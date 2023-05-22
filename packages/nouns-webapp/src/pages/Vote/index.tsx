@@ -65,9 +65,32 @@ const getCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
+      : undefined;
+
+  return (
+    <Trans>
+      {dayjs(endDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow(true)}
+    </Trans>
+  );
+};
+
+const getUpdatableCountdownCopy = (
+  proposal: PartialProposal,
+  currentBlock: number,
+  locale: SupportedLocale,
+) => {
+  const timestamp = Date.now();
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   return (
@@ -129,9 +152,9 @@ const VotePage = ({
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
@@ -490,7 +513,7 @@ const VotePage = ({
                     {isUpdateable && (
                       <>
                         <Trans>This proposal can be edited for the next </Trans>{' '}
-                        {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}
                       </>
                     )}
                     {isCancellable && !isUpdateable && (

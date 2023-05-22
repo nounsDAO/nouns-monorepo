@@ -5,11 +5,10 @@ import clsx from 'clsx';
 import VoteSignalGroup from './VoteSignalGroup';
 import {
   VoteSignalDetail,
-  useAddSignature,
   useProposalFeedback,
   useSendFeedback,
 } from '../../wrappers/nounsData';
-import { Proposal, ProposalVersion, useCancelSignature } from '../../wrappers/nounsDao';
+import { Proposal, ProposalVersion } from '../../wrappers/nounsDao';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useAppDispatch } from '../../hooks';
 import { useEthers } from '@usedapp/core';
@@ -21,55 +20,14 @@ type Props = {
   proposalVersions?: ProposalVersion[];
 };
 
-const tempVoteSignalsFor = [
-  {
-    address: '0x1234',
-    voteCount: 3,
-    support: 1,
-    reason: "I'm voting for this proposal because I like it.",
-  },
-  {
-    address: '0xXYZZ',
-    voteCount: 1,
-    support: 1,
-    reason:
-      'Maecenas faucibus mollis interdum. Donec id elit non mi porta gravida at eget metus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.',
-  },
-  {
-    address: '0xBCA',
-    voteCount: 1,
-    support: 1,
-    reason: '',
-  },
-];
-const tempVoteSignalsAgainst = [
-  {
-    address: '0x1234',
-    voteCount: 6,
-    support: 0,
-    reason: "I'm voting against this proposal because I don't like it.",
-  },
-  {
-    address: '0xABC',
-    voteCount: 1,
-    support: 0,
-    reason: '',
-  },
-];
-
-const tempVoteSignalsAbstain: any[] = [];
-
-// const VoteSignals = (props: Props) => {
 function VoteSignals(props: Props) {
   const supportText = ['Against', 'For', 'Abstain'];
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
   const { sendFeedback, sendFeedbackState } = useSendFeedback();
   const { account } = useEthers();
-  const proposalId = props.proposal.id ? +props.proposal.id : 0;
   const { loading, error, data } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0');
   const [isTransactionPending, setIsTransactionPending] = useState(false);
-
   const [forFeedback, setForFeedback] = useState<any[]>([]);
   const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
   const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
@@ -78,7 +36,6 @@ function VoteSignals(props: Props) {
   useEffect(() => {
     if (data) {
       // get latest version number
-      // const versionNumber = props.proposalVersions[props.proposalVersions.length - 1].versionNumber;
       const versionDetails =
         props.proposalVersions && props.proposalVersions[props.proposalVersions.length - 1];
       const versionCreatedTimestamp = versionDetails?.createdAt;
@@ -139,10 +96,11 @@ function VoteSignals(props: Props) {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
+          message: <Trans>Your feedback has been added!</Trans>,
           show: true,
         });
         setIsTransactionPending(false);
+        setHasUserVoted(true);
         break;
       case 'Fail':
         setModal({
@@ -251,20 +209,21 @@ function VoteSignals(props: Props) {
                 ) : (
                   <div className={classes.voted}>
                     <p>
-                      You provided{' '}
-                      <span
-                        className={clsx(
-                          userVoteSupport?.supportDetailed === 1 && classes.forText,
-                          userVoteSupport?.supportDetailed === 0 && classes.againstText,
-                          userVoteSupport?.supportDetailed === 2 && classes.abstainText,
-                        )}
-                      >
-                        {userVoteSupport &&
-                          supportText[userVoteSupport.supportDetailed].toLowerCase()}
-                      </span>{' '}
-                      feedback{' '}
-                      {userVoteSupport?.createdTimestamp &&
-                        dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
+                      <Trans>You provided{' '}
+                        <span
+                          className={clsx(
+                            userVoteSupport?.supportDetailed === 1 && classes.forText,
+                            userVoteSupport?.supportDetailed === 0 && classes.againstText,
+                            userVoteSupport?.supportDetailed === 2 && classes.abstainText,
+                          )}
+                        >
+                          {userVoteSupport &&
+                            supportText[userVoteSupport.supportDetailed].toLowerCase()}
+                        </span>{' '}
+                        feedback{' '}
+                        {userVoteSupport?.createdTimestamp &&
+                          dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
+                      </Trans>
                     </p>
                     {userVoteSupport?.reason && (
                       <div className={classes.userVotedReason}>

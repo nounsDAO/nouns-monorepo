@@ -84,7 +84,6 @@ const CandidateHistoryPage = ({
                 ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
                 : proposal.title
             }
-            slug={proposal.slug}
             id={proposal.id}
             proposer={proposal.proposer}
             versionsCount={proposal.versionsCount}
@@ -136,7 +135,9 @@ const CandidateHistoryPage = ({
           <Col lg={4} md={12}>
             <div className={classes.versionHistory}>
               <div className={classes.versionHistoryHeader}>
-                <h2><Trans>Version History</Trans></h2>
+                <h2>
+                  <Trans>Version History</Trans>
+                </h2>
                 <button
                   className={classes.diffsLink}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}

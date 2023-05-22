@@ -18,7 +18,6 @@ import { useQuery } from '@apollo/client';
 import {
   proposalQuery,
   partialProposalsQuery,
-  // candidateProposalQuery,
   proposalVersionsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
@@ -902,6 +901,22 @@ export const useUpdateProposal = () => {
     'updateProposal',
   );
   return { updateProposal, updateProposalState };
+};
+
+export const useUpdateProposalTransactions = () => {
+  const { send: updateProposalTransactions, state: updateProposaTransactionsState } = useContractFunction(
+    nounsDaoContract,
+    'updateProposalTransactions',
+  );
+  return { updateProposalTransactions, updateProposaTransactionsState };
+};
+
+export const useUpdateProposalDescription = () => {
+  const { send: updateProposalDescription, state: updateProposalDescriptionState } = useContractFunction(
+    nounsDaoContract,
+    'updateProposalDescription',
+  );
+  return { updateProposalDescription, updateProposalDescriptionState };
 };
 
 // export const useProposeBySigs = () => {

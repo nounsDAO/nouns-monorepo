@@ -119,7 +119,6 @@ const CandidatePage = ({
         {candidate && (
           <CandidateHeader
             title={candidate.version.title}
-            slug={candidate.slug}
             id={candidate.id}
             proposer={candidate.proposer}
             versionsCount={candidate.versionsCount}
@@ -131,34 +130,37 @@ const CandidatePage = ({
           />
         )}
       </Col>
-      <Row>
-        <Col lg={12}>
-          <div className={classes.editCandidate}>
-            <p>
-              <Trans>
-                Editing a proposal candidate will clear any previous sponsors and require each
-                sponsor to re-sign
-              </Trans>
-            </p>
-            <div className={classes.buttons}>
-              <Button
-                onClick={destructiveStateAction}
-                disabled={isCancelPending}
-                variant="danger"
-                className={clsx(classes.destructiveTransitionStateButton, classes.button)}
-              >
-                {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
-              </Button>
-              <Link
-                to={`/candidates/${id}/edit`}
-                className={clsx(classes.primaryButton, classes.button)}
-              >
-                {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
-              </Link>
+      {isProposer && (
+        <Row>
+          <Col lg={12}>
+            <div className={classes.editCandidate}>
+              <p>
+                <span className={classes.proposerOptionsHeader}><Trans>Proposer functions</Trans></span>
+                <Trans>
+                  Editing a proposal candidate will clear any previous sponsors and require each
+                  sponsor to re-sign
+                </Trans>
+              </p>
+              <div className={classes.buttons}>
+                <Button
+                  onClick={destructiveStateAction}
+                  disabled={isCancelPending}
+                  variant="danger"
+                  className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+                >
+                  {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
+                </Button>
+                <Link
+                  to={`/candidates/${id}/edit`}
+                  className={clsx(classes.primaryButton, classes.button)}
+                >
+                  {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
+                </Link>
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
       {candidate && (
         <Row>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>

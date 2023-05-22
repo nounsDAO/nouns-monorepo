@@ -1,53 +1,22 @@
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import {
-  ProposalState,
-  useCancelProposal,
-  useCurrentQuorum,
-  useExecuteProposal,
-  useProposal,
-  useProposalVersions,
-  useQueueProposal,
-} from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
-import { RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { RouteComponentProps, } from 'react-router-dom';
+import { useBlockNumber } from '@usedapp/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
-import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
-import { useQuery } from '@apollo/client';
-import {
-  proposalVotesQuery,
-  delegateNounsAtBlockQuery,
-  ProposalVotes,
-  Delegates,
-  propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { SearchIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
@@ -131,13 +100,13 @@ const ProposalHistory = ({
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
-              <ProposalContent
-                description={proposalVersions[activeVersion - 1].description}
-                title={proposalVersions[activeVersion - 1].title}
-                details={proposalVersions[activeVersion - 1].details}
-                isV3Proposal={true}
-              />
-            )}
+                <ProposalContent
+                  description={proposalVersions[activeVersion - 1].description}
+                  title={proposalVersions[activeVersion - 1].title}
+                  details={proposalVersions[activeVersion - 1].details}
+                  isV3Proposal={true}
+                />
+              )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
                 <ReactDiffViewer
@@ -153,10 +122,10 @@ const ProposalHistory = ({
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
-                    <p>Version {activeVersion - 1}</p>
+                    <p>Version {activeVersion}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
 
-                    <p>Version {activeVersion - 2}</p>
+                    <p>Version {activeVersion - 1}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
                   </Col>
                 </Row>

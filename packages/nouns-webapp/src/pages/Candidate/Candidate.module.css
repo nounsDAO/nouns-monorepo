@@ -274,3 +274,20 @@ a.primaryButton {
 a.primaryButton:hover {
   opacity: 0.75;
 }
+
+.proposerOptions p,
+.objection p {
+  @media (max-width: 992px) {
+    padding-top: 0;
+    margin: 0 0 5px;
+  }
+}
+
+.proposerOptionsHeader,
+.objectionHeader {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  display: block;
+}

@@ -5,8 +5,9 @@ import {
   ProposalDetail,
   useProposal,
   useProposalThreshold,
-  usePropose,
   useUpdateProposal,
+  useUpdateProposalDescription,
+  useUpdateProposalTransactions,
 } from '../../wrappers/nounsDao';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';
@@ -41,13 +42,19 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
+  const [originalTitleValue, setOriginalTitleValue] = useState('');
+  const [originalBodyValue, setOriginalBodyValue] = useState('');
+  const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
+    ProposalDetail[]
+  >([]);
   const proposal = useProposal(props.match.params.id, true);
   const proposalThreshold = useProposalThreshold();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { account } = useEthers();
-  const { propose, proposeState } = usePropose();
   const { updateProposal, updateProposalState } = useUpdateProposal();
+  const { updateProposalDescription, updateProposalDescriptionState } = useUpdateProposalDescription();
+  const { updateProposalTransactions, updateProposaTransactionsState } = useUpdateProposalTransactions();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -157,40 +164,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     [setBodyValue, bodyValue],
   );
 
-  useEffect(() => {
-    switch (proposeState.status) {
-      case 'None':
-        setProposePending(false);
-        break;
-      case 'Mining':
-        setProposePending(true);
-        break;
-      case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-    }
-  }, [proposeState, setModal]);
 
   useEffect(() => {
     switch (updateProposalState.status) {
@@ -227,25 +200,131 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   }, [updateProposalState, setModal]);
 
+  useEffect(() => {
+    switch (updateProposalDescriptionState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: <Trans>Proposal Updated!</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: updateProposalDescriptionState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: updateProposalDescriptionState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+  }, [updateProposalDescriptionState, setModal]);
+
+  useEffect(() => {
+    switch (updateProposaTransactionsState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: <Trans>Proposal Updated!</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: updateProposaTransactionsState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: updateProposaTransactionsState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+  }, [updateProposaTransactionsState, setModal]);
+
+  const isTransactionsEdited = () => {
+    if (originalProposalTransactions.length !== proposalTransactions.length) {
+      return true
+    }
+    for (let i = 0; i < originalProposalTransactions.length; i++) {
+      if (
+        originalProposalTransactions[i].target !== proposalTransactions[i].address ||
+        originalProposalTransactions[i].value !== proposalTransactions[i].value
+      ) {
+        return true
+      }
+    }
+    return false
+  };
+
+  const isDescriptionEdited = () => {
+    return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false
+  };
+
   const handleUpdateProposal = async () => {
     if (!proposalTransactions?.length) return;
     if (proposal === undefined) return;
-    await updateProposal(
-      proposal.id, // proposalId
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-      commitMessage,
-    );
-  };
 
-  const [originalTitleValue, setOriginalTitleValue] = useState('');
-  const [originalBodyValue, setOriginalBodyValue] = useState('');
-  const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
-    ProposalDetail[]
-  >([]);
+    // check to see if only description or only transactions are edited
+    if (isDescriptionEdited() && !isTransactionsEdited()) {
+      // only update description
+      updateProposalDescription(
+        proposal.id,
+        `# ${titleValue}\n\n${bodyValue}`,
+        commitMessage,
+      )
+    }
+    if (!isDescriptionEdited() && isTransactionsEdited()) {
+      // only update transactions
+      updateProposalTransactions(
+        proposal.id,
+        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ value }) => value ?? '0'), // Values
+        proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+        commitMessage,
+      )
+    } if (isDescriptionEdited() && isTransactionsEdited()) {
+      // update all
+      await updateProposal(
+        proposal.id, // proposalId
+        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ value }) => value ?? '0'), // Values
+        proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+        `# ${titleValue}\n\n${bodyValue}`, // Description
+        commitMessage,
+      );
+    }
+  };
 
   // set initial values on page load and as they're changed
   useEffect(() => {
@@ -266,29 +345,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setOriginalProposalTransactions(proposal.details);
     }
   }, [proposal?.title, proposal?.description, proposal?.details.length]);
-
-  const checkIsProposalEdited = () => {
-    if (proposal) {
-      if (originalTitleValue !== titleValue) {
-        return true;
-      }
-      if (originalBodyValue !== bodyValue) {
-        return true;
-      }
-      if (originalProposalTransactions.length !== proposalTransactions.length) {
-        return true;
-      }
-      for (let i = 0; i < originalProposalTransactions.length; i++) {
-        if (
-          originalProposalTransactions[i].target !== proposalTransactions[i].address ||
-          originalProposalTransactions[i].value !== proposalTransactions[i].value
-        ) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
     return null;
@@ -363,7 +419,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
-          isFormInvalid={isProposalEdited ? false : true}
+          isFormInvalid={isTransactionsEdited() || isDescriptionEdited() ? false : true}
           handleCreateProposal={handleUpdateProposal}
         />
         {props.isCandidate && (

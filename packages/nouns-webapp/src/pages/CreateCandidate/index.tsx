@@ -22,10 +22,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import {
-  useGetCreateCandidateCost,
-  useCreateProposalCandidate,
-} from '../../wrappers/nounsData';
+import { useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
 import {

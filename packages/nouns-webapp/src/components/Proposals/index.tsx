@@ -1,8 +1,4 @@
-import {
-  PartialProposal,
-  ProposalState,
-  useProposalThreshold,
-} from '../../wrappers/nounsDao';
+import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { PartialProposalCandidate, ProposalCandidate } from '../../wrappers/nounsData';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
@@ -40,17 +36,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -104,7 +100,6 @@ const Proposals = ({
 
   // Get candidates
   const { loading, error, data: allCandidates } = useCandidateProposals();
-
 
   const nullStateCopy = () => {
     if (account !== null) {

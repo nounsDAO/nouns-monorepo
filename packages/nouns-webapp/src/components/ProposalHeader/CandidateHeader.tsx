@@ -1,18 +1,12 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { useBlockNumber } from '@usedapp/core';
-import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import { useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { transactionLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
@@ -20,14 +14,10 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
-import { timestampFromBlockNumber } from '../../utils/timeUtils';
 import dayjs from 'dayjs';
-import { ProposalCandidate } from '../../wrappers/nounsData';
 
 interface CandidateHeaderProps {
-  // proposal: ProposalCandidate;
   title: string;
-  slug: string;
   id: string;
   proposer: string;
   versionsCount: number;
@@ -64,7 +54,6 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   const {
     title,
-    slug,
     id,
     proposer,
     versionsCount,
@@ -74,24 +63,10 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     isWalletConnected,
     submitButtonClickHandler,
   } = props;
-  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
   const availableVotes = useUserVotesAsOfBlock(currentBlock) ?? 0;
-  // const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
-  // const hasVoted = useHasVotedOnProposal(proposal?.id);
-  // const proposalVote = useProposalVote(proposal?.id);
-  // const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
-  // const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
-  // TODO: remove this after getting real data from the contract
-  // useEffect(() => {
-  //   if (currentBlock) {
-  //     // TODO: remove this after getting real data from the contract
-  //     const timestamp = timestampFromBlockNumber(tempUpdatedBlockNumber, currentBlock);
-  //     setUpdatedTimestamp(timestamp.toDate());
-  //   }
-  // }, [currentBlock]);
 
   const voteButton = (
     <>
@@ -138,12 +113,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
 
   return (
     <>
+      <div className={classes.backButtonWrapper}>
+        <Link to={'/vote'}>
+          <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+        </Link>
+      </div>
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
-          {/* TODO: bleed left on wide. move above on mobile */}
-          <Link to={'/vote'}>
-            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
-          </Link>
+
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
@@ -206,24 +183,25 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       </div>
 
       <p className={classes.versionHistory}>
-        <Link to={`/candidates/${id}/history/`}>
-          <strong>Version {versionsCount}</strong>{' '}
+        {versionsCount > 1 ? (
+          <Link to={`/candidates/${id}/history/`}>
+            <strong>Version {versionsCount}</strong>{' '}
+            <span>
+              {versionsCount === 1 ? 'created' : 'updated'}{' '}
+              {dayjs(lastUpdatedTimestamp * 1000).fromNow()}
+            </span>
+          </Link>
+        ) : (
           <span>
             {versionsCount === 1 ? 'created' : 'updated'}{' '}
             {dayjs(lastUpdatedTimestamp * 1000).fromNow()}
           </span>
-        </Link>
+        )}
       </p>
 
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
       )}
-
-      {/* {proposal && isActiveForVoting && hasVoted && (
-        <Alert variant="success" className={classes.voterIneligibleAlert}>
-          {getTranslatedVoteCopyFromString(proposalVote)}
-        </Alert>
-      )} */}
     </>
   );
 };

@@ -73,10 +73,8 @@ export const useCandidateProposal = (id: string, toUpdate?: boolean) => {
 };
 
 export const useCandidateProposalVersions = (id: string) => {
-  console.log('useCandidateProposalVersions ID', id);
   const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
   const versions = data && parseSubgraphCandidateVersions(data.proposalCandidate);
-  // console.log('useCandidateProposalVersions', versions);
   return { loading, data: versions, error };
 };
 
@@ -111,10 +109,8 @@ export const useGetUpdateCandidateCost = () => {
 };
 
 export const useUpdateProposalCandidate = () => {
-  console.log('useUpdateProposalCandidate');
   const { send: updateProposalCandidate, state: updateProposalCandidateState } =
     useContractFunction(nounsDAOData, 'updateProposalCandidate');
-  console.log('updateProposalCandidateState', updateProposalCandidateState);
   return { updateProposalCandidate, updateProposalCandidateState };
 };
 
@@ -335,6 +331,10 @@ export interface ProposalCandidateVersion {
   title: string;
   description: string;
   details: ProposalDetail[];
+  targets: string[];
+  values: string[];
+  signatures: string[];
+  calldatas: string[];
   versionSignatures: {
     reason: string;
     expirationTimestamp: number;

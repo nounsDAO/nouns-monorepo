@@ -1,12 +1,10 @@
 import { Col, Alert, Button } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
-  ProposalState,
   ProposalTransaction,
   useProposal,
   useProposalCount,
   useProposalThreshold,
-  usePropose,
   useUpdateProposal,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';

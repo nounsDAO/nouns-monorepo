@@ -1,10 +1,6 @@
 import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import {
-  ProposalTransaction,
-  ProposalDetail,
-  useProposalThreshold,
-} from '../../wrappers/nounsDao';
+import { ProposalTransaction, ProposalDetail, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';

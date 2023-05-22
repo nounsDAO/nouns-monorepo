@@ -5,7 +5,7 @@ import config, { CHAIN_ID } from '../../config';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useProposeBySigs } from '../../wrappers/nounsData';
-import { useProposalThreshold, } from '../../wrappers/nounsDao';
+import { useProposalThreshold } from '../../wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposal } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
@@ -86,7 +86,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     }
   }, [props.signatures, delegateSnapshot]);
 
-
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -133,10 +132,10 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const submitProposalOnChain = async () => {
     await proposeBySigs(
       props.signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
-      candidateProposal?.version.details.targets,
-      candidateProposal?.version.details.values,
-      candidateProposal?.version.details.signatures,
-      candidateProposal?.version.details.calldatas,
+      candidateProposal?.version.targets,
+      candidateProposal?.version.values,
+      candidateProposal?.version.signatures,
+      candidateProposal?.version.calldatas,
       candidateProposal?.version.description,
     );
   };
