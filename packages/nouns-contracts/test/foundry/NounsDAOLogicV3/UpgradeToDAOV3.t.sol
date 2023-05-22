@@ -314,7 +314,6 @@ contract UpgradeToDAOV3Test is DeployUtils {
             address(0), // auctionImpl_,
             address(0), // governorImpl_,
             address(0), // treasuryImpl_,
-            address(forkEscrow), //
             30 days
         );
         daoV3Impl = new NounsDAOLogicV3();

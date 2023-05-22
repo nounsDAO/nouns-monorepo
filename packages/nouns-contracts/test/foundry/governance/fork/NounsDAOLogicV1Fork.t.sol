@@ -186,9 +186,7 @@ abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
 
         vm.stopPrank();
 
-        (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO(
-            address(originalDAO.forkEscrow())
-        );
+        (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO(originalDAO.forkEscrow());
 
         dao = NounsDAOLogicV1Fork(daoAddress);
         token = NounsTokenFork(tokenAddress);

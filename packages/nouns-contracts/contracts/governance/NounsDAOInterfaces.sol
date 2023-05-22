@@ -565,7 +565,9 @@ interface NounsTokenLike {
 }
 
 interface IForkDAODeployer {
-    function deployForkDAO(uint256 forkingPeriodEndTimestamp) external returns (address treasury, address token);
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
+        external
+        returns (address treasury, address token);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {

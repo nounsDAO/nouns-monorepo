@@ -83,7 +83,7 @@ library NounsDAOV3Fork {
 
         uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
 
-        (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp);
+        (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp, forkEscrow);
         sendProRataTreasury(ds, forkTreasury, tokensInEscrow, adjustedTotalSupply(ds));
         uint32 forkId = forkEscrow.closeEscrow();
 

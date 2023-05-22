@@ -94,7 +94,6 @@ abstract contract DeployUtilsV3 is DeployUtils {
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
             address(new NounsDAOExecutorV2()),
-            predictedForkEscrowAddress,
             DELAYED_GOV_DURATION
         );
 

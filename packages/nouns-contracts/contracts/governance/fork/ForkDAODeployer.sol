@@ -43,9 +43,6 @@ contract ForkDAODeployer is IForkDAODeployer {
     /// @notice The governor implementation address
     address public governorImpl;
 
-    /// @notice The address of the fork escrow contract
-    address public forkEscrowAddress;
-
     /// @notice The maximum duration of the governance delay in new DAOs
     uint256 public delayedGovernanceMaxDuration;
 
@@ -54,14 +51,12 @@ contract ForkDAODeployer is IForkDAODeployer {
         address auctionImpl_,
         address governorImpl_,
         address treasuryImpl_,
-        address forkEscrowAddress_,
         uint256 delayedGovernanceMaxDuration_
     ) {
         tokenImpl = tokenImpl_;
         auctionImpl = auctionImpl_;
         governorImpl = governorImpl_;
         treasuryImpl = treasuryImpl_;
-        forkEscrowAddress = forkEscrowAddress_;
         delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
     }
 
@@ -70,16 +65,19 @@ contract ForkDAODeployer is IForkDAODeployer {
      * All contracts are upgradable, and are almost entirely initialized with the same parameters as the original DAO,
      * except for the vetoer address, which is set to the zero address.
      * @param forkingPeriodEndTimestamp The timestamp at which the forking period ends
+     * @param forkEscrow The address of the fork escrow contract
      * @return treasury The address of the fork DAO treasury
      * @return token The address of the fork DAO token
      */
-    function deployForkDAO(uint256 forkingPeriodEndTimestamp) external returns (address treasury, address token) {
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrow)
+        external
+        returns (address treasury, address token)
+    {
         token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
         address governor = address(new ERC1967Proxy(governorImpl, ''));
         treasury = address(new ERC1967Proxy(treasuryImpl, ''));
 
-        INounsDAOForkEscrow forkEscrow = INounsDAOForkEscrow(forkEscrowAddress);
         NounsAuctionHouse originalAuction = getOriginalAuction(forkEscrow);
         NounsDAOExecutorV2 originalTimelock = getOriginalTimelock(forkEscrow);
 
