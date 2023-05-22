@@ -16,6 +16,7 @@
  *********************************/
 
 // LICENSE
+// NounsDAOLogicV1Fork.sol is a modified version of NounsDAOLogicV1.sol.
 // NounsDAOLogicV1.sol is a modified version of Compound Lab's GovernorBravoDelegate.sol:
 // https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol
 //
@@ -25,6 +26,33 @@
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
+// NounsDAOLogicV1Fork adds:
+// - `quit(tokenIds)`, a function that allows token holders to quit the DAO, taking their pro rata funds,
+//   and sending their tokens to the DAO treasury.
+//
+// - `adjustedTotalSupply`, the total supply calculation used in DAO functions like quorum and proposal threshold, in
+//   which the DAO exludes tokens held by the treasury, such that tokens used to quit the DAO are not counted.
+//
+// - A function for the DAO to set which ERC20s are transferred pro rata in the `quit` function.
+//
+// - A new proposals getter function, since adding new fields to Proposal results in the default getter hitting a
+//   `Stack too deep` error.
+//
+// - A new Proposal field: `creationBlock`, used to resolve the `votingDelay` bug, in which editing `votingDelay` would
+//  change the votes snapshot block for proposals in-progress.
+//
+// NounsDAOLogicV1Fork modifies:
+// - The proxy pattern from Compound's old Transparent-like proxy, to OpenZeppelin's recommended UUPS pattern.
+//
+// - `propose`
+//   - uses `adjutedTotalSupply`
+//   - includes a new 'delayed governance' feature which gives forkers from the original DAO time to claim their tokens
+//     with this new DAO; proposals are not allowed until all tokens are claimed, or until the delay expiration
+//     timestamp is reached.
+//
+// - `cancel` bugfix, allowing proposals to be canceled by anyone if the proposer's vote balance is equal to proposal
+//   threshold.
+//
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
 //   due to the Noun token's increasing supply
