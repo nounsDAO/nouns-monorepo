@@ -7,10 +7,7 @@ import dayjs from 'dayjs';
 import { useEthers } from '@usedapp/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useQuery } from '@apollo/client';
-import {
-  Delegates,
-  delegateNounsAtBlockQuery,
-} from '../../wrappers/subgraph';
+import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
@@ -108,7 +105,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => { }}>
+              <button className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}

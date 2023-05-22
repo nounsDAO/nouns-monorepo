@@ -91,7 +91,6 @@ function SignatureForm(props: Props) {
     return encodedData;
   }
 
-
   async function sign() {
     if (!candidateProposal) return;
     let signature;
