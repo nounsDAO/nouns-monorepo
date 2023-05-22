@@ -1,22 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { Proposal, ProposalCandidate, ProposalDetail } from '../../wrappers/nounsDao';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
 import EnsOrLongAddress from '../EnsOrLongAddress';
-import config from '../../config';
-import { InformationCircleIcon } from '@heroicons/react/solid';
-import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
 import ProposalTransactions from './ProposalTransactions';
 
 interface ProposalContentProps {
-  // proposal?: Proposal;
   description: string;
   title: string;
   details: ProposalDetail[];

@@ -1,17 +1,14 @@
 import { Col, Alert, Button } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
-  ProposalState,
   ProposalTransaction,
-  useAllProposals,
   useProposal,
   useProposalCount,
   useProposalThreshold,
-  usePropose,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -26,7 +23,6 @@ import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import {
-  useCandidateProposals,
   useGetCreateCandidateCost,
   useCreateProposalCandidate,
 } from '../../wrappers/nounsData';
@@ -35,7 +31,6 @@ import CreateCandidateButton from '../../components/CreateCandidateButton';
 import {
   checkEnoughVotes,
   checkHasActiveOrPendingProposalOrCandidate,
-  checkIsEligibleToPropose,
 } from '../../utils/proposals';
 
 const CreateCandidatePage = () => {
@@ -53,11 +48,10 @@ const CreateCandidatePage = () => {
   const proposalThreshold = useProposalThreshold();
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
   const createCandidateCost = useGetCreateCandidateCost();
-  const history = useHistory();
-  const { loading, error, data: candidates } = useCandidateProposals();
-  // TODO: fetch candidates and proposals and check if user has an active or pending proposal or candidate
-  // const proposalCandidates = candidates?.proposalCandidates ?? [];
-  // const { data: proposals } = useAllProposals();
+  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
+  const [isProposePending, setProposePending] = useState(false);
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -133,7 +127,6 @@ const CreateCandidatePage = () => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
-      // TODO: how to confirm slug is unique?
       setSlug(
         title
           .toLowerCase()
@@ -156,13 +149,8 @@ const CreateCandidatePage = () => {
     [proposalTransactions, titleValue, bodyValue],
   );
 
-  // const hasEnoughVote = Boolean(
-  //   availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
-  // );
   const hasEnoughVote = checkEnoughVotes(availableVotes, proposalThreshold);
-  const isEligibleToPropose = checkIsEligibleToPropose(latestProposal, account);
   const handleCreateProposal = async () => {
-    const description = `# ${titleValue}\n\n${bodyValue}`;
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
       proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -173,12 +161,6 @@ const CreateCandidatePage = () => {
       { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
-
-  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
-  const [isProposePending, setProposePending] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   useEffect(() => {
     switch (createProposalCandidateState.status) {
@@ -214,14 +196,6 @@ const CreateCandidatePage = () => {
         break;
     }
   }, [createProposalCandidateState, setModal]);
-
-  console.log('latestProposal', latestProposal);
-  console.log(
-    (latestProposal?.status === ProposalState.ACTIVE ||
-      latestProposal?.status === ProposalState.PENDING) &&
-      latestProposal.proposer === account,
-  );
-  console.log('isEligibleToPropose', isEligibleToPropose);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -293,7 +267,6 @@ const CreateCandidatePage = () => {
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          // TODO: update this check to include proposals AND candidates
           hasActiveOrPendingProposal={checkHasActiveOrPendingProposalOrCandidate(
             latestProposal,
             account,

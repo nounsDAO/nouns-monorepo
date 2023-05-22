@@ -1,4 +1,4 @@
-import { Proposal, ProposalCandidate, ProposalState } from '../wrappers/nounsDao';
+import { Proposal, ProposalState } from '../wrappers/nounsDao';
 
 export const isProposalUpdatable = (proposal: Proposal, currentBlock: number) => {
   return (
@@ -37,12 +37,7 @@ export const checkIsEligibleToPropose = (
 export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposal: Proposal | undefined,
   account: string | null | undefined,
-  // proposalCandidates: ProposalCandidate[]
 ) => {
-  // add this candidates check in once candidates can be labeled as "proposed"
-  // const hasProposedCandidate = proposalCandidates.find((candidate) => {
-  //   return candidate.proposer.toLowerCase() === account?.toLowerCase();
-  // });
   if (
     latestProposal &&
     account &&

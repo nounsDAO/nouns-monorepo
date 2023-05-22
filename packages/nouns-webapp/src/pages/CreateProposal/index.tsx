@@ -27,20 +27,21 @@ import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 
 const CreateProposalPage = () => {
-  const { account } = useEthers();
+  const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
+  const [titleValue, setTitleValue] = useState('');
+  const [bodyValue, setBodyValue] = useState('');
+  const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
+  const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
+  const [isProposePending, setProposePending] = useState(false);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-
+  const { account } = useEthers();
   const { propose, proposeState } = usePropose();
-
-  const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
-  const [titleValue, setTitleValue] = useState('');
-  const [bodyValue, setBodyValue] = useState('');
-
-  const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
-  const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -158,12 +159,6 @@ const CreateProposalPage = () => {
     );
   };
 
-  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
-  const [isProposePending, setProposePending] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
   useEffect(() => {
     switch (proposeState.status) {
       case 'None':
@@ -198,8 +193,6 @@ const CreateProposalPage = () => {
         break;
     }
   }, [proposeState, setModal]);
-
-  console.log('proposalTransactions', proposalTransactions);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>

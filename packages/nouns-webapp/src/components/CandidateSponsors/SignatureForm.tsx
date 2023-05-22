@@ -7,7 +7,7 @@ import { ethers } from 'ethers';
 import config, { CHAIN_ID } from '../../config';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useProposeBySigs, useUpdateProposalBySigs } from '../../wrappers/nounsDao';
+import { useProposeBySigs, useUpdateProposalBySigs } from '../../wrappers/nounsData';
 import { useCandidateProposal, useAddSignature } from '../../wrappers/nounsData';
 
 const domain = {
@@ -91,7 +91,6 @@ function SignatureForm(props: Props) {
     return encodedData;
   }
 
-  console.log('candidateProposal', candidateProposal);
 
   async function sign() {
     if (!candidateProposal) return;

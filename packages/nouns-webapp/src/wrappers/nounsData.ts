@@ -1,5 +1,5 @@
 import { Contract, utils } from 'ethers';
-import { NounsDAODataABI, NounsDaoDataFactory } from '@nouns/contracts';
+import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@nouns/contracts';
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import config from '../config';
 import {
@@ -32,6 +32,8 @@ export interface VoteSignalDetail {
     id: string;
   };
 }
+
+const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 export const useCreateProposalCandidate = () => {
   const { send: createProposalCandidate, state: createProposalCandidateState } =
@@ -134,6 +136,22 @@ export const useProposalFeedback = (id: string) => {
   const { loading, data, error } = useQuery(proposalFeedbacksQuery(id));
 
   return { loading, data, error };
+};
+
+export const useProposeBySigs = () => {
+  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
+    nounsDaoContract,
+    'proposeBySigs',
+  );
+  return { proposeBySigs, proposeBySigsState };
+};
+
+export const useUpdateProposalBySigs = () => {
+  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(
+    nounsDaoContract,
+    'updateProposalBySigs',
+  );
+  return { updateProposalBySigs, updateProposalBySigState };
 };
 
 const parseSubgraphCandidate = (

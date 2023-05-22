@@ -1,26 +1,13 @@
-import { JsonRpcSigner } from '@ethersproject/providers';
 import { Trans } from '@lingui/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
-import { RouteComponentProps } from 'react-router-dom';
-import remarkBreaks from 'remark-breaks';
 import config, { CHAIN_ID } from '../../config';
 import { useAppDispatch } from '../../hooks';
-import Section from '../../layout/Section';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import {
-  useProposeBySigs,
-  useUpdateProposalBySigs,
-  CandidateSignature,
-  useProposalThreshold,
-  ProposalCandidate,
-} from '../../wrappers/nounsDao';
-import { useAddSignature, useCandidateProposal } from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
+import { useProposeBySigs } from '../../wrappers/nounsData';
+import { useProposalThreshold, } from '../../wrappers/nounsDao';
+import { ProposalCandidate, useCandidateProposal } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
-import { Proposal } from '../../wrappers/nounsDao';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import React from 'react';
 import { useUserVotes } from '../../wrappers/nounToken';
@@ -34,8 +21,6 @@ import { useQuery } from '@apollo/client';
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;
   slug: string;
-  // delegateSnapshot?: Delegates;
-  // signers: string[];
   signatures?: {
     reason: string;
     expirationTimestamp: number;
@@ -52,36 +37,6 @@ interface CandidateSponsorsProps {
   id: string;
 }
 
-const domain = {
-  name: 'Nouns DAO',
-  chainId: CHAIN_ID,
-  verifyingContract: config.addresses.nounsDAOProxy,
-};
-
-const createProposalTypes = {
-  Proposal: [
-    { name: 'proposer', type: 'address' },
-    { name: 'targets', type: 'address[]' },
-    { name: 'values', type: 'uint256[]' },
-    { name: 'signatures', type: 'string[]' },
-    { name: 'calldatas', type: 'bytes[]' },
-    { name: 'description', type: 'string' },
-    { name: 'expiry', type: 'uint256' },
-  ],
-};
-
-const updateProposalTypes = {
-  UpdateProposal: [
-    { name: 'proposalId', type: 'uint256' },
-    { name: 'proposer', type: 'address' },
-    { name: 'targets', type: 'address[]' },
-    { name: 'values', type: 'uint256[]' },
-    { name: 'signatures', type: 'string[]' },
-    { name: 'calldatas', type: 'bytes[]' },
-    { name: 'description', type: 'string' },
-    { name: 'expiry', type: 'uint256' },
-  ],
-};
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
   const [requiredVotes, setRequiredVotes] = React.useState<number>();
@@ -92,6 +47,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const connectedAccountNounVotes = useUserVotes() || 0;
   const threshold = useProposalThreshold();
   const signers = props.candidate.version.versionSignatures?.map(signature => signature.signer.id);
+  const candidateProposal = useCandidateProposal(props.id);
   const { account } = useEthers();
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
@@ -130,92 +86,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     }
   }, [props.signatures, delegateSnapshot]);
 
-  const { library } = useEthers();
-  const signer = library?.getSigner();
-  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60 * 60 * 24);
-  const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
-  const candidateProposal = useCandidateProposal(props.id);
-  const { addSignature, addSignatureState } = useAddSignature();
-  async function calcProposalEncodeData(
-    proposer: any,
-    targets: any,
-    values: any,
-    signatures: any[],
-    calldatas: any[],
-    description: string,
-  ) {
-    const signatureHashes = signatures.map((sig: string) =>
-      ethers.utils.keccak256(ethers.utils.toUtf8Bytes(sig)),
-    );
-
-    const calldatasHashes = calldatas.map((calldata: ethers.utils.BytesLike) =>
-      ethers.utils.keccak256(calldata),
-    );
-
-    const encodedData = ethers.utils.defaultAbiCoder.encode(
-      ['address', 'bytes32', 'bytes32', 'bytes32', 'bytes32', 'bytes32'],
-      [
-        proposer,
-        ethers.utils.keccak256(ethers.utils.solidityPack(['address[]'], [targets])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['uint256[]'], [values])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [signatureHashes])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [calldatasHashes])),
-        ethers.utils.keccak256(ethers.utils.toUtf8Bytes(description)),
-      ],
-    );
-
-    return encodedData;
-  }
-
-  // async function sign() {
-  //   if (!candidateProposal) return;
-  //   let signature;
-  //   if (proposalIdToUpdate) {
-  //     const value = {
-  //       proposer: candidateProposal.proposer,
-  //       targets: candidateProposal.latestVersion.targets,
-  //       values: candidateProposal.latestVersion.values,
-  //       signatures: candidateProposal.latestVersion.signatures,
-  //       calldatas: candidateProposal.latestVersion.calldatas,
-  //       description: candidateProposal.latestVersion.description,
-  //       expiry: expiry,
-  //       proposalId: proposalIdToUpdate,
-  //     };
-  //     signature = await signer!._signTypedData(domain, updateProposalTypes, value);
-  //   } else {
-  //     const value = {
-  //       proposer: candidateProposal.proposer,
-  //       targets: candidateProposal.latestVersion.targets,
-  //       values: candidateProposal.latestVersion.values,
-  //       signatures: candidateProposal.latestVersion.signatures,
-  //       calldatas: candidateProposal.latestVersion.calldatas,
-  //       description: candidateProposal.latestVersion.description,
-  //       expiry: expiry,
-  //     };
-  //     signature = await signer!._signTypedData(domain, createProposalTypes, value);
-  //   }
-
-  //   const encodedProp = await calcProposalEncodeData(
-  //     candidateProposal.proposer,
-  //     candidateProposal.latestVersion.targets,
-  //     candidateProposal.latestVersion.values,
-  //     candidateProposal.latestVersion.signatures,
-  //     candidateProposal.latestVersion.calldatas,
-  //     candidateProposal.latestVersion.description,
-  //   );
-
-  //   await addSignature(
-  //     signature,
-  //     expiry,
-  //     candidateProposal.proposer,
-  //     candidateProposal.slug,
-  //     encodedProp,
-  //     'TODO reason',
-  //   );
-  // }
 
   const [isProposePending, setProposePending] = useState(false);
-
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
@@ -308,7 +180,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                 />
               );
             })}
-          {/* TODO: check this against num of votes instead of num of sigs */}
           {props.signatures &&
             requiredVotes &&
             signedVotes < requiredVotes &&

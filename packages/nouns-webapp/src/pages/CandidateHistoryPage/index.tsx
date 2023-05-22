@@ -1,62 +1,24 @@
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import {
-  ProposalState,
-  ProposalVersion,
-  useCancelProposal,
-  useCurrentQuorum,
-  useExecuteProposal,
-  useProposal,
-  useProposalVersions,
-  useQueueProposal,
-} from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { ProposalVersion } from '../../wrappers/nounsDao';
 import classes from '../ProposalHistory/Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
-import { RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { RouteComponentProps } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
-import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
-import { useQuery } from '@apollo/client';
-import {
-  proposalVotesQuery,
-  delegateNounsAtBlockQuery,
-  ProposalVotes,
-  Delegates,
-  propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { SearchIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
-import {
-  ProposalCandidate,
-  useCandidateProposal,
-  useCandidateProposalVersions,
-} from '../../wrappers/nounsData';
+import { useCandidateProposalVersions } from '../../wrappers/nounsData';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 
 dayjs.extend(utc);
@@ -74,17 +36,9 @@ const CandidateHistoryPage = ({
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
   const { loading, data: proposal, error } = useCandidateProposalVersions(id);
   const proposalVersions = proposal?.versions;
-  console.log('candidate', proposal);
-  // const proposalVersions = useProposalVersions(id);
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [earlierVersion, setEarlierVersion] = useState(0);
-
-  // Get and format date from data
-  const timestamp = Date.now();
-  const currentBlock = useBlockNumber();
-
-  console.log('proposalVersions', proposalVersions);
 
   useEffect(() => {
     if (versionNumber) {
@@ -120,8 +74,6 @@ const CandidateHistoryPage = ({
     );
   };
 
-  console.log('activeVersion', activeVersion);
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
@@ -143,28 +95,19 @@ const CandidateHistoryPage = ({
             submitButtonClickHandler={() => null}
           />
         )}
-        {/* {proposal && (
-          <ProposalHeader
-            title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
-            proposal={proposal}
-            isActiveForVoting={false}
-            isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => null}
-          />
-        )} */}
       </Col>
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
-              <ProposalContent
-                description={proposalVersions[activeVersion - 1].description}
-                title={proposalVersions[activeVersion - 1].title}
-                details={proposalVersions[activeVersion - 1].details}
-                isV3Proposal={true}
-              />
-            )}
+                <ProposalContent
+                  description={proposalVersions[activeVersion - 1].description}
+                  title={proposalVersions[activeVersion - 1].title}
+                  details={proposalVersions[activeVersion - 1].details}
+                  isV3Proposal={true}
+                />
+              )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
                 <ReactDiffViewer
@@ -193,12 +136,12 @@ const CandidateHistoryPage = ({
           <Col lg={4} md={12}>
             <div className={classes.versionHistory}>
               <div className={classes.versionHistoryHeader}>
-                <h2>Version History</h2>
+                <h2><Trans>Version History</Trans></h2>
                 <button
                   className={classes.diffsLink}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}
                 >
-                  View diffs
+                  <Trans>View diffs</Trans>
                 </button>
               </div>
               <div className={classes.versionsList}>

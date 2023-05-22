@@ -15,7 +15,6 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import UpdateProposalPage from './pages/UpdateProposal';
-import CreateDraftProposalPage from './pages/CreateDraftProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import ExplorePage from './pages/Explore';
@@ -31,11 +30,8 @@ import CandidatePage from './pages/Candidate';
 import EditProposalPage from './pages/EditProposal';
 import EditCandidatePage from './pages/EditCandidate';
 import ProposalHistory from './pages/ProposalHistory';
-import DraftProposals from './pages/DraftProposals';
-import DraftProposalPage from './pages/DraftProposal';
-import CreateCandidateProposalPage from './pages/CreateCandidateProposalPage';
+
 import CandidateProposals from './pages/CandidateProposals';
-import CandidateProposalPage from './pages/CandidateProposalPage';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
 
 function App() {
@@ -77,13 +73,8 @@ function App() {
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
-            {/* <Route exact path="/create-draft-proposal" component={CreateDraftProposalPage} /> */}
-            {/* <Route exact path="/candidates/create" component={CreateCandidateProposalPage} /> */}
             <Route exact path="/candidates" component={CandidateProposals} />
-            {/* <Route exact path="/candidates-poc/:id" component={CandidateProposalPage} /> */}
             <Route exact path="/update-proposal/:id" component={UpdateProposalPage} />
-            <Route exact path="/draft-proposals" component={DraftProposals} />
-            <Route exact path="/draft-proposals/:id" component={DraftProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />

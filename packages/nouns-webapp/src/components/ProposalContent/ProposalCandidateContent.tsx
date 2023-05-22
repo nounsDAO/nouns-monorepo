@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalCandidate } from '../../wrappers/nounsDao';
+import { ProposalCandidate } from '../../wrappers/nounsData';
 import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';

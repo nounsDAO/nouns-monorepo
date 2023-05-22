@@ -18,7 +18,7 @@ import { useQuery } from '@apollo/client';
 import {
   proposalQuery,
   partialProposalsQuery,
-  candidateProposalQuery,
+  // candidateProposalQuery,
   proposalVersionsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
@@ -142,7 +142,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
+  PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -165,105 +165,105 @@ export interface ProposalTransaction {
   usdcValue?: number;
 }
 
-export interface ProposalCandidateInfo {
-  id: string;
-  slug: string;
-  proposer: string;
-  lastUpdatedTimestamp: number;
-  canceled: boolean;
-  versionsCount: number;
-}
+// export interface ProposalCandidateInfo {
+//   id: string;
+//   slug: string;
+//   proposer: string;
+//   lastUpdatedTimestamp: number;
+//   canceled: boolean;
+//   versionsCount: number;
+// }
 
-export interface ProposalCandidateVersion {
-  title: string;
-  description: string;
-  details: ProposalDetail[];
-  versionSignatures: {
-    reason: string;
-    expirationTimestamp: number;
-    sig: string;
-    canceled: boolean;
-    signer: {
-      id: string;
-      proposals: {
-        id: string;
-      }[];
-    };
-  }[];
-}
+// export interface ProposalCandidateVersion {
+//   title: string;
+//   description: string;
+//   details: ProposalDetail[];
+//   versionSignatures: {
+//     reason: string;
+//     expirationTimestamp: number;
+//     sig: string;
+//     canceled: boolean;
+//     signer: {
+//       id: string;
+//       proposals: {
+//         id: string;
+//       }[];
+//     };
+//   }[];
+// }
 
-export interface ProposalCandidate extends ProposalCandidateInfo {
-  version: ProposalCandidateVersion;
-  canceled: boolean;
-  proposer: string;
-}
+// export interface ProposalCandidate extends ProposalCandidateInfo {
+//   version: ProposalCandidateVersion;
+//   canceled: boolean;
+//   proposer: string;
+// }
 
-export interface PartialProposalCandidate extends ProposalCandidateInfo {
-  lastUpdatedTimestamp: number;
-  latestVersion: {
-    title: string;
-    description: string;
-    versionSignatures: {
-      reason: string;
-      expirationTimestamp: number;
-      sig: string;
-      canceled: boolean;
-      signer: {
-        id: string;
-        proposals: {
-          id: string;
-        }[];
-      };
-    }[];
-  };
-}
+// export interface PartialProposalCandidate extends ProposalCandidateInfo {
+//   lastUpdatedTimestamp: number;
+//   latestVersion: {
+//     title: string;
+//     description: string;
+//     versionSignatures: {
+//       reason: string;
+//       expirationTimestamp: number;
+//       sig: string;
+//       canceled: boolean;
+//       signer: {
+//         id: string;
+//         proposals: {
+//           id: string;
+//         }[];
+//       };
+//     }[];
+//   };
+// }
 
-export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
-  versions: {
-    title: string;
-  }[];
-  latestVersion: {
-    title: string;
-    description: string;
-    targets: string[];
-    values: string[];
-    signatures: string[];
-    calldatas: string[];
-    encodedProposalHash: string;
-    versionSignatures: {
-      reason: string;
-      expirationTimestamp: number;
-      sig: string;
-      canceled: boolean;
-      signer: {
-        id: string;
-        proposals: {
-          id: string;
-        }[];
-      };
-    }[];
-  };
-}
+// export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
+//   versions: {
+//     title: string;
+//   }[];
+//   latestVersion: {
+//     title: string;
+//     description: string;
+//     targets: string[];
+//     values: string[];
+//     signatures: string[];
+//     calldatas: string[];
+//     encodedProposalHash: string;
+//     versionSignatures: {
+//       reason: string;
+//       expirationTimestamp: number;
+//       sig: string;
+//       canceled: boolean;
+//       signer: {
+//         id: string;
+//         proposals: {
+//           id: string;
+//         }[];
+//       };
+//     }[];
+//   };
+// }
 
-export interface PartialCandidateSignature {
-  signer: {
-    id: string;
-  };
-  expirationTimestamp: string;
-}
+// export interface PartialCandidateSignature {
+//   signer: {
+//     id: string;
+//   };
+//   expirationTimestamp: string;
+// }
 
-export interface CandidateSignature {
-  reason: string;
-  expirationTimestamp: number;
-  sig: string;
-  canceled: boolean;
-  signer: {
-    id: string;
-    proposals: {
-      id: string;
-    }[];
-  };
-}
+// export interface CandidateSignature {
+//   reason: string;
+//   expirationTimestamp: number;
+//   sig: string;
+//   canceled: boolean;
+//   signer: {
+//     id: string;
+//     proposals: {
+//       id: string;
+//     }[];
+//   };
+// }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
@@ -590,42 +590,37 @@ const parsePartialSubgraphProposal = (
   };
 };
 
-const parseSubgraphCandidate = (candidate: ProposalCandidateSubgraphEntity | undefined) => {
-  if (!candidate) {
-    return;
-  }
-  const description = candidate.latestVersion.description
-    ?.replace(/\\n/g, '\n')
-    .replace(/(^['"]|['"]$)/g, '');
-  // const versionSignatures = candidate.latestVersion.versionSignatures.map(s => {
-  //   if (s.canceled === false) {
-  //     return s;
-  //   }
-  // });
-  const details = {
-    targets: candidate.latestVersion.targets,
-    values: candidate.latestVersion.values,
-    signatures: candidate.latestVersion.signatures,
-    calldatas: candidate.latestVersion.calldatas,
-    encodedProposalHash: candidate.latestVersion.encodedProposalHash,
-  };
+// const parseSubgraphCandidate = (candidate: ProposalCandidateSubgraphEntity | undefined) => {
+//   if (!candidate) {
+//     return;
+//   }
+//   const description = candidate.latestVersion.description
+//     ?.replace(/\\n/g, '\n')
+//     .replace(/(^['"]|['"]$)/g, '');
+//   const details = {
+//     targets: candidate.latestVersion.targets,
+//     values: candidate.latestVersion.values,
+//     signatures: candidate.latestVersion.signatures,
+//     calldatas: candidate.latestVersion.calldatas,
+//     encodedProposalHash: candidate.latestVersion.encodedProposalHash,
+//   };
 
-  return {
-    id: candidate.id,
-    slug: candidate.slug,
-    proposer: candidate.proposer,
-    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
-    canceled: candidate.canceled,
-    versionsCount: candidate.versions.length,
-    version: {
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-      description: description ?? 'No description.',
-      details: formatProposalTransactionDetails(details),
-      transactionHash: details.encodedProposalHash,
-      versionSignatures: candidate.latestVersion.versionSignatures,
-    },
-  };
-};
+//   return {
+//     id: candidate.id,
+//     slug: candidate.slug,
+//     proposer: candidate.proposer,
+//     lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+//     canceled: candidate.canceled,
+//     versionsCount: candidate.versions.length,
+//     version: {
+//       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+//       description: description ?? 'No description.',
+//       details: formatProposalTransactionDetails(details),
+//       transactionHash: details.encodedProposalHash,
+//       versionSignatures: candidate.latestVersion.versionSignatures,
+//     },
+//   };
+// };
 
 const parseSubgraphProposal = (
   proposal: ProposalSubgraphEntity | undefined,
@@ -666,46 +661,44 @@ const parseSubgraphProposal = (
   };
 };
 
-const parseSubgraphProposalVersions = (
-  proposal: ProposalSubgraphEntity | undefined,
-  blockNumber: number | undefined,
-  timestamp: number | undefined,
-  toUpdate?: boolean,
-) => {
-  if (!proposal) {
-    return;
-  }
+// const parseSubgraphProposalVersions = (
+//   proposal: ProposalSubgraphEntity | undefined,
+//   blockNumber: number | undefined,
+//   timestamp: number | undefined,
+//   toUpdate?: boolean,
+// ) => {
+//   if (!proposal) {
+//     return;
+//   }
 
-  const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
-  let details;
-  if (toUpdate) {
-    console.log('parseSubgraphProposal toUpdate', toUpdate);
-    details = formatProposalTransactionDetailsToUpdate(proposal);
-    console.log('parseSubgraphProposal details', details);
-  } else {
-    details = formatProposalTransactionDetails(proposal);
-  }
-  return {
-    id: proposal.id,
-    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-    description: description ?? 'No description.',
-    proposer: proposal.proposer?.id,
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
-    proposalThreshold: parseInt(proposal.proposalThreshold),
-    quorumVotes: parseInt(proposal.quorumVotes),
-    forCount: parseInt(proposal.forVotes),
-    againstCount: parseInt(proposal.againstVotes),
-    abstainCount: parseInt(proposal.abstainVotes),
-    createdBlock: parseInt(proposal.createdBlock),
-    startBlock: parseInt(proposal.startBlock),
-    endBlock: parseInt(proposal.endBlock),
-    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-    details: details,
-    transactionHash: proposal.createdTransactionHash,
-    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
-    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
-  };
-};
+//   const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+//   let details;
+//   if (toUpdate) {
+//     details = formatProposalTransactionDetailsToUpdate(proposal);
+//   } else {
+//     details = formatProposalTransactionDetails(proposal);
+//   }
+//   return {
+//     id: proposal.id,
+//     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+//     description: description ?? 'No description.',
+//     proposer: proposal.proposer?.id,
+//     status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+//     proposalThreshold: parseInt(proposal.proposalThreshold),
+//     quorumVotes: parseInt(proposal.quorumVotes),
+//     forCount: parseInt(proposal.forVotes),
+//     againstCount: parseInt(proposal.againstVotes),
+//     abstainCount: parseInt(proposal.abstainVotes),
+//     createdBlock: parseInt(proposal.createdBlock),
+//     startBlock: parseInt(proposal.startBlock),
+//     endBlock: parseInt(proposal.endBlock),
+//     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+//     details: details,
+//     transactionHash: proposal.createdTransactionHash,
+//     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
+//     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
+//   };
+// };
 
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
   const { loading, data, error } = useQuery(partialProposalsQuery());
@@ -830,9 +823,9 @@ export const useProposalVersions = (
   return sortedNumberedVersions;
 };
 
-export const useCandidate = (id: string): ProposalCandidate | undefined => {
-  return parseSubgraphCandidate(useQuery(candidateProposalQuery(id)).data?.proposalCandidate);
-};
+// export const useCandidate = (id: string): ProposalCandidate | undefined => {
+//   return parseSubgraphCandidate(useQuery(candidateProposalQuery(id)).data?.proposalCandidate);
+// };
 
 export const useCancelSignature = () => {
   const { send: cancelSig, state: cancelSigState } = useContractFunction(
@@ -911,21 +904,21 @@ export const useUpdateProposal = () => {
   return { updateProposal, updateProposalState };
 };
 
-export const useProposeBySigs = () => {
-  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
-    nounsDaoContract,
-    'proposeBySigs',
-  );
-  return { proposeBySigs, proposeBySigsState };
-};
+// export const useProposeBySigs = () => {
+//   const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
+//     nounsDaoContract,
+//     'proposeBySigs',
+//   );
+//   return { proposeBySigs, proposeBySigsState };
+// };
 
-export const useUpdateProposalBySigs = () => {
-  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposalBySigs',
-  );
-  return { updateProposalBySigs, updateProposalBySigState };
-};
+// export const useUpdateProposalBySigs = () => {
+//   const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(
+//     nounsDaoContract,
+//     'updateProposalBySigs',
+//   );
+//   return { updateProposalBySigs, updateProposalBySigState };
+// };
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classes from './CandidateSponsors.module.css';
-import { CandidateSignature } from '../../wrappers/nounsDao';
+import { CandidateSignature } from '../../wrappers/nounsData';
 import CandidateSponsorImage from './CandidateSponsorImage';
 import { useQuery } from '@apollo/client';
 import { useBlockNumber } from '@usedapp/core';
@@ -14,9 +14,7 @@ type Props = {
 
 function CandidateSponsors({ signers, nounsRequired }: Props) {
   const [signerSpots, setSignerSpots] = useState<CandidateSignature[]>();
-  const [emptySignerSpots, setEmptySignerSpots] = useState<number[]>();
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
-
   const currentBlock = useBlockNumber();
   const signerIds = signers?.map(s => s.signer.id) ?? [];
 
@@ -28,9 +26,7 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
     acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
     return acc;
   }, {});
-  console.log('delegateToNounIds', delegateToNounIds);
   const nounIds = Object.values(delegateToNounIds ?? {}).flat();
-  console.log('nounIds', nounIds);
 
   React.useEffect(() => {
     if (signers && signers.length < nounsRequired) {

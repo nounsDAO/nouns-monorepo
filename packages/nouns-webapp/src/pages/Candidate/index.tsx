@@ -1,15 +1,5 @@
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import {
-  ProposalState,
-  useCancelProposal,
-  useCandidate,
-  useCurrentQuorum,
-  useExecuteProposal,
-  useProposal,
-  useQueueProposal,
-} from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Candidate.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
@@ -18,38 +8,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
-import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
-import ProposalContent from '../../components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
-import { useQuery } from '@apollo/client';
-import {
-  proposalVotesQuery,
-  delegateNounsAtBlockQuery,
-  ProposalVotes,
-  Delegates,
-  propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { SearchIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import CandidateSponsors from '../../components/CandidateSponsors';
-import { BigNumber } from 'ethers';
-import { CandidateSignature } from '../../wrappers/nounsDao';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
-import { version } from 'process';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
 import {
   ProposalCandidate,
@@ -90,7 +55,6 @@ const CandidatePage = ({
       getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
-      console.log('tx', tx);
       switch (tx.status) {
         case 'None':
           setPending?.(false);
@@ -154,7 +118,6 @@ const CandidatePage = ({
       <Col lg={12} className={classes.wrapper}>
         {candidate && (
           <CandidateHeader
-            // proposal={candidate}
             title={candidate.version.title}
             slug={candidate.slug}
             id={candidate.id}
@@ -164,7 +127,7 @@ const CandidatePage = ({
             lastUpdatedTimestamp={candidate.lastUpdatedTimestamp}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => {}}
+            submitButtonClickHandler={() => { }}
           />
         )}
       </Col>

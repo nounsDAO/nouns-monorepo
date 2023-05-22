@@ -1,10 +1,9 @@
 import {
   PartialProposal,
-  PartialProposalCandidate,
-  ProposalCandidate,
   ProposalState,
   useProposalThreshold,
 } from '../../wrappers/nounsDao';
+import { PartialProposalCandidate, ProposalCandidate } from '../../wrappers/nounsData';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -41,17 +40,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -89,21 +88,23 @@ const Proposals = ({
   proposals: PartialProposal[];
   nounsRequired?: number;
 }) => {
-  const history = useHistory();
-
+  const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [candidates, setCandidates] = useState<PartialProposalCandidate[]>([]);
   const { account } = useEthers();
+  const history = useHistory();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
-  const [showDelegateModal, setShowDelegateModal] = useState(false);
-
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
-
-  const [activeTab, setActiveTab] = useState(0);
   const tabs = ['Proposals', 'Candidates'];
+
+  // Get candidates
+  const { loading, error, data: allCandidates } = useCandidateProposals();
+
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -114,10 +115,6 @@ const Proposals = ({
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
-
-  // Get candidates
-  const { loading, error, data: allCandidates } = useCandidateProposals();
-  const [candidates, setCandidates] = useState<PartialProposalCandidate[]>([]);
 
   useEffect(() => {
     if (!loading && !error && allCandidates) {

@@ -1,25 +1,10 @@
-import React from 'react';
 import classes from './CandidateCard.module.css';
 import clsx from 'clsx';
-import {
-  PartialProposal,
-  PartialProposalCandidate,
-  ProposalCandidate,
-  ProposalState,
-} from '../../wrappers/nounsDao';
-import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
-import { i18n } from '@lingui/core';
-import { ClockIcon } from '@heroicons/react/solid';
-import ProposalStatus from '../ProposalStatus';
-import { useGetCountdownCopy } from '../../hooks/useGetCountDownCopy';
-import { useBlockNumber } from '@usedapp/core';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { isMobileScreen } from '../../utils/isMobile';
+import { PartialProposalCandidate } from '../../wrappers/nounsData';
 import CandidateSponsors from './CandidateSponsors';
 import ShortAddress from '../ShortAddress';
 import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
@@ -29,23 +14,6 @@ type Props = {
 };
 
 function CandidateCard({ candidate, nounsRequired }: Props) {
-  const currentBlock = useBlockNumber();
-  const isMobile = isMobileScreen();
-  const activeLocale = useActiveLocale();
-  const minSponsorCount = 5;
-
-  const countdownPill = (
-    <div className={classes.proposalStatusWrapper}>
-      <div className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}>
-        <div className={classes.countdownPillContentWrapper}>
-          <span className={classes.countdownPillClock}>
-            <ClockIcon height={16} width={16} />
-          </span>{' '}
-          {/* <span className={classes.countdownPillText}>{countDownCopy}</span> */}
-        </div>
-      </div>
-    </div>
-  );
   return (
     <Link
       className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
