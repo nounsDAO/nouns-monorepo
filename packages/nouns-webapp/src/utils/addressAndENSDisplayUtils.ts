@@ -16,3 +16,11 @@ export const shortENS = (ens: string) => {
 export const useShortAddress = (address: string) => {
   return address && [address.substr(0, 4), address.substr(38, 4)].join('...');
 };
+
+export const shortAddress = (address: string) => {
+  return address && [address.substr(0, 4), address.substr(38, 4)].join('...');
+};
+
+export const lowerCaseAddress = (address: string | null | undefined) => {
+  return address ? address.toLowerCase() : '';
+};
