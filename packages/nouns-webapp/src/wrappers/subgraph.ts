@@ -131,6 +131,7 @@ export const candidateProposalQuery = (id: string) => gql`
     proposer
     lastUpdatedTimestamp
     createdTransactionHash
+    canceled
     versions {
       title
     }
@@ -155,6 +156,34 @@ export const candidateProposalQuery = (id: string) => gql`
         canceled
         reason
       }
+    }
+  }
+}
+`;
+
+export const candidateProposalVersionsQuery = (id: string) => gql`
+{
+  proposalCandidate(id: "${id}") {
+    id
+    slug
+    proposer
+    lastUpdatedTimestamp
+    canceled
+    createdTransactionHash
+    versions {
+      id
+      title
+      description
+      targets
+      values
+      signatures
+      calldatas
+      encodedProposalHash
+      createdTimestamp
+      updateMessage
+    }
+    latestVersion {
+      id
     }
   }
 }

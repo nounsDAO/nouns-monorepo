@@ -21,34 +21,18 @@ import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 type Props = {
   candidate: PartialProposalCandidate;
+  nounsRequired: number;
 };
 
-// temporary hard-coded list of candidate sponsors
-const candidateSponsorsList: `0x${string}`[] = [
-  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-];
-
-function CandidateCard({ candidate }: Props) {
-  console.log('candidate', candidate);
+function CandidateCard({ candidate, nounsRequired }: Props) {
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const minSponsorCount = 5;
-
-  // const countDownCopy = useGetCountdownCopy(candidate, currentBlock || 0, activeLocale);
-  // const isPropInStateToHaveCountDown =
-  //   candidate.status === ProposalState.PENDING ||
-  //   candidate.status === ProposalState.ACTIVE ||
-  //   candidate.status === ProposalState.QUEUED;
-  // console.log(
-  //   'candidate.latestVersion.versionSignatures',
-  //   candidate.latestVersion.versionSignatures,
-  // );
 
   const countdownPill = (
     <div className={classes.proposalStatusWrapper}>
@@ -73,17 +57,21 @@ function CandidateCard({ candidate }: Props) {
         </span>
         <p className={classes.proposer}>
           by{' '}
-          <a href="">
-            <ShortAddress address={candidate.proposer} />
+          <a
+            href={buildEtherscanAddressLink(candidate.proposer || '')}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ShortAddress address={candidate.proposer || ''} avatar={false} />
           </a>
         </p>
 
         <div className={classes.footer}>
           <div className={classes.candidateSponsors}>
-            <CandidateSponsors signers={candidate.latestVersion.versionSignatures} />
+            <CandidateSponsors signers={candidate.latestVersion.versionSignatures} nounsRequired={nounsRequired} />
             <span className={classes.sponsorCount}>
               <strong>
-                {candidate.latestVersion.versionSignatures.length} / {minSponsorCount}{' '}
+                {candidate.latestVersion.versionSignatures.length} / {nounsRequired}
               </strong>{' '}
               <Trans>sponsors</Trans>
             </span>

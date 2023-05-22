@@ -102,7 +102,7 @@ export interface Proposal extends PartialProposal {
 
 export interface ProposalVersion {
   id: string;
-  createdAt: string;
+  createdAt: number;
   updateMessage: string;
   description: string;
   targets: string[];
@@ -811,7 +811,6 @@ export const useProposalVersions = (
     );
 
   const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: any, i: number) => {
-    console.log('proposalVersion', proposalVersion);
     return {
       id: proposalVersion.id,
       versionNumber: i + 1,
@@ -827,12 +826,6 @@ export const useProposalVersions = (
       proposal: {
         id: proposalVersion.proposal.id,
       },
-      // proposal: parseSubgraphProposalVersions(
-      //   proposalVersion.proposal,
-      //   blockNumber,
-      //   timestamp,
-      //   toUpdate,
-      // ),
     };
   });
 

@@ -12,7 +12,7 @@ import { i18n } from '@lingui/core';
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
+  const nounsRequired = threshold !== undefined ? threshold + 1 : undefined;
 
   const treasuryBalance = useTreasuryBalance();
   const treasuryBalanceUSD = useTreasuryUSDValue();
@@ -38,7 +38,13 @@ const GovernancePage = () => {
               Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
               proposals or delegate their vote to a third party. A minimum of{' '}
               <span className={classes.boldText}>
-                {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
+                {nounsRequired ? (
+                  <>
+                    {nounsRequired}{" "}{threshold === 0 ? nounSingular : nounPlural}
+                  </>
+                ) : (
+                  '...'
+                )}
               </span>{' '}
               is required to submit proposals.
             </Trans>
@@ -81,7 +87,7 @@ const GovernancePage = () => {
         </Col>
       </Section>
 
-      <Proposals proposals={proposals} />
+      <Proposals proposals={proposals} nounsRequired={nounsRequired} />
     </>
   );
 };

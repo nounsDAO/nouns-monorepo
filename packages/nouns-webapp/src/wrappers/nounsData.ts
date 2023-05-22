@@ -4,6 +4,7 @@ import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import config from '../config';
 import {
   candidateProposalQuery,
+  candidateProposalVersionsQuery,
   candidateProposalsQuery,
   proposalFeedbacksQuery,
 } from './subgraph';
@@ -62,6 +63,14 @@ export const useCandidateProposal = (id: string, toUpdate?: boolean) => {
     useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
     toUpdate
   );
+};
+
+export const useCandidateProposalVersions = (id: string) => {
+  console.log('useCandidateProposalVersions ID', id);
+  const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
+  const versions = data && parseSubgraphCandidateVersions(data.proposalCandidate);
+  // console.log('useCandidateProposalVersions', versions);
+  return { loading, data: versions, error };
 };
 
 export const useGetCreateCandidateCost = () => {
@@ -149,6 +158,7 @@ const parseSubgraphCandidate = (
     details = formatProposalTransactionDetails(transactionDetails);
   }
   console.log('candidate return', candidate);
+  console.log('candidate return details', details);
 
   return {
     id: candidate.id,
@@ -164,7 +174,65 @@ const parseSubgraphCandidate = (
       details: details,
       transactionHash: details.encodedProposalHash,
       versionSignatures: candidate.latestVersion.versionSignatures,
+      targets: candidate.latestVersion.targets,
+      values: candidate.latestVersion.values,
+      signatures: candidate.latestVersion.signatures,
+      calldatas: candidate.latestVersion.calldatas,
     },
+  };
+};
+
+const parseSubgraphCandidateVersions = (
+  candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined) => {
+  if (!candidateVersions) {
+    return;
+  }
+
+  console.log('parseSubgraphCandidateVersions', candidateVersions);
+  // const sortedCandidateVersions =
+  //   candidateVersions &&
+  //   candidateVersions.versions.sort((a, b) =>
+  //     a.createdTimestamp > b.createdTimestamp ? 1 : -1,
+  //   );
+
+  // const versions = sortedCandidateVersions.map((version, i) => {
+  const versions = candidateVersions.versions.map((version, i) => {
+
+    const description = version.description
+      ?.replace(/\\n/g, '\n')
+      .replace(/(^['"]|['"]$)/g, '');
+    const transactionDetails: ProposalTransactionDetails = {
+      targets: version.targets,
+      values: version.values,
+      signatures: version.signatures,
+      calldatas: version.calldatas,
+      encodedProposalHash: version.encodedProposalHash,
+    };
+
+    const details = formatProposalTransactionDetails(transactionDetails);
+
+    return {
+      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      description: description ?? 'No description.',
+      details: details,
+      createdAt: version.createdTimestamp,
+      updateMessage: version.updateMessage,
+      versionNumber: i + 1,
+    };
+  });
+
+
+  return {
+    id: candidateVersions.id,
+    title: R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ?? 'Untitled',
+    description: candidateVersions.latestVersion.description ?? 'No description.',
+    slug: candidateVersions.slug,
+    proposer: candidateVersions.proposer,
+    lastUpdatedTimestamp: candidateVersions.lastUpdatedTimestamp,
+    canceled: candidateVersions.canceled,
+    versionsCount: candidateVersions.versions.length,
+    createdTransactionHash: candidateVersions.createdTransactionHash,
+    versions: versions,
   };
 };
 
@@ -194,6 +262,25 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
         }[];
       };
     }[];
+  };
+}
+
+export interface ProposalCandidateVersionsSubgraphEntity extends ProposalCandidateInfo {
+  versions: {
+    title: string;
+    description: string;
+    targets: string[];
+    values: string[];
+    signatures: string[];
+    calldatas: string[];
+    encodedProposalHash: string;
+    updateMessage: string;
+    createdTimestamp: number;
+  }[];
+  latestVersion: {
+    id: string;
+    title: string;
+    description: string;
   };
 }
 
@@ -248,9 +335,6 @@ export interface ProposalCandidateVersion {
 
 export interface ProposalCandidate extends ProposalCandidateInfo {
   version: ProposalCandidateVersion;
-  // canceled: boolean;
-  // proposer: string;
-  // createdTransactionHash: string;
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {

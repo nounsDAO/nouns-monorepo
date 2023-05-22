@@ -82,7 +82,7 @@ const getCountdownCopy = (
   );
 };
 
-const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
+const Proposals = ({ proposals, nounsRequired }: { proposals: PartialProposal[], nounsRequired?: number }) => {
   const history = useHistory();
 
   const { account } = useEthers();
@@ -282,14 +282,14 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
           <Col lg={10} className={classes.proposalsList}>
             <Row>
               <Col lg={9}>
-                {candidates?.length ? (
+                {nounsRequired && candidates?.length ? (
                   candidates
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
                       return (
                         <div>
-                          <CandidateCard candidate={c} key={c.id} />
+                          <CandidateCard candidate={c} key={c.id} nounsRequired={nounsRequired} />
                         </div>
                       );
                     })
