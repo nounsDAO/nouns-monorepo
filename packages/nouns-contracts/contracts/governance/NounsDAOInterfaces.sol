@@ -701,10 +701,11 @@ contract NounsDAOStorageV3 {
         /// @notice The total supply at the time of proposal creation
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
-        uint256 creationBlock;
-        address[] signers;
+        uint64 creationBlock;
         uint64 updatePeriodEndBlock;
         uint64 objectionPeriodEndBlock;
+        uint64 placeholder;
+        address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
     }

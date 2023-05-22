@@ -4,11 +4,12 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
+import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOExecutorProxy } from '../../../contracts/governance/NounsDAOExecutorProxy.sol';
-import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOExecutor, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
@@ -211,8 +212,40 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(daoProxy.implementation(), address(1234));
     }
 
-    function upgradeToV3() internal {
-        uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
+    using stdStorage for StdStorage;
+
+    function test_proposalCreatedInV2HasSameFieldsInV3() public {
+        vm.roll(block.number + 256);
+
+        uint256 proposalId = proposeToSendETH(proposer2, proposer2, 100 ether);
+        rollAndCastVote(proposer, proposalId, 1);
+        queueAndExecute(proposalId);
+
+        NounsDAOStorageV2.ProposalCondensed memory propV2 = NounsDAOLogicV2(payable(address(daoProxy))).proposals(1);
+
+        upgradeToV3();
+
+        NounsDAOStorageV2.ProposalCondensed memory propV3 = NounsDAOLogicV3(payable(address(daoProxy))).proposals(1);
+
+        assertEq(propV2.id, propV3.id);
+        assertEq(propV2.proposer, propV3.proposer);
+        assertEq(propV2.proposalThreshold, propV3.proposalThreshold);
+        assertEq(propV2.quorumVotes, propV3.quorumVotes);
+        assertEq(propV2.eta, propV3.eta);
+        assertEq(propV2.startBlock, propV3.startBlock);
+        assertEq(propV2.endBlock, propV3.endBlock);
+        assertEq(propV2.forVotes, propV3.forVotes);
+        assertEq(propV2.againstVotes, propV3.againstVotes);
+        assertEq(propV2.abstainVotes, propV3.abstainVotes);
+        assertEq(propV2.canceled, propV3.canceled);
+        assertEq(propV2.vetoed, propV3.vetoed);
+        assertEq(propV2.executed, propV3.executed);
+        assertEq(propV2.totalSupply, propV3.totalSupply);
+        assertEq(propV2.creationBlock, propV3.creationBlock);
+    }
+
+    function upgradeToV3() internal returns (uint256 proposalId) {
+        proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
         rollAndCastVote(proposer, proposalId, 1);
         queueAndExecute(proposalId);
     }
