@@ -16,6 +16,7 @@
  *********************************/
 
 // LICENSE
+// ERC721CheckpointableUpgradeable.sol is a modified version of ERC721Checkpointable.sol in this repository.
 // ERC721Checkpointable.sol uses and modifies part of Compound Lab's Comp.sol:
 // https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol
 //
@@ -24,7 +25,17 @@
 //
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
-// MODIFICATIONS
+// ERC721CheckpointableUpgradeable.sol MODIFICATIONS:
+// - Inherits from OpenZeppelin's ERC721EnumerableUpgradeable.sol, removing the original modification Nouns made to
+//   ERC721.sol, where for each mint two Transfer events were emitted; this modified implementation sticks with the
+//   OpenZeppelin standard.
+// - More importantly, this inheritance change makes the token upgradable, which we deemed important in the context of
+//   forks, in order to give new Nouns forks enough of a chance to modify their contracts to the new DAO's needs.
+// - Fixes a critical bug in `delegateBySig`, where the previous version allowed delegating to address zero, which then
+//   reverts whenever that owner tries to delegate anew or transfer their tokens. The fix is simply to revert on any
+//   attempt to delegate to address zero.
+//
+// ERC721Checkpointable.sol MODIFICATIONS:
 // Checkpointing logic from Comp.sol has been used with the following modifications:
 // - `delegates` is renamed to `_delegates` and is set to private
 // - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
