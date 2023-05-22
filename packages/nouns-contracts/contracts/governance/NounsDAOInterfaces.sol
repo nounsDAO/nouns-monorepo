@@ -700,11 +700,11 @@ contract NounsDAOStorageV3 {
         mapping(address => Receipt) receipts;
         /// @notice The total supply at the time of proposal creation
         uint256 totalSupply;
+        /// @notice The block at which this proposal was created
+        uint64 creationBlock;
         uint64 updatePeriodEndBlock;
         uint64 objectionPeriodEndBlock;
         uint64 placeholder;
-        /// @notice The block at which this proposal was created
-        uint64 creationBlock;
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
