@@ -51,7 +51,7 @@ import { CandidateSignature } from '../../wrappers/nounsDao';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import { version } from 'process';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
-import { useCancelCandidate } from '../../wrappers/nounsData';
+import { ProposalCandidate, useCancelCandidate, useCandidateProposal } from '../../wrappers/nounsData';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -64,7 +64,7 @@ const CandidatePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
-  const candidate = useCandidate(id);
+  const candidate: ProposalCandidate | undefined = useCandidateProposal(id);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = !(activeAccount === undefined);
@@ -143,94 +143,53 @@ const CandidatePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+
       <Col lg={12} className={classes.wrapper}>
         {candidate && (
           <CandidateHeader
-            proposal={candidate}
+            // proposal={candidate}
+            title={candidate.version.title}
+            slug={candidate.slug}
+            id={candidate.id}
+            proposer={candidate.proposer}
+            versionsCount={candidate.versionsCount}
+            createdTransactionHash={candidate.createdTransactionHash}
+            lastUpdatedTimestamp={candidate.lastUpdatedTimestamp}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => { }}
           />
         )}
       </Col>
-
-      <Col lg={12} className={classes.editCandidate}>
-        <p>
-          <Trans>
-            Editing a proposal candidate will clear any previous sponsors and require each sponsor to
-            re-sign</Trans>
-        </p>
-        <div className={classes.buttons}>
-          <Button
-            onClick={destructiveStateAction}
-            disabled={isCancelPending}
-            variant="danger"
-            className={clsx(classes.destructiveTransitionStateButton, classes.button)}
-          >
-            {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
-          </Button>
-          <Link
-            to={`/candidates/${id}/edit`}
-            className={clsx(classes.primaryButton, classes.button)}
-          >
-            {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
-          </Link>
-        </div>
-      </Col>
-      {/* <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-        <Col className="d-grid gap-4">
-          {isProposer && (
-            <div className={classes.proposerOptionsWrapper}>
-              <div className={classes.proposerOptions}>
-
-                <div className="d-flex gap-3">
-                  {isAwaitingStateChange() && (
-                    <Button
-                      onClick={moveStateAction}
-                      disabled={isQueuePending || isExecutePending}
-                      variant="dark"
-                      className={classes.transitionStateButton}
-                    >
-                      {isQueuePending || isExecutePending ? (
-                        <Spinner animation="border" />
-                      ) : (
-                        <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                      )}
-                    </Button>
-                  )}
-
-                  <Button
-                    onClick={destructiveStateAction}
-                    disabled={isCancelPending}
-                    className={clsx(
-                      classes.destructiveTransitionStateButton,
-                      classes.button,
-                    )}
-                  >
-                    {isCancelPending ? (
-                      <Spinner animation="border" />
-                    ) : (
-                      <Trans>{destructiveStateButtonAction} Proposal </Trans>
-                    )}
-                  </Button>
-
-                  {isUpdateable && (
-                    <Link
-                      to={`/vote/${id}/edit`}
-                      className={clsx(classes.primaryButton, classes.button)}
-                    >
-                      Edit
-                    </Link>
-                  )}
-                </div>
-              </div>
+      <Row>
+        <Col lg={12}>
+          <div className={classes.editCandidate}>
+            <p>
+              <Trans>
+                Editing a proposal candidate will clear any previous sponsors and require each sponsor to
+                re-sign</Trans>
+            </p>
+            <div className={classes.buttons}>
+              <Button
+                onClick={destructiveStateAction}
+                disabled={isCancelPending}
+                variant="danger"
+                className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+              >
+                {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
+              </Button>
+              <Link
+                to={`/candidates/${id}/edit`}
+                className={clsx(classes.primaryButton, classes.button)}
+              >
+                {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
+              </Link>
             </div>
-          )}
+          </div>
         </Col>
-      </Row> */}
+      </Row>
       {candidate && (
         <Row>
-          {candidate?.proposer === account && 'is proposer'}
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate} />
           </Col>

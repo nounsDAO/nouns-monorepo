@@ -15,10 +15,14 @@ import { version } from 'process';
 import { Link } from 'react-router-dom';
 
 type Props = {
-  versionNumber: number;
   isActive: boolean;
   setActiveVersion: Function;
-  version: ProposalVersion;
+  // version: ProposalVersion;
+  id: string; // slug for candidate
+  createdAt: number;
+  versionNumber: number;
+  updateMessage: string;
+  isCandidate?: boolean;
 };
 
 const VersionTab = (props: Props) => {
@@ -27,18 +31,18 @@ const VersionTab = (props: Props) => {
 
   useEffect(() => {
     if (currentBlock) {
-      const date = new Date(+props.version.createdAt * 1000);
+      const date = new Date(+props.createdAt * 1000);
       setUpdatedTimestamp(date);
     }
   }, [currentBlock]);
 
-  console.log('props.version', props.version);
+  const versionLink = props.isCandidate ? `/candidates/${props.id}/history/${props.versionNumber}` : `/vote/${props.id}/history/${props.versionNumber}`;
 
   return (
     <>
       <Link
         className={clsx(classes.version, props.isActive && classes.activeVersion)}
-        to={`/vote/${props.version.proposal.id}/history/${props.versionNumber}`}
+        to={versionLink}
       >
         <h4>
           <Trans>Version</Trans> {props.versionNumber}
@@ -46,10 +50,10 @@ const VersionTab = (props: Props) => {
 
         <span>{updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
 
-        {props.version.updateMessage && props.isActive && (
+        {props.updateMessage && props.isActive && (
           <div className={classes.message}>
             <h5>Commit message</h5>
-            <p>{props.version.updateMessage}</p>
+            <p>{props.updateMessage}</p>
           </div>
         )}
       </Link>

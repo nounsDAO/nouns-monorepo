@@ -75,16 +75,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
 
-  // useEffect(() => {
-  //   if (currentBlock) {
-  //     // TODO: remove this after getting real data from the contract
-  //     const timestamp = timestampFromBlockNumber(props.proposal.createdBlock, currentBlock);
-  //     setUpdatedTimestamp(timestamp.toDate());
-  //   }
-  // }, [currentBlock]);
-
-  console.log('proposal in history', proposal);
-
   useEffect(() => {
     if (currentBlock && hasManyVersions) {
       const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];

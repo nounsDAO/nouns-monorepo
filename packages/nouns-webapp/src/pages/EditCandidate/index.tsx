@@ -38,7 +38,7 @@ interface EditCandidateProps {
 
 const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const { account } = useEthers();
-  const candidate = useCandidateProposal(props.match.params.id);
+  const candidate = useCandidateProposal(props.match.params.id, true); // get updatable transaction details
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();

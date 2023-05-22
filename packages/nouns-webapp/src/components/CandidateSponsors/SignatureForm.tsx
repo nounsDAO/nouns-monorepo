@@ -91,17 +91,19 @@ function SignatureForm(props: Props) {
     return encodedData;
   }
 
+  console.log('candidateProposal', candidateProposal);
+
   async function sign() {
-    // if (!candidateProposal) return;
+    if (!candidateProposal) return;
     let signature;
     if (proposalIdToUpdate && candidateProposal) {
       const value = {
         proposer: candidateProposal.proposer,
-        targets: candidateProposal.version.details.targets,
-        values: candidateProposal.version.details.values,
-        signatures: candidateProposal.version.details.signatures,
-        calldatas: candidateProposal.version.details.calldatas,
-        description: candidateProposal.version.details.description,
+        targets: candidateProposal.version.targets,
+        values: candidateProposal.version.values,
+        signatures: candidateProposal.version.signatures,
+        calldatas: candidateProposal.version.calldatas,
+        description: candidateProposal.version.description,
         expiry: expirationDate,
         proposalId: proposalIdToUpdate,
       };
@@ -110,11 +112,11 @@ function SignatureForm(props: Props) {
       if (!candidateProposal) return;
       const value = {
         proposer: candidateProposal.proposer,
-        targets: candidateProposal.version.details.targets,
-        values: candidateProposal.version.details.values,
-        signatures: candidateProposal.version.details.signatures,
-        calldatas: candidateProposal.version.details.calldatas,
-        description: candidateProposal.version.details.description,
+        targets: candidateProposal.version.targets,
+        values: candidateProposal.version.values,
+        signatures: candidateProposal.version.signatures,
+        calldatas: candidateProposal.version.calldatas,
+        description: candidateProposal.version.description,
         expiry: expirationDate,
       };
       signature = await signer!._signTypedData(domain, createProposalTypes, value);
@@ -122,11 +124,11 @@ function SignatureForm(props: Props) {
 
     const encodedProp = await calcProposalEncodeData(
       candidateProposal.proposer,
-      candidateProposal.version.details.targets,
-      candidateProposal.version.details.values,
-      candidateProposal.version.details.signatures,
-      candidateProposal.version.details.calldatas,
-      candidateProposal.version.details.description,
+      candidateProposal.version.targets,
+      candidateProposal.version.values,
+      candidateProposal.version.signatures,
+      candidateProposal.version.calldatas,
+      candidateProposal.version.description,
     );
 
     await addSignature(

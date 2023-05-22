@@ -2,6 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  ProposalVersion,
   useCancelProposal,
   useCurrentQuorum,
   useExecuteProposal,
@@ -10,7 +11,7 @@ import {
   useQueueProposal,
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import classes from './Vote.module.css';
+import classes from '../ProposalHistory/Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
@@ -48,9 +49,11 @@ import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import VersionTab from './VersionTab';
+import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
+import { ProposalCandidate, useCandidateProposal, useCandidateProposalVersions } from '../../wrappers/nounsData';
+import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 
 
 dayjs.extend(utc);
@@ -61,13 +64,16 @@ interface MatchParams {
   id: string;
 }
 
-const ProposalHistory = ({
+const CandidateHistoryPage = ({
   match: {
     params: { id, versionNumber },
   },
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-  const proposal = useProposal(id);
-  const proposalVersions = useProposalVersions(id);
+
+  const { loading, data: proposal, error } = useCandidateProposalVersions(id);
+  const proposalVersions = proposal?.versions;
+  console.log('candidate', proposal);
+  // const proposalVersions = useProposalVersions(id);
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [earlierVersion, setEarlierVersion] = useState(0);
@@ -76,7 +82,7 @@ const ProposalHistory = ({
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
 
-
+  console.log('proposalVersions', proposalVersions);
 
   useEffect(() => {
     if (versionNumber) {
@@ -111,10 +117,26 @@ const ProposalHistory = ({
       />);
   };
 
+  console.log('activeVersion', activeVersion);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
         {proposal && (
+          <CandidateHeader
+            title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
+            slug={proposal.slug}
+            id={proposal.id}
+            proposer={proposal.proposer}
+            versionsCount={proposal.versionsCount}
+            createdTransactionHash={proposal.createdTransactionHash}
+            lastUpdatedTimestamp={proposal.lastUpdatedTimestamp}
+            isCandidate={true}
+            isWalletConnected={isWalletConnected}
+            submitButtonClickHandler={() => null}
+          />
+        )}
+        {/* {proposal && (
           <ProposalHeader
             title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
             proposal={proposal}
@@ -122,7 +144,7 @@ const ProposalHistory = ({
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => null}
           />
-        )}
+        )} */}
       </Col>
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
@@ -150,10 +172,10 @@ const ProposalHistory = ({
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
-                    <p>Version {activeVersion - 1}</p>
+                    <p>Version {activeVersion}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
 
-                    <p>Version {activeVersion - 2}</p>
+                    <p>Version {activeVersion - 1}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
 
                   </Col>
@@ -176,16 +198,17 @@ const ProposalHistory = ({
               <div className={classes.versionsList}>
                 {proposalVersions &&
                   proposalVersions
-                    .map((version, i) => {
+                    .map((version: ProposalVersion, i: number) => {
                       return (
                         <VersionTab
                           key={i}
                           id={id}
                           createdAt={version.createdAt}
-                          updateMessage={version.updateMessage}
                           versionNumber={version.versionNumber}
+                          updateMessage={version.updateMessage}
                           isActive={i + 1 === activeVersion ? true : false}
                           setActiveVersion={setActiveVersion}
+                          isCandidate={true}
                         />
                       );
                     })
@@ -199,4 +222,4 @@ const ProposalHistory = ({
   );
 };
 
-export default ProposalHistory;
+export default CandidateHistoryPage;

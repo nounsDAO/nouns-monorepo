@@ -28,7 +28,14 @@ import dayjs from 'dayjs';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 
 interface CandidateHeaderProps {
-  proposal: ProposalCandidate;
+  // proposal: ProposalCandidate;
+  title: string;
+  slug: string;
+  id: string;
+  proposer: string;
+  versionsCount: number;
+  createdTransactionHash: string;
+  lastUpdatedTimestamp: number;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isCandidate?: boolean;
@@ -58,26 +65,26 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 };
 
 const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
-  const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
+  const { title, slug, id, proposer, versionsCount, createdTransactionHash, lastUpdatedTimestamp, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
   const availableVotes = useUserVotesAsOfBlock(currentBlock) ?? 0;
   // const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
-  const proposalVote = useProposalVote(proposal?.id);
+  // const hasVoted = useHasVotedOnProposal(proposal?.id);
+  // const proposalVote = useProposalVote(proposal?.id);
   // const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
-  const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
+  // const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
   // TODO: remove this after getting real data from the contract
-  const tempUpdatedBlockNumber = 17097956;
-  useEffect(() => {
-    if (currentBlock) {
-      // TODO: remove this after getting real data from the contract
-      const timestamp = timestampFromBlockNumber(tempUpdatedBlockNumber, currentBlock);
-      setUpdatedTimestamp(timestamp.toDate());
-    }
-  }, [currentBlock]);
+  // useEffect(() => {
+  //   if (currentBlock) {
+  //     // TODO: remove this after getting real data from the contract
+  //     const timestamp = timestampFromBlockNumber(tempUpdatedBlockNumber, currentBlock);
+  //     setUpdatedTimestamp(timestamp.toDate());
+  //   }
+  // }, [currentBlock]);
+
 
   const voteButton = (
     <>
@@ -94,24 +101,24 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           <Trans>Connect a wallet to vote.</Trans>
         </div>
       )}
-      <Button
+      {/* <Button
         className={disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn}
         disabled={disableVoteButton}
         onClick={submitButtonClickHandler}
       >
         <Trans>Submit vote</Trans>
-      </Button>
+      </Button> */}
     </>
   );
 
-  const proposer = (
+  const proposerLink = (
     <a
-      href={buildEtherscanAddressLink(proposal.proposer || '')}
+      href={buildEtherscanAddressLink(proposer || '')}
       target="_blank"
       rel="noreferrer"
       className={classes.proposerLinkJp}
     >
-      <ShortAddress address={proposal.proposer || ''} avatar={false} />
+      <ShortAddress address={proposer || ''} avatar={false} />
     </a>
   );
 
@@ -119,7 +126,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     <Trans>
       at{' '}
       <span className={classes.propTransactionHash}>
-        {transactionLink(proposal.createdTransactionHash)}
+        {transactionLink(createdTransactionHash)}
       </span>
     </Trans>
   );
@@ -135,24 +142,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
-                {props.isCandidate ? (
-                  <>
-                    <div>
-                      <Trans>Proposal Candidate</Trans>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
-                    </div>
-                  </>
-                )}
+                <div>
+                  <Trans>Proposal Candidate</Trans>
+                </div>
               </div>
             </span>
             <div className={classes.proposalTitleWrapper}>
               <div className={classes.proposalTitle}>
-                <h1>{proposal.version.title} </h1>
+                <h1>{title} </h1>
               </div>
             </div>
           </div>
@@ -168,13 +165,13 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
         {activeLocale === Locales.ja_JP ? (
           <HoverCard
             hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-            tip={proposal && proposal.proposer ? proposal.proposer : ''}
+            tip={proposer || ''}
             id="byLineHoverCard"
           >
             <div className={classes.proposalByLineWrapperJp}>
               <Trans>
                 <span className={classes.proposedByJp}>Proposed by: </span>
-                <span className={classes.proposerJp}>{proposer}</span>
+                <span className={classes.proposerJp}>{proposerLink}</span>
                 <span className={classes.propTransactionWrapperJp}>
                   {proposedAtTransactionHash}
                 </span>
@@ -188,11 +185,11 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             <div className={classes.byLineContentWrapper}>
               <HoverCard
                 hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-                tip={proposal && proposal.proposer ? proposal.proposer : ''}
+                tip={proposer || ''}
                 id="byLineHoverCard"
               >
                 <h3>
-                  {proposer}
+                  {proposerLink}
                   <span className={classes.propTransactionWrapper}>
                     {proposedAtTransactionHash}
                   </span>
@@ -204,11 +201,11 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       </div>
 
       <p className={classes.versionHistory}>
-        <Link to={`/candidates/${proposal.id}/history/`}>
-          <strong>Version {proposal.versionsCount}</strong>{' '}
+        <Link to={`/candidates/${id}/history/`}>
+          <strong>Version {versionsCount}</strong>{' '}
           <span>
-            {proposal.versionsCount === 1 ? 'created' : 'updated'}{' '}
-            {dayjs(proposal.lastUpdatedTimestamp * 1000).fromNow()}
+            {versionsCount === 1 ? 'created' : 'updated'}{' '}
+            {dayjs(lastUpdatedTimestamp * 1000).fromNow()}
           </span>
         </Link>
       </p>
@@ -217,22 +214,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
         <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
       )}
 
-      {proposal && isActiveForVoting && hasVoted && (
+      {/* {proposal && isActiveForVoting && hasVoted && (
         <Alert variant="success" className={classes.voterIneligibleAlert}>
           {getTranslatedVoteCopyFromString(proposalVote)}
-        </Alert>
-      )}
-
-      {/* {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
-        <Alert variant="success" className={classes.voterIneligibleAlert}>
-          <Trans>
-            Only Nouns you owned or were delegated to you before{' '}
-            {i18n.date(new Date(proposalCreationTimestamp * 1000), {
-              dateStyle: 'long',
-              timeStyle: 'long',
-            })}{' '}
-            are eligible to vote.
-          </Trans>
         </Alert>
       )} */}
     </>
