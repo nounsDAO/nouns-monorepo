@@ -24,6 +24,8 @@ library NounsDAOV3Fork {
     error ForkPeriodNotActive();
     error ForkPeriodActive();
     error AdminOnly();
+    error ETHTransferFailed();
+    error ERC20TransferFailed();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
@@ -143,13 +145,15 @@ library NounsDAOV3Fork {
         INounsDAOExecutorV2 timelock = ds.timelock;
         uint256 ethToSend = (address(timelock).balance * tokenCount) / totalSupply;
 
-        timelock.sendETH(newDAOTreasury, ethToSend);
+        bool ethSent = timelock.sendETH(newDAOTreasury, ethToSend);
+        if (!ethSent) revert ETHTransferFailed();
 
         uint256 erc20Count = ds.erc20TokensToIncludeInFork.length;
         for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
-            timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
+            bool erc20Sent = timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
+            if (!erc20Sent) revert ERC20TransferFailed();
         }
     }
 }

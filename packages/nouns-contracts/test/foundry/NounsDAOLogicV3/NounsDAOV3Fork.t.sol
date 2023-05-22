@@ -456,3 +456,21 @@ contract DAOSecondForkSignaledOverThresholdTest is DAOSecondForkSignaledOverThre
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(1));
     }
 }
+
+contract DAOFork_SendFundsFailureTest is DAOForkSignaledOverThresholdState {
+    function test_givenERC20TransferFailure_reverts() public {
+        erc20Mock.setFailNextTransfer(true);
+
+        vm.expectRevert(NounsDAOV3Fork.ERC20TransferFailed.selector);
+        dao.executeFork();
+    }
+
+    function test_givenETHTransferFailure_reverts() public {
+        forkDAODeployer.setTreasury(address(new ETHBlocker()));
+
+        vm.expectRevert(NounsDAOV3Fork.ETHTransferFailed.selector);
+        dao.executeFork();
+    }
+}
+
+contract ETHBlocker {}
