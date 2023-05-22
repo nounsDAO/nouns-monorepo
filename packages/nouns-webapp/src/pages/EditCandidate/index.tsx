@@ -1,6 +1,6 @@
 import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalTransaction, ProposalDetail, useProposalThreshold } from '../../wrappers/nounsDao';
+import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ import ProposalEditor from '../../components/ProposalEditor';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import EditProposalButton from '../../components/EditProposalButton/index';
 import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
@@ -39,11 +39,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
-  const [originalTitleValue, setOriginalTitleValue] = useState('');
-  const [originalBodyValue, setOriginalBodyValue] = useState('');
-  const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
-    ProposalDetail[]
-  >([]);
   const candidate = useCandidateProposal(props.match.params.id, true); // get updatable transaction details
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
@@ -74,9 +69,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         }
       });
       setProposalTransactions([...proposalTransactions, ...transactionsArray]);
-
       setShowTransactionFormModal(false);
     },
+    // todo: make params more specific
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -85,6 +81,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
+    // todo: make params more specific
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -92,7 +90,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
         proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
-
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
@@ -121,7 +118,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           }
         }
       }
-
       setTokenBuyerTopUpETH(ethNeeded ?? '0');
     }
   }, [
@@ -142,9 +138,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setIsProposalEdited(true);
       }
     },
-    [setTitleValue, titleValue],
+    [setTitleValue, candidate?.version.title],
   );
-
   const handleBodyInput = useCallback(
     (body: string) => {
       setBodyValue(body);
@@ -154,11 +149,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setIsProposalEdited(true);
       }
     },
-    [setBodyValue, bodyValue],
-  );
-  const isFormInvalid = useMemo(
-    () => !proposalTransactions.length || titleValue === '' || bodyValue === '',
-    [proposalTransactions, titleValue, bodyValue],
+    [setBodyValue, candidate?.version?.description],
   );
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
@@ -223,34 +214,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTitleValue(proposal.title);
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
-      setOriginalTitleValue(proposal.title);
-      setOriginalBodyValue(proposal.description);
-      setOriginalProposalTransactions(proposal.details);
     }
-  }, [proposal?.title, proposal?.description, proposal?.details.length]);
-
-  const checkIsProposalEdited = () => {
-    if (proposal) {
-      if (originalTitleValue !== titleValue) {
-        return true;
-      }
-      if (originalBodyValue !== bodyValue) {
-        return true;
-      }
-      if (originalProposalTransactions.length !== proposalTransactions.length) {
-        return true;
-      }
-      for (let i = 0; i < originalProposalTransactions.length; i++) {
-        if (
-          originalProposalTransactions[i].target !== proposalTransactions[i].address ||
-          originalProposalTransactions[i].value !== proposalTransactions[i].value
-        ) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
+  }, [proposal?.title, proposal?.description, proposal?.details.length, proposal, candidate]);
 
   if (candidate?.proposer.toLowerCase() !== account?.toLowerCase()) {
     return null;

@@ -25,20 +25,18 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-interface MatchParams {
-  id: string;
-}
-
 const CandidateHistoryPage = ({
   match: {
     params: { id, versionNumber },
   },
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
   const { loading, data: proposal, error } = useCandidateProposalVersions(id);
-  const proposalVersions = proposal?.versions;
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
-  const [earlierVersion, setEarlierVersion] = useState(0);
+  const [showToast, setShowToast] = useState(true);
+  const proposalVersions = proposal?.versions;
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  console.log('todo: add loading and error states', loading, error);
 
   useEffect(() => {
     if (versionNumber) {
@@ -46,15 +44,9 @@ const CandidateHistoryPage = ({
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);
-      if (proposalVersions && proposalVersions?.length > 1) {
-        setEarlierVersion(proposalVersions.length - 1);
-      }
     }
   }, [versionNumber, proposalVersions]);
 
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
-
-  const [showToast, setShowToast] = useState(true);
   useEffect(() => {
     if (showToast) {
       setTimeout(() => {

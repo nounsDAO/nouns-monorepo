@@ -37,7 +37,9 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
     } else {
       setSignerSpots(signers);
     }
-  }, [signers]);
+  }, [signers, nounsRequired]);
+
+  console.log('todo: add signerCountOverflow element', signerCountOverflow);
 
   return (
     <div className={classes.sponsors}>

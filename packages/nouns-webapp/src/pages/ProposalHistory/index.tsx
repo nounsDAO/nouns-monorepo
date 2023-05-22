@@ -4,7 +4,6 @@ import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps, } from 'react-router-dom';
-import { useBlockNumber } from '@usedapp/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -25,24 +24,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-interface MatchParams {
-  id: string;
-}
-
 const ProposalHistory = ({
   match: {
     params: { id, versionNumber },
   },
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-  const proposal = useProposal(id);
-  const proposalVersions = useProposalVersions(id);
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
-  const [earlierVersion, setEarlierVersion] = useState(0);
-
-  // Get and format date from data
-  const timestamp = Date.now();
-  const currentBlock = useBlockNumber();
+  const [showToast, setShowToast] = useState(true);
+  const proposal = useProposal(id);
+  const proposalVersions = useProposalVersions(id);
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   useEffect(() => {
     if (versionNumber) {
@@ -50,15 +42,9 @@ const ProposalHistory = ({
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);
-      if (proposalVersions && proposalVersions?.length > 1) {
-        setEarlierVersion(proposalVersions.length - 1);
-      }
     }
   }, [versionNumber, proposalVersions]);
 
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
-
-  const [showToast, setShowToast] = useState(true);
   useEffect(() => {
     if (showToast) {
       setTimeout(() => {

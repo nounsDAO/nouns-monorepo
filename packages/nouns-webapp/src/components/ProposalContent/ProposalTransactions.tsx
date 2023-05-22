@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { ProposalDetail } from '../../wrappers/nounsDao';
 import classes from './ProposalContent.module.css';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import config from '../../config';
 import { utils } from 'ethers';
-import { Row, Col } from 'react-bootstrap';
 import { linkIfAddress } from '.';
 import ShortAddress from '../ShortAddress';
 

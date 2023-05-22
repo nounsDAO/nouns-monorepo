@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { useCallback, useEffect, useState } from 'react';
-import config, { CHAIN_ID } from '../../config';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useProposeBySigs } from '../../wrappers/nounsData';
@@ -80,11 +79,13 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             if (delegate.id === signature.signer.id) {
               setSignedVotes(signedVotes => signedVotes + delegate.nounsRepresented.length);
             }
+            return delegate;
           });
+          return signature;
         });
       }
     }
-  }, [props.signatures, delegateSnapshot]);
+  }, [props.signatures, delegateSnapshot, signedVotes, account, isVoteCountUpdated]);
 
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
@@ -184,10 +185,12 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             signedVotes < requiredVotes &&
             Array(requiredVotes - props.signatures.length)
               .fill('')
-              .map((_s, i) => <li className={classes.placeholder}> </li>)}
+              .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
 
           {props.isProposer && requiredVotes && signedVotes >= requiredVotes ? (
-            <button className={classes.button} onClick={() => submitProposalOnChain()}>
+            <button className={classes.button}
+              disabled={isProposePending}
+              onClick={() => submitProposalOnChain()}>
               Submit on-chain
             </button>
           ) : (

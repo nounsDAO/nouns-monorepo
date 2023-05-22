@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { useBlockNumber } from '@usedapp/core';
 import { useCancelSignature } from '../../wrappers/nounsDao';
 import dayjs from 'dayjs';
-import { useEthers } from '@usedapp/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useQuery } from '@apollo/client';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
@@ -32,7 +31,6 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   const expiration = dayjs(dayjs.unix(props.expirationTimestamp / 1000)).fromNow();
   // get votes for signer
   const blockNumber = useBlockNumber();
-  const { account } = useEthers();
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery([props.signer], blockNumber || 0),
   );
@@ -76,6 +74,8 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         setIsCancelSignaturePending(false);
         break;
     }
+    // todo: make these deps more specific
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelSigState, setCancelStatusOverlay]);
 
   return (
@@ -105,7 +105,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => {}}>
+              <button className={classes.readMore} onClick={() => { }}>
                 more
               </button>
             )}

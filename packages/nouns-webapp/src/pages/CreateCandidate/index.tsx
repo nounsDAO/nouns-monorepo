@@ -268,7 +268,6 @@ const CreateCandidatePage = () => {
             latestProposal,
             account,
           )}
-          hasEnoughVote={hasEnoughVote}
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}
         />

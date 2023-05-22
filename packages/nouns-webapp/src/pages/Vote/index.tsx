@@ -2,7 +2,6 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   PartialProposal,
-  Proposal,
   ProposalState,
   useCancelProposal,
   useCurrentQuorum,
@@ -13,7 +12,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -22,7 +21,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
 import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -107,20 +106,13 @@ const VotePage = ({
     params: { id },
   },
 }: RouteComponentProps<{ id: string }>) => {
-  const proposal = useProposal(id);
-  const proposalVersions = useProposalVersions(id);
-  const { account } = useEthers();
-  const activeLocale = useActiveLocale();
   // TODO: set this to true when we want to enable v3 proposals
   const [isv3Proposal, setIsV3Proposal] = useState<boolean>(true);
-  // TODO: make this dynamic
-  // const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(true);
-
+  setIsV3Proposal(true); // temp
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
-
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
@@ -134,9 +126,12 @@ const VotePage = ({
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
-
+  const proposal = useProposal(id);
+  const proposalVersions = useProposalVersions(id);
+  const activeLocale = useActiveLocale();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { account } = useEthers();
   const {
     data: dqInfo,
     loading: loadingDQInfo,

@@ -16,7 +16,7 @@ import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import EditProposalButton from '../../components/EditProposalButton/index';
 import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
@@ -60,6 +60,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
+
+  console.log('todo: add isProposalEdited element', isProposalEdited);
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
@@ -149,7 +151,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         setIsProposalEdited(true);
       }
     },
-    [setTitleValue, titleValue],
+    [setTitleValue, proposal?.title],
   );
 
   const handleBodyInput = useCallback(
@@ -161,7 +163,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         setIsProposalEdited(true);
       }
     },
-    [setBodyValue, bodyValue],
+    [setBodyValue, proposal?.description],
   );
 
 
@@ -233,7 +235,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         setProposePending(false);
         break;
     }
-  }, [updateProposalDescriptionState, setModal]);
+  }, [updateProposalDescriptionState, setModal, updateProposalDescriptionState?.errorMessage]);
 
   useEffect(() => {
     switch (updateProposaTransactionsState.status) {
@@ -268,7 +270,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         setProposePending(false);
         break;
     }
-  }, [updateProposaTransactionsState, setModal]);
+  }, [updateProposaTransactionsState, setModal, updateProposaTransactionsState?.errorMessage]);
 
   const isTransactionsEdited = () => {
     if (originalProposalTransactions.length !== proposalTransactions.length) {
@@ -344,7 +346,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setOriginalBodyValue(proposal.description);
       setOriginalProposalTransactions(proposal.details);
     }
-  }, [proposal?.title, proposal?.description, proposal?.details.length]);
+  }, [proposal?.title, proposal?.description, proposal?.details.length, proposal]);
 
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
     return null;

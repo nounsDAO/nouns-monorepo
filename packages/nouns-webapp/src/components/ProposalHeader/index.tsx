@@ -80,7 +80,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       const date = latestProposalVersion && new Date(+latestProposalVersion.createdAt * 1000);
       date && setUpdatedTimestamp(date);
     }
-  }, [currentBlock]);
+  }, [currentBlock, hasManyVersions, props.proposalVersions]);
 
   const voteButton = (
     <>

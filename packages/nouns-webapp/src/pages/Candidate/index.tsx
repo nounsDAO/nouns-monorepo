@@ -2,7 +2,7 @@ import { Row, Col, Button, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Candidate.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

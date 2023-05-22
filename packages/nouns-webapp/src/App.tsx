@@ -14,7 +14,6 @@ import Footer from './components/Footer';
 import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
-import UpdateProposalPage from './pages/UpdateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import ExplorePage from './pages/Explore';
@@ -74,7 +73,6 @@ function App() {
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
             <Route exact path="/candidates" component={CandidateProposals} />
-            <Route exact path="/update-proposal/:id" component={UpdateProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />

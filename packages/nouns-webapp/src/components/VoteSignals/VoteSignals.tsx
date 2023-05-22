@@ -21,18 +21,20 @@ type Props = {
 };
 
 function VoteSignals(props: Props) {
-  const supportText = ['Against', 'For', 'Abstain'];
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
-  const { sendFeedback, sendFeedbackState } = useSendFeedback();
-  const { account } = useEthers();
-  const { loading, error, data } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0');
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [forFeedback, setForFeedback] = useState<any[]>([]);
   const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
   const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
+  const { sendFeedback, sendFeedbackState } = useSendFeedback();
+  const { account } = useEthers();
+  const { loading, error, data } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0');
+  const supportText = ['Against', 'For', 'Abstain'];
+  console.log('todo: add loading and error states', loading, error);
+
   useEffect(() => {
     if (data) {
       // get latest version number
@@ -60,6 +62,7 @@ function VoteSignals(props: Props) {
         if (feedback.supportDetailed === 2) {
           setAbstainFeedback(prevState => [...prevState, feedback]);
         }
+        return feedback;
       });
 
       // check if user has voted for this proposal or version
@@ -68,9 +71,10 @@ function VoteSignals(props: Props) {
           setHasUserVoted(true);
           setUserVoteSupport(feedback);
         }
+        return feedback;
       });
     }
-  }, [data]);
+  }, [data, props.proposalVersions, account]);
 
   async function handleFeedbackSubmit(
     proposalId: number,
@@ -119,6 +123,8 @@ function VoteSignals(props: Props) {
         setIsTransactionPending(false);
         break;
     }
+    // todo: make these deps more specific
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendFeedbackState, setModal]);
 
   return (

@@ -1,6 +1,6 @@
-import { Contract, utils } from 'ethers';
+import { utils } from 'ethers';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@nouns/contracts';
-import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
+import { useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
   candidateProposalQuery,
@@ -9,7 +9,6 @@ import {
   proposalFeedbacksQuery,
 } from './subgraph';
 import { useQuery } from '@apollo/client';
-import BigNumber from 'bignumber.js';
 import {
   ProposalDetail,
   ProposalTransactionDetails,

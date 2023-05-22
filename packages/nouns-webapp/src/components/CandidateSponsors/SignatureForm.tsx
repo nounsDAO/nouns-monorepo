@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './CandidateSponsors.module.css';
 import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
 import { ethers } from 'ethers';
 import config, { CHAIN_ID } from '../../config';
-import { useAppDispatch } from '../../hooks';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useProposeBySigs, useUpdateProposalBySigs } from '../../wrappers/nounsData';
 import { useCandidateProposal, useAddSignature } from '../../wrappers/nounsData';
 
 const domain = {
@@ -51,11 +48,13 @@ function SignatureForm(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [expirationDate, setExpirationDate] = React.useState<number>();
 
-  const { library, chainId } = useEthers();
+  const { library } = useEthers();
   const signer = library?.getSigner();
 
-  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60 * 60 * 24);
-  const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
+  const [proposalIdToUpdate,
+    // setProposalIdToUpdate
+    // todo: does this need to be set? 
+  ] = useState('');
 
   const candidateProposal = useCandidateProposal(props.id);
   const { addSignature, addSignatureState } = useAddSignature();
@@ -139,13 +138,6 @@ function SignatureForm(props: Props) {
     );
   }
 
-  const [isProposePending, setProposePending] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
-  const { updateProposalBySigs, updateProposalBySigState } = useUpdateProposalBySigs();
-
   const [submitSignatureStatusMessage, setSubmitSignatureStatusMessage] = React.useState<{
     title: string;
     message: string;
@@ -171,7 +163,7 @@ function SignatureForm(props: Props) {
       case 'Fail':
         setSubmitSignatureStatusMessage({
           title: 'Transaction Failed',
-          message: proposeBySigsState?.errorMessage || 'Please try again.',
+          message: addSignatureState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsAddSignaturePending(false);
@@ -179,7 +171,7 @@ function SignatureForm(props: Props) {
       case 'Exception':
         setSubmitSignatureStatusMessage({
           title: 'Error',
-          message: proposeBySigsState?.errorMessage || 'Please try again.',
+          message: addSignatureState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsAddSignaturePending(false);
@@ -225,14 +217,6 @@ function SignatureForm(props: Props) {
 
           {submitSignatureStatusMessage?.show && (
             <div className={classes.submitSignatureStatusOverlay}>
-              {/* {(addSignatureState.status === "Exception" || addSignatureState.status === "Fail") && (
-                <button className={classes.closeButton} onClick={() => {
-                  setSubmitSignatureStatusMessage(undefined);
-                  setIsAddSignaturePending(false);
-                }}>
-                  &times;
-                </button>
-              )} */}
               <div>
                 <Trans>{submitSignatureStatusMessage.title}</Trans>
               </div>

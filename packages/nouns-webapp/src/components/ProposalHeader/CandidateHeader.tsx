@@ -29,28 +29,6 @@ interface CandidateHeaderProps {
   submitButtonClickHandler: () => void;
 }
 
-const getTranslatedVoteCopyFromString = (proposalVote: string) => {
-  if (proposalVote === 'For') {
-    return (
-      <Trans>
-        You voted <strong>For</strong> this proposal
-      </Trans>
-    );
-  }
-  if (proposalVote === 'Against') {
-    return (
-      <Trans>
-        You voted <strong>Against</strong> this proposal
-      </Trans>
-    );
-  }
-  return (
-    <Trans>
-      You <strong>Abstained</strong> from this proposal
-    </Trans>
-  );
-};
-
 const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   const {
     title,
@@ -61,7 +39,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     lastUpdatedTimestamp,
     isActiveForVoting,
     isWalletConnected,
-    submitButtonClickHandler,
   } = props;
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
