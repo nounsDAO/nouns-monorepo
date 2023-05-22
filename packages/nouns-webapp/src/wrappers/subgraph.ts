@@ -160,6 +160,20 @@ export const tokensIndex = () => gql`
   }
 `;
 
+export const ogpunksByOwner = (address: string) => gql`
+ {
+    ogpunks(where:{owner:"${address}"}) {
+      id
+      delegate {
+        id
+      }
+      owner {
+        id
+      }
+    }
+ }
+`;
+
 export const latestAuctionsQuery = () => gql`
   {
     auctions(orderBy: startTime, orderDirection: desc, first: 1000) {

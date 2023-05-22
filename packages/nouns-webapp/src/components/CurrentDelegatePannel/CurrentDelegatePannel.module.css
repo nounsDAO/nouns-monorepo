@@ -59,7 +59,7 @@
 .buttonWrapper {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 992px) {

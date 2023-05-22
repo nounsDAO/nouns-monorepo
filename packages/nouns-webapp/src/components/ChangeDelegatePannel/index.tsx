@@ -9,12 +9,25 @@ import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
 import { useDelegateVotes, useNTokenBalance, useUserDelegatee } from '../../wrappers/nToken';
+import { useCryptoPunksVote } from '../../wrappers/useCryptoPunkVote/hook';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import pIcon from '../../assets/P.png';
+import { ogpunksByOwner } from '../../wrappers/subgraph';
+import { useQuery } from '@apollo/client';
+import { lowerCaseAddress, shortAddress } from '../../utils/addressAndENSDisplayUtils';
+import BrandSpinner from '../BrandSpinner';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;
+}
+
+interface OgPunk {
+  id: string;
+  delegate: {
+    id: string;
+  };
 }
 
 export enum ChangeDelegateState {
@@ -25,10 +38,13 @@ export enum ChangeDelegateState {
 }
 
 /**
- * Gets localized title component based on current ChangeDelegateState
+ * Gets localized title component based on current ChangeDelegateState or active delegate id
  * @param state
+ * @param id
  */
-const getTitleFromState = (state: ChangeDelegateState) => {
+const getTitleFromStateOrId = (state: ChangeDelegateState, id: string) => {
+  if (id.length) return <Trans>Updating...</Trans>;
+
   switch (state) {
     case ChangeDelegateState.CHANGING:
       return <Trans>Updating...</Trans>;
@@ -57,6 +73,20 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
+  const [ogPunks, setOgPunks] = useState<OgPunk[]>([]);
+  const { send: delegateOgPunksVotes, state: delegateOgPunksState } = useCryptoPunksVote();
+  const [activeOgPunkId, setActiveOgPunkId] = useState<string>('');
+
+  const { loading, error, data, refetch } = useQuery(
+    ogpunksByOwner(lowerCaseAddress(account ?? '')),
+    {
+      skip: !account,
+    },
+  );
+
+  useEffect(() => {
+    !loading && !error && setOgPunks(data.ogpunks);
+  }, [loading, error, data]);
 
   useEffect(() => {
     if (delegateState.status === 'Success') {
@@ -95,7 +125,16 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     }
   }, [delegateAddress]);
 
-  const etherscanTxLink = buildEtherscanTxLink(delegateState.transaction?.hash ?? '');
+  const showEtherscanTxLink = (hash?: string) =>
+    window.open(buildEtherscanTxLink(hash ?? ''), '_blank')?.focus();
+
+  const handleResetDelegate = () => {
+    setDelegateAddress('');
+    setDelegateInputText('');
+    setChangeDelegateState(ChangeDelegateState.ENTER_DELEGATE_ADDRESS);
+  };
+
+  const handleDelegateVotes = () => delegateVotes(delegateAddress).then(handleResetDelegate);
 
   const primaryButton = usePickByState(
     changeDelegateState,
@@ -115,13 +154,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}
               </>
             ) : (
-              <>
-                {availableVotes === 1 ? (
-                  <Trans>Delegate {availableVotes} Vote</Trans>
-                ) : (
-                  <Trans>Delegate {availableVotes} Votes</Trans>
-                )}
-              </>
+              <Trans>
+                Delegate {availableVotes} {availableVotes === 1 ? 'Vote' : 'Votes'}
+              </Trans>
             )}
           </div>
         }
@@ -130,9 +165,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             ? NavBarButtonStyle.DELEGATE_SECONDARY
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
-        onClick={() => {
-          delegateVotes(delegateAddress);
-        }}
+        onClick={handleDelegateVotes}
         disabled={
           changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           !isAddress(delegateAddress)
@@ -141,15 +174,34 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       <NavBarButton
         buttonText={<Trans>View on Etherscan</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
-        onClick={() => {
-          window.open(etherscanTxLink, '_blank')?.focus();
-        }}
+        onClick={() => showEtherscanTxLink(delegateState.transaction?.hash)}
         disabled={false}
       />,
       <NavBarButton
-        buttonText={<Trans>Close</Trans>}
-        buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
-        onClick={onDismiss}
+        buttonText={
+          <div className={classes.delegateKVotesBtn}>
+            {locale === 'en-US ' ? (
+              <>
+                Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
+                {availableVotes === 1 ? <>Vote</> : <>Votes</>}
+              </>
+            ) : (
+              <Trans>
+                Delegate {availableVotes} {availableVotes === 1 ? 'Vote' : 'Votes'}
+              </Trans>
+            )}
+          </div>
+        }
+        buttonStyle={
+          isAddress(delegateAddress) && delegateAddress !== currentDelegate
+            ? NavBarButtonStyle.DELEGATE_SECONDARY
+            : NavBarButtonStyle.DELEGATE_DISABLED
+        }
+        onClick={() => delegateVotes(delegateAddress)}
+        disabled={
+          changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+          !isAddress(delegateAddress)
+        }
       />,
       <></>,
     ],
@@ -181,21 +233,61 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
   );
 
+  const renderDelegatee = (ogpunk: OgPunk) => {
+    if (!ogpunk.delegate) {
+      return 'None';
+    } else if (ogpunk.delegate.id === lowerCaseAddress(account)) {
+      return 'You';
+    } else return shortAddress(ogpunk.delegate.id);
+  };
+
+  const handleDelegateOgPunk = (id: string) => {
+    setActiveOgPunkId(id);
+    delegateOgPunksVotes(delegateAddress, id)
+      .then(() => refetch())
+      .finally(() => {
+        setActiveOgPunkId('');
+        handleResetDelegate();
+      });
+  };
+
+  const getPosition = (ogpunk: OgPunk) => {
+    const id = parseInt(ogpunk.id);
+    const pictureSize = 24;
+    const backgroundSize = 2400;
+
+    const row = Math.floor(id / (backgroundSize / pictureSize));
+    const column = id % (backgroundSize / pictureSize);
+
+    const x = column * pictureSize;
+    const y = row * pictureSize;
+
+    const positionX = `${-x}px`;
+    const positionY = `${-y}px`;
+
+    return `${positionX} ${positionY}`;
+  };
+
+  const noError = !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE);
+
   return (
     <>
       <div className={currentDelegatePannelClasses.wrapper}>
         <h1
           className={clsx(
             currentDelegatePannelClasses.title,
-            locale !== 'en-US' ? classes.nonEnBottomMargin : '',
+            locale !== 'en-US' ? !noError && classes.nonEnBottomMargin : '',
           )}
         >
-          {getTitleFromState(changeDelegateState)}
+          {getTitleFromStateOrId(
+            changeDelegateState,
+            delegateOgPunksState.status === 'Mining' ? activeOgPunkId : '',
+          )}
         </h1>
         <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
       </div>
 
-      {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) && (
+      {noError && (
         <FormControl
           className={clsx(classes.delegateInput, delegateInputClass)}
           type="string"
@@ -207,9 +299,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           placeholder="Enter delegate address..."
         />
       )}
-      <Collapse
-        in={!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)}
-      >
+      <Collapse in={noError}>
         <div className={classes.delegateCandidateInfoWrapper}>
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           delegateAddress === currentDelegate ? (
@@ -225,45 +315,85 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           )}
         </div>
       </Collapse>
-      <div className={classes.delegateWrapper}>
-        <div className={classes.headingWrapper}>
-          <div className={classes.avatarWrapper}>
-            <div className={classes.avatar}>P</div>
+      {noError && (
+        <>
+          <div className={classes.delegateWrapper}>
+            <div className={classes.headingWrapper}>
+              <div className={classes.avatarWrapper}>
+                <div className={classes.avatar}>
+                  <img src={pIcon} alt="New CryptoPunks" />
+                </div>
+              </div>
+              <div className={classes.headingText}>
+                <Trans>New CryptoPunks</Trans>
+              </div>
+            </div>
+            {primaryButton}
           </div>
-          <div className={classes.headingText}>
-            <Trans>New CryptoPunks</Trans>
+          <div className={classes.ogPunksWrapper}>
+            {ogPunks.map(ogpunk => (
+              <div key={ogpunk.id} className={classes.delegateRow}>
+                <div className={classes.ogPunkWrapper}>
+                  <div className={classes.ogPunkAvatarWrapper}>
+                    <div
+                      className={classes.ogPunkAvatar}
+                      style={{ backgroundPosition: getPosition(ogpunk) }}
+                    />
+                  </div>
+                  <div className={classes.ogPunkText}>
+                    CryptoPunk {ogpunk.id}
+                    <span>
+                      <Trans>{renderDelegatee(ogpunk)}</Trans>
+                    </span>
+                  </div>
+                </div>
+                {delegateOgPunksState.status === 'Mining' && ogpunk.id === activeOgPunkId ? (
+                  <div className={classes.delegateTxWrapper}>
+                    <div className={classes.spinner}>
+                      <BrandSpinner />
+                    </div>
+                    <NavBarButton
+                      buttonText={<Trans>View on Etherscan</Trans>}
+                      buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
+                      onClick={() => showEtherscanTxLink(delegateOgPunksState.transaction?.hash)}
+                      disabled={false}
+                    />
+                  </div>
+                ) : (
+                  <NavBarButton
+                    buttonText={<Trans>Delegate</Trans>}
+                    buttonStyle={
+                      !isAddress(delegateAddress) ||
+                      ogpunk.delegate?.id === lowerCaseAddress(delegateAddress)
+                        ? NavBarButtonStyle.DELEGATE_DISABLED
+                        : undefined
+                    }
+                    onClick={() => handleDelegateOgPunk(ogpunk.id)}
+                    disabled={
+                      changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+                      !isAddress(delegateAddress)
+                    }
+                  />
+                )}
+              </div>
+            ))}
           </div>
-        </div>
-        {primaryButton}
-      </div>
-      <div className={classes.delegateWrapper}>
-        ??PUNKS
-      </div>
+        </>
+      )}
       <div className={classes.buttonWrapper}>
-        <div className={classes.noteText}>
-          <Trans>
-            Note: OG CryptoPunks will need to be delegated to your own address if you'd like to use them to vote.
-            One delegation transaction is required per OG CryptoPunk. There are no batch txs for OG Punks.
-          </Trans>
-        </div>
+        {noError && (
+          <div className={classes.noteText}>
+            <Trans>
+              Note: OG CryptoPunks will need to be delegated to your own address if you'd like to
+              use them to vote. One delegation transaction is required per OG CryptoPunk. There are
+              no batch txs for OG Punks.
+            </Trans>
+          </div>
+        )}
         <NavBarButton
-          buttonText={
-            changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS ? (
-              <Trans>Change</Trans>
-            ) : (
-              <Trans>Close</Trans>
-            )
-          }
+          buttonText={<Trans>Close</Trans>}
           buttonStyle={NavBarButtonStyle.DELEGATE_BACK}
-          onClick={
-            changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS
-              ? () => {
-                setDelegateAddress('');
-                setDelegateInputText('');
-                setChangeDelegateState(ChangeDelegateState.ENTER_DELEGATE_ADDRESS);
-              }
-              : onDismiss
-          }
+          onClick={onDismiss}
         />
         {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && (
           <div

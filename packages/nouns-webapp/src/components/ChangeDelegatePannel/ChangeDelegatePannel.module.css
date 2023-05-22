@@ -21,7 +21,7 @@
 }
 
 .nonEnBottomMargin {
-  margin-bottom: 2.1rem;
+  margin-bottom: 3.1rem;
 }
 
 @media (max-width: 992px) {
@@ -48,6 +48,37 @@
   margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.ogPunksWrapper {
+  border-top: 1px solid var(--brand-gray-border);
+  padding: 1.5rem 0.5rem 0;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.delegateRow {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.delegateRow:first-of-type {
+  margin-top: 0;
+}
+
+.delegateRow:last-of-type {
+  margin-bottom: 0;
+}
+
+.delegateRow .headingWrapper {
+  justify-content: space-between;
 }
 
 .headingWrapper {
@@ -69,11 +100,57 @@
 .avatar {
   width: 45px;
   height: 45px;
-  border-radius: 50%;
-  background-color: var(--brand-cool-background);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.avatar img {
+  height: 80%;
+}
+
+.ogPunkWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.ogPunkAvatarWrapper {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.ogPunkAvatar {
+  background-color: var(--brand-cool-background);
+  background-image: url('../../assets/punks.png');
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  transform: scale(1.5);
+  border-radius: 4px;
+}
+
+.ogPunkText {
+  display: flex;
+  flex-direction: column;
+}
+
+.ogPunkText span {
+  color: var(--brand-cool-light-text);
+  font-size: 13px;
+}
+
+.delegateTxWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.spinner {
+  margin-right: 10px;
 }
 
 .noteText {
@@ -98,7 +175,7 @@
 }
 
 .delegateKVotesBtn {
-  z-index: 101;
+  text-align: center;
 }
 
 .delegateKVotesBtn span {
@@ -119,7 +196,7 @@
 }
 
 .delegateCandidateInfoWrapper {
-  padding: 0rem 0.25rem 0.25rem 0rem;
+  padding: 0 0.25rem 0.25rem 0;
   margin-top: 0.5rem;
 }
 
@@ -127,6 +204,10 @@
   .customButtonHighlighter {
     top: 24.15%;
     left: 81.115%;
+  }
+
+  .headingText {
+    font-size: 18px;
   }
 }
 

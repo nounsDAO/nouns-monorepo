@@ -6,7 +6,7 @@
 .wrapper {
   display: flex;
   flex-direction: row;
-  margin-top: 0.75rem;
+  margin-top: 1.75rem;
   justify-content: space-between;
   padding-left: 0.5rem;
   padding-right: 0.5rem;

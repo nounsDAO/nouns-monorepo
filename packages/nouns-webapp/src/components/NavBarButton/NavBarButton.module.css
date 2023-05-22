@@ -145,7 +145,7 @@
 .delegatePrimary {
   background-color: var(--brand-cool-dark-text);
   color: white;
-  width: 315px;
+  /*width: 315px;*/
 }
 
 .delegatePrimary:hover {
@@ -167,20 +167,14 @@
   background-color: var(--brand-color-blue);
   opacity: 0.5;
   color: white;
-  width: 315px;
+  /*width: 315px;*/
   border: none;
 }
 
 @media (max-width: 992px) {
-  .delegatePrimary {
-    width: 210px;
-  }
-
-  .delegateSecondary {
-    width: 210px;
-  }
-
+  .delegatePrimary,
+  .delegateSecondary,
   .delegateDisabled {
-    width: 210px;
+    width: 110px;
   }
 }
