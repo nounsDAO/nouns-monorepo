@@ -11,6 +11,7 @@ import { NounsDescriptorV2 } from '../../../../contracts/NounsDescriptorV2.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { IProxyRegistry } from '../../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
+import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
 abstract contract NounsTokenForkBase is DeployUtilsFork {
     NounsTokenFork token;
@@ -24,10 +25,12 @@ abstract contract NounsTokenForkBase is DeployUtilsFork {
     address minter = makeAddr('minter');
     address originalDAO = makeAddr('original dao');
 
-    address nouner = makeAddr('nouner');
+    address nouner;
+    uint256 nounerPK;
     uint256[] tokenIds;
 
     function setUp() public virtual {
+        (nouner, nounerPK) = makeAddrAndKey('nouner');
         descriptor = _deployAndPopulateV2();
         seeder = new NounsSeeder();
 
@@ -129,5 +132,83 @@ contract NounsTokenFork_ClaimFromEscrow_Test is NounsTokenForkBase {
 
         vm.expectRevert('ERC721: token already minted');
         token.claimFromEscrow(tokenIds);
+    }
+}
+
+contract NounsTokenFork_DelegateBySig_Test is NounsTokenForkBase {
+    function setUp() public override {
+        super.setUp();
+
+        vm.startPrank(token.minter());
+        token.mint();
+        token.mint();
+        token.transferFrom(token.minter(), nouner, 0);
+        token.transferFrom(token.minter(), nouner, 1);
+        vm.stopPrank();
+
+        vm.roll(block.number + 1);
+    }
+
+    function test_givenDelegateeAddressZero_reverts() public {
+        address delegatee = address(0);
+        uint256 nonce = 0;
+        uint256 expiry = block.timestamp + 1234;
+        (uint8 v, bytes32 r, bytes32 s) = signDelegation(delegatee, nonce, expiry, nounerPK);
+
+        vm.expectRevert('ERC721Checkpointable::delegateBySig: delegatee cannot be zero address');
+        token.delegateBySig(delegatee, nonce, expiry, v, r, s);
+    }
+
+    function test_givenValidDelegatee_worksAndLaterTransfersWork() public {
+        address delegatee = makeAddr('delegatee');
+        uint256 nonce = 0;
+        uint256 expiry = block.timestamp + 1234;
+        (uint8 v, bytes32 r, bytes32 s) = signDelegation(delegatee, nonce, expiry, nounerPK);
+
+        token.delegateBySig(delegatee, nonce, expiry, v, r, s);
+
+        assertEq(token.delegates(nouner), delegatee);
+        assertEq(token.getCurrentVotes(delegatee), 2);
+
+        address recipient = makeAddr('recipient');
+        vm.prank(nouner);
+        token.transferFrom(nouner, recipient, 0);
+
+        assertEq(token.getCurrentVotes(delegatee), 1);
+        assertEq(token.getCurrentVotes(recipient), 1);
+    }
+
+    function signDelegation(
+        address delegatee,
+        uint256 nonce,
+        uint256 expiry,
+        uint256 pk
+    )
+        internal
+        returns (
+            uint8 v,
+            bytes32 r,
+            bytes32 s
+        )
+    {
+        bytes32 domainSeparator = keccak256(
+            abi.encode(
+                keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)'),
+                keccak256(bytes(token.name())),
+                block.chainid,
+                address(token)
+            )
+        );
+
+        bytes32 structHash = keccak256(
+            abi.encode(
+                keccak256('Delegation(address delegatee,uint256 nonce,uint256 expiry)'),
+                delegatee,
+                nonce,
+                expiry
+            )
+        );
+
+        return vm.sign(pk, ECDSA.toTypedDataHash(domainSeparator, structHash));
     }
 }

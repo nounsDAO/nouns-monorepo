@@ -131,6 +131,7 @@ abstract contract ERC721Checkpointable is ERC721EnumerableUpgradeable {
         bytes32 r,
         bytes32 s
     ) public {
+        require(delegatee != address(0), 'ERC721Checkpointable::delegateBySig: delegatee cannot be zero address');
         bytes32 domainSeparator = keccak256(
             abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name())), getChainId(), address(this))
         );
