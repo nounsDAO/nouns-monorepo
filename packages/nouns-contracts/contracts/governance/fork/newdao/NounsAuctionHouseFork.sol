@@ -22,6 +22,10 @@
 //
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
 // With modifications by Nounders DAO.
+//
+// NounsAuctionHouseFork.sol Modifications:
+// - Proxy pattern changed from Transparent to UUPS.
+// - Owner is set in the initialize function, instead of in a follow-up transaction.
 
 pragma solidity ^0.8.6;
 
