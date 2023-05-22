@@ -18,7 +18,7 @@
 pragma solidity ^0.8.6;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
-import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
+import { ERC721CheckpointableUpgradeable } from './base/ERC721CheckpointableUpgradeable.sol';
 import { INounsDescriptorMinimal } from '../../../../interfaces/INounsDescriptorMinimal.sol';
 import { INounsSeeder } from '../../../../interfaces/INounsSeeder.sol';
 import { INounsTokenFork } from './INounsTokenFork.sol';
@@ -26,7 +26,7 @@ import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { INounsDAOForkEscrow } from '../../../NounsDAOInterfaces.sol';
 
-contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
+contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721CheckpointableUpgradeable, UUPSUpgradeable {
     error OnlyOwner();
     error OnlyTokenOwnerCanClaim();
     error OnlyOriginalDAO();
