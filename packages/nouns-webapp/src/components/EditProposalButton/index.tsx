@@ -36,7 +36,7 @@ const EditProposalButton = ({
       return <Trans>You don't have enough votes to submit a proposal</Trans>;
     }
     if (isCandidate) {
-      return <Trans>Update Proposal Candidate</Trans>
+      return <Trans>Update Proposal Candidate</Trans>;
     }
     return <Trans>Update Proposal</Trans>;
   };

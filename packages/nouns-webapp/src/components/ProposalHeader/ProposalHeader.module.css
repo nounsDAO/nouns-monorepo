@@ -210,9 +210,9 @@
   border: 1px solid #e6e6e6;
   border-radius: 6px;
   margin-right: 5px;
-} 
+}
 
-.versionHistory:hover strong { 
+.versionHistory:hover strong {
   background-color: #e6e6e6;
 }
 

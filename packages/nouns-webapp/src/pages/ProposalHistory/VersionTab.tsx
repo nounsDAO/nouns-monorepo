@@ -36,7 +36,9 @@ const VersionTab = (props: Props) => {
     }
   }, [currentBlock]);
 
-  const versionLink = props.isCandidate ? `/candidates/${props.id}/history/${props.versionNumber}` : `/vote/${props.id}/history/${props.versionNumber}`;
+  const versionLink = props.isCandidate
+    ? `/candidates/${props.id}/history/${props.versionNumber}`
+    : `/vote/${props.id}/history/${props.versionNumber}`;
 
   return (
     <>

@@ -65,9 +65,9 @@ const getCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   return (
@@ -129,9 +129,9 @@ const VotePage = ({
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
@@ -238,7 +238,11 @@ const VotePage = ({
   })();
 
   useEffect(() => {
-    if (currentBlock && proposal?.status === ProposalState.OBJECTION_PERIOD && proposal?.objectionPeriodEndBlock >= currentBlock) {
+    if (
+      currentBlock &&
+      proposal?.status === ProposalState.OBJECTION_PERIOD &&
+      proposal?.objectionPeriodEndBlock >= currentBlock
+    ) {
       setIsObjectionPeriod(true);
     } else {
       setIsObjectionPeriod(false);
@@ -461,8 +465,8 @@ const VotePage = ({
                       <strong className="d-block">
                         <Trans>Objection only period</Trans>
                       </strong>
-                      Voting is now limited to against votes. This objection-only period protects the
-                      DAO from last-minute vote swings.
+                      Voting is now limited to against votes. This objection-only period protects
+                      the DAO from last-minute vote swings.
                     </p>
                   </div>
                   <button

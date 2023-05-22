@@ -32,12 +32,11 @@ type CandidateSignatureProps = {
 const Signature: React.FC<CandidateSignatureProps> = props => {
   const [isReasonShown, setIsReasonShown] = React.useState(false);
   const [isCancelSignaturePending, setIsCancelSignaturePending] = React.useState(false);
-  const [cancelStatusOverlay, setCancelStatusOverlay] = React.useState<
-    {
-      title: string,
-      message: string,
-      show: boolean,
-    }>();
+  const [cancelStatusOverlay, setCancelStatusOverlay] = React.useState<{
+    title: string;
+    message: string;
+    show: boolean;
+  }>();
   dayjs.extend(relativeTime);
   const expiration = dayjs(dayjs.unix(props.expirationTimestamp / 1000)).fromNow();
   // get votes for signer
@@ -62,8 +61,8 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         break;
       case 'Success':
         setCancelStatusOverlay({
-          title: "Success",
-          message: "Signature removed",
+          title: 'Success',
+          message: 'Signature removed',
           show: true,
         });
         setIsCancelSignaturePending(false);
@@ -71,16 +70,16 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         break;
       case 'Fail':
         setCancelStatusOverlay({
-          title: "Transaction Failed",
-          message: cancelSigState?.errorMessage || "Please try again.",
+          title: 'Transaction Failed',
+          message: cancelSigState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsCancelSignaturePending(false);
         break;
       case 'Exception':
         setCancelStatusOverlay({
-          title: "Error",
-          message: cancelSigState?.errorMessage || "Please try again.",
+          title: 'Error',
+          message: cancelSigState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsCancelSignaturePending(false);
@@ -115,7 +114,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => { }}>
+              <button className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}
@@ -126,31 +125,40 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             {isCancelSignaturePending ? (
               <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
             ) : (
-              <button onClick={() => {
-                cancel();
-                setIsCancelSignaturePending(true);
-              }}>Remove sponsorship</button>
+              <button
+                onClick={() => {
+                  cancel();
+                  setIsCancelSignaturePending(true);
+                }}
+              >
+                Remove sponsorship
+              </button>
             )}
 
             <div className={classes.cancelStatusOverlayWrapper}>
-
               {cancelStatusOverlay?.show && (
                 <div className={classes.cancelStatusOverlay}>
-                  {(cancelSigState.status === "Exception" || cancelSigState.status === "Fail") && (
-                    <button className={classes.closeButton} onClick={() => {
-                      setCancelStatusOverlay(undefined);
-                    }}>
+                  {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && (
+                    <button
+                      className={classes.closeButton}
+                      onClick={() => {
+                        setCancelStatusOverlay(undefined);
+                      }}
+                    >
                       &times;
                     </button>
                   )}
-                  <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
-                  <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
+                  <div className={classes.cancelStatusOverlayTitle}>
+                    {cancelStatusOverlay.title}
+                  </div>
+                  <div className={classes.cancelStatusOverlayMessage}>
+                    {cancelStatusOverlay.message}
+                  </div>
                 </div>
               )}
             </div>
           </div>
         )}
-
       </div>
     </li>
   );

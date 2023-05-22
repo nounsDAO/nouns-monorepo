@@ -51,7 +51,11 @@ import { CandidateSignature } from '../../wrappers/nounsDao';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import { version } from 'process';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
-import { ProposalCandidate, useCancelCandidate, useCandidateProposal } from '../../wrappers/nounsData';
+import {
+  ProposalCandidate,
+  useCancelCandidate,
+  useCandidateProposal,
+} from '../../wrappers/nounsData';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -128,7 +132,12 @@ const CandidatePage = ({
 
   // handle cancel candidate
   useEffect(
-    () => onTransactionStateChange(cancelCandidateState, 'Proposal Candidate Canceled!', setCancelPending),
+    () =>
+      onTransactionStateChange(
+        cancelCandidateState,
+        'Proposal Candidate Canceled!',
+        setCancelPending,
+      ),
     [cancelCandidateState, onTransactionStateChange, setModal],
   );
 
@@ -140,10 +149,8 @@ const CandidatePage = ({
     };
   })();
 
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
-
       <Col lg={12} className={classes.wrapper}>
         {candidate && (
           <CandidateHeader
@@ -157,7 +164,7 @@ const CandidatePage = ({
             lastUpdatedTimestamp={candidate.lastUpdatedTimestamp}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => { }}
+            submitButtonClickHandler={() => {}}
           />
         )}
       </Col>
@@ -166,8 +173,9 @@ const CandidatePage = ({
           <div className={classes.editCandidate}>
             <p>
               <Trans>
-                Editing a proposal candidate will clear any previous sponsors and require each sponsor to
-                re-sign</Trans>
+                Editing a proposal candidate will clear any previous sponsors and require each
+                sponsor to re-sign
+              </Trans>
             </p>
             <div className={classes.buttons}>
               <Button

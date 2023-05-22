@@ -21,7 +21,7 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
   const signerIds = signers?.map(s => s.signer.id) ?? [];
 
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0)
+    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0),
   );
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
@@ -46,7 +46,8 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
   return (
     <div className={classes.sponsors}>
       {signerSpots &&
-        signerSpots.length > 0 && delegateToNounIds &&
+        signerSpots.length > 0 &&
+        delegateToNounIds &&
         nounIds.map(nounId => {
           return (
             <Link to={`/noun/${nounId}`} className={classes.sponsorAvatar}>

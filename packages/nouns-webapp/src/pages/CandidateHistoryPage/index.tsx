@@ -52,9 +52,12 @@ import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/s
 import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
-import { ProposalCandidate, useCandidateProposal, useCandidateProposalVersions } from '../../wrappers/nounsData';
+import {
+  ProposalCandidate,
+  useCandidateProposal,
+  useCandidateProposalVersions,
+} from '../../wrappers/nounsData';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
-
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -69,7 +72,6 @@ const CandidateHistoryPage = ({
     params: { id, versionNumber },
   },
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-
   const { loading, data: proposal, error } = useCandidateProposalVersions(id);
   const proposalVersions = proposal?.versions;
   console.log('candidate', proposal);
@@ -114,7 +116,8 @@ const CandidateHistoryPage = ({
         className={clsx(editorClasses.markdown, editorClasses.diffs)}
         children={str}
         remarkPlugins={[remarkBreaks]}
-      />);
+      />
+    );
   };
 
   console.log('activeVersion', activeVersion);
@@ -124,7 +127,11 @@ const CandidateHistoryPage = ({
       <Col lg={12} className={classes.wrapper}>
         {proposal && (
           <CandidateHeader
-            title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
+            title={
+              proposalVersions
+                ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
+                : proposal.title
+            }
             slug={proposal.slug}
             id={proposal.id}
             proposer={proposal.proposer}
@@ -149,7 +156,8 @@ const CandidateHistoryPage = ({
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
-            {((!isDiffsVisible && proposalVersions && activeVersion) || (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
+            {((!isDiffsVisible && proposalVersions && activeVersion) ||
+              (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
               <ProposalContent
                 description={proposalVersions[activeVersion - 1].description}
                 title={proposalVersions[activeVersion - 1].title}
@@ -177,10 +185,8 @@ const CandidateHistoryPage = ({
 
                     <p>Version {activeVersion - 1}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
-
                   </Col>
                 </Row>
-
               </div>
             )}
           </Col>

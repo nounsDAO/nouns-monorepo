@@ -19,8 +19,8 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.headerWrapper { 
-  display: flex; 
+.headerWrapper {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-left: auto;
@@ -32,7 +32,7 @@
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 10px;  
+  gap: 10px;
   margin: 0;
 }
 
@@ -189,8 +189,8 @@
 }
 
 @media (max-width: 992px) {
-  .headerWrapper { 
-    display: flex; 
+  .headerWrapper {
+    display: flex;
     flex-direction: column;
     justify-content: start;
   }

@@ -65,7 +65,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
 
-
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');

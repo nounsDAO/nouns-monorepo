@@ -41,17 +41,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -82,7 +82,13 @@ const getCountdownCopy = (
   );
 };
 
-const Proposals = ({ proposals, nounsRequired }: { proposals: PartialProposal[], nounsRequired?: number }) => {
+const Proposals = ({
+  proposals,
+  nounsRequired,
+}: {
+  proposals: PartialProposal[];
+  nounsRequired?: number;
+}) => {
   const history = useHistory();
 
   const { account } = useEthers();
@@ -115,9 +121,9 @@ const Proposals = ({ proposals, nounsRequired }: { proposals: PartialProposal[],
 
   useEffect(() => {
     if (!loading && !error && allCandidates) {
-      const filteredCandidates: PartialProposalCandidate[] = allCandidates['proposalCandidates'].filter(
-        (candidate: ProposalCandidate) => candidate.canceled === false,
-      );
+      const filteredCandidates: PartialProposalCandidate[] = allCandidates[
+        'proposalCandidates'
+      ].filter((candidate: ProposalCandidate) => candidate.canceled === false);
       setCandidates(filteredCandidates);
     }
     if (error) {

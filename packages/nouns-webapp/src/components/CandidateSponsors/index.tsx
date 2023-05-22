@@ -219,7 +219,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
-  const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<"None" | "Success" | "Mining" | "Fail" | "Exception">("None");
+  const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<
+    'None' | 'Success' | 'Mining' | 'Fail' | 'Exception'
+  >('None');
 
   useEffect(() => {
     switch (proposeBySigsState.status) {
@@ -343,7 +345,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         </ul>
         <AnimatePresence>
           {addSignatureTransactionState === 'Success' && (
-            <div className='transactionStatus success'>
+            <div className="transactionStatus success">
               <p>Success!</p>
             </div>
           )}

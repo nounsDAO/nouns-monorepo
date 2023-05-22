@@ -43,7 +43,7 @@ const updateProposalTypes = {
 
 type Props = {
   id: string;
-  transactionState: "None" | "Success" | "Mining" | "Fail" | "Exception";
+  transactionState: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception';
   setTransactionState: Function;
 };
 
@@ -148,13 +148,11 @@ function SignatureForm(props: Props) {
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
   const { updateProposalBySigs, updateProposalBySigState } = useUpdateProposalBySigs();
 
-  const [submitSignatureStatusMessage, setSubmitSignatureStatusMessage] = React.useState<
-    {
-      title: string,
-      message: string,
-      show: boolean,
-    }>();
-
+  const [submitSignatureStatusMessage, setSubmitSignatureStatusMessage] = React.useState<{
+    title: string;
+    message: string;
+    show: boolean;
+  }>();
 
   useEffect(() => {
     switch (addSignatureState.status) {
@@ -166,31 +164,30 @@ function SignatureForm(props: Props) {
         break;
       case 'Success':
         setSubmitSignatureStatusMessage({
-          title: "Success",
-          message: "Signature added",
+          title: 'Success',
+          message: 'Signature added',
           show: true,
         });
         setIsAddSignaturePending(false);
         break;
       case 'Fail':
         setSubmitSignatureStatusMessage({
-          title: "Transaction Failed",
-          message: proposeBySigsState?.errorMessage || "Please try again.",
+          title: 'Transaction Failed',
+          message: proposeBySigsState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsAddSignaturePending(false);
         break;
       case 'Exception':
         setSubmitSignatureStatusMessage({
-          title: "Error",
-          message: proposeBySigsState?.errorMessage || "Please try again.",
+          title: 'Error',
+          message: proposeBySigsState?.errorMessage || 'Please try again.',
           show: true,
         });
         setIsAddSignaturePending(false);
         break;
     }
   }, [addSignatureState, setSubmitSignatureStatusMessage]);
-
 
   return (
     <div className={classes.formWrapper}>
@@ -211,7 +208,7 @@ function SignatureForm(props: Props) {
             min={new Date().toISOString().split('T')[0]} // only future dates
             onChange={e => setExpirationDate(+dayjs(e.target.value))}
           />
-          <div className='text-center'>
+          <div className="text-center">
             {isAddSignaturePending ? (
               <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
             ) : (
@@ -221,7 +218,7 @@ function SignatureForm(props: Props) {
                   sign();
                   // not using pending status while waiting for user to sign the first signature because rejected signatures are not caught
                 }}
-                disabled={(props.transactionState === "Mining" || expirationDate === undefined)}
+                disabled={props.transactionState === 'Mining' || expirationDate === undefined}
               >
                 Sponsor
               </button>
@@ -238,25 +235,29 @@ function SignatureForm(props: Props) {
                   &times;
                 </button>
               )} */}
-              <div><Trans>{submitSignatureStatusMessage.title}</Trans></div>
-              {submitSignatureStatusMessage.title === "Success" ? (
-                <div><Trans>{submitSignatureStatusMessage.message}</Trans></div>
+              <div>
+                <Trans>{submitSignatureStatusMessage.title}</Trans>
+              </div>
+              {submitSignatureStatusMessage.title === 'Success' ? (
+                <div>
+                  <Trans>{submitSignatureStatusMessage.message}</Trans>
+                </div>
               ) : (
-                <button className={classes.closeLink} onClick={() => {
-                  setSubmitSignatureStatusMessage(undefined);
-                  setIsAddSignaturePending(false);
-                }}>
+                <button
+                  className={classes.closeLink}
+                  onClick={() => {
+                    setSubmitSignatureStatusMessage(undefined);
+                    setIsAddSignaturePending(false);
+                  }}
+                >
                   <Trans>{submitSignatureStatusMessage.message}</Trans>
                 </button>
               )}
-
             </div>
           )}
-
         </>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 

@@ -1,22 +1,27 @@
-import { JsonRpcSigner } from "@ethersproject/providers";
+import { JsonRpcSigner } from '@ethersproject/providers';
 import { Trans } from '@lingui/macro';
-import { useEthers } from "@usedapp/core";
-import { useCallback, useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
-import ReactMarkdown from "react-markdown";
-import { RouteComponentProps } from "react-router-dom";
-import remarkBreaks from "remark-breaks";
-import config, { CHAIN_ID } from "../../config";
-import { useAppDispatch } from "../../hooks";
-import Section from "../../layout/Section";
-import { AlertModal, setAlertModal } from "../../state/slices/application";
-import { useProposeBySigs, useUpdateProposalBySigs } from "../../wrappers/nounsDao";
-import { addSignature, DraftProposal, getDraftProposals, ProposalContent } from "../CreateDraftProposal/DraftProposalsStorage";
+import { useEthers } from '@usedapp/core';
+import { useCallback, useEffect, useState } from 'react';
+import { Button, Container } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
+import { RouteComponentProps } from 'react-router-dom';
+import remarkBreaks from 'remark-breaks';
+import config, { CHAIN_ID } from '../../config';
+import { useAppDispatch } from '../../hooks';
+import Section from '../../layout/Section';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { useProposeBySigs, useUpdateProposalBySigs } from '../../wrappers/nounsDao';
+import {
+  addSignature,
+  DraftProposal,
+  getDraftProposals,
+  ProposalContent,
+} from '../CreateDraftProposal/DraftProposalsStorage';
 
 const domain = {
   name: 'Nouns DAO',
   chainId: CHAIN_ID,
-  verifyingContract: config.addresses.nounsDAOProxy
+  verifyingContract: config.addresses.nounsDAOProxy,
 };
 
 const createProposalTypes = {
@@ -27,8 +32,8 @@ const createProposalTypes = {
     { name: 'signatures', type: 'string[]' },
     { name: 'calldatas', type: 'bytes[]' },
     { name: 'description', type: 'string' },
-    { name: 'expiry', type: 'uint256' }
-  ]
+    { name: 'expiry', type: 'uint256' },
+  ],
 };
 
 const updateProposalTypes = {
@@ -40,8 +45,8 @@ const updateProposalTypes = {
     { name: 'signatures', type: 'string[]' },
     { name: 'calldatas', type: 'bytes[]' },
     { name: 'description', type: 'string' },
-    { name: 'expiry', type: 'uint256' }
-  ]
+    { name: 'expiry', type: 'uint256' },
+  ],
 };
 
 const DraftProposalPage = ({
@@ -53,14 +58,13 @@ const DraftProposalPage = ({
   const { library, chainId } = useEthers();
   const signer = library?.getSigner();
   const [draftProposal, setDraftProposal] = useState<DraftProposal | undefined>(undefined);
-  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60*60*24);
+  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60 * 60 * 24);
   const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
 
   useEffect(() => {
     const draftProposals = getDraftProposals();
     setDraftProposal(draftProposals[proposalId]);
   }, []);
-
 
   async function sign() {
     if (!draftProposal) return;
@@ -70,29 +74,31 @@ const DraftProposalPage = ({
     if (proposalIdToUpdate) {
       const value = {
         ...draftProposal.proposalContent,
-        'expiry': expiry,
-        'proposalId': proposalIdToUpdate
+        expiry: expiry,
+        proposalId: proposalIdToUpdate,
       };
       signature = await signer!._signTypedData(domain, updateProposalTypes, value);
     } else {
       const value = {
         ...draftProposal.proposalContent,
-        'expiry': expiry
+        expiry: expiry,
       };
       signature = await signer!._signTypedData(domain, createProposalTypes, value);
     }
-    
+
     const updatedDraftProposal = addSignature(
       {
-        signer: await signer!.getAddress(), 
-        signature: signature!, 
-        expiry: expiry}, 
-      proposalId);
+        signer: await signer!.getAddress(),
+        signature: signature!,
+        expiry: expiry,
+      },
+      proposalId,
+    );
     setDraftProposal(updatedDraftProposal);
   }
 
   const [isProposePending, setProposePending] = useState(false);
-  
+
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
@@ -190,7 +196,7 @@ const DraftProposalPage = ({
       draftProposal?.proposalContent.signatures,
       draftProposal?.proposalContent.calldatas,
       draftProposal?.proposalContent.description,
-    )
+    );
   }
 
   return (
@@ -200,26 +206,41 @@ const DraftProposalPage = ({
         <ReactMarkdown
           children={draftProposal.proposalContent.description}
           remarkPlugins={[remarkBreaks]}
-          />
+        />
       )}
-      <pre>
-        {JSON.stringify(draftProposal, null, 4)}
-      </pre>
-      
-      <label>Expiry: <input type="text" value={expiry} onChange={e => setExpiry(Number.parseInt(e.target.value))} /></label>
+      <pre>{JSON.stringify(draftProposal, null, 4)}</pre>
+
+      <label>
+        Expiry:{' '}
+        <input
+          type="text"
+          value={expiry}
+          onChange={e => setExpiry(Number.parseInt(e.target.value))}
+        />
+      </label>
       <label>
         Update proposal id (leave empty if creating a new proposal):
-        <input type="text" value={proposalIdToUpdate} onChange={e => setProposalIdToUpdate(e.target.value)} />
+        <input
+          type="text"
+          value={proposalIdToUpdate}
+          onChange={e => setProposalIdToUpdate(e.target.value)}
+        />
       </label>
-      
-      <Button onClick={() => sign()} style={{marginBottom: 10}}>Sign proposal</Button>
-      <Button onClick={() => proposeBySigsClicked()} style={{marginBottom: 10}}>proposeBySigs</Button>
+
+      <Button onClick={() => sign()} style={{ marginBottom: 10 }}>
+        Sign proposal
+      </Button>
+      <Button onClick={() => proposeBySigsClicked()} style={{ marginBottom: 10 }}>
+        proposeBySigs
+      </Button>
 
       <Container>
-        <Button onClick={() => updateProposalBySigsClicked()} style={{display: 'inline'}}>updateProposalBySig</Button>
+        <Button onClick={() => updateProposalBySigsClicked()} style={{ display: 'inline' }}>
+          updateProposalBySig
+        </Button>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
 export default DraftProposalPage;

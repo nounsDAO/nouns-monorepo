@@ -19,7 +19,7 @@
   font-size: 20px;
 }
 
-.subhead { 
+.subhead {
   margin: 0 0 10px;
   padding-top: 0;
   font-size: 14px;
@@ -42,17 +42,17 @@
   padding: 10px;
   border-radius: 12px;
   margin-bottom: 10px;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
   list-style-type: none;
   margin: 0;
 }
 
 .sponsorsList p {
-  margin: 0; 
+  margin: 0;
   padding: 0;
 }
 .sponsorsList li.sponsor {
-  background-color: #FBFBFC;
+  background-color: #fbfbfc;
   border-width: 1px;
   position: relative;
 }
@@ -71,7 +71,7 @@
 
 .reason {
   font-size: 13px;
-  color: #646465; 
+  color: #646465;
   border-top: 1px solid #e6e6e6;
   margin-top: 8px;
   padding-top: 10px;
@@ -81,7 +81,7 @@
 .reasonWrapper {
   display: -webkit-box;
   -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
@@ -143,7 +143,7 @@
 .removeSignature {
   border: none;
   text-align: center;
-  border-top: 1px solid #e6e6e6; 
+  border-top: 1px solid #e6e6e6;
   margin-top: 8px;
   padding-top: 10px;
   line-height: 1.1;
@@ -168,8 +168,8 @@
   font-size: 13px;
   font-weight: bold;
   color: #000 !important;
-  background: rgb(251,251,252);
-  background: linear-gradient(0deg, rgba(251,251,252,1) 33%, rgba(251,251,252,0) 100%);
+  background: rgb(251, 251, 252);
+  background: linear-gradient(0deg, rgba(251, 251, 252, 1) 33%, rgba(251, 251, 252, 0) 100%);
   padding: 20px 3px 4px;
   position: relative;
   z-index: 2;
@@ -183,7 +183,7 @@
   padding: 0;
   font-size: 13px;
   line-height: 1;
-  color: var(--brand-gray-light-text); 
+  color: var(--brand-gray-light-text);
   padding: 0 20px;
   margin: 0 auto;
 }
@@ -202,7 +202,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255,255,255);
+  background-color: rgba(255, 255, 255);
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -211,7 +211,8 @@
   border: 1px solid #e6e6e6;
 }
 
-.formOverlay .closeButton, .cancelStatusOverlay .closeButton {
+.formOverlay .closeButton,
+.cancelStatusOverlay .closeButton {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -228,7 +229,8 @@
   width: 100%;
   padding: 15px;
 }
-.formWrapper input, .formWrapper textarea {
+.formWrapper input,
+.formWrapper textarea {
   width: 100%;
 }
 .formWrapper button {
@@ -242,7 +244,8 @@
   margin-bottom: 2px;
 }
 
-.formWrapper input, .formWrapper textarea {
+.formWrapper input,
+.formWrapper textarea {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #aaa !important;
@@ -270,7 +273,8 @@
   text-align: center;
 }
 
-.cancelStatusOverlay, .submitSignatureStatusOverlay {
+.cancelStatusOverlay,
+.submitSignatureStatusOverlay {
   position: absolute;
   top: 3px;
   left: 3px;
@@ -283,11 +287,12 @@
   flex-direction: column;
   justify-content: center;
 }
-.cancelStatusOverlay .cancelStatusOverlayTitle, .submitSignatureStatusOverlay {
+.cancelStatusOverlay .cancelStatusOverlayTitle,
+.submitSignatureStatusOverlay {
   font-size: 18px;
   font-weight: bold;
   text-align: center;
-} 
+}
 
 .loadingNoggles {
   margin: 0 auto;

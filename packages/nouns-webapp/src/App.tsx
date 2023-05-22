@@ -92,7 +92,11 @@ function App() {
             <Route exact path="/candidates/:id" component={CandidatePage} />
             <Route exact path="/candidates/:id/edit" component={EditCandidatePage} />
             <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} />
-            <Route exact path="/candidates/:id/history/:versionNumber?" component={CandidateHistoryPage} />
+            <Route
+              exact
+              path="/candidates/:id/history/:versionNumber?"
+              component={CandidateHistoryPage}
+            />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />

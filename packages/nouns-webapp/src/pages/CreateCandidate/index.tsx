@@ -25,10 +25,18 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useCandidateProposals, useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import {
+  useCandidateProposals,
+  useGetCreateCandidateCost,
+  useCreateProposalCandidate,
+} from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
-import { checkEnoughVotes, checkHasActiveOrPendingProposalOrCandidate, checkIsEligibleToPropose } from '../../utils/proposals';
+import {
+  checkEnoughVotes,
+  checkHasActiveOrPendingProposalOrCandidate,
+  checkIsEligibleToPropose,
+} from '../../utils/proposals';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -152,7 +160,7 @@ const CreateCandidatePage = () => {
   //   availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   // );
   const hasEnoughVote = checkEnoughVotes(availableVotes, proposalThreshold);
-  const isEligibleToPropose = checkIsEligibleToPropose(latestProposal, account)
+  const isEligibleToPropose = checkIsEligibleToPropose(latestProposal, account);
   const handleCreateProposal = async () => {
     const description = `# ${titleValue}\n\n${bodyValue}`;
     await createProposalCandidate(
@@ -207,12 +215,12 @@ const CreateCandidatePage = () => {
     }
   }, [createProposalCandidateState, setModal]);
 
-
-
   console.log('latestProposal', latestProposal);
-  console.log((latestProposal?.status === ProposalState.ACTIVE ||
-    latestProposal?.status === ProposalState.PENDING) &&
-    latestProposal.proposer === account);
+  console.log(
+    (latestProposal?.status === ProposalState.ACTIVE ||
+      latestProposal?.status === ProposalState.PENDING) &&
+      latestProposal.proposer === account,
+  );
   console.log('isEligibleToPropose', isEligibleToPropose);
 
   return (
@@ -286,7 +294,10 @@ const CreateCandidatePage = () => {
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
           // TODO: update this check to include proposals AND candidates
-          hasActiveOrPendingProposal={checkHasActiveOrPendingProposalOrCandidate(latestProposal, account)}
+          hasActiveOrPendingProposal={checkHasActiveOrPendingProposalOrCandidate(
+            latestProposal,
+            account,
+          )}
           hasEnoughVote={hasEnoughVote}
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}

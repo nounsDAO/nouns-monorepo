@@ -52,7 +52,6 @@ import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
 
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
@@ -75,8 +74,6 @@ const ProposalHistory = ({
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
-
-
 
   useEffect(() => {
     if (versionNumber) {
@@ -108,7 +105,8 @@ const ProposalHistory = ({
         className={clsx(editorClasses.markdown, editorClasses.diffs)}
         children={str}
         remarkPlugins={[remarkBreaks]}
-      />);
+      />
+    );
   };
 
   return (
@@ -116,7 +114,11 @@ const ProposalHistory = ({
       <Col lg={12} className={classes.wrapper}>
         {proposal && (
           <ProposalHeader
-            title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
+            title={
+              proposalVersions
+                ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
+                : proposal.title
+            }
             proposal={proposal}
             isActiveForVoting={false}
             isWalletConnected={isWalletConnected}
@@ -127,7 +129,8 @@ const ProposalHistory = ({
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
-            {((!isDiffsVisible && proposalVersions && activeVersion) || (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
+            {((!isDiffsVisible && proposalVersions && activeVersion) ||
+              (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
               <ProposalContent
                 description={proposalVersions[activeVersion - 1].description}
                 title={proposalVersions[activeVersion - 1].title}
@@ -155,10 +158,8 @@ const ProposalHistory = ({
 
                     <p>Version {activeVersion - 2}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
-
                   </Col>
                 </Row>
-
               </div>
             )}
           </Col>

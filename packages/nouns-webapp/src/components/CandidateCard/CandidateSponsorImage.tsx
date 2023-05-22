@@ -2,11 +2,9 @@ import { BigNumber } from 'ethers';
 import { StandaloneNounImage } from '../StandaloneNoun';
 
 type Props = {
-  nounId: number
-}
+  nounId: number;
+};
 
 export default function CandidateSponsorImage({ nounId }: Props) {
-  return (
-    <StandaloneNounImage nounId={BigNumber.from(nounId)} />
-  )
+  return <StandaloneNounImage nounId={BigNumber.from(nounId)} />;
 }

@@ -68,7 +68,6 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               <Trans>Proposed Transactions</Trans>
             </h5>
             <ProposalTransactions details={details} />
-
           </Col>
         </Row>
       )}

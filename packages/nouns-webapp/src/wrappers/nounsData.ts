@@ -10,7 +10,14 @@ import {
 } from './subgraph';
 import { useQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js';
-import { ProposalDetail, ProposalTransactionDetails, extractTitle, formatProposalTransactionDetails, formatProposalTransactionDetailsToUpdate, removeMarkdownStyle } from './nounsDao';
+import {
+  ProposalDetail,
+  ProposalTransactionDetails,
+  extractTitle,
+  formatProposalTransactionDetails,
+  formatProposalTransactionDetailsToUpdate,
+  removeMarkdownStyle,
+} from './nounsDao';
 import * as R from 'ramda';
 
 const abi = new utils.Interface(NounsDAODataABI);
@@ -33,7 +40,6 @@ export const useCreateProposalCandidate = () => {
   return { createProposalCandidate, createProposalCandidateState };
 };
 
-
 export const useCancelCandidate = () => {
   const { send: cancelCandidate, state: cancelCandidateState } = useContractFunction(
     nounsDAOData,
@@ -41,7 +47,6 @@ export const useCancelCandidate = () => {
   );
   return { cancelCandidate, cancelCandidateState };
 };
-
 
 export const useAddSignature = () => {
   const { send: addSignature, state: addSignatureState } = useContractFunction(
@@ -61,7 +66,7 @@ export const useCandidateProposals = () => {
 export const useCandidateProposal = (id: string, toUpdate?: boolean) => {
   return parseSubgraphCandidate(
     useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
-    toUpdate
+    toUpdate,
   );
 };
 
@@ -105,10 +110,8 @@ export const useGetUpdateCandidateCost = () => {
 
 export const useUpdateProposalCandidate = () => {
   console.log('useUpdateProposalCandidate');
-  const { send: updateProposalCandidate, state: updateProposalCandidateState } = useContractFunction(
-    nounsDAOData,
-    'updateProposalCandidate',
-  );
+  const { send: updateProposalCandidate, state: updateProposalCandidateState } =
+    useContractFunction(nounsDAOData, 'updateProposalCandidate');
   console.log('updateProposalCandidateState', updateProposalCandidateState);
   return { updateProposalCandidate, updateProposalCandidateState };
 };
@@ -132,7 +135,6 @@ export const useProposalFeedback = (id: string) => {
 
   return { loading, data, error };
 };
-
 
 const parseSubgraphCandidate = (
   candidate: ProposalCandidateSubgraphEntity | undefined,
@@ -183,7 +185,8 @@ const parseSubgraphCandidate = (
 };
 
 const parseSubgraphCandidateVersions = (
-  candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined) => {
+  candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined,
+) => {
   if (!candidateVersions) {
     return;
   }
@@ -197,10 +200,7 @@ const parseSubgraphCandidateVersions = (
 
   // const versions = sortedCandidateVersions.map((version, i) => {
   const versions = candidateVersions.versions.map((version, i) => {
-
-    const description = version.description
-      ?.replace(/\\n/g, '\n')
-      .replace(/(^['"]|['"]$)/g, '');
+    const description = version.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
       targets: version.targets,
       values: version.values,
@@ -221,10 +221,11 @@ const parseSubgraphCandidateVersions = (
     };
   });
 
-
   return {
     id: candidateVersions.id,
-    title: R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ?? 'Untitled',
+    title:
+      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
+      'Untitled',
     description: candidateVersions.latestVersion.description ?? 'No description.',
     slug: candidateVersions.slug,
     proposer: candidateVersions.proposer,
@@ -235,8 +236,6 @@ const parseSubgraphCandidateVersions = (
     versions: versions,
   };
 };
-
-
 
 export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
   versions: {
@@ -303,7 +302,6 @@ export interface CandidateSignature {
     }[];
   };
 }
-
 
 export interface ProposalCandidateInfo {
   id: string;

@@ -48,23 +48,27 @@
   box-shadow: none !important;
 }
 
-.markdown h1, .diffs h1 {
+.markdown h1,
+.diffs h1 {
   font-size: 1.7rem;
   margin-top: 1rem;
   font-weight: bold;
 }
 
-.markdown h2, .diffs h2 {
+.markdown h2,
+.diffs h2 {
   font-size: 1.5rem;
   margin-top: 1rem;
   font-weight: bold;
 }
 
-.markdown h3, .diffs h3 {
+.markdown h3,
+.diffs h3 {
   font-size: 1.3rem;
 }
 
-.markdown img, .diffs img {
+.markdown img,
+.diffs img {
   max-width: 100%;
   height: auto;
 }

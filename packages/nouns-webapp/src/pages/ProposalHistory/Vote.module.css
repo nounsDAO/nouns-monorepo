@@ -200,7 +200,6 @@
   margin-bottom: 0.5rem;
 }
 
-
 /* // Proposal History */
 .versionHistory {
   position: sticky;
@@ -240,13 +239,13 @@
 .versionHistory .version {
   padding: 15px;
   border-radius: 12px;
-  background-color: #F2F2F5;
+  background-color: #f2f2f5;
   border: 1px solid transparent;
   text-align: left;
   text-decoration: none;
 }
 .versionHistory .version:hover {
-  background-color: #E6E6EB;
+  background-color: #e6e6eb;
 }
 
 .versionHistory .version.activeVersion {
@@ -254,19 +253,22 @@
   background-color: #fff;
 }
 
-.versionHistory .version h3, .versionHistory .version h5 {
+.versionHistory .version h3,
+.versionHistory .version h5 {
   font-size: 14px;
   font-weight: bold;
   margin: 0;
   padding: 0;
 }
 
-.versionHistory .version span, .versionHistory .version h4 {
+.versionHistory .version span,
+.versionHistory .version h4 {
   font-size: 14px;
   color: var(--brand-gray-light-text);
 }
 
-.versionHistory .version h4, .versionHistory .message {
+.versionHistory .version h4,
+.versionHistory .message {
   color: black;
   font-weight: bold;
   margin: 0;

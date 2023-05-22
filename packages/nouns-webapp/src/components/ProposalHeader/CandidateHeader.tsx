@@ -6,10 +6,7 @@ import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import {
-  useHasVotedOnProposal,
-  useProposalVote,
-} from '../../wrappers/nounsDao';
+import { useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
@@ -65,7 +62,18 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 };
 
 const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
-  const { title, slug, id, proposer, versionsCount, createdTransactionHash, lastUpdatedTimestamp, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
+  const {
+    title,
+    slug,
+    id,
+    proposer,
+    versionsCount,
+    createdTransactionHash,
+    lastUpdatedTimestamp,
+    isActiveForVoting,
+    isWalletConnected,
+    submitButtonClickHandler,
+  } = props;
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
@@ -84,7 +92,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   //     setUpdatedTimestamp(timestamp.toDate());
   //   }
   // }, [currentBlock]);
-
 
   const voteButton = (
     <>
@@ -125,9 +132,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   const proposedAtTransactionHash = (
     <Trans>
       at{' '}
-      <span className={classes.propTransactionHash}>
-        {transactionLink(createdTransactionHash)}
-      </span>
+      <span className={classes.propTransactionHash}>{transactionLink(createdTransactionHash)}</span>
     </Trans>
   );
 

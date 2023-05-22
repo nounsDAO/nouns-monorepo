@@ -28,7 +28,12 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useGetCreateCandidateCost, useCreateProposalCandidate, useUpdateProposalCandidate, useCandidateProposal } from '../../wrappers/nounsData';
+import {
+  useGetCreateCandidateCost,
+  useCreateProposalCandidate,
+  useUpdateProposalCandidate,
+  useCandidateProposal,
+} from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 interface EditCandidateProps {
   match: {
@@ -239,14 +244,16 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     console.log('proposal', proposal);
     console.log('candidate', candidate);
     if (proposal && candidate) {
-      const transactions = candidate?.version.details.map((txn: { target: any; value: any; callData: any; functionSig: any; }) => {
-        return {
-          address: txn.target,
-          value: txn.value ?? '0',
-          calldata: txn.callData,
-          signature: txn.functionSig,
-        };
-      });
+      const transactions = candidate?.version.details.map(
+        (txn: { target: any; value: any; callData: any; functionSig: any }) => {
+          return {
+            address: txn.target,
+            value: txn.value ?? '0',
+            calldata: txn.callData,
+            signature: txn.functionSig,
+          };
+        },
+      );
       console.log('transactions', transactions);
       setTitleValue(proposal.title);
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
@@ -303,7 +310,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
-      candidate?.slug, // Slug 
+      candidate?.slug, // Slug
       commitMessage,
     );
   };
@@ -390,11 +397,16 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             </Trans>
           )}
         </p>
-        <p className="text-center pt-0"><Trans>Updating this proposal candidate will clear all previous signers.
-          {proposal && proposal.versionSignatures?.length > 0 ? (
-            <>This candidate currently has {proposal.versionSignatures?.length} signatures.</>
-          ) : ('')}
-        </Trans></p>
+        <p className="text-center pt-0">
+          <Trans>
+            Updating this proposal candidate will clear all previous signers.
+            {proposal && proposal.versionSignatures?.length > 0 ? (
+              <>This candidate currently has {proposal.versionSignatures?.length} signatures.</>
+            ) : (
+              ''
+            )}
+          </Trans>
+        </p>
       </Col>
     </Section>
   );

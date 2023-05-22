@@ -142,7 +142,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-  PartialProposalSubgraphEntity {
+    PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -470,7 +470,9 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
   });
 };
 
-export const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails | Result) => {
+export const formatProposalTransactionDetailsToUpdate = (
+  details: ProposalTransactionDetails | Result,
+) => {
   return details.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(
@@ -588,9 +590,7 @@ const parsePartialSubgraphProposal = (
   };
 };
 
-const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity | undefined
-) => {
+const parseSubgraphCandidate = (candidate: ProposalCandidateSubgraphEntity | undefined) => {
   if (!candidate) {
     return;
   }
@@ -609,8 +609,6 @@ const parseSubgraphCandidate = (
     calldatas: candidate.latestVersion.calldatas,
     encodedProposalHash: candidate.latestVersion.encodedProposalHash,
   };
-
-
 
   return {
     id: candidate.id,
@@ -833,8 +831,7 @@ export const useProposalVersions = (
 };
 
 export const useCandidate = (id: string): ProposalCandidate | undefined => {
-  return parseSubgraphCandidate(
-    useQuery(candidateProposalQuery(id)).data?.proposalCandidate);
+  return parseSubgraphCandidate(useQuery(candidateProposalQuery(id)).data?.proposalCandidate);
 };
 
 export const useCancelSignature = () => {

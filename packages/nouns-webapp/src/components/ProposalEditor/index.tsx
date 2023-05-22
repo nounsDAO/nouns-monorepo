@@ -33,14 +33,12 @@ const ProposalEditor = ({
   return (
     <div>
       <InputGroup className={`${classes.proposalEditor} d-flex flex-column`}>
-        <FormText>
-          {isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}
-        </FormText>
+        <FormText>{isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}</FormText>
         <FormControl
           className={classes.titleInput}
           value={title}
           onChange={e => onTitleInput(e.target.value)}
-          placeholder={isCandidate ? "Proposal candidate title" : "Proposal title"}
+          placeholder={isCandidate ? 'Proposal candidate title' : 'Proposal title'}
         />
         <hr className={classes.divider} />
         <FormControl

@@ -1,4 +1,3 @@
-
 const STORAGE_KEY = 'draft-proposals';
 
 export interface DraftProposal {
@@ -25,13 +24,13 @@ export const saveDraftProposal = (draftProposal: DraftProposal) => {
   const draftProposals = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
   draftProposals.push(draftProposal);
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draftProposals));
-}
+};
 
-export const getDraftProposals = () : DraftProposal[] => {
+export const getDraftProposals = (): DraftProposal[] => {
   return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
-}
+};
 
-export const addSignature = (signature: ProposalSignaure, proposalId: number) : DraftProposal => {
+export const addSignature = (signature: ProposalSignaure, proposalId: number): DraftProposal => {
   const draftProposals = getDraftProposals();
   const draftProposal = draftProposals[proposalId];
   const signatures = draftProposal['signatures'];
@@ -40,4 +39,4 @@ export const addSignature = (signature: ProposalSignaure, proposalId: number) : 
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draftProposals));
 
   return draftProposal;
-}
+};

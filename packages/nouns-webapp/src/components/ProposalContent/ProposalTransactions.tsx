@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react'
-import { ProposalDetail } from '../../wrappers/nounsDao'
+import React, { Fragment } from 'react';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import classes from './ProposalContent.module.css';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
@@ -10,8 +10,8 @@ import { linkIfAddress } from '.';
 import ShortAddress from '../ShortAddress';
 
 type Props = {
-  details: ProposalDetail[]
-}
+  details: ProposalDetail[];
+};
 
 export default function ProposalTransactions({ details }: Props) {
   console.log('details', details);
@@ -49,8 +49,8 @@ export default function ProposalTransactions({ details }: Props) {
                 </div>
                 <div>
                   <Trans>
-                    This transaction was automatically added to refill the TokenBuyer.
-                    Proposers do not receive this ETH.
+                    This transaction was automatically added to refill the TokenBuyer. Proposers do
+                    not receive this ETH.
                   </Trans>
                 </div>
               </div>
@@ -66,8 +66,8 @@ export default function ProposalTransactions({ details }: Props) {
                     {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
                       Number(utils.formatUnits(d.callData.split(',')[1], 6)),
                     )}{' '}
-                    USDC to <ShortAddress address={d.callData.split(',')[0]} /> via the
-                    DAO's PayerContract.
+                    USDC to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
+                    PayerContract.
                   </Trans>
                 </div>
               </div>
@@ -76,5 +76,5 @@ export default function ProposalTransactions({ details }: Props) {
         );
       })}
     </ol>
-  )
+  );
 }

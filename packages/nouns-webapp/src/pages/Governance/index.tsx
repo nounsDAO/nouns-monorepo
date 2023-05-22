@@ -40,7 +40,7 @@ const GovernancePage = () => {
               <span className={classes.boldText}>
                 {nounsRequired ? (
                   <>
-                    {nounsRequired}{" "}{threshold === 0 ? nounSingular : nounPlural}
+                    {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
                   </>
                 ) : (
                   '...'

@@ -147,9 +147,9 @@ const CreateDraftProposalPage = () => {
         values: proposalTransactions.map(({ value }) => value ?? '0'), // Values
         signatures: proposalTransactions.map(({ signature }) => signature), // Signatures
         calldatas: proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        description: description 
+        description: description,
       },
-      signatures: []
+      signatures: [],
     });
 
     history.push('/draft-proposals');
@@ -264,7 +264,7 @@ const CreateDraftProposalPage = () => {
           onBodyInput={handleBodyInput}
         />
         <div className="d-grid gap-2">
-          <Button 
+          <Button
             className={classes.createProposalButton}
             disabled={isFormInvalid}
             onClick={handleCreateProposal}

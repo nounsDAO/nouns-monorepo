@@ -68,7 +68,10 @@ function CandidateCard({ candidate, nounsRequired }: Props) {
 
         <div className={classes.footer}>
           <div className={classes.candidateSponsors}>
-            <CandidateSponsors signers={candidate.latestVersion.versionSignatures} nounsRequired={nounsRequired} />
+            <CandidateSponsors
+              signers={candidate.latestVersion.versionSignatures}
+              nounsRequired={nounsRequired}
+            />
             <span className={classes.sponsorCount}>
               <strong>
                 {candidate.latestVersion.versionSignatures.length} / {nounsRequired}
