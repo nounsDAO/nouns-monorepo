@@ -667,10 +667,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
-     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     * Sets it to the next proposal id.
      */
-    function _setVoteSnapshotBlockSwitchProposalId(uint256 newVoteSnapshotBlockSwitchProposalId) external {
-        ds._setVoteSnapshotBlockSwitchProposalId(newVoteSnapshotBlockSwitchProposalId);
+    function _setVoteSnapshotBlockSwitchProposalId() external {
+        ds._setVoteSnapshotBlockSwitchProposalId();
     }
 
     function _setForkDAODeployer(address newForkDAODeployer) external {
@@ -864,6 +864,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function timelockV1() public view returns (address) {
         return address(ds.timelockV1);
+    }
+
+    function voteSnapshotBlockSwitchProposalId() public view returns (uint256) {
+        return ds.voteSnapshotBlockSwitchProposalId;
     }
 
     receive() external payable {}

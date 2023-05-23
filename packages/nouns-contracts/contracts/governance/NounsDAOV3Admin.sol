@@ -431,13 +431,12 @@ library NounsDAOV3Admin {
     /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
-     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     * Sets it to the next proposal id.
      */
-    function _setVoteSnapshotBlockSwitchProposalId(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 newVoteSnapshotBlockSwitchProposalId
-    ) external onlyAdmin(ds) {
+    function _setVoteSnapshotBlockSwitchProposalId(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) {
+        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+
         ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
         emit VoteSnapshotBlockSwitchProposalIdSet(

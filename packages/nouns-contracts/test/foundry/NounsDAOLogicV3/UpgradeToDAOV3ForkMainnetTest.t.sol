@@ -148,7 +148,8 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(daoV3.lastMinuteWindowInBlocks(), 0);
         assertEq(daoV3.objectionPeriodDurationInBlocks(), 0);
         assertEq(daoV3.proposalUpdatablePeriodInBlocks(), 0);
-        // TODO: voteSnapshotBlockSwitchProposalId
+
+        assertEq(daoV3.voteSnapshotBlockSwitchProposalId(), 299);
     }
 
     function test_TokenBuyer_changedOwner() public {

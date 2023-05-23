@@ -61,7 +61,7 @@ contract ProposeDAOV3UpgradeScript is Script {
         address[] memory erc20TokensToIncludeInFork,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 8;
+        uint8 numTxs = 9;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -90,6 +90,12 @@ contract ProposeDAOV3UpgradeScript is Script {
             FORK_PERIOD,
             FORK_THRESHOLD_BPS
         );
+
+        i++;
+        targets[i] = address(daoProxy);
+        values[i] = 0;
+        signatures[i] = '_setVoteSnapshotBlockSwitchProposalId()';
+        calldatas[i] = '';
 
         i++;
         targets[i] = TOKEN_BUYER_MAINNET;
