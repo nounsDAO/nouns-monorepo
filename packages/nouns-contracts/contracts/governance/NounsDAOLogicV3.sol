@@ -261,7 +261,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory updateMessage
     ) external {
-        // TODO: gas: should these be calldata instead of memory?
         ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
     }
 

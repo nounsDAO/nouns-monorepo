@@ -454,7 +454,4 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
         vm.prank(proposerWithNoVotes);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
-
-    // TODO tests
-    // test for event
 }

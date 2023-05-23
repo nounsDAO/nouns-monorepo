@@ -30,8 +30,6 @@ contract NounsDAOForkEscrow is IERC721Receiver {
     /// @notice Number of tokens in escrow contributing to the fork threshold. They can be unescrowed.
     uint256 public numTokensInEscrow;
 
-    // TODO: events
-
     error OnlyDAO();
     error OnlyNounsToken();
     error NotOwner();
