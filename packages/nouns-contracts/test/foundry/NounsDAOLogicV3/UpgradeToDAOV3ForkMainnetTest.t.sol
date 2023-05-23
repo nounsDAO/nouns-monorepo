@@ -138,7 +138,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(daoV3.forkThresholdBPS(), 2000);
     }
 
-    function test_setsTimelockAndAdmin() public {
+    function test_setsTimelocksAndAdmin() public {
         assertEq(address(daoV3.timelock()), address(timelockV2));
         assertEq(address(daoV3.timelockV1()), address(NOUNS_TIMELOCK_V1_MAINNET));
         assertEq(NounsDAOProxy(payable(address(daoV3))).admin(), address(timelockV2));
