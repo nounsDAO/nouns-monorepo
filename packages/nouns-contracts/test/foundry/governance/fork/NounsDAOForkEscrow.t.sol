@@ -5,14 +5,30 @@ import 'forge-std/Test.sol';
 
 import { NounsDAOForkEscrow, NounsTokenLike } from '../../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ERC721Mock } from '../../helpers/ERC721Mock.sol';
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+
+contract DAOMock {
+    IERC721 token;
+
+    constructor(IERC721 token_) {
+        token = token_;
+    }
+
+    function sendTokensToEscrow(address escrow, uint256[] memory tokenIds) public {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            token.safeTransferFrom(msg.sender, escrow, tokenIds[i]);
+        }
+    }
+}
 
 abstract contract ZeroState is Test {
     NounsDAOForkEscrow escrow;
     ERC721Mock token = new ERC721Mock();
-    address dao = makeAddr('dao');
+    DAOMock dao;
 
     function setUp() public virtual {
-        escrow = new NounsDAOForkEscrow(dao, address(token));
+        dao = new DAOMock(token);
+        escrow = new NounsDAOForkEscrow(address(dao), address(token));
     }
 }
 
@@ -25,10 +41,16 @@ contract ZeroStateTest is ZeroState {
         assertEq(escrow.numTokensOwnedByDAO(), 0);
     }
 
-    function test_markOwner_onlyDAO() public {
+    function test_onERC721Received_onlyNounsToken() public {
+        vm.expectRevert(NounsDAOForkEscrow.OnlyNounsToken.selector);
+        escrow.onERC721Received(address(0), address(0), 0, '');
+    }
+
+    function test_onERC721Received_onlyFromDAO() public {
+        token.mint(address(this), 1234);
+
         vm.expectRevert(NounsDAOForkEscrow.OnlyDAO.selector);
-        uint256[] memory tokenIds = new uint256[](0);
-        escrow.markOwner(makeAddr('user1'), tokenIds);
+        token.safeTransferFrom(address(this), address(escrow), 1234);
     }
 
     function test_returnTokensToOwner_onlyDAO() public {
@@ -51,7 +73,7 @@ contract ZeroStateTest is ZeroState {
 
         uint256[] memory tokenIds = new uint256[](1);
         tokenIds[0] = 123;
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.withdrawTokensToDAO(tokenIds, makeAddr('timelock'));
 
         assertEq(token.ownerOf(123), makeAddr('timelock'));
@@ -70,20 +92,14 @@ abstract contract TwoUsersEscrowedState is ZeroState {
         user1tokenIds = token.mintBatch(user1, 2);
 
         vm.startPrank(user1);
-        token.transferFrom(user1, address(escrow), 0);
-        token.transferFrom(user1, address(escrow), 1);
-
-        changePrank(dao);
-        escrow.markOwner(user1, user1tokenIds);
+        token.setApprovalForAll(address(dao), true);
+        dao.sendTokensToEscrow(address(escrow), user1tokenIds);
 
         user2tokenIds = token.mintBatch(user2, 2);
 
         changePrank(user2);
-        token.transferFrom(user2, address(escrow), 2);
-        token.transferFrom(user2, address(escrow), 3);
-
-        changePrank(dao);
-        escrow.markOwner(user2, user2tokenIds);
+        token.setApprovalForAll(address(dao), true);
+        dao.sendTokensToEscrow(address(escrow), user2tokenIds);
 
         vm.stopPrank();
     }
@@ -99,7 +115,7 @@ contract TwoUsersEscrowedStateTest is TwoUsersEscrowedState {
     }
 
     function test_canUnescrowToOwner() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.returnTokensToOwner(user1, user1tokenIds);
 
         assertEq(token.ownerOf(0), user1);
@@ -107,13 +123,13 @@ contract TwoUsersEscrowedStateTest is TwoUsersEscrowedState {
     }
 
     function test_cannotUnescrowTokensOfOtherOwners() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         escrow.returnTokensToOwner(user1, user2tokenIds);
     }
 
     function test_daoCannotWithdrawTokensYet() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         escrow.withdrawTokensToDAO(user1tokenIds, makeAddr('timelock'));
     }
@@ -122,7 +138,7 @@ contract TwoUsersEscrowedStateTest is TwoUsersEscrowedState {
 abstract contract OneUserUnescrowedState is TwoUsersEscrowedState {
     function setUp() public virtual override {
         super.setUp();
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.returnTokensToOwner(user1, user1tokenIds);
     }
 }
@@ -137,7 +153,7 @@ contract OneUserUnescrowedStateTest is OneUserUnescrowedState {
     }
 
     function test_otherUserCanWithdraw() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.returnTokensToOwner(user2, user2tokenIds);
     }
 }
@@ -147,7 +163,7 @@ abstract contract EscrowClosedState is OneUserUnescrowedState {
 
     function setUp() public virtual override {
         super.setUp();
-        vm.prank(dao);
+        vm.prank(address(dao));
         closedForkId = escrow.closeEscrow();
     }
 }
@@ -162,7 +178,7 @@ contract EscrowClosedStateTest is EscrowClosedState {
     }
 
     function test_canWithdrawTokensToDAO() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.withdrawTokensToDAO(user2tokenIds, makeAddr('timelock'));
 
         assertEq(token.ownerOf(2), makeAddr('timelock'));
@@ -170,7 +186,7 @@ contract EscrowClosedStateTest is EscrowClosedState {
     }
 
     function test_cannotReturnTokensToOwner() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         escrow.returnTokensToOwner(user2, user2tokenIds);
     }
@@ -189,11 +205,8 @@ abstract contract EscrowedTokensAfterClosingState is EscrowClosedState {
         super.setUp();
 
         vm.startPrank(user1);
-        token.transferFrom(user1, address(escrow), 0);
-        token.transferFrom(user1, address(escrow), 1);
-
-        changePrank(dao);
-        escrow.markOwner(user1, user1tokenIds);
+        token.setApprovalForAll(address(dao), true);
+        dao.sendTokensToEscrow(address(escrow), user1tokenIds);
 
         vm.stopPrank();
     }
@@ -209,7 +222,7 @@ contract EscrowedTokensAfterClosingStateTest is EscrowedTokensAfterClosingState 
     }
 
     function test_canWithdrawTokensToDAO_fromPreviousFork() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.withdrawTokensToDAO(user2tokenIds, makeAddr('timelock'));
 
         assertEq(token.ownerOf(2), makeAddr('timelock'));
@@ -217,19 +230,19 @@ contract EscrowedTokensAfterClosingStateTest is EscrowedTokensAfterClosingState 
     }
 
     function test_cannotWithdrawTokensToDAO_fromCurrentFork() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         escrow.withdrawTokensToDAO(user1tokenIds, makeAddr('timelock'));
     }
 
     function test_cannotReturnTokensToOwner_fromPreviousFork() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         escrow.returnTokensToOwner(user2, user2tokenIds);
     }
 
     function test_canReturnTokensToOwner_fromCurrentFork() public {
-        vm.prank(dao);
+        vm.prank(address(dao));
         escrow.returnTokensToOwner(user1, user1tokenIds);
     }
 }

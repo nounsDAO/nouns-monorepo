@@ -16,8 +16,9 @@
 pragma solidity ^0.8.6;
 
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
+import { IERC721Receiver } from '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
 
-contract NounsDAOForkEscrow {
+contract NounsDAOForkEscrow is IERC721Receiver {
     address public immutable dao;
     NounsTokenLike public immutable nounsToken;
 
@@ -32,6 +33,7 @@ contract NounsDAOForkEscrow {
     // TODO: events
 
     error OnlyDAO();
+    error OnlyNounsToken();
     error NotOwner();
 
     constructor(address dao_, address nounsToken_) {
@@ -46,11 +48,20 @@ contract NounsDAOForkEscrow {
         _;
     }
 
-    function markOwner(address owner, uint256[] calldata tokenIds) external onlyDAO {
-        for (uint256 i = 0; i < tokenIds.length; i++) {
-            escrowedTokensByForkId[forkId][tokenIds[i]] = owner;
-        }
-        numTokensInEscrow += tokenIds.length;
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes memory
+    ) public override returns (bytes4) {
+        if (msg.sender != address(nounsToken)) revert OnlyNounsToken();
+        if (operator != dao) revert OnlyDAO();
+
+        escrowedTokensByForkId[forkId][tokenId] = from;
+
+        numTokensInEscrow++;
+
+        return IERC721Receiver.onERC721Received.selector;
     }
 
     function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external onlyDAO {

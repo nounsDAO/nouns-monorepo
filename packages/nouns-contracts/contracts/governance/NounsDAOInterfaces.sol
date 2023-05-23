@@ -553,6 +553,12 @@ interface NounsTokenLike {
         uint256 tokenId
     ) external;
 
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
+
     function balanceOf(address owner) external view returns (uint256 balance);
 
     function ownerOf(uint256 tokenId) external view returns (address owner);

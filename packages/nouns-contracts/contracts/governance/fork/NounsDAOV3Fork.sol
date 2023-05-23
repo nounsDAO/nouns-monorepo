@@ -57,9 +57,8 @@ library NounsDAOV3Fork {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
-        forkEscrow.markOwner(msg.sender, tokenIds);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
+            ds.nouns.safeTransferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
         emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);

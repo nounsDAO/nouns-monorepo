@@ -48,6 +48,14 @@ contract NounsTokenLikeMock is NounsTokenLike {
         // noop
     }
 
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external {
+        // noop
+    }
+
     function setNoundersDAO(address _noundersDAO) external {
         noundersDAO = _noundersDAO;
     }
