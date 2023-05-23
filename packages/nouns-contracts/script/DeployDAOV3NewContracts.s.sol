@@ -12,6 +12,7 @@ import { NounsTokenFork } from '../contracts/governance/fork/newdao/token/NounsT
 import { NounsAuctionHouseFork } from '../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
+import { ERC20Transferer } from '../contracts/utils/ERC20Transferer.sol';
 
 contract DeployDAOV3NewContractsScript is Script {
     NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_MAINNET =
@@ -25,14 +26,15 @@ contract DeployDAOV3NewContractsScript is Script {
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
             NounsDAOLogicV3 daoV3Impl,
-            NounsDAOExecutorV2 timelockV2
+            NounsDAOExecutorV2 timelockV2,
+            ERC20Transferer erc20Transferer
         )
     {
         uint256 deployerKey = vm.envUint('DEPLOYER_PRIVATE_KEY');
 
         vm.startBroadcast(deployerKey);
 
-        (forkEscrow, forkDeployer, daoV3Impl, timelockV2) = deployNewContracts(
+        (forkEscrow, forkDeployer, daoV3Impl, timelockV2, erc20Transferer) = deployNewContracts(
             NOUNS_DAO_PROXY_MAINNET,
             INounsDAOExecutor(NOUNS_TIMELOCK_V1_MAINNET)
         );
@@ -46,7 +48,8 @@ contract DeployDAOV3NewContractsScript is Script {
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
             NounsDAOLogicV3 daoV3Impl,
-            NounsDAOExecutorV2 timelockV2
+            NounsDAOExecutorV2 timelockV2,
+            ERC20Transferer erc20Transferer
         )
     {
         forkEscrow = new NounsDAOForkEscrow(address(daoProxy), address(daoProxy.nouns()));
@@ -59,6 +62,7 @@ contract DeployDAOV3NewContractsScript is Script {
         );
         daoV3Impl = new NounsDAOLogicV3();
         (timelockV2, ) = deployAndInitTimelockV2(daoProxy, timelockV1);
+        erc20Transferer = new ERC20Transferer();
     }
 
     function deployAndInitTimelockV2(NounsDAOLogicV1 daoProxy, INounsDAOExecutor timelockV1)

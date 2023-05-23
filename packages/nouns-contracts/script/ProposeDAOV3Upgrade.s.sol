@@ -12,8 +12,12 @@ contract ProposeDAOV3UpgradeScript is Script {
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
     uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 10000 ether;
+    uint256 public constant FORK_PERIOD = 7 days;
+    uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
+    address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
+    address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -21,6 +25,7 @@ contract ProposeDAOV3UpgradeScript is Script {
         address timelockV2 = vm.envAddress('TIMELOCK_V2');
         address forkEscrow = vm.envAddress('FORK_ESCROW');
         address forkDeployer = vm.envAddress('FORK_DEPLOYER');
+        address erc20Transferer = vm.envAddress('ERC20_TRANSFERER');
 
         string memory description = vm.readFile(vm.envString('PROPOSAL_DESCRIPTION_FILE'));
 
@@ -33,8 +38,8 @@ contract ProposeDAOV3UpgradeScript is Script {
             NOUNS_DAO_PROXY_MAINNET,
             daoV3Implementation,
             timelockV2,
-            NOUNS_TIMELOCK_V1_MAINNET,
             ETH_TO_SEND_TO_NEW_TIMELOCK,
+            erc20Transferer,
             forkEscrow,
             forkDeployer,
             erc20TokensToIncludeInFork,
@@ -49,17 +54,18 @@ contract ProposeDAOV3UpgradeScript is Script {
         NounsDAOLogicV1 daoProxy,
         address daoV3Implementation,
         address timelockV2,
-        address timelockV1,
         uint256 ethToSendToNewTimelock,
+        address erc20Transferer,
         address forkEscrow,
         address forkDeployer,
         address[] memory erc20TokensToIncludeInFork,
         string memory description
     ) internal returns (uint256 proposalId) {
-        address[] memory targets = new address[](4);
-        uint256[] memory values = new uint256[](4);
-        string[] memory signatures = new string[](4);
-        bytes[] memory calldatas = new bytes[](4);
+        uint8 numTxs = 8;
+        address[] memory targets = new address[](numTxs);
+        uint256[] memory values = new uint256[](numTxs);
+        string[] memory signatures = new string[](numTxs);
+        bytes[] memory calldatas = new bytes[](numTxs);
 
         uint256 i = 0;
         targets[i] = timelockV2;
@@ -77,13 +83,43 @@ contract ProposeDAOV3UpgradeScript is Script {
         targets[i] = address(daoProxy);
         values[i] = 0;
         signatures[i] = '_setForkParams(address,address,address[],uint256,uint256)';
-        calldatas[i] = abi.encode(forkEscrow, forkDeployer, erc20TokensToIncludeInFork, 7 days, 2_000);
+        calldatas[i] = abi.encode(
+            forkEscrow,
+            forkDeployer,
+            erc20TokensToIncludeInFork,
+            FORK_PERIOD,
+            FORK_THRESHOLD_BPS
+        );
+
+        i++;
+        targets[i] = TOKEN_BUYER_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        i++;
+        targets[i] = PAYER_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        i++;
+        targets[i] = STETH_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'approve(address,uint256)';
+        calldatas[i] = abi.encode(erc20Transferer, type(uint256).max);
+
+        i++;
+        targets[i] = erc20Transferer;
+        values[i] = 0;
+        signatures[i] = 'transferEntireBalance(address,address)';
+        calldatas[i] = abi.encode(STETH_MAINNET, timelockV2);
 
         i++;
         targets[i] = address(daoProxy);
         values[i] = 0;
         signatures[i] = '_setTimelocksAndAdmin(address,address,address)';
-        calldatas[i] = abi.encode(timelockV2, timelockV1, timelockV2);
+        calldatas[i] = abi.encode(timelockV2, NOUNS_TIMELOCK_V1_MAINNET, timelockV2);
 
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, description);
     }

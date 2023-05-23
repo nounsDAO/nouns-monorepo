@@ -45,6 +45,8 @@ contract NounsAuctionHouseFork is
     OwnableUpgradeable,
     UUPSUpgradeable
 {
+    string public constant NAME = 'NounsAuctionHouseFork';
+
     // The Nouns ERC721 token contract
     INounsToken public nouns;
 

@@ -33,6 +33,8 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
     error NoundersCannotBeAddressZero();
     error OnlyDuringForkingPeriod();
 
+    string public constant NAME = 'NounsTokenFork';
+
     /// @notice  An address who has permissions to mint Nouns
     address public minter;
 

@@ -6,12 +6,24 @@ import { ProposeDAOV3UpgradeScript } from '../../../script/ProposeDAOV3Upgrade.s
 import { DeployDAOV3NewContractsScript } from '../../../script/DeployDAOV3NewContracts.s.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
+import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOExecutor, INounsDAOForkEscrow, IForkDAODeployer } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
+import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
+import { ERC20Transferer } from '../../../contracts/utils/ERC20Transferer.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+
+interface IHasName {
+    function NAME() external pure returns (string memory);
+}
+
+interface IOwnable {
+    function owner() external view returns (address);
+}
 
 contract UpgradeToDAOV3ForkMainnetTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -24,6 +36,13 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         INounsDAOExecutor(0x0BC3807Ec262cB779b38D65b38158acC3bfedE10);
     address whaleAddr = 0xf6B6F07862A02C85628B3A9688beae07fEA9C863;
     uint256 public constant INITIAL_ETH_IN_TREASURY = 12919915363316446110962;
+    uint256 public constant STETH_BALANCE = 14931432047776533741220;
+    address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
+    address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
+    address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
+
+    NounsDAOExecutorV2 timelockV2;
+    NounsDAOLogicV3 daoV3;
 
     function setUp() public {
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 17315040);
@@ -44,8 +63,11 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
             NounsDAOLogicV3 daoV3Impl,
-            NounsDAOExecutorV2 timelockV2
+            NounsDAOExecutorV2 timelockV2_,
+            ERC20Transferer erc20Transferer_
         ) = new DeployDAOV3NewContractsScript().run();
+
+        timelockV2 = timelockV2_;
 
         // propose upgrade
 
@@ -55,9 +77,15 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         vm.setEnv('TIMELOCK_V2', Strings.toHexString(uint160(address(timelockV2)), 20));
         vm.setEnv('FORK_ESCROW', Strings.toHexString(uint160(address(forkEscrow)), 20));
         vm.setEnv('FORK_DEPLOYER', Strings.toHexString(uint160(address(forkDeployer)), 20));
+        vm.setEnv('ERC20_TRANSFERER', Strings.toHexString(uint160(address(erc20Transferer_)), 20));
         vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/NounsDAOLogicV3/proposal-description.txt');
 
         proposalId = new ProposeDAOV3UpgradeScript().run();
+
+        // simulate vote & proposal execution
+        executeUpgradeProposal();
+
+        daoV3 = NounsDAOLogicV3(payable(address(NOUNS_DAO_PROXY_MAINNET)));
     }
 
     function executeUpgradeProposal() internal {
@@ -74,15 +102,65 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         NOUNS_DAO_PROXY_MAINNET.execute(proposalId);
     }
 
-    function test_proposalIsExecutable() public {
-        executeUpgradeProposal();
-    }
-
     function test_transfersETHToNewTimelock() public {
-        executeUpgradeProposal();
-
-        NounsDAOLogicV3 daoV3 = NounsDAOLogicV3(payable(address(NOUNS_DAO_PROXY_MAINNET)));
         assertEq(address(daoV3.timelockV1()).balance, INITIAL_ETH_IN_TREASURY - 10_000 ether);
         assertEq(address(daoV3.timelock()).balance, 10_000 ether);
+    }
+
+    function test_timelockV2adminIsDAO() public {
+        assertEq(timelockV2.admin(), address(NOUNS_DAO_PROXY_MAINNET));
+    }
+
+    function test_timelockV2delayIsCopiedFromTimelockV1() public {
+        assertEq(timelockV2.delay(), NOUNS_TIMELOCK_V1_MAINNET.delay());
+    }
+
+    function test_forkEscrowConstructorParamsAreCorrect() public {
+        INounsDAOForkEscrow forkEscrow = daoV3.forkEscrow();
+        assertEq(address(forkEscrow.dao()), address(NOUNS_DAO_PROXY_MAINNET));
+        assertEq(address(forkEscrow.nounsToken()), address(nouns));
+    }
+
+    function test_forkDeployerSetsImplementationContracts() public {
+        IForkDAODeployer forkDeployer = daoV3.forkDAODeployer();
+        assertEq(IHasName(forkDeployer.tokenImpl()).NAME(), 'NounsTokenFork');
+        assertEq(IHasName(forkDeployer.auctionImpl()).NAME(), 'NounsAuctionHouseFork');
+        assertEq(NounsDAOLogicV1Fork(forkDeployer.governorImpl()).name(), 'Nouns DAO');
+        assertEq(IHasName(forkDeployer.treasuryImpl()).NAME(), 'NounsDAOExecutorV2');
+    }
+
+    function test_forkParams() public {
+        address[] memory erc20TokensToIncludeInFork = daoV3.erc20TokensToIncludeInFork();
+        assertEq(erc20TokensToIncludeInFork.length, 1);
+        assertEq(erc20TokensToIncludeInFork[0], STETH_MAINNET);
+
+        assertEq(daoV3.forkPeriod(), 7 days);
+        assertEq(daoV3.forkThresholdBPS(), 2000);
+    }
+
+    function test_setsTimelockAndAdmin() public {
+        assertEq(address(daoV3.timelock()), address(timelockV2));
+        assertEq(address(daoV3.timelockV1()), address(NOUNS_TIMELOCK_V1_MAINNET));
+        assertEq(NounsDAOProxy(payable(address(daoV3))).admin(), address(timelockV2));
+    }
+
+    function test_DAOV3Params() public {
+        assertEq(daoV3.lastMinuteWindowInBlocks(), 0);
+        assertEq(daoV3.objectionPeriodDurationInBlocks(), 0);
+        assertEq(daoV3.proposalUpdatablePeriodInBlocks(), 0);
+        // TODO: voteSnapshotBlockSwitchProposalId
+    }
+
+    function test_TokenBuyer_changedOwner() public {
+        assertEq(IOwnable(TOKEN_BUYER_MAINNET).owner(), address(timelockV2));
+    }
+
+    function test_Payer_changedOwner() public {
+        assertEq(IOwnable(PAYER_MAINNET).owner(), address(timelockV2));
+    }
+
+    function test_transfersAllstETH() public {
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 1);
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), STETH_BALANCE - 1);
     }
 }

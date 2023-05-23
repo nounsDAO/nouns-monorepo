@@ -568,6 +568,14 @@ interface IForkDAODeployer {
     function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
         external
         returns (address treasury, address token);
+
+    function tokenImpl() external view returns (address);
+
+    function auctionImpl() external view returns (address);
+
+    function governorImpl() external view returns (address);
+
+    function treasuryImpl() external view returns (address);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {

@@ -20,4 +20,20 @@ contract ForkDAODeployerMock is IForkDAODeployer, StdCheats {
     function setTreasury(address treasury) public {
         mockTreasury = treasury;
     }
+
+    function tokenImpl() external view returns (address) {
+        return address(0);
+    }
+
+    function auctionImpl() external view returns (address) {
+        return address(0);
+    }
+
+    function governorImpl() external view returns (address) {
+        return address(0);
+    }
+
+    function treasuryImpl() external view returns (address) {
+        return address(0);
+    }
 }

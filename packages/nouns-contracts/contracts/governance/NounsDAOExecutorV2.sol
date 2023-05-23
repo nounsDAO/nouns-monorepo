@@ -68,6 +68,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
     event ETHSent(address indexed to, uint256 amount, bool success);
     event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount, bool success);
 
+    string public constant NAME = 'NounsDAOExecutorV2';
+
     /// @dev increased grace period from 14 days to 21 days to allow more time in case of a forking period
     uint256 public constant GRACE_PERIOD = 21 days;
     uint256 public constant MINIMUM_DELAY = 2 days;
