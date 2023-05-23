@@ -137,10 +137,7 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the voting delay
      * @param newVotingDelay new voting delay, in blocks
      */
-    function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external onlyAdmin(ds) {
         require(
             newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
             'NounsDAO::_setVotingDelay: invalid voting delay'
@@ -155,10 +152,7 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the voting period
      * @param newVotingPeriod new voting period, in blocks
      */
-    function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external onlyAdmin(ds) {
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
             'NounsDAO::_setVotingPeriod: invalid voting period'
@@ -176,10 +170,8 @@ library NounsDAOV3Admin {
      */
     function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)
         external
+        onlyAdmin(ds)
     {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
@@ -194,11 +186,7 @@ library NounsDAOV3Admin {
     function _setObjectionPeriodDurationInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newObjectionPeriodDurationInBlocks
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    ) external onlyAdmin(ds) {
         uint32 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
         ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
 
@@ -207,11 +195,8 @@ library NounsDAOV3Admin {
 
     function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
         external
+        onlyAdmin(ds)
     {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
         uint32 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
         ds.lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
 
@@ -221,11 +206,7 @@ library NounsDAOV3Admin {
     function _setProposalUpdatablePeriodInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newProposalUpdatablePeriodInBlocks
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    ) external onlyAdmin(ds) {
         uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
         ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
 
@@ -237,10 +218,7 @@ library NounsDAOV3Admin {
      * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
      * @param newPendingAdmin New pending admin.
      */
-    function _setPendingAdmin(NounsDAOStorageV3.StorageV3 storage ds, address newPendingAdmin) external {
-        // Check caller = admin
-        require(msg.sender == ds.admin, 'NounsDAO::_setPendingAdmin: admin only');
-
+    function _setPendingAdmin(NounsDAOStorageV3.StorageV3 storage ds, address newPendingAdmin) external onlyAdmin(ds) {
         // Save current value, if any, for inclusion in log
         address oldPendingAdmin = ds.pendingAdmin;
 
@@ -327,10 +305,10 @@ library NounsDAOV3Admin {
      *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
-    function _setMinQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMinQuorumVotesBPS) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setMinQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMinQuorumVotesBPS)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -357,10 +335,10 @@ library NounsDAOV3Admin {
      *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be higher than or equal to minQuorumVotesBPS
      */
-    function _setMaxQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMaxQuorumVotesBPS) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setMaxQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMaxQuorumVotesBPS)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -384,10 +362,10 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the dynamic quorum coefficient
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
-    function _setQuorumCoefficient(NounsDAOStorageV3.StorageV3 storage ds, uint32 newQuorumCoefficient) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setQuorumCoefficient(NounsDAOStorageV3.StorageV3 storage ds, uint32 newQuorumCoefficient)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         uint32 oldQuorumCoefficient = params.quorumCoefficient;
@@ -413,10 +391,7 @@ library NounsDAOV3Admin {
         uint16 newMinQuorumVotesBPS,
         uint16 newMaxQuorumVotesBPS,
         uint32 newQuorumCoefficient
-    ) public {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    ) public onlyAdmin(ds) {
         if (
             newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
             newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
@@ -444,11 +419,7 @@ library NounsDAOV3Admin {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
-    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external returns (uint256, bool) {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) returns (uint256, bool) {
         uint256 amount = address(this).balance;
         (bool sent, ) = msg.sender.call{ value: amount }('');
 
@@ -465,11 +436,7 @@ library NounsDAOV3Admin {
     function _setVoteSnapshotBlockSwitchProposalId(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 newVoteSnapshotBlockSwitchProposalId
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    ) external onlyAdmin(ds) {
         uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
         ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
@@ -479,11 +446,10 @@ library NounsDAOV3Admin {
         );
     }
 
-    function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer)
+        external
+        onlyAdmin(ds)
+    {
         address oldForkDAODeployer = address(ds.forkDAODeployer);
         ds.forkDAODeployer = IForkDAODeployer(newForkDAODeployer);
 
