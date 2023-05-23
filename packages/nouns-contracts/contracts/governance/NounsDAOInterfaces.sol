@@ -655,14 +655,23 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         /// @notice user => sig => isCancelled: signatures that have been cancelled by the signer and are no longer valid
         mapping(address => mapping(bytes32 => bool)) cancelledSigs;
+        /// @notice The number of blocks before voting ends during which the objection period can be initiated
         uint32 lastMinuteWindowInBlocks;
+        /// @notice Length of the objection period in blocks
         uint32 objectionPeriodDurationInBlocks;
+        /// @notice Length of proposal updatable period in block
         uint32 proposalUpdatablePeriodInBlocks;
+        /// @notice address of the DAO's fork escrow contract
         INounsDAOForkEscrow forkEscrow;
+        /// @notice address of the DAO's fork deployer contract
         IForkDAODeployer forkDAODeployer;
+        /// @notice ERC20 tokens to include when sending funds to a deployed fork
         address[] erc20TokensToIncludeInFork;
+        /// @notice The treasury contract of the last deployed fork
         address forkDAOTreasury;
+        /// @notice The token contract of the last deployed fork
         address forkDAOToken;
+        /// @notice Timestamp at which the last fork period ends
         uint256 forkEndTimestamp;
         /// @notice Fork period in seconds
         uint256 forkPeriod;
