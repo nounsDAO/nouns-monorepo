@@ -740,7 +740,6 @@ library NounsDAOV3Proposals {
         uint256 proposalId,
         NounsDAOStorageV3.Proposal storage proposal
     ) internal view {
-        // TODO: gas: does reading the proposal once save gas?
         if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
         if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
