@@ -29,6 +29,8 @@
 // See NounsDAOLogicV1.sol for more details.
 // NounsDAOStorageV1Adjusted and NounsDAOStorageV2 add support for a dynamic vote quorum.
 // See NounsDAOLogicV2.sol for more details.
+// NounsDAOStorageV3
+// See NounsDAOLogicV3.sol for more details.
 
 pragma solidity ^0.8.6;
 
@@ -740,9 +742,13 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint64 creationBlock;
+        /// @notice The last block which allows updating a proposal's description and transactions
         uint64 updatePeriodEndBlock;
+        /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
         uint64 objectionPeriodEndBlock;
+        /// @dev unused for now
         uint64 placeholder;
+        /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
@@ -759,8 +765,11 @@ contract NounsDAOStorageV3 {
     }
 
     struct ProposerSignature {
+        /// @notice Signature of a proposal
         bytes sig;
+        /// @notice The address of the signer
         address signer;
+        /// @notice The timestamp until which the signature is valid
         uint256 expirationTimestamp;
     }
 
@@ -795,9 +804,14 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
+        /// @notice The last block which allows updating a proposal's description and transactions
         uint256 updatePeriodEndBlock;
+        /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
         uint256 objectionPeriodEndBlock;
+        /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
+        bool executeOnTimelockV1;
     }
 
     struct DynamicQuorumParams {
