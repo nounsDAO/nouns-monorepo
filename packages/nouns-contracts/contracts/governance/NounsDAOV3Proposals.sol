@@ -178,6 +178,14 @@ library NounsDAOV3Proposals {
         return proposalId;
     }
 
+    /**
+     * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold.
+     * This proposal would be executed via the timelockV1 contract. This is meant to be used in case timelockV1
+     * is still holding funds or has special permissions to execute on certain contracts.
+     * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
+     * @param description String description of the proposal
+     * @return uint256 Proposal id of new proposal
+     */
     function proposeOnTimelockV1(
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
@@ -193,6 +201,14 @@ library NounsDAOV3Proposals {
         return newProposalId;
     }
 
+    /**
+     * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
+     * @param description String description of the proposal
+     * @return uint256 Proposal id of new proposal
+     */
     function proposeBySigs(
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
@@ -227,6 +243,15 @@ library NounsDAOV3Proposals {
         return proposalId;
     }
 
+    /**
+     * @notice Invalidates a signature that may be used for signing a proposal.
+     * Once a signature is canceled, the sender can no longer use it again.
+     * If the sender changes their mind and want to sign the proposal, they can change the expiry timestamp
+     * in order to produce a new signature.
+     * The signature will only be invalidated when used by the sender. If used by a different account, it will
+     * not be invalidated.
+     * @param sig The signature to cancel
+     */
     function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) external {
         bytes32 sigHash = keccak256(sig);
         ds.cancelledSigs[msg.sender][sigHash] = true;
@@ -234,6 +259,17 @@ library NounsDAOV3Proposals {
         emit SignatureCancelled(msg.sender, sig);
     }
 
+    /**
+     * @notice Update a proposal transactions and description.
+     * Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposal(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -258,6 +294,15 @@ library NounsDAOV3Proposals {
         );
     }
 
+    /**
+     * @notice Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposalTransactions(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -291,6 +336,12 @@ library NounsDAOV3Proposals {
         proposal.calldatas = calldatas;
     }
 
+    /**
+     * @notice Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposalDescription(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -404,6 +455,11 @@ library NounsDAOV3Proposals {
         executeInternal(ds, proposal, timelock);
     }
 
+    /**
+     * @notice Executes a queued proposal on timelockV1 if eta has passed
+     * This is only required for proposal that were queued on timelockV1, but before the upgrade to DAO V3.
+     * These proposals will not have the `executeOnTimelockV1` bool turned on.
+     */
     function executeOnTimelockV1(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         executeInternal(ds, proposal, ds.timelockV1);

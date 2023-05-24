@@ -48,6 +48,13 @@ library NounsDAOV3Fork {
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
 
+    /**
+     * @notice Escrow Nouns to contribute to the fork threshold
+     * @dev Requires approving the tokenIds or the entire noun token to the DAO contract
+     * @param tokenIds the tokenIds to escrow. They will be sent to the DAO once the fork threshold is reached and the escrow is closed.
+     * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
+     * @param reason the reason for want to fork. This will only be used to emit event.
+     */
     function escrowToFork(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256[] calldata tokenIds,
@@ -64,6 +71,11 @@ library NounsDAOV3Fork {
         emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);
     }
 
+    /**
+     * @notice Withdraw Nouns from the fork escrow. Only possible if the fork has not been executed.
+     * Only allowed to withdraw tokens that the sender has escrowed.
+     * @param tokenIds the tokenIds to withdraw
+     */
     function withdrawFromForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
@@ -72,6 +84,13 @@ library NounsDAOV3Fork {
         emit WithdrawFromForkEscrow(msg.sender, tokenIds);
     }
 
+    /**
+     * @notice Execute the fork. Only possible if the fork threshold has been met.
+     * This will deploy a new DAO and send part of the treasury to the new DAO's treasury.
+     * This will also close the active escrow and all nouns in the escrow belong to the original DAO.
+     * @return forkTreasury The address of the new DAO's treasury
+     * @return forkToken The address of the new DAO's token
+     */
     function executeFork(NounsDAOStorageV3.StorageV3 storage ds)
         external
         returns (address forkTreasury, address forkToken)
@@ -95,6 +114,10 @@ library NounsDAOV3Fork {
         emit ExecuteFork(forkId, forkTreasury, forkToken, forkEndTimestamp, tokensInEscrow);
     }
 
+    /**
+     * @notice Joins a fork while a fork is active
+     * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
+     */
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
@@ -109,6 +132,12 @@ library NounsDAOV3Fork {
         emit JoinFork(msg.sender, tokenIds);
     }
 
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     * @param to the address to send the nouns to
+     */
     function withdrawDAONounsFromEscrow(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256[] calldata tokenIds,
@@ -127,6 +156,11 @@ library NounsDAOV3Fork {
         return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
     }
 
+    /**
+     * @notice Returns the number of nouns in supply minus nouns owned by the DAO, i.e. held in the treasury or in an
+     * escrow after it has closed.
+     * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
+     */
     function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
     }
