@@ -145,6 +145,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string description
     );
 
+    /// @notice Emitted when a proposal is created to be executed on timelockV1
     event ProposalCreatedOnTimelockV1(uint256 id);
 
     /// @notice Emitted when a proposal is updated
@@ -202,6 +203,21 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         uint256 oldVoteSnapshotBlockSwitchProposalId,
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
+
+    /// @notice Emitted when the erc20 tokens to include in a fork are set
+    event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
+    /// @notice Emitted when the fork DAO deployer is set
+    event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
+
+    /// @notice Emitted when the during of the forking period is set
+    event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
+
+    /// @notice Emitted when the threhsold for forking is set
+    event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
+
+    /// @notice Emitted when the main timelock, timelockV1 and admin are set
+    event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);

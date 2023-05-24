@@ -86,14 +86,19 @@ library NounsDAOV3Admin {
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
 
+    /// @notice Emitted when the fork DAO deployer is set
     event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
 
+    /// @notice Emitted when the erc20 tokens to include in a fork are set
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
+    /// @notice Emitted when the during of the forking period is set
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
 
+    /// @notice Emitted when the threhsold for forking is set
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
 
+    /// @notice Emitted when the main timelock, timelockV1 and admin are set
     event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
 
     /// @notice The minimum setable proposal threshold
