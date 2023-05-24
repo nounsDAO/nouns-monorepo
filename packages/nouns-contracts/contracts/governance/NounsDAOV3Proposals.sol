@@ -73,8 +73,10 @@ library NounsDAOV3Proposals {
         string description
     );
 
+    /// @notice Emitted when a proposal is created to be executed on timelockV1
     event ProposalCreatedOnTimelockV1(uint256 id);
 
+    /// @notice Emitted when a proposal is updated
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -86,6 +88,7 @@ library NounsDAOV3Proposals {
         string updateMessage
     );
 
+    /// @notice Emitted when a proposal's transactions are updated
     event ProposalTransactionsUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -96,6 +99,7 @@ library NounsDAOV3Proposals {
         string updateMessage
     );
 
+    /// @notice Emitted when a proposal's description is updated
     event ProposalDescriptionUpdated(
         uint256 indexed id,
         address indexed proposer,
