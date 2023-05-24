@@ -354,6 +354,17 @@ library NounsDAOV3Proposals {
         emit ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
     }
 
+    /**
+     * @notice Update a proposal's transactions and description that was created with proposeBySigs.
+     * Only the proposer can update it, during the updateable period.
+     * Requires the original signers to sign the update.
+     * @param proposalId Proposal's id
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @param txs Updated transactions for the proposal
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposalBySigs(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -729,6 +740,10 @@ library NounsDAOV3Proposals {
         return forVotes <= proposal.againstVotes || forVotes < ds.quorumVotes(proposal.id);
     }
 
+    /**
+     * @notice reverts if `proposer` is the proposer or signer of an active proposal.
+     * This is a spam protection mechanism to limit the number of proposals each noun can back.
+     */
     function checkNoActiveProp(NounsDAOStorageV3.StorageV3 storage ds, address proposer) internal view {
         uint256 latestProposalId = ds.latestProposalIds[proposer];
         if (latestProposalId != 0) {
