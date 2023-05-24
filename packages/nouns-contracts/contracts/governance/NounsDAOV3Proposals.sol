@@ -647,7 +647,8 @@ library NounsDAOV3Proposals {
                 creationBlock: proposal.creationBlock,
                 signers: proposal.signers,
                 updatePeriodEndBlock: proposal.updatePeriodEndBlock,
-                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock
+                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
+                executeOnTimelockV1: proposal.executeOnTimelockV1
             });
     }
 

@@ -145,6 +145,11 @@ contract UpgradeToDAOV3Test is DeployUtils {
 
         uint256 proposalId = proposeToSendETH(proposer2, proposer2, 100 ether);
 
+        // check executeOnTimelockV1 is false
+        NounsDAOLogicV3 daoV3 = NounsDAOLogicV3(payable(address(daoProxy)));
+        NounsDAOStorageV3.ProposalCondensed memory proposal = daoV3.proposalsV3(proposalId);
+        assertFalse(proposal.executeOnTimelockV1);
+
         rollAndCastVote(proposer, proposalId, 1);
 
         queueAndExecute(proposalId);
@@ -162,13 +167,11 @@ contract UpgradeToDAOV3Test is DeployUtils {
         vm.expectEmit(true, true, true, true);
         emit ProposalCreatedOnTimelockV1(2);
         vm.prank(proposer);
-        uint256 proposalId = NounsDAOLogicV3(payable(address(daoProxy))).proposeOnTimelockV1(
-            targets,
-            values,
-            signatures,
-            calldatas,
-            'send eth'
-        );
+        NounsDAOLogicV3 daoV3 = NounsDAOLogicV3(payable(address(daoProxy)));
+        uint256 proposalId = daoV3.proposeOnTimelockV1(targets, values, signatures, calldatas, 'send eth');
+
+        NounsDAOStorageV3.ProposalCondensed memory proposal = daoV3.proposalsV3(proposalId);
+        assertTrue(proposal.executeOnTimelockV1);
 
         rollAndCastVote(proposer, proposalId, 1);
         queueAndExecute(proposalId);
