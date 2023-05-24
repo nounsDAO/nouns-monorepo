@@ -26,29 +26,25 @@
 //
 // MODIFICATIONS
 // See NounsDAOLogicV1 for initial GovernorBravoDelegate modifications.
-
-// NounsDAOLogicV2 adds:
-// - `quorumParamsCheckpoints`, which store dynamic quorum parameters checkpoints
-// to be used when calculating the dynamic quorum.
-// - `_setDynamicQuorumParams(DynamicQuorumParams memory params)`, which allows the
-// DAO to update the dynamic quorum parameters' values.
-// - `getDynamicQuorumParamsAt(uint256 blockNumber_)`
-// - Individual setters of the DynamicQuorumParams members:
-//    - `_setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS)`
-//    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
-//    - `_setQuorumCoefficient(uint32 newQuorumCoefficient)`
-// - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
-// max quorum votes using the current Noun supply.
-// - New `Proposal` struct member:
-//    - `totalSupply` used in dynamic quorum calculation.
-//    - `creationBlock` used for retrieving checkpoints of votes and dynamic quorum params. This now
-// allows changing `votingDelay` without affecting the checkpoints lookup.
-// - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
-// quorum for a specific proposal.
-// - `proposals(uint256 proposalId)` instead of the implicit getter, to avoid stack-too-deep error
+// See NounsDAOLogicV2 for additional modifications
 //
-// NounsDAOLogicV2 removes:
-// - `quorumVotes()` has been replaced by `quorumVotes(uint256 proposalId)`.
+// NounsDAOLogicV3 adds:
+// - Contract has been broken down to use libraries because of contract size limitations
+// - Proposal editing: allowing proposers to update their proposal’s transactions and text description,
+// during the Updatable period only, which is the state upon proposal creation. Editing also works with signatures,
+// assuming the proposer is able to accumulate signatures from the same signers.
+// - Propose by signature: allowing Nouners and delegates to pool their voting power towards submitting a proposal,
+// by submitting their signature, instead of the current approach where sponsors must delegate their votes to help
+// a proposer achieve threshold.
+// - Objection-only Period: a conditional voting period that gets activated upon a last-minute proposal swing
+// from defeated to successful, affording against voters more reaction time.
+// Only against votes are possible during the objection period.
+// - Votes snapshot after voting delay: moving votes snapshot up, to provide Nouners with reaction time per proposal,
+// to get their votes ready (e.g. some might want to move their delegations around).
+// In NounsDAOLogicV2 the vote snapshot block is the proposal creation block.
+// - Nouns fork: any token holder can signal to fork (exit) in response to a governance proposal.
+// If a quorum of a configured threshold amount of tokens signals to exit, the fork will succeed.
+// This will deploy a new DAO and send part of the treasury to the new DAO.
 
 pragma solidity ^0.8.6;
 
