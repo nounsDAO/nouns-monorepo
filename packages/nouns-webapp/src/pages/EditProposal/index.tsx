@@ -346,6 +346,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setOriginalBodyValue(proposal.description);
       setOriginalProposalTransactions(proposal.details);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {

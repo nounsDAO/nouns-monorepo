@@ -255,6 +255,11 @@ const VotePage = ({
   })();
 
   useEffect(() => {
+    // temp set v3 proposals layout
+    setIsV3Proposal(true);
+  }, []);
+
+  useEffect(() => {
     if (
       currentBlock &&
       proposal?.status === ProposalState.OBJECTION_PERIOD &&

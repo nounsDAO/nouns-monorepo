@@ -215,6 +215,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal, candidate]);
 
   if (candidate?.proposer.toLowerCase() !== account?.toLowerCase()) {
