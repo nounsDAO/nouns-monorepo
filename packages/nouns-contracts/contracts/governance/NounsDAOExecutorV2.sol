@@ -25,11 +25,17 @@
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
-// See NounsDAOExecutor for initial Timelock modifications.
+// NounsDAOExecutor2.sol is a modified version of NounsDAOExecutor.sol
 //
-// NounsDAOExecutor2 adds:
+// NounsDAOExecutor.sol modifications:
+// NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
+// This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
+//
+//
+// NounsDAOExecutor2.sol modifications:
 // - `sendETH` and `sendERC20` functions used for DAO forks
-// - is upgradable via UUPSUpgradeable
+// - is upgradable via UUPSUpgradeable. uses intializer instead of constructor.
+// - `GRACE_PERIOD` has been increased from 14 days to 21 days to allow more time in case of a forking period
 
 pragma solidity ^0.8.6;
 
