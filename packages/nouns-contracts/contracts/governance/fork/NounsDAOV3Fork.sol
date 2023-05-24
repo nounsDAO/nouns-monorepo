@@ -169,6 +169,11 @@ library NounsDAOV3Fork {
         return ds.forkEndTimestamp > block.timestamp;
     }
 
+    /**
+     * @notice Sends part of the DAO's treasury to the `newDAOTreasury` address.
+     * The amount sent is proportional to the `tokenCount` out of `totalSupply`.
+     * Sends ETH and ERC20 tokens listed in `ds.erc20TokensToIncludeInFork`.
+     */
     function sendProRataTreasury(
         NounsDAOStorageV3.StorageV3 storage ds,
         address newDAOTreasury,

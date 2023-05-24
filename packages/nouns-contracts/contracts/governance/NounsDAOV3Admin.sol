@@ -188,6 +188,10 @@ library NounsDAOV3Admin {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
     }
 
+    /**
+     * @notice Admin function for setting the objection period duration
+     * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
+     */
     function _setObjectionPeriodDurationInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newObjectionPeriodDurationInBlocks
@@ -198,6 +202,10 @@ library NounsDAOV3Admin {
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
+    /**
+     * @notice Admin function for setting the objection period last minute window
+     * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
+     */
     function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
         external
         onlyAdmin(ds)
@@ -208,6 +216,10 @@ library NounsDAOV3Admin {
         emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
     }
 
+    /**
+     * @notice Admin function for setting the proposal updatable period
+     * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
+     */
     function _setProposalUpdatablePeriodInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newProposalUpdatablePeriodInBlocks
@@ -273,6 +285,9 @@ library NounsDAOV3Admin {
         ds.pendingVetoer = newPendingVetoer;
     }
 
+    /**
+     * @notice Called by the pendingVetoer to accept role and update vetoer
+     */
     function _acceptVetoer(NounsDAOStorageV3.StorageV3 storage ds) external {
         if (msg.sender != ds.pendingVetoer) {
             revert PendingVetoerOnly();
@@ -424,6 +439,9 @@ library NounsDAOV3Admin {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
+    /**
+     * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
+     */
     function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) returns (uint256, bool) {
         uint256 amount = address(this).balance;
         (bool sent, ) = msg.sender.call{ value: amount }('');
@@ -450,6 +468,9 @@ library NounsDAOV3Admin {
         );
     }
 
+    /**
+     * @notice Admin function for setting the fork DAO deployer contract
+     */
     function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer)
         external
         onlyAdmin(ds)
@@ -460,6 +481,9 @@ library NounsDAOV3Admin {
         emit ForkDAODeployerSet(oldForkDAODeployer, newForkDAODeployer);
     }
 
+    /**
+     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
+     */
     function _setErc20TokensToIncludeInFork(NounsDAOStorageV3.StorageV3 storage ds, address[] calldata erc20tokens)
         external
         onlyAdmin(ds)
@@ -469,6 +493,9 @@ library NounsDAOV3Admin {
         ds.erc20TokensToIncludeInFork = erc20tokens;
     }
 
+    /**
+     * @notice Admin function for setting the fork escrow contract
+     */
     function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
         ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
@@ -483,6 +510,10 @@ library NounsDAOV3Admin {
         ds.forkPeriod = newForkPeriod;
     }
 
+    /**
+     * @notice Admin function for setting the fork threshold
+     * @param newForkThresholdBPS the new fork proposal threshold, in basis points
+     */
     function _setForkThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkThresholdBPS)
         external
         onlyAdmin(ds)
@@ -492,6 +523,12 @@ library NounsDAOV3Admin {
         ds.forkThresholdBPS = newForkThresholdBPS;
     }
 
+    /**
+     * @notice Admin function for setting the timelocks and admin
+     * @param newTimelock the new timelock contract
+     * @param newTimelockV1 the new timelockV1 contract
+     * @param newAdmin the new admin address
+     */
     function _setTimelocksAndAdmin(
         NounsDAOStorageV3.StorageV3 storage ds,
         address timelock,
