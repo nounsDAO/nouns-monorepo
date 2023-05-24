@@ -160,6 +160,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
+    /// @notice Emitted when a proposal's transactions are updated
     event ProposalTransactionsUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -170,6 +171,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
+    /// @notice Emitted when a proposal's description is updated
     event ProposalDescriptionUpdated(
         uint256 indexed id,
         address indexed proposer,
