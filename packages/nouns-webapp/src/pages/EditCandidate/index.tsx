@@ -200,7 +200,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   };
 
   useEffect(() => {
-    if (proposal && candidate) {
+    if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
       const transactions = candidate?.version.details.map(
         (txn: { target: any; value: any; callData: any; functionSig: any }) => {
           return {
@@ -215,7 +215,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
     }
-  }, [proposal?.title, proposal?.description, proposal?.details.length, proposal, candidate]);
+  }, [proposal, candidate]);
 
   if (candidate?.proposer.toLowerCase() !== account?.toLowerCase()) {
     return null;

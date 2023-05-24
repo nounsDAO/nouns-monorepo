@@ -33,7 +33,9 @@ interface EditProposalProps {
 }
 
 const EditProposalPage: React.FC<EditProposalProps> = props => {
-  const [isProposalEdited, setIsProposalEdited] = useState(false);
+  const [
+    isProposalEdited,
+    setIsProposalEdited] = useState(false);
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
@@ -60,8 +62,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
-
-  console.log('todo: add isProposalEdited element', isProposalEdited);
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
@@ -330,7 +330,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
 
   // set initial values on page load and as they're changed
   useEffect(() => {
-    if (proposal) {
+    if (proposal && !titleValue && !bodyValue && !proposalTransactions.length && !originalTitleValue && !originalBodyValue && !originalProposalTransactions.length) {
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
@@ -346,7 +346,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setOriginalBodyValue(proposal.description);
       setOriginalProposalTransactions(proposal.details);
     }
-  }, [proposal?.title, proposal?.description, proposal?.details.length, proposal]);
+  }, []);
 
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
     return null;
@@ -421,7 +421,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
-          isFormInvalid={isTransactionsEdited() || isDescriptionEdited() ? false : true}
+          isFormInvalid={(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ? false : true}
           handleCreateProposal={handleUpdateProposal}
         />
         {props.isCandidate && (

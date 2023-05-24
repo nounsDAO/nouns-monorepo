@@ -108,7 +108,6 @@ const VotePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   // TODO: set this to true when we want to enable v3 proposals
   const [isv3Proposal, setIsV3Proposal] = useState<boolean>(true);
-  setIsV3Proposal(true); // temp
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view

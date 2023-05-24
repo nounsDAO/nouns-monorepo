@@ -172,8 +172,6 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  console.log('candidate return', candidate);
-  console.log('candidate return details', details);
 
   return {
     id: candidate.id,
