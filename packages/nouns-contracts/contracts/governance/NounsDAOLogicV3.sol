@@ -800,7 +800,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /**
      * @notice Admin function for setting the fork related parameters
      * @param forkEscrow_ the fork escrow contract
-     * @param forkDeployer_ the fork dao deployer contract
+     * @param forkDAODeployer_ the fork dao deployer contract
      * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
      * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
      * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork

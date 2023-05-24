@@ -525,9 +525,9 @@ library NounsDAOV3Admin {
 
     /**
      * @notice Admin function for setting the timelocks and admin
-     * @param newTimelock the new timelock contract
-     * @param newTimelockV1 the new timelockV1 contract
-     * @param newAdmin the new admin address
+     * @param timelock the new timelock contract
+     * @param timelockV1 the new timelockV1 contract
+     * @param admin the new admin address
      */
     function _setTimelocksAndAdmin(
         NounsDAOStorageV3.StorageV3 storage ds,
