@@ -48,9 +48,6 @@ contract NounsDAOEvents {
     /// @notice An event emitted when a proposal has been executed in the NounsDAOExecutor
     event ProposalExecuted(uint256 id);
 
-    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
-    event ProposalVetoed(uint256 id);
-
     /// @notice An event emitted when the voting delay is set
     event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay);
 
@@ -71,7 +68,4 @@ contract NounsDAOEvents {
 
     /// @notice Emitted when pendingAdmin is accepted, which means admin is updated
     event NewAdmin(address oldAdmin, address newAdmin);
-
-    /// @notice Emitted when vetoer is changed
-    event NewVetoer(address oldVetoer, address newVetoer);
 }

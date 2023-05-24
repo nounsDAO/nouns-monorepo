@@ -53,6 +53,9 @@
 // - `cancel` bugfix, allowing proposals to be canceled by anyone if the proposer's vote balance is equal to proposal
 //   threshold.
 //
+// - Removes the vetoer role and logic related to it. The quit function provides minority protection instead of the
+//   vetoer, and fork DAOs can upgrade their governor to include the vetoer feature if it's needed.
+//
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
 //   due to the Noun token's increasing supply
@@ -146,7 +149,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
-     * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
@@ -157,7 +159,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     function initialize(
         address timelock_,
         address nouns_,
-        address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
@@ -194,7 +195,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         admin = timelock_;
         timelock = NounsDAOExecutorV2(payable(timelock_));
         nouns = NounsTokenForkLike(nouns_);
-        vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
@@ -319,7 +319,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         newProposal.abstainVotes = 0;
         newProposal.canceled = false;
         newProposal.executed = false;
-        newProposal.vetoed = false;
         newProposal.creationBlock = block.number;
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
@@ -445,31 +444,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     /**
-     * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
-     * @param proposalId The id of the proposal to veto
-     */
-    function veto(uint256 proposalId) external {
-        require(vetoer != address(0), 'NounsDAO::veto: veto power burned');
-        require(msg.sender == vetoer, 'NounsDAO::veto: only vetoer');
-        require(state(proposalId) != ProposalState.Executed, 'NounsDAO::veto: cannot veto executed proposal');
-
-        Proposal storage proposal = _proposals[proposalId];
-
-        proposal.vetoed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalVetoed(proposalId);
-    }
-
-    /**
      * @notice Gets actions of a proposal
      * @param proposalId the id of the proposal
      * @return targets
@@ -509,9 +483,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     function state(uint256 proposalId) public view returns (ProposalState) {
         require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         Proposal storage proposal = _proposals[proposalId];
-        if (proposal.vetoed) {
-            return ProposalState.Vetoed;
-        } else if (proposal.canceled) {
+        if (proposal.canceled) {
             return ProposalState.Canceled;
         } else if (block.number <= proposal.startBlock) {
             return ProposalState.Pending;
@@ -552,7 +524,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
                 againstVotes: proposal.againstVotes,
                 abstainVotes: proposal.abstainVotes,
                 canceled: proposal.canceled,
-                vetoed: proposal.vetoed,
                 executed: proposal.executed,
                 creationBlock: proposal.creationBlock
             });
@@ -744,29 +715,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
         emit NewAdmin(oldAdmin, admin);
         emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
-    }
-
-    /**
-     * @notice Changes vetoer address
-     * @dev Vetoer function for updating vetoer address
-     */
-    function _setVetoer(address newVetoer) public {
-        require(msg.sender == vetoer, 'NounsDAO::_setVetoer: vetoer only');
-
-        emit NewVetoer(vetoer, newVetoer);
-
-        vetoer = newVetoer;
-    }
-
-    /**
-     * @notice Burns veto priviledges
-     * @dev Vetoer function destroying veto power forever
-     */
-    function _burnVetoPower() public {
-        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
-
-        _setVetoer(address(0));
     }
 
     /**

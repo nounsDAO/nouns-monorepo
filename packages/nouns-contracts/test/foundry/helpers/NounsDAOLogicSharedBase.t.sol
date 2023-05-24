@@ -119,9 +119,6 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
 
         NounsDAOLogicV1 dao = NounsDAOLogicV1(daoAddress);
 
-        vm.prank(dao.vetoer());
-        dao._setVetoer(vetoer_);
-
         vm.startPrank(address(dao.timelock()));
         dao._setVotingPeriod(votingPeriod);
         dao._setVotingDelay(votingDelay);

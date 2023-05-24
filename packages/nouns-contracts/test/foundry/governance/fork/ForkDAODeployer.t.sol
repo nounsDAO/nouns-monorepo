@@ -25,10 +25,6 @@ contract ForkDAODeployerTest is DeployUtilsFork {
         treasury = NounsDAOExecutorV2(payable(treasuryAddress));
     }
 
-    function test_dao_vetoerIsAddressZero() public {
-        assertEq(dao.vetoer(), address(0));
-    }
-
     function test_token_nonTreasuryCannotUpgrade() public {
         NounsTokenFork newLogic = new NounsTokenFork();
 

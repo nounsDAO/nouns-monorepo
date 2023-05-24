@@ -453,20 +453,6 @@ abstract contract NounsDAOLogicV1V2VetoingTest is NounsDAOLogicSharedBaseTest {
     }
 }
 
-contract NounsDAOLogicV1ForkVetoingTest is NounsDAOLogicV1V2VetoingTest {
-    function daoVersion() internal pure override returns (uint256) {
-        return 1;
-    }
-
-    function deployDAOProxy(
-        address,
-        address,
-        address vetoer
-    ) internal override returns (NounsDAOLogicV1) {
-        return deployForkDAOProxy(vetoer);
-    }
-}
-
 contract NounsDAOLogicV1VetoingTest is NounsDAOLogicV1V2VetoingTest {
     function test_setVetoer_revertsForNonVetoer() public {
         address newVetoer = utils.getNextUserAddress();

@@ -121,7 +121,6 @@ contract ForkDAODeployer is IForkDAODeployer {
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
-            address(0),
             originalDAO.votingPeriod(),
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),

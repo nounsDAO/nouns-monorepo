@@ -18,9 +18,6 @@ contract NounsDAOStorageV1 {
     /// @notice Pending administrator for this contract
     address public pendingAdmin;
 
-    /// @notice Vetoer who has the ability to veto any proposal
-    address public vetoer;
-
     /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
     uint256 public votingDelay;
 
@@ -83,8 +80,6 @@ contract NounsDAOStorageV1 {
         uint256 abstainVotes;
         /// @notice Flag marking whether the proposal has been canceled
         bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
         /// @notice Flag marking whether the proposal has been executed
         bool executed;
         /// @notice Receipts of ballots for the entire set of voters
@@ -112,8 +107,7 @@ contract NounsDAOStorageV1 {
         Succeeded,
         Queued,
         Expired,
-        Executed,
-        Vetoed
+        Executed
     }
 
     struct ProposalCondensed {
@@ -139,8 +133,6 @@ contract NounsDAOStorageV1 {
         uint256 abstainVotes;
         /// @notice Flag marking whether the proposal has been canceled
         bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
         /// @notice Flag marking whether the proposal has been executed
         bool executed;
         /// @notice The block at which this proposal was created
