@@ -62,10 +62,10 @@ contract ForkDAODeployer is IForkDAODeployer {
 
     /**
      * @notice Deploys a new Nouns DAO fork, including a new token, auction house, governor, and treasury.
-     * All contracts are upgradable, and are almost entirely initialized with the same parameters as the original DAO,
-     * except for the vetoer address, which is set to the zero address.
+     * All contracts are upgradable, and are almost entirely initialized with the same parameters as the original DAO.
      * @param forkingPeriodEndTimestamp The timestamp at which the forking period ends
-     * @param forkEscrow The address of the fork escrow contract
+     * @param forkEscrow The address of the fork escrow contract, used for claiming tokens that were escrowed in the original DAO
+     * and to get references to the original DAO's auction house and timelock
      * @return treasury The address of the fork DAO treasury
      * @return token The address of the fork DAO token
      */

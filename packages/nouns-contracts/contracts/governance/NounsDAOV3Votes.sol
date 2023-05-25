@@ -170,6 +170,9 @@ library NounsDAOV3Votes {
 
     /**
      * @notice Internal function that caries out voting logic
+     * In case of a vote during the 'last minute window', which changes the proposal outcome from being defeated to
+     * passing, and objection period is adding to the proposal's voting period.
+     * During the objection period, only votes against a proposal can be cast.
      * @param voter The voter that is casting their vote
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain

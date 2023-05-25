@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
+/// @title Library for NounsDAOLogicV3 contract containing the dao fork logic
+
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -86,8 +88,8 @@ library NounsDAOV3Fork {
 
     /**
      * @notice Execute the fork. Only possible if the fork threshold has been met.
-     * This will deploy a new DAO and send part of the treasury to the new DAO's treasury.
-     * This will also close the active escrow and all nouns in the escrow belong to the original DAO.
+     * This will deploy a new DAO and send the prorated part of the treasury to the new DAO's treasury.
+     * This will also close the active escrow and all nouns in the escrow will belong to the original DAO.
      * @return forkTreasury The address of the new DAO's treasury
      * @return forkToken The address of the new DAO's token
      */
@@ -116,6 +118,9 @@ library NounsDAOV3Fork {
 
     /**
      * @notice Joins a fork while a fork is active
+     * Sends the tokens to the escrow contract.
+     * Sends a prorated part of the treasury to the new fork DAO's treasury.
+     * Mints new tokens in the new fork DAO with the same token ids.
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
      */
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
@@ -152,6 +157,9 @@ library NounsDAOV3Fork {
         emit DAOWithdrawNounsFromEscrow(tokenIds, to);
     }
 
+    /**
+     * @notice returns the required number of tokens to escrow to trigger a fork
+     */
     function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
     }
