@@ -51,7 +51,7 @@ library NounsDAOV3Fork {
     );
 
     /// @notice Emitted when someone joins a fork during the forking period
-    event JoinFork(address indexed owner, uint256[] tokenIds, uint32 forkId);
+    event JoinFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason, uint32 forkId);
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
@@ -130,7 +130,12 @@ library NounsDAOV3Fork {
      * Mints new tokens in the new fork DAO with the same token ids.
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
      */
-    function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
+    function joinFork(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
@@ -142,7 +147,7 @@ library NounsDAOV3Fork {
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
 
-        emit JoinFork(msg.sender, tokenIds, forkEscrow.forkId() - 1);
+        emit JoinFork(msg.sender, tokenIds, proposalIds, reason, forkEscrow.forkId() - 1);
     }
 
     /**

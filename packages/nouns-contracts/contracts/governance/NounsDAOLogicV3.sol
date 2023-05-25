@@ -495,9 +495,15 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /**
      * @notice Joins a fork while a fork is active
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
+     * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
+     * @param reason the reason for want to fork. This will only be used to emit event.
      */
-    function joinFork(uint256[] calldata tokenIds) external {
-        ds.joinFork(tokenIds);
+    function joinFork(
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
+        ds.joinFork(tokenIds, proposalIds, reason);
     }
 
     /**

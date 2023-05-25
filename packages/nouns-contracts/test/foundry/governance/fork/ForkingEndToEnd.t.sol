@@ -131,7 +131,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
     function joinFork(address nouner) internal {
         vm.startPrank(nouner);
         ogToken.setApprovalForAll(address(daoV3), true);
-        daoV3.joinFork(getOwnedTokens(nouner));
+        daoV3.joinFork(getOwnedTokens(nouner), new uint256[](0), '');
         vm.stopPrank();
     }
 

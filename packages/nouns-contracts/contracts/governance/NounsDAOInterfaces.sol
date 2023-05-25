@@ -245,7 +245,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     );
 
     /// @notice Emitted when someone joins a fork during the forking period
-    event JoinFork(address indexed owner, uint256[] tokenIds, uint32 forkId);
+    event JoinFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason, uint32 forkId);
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);

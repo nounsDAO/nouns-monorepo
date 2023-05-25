@@ -89,7 +89,7 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
         tokenIds = [4, 5];
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
     function test_withdrawDAONounsFromEscrow_onlyAdmin() public {
@@ -122,7 +122,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         tokenIds = [4, 5];
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
     function test_unsignalFork_returnsTokens() public {
@@ -198,7 +198,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         tokenIds = [6, 7];
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
     event ETHSent(address indexed to, uint256 amount, bool success);
@@ -301,11 +301,12 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
     function test_joinFork() public {
         tokenIds = [8, 9];
+        proposalIds = [1, 2];
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds, escrow.forkId() - 1);
+        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds, proposalIds, 'some reason', escrow.forkId() - 1);
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, proposalIds, 'some reason');
 
         // now 35% of the treasury is in the new DAO
         assertEq(address(timelock).balance, 650 ether);
@@ -317,7 +318,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         // 1 more token joins
         tokenIds = [7];
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, proposalIds, 'some reason');
 
         // now 40% of the treasury is in the new DAO
         assertEq(address(timelock).balance, 600 ether);
@@ -363,7 +364,7 @@ contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriod
 
         vm.prank(tokenHolder);
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
     function test_execute_reverts() public {
@@ -408,7 +409,7 @@ contract DAOSecondForkSignaledUnderThresholdTest is DAOSecondForkSignaledUnderTh
         tokenIds = [14, 15];
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinFork(tokenIds);
+        dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
     function test_unsignalFork_returnsTokens() public {
