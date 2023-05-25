@@ -544,9 +544,9 @@ type Fork @entity {
 
   tokensForkingCount: Int!
 
-  escrowedNouns: [EscrowedNoun!]!
+  escrowedNouns: [EscrowedNoun!]! @derivedFrom(field: "fork")
 
-  joinedNouns: [ForkJoinedNoun!]!
+  joinedNouns: [ForkJoinedNoun!]! @derivedFrom(field: "fork")
 }
 
 type EscrowDeposit @entity(immutable: true) {
