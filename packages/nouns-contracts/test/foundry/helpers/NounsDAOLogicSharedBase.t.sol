@@ -111,7 +111,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         return NounsDAOLogicV2(payable(address(daoProxy)));
     }
 
-    function deployForkDAOProxy(address vetoer_) internal returns (NounsDAOLogicV1) {
+    function deployForkDAOProxy() internal returns (NounsDAOLogicV1) {
         (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
         timelock = NounsDAOExecutor(payable(treasuryAddress));
         nounsToken = NounsToken(tokenAddress);

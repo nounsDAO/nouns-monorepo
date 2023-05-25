@@ -188,9 +188,9 @@ contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicV1V2StateTest {
     function deployDAOProxy(
         address,
         address,
-        address vetoer
+        address
     ) internal override returns (NounsDAOLogicV1) {
-        return deployForkDAOProxy(vetoer);
+        return deployForkDAOProxy();
     }
 }
 
