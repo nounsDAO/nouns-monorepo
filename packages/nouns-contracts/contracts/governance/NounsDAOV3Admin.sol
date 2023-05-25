@@ -30,6 +30,8 @@ library NounsDAOV3Admin {
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
     error ForkPeriodTooLong();
+    error InvalidObjectionPeriodDurationInBlocks();
+    error InvalidProposalUpdatablePeriodInBlocks();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -130,6 +132,12 @@ library NounsDAOV3Admin {
     /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
     uint256 public constant MAX_FORK_PERIOD = 14 days;
 
+    /// @notice Upper bound for objection period duration in blocks.
+    uint256 public constant MAX_OBJECTION_PERIOD_BLOCKS = 7 days / 12;
+
+    /// @notice Upper bound for proposal updatable period duration in blocks.
+    uint256 public constant MAX_UPDATABLE_PERIOD_BLOCKS = 7 days / 12;
+
     modifier onlyAdmin(NounsDAOStorageV3.StorageV3 storage ds) {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
@@ -195,6 +203,9 @@ library NounsDAOV3Admin {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newObjectionPeriodDurationInBlocks
     ) external onlyAdmin(ds) {
+        if (newObjectionPeriodDurationInBlocks > MAX_OBJECTION_PERIOD_BLOCKS)
+            revert InvalidObjectionPeriodDurationInBlocks();
+
         uint32 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
         ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
 
@@ -223,6 +234,9 @@ library NounsDAOV3Admin {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newProposalUpdatablePeriodInBlocks
     ) external onlyAdmin(ds) {
+        if (newProposalUpdatablePeriodInBlocks > MAX_UPDATABLE_PERIOD_BLOCKS)
+            revert InvalidProposalUpdatablePeriodInBlocks();
+
         uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
         ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
 

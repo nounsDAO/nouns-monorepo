@@ -10,6 +10,14 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
+    event ObjectionPeriodDurationSet(
+        uint32 oldObjectionPeriodDurationInBlocks,
+        uint32 newObjectionPeriodDurationInBlocks
+    );
+    event ProposalUpdatablePeriodSet(
+        uint32 oldProposalUpdatablePeriodInBlocks,
+        uint32 newProposalUpdatablePeriodInBlocks
+    );
 
     address[] tokens;
 
@@ -113,5 +121,53 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setVoteSnapshotBlockSwitchProposalId();
 
         assertEq(dao.voteSnapshotBlockSwitchProposalId(), 101);
+    }
+
+    function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        dao._setObjectionPeriodDurationInBlocks(3 days / 12);
+    }
+
+    function test_setObjectionPeriodDurationInBlocks_worksForAdmin() public {
+        uint32 blocks = 3 days / 12;
+        vm.expectEmit(true, true, true, true);
+        emit ObjectionPeriodDurationSet(10, blocks);
+
+        vm.prank(address(dao.timelock()));
+        dao._setObjectionPeriodDurationInBlocks(blocks);
+
+        assertEq(dao.objectionPeriodDurationInBlocks(), blocks);
+    }
+
+    function test_setObjectionPeriodDurationInBlocks_givenValueAboveUpperBound_reverts() public {
+        uint32 blocks = 8 days / 12;
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOV3Admin.InvalidObjectionPeriodDurationInBlocks.selector);
+        dao._setObjectionPeriodDurationInBlocks(blocks);
+    }
+
+    function test_setProposalUpdatablePeriodInBlocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        dao._setProposalUpdatablePeriodInBlocks(3 days / 12);
+    }
+
+    function test_setProposalUpdatablePeriodInBlocks_worksForAdmin() public {
+        uint32 blocks = 3 days / 12;
+        vm.expectEmit(true, true, true, true);
+        emit ProposalUpdatablePeriodSet(10, blocks);
+
+        vm.prank(address(dao.timelock()));
+        dao._setProposalUpdatablePeriodInBlocks(blocks);
+
+        assertEq(dao.proposalUpdatablePeriodInBlocks(), blocks);
+    }
+
+    function test_setProposalUpdatablePeriodInBlocks_givenValueAboveUpperBound_reverts() public {
+        uint32 blocks = 8 days / 12;
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOV3Admin.InvalidProposalUpdatablePeriodInBlocks.selector);
+        dao._setProposalUpdatablePeriodInBlocks(blocks);
     }
 }
