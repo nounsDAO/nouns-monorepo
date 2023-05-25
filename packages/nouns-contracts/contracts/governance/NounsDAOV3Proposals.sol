@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing the proposal lifecycle code
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -41,6 +41,12 @@ library NounsDAOV3Proposals {
     error MustProvideSignatures();
     error SignatureIsCancelled();
     error CannotExecuteDuringForkingPeriod();
+    error VetoerBurned();
+    error VetoerOnly();
+    error CantVetoExecutedProposal();
+
+    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
+    event ProposalVetoed(uint256 id);
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -511,6 +517,39 @@ library NounsDAOV3Proposals {
         } else {
             return ds.timelock;
         }
+    }
+
+    /**
+     * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
+     * @param proposalId The id of the proposal to veto
+     */
+    function veto(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
+        if (ds.vetoer == address(0)) {
+            revert VetoerBurned();
+        }
+
+        if (msg.sender != ds.vetoer) {
+            revert VetoerOnly();
+        }
+
+        if (stateInternal(ds, proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
+            revert CantVetoExecutedProposal();
+        }
+
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+
+        proposal.vetoed = true;
+        for (uint256 i = 0; i < proposal.targets.length; i++) {
+            ds.timelock.cancelTransaction(
+                proposal.targets[i],
+                proposal.values[i],
+                proposal.signatures[i],
+                proposal.calldatas[i],
+                proposal.eta
+            );
+        }
+
+        emit ProposalVetoed(proposalId);
     }
 
     /**

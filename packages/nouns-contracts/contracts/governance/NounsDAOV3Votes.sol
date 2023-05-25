@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing all the voting related code
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -22,13 +22,6 @@ import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 
 library NounsDAOV3Votes {
     using NounsDAOV3Proposals for NounsDAOStorageV3.StorageV3;
-
-    error VetoerBurned();
-    error VetoerOnly();
-    error CantVetoExecutedProposal();
-
-    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
-    event ProposalVetoed(uint256 id);
 
     /// @notice An event emitted when a vote has been cast on a proposal
     /// @param voter The address which casted a vote
@@ -65,39 +58,6 @@ library NounsDAOV3Votes {
 
     /// @notice The maximum basefee the DAO will refund voters on
     uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
-
-    /**
-     * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
-     * @param proposalId The id of the proposal to veto
-     */
-    function veto(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
-        if (ds.vetoer == address(0)) {
-            revert VetoerBurned();
-        }
-
-        if (msg.sender != ds.vetoer) {
-            revert VetoerOnly();
-        }
-
-        if (ds.stateInternal(proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
-            revert CantVetoExecutedProposal();
-        }
-
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-
-        proposal.vetoed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            ds.timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalVetoed(proposalId);
-    }
 
     /**
      * @notice Cast a vote for a proposal
