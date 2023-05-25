@@ -30,10 +30,16 @@ library NounsDAOV3Fork {
     error ERC20TransferFailed();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
-    event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
+    event EscrowedToFork(
+        address indexed owner,
+        uint256[] tokenIds,
+        uint256[] proposalIds,
+        string reason,
+        uint32 forkId
+    );
 
     /// @notice Emitted when the owner withdraws their nouns from the fork escrow
-    event WithdrawFromForkEscrow(address indexed owner, uint256[] tokenIds);
+    event WithdrawFromForkEscrow(address indexed owner, uint256[] tokenIds, uint32 forkId);
 
     /// @notice Emitted when the fork is executed and the forking period begins
     event ExecuteFork(
@@ -45,7 +51,7 @@ library NounsDAOV3Fork {
     );
 
     /// @notice Emitted when someone joins a fork during the forking period
-    event JoinFork(address indexed owner, uint256[] tokenIds);
+    event JoinFork(address indexed owner, uint256[] tokenIds, uint32 forkId);
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
@@ -70,7 +76,7 @@ library NounsDAOV3Fork {
             ds.nouns.safeTransferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
-        emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);
+        emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason, forkEscrow.forkId());
     }
 
     /**
@@ -81,9 +87,10 @@ library NounsDAOV3Fork {
     function withdrawFromForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
-        ds.forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
+        INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
+        forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
 
-        emit WithdrawFromForkEscrow(msg.sender, tokenIds);
+        emit WithdrawFromForkEscrow(msg.sender, tokenIds, forkEscrow.forkId());
     }
 
     /**
@@ -126,15 +133,16 @@ library NounsDAOV3Fork {
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
+        INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(ds.forkEscrow), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
 
-        emit JoinFork(msg.sender, tokenIds);
+        emit JoinFork(msg.sender, tokenIds, forkEscrow.forkId() - 1);
     }
 
     /**

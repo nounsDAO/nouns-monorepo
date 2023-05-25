@@ -8,6 +8,7 @@ import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { NounsDAOV3Fork } from '../../../contracts/governance/fork/NounsDAOV3Fork.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
     address tokenHolder = makeAddr('tokenHolder');
@@ -17,6 +18,7 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
     ForkDAODeployerMock forkDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
+    INounsDAOForkEscrow escrow;
 
     function setUp() public virtual override {
         super.setUp();
@@ -39,6 +41,8 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
         }
         vm.stopPrank();
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
+
+        escrow = dao.forkEscrow();
     }
 
     function assertOwnerOfTokens(
@@ -72,7 +76,7 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
         nounsToken.setApprovalForAll(address(dao), true);
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork');
+        emit NounsDAOV3Fork.EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork', escrow.forkId());
         dao.escrowToFork(tokenIds, proposalIds, 'time to fork');
     }
 
@@ -127,7 +131,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         tokenIds = [1, 2, 3];
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.WithdrawFromForkEscrow(tokenHolder, tokenIds);
+        emit NounsDAOV3Fork.WithdrawFromForkEscrow(tokenHolder, tokenIds, escrow.forkId());
         vm.prank(tokenHolder);
         dao.withdrawFromForkEscrow(tokenIds);
 
@@ -299,7 +303,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         tokenIds = [8, 9];
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds);
+        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds, escrow.forkId() - 1);
         vm.prank(tokenHolder);
         dao.joinFork(tokenIds);
 
