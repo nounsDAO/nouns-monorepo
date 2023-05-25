@@ -344,8 +344,11 @@ export const propUsingDynamicQuorum = (propoaslId: string) => gql`
 }
 `;
 
-export const clientFactory = (uri: string) =>
-  new ApolloClient({
+export const clientFactory = (uri: string) => {
+  console.log('CLIENT FACTORY', uri);
+
+  return new ApolloClient({
     uri,
     cache: new InMemoryCache(),
   });
+};
