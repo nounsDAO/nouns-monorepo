@@ -22,7 +22,7 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
     const types = [0,0,0,0,0];
     const skins = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]];
     const accCount = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];
-    const accTypes = [Array(15).fill(0), Array(15).fill(0), Array(15).fill(0), Array(15).fill(0), Array(15).fill(0)]
+    const accTypes = [Array(16).fill(0), Array(16).fill(0), Array(16).fill(0), Array(16).fill(0), Array(16).fill(0)]
 
     for (let i = 0; i < 100_000; i++) {
       let stringNumber = (i).toString(16);

@@ -5,124 +5,6 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NAuctionHouse
-    network: {{network}}
-    source:
-      address: '{{nAuctionHouse.address}}'
-      abi: NAuctionHouse
-      startBlock: {{nAuctionHouse.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/n-auction-house.ts
-      entities:
-        - Account
-        - Auction
-        - Bid
-        - Punk
-      abis:
-        - name: NAuctionHouse
-          file: ../nouns-contracts/abi/contracts/NAuctionHouse.sol/NAuctionHouse.json
-      eventHandlers:
-        - event: AuctionCreated(indexed uint256,uint256,uint256)
-          handler: handleAuctionCreated
-        - event: AuctionBid(indexed uint256,address,uint256,bool)
-          handler: handleAuctionBid
-        - event: AuctionExtended(indexed uint256,uint256)
-          handler: handleAuctionExtended
-        - event: AuctionSettled(indexed uint256,address,uint256)
-          handler: handleAuctionSettled
-  - kind: ethereum/contract
-    name: NToken
-    network: {{network}}
-    source:
-      address: '{{nToken.address}}'
-      abi: NToken
-      startBlock: {{nToken.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/n-erc-721.ts
-      entities:
-        - Punk
-        - Seed
-        - Account
-        - Delegate
-        - Governance
-      abis:
-        - name: NToken
-          file: ../nouns-contracts/abi/contracts/NToken.sol/NToken.json
-      eventHandlers:
-        - event: PunkCreated(indexed uint256,(uint8,uint8,(uint16,uint16)[]))
-          handler: handlePunkCreated
-        - event: DelegateChanged(indexed address,indexed address,indexed address)
-          handler: handleDelegateChanged
-        - event: DelegateVotesChanged(indexed address,uint256,uint256)
-          handler: handleDelegateVotesChanged
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-  - kind: ethereum/contract
-    name: NDAO
-    network: {{network}}
-    source:
-      address: '{{nDAO.address}}'
-      abi: NDAO
-      startBlock: {{nDAO.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/n-dao.ts
-      entities:
-        - Account
-        - Delegate
-        - Proposal
-        - Vote
-        - Governance
-      abis:
-        - name: NDAO
-          file: ../nouns-contracts/abi/contracts/governance/NDAOLogicV1.sol/NDAOLogicV1.json
-      eventHandlers:
-        - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
-          handler: handleProposalCreatedWithRequirements
-        - event: ProposalCanceled(uint256)
-          handler: handleProposalCanceled
-        - event: ProposalVetoed(uint256)
-          handler: handleProposalVetoed
-        - event: ProposalQueued(uint256,uint256)
-          handler: handleProposalQueued
-        - event: ProposalExecuted(uint256)
-          handler: handleProposalExecuted
-        - event: VoteCast(indexed address,uint256,uint8,uint256,string)
-          handler: handleVoteCast
-  - kind: ethereum/contract
-    name: CryptopunksVote
-    network: {{network}}
-    source:
-      address: '{{cryptopunksVote.address}}'
-      abi: CryptopunksVote
-      startBlock: {{cryptopunksVote.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/cryptopunks-vote.ts
-      entities:
-        - OGPunk
-        - Account
-        - Delegate
-        - Governance
-      abis:
-        - name: CryptopunksVote
-          file: ../nouns-contracts/abi/contracts/CryptopunksVote.sol/CryptopunksVote.json
-      eventHandlers:
-        - event: DelegateChanged(address,indexed address,indexed address,indexed uint256)
-          handler: handleOGPunkDelegateChanged
-        - event: DelegateVotesChanged(indexed address,uint256,uint256)
-          handler: handleOGPunkDelegateVotesChanged
-  - kind: ethereum/contract
     name: OGCryptopunks
     network: {{network}}
     source:
@@ -145,3 +27,24 @@ dataSources:
           handler: handleOGPunkAssign
         - event: PunkTransfer(indexed address,indexed address,uint256)
           handler: handleOGPunkTransfer
+  - kind: ethereum/contract
+    name: WrappedPunk
+    network: {{network}}
+    source:
+      address: '{{wrappedpunk.address}}'
+      abi: WrappedPunk
+      startBlock: {{wrappedpunk.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/wrapped-punk.ts
+      entities:
+        - OGPunk
+        - Account
+      abis:
+        - name: WrappedPunk
+          file: ../nouns-contracts/abi/contracts/test/WrappedPunk.sol/WrappedPunk.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

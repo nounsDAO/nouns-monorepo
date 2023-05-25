@@ -3,7 +3,7 @@ import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import {
   CryptopunksMock,
-  WrappedPunk,
+  WrappedPunkMock,
   CryptopunksVote,
 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -24,7 +24,7 @@ const { expect } = chai;
 describe('CryptopunksVote', () => {
   let snapshotId: number;
   let cryptopunks: CryptopunksMock;
-  let wrappedPunk: WrappedPunk;
+  let wrappedPunk: WrappedPunkMock;
   let cryptopunksVote: CryptopunksVote;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;

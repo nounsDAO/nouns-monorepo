@@ -1,35 +1,25 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import {
-  Assign,
-  PunkTransfer,
-} from './types/OGCryptopunks/OGCryptopunks';
-import { OGPunk } from './types/schema';
+  Transfer,
+} from './types/WrappedPunk/WrappedPunk';
+import { OGPunk, Account } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getOrCreateAccount } from './utils/helpers';
 
 
-export function handleOGPunkAssign(event: Assign): void {
-  let owner = getOrCreateAccount(event.params.to.toHexString());
-  let ogpunk = new OGPunk(event.params.punkIndex.toString());
-
-  ogpunk.owner = owner.id;
-  ogpunk.wrapped = false;
-  ogpunk.save();
-
-  owner.ogpunkBalanceRaw = owner.ogpunkBalanceRaw + BIGINT_ONE;
-  owner.ogpunkBalance = owner.ogpunkBalanceRaw;
-  let newOGPunks = owner.ogpunks; // Re-assignment required to update array
-  newOGPunks.push(ogpunk.id);
-  owner.ogpunks = newOGPunks;
-  owner.save();
-}
-
 let transferredPunkId: string; // Use WebAssembly global due to lack of closure support
-export function handleOGPunkTransfer(event: PunkTransfer): void {
-  let prevOwner = getOrCreateAccount(event.params.from.toHexString());
-  let newOwner = getOrCreateAccount(event.params.to.toHexString());
-  transferredPunkId = event.params.punkIndex.toString();
+export function handleTransfer(event: Transfer): void {
+  let prevOwner: Account;
+  let newOwner: Account;
+  transferredPunkId = event.params.tokenId.toString();
   let ogpunk = OGPunk.load(transferredPunkId);
+
+  if (event.params.from.toHexString() == ZERO_ADDRESS) { // mint/wrap
+    ogpunk.wrapped = true;
+    prevOwner = getOrCreateAccount(event.address.toHexString());
+  } else {
+    prevOwner = getOrCreateAccount(event.params.from.toHexString());
+  }
 
   prevOwner.ogpunkBalanceRaw = prevOwner.ogpunkBalanceRaw - BIGINT_ONE;
   prevOwner.ogpunkBalance = prevOwner.ogpunkBalanceRaw;
@@ -38,6 +28,13 @@ export function handleOGPunkTransfer(event: PunkTransfer): void {
     n => n != transferredPunkId,
   );
   prevOwner.save();
+
+  if (event.params.to.toHexString() == ZERO_ADDRESS) { // burn/unwrap
+    ogpunk.wrapped = false;
+    newOwner = getOrCreateAccount(event.address.toHexString());
+  } else {
+    newOwner = getOrCreateAccount(event.params.to.toHexString());
+  }
 
   ogpunk.owner = newOwner.id;
   ogpunk.save();

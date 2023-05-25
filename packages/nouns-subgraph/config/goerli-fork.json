@@ -19,5 +19,9 @@
   "ogcryptopunks": {
     "address": "0x85B353Ba06d16a237F24CB370ea291972F9bDd42",
     "startBlock": 8542634
+  },
+  "wrappedpunk": {
+    "address": "",
+    "startBlock": 8542634
   }
 }

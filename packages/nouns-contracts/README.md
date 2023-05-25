@@ -20,6 +20,16 @@ One Noun is generated and auctioned every day, forever. All Noun artwork is stor
 
 ## Development
 
+### Environment Addresses
+
+| Contract              | Chain   | Address                                    |
+|-----------------------|---------|--------------------------------------------|
+| OG Cryptopunks (mock) | Sepolia | 0x8316d3Ba5ffF588ED37263906Cac45E9cB44e014 |
+| WrappedPunk (mock)    | Sepolia | 0xde3be40B3e81d1BEd035bEA3f265DE07e3FB942A |
+| CryptopunksVote       | Sepolia | 0x225EB996209af94F45Bd71c35fDB032feF96b8e4 |
+| OG Cryptopunks (mock) | Goerli  | 0x85B353Ba06d16a237F24CB370ea291972F9bDd42 |
+| CryptopunksVote (old) | Goerli  | 0xfabd98b4976620ee2bc79641126c734fc49e2c81 |
+
 ### Install dependencies
 
 ```sh
