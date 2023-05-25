@@ -68,12 +68,16 @@ contract ProposeDAOV3UpgradeScript is Script {
         string[] memory signatures = new string[](numTxs);
         bytes[] memory calldatas = new bytes[](numTxs);
 
+        // Can't send the entire ETH balance because we can't reference self.balance
+        // Would also be good to leave some ETH in case of queued proposals
+        // For both reasons, we will first sent a chunk of ETH, and send the rest in a followup proposal
         uint256 i = 0;
         targets[i] = timelockV2;
         values[i] = ethToSendToNewTimelock;
         signatures[i] = '';
         calldatas[i] = '';
 
+        // Upgrade to DAO V3
         i++;
         targets[i] = address(daoProxy);
         values[i] = 0;
