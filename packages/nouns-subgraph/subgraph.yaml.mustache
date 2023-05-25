@@ -116,6 +116,14 @@ dataSources:
           handler: handleProposalObjectionPeriodSet
         - event: SignatureCancelled(indexed address,bytes)
           handler: handleSignatureCanceled
+        - event: EscrowedToFork(indexed address,uint256[],uint256[],string,uint32)
+          handler: handleEscrowedToFork
+        - event: WithdrawFromForkEscrow(indexed address,uint256[],uint32)
+          handler: handleWithdrawFromForkEscrow
+        - event: ExecuteFork(uint32,address,address,uint256,uint256)
+          handler: handleExecuteFork
+        - event: JoinFork(indexed address,uint256[],uint256[],string,uint32)
+          handler: handleJoinFork
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}
