@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing admin related functions
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -26,7 +26,6 @@ library NounsDAOV3Admin {
     error AdminOnly();
     error VetoerOnly();
     error PendingVetoerOnly();
-
     error InvalidMinQuorumVotesBPS();
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
