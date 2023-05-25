@@ -4,7 +4,7 @@ import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
-type LocalContractName = ContractName | 'WETH' | 'CryptopunksMock' | 'WrappedPunk' |  'CryptopunksVote';
+type LocalContractName = ContractName | 'WETH' | 'CryptopunksMock' | 'WrappedPunkMock' |  'CryptopunksVote';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -59,11 +59,11 @@ task('deploy-local', 'Deploy contracts to hardhat')
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
       CryptopunksMock: {},
-      WrappedPunk: {
+      WrappedPunkMock: {
         args: [() => contracts.CryptopunksMock.instance?.address]
       },
       CryptopunksVote: {
-        args: [() => contracts.CryptopunksMock.instance?.address, () => contracts.WrappedPunk.instance?.address]
+        args: [() => contracts.CryptopunksMock.instance?.address, () => contracts.WrappedPunkMock.instance?.address]
       },
       NFTDescriptorV2: {},
       SVGRenderer: {},

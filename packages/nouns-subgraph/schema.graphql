@@ -47,7 +47,7 @@ type TransferEvent @entity {
   "The txn hash of this event"
   id: ID!
 
-  "The Punk being transfered"
+  "The Punk being transferred"
   punk: Punk!
 
   "Previous holder address"
@@ -95,6 +95,9 @@ type Punk @entity {
 type OGPunk @entity {
   "The OG Punk's token id"
   id: ID!
+
+  "Whether the OG Punk is wrapped (WrappedPunk) - if yes, the owner is the owner of wrapped punk"
+  wrapped: Boolean!
 
   "The owner of the OG Punk"
   owner: Account!

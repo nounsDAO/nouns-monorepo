@@ -9,8 +9,8 @@ import {
   NToken__factory as NTokenFactory,
   CryptopunksMock,
   CryptopunksMock__factory as CryptopunksMockFactory,
-  WrappedPunk,
-  WrappedPunk__factory as WrappedPunkFactory,
+  WrappedPunkMock,
+  WrappedPunkMock__factory as WrappedPunkMockFactory,
   CryptopunksVote,
   CryptopunksVote__factory as CryptopunksVoteFactory,
   NSeeder,
@@ -121,11 +121,11 @@ export const deployNToken = async (
 
 export const deployCryptopunksVote = async (
   deployer?: SignerWithAddress,
-): Promise<{cryptopunks: CryptopunksMock, wrappedPunk: WrappedPunk, cryptopunksVote: CryptopunksVote}> => {
+): Promise<{cryptopunks: CryptopunksMock, wrappedPunk: WrappedPunkMock, cryptopunksVote: CryptopunksVote}> => {
   const signer = deployer || (await getSigners()).deployer;
 
   const cryptopunksMockFactory = new CryptopunksMockFactory(signer);
-  const wrappedPunkFactory = new WrappedPunkFactory(signer);
+  const wrappedPunkFactory = new WrappedPunkMockFactory(signer);
   const cryptopunksVoteFactory = new CryptopunksVoteFactory(signer);
 
   const cryptopunks = await cryptopunksMockFactory.deploy();
@@ -398,7 +398,7 @@ export const deployGovAndToken = async (
   // nonce 8: Deploy NSeeder
   // nonce 9: Deploy NToken
   // nonce 10: Deploy OGCryptopunks
-  // nonce 11: Deploy WrappedPunk
+  // nonce 11: Deploy WrappedPunkMock
   // nonce 12: Deploy CryptopunksVote
   // nonce 13: Deploy NDAOProxy
   // nonce 14+: populate Descriptor
