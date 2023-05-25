@@ -18,6 +18,7 @@ contract ProposeDAOV3UpgradeScript is Script {
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
+    address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -61,7 +62,7 @@ contract ProposeDAOV3UpgradeScript is Script {
         address[] memory erc20TokensToIncludeInFork,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 9;
+        uint8 numTxs = 10;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -105,6 +106,12 @@ contract ProposeDAOV3UpgradeScript is Script {
 
         i++;
         targets[i] = PAYER_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        i++;
+        targets[i] = AUCTION_HOUSE_PROXY_MAINNET;
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
         calldatas[i] = abi.encode(timelockV2);

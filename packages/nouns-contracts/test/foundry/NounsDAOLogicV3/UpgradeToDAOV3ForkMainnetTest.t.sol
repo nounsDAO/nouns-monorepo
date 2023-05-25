@@ -16,6 +16,7 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { ERC20Transferer } from '../../../contracts/utils/ERC20Transferer.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 
 interface IHasName {
     function NAME() external pure returns (string memory);
@@ -40,6 +41,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
+    address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
 
     NounsDAOExecutorV2 timelockV2;
     NounsDAOLogicV3 daoV3;
@@ -163,5 +165,19 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     function test_transfersAllstETH() public {
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 1);
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), STETH_BALANCE - 1);
+    }
+
+    function test_AuctionHouse_changedOwner() public {
+        assertEq(IOwnable(AUCTION_HOUSE_PROXY_MAINNET).owner(), address(timelockV2));
+    }
+
+    function test_AuctionHouseRevenueGoesToNewTimelock() public {
+        assertEq(address(daoV3.timelock()).balance, 10_000 ether);
+
+        (, uint256 amount, , uint256 endTime, , ) = NounsAuctionHouse(AUCTION_HOUSE_PROXY_MAINNET).auction();
+        vm.warp(endTime + 1);
+        NounsAuctionHouse(AUCTION_HOUSE_PROXY_MAINNET).settleCurrentAndCreateNewAuction();
+
+        assertEq(address(daoV3.timelock()).balance, 10_000 ether + amount);
     }
 }
