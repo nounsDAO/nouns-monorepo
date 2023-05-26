@@ -373,6 +373,7 @@ export function handleEscrowedToFork(event: EscrowedToFork): void {
     const noun = new EscrowedNoun(id);
     noun.fork = fork.id;
     noun.noun = event.params.tokenIds[i].toString();
+    noun.owner = deposit.owner;
     noun.escrowDeposit = deposit.id;
     noun.save();
   }
@@ -443,6 +444,7 @@ export function handleJoinFork(event: JoinFork): void {
     const noun = new ForkJoinedNoun(id);
     noun.fork = fork.id;
     noun.noun = event.params.tokenIds[i].toString();
+    noun.owner = join.owner;
     noun.forkJoin = join.id;
     noun.save();
   }

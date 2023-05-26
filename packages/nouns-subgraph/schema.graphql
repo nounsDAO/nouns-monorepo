@@ -600,6 +600,8 @@ type EscrowedNoun @entity(immutable: true) {
 
   noun: Noun!
 
+  owner: Delegate!
+
   escrowDeposit: EscrowDeposit!
 }
 
@@ -609,6 +611,8 @@ type ForkJoinedNoun @entity(immutable: true) {
   fork: Fork!
 
   noun: Noun!
+
+  owner: Delegate!
 
   forkJoin: ForkJoin!
 }

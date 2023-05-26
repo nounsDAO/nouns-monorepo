@@ -732,6 +732,7 @@ describe('forking', () => {
       let escrowDespositId = txHash.toHexString().concat('-0');
       assert.stringEquals(escrowedNoun.fork, forkId.toString());
       assert.stringEquals(escrowedNoun.noun, '4');
+      assert.stringEquals(escrowedNoun.owner, nouner.toHexString());
       assert.stringEquals(escrowedNoun.escrowDeposit, escrowDespositId);
 
       let escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
