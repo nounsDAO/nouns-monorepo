@@ -33,6 +33,7 @@ export enum ChainId {
   Ropsten = 3,
   Rinkeby = 4,
   Goerli = 5,
+  Sepolia = 11155111,
   Kovan = 42,
   Local = 31337,
 }

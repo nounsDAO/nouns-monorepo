@@ -17,7 +17,7 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Goerli | ChainId.Mainnet | ChainId.Hardhat;
+type SupportedChains = ChainId.Goerli | ChainId.Sepolia | ChainId.Mainnet | ChainId.Hardhat;
 
 interface CacheBucket {
   name: string;
@@ -62,6 +62,12 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/stan7123/punks2',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
+  [ChainId.Sepolia]: {
+    jsonRpcUri: createNetworkHttpUrl('sepolia'),
+    wsRpcUri: createNetworkWsUrl('sepolia'),
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/stan7123/punks2',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+  },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
@@ -79,6 +85,9 @@ const app: Record<SupportedChains, AppConfig> = {
 const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
+  },
+  [ChainId.Sepolia]: {
+    lidoToken: '0x93556903C7517120544418d5ceacDAbc09414D32',
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
