@@ -724,7 +724,7 @@ describe('forking', () => {
         ),
       );
 
-      const fork = getOrCreateFork(forkId.toString());
+      const fork = getOrCreateFork(forkId);
       assert.i32Equals(fork.tokensInEscrowCount, 2);
       assert.i32Equals(fork.escrowedNouns.length, 2);
 

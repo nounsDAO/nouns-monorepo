@@ -526,6 +526,9 @@ type Fork @entity {
   "The fork ID given by the escrow contract"
   id: ID!
 
+  "The fork ID as int, to make it easier to query for the latest fork"
+  forkID: BigInt!
+
   tokensInEscrowCount: Int!
 
   escrowDeposits: [EscrowDeposit!]! @derivedFrom(field: "fork")

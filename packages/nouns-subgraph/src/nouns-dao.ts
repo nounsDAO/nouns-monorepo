@@ -354,7 +354,7 @@ function captureProposalVersion(
 }
 
 export function handleEscrowedToFork(event: EscrowedToFork): void {
-  const fork = getOrCreateFork(event.params.forkId.toString());
+  const fork = getOrCreateFork(event.params.forkId);
 
   const deposit = new EscrowDeposit(genericUniqueId(event));
   deposit.fork = fork.id;
@@ -382,7 +382,7 @@ export function handleEscrowedToFork(event: EscrowedToFork): void {
 }
 
 export function handleWithdrawFromForkEscrow(event: WithdrawFromForkEscrow): void {
-  const fork = getOrCreateFork(event.params.forkId.toString());
+  const fork = getOrCreateFork(event.params.forkId);
 
   const withdrawal = new EscrowWithdrawal(genericUniqueId(event));
   withdrawal.fork = fork.id;
@@ -403,7 +403,7 @@ export function handleWithdrawFromForkEscrow(event: WithdrawFromForkEscrow): voi
 }
 
 export function handleExecuteFork(event: ExecuteFork): void {
-  const fork = getOrCreateFork(event.params.forkId.toString());
+  const fork = getOrCreateFork(event.params.forkId);
 
   fork.executed = true;
   fork.executedAt = event.block.timestamp;
@@ -424,7 +424,7 @@ export function handleExecuteFork(event: ExecuteFork): void {
 }
 
 export function handleJoinFork(event: JoinFork): void {
-  const fork = getOrCreateFork(event.params.forkId.toString());
+  const fork = getOrCreateFork(event.params.forkId);
 
   const join = new ForkJoin(genericUniqueId(event));
   join.fork = fork.id;

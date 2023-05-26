@@ -202,10 +202,11 @@ export function getOrCreateProposalFeedback(id: string): ProposalFeedback {
   return feedback;
 }
 
-export function getOrCreateFork(id: string): Fork {
-  let fork = Fork.load(id);
+export function getOrCreateFork(id: BigInt): Fork {
+  let fork = Fork.load(id.toString());
   if (fork == null) {
-    fork = new Fork(id);
+    fork = new Fork(id.toString());
+    fork.forkID = id;
     fork.tokensInEscrowCount = 0;
     fork.tokensForkingCount = 0;
     fork.escrowedNouns = new Array<string>();
