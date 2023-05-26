@@ -87,6 +87,12 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint32",
+        "name": "forkId",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -108,12 +114,6 @@
         "internalType": "string",
         "name": "reason",
         "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "forkId",
-        "type": "uint32"
       }
     ],
     "name": "EscrowedToFork",
@@ -123,7 +123,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint32",
         "name": "forkId",
         "type": "uint32"
@@ -218,6 +218,12 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint32",
+        "name": "forkId",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -239,12 +245,6 @@
         "internalType": "string",
         "name": "reason",
         "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "forkId",
-        "type": "uint32"
       }
     ],
     "name": "JoinFork",
@@ -1128,6 +1128,12 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint32",
+        "name": "forkId",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -1137,12 +1143,6 @@
         "internalType": "uint256[]",
         "name": "tokenIds",
         "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "forkId",
-        "type": "uint32"
       }
     ],
     "name": "WithdrawFromForkEscrow",
@@ -1893,6 +1893,19 @@
   },
   {
     "inputs": [],
+    "name": "forkThreshold",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "forkThresholdBPS",
     "outputs": [
       {
@@ -2196,6 +2209,19 @@
         "internalType": "contract NounsTokenLike",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "numTokensInForkEscrow",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

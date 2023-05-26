@@ -116,13 +116,13 @@ dataSources:
           handler: handleProposalObjectionPeriodSet
         - event: SignatureCancelled(indexed address,bytes)
           handler: handleSignatureCanceled
-        - event: EscrowedToFork(indexed address,uint256[],uint256[],string,uint32)
+        - event: EscrowedToFork(indexed uint32,indexed address,uint256[],uint256[],string)
           handler: handleEscrowedToFork
-        - event: WithdrawFromForkEscrow(indexed address,uint256[],uint32)
+        - event: WithdrawFromForkEscrow(indexed uint32,indexed address,uint256[])
           handler: handleWithdrawFromForkEscrow
-        - event: ExecuteFork(uint32,address,address,uint256,uint256)
+        - event: ExecuteFork(indexed uint32,address,address,uint256,uint256)
           handler: handleExecuteFork
-        - event: JoinFork(indexed address,uint256[],uint256[],string,uint32)
+        - event: JoinFork(indexed uint32,indexed address,uint256[],uint256[],string)
           handler: handleJoinFork
   - kind: ethereum/contract
     name: NounsDAOData

@@ -31,19 +31,19 @@ library NounsDAOV3Fork {
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
+        uint32 indexed forkId,
         address indexed owner,
         uint256[] tokenIds,
         uint256[] proposalIds,
-        string reason,
-        uint32 forkId
+        string reason
     );
 
     /// @notice Emitted when the owner withdraws their nouns from the fork escrow
-    event WithdrawFromForkEscrow(address indexed owner, uint256[] tokenIds, uint32 forkId);
+    event WithdrawFromForkEscrow(uint32 indexed forkId, address indexed owner, uint256[] tokenIds);
 
     /// @notice Emitted when the fork is executed and the forking period begins
     event ExecuteFork(
-        uint32 forkId,
+        uint32 indexed forkId,
         address forkTreasury,
         address forkToken,
         uint256 forkEndTimestamp,
@@ -51,7 +51,13 @@ library NounsDAOV3Fork {
     );
 
     /// @notice Emitted when someone joins a fork during the forking period
-    event JoinFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason, uint32 forkId);
+    event JoinFork(
+        uint32 indexed forkId,
+        address indexed owner,
+        uint256[] tokenIds,
+        uint256[] proposalIds,
+        string reason
+    );
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
@@ -76,7 +82,7 @@ library NounsDAOV3Fork {
             ds.nouns.safeTransferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
-        emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason, forkEscrow.forkId());
+        emit EscrowedToFork(forkEscrow.forkId(), msg.sender, tokenIds, proposalIds, reason);
     }
 
     /**
@@ -90,7 +96,7 @@ library NounsDAOV3Fork {
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
         forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
 
-        emit WithdrawFromForkEscrow(msg.sender, tokenIds, forkEscrow.forkId());
+        emit WithdrawFromForkEscrow(forkEscrow.forkId(), msg.sender, tokenIds);
     }
 
     /**
@@ -147,7 +153,7 @@ library NounsDAOV3Fork {
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
 
-        emit JoinFork(msg.sender, tokenIds, proposalIds, reason, forkEscrow.forkId() - 1);
+        emit JoinFork(forkEscrow.forkId() - 1, msg.sender, tokenIds, proposalIds, reason);
     }
 
     /**

@@ -76,7 +76,7 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
         nounsToken.setApprovalForAll(address(dao), true);
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork', escrow.forkId());
+        emit NounsDAOV3Fork.EscrowedToFork(escrow.forkId(), tokenHolder, tokenIds, proposalIds, 'time to fork');
         dao.escrowToFork(tokenIds, proposalIds, 'time to fork');
     }
 
@@ -131,7 +131,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         tokenIds = [1, 2, 3];
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.WithdrawFromForkEscrow(tokenHolder, tokenIds, escrow.forkId());
+        emit NounsDAOV3Fork.WithdrawFromForkEscrow(escrow.forkId(), tokenHolder, tokenIds);
         vm.prank(tokenHolder);
         dao.withdrawFromForkEscrow(tokenIds);
 
@@ -304,7 +304,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         proposalIds = [1, 2];
 
         vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds, proposalIds, 'some reason', escrow.forkId() - 1);
+        emit NounsDAOV3Fork.JoinFork(escrow.forkId() - 1, tokenHolder, tokenIds, proposalIds, 'some reason');
         vm.prank(tokenHolder);
         dao.joinFork(tokenIds, proposalIds, 'some reason');
 

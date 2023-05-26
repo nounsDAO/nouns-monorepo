@@ -225,19 +225,19 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
+        uint32 indexed forkId,
         address indexed owner,
         uint256[] tokenIds,
         uint256[] proposalIds,
-        string reason,
-        uint32 forkId
+        string reason
     );
 
     /// @notice Emitted when the owner withdraws their nouns from the fork escrow
-    event WithdrawFromForkEscrow(address indexed owner, uint256[] tokenIds, uint32 forkId);
+    event WithdrawFromForkEscrow(uint32 indexed forkId, address indexed owner, uint256[] tokenIds);
 
     /// @notice Emitted when the fork is executed and the forking period begins
     event ExecuteFork(
-        uint32 forkId,
+        uint32 indexed forkId,
         address forkTreasury,
         address forkToken,
         uint256 forkEndTimestamp,
@@ -245,7 +245,13 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     );
 
     /// @notice Emitted when someone joins a fork during the forking period
-    event JoinFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason, uint32 forkId);
+    event JoinFork(
+        uint32 indexed forkId,
+        address indexed owner,
+        uint256[] tokenIds,
+        uint256[] proposalIds,
+        string reason
+    );
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
