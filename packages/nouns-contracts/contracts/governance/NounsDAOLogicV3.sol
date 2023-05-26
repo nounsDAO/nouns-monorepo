@@ -526,6 +526,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
+     * @notice returns the required number of tokens to escrow to trigger a fork
+     */
+    function forkThreshold() external view returns (uint256) {
+        return ds.forkThreshold();
+    }
+
+    /**
+     * @notice Returns the number of tokens currently in escrow, contributing to the fork threshold
+     */
+    function numTokensInForkEscrow() external view returns (uint256) {
+        return ds.numTokensInForkEscrow();
+    }
+
+    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   VOTES
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

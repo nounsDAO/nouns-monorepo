@@ -171,10 +171,17 @@ library NounsDAOV3Fork {
     }
 
     /**
-     * @notice returns the required number of tokens to escrow to trigger a fork
+     * @notice Returns the required number of tokens to escrow to trigger a fork
      */
-    function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
+    function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
         return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
+    }
+
+    /**
+     * @notice Returns the number of tokens currently in escrow, contributing to the fork threshold
+     */
+    function numTokensInForkEscrow(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+        return ds.forkEscrow.numTokensInEscrow();
     }
 
     /**

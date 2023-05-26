@@ -17,6 +17,9 @@ import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { ERC20Transferer } from '../../../contracts/utils/ERC20Transferer.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { ERC721Enumerable } from '../../../contracts/base/ERC721Enumerable.sol';
+import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
+import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 
 interface IHasName {
     function NAME() external pure returns (string memory);
@@ -45,6 +48,12 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
 
     NounsDAOExecutorV2 timelockV2;
     NounsDAOLogicV3 daoV3;
+
+    uint256[] tokenIds;
+    address[] targets;
+    uint256[] values;
+    string[] signatures;
+    bytes[] calldatas;
 
     function setUp() public {
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 17315040);
@@ -179,5 +188,65 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         NounsAuctionHouse(AUCTION_HOUSE_PROXY_MAINNET).settleCurrentAndCreateNewAuction();
 
         assertEq(address(daoV3.timelock()).balance, 10_000 ether + amount);
+    }
+
+    function test_forkScenarioAfterUpgrade() public {
+        uint256[] memory whaleTokens = _getAllNounsOf(whaleAddr);
+        _escrowAllNouns(whaleAddr);
+        _escrowAllNouns(NOUNDERS);
+        _escrowAllNouns(0x5606B493c51316A9e65c9b2A00BbF7Ff92515A3E);
+        _escrowAllNouns(0xd1d1D4e36117aB794ec5d4c78cBD3a8904E691D0);
+        _escrowAllNouns(0x7dE92ca2D0768cDbA376Aac853234D4EEd8d8B5C);
+        _escrowAllNouns(0xFa4FC4ec2F81A4897743C5b4f45907c02ce06199);
+
+        (address forkTreasury, address forkToken) = daoV3.executeFork();
+
+        vm.startPrank(whaleAddr);
+        NounsTokenFork(forkToken).claimFromEscrow(whaleTokens);
+        vm.roll(block.number + 1);
+
+        NounsDAOLogicV1Fork forkDao = NounsDAOLogicV1Fork(NounsDAOExecutorV2(payable(forkTreasury)).admin());
+
+        targets = [makeAddr('wallet')];
+        values = [50 ether];
+        signatures = [''];
+        calldatas = [bytes('')];
+
+        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        forkDao.propose(targets, values, signatures, calldatas, 'new prop');
+
+        vm.warp(forkDao.delayedGovernanceExpirationTimestamp() + 1);
+        forkDao.propose(targets, values, signatures, calldatas, 'new prop');
+
+        vm.roll(block.number + forkDao.votingDelay() + 1);
+        forkDao.castVote(1, 1);
+
+        vm.roll(block.number + forkDao.votingPeriod());
+        forkDao.queue(1);
+
+        vm.warp(block.timestamp + 2 days);
+        forkDao.execute(1);
+
+        assertEq(makeAddr('wallet').balance, 50 ether);
+    }
+
+    function _escrowAllNouns(address owner) internal {
+        vm.startPrank(owner);
+        daoV3.nouns().setApprovalForAll(address(daoV3), true);
+        daoV3.escrowToFork(_getAllNounsOf(owner), new uint256[](0), '');
+        vm.stopPrank();
+    }
+
+    function _getAllNounsOf(address owner) internal view returns (uint256[] memory) {
+        ERC721Enumerable nouns_ = ERC721Enumerable(address(daoV3.nouns()));
+        uint256 numTokens = nouns_.balanceOf(owner);
+
+        uint256[] memory tokens = new uint256[](numTokens);
+
+        for (uint256 i; i < numTokens; i++) {
+            tokens[i] = nouns_.tokenOfOwnerByIndex(owner, i);
+        }
+
+        return tokens;
     }
 }
