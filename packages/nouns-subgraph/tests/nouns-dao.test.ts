@@ -728,7 +728,7 @@ describe('forking', () => {
       assert.i32Equals(fork.tokensInEscrowCount, 2);
       assert.i32Equals(fork.escrowedNouns.length, 2);
 
-      let escrowedNoun = EscrowedNoun.load(fork.escrowedNouns[0])!;
+      let escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
       let escrowDespositId = txHash.toHexString().concat('-0');
       assert.stringEquals(escrowedNoun.fork, forkId.toString());
       assert.stringEquals(escrowedNoun.noun, '4');

@@ -516,6 +516,9 @@ export function createEscrowedToForkEvent(
   newEvent.block.timestamp = blockTimestamp;
 
   newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('forkId', ethereum.Value.fromUnsignedBigInt(forkId)),
+  );
   newEvent.parameters.push(new ethereum.EventParam('owner', ethereum.Value.fromAddress(owner)));
   newEvent.parameters.push(
     new ethereum.EventParam('tokenIds', ethereum.Value.fromUnsignedBigIntArray(tokenIds)),
@@ -524,9 +527,6 @@ export function createEscrowedToForkEvent(
     new ethereum.EventParam('proposalIds', ethereum.Value.fromUnsignedBigIntArray(proposalIds)),
   );
   newEvent.parameters.push(new ethereum.EventParam('reason', ethereum.Value.fromString(reason)));
-  newEvent.parameters.push(
-    new ethereum.EventParam('forkId', ethereum.Value.fromUnsignedBigInt(forkId)),
-  );
 
   return newEvent;
 }
@@ -546,12 +546,12 @@ export function createWithdrawFromForkEscrowEvent(
   newEvent.block.timestamp = blockTimestamp;
 
   newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('forkId', ethereum.Value.fromUnsignedBigInt(forkId)),
+  );
   newEvent.parameters.push(new ethereum.EventParam('owner', ethereum.Value.fromAddress(owner)));
   newEvent.parameters.push(
     new ethereum.EventParam('tokenIds', ethereum.Value.fromUnsignedBigIntArray(tokenIds)),
-  );
-  newEvent.parameters.push(
-    new ethereum.EventParam('forkId', ethereum.Value.fromUnsignedBigInt(forkId)),
   );
 
   return newEvent;
