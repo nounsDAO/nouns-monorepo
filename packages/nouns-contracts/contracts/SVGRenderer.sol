@@ -25,7 +25,7 @@ contract SVGRenderer is ISVGRenderer {
     uint256 private constant _INDEX_TO_BYTES3_FACTOR = 4;
 
     // prettier-ignore
-    string private constant _SVG_START_TAG = '<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
+    string private constant _SVG_START_TAG = '<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" fill="#597A8A"><rect width="100%" height="100%" />';
     string private constant _SVG_END_TAG = '</svg>';
 
     struct ContentBounds {

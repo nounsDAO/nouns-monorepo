@@ -7,6 +7,8 @@ const networkName = () => {
       return 'Ethereum Mainnet';
     case 5:
       return 'the Goerli network';
+    case 11155111:
+      return 'the Sepolia network';
     default:
       return `Network ${CHAIN_ID}`;
   }
@@ -18,6 +20,8 @@ const metamaskNetworkName = () => {
       return 'Ethereum Mainnet';
     case 5:
       return 'Goerli Test Network';
+    case 11155111:
+      return 'Sepolia Test Network';
     default:
       return `Network ${CHAIN_ID}`;
   }

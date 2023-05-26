@@ -1,0 +1,27 @@
+{
+  "network": "sepolia",
+  "nToken": {
+    "address": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
+    "startBlock": 3564000
+  },
+  "nAuctionHouse": {
+    "address": "0x943b154F4a8b47ffCd1B14487463897835Bfa2F4",
+    "startBlock": 3564000
+  },
+  "nDAO": {
+    "address": "0x577Ee173b982de9e22D92Df244a52BcbfBe9500B",
+    "startBlock": 3564000
+  },
+  "cryptopunksVote": {
+    "address": "0x225EB996209af94F45Bd71c35fDB032feF96b8e4",
+    "startBlock": 3549670
+  },
+  "ogcryptopunks": {
+    "address": "0x8316d3Ba5ffF588ED37263906Cac45E9cB44e014",
+    "startBlock": 3548966
+  },
+  "wrappedpunk": {
+    "address": "0xde3be40B3e81d1BEd035bEA3f265DE07e3FB942A",
+    "startBlock": 	3549648
+  }
+}

@@ -58,7 +58,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     uint256 private _currentPunkId = 10_000;
 
     // IPFS content hash of contract-level metadata
-    string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
+    string private _contractURIHash = 'QmVgLtMuJ48EueJkqYokqNAGC7AMuknKxNb4AJSEzhUFoU';
 
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
@@ -136,14 +136,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         _contractURIHash = newContractURIHash;
     }
 
-    /**
-     * @notice Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
-     */
     function isApprovedForAll(address owner, address operator) public view override(IERC721, ERC721) returns (bool) {
-        // Whitelist OpenSea proxy contract for easy trading.
-        if (proxyRegistry.proxies(owner) == operator) {
-            return true;
-        }
         return super.isApprovedForAll(owner, operator);
     }
 

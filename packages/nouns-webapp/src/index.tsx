@@ -82,6 +82,7 @@ export type AppDispatch = typeof store.dispatch;
 const supportedChainURLs = {
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
+  [ChainId.Sepolia]: createNetworkHttpUrl('sepolia'),
   [ChainId.Hardhat]: 'http://localhost:8545',
 };
 
