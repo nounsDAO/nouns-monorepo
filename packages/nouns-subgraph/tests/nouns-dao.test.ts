@@ -8,8 +8,8 @@ import {
   beforeEach,
   afterEach,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Proposal, ProposalVersion } from '../src/types/schema';
+import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
+import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
 import {
   handleProposalCreatedWithRequirements,
   handleVoteCast,
@@ -21,6 +21,8 @@ import {
   handleProposalUpdated,
   handleProposalDescriptionUpdated,
   handleProposalTransactionsUpdated,
+  handleEscrowedToFork,
+  handleWithdrawFromForkEscrow,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -35,6 +37,8 @@ import {
   createProposalUpdatedEvent,
   createProposalDescriptionUpdatedEvent,
   createProposalTransactionsUpdatedEvent,
+  createEscrowedToForkEvent,
+  createWithdrawFromForkEscrowEvent,
 } from './utils';
 import {
   BIGINT_10K,
@@ -47,6 +51,7 @@ import {
   getOrCreateDynamicQuorumParams,
   getGovernanceEntity,
   getOrCreateDelegate,
+  getOrCreateFork,
 } from '../src/utils/helpers';
 import { extractTitle, ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
 
@@ -676,6 +681,70 @@ describe('ParsedProposalV3', () => {
       assert.i32Equals(parsedProposal.signers.length, 2);
       assert.stringEquals(parsedProposal.signers[0], SOME_ADDRESS);
       assert.stringEquals(parsedProposal.signers[1], proposerWithDelegate.toHexString());
+    });
+  });
+});
+
+describe('forking', () => {
+  describe('escrow deposit and withdraw', () => {
+    afterAll(() => {
+      clearStore();
+    });
+
+    test('one deposit with 3 nouns, one withdrawal of 1 noun, results in 2 escrowed nouns', () => {
+      const escrowBlockTimestamp = BigInt.fromI32(946684800);
+      const withdrawBlockTimestamp = BigInt.fromI32(956684800);
+      const nouner = Address.fromString('0x0000000000000000000000000000000000000001');
+      const depositTokenIds = [BigInt.fromI32(1), BigInt.fromI32(4), BigInt.fromI32(2)];
+      const withdrawTokenIds = [BigInt.fromI32(1)];
+      const proposalIds = [BigInt.fromI32(1234)];
+      const forkId = BIGINT_ZERO;
+
+      handleEscrowedToFork(
+        createEscrowedToForkEvent(
+          txHash,
+          BIGINT_ZERO,
+          escrowBlockTimestamp,
+          nouner,
+          depositTokenIds,
+          proposalIds,
+          'some reason',
+          forkId,
+        ),
+      );
+
+      handleWithdrawFromForkEscrow(
+        createWithdrawFromForkEscrowEvent(
+          txHash,
+          BIGINT_ZERO,
+          withdrawBlockTimestamp,
+          nouner,
+          withdrawTokenIds,
+          forkId,
+        ),
+      );
+
+      const fork = getOrCreateFork(forkId);
+      assert.i32Equals(fork.tokensInEscrowCount, 2);
+      assert.i32Equals(fork.escrowedNouns.length, 2);
+
+      let escrowedNoun = EscrowedNoun.load(fork.escrowedNouns[0])!;
+      let escrowDespositId = txHash.toHexString().concat('-0');
+      assert.stringEquals(escrowedNoun.fork, forkId.toString());
+      assert.stringEquals(escrowedNoun.noun, '4');
+      assert.stringEquals(escrowedNoun.owner, nouner.toHexString());
+      assert.stringEquals(escrowedNoun.escrowDeposit, escrowDespositId);
+
+      let escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
+      assert.stringEquals(escrowDeposit.fork, forkId.toString());
+      assert.bigIntEquals(escrowDeposit.createdAt, escrowBlockTimestamp);
+      assert.stringEquals(escrowDeposit.owner, nouner.toHexString());
+      assert.i32Equals(escrowDeposit.tokenIDs.length, 3);
+      assert.bigIntEquals(escrowDeposit.tokenIDs[0], BigInt.fromI32(1));
+      assert.bigIntEquals(escrowDeposit.tokenIDs[1], BigInt.fromI32(4));
+      assert.bigIntEquals(escrowDeposit.tokenIDs[2], BigInt.fromI32(2));
+      assert.bigIntEquals(escrowDeposit.proposalIDs[0], BigInt.fromI32(1234));
+      assert.stringEquals(escrowDeposit.reason!, 'some reason');
     });
   });
 });

@@ -29,14 +29,13 @@ task(
     });
 
   // Transfer ownership
-  const executorAddress = contracts.NounsDAOExecutor.instance.address;
+  const executorAddress = contracts.NounsDAOExecutorProxy.instance.address;
   await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
   await contracts.NounsToken.instance.transferOwnership(executorAddress);
   await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
   await contracts.NounsAuctionHouse.instance
     .attach(contracts.NounsAuctionHouseProxy.instance.address)
     .transferOwnership(executorAddress);
-  await contracts.NounsDAODataProxyAdmin.instance.transferOwnership(executorAddress);
   console.log(
     'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
   );
@@ -64,7 +63,7 @@ task(
   );
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
   console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
-  console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutor.instance.address}`);
+  console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutorProxy.instance.address}`);
   console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxyV3.instance.address}`);
   console.log(`Data Proxy address: ${contracts.NounsDAODataProxy.instance.address}`);
 

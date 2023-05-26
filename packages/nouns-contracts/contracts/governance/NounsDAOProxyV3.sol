@@ -41,20 +41,16 @@ pragma solidity ^0.8.6;
 import './NounsDAOInterfaces.sol';
 
 contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
-
     constructor(
         address timelock_,
         address nouns_,
+        address forkEscrow_,
+        address forkDAODeployer_,
         address vetoer_,
         address admin_,
         address implementation_,
-        uint256 votingPeriod_,
-        uint256 votingDelay_,
-        uint256 proposalThresholdBPS_,
-        NounsDAOStorageV3.DynamicQuorumParams memory dynamicQuorumParams_,
-        uint32 lastMinuteWindowInBlocks_,
-        uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_
+        NounsDAOStorageV3.NounsDAOParams memory daoParams_,
+        NounsDAOStorageV3.DynamicQuorumParams memory dynamicQuorumParams_
     ) {
         // Admin set to msg.sender for initialization
         admin = msg.sender;
@@ -62,17 +58,14 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
         delegateTo(
             implementation_,
             abi.encodeWithSignature(
-                'initialize(address,address,address,uint256,uint256,uint256,(uint16,uint16,uint32),uint32,uint32,uint32)',
+                'initialize(address,address,address,address,address,(uint256,uint256,uint256,uint32,uint32,uint32),(uint16,uint16,uint32))',
                 timelock_,
                 nouns_,
+                forkEscrow_,
+                forkDAODeployer_,
                 vetoer_,
-                votingPeriod_,
-                votingDelay_,
-                proposalThresholdBPS_,
-                dynamicQuorumParams_,
-                lastMinuteWindowInBlocks_,
-                objectionPeriodDurationInBlocks_,
-                proposalUpdatablePeriodInBlocks_
+                daoParams_,
+                dynamicQuorumParams_
             )
         );
 

@@ -2,8 +2,9 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { DeployUtils } from '../helpers/DeployUtils.sol';
+import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
+import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
@@ -11,9 +12,10 @@ import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfa
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
+import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 
-abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
+abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -35,7 +37,12 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         string updateMessage
     );
 
-    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+    event ProposalDescriptionUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        string description,
+        string updateMessage
+    );
 
     event ProposalCreated(
         uint256 id,
@@ -67,54 +74,22 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
 
     NounsToken nounsToken;
     NounsDAOLogicV3 dao;
-    NounsDAOExecutor timelock;
+    NounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
-    address minter = makeAddr('minter');
+    address minter;
     address vetoer = makeAddr('vetoer');
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
     uint32 proposalUpdatablePeriodInBlocks = 10;
+    address forkEscrow;
 
     function setUp() public virtual {
-        timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
-
-        nounsToken = new NounsToken(
-            noundersDAO,
-            minter,
-            _deployAndPopulateV2(),
-            new NounsSeeder(),
-            IProxyRegistry(address(0))
-        );
-        nounsToken.transferOwnership(address(timelock));
-
-        dao = NounsDAOLogicV3(
-            payable(
-                new NounsDAOProxyV3(
-                    address(timelock),
-                    address(nounsToken),
-                    vetoer,
-                    address(timelock),
-                    address(new NounsDAOLogicV3()),
-                    VOTING_PERIOD,
-                    VOTING_DELAY,
-                    PROPOSAL_THRESHOLD,
-                    NounsDAOStorageV3.DynamicQuorumParams({
-                        minQuorumVotesBPS: 200,
-                        maxQuorumVotesBPS: 2000,
-                        quorumCoefficient: 10000
-                    }),
-                    lastMinuteWindowInBlocks,
-                    objectionPeriodDurationInBlocks,
-                    proposalUpdatablePeriodInBlocks
-                )
-            )
-        );
-
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(dao));
-        vm.prank(address(dao));
-        timelock.acceptAdmin();
+        dao = _deployDAOV3();
+        nounsToken = NounsToken(address(dao.nouns()));
+        minter = nounsToken.minter();
+        timelock = NounsDAOExecutorV2(payable(address(dao.timelock())));
+        forkEscrow = address(dao.forkEscrow());
     }
 
     function propose(

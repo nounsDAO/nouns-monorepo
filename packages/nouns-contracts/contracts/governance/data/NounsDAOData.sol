@@ -21,8 +21,9 @@ import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/O
 import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
+import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 
-contract NounsDAOData is OwnableUpgradeable {
+contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -329,4 +330,16 @@ contract NounsDAOData is OwnableUpgradeable {
     function isNouner(address account) internal view returns (bool) {
         return nounsToken.getPriorVotes(account, block.number - PRIOR_VOTES_BLOCKS_AGO) > 0;
     }
+
+    /**
+     * @dev Function that should revert when `msg.sender` is not authorized to upgrade the contract. Called by
+     * {upgradeTo} and {upgradeToAndCall}.
+     *
+     * Normally, this function will use an xref:access.adoc[access control] modifier such as {Ownable-onlyOwner}.
+     *
+     * ```solidity
+     * function _authorizeUpgrade(address) internal override onlyOwner {}
+     * ```
+     */
+    function _authorizeUpgrade(address) internal view override onlyOwner {}
 }

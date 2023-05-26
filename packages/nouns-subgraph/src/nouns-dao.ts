@@ -1,4 +1,4 @@
-import { BigInt, Bytes, log } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -15,6 +15,10 @@ import {
   ProposalDescriptionUpdated,
   ProposalTransactionsUpdated,
   SignatureCancelled,
+  EscrowedToFork,
+  WithdrawFromForkEscrow,
+  ExecuteFork,
+  JoinFork,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -24,6 +28,7 @@ import {
   getOrCreateDelegateWithNullOption,
   getOrCreateDynamicQuorumParams,
   getOrCreateProposalVersion,
+  getOrCreateFork,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -37,7 +42,15 @@ import {
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
-import { Proposal, ProposalCandidateSignature } from './types/schema';
+import {
+  Proposal,
+  ProposalCandidateSignature,
+  EscrowDeposit,
+  EscrowWithdrawal,
+  ForkJoin,
+  ForkJoinedNoun,
+  EscrowedNoun,
+} from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
@@ -338,4 +351,107 @@ function captureProposalVersion(
   previousVersion.description = proposal.description;
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
+}
+
+export function handleEscrowedToFork(event: EscrowedToFork): void {
+  const fork = getOrCreateFork(event.params.forkId);
+
+  const deposit = new EscrowDeposit(genericUniqueId(event));
+  deposit.fork = fork.id;
+  deposit.createdAt = event.block.timestamp;
+  deposit.owner = getOrCreateDelegate(event.params.owner.toHexString()).id;
+  deposit.tokenIDs = event.params.tokenIds;
+  deposit.proposalIDs = event.params.proposalIds;
+  deposit.reason = event.params.reason;
+  deposit.save();
+
+  fork.tokensInEscrowCount += event.params.tokenIds.length;
+  // Add escrowed Nouns to the list of Nouns connected to their escrow event
+  // Using an entity rather than just Noun IDs thinking it's helpful in creating the UI timeline view
+  for (let i = 0; i < event.params.tokenIds.length; i++) {
+    const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
+    const noun = new EscrowedNoun(id);
+    noun.fork = fork.id;
+    noun.noun = event.params.tokenIds[i].toString();
+    noun.owner = deposit.owner;
+    noun.escrowDeposit = deposit.id;
+    noun.save();
+  }
+
+  fork.save();
+}
+
+export function handleWithdrawFromForkEscrow(event: WithdrawFromForkEscrow): void {
+  const fork = getOrCreateFork(event.params.forkId);
+
+  const withdrawal = new EscrowWithdrawal(genericUniqueId(event));
+  withdrawal.fork = fork.id;
+  withdrawal.createdAt = event.block.timestamp;
+  withdrawal.owner = getOrCreateDelegate(event.params.owner.toHexString()).id;
+  withdrawal.tokenIDs = event.params.tokenIds;
+  withdrawal.save();
+
+  fork.tokensInEscrowCount -= event.params.tokenIds.length;
+
+  // Remove escrowed Nouns from the list
+  for (let i = 0; i < event.params.tokenIds.length; i++) {
+    const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
+    store.remove('EscrowedNoun', id);
+  }
+
+  fork.save();
+}
+
+export function handleExecuteFork(event: ExecuteFork): void {
+  const fork = getOrCreateFork(event.params.forkId);
+
+  fork.executed = true;
+  fork.executedAt = event.block.timestamp;
+  fork.forkingPeriodEndTimestamp = event.params.forkEndTimestamp;
+  fork.forkTreasury = event.params.forkTreasury;
+  fork.forkToken = event.params.forkToken;
+
+  if (fork.tokensInEscrowCount != event.params.tokensInEscrow.toI32()) {
+    log.warning('Number of tokens in escrow mismatch. Indexed count: {} vs Event count: {}', [
+      fork.tokensInEscrowCount.toString(),
+      event.params.tokensInEscrow.toString(),
+    ]);
+    fork.tokensInEscrowCount = event.params.tokensInEscrow.toI32();
+  }
+  fork.tokensForkingCount = fork.tokensInEscrowCount;
+
+  fork.save();
+}
+
+export function handleJoinFork(event: JoinFork): void {
+  const fork = getOrCreateFork(event.params.forkId);
+
+  const join = new ForkJoin(genericUniqueId(event));
+  join.fork = fork.id;
+  join.createdAt = event.block.timestamp;
+  join.owner = getOrCreateDelegate(event.params.owner.toHexString()).id;
+  join.tokenIDs = event.params.tokenIds;
+  join.proposalIDs = event.params.proposalIds;
+  join.reason = event.params.reason;
+  join.save();
+
+  fork.tokensForkingCount += event.params.tokenIds.length;
+
+  // Add newly joined Nouns to the list of joined Nouns
+  // Using an entity rather than just Noun IDs thinking it's helpful in creating the UI timeline view
+  for (let i = 0; i < event.params.tokenIds.length; i++) {
+    const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
+    const noun = new ForkJoinedNoun(id);
+    noun.fork = fork.id;
+    noun.noun = event.params.tokenIds[i].toString();
+    noun.owner = join.owner;
+    noun.forkJoin = join.id;
+    noun.save();
+  }
+
+  fork.save();
+}
+
+function genericUniqueId(event: ethereum.Event): string {
+  return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
 }

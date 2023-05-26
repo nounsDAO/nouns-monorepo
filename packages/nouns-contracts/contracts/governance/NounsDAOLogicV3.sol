@@ -26,29 +26,32 @@
 //
 // MODIFICATIONS
 // See NounsDAOLogicV1 for initial GovernorBravoDelegate modifications.
-
-// NounsDAOLogicV2 adds:
-// - `quorumParamsCheckpoints`, which store dynamic quorum parameters checkpoints
-// to be used when calculating the dynamic quorum.
-// - `_setDynamicQuorumParams(DynamicQuorumParams memory params)`, which allows the
-// DAO to update the dynamic quorum parameters' values.
-// - `getDynamicQuorumParamsAt(uint256 blockNumber_)`
-// - Individual setters of the DynamicQuorumParams members:
-//    - `_setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS)`
-//    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
-//    - `_setQuorumCoefficient(uint32 newQuorumCoefficient)`
-// - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
-// max quorum votes using the current Noun supply.
-// - New `Proposal` struct member:
-//    - `totalSupply` used in dynamic quorum calculation.
-//    - `creationBlock` used for retrieving checkpoints of votes and dynamic quorum params. This now
-// allows changing `votingDelay` without affecting the checkpoints lookup.
-// - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
-// quorum for a specific proposal.
-// - `proposals(uint256 proposalId)` instead of the implicit getter, to avoid stack-too-deep error
+// See NounsDAOLogicV2 for additional modifications
 //
-// NounsDAOLogicV2 removes:
-// - `quorumVotes()` has been replaced by `quorumVotes(uint256 proposalId)`.
+// NounsDAOLogicV3 adds:
+// - Contract has been broken down to use libraries because of contract size limitations
+// - Proposal editing: allowing proposers to update their proposal’s transactions and text description,
+// during the Updatable period only, which is the state upon proposal creation. Editing also works with signatures,
+// assuming the proposer is able to accumulate signatures from the same signers.
+// - Propose by signature: allowing Nouners and delegates to pool their voting power towards submitting a proposal,
+// by submitting their signature, instead of the current approach where sponsors must delegate their votes to help
+// a proposer achieve threshold.
+// - Objection-only Period: a conditional voting period that gets activated upon a last-minute proposal swing
+// from defeated to successful, affording against voters more reaction time.
+// Only against votes are possible during the objection period.
+// - Votes snapshot after voting delay: moving votes snapshot up, to provide Nouners with reaction time per proposal,
+// to get their votes ready (e.g. some might want to move their delegations around).
+// In NounsDAOLogicV2 the vote snapshot block is the proposal creation block.
+// - Nouns fork: any token holder can signal to fork (exit) in response to a governance proposal.
+// If a quorum of a configured threshold amount of tokens signals to exit, the fork will succeed.
+// This will deploy a new DAO and send part of the treasury to the new DAO.
+//
+// 2 new states have been added to the proposal state machine: Updatable, ObjectionPeriod
+//
+// Updated state machine:
+// Updatable -> Pending -> Active -> ObjectionPeriod (conditional) -> Succeeded -> Queued -> Executed
+//                                                                 ┖> Defeated
+//
 
 pragma solidity ^0.8.6;
 
@@ -57,12 +60,14 @@ import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
+import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
     using NounsDAOV3DynamicQuorum for StorageV3;
     using NounsDAOV3Votes for StorageV3;
     using NounsDAOV3Proposals for StorageV3;
+    using NounsDAOV3Fork for StorageV3;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -124,36 +129,34 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Used to initialize the contract during delegator contructor
+     * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
      * @param vetoer_ The address allowed to unilaterally veto proposals
-     * @param votingPeriod_ The initial voting period
-     * @param votingDelay_ The initial voting delay
-     * @param proposalThresholdBPS_ The initial proposal threshold in basis points
+     * @param daoParams_ Initial DAO parameters
      * @param dynamicQuorumParams_ The initial dynamic quorum parameters
      */
     function initialize(
         address timelock_,
         address nouns_,
+        address forkEscrow_,
+        address forkDAODeployer_,
         address vetoer_,
-        uint256 votingPeriod_,
-        uint256 votingDelay_,
-        uint256 proposalThresholdBPS_,
-        DynamicQuorumParams calldata dynamicQuorumParams_,
-        uint32 lastMinuteWindowInBlocks_,
-        uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_
+        NounsDAOParams calldata daoParams_,
+        DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
         if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
         if (msg.sender != ds.admin) revert AdminOnly();
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        ds._setVotingPeriod(votingPeriod_);
-        ds._setVotingDelay(votingDelay_);
-        ds._setProposalThresholdBPS(proposalThresholdBPS_);
-        ds.timelock = INounsDAOExecutor(timelock_);
+        ds._setVotingPeriod(daoParams_.votingPeriod);
+        ds._setVotingDelay(daoParams_.votingDelay);
+        ds._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
+        ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
+        ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
+        ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
@@ -161,9 +164,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        ds._setLastMinuteWindowInBlocks(lastMinuteWindowInBlocks_);
-        ds._setObjectionPeriodDurationInBlocks(objectionPeriodDurationInBlocks_);
-        ds._setProposalUpdatablePeriodInBlocks(proposalUpdatablePeriodInBlocks_);
+        ds._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        ds._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        ds._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 
     /**
@@ -191,6 +194,42 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description);
     }
 
+    /**
+     * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold.
+     * This proposal would be executed via the timelockV1 contract. This is meant to be used in case timelockV1
+     * is still holding funds or has special permissions to execute on certain contracts.
+     * @param targets Target addresses for proposal calls
+     * @param values Eth values for proposal calls
+     * @param signatures Function signatures for proposal calls
+     * @param calldatas Calldatas for proposal calls
+     * @param description String description of the proposal
+     * @return uint256 Proposal id of new proposal
+     */
+    function proposeOnTimelockV1(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) public returns (uint256) {
+        return
+            ds.proposeOnTimelockV1(
+                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                description
+            );
+    }
+
+    /**
+     * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @param targets Target addresses for proposal calls
+     * @param values Eth values for proposal calls
+     * @param signatures Function signatures for proposal calls
+     * @param calldatas Calldatas for proposal calls
+     * @param description String description of the proposal
+     * @return uint256 Proposal id of new proposal
+     */
     function proposeBySigs(
         ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
@@ -207,10 +246,30 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             );
     }
 
+    /**
+     * @notice Invalidates a signature that may be used for signing a proposal.
+     * Once a signature is canceled, the sender can no longer use it again.
+     * If the sender changes their mind and want to sign the proposal, they can change the expiry timestamp
+     * in order to produce a new signature.
+     * The signature will only be invalidated when used by the sender. If used by a different account, it will
+     * not be invalidated.
+     * @param sig The signature to cancel
+     */
     function cancelSig(bytes calldata sig) external {
         ds.cancelSig(sig);
     }
 
+    /**
+     * @notice Update a proposal transactions and description.
+     * Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposal(
         uint256 proposalId,
         address[] memory targets,
@@ -224,17 +283,27 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
-     * @param proposalId proposal's id
-     * @param description the updated description
-     * @param updateMessage short message to explain the update
+     * @notice Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
      */
-    function updateProposalDescription(uint256 proposalId, string calldata description, string calldata updateMessage) external {
+    function updateProposalDescription(
+        uint256 proposalId,
+        string calldata description,
+        string calldata updateMessage
+    ) external {
         ds.updateProposalDescription(proposalId, description, updateMessage);
     }
 
     /**
-     * Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     * @notice Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param updateMessage Short message to explain the update
      */
     function updateProposalTransactions(
         uint256 proposalId,
@@ -244,10 +313,23 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory updateMessage
     ) external {
-        // TODO: gas: should these be calldata instead of memory?
         ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
     }
 
+    /**
+     * @notice Update a proposal's transactions and description that was created with proposeBySigs.
+     * Only the proposer can update it, during the updateable period.
+     * Requires the original signers to sign the update.
+     * @param proposalId Proposal's id
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     */
     function updateProposalBySigs(
         uint256 proposalId,
         ProposerSignature[] memory proposerSignatures,
@@ -281,6 +363,15 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
     function execute(uint256 proposalId) external {
         ds.execute(proposalId);
+    }
+
+    /**
+     * @notice Executes a queued proposal on timelockV1 if eta has passed
+     * This is only required for proposal that were queued on timelockV1, but before the upgrade to DAO V3.
+     * These proposals will not have the `executeOnTimelockV1` bool turned on.
+     */
+    function executeOnTimelockV1(uint256 proposalId) external {
+        ds.executeOnTimelockV1(proposalId);
     }
 
     /**
@@ -357,7 +448,95 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return ds.proposalThreshold();
+        return ds.proposalThreshold(ds.adjustedTotalSupply());
+    }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   DAO FORK
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    /**
+     * @notice Escrow Nouns to contribute to the fork threshold
+     * @dev Requires approving the tokenIds or the entire noun token to the DAO contract
+     * @param tokenIds the tokenIds to escrow. They will be sent to the DAO once the fork threshold is reached and the escrow is closed.
+     * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
+     * @param reason the reason for want to fork. This will only be used to emit event.
+     */
+    function escrowToFork(
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
+        ds.escrowToFork(tokenIds, proposalIds, reason);
+    }
+
+    /**
+     * @notice Withdraw Nouns from the fork escrow. Only possible if the fork has not been executed.
+     * Only allowed to withdraw tokens that the sender has escrowed.
+     * @param tokenIds the tokenIds to withdraw
+     */
+    function withdrawFromForkEscrow(uint256[] calldata tokenIds) external {
+        ds.withdrawFromForkEscrow(tokenIds);
+    }
+
+    /**
+     * @notice Execute the fork. Only possible if the fork threshold has been met.
+     * This will deploy a new DAO and send part of the treasury to the new DAO's treasury.
+     * This will also close the active escrow and all nouns in the escrow belong to the original DAO.
+     * @return forkTreasury The address of the new DAO's treasury
+     * @return forkToken The address of the new DAO's token
+     */
+    function executeFork() external returns (address forkTreasury, address forkToken) {
+        return ds.executeFork();
+    }
+
+    /**
+     * @notice Joins a fork while a fork is active
+     * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
+     * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
+     * @param reason the reason for want to fork. This will only be used to emit event.
+     */
+    function joinFork(
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
+        ds.joinFork(tokenIds, proposalIds, reason);
+    }
+
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     * @param to the address to send the nouns to
+     */
+    function withdrawDAONounsFromEscrow(uint256[] calldata tokenIds, address to) external {
+        ds.withdrawDAONounsFromEscrow(tokenIds, to);
+    }
+
+    /**
+     * @notice Returns the number of nouns in supply minus nouns owned by the DAO, i.e. held in the treasury or in an
+     * escrow after it has closed.
+     * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
+     */
+    function adjustedTotalSupply() external view returns (uint256) {
+        return ds.adjustedTotalSupply();
+    }
+
+    /**
+     * @notice returns the required number of tokens to escrow to trigger a fork
+     */
+    function forkThreshold() external view returns (uint256) {
+        return ds.forkThreshold();
+    }
+
+    /**
+     * @notice Returns the number of tokens currently in escrow, contributing to the fork threshold
+     */
+    function numTokensInForkEscrow() external view returns (uint256) {
+        return ds.numTokensInForkEscrow();
     }
 
     /**
@@ -524,6 +703,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setPendingVetoer(newPendingVetoer);
     }
 
+    /**
+     * @notice Called by the pendingVetoer to accept role and update vetoer
+     */
     function _acceptVetoer() external {
         ds._acceptVetoer();
     }
@@ -582,17 +764,93 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setDynamicQuorumParams(newMinQuorumVotesBPS, newMaxQuorumVotesBPS, newQuorumCoefficient);
     }
 
+    /**
+     * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
+     */
     function _withdraw() external returns (uint256, bool) {
         return ds._withdraw();
     }
 
     /**
+     * @notice Admin function for setting the fork period
+     * @param newForkPeriod the new fork proposal period, in seconds
+     */
+    function _setForkPeriod(uint256 newForkPeriod) external {
+        ds._setForkPeriod(newForkPeriod);
+    }
+
+    /**
+     * @notice Admin function for setting the fork threshold
+     * @param newForkThresholdBPS the new fork proposal threshold, in basis points
+     */
+    function _setForkThresholdBPS(uint256 newForkThresholdBPS) external {
+        ds._setForkThresholdBPS(newForkThresholdBPS);
+    }
+
+    /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
-     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     * Sets it to the next proposal id.
      */
-    function _setVoteSnapshotBlockSwitchProposalId(uint256 newVoteSnapshotBlockSwitchProposalId) external {
-        ds._setVoteSnapshotBlockSwitchProposalId(newVoteSnapshotBlockSwitchProposalId);
+    function _setVoteSnapshotBlockSwitchProposalId() external {
+        ds._setVoteSnapshotBlockSwitchProposalId();
+    }
+
+    /**
+     * @notice Admin function for setting the fork DAO deployer contract
+     */
+    function _setForkDAODeployer(address newForkDAODeployer) external {
+        ds._setForkDAODeployer(newForkDAODeployer);
+    }
+
+    /**
+     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
+     */
+    function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) external {
+        ds._setErc20TokensToIncludeInFork(erc20tokens);
+    }
+
+    /**
+     * @notice Admin function for setting the fork escrow contract
+     */
+    function _setForkEscrow(address newForkEscrow) external {
+        ds._setForkEscrow(newForkEscrow);
+    }
+
+    /**
+     * @notice Admin function for setting the fork related parameters
+     * @param forkEscrow_ the fork escrow contract
+     * @param forkDAODeployer_ the fork dao deployer contract
+     * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
+     * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
+     * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork
+     */
+    function _setForkParams(
+        address forkEscrow_,
+        address forkDAODeployer_,
+        address[] calldata erc20TokensToIncludeInFork_,
+        uint256 forkPeriod_,
+        uint256 forkThresholdBPS_
+    ) external {
+        ds._setForkEscrow(forkEscrow_);
+        ds._setForkDAODeployer(forkDAODeployer_);
+        ds._setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
+        ds._setForkPeriod(forkPeriod_);
+        ds._setForkThresholdBPS(forkThresholdBPS_);
+    }
+
+    /**
+     * @notice Admin function for setting the timelocks and admin
+     * @param newTimelock the new timelock contract
+     * @param newTimelockV1 the new timelockV1 contract
+     * @param newAdmin the new admin address
+     */
+    function _setTimelocksAndAdmin(
+        address newTimelock,
+        address newTimelockV1,
+        address newAdmin
+    ) external {
+        ds._setTimelocksAndAdmin(newTimelock, newTimelockV1, newAdmin);
     }
 
     /**
@@ -644,14 +902,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @notice Current min quorum votes using Noun total supply
      */
     function minQuorumVotes() public view returns (uint256) {
-        return ds.minQuorumVotes();
+        return ds.minQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
-        return ds.maxQuorumVotes();
+        return ds.maxQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
@@ -722,8 +980,40 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.objectionPeriodDurationInBlocks;
     }
 
+    function erc20TokensToIncludeInFork() public view returns (address[] memory) {
+        return ds.erc20TokensToIncludeInFork;
+    }
+
+    function forkEscrow() public view returns (INounsDAOForkEscrow) {
+        return ds.forkEscrow;
+    }
+
+    function forkDAODeployer() public view returns (IForkDAODeployer) {
+        return ds.forkDAODeployer;
+    }
+
+    function forkEndTimestamp() public view returns (uint256) {
+        return ds.forkEndTimestamp;
+    }
+
+    function forkPeriod() public view returns (uint256) {
+        return ds.forkPeriod;
+    }
+
+    function forkThresholdBPS() public view returns (uint256) {
+        return ds.forkThresholdBPS;
+    }
+
     function proposalUpdatablePeriodInBlocks() public view returns (uint256) {
         return ds.proposalUpdatablePeriodInBlocks;
+    }
+
+    function timelockV1() public view returns (address) {
+        return address(ds.timelockV1);
+    }
+
+    function voteSnapshotBlockSwitchProposalId() public view returns (uint256) {
+        return ds.voteSnapshotBlockSwitchProposalId;
     }
 
     receive() external payable {}

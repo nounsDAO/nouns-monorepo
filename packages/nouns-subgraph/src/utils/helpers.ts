@@ -11,6 +11,7 @@ import {
   ProposalCandidate,
   ProposalCandidateSignature,
   ProposalFeedback,
+  Fork,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -199,4 +200,17 @@ export function getOrCreateProposalFeedback(id: string): ProposalFeedback {
     feedback = new ProposalFeedback(id);
   }
   return feedback;
+}
+
+export function getOrCreateFork(id: BigInt): Fork {
+  let fork = Fork.load(id.toString());
+  if (fork == null) {
+    fork = new Fork(id.toString());
+    fork.forkID = id;
+    fork.tokensInEscrowCount = 0;
+    fork.tokensForkingCount = 0;
+    fork.escrowedNouns = new Array<string>();
+    fork.joinedNouns = new Array<string>();
+  }
+  return fork;
 }

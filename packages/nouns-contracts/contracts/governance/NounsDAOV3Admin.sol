@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing admin related functions
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -26,10 +26,12 @@ library NounsDAOV3Admin {
     error AdminOnly();
     error VetoerOnly();
     error PendingVetoerOnly();
-
     error InvalidMinQuorumVotesBPS();
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
+    error ForkPeriodTooLong();
+    error InvalidObjectionPeriodDurationInBlocks();
+    error InvalidProposalUpdatablePeriodInBlocks();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -85,6 +87,21 @@ library NounsDAOV3Admin {
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
 
+    /// @notice Emitted when the fork DAO deployer is set
+    event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
+
+    /// @notice Emitted when the erc20 tokens to include in a fork are set
+    event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
+    /// @notice Emitted when the during of the forking period is set
+    event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
+
+    /// @notice Emitted when the threhsold for forking is set
+    event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
+
+    /// @notice Emitted when the main timelock, timelockV1 and admin are set
+    event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -112,14 +129,27 @@ library NounsDAOV3Admin {
     /// @notice The upper bound of maximum quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
 
+    /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
+    uint256 public constant MAX_FORK_PERIOD = 14 days;
+
+    /// @notice Upper bound for objection period duration in blocks.
+    uint256 public constant MAX_OBJECTION_PERIOD_BLOCKS = 7 days / 12;
+
+    /// @notice Upper bound for proposal updatable period duration in blocks.
+    uint256 public constant MAX_UPDATABLE_PERIOD_BLOCKS = 7 days / 12;
+
+    modifier onlyAdmin(NounsDAOStorageV3.StorageV3 storage ds) {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+        _;
+    }
+
     /**
      * @notice Admin function for setting the voting delay
      * @param newVotingDelay new voting delay, in blocks
      */
-    function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external onlyAdmin(ds) {
         require(
             newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
             'NounsDAO::_setVotingDelay: invalid voting delay'
@@ -134,10 +164,7 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the voting period
      * @param newVotingPeriod new voting period, in blocks
      */
-    function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external onlyAdmin(ds) {
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
             'NounsDAO::_setVotingPeriod: invalid voting period'
@@ -155,10 +182,8 @@ library NounsDAOV3Admin {
      */
     function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)
         external
+        onlyAdmin(ds)
     {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
@@ -170,13 +195,16 @@ library NounsDAOV3Admin {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
     }
 
+    /**
+     * @notice Admin function for setting the objection period duration
+     * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
+     */
     function _setObjectionPeriodDurationInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newObjectionPeriodDurationInBlocks
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    ) external onlyAdmin(ds) {
+        if (newObjectionPeriodDurationInBlocks > MAX_OBJECTION_PERIOD_BLOCKS)
+            revert InvalidObjectionPeriodDurationInBlocks();
 
         uint32 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
         ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
@@ -184,26 +212,30 @@ library NounsDAOV3Admin {
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
+    /**
+     * @notice Admin function for setting the objection period last minute window
+     * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
+     */
     function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
         external
+        onlyAdmin(ds)
     {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
         uint32 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
         ds.lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
 
         emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
     }
 
+    /**
+     * @notice Admin function for setting the proposal updatable period
+     * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
+     */
     function _setProposalUpdatablePeriodInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newProposalUpdatablePeriodInBlocks
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    ) external onlyAdmin(ds) {
+        if (newProposalUpdatablePeriodInBlocks > MAX_UPDATABLE_PERIOD_BLOCKS)
+            revert InvalidProposalUpdatablePeriodInBlocks();
 
         uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
         ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
@@ -216,10 +248,7 @@ library NounsDAOV3Admin {
      * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
      * @param newPendingAdmin New pending admin.
      */
-    function _setPendingAdmin(NounsDAOStorageV3.StorageV3 storage ds, address newPendingAdmin) external {
-        // Check caller = admin
-        require(msg.sender == ds.admin, 'NounsDAO::_setPendingAdmin: admin only');
-
+    function _setPendingAdmin(NounsDAOStorageV3.StorageV3 storage ds, address newPendingAdmin) external onlyAdmin(ds) {
         // Save current value, if any, for inclusion in log
         address oldPendingAdmin = ds.pendingAdmin;
 
@@ -269,6 +298,9 @@ library NounsDAOV3Admin {
         ds.pendingVetoer = newPendingVetoer;
     }
 
+    /**
+     * @notice Called by the pendingVetoer to accept role and update vetoer
+     */
     function _acceptVetoer(NounsDAOStorageV3.StorageV3 storage ds) external {
         if (msg.sender != ds.pendingVetoer) {
             revert PendingVetoerOnly();
@@ -306,10 +338,10 @@ library NounsDAOV3Admin {
      *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
-    function _setMinQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMinQuorumVotesBPS) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setMinQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMinQuorumVotesBPS)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -336,10 +368,10 @@ library NounsDAOV3Admin {
      *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be higher than or equal to minQuorumVotesBPS
      */
-    function _setMaxQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMaxQuorumVotesBPS) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setMaxQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMaxQuorumVotesBPS)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -363,10 +395,10 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the dynamic quorum coefficient
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
-    function _setQuorumCoefficient(NounsDAOStorageV3.StorageV3 storage ds, uint32 newQuorumCoefficient) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    function _setQuorumCoefficient(NounsDAOStorageV3.StorageV3 storage ds, uint32 newQuorumCoefficient)
+        external
+        onlyAdmin(ds)
+    {
         NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
 
         uint32 oldQuorumCoefficient = params.quorumCoefficient;
@@ -392,10 +424,7 @@ library NounsDAOV3Admin {
         uint16 newMinQuorumVotesBPS,
         uint16 newMaxQuorumVotesBPS,
         uint32 newQuorumCoefficient
-    ) public {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    ) public onlyAdmin(ds) {
         if (
             newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
             newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
@@ -423,11 +452,10 @@ library NounsDAOV3Admin {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
-    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external returns (uint256, bool) {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    /**
+     * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
+     */
+    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) returns (uint256, bool) {
         uint256 amount = address(this).balance;
         (bool sent, ) = msg.sender.call{ value: amount }('');
 
@@ -439,23 +467,92 @@ library NounsDAOV3Admin {
     /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
-     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     * Sets it to the next proposal id.
      */
-    function _setVoteSnapshotBlockSwitchProposalId(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 newVoteSnapshotBlockSwitchProposalId
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
+    function _setVoteSnapshotBlockSwitchProposalId(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) {
+        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+
         ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
         emit VoteSnapshotBlockSwitchProposalIdSet(
             oldVoteSnapshotBlockSwitchProposalId,
             newVoteSnapshotBlockSwitchProposalId
         );
+    }
+
+    /**
+     * @notice Admin function for setting the fork DAO deployer contract
+     */
+    function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer)
+        external
+        onlyAdmin(ds)
+    {
+        address oldForkDAODeployer = address(ds.forkDAODeployer);
+        ds.forkDAODeployer = IForkDAODeployer(newForkDAODeployer);
+
+        emit ForkDAODeployerSet(oldForkDAODeployer, newForkDAODeployer);
+    }
+
+    /**
+     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
+     */
+    function _setErc20TokensToIncludeInFork(NounsDAOStorageV3.StorageV3 storage ds, address[] calldata erc20tokens)
+        external
+        onlyAdmin(ds)
+    {
+        emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
+
+        ds.erc20TokensToIncludeInFork = erc20tokens;
+    }
+
+    /**
+     * @notice Admin function for setting the fork escrow contract
+     */
+    function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
+        ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
+    }
+
+    function _setForkPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkPeriod) external onlyAdmin(ds) {
+        if (newForkPeriod > MAX_FORK_PERIOD) {
+            revert ForkPeriodTooLong();
+        }
+
+        emit ForkPeriodSet(ds.forkPeriod, newForkPeriod);
+
+        ds.forkPeriod = newForkPeriod;
+    }
+
+    /**
+     * @notice Admin function for setting the fork threshold
+     * @param newForkThresholdBPS the new fork proposal threshold, in basis points
+     */
+    function _setForkThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkThresholdBPS)
+        external
+        onlyAdmin(ds)
+    {
+        emit ForkThresholdSet(ds.forkThresholdBPS, newForkThresholdBPS);
+
+        ds.forkThresholdBPS = newForkThresholdBPS;
+    }
+
+    /**
+     * @notice Admin function for setting the timelocks and admin
+     * @param timelock the new timelock contract
+     * @param timelockV1 the new timelockV1 contract
+     * @param admin the new admin address
+     */
+    function _setTimelocksAndAdmin(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        address timelock,
+        address timelockV1,
+        address admin
+    ) external onlyAdmin(ds) {
+        ds.timelock = INounsDAOExecutorV2(timelock);
+        ds.timelockV1 = INounsDAOExecutor(timelockV1);
+        ds.admin = admin;
+
+        emit TimelocksAndAdminSet(timelock, timelockV1, admin);
     }
 
     function _writeQuorumParamsCheckpoint(

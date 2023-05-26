@@ -7,14 +7,14 @@ import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.s
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
-import { DeployUtils } from './DeployUtils.sol';
+import { DeployUtilsFork } from './DeployUtilsFork.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 import { Utils } from './Utils.sol';
 
-abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
+abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
     NounsDAOLogicV1 daoProxy;
     NounsToken nounsToken;
     NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
@@ -42,7 +42,11 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         utils = new Utils();
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal virtual returns (NounsDAOLogicV1);
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal virtual returns (NounsDAOLogicV1);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -105,5 +109,23 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
 
     function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
         return NounsDAOLogicV2(payable(address(daoProxy)));
+    }
+
+    function deployForkDAOProxy() internal returns (NounsDAOLogicV1) {
+        (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
+        timelock = NounsDAOExecutor(payable(treasuryAddress));
+        nounsToken = NounsToken(tokenAddress);
+        minter = nounsToken.minter();
+
+        NounsDAOLogicV1 dao = NounsDAOLogicV1(daoAddress);
+
+        vm.startPrank(address(dao.timelock()));
+        dao._setVotingPeriod(votingPeriod);
+        dao._setVotingDelay(votingDelay);
+        dao._setProposalThresholdBPS(proposalThresholdBPS);
+        dao._setQuorumVotesBPS(1000);
+        vm.stopPrank();
+
+        return NounsDAOLogicV1(daoAddress);
     }
 }

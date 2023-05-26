@@ -1,23 +1,34 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
+import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
 type LocalContractName =
-  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2'>
+  | Exclude<
+      ContractName,
+      'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
+    >
   | 'NounsDAOLogicV3'
   | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
   | 'NounsDAOV3DynamicQuorum'
   | 'NounsDAOV3Proposals'
   | 'NounsDAOV3Votes'
+  | 'NounsDAOV3Fork'
+  | 'NounsDAOForkEscrow'
+  | 'ForkDAODeployer'
+  | 'NounsTokenFork'
+  | 'NounsAuctionHouseFork'
+  | 'NounsDAOLogicV1Fork'
+  | 'NounsDAOExecutorV2'
+  | 'NounsDAOExecutorProxy'
   | 'WETH'
   | 'Multicall2'
   | 'NounsDAOData'
-  | 'NounsDAODataProxy'
-  | 'NounsDAODataProxyAdmin';
+  | 'NounsDAODataProxy';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -83,7 +94,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
 
     const NOUNS_ART_NONCE_OFFSET = 5;
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 10;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 17;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 24;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
@@ -145,9 +156,6 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
             ]),
         ],
       },
-      NounsDAOExecutor: {
-        args: [expectedNounsDAOProxyAddress, args.timelockDelay],
-      },
       NounsDAOV3DynamicQuorum: {},
       NounsDAOV3Admin: {
         libraries: () => ({
@@ -156,33 +164,68 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       },
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
+      NounsDAOV3Fork: {},
       NounsDAOLogicV3: {
         libraries: () => ({
           NounsDAOV3Admin: contracts.NounsDAOV3Admin.instance?.address as string,
           NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
           NounsDAOV3Proposals: contracts.NounsDAOV3Proposals.instance?.address as string,
           NounsDAOV3Votes: contracts.NounsDAOV3Votes.instance?.address as string,
+          NounsDAOV3Fork: contracts.NounsDAOV3Fork.instance?.address as string,
         }),
         waitForConfirmation: true,
       },
+      NounsDAOForkEscrow: {
+        args: [
+          expectedNounsDAOProxyAddress,
+          () => contracts.NounsToken.instance?.address as string,
+        ],
+      },
+      NounsTokenFork: {},
+      NounsAuctionHouseFork: {},
+      NounsDAOLogicV1Fork: {},
+      NounsDAOExecutorV2: {},
+      NounsDAOExecutorProxy: {
+        args: [
+          () => contracts.NounsDAOExecutorV2.instance?.address,
+          () =>
+            new Interface(NounsDAOExecutorV2ABI).encodeFunctionData('initialize', [
+              expectedNounsDAOProxyAddress,
+              args.timelockDelay,
+            ]),
+        ],
+      },
+      ForkDAODeployer: {
+        args: [
+          () => contracts.NounsTokenFork.instance?.address,
+          () => contracts.NounsAuctionHouseFork.instance?.address,
+          () => contracts.NounsDAOLogicV1Fork.instance?.address,
+          () => contracts.NounsDAOExecutorV2.instance?.address,
+          60 * 60 * 24 * 30, // 30 days
+        ],
+      },
       NounsDAOProxyV3: {
         args: [
-          () => contracts.NounsDAOExecutor.instance?.address, // timelock
+          () => contracts.NounsDAOExecutorProxy.instance?.address, // timelock
           () => contracts.NounsToken.instance?.address, // token
+          () => contracts.NounsDAOForkEscrow.instance?.address, // forkEscrow
+          () => contracts.ForkDAODeployer.instance?.address, // forkDAODeployer
           args.noundersdao || deployer.address, // vetoer
-          () => contracts.NounsDAOExecutor.instance?.address, // admin
+          () => contracts.NounsDAOExecutorProxy.instance?.address, // admin
           () => contracts.NounsDAOLogicV3.instance?.address, // implementation
-          args.votingPeriod, // votingPeriod
-          args.votingDelay, // votingDelay
-          args.proposalThresholdBps, // proposalThresholdBps
+          {
+            votingPeriod: args.votingPeriod,
+            votingDelay: args.votingDelay,
+            proposalThresholdBPS: args.proposalThresholdBps,
+            lastMinuteWindowInBlocks: 0,
+            objectionPeriodDurationInBlocks: 0,
+            proposalUpdatablePeriodInBlocks: 0,
+          }, // DAOParams
           {
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
           }, // DynamicQuorumParams
-          50, // lastMinuteWindowInBlocks
-          100, // objectionPeriodDurationInBlocks
-          1000, // proposalUpdatablePeriodInBlocks
         ],
         waitForConfirmation: true,
       },
@@ -191,16 +234,12 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         args: [() => contracts.NounsToken.instance?.address, expectedNounsDAOProxyAddress],
         waitForConfirmation: true,
       },
-      NounsDAODataProxyAdmin: {
-        waitForConfirmation: true,
-      },
       NounsDAODataProxy: {
         args: [
           () => contracts.NounsDAOData.instance?.address,
-          () => contracts.NounsDAODataProxyAdmin.instance?.address,
           () =>
             new Interface(NounsDaoDataABI).encodeFunctionData('initialize', [
-              contracts.NounsDAOExecutor.instance?.address,
+              contracts.NounsDAOExecutorProxy.instance?.address,
               args.createCandidateCost,
               args.updateCandidateCost,
             ]),

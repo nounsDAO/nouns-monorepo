@@ -7,7 +7,7 @@ import {
   ProposalCandidateUpdated,
   SignatureAdded,
 } from './types/NounsDAOData/NounsDAOData';
-import { ProposalCandidate, ProposalCandidateVersion } from './types/schema';
+import { ProposalCandidateVersion } from './types/schema';
 import {
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
@@ -91,7 +91,7 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   const candidateId = event.params.proposer.toHexString().concat('-').concat(event.params.slug);
   const candidate = getOrCreateProposalCandidate(candidateId);
 
-  const latestVersion = ProposalCandidateVersion.load(candidate.latestVersion!)!;
+  const latestVersion = ProposalCandidateVersion.load(candidate.latestVersion)!;
   if (latestVersion.encodedProposalHash != event.params.encodedPropHash) {
     log.error('Wrong encodedProposalHash. Latest version: {}. Event: {}. tx_hash: {}', [
       latestVersion.encodedProposalHash.toHexString(),
@@ -101,7 +101,7 @@ export function handleSignatureAdded(event: SignatureAdded): void {
     return;
   }
 
-  candidateSig.version = candidate.latestVersion!;
+  candidateSig.version = candidate.latestVersion;
   candidateSig.signer = getOrCreateDelegate(event.params.signer.toHexString()).id;
   candidateSig.sig = event.params.sig;
   candidateSig.expirationTimestamp = event.params.expirationTimestamp;
@@ -157,18 +157,4 @@ function captureProposalCandidateVersion(
   version.save();
 
   return version;
-}
-
-function getMatchingCandidateVersion(
-  versionIds: string[],
-  encodedPropHash: Bytes,
-): ProposalCandidateVersion | null {
-  for (let i = 0; i < versionIds.length; i++) {
-    const versionId = versionIds[i];
-    const version = getOrCreateProposalCandidateVersion(versionId);
-    if (encodedPropHash == version.encodedProposalHash) {
-      return version;
-    }
-  }
-  return null;
 }

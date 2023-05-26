@@ -427,7 +427,17 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
         expectNewPropEvents(txs, proposerWithNoVotes, dao.proposalCount() + 1, 1, 0, expectedSigners);
 
         vm.prank(proposerWithNoVotes);
-        dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
+        uint256 proposalId = dao.proposeBySigs(
+            proposerSignatures,
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            'description'
+        );
+
+        NounsDAOStorageV3.ProposalCondensed memory proposal = dao.proposalsV3(proposalId);
+        assertEq(proposal.signers, expectedSigners);
     }
 
     function test_givenProposerWithNoVotesAndERC1271SignerWithEnoughVotes_worksAndEmitsEvents() public {
@@ -454,7 +464,4 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
         vm.prank(proposerWithNoVotes);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
-
-    // TODO tests
-    // test for event
 }

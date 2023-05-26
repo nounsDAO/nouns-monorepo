@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing functions related to quorum calculations
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -18,8 +18,11 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
+import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 
 library NounsDAOV3DynamicQuorum {
+    using NounsDAOV3Fork for NounsDAOStorageV3.StorageV3;
+
     error UnsafeUint16Cast();
 
     /**
@@ -120,15 +123,23 @@ library NounsDAOV3DynamicQuorum {
     /**
      * @notice Current min quorum votes using Noun total supply
      */
-    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.nouns.totalSupply());
+    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
+        internal
+        view
+        returns (uint256)
+    {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, adjustedTotalSupply);
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
-    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
+    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
+        internal
+        view
+        returns (uint256)
+    {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, adjustedTotalSupply);
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {

@@ -29,6 +29,8 @@
 // See NounsDAOLogicV1.sol for more details.
 // NounsDAOStorageV1Adjusted and NounsDAOStorageV2 add support for a dynamic vote quorum.
 // See NounsDAOLogicV2.sol for more details.
+// NounsDAOStorageV3
+// See NounsDAOLogicV3.sol for more details.
 
 pragma solidity ^0.8.6;
 
@@ -145,6 +147,9 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string description
     );
 
+    /// @notice Emitted when a proposal is created to be executed on timelockV1
+    event ProposalCreatedOnTimelockV1(uint256 id);
+
     /// @notice Emitted when a proposal is updated
     event ProposalUpdated(
         uint256 indexed id,
@@ -157,6 +162,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
+    /// @notice Emitted when a proposal's transactions are updated
     event ProposalTransactionsUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -167,7 +173,13 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
-    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+    /// @notice Emitted when a proposal's description is updated
+    event ProposalDescriptionUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        string description,
+        string updateMessage
+    );
 
     /// @notice Emitted when a proposal is set to have an objection period
     event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
@@ -195,6 +207,54 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         uint256 oldVoteSnapshotBlockSwitchProposalId,
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
+
+    /// @notice Emitted when the erc20 tokens to include in a fork are set
+    event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
+    /// @notice Emitted when the fork DAO deployer is set
+    event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
+
+    /// @notice Emitted when the during of the forking period is set
+    event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
+
+    /// @notice Emitted when the threhsold for forking is set
+    event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
+
+    /// @notice Emitted when the main timelock, timelockV1 and admin are set
+    event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
+
+    /// @notice Emitted when someones adds nouns to the fork escrow
+    event EscrowedToFork(
+        uint32 indexed forkId,
+        address indexed owner,
+        uint256[] tokenIds,
+        uint256[] proposalIds,
+        string reason
+    );
+
+    /// @notice Emitted when the owner withdraws their nouns from the fork escrow
+    event WithdrawFromForkEscrow(uint32 indexed forkId, address indexed owner, uint256[] tokenIds);
+
+    /// @notice Emitted when the fork is executed and the forking period begins
+    event ExecuteFork(
+        uint32 indexed forkId,
+        address forkTreasury,
+        address forkToken,
+        uint256 forkEndTimestamp,
+        uint256 tokensInEscrow
+    );
+
+    /// @notice Emitted when someone joins a fork during the forking period
+    event JoinFork(
+        uint32 indexed forkId,
+        address indexed owner,
+        uint256[] tokenIds,
+        uint256[] proposalIds,
+        string reason
+    );
+
+    /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
+    event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
 }
 
 contract NounsDAOProxyStorage {
@@ -408,8 +468,7 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         Queued,
         Expired,
         Executed,
-        Vetoed,
-        ObjectionPeriod
+        Vetoed
     }
 }
 
@@ -424,9 +483,6 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
 
     /// @notice Pending new vetoer
     address public pendingVetoer;
-
-    uint256 public lastMinuteWindowInBlocks;
-    uint256 public objectionPeriodDurationInBlocks;
 
     struct DynamicQuorumParams {
         /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
@@ -518,6 +574,74 @@ interface NounsTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint256);
+
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
+
+    function balanceOf(address owner) external view returns (uint256 balance);
+
+    function ownerOf(uint256 tokenId) external view returns (address owner);
+
+    function minter() external view returns (address);
+
+    function mint() external returns (uint256);
+
+    function setApprovalForAll(address operator, bool approved) external;
+}
+
+interface IForkDAODeployer {
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
+        external
+        returns (address treasury, address token);
+
+    function tokenImpl() external view returns (address);
+
+    function auctionImpl() external view returns (address);
+
+    function governorImpl() external view returns (address);
+
+    function treasuryImpl() external view returns (address);
+}
+
+interface INounsDAOExecutorV2 is INounsDAOExecutor {
+    function sendETH(address newDAOTreasury, uint256 ethToSend) external returns (bool success);
+
+    function sendERC20(
+        address newDAOTreasury,
+        address erc20Token,
+        uint256 tokensToSend
+    ) external returns (bool success);
+}
+
+interface INounsDAOForkEscrow {
+    function markOwner(address owner, uint256[] calldata tokenIds) external;
+
+    function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external;
+
+    function closeEscrow() external returns (uint32);
+
+    function numTokensInEscrow() external view returns (uint256);
+
+    function numTokensOwnedByDAO() external view returns (uint256);
+
+    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external;
+
+    function forkId() external view returns (uint32);
+
+    function nounsToken() external view returns (NounsTokenLike);
+
+    function dao() external view returns (address);
+
+    function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address);
 }
 
 contract NounsDAOStorageV3 {
@@ -545,7 +669,7 @@ contract NounsDAOStorageV3 {
         /// @notice The total number of proposals
         uint256 proposalCount;
         /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-        INounsDAOExecutor timelock;
+        INounsDAOExecutorV2 timelock;
         /// @notice The address of the Nouns tokens
         NounsTokenLike nouns;
         /// @notice The official record of all proposals ever proposed
@@ -559,10 +683,32 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         /// @notice user => sig => isCancelled: signatures that have been cancelled by the signer and are no longer valid
         mapping(address => mapping(bytes32 => bool)) cancelledSigs;
+        /// @notice The number of blocks before voting ends during which the objection period can be initiated
         uint32 lastMinuteWindowInBlocks;
+        /// @notice Length of the objection period in blocks
         uint32 objectionPeriodDurationInBlocks;
+        /// @notice Length of proposal updatable period in block
         uint32 proposalUpdatablePeriodInBlocks;
+        /// @notice address of the DAO's fork escrow contract
+        INounsDAOForkEscrow forkEscrow;
+        /// @notice address of the DAO's fork deployer contract
+        IForkDAODeployer forkDAODeployer;
+        /// @notice ERC20 tokens to include when sending funds to a deployed fork
+        address[] erc20TokensToIncludeInFork;
+        /// @notice The treasury contract of the last deployed fork
+        address forkDAOTreasury;
+        /// @notice The token contract of the last deployed fork
+        address forkDAOToken;
+        /// @notice Timestamp at which the last fork period ends
+        uint256 forkEndTimestamp;
+        /// @notice Fork period in seconds
+        uint256 forkPeriod;
+        /// @notice Threshold defined in basis points (10,000 = 100%) required for forking
+        uint256 forkThresholdBPS;
+        /// @notice Address of the original timelock
+        INounsDAOExecutor timelockV1;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
+        /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
     }
@@ -607,10 +753,17 @@ contract NounsDAOStorageV3 {
         /// @notice The total supply at the time of proposal creation
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
-        uint256 creationBlock;
+        uint64 creationBlock;
+        /// @notice The last block which allows updating a proposal's description and transactions
+        uint64 updatePeriodEndBlock;
+        /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
+        uint64 objectionPeriodEndBlock;
+        /// @dev unused for now
+        uint64 placeholder;
+        /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
-        uint256 updatePeriodEndBlock;
-        uint256 objectionPeriodEndBlock;
+        /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
+        bool executeOnTimelockV1;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -624,8 +777,11 @@ contract NounsDAOStorageV3 {
     }
 
     struct ProposerSignature {
+        /// @notice Signature of a proposal
         bytes sig;
+        /// @notice The address of the signer
         address signer;
+        /// @notice The timestamp until which the signature is valid
         uint256 expirationTimestamp;
     }
 
@@ -660,9 +816,14 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
+        /// @notice The last block which allows updating a proposal's description and transactions
         uint256 updatePeriodEndBlock;
+        /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
         uint256 objectionPeriodEndBlock;
+        /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
+        bool executeOnTimelockV1;
     }
 
     struct DynamicQuorumParams {
@@ -673,6 +834,15 @@ contract NounsDAOStorageV3 {
         /// @notice The dynamic quorum coefficient
         /// @dev Assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
         uint32 quorumCoefficient;
+    }
+
+    struct NounsDAOParams {
+        uint256 votingPeriod;
+        uint256 votingDelay;
+        uint256 proposalThresholdBPS;
+        uint32 lastMinuteWindowInBlocks;
+        uint32 objectionPeriodDurationInBlocks;
+        uint32 proposalUpdatablePeriodInBlocks;
     }
 
     /// @notice A checkpoint for storing dynamic quorum params from a given block

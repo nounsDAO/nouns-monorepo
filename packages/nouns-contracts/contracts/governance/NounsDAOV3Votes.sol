@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title
+/// @title Library for NounsDAOLogicV3 contract containing all the voting related code
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -22,13 +22,6 @@ import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 
 library NounsDAOV3Votes {
     using NounsDAOV3Proposals for NounsDAOStorageV3.StorageV3;
-
-    error VetoerBurned();
-    error VetoerOnly();
-    error CantVetoExecutedProposal();
-
-    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
-    event ProposalVetoed(uint256 id);
 
     /// @notice An event emitted when a vote has been cast on a proposal
     /// @param voter The address which casted a vote
@@ -65,39 +58,6 @@ library NounsDAOV3Votes {
 
     /// @notice The maximum basefee the DAO will refund voters on
     uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
-
-    /**
-     * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
-     * @param proposalId The id of the proposal to veto
-     */
-    function veto(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
-        if (ds.vetoer == address(0)) {
-            revert VetoerBurned();
-        }
-
-        if (msg.sender != ds.vetoer) {
-            revert VetoerOnly();
-        }
-
-        if (ds.stateInternal(proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
-            revert CantVetoExecutedProposal();
-        }
-
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-
-        proposal.vetoed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            ds.timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalVetoed(proposalId);
-    }
 
     /**
      * @notice Cast a vote for a proposal
@@ -210,6 +170,9 @@ library NounsDAOV3Votes {
 
     /**
      * @notice Internal function that caries out voting logic
+     * In case of a vote during the 'last minute window', which changes the proposal outcome from being defeated to
+     * passing, and objection period is adding to the proposal's voting period.
+     * During the objection period, only votes against a proposal can be cast.
      * @param voter The voter that is casting their vote
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
@@ -250,7 +213,7 @@ library NounsDAOV3Votes {
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposal));
+        uint96 votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposalId, proposal));
 
         bool isForVoteInLastMinuteWindow = false;
         if (support == 1) {
@@ -280,7 +243,7 @@ library NounsDAOV3Votes {
             // second part of the vote flip check
             !ds.isDefeated(proposal)
         ) {
-            proposal.objectionPeriodEndBlock = proposal.endBlock + ds.objectionPeriodDurationInBlocks;
+            proposal.objectionPeriodEndBlock = uint64(proposal.endBlock + ds.objectionPeriodDurationInBlocks);
 
             emit ProposalObjectionPeriodSet(proposal.id, proposal.objectionPeriodEndBlock);
         }
@@ -303,7 +266,10 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
-        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposal));
+        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(
+            voter,
+            proposalVoteSnapshotBlock(ds, proposalId, proposal)
+        );
         receipt.hasVoted = true;
         receipt.support = 0;
         proposal.againstVotes = proposal.againstVotes + votes;
@@ -328,12 +294,14 @@ library NounsDAOV3Votes {
 
     function proposalVoteSnapshotBlock(
         NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
         NounsDAOStorageV3.Proposal storage proposal
     ) internal view returns (uint256) {
         // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
         // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.
         // In that version upgrade we can also zero-out and remove this storage variable for max cleanup.
-        if (proposal.id < ds.voteSnapshotBlockSwitchProposalId || ds.voteSnapshotBlockSwitchProposalId == 0) {
+        uint256 voteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+        if (proposalId < voteSnapshotBlockSwitchProposalId || voteSnapshotBlockSwitchProposalId == 0) {
             return proposal.creationBlock;
         }
         return proposal.startBlock;

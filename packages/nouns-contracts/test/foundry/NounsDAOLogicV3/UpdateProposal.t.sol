@@ -245,6 +245,9 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
 }
 
 contract UpdateProposalTransactionsTest is UpdateProposalBaseTest {
+    function test_proposalsV3GetterReturnsUpdatableEndBlock() public {
+        assertEq(dao.proposalsV3(proposalId).updatePeriodEndBlock, block.number - 1 + proposalUpdatablePeriodInBlocks);
+    }
 
     function test_givenNoTxs_reverts() public {
         address[] memory targets = new address[](0);

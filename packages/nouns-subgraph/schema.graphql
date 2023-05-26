@@ -521,3 +521,101 @@ type ProposalFeedback @entity(immutable: true) {
   "The optional feedback reason free text"
   reason: String
 }
+
+type Fork @entity {
+  "The fork ID given by the escrow contract"
+  id: ID!
+
+  "The fork ID as int, to make it easier to query for the latest fork"
+  forkID: BigInt!
+
+  tokensInEscrowCount: Int!
+
+  escrowDeposits: [EscrowDeposit!]! @derivedFrom(field: "fork")
+
+  escrowWithdrawals: [EscrowWithdrawal!]! @derivedFrom(field: "fork")
+
+  executed: Boolean
+
+  executedAt: BigInt
+
+  forkingPeriodEndTimestamp: BigInt
+
+  forkTreasury: Bytes
+
+  forkToken: Bytes
+
+  tokensForkingCount: Int!
+
+  escrowedNouns: [EscrowedNoun!]! @derivedFrom(field: "fork")
+
+  joinedNouns: [ForkJoinedNoun!]! @derivedFrom(field: "fork")
+}
+
+type EscrowDeposit @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+
+  proposalIDs: [BigInt!]!
+
+  reason: String
+}
+
+type EscrowWithdrawal @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+}
+
+type ForkJoin @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+
+  proposalIDs: [BigInt!]!
+
+  reason: String
+}
+
+type EscrowedNoun @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  noun: Noun!
+
+  owner: Delegate!
+
+  escrowDeposit: EscrowDeposit!
+}
+
+type ForkJoinedNoun @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  noun: Noun!
+
+  owner: Delegate!
+
+  forkJoin: ForkJoin!
+}
