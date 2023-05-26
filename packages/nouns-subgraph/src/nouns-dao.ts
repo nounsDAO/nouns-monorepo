@@ -1,4 +1,4 @@
-import { BigInt, Bytes, log, ethereum } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -368,7 +368,6 @@ export function handleEscrowedToFork(event: EscrowedToFork): void {
   fork.tokensInEscrowCount += event.params.tokenIds.length;
   // Add escrowed Nouns to the list of Nouns connected to their escrow event
   // Using an entity rather than just Noun IDs thinking it's helpful in creating the UI timeline view
-  const escrowedNouns = fork.escrowedNouns;
   for (let i = 0; i < event.params.tokenIds.length; i++) {
     const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
     const noun = new EscrowedNoun(id);
@@ -376,9 +375,7 @@ export function handleEscrowedToFork(event: EscrowedToFork): void {
     noun.noun = event.params.tokenIds[i].toString();
     noun.escrowDeposit = deposit.id;
     noun.save();
-    escrowedNouns.push(noun.id);
   }
-  fork.escrowedNouns = escrowedNouns;
 
   fork.save();
 }
@@ -396,21 +393,10 @@ export function handleWithdrawFromForkEscrow(event: WithdrawFromForkEscrow): voi
   fork.tokensInEscrowCount -= event.params.tokenIds.length;
 
   // Remove escrowed Nouns from the list
-  // This is a helper map to know which Nouns were withdrawn
-  var withdrawn = new Map<string, boolean>();
   for (let i = 0; i < event.params.tokenIds.length; i++) {
     const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
-    withdrawn.set(id, true);
+    store.remove('EscrowedNoun', id);
   }
-
-  // We recreate the list of escrowed Nouns without the ones that were withdrawn
-  const escrowedNouns = new Array<string>();
-  for (let i = 0; i < fork.escrowedNouns.length; i++) {
-    if (!withdrawn.has(fork.escrowedNouns[i])) {
-      escrowedNouns.push(fork.escrowedNouns[i]);
-    }
-  }
-  fork.escrowedNouns = escrowedNouns;
 
   fork.save();
 }
@@ -452,7 +438,6 @@ export function handleJoinFork(event: JoinFork): void {
 
   // Add newly joined Nouns to the list of joined Nouns
   // Using an entity rather than just Noun IDs thinking it's helpful in creating the UI timeline view
-  const joinedNouns = fork.joinedNouns;
   for (let i = 0; i < event.params.tokenIds.length; i++) {
     const id = fork.id.toString().concat('-').concat(event.params.tokenIds[i].toString());
     const noun = new ForkJoinedNoun(id);
@@ -460,9 +445,7 @@ export function handleJoinFork(event: JoinFork): void {
     noun.noun = event.params.tokenIds[i].toString();
     noun.forkJoin = join.id;
     noun.save();
-    joinedNouns.push(noun.id);
   }
-  fork.joinedNouns = joinedNouns;
 
   fork.save();
 }
