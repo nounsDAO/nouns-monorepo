@@ -1,11 +1,11 @@
 import { ChainId } from '@usedapp/core';
-import { CHAIN_ID, ETHERSCAN_API_KEY } from '../config';
+import { CHAIN_ID, ChainSepolia, ETHERSCAN_API_KEY } from '../config';
 
-const getBaseURL = (network: ChainId) => {
+const getBaseURL = (network: number) => {
   switch (network) {
     case ChainId.Goerli:
       return 'https://goerli.etherscan.io/';
-    case ChainId.Sepolia:
+    case ChainSepolia.id:
       return 'https://sepolia.etherscan.io/';
     default:
       return 'https://etherscan.io/';
@@ -34,11 +34,11 @@ export const buildEtherscanHoldingsLink = (address: string): string => {
   return new URL(path, BASE_URL).toString();
 };
 
-const getApiBaseURL = (network: ChainId) => {
+const getApiBaseURL = (network: number) => {
   switch (network) {
     case ChainId.Goerli:
       return `https://api-goerli.etherscan.io/`;
-    case ChainId.Sepolia:
+    case ChainSepolia.id:
       return `https://api-sepolia.etherscan.io/`;
     default:
       return 'https://api.etherscan.io/';

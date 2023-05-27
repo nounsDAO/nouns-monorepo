@@ -1,8 +1,6 @@
-import {
-  ContractAddresses as PunkContractAddresses,
-  getContractAddressesForChainOrThrow,
-} from '@nouns/sdk';
+import { ContractAddresses as PunkContractAddresses } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
+import addresses from './addresses.json';
 
 interface ExternalContractAddresses {
   lidoToken: string | undefined;
@@ -17,7 +15,13 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Goerli | ChainId.Sepolia | ChainId.Mainnet | ChainId.Hardhat;
+export enum ChainSepolia {
+  id = 11155111,
+}
+
+type SupportedChains = ChainId.Goerli | ChainId.Mainnet | ChainId.Hardhat;
+
+type ExtendedSupportedChains = SupportedChains | ChainSepolia.id;
 
 interface CacheBucket {
   name: string;
@@ -55,14 +59,14 @@ export const createNetworkWsUrl = (network: string): string => {
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
-const app: Record<SupportedChains, AppConfig> = {
+const app: Record<ExtendedSupportedChains, AppConfig> = {
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/stan7123/punks2',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
-  [ChainId.Sepolia]: {
+  [ChainSepolia.id]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/stan7123/punks2',
@@ -82,11 +86,11 @@ const app: Record<SupportedChains, AppConfig> = {
   },
 };
 
-const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
+const externalAddresses: Record<ExtendedSupportedChains, ExternalContractAddresses> = {
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
   },
-  [ChainId.Sepolia]: {
+  [ChainSepolia.id]: {
     lidoToken: '0x93556903C7517120544418d5ceacDAbc09414D32',
   },
   [ChainId.Mainnet]: {
@@ -95,6 +99,18 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Hardhat]: {
     lidoToken: undefined,
   },
+};
+
+// TODO remove when added properly to nouns-sdk
+const getContractAddressesForChainOrThrow = (chainId: number): ContractAddresses => {
+  // @ts-ignore
+  const _addresses: Record<string, ContractAddresses> = addresses;
+  if (!_addresses[chainId]) {
+    throw new Error(
+      `Unknown chain id (${chainId}). No known contracts have been deployed on this chain.`,
+    );
+  }
+  return _addresses[chainId];
 };
 
 const getAddresses = (): ContractAddresses => {

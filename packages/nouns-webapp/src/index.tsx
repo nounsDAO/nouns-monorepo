@@ -27,7 +27,7 @@ import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
+import config, { CHAIN_ID, ChainSepolia, createNetworkHttpUrl } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
 import { NAuctionHouseFactory } from '@nouns/sdk';
@@ -82,7 +82,7 @@ export type AppDispatch = typeof store.dispatch;
 const supportedChainURLs = {
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
-  [ChainId.Sepolia]: createNetworkHttpUrl('sepolia'),
+  [ChainSepolia.id]: createNetworkHttpUrl('sepolia'),
   [ChainId.Hardhat]: 'http://localhost:8545',
 };
 
