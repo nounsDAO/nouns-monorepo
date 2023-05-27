@@ -1,3 +1,22 @@
+Goerli 27.05.2023
+
+┌─────────────────────────┬──────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────┐
+│         (index)         │                   Address                    │                           Deployment Hash                            │
+├─────────────────────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+│     NFTDescriptorV2     │ '0xe69094361f895c691D1d14996B707F5D223d37DD' │ '0x17fdf326852effd1df798db86b64b59f9e9c07330119ee8d4eb58a7f88d6a175' │
+│       SVGRenderer       │ '0xC0899b6D25764e98CD125e45c97587BFfF16e79D' │ '0x30058c55e9e60d446ed30e595b3d7a12c50277de25275aba40a35c6e975db6cb' │
+│      NDescriptorV2      │ '0x85F1BFDcb87293B0d9a4df539d3B543A156eb09E' │ '0x09c2ccce484bfa269a7a9be7cdc85c9c425d0c51c337f52a62cc072fff165221' │
+│        Inflator         │ '0xB7EebE9581aCC782cbd8dd0E4E70C58B928f3B74' │ '0x4f9a6697470b62e045f0f666746ec2b8166b80a8d3da2666166a3d237cff2f55' │
+│          NArt           │ '0xD9Dd8552A3483BD15C034252C3E8A6a4296444DB' │ '0x25980f059cc260981278d58cf111c55ccbfa7a03f2c216922acf6821a86c3dff' │
+│         NSeeder         │ '0xCc1ca660eeD4ea2eeb9A967862C967BA91Ab7A74' │ '0xbdc4ef2105abde29b838e5f93f960e44847b84b26f78300b390dad6658731747' │
+│         NToken          │ '0x91a46d6dc9fdfF596EcDefdD0f4D0c829C65ED0e' │ '0x13df3685cd796c56d4fea7fd604c024f78a6e51aa9a9117d92244bec6fefdd20' │
+│      NAuctionHouse      │ '0xa906ab22B21db9eb0346a9f65c855F2F89D34fb0' │ '0x8d434bcdf5470743b8d933be57b77c20dcaca30a6883500dae9132e3d046e64c' │
+│ NAuctionHouseProxyAdmin │ '0x526f7FbfA31C51230f6AF86Ad33aD51De2967CE1' │ '0x2179163df8019a9805e5780afe126eb15e43775c0ad4d0d5d8231ba874f215b7' │
+│   NAuctionHouseProxy    │ '0x8D5EC4CBd88621A931F9Ac30b92e9c48F210aeCb' │ '0xe200795572362110ec2faa81d1c1ac25daf4f09bb27b22c024ab85f6b4bcae74' │
+│      NDAOExecutor       │ '0x1b6027bb294354F660d5Cbeca48c35987Dfa7ACf' │ '0xc0b4cd29d4b8d92130f153ac8dbe09e15b42466e0c43bf8ed009d7494d438826' │
+│       NDAOLogicV1       │ '0xA3747a21061Ced5a0B35344729C5D7555f407Afd' │ '0xebb960fd57134fc57256f1af86dd48610af533c5bb59f21e2538d50f8276cfb2' │
+│        NDAOProxy        │ '0x825f7Fc46898F119DE1Cd179e322fb375613b841' │ '0xa8b381da0d9a52ef8f1b4af0f60864d10add3cfbbac2d04a386dff7180a23761' │
+└─────────────────────────┴──────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────┘
 Sepolia 26.05.2023
 
 ┌─────────────────────────┬──────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────┐
