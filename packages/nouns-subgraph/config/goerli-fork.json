@@ -1,27 +1,27 @@
 {
   "network": "goerli",
   "nToken": {
-    "address": "0xf3cdd09fC3A4fdA4B1fE51984bb927F594bF139C",
-    "startBlock": 8568700
+    "address": "0x91a46d6dc9fdfF596EcDefdD0f4D0c829C65ED0e",
+    "startBlock": 9075342
   },
   "nAuctionHouse": {
-    "address": "0xCdC11Ef4AbB1086F0502CfD8D779cA337472583d",
-    "startBlock": 8568700
+    "address": "0x8D5EC4CBd88621A931F9Ac30b92e9c48F210aeCb",
+    "startBlock": 9075345
   },
   "nDAO": {
-    "address": "0x14b61C27E280788110Ed40f37d8766Ef8D241343",
-    "startBlock": 8568700
+    "address": "0x825f7Fc46898F119DE1Cd179e322fb375613b841",
+    "startBlock": 9075350
   },
   "cryptopunksVote": {
-    "address": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
-    "startBlock": 8561584
+    "address": "0x4C92061D1Ab6768F8267E7BC10c516CBA4c85b99",
+    "startBlock": 9075255
   },
   "ogcryptopunks": {
     "address": "0x85B353Ba06d16a237F24CB370ea291972F9bDd42",
     "startBlock": 8542634
   },
   "wrappedpunk": {
-    "address": "",
-    "startBlock": 8542634
+    "address": "0xDE513f5783C86D71501b4fC6cCD16e0Ecd6D3230",
+    "startBlock": 9075246
   }
 }
