@@ -154,9 +154,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}
               </>
             ) : (
-              <Trans>
+              <>
                 Delegate {availableVotes} {availableVotes === 1 ? 'Vote' : 'Votes'}
-              </Trans>
+              </>
             )}
           </div>
         }
@@ -186,9 +186,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}
               </>
             ) : (
-              <Trans>
+              <>
                 Delegate {availableVotes} {availableVotes === 1 ? 'Vote' : 'Votes'}
-              </Trans>
+              </>
             )}
           </div>
         }
@@ -217,18 +217,18 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
     // eslint-disable-next-line no-sparse-arrays
     [
-      <Trans>
+      <>
         Enter the Ethereum address or ENS name of the account you would like to delegate your votes
         to.
-      </Trans>,
-      <Trans>
+      </>,
+      <>
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes are being delegated
         to a new account.
-      </Trans>,
-      <Trans>
+      </>,
+      <>
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
         to a new account.
-      </Trans>,
+      </>,
       <>{delegateState.errorMessage}</>,
     ],
   );
@@ -342,9 +342,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
                   </div>
                   <div className={classes.ogPunkText}>
                     CryptoPunk {ogpunk.id}
-                    <span>
-                      <Trans>{renderDelegatee(ogpunk)}</Trans>
-                    </span>
+                    <span>{renderDelegatee(ogpunk)}</span>
                   </div>
                 </div>
                 {delegateOgPunksState.status === 'Mining' && ogpunk.id === activeOgPunkId ? (
