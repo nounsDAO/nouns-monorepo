@@ -27,7 +27,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
     if (initialAuctionId !== undefined) {
       // handle out of bounds token path ids
-      if (initialAuctionId > lastAuctionTokenId || initialAuctionId < 0) {
+      if (initialAuctionId > lastAuctionTokenId || initialAuctionId < 10000) {
         dispatch(setOnDisplayAuctionTokenId(lastAuctionTokenId));
         dispatch(push(tokenPath(lastAuctionTokenId)));
       } else {
