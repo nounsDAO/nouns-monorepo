@@ -33,14 +33,12 @@ const GovernancePage = () => {
           </h1>
         </Row>
         <p className={classes.subheading}>
-          <Trans>
-            Punks govern <span className={classes.boldText}>Punks DAO</span>. Punks can vote on
-            proposals or delegate their vote to a third party. A minimum of{' '}
-            <span className={classes.boldText}>
-              {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
-            </span>{' '}
-            is required to submit proposals.
-          </Trans>
+          Punks govern <span className={classes.boldText}>Punks DAO</span>. Punks can vote on
+          proposals or delegate their vote to a third party. A minimum of{' '}
+          <span className={classes.boldText}>
+            {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
+          </span>{' '}
+          is required to submit proposals.
         </p>
 
         <Row className={classes.treasuryInfoCard}>
