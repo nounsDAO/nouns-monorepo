@@ -19,6 +19,25 @@ export type ContractNameDescriptorV1 = DescriptorV1ContractNames | 'NounsSeeder'
 // prettier-ignore
 export type ContractNamesDAOV2 = Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'> | 'NounsDAOLogicV2' | 'NounsDAOProxyV2';
 
+export type ContractNamesDAOV3 =
+  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOExecutor'>
+  | 'NounsDAOLogicV3'
+  | 'NounsDAOProxyV3'
+  | 'NounsDAOV3Admin'
+  | 'NounsDAOV3DynamicQuorum'
+  | 'NounsDAOV3Proposals'
+  | 'NounsDAOV3Votes'
+  | 'NounsDAOV3Fork'
+  | 'NounsDAOForkEscrow'
+  | 'ForkDAODeployer'
+  | 'NounsTokenFork'
+  | 'NounsAuctionHouseFork'
+  | 'NounsDAOLogicV1Fork'
+  | 'NounsDAOExecutorV2'
+  | 'NounsDAOExecutorProxy'
+  | 'NounsDAOData'
+  | 'NounsDAODataProxy';
+
 export interface ContractDeployment {
   args?: (string | number | (() => string))[];
   libraries?: () => Record<string, string>;

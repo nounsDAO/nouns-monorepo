@@ -157,11 +157,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         ],
       },
       NounsDAOV3DynamicQuorum: {},
-      NounsDAOV3Admin: {
-        libraries: () => ({
-          NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
-        }),
-      },
+      NounsDAOV3Admin: {},
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
       NounsDAOV3Fork: {},

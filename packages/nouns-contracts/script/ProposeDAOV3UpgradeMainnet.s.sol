@@ -6,7 +6,7 @@ import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
 
-contract ProposeDAOV3UpgradeScript is Script {
+contract ProposeDAOV3UpgradeMainnet is Script {
     NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV1(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;

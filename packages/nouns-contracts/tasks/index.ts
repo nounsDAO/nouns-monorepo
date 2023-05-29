@@ -25,3 +25,7 @@ export * from './deploy-short-times-daov1';
 export * from './deploy-and-configure-short-times-daov1';
 export * from './deploy-local-dao-v3';
 export * from './run-local-dao-v3';
+export * from './deploy-short-times-dao-v3';
+export * from './deploy-and-configure-short-times-dao-v3';
+export * from './verify-etherscan-dao-v3';
+export * from './update-configs-dao-v3';

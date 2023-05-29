@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
 import { NounsDAOExecutorV2 } from '../contracts/governance/NounsDAOExecutorV2.sol';
+import { NounsDAOExecutorV2Test } from '../contracts/test/NounsDAOExecutorHarness.sol';
 import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOExecutorProxy } from '../contracts/governance/NounsDAOExecutorProxy.sol';
@@ -14,11 +15,22 @@ import { NounsDAOLogicV1Fork } from '../contracts/governance/fork/newdao/governa
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
 import { ERC20Transferer } from '../contracts/utils/ERC20Transferer.sol';
 
-contract DeployDAOV3NewContractsScript is Script {
-    NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_MAINNET =
-        NounsDAOLogicV1(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
-    address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
+contract DeployDAOV3NewContractsBase is Script {
     uint256 public constant DELAYED_GOV_DURATION = 30 days;
+
+    NounsDAOLogicV1 public immutable daoProxy;
+    INounsDAOExecutor public immutable timelockV1;
+    bool public immutable deployTimelockV2Harness; // should be true only for testnets
+
+    constructor(
+        address _daoProxy,
+        address _timelockV1,
+        bool _deployTimelockV2Harness
+    ) {
+        daoProxy = NounsDAOLogicV1(payable(_daoProxy));
+        timelockV1 = INounsDAOExecutor(_timelockV1);
+        deployTimelockV2Harness = _deployTimelockV2Harness;
+    }
 
     function run()
         public
@@ -34,15 +46,12 @@ contract DeployDAOV3NewContractsScript is Script {
 
         vm.startBroadcast(deployerKey);
 
-        (forkEscrow, forkDeployer, daoV3Impl, timelockV2, erc20Transferer) = deployNewContracts(
-            NOUNS_DAO_PROXY_MAINNET,
-            INounsDAOExecutor(NOUNS_TIMELOCK_V1_MAINNET)
-        );
+        (forkEscrow, forkDeployer, daoV3Impl, timelockV2, erc20Transferer) = deployNewContracts();
 
         vm.stopBroadcast();
     }
 
-    function deployNewContracts(NounsDAOLogicV1 daoProxy, INounsDAOExecutor timelockV1)
+    function deployNewContracts()
         internal
         returns (
             NounsDAOForkEscrow forkEscrow,
@@ -52,25 +61,27 @@ contract DeployDAOV3NewContractsScript is Script {
             ERC20Transferer erc20Transferer
         )
     {
+        NounsDAOExecutorV2 timelockV2Impl;
+        if (deployTimelockV2Harness) {
+            timelockV2Impl = new NounsDAOExecutorV2Test();
+        } else {
+            timelockV2Impl = new NounsDAOExecutorV2();
+        }
+
         forkEscrow = new NounsDAOForkEscrow(address(daoProxy), address(daoProxy.nouns()));
         forkDeployer = new ForkDAODeployer(
             address(new NounsTokenFork()),
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
-            address(new NounsDAOExecutorV2()),
+            address(timelockV2Impl),
             DELAYED_GOV_DURATION
         );
         daoV3Impl = new NounsDAOLogicV3();
-        (timelockV2, ) = deployAndInitTimelockV2(daoProxy, timelockV1);
+        timelockV2 = deployAndInitTimelockV2(address(timelockV2Impl));
         erc20Transferer = new ERC20Transferer();
     }
 
-    function deployAndInitTimelockV2(NounsDAOLogicV1 daoProxy, INounsDAOExecutor timelockV1)
-        internal
-        returns (NounsDAOExecutorV2 timelockV2, address timelockV2Impl)
-    {
-        timelockV2Impl = address(new NounsDAOExecutorV2());
-
+    function deployAndInitTimelockV2(address timelockV2Impl) internal returns (NounsDAOExecutorV2 timelockV2) {
         bytes memory initCallData = abi.encodeWithSignature(
             'initialize(address,uint256)',
             address(daoProxy),
@@ -79,6 +90,6 @@ contract DeployDAOV3NewContractsScript is Script {
 
         timelockV2 = NounsDAOExecutorV2(payable(address(new NounsDAOExecutorProxy(timelockV2Impl, initCallData))));
 
-        return (timelockV2, timelockV2Impl);
+        return timelockV2;
     }
 }

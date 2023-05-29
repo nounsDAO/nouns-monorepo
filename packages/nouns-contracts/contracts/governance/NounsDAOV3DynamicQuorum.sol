@@ -75,7 +75,7 @@ library NounsDAOV3DynamicQuorum {
      * @return The dynamic quorum parameters that were set at the given block number
      */
     function getDynamicQuorumParamsAt(NounsDAOStorageV3.StorageV3 storage ds, uint256 blockNumber_)
-        public
+        internal
         view
         returns (NounsDAOStorageV3.DynamicQuorumParams memory)
     {
