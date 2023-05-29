@@ -2,8 +2,8 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { ProposeDAOV3UpgradeScript } from '../../../script/ProposeDAOV3Upgrade.s.sol';
-import { DeployDAOV3NewContractsScript } from '../../../script/DeployDAOV3NewContracts.s.sol';
+import { ProposeDAOV3UpgradeMainnet } from '../../../script/ProposeDAOV3UpgradeMainnet.s.sol';
+import { DeployDAOV3NewContractsMainnet } from '../../../script/DeployDAOV3NewContractsMainnet.s.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
@@ -76,7 +76,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
             NounsDAOLogicV3 daoV3Impl,
             NounsDAOExecutorV2 timelockV2_,
             ERC20Transferer erc20Transferer_
-        ) = new DeployDAOV3NewContractsScript().run();
+        ) = new DeployDAOV3NewContractsMainnet().run();
 
         timelockV2 = timelockV2_;
 
@@ -91,7 +91,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         vm.setEnv('ERC20_TRANSFERER', Strings.toHexString(uint160(address(erc20Transferer_)), 20));
         vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/NounsDAOLogicV3/proposal-description.txt');
 
-        proposalId = new ProposeDAOV3UpgradeScript().run();
+        proposalId = new ProposeDAOV3UpgradeMainnet().run();
 
         // simulate vote & proposal execution
         executeUpgradeProposal();
