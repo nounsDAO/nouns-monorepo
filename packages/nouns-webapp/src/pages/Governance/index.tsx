@@ -53,7 +53,7 @@ const GovernancePage = () => {
                 <h1 className={classes.ethSymbol}>Ξ</h1>
                 <h1>
                   {treasuryBalance &&
-                    i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)))}
+                    i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(2)))}
                 </h1>
               </Col>
               <Col className={classes.usdTreasuryAmt}>
