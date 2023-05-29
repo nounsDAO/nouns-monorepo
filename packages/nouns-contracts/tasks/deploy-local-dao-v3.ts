@@ -151,11 +151,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         ],
       },
       NounsDAOV3DynamicQuorum: {},
-      NounsDAOV3Admin: {
-        libraries: () => ({
-          NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
-        }),
-      },
+      NounsDAOV3Admin: {},
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
       NounsDAOV3Fork: {},
@@ -195,7 +191,6 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
           () => contracts.NounsAuctionHouseFork.instance?.address,
           () => contracts.NounsDAOLogicV1Fork.instance?.address,
           () => contracts.NounsDAOExecutorV2.instance?.address,
-          () => contracts.NounsDAOForkEscrow.instance?.address,
           60 * 60 * 24 * 30, // 30 days
         ],
       },

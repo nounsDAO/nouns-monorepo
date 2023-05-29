@@ -185,11 +185,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
         },
       },
       NounsDAOV3DynamicQuorum: {},
-      NounsDAOV3Admin: {
-        libraries: () => ({
-          NounsDAOV3DynamicQuorum: deployment.NounsDAOV3DynamicQuorum.address,
-        }),
-      },
+      NounsDAOV3Admin: {},
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
       NounsDAOV3Fork: {},
