@@ -21,16 +21,14 @@ const Documentation = () => {
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <p className={classes.aboutText}>
-            <Trans>
-              DAO CryptoPunks are an experimental attempt to improve the coordination and funding of
-              the {cryptopunksLink} community. CryptoPunks are one of the largest NFT projects by
-              market cap, but the community is completely cash poor. There is no treasury to
-              encourage Punk innovation or to sponsor Punk community events.
-              <br />
-              Nouns was first inspired by CryptoPunks, and now it’s CryptoPunks’ turn to be inspired
-              by Nouns. This is an attempt to bootstrap the coordination, governance, and treasury
-              of one of the most recognizable avatars in crypto. LFG!
-            </Trans>
+            DAO CryptoPunks are an experimental attempt to improve the coordination and funding of
+            the {cryptopunksLink} community. CryptoPunks are one of the largest NFT projects by
+            market cap, but the community is completely cash poor. There is no treasury to encourage
+            Punk innovation or to sponsor Punk community events.
+            <br />
+            Nouns was first inspired by CryptoPunks, and now it’s CryptoPunks’ turn to be inspired
+            by Nouns. This is an attempt to bootstrap the coordination, governance, and treasury of
+            one of the most recognizable avatars in crypto. LFG!
           </p>
           {/*<p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>*/}
           {/*  <Trans>*/}
@@ -303,7 +301,7 @@ const Documentation = () => {
                   />
                 </li>
                 <li>
-                  <Link text="@FR3UD" url="https://twitter.com/FR3UD" leavesPage={true} />
+                  <Link text="@FR3UD_" url="https://twitter.com/FR3UD_" leavesPage={true} />
                 </li>
               </ul>
               <p>
