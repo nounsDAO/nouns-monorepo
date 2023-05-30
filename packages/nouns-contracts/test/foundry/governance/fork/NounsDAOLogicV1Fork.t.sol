@@ -242,6 +242,50 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
 
         propose();
     }
+
+    function test_quit_givenPartialClaim_reverts() public {
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.startPrank(proposer);
+        token.claimFromEscrow(tokens);
+
+        token.setApprovalForAll(address(dao), true);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        dao.quit(tokens);
+    }
+
+    function test_quit_givenFullClaim_works() public {
+        vm.deal(timelock, 10 ether);
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 2;
+        vm.prank(owner1);
+        token.claimFromEscrow(tokens);
+
+        vm.startPrank(proposer);
+        tokens[0] = 1;
+        token.claimFromEscrow(tokens);
+
+        token.setApprovalForAll(address(dao), true);
+
+        dao.quit(tokens);
+        assertEq(proposer.balance, 5 ether);
+    }
+
+    function test_quit_givenTokensToClaimAndDelayedGovernanceExpires_works() public {
+        vm.deal(timelock, 10 ether);
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.startPrank(proposer);
+        token.claimFromEscrow(tokens);
+
+        vm.warp(dao.delayedGovernanceExpirationTimestamp());
+
+        token.setApprovalForAll(address(dao), true);
+
+        dao.quit(tokens);
+        assertEq(proposer.balance, 10 ether);
+    }
 }
 
 contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {

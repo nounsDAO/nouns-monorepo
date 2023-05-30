@@ -203,7 +203,15 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         delayedGovernanceExpirationTimestamp = delayedGovernanceExpirationTimestamp_;
     }
 
+    /**
+     * @notice A function that allows token holders to quit the DAO, taking their pro rata funds,
+     * and sending their tokens to the DAO treasury.
+     * Will revert as long as not all tokens were claimed, and as long as the delayed governance has not expired.
+     * @param tokenIds The token ids to quit with
+     */
     function quit(uint256[] calldata tokenIds) external nonReentrant {
+        checkGovernanceActive();
+
         uint256 totalSupply = adjustedTotalSupply();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
@@ -245,6 +253,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 endBlock;
     }
 
+    function checkGovernanceActive() internal view {
+        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
+            revert WaitingForTokensToClaimOrExpiration();
+    }
+
     /**
      * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
      * Will revert as long as not all tokens were claimed, and as long as the delayed governance has not expired.
@@ -262,8 +275,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         bytes[] memory calldatas,
         string memory description
     ) public returns (uint256) {
-        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
-            revert WaitingForTokensToClaimOrExpiration();
+        checkGovernanceActive();
 
         ProposalTemp memory temp;
 
