@@ -3,8 +3,6 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
-import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
-import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
 
 contract ProposeTimelockMigrationCleanupMainnet is Script {
     NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
