@@ -32,32 +32,52 @@ contract ForkDAODeployer is IForkDAODeployer {
     event DAODeployed(address token, address auction, address governor, address treasury);
 
     /// @notice The token implementation address
-    address public tokenImpl;
+    address public immutable tokenImpl;
 
     /// @notice The auction house implementation address
-    address public auctionImpl;
+    address public immutable auctionImpl;
 
     /// @notice The treasury implementation address
-    address public treasuryImpl;
+    address public immutable treasuryImpl;
 
     /// @notice The governor implementation address
-    address public governorImpl;
+    address public immutable governorImpl;
 
     /// @notice The maximum duration of the governance delay in new DAOs
-    uint256 public delayedGovernanceMaxDuration;
+    uint256 public immutable delayedGovernanceMaxDuration;
+
+    /// @notice The initial voting period in new DAOs, in blocks
+    uint256 public immutable initialVotingPeriod;
+
+    /// @notice The initial voting delay in new DAOs, in blocks
+    uint256 public immutable initialVotingDelay;
+
+    /// @notice The initial proposal threshold in new DAOs, in BPS
+    uint256 public immutable initialProposalThresholdBPS;
+
+    /// @notice The initial quorum votes in new DAOs, in BPS
+    uint256 public immutable initialQuorumVotesBPS;
 
     constructor(
         address tokenImpl_,
         address auctionImpl_,
         address governorImpl_,
         address treasuryImpl_,
-        uint256 delayedGovernanceMaxDuration_
+        uint256 delayedGovernanceMaxDuration_,
+        uint256 initialVotingPeriod_,
+        uint256 initialVotingDelay_,
+        uint256 initialProposalThresholdBPS_,
+        uint256 initialQuorumVotesBPS_
     ) {
         tokenImpl = tokenImpl_;
         auctionImpl = auctionImpl_;
         governorImpl = governorImpl_;
         treasuryImpl = treasuryImpl_;
         delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
+        initialVotingPeriod = initialVotingPeriod_;
+        initialVotingDelay = initialVotingDelay_;
+        initialProposalThresholdBPS = initialProposalThresholdBPS_;
+        initialQuorumVotesBPS = initialQuorumVotesBPS_;
     }
 
     /**
@@ -121,10 +141,10 @@ contract ForkDAODeployer is IForkDAODeployer {
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
-            originalDAO.votingPeriod(),
-            originalDAO.votingDelay(),
-            originalDAO.proposalThresholdBPS(),
-            getMinQuorumVotesBPS(originalDAO),
+            initialVotingPeriod,
+            initialVotingDelay,
+            initialProposalThresholdBPS,
+            initialQuorumVotesBPS,
             originalDAO.erc20TokensToIncludeInFork(),
             block.timestamp + delayedGovernanceMaxDuration
         );
@@ -144,14 +164,6 @@ contract ForkDAODeployer is IForkDAODeployer {
     function getOriginalAuction(INounsDAOForkEscrow forkEscrow) internal view returns (NounsAuctionHouse) {
         NounsToken originalToken = NounsToken(address(forkEscrow.nounsToken()));
         return NounsAuctionHouse(originalToken.minter());
-    }
-
-    /**
-     * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
-     */
-    function getMinQuorumVotesBPS(NounsDAOLogicV3 originalDAO) internal view returns (uint16) {
-        NounsDAOStorageV3.DynamicQuorumParams memory dqParams = originalDAO.getDynamicQuorumParamsAt(block.number);
-        return dqParams.minQuorumVotesBPS;
     }
 
     function getStartNounId(NounsAuctionHouse originalAuction) internal view returns (uint256) {

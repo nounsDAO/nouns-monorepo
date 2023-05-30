@@ -94,7 +94,11 @@ abstract contract DeployUtilsV3 is DeployUtils {
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
             address(new NounsDAOExecutorV2()),
-            DELAYED_GOV_DURATION
+            DELAYED_GOV_DURATION,
+            FORK_DAO_VOTING_PERIOD,
+            FORK_DAO_VOTING_DELAY,
+            FORK_DAO_PROPOSAL_THRESHOLD_BPS,
+            FORK_DAO_QUORUM_VOTES_BPS
         );
 
         NounsDAOLogicV3 dao = NounsDAOLogicV3(

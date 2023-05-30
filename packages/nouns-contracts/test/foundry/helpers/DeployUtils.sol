@@ -33,6 +33,10 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant DELAYED_GOV_DURATION = 30 days;
     uint256 constant FORK_PERIOD = 7 days;
     uint256 constant FORK_THRESHOLD_BPS = 2_000; // 20%
+    uint256 public constant FORK_DAO_VOTING_PERIOD = 36000; // 5 days
+    uint256 public constant FORK_DAO_VOTING_DELAY = 36000; // 5 days
+    uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%
+    uint256 public constant FORK_DAO_QUORUM_VOTES_BPS = 1000; // 10%
 
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
         NounsDescriptor descriptor = new NounsDescriptor();

@@ -88,4 +88,11 @@ contract ForkDAODeployerTest is DeployUtilsFork {
 
         assertEq(get1967Implementation(address(treasury)), address(newLogic));
     }
+
+    function test_govContractParams() public {
+        assertEq(dao.votingPeriod(), FORK_DAO_VOTING_PERIOD);
+        assertEq(dao.votingDelay(), FORK_DAO_VOTING_DELAY);
+        assertEq(dao.proposalThresholdBPS(), FORK_DAO_PROPOSAL_THRESHOLD_BPS);
+        assertEq(dao.quorumVotesBPS(), FORK_DAO_QUORUM_VOTES_BPS);
+    }
 }

@@ -228,6 +228,12 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         forkDao.execute(1);
 
         assertEq(makeAddr('wallet').balance, 50 ether);
+
+        // check new forked DAO has correct params
+        assertEq(forkDao.votingDelay(), 36000);
+        assertEq(forkDao.votingPeriod(), 36000);
+        assertEq(forkDao.proposalThresholdBPS(), 25);
+        assertEq(forkDao.quorumVotesBPS(), 1000);
     }
 
     function _escrowAllNouns(address owner) internal {

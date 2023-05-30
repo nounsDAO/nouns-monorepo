@@ -7,6 +7,16 @@ import { DeployDAOV3NewContractsBase } from './DeployDAOV3NewContractsBase.s.sol
 contract DeployDAOV3NewContractsGoerli is DeployDAOV3NewContractsBase {
     address public constant NOUNS_DAO_PROXY_GOERLI = 0x9e6D4B42b8Dc567AC4aeCAB369Eb9a3156dF095C;
     address public constant NOUNS_TIMELOCK_V1_GOERLI = 0xADa0F1A73D1df49477fa41C7F8476F9eA5aB115f;
+    uint256 public constant FORK_DAO_VOTING_PERIOD = 40; // 8 minutes
+    uint256 public constant FORK_DAO_VOTING_DELAY = 1;
 
-    constructor() DeployDAOV3NewContractsBase(NOUNS_DAO_PROXY_GOERLI, NOUNS_TIMELOCK_V1_GOERLI, true) {}
+    constructor()
+        DeployDAOV3NewContractsBase(
+            NOUNS_DAO_PROXY_GOERLI,
+            NOUNS_TIMELOCK_V1_GOERLI,
+            true,
+            FORK_DAO_VOTING_PERIOD,
+            FORK_DAO_VOTING_DELAY
+        )
+    {}
 }
