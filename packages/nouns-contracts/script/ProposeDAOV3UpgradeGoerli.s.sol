@@ -8,8 +8,8 @@ import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.so
 
 contract ProposeDAOV3UpgradeGoerli is Script {
     NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_GOERLI =
-        NounsDAOLogicV1(0x34b74B5c1996b37e5e3EDB756731A5812FF43F67);
-    address public constant NOUNS_TIMELOCK_V1_GOERLI = 0x62e85a8dbc2799fB5D12BC59556bD3721D5E4CdE;
+        NounsDAOLogicV1(0x9e6D4B42b8Dc567AC4aeCAB369Eb9a3156dF095C);
+    address public constant NOUNS_TIMELOCK_V1_GOERLI = 0xADa0F1A73D1df49477fa41C7F8476F9eA5aB115f;
 
     uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 0.001 ether;
     uint256 public constant FORK_PERIOD = 1 hours;
@@ -17,7 +17,7 @@ contract ProposeDAOV3UpgradeGoerli is Script {
 
     address public constant STETH_GOERLI = 0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F;
 
-    address public constant AUCTION_HOUSE_PROXY_GOERLI = 0x3DFB1EFC72f2BA9268cBaf82527fD19592618A8D;
+    address public constant AUCTION_HOUSE_PROXY_GOERLI = 0x17e8512851Db9F04164Aa54A6e62f368acCF9D0c;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
