@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
+import { useOgPunks } from '../../wrappers/useOgPunks/hook';
 
 dayjs.extend(relativeTime);
 
@@ -104,7 +105,8 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useUserNTokenBalance() ?? 0) > 0;
+  const { ogPunks } = useOgPunks();
+  const hasNounBalance = (useUserNTokenBalance() ?? 0) + (ogPunks?.length ?? 0) > 0;
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -119,46 +121,43 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div
-        className={clsx(
-          classes.headerWrapper,
-          !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
-        )}
-      >
+      <div className={classes.headerWrapper}>
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {hasEnoughVotesToPropose ? (
-          <div className={classes.nounInWalletBtnWrapper}>
-            <div className={classes.submitProposalButtonWrapper}>
-              <Button
-                className={classes.generateBtn}
-                onClick={() => history.push('create-proposal')}
-              >
-                <Trans>Submit Proposal</Trans>
-              </Button>
-            </div>
-            {hasNounBalance && (
-              <div className={classes.delegateBtnWrapper}>
+        <div className="d-flex align-baseline">
+          {hasEnoughVotesToPropose ? (
+            <div className={classes.nounInWalletBtnWrapper}>
+              <div className={classes.submitProposalButtonWrapper}>
                 <Button
-                  className={classes.changeDelegateBtn}
-                  onClick={() => setShowDelegateModal(true)}
+                  className={classes.generateBtn}
+                  onClick={() => history.push('create-proposal')}
                 >
-                  <Trans>Delegate</Trans>
+                  <Trans>Submit Proposal</Trans>
                 </Button>
               </div>
-            )}
-          </div>
-        ) : (
-          <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
-            {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-            <div className={classes.nullBtnWrapper}>
-              <Button className={classes.generateBtnDisabled}>
-                <Trans>Submit Proposal</Trans>
+            </div>
+          ) : (
+            <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
+              {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
+              <div className={classes.nullBtnWrapper}>
+                <Button className={classes.generateBtnDisabled}>
+                  <Trans>Submit Proposal</Trans>
+                </Button>
+              </div>
+            </div>
+          )}
+          {hasNounBalance && (
+            <div className={classes.delegateBtnWrapper}>
+              <Button
+                className={classes.changeDelegateBtn}
+                onClick={() => setShowDelegateModal(true)}
+              >
+                <Trans>Delegate</Trans>
               </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
       {proposals?.length ? (
