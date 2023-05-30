@@ -20,6 +20,8 @@ import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 import { ERC721Enumerable } from '../../../contracts/base/ERC721Enumerable.sol';
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { ENSNamehash } from '../lib/ENSNamehash.sol';
+import '../lib/ENSInterfaces.sol';
 
 interface IHasName {
     function NAME() external pure returns (string memory);
@@ -234,6 +236,37 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(forkDao.votingPeriod(), 36000);
         assertEq(forkDao.proposalThresholdBPS(), 25);
         assertEq(forkDao.quorumVotesBPS(), 1000);
+    }
+
+    function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {
+        ENS ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
+        // 0xdc972a4db1aa8630a234db4202794eae94ad0e7a9e201e13667ac92aa887a02a
+        bytes32 node = ENSNamehash.namehash('nouns.eth');
+        Resolver resolver = Resolver(ens.resolver(node));
+
+        // showing nouns.eth resolves to timelockv1
+        assertEq(resolver.addr(node), address(NOUNS_TIMELOCK_V1_MAINNET));
+
+        // this is a critical step that will need to happen outside DAO proposals
+        // 0x88f9E324801320A3fC22C8d045A98Ad32a490d8E;
+        vm.prank(ens.owner(node));
+        resolver.setAddr(node, address(timelockV2));
+
+        // showing nouns.eth resolves to timelockv2 after the setAddr change
+        assertEq(resolver.addr(node), address(timelockV2));
+
+        // Now tackling reverse lookup
+
+        // reverse.ens.eth
+        ReverseRegistrar reverse = ReverseRegistrar(0xa58E81fe9b61B5c3fE2AFD33CF304c454AbFc7Cb);
+        vm.prank(address(timelockV2));
+        reverse.setName('nouns.eth');
+
+        // 0xb983f3b9362fbdfcdb9012cf09dce9ae0c0a377c167b14fdf5b3bd94a4dfdf81
+        bytes32 resolvedReverseNode = reverse.node(address(timelockV2));
+
+        // showing that timelockV2's address resolves to nouns.eth
+        assertEq(reverse.defaultResolver().name(resolvedReverseNode), 'nouns.eth');
     }
 
     function _escrowAllNouns(address owner) internal {
