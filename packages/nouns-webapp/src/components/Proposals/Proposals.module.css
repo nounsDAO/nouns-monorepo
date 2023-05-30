@@ -5,7 +5,6 @@
 
 .proposals > div {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
@@ -13,7 +12,7 @@
 .heading {
   font-family: 'Montserrat Bold', sans-serif;
   font-size: 40px;
-  margin: 0 !important;
+  margin: 0;
 }
 
 .generateBtn {
@@ -164,6 +163,7 @@
 
   .heading {
     width: 100%;
+    margin-bottom: 1rem;
   }
 
   .nullStateSubmitProposalBtnWrapper {

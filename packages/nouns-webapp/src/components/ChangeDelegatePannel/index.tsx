@@ -14,20 +14,12 @@ import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import pIcon from '../../assets/P.png';
-import { ogpunksByOwner } from '../../wrappers/subgraph';
-import { useQuery } from '@apollo/client';
+import { useOgPunks, OgPunk } from '../../wrappers/useOgPunks/hook';
 import { lowerCaseAddress, shortAddress } from '../../utils/addressAndENSDisplayUtils';
 import BrandSpinner from '../BrandSpinner';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;
-}
-
-interface OgPunk {
-  id: string;
-  delegate: {
-    id: string;
-  };
 }
 
 export enum ChangeDelegateState {
@@ -73,20 +65,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
-  const [ogPunks, setOgPunks] = useState<OgPunk[]>([]);
+  const { ogPunks, refetch } = useOgPunks();
   const { send: delegateOgPunksVotes, state: delegateOgPunksState } = useCryptoPunksVote();
   const [activeOgPunkId, setActiveOgPunkId] = useState<string>('');
-
-  const { loading, error, data, refetch } = useQuery(
-    ogpunksByOwner(lowerCaseAddress(account ?? '')),
-    {
-      skip: !account,
-    },
-  );
-
-  useEffect(() => {
-    !loading && !error && setOgPunks(data.ogpunks);
-  }, [loading, error, data]);
 
   useEffect(() => {
     if (delegateState.status === 'Success') {
@@ -161,14 +142,17 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           </div>
         }
         buttonStyle={
-          isAddress(delegateAddress) && delegateAddress !== currentDelegate
+          availableVotes === 0
+            ? NavBarButtonStyle.DELEGATE_DISABLED
+            : isAddress(delegateAddress) && delegateAddress !== currentDelegate
             ? NavBarButtonStyle.DELEGATE_SECONDARY
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
         onClick={handleDelegateVotes}
         disabled={
-          changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-          !isAddress(delegateAddress)
+          availableVotes === 0 ||
+          (changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+            !isAddress(delegateAddress))
         }
       />,
       <NavBarButton
