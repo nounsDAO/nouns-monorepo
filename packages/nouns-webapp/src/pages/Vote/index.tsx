@@ -50,6 +50,7 @@ import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/s
 import VoteSignals from '../../components/VoteSignals/VoteSignals';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import { isProposalUpdatable } from '../../utils/proposals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -184,14 +185,13 @@ const VotePage = ({
     ProposalState.QUEUED,
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
-  const isCancellable =
-    isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-  const isProposer = proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-  const isUpdateable = proposal?.status === ProposalState.UPDATABLE;
 
+  const isUpdateable = proposal && currentBlock && isProposalUpdatable(proposal, currentBlock);
+  const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
+  const isProposalSigner = account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const isProposer = proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+  const isCancellable = isInNonFinalState && (isProposalSigner || isProposer);
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
-  // let routeMatch = useRouteMatch('/vote/:id');
-  // const isLatestProposalVersion = routeMatch?.params?.id === proposal?.id;
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -504,18 +504,22 @@ const VotePage = ({
                 </div>
               </div>
             )}
-            {isProposer && (
+            {((isProposer && isCancellable && isUpdateable) || (isProposalSigner && isCancellable)) && (
               <div className={classes.proposerOptionsWrapper}>
                 <div className={classes.proposerOptions}>
                   <p>
-                    <span className={classes.proposerOptionsHeader}>Proposer functions</span>
-                    {isUpdateable && (
+                    <span className={classes.proposerOptionsHeader}>
+                      <Trans>
+                        {isProposalSigner ? 'Signer' : 'Proposer'} functions
+                      </Trans>
+                    </span>
+                    {isProposer && isUpdateable && (
                       <>
                         <Trans>This proposal can be edited for the next </Trans>{' '}
-                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}.
                       </>
                     )}
-                    {isCancellable && !isUpdateable && (
+                    {isCancellable && (
                       <>
                         <Trans>This proposal can be canceled for the next </Trans>{' '}
                         {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
@@ -559,7 +563,7 @@ const VotePage = ({
                       </>
                     )}
 
-                    {isUpdateable && (
+                    {isProposer && isUpdateable && (
                       <Link
                         to={`/vote/${id}/edit`}
                         className={clsx(classes.primaryButton, classes.button)}

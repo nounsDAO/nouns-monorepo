@@ -97,6 +97,7 @@ export interface Proposal extends PartialProposal {
   proposalThreshold: number;
   details: ProposalDetail[];
   transactionHash: string;
+  signers: { id: string }[];
 }
 
 export interface ProposalVersion {
@@ -147,6 +148,7 @@ export interface ProposalSubgraphEntity
   createdTransactionHash: string;
   proposer: { id: string };
   proposalThreshold: string;
+  signers: { id: string }[];
 }
 
 interface PartialProposalData {
@@ -499,7 +501,6 @@ const parseSubgraphProposal = (
   if (!proposal) {
     return;
   }
-
   const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
   let details;
   if (toUpdate) {
@@ -526,6 +527,7 @@ const parseSubgraphProposal = (
     transactionHash: proposal.createdTransactionHash,
     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
+    signers: proposal.signers,
   };
 };
 

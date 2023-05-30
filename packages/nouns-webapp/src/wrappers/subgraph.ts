@@ -79,6 +79,9 @@ export const proposalQuery = (id: string | number) => gql`
     proposer {
       id
     }
+    signers {
+      id
+    }
   }
 }
 `;
