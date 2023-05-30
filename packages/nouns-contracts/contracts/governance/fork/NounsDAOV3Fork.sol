@@ -100,7 +100,7 @@ library NounsDAOV3Fork {
     }
 
     /**
-     * @notice Execute the fork. Only possible if the fork threshold has been met.
+     * @notice Execute the fork. Only possible if the fork threshold has been exceeded.
      * This will deploy a new DAO and send the prorated part of the treasury to the new DAO's treasury.
      * This will also close the active escrow and all nouns in the escrow will belong to the original DAO.
      * @return forkTreasury The address of the new DAO's treasury
@@ -114,7 +114,7 @@ library NounsDAOV3Fork {
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
         uint256 tokensInEscrow = forkEscrow.numTokensInEscrow();
-        if (tokensInEscrow < forkThreshold(ds)) revert ForkThresholdNotMet();
+        if (tokensInEscrow <= forkThreshold(ds)) revert ForkThresholdNotMet();
 
         uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
 
