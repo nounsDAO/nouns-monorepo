@@ -596,7 +596,7 @@ type ForkJoin @entity(immutable: true) {
   reason: String
 }
 
-type EscrowedNoun @entity(immutable: true) {
+type EscrowedNoun @entity {
   id: ID!
 
   fork: Fork!
