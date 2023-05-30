@@ -56,6 +56,9 @@
 // - Removes the vetoer role and logic related to it. The quit function provides minority protection instead of the
 //   vetoer, and fork DAOs can upgrade their governor to include the vetoer feature if it's needed.
 //
+// - Modified MIN_VOTING_PERIOD, MAX_VOTING_PERIOD to correct block numbers assuming 12 second blocks
+// - Modified MAX_VOTING_DELAY to be 2 weeks
+//
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
 //   due to the Noun token's increasing supply
@@ -118,16 +121,16 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 public constant MIN_VOTING_PERIOD = 7_200; // 24 hours
 
     /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 80_640; // About 2 weeks
+    uint256 public constant MAX_VOTING_PERIOD = 100_800; // 2 weeks
 
     /// @notice The min setable voting delay
     uint256 public constant MIN_VOTING_DELAY = 1;
 
     /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 40_320; // About 1 week
+    uint256 public constant MAX_VOTING_DELAY = 100_800; // 2 weeks
 
     /// @notice The minimum setable quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS = 200; // 200 basis points or 2%
