@@ -5,6 +5,7 @@ import 'forge-std/Test.sol';
 import { ProposeDAOV3UpgradeMainnet } from '../../../script/ProposeDAOV3UpgradeMainnet.s.sol';
 import { DeployDAOV3NewContractsMainnet } from '../../../script/DeployDAOV3NewContractsMainnet.s.sol';
 import { ProposeTimelockMigrationCleanupMainnet } from '../../../script/ProposeTimelockMigrationCleanupMainnet.s.sol';
+import { ProposeENSReverseLookupConfigMainnet } from '../../../script/ProposeENSReverseLookupConfigMainnet.s.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
@@ -276,13 +277,13 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
 
         // Now tackling reverse lookup
 
+        // the proposal calls (reverse.ens.eth).setName('nouns.eth') from timelock V2
+        proposalId = new ProposeENSReverseLookupConfigMainnet().run();
+        executeUpgradeProposal();
+
         // reverse.ens.eth
         ReverseRegistrar reverse = ReverseRegistrar(0xa58E81fe9b61B5c3fE2AFD33CF304c454AbFc7Cb);
-        vm.prank(address(timelockV2));
-        reverse.setName('nouns.eth');
-
-        // 0xb983f3b9362fbdfcdb9012cf09dce9ae0c0a377c167b14fdf5b3bd94a4dfdf81
-        bytes32 resolvedReverseNode = reverse.node(address(timelockV2));
+        bytes32 resolvedReverseNode = reverse.node(address(timelockV2)); // 0xb983f3b9362fbdfcdb9012cf09dce9ae0c0a377c167b14fdf5b3bd94a4dfdf81
 
         // showing that timelockV2's address resolves to nouns.eth
         assertEq(reverse.defaultResolver().name(resolvedReverseNode), 'nouns.eth');
