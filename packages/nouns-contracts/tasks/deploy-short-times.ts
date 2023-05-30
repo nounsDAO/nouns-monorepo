@@ -11,6 +11,7 @@ promptjs.delimiter = '';
 
 const proxyRegistries: Record<number, string> = {
   [ChainId.Mainnet]: '0xa5409ec958c83c3f309868babaca7c86dcb077c1',
+  [ChainId.Goerli]: '0x5d44754DE92363d5746485F31280E4c0c54c855c', // ProxyRegistryMock
 };
 const wethContracts: Record<number, string> = {
   [ChainId.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
