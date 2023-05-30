@@ -171,7 +171,7 @@ library NounsDAOV3Fork {
             revert AdminOnly();
         }
 
-        ds.forkEscrow.withdrawTokensToDAO(tokenIds, to);
+        ds.forkEscrow.withdrawTokens(tokenIds, to);
 
         emit DAOWithdrawNounsFromEscrow(tokenIds, to);
     }

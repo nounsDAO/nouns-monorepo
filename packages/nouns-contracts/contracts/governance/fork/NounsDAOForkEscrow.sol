@@ -126,7 +126,7 @@ contract NounsDAOForkEscrow is IERC721Receiver {
      * @param tokenIds The ids of the tokens being withdrawn
      * @param to The address which will receive the tokens
      */
-    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external onlyDAO {
+    function withdrawTokens(uint256[] calldata tokenIds, address to) external onlyDAO {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             if (currentOwnerOf(tokenIds[i]) != dao) revert NotOwner();
 
