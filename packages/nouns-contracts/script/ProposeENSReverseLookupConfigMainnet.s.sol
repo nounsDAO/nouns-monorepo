@@ -4,6 +4,11 @@ pragma solidity ^0.8.15;
 import 'forge-std/Script.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
 
+/**
+ * @notice Submits a proposal to configure the ENS reverse lookup for nouns.eth.
+ * @dev Must run after the upgrade to DAO V3 and Executor V2, since it's the new treasury (executor) that needs to be
+ * the msg.sender to ENS.
+ */
 contract ProposeENSReverseLookupConfigMainnet is Script {
     NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
