@@ -20,3 +20,20 @@ contract DeployDAOV3NewContractsGoerli is DeployDAOV3NewContractsBase {
         )
     {}
 }
+
+contract DeployDAOV3NewContractsSepolia is DeployDAOV3NewContractsBase {
+    address public constant NOUNS_DAO_PROXY_SEPOLIA = 0x35d2670d7C8931AACdd37C89Ddcb0638c3c44A57;
+    address public constant NOUNS_TIMELOCK_V1_SEPOLIA = 0x332db58b51393f3a6b28d4DD8964234967e1aD33;
+    uint256 public constant FORK_DAO_VOTING_PERIOD = 40; // 8 minutes
+    uint256 public constant FORK_DAO_VOTING_DELAY = 1;
+
+    constructor()
+        DeployDAOV3NewContractsBase(
+            NOUNS_DAO_PROXY_SEPOLIA,
+            NOUNS_TIMELOCK_V1_SEPOLIA,
+            true,
+            FORK_DAO_VOTING_PERIOD,
+            FORK_DAO_VOTING_DELAY
+        )
+    {}
+}
