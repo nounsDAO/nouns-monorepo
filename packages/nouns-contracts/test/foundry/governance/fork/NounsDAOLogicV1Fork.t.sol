@@ -9,7 +9,7 @@ import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
-import { NounsDAOStorageV1 } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOStorageV1.sol';
+import { NounsDAOStorageV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOStorageV1Fork.sol';
 import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
 import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';

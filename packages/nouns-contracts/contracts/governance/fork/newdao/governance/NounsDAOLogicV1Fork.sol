@@ -95,14 +95,14 @@
 pragma solidity ^0.8.6;
 
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
-import { NounsDAOEvents } from './NounsDAOEvents.sol';
-import { NounsDAOStorageV1 } from './NounsDAOStorageV1.sol';
+import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';
+import { NounsDAOStorageV1Fork } from './NounsDAOStorageV1Fork.sol';
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
-contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
     error QuitETHTransferFailed();
