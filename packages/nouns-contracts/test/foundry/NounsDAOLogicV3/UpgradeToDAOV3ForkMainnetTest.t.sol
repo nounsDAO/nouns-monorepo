@@ -103,12 +103,12 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         proposalId = new ProposeDAOV3UpgradeMainnet().run();
 
         // simulate vote & proposal execution
-        executeUpgradeProposal();
+        voteAndExecuteProposal();
 
         daoV3 = NounsDAOLogicV3(payable(address(NOUNS_DAO_PROXY_MAINNET)));
     }
 
-    function executeUpgradeProposal() internal {
+    function voteAndExecuteProposal() internal {
         vm.roll(block.number + NOUNS_DAO_PROXY_MAINNET.votingDelay() + 1);
         vm.prank(proposerAddr);
         NOUNS_DAO_PROXY_MAINNET.castVote(proposalId, 1);
@@ -246,15 +246,18 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     }
 
     function test_timelockV1CleanupProposal() public {
-        assertGt(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 2919 ether);
+        uint256 timelockV1Balance = address(NOUNS_TIMELOCK_V1_MAINNET).balance;
+        assertGt(timelockV1Balance, 2919 ether);
+        uint256 expectedV2Balance = address(timelockV2).balance + timelockV1Balance;
 
         proposalId = new ProposeTimelockMigrationCleanupMainnet().run();
-        executeUpgradeProposal();
+        voteAndExecuteProposal();
 
         assertEq(nouns.owner(), address(timelockV2));
         assertEq(Ownable(DESCRIPTOR_MAINNET).owner(), address(timelockV2));
         assertEq(Ownable(AUCTION_HOUSE_PROXY_ADMIN_MAINNET).owner(), address(timelockV2));
         assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 0);
+        assertEq(address(timelockV2).balance, expectedV2Balance);
         assertTrue(IERC721(LILNOUNS_MAINNET).isApprovedForAll(address(NOUNS_TIMELOCK_V1_MAINNET), address(timelockV2)));
     }
 
@@ -279,7 +282,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
 
         // the proposal calls (reverse.ens.eth).setName('nouns.eth') from timelock V2
         proposalId = new ProposeENSReverseLookupConfigMainnet().run();
-        executeUpgradeProposal();
+        voteAndExecuteProposal();
 
         // reverse.ens.eth
         ReverseRegistrar reverse = ReverseRegistrar(0xa58E81fe9b61B5c3fE2AFD33CF304c454AbFc7Cb);
