@@ -221,30 +221,12 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         emit Quit(msg.sender, tokenIds);
     }
 
-    function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
-        if (msg.sender != admin) revert AdminOnly();
-
-        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
-        erc20TokensToIncludeInQuit = erc20tokens;
-
-        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
-    }
-
-    function adjustedTotalSupply() public view returns (uint256) {
-        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
-    }
-
     struct ProposalTemp {
         uint256 totalSupply;
         uint256 proposalThreshold;
         uint256 latestProposalId;
         uint256 startBlock;
         uint256 endBlock;
-    }
-
-    function checkGovernanceActive() internal view {
-        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
-            revert WaitingForTokensToClaimOrExpiration();
     }
 
     /**
@@ -353,6 +335,17 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         );
 
         return newProposal.id;
+    }
+
+    /**
+     * @notice Internal function that reverts if the governance is not active yet. Governance becomes active as soon as
+     * one of these conditions is met:
+     * 1. All tokens are claimed
+     * 2. The delayed governance expiration timestamp is reached
+     */
+    function checkGovernanceActive() internal view {
+        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
+            revert WaitingForTokensToClaimOrExpiration();
     }
 
     /**
@@ -565,7 +558,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         bytes32 s
     ) external {
         bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), block.chainid, address(this))
         );
         bytes32 structHash = keccak256(abi.encode(BALLOT_TYPEHASH, proposalId, support));
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
@@ -719,6 +712,18 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     /**
+     * @notice Admin function for setting the list of ERC20 tokens to transfer on `quit`.
+     */
+    function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
+        if (msg.sender != admin) revert AdminOnly();
+
+        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
+        erc20TokensToIncludeInQuit = erc20tokens;
+
+        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
+    }
+
+    /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
@@ -734,16 +739,12 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         return bps2Uint(quorumVotesBPS, adjustedTotalSupply());
     }
 
-    function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
-        return (number * bps) / 10000;
+    function adjustedTotalSupply() public view returns (uint256) {
+        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
     }
 
-    function getChainIdInternal() internal view returns (uint256) {
-        uint256 chainId;
-        assembly {
-            chainId := chainid()
-        }
-        return chainId;
+    function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
+        return (number * bps) / 10000;
     }
 
     function _authorizeUpgrade(address) internal view override {
