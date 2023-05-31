@@ -150,6 +150,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     /**
      * @notice Used to initialize the contract during delegator contructor
+     * @dev Not asserting that param values are within the hard-coded bounds in order to make it easier to run
+     * manual tests; seems a safe decision since we assume fork DAOs are initialized by `ForkDAODeployer`
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
      * @param votingPeriod_ The initial voting period
