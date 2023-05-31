@@ -131,7 +131,7 @@ library NounsDAOV3Fork {
 
     /**
      * @notice Joins a fork while a fork is active
-     * Sends the tokens to the escrow contract.
+     * Sends the tokens to the timelock contract.
      * Sends a prorated part of the treasury to the new fork DAO's treasury.
      * Mints new tokens in the new fork DAO with the same token ids.
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
@@ -145,10 +145,11 @@ library NounsDAOV3Fork {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
+        address timelock = address(ds.timelock);
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);

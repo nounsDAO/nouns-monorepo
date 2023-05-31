@@ -347,15 +347,13 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
 
-        // DAO can withdraw the tokens sent in joinFork
+        // Tokens are in the OG DAO timelock
         tokenIds = [7, 8, 9];
-        vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.DAOWithdrawNounsFromEscrow(tokenIds, address(1));
-        vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(timelock));
 
-        assertEq(dao.nouns().ownerOf(7), address(1));
-        assertEq(dao.nouns().ownerOf(8), address(1));
+        // Timelock can move the tokens
+        vm.startPrank(address(timelock));
+        dao.nouns().transferFrom(address(timelock), address(1), 9);
         assertEq(dao.nouns().ownerOf(9), address(1));
     }
 
