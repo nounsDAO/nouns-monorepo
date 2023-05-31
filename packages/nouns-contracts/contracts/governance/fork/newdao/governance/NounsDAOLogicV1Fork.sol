@@ -173,22 +173,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
-        require(
-            votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD,
-            'NounsDAO::initialize: invalid voting period'
-        );
-        require(
-            votingDelay_ >= MIN_VOTING_DELAY && votingDelay_ <= MAX_VOTING_DELAY,
-            'NounsDAO::initialize: invalid voting delay'
-        );
-        require(
-            proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::initialize: invalid proposal threshold BPs'
-        );
-        require(
-            quorumVotesBPS_ >= MIN_QUORUM_VOTES_BPS && quorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS,
-            'NounsDAO::initialize: invalid quorum votes BPs'
-        );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
         emit VotingDelaySet(votingDelay, votingDelay_);
