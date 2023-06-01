@@ -105,14 +105,14 @@ const PunkerTokenContent: React.FC<{
             >
               <Trans>All Token auction proceeds are sent to the</Trans>{' '}
               <Link to="/vote" className={tokenContentClasses.link}>
-                <Trans>Punks DAO</Trans>
+                <Trans>Punkers DAO</Trans>
               </Link>
               .{' '}
               <Trans>
                 For this reason, we, the project's founders (‘Punkers’) have chosen to compensate
-                ourselves with Punks. Every 10th Punk for the first 5 years of the project will be
-                sent to our multisig (5/10), where it will be vested and distributed to individual
-                Punkers.
+                ourselves with CryptoPunks. Every 10th Punk for the first 5 years of the project
+                will be sent to our multisig (5/10), where it will be vested and distributed to
+                individual Punkers.
               </Trans>
             </li>
           </ul>

@@ -4,15 +4,20 @@ import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
+import { ExternalURL, externalURL } from '../../utils/externalURL';
 
 const Documentation = () => {
   const cryptopunksLink = (
     <Link
-      text={<Trans>Cryptopunks</Trans>}
+      text={<Trans>CryptoPunks</Trans>}
       url="https://www.larvalabs.com/cryptopunks"
       leavesPage={true}
     />
   );
+  const docsLink = (
+    <Link text={<Trans>here</Trans>} url={externalURL(ExternalURL.notion)} leavesPage={true} />
+  );
+
   // const playgroundLink = (
   //   <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
   // );
@@ -26,9 +31,9 @@ const Documentation = () => {
             market cap, but the community is completely cash poor. There is no treasury to encourage
             Punk innovation or to sponsor Punk community events.
             <br />
-            Nouns was first inspired by CryptoPunks, and now it’s CryptoPunks’ turn to be inspired
-            by Nouns. This is an attempt to bootstrap the coordination, governance, and treasury of
-            one of the most recognizable avatars in crypto. LFG!
+            Nouns was first inspired by CryptoPunks, and now it's CryptoPunks turn to be inspired by
+            Nouns. This is an attempt to bootstrap the coordination, governance, and treasury of one
+            of the most recognizable avatars in crypto. LFG!
           </p>
           {/*<p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>*/}
           {/*  <Trans>*/}
@@ -114,7 +119,7 @@ const Documentation = () => {
                   The CryptoPunks Auction Contract will act as a self-sufficient CryptoPunk
                   generation and distribution mechanism, auctioning one new CryptoPunk every 24
                   hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the
-                  CryptoPunks DAO treasury, where they are governed by all CrytoPunks owners.
+                  Punkers DAO treasury, where they are governed by all CryptoPunks owners.
                 </Trans>
               </p>
 
@@ -135,14 +140,14 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>CryptoPunks DAO</Trans>
+              <Trans>Punkers DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
-                CryptoPunks DAO utilizes a fork of Compound Governance and is the main governing
-                body of the CryptoPunks ecosystem. The CryptoPunks DAO treasury receives 100% of ETH
-                proceeds from daily CryptoPunks auctions. Each CryptoPunk - original and new - is an
-                irrevocable member of the CryptoPunks DAO and entitled to one vote in all governance
+                Punkers DAO utilizes a fork of Compound Governance and is the main governing body of
+                the CryptoPunks ecosystem. The Punkers DAO treasury receives 100% of ETH proceeds
+                from daily CryptoPunks auctions. Each CryptoPunk - original and new - is an
+                irrevocable member of the Punkers DAO and entitled to one vote in all governance
                 matters. CryptoPunks votes are non-transferable (if you sell your CryptoPunk the
                 vote goes with it) but delegatable, which means you can assign your vote to someone
                 else as long as you own your CryptoPunks.
@@ -156,17 +161,15 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  CryptoPunks govern Punks DAO. Punks can vote on proposals or delegate their vote
-                  to a third party. A minimum of 2 Punks (any combination of new/original) is
-                  required to submit proposals. Each CryptoPunk (new & original) you hold represents
-                  one vote in all governance related matters.
+                  CryptoPunks govern Punkers DAO. CryptoPunks can vote on proposals or delegate
+                  their vote to a third party. A minimum of 2 CryptoPunks (any combination of
+                  new/original) is required to submit proposals. Each CryptoPunk (new & original)
+                  you hold represents one vote in all governance related matters.
                 </Trans>
               </p>
               <p>
-                <Trans>
-                  For more information on how to delegate your Punk, refer to our documentation
-                  here.
-                </Trans>
+                For more information on how to delegate your Punk, refer to our documentation{' '}
+                {docsLink}.
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -288,8 +291,8 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  ‘Punkers’ are the individuals responsible for building CryptoPunks DAO. The
-                  Punkers include:
+                  ’Punkers’ are the individuals responsible for building Punkers DAO. The Punkers
+                  include:
                 </Trans>
               </p>
               <ul>
@@ -306,16 +309,17 @@ const Documentation = () => {
               </ul>
               <p>
                 <Trans>
-                  As compensation for standing up Punks DAO, Punkers have elected to use the same
-                  model used by Nouns DAO’s “Nounders” for compensating themselves. Every 10th Punk
+                  As compensation for standing up Punkers DAO, Punkers have elected to use the same
+                  model used by Nouns DAO's ’Nounders’ for compensating themselves. Every 10th Punk
                   for the first five years of the project (#10,000, #10,010, etc) will be
-                  automatically minted and sent to the Punkers’s multisig wallet.
+                  automatically minted and sent to the Punkers's multisig wallet.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Punker distributions dont interfere with the cadence of 24hr auctions. Punks are
-                  sent directly to the Punkers’s multisig and auctions resume without interruption.
+                  Punker distributions don't interfere with the cadence of 24hr auctions.
+                  CryptoPunks are sent directly to the Punkers's multisig and auctions resume
+                  without interruption.
                 </Trans>
               </p>
             </Accordion.Body>

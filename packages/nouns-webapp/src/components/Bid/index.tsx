@@ -297,7 +297,7 @@ const Bid: React.FC<{
                 onClick={fomoNounsBtnOnClickHandler}
                 disabled
               >
-                <Trans>Wait for the for the next Punk</Trans>
+                <Trans>Wait for the next Punk</Trans>
               </Button>
             </Col>
             {/* Only show force settle button if wallet connected */}
