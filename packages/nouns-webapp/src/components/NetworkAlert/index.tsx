@@ -20,8 +20,9 @@ const metamaskNetworkName = () => {
       return 'Ethereum Mainnet';
     case 5:
       return 'Goerli Test Network';
-    case 11155111:
-      return 'Sepolia Test Network';
+    // TODO bring back after adding Sepolia support
+    // case 11155111:
+    // return 'Sepolia Test Network';
     default:
       return `Network ${CHAIN_ID}`;
   }
@@ -36,7 +37,8 @@ const NetworkAlert = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Nouns DAO auctions require you to switch over {networkName()} to be able to participate.
+            Punkers DAO auctions require you to switch over {networkName()} to be able to
+            participate.
           </p>
           <p>
             <b>To get started, please switch your network by following the instructions below:</b>
