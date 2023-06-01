@@ -9,11 +9,11 @@ import { Nav, Navbar, Container } from 'react-bootstrap';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-// import { ExternalURL, externalURL } from '../../utils/externalURL';
+import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faUsers } from '@fortawesome/free-solid-svg-icons';
 // import { faComments } from '@fortawesome/free-solid-svg-icons';
 // import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
@@ -57,7 +57,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="Punks DAO logo" />
+              <img src={logo} className={classes.navBarLogo} alt="Punkers DAO logo" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -94,19 +94,19 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            {/*<Nav.Link*/}
-            {/*  href={externalURL(ExternalURL.notion)}*/}
-            {/*  className={classes.nounsNavLink}*/}
-            {/*  target="_blank"*/}
-            {/*  rel="noreferrer"*/}
-            {/*  onClick={closeNav}*/}
-            {/*>*/}
-            {/*  <NavBarButton*/}
-            {/*    buttonText={<Trans>Docs</Trans>}*/}
-            {/*    buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}*/}
-            {/*    buttonStyle={nonWalletButtonStyle}*/}
-            {/*  />*/}
-            {/*</Nav.Link>*/}
+            <Nav.Link
+              href={externalURL(ExternalURL.notion)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+              onClick={closeNav}
+            >
+              <NavBarButton
+                buttonText={<Trans>Docs</Trans>}
+                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
             {/*<Nav.Link*/}
             {/*  href={externalURL(ExternalURL.discourse)}*/}
             {/*  className={classes.nounsNavLink}*/}
