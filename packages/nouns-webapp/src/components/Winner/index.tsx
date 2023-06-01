@@ -16,7 +16,7 @@ interface WinnerProps {
 
 const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const isNounders = !winner;
+  const isPunkers = !winner;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   // const isMobile = isMobileScreen();
@@ -57,9 +57,9 @@ const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
     <ShortAddress size={40} address={winner} avatar={true} />
   );
 
-  const nounderNounContent = (
+  const punkersPunkContent = (
     <a
-      href={buildEtherscanAddressLink('nounders.eth')}
+      href={buildEtherscanAddressLink('punkers.eth')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -71,7 +71,7 @@ const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
         }}
         id="holder-etherscan-tooltip"
       >
-        nounders.eth
+        punkers.eth
       </Tooltip>
     </a>
   );
@@ -83,7 +83,7 @@ const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
-              marginTop: isNounders ? -5 : 0,
+              marginTop: isPunkers ? -5 : 0,
             }}
             className={classes.winnerCopy}
           >
@@ -97,7 +97,7 @@ const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isNounders ? nounderNounContent : nonNounderNounContent}
+            {isPunkers ? punkersPunkContent : nonNounderNounContent}
           </h2>
         </Col>
       </Row>

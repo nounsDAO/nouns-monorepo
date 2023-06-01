@@ -368,7 +368,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             <Trans>
               Note: OG CryptoPunks will need to be delegated to your own address if you'd like to
               use them to vote. One delegation transaction is required per OG CryptoPunk. There are
-              no batch txs for OG Punks.
+              no batch txs for OG CryptoPunks.
             </Trans>
           </div>
         )}

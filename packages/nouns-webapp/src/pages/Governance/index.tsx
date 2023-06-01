@@ -12,7 +12,7 @@ import { i18n } from '@lingui/core';
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
+  const cryptopunksRequired = threshold !== undefined ? threshold + 1 : '...';
 
   const treasuryBalance = useTreasuryBalance();
   const treasuryBalanceUSD = useTreasuryUSDValue();
@@ -29,14 +29,14 @@ const GovernancePage = () => {
             <Trans>Governance</Trans>
           </span>
           <h1>
-            <Trans>Punks DAO</Trans>
+            <Trans>Punkers DAO</Trans>
           </h1>
         </Row>
         <p className={classes.subheading}>
-          Punks govern <span className={classes.boldText}>Punks DAO</span>. Punks can vote on
-          proposals or delegate their vote to a third party. A minimum of{' '}
+          CryptoPunks govern <span className={classes.boldText}>Punkers DAO</span>. CryptoPunks can
+          vote on proposals or delegate their vote to a third party. A minimum of{' '}
           <span className={classes.boldText}>
-            {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
+            {cryptopunksRequired} {threshold === 0 ? nounSingular : nounPlural}
           </span>{' '}
           is required to submit proposals.
         </p>
@@ -69,9 +69,9 @@ const GovernancePage = () => {
           </Col>
           <Col className={classes.treasuryInfoText}>
             <Trans>
-              This treasury exists for <span className={classes.boldText}>Punks DAO</span>{' '}
+              This treasury exists for <span className={classes.boldText}>Punkers DAO</span>{' '}
               participants to allocate resources for the long-term growth and prosperity of the
-              Punks project.
+              CryptoPunks project.
             </Trans>
           </Col>
         </Row>
