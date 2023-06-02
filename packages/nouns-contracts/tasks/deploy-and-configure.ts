@@ -57,6 +57,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     const executorAddress = contracts.NDAOExecutor.address;
     await contracts.NDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NToken.instance.transferOwnership(executorAddress);
+    await contracts.NSeeder.instance.transferOwnership(executorAddress);
     await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
       'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
