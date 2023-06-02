@@ -28,8 +28,8 @@ import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
 
 contract NToken is IToken, Ownable, ERC721Checkpointable {
-    // The punkers DAO address (creators org)
-    address public punkersDAO;
+    // The punkers address (creators org)
+    address public punkers;
 
     // An address who has permissions to mint Punks
     address public minter;
@@ -92,10 +92,10 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Require that the sender is the punkers DAO.
+     * @notice Require that the sender is the punkers.
      */
-    modifier onlyPunkersDAO() {
-        require(msg.sender == punkersDAO, 'Sender is not the punkers DAO');
+    modifier onlyPunkers() {
+        require(msg.sender == punkers, 'Sender is not the punkers');
         _;
     }
 
@@ -108,13 +108,13 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     }
 
     constructor(
-        address _punkersDAO,
+        address _punkers,
         address _minter,
         IDescriptorMinimal _descriptor,
         ISeeder _seeder,
         IProxyRegistry _proxyRegistry
     ) ERC721('CRYPTOPUNKS', '\u03FE') {
-        punkersDAO = _punkersDAO;
+        punkers = _punkers;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
@@ -149,7 +149,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     function mint() public override onlyMinter returns (uint256) {
         // punk ids start with 10000
         if (_currentPunkId <= 11820 && _currentPunkId % 10 == 0) {
-            _mintTo(punkersDAO, _currentPunkId++);
+            _mintTo(punkers, _currentPunkId++);
         }
         return _mintTo(minter, _currentPunkId++);
     }
@@ -183,15 +183,15 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Set the punkers DAO.
-     * @dev Only callable by the punkers DAO when not locked.
+     * @notice Set the punkers.
+     * @dev Only callable by the punkers when not locked.
      */
-    function setPunkersDAO(address _punkersDAO) external override onlyPunkersDAO {
-        require(_punkersDAO != address(0), "punkersDAO cannot be null");
+    function setPunkers(address _punkers) external override onlyPunkers {
+        require(_punkers != address(0), "punkers cannot be null");
 
-        punkersDAO = _punkersDAO;
+        punkers = _punkers;
 
-        emit PunkersDAOUpdated(_punkersDAO);
+        emit PunkersUpdated(_punkers);
     }
 
     /**

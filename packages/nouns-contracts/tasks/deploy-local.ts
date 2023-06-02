@@ -14,7 +14,7 @@ interface Contract {
 }
 
 task('deploy-local', 'Deploy contracts to hardhat')
-  .addOptionalParam('punkersdao', 'The punkers DAO contract address')
+  .addOptionalParam('punkers', 'The punkers (creator org) address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
@@ -83,7 +83,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
       NSeeder: {},
       NToken: {
         args: [
-          args.punkersdao || deployer.address,
+          args.punkers || deployer.address,
           expectedAuctionHouseProxyAddress,
           () => contracts.NDescriptorV2.instance?.address,
           () => contracts.NSeeder.instance?.address,
@@ -120,7 +120,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           () => contracts.NDAOExecutor.instance?.address,
           () => contracts.NToken.instance?.address,
           () => contracts.CryptopunksVote.instance?.address,
-          args.punkersdao || deployer.address,
+          args.punkers || deployer.address,
           () => contracts.NDAOExecutor.instance?.address,
           () => contracts.NDAOLogicV1.instance?.address,
           args.votingPeriod,

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-/// @title Nouns DAO Logic interfaces and events
+/// @title Cryptopunks DAO Logic interfaces and events
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *

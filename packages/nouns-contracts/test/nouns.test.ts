@@ -57,12 +57,12 @@ function calculateSeedHash(seed: Seed) {
 describe('NToken', () => {
   let nounsToken: NToken;
   let deployer: SignerWithAddress;
-  let noundersDAO: SignerWithAddress;
+  let punkers: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, noundersDAO] = await ethers.getSigners();
-    nounsToken = await deployNToken(deployer, noundersDAO.address, deployer.address);
+    [deployer, punkers] = await ethers.getSigners();
+    nounsToken = await deployNToken(deployer, punkers.address, deployer.address);
 
     const descriptor = await nounsToken.descriptor();
     const seeder = await nounsToken.seeder();
@@ -79,12 +79,12 @@ describe('NToken', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
+  it('should allow the minter to mint a noun to itself and a reward noun to the punkers', async () => {
     const receipt = await (await nounsToken.mint()).wait();
 
     const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
 
-    expect(await nounsToken.ownerOf(10_000)).to.eq(noundersDAO.address);
+    expect(await nounsToken.ownerOf(10_000)).to.eq(punkers.address);
     expect(noundersNounCreated?.event).to.eq('PunkCreated');
     expect(noundersNounCreated?.args?.tokenId).to.eq(10_000);
     expect(noundersNounCreated?.args?.seed.length).to.equal(3);
@@ -161,14 +161,14 @@ describe('NToken', () => {
 
   it('should not allow minter to burn a noun not owned', async () => {
     await (await nounsToken.mint()).wait();
-    await (await nounsToken.transferFrom(deployer.address, noundersDAO.address, 10_001)).wait();
+    await (await nounsToken.transferFrom(deployer.address, punkers.address, 10_001)).wait();
 
     const tx = nounsToken.burn(10_001);
     await expect(tx).to.be.revertedWith('PunkToken: burn caller is not owner nor approved');
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = nounsToken.connect(noundersDAO);
+    const account0AsNounErc721Account = nounsToken.connect(punkers);
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 

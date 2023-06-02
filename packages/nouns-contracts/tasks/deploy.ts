@@ -35,7 +35,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('cryptopunksVote', 'The CryptopunksVote contract address', undefined, types.string)
-  .addOptionalParam('punkersdao', 'The punkers DAO contract address', undefined, types.string)
+  .addOptionalParam('punkers', 'The punkers (creator org) address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -97,11 +97,11 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
-    if (!args.punkersdao) {
+    if (!args.punkers) {
       console.log(
-        `Punkers DAO address not provided. Setting to deployer (${deployer.address})...`,
+        `Punkers address not provided. Setting to deployer (${deployer.address})...`,
       );
-      args.punkersdao = deployer.address;
+      args.punkers = deployer.address;
     }
     console.log(args)
     if (!args.cryptopunksVote) {
@@ -166,7 +166,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
       },
       NToken: {
         args: [
-          args.punkersdao,
+          args.punkers,
           expectedAuctionHouseProxyAddress,
           () => deployment.NDescriptorV2.address,
           () => deployment.NSeeder.address,
@@ -217,7 +217,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
           () => deployment.NDAOExecutor.address,
           () => deployment.NToken.address,
           args.cryptopunksVote,
-          args.punkersdao,
+          args.punkers,
           () => deployment.NDAOExecutor.address,
           () => deployment.NDAOLogicV1.address,
           args.votingPeriod,
