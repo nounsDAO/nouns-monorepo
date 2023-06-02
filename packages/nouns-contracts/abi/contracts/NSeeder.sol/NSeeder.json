@@ -223,7 +223,7 @@
   },
   {
     "inputs": [],
-    "name": "lockSProbabilities",
+    "name": "lockProbabilities",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
