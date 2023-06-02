@@ -187,6 +187,8 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      * @dev Only callable by the punkers DAO when not locked.
      */
     function setPunkersDAO(address _punkersDAO) external override onlyPunkersDAO {
+        require(_punkersDAO != address(0), "punkersDAO cannot be null");
+
         punkersDAO = _punkersDAO;
 
         emit PunkersDAOUpdated(_punkersDAO);
