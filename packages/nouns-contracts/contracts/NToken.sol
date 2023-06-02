@@ -50,6 +50,9 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     // Whether the seeder can be updated
     bool public isSeederLocked;
 
+    // Whether the owner can register OG Punk hashes
+    bool public isRegisterOGHashesLocked;
+
     // The punk seeds
     /// @notice The value is the seed hash actually
     mapping(uint256 => bytes32) public seeds;
@@ -88,6 +91,14 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     modifier whenSeederNotLocked() {
         require(!isSeederLocked, 'Seeder is locked');
+        _;
+    }
+
+    /**
+     * @notice Require that registration of OG Punk hashes is not locked.
+     */
+    modifier whenRegisterOGHashesNotLocked() {
+        require(!isRegisterOGHashesLocked, 'RegisterOGHashesLocked is locked');
         _;
     }
 
@@ -255,6 +266,16 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     }
 
     /**
+     * @notice Lock the seeder.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockRegisterOGHashes() external override onlyOwner whenRegisterOGHashesNotLocked {
+        isRegisterOGHashesLocked = true;
+
+        emit RegisterOGHashesLocked();
+    }
+
+    /**
      * @dev calculates seed's hash.
      * Public for testing purposes.
      * Accessories are assumed to be sorted by accType!
@@ -315,7 +336,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         return punkId;
     }
 
-    function registerOGHashes(bytes32[] calldata hashes) external onlyOwner {
+    function registerOGHashes(bytes32[] calldata hashes) external onlyOwner whenRegisterOGHashesNotLocked {
         for(uint i = 0; i < hashes.length; i ++) {
             seedHashes[hashes[i]] = 1;
         }

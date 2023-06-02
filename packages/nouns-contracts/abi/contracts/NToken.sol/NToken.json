@@ -264,6 +264,12 @@
   {
     "anonymous": false,
     "inputs": [],
+    "name": "RegisterOGHashesLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
     "name": "SeederLocked",
     "type": "event"
   },
@@ -748,6 +754,19 @@
   },
   {
     "inputs": [],
+    "name": "isRegisterOGHashesLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "isSeederLocked",
     "outputs": [
       {
@@ -769,6 +788,13 @@
   {
     "inputs": [],
     "name": "lockMinter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockRegisterOGHashes",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

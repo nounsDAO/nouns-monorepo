@@ -40,6 +40,8 @@ interface IToken is IERC721 {
 
     event SeederLocked();
 
+    event RegisterOGHashesLocked();
+
     function mint() external returns (uint256);
 
     function burn(uint256 tokenId) external;
@@ -59,4 +61,6 @@ interface IToken is IERC721 {
     function setSeeder(ISeeder seeder) external;
 
     function lockSeeder() external;
+
+    function lockRegisterOGHashes() external;
 }
