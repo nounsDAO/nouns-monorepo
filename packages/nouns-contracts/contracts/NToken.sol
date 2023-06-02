@@ -158,6 +158,8 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      * @notice Burn a punk.
      */
     function burn(uint256 punkId) public override onlyMinter {
+        //solhint-disable-next-line max-line-length
+        require(_isApprovedOrOwner(_msgSender(), punkId), 'PunkToken: burn caller is not owner nor approved');
         _burn(punkId);
         emit PunkBurned(punkId);
     }
