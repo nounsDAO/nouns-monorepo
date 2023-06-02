@@ -55,7 +55,7 @@ task(
     1_000 /* 10% */,
     types.int,
   )
-  .setAction(async (args, { run }) => {
+  .setAction(async (args, { ethers, run }) => {
     // Deploy the NDAO contracts and return deployment information
     const contracts = await run('deploy-short-times', args);
 
@@ -72,6 +72,7 @@ task(
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
+    const [deployer] = await ethers.getSigners();
     if (!args.punkers) {
       console.log(
         `Punkers address not provided. Setting to deployer (${deployer.address})...`,
