@@ -31,7 +31,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addOptionalParam('votingDelay', 'The voting delay (blocks)')
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
-  .setAction(async (args, { run }) => {
+  .setAction(async (args, { ethers, run }) => {
     // Deploy the NDAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
@@ -54,6 +54,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
+    const [deployer] = await ethers.getSigners();
     if (!args.punkers) {
       console.log(
         `Punkers address not provided. Setting to deployer (${deployer.address})...`,
