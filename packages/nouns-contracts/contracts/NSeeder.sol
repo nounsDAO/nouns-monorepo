@@ -37,6 +37,14 @@ contract NSeeder is ISeeder, Ownable {
     // punk type, acc type, acc order id => accId
     mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) internal accIdByType; // not typeOrderSorted
 
+    // Whether the seeder can be updated
+    bool public areProbabilitiesLocked;
+
+    modifier whenProbabilitiesNotLocked() {
+        require(!areProbabilitiesLocked, 'Seeder probabilities are locked');
+        _;
+    }
+
     function generateSeed(uint256 punkId, uint256 salt) external view override returns (ISeeder.Seed memory) {
         uint256 pseudorandomness = uint256(
             keccak256(abi.encodePacked(blockhash(block.number - 1), punkId, salt))
@@ -154,12 +162,12 @@ contract NSeeder is ISeeder, Ownable {
         }
     }
 
-    function setTypeProbability(uint256[] calldata probabilities) external onlyOwner {
+    function setTypeProbability(uint256[] calldata probabilities) external onlyOwner whenProbabilitiesNotLocked {
         delete cTypeProbability;
         cTypeProbability = _calcProbability(probabilities);
     }
 
-    function setSkinProbability(uint16 punkType, uint256[] calldata probabilities) external onlyOwner {
+    function setSkinProbability(uint16 punkType, uint256[] calldata probabilities) external onlyOwner whenProbabilitiesNotLocked {
         while (cSkinProbability.length < punkType + 1) {
             cSkinProbability.push(0);
         }
@@ -167,7 +175,7 @@ contract NSeeder is ISeeder, Ownable {
         cSkinProbability[punkType] = _calcProbability(probabilities);
     }
 
-    function setAccCountProbability(uint16 punkType, uint256[] calldata probabilities) external onlyOwner {
+    function setAccCountProbability(uint16 punkType, uint256[] calldata probabilities) external onlyOwner whenProbabilitiesNotLocked {
         while (cAccCountProbability.length < punkType + 1) {
             cAccCountProbability.push(0);
         }
@@ -177,7 +185,7 @@ contract NSeeder is ISeeder, Ownable {
 
     // group list
     // key: group, value: accessory type
-    function setAccExclusion(uint256[] calldata _accExclusion) external onlyOwner {
+    function setAccExclusion(uint256[] calldata _accExclusion) external onlyOwner whenProbabilitiesNotLocked {
         require(_accExclusion.length == accTypeCount, "NSeeder: A");
         for(uint256 i = 0; i < accTypeCount; i ++) {
             accExclusion[i] = _accExclusion[i];
@@ -188,7 +196,7 @@ contract NSeeder is ISeeder, Ownable {
      * @notice Sets: accCountByType, accTypeCount.
      * According to counts.
      */
-    function setAccCountPerTypeAndPunk(uint256[][] memory counts) external onlyOwner {
+    function setAccCountPerTypeAndPunk(uint256[][] memory counts) external onlyOwner whenProbabilitiesNotLocked {
         delete accCountByType;
         require(counts.length > 0, "NSeeder: B");
         uint256 count = counts[0].length;
@@ -205,7 +213,7 @@ contract NSeeder is ISeeder, Ownable {
         accTypeCount = count;
     }
 
-    function setAccIdByType(uint256[][][] memory accIds) external onlyOwner {
+    function setAccIdByType(uint256[][][] memory accIds) external onlyOwner whenProbabilitiesNotLocked {
         for (uint256 i = 0 ; i < accIds.length ; i ++) {
             for (uint256 j = 0 ; j < accIds[i].length ; j ++) {
                 for (uint256 k = 0 ; k < accIds[i][j].length ; k ++) {
@@ -229,4 +237,14 @@ contract NSeeder is ISeeder, Ownable {
         require(cumulative == 100000, "Probability must be summed up 100000 ( 100.000% x1000 )");
         return probs;
     }
+
+    /**
+     * @notice Lock the seeder.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockSProbabilities() external override onlyOwner whenProbabilitiesNotLocked {
+        areProbabilitiesLocked = true;
+        emit ProbabilitiesLocked();
+    }
+
 }
