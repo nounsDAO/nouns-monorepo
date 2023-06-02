@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsToken
+/// @title Interface for NToken
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -26,7 +26,7 @@ interface IToken is IERC721 {
 
     event PunkBurned(uint256 indexed tokenId);
 
-    event PunkersDAOUpdated(address punkersDAO);
+    event PunkersUpdated(address punkers);
 
     event MinterUpdated(address minter);
 
@@ -46,7 +46,7 @@ interface IToken is IERC721 {
 
     function dataURI(uint256 tokenId) external returns (string memory);
 
-    function setPunkersDAO(address punkersDAO) external;
+    function setPunkers(address punkers) external;
 
     function setMinter(address minter) external;
 

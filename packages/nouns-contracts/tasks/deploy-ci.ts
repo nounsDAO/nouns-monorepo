@@ -2,17 +2,17 @@ import fs from 'fs';
 import { task } from 'hardhat/config';
 
 task('deploy-ci', 'Deploy contracts (automated by CI)')
-  .addOptionalParam('punkersdao', 'The punkersdao DAO contract address')
+  .addOptionalParam('punkers', 'The punkers (creator org) address')
   .addOptionalParam(
     'weth',
     'The WETH contract address',
     '0xc778417e063141139fce010982780140aa0cd5ab',
   )
-  .setAction(async ({ punkersdao, weth }, { ethers, run }) => {
+  .setAction(async ({ punkers, weth }, { ethers, run }) => {
     const [deployer] = await ethers.getSigners();
     const contracts = await run('deploy', {
       weth,
-      punkersDao: punkersdao || deployer.address,
+      punkers: punkers || deployer.address,
     });
 
     if (!fs.existsSync('logs')) {

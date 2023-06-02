@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Common interface for NounsDescriptor versions, as used by NounsToken and NounsSeeder.
+/// @title Common interface for NDescriptor versions, as used by NToken and NSeeder.
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *

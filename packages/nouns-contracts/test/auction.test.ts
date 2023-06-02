@@ -21,7 +21,7 @@ describe('NAuctionHouse', () => {
   let nToken: NToken;
   let weth: WETH;
   let deployer: SignerWithAddress;
-  let noundersDAO: SignerWithAddress;
+  let punkers: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
   let snapshotId: number;
@@ -44,9 +44,9 @@ describe('NAuctionHouse', () => {
   }
 
   before(async () => {
-    [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
+    [deployer, punkers, bidderA, bidderB] = await ethers.getSigners();
 
-    nToken = await deployNToken(deployer, noundersDAO.address, deployer.address);
+    nToken = await deployNToken(deployer, punkers.address, deployer.address);
     weth = await deployWeth(deployer);
     nAuctionHouse = await deploy(deployer);
 
@@ -79,7 +79,7 @@ describe('NAuctionHouse', () => {
     await expect(tx).to.be.revertedWith('Initializable: contract is already initialized');
   });
 
-  it('should allow the noundersDAO to unpause the contract and create the first auction', async () => {
+  it('should allow the punkers to unpause the contract and create the first auction', async () => {
     const tx = await nAuctionHouse.unpause();
     await tx.wait();
 

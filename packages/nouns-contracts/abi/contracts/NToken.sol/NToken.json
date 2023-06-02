@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_punkersDAO",
+        "name": "_punkers",
         "type": "address"
       },
       {
@@ -254,11 +254,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "punkersDAO",
+        "name": "punkers",
         "type": "address"
       }
     ],
-    "name": "PunkersDAOUpdated",
+    "name": "PunkersUpdated",
     "type": "event"
   },
   {
@@ -904,7 +904,7 @@
   },
   {
     "inputs": [],
-    "name": "punkersDAO",
+    "name": "punkers",
     "outputs": [
       {
         "internalType": "address",
@@ -1079,11 +1079,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_punkersDAO",
+        "name": "_punkers",
         "type": "address"
       }
     ],
-    "name": "setPunkersDAO",
+    "name": "setPunkers",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

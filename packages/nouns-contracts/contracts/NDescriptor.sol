@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns NFT descriptor
+/// @title The Cryptopunks NFT descriptor
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -354,7 +354,7 @@ contract NDescriptor is IDescriptor, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a token URI for an official Nouns DAO noun.
+     * @notice Given a token ID and seed, construct a token URI for an official Cryptopunk.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
     function tokenURI(uint256 tokenId, ISeeder.Seed memory seed) external view override returns (string memory) {

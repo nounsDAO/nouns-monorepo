@@ -7,7 +7,7 @@ import '../governance/NDAOLogicV1.sol';
 contract NDAOImmutable is NDAOLogicV1 {
     constructor(
         address timelock_,
-        address nouns_,
+        address punks_,
         address cryptopunksVote_,
         address admin_,
         address vetoer_,
@@ -17,7 +17,7 @@ contract NDAOImmutable is NDAOLogicV1 {
         uint256 quorumVotesBPS_
     ) {
         admin = msg.sender;
-        initialize(timelock_, nouns_, cryptopunksVote_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
+        initialize(timelock_, punks_, cryptopunksVote_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
         admin = admin_;
     }
@@ -32,8 +32,8 @@ contract NDAOImmutable is NDAOLogicV1 {
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) public override {
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
-        require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
+        require(msg.sender == admin, 'CryptopunksDAO::initialize: admin only');
+        require(address(timelock) == address(0), 'CryptopunksDAO::initialize: can only initialize once');
 
         timelock = IDAOExecutor(timelock_);
         npunks = NTokenLike(npunks_);
