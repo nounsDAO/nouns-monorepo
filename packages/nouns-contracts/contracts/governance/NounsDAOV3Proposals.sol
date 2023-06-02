@@ -167,9 +167,10 @@ library NounsDAOV3Proposals {
             adjustedTotalSupply
         );
         checkProposalTxs(txs);
-        checkNoActiveProp(ds, msg.sender);
 
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
+        checkNoActiveProp(ds, msg.sender, proposalId);
+
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             proposalId,
@@ -783,8 +784,16 @@ library NounsDAOV3Proposals {
      * @notice reverts if `proposer` is the proposer or signer of an active proposal.
      * This is a spam protection mechanism to limit the number of proposals each noun can back.
      */
-    function checkNoActiveProp(NounsDAOStorageV3.StorageV3 storage ds, address proposer) internal view {
+    function checkNoActiveProp(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        address proposer,
+        uint256 currentProposalId
+    ) internal view {
         uint256 latestProposalId = ds.latestProposalIds[proposer];
+
+        // This check is necessary to prevent the same signer used more than once in proposeBySigs
+        if (latestProposalId == currentProposalId) revert ProposerAlreadyHasALiveProposal();
+
         if (latestProposalId != 0) {
             NounsDAOStorageV3.ProposalState proposersLatestProposalState = state(ds, latestProposalId);
             if (
@@ -814,12 +823,12 @@ library NounsDAOV3Proposals {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
             address signer = signers[i] = proposerSignatures[i].signer;
 
-            checkNoActiveProp(ds, signer);
+            checkNoActiveProp(ds, signer, proposalId);
             ds.latestProposalIds[signer] = proposalId;
             votes += nouns.getPriorVotes(signer, block.number - 1);
         }
 
-        checkNoActiveProp(ds, msg.sender);
+        checkNoActiveProp(ds, msg.sender, proposalId);
         ds.latestProposalIds[msg.sender] = proposalId;
         votes += nouns.getPriorVotes(msg.sender, block.number - 1);
     }
