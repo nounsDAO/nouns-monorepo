@@ -40,6 +40,8 @@ contract NSeeder is ISeeder, Ownable {
     // Whether the seeder can be updated
     bool public areProbabilitiesLocked;
 
+    event ProbabilitiesLocked();
+
     modifier whenProbabilitiesNotLocked() {
         require(!areProbabilitiesLocked, 'Seeder probabilities are locked');
         _;
@@ -242,7 +244,7 @@ contract NSeeder is ISeeder, Ownable {
      * @notice Lock the seeder.
      * @dev This cannot be reversed and is only callable by the owner when not locked.
      */
-    function lockSProbabilities() external override onlyOwner whenProbabilitiesNotLocked {
+    function lockProbabilities() external onlyOwner whenProbabilitiesNotLocked {
         areProbabilitiesLocked = true;
         emit ProbabilitiesLocked();
     }

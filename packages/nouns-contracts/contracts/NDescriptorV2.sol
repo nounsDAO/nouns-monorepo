@@ -74,6 +74,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     /**
      * @notice Set the SVG renderer.
      * @dev Only callable by the owner.
+     * Reversible. Only view functions. No need to lock.
      */
     function setRenderer(ISVGRenderer _renderer) external onlyOwner {
         renderer = _renderer;
@@ -86,7 +87,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @param descriptor the address to set.
      * @dev Only callable by the owner.
      */
-    function setArtDescriptor(address descriptor) external onlyOwner {
+    function setArtDescriptor(address descriptor) external onlyOwner whenPartsNotLocked {
         art.setDescriptor(descriptor);
     }
 
@@ -94,6 +95,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @notice Set the art contract's `inflator`.
      * @param inflator the address to set.
      * @dev Only callable by the owner.
+     * Reversible. Only view functions. No need to lock.
      */
     function setArtInflator(IInflator inflator) external onlyOwner {
         art.setInflator(inflator);
@@ -601,7 +603,6 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
             name: name,
             description: description,
             parts: getPartsForSeed(seed)
-//            background: art.backgrounds(seed.background)
         });
         return NFTDescriptorV2.constructTokenURI(renderer, params);
     }
@@ -612,7 +613,6 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     function generateSVGImage(ISeeder.Seed memory seed) external view override returns (string memory) {
         ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
             parts: getPartsForSeed(seed)
-//            background: art.backgrounds(seed.background)
         });
         return NFTDescriptorV2.generateSVGImage(renderer, params);
     }
