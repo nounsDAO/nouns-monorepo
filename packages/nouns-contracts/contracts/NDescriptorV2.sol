@@ -583,8 +583,8 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      */
     function dataURI(uint256 tokenId, ISeeder.Seed memory seed) public view override returns (string memory) {
         string memory punkId = tokenId.toString();
-        string memory name = string(abi.encodePacked('Token ', punkId));
-        string memory description = string(abi.encodePacked('Token ', punkId, ' is a member of the Punk DAO'));
+        string memory name = string(abi.encodePacked('CryptoPunk ', punkId));
+        string memory description = string(abi.encodePacked('CryptoPunk ', punkId, ' is a member of the CryptoPunks DAO'));
 
         return genericDataURI(name, description, seed);
     }
