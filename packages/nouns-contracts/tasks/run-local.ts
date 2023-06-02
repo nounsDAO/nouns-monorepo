@@ -29,6 +29,7 @@ task(
   const executorAddress = contracts.NDAOExecutor.instance.address;
   await contracts.NDescriptorV2.instance.transferOwnership(executorAddress);
   await contracts.NToken.instance.transferOwnership(executorAddress);
+  await contracts.NSeeder.instance.transferOwnership(executorAddress);
   await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
   await contracts.NAuctionHouse.instance
     .attach(contracts.NAuctionHouseProxy.instance.address)

@@ -39,6 +39,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
 
     // The Punks token seeder
     ISeeder public seeder;
+
     mapping(bytes32 => uint256) seedHashes;
 
     // Whether the minter can be updated
