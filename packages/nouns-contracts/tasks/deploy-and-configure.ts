@@ -54,11 +54,17 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
+    if (!args.punkers) {
+      console.log(
+        `Punkers address not provided. Setting to deployer (${deployer.address})...`,
+      );
+      args.punkers = deployer.address;
+    }
     const executorAddress = contracts.NDAOExecutor.address;
-    await contracts.NDescriptorV2.instance.transferOwnership(executorAddress);
-    await contracts.NToken.instance.transferOwnership(executorAddress);
-    await contracts.NSeeder.instance.transferOwnership(executorAddress);
-    await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+    await contracts.NDescriptorV2.instance.transferOwnership(args.punkers);
+    await contracts.NToken.instance.transferOwnership(args.punkers);
+    await contracts.NSeeder.instance.transferOwnership(args.punkers);
+    await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(args.punkers);
     console.log(
       'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
     );
@@ -72,7 +78,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       await auctionHouse.unpause({
         gasLimit: 5_000_000,
       });
-      await auctionHouse.transferOwnership(executorAddress);
+      await auctionHouse.transferOwnership(args.punkers);
       console.log(
         'Started the first auction and transferred ownership of the auction house to the executor.',
       );

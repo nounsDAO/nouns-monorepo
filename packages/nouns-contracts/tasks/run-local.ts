@@ -26,16 +26,17 @@ task(
     });
 
   // Transfer ownership
+  const [deployer] = await ethers.getSigners();
   const executorAddress = contracts.NDAOExecutor.instance.address;
-  await contracts.NDescriptorV2.instance.transferOwnership(executorAddress);
-  await contracts.NToken.instance.transferOwnership(executorAddress);
-  await contracts.NSeeder.instance.transferOwnership(executorAddress);
-  await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+  await contracts.NDescriptorV2.instance.transferOwnership(deployer.address);
+  await contracts.NToken.instance.transferOwnership(deployer.address);
+  await contracts.NSeeder.instance.transferOwnership(deployer.address);
+  await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(deployer.address);
   await contracts.NAuctionHouse.instance
     .attach(contracts.NAuctionHouseProxy.instance.address)
-    .transferOwnership(executorAddress);
+    .transferOwnership(deployer.address);
   console.log(
-    'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
+    'Transferred ownership of the descriptor, token, and proxy admin contracts to the deployer.',
   );
 
   // await run('create-proposal', {
