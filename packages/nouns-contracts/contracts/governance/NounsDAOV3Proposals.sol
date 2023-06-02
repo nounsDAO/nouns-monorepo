@@ -225,16 +225,10 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
-        (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
-            ds,
-            proposerSignatures,
-            txs,
-            description,
-            proposalId
-        );
-
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
-        uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
+
+        uint256 propThreshold = proposalThreshold(ds, adjustedTotalSupply);
+
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             proposalId,
@@ -242,6 +236,16 @@ library NounsDAOV3Proposals {
             adjustedTotalSupply,
             txs
         );
+
+        (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
+            ds,
+            proposerSignatures,
+            txs,
+            description,
+            proposalId
+        );
+        require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
+
         newProposal.signers = signers;
 
         emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(adjustedTotalSupply), txs, description);
