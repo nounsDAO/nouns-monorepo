@@ -28,5 +28,9 @@ interface ISeeder {
         Accessory[] accessories;
     }
 
+    event ProbabilitiesLocked();
+
     function generateSeed(uint256 punkId, uint256 salt) external view returns (Seed memory);
+
+    function lockSProbabilities() external;
 }
