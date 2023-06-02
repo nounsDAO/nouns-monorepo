@@ -155,8 +155,16 @@ describe('NToken', () => {
   it('should allow minter to burn a noun', async () => {
     await (await nounsToken.mint()).wait();
 
-    const tx = nounsToken.burn(10_000);
-    await expect(tx).to.emit(nounsToken, 'PunkBurned').withArgs(10_000);
+    const tx = nounsToken.burn(10_001);
+    await expect(tx).to.emit(nounsToken, 'PunkBurned').withArgs(10_001);
+  });
+
+  it('should not allow minter to burn a noun not owned', async () => {
+    await (await nounsToken.mint()).wait();
+    await (await nounsToken.transferFrom(deployer.address, noundersDAO.address, 10_001)).wait();
+
+    const tx = nounsToken.burn(10_001);
+    await expect(tx).to.be.revertedWith('PunkToken: burn caller is not owner nor approved');
   });
 
   it('should revert on non-minter mint', async () => {
