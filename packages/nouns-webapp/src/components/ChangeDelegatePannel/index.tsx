@@ -314,52 +314,54 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             </div>
             {primaryButton}
           </div>
-          <div className={classes.ogPunksWrapper}>
-            {ogPunks.map(ogpunk => (
-              <div key={ogpunk.id} className={classes.delegateRow}>
-                <div className={classes.ogPunkWrapper}>
-                  <div className={classes.ogPunkAvatarWrapper}>
-                    <div
-                      className={classes.ogPunkAvatar}
-                      style={{ backgroundPosition: getPosition(ogpunk) }}
-                    />
-                  </div>
-                  <div className={classes.ogPunkText}>
-                    CryptoPunk {ogpunk.id}
-                    <span>{renderDelegatee(ogpunk)}</span>
-                  </div>
-                </div>
-                {delegateOgPunksState.status === 'Mining' && ogpunk.id === activeOgPunkId ? (
-                  <div className={classes.delegateTxWrapper}>
-                    <div className={classes.spinner}>
-                      <BrandSpinner />
+          {!!ogPunks.length && (
+            <div className={classes.ogPunksWrapper}>
+              {ogPunks.map(ogpunk => (
+                <div key={ogpunk.id} className={classes.delegateRow}>
+                  <div className={classes.ogPunkWrapper}>
+                    <div className={classes.ogPunkAvatarWrapper}>
+                      <div
+                        className={classes.ogPunkAvatar}
+                        style={{ backgroundPosition: getPosition(ogpunk) }}
+                      />
                     </div>
-                    <NavBarButton
-                      buttonText={<Trans>View on Etherscan</Trans>}
-                      buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
-                      onClick={() => showEtherscanTxLink(delegateOgPunksState.transaction?.hash)}
-                      disabled={false}
-                    />
+                    <div className={classes.ogPunkText}>
+                      CryptoPunk {ogpunk.id}
+                      <span>{renderDelegatee(ogpunk)}</span>
+                    </div>
                   </div>
-                ) : (
-                  <NavBarButton
-                    buttonText={<Trans>Delegate</Trans>}
-                    buttonStyle={
-                      !isAddress(delegateAddress) ||
-                      ogpunk.delegate?.id === lowerCaseAddress(delegateAddress)
-                        ? NavBarButtonStyle.DELEGATE_DISABLED
-                        : undefined
-                    }
-                    onClick={() => handleDelegateOgPunk(ogpunk.id)}
-                    disabled={
-                      changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-                      !isAddress(delegateAddress)
-                    }
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+                  {delegateOgPunksState.status === 'Mining' && ogpunk.id === activeOgPunkId ? (
+                    <div className={classes.delegateTxWrapper}>
+                      <div className={classes.spinner}>
+                        <BrandSpinner />
+                      </div>
+                      <NavBarButton
+                        buttonText={<Trans>View on Etherscan</Trans>}
+                        buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
+                        onClick={() => showEtherscanTxLink(delegateOgPunksState.transaction?.hash)}
+                        disabled={false}
+                      />
+                    </div>
+                  ) : (
+                    <NavBarButton
+                      buttonText={<Trans>Delegate</Trans>}
+                      buttonStyle={
+                        !isAddress(delegateAddress) ||
+                        ogpunk.delegate?.id === lowerCaseAddress(delegateAddress)
+                          ? NavBarButtonStyle.DELEGATE_DISABLED
+                          : undefined
+                      }
+                      onClick={() => handleDelegateOgPunk(ogpunk.id)}
+                      disabled={
+                        changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+                        !isAddress(delegateAddress)
+                      }
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </>
       )}
       <div className={classes.buttonWrapper}>

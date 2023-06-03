@@ -121,7 +121,7 @@ export const useUserVotes = (): number | undefined => {
   const accountVotes = useAccountVotes(account ?? ethers.constants.AddressZero) ?? 0;
   const cryptopunksVotes = useCryptopunksVotes(account ?? ethers.constants.AddressZero) ?? 0;
 
-  return accountVotes + cryptopunksVotes;
+  return account ? accountVotes + cryptopunksVotes : 0;
 };
 
 export const useAccountVotes = (account?: string): number | undefined => {
