@@ -25,5 +25,6 @@ export const useTreasuryUSDValue = () => {
   const treasuryBalanceETH = Number(
     ethers.utils.formatEther(useTreasuryBalance()?.toString() || '0'),
   );
-  return etherPrice * treasuryBalanceETH;
+
+  return etherPrice ? etherPrice * treasuryBalanceETH : undefined;
 };
