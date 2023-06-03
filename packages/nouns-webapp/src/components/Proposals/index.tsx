@@ -125,7 +125,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        <div className="d-flex align-baseline">
+        <div className={classes.wrapper}>
           {hasEnoughVotesToPropose ? (
             <div className={classes.nounInWalletBtnWrapper}>
               <div className={classes.submitProposalButtonWrapper}>

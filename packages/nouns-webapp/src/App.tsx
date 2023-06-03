@@ -15,7 +15,7 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
-import NoundersPage from './pages/Nounders';
+// import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
 // import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';

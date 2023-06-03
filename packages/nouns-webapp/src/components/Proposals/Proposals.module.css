@@ -249,3 +249,8 @@
 .changeDelegateBtn:active {
   background-color: #e2e3e8 !important;
 }
+
+.wrapper {
+  display: flex;
+  align-items: baseline;
+}
