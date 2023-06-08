@@ -10,6 +10,10 @@ type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
   isForkingPeriod: boolean;
+  title: string;
+  description: string;
+  selectLabel: string;
+  selectDescription: string;
 }
 
 const dummyData = {
@@ -22,9 +26,9 @@ export default function AddNounsToForkModal(props: Props) {
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const { data: proposals } = useAllProposals();
-  const proposalsList = proposals?.map((proposal) => {
+  const proposalsList = proposals?.map((proposal, i) => {
     return (
-      <option value={proposal.id}>{proposal.id} - {proposal.title}</option>
+      <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
     )
   });
 
@@ -32,6 +36,37 @@ export default function AddNounsToForkModal(props: Props) {
   const ownedNouns = dummyData.ownedNouns;
   const allNounIds = ownedNouns.map((nounId) => nounId);
 
+  // const [modalCopy, setModalCopy] = React.useState({
+  //   title: 'Add Nouns to escrow',
+  //   description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+  //   selectLabel: 'Select Nouns to escrow',
+  //   selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+  // })
+
+  // React.useEffect(() => {
+  //   if (props.isForkingPeriod) {
+  //     setModalCopy({
+  //       title: 'Join the fork',
+  //       description: "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.",
+  //       selectLabel: 'Select Nouns to join the fork',
+  //       selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period',
+  //     })
+  //   } else {
+  //     setModalCopy({
+  //       title: 'Add Nouns to escrow',
+  //       description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+  //       selectLabel: 'Select Nouns to escrow',
+  //       selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+  //     })
+  //   }
+  // }, [props.isForkingPeriod])
+
+  // const modalCopy = {
+  //   title: props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow',
+  //   description: props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+  //   selectLabel: props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow',
+  //   selectDescription: props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+  // }
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
@@ -50,12 +85,14 @@ export default function AddNounsToForkModal(props: Props) {
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
         <Trans>
-          {props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow'}
+          {/* {props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow'} */}
+          {props.title}
         </Trans>
       </h2>
       <p className={classes.modalDescription}>
         <Trans>
-          {props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
+          {/* {props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."} */}
+          {props.description}
         </Trans>
       </p>
       <div className={classes.fields}>
@@ -105,13 +142,15 @@ export default function AddNounsToForkModal(props: Props) {
           <p>
             <strong>
               <Trans>
-                {props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow'}
+                {/* {props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow'} */}
+                {props.selectLabel}
               </Trans>
             </strong>
           </p>
           <p>
             <Trans>
-              {props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
+              {/* {props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'} */}
+              {props.selectDescription}
             </Trans>
           </p>
         </div>
@@ -158,13 +197,23 @@ export default function AddNounsToForkModal(props: Props) {
 
   )
   return (
-    <SolidColorBackgroundModal
-      show={props.isModalOpen}
-      onDismiss={() => {
-        props.setIsModalOpen(false);
-        setIsConfirmModalOpen(false);
-      }}
-      content={isConfirmModalOpen ? confirmModalContent : modalContent}
-    />
+    <>
+      <SolidColorBackgroundModal
+        show={props.isModalOpen && !isConfirmModalOpen}
+        onDismiss={() => {
+          props.setIsModalOpen(false);
+          setIsConfirmModalOpen(false);
+        }}
+        content={modalContent}
+      />
+      <SolidColorBackgroundModal
+        show={props.isModalOpen && isConfirmModalOpen}
+        onDismiss={() => {
+          props.setIsModalOpen(false);
+          setIsConfirmModalOpen(false);
+        }}
+        content={confirmModalContent}
+      />
+    </>
   )
 }
