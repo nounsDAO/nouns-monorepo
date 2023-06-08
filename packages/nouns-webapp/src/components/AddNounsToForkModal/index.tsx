@@ -32,12 +32,37 @@ export default function AddNounsToForkModal(props: Props) {
   const ownedNouns = dummyData.ownedNouns;
   const allNounIds = ownedNouns.map((nounId) => nounId);
 
-  const modalCopy = {
-    title: props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow',
-    description: props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
-    selectLabel: props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow',
-    selectDescription: props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
-  }
+  const [modalCopy, setModalCopy] = React.useState({
+    title: 'Add Nouns to escrow',
+    description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+    selectLabel: 'Select Nouns to escrow',
+    selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+  })
+
+  React.useEffect(() => {
+    if (props.isForkingPeriod) {
+      setModalCopy({
+        title: 'Join the fork',
+        description: "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.",
+        selectLabel: 'Select Nouns to join the fork',
+        selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period',
+      })
+    } else {
+      setModalCopy({
+        title: 'Add Nouns to escrow',
+        description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+        selectLabel: 'Select Nouns to escrow',
+        selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+      })
+    }
+  }, [props.isForkingPeriod])
+
+  // const modalCopy = {
+  //   title: props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow',
+  //   description: props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
+  //   selectLabel: props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow',
+  //   selectDescription: props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
+  // }
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
