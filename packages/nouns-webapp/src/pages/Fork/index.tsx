@@ -53,9 +53,6 @@ const ForkPage: React.FC<ForkPageProps> = props => {
         <button
           className={clsx(currentState === 'forking' && classes.active)}
           onClick={() => setCurrentState('forking')}>forking</button>
-        <button
-          className={clsx(currentState === 'deployed' && classes.active)}
-          onClick={() => setCurrentState('deployed')}>deployed</button>
       </div>
       <Section fullWidth={false} className='al'>
         <div className={classes.pageHeader}>
