@@ -196,6 +196,16 @@ const ForkPage: React.FC<ForkPageProps> = props => {
         />
       )}
 
+      {/* <AddNounsToForkModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+        isForkingPeriod={false}
+        title="Add Nouns to escrow"
+        description="Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."
+        selectLabel="Select Nouns to escrow"
+        selectDescription="Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period."
+      /> */}
+
 
       <SolidColorBackgroundModal
         show={isConfirmModalOpen}
