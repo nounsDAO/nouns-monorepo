@@ -4,7 +4,6 @@ import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
 import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
-import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
 
@@ -14,7 +13,6 @@ const dummyData = {
   states: ['escrow', 'nouns added', 'escrow threshold met', 'forking'],
   userNouns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
 }
-
 const now = new Date();
 const dummyForkingDates = {
   startTime: now.getTime() / 1000,
@@ -25,19 +23,7 @@ const nounsInFork = Array.from(Array(160), (_, x) => Math.floor(Math.random() * 
 
 const ForkPage: React.FC<ForkPageProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [currentState, setCurrentState] = useState('escrow');
-
-  const confirmModalContent = (
-    <div className={classes.confirmModalContent}>
-      <h2 className={classes.modalTitle}>Confirm</h2>
-      <p className={classes.modalDescription}>By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.</p>
-      <button className={clsx(classes.button, classes.primaryButton)}
-      // onClick={() => setIsConfirmModalOpen(false)}
-      >Join</button>
-      <button className={clsx(classes.button, classes.secondaryButton)} onClick={() => setIsConfirmModalOpen(false)}>Cancel</button>
-    </div>
-  );
 
   return (
     <>
@@ -84,13 +70,12 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               >Timelock</a></p>
             ) : (
               <p>160 Nouns (20%) are required to meet the threshold</p>
-
             )}
           </Col>
           <Col lg={6} className={classes.buttons}>
             {currentState === 'nouns added' && (
-              <button className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
-                onClick={() => setIsConfirmModalOpen(false)}
+              <button
+                className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
               >Withdraw Nouns</button>
             )}
             <button
