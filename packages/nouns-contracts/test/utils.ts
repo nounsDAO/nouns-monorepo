@@ -329,13 +329,6 @@ export const populateSeeder = async (nSeeder: NSeeder): Promise<void> => {
 
   const accTypeCount = Object.keys(probDoc.acc_types).length
 
-  const accCountPerType = probDoc.types.map((punkType: string) =>
-      Object.keys(probDoc.acc_types).map(type =>
-          Object.values(probDoc.accessories).filter((item: any) => item.type == type && item.punk.split("").includes(shortPunkType[punkType])).length
-      )
-  )
-  const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
-
   const accIdPerType = probDoc.types.map((punkType: string) =>
     Object.keys(probDoc.acc_types).map(type =>
       Object.values(probDoc.accessories).filter((item: any) => item.type == type)
@@ -344,7 +337,15 @@ export const populateSeeder = async (nSeeder: NSeeder): Promise<void> => {
         .map((entry: any) => entry[1])
     )
   )
-  const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType)).wait()
+  const accWeightPerType = probDoc.types.map((punkType: string) =>
+    Object.keys(probDoc.acc_types).map(type =>
+      Object.values(probDoc.accessories).filter((item: any) => item.type == type)
+        .map((item: any) => [item.punk.split("").includes(shortPunkType[punkType]), item.weight])
+        .filter((entry: any) => entry[0])
+        .map((entry: any) => entry[1])
+    )
+  )
+  const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType, accWeightPerType)).wait()
 
   const accExclusion = Array()
   for (let i = 0 ; i < accTypeCount ; i ++) {

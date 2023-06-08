@@ -25,25 +25,6 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "accExclusion",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "accTypeCount",
     "outputs": [
@@ -251,19 +232,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[][]",
-        "name": "counts",
-        "type": "uint256[][]"
-      }
-    ],
-    "name": "setAccCountPerTypeAndPunk",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint16",
         "name": "punkType",
         "type": "uint16"
@@ -297,6 +265,11 @@
       {
         "internalType": "uint256[][][]",
         "name": "accIds",
+        "type": "uint256[][][]"
+      },
+      {
+        "internalType": "uint256[][][]",
+        "name": "accWeights",
         "type": "uint256[][][]"
       }
     ],

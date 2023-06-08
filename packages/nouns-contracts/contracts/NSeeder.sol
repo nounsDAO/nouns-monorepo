@@ -30,12 +30,14 @@ contract NSeeder is ISeeder, Ownable {
     uint256[] public cSkinProbability;
     uint256[] public cAccCountProbability;
     uint256 public accTypeCount;
-    mapping(uint256 => uint256) public accExclusion; // i: acc index, excluded acc indexes as bitmap
+    mapping(uint256 => uint256) internal accExclusion; // i: acc index, excluded acc indexes as bitmap
 
-    uint256[] accCountByType; // accessories count by punk type, acc type, joined with one byte chunks
+    uint256[] internal accCountByType; // accessories count by punk type, acc type, joined with one byte chunks
+    uint16[][] internal accTypeWeight; // accessory types sum of weight by punk type
+    uint16[][][] internal accAggWeightByType; // accessory aggregated sum of weight by punk type and acc type
 
     // punk type, acc type, acc order id => accId
-    mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) internal accIdByType; // not typeOrderSorted
+    mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) internal accIdByType;
 
     // Whether the seeder can be updated
     bool public areProbabilitiesLocked;
@@ -98,40 +100,51 @@ contract NSeeder is ISeeder, Ownable {
 
         // Pick random values for accessories
         pseudorandomness >>= 72;
-        uint256 accCounts = accCountByType[seed.punkType];
-        assert(accCounts > 0);
         seed.accessories = new Accessory[](curAccCount);
-        uint256 remainingAccCount = 0;
-        for (uint256 i = 0; i < accTypeCount; i ++) {
-            remainingAccCount += (accCounts >> (i * 8)) & 0xff;
-        }
+        uint16[] memory currAccTypeWeights = accTypeWeight[seed.punkType];
+        assert(currAccTypeWeights.length == accTypeCount);
+        uint16[] memory currAggAccTypeWeights = new uint16[](currAccTypeWeights.length);
         for (uint256 i = 0; i < curAccCount; i ++) {
-            // just in case
-            if (remainingAccCount == 0) {
-                // todo
-                break;
+            // calculate currAggAccTypeWeights
+            uint16 temp = 0; // need to save variables, solidity stack-to-deep error, temp is acc aggregated weight
+            for (uint256 j = 0; j < accTypeCount; j ++) {
+                temp += currAccTypeWeights[j];
+                currAggAccTypeWeights[j] = temp;
             }
-            uint256 accSelection = pseudorandomness % remainingAccCount;
+            // todo temp == 0 check
+            // random number for acc type selection
+            temp = uint16((pseudorandomness % temp) + 1); // temp is acc type random
             pseudorandomness >>= 16;
-            for (uint j = 0; j < accTypeCount; j ++) {
-                // we loop until accSelection overflow, and it WILL overflow
-                unchecked {
-                    accSelection -= (accCounts >> (j * 8)) & 0xff;
-                }
-                if (accSelection > remainingAccCount) {
-                    seed.accessories[i] = Accessory({
-                        accType: uint16(j),
-                        accId: uint16(accIdByType[seed.punkType][j][pseudorandomness % ((accCounts >> (j * 8)) & 0xff)])
-                    });
-                    pseudorandomness >>= 8;
-                    uint256 accExclusiveGroup = accExclusion[j];
-                    for (uint256 k = 0; k < accTypeCount; k ++) {
-                        if ((accExclusiveGroup >> k) & 1 == 1) {
-                            remainingAccCount -= (accCounts >> (k * 8)) & 0xff;
-                            accCounts &= (0xff << (k * 8)) ^ 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
-                        }
-                    }
+            // select acc type
+            uint256 accType = 0;
+            for (uint256 j = 0; j < accTypeCount; j ++) {
+                if (temp <= currAggAccTypeWeights[j]) {
+                    accType = j;
                     break;
+                }
+            }
+            // random number for acc id selection
+            uint16[] memory currAccAggWeight = accAggWeightByType[seed.punkType][accType];
+            temp = uint16((pseudorandomness % (currAccAggWeight[currAccAggWeight.length - 1])) + 1); // temp is acc id random
+            pseudorandomness >>= 8;
+            // select acc accId
+            uint256 accIdx = 0;
+            for (uint256 j = 0; j < currAccAggWeight.length; j ++) {
+                if (temp <= currAccAggWeight[j]) {
+                    accIdx = j;
+                    break;
+                }
+            }
+            // set Accessory
+            seed.accessories[i] = Accessory({
+                accType: uint16(accType),
+                accId: uint16(accIdByType[seed.punkType][accType][accIdx])
+            });
+            // apply exclusions
+            uint256 accExclusiveGroup = accExclusion[accType];
+            for (uint256 j = 0; j < accTypeCount; j ++) {
+                if ((accExclusiveGroup >> j) & 1 == 1) {
+                    currAccTypeWeights[j] = 0;
                 }
             }
         }
@@ -195,34 +208,44 @@ contract NSeeder is ISeeder, Ownable {
     }
 
     /**
-     * @notice Sets: accCountByType, accTypeCount.
-     * According to counts.
+     * @notice Sets: accCountByType, accTypeCount, accIdByType.
+     * According to accIds.
      */
-    function setAccCountPerTypeAndPunk(uint256[][] memory counts) external onlyOwner whenProbabilitiesNotLocked {
+    function setAccIdByType(uint256[][][] memory accIds, uint256[][][] memory accWeights) external onlyOwner whenProbabilitiesNotLocked {
         delete accCountByType;
-        require(counts.length > 0, "NSeeder: B");
-        uint256 count = counts[0].length;
+        delete accTypeWeight;
+        delete accAggWeightByType;
+        require(accIds.length > 0, "NSeeder: B");
+        require(accIds.length == accWeights.length, "NSeeder: H");
+        uint256 count = accIds[0].length; // count of accessory types
         require(count < 28, "NSeeder: C"); // beacuse of seedHash calculation
-        for(uint256 k = 0; k < counts.length; k ++) {
-            require(counts[k].length == count, "NSeeder: D");
+        for (uint256 i = 0 ; i < accIds.length ; i ++) {
+            require(accIds[i].length == count, "NSeeder: D");
+            require(accWeights[i].length == count, "NSeeder: I");
             uint256 accCounts = 0;
-            for(uint256 i = 0; i < counts[k].length; i ++) {
-                require(counts[k][i] < 255, "NSeeder: E"); // 256 - 1, because of seedHash calculation
-                accCounts |= (1 << (i * 8)) * counts[k][i];
+            uint16[] memory accTypeWeightForPunk = new uint16[](count);
+            uint16[][] memory accAggWeightByTypeForPunk = new uint16[][](count);
+            for (uint256 j = 0 ; j < accIds[i].length ; j ++) {
+                require(accIds[i][j].length < 255, "NSeeder: E"); // 256 - 1, because of seedHash calculation
+                require(accIds[i][j].length == accWeights[i][j].length, "NSeeder: J");
+                accCounts |= (1 << (j * 8)) * accIds[i][j].length;
+                uint16[] memory accAggWeightByTypeForPunkAndType = new uint16[](accWeights[i][j].length);
+                uint16 currAccAggWeightByTypeForPunkAndType = 0;
+                for (uint256 k = 0 ; k < accIds[i][j].length ; k ++) {
+                    require(accWeights[i][j][k] < type(uint16).max, "NSeeder: K");
+                    require(accWeights[i][j][k] > 0, "NSeeder: L");
+                    accIdByType[i][j][k] = accIds[i][j][k];
+                    currAccAggWeightByTypeForPunkAndType += uint16(accWeights[i][j][k]);
+                    accAggWeightByTypeForPunkAndType[k] = currAccAggWeightByTypeForPunkAndType;
+                }
+                accTypeWeightForPunk[j] = currAccAggWeightByTypeForPunkAndType;
+                accAggWeightByTypeForPunk[j] = accAggWeightByTypeForPunkAndType;
             }
             accCountByType.push(accCounts);
+            accTypeWeight.push(accTypeWeightForPunk);
+            accAggWeightByType.push(accAggWeightByTypeForPunk);
         }
         accTypeCount = count;
-    }
-
-    function setAccIdByType(uint256[][][] memory accIds) external onlyOwner whenProbabilitiesNotLocked {
-        for (uint256 i = 0 ; i < accIds.length ; i ++) {
-            for (uint256 j = 0 ; j < accIds[i].length ; j ++) {
-                for (uint256 k = 0 ; k < accIds[i][j].length ; k ++) {
-                    accIdByType[i][j][k] = accIds[i][j][k];
-                }
-            }
-        }
     }
 
     function _calcProbability(
