@@ -79,8 +79,16 @@ export default function AddNounsToForkModal(props: Props) {
 
   const modalContent = (
     <div className={classes.modalContent}>
-      <h2 className={classes.modalTitle}><Trans>{modalCopy.title}</Trans></h2>
-      <p className={classes.modalDescription}><Trans>{modalCopy.description}</Trans></p>
+      <h2 className={classes.modalTitle}>
+        <Trans>
+          {props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow'}
+        </Trans>
+      </h2>
+      <p className={classes.modalDescription}>
+        <Trans>
+          {props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
+        </Trans>
+      </p>
       <div className={classes.fields}>
         <InputGroup className={classes.inputs}>
           <div>
@@ -125,8 +133,18 @@ export default function AddNounsToForkModal(props: Props) {
       </div>
       <div className={classes.sectionHeader}>
         <div className={classes.sectionLabel}>
-          <p><strong><Trans>{modalCopy.selectLabel}</Trans></strong></p>
-          <p><Trans>{modalCopy.selectDescription}</Trans></p>
+          <p>
+            <strong>
+              <Trans>
+                {props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow'}
+              </Trans>
+            </strong>
+          </p>
+          <p>
+            <Trans>
+              {props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
+            </Trans>
+          </p>
         </div>
         <button
           onClick={() => {
