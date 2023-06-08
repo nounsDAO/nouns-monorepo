@@ -43,7 +43,7 @@ task("populate-seeder", "Initialize deployed smart contracts")
             )
         )
         console.log("accCountPerType", accCountPerType)
-        const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
+//         const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
 
         // a check
         for (const [punkType, probObj] of Object.entries(probDoc.probabilities)) {
@@ -67,14 +67,24 @@ task("populate-seeder", "Initialize deployed smart contracts")
 
         const accIdPerType = probDoc.types.map((punkType: string) =>
             Object.keys(probDoc.acc_types).map(type =>
-                Object.values(probDoc.accessories).filter((item: any) => item.type == type)
+                Object.values(probDoc.accessories)
+                    .filter((item: any) => item.type == type)
                     .map((item: any, idx: number) => [item.punk.split("").includes(shortPunkType[punkType]), idx])
                     .filter((entry: any) => entry[0])
                     .map((entry: any) => entry[1])
             )
         )
         console.log("accIdPerType", accIdPerType);
-        const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType)).wait()
+        const accWeightPerType = probDoc.types.map((punkType: string) =>
+            Object.keys(probDoc.acc_types).map(type =>
+                Object.values(probDoc.accessories).filter((item: any) => item.type == type)
+                    .map((item: any) => [item.punk.split("").includes(shortPunkType[punkType]), item.weight])
+                    .filter((entry: any) => entry[0])
+                    .map((entry: any) => entry[1])
+            )
+        )
+        console.log("accWeightPerType", accWeightPerType);
+        const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType, accWeightPerType)).wait()
 
         const accExclusion = Array()
         for (let i = 0 ; i < accTypeCount ; i ++) {
