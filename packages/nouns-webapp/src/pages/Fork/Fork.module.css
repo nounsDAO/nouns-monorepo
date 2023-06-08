@@ -21,6 +21,15 @@ h1 {
   padding: 0;
 }
 
+.pageHeader a {
+  color: #14161b;
+  font-weight: bold;
+}
+
+.pageHeader a:hover {
+  text-decoration: none;
+}
+
 .button {
   border-radius: 8px;
   font-family: 'PT Root UI';
@@ -111,9 +120,10 @@ h1 {
   text-align: center;
   padding: 20px;
   border: 1px solid #e6e6e6;
-  border-radius: 6px;
+  border-radius: 12px;
   line-height: 1;
   margin-bottom: 20px;
+  width: 100%;
 }
 .summary span, .timestamp {
   display: block;
@@ -124,11 +134,19 @@ h1 {
   font-family: 'Londrina Solid';
   font-size: 42px;
 }
+.nounsInFork {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+.nounsInFork img {
+  border-radius: 6px;
+  max-width: 40px;
+}
 
 /* timeline */
-.events {
-  
-}
 .forkTimelineItem {
   position: relative;
   margin: 0;
@@ -154,6 +172,9 @@ h1 {
   height: 30px;
   width: 30px;
 }
+.eventRemove .nounsList {
+  opacity: 0.25;
+}
 
 
 /* timeline item */
@@ -175,6 +196,7 @@ h1 {
 }
 .message::before {
   content: '“';
+  margin-left: -6px;
 }
 .message::after {
   content: '”'
@@ -275,3 +297,4 @@ h1 {
 .tempStateChanger button.active {
   border-color: white;
 }
+

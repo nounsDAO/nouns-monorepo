@@ -20,6 +20,8 @@ const dummyForkingDates = {
   startTime: now.getTime() / 1000,
   endTime: now.getTime() / 1000 + 86400
 }
+const nounsInFork = Array.from(Array(160), (_, x) => Math.floor(Math.random() * 737));
+
 
 const ForkPage: React.FC<ForkPageProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,6 +58,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
       </div>
       <Section fullWidth={false} className='al'>
         <div className={classes.pageHeader}>
+
           <Col lg={6}>
             <span className={clsx(classes.forkStatus)}>
               {currentState === 'escrow' && 'Escrow'}
@@ -65,7 +68,24 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               {" "}Period
             </span>
             <h1><Trans>Nouns DAO Fork</Trans></h1>
-            <p>160 Nouns (20%) are required to meet the threshold</p>
+            {currentState === 'forking' ? (
+              <p>Fork contracts: <a
+                href="https://etherscan.io/[link]"
+                target='_blank'
+                rel='noreferrer'
+              >Governor</a>, <a
+                href="https://etherscan.io/[link]"
+                target='_blank'
+                rel='noreferrer'
+              >Token</a>, <a
+                href="https://etherscan.io/[link]"
+                target='_blank'
+                rel='noreferrer'
+              >Timelock</a></p>
+            ) : (
+              <p>160 Nouns (20%) are required to meet the threshold</p>
+
+            )}
           </Col>
           <Col lg={6} className={classes.buttons}>
             {currentState === 'nouns added' && (
@@ -114,6 +134,13 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   Deploy Nouns fork
                 </button>
               )}
+              {currentState === 'forking' && (
+                <div className={classes.nounsInFork}>
+                  {nounsInFork.map((nounId) => (
+                    <a href={`/noun/${nounId}`}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
+                  ))}
+                </div>
+              )}
             </Col>
             <Col lg={9} className={classes.events}>
               {currentState === 'nouns added' && (
@@ -123,10 +150,49 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   </p>
                 </div>
               )}
+              {currentState === 'forking' && (
+                <>
+                  <div className={classes.forkTimelineItem}>
+                    <header>
+                      <span className={classes.timestamp}>1 hour ago</span>
+                      <h3 className={classes.eventTitle}>Noun321.eth added 1 Noun</h3>
+                      <div className={classes.nounsList}>
+                        <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                      </div>
+                    </header>
+                  </div>
+                  <div className={classes.forkTimelineItem}>
+                    <header>
+                      <span className={classes.timestamp}>3 hours ago</span>
+                      <h3 className={classes.eventTitle}>NounXYZ.eth added 2 Nouns</h3>
+                      <p className={classes.message}>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nulla vitae elit libero, a pharetra augue.</p>
+                      <div className={classes.nounsList}>
+                        <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                        <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                      </div>
+                      <div className={classes.proposals}>
+                        <p className={classes.sectionLabel}>
+                          <Trans>Offending proposals</Trans>
+                        </p>
+                        <ul>
+                          <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
+                          <li><a href="/vote/123"><strong>123</strong> Prop 56 FUN Frames Re-evaluation</a></li>
+                          <li><a href="/vote/282"><strong>99</strong> Sailing PR campaign, Korea Blockchain Week 2022 [6,7 August]</a></li>
+                        </ul>
+                      </div>
+                    </header>
+                  </div>
+                  <div className={clsx(classes.forkTimelineItem, classes.forkDeployed)}>
+                    <header>
+                      <span className={classes.timestamp}>1 day ago</span>
+                      <h3 className={classes.eventTitle}>Fork deployed</h3>
+                    </header>
+                  </div>
+                </>)}
               <div className={classes.forkTimelineItem}>
                 <header>
                   <span className={classes.timestamp}>2 days ago</span>
-                  <h3 className={classes.eventTitle}>Noun123.eth added 6 Nouns to escrow</h3>
+                  <h3 className={classes.eventTitle}>Noun123.eth added 6 Nouns</h3>
                   <p className={classes.message}>Etiam porta sem malesuada magna mollis euismod. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
                   <div className={classes.nounsList}>
                     <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
@@ -142,21 +208,57 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     </p>
                     <ul>
                       <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
+                      <li><a href="/vote/123"><strong>123</strong> Prop 56 FUN Frames Re-evaluation</a></li>
+                      <li><a href="/vote/282"><strong>99</strong> Sailing PR campaign, Korea Blockchain Week 2022 [6,7 August]</a></li>
+                    </ul>
+                  </div>
+                </header>
+              </div>
+              <div className={clsx(classes.forkTimelineItem, classes.eventRemove)}>
+                <header>
+                  <span className={classes.timestamp}>4 days ago</span>
+                  <h3 className={classes.eventTitle}>NounABC.eth withdrew 3 Nouns from escrow</h3>
+                  <div className={classes.nounsList}>
+                    <a href={`/noun/123`}><img src={`https://noun.pics/123`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/124`}><img src={`https://noun.pics/124`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/125`}><img src={`https://noun.pics/125`} alt="noun" className={classes.nounImage} /></a>
+                  </div>
+                </header>
+              </div>
+              <div className={classes.forkTimelineItem}>
+                <header>
+                  <span className={classes.timestamp}>5 days ago</span>
+                  <h3 className={classes.eventTitle}>Noun123.eth added 6 Nouns</h3>
+                  <p className={classes.message}>Etiam porta sem malesuada magna mollis euismod. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                  <div className={classes.nounsList}>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                  </div>
+                  <div className={classes.proposals}>
+                    <p className={classes.sectionLabel}>
+                      <Trans>Offending proposals</Trans>
+                    </p>
+                    <ul>
                       <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
-                      <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
+                      <li><a href="/vote/123"><strong>123</strong> Prop 56 FUN Frames Re-evaluation</a></li>
+                      <li><a href="/vote/282"><strong>99</strong> Sailing PR campaign, Korea Blockchain Week 2022 [6,7 August]</a></li>
                     </ul>
                   </div>
                 </header>
               </div>
               <div className={classes.forkTimelineItem}>
                 <header>
-                  <span className={classes.timestamp}>2 days ago</span>
-                  <h3 className={classes.eventTitle}>NounABC.eth added 3 Nouns to escrow</h3>
+                  <span className={classes.timestamp}>6 days ago</span>
+                  <h3 className={classes.eventTitle}>NounABC.eth added 3 Nouns</h3>
                   <p className={classes.message}>Etiam porta sem malesuada magna mollis euismod. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
                   <div className={classes.nounsList}>
-                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
-                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
-                    <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/123`}><img src={`https://noun.pics/123`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/124`}><img src={`https://noun.pics/124`} alt="noun" className={classes.nounImage} /></a>
+                    <a href={`/noun/125`}><img src={`https://noun.pics/125`} alt="noun" className={classes.nounImage} /></a>
                   </div>
                   <div className={classes.proposals}>
                     <p className={classes.sectionLabel}>
@@ -164,8 +266,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     </p>
                     <ul>
                       <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
-                      <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
-                      <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
+                      <li><a href="/vote/123"><strong>123</strong> Prop 56 FUN Frames Re-evaluation</a></li>
+                      <li><a href="/vote/282"><strong>99</strong> Sailing PR campaign, Korea Blockchain Week 2022 [6,7 August]</a></li>
                     </ul>
                   </div>
                 </header>
@@ -195,23 +297,6 @@ const ForkPage: React.FC<ForkPageProps> = props => {
           selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
         />
       )}
-
-      {/* <AddNounsToForkModal
-        setIsModalOpen={setIsModalOpen}
-        isModalOpen={isModalOpen}
-        isForkingPeriod={false}
-        title="Add Nouns to escrow"
-        description="Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."
-        selectLabel="Select Nouns to escrow"
-        selectDescription="Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period."
-      /> */}
-
-
-      <SolidColorBackgroundModal
-        show={isConfirmModalOpen}
-        onDismiss={() => setIsConfirmModalOpen(false)}
-        content={confirmModalContent}
-      />
     </>
   );
 };
