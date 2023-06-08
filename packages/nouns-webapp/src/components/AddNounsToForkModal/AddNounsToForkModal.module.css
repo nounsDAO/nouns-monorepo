@@ -1,0 +1,187 @@
+.modalContent {
+  font-weight: normal;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.inputs input, .inputs select {
+  padding: 10px 12px;
+}
+.inputs small, .sectionLabel p {
+  font-size: 16px;
+  color: #14161b;
+  font-weight: normal;
+}
+.inputs small strong {
+  font-weight: bold;
+}
+.reasonInput, .selectMenu {
+  width: 100% !important;
+  border-radius: 6px !important;
+}
+
+/* nouns */
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 20px 0;
+  @media (max-width: 991px) {
+    flex-direction: column;
+  }
+}
+.sectionHeader button {
+  height: fit-content;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.sectionHeader button:hover {
+  opacity: 0.75;
+  text-decoration: none;
+}
+.sectionLabel {
+  width: 70%;
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+.sectionLabel p {
+  margin: 0;
+  padding: 0;
+}
+.nounsList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+.nounButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  gap: 10px;
+  text-align: left;
+  width: auto;
+  font-family: "Londrina Solid", sans-serif;
+  font-size: 20px;
+  border: 2px solid #D3D3D3;
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+
+.nounButton:hover {
+  border: 2px solid #5E5E5E;
+}
+
+.nounButton img {
+  max-width: 48px;
+  border-radius: 6px;
+}
+
+.selectedNounButton {
+  border: 2px solid #000;
+}
+
+/* proposals */
+.selectedProposals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.selectedProposal {
+  background-color: white;
+  border: 2px solid #D3D3D3;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+.selectedProposal a {
+  color: #14161b;
+  text-decoration: none;
+}
+.selectedProposal a:hover {
+  text-decoration: underline;
+}
+.selectedProposal span {
+  font-family: "Londrina Solid", sans-serif;
+}
+.removeButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  opacity: 0.2;
+  transition: all 0.2s ease-in-out;
+}
+.removeButton svg {
+  vertical-align: top;
+}
+.removeButton:hover {
+  opacity: 1;
+}
+
+/* confirm */
+.modalActions {
+  text-align: center; 
+  margin: 20px 0;
+}
+
+.modalActions p { 
+  margin: 10px 0;
+  padding: 0;
+  opacity: 0.7;
+}
+
+.button {
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  background-color: #faf4f8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+  font-size: 22px;
+}
+
+.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.primaryButton:disabled {
+  background-color: #ccc;
+}
+.primaryButton:disabled:hover {
+  opacity: 1;
+}
+.primaryButton:hover {
+  opacity: 0.75;
+}
