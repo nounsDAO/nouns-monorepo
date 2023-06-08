@@ -26,7 +26,8 @@ interface IN00unsSeeder {
         uint48 accessory;
         uint48 head;
         uint48 glasses;
+        bytes imgData;
     }
-
-    function generateSeed(uint256 n00unId, IN00unsDescriptorMinimal descriptor) external view returns (Seed memory);
+  
+    function generateSeed(uint256 n00unId, IN00unsDescriptorMinimal descriptor) external returns (Seed memory);
 }

@@ -14,10 +14,7 @@ task(
 
   const contracts = await run('deploy-local');
 
-  await run('populate-descriptor', {
-    nftDescriptor: contracts.NFTDescriptorV2.instance.address,
-    n00unsDescriptor: contracts.N00unsDescriptorV2.instance.address,
-  });
+ 
 
   await contracts.N00unsAuctionHouse.instance
     .attach(contracts.N00unsAuctionHouseProxy.instance.address)
@@ -27,8 +24,8 @@ task(
 
   // Transfer ownership
   const executorAddress = contracts.N00unsDAOExecutor.instance.address;
-  await contracts.N00unsDescriptorV2.instance.transferOwnership(executorAddress);
-  await contracts.N00unsToken.instance.transferOwnership(executorAddress);
+  //await contracts.N00unsDescriptorV2.instance.transferOwnership(executorAddress);
+  //await contracts.N00unsToken.instance.transferOwnership(executorAddress);
   await contracts.N00unsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
   await contracts.N00unsAuctionHouse.instance
     .attach(contracts.N00unsAuctionHouseProxy.instance.address)
@@ -59,7 +56,7 @@ task(
     `N00un contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
   );
   console.log(`Auction House Proxy address: ${contracts.N00unsAuctionHouseProxy.instance.address}`);
-  console.log(`N00uns ERC721 address: ${contracts.N00unsToken.instance.address}`);
+  console.log(`N00uns ERC721 address: ${contracts.N00unsTokenv2.instance.address}`);
   console.log(`N00uns DAO Executor address: ${contracts.N00unsDAOExecutor.instance.address}`);
   console.log(`N00uns DAO Proxy address: ${contracts.N00unsDAOProxyV2.instance.address}`);
 

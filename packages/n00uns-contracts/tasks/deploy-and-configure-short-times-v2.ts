@@ -2,7 +2,7 @@ import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
 task(
-  'deploy-and-configure-short-times',
+  'deploy-and-configure-short-times-v2',
   'Deploy and configure all contracts with short gov times for testing',
 )
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
@@ -63,18 +63,14 @@ task(
   .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { run }) => {
     // Deploy the N00uns DAO contracts and return deployment information
-    const contracts = await run('deploy-short-times', args);
+    const contracts = await run('deploy-short-times-v2', args);
 
     // Verify the contracts on Etherscan
     await run('verify-etherscan-daov2', {
       contracts,
     });
 
-    // Populate the on-chain art
-    await run('populate-descriptor', {
-      nftDescriptor: contracts.NFTDescriptorV2.address,
-      n00unsDescriptor: contracts.N00unsDescriptorV2.address,
-    });
+
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.

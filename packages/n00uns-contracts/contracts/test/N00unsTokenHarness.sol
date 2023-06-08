@@ -41,7 +41,8 @@ contract N00unsTokenHarness is N00unsToken {
             body: body,
             accessory: accessory,
             head: head,
-            glasses: glasses
+            glasses: glasses,
+            imgData: new bytes(32)
         });
 
         _mint(owner(), to, currentN00unId++);

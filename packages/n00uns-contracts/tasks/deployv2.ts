@@ -1,13 +1,6 @@
 import { default as N00unsAuctionHouseABI } from '../abi/contracts/N00unsAuctionHouse.sol/N00unsAuctionHouse.json';
-import {
-  ChainId,
-  ContractDeployment,
-  ContractName,
-  ContractNameDescriptorV1,
-  ContractNamesDAOV2,
-  DeployedContract,
-} from './types';
-import { Interface, parseUnits } from 'ethers/lib/utils';
+import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
+import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
 
@@ -25,20 +18,23 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+  [ChainId.Mumbai]: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+  [ChainId.Polygon]: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+  [ChainId.BscTestNet]:'0x4DB5a66E937A9F4473fA95b1cAF1d1E1D62E29EA'
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for testing')
+task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00unsToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('n00undersdao', 'The n00unders DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    30 /* 30 seconds */,
+    5 * 60 /* 5 minutes */,
     types.int,
   )
   .addOptionalParam(
@@ -56,17 +52,27 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 2 /* 2 minutes */,
+    60 * 60 * 24 /* 24 hours */,
     types.int,
   )
-  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
+  .addOptionalParam(
+    'timelockDelay',
+    'The timelock delay (seconds)',
+    60 * 60 * 24 * 2 /* 2 days */,
+    types.int,
+  )
   .addOptionalParam(
     'votingPeriod',
     'The voting period (blocks)',
-    80 /* 20 min (15s blocks) */,
+    Math.round(4 * 60 * 24 * (60 / 2)) /* 4 days (2s blocks) */,
     types.int,
   )
-  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
+  .addOptionalParam(
+    'votingDelay',
+    'The voting delay (blocks)',
+    Math.round(3 * 60 * 24 * (60 / 2)) /* 3 days (2s blocks) */,
+    types.int,
+  )
   .addOptionalParam(
     'proposalThresholdBps',
     'The proposal threshold (basis points)',
@@ -74,18 +80,11 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
     types.int,
   )
   .addOptionalParam(
-    'minQuorumVotesBPS',
-    'Min basis points input for dynamic quorum',
-    1_000,
+    'quorumVotesBps',
+    'Votes required for quorum (basis points)',
+    1_000 /* 10% */,
     types.int,
-  ) // Default: 10%
-  .addOptionalParam(
-    'maxQuorumVotesBPS',
-    'Max basis points input for dynamic quorum',
-    4_000,
-    types.int,
-  ) // Default: 40%
-  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
+  )
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
@@ -122,11 +121,11 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
-      ContractNamesDAOV2,
+    const deployment: Record<ContractName, DeployedContract> = {} as Record<
+      ContractName,
       DeployedContract
     >;
-    const contracts: Record<ContractNamesDAOV2, ContractDeployment> = {
+    const contracts: Record<ContractName, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
       N00unsDescriptorV2: {
@@ -139,7 +138,6 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
       N00unsArt: {
         args: [() => deployment.N00unsDescriptorV2.address, () => deployment.Inflator.address],
       },
-      N00unsTokenv2: {},
       N00unsSeeder2: {},
       N00unsToken: {
         args: [
@@ -182,29 +180,25 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
       N00unsDAOExecutor: {
         args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
       },
-      N00unsDAOLogicV2: {
+      N00unsDAOLogicV1: {
         waitForConfirmation: true,
       },
-      N00unsDAOProxyV2: {
+      N00unsDAOProxy: {
         args: [
           () => deployment.N00unsDAOExecutor.address,
           () => deployment.N00unsToken.address,
           args.n00undersdao,
           () => deployment.N00unsDAOExecutor.address,
-          () => deployment.N00unsDAOLogicV2.address,
+          () => deployment.N00unsDAOLogicV1.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
-          {
-            minQuorumVotesBPS: args.minQuorumVotesBPS,
-            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
-            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
-          },
+          args.quorumVotesBps,
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedN00unsDAOProxyAddress.toLowerCase();
-          const actual = deployment.N00unsDAOProxyV2.address.toLowerCase();
+          const actual = deployment.N00unsDAOProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
               `Unexpected N00uns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
@@ -236,20 +230,7 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
 
-      let nameForFactory: string;
-      switch (name) {
-        case 'N00unsDAOExecutor':
-          nameForFactory = 'N00unsDAOExecutorTest';
-          break;
-        case 'N00unsDAOLogicV2':
-          nameForFactory = 'N00unsDAOLogicV2Harness';
-          break;
-        default:
-          nameForFactory = name;
-          break;
-      }
-
-      const factory = await ethers.getContractFactory(nameForFactory, {
+      const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
       });
 
@@ -304,8 +285,8 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractNamesDAOV2] = {
-        name: nameForFactory,
+      deployment[name as ContractName] = {
+        name,
         instance: deployedContract,
         address: deployedContract.address,
         constructorArguments: contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? [],

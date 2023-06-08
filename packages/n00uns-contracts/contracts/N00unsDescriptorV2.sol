@@ -413,13 +413,14 @@ contract N00unsDescriptorV2 is IN00unsDescriptorV2, Ownable {
         string memory name = string(abi.encodePacked('N00un ', n00unId));
         string memory description = string(abi.encodePacked('N00un ', n00unId, ' is a member of the N00uns DAO'));
 
-        return genericDataURI(name, description, seed);
+        return genericDataURI(tokenId, name, description, seed);
     }
 
     /**
      * @notice Given a name, description, and seed, construct a base64 encoded data URI.
      */
     function genericDataURI(
+        uint256 tokenId,
         string memory name,
         string memory description,
         IN00unsSeeder.Seed memory seed
@@ -428,7 +429,8 @@ contract N00unsDescriptorV2 is IN00unsDescriptorV2, Ownable {
             name: name,
             description: description,
             parts: getPartsForSeed(seed),
-            background: art.backgrounds(seed.background)
+            background: art.backgrounds(seed.background),
+            imgData: seed.imgData
         });
         return NFTDescriptorV2.constructTokenURI(renderer, params);
     }
