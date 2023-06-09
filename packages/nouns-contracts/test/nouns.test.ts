@@ -228,7 +228,7 @@ describe('NToken', () => {
   describe('contractURI', async () => {
     it('should return correct contractURI', async () => {
       expect(await nounsToken.contractURI()).to.eq(
-        'ipfs://QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX',
+        'ipfs://QmSZrgQjaisaJH2qzio8EvYoCx4VHKBQryCxWeYd5njMvt',
       );
     });
     it('should allow owner to set contractURI', async () => {
@@ -240,6 +240,71 @@ describe('NToken', () => {
       await expect(nounsToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
         'Ownable: caller is not the owner',
       );
+    });
+  });
+
+  describe('metadata', async () => {
+    it('should get default name', async () => {
+      expect(await nounsToken.name()).to.eq('CRYPTOPUNKS');
+    });
+    it('should get default symbol', async () => {
+      expect(await nounsToken.symbol()).to.eq('Ͼ');
+    });
+    it('the owner can change the name', async () => {
+      await nounsToken.setName('CRYPTOPUNKS-2');
+      expect(await nounsToken.name()).to.eq('CRYPTOPUNKS-2');
+    });
+    it('the owner can change the symbol', async () => {
+      await nounsToken.setSymbol('Ͼ-2');
+      expect(await nounsToken.symbol()).to.eq('Ͼ-2');
+    });
+    it('only owner can change the name', async () => {
+      const [, nonOwner] = await ethers.getSigners();
+      const tx = nounsToken.connect(nonOwner).setName('CRYPTOPUNKS-2');
+      await expect(tx).to.be.revertedWith('Ownable: caller is not the owner');
+    });
+    it('only owner can change the symbol', async () => {
+      const [, nonOwner] = await ethers.getSigners();
+      const tx = nounsToken.connect(nonOwner).setSymbol('Ͼ-2');
+      await expect(tx).to.be.revertedWith('Ownable: caller is not the owner');
+    });
+    it('a name change emits the event', async () => {
+      const tx = nounsToken.setName('CRYPTOPUNKS-2');
+      await expect(tx)
+        .to.emit(nounsToken, 'MetadataUpdated')
+        .withArgs('CRYPTOPUNKS-2', 'Ͼ');
+    });
+    it('a name change emits the event', async () => {
+      const tx = nounsToken.setSymbol('Ͼ-2');
+      await expect(tx)
+        .to.emit(nounsToken, 'MetadataUpdated')
+        .withArgs('CRYPTOPUNKS', 'Ͼ-2');
+    });
+    it('the owner cannot change the name when locked', async () => {
+      await nounsToken.lockMetadata();
+      const tx = nounsToken.setName('CRYPTOPUNKS-2');
+      await expect(tx).to.be.revertedWith('Metadata is locked');
+    });
+    it('the owner cannot change the symbol when locked', async () => {
+      await nounsToken.lockMetadata();
+      const tx = nounsToken.setSymbol('Ͼ-2');
+      await expect(tx).to.be.revertedWith('Metadata is locked');
+    });
+    it('the owner can lock metadata', async () => {
+      expect(await nounsToken.isMetadataLocked()).to.be.eq(false);
+      await nounsToken.lockMetadata();
+      expect(await nounsToken.isMetadataLocked()).to.be.eq(true);
+    });
+    it('locking metadata emits the event', async () => {
+      const tx = nounsToken.lockMetadata();
+      await expect(tx)
+        .to.emit(nounsToken, 'MetadataLocked')
+        .withArgs();
+    });
+    it('only owner can lock metadata', async () => {
+      const [, nonOwner] = await ethers.getSigners();
+      const tx = nounsToken.connect(nonOwner).lockMetadata();
+      await expect(tx).to.be.revertedWith('Ownable: caller is not the owner');
     });
   });
 });

@@ -19,7 +19,7 @@
     "alien": {
       "probability": 0.1,
       "skin": [ 0, 0, 0, 0, 0, 0, 100 ],
-      "accessories": ["hat", "glasses", "mouth", "ears" ],
+      "accessories": ["hat", "glasses", "mouth", "neck", "ears" ],
       "accessory_count_probabbilities": [0.0, 33.33, 44.45, 22.22]
     },
     "ape": {

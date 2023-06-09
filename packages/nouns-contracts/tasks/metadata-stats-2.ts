@@ -2,6 +2,7 @@ import { Result } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import * as fs from 'fs';
 import probDoc from '../../nouns-assets/src/config/probability.json'
+import ImageData from '../files/image-data-v2.json';
 
 
 const shortPunkType: any = {
@@ -39,7 +40,11 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
       }
       accIds.push(perPunk);
     }
+    const accNames: Array<Map<string,number>> = [new Map(), new Map(), new Map(), new Map(), new Map()];
 
+    const { palette, images } = ImageData;
+    const { necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+    const orderedAccNames = [necks, cheekses, faces, lipses, emotions, teeths, beards, earses, hats, helmets, hairs, mouths, glasseses, goggleses, eyeses, noses];
 
     for (let i = 0; i < 100_000; i++) {
       let stringNumber = (i).toString(16);
@@ -54,13 +59,15 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
       accCount[seed[0]][seed[2].length] ++;
       for (const acc of seed[2]) {
         accTypes[seed[0]][acc[0]] ++;
-//         accIds[seed[0]][acc[0]][acc[1]] ++;
-        const currAccIdCount = accIds[seed[0]][acc[0]].get(acc[1]);
+        let currAccIdCount = accIds[seed[0]][acc[0]].get(acc[1]);
         if (currAccIdCount === undefined) {
-          accIds[seed[0]][acc[0]].set(acc[1], 1);
+          currAccIdCount = 1;
         } else {
-          accIds[seed[0]][acc[0]].set(acc[1], currAccIdCount + 1);
+          currAccIdCount = currAccIdCount + 1;
         }
+        accIds[seed[0]][acc[0]].set(acc[1], currAccIdCount);
+        const accName = orderedAccNames[acc[0]][acc[1]].filename;
+        accNames[seed[0]].set(accName, currAccIdCount);
       }
       if (i %  10_000 == 9_999) {
         console.log("----------------------------------------------------------------");
@@ -72,7 +79,8 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
         console.log("accCount per type", accCount);
         console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, helmet, hair, mouth, glasses, goggles, eyes, nose");
         console.log("accTypes per type", accTypes);
-        console.log("accIds per punk type per ac type", accIds);
+//         console.log("accIds per punk type per acc type", accIds);
+        console.log("accNames per punk type", accNames);
         console.log("----------------------------------------------------------------");
       }
     }
@@ -85,5 +93,6 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
     console.log("accCount per type", accCount);
     console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, helmet, hair, mouth, glasses, goggles, eyes, nose");
     console.log("accTypes per type", accTypes);
-    console.log("accIds per punk type per ac type", accIds);
+//     console.log("accIds per punk type per acc type", accIds);
+    console.log("accNames per punk type", accNames);
   });

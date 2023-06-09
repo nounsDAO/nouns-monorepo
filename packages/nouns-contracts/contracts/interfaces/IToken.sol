@@ -42,6 +42,10 @@ interface IToken is IERC721 {
 
     event RegisterOGHashesLocked();
 
+    event MetadataUpdated(string name, string symbol);
+
+    event MetadataLocked();
+
     function mint() external returns (uint256);
 
     function burn(uint256 tokenId) external;
@@ -63,4 +67,10 @@ interface IToken is IERC721 {
     function lockSeeder() external;
 
     function lockRegisterOGHashes() external;
+
+    function setName(string memory name_) external;
+
+    function setSymbol(string memory symbol_) external;
+
+    function lockMetadata() external;
 }

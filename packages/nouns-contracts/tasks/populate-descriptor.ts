@@ -25,7 +25,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     });
     const descriptorContract = descriptorFactory.attach(nDescriptor);
 
-    const { /*bgcolors, */palette, images } = ImageData;
+    const { palette, images } = ImageData;
     const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
     const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
