@@ -5,6 +5,7 @@ import {
   ContractName,
   ContractNameDescriptorV1,
   ContractNamesDAOV2,
+  ContractNamesDAOV3,
   DeployedContract,
 } from './types';
 import { Interface, parseUnits } from 'ethers/lib/utils';
@@ -25,13 +26,15 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+  [ChainId.Mumbai]: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+   [ChainId.BscTestNet]:'0x4DB5a66E937A9F4473fA95b1cAF1d1E1D62E29EA'
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for testing')
+task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('n00undersdao', 'The n00unders DAO contract address', undefined, types.string)
@@ -122,96 +125,81 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
-      ContractNamesDAOV2,
+    const deployment: Record<ContractNamesDAOV3, DeployedContract> = {} as Record<
+      ContractNamesDAOV3,
       DeployedContract
     >;
-    const contracts: Record<ContractNamesDAOV2, ContractDeployment> = {
-      NFTDescriptorV2: {},
-      SVGRenderer: {},
-      N00unsDescriptorV2: {
-        args: [expectedN00unsArtAddress, () => deployment.SVGRenderer.address],
-        libraries: () => ({
-          NFTDescriptorV2: deployment.NFTDescriptorV2.address,
-        }),
-      },
-      Inflator: {},
-      N00unsArt: {
-        args: [() => deployment.N00unsDescriptorV2.address, () => deployment.Inflator.address],
-      },
-      N00unsTokenv2: {},
-      N00unsSeeder2: {},
-      N00unsToken: {
+    const contracts: Record<ContractNamesDAOV3, ContractDeployment> = {
+      N00unsTokenv2: {
         args: [
-          args.n00undersdao,
+          deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => deployment.N00unsDescriptorV2.address,
-          () => deployment.N00unsSeeder2.address,
           proxyRegistryAddress,
         ],
       },
-      N00unsAuctionHouse: {
-        waitForConfirmation: true,
-      },
-      N00unsAuctionHouseProxyAdmin: {},
-      N00unsAuctionHouseProxy: {
-        args: [
-          () => deployment.N00unsAuctionHouse.address,
-          () => deployment.N00unsAuctionHouseProxyAdmin.address,
-          () =>
-            new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
-              deployment.N00unsToken.address,
-              args.weth,
-              args.auctionTimeBuffer,
-              args.auctionReservePrice,
-              args.auctionMinIncrementBidPercentage,
-              args.auctionDuration,
-            ]),
-        ],
-        waitForConfirmation: true,
-        validateDeployment: () => {
-          const expected = expectedAuctionHouseProxyAddress.toLowerCase();
-          const actual = deployment.N00unsAuctionHouseProxy.address.toLowerCase();
-          if (expected !== actual) {
-            throw new Error(
-              `Unexpected auction house proxy address. Expected: ${expected}. Actual: ${actual}.`,
-            );
-          }
+        N00unsAuctionHouse: {
+            waitForConfirmation: true,
         },
-      },
-      N00unsDAOExecutor: {
-        args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
-      },
-      N00unsDAOLogicV2: {
-        waitForConfirmation: true,
-      },
-      N00unsDAOProxyV2: {
-        args: [
-          () => deployment.N00unsDAOExecutor.address,
-          () => deployment.N00unsToken.address,
-          args.n00undersdao,
-          () => deployment.N00unsDAOExecutor.address,
-          () => deployment.N00unsDAOLogicV2.address,
-          args.votingPeriod,
-          args.votingDelay,
-          args.proposalThresholdBps,
-          {
-            minQuorumVotesBPS: args.minQuorumVotesBPS,
-            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
-            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
-          },
-        ],
-        waitForConfirmation: true,
-        validateDeployment: () => {
-          const expected = expectedN00unsDAOProxyAddress.toLowerCase();
-          const actual = deployment.N00unsDAOProxyV2.address.toLowerCase();
-          if (expected !== actual) {
-            throw new Error(
-              `Unexpected N00uns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
-            );
-          }
+        N00unsAuctionHouseProxyAdmin: {},
+        N00unsAuctionHouseProxy: {
+            args: [
+                () => deployment.N00unsAuctionHouse.address,
+                () => deployment.N00unsAuctionHouseProxyAdmin.address,
+                () => new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
+                    deployment.N00unsTokenv2.address,
+                    args.weth,
+                    args.auctionTimeBuffer,
+                    args.auctionReservePrice,
+                    args.auctionMinIncrementBidPercentage,
+                    args.auctionDuration,
+                ]),
+            ],
+            waitForConfirmation: true,
+            validateDeployment: () => {
+                const expected = expectedAuctionHouseProxyAddress.toLowerCase();
+                const actual = deployment.N00unsAuctionHouseProxy.address.toLowerCase();
+                if (expected !== actual) {
+                  return;
+                    throw new Error(
+                        `Unexpected auction house proxy address. Expected: ${expected}. Actual: ${actual}.`
+                    );
+                }
+            },
         },
-      },
+        N00unsDAOExecutor: {
+            args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
+        },
+        N00unsDAOLogicV2: {
+            waitForConfirmation: true,
+        },
+        N00unsDAOProxyV2: {
+            args: [
+                () => deployment.N00unsDAOExecutor.address,
+                () => deployment.N00unsTokenv2.address,
+                args.n00undersdao,
+                () => deployment.N00unsDAOExecutor.address,
+                () => deployment.N00unsDAOLogicV2.address,
+                args.votingPeriod,
+                args.votingDelay,
+                args.proposalThresholdBps,
+                {
+                    minQuorumVotesBPS: args.minQuorumVotesBPS,
+                    maxQuorumVotesBPS: args.maxQuorumVotesBPS,
+                    quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
+                },
+            ],
+            waitForConfirmation: true,
+            validateDeployment: () => {
+                const expected = expectedN00unsDAOProxyAddress.toLowerCase();
+                const actual = deployment.N00unsDAOProxyV2.address.toLowerCase();
+                if (expected !== actual) {
+                  return;
+                    throw new Error(
+                        `Unexpected N00uns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`
+                    );
+                }
+            },
+        }
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
@@ -304,7 +292,7 @@ task('deploy-short-times', 'Deploy all N00uns contracts with short gov times for
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractNamesDAOV2] = {
+      deployment[name as ContractNamesDAOV3] = {
         name: nameForFactory,
         instance: deployedContract,
         address: deployedContract.address,

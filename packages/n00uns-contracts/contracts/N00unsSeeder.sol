@@ -51,7 +51,8 @@ contract N00unsSeeder is IN00unsSeeder {
             ),
             glasses: uint48(
                 uint48(pseudorandomness >> 192) % glassesCount
-            )
+            ),
+            imgData:  new bytes(32)
         });
     }
 }

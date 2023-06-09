@@ -19,7 +19,7 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       const addresses = JSON.parse(readFileSync(addressesPath, 'utf8'));
       addresses[chainId] = {
         n00unsToken: contracts.N00unsToken.address,
-        n00unsSeeder: contracts.N00unsSeeder.address,
+        n00unsSeeder: contracts.N00unsSeeder2.address,
         n00unsDescriptor: contracts.N00unsDescriptorV2.address,
         nftDescriptor: contracts.NFTDescriptorV2.address,
         n00unsAuctionHouse: contracts.N00unsAuctionHouse.address,

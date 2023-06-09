@@ -59,6 +59,8 @@ contract N00unsAuctionHouse is
     // The active auction
     IN00unsAuctionHouse.Auction public auction;
 
+ IERC20 public biddingToken;
+
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -140,6 +142,51 @@ contract N00unsAuctionHouse is
         }
     }
 
+    function setBiddingToken(IERC20 _biddingToken) external onlyOwner {
+        biddingToken = _biddingToken;
+    }
+
+    function createBidWithToken(uint256 n00unId, uint256 bidAmount) external nonReentrant {
+        IN00unsAuctionHouse.Auction memory _auction = auction;
+
+        require(_auction.n00unId == n00unId, 'N00un not up for auction');
+        require(block.timestamp < _auction.endTime, 'Auction expired');
+        require(bidAmount >= reservePrice, 'Must send at least reservePrice');
+        require(
+            bidAmount >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            'Must send more than last bid by minBidIncrementPercentage amount'
+        );
+
+        // Transfer the bid amount from the bidder to the contract
+        biddingToken.transferFrom(msg.sender, address(this), bidAmount);
+
+        address payable lastBidder = _auction.bidder;
+
+        // Refund the last bidder, if applicable
+        if (lastBidder != address(0)) {
+            biddingToken.transfer(lastBidder, _auction.amount);
+        }
+
+        auction.amount = bidAmount;
+        auction.bidder = payable(msg.sender);
+
+        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        if (extended) {
+            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
+        }
+
+        emit AuctionBid(_auction.n00unId, msg.sender, bidAmount, extended);
+
+        if (extended) {
+            emit AuctionExtended(_auction.n00unId, _auction.endTime);
+        }
+    }
+
+
+
+
+
     /**
      * @notice Pause the N00uns auction house.
      * @dev This function can only be called by the owner when the
@@ -219,7 +266,8 @@ contract N00unsAuctionHouse is
         }
     }
 
-    /**
+   
+       /**
      * @notice Settle an auction, finalizing the bid and paying out to the owner.
      * @dev If there are no bids, the N00un is burned.
      */
@@ -239,11 +287,12 @@ contract N00unsAuctionHouse is
         }
 
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+            biddingToken.transfer(owner(), _auction.amount);
         }
 
         emit AuctionSettled(_auction.n00unId, _auction.bidder, _auction.amount);
     }
+
 
     /**
      * @notice Transfer ETH. If the ETH transfer fails, wrap the ETH and try send it as WETH.

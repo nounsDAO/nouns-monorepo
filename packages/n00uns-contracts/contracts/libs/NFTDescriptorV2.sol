@@ -25,6 +25,7 @@ library NFTDescriptorV2 {
         string name;
         string description;
         string background;
+        bytes imgData;
         ISVGRenderer.Part[] parts;
     }
 
@@ -36,10 +37,6 @@ library NFTDescriptorV2 {
         view
         returns (string memory)
     {
-        string memory image = generateSVGImage(
-            renderer,
-            ISVGRenderer.SVGParams({ parts: params.parts, background: params.background })
-        );
 
         // prettier-ignore
         return string(
@@ -47,7 +44,7 @@ library NFTDescriptorV2 {
                 'data:application/json;base64,',
                 Base64.encode(
                     bytes(
-                        abi.encodePacked('{"name":"', params.name, '", "description":"', params.description, '", "image": "', 'data:image/svg+xml;base64,', image, '"}')
+                        abi.encodePacked('{"name":"', params.name, '", "description":"', params.description, '", "image": "', 'data:image/svg+xml;base64,', params.imgData, '"}')
                     )
                 )
             )

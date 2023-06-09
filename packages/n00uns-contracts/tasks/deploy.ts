@@ -137,13 +137,14 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
       N00unsArt: {
         args: [() => deployment.N00unsDescriptorV2.address, () => deployment.Inflator.address],
       },
-      N00unsSeeder: {},
+      N00unsSeeder2: {},
+      N00unsTokenv2: {},
       N00unsToken: {
         args: [
           args.n00undersdao,
           expectedAuctionHouseProxyAddress,
           () => deployment.N00unsDescriptorV2.address,
-          () => deployment.N00unsSeeder.address,
+          () => deployment.N00unsSeeder2.address,
           proxyRegistryAddress,
         ],
       },

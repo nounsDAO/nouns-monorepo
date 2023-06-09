@@ -2,8 +2,9 @@ import { Auction, AuctionHouseContractFunction } from '../../wrappers/n00unsAuct
 import { useEthers, useContractFunction } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
-import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
-import { utils, BigNumber as EthersBN } from 'ethers';
+import React, {  useRef, ChangeEvent, useCallback } from 'react';
+import { useMemo, useEffect, useState } from 'react';
+import { utils, BigNumber as EthersBN, Contract } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
@@ -18,6 +19,9 @@ import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { Web3Provider } from '@ethersproject/providers';
+import ERC20 from '../../libs/abi/ERC20.json';
+
+const erc20Interface = new utils.Interface(ERC20);
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -47,6 +51,8 @@ const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
   return new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
 };
 
+
+
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
@@ -58,6 +64,12 @@ const Bid: React.FC<{
   const n00unsAuctionHouseContract = new N00unsAuctionHouseFactory().attach(
     config.addresses.n00unsAuctionHouseProxy,
   );
+
+  // Temporarily hardcode the WETH address.
+  var tokenContract = useMemo((): Contract => {
+   
+    return new Contract('0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1', erc20Interface, library);
+  }, [library]);
 
   const account = useAppSelector(state => state.account.activeAccount);
 
@@ -94,6 +106,14 @@ const Bid: React.FC<{
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
+  const { send: approve, state: approveState } = useContractFunction(
+    tokenContract,
+    'approve',
+    {
+      transactionName: 'Approve token transfer',
+    }
+  );
+
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
@@ -125,14 +145,16 @@ const Bid: React.FC<{
       return;
     }
 
-    const value = utils.parseEther(bidInputRef.current.value.toString());
+    //const value = utils.parseEther(bidInputRef.current.value.toString());
     const contract = connectContractToSigner(n00unsAuctionHouseContract as any, undefined, new Web3Provider((library as any)));
-    const gasLimit = await contract.estimateGas.createBid(auction.n00unId, {
-      value,
-    });
+
+    // The bid amount, scaled up by the number of decimals in the token.
+    const value = utils.parseUnits(bidInputRef.current.value.toString(), 18);
+    var status = await approve(config.addresses.n00unsAuctionHouseProxy, value);
+
     placeBid(auction.n00unId, {
       value,
-      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      gasLimit: 150000, // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
   };
 

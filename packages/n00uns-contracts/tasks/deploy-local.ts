@@ -2,10 +2,10 @@ import { default as N00unsAuctionHouseABI } from '../abi/contracts/N00unsAuction
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
-import { ContractName } from './types';
+import { ContractName, ContractNamesDAOV3 } from './types';
 
 type LocalContractName =
-  | Exclude<ContractName, 'N00unsDAOLogicV1' | 'N00unsDAOProxy'>
+  | Exclude<ContractNamesDAOV3, 'N00unsDAOLogicV1' | 'N00unsDAOProxy'>
   | 'N00unsDAOLogicV2'
   | 'N00unsDAOProxyV2'
   | 'WETH'
@@ -75,28 +75,10 @@ task('deploy-local', 'Deploy contracts to hardhat')
     });
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
-      NFTDescriptorV2: {},
-      SVGRenderer: {},
-      N00unsDescriptorV2: {
-        args: [expectedN00unsArtAddress, () => contracts.SVGRenderer.instance?.address],
-        libraries: () => ({
-          NFTDescriptorV2: contracts.NFTDescriptorV2.instance?.address as string,
-        }),
-      },
-      Inflator: {},
-      N00unsArt: {
+      N00unsTokenv2: {
         args: [
-          () => contracts.N00unsDescriptorV2.instance?.address,
-          () => contracts.Inflator.instance?.address,
-        ],
-      },
-      N00unsSeeder: {},
-      N00unsToken: {
-        args: [
-          args.n00undersdao || deployer.address,
+          deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts.N00unsDescriptorV2.instance?.address,
-          () => contracts.N00unsSeeder.instance?.address,
           proxyRegistryAddress,
         ],
       },
@@ -110,7 +92,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           () => contracts.N00unsAuctionHouseProxyAdmin.instance?.address,
           () =>
             new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts.N00unsToken.instance?.address,
+              contracts.N00unsTokenv2.instance?.address,
               contracts.WETH.instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -128,11 +110,11 @@ task('deploy-local', 'Deploy contracts to hardhat')
       N00unsDAOProxyV2: {
         args: [
           () => contracts.N00unsDAOExecutor.instance?.address,
-          () => contracts.N00unsToken.instance?.address,
+          () => contracts.N00unsTokenv2.instance?.address,
           args.n00undersdao || deployer.address,
           () => contracts.N00unsDAOExecutor.instance?.address,
           () => contracts.N00unsDAOLogicV2.instance?.address,
-          args.votingPeriod,
+          43200,
           args.votingDelay,
           args.proposalThresholdBps,
           {

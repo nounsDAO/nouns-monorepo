@@ -14,12 +14,12 @@ type ObjectKey = keyof typeof images;
 export const getN00unData = (seed: N00unSeed): N00unData => {
   return {
     parts: [
-      bodies[seed.body],
-      accessories[seed.accessory],
-      heads[seed.head],
-      glasses[seed.glasses],
+      bodies[1],
+      accessories[1],
+      heads[1],
+      glasses[1],
     ],
-    background: bgcolors[seed.background],
+    background: bgcolors[1],
   };
 };
 

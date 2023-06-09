@@ -132,6 +132,7 @@ interface IN00unsDescriptorV2 is IN00unsDescriptorMinimal {
     function dataURI(uint256 tokenId, IN00unsSeeder.Seed memory seed) external view override returns (string memory);
 
     function genericDataURI(
+        uint256 tokenId,
         string calldata name,
         string calldata description,
         IN00unsSeeder.Seed memory seed
