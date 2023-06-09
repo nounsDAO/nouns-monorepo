@@ -12,8 +12,6 @@ task('deploy-test-token', 'Deploy NTokenHarness given a descriptor')
     const [deployer] = await ethers.getSigners();
     console.log(`Deploying from address ${deployer.address}`);
 
-    const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
-
     const token = await (
       await ethers.getContractFactory('NTokenHarness', deployer)
     ).deploy(
@@ -21,7 +19,6 @@ task('deploy-test-token', 'Deploy NTokenHarness given a descriptor')
       deployer.address,
       descriptorAddress,
       seederAddress,
-      proxyRegistryAddress,
     );
     console.log(`NTokenHarness deployed to: ${token.address}`);
 
@@ -40,7 +37,6 @@ task('deploy-test-token', 'Deploy NTokenHarness given a descriptor')
           deployer.address,
           descriptorAddress,
           seederAddress,
-          proxyRegistryAddress,
         ],
         instance: token,
         libraries: {},

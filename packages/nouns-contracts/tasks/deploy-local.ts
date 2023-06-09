@@ -36,8 +36,6 @@ task('deploy-local', 'Deploy contracts to hardhat')
       return;
     }
 
-    const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
-
     const N_ART_NONCE_OFFSET = 8;
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 13;
     const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 16;
@@ -87,7 +85,6 @@ task('deploy-local', 'Deploy contracts to hardhat')
           expectedAuctionHouseProxyAddress,
           () => contracts.NDescriptorV2.instance?.address,
           () => contracts.NSeeder.instance?.address,
-          proxyRegistryAddress,
         ],
       },
       NAuctionHouse: {

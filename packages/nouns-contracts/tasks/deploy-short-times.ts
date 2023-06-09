@@ -8,10 +8,6 @@ promptjs.colors = false;
 promptjs.message = '> ';
 promptjs.delimiter = '';
 
-const proxyRegistries: Record<number, string> = {
-  [ChainId.Mainnet]: '0xa5409ec958c83c3f309868babaca7c86dcb077c1',
-  [ChainId.Rinkeby]: '0xf57b2c51ded3a29e6891aba85459d600256cf317',
-};
 const wethContracts: Record<number, string> = {
   [ChainId.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   [ChainId.Ropsten]: '0xc778417e063141139fce010982780140aa0cd5ab',
@@ -79,9 +75,6 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
 
-    // prettier-ignore
-    const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
-
     if (!args.punkers) {
       console.log(
         `Punkers (creator org) address not provided. Setting to deployer (${deployer.address})...`,
@@ -144,7 +137,6 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
           expectedAuctionHouseProxyAddress,
           () => deployment.NDescriptorV2.address,
           () => deployment.NSeeder.address,
-          proxyRegistryAddress,
         ],
       },
       NAuctionHouse: {

@@ -5,7 +5,6 @@ pragma solidity ^0.8.15;
 import { NToken } from '../NToken.sol';
 import { IDescriptorMinimal } from '../interfaces/IDescriptorMinimal.sol';
 import { ISeeder } from '../interfaces/ISeeder.sol';
-import { IProxyRegistry } from '../external/opensea/IProxyRegistry.sol';
 
 contract NTokenHarness is NToken {
     uint256 public currentPunkId;
@@ -14,9 +13,8 @@ contract NTokenHarness is NToken {
         address punkerDAO,
         address minter,
         IDescriptorMinimal descriptor,
-        ISeeder seeder,
-        IProxyRegistry proxyRegistry
-    ) NToken(punkerDAO, minter, descriptor, seeder, proxyRegistry) {}
+        ISeeder seeder
+    ) NToken(punkerDAO, minter, descriptor, seeder) {}
 
     function mintTo(address to) public {
         _mintTo(to, currentPunkId++);

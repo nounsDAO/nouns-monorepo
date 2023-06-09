@@ -105,7 +105,6 @@ export const deployNToken = async (
   minter?: string,
   descriptor?: string,
   seeder?: string,
-  proxyRegistryAddress?: string,
 ): Promise<NToken> => {
   const signer = deployer || (await getSigners()).deployer;
   const factory = new NTokenFactory(signer);
@@ -115,7 +114,6 @@ export const deployNToken = async (
     minter || signer.address,
     descriptor || (await deployNDescriptorV2(signer)).address,
     seeder || (await deployNSeeder(signer)).address,
-    proxyRegistryAddress || address(0),
   );
 };
 

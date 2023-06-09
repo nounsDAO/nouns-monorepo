@@ -24,7 +24,6 @@ import { ISeeder } from './interfaces/ISeeder.sol';
 import { IToken } from './interfaces/IToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
 
 contract NToken is IToken, Ownable, ERC721Checkpointable {
@@ -72,9 +71,6 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
 
     // Token symbol, a parent contract already declares _symbol
     string private __symbol;
-
-    // OpenSea's Proxy Registry
-    IProxyRegistry public immutable proxyRegistry;
 
     /**
      * @notice Require that the minter has not been locked.
@@ -136,14 +132,12 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         address _punkers,
         address _minter,
         IDescriptorMinimal _descriptor,
-        ISeeder _seeder,
-        IProxyRegistry _proxyRegistry
+        ISeeder _seeder
     ) ERC721('', '') {
         punkers = _punkers;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
-        proxyRegistry = _proxyRegistry;
         __name = 'CRYPTOPUNKS';
         __symbol = '\u03FE';
     }
@@ -161,10 +155,6 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     function setContractURIHash(string memory newContractURIHash) external onlyOwner {
         _contractURIHash = newContractURIHash;
-    }
-
-    function isApprovedForAll(address owner, address operator) public view override(IERC721, ERC721) returns (bool) {
-        return super.isApprovedForAll(owner, operator);
     }
 
     /**
