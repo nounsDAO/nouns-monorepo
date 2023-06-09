@@ -93,7 +93,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Mumbai]: {
     jsonRpcUri: createNetworkHttpUrl('polygon-mumbai'),
     wsRpcUri: createNetworkWsUrl('polygon-mumbai'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/yanuar-ar/n00uns-mumbai',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/n00uns/mumbai',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
