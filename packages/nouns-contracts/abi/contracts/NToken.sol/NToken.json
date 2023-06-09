@@ -152,6 +152,31 @@
   {
     "anonymous": false,
     "inputs": [],
+    "name": "MetadataLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+      }
+    ],
+    "name": "MetadataUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
     "name": "MinterLocked",
     "type": "event"
   },
@@ -741,6 +766,19 @@
   },
   {
     "inputs": [],
+    "name": "isMetadataLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "isMinterLocked",
     "outputs": [
       {
@@ -781,6 +819,13 @@
   {
     "inputs": [],
     "name": "lockDescriptor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockMetadata",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1104,6 +1149,19 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "name_",
+        "type": "string"
+      }
+    ],
+    "name": "setName",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_punkers",
         "type": "address"
@@ -1123,6 +1181,19 @@
       }
     ],
     "name": "setSeeder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "symbol_",
+        "type": "string"
+      }
+    ],
+    "name": "setSymbol",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

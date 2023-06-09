@@ -54,6 +54,9 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     // Whether the owner can register OG Punk hashes
     bool public isRegisterOGHashesLocked;
 
+    // Whether the owner can change metadata
+    bool public isMetadataLocked;
+
     // The punk seeds
     /// @notice The value is the seed hash actually
     mapping(uint256 => bytes32) public seeds;
@@ -64,16 +67,18 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = 'QmVgLtMuJ48EueJkqYokqNAGC7AMuknKxNb4AJSEzhUFoU';
 
+    // Token name, a parent contract already declares _name
+    string private __name;
+
+    // Token symbol, a parent contract already declares _symbol
+    string private __symbol;
+
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
 
     /**
      * @notice Require that the minter has not been locked.
      */
-
-
-
-
     modifier whenMinterNotLocked() {
         require(!isMinterLocked, 'Minter is locked');
         _;
@@ -99,7 +104,15 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      * @notice Require that registration of OG Punk hashes is not locked.
      */
     modifier whenRegisterOGHashesNotLocked() {
-        require(!isRegisterOGHashesLocked, 'RegisterOGHashesLocked is locked');
+        require(!isRegisterOGHashesLocked, 'RegisterOGHashes is locked');
+        _;
+    }
+
+    /**
+     * @notice Require that metadata is not locked.
+     */
+    modifier whenMetadataNotLocked() {
+        require(!isMetadataLocked, 'Metadata is locked');
         _;
     }
 
@@ -125,12 +138,14 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         IDescriptorMinimal _descriptor,
         ISeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('CRYPTOPUNKS', '\u03FE') {
+    ) ERC721('', '') {
         punkers = _punkers;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
         proxyRegistry = _proxyRegistry;
+        __name = 'CRYPTOPUNKS';
+        __symbol = '\u03FE';
     }
 
     /**
@@ -192,6 +207,20 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'PunkToken: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, _decodeSeedHash(seeds[tokenId]));
+    }
+
+    /**
+     * @dev See {IERC721Metadata-name}.
+     */
+    function name() public view virtual override returns (string memory) {
+        return __name;
+    }
+
+    /**
+     * @dev See {IERC721Metadata-symbol}.
+     */
+    function symbol() public view virtual override returns (string memory) {
+        return __symbol;
     }
 
     /**
@@ -274,6 +303,28 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         isRegisterOGHashesLocked = true;
 
         emit RegisterOGHashesLocked();
+    }
+
+    function setName(string memory name_) external override onlyOwner whenMetadataNotLocked {
+        __name = name_;
+
+        emit MetadataUpdated(__name, __symbol);
+    }
+
+    function setSymbol(string memory symbol_) external override onlyOwner whenMetadataNotLocked {
+        __symbol = symbol_;
+
+        emit MetadataUpdated(__name, __symbol);
+    }
+
+    /**
+     * @notice Lock the seeder.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockMetadata() external override onlyOwner whenMetadataNotLocked {
+        isMetadataLocked = true;
+
+        emit MetadataLocked();
     }
 
     /**
