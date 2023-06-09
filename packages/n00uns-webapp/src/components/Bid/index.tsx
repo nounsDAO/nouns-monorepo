@@ -107,7 +107,7 @@ const Bid: React.FC<{
   );
 
   const { send: approve, state: approveState } = useContractFunction(
-    tokenContract,
+    tokenContract as any,
     'approve',
     {
       transactionName: 'Approve token transfer',
