@@ -57,13 +57,10 @@ const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-
-  return "https://polygon-mumbai.g.alchemy.com/v2/NeTShvv09IiaAWpdMm4mODTDXNzem83R";
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
-  return "wss://polygon-mumbai.g.alchemy.com/v2/NeTShvv09IiaAWpdMm4mODTDXNzem83R";
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
@@ -96,7 +93,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Mumbai]: {
     jsonRpcUri: createNetworkHttpUrl('polygon-mumbai'),
     wsRpcUri: createNetworkWsUrl('polygon-mumbai'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/yanuar-ar/n00uns-mumbai',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/n00uns/mumbai',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
