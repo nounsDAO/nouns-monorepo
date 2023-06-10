@@ -32,6 +32,7 @@ import ProposalHistory from './pages/ProposalHistory';
 
 import CandidateProposals from './pages/CandidateProposals';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
+import ForkPage from './pages/Fork';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -89,6 +90,7 @@ function App() {
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />
+            <Route exact path="/fork" component={ForkPage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
