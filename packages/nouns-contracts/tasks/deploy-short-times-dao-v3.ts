@@ -21,6 +21,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Ropsten]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+  [ChainId.Sepolia]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
@@ -207,7 +208,9 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
       NounsTokenFork: {},
       NounsAuctionHouseFork: {},
       NounsDAOLogicV1Fork: {},
-      NounsDAOExecutorV2: {},
+      NounsDAOExecutorV2: {
+        waitForConfirmation: true,
+      },
       NounsDAOExecutorProxy: {
         args: [
           () => deployment.NounsDAOExecutorV2.address,
@@ -224,7 +227,11 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           () => deployment.NounsAuctionHouseFork.address,
           () => deployment.NounsDAOLogicV1Fork.address,
           () => deployment.NounsDAOExecutorV2.address,
-          60 * 60 * 24 * 30, // 30 days
+          60 * 60 * 24 * 30, // 30 days,
+          args.votingPeriod,
+          args.votingDelay,
+          args.proposalThresholdBps,
+          args.minQuorumVotesBPS,
         ],
       },
       NounsDAOProxyV3: {
