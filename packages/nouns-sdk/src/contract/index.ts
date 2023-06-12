@@ -8,6 +8,7 @@ export {
   NounsSeederABI,
   NounsDAOABI,
   NounsDAOV2ABI,
+  NounsDAOV3ABI,
   NounsTokenFactory,
   NounsAuctionHouseFactory,
   NounsDescriptorFactory,
