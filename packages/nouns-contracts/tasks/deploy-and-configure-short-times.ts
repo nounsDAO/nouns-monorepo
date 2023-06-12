@@ -35,12 +35,7 @@ task(
     types.int,
   )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
-  .addOptionalParam(
-    'votingPeriod',
-    'The voting period (blocks)',
-    80 /* 20 min (15s blocks) */,
-    types.int,
-  )
+  .addOptionalParam('votingPeriod', 'The voting period (blocks)', 25 /* 5 mins */, types.int)
   .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
   .addOptionalParam(
     'proposalThresholdBps',

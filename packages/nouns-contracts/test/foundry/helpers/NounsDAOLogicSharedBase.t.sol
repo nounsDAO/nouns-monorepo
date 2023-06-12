@@ -23,7 +23,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
     address noundersDAO = address(0x5);
     address minter = address(0x6);
     address proposer = address(0x7);
-    uint256 votingPeriod = 6000;
+    uint256 votingPeriod = 7200;
     uint256 votingDelay = 1;
     uint256 proposalThresholdBPS = 200;
     Utils utils;

@@ -100,7 +100,7 @@ library NounsDAOV3Fork {
     }
 
     /**
-     * @notice Execute the fork. Only possible if the fork threshold has been met.
+     * @notice Execute the fork. Only possible if the fork threshold has been exceeded.
      * This will deploy a new DAO and send the prorated part of the treasury to the new DAO's treasury.
      * This will also close the active escrow and all nouns in the escrow will belong to the original DAO.
      * @return forkTreasury The address of the new DAO's treasury
@@ -114,7 +114,7 @@ library NounsDAOV3Fork {
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
         uint256 tokensInEscrow = forkEscrow.numTokensInEscrow();
-        if (tokensInEscrow < forkThreshold(ds)) revert ForkThresholdNotMet();
+        if (tokensInEscrow <= forkThreshold(ds)) revert ForkThresholdNotMet();
 
         uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
 
@@ -131,7 +131,7 @@ library NounsDAOV3Fork {
 
     /**
      * @notice Joins a fork while a fork is active
-     * Sends the tokens to the escrow contract.
+     * Sends the tokens to the timelock contract.
      * Sends a prorated part of the treasury to the new fork DAO's treasury.
      * Mints new tokens in the new fork DAO with the same token ids.
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
@@ -145,10 +145,11 @@ library NounsDAOV3Fork {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
+        address timelock = address(ds.timelock);
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
@@ -171,7 +172,7 @@ library NounsDAOV3Fork {
             revert AdminOnly();
         }
 
-        ds.forkEscrow.withdrawTokensToDAO(tokenIds, to);
+        ds.forkEscrow.withdrawTokens(tokenIds, to);
 
         emit DAOWithdrawNounsFromEscrow(tokenIds, to);
     }

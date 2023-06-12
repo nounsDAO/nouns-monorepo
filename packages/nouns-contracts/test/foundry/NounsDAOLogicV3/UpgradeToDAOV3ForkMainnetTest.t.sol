@@ -4,6 +4,8 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { ProposeDAOV3UpgradeMainnet } from '../../../script/ProposeDAOV3UpgradeMainnet.s.sol';
 import { DeployDAOV3NewContractsMainnet } from '../../../script/DeployDAOV3NewContractsMainnet.s.sol';
+import { ProposeTimelockMigrationCleanupMainnet } from '../../../script/ProposeTimelockMigrationCleanupMainnet.s.sol';
+import { ProposeENSReverseLookupConfigMainnet } from '../../../script/ProposeENSReverseLookupConfigMainnet.s.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
@@ -20,6 +22,10 @@ import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 import { ERC721Enumerable } from '../../../contracts/base/ERC721Enumerable.sol';
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { ENSNamehash } from '../lib/ENSNamehash.sol';
+import '../lib/ENSInterfaces.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
 interface IHasName {
     function NAME() external pure returns (string memory);
@@ -38,6 +44,9 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         NounsDAOLogicV1(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     INounsDAOExecutor public constant NOUNS_TIMELOCK_V1_MAINNET =
         INounsDAOExecutor(0x0BC3807Ec262cB779b38D65b38158acC3bfedE10);
+    address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
+    address public constant DESCRIPTOR_MAINNET = 0x6229c811D04501523C6058bfAAc29c91bb586268;
+    address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
     address whaleAddr = 0xf6B6F07862A02C85628B3A9688beae07fEA9C863;
     uint256 public constant INITIAL_ETH_IN_TREASURY = 12919915363316446110962;
     uint256 public constant STETH_BALANCE = 14931432047776533741220;
@@ -94,12 +103,12 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         proposalId = new ProposeDAOV3UpgradeMainnet().run();
 
         // simulate vote & proposal execution
-        executeUpgradeProposal();
+        voteAndExecuteProposal();
 
         daoV3 = NounsDAOLogicV3(payable(address(NOUNS_DAO_PROXY_MAINNET)));
     }
 
-    function executeUpgradeProposal() internal {
+    function voteAndExecuteProposal() internal {
         vm.roll(block.number + NOUNS_DAO_PROXY_MAINNET.votingDelay() + 1);
         vm.prank(proposerAddr);
         NOUNS_DAO_PROXY_MAINNET.castVote(proposalId, 1);
@@ -228,6 +237,59 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         forkDao.execute(1);
 
         assertEq(makeAddr('wallet').balance, 50 ether);
+
+        // check new forked DAO has correct params
+        assertEq(forkDao.votingDelay(), 36000);
+        assertEq(forkDao.votingPeriod(), 36000);
+        assertEq(forkDao.proposalThresholdBPS(), 25);
+        assertEq(forkDao.quorumVotesBPS(), 1000);
+    }
+
+    function test_timelockV1CleanupProposal() public {
+        uint256 timelockV1Balance = address(NOUNS_TIMELOCK_V1_MAINNET).balance;
+        assertGt(timelockV1Balance, 2919 ether);
+        uint256 expectedV2Balance = address(timelockV2).balance + timelockV1Balance;
+
+        proposalId = new ProposeTimelockMigrationCleanupMainnet().run();
+        voteAndExecuteProposal();
+
+        assertEq(nouns.owner(), address(timelockV2));
+        assertEq(Ownable(DESCRIPTOR_MAINNET).owner(), address(timelockV2));
+        assertEq(Ownable(AUCTION_HOUSE_PROXY_ADMIN_MAINNET).owner(), address(timelockV2));
+        assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 0);
+        assertEq(address(timelockV2).balance, expectedV2Balance);
+        assertTrue(IERC721(LILNOUNS_MAINNET).isApprovedForAll(address(NOUNS_TIMELOCK_V1_MAINNET), address(timelockV2)));
+    }
+
+    function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {
+        ENS ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
+        // 0xdc972a4db1aa8630a234db4202794eae94ad0e7a9e201e13667ac92aa887a02a
+        bytes32 node = ENSNamehash.namehash('nouns.eth');
+        Resolver resolver = Resolver(ens.resolver(node));
+
+        // showing nouns.eth resolves to timelockv1
+        assertEq(resolver.addr(node), address(NOUNS_TIMELOCK_V1_MAINNET));
+
+        // this is a critical step that will need to happen outside DAO proposals
+        // 0x88f9E324801320A3fC22C8d045A98Ad32a490d8E;
+        vm.prank(ens.owner(node));
+        resolver.setAddr(node, address(timelockV2));
+
+        // showing nouns.eth resolves to timelockv2 after the setAddr change
+        assertEq(resolver.addr(node), address(timelockV2));
+
+        // Now tackling reverse lookup
+
+        // the proposal calls (reverse.ens.eth).setName('nouns.eth') from timelock V2
+        proposalId = new ProposeENSReverseLookupConfigMainnet().run();
+        voteAndExecuteProposal();
+
+        // reverse.ens.eth
+        ReverseRegistrar reverse = ReverseRegistrar(0xa58E81fe9b61B5c3fE2AFD33CF304c454AbFc7Cb);
+        bytes32 resolvedReverseNode = reverse.node(address(timelockV2)); // 0xb983f3b9362fbdfcdb9012cf09dce9ae0c0a377c167b14fdf5b3bd94a4dfdf81
+
+        // showing that timelockV2's address resolves to nouns.eth
+        assertEq(reverse.defaultResolver().name(resolvedReverseNode), 'nouns.eth');
     }
 
     function _escrowAllNouns(address owner) internal {

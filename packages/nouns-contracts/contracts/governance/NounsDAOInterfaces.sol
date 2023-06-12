@@ -633,7 +633,7 @@ interface INounsDAOForkEscrow {
 
     function numTokensOwnedByDAO() external view returns (uint256);
 
-    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external;
+    function withdrawTokens(uint256[] calldata tokenIds, address to) external;
 
     function forkId() external view returns (uint32);
 

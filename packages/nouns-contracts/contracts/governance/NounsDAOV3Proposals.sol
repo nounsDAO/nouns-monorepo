@@ -22,6 +22,7 @@ import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
+import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
@@ -867,7 +868,7 @@ library NounsDAOV3Proposals {
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint64 updatePeriodEndBlock = uint64(block.number + ds.proposalUpdatablePeriodInBlocks);
+        uint64 updatePeriodEndBlock = SafeCast.toUint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
         uint256 endBlock = startBlock + ds.votingPeriod;
 
@@ -882,7 +883,7 @@ library NounsDAOV3Proposals {
         newProposal.startBlock = startBlock;
         newProposal.endBlock = endBlock;
         newProposal.totalSupply = adjustedTotalSupply;
-        newProposal.creationBlock = uint64(block.number);
+        newProposal.creationBlock = SafeCast.toUint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 

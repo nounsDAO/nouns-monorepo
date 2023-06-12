@@ -19,9 +19,12 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
+import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Votes {
     using NounsDAOV3Proposals for NounsDAOStorageV3.StorageV3;
+
+    error CanOnlyVoteAgainstDuringObjectionPeriod();
 
     /// @notice An event emitted when a vote has been cast on a proposal
     /// @param voter The address which casted a vote
@@ -159,7 +162,7 @@ library NounsDAOV3Votes {
         bytes32 s
     ) external {
         bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), block.chainid, address(this))
         );
         bytes32 structHash = keccak256(abi.encode(BALLOT_TYPEHASH, proposalId, support));
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
@@ -187,26 +190,29 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.ProposalState proposalState = ds.stateInternal(proposalId);
 
         if (proposalState == NounsDAOStorageV3.ProposalState.Active) {
-            return castVoteDuringVotingPeriodInternal(ds, proposalId, proposalState, voter, support);
+            return castVoteDuringVotingPeriodInternal(ds, proposalId, voter, support);
         } else if (proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod) {
-            require(support == 0, 'can only object with an against vote');
-            return castObjectionInternal(ds, proposalId, proposalState, voter);
+            if (support != 0) revert CanOnlyVoteAgainstDuringObjectionPeriod();
+            return castObjectionInternal(ds, proposalId, voter);
         }
 
         revert('NounsDAO::castVoteInternal: voting is closed');
     }
 
+    /**
+     * @notice Internal function that handles voting logic during the voting period.
+     * @dev Assumes it's only called by `castVoteInternal` which ensures the proposal is active.
+     * @param proposalId The id of the proposal being voted on
+     * @param voter The address of the voter
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @return The number of votes cast
+     */
     function castVoteDuringVotingPeriodInternal(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
-        NounsDAOStorageV3.ProposalState proposalState,
         address voter,
         uint8 support
     ) internal returns (uint96) {
-        require(
-            proposalState == NounsDAOStorageV3.ProposalState.Active,
-            'NounsDAO::castVoteInternal: voting is closed'
-        );
         require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
@@ -243,7 +249,9 @@ library NounsDAOV3Votes {
             // second part of the vote flip check
             !ds.isDefeated(proposal)
         ) {
-            proposal.objectionPeriodEndBlock = uint64(proposal.endBlock + ds.objectionPeriodDurationInBlocks);
+            proposal.objectionPeriodEndBlock = SafeCast.toUint64(
+                proposal.endBlock + ds.objectionPeriodDurationInBlocks
+            );
 
             emit ProposalObjectionPeriodSet(proposal.id, proposal.objectionPeriodEndBlock);
         }
@@ -255,13 +263,20 @@ library NounsDAOV3Votes {
         return votes;
     }
 
+    /**
+     * @notice Internal function that handles against votes during an objetion period.
+     * @dev Assumes it's being called by `castVoteInternal` which ensures:
+     * 1. The proposal is in the objection period state.
+     * 2. The vote is an against vote.
+     * @param proposalId The id of the proposal being voted on
+     * @param voter The address of the voter
+     * @return The number of votes cast
+     */
     function castObjectionInternal(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
-        NounsDAOStorageV3.ProposalState proposalState,
         address voter
     ) internal returns (uint96) {
-        require(proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod, 'not in objection period');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
@@ -292,6 +307,13 @@ library NounsDAOV3Votes {
         }
     }
 
+    /**
+     * @notice Internal function that returns the snapshot block number to use given a proposalId. The choice is
+     * between the proposal's creation block and the proposal's voting start block, to allow a smooth migration from
+     * creation block to start block.
+     * @param proposalId The id of the proposal being voted on
+     * @param proposal The proposal storage reference, used to read `creationBlock` and `startBlock`
+     */
     function proposalVoteSnapshotBlock(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -305,14 +327,6 @@ library NounsDAOV3Votes {
             return proposal.creationBlock;
         }
         return proposal.startBlock;
-    }
-
-    function getChainIdInternal() internal view returns (uint256) {
-        uint256 chainId;
-        assembly {
-            chainId := chainid()
-        }
-        return chainId;
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {

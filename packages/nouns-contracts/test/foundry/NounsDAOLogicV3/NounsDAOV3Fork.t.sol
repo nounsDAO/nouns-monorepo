@@ -96,6 +96,23 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
         vm.expectRevert(NounsDAOV3Fork.AdminOnly.selector);
         dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
     }
+
+    function test_givenThresholdSetToZero_requiresOneTokenInEscrowToFork() public {
+        vm.prank(address(dao.timelock()));
+        dao._setForkThresholdBPS(0);
+        assertEq(escrow.numTokensInEscrow(), 0);
+
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
+
+        tokenIds = [1];
+        vm.startPrank(tokenHolder);
+        nounsToken.setApprovalForAll(address(dao), true);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
+        vm.stopPrank();
+
+        dao.executeFork();
+    }
 }
 
 abstract contract DAOForkSignaledUnderThresholdState is DAOForkZeroState {
@@ -157,7 +174,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         dao.withdrawFromForkEscrow(tokenIds);
     }
 
-    function test_withdrawTokensToDAO_reverts() public {
+    function test_withdrawTokens_reverts() public {
         tokenIds = [1];
         vm.prank(address(dao.timelock()));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
@@ -187,7 +204,10 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
         dao.executeFork();
 
-        tokenIds = [6];
+        // adjustedTotalSupply = 20
+        // 30% of 20 = 6
+        // 7 tokens are needed to execute fork
+        tokenIds = [6, 7];
         vm.prank(tokenHolder);
         dao.escrowToFork(tokenIds, new uint256[](0), '');
 
@@ -238,7 +258,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         dao.executeFork();
     }
 
-    function test_withdrawTokensToDAO_reverts() public {
+    function test_withdrawTokens_reverts() public {
         tokenIds = [1];
         vm.prank(address(dao.timelock()));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
@@ -327,19 +347,17 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
 
-        // DAO can withdraw the tokens sent in joinFork
+        // Tokens are in the OG DAO timelock
         tokenIds = [7, 8, 9];
-        vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.DAOWithdrawNounsFromEscrow(tokenIds, address(1));
-        vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(timelock));
 
-        assertEq(dao.nouns().ownerOf(7), address(1));
-        assertEq(dao.nouns().ownerOf(8), address(1));
+        // Timelock can move the tokens
+        vm.startPrank(address(timelock));
+        dao.nouns().transferFrom(address(timelock), address(1), 9);
         assertEq(dao.nouns().ownerOf(9), address(1));
     }
 
-    function test_withdrawTokensToDAO() public {
+    function test_withdrawTokens() public {
         tokenIds = [1, 2, 3];
         vm.prank(address(dao.timelock()));
         dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
@@ -372,7 +390,7 @@ contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriod
         dao.executeFork();
     }
 
-    function test_withdrawTokensToDAO() public {
+    function test_withdrawTokens() public {
         tokenIds = [1, 2, 3];
         vm.prank(address(dao.timelock()));
         dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
@@ -422,7 +440,7 @@ contract DAOSecondForkSignaledUnderThresholdTest is DAOSecondForkSignaledUnderTh
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, tokenHolder);
     }
 
-    function test_withdrawTokensToDAO_reverts() public {
+    function test_withdrawTokens_reverts() public {
         tokenIds = [11];
         vm.prank(address(dao.timelock()));
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
@@ -434,8 +452,9 @@ abstract contract DAOSecondForkSignaledOverThreshold is DAOSecondForkSignaledUnd
     function setUp() public virtual override {
         super.setUp();
 
-        // adjusted total supply is 15, so for 20% 3 tokens are enough (15 * 0.2 = 3)
-        tokenIds = [13];
+        // adjusted total supply is 15, so for 20% 4 tokens are enough (15 * 0.2 = 3, and tokens in escrow need to be
+        // greater than the threshold).
+        tokenIds = [13, 14];
         vm.prank(tokenHolder);
         dao.escrowToFork(tokenIds, new uint256[](0), '');
     }
@@ -448,11 +467,14 @@ contract DAOSecondForkSignaledOverThresholdTest is DAOSecondForkSignaledOverThre
 
         dao.executeFork();
 
-        assertEq(address(timelock).balance, 600 ether);
-        assertEq(address(forkDAODeployer.mockTreasury()).balance, 400 ether);
+        // OG DAO should retain 73.333% of its funds
+        // Since we have 4 Nouns in escrow out of 15
+        // 1 - (4/15) = 0.73333333
+        assertEq(address(timelock).balance, 550 ether);
+        assertEq(address(forkDAODeployer.mockTreasury()).balance, 450 ether);
 
-        assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
-        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
+        assertEq(erc20Mock.balanceOf(address(timelock)), 165e18);
+        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 135e18);
 
         tokenIds = [11, 12, 13];
         vm.prank(address(dao.timelock()));

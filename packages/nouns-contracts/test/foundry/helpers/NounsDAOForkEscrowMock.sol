@@ -33,7 +33,7 @@ contract NounsDAOForkEscrowMock is INounsDAOForkEscrow {
 
     function numTokensOwnedByDAO() external view returns (uint256) {}
 
-    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external {}
+    function withdrawTokens(uint256[] calldata tokenIds, address to) external {}
 
     function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address) {
         return escrowedTokensByForkId[forkId_][tokenId];
