@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classes from './AddNounsToForkModal.module.css'
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
 import { InputGroup, FormText, FormControl, FormSelect } from 'react-bootstrap'
-import { useAllProposals } from '../../wrappers/nounsDao'
+import { useAllProposals, useEscrowToFork } from '../../wrappers/nounsDao'
 import clsx from 'clsx'
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
+import { current } from '@reduxjs/toolkit'
+import { ethers } from 'ethers'
+import { TransactionStatus, useEthers } from '@usedapp/core'
+import { useBlockNumber } from '@usedapp/core';
+import { useGetOwnedNounIds } from '../../hooks/useGetOwnedNounIds'
+import { useQuery } from '@apollo/client'
+import { Delegates, currentlyDelegatedNouns, delegateNounsAtBlockQuery } from '../../wrappers/subgraph'
+import config from '../../config';
+import { useSetApprovalForAll } from '../../wrappers/nounToken'
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
@@ -14,6 +23,7 @@ type Props = {
   description: string;
   selectLabel: string;
   selectDescription: string;
+  account: string;
 }
 
 const dummyData = {
@@ -25,6 +35,7 @@ export default function AddNounsToForkModal(props: Props) {
   const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
+
   const { data: proposals } = useAllProposals();
   const proposalsList = proposals?.map((proposal, i) => {
     return (
@@ -32,41 +43,101 @@ export default function AddNounsToForkModal(props: Props) {
     )
   });
 
-  // set data 
-  const ownedNouns = dummyData.ownedNouns;
-  const allNounIds = ownedNouns.map((nounId) => nounId);
+  // get owned nouns
+  // const { account } = useEthers();
+  const { data: delegateSnapshot } = useQuery<Delegates>(
+    // TODO: This isn't working without hardcoding the address in subgraph.ts
+    currentlyDelegatedNouns(props.account ?? ''),
+  );
+  const { delegates } = delegateSnapshot || {};
+  const delegateToNounIds = delegates?.reduce<Record<string, number[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsRepresented?.map(nr => +nr.id) ?? [];
+    return acc;
+  }, {});
+  const ownedNouns = Object.values(delegateToNounIds ?? {}).flat();
+  console.log('account', props.account)
+  console.log('ownedNouns', ownedNouns, delegates)
+  // handle transactions 
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ReactNode>('');
+  const { escrowToFork, escrowToForkState } = useEscrowToFork();
+  const { setApproval, setApprovalState } = useSetApprovalForAll();
 
-  // const [modalCopy, setModalCopy] = React.useState({
-  //   title: 'Add Nouns to escrow',
-  //   description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
-  //   selectLabel: 'Select Nouns to escrow',
-  //   selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
-  // })
+  const handleSubmission = () => {
+    // if forking period 
 
-  // React.useEffect(() => {
-  //   if (props.isForkingPeriod) {
-  //     setModalCopy({
-  //       title: 'Join the fork',
-  //       description: "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.",
-  //       selectLabel: 'Select Nouns to join the fork',
-  //       selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period',
-  //     })
-  //   } else {
-  //     setModalCopy({
-  //       title: 'Add Nouns to escrow',
-  //       description: "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
-  //       selectLabel: 'Select Nouns to escrow',
-  //       selectDescription: 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
-  //     })
-  //   }
-  // }, [props.isForkingPeriod])
+    // if escrow period
+    // escrowToFork([27], [1], "the reason");
 
-  // const modalCopy = {
-  //   title: props.isForkingPeriod ? 'Join the fork' : 'Add Nouns to escrow',
-  //   description: props.isForkingPeriod ? "By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone." : "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.",
-  //   selectLabel: props.isForkingPeriod ? 'Select Nouns to join the fork' : 'Select Nouns to escrow',
-  //   selectDescription: props.isForkingPeriod ? 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period' : 'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.',
-  // }
+  }
+  const handleEscrowToFork = () => {
+    // escrowToFork(27, 1, "the reason");
+    // escrowToFork();
+  }
+  const handleSetApproval = () => {
+    setApproval(config.addresses.nounsDAOProxy, true);
+  }
+
+  const handleSetApprovalStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        break;
+      case 'Fail':
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        break;
+      case 'Exception':
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        break;
+    }
+  }, []);
+
+  const handleEscrowToForkStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        // setIsVoteSuccessful(true);
+        break;
+      case 'Fail':
+        // setFailureCopy(<Trans>Transaction Failed</Trans>);
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+      case 'Exception':
+        // setFailureCopy(<Trans>Error</Trans>);
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+    }
+  }, []);
+
+  useEffect(() => {
+    handleEscrowToForkStateChange(escrowToForkState);
+  }, [escrowToForkState, handleEscrowToForkStateChange]);
+
+  useEffect(() => {
+    handleSetApprovalStateChange(setApprovalState);
+  }, [setApprovalState, handleSetApprovalStateChange]);
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
@@ -152,14 +223,14 @@ export default function AddNounsToForkModal(props: Props) {
         </div>
         <button
           onClick={() => {
-            selectedNouns.length === allNounIds.length ?
+            selectedNouns.length === ownedNouns.length ?
               setSelectedNouns([]) :
-              setSelectedNouns(allNounIds)
+              setSelectedNouns(ownedNouns)
           }}
-        >{selectedNouns.length === allNounIds.length ? 'Unselect' : "Select"} all</button>
+        >{selectedNouns.length === ownedNouns.length ? 'Unselect' : "Select"} all</button>
       </div>
       <div className={classes.nounsList}>
-        {dummyData.ownedNouns.map((nounId) => {
+        {ownedNouns.map((nounId) => {
           return (
             <button
               onClick={() => {
@@ -180,7 +251,8 @@ export default function AddNounsToForkModal(props: Props) {
           className={clsx(classes.button, classes.primaryButton)}
           disabled={selectedNouns.length === 0}
           onClick={() => {
-            props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
+            // props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
+            handleSubmission()
           }}
         >
           Add {selectedNouns.length > 0 && selectedNouns.length} Nouns to {props.isForkingPeriod ? 'fork' : 'escrow'}
@@ -263,11 +335,11 @@ export default function AddNounsToForkModal(props: Props) {
         </div>
         <button
           onClick={() => {
-            selectedNouns.length === allNounIds.length ?
+            selectedNouns.length === ownedNouns.length ?
               setSelectedNouns([]) :
-              setSelectedNouns(allNounIds)
+              setSelectedNouns(ownedNouns)
           }}
-        >{selectedNouns.length === allNounIds.length ? 'Unselect' : "Select"} all</button>
+        >{selectedNouns.length === ownedNouns.length ? 'Unselect' : "Select"} all</button>
       </div>
       <div className={classes.nounsList}>
         {dummyData.ownedNouns.map((nounId) => {
@@ -291,8 +363,11 @@ export default function AddNounsToForkModal(props: Props) {
           className={clsx(classes.button, classes.primaryButton)}
           disabled={selectedNouns.length === 0}
           onClick={() => {
-            props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
+            handleSubmission()
           }}
+        // onClick={() => {
+        //   props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
+        // }}
         >
           Add {selectedNouns.length > 0 && selectedNouns.length} Nouns to {props.isForkingPeriod ? 'fork' : 'escrow'}
         </button>

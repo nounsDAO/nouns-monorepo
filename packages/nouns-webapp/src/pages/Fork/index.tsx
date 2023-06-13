@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import classes from './Fork.module.css';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
@@ -6,6 +6,11 @@ import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
+import { useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
+import { TransactionStatus, useEthers } from '@usedapp/core';
+import { useSetApprovalForAll, useTotalSupply } from '../../wrappers/nounToken';
+import config from '../../config';
+import { use } from 'chai';
 
 interface ForkPageProps { }
 
@@ -24,6 +29,147 @@ const nounsInFork = Array.from(Array(160), (_, x) => Math.floor(Math.random() * 
 const ForkPage: React.FC<ForkPageProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentState, setCurrentState] = useState('escrow');
+  const [isThresholdMet, setIsThresholdMet] = useState(false);
+  const [thresholdPercentage, setThresholdPercentage] = useState(0);
+  const [currentEscrowPercentage, setCurrentEscrowPercentage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ReactNode>('');
+  const { escrowToFork, escrowToForkState } = useEscrowToFork();
+  const { setApproval, setApprovalState } = useSetApprovalForAll();
+  const isForkPeriodActive = useIsForkPeriodActive();
+  const totalSupply = useTotalSupply();
+  const forkThreshold = useForkThreshold();
+  const numTokensInForkEscrow = useNumTokensInForkEscrow();
+  console.log('numTokensInForkEscrow', numTokensInForkEscrow);
+  useEffect(() => {
+    if (isForkPeriodActive) {
+      setCurrentState('forking');
+    }
+  }, [forkThreshold]);
+
+  useEffect(() => {
+    if ((numTokensInForkEscrow && forkThreshold) && numTokensInForkEscrow >= forkThreshold) {
+      setIsThresholdMet(true);
+      setCurrentState('escrow threshold met');
+    }
+  }, [forkThreshold, numTokensInForkEscrow]);
+
+  const { account } = useEthers();
+  const handleEscrowToFork = () => {
+    // escrowToFork(27, 1, "the reason");
+    // escrowToFork();
+  }
+  const handleSetApproval = () => {
+    setApproval(config.addresses.nounsDAOProxy, true);
+  }
+
+  useEffect(() => {
+    if (forkThreshold && totalSupply && numTokensInForkEscrow) {
+      const percentage = (forkThreshold / totalSupply) * 100;
+      setThresholdPercentage(+percentage.toFixed(2));
+      const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
+      setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
+    }
+  }, [forkThreshold, totalSupply, numTokensInForkEscrow]);
+
+  // useEffect(() => {
+  //   if (isForkPeriodActive) {
+  //     setCurrentState('forking');
+  //   }
+  // }, [isForkPeriodActive]);
+
+
+  // const handleForkThresholdStateChange = useCallback((state: TransactionStatus) => {
+  //   console.log('handleForkThresholdStateChange', state)
+  //   switch (state.status) {
+  //     case 'None':
+  //       // setIsLoading(false);
+  //       break;
+  //     case 'Mining':
+  //       // setIsLoading(true);
+  //       break;
+  //     case 'Success':
+  //       // setIsLoading(false);
+  //       break;
+  //     case 'Fail':
+  //       // setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+  //       // setIsLoading(false);
+  //       break;
+  //     case 'Exception':
+  //       // setErrorMessage(
+  //       //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+  //       // );
+  //       // setIsLoading(false);
+  //       break;
+  //   }
+  // }, []);
+
+
+  const handleSetApprovalStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        break;
+      case 'Fail':
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        break;
+      case 'Exception':
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        break;
+    }
+  }, []);
+
+  const handleEscrowToForkStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        // setIsVoteSuccessful(true);
+        break;
+      case 'Fail':
+        // setFailureCopy(<Trans>Transaction Failed</Trans>);
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+      case 'Exception':
+        // setFailureCopy(<Trans>Error</Trans>);
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+    }
+  }, []);
+
+  useEffect(() => {
+    handleEscrowToForkStateChange(escrowToForkState);
+  }, [escrowToForkState, handleEscrowToForkStateChange]);
+
+  useEffect(() => {
+    handleSetApprovalStateChange(setApprovalState);
+  }, [setApprovalState, handleSetApprovalStateChange]);
+
+  // useEffect(() => {
+  //   handleForkThresholdStateChange(forkThresholdState);
+  // }, [forkThresholdState, handleForkThresholdStateChange]);
+
 
   return (
     <>
@@ -69,7 +215,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                 rel='noreferrer'
               >Timelock</a></p>
             ) : (
-              <p>160 Nouns (20%) are required to meet the threshold</p>
+              <p>{forkThreshold || '...'} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold</p>
             )}
           </Col>
           <Col lg={6} className={classes.buttons}>
@@ -84,6 +230,12 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               {(currentState === 'escrow' || currentState === 'escrow threshold met' || currentState === 'nouns added') && 'Add Nouns to escrow'}
               {currentState === 'forking' && 'Join fork'}
             </button>
+            {/* <button className={clsx(classes.button, classes.primaryButton)}
+              onClick={async () => {
+                setApproval(config.addresses.nounsDAOProxy, true);
+              
+              }}
+            >Add Nouns to Escrow [contract] </button> */}
           </Col>
         </div>
       </Section>
@@ -107,14 +259,14 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   {currentState === 'forking' && 'joined this fork'}
                 </span>
                 <strong>
-                  {(currentState === 'escrow' || currentState === 'nouns added') && '12'}
-                  {(currentState === 'escrow threshold met' || currentState === 'forking') && '160'}
+                  {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
                   {" "}Nouns
                 </strong>
-                <span>{(currentState === 'escrow' || currentState === 'nouns added') && '1.5%'}
-                  {(currentState === 'escrow threshold met' || currentState === 'forking') && '21%'}</span>
+                <span>
+                  {currentEscrowPercentage > 0 && `${currentEscrowPercentage}%`}
+                </span>
               </div>
-              {currentState === 'escrow threshold met' && (
+              {isThresholdMet && currentState === 'escrow threshold met' && (
                 <button className={clsx(classes.button, classes.primaryButton, classes.deployButton)}>
                   Deploy Nouns fork
                 </button>
@@ -261,26 +413,32 @@ const ForkPage: React.FC<ForkPageProps> = props => {
           </Row>
         </Container>
       </div>
-      {currentState === 'forking' ? (
-        <AddNounsToForkModal
-          setIsModalOpen={setIsModalOpen}
-          isModalOpen={isModalOpen}
-          isForkingPeriod={true}
-          title={'Join the fork'}
-          description={"By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone."}
-          selectLabel={'Select Nouns to join the fork'}
-          selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period'}
-        />
-      ) : (
-        <AddNounsToForkModal
-          setIsModalOpen={setIsModalOpen}
-          isModalOpen={isModalOpen}
-          isForkingPeriod={false}
-          title={'Add Nouns to escrow'}
-          description={"Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
-          selectLabel={'Select Nouns to escrow'}
-          selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
-        />
+      {account && (
+        <>
+          {currentState === 'forking' ? (
+            <AddNounsToForkModal
+              setIsModalOpen={setIsModalOpen}
+              isModalOpen={isModalOpen}
+              isForkingPeriod={true}
+              title={'Join the fork'}
+              description={"By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone."}
+              selectLabel={'Select Nouns to join the fork'}
+              selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period'}
+              account={account}
+            />
+          ) : (
+            <AddNounsToForkModal
+              setIsModalOpen={setIsModalOpen}
+              isModalOpen={isModalOpen}
+              isForkingPeriod={false}
+              title={'Add Nouns to escrow'}
+              description={"Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
+              selectLabel={'Select Nouns to escrow'}
+              selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
+              account={account}
+            />
+          )}
+        </>
       )}
     </>
   );
