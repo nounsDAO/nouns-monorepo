@@ -1,6 +1,6 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
@@ -26,6 +26,9 @@ export enum NounsTokenContractFunction {
 
 const abi = new utils.Interface(NounsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
+// const nounsTokenContract = new NounsTokenFactory().attach(config.addresses.nounsToken);
+const nounsTokenContract = NounsTokenFactory.connect(config.addresses.nounsToken, undefined!);
+const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 const isSeedValid = (seed: Record<string, any> | undefined) => {
   const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
@@ -185,3 +188,23 @@ export const useUserNounTokenBalance = (): number | undefined => {
     }) || [];
   return tokenBalance?.toNumber();
 };
+
+export const useTotalSupply = (): number | undefined => {
+  const [totalSupply] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsToken,
+      method: 'totalSupply',
+    }) || [];
+  return totalSupply?.toNumber();
+};
+
+export const useSetApprovalForAll = () => {
+  const { send: setApproval, state: setApprovalState } = useContractFunction(nounsTokenContract, 'setApprovalForAll');
+  return { setApproval, setApprovalState };
+}
+
+export const useIsApproved = () => {
+  const { send: getIsApproved, state: getIsApprovedState } = useContractFunction(nounsTokenContract, 'isApprovedForAll');
+  return { getIsApproved, getIsApprovedState };
+}

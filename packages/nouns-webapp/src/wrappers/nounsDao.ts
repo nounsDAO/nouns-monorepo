@@ -1,13 +1,13 @@
-import { NounsDAOV2ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI, NounsDAOV3ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
 import {
   ChainId,
-  connectContractToSigner,
   useBlockNumber,
   useContractCall,
   useContractCalls,
   useContractFunction,
   useEthers,
 } from '@usedapp/core';
+// import { connectContractToSigner } from '@usedapp/core/src/hooks/useContractFunction';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
@@ -166,7 +166,23 @@ export interface ProposalTransaction {
   usdcValue?: number;
 }
 
-const abi = new utils.Interface(NounsDAOV2ABI);
+export interface EscrowDeposit {
+  id: string;
+  createdAt: number;
+  owner: { id: string };
+  reason: string;
+  tokenIds: string[];
+  proposalIds: string[];
+}
+
+export interface EscrowWithdrawal {
+  id: string;
+  tokenIDs: string[];
+  createdAt: string;
+  owner: { id: string };
+}
+
+const abi = new utils.Interface(NounsDAOV3ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -762,3 +778,45 @@ export const useExecuteProposal = () => {
   );
   return { executeProposal, executeProposalState };
 };
+
+// fork functions 
+export const useEscrowToFork = () => {
+  console.log("useEscrowToFork", nounsDaoContract);
+  const { send: escrowToFork, state: escrowToForkState } = useContractFunction(
+    nounsDaoContract,
+    'escrowToFork',
+  );
+  return { escrowToFork, escrowToForkState };
+}
+
+export const useIsForkPeriodActive = (): boolean => {
+  const [isForkPeriodActive] =
+    useContractCall<[boolean]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'isForkPeriodActive',
+      args: [],
+    }) || [];
+  return isForkPeriodActive ?? false;
+}
+
+export const useForkThreshold = () => {
+  const [forkThreshold] = useContractCall<[EthersBN]>({
+    abi,
+    address: config.addresses.nounsDAOProxy,
+    method: 'forkThreshold',
+    args: [],
+  }) || [];
+  return forkThreshold?.toNumber();
+}
+
+export const useNumTokensInForkEscrow = (): number | undefined => {
+  const [numTokensInForkEscrow] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'numTokensInForkEscrow',
+      args: [],
+    }) || [];
+  return numTokensInForkEscrow?.toNumber();
+}
