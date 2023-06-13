@@ -209,8 +209,6 @@ export function getOrCreateFork(id: BigInt): Fork {
     fork.forkID = id;
     fork.tokensInEscrowCount = 0;
     fork.tokensForkingCount = 0;
-    fork.escrowedNouns = new Array<string>();
-    fork.joinedNouns = new Array<string>();
   }
   return fork;
 }

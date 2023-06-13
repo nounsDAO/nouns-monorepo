@@ -56,6 +56,9 @@
 // - Removes the vetoer role and logic related to it. The quit function provides minority protection instead of the
 //   vetoer, and fork DAOs can upgrade their governor to include the vetoer feature if it's needed.
 //
+// - Modified MIN_VOTING_PERIOD, MAX_VOTING_PERIOD to correct block numbers assuming 12 second blocks
+// - Modified MAX_VOTING_DELAY to be 2 weeks
+//
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
 //   due to the Noun token's increasing supply
@@ -92,14 +95,14 @@
 pragma solidity ^0.8.6;
 
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
-import { NounsDAOEvents } from './NounsDAOEvents.sol';
-import { NounsDAOStorageV1 } from './NounsDAOStorageV1.sol';
+import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';
+import { NounsDAOStorageV1Fork } from './NounsDAOStorageV1Fork.sol';
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
-contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
     error QuitETHTransferFailed();
@@ -118,16 +121,16 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 public constant MIN_VOTING_PERIOD = 7_200; // 24 hours
 
     /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 80_640; // About 2 weeks
+    uint256 public constant MAX_VOTING_PERIOD = 100_800; // 2 weeks
 
     /// @notice The min setable voting delay
     uint256 public constant MIN_VOTING_DELAY = 1;
 
     /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 40_320; // About 1 week
+    uint256 public constant MAX_VOTING_DELAY = 100_800; // 2 weeks
 
     /// @notice The minimum setable quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS = 200; // 200 basis points or 2%
@@ -147,6 +150,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     /**
      * @notice Used to initialize the contract during delegator contructor
+     * @dev Not asserting that param values are within the hard-coded bounds in order to make it easier to run
+     * manual tests; seems a safe decision since we assume fork DAOs are initialized by `ForkDAODeployer`
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
      * @param votingPeriod_ The initial voting period
@@ -170,22 +175,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
-        require(
-            votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD,
-            'NounsDAO::initialize: invalid voting period'
-        );
-        require(
-            votingDelay_ >= MIN_VOTING_DELAY && votingDelay_ <= MAX_VOTING_DELAY,
-            'NounsDAO::initialize: invalid voting delay'
-        );
-        require(
-            proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::initialize: invalid proposal threshold BPs'
-        );
-        require(
-            quorumVotesBPS_ >= MIN_QUORUM_VOTES_BPS && quorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS,
-            'NounsDAO::initialize: invalid quorum votes BPs'
-        );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
         emit VotingDelaySet(votingDelay, votingDelay_);
@@ -203,7 +192,15 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         delayedGovernanceExpirationTimestamp = delayedGovernanceExpirationTimestamp_;
     }
 
+    /**
+     * @notice A function that allows token holders to quit the DAO, taking their pro rata funds,
+     * and sending their tokens to the DAO treasury.
+     * Will revert as long as not all tokens were claimed, and as long as the delayed governance has not expired.
+     * @param tokenIds The token ids to quit with
+     */
     function quit(uint256[] calldata tokenIds) external nonReentrant {
+        checkGovernanceActive();
+
         uint256 totalSupply = adjustedTotalSupply();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
@@ -222,19 +219,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         if (!ethSent) revert QuitETHTransferFailed();
 
         emit Quit(msg.sender, tokenIds);
-    }
-
-    function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
-        if (msg.sender != admin) revert AdminOnly();
-
-        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
-        erc20TokensToIncludeInQuit = erc20tokens;
-
-        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
-    }
-
-    function adjustedTotalSupply() public view returns (uint256) {
-        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
     }
 
     struct ProposalTemp {
@@ -262,8 +246,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         bytes[] memory calldatas,
         string memory description
     ) public returns (uint256) {
-        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
-            revert WaitingForTokensToClaimOrExpiration();
+        checkGovernanceActive();
 
         ProposalTemp memory temp;
 
@@ -352,6 +335,17 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         );
 
         return newProposal.id;
+    }
+
+    /**
+     * @notice Internal function that reverts if the governance is not active yet. Governance becomes active as soon as
+     * one of these conditions is met:
+     * 1. All tokens are claimed
+     * 2. The delayed governance expiration timestamp is reached
+     */
+    function checkGovernanceActive() internal view {
+        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
+            revert WaitingForTokensToClaimOrExpiration();
     }
 
     /**
@@ -564,7 +558,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         bytes32 s
     ) external {
         bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), block.chainid, address(this))
         );
         bytes32 structHash = keccak256(abi.encode(BALLOT_TYPEHASH, proposalId, support));
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
@@ -718,6 +712,18 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     /**
+     * @notice Admin function for setting the list of ERC20 tokens to transfer on `quit`.
+     */
+    function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
+        if (msg.sender != admin) revert AdminOnly();
+
+        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
+        erc20TokensToIncludeInQuit = erc20tokens;
+
+        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
+    }
+
+    /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
@@ -733,16 +739,12 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         return bps2Uint(quorumVotesBPS, adjustedTotalSupply());
     }
 
-    function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
-        return (number * bps) / 10000;
+    function adjustedTotalSupply() public view returns (uint256) {
+        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
     }
 
-    function getChainIdInternal() internal view returns (uint256) {
-        uint256 chainId;
-        assembly {
-            chainId := chainid()
-        }
-        return chainId;
+    function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
+        return (number * bps) / 10000;
     }
 
     function _authorizeUpgrade(address) internal view override {

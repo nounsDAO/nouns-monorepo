@@ -23,7 +23,8 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
+export const ChainId_Sepolia = 11155111;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia;
 
 interface CacheBucket {
   name: string;
@@ -65,8 +66,14 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/davidbrai/nouns-goerli',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+  },
+  [ChainId_Sepolia]: {
+    jsonRpcUri: createNetworkHttpUrl('sepolia'),
+    wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.thegraph.com/subgraphs/name/verbsteam/nouns-goerli',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia/0.1.1/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
@@ -93,6 +100,15 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     tokenBuyer: '0x7Ee1fE5973c2F6e42D2D40c93f0FDed078c85770',
     chainlinkEthUsdc: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
     nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
+  },
+  [ChainId_Sepolia]: {
+    lidoToken: undefined,
+    usdcToken: undefined,
+    weth: undefined,
+    payerContract: undefined,
+    tokenBuyer: undefined,
+    chainlinkEthUsdc: undefined,
+    nounsStreamFactory: undefined,
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',

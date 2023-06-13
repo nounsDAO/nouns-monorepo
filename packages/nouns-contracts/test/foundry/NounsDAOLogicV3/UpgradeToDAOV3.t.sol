@@ -317,7 +317,11 @@ contract UpgradeToDAOV3Test is DeployUtils {
             address(0), // auctionImpl_,
             address(0), // governorImpl_,
             address(0), // treasuryImpl_,
-            30 days
+            30 days,
+            FORK_DAO_VOTING_PERIOD,
+            FORK_DAO_VOTING_DELAY,
+            FORK_DAO_PROPOSAL_THRESHOLD_BPS,
+            FORK_DAO_QUORUM_VOTES_BPS
         );
         daoV3Impl = new NounsDAOLogicV3();
         (timelockV2, ) = deployAndInitTimelockV2();

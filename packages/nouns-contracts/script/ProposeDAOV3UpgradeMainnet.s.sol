@@ -62,6 +62,7 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         address[] memory erc20TokensToIncludeInFork,
         string memory description
     ) internal returns (uint256 proposalId) {
+        // We are limited to 10 txs per proposal, see `proposalMaxOperations` in NounsDAOV3Proposals.sol
         uint8 numTxs = 10;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);

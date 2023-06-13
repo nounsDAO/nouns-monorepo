@@ -23,6 +23,16 @@ import { IERC721Receiver } from '@openzeppelin/contracts/token/ERC721/IERC721Rec
 contract NounsDAOForkEscrow is IERC721Receiver {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   ERRORS
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    error OnlyDAO();
+    error OnlyNounsToken();
+    error NotOwner();
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   IMMUTABLES
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
@@ -50,14 +60,16 @@ contract NounsDAOForkEscrow is IERC721Receiver {
     /// @notice Number of tokens in escrow in the current fork contributing to the fork threshold. They can be unescrowed.
     uint256 public numTokensInEscrow;
 
-    error OnlyDAO();
-    error OnlyNounsToken();
-    error NotOwner();
-
     constructor(address dao_, address nounsToken_) {
         dao = dao_;
         nounsToken = NounsTokenLike(nounsToken_);
     }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   MODIFIERS
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
     modifier onlyDAO() {
         if (msg.sender != dao) {
@@ -65,6 +77,12 @@ contract NounsDAOForkEscrow is IERC721Receiver {
         }
         _;
     }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   PUBLIC/EXTERNAL OnlyDAO Txs
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
     /**
      * @notice Escrows nouns tokens
@@ -126,13 +144,19 @@ contract NounsDAOForkEscrow is IERC721Receiver {
      * @param tokenIds The ids of the tokens being withdrawn
      * @param to The address which will receive the tokens
      */
-    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external onlyDAO {
+    function withdrawTokens(uint256[] calldata tokenIds, address to) external onlyDAO {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             if (currentOwnerOf(tokenIds[i]) != dao) revert NotOwner();
 
             nounsToken.transferFrom(address(this), to, tokenIds[i]);
         }
     }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   VIEW FUNCTIONS
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
     /**
      * @notice Returns the number of tokens owned by the DAO, excluding the ones in escrow

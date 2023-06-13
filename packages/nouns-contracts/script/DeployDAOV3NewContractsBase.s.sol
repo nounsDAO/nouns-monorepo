@@ -17,6 +17,10 @@ import { ERC20Transferer } from '../contracts/utils/ERC20Transferer.sol';
 
 contract DeployDAOV3NewContractsBase is Script {
     uint256 public constant DELAYED_GOV_DURATION = 30 days;
+    uint256 public immutable forkDAOVotingPeriod;
+    uint256 public immutable forkDAOVotingDelay;
+    uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%
+    uint256 public constant FORK_DAO_QUORUM_VOTES_BPS = 1000; // 10%
 
     NounsDAOLogicV1 public immutable daoProxy;
     INounsDAOExecutor public immutable timelockV1;
@@ -25,11 +29,15 @@ contract DeployDAOV3NewContractsBase is Script {
     constructor(
         address _daoProxy,
         address _timelockV1,
-        bool _deployTimelockV2Harness
+        bool _deployTimelockV2Harness,
+        uint256 _forkDAOVotingPeriod,
+        uint256 _forkDAOVotingDelay
     ) {
         daoProxy = NounsDAOLogicV1(payable(_daoProxy));
         timelockV1 = INounsDAOExecutor(_timelockV1);
         deployTimelockV2Harness = _deployTimelockV2Harness;
+        forkDAOVotingPeriod = _forkDAOVotingPeriod;
+        forkDAOVotingDelay = _forkDAOVotingDelay;
     }
 
     function run()
@@ -74,7 +82,11 @@ contract DeployDAOV3NewContractsBase is Script {
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
             address(timelockV2Impl),
-            DELAYED_GOV_DURATION
+            DELAYED_GOV_DURATION,
+            forkDAOVotingPeriod,
+            forkDAOVotingDelay,
+            FORK_DAO_PROPOSAL_THRESHOLD_BPS,
+            FORK_DAO_QUORUM_VOTES_BPS
         );
         daoV3Impl = new NounsDAOLogicV3();
         timelockV2 = deployAndInitTimelockV2(address(timelockV2Impl));
