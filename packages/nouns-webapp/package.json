@@ -22,7 +22,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@usedapp/coingecko": "0.5.1",
-    "@usedapp/core": "file:./packages/nouns-webapp/src/usedapp-sepolia-fork/core",
+    "@usedapp/core": "file:./src/usedapp-sepolia-fork/core",
     "@web3-react/core": "^6.1.9",
     "@web3-react/fortmatic-connector": "^6.1.6",
     "@web3-react/injected-connector": "^6.0.7",
