@@ -318,7 +318,7 @@ contract ForkDAO_PostFork_NewOGNounsJoin is ForkDAOBase {
         bidAndSettleOriginalAuction(joiningNouner);
 
         // join the fork with new noun IDs
-        changePrank(joiningNouner);
+        vm.startPrank(joiningNouner);
         uint256[] memory tokenIds = new uint256[](2);
         tokenIds[0] = 3;
         tokenIds[1] = 4;
