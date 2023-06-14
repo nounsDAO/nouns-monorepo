@@ -19,6 +19,8 @@ task(
     // Populate the on-chain seeder
   await run('populate-seeder', { nSeeder: contracts.NSeeder.instance, probDoc });
 
+  await run('register-og-punks', { nToken: contracts.NToken.instance });
+
   await contracts.NAuctionHouse.instance
     .attach(contracts.NAuctionHouseProxy.instance.address)
     .unpause({
