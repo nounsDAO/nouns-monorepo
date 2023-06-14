@@ -415,7 +415,17 @@ const ForkPage: React.FC<ForkPageProps> = props => {
       </div>
       {account && (
         <>
-          {currentState === 'forking' ? (
+          <AddNounsToForkModal
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            isForkingPeriod={false}
+            title={'Add Nouns to escrow'}
+            description={"Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
+            selectLabel={'Select Nouns to escrow'}
+            selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
+            account={account}
+          />
+          {/* {currentState === 'forking' ? (
             <AddNounsToForkModal
               setIsModalOpen={setIsModalOpen}
               isModalOpen={isModalOpen}
@@ -437,7 +447,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
               account={account}
             />
-          )}
+          )} */}
         </>
       )}
     </>

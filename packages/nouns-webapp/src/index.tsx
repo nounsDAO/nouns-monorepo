@@ -115,6 +115,7 @@ const useDappConfig = {
 };
 
 const client = clientFactory(config.app.subgraphApiUri);
+console.log('client', client, config.app.subgraphApiUri)
 
 const Updaters = () => {
   return (

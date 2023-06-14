@@ -3,13 +3,18 @@ import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { seedsQuery } from './subgraph';
+import { Delegates, currentlyDelegatedNouns, ownedNounsQuery, seedsQuery } from './subgraph';
 import { useEffect } from 'react';
+import { props } from 'ramda';
 
 interface NounToken {
   name: string;
   description: string;
   image: string;
+}
+
+interface NounId {
+  id: string;
 }
 
 export interface INounSeed {
@@ -198,6 +203,15 @@ export const useTotalSupply = (): number | undefined => {
     }) || [];
   return totalSupply?.toNumber();
 };
+
+export const useUserOwnedNounIds = (): number[] | undefined => {
+  const { account } = useEthers();
+  const { data } = useQuery(
+    ownedNounsQuery(account ?? ''),
+  );
+  const ownedNouns = data.nouns.map((noun: NounId) => Number(noun.id));
+  return ownedNouns;
+}
 
 export const useSetApprovalForAll = () => {
   const { send: setApproval, state: setApprovalState } = useContractFunction(nounsTokenContract, 'setApprovalForAll');

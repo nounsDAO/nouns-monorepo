@@ -11,10 +11,10 @@ import { ethers } from 'ethers'
 import { TransactionStatus, useEthers } from '@usedapp/core'
 import { useBlockNumber } from '@usedapp/core';
 import { useGetOwnedNounIds } from '../../hooks/useGetOwnedNounIds'
-import { useQuery } from '@apollo/client'
-import { Delegates, currentlyDelegatedNouns, delegateNounsAtBlockQuery } from '../../wrappers/subgraph'
+import { gql, useQuery } from '@apollo/client'
+import { Delegates, currentlyDelegatedNouns, delegateNounsAtBlockQuery, nounsIndex, ownedNounsQuery, partialProposalsQuery, propUsingDynamicQuorum } from '../../wrappers/subgraph'
 import config from '../../config';
-import { useSetApprovalForAll } from '../../wrappers/nounToken'
+import { useSetApprovalForAll, useUserOwnedNounIds, useUserVotes } from '../../wrappers/nounToken'
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
@@ -42,21 +42,8 @@ export default function AddNounsToForkModal(props: Props) {
       <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
     )
   });
+  const ownedNouns = useUserOwnedNounIds();
 
-  // get owned nouns
-  // const { account } = useEthers();
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    // TODO: This isn't working without hardcoding the address in subgraph.ts
-    currentlyDelegatedNouns(props.account ?? ''),
-  );
-  const { delegates } = delegateSnapshot || {};
-  const delegateToNounIds = delegates?.reduce<Record<string, number[]>>((acc, curr) => {
-    acc[curr.id] = curr?.nounsRepresented?.map(nr => +nr.id) ?? [];
-    return acc;
-  }, {});
-  const ownedNouns = Object.values(delegateToNounIds ?? {}).flat();
-  console.log('account', props.account)
-  console.log('ownedNouns', ownedNouns, delegates)
   // handle transactions 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
@@ -223,14 +210,14 @@ export default function AddNounsToForkModal(props: Props) {
         </div>
         <button
           onClick={() => {
-            selectedNouns.length === ownedNouns.length ?
+            ownedNouns && selectedNouns.length === ownedNouns.length ?
               setSelectedNouns([]) :
-              setSelectedNouns(ownedNouns)
+              setSelectedNouns(ownedNouns || [])
           }}
-        >{selectedNouns.length === ownedNouns.length ? 'Unselect' : "Select"} all</button>
+        >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
       </div>
       <div className={classes.nounsList}>
-        {ownedNouns.map((nounId) => {
+        {ownedNouns && ownedNouns.map((nounId: number) => {
           return (
             <button
               onClick={() => {
@@ -335,14 +322,14 @@ export default function AddNounsToForkModal(props: Props) {
         </div>
         <button
           onClick={() => {
-            selectedNouns.length === ownedNouns.length ?
+            selectedNouns.length === ownedNouns?.length ?
               setSelectedNouns([]) :
-              setSelectedNouns(ownedNouns)
+              setSelectedNouns(ownedNouns || [])
           }}
-        >{selectedNouns.length === ownedNouns.length ? 'Unselect' : "Select"} all</button>
+        >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
       </div>
       <div className={classes.nounsList}>
-        {dummyData.ownedNouns.map((nounId) => {
+        {ownedNouns && ownedNouns.map((nounId: number) => {
           return (
             <button
               onClick={() => {
