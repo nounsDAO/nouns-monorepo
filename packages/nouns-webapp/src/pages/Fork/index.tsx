@@ -8,7 +8,7 @@ import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
 import { useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
 import { TransactionStatus, useEthers } from '@usedapp/core';
-import { useSetApprovalForAll, useTotalSupply } from '../../wrappers/nounToken';
+import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds } from '../../wrappers/nounToken';
 import config from '../../config';
 import { use } from 'chai';
 
@@ -40,7 +40,9 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const totalSupply = useTotalSupply();
   const forkThreshold = useForkThreshold();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
+  const userEscrowedNounIds = useUserEscrowedNounIds();
   console.log('numTokensInForkEscrow', numTokensInForkEscrow);
+  console.log('userEscrowedNounIds', userEscrowedNounIds);
   useEffect(() => {
     if (isForkPeriodActive) {
       setCurrentState('forking');
@@ -280,10 +282,11 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               )}
             </Col>
             <Col lg={9} className={classes.events}>
-              {currentState === 'nouns added' && (
+              {/* {currentState === 'nouns added' && ( */}
+              {userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
                 <div className={clsx(classes.userNouns, classes.callout)}>
                   <p>
-                    Your Nouns <strong>{dummyData.userNouns.map((nounId) => nounId).join(', ')}</strong> are in escrow.
+                    Your Noun{userEscrowedNounIds.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
                   </p>
                 </div>
               )}

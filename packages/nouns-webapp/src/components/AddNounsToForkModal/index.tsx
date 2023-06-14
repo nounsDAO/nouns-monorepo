@@ -51,10 +51,11 @@ export default function AddNounsToForkModal(props: Props) {
   const { setApproval, setApprovalState } = useSetApprovalForAll();
 
   const handleSubmission = () => {
+    console.log("handle submission")
     // if forking period 
 
     // if escrow period
-    // escrowToFork([27], [1], "the reason");
+    escrowToFork([18], [1], "the reason");
 
   }
   const handleEscrowToFork = () => {
@@ -244,6 +245,15 @@ export default function AddNounsToForkModal(props: Props) {
         >
           Add {selectedNouns.length > 0 && selectedNouns.length} Nouns to {props.isForkingPeriod ? 'fork' : 'escrow'}
         </button>
+        <button
+          className={clsx(classes.button, classes.primaryButton)}
+          disabled={selectedNouns.length === 0}
+          onClick={() => {
+            handleSetApproval()
+          }}
+        >
+          Set Approval
+        </button>
         <p>
           {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
         </p>
@@ -373,7 +383,8 @@ export default function AddNounsToForkModal(props: Props) {
           props.setIsModalOpen(false);
           setIsConfirmModalOpen(false);
         }}
-        content={props.isForkingPeriod ? forkingModalContent : modalContent}
+        // content={props.isForkingPeriod ? forkingModalContent : modalContent}
+        content={modalContent}
       />
       <SolidColorBackgroundModal
         show={isConfirmModalOpen}

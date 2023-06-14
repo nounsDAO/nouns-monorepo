@@ -3,7 +3,7 @@ import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { Delegates, currentlyDelegatedNouns, ownedNounsQuery, seedsQuery } from './subgraph';
+import { Delegates, accountEscrowedNounsQuery, currentlyDelegatedNouns, nounsIndex, ownedNounsQuery, seedsQuery } from './subgraph';
 import { useEffect } from 'react';
 import { props } from 'ramda';
 
@@ -15,6 +15,9 @@ interface NounToken {
 
 interface NounId {
   id: string;
+}
+interface EscrowedNoun {
+  noun: NounId;
 }
 
 export interface INounSeed {
@@ -207,10 +210,23 @@ export const useTotalSupply = (): number | undefined => {
 export const useUserOwnedNounIds = (): number[] | undefined => {
   const { account } = useEthers();
   const { data } = useQuery(
-    ownedNounsQuery(account ?? ''),
+    ownedNounsQuery(account?.toLowerCase() ?? ''),
   );
-  const ownedNouns = data.nouns.map((noun: NounId) => Number(noun.id));
+  const ownedNouns = data?.nouns?.map((noun: NounId) => Number(noun.id));
   return ownedNouns;
+}
+
+export const useUserEscrowedNounIds = (): number[] | undefined => {
+  const { account } = useEthers();
+  const { data: nounsIndexData } = useQuery(
+    nounsIndex(),
+  );
+  const { data } = useQuery(
+    accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
+  );
+  console.log('useUserEscrowedNounIds', data);
+  const escrowedNouns = data?.escrowedNouns.map((escrowedNoun: EscrowedNoun) => Number(escrowedNoun.noun.id));
+  return escrowedNouns;
 }
 
 export const useSetApprovalForAll = () => {

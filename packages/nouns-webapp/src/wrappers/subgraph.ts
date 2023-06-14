@@ -488,3 +488,15 @@ export const ownedNounsQuery = (owner: string) => gql`
   }
 }
 `;
+
+export const accountEscrowedNounsQuery = (owner: string) => gql`
+{
+  escrowedNouns(
+    where: {owner_: {id: "${owner}"}}
+  ) {
+    noun {
+      id
+    }
+  }
+}
+`;
