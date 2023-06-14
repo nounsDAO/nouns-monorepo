@@ -95,7 +95,11 @@ contract CryptopunksVote is EIP712 {
         return _getPriorVotes(account, blockNumber);
     }
 
-    function totalSupply() external view returns (uint256) {
+    function totalSupply() external pure returns (uint256) {
+        return CRYPTOPUNKS_TOTAL_SUPPLY;
+    }
+
+    function totalDelegated() external view returns (uint256) {
         uint32 nCheckpoints = numCheckpoints[TOTAL_SUPPLY_HOLDER];
         return nCheckpoints > 0 ? checkpoints[TOTAL_SUPPLY_HOLDER][nCheckpoints - 1].votes : 0;
     }
@@ -109,8 +113,18 @@ contract CryptopunksVote is EIP712 {
      * vote.
      *
      * IERC5805 compliant
+     *
+     * Returns always 10_000 as there are 10_000 OG punks
      */
-    function getPastTotalSupply(uint256 timepoint) external view returns (uint256) {
+    function getPastTotalSupply(uint256 /*timepoint*/) external pure returns (uint256) {
+        return CRYPTOPUNKS_TOTAL_SUPPLY;
+    }
+
+    /**
+     * @dev Returns the number of delegated votes.
+     * It is provided in the case a project would want to refer to delegated votes/punks instead of all OG punks.
+     */
+    function getPastTotalDelegated(uint256 timepoint) external view returns (uint256) {
         return _getPriorVotes(TOTAL_SUPPLY_HOLDER, timepoint);
     }
 

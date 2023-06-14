@@ -219,6 +219,20 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     signatures.push('');
     callDatas.push('0x');
 
+    // we need at least 1000 votes to pass a proposal
+    await cryptopunks.mintBatch(bidderA.address, 499);
+    let tokenIds = [];
+    for (let i = 0 ; i < 499 ; i ++) {
+      tokenIds.push(i);
+    }
+    await cryptopunksVote.connect(bidderA).delegateBatch(bidderA.address, tokenIds);
+    await cryptopunks.mintBatch(bidderA.address, 500);
+    tokenIds = [];
+    for (let i = 499 ; i < 999 ; i ++) {
+      tokenIds.push(i);
+    }
+    await cryptopunksVote.connect(bidderA).delegateBatch(bidderA.address, tokenIds);
+
     await gov.connect(bidderA).propose(targets, values, signatures, callDatas, description);
 
     proposalId = await gov.latestProposalIds(bidderA.address);

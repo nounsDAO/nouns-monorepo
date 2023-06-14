@@ -34,5 +34,18 @@ contract CryptopunksMock is ICryptopunks {
         emit Assign(to, _currentPunkIndex);
         _currentPunkIndex ++;
     }
+
+    function mintBatch(address to, uint256 amount) external {
+        require(to != address(0), "CryptopunksMock: E");
+        require(amount != 0, "CryptopunksMock: F");
+        require(_currentPunkIndex + amount < 10000, "CryptopunksMock: G");
+
+        for(uint256 i = 0 ; i < amount ; i ++) {
+            punkIndexToAddress[_currentPunkIndex + i] = to;
+            emit Assign(to, _currentPunkIndex + i);
+        }
+        balanceOf[to] += amount;
+        _currentPunkIndex += amount;
+    }
 }
 
