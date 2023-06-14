@@ -479,3 +479,12 @@ export const proposalFeedbacksQuery = (proposalId: string) => gql`
   }
 }
 `;
+
+
+export const ownedNounsQuery = (owner: string) => gql`
+{
+  nouns(where: {owner_: {id: "${owner}"}}) {
+    id      
+  }
+}
+`;
