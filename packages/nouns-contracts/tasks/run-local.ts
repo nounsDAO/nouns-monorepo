@@ -10,6 +10,9 @@ task(
 
   await Promise.race([run(TASK_NODE), new Promise(resolve => setTimeout(resolve, 2_000))]);
 
+  const [deployer] = await ethers.getSigners();
+  const initialDeployerBalance = await ethers.provider.getBalance(deployer.address);
+
   const contracts = await run('deploy-local');
 
   await run('populate-descriptor', {
@@ -28,7 +31,6 @@ task(
     });
 
   // Transfer ownership
-  const [deployer] = await ethers.getSigners();
   const executorAddress = contracts.NDAOExecutor.instance.address;
   await contracts.NDescriptorV2.instance.transferOwnership(deployer.address);
   await contracts.NToken.instance.transferOwnership(deployer.address);
@@ -66,6 +68,11 @@ task(
   console.log(`Punk ERC721 address: ${contracts.NToken.instance.address}`);
   console.log(`Punk DAO Executor address: ${contracts.NDAOExecutor.instance.address}`);
   console.log(`Punk DAO Proxy address: ${contracts.NDAOProxy.instance.address}`);
+
+  const finalDeployerBalance = await ethers.provider.getBalance(deployer.address);
+  const gasPrice = await ethers.provider.getGasPrice();
+  console.log("total gas consumption:", initialDeployerBalance.sub(finalDeployerBalance).div(gasPrice));
+  console.log("total gas cost:", initialDeployerBalance.sub(finalDeployerBalance));
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

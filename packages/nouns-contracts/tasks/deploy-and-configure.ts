@@ -32,6 +32,9 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
   .setAction(async (args, { ethers, run }) => {
+    const [deployer] = await ethers.getSigners();
+    const initialDeployerBalance = await ethers.provider.getBalance(deployer.address);
+
     // Deploy the NDAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
@@ -54,7 +57,6 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
-    const [deployer] = await ethers.getSigners();
     if (!args.punkers) {
       console.log(
         `Punkers address not provided. Setting to deployer (${deployer.address})...`,
@@ -94,5 +96,9 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     }
 
     printContractsTable(contracts);
+
+    const finalDeployerBalance = await ethers.provider.getBalance(deployer.address);
+    console.log("total gas cost:", initialDeployerBalance.sub(finalDeployerBalance));
+
     console.log('Deployment Complete.');
   });
