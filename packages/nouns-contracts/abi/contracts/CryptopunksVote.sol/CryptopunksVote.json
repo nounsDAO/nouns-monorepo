@@ -326,7 +326,7 @@
         "type": "uint256"
       }
     ],
-    "name": "getPastTotalSupply",
+    "name": "getPastTotalDelegated",
     "outputs": [
       {
         "internalType": "uint256",
@@ -335,6 +335,25 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPastTotalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -444,7 +463,7 @@
   },
   {
     "inputs": [],
-    "name": "totalSupply",
+    "name": "totalDelegated",
     "outputs": [
       {
         "internalType": "uint256",
@@ -453,6 +472,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {

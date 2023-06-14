@@ -94,29 +94,44 @@ describe('NDAO#inflationHandling', () => {
 
     await mineBlock();
 
-    // 6.78% of 40 = 2.712, floored to 2
-    expect(await gov.proposalThreshold()).to.equal(2);
-    // 11% of 40 = 4.4, floored to 4
-    expect(await gov.quorumVotes()).to.equal(4);
+    // 6.78% of 40 + 10_000 = 680.712, floored to 680
+    expect(await gov.proposalThreshold()).to.equal(680);
+    // 11% of 40 + 10_000 = 1104.4, floored to 1104
+    expect(await gov.quorumVotes()).to.equal(1104);
   });
 
   it('rejects if proposing below threshold', async () => {
-    // account0 has 1 token, requires 3
+    // account0 has 1 token, requires 681
     await token.transferFrom(deployer.address, account0.address, 10_000);
     await mineBlock();
     await expect(
       gov.connect(account0).propose(targets, values, signatures, callDatas, 'do nothing'),
     ).revertedWith('NDAO::propose: proposer votes below proposal threshold');
   });
+
   it('allows proposing if above threshold', async () => {
-    // account0 has 3 token, requires 3
+    // account0 has already 1 token, requires 681
     await token.transferFrom(deployer.address, account0.address, 10_001);
     await token.transferFrom(deployer.address, account0.address, 10_002);
+    // we need at least 678 + 3 votes to pass a proposal
+    await cryptopunks.mintBatch(account0.address, 678);
+    const tokenIds0 = [];
+    for (let i = 0 ; i < 678 ; i ++) {
+      tokenIds0.push(i);
+    }
+    await cryptopunksVote.connect(account0).delegateBatch(account0.address, tokenIds0);
 
-    // account1 has 3 tokens
+    // account1 has 681 tokens
     await token.transferFrom(deployer.address, account1.address, 10_003);
     await token.transferFrom(deployer.address, account1.address, 10_004);
     await token.transferFrom(deployer.address, account1.address, 10_005);
+    // we need at least 678 + 3 votes to pass a proposal
+    await cryptopunks.mintBatch(account1.address, 678);
+    const tokenIds1 = [];
+    for (let i = 678 ; i < 678 + 678; i ++) {
+      tokenIds1.push(i);
+    }
+    await cryptopunksVote.connect(account1).delegateBatch(account1.address, tokenIds1);
 
     // account2 has 5 tokens
     await token.transferFrom(deployer.address, account2.address, 10_006);
@@ -131,22 +146,22 @@ describe('NDAO#inflationHandling', () => {
 
   it('sets proposal attributes correctly', async () => {
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.proposalThreshold).to.equal(2);
-    expect(proposal.quorumVotes).to.equal(4);
+    expect(proposal.proposalThreshold).to.equal(680);
+    expect(proposal.quorumVotes).to.equal(1104);
   });
 
   it('returns updated quorum votes and proposal threshold when total supply changes', async () => {
     // Total Supply = 80
     await setTotalSupply(token, 80);
 
-    // 6.78% of 80 = 5.424, floored to 5
-    expect(await gov.proposalThreshold()).to.equal(5);
-    // 11% of 80 = 8.88, floored to 8
-    expect(await gov.quorumVotes()).to.equal(8);
+    // 6.78% of 80 + 10_000 = 683.424, floored to 683
+    expect(await gov.proposalThreshold()).to.equal(683);
+    // 11% of 80 + 10_000 = 1108.8, floored to 1108
+    expect(await gov.quorumVotes()).to.equal(1108);
   });
 
   it('rejects proposals that were previously above proposal threshold, but due to increasing supply are now below', async () => {
-    // account1 has 3 tokens, but requires 5 to pass new proposal threshold when totalSupply = 80 and threshold = 5%
+    // account1 has 681 tokens, but requires 683 to pass new proposal threshold when totalSupply = 80 and threshold = 6.78%
     await expect(
       gov.connect(account1).propose(targets, values, signatures, callDatas, 'do nothing'),
     ).revertedWith('NDAO::propose: proposer votes below proposal threshold');
@@ -154,20 +169,20 @@ describe('NDAO#inflationHandling', () => {
 
   it('does not change previous proposal attributes when total supply changes', async () => {
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.proposalThreshold).to.equal(2);
-    expect(proposal.quorumVotes).to.equal(4);
+    expect(proposal.proposalThreshold).to.equal(680);
+    expect(proposal.quorumVotes).to.equal(1104);
   });
 
   it('updates for/against votes correctly', async () => {
-    // Accounts voting for = 5 votes
+    // Accounts voting for = 681 votes
     // forVotes should be greater than quorumVotes
-    await gov.connect(account0).castVote(proposalId, 1); // 3
-    await gov.connect(account1).castVote(proposalId, 1); // 3
+    await gov.connect(account0).castVote(proposalId, 1); // 681
+    await gov.connect(account1).castVote(proposalId, 1); // 681
 
     await gov.connect(account2).castVote(proposalId, 0); // 5
 
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.forVotes).to.equal(6);
+    expect(proposal.forVotes).to.equal(1362);
     expect(proposal.againstVotes).to.equal(5);
   });
 

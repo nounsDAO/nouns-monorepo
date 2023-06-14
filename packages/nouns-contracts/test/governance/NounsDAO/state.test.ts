@@ -169,8 +169,8 @@ describe('NDAO#state/1', () => {
   });
 
   it('Canceled', async () => {
-    // set proposalThresholdBPS to 10% (1 token) so proposalThreshold is > 0
-    await makeProposal(account0, 10, 2, account0, 1000);
+    // proposalThreshold is > 0 since OG Punks total supply
+    await makeProposal(account0, 10, 2, account0, 1);
     await gov.proposals(proposalId);
 
     // send away the delegates

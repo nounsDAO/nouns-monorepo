@@ -76,9 +76,10 @@ async function reset(): Promise<void> {
 
 async function propose(proposer: SignerWithAddress, mint = true) {
   if (mint) {
-    await setTotalSupply(token, 1);
+    await setTotalSupply(token, 2);
     if (proposer.address !== deployer.address) {
       await token.transferFrom(deployer.address, proposer.address, 10_000);
+      await token.transferFrom(deployer.address, proposer.address, 10_001);
     }
   }
   await mineBlock();
@@ -107,8 +108,8 @@ let gov: NDAOLogicV1;
 let timelock: NDAOExecutor;
 const timelockDelay = 172800; // 2 days
 
-const proposalThresholdBPS = 500; // 5%
-const quorumVotesBPS = 1000; // 10%
+const proposalThresholdBPS = 1; // 5%
+const quorumVotesBPS = 200; // 10%
 
 let targets: string[];
 let values: string[];
@@ -202,15 +203,16 @@ describe('NDAO#vetoing', () => {
       await expectState(proposalId, 'Vetoed');
     });
     it('Defeated', async () => {
-      await setTotalSupply(token, 3);
+      await setTotalSupply(token, 4);
       await token.transferFrom(deployer.address, account0.address, 10_000);
-      await token.transferFrom(deployer.address, account1.address, 10_001);
+      await token.transferFrom(deployer.address, account0.address, 10_001);
       await token.transferFrom(deployer.address, account1.address, 10_002);
+      await token.transferFrom(deployer.address, account1.address, 10_003);
       await propose(account0, false);
       await mineBlock();
       await mineBlock();
       await expectState(proposalId, 'Active');
-      // account0 with 1 vote casts for vote
+      // account0 with 2 vote casts for vote
       await gov.connect(account0).castVote(proposalId, 1);
       // account1 with 2 votes casts against vote
       await gov.connect(account1).castVote(proposalId, 0);
@@ -219,67 +221,89 @@ describe('NDAO#vetoing', () => {
       await gov.veto(proposalId);
       await expectState(proposalId, 'Vetoed');
     });
-    it('Succeeded', async () => {
-      await setTotalSupply(token, 3);
-      await token.transferFrom(deployer.address, account0.address, 10_000);
-      await token.transferFrom(deployer.address, account1.address, 10_001);
-      await token.transferFrom(deployer.address, account1.address, 10_002);
-      await propose(account0, false);
-      await mineBlock();
-      await mineBlock();
-      await expectState(proposalId, 'Active');
-      // account0 with 1 vote casts against vote
-      await gov.connect(account0).castVote(proposalId, 0);
-      // account1 with 2 votes casts for vote
-      await gov.connect(account1).castVote(proposalId, 1);
-      await advanceBlocks(5780);
-      await expectState(proposalId, 'Succeeded');
-      await gov.veto(proposalId);
-      await expectState(proposalId, 'Vetoed');
-    });
-    it('Queued', async () => {
-      await propose(account0);
-      await mineBlock();
-      await mineBlock();
-      await expectState(proposalId, 'Active');
-      await gov.connect(account0).castVote(proposalId, 1);
-      await advanceBlocks(5780);
-      await gov.queue(proposalId);
-      await expectState(proposalId, 'Queued');
-      await gov.veto(proposalId);
-      await expectState(proposalId, 'Vetoed');
-    });
-    it('Expired', async () => {
-      await propose(account0);
-      await mineBlock();
-      await mineBlock();
-      await expectState(proposalId, 'Active');
-      await gov.connect(account0).castVote(proposalId, 1);
-      await advanceBlocks(5780);
-      await gov.queue(proposalId);
-      const proposal = await gov.proposals(proposalId);
-      await setNextBlockTimestamp(
-        proposal.eta.toNumber() + (await timelock.GRACE_PERIOD()).toNumber() + 1,
-      );
-      await expectState(proposalId, 'Expired');
-      await gov.veto(proposalId);
-      await expectState(proposalId, 'Vetoed');
-    });
-    it('Executed', async () => {
-      await propose(account0);
-      await mineBlock();
-      await mineBlock();
-      await expectState(proposalId, 'Active');
-      await gov.connect(account0).castVote(proposalId, 1);
-      await advanceBlocks(5780);
-      await gov.queue(proposalId);
-      const proposal = await gov.proposals(proposalId);
-      await setNextBlockTimestamp(proposal.eta.toNumber() + 1);
-      await gov.execute(proposalId);
-      await expectState(proposalId, 'Executed');
-      await expect(gov.veto(proposalId)).revertedWith(
-        'NDAO::veto: cannot veto executed proposal',
-      );
+    describe('vetoing works correctly for proposal state with success', async () => {
+      before(async () => {
+        // we need at least 200 votes to pass a proposal
+        await cryptopunks.mintBatch(account1.address, 200);
+        const tokenIds = [];
+        for (let i = 0 ; i < 200 ; i ++) {
+          tokenIds.push(i);
+        }
+        await cryptopunksVote.connect(account1).delegateBatch(account1.address, tokenIds);
+      });
+
+      beforeEach(async () => {
+        snapshotId = await ethers.provider.send('evm_snapshot', []);
+      });
+
+      afterEach(async () => {
+        await ethers.provider.send('evm_revert', [snapshotId]);
+      });
+
+      it('Succeeded', async () => {
+        await setTotalSupply(token, 5);
+        await token.transferFrom(deployer.address, account0.address, 10_000);
+        await token.transferFrom(deployer.address, account0.address, 10_001);
+        await token.transferFrom(deployer.address, account1.address, 10_002);
+        await token.transferFrom(deployer.address, account1.address, 10_003);
+        await token.transferFrom(deployer.address, account1.address, 10_004);
+        await propose(account0, false);
+        await mineBlock();
+        await mineBlock();
+        await expectState(proposalId, 'Active');
+        // account0 with 2 vote casts against vote
+        await gov.connect(account0).castVote(proposalId, 0);
+        // account1 with 3 votes casts for vote
+        await gov.connect(account1).castVote(proposalId, 1);
+        await advanceBlocks(5780);
+        await expectState(proposalId, 'Succeeded');
+        await gov.veto(proposalId);
+        await expectState(proposalId, 'Vetoed');
+      });
+      it('Queued', async () => {
+        await propose(account0);
+        await mineBlock();
+        await mineBlock();
+        await expectState(proposalId, 'Active');
+        await gov.connect(account1).castVote(proposalId, 1);
+        await advanceBlocks(5780);
+        await gov.queue(proposalId);
+        await expectState(proposalId, 'Queued');
+        await gov.veto(proposalId);
+        await expectState(proposalId, 'Vetoed');
+      });
+      it('Expired', async () => {
+        await propose(account0);
+        await mineBlock();
+        await mineBlock();
+        await expectState(proposalId, 'Active');
+        await gov.connect(account1).castVote(proposalId, 1);
+        await advanceBlocks(5780);
+        await gov.queue(proposalId);
+        const proposal = await gov.proposals(proposalId);
+        await setNextBlockTimestamp(
+          proposal.eta.toNumber() + (await timelock.GRACE_PERIOD()).toNumber() + 1,
+        );
+        await expectState(proposalId, 'Expired');
+        await gov.veto(proposalId);
+        await expectState(proposalId, 'Vetoed');
+      });
+      it('Executed', async () => {
+        await propose(account0);
+        await mineBlock();
+        await mineBlock();
+        await expectState(proposalId, 'Active');
+        await gov.connect(account1).castVote(proposalId, 1);
+        await advanceBlocks(5780);
+        await gov.queue(proposalId);
+        const proposal = await gov.proposals(proposalId);
+        await setNextBlockTimestamp(proposal.eta.toNumber() + 1);
+        await gov.execute(proposalId);
+        await expectState(proposalId, 'Executed');
+        await expect(gov.veto(proposalId)).revertedWith(
+          'NDAO::veto: cannot veto executed proposal',
+        );
+      });
     });
     it('Vetoed', async () => {
       await propose(account0);
