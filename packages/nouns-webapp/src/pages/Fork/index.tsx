@@ -6,11 +6,10 @@ import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
+import { useEscrowEvents, useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds } from '../../wrappers/nounToken';
 import config from '../../config';
-import { use } from 'chai';
 
 interface ForkPageProps { }
 
@@ -41,6 +40,9 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const forkThreshold = useForkThreshold();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds();
+  const escrowEvents = useEscrowEvents();
+
+  console.log('escrowEvents', escrowEvents);
   console.log('numTokensInForkEscrow', numTokensInForkEscrow);
   console.log('userEscrowedNounIds', userEscrowedNounIds);
   useEffect(() => {

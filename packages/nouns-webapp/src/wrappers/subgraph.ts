@@ -500,3 +500,31 @@ export const accountEscrowedNounsQuery = (owner: string) => gql`
   }
 }
 `;
+
+export const escrowDepositEventsQuery = () => gql`
+{
+  escrowDeposits {
+    id 
+    createdAt
+    owner {
+      id
+    }
+    reason
+    tokenIDs
+    proposalIDs
+  }
+}
+`;
+
+export const escrowWithdrawEventsQuery = () => gql`
+{
+  escrowWithdrawals {
+    id 
+    createdAt
+    owner {
+      id
+    }
+    tokenIDs
+  }
+}
+`;

@@ -19,6 +19,9 @@ import {
   proposalQuery,
   partialProposalsQuery,
   proposalVersionsQuery,
+  accountEscrowedNounsQuery,
+  escrowDepositEventsQuery,
+  escrowWithdrawEventsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -167,6 +170,7 @@ export interface ProposalTransaction {
 }
 
 export interface EscrowDeposit {
+  eventType: 'EscrowDeposit';
   id: string;
   createdAt: number;
   owner: { id: string };
@@ -176,10 +180,11 @@ export interface EscrowDeposit {
 }
 
 export interface EscrowWithdrawal {
+  eventType: 'EscrowWithdrawal';
   id: string;
-  tokenIDs: string[];
   createdAt: string;
   owner: { id: string };
+  tokenIds: string[];
 }
 
 const abi = new utils.Interface(NounsDAOV3ABI);
@@ -819,4 +824,64 @@ export const useNumTokensInForkEscrow = (): number | undefined => {
       args: [],
     }) || [];
   return numTokensInForkEscrow?.toNumber();
+}
+
+export const useEscrowDepositEvents = () => {
+  const { loading, data, error } = useQuery(escrowDepositEventsQuery()) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error }
+  const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit: EscrowDeposit) => {
+    return {
+      eventType: 'EscrowDeposit',
+      id: escrowDeposit.id,
+      createdAt: escrowDeposit.createdAt,
+      owner: { id: escrowDeposit.owner.id },
+      reason: escrowDeposit.reason,
+      tokenIds: escrowDeposit.tokenIds,
+      proposalIds: escrowDeposit.proposalIds,
+    };
+  });
+
+  return {
+    loading,
+    error,
+    data: escrowDeposits as EscrowDeposit[] ?? [],
+  };
+}
+
+export const useEscrowWithdrawalEvents = () => {
+  const { loading, data, error } = useQuery(escrowWithdrawEventsQuery()) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error };
+  const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
+    return {
+      eventType: 'EscrowWithdrawal',
+      id: escrowWithdrawal.id,
+      createdAt: escrowWithdrawal.createdAt,
+      owner: { id: escrowWithdrawal.owner.id },
+      tokenIds: escrowWithdrawal.tokenIds,
+    };
+  });
+
+  return {
+    loading,
+    error,
+    data: escrowWithdrawals as EscrowWithdrawal[] ?? [],
+  };
+}
+
+export const useEscrowEvents = () => {
+  const { loading: depositsLoading, data: depositEvents, error: depositsError } = useEscrowDepositEvents();
+  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError } = useEscrowWithdrawalEvents();
+
+  const loading = depositsLoading || withdrawalsLoading;
+  const error = depositsError || withdrawalsError;
+  const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents];
+
+  const sortedData = data.sort((a: EscrowDeposit | EscrowWithdrawal, b: EscrowDeposit | EscrowWithdrawal) => {
+    return a.createdAt > b.createdAt ? 1 : -1;
+  });
+
+  return {
+    loading,
+    error,
+    data: sortedData,
+  }
+
 }
