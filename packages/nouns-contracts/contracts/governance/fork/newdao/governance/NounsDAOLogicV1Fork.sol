@@ -199,6 +199,14 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      * @param tokenIds The token ids to quit with
      */
     function quit(uint256[] calldata tokenIds) external nonReentrant {
+        quitInternal(tokenIds, new address[](0));
+    }
+
+    function quit(uint256[] calldata tokenIds, address[] memory erc20TokensToInclude) external nonReentrant {
+        quitInternal(tokenIds, erc20TokensToInclude);
+    }
+
+    function quitInternal(uint256[] calldata tokenIds, address[] memory erc20TokensToInclude) internal {
         checkGovernanceActive();
 
         uint256 totalSupply = adjustedTotalSupply();
@@ -209,6 +217,10 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
+
+            // skip tokens that aren't in erc20TokensToInclude
+            if (erc20TokensToInclude.length > 0 && !isAddressIn(address(erc20token), erc20TokensToInclude)) continue;
+
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
             bool erc20Sent = timelock.sendERC20(msg.sender, address(erc20token), tokensToSend);
             if (!erc20Sent) revert QuitERC20TransferFailed();
@@ -219,6 +231,13 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         if (!ethSent) revert QuitETHTransferFailed();
 
         emit Quit(msg.sender, tokenIds);
+    }
+
+    function isAddressIn(address a, address[] memory addresses) internal pure returns (bool) {
+        for (uint256 i = 0; i < addresses.length; i++) {
+            if (addresses[i] == a) return true;
+        }
+        return false;
     }
 
     struct ProposalTemp {
