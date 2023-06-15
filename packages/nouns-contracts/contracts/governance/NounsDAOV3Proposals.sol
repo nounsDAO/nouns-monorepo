@@ -233,6 +233,7 @@ library NounsDAOV3Proposals {
             description,
             proposalId
         );
+        if (signers.length == 0) revert MustProvideSignatures();
 
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
