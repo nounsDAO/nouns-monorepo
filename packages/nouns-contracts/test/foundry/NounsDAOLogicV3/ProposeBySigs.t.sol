@@ -331,7 +331,7 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
             expirationTimestamp
         );
 
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
         vm.prank(proposerWithVote);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
@@ -458,9 +458,16 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
             expirationTimestamp
         );
         proposerSignatures[1] = NounsDAOStorageV3.ProposerSignature(
-            signProposal(proposerWithNoVotes, signerWithVote1PK, txs, 'description', expirationTimestamp, address(dao)),
+            signProposal(
+                proposerWithNoVotes,
+                signerWithVote1PK,
+                txs,
+                'description',
+                expirationTimestamp + 1,
+                address(dao)
+            ),
             signerWithVote1,
-            expirationTimestamp
+            expirationTimestamp + 1
         );
 
         vm.prank(proposerWithNoVotes);

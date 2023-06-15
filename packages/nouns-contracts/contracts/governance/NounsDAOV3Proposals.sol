@@ -44,6 +44,7 @@ library NounsDAOV3Proposals {
     error VetoerBurned();
     error VetoerOnly();
     error CantVetoExecutedProposal();
+    error VotesBelowProposalThreshold();
 
     /// @notice An event emitted when a proposal has been vetoed by vetoAddress
     event ProposalVetoed(uint256 id);
@@ -237,6 +238,8 @@ library NounsDAOV3Proposals {
             txs
         );
 
+        // important that the proposal is created before the verification call in order to ensure
+        // the same signer is not trying to sign this proposal more than once
         (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
             ds,
             proposerSignatures,
@@ -244,7 +247,7 @@ library NounsDAOV3Proposals {
             description,
             proposalId
         );
-        require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
+        if (votes <= propThreshold) revert VotesBelowProposalThreshold();
 
         newProposal.signers = signers;
 
@@ -936,7 +939,7 @@ library NounsDAOV3Proposals {
         uint256 adjustedTotalSupply
     ) internal view returns (uint256 propThreshold) {
         propThreshold = proposalThreshold(ds, adjustedTotalSupply);
-        require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
+        if (votes <= propThreshold) revert VotesBelowProposalThreshold();
     }
 
     function checkProposalTxs(ProposalTxs memory txs) internal pure {
