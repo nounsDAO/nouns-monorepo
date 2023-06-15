@@ -22,6 +22,7 @@ import {
   accountEscrowedNounsQuery,
   escrowDepositEventsQuery,
   escrowWithdrawEventsQuery,
+  proposalTitlesQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -172,10 +173,10 @@ export interface ProposalTransaction {
 export interface EscrowDeposit {
   eventType: 'EscrowDeposit';
   id: string;
-  createdAt: number;
+  createdAt: string;
   owner: { id: string };
   reason: string;
-  tokenIds: string[];
+  tokenIDs: string[];
   proposalIds: string[];
 }
 
@@ -184,8 +185,14 @@ export interface EscrowWithdrawal {
   id: string;
   createdAt: string;
   owner: { id: string };
-  tokenIds: string[];
+  tokenIDs: string[];
 }
+
+export interface ProposalTitle {
+  id: string;
+  title: string;
+}
+
 
 const abi = new utils.Interface(NounsDAOV3ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
@@ -636,6 +643,11 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
   );
 };
 
+export const useProposalTitles = (ids: string[] | number[]): ProposalTitle[] | undefined => {
+  const proposals: ProposalTitle[] | undefined = useQuery(proposalTitlesQuery(ids)).data?.proposal;
+  return proposals;
+};
+
 export const useProposalVersions = (
   id: string | number,
   toUpdate?: boolean,
@@ -835,7 +847,7 @@ export const useEscrowDepositEvents = () => {
       createdAt: escrowDeposit.createdAt,
       owner: { id: escrowDeposit.owner.id },
       reason: escrowDeposit.reason,
-      tokenIds: escrowDeposit.tokenIds,
+      tokenIDs: escrowDeposit.tokenIDs,
       proposalIds: escrowDeposit.proposalIds,
     };
   });
@@ -855,7 +867,7 @@ export const useEscrowWithdrawalEvents = () => {
       id: escrowWithdrawal.id,
       createdAt: escrowWithdrawal.createdAt,
       owner: { id: escrowWithdrawal.owner.id },
-      tokenIds: escrowWithdrawal.tokenIds,
+      tokenIDs: escrowWithdrawal.tokenIDs,
     };
   });
 
@@ -875,7 +887,7 @@ export const useEscrowEvents = () => {
   const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents];
 
   const sortedData = data.sort((a: EscrowDeposit | EscrowWithdrawal, b: EscrowDeposit | EscrowWithdrawal) => {
-    return a.createdAt > b.createdAt ? 1 : -1;
+    return a.createdAt > b.createdAt ? -1 : 1;
   });
 
   return {

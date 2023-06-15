@@ -10,6 +10,7 @@ import { useEscrowEvents, useEscrowToFork, useForkThreshold, useIsForkPeriodActi
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds } from '../../wrappers/nounToken';
 import config from '../../config';
+import ForkEvent from './ForkEvent';
 
 interface ForkPageProps { }
 
@@ -292,7 +293,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   </p>
                 </div>
               )}
-              {currentState === 'forking' && (
+              {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} />)}
+              {/* {currentState === 'forking' && (
                 <>
                   <div className={classes.forkTimelineItem}>
                     <header>
@@ -330,8 +332,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                       <h3 className={classes.eventTitle}>Fork deployed</h3>
                     </header>
                   </div>
-                </>)}
-              <div className={classes.forkTimelineItem}>
+                </>)} */}
+              {/* <div className={classes.forkTimelineItem}>
                 <header>
                   <span className={classes.timestamp}>2 days ago</span>
                   <h3 className={classes.eventTitle}>Noun123.eth added 6 Nouns</h3>
@@ -355,8 +357,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     </ul>
                   </div>
                 </header>
-              </div>
-              <div className={clsx(classes.forkTimelineItem, classes.eventRemove)}>
+              </div> */}
+              {/* <div className={clsx(classes.forkTimelineItem, classes.eventRemove)}>
                 <header>
                   <span className={classes.timestamp}>4 days ago</span>
                   <h3 className={classes.eventTitle}>NounABC.eth withdrew 3 Nouns from escrow</h3>
@@ -413,7 +415,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     </ul>
                   </div>
                 </header>
-              </div>
+              </div> */}
             </Col>
           </Row>
         </Container>

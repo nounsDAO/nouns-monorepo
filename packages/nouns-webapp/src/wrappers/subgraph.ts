@@ -464,67 +464,76 @@ export const clientFactory = (uri: string) =>
   });
 
 export const proposalFeedbacksQuery = (proposalId: string) => gql`
-{
-  proposalFeedbacks(where: {proposal_:{id: "${proposalId}"}}) {
-    supportDetailed
-    votes
-    reason
-    createdTimestamp
-    voter {
-      id
-    }
-    proposal {
-      id
+  {
+    proposalFeedbacks(where: {proposal_:{id: "${proposalId}"}}) {
+      supportDetailed
+      votes
+      reason
+      createdTimestamp
+      voter {
+        id
+      }
+      proposal {
+        id
+      }
     }
   }
-}
 `;
 
 
 export const ownedNounsQuery = (owner: string) => gql`
-{
-  nouns(where: {owner_: {id: "${owner}"}}) {
-    id      
+  {
+    nouns(where: {owner_: {id: "${owner}"}}) {
+      id      
+    }
   }
-}
 `;
 
 export const accountEscrowedNounsQuery = (owner: string) => gql`
-{
-  escrowedNouns(
-    where: {owner_: {id: "${owner}"}}
-  ) {
-    noun {
-      id
+  {
+    escrowedNouns(
+      where: {owner_: {id: "${owner}"}}
+    ) {
+      noun {
+        id
+      }
     }
   }
-}
 `;
 
 export const escrowDepositEventsQuery = () => gql`
-{
-  escrowDeposits {
-    id 
-    createdAt
-    owner {
-      id
+  {
+    escrowDeposits {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      reason
+      tokenIDs
+      proposalIDs
     }
-    reason
-    tokenIDs
-    proposalIDs
   }
-}
 `;
 
 export const escrowWithdrawEventsQuery = () => gql`
-{
-  escrowWithdrawals {
-    id 
-    createdAt
-    owner {
-      id
+  {
+    escrowWithdrawals {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      tokenIDs
     }
-    tokenIDs
   }
-}
+`;
+
+export const proposalTitlesQuery = (ids: number[] | string[]) => gql`
+  {
+    proposals(where: {id_in: ${ids}}) {
+      id
+      title
+    }
+  }
 `;
