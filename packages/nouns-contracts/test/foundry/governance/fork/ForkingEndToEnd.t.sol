@@ -211,8 +211,6 @@ abstract contract ForkDAOBase is DeployUtilsFork {
         forkToken.claimFromEscrow(tokenIds);
         vm.stopPrank();
         vm.roll(block.number + 1);
-
-        vm.warp(forkToken.forkingPeriodEndTimestamp());
     }
 
     function bidAndSettleForkAuction(address buyer) internal {
@@ -274,7 +272,15 @@ abstract contract ForkDAOBase is DeployUtilsFork {
     }
 }
 
-contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
+abstract contract ForkDAOPostForkingPeriodBase is ForkDAOBase {
+    function setUp() public virtual override {
+        super.setUp();
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
+    }
+}
+
+contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOPostForkingPeriodBase {
     function test_resumeAuctionViaProposal_buyOnAuctionAndPropose() public {
         // Execute the proposal to resume the auction
         vm.startPrank(originalNouner);
@@ -299,7 +305,7 @@ contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
     }
 }
 
-contract ForkDAOCanUpgradeItsTokenTest is ForkDAOBase {
+contract ForkDAOCanUpgradeItsTokenTest is ForkDAOPostForkingPeriodBase {
     function test_upgradeTokenWorks() public {
         vm.expectRevert();
         TokenUpgrade(address(forkToken)).theUpgradeWorked();
@@ -332,6 +338,8 @@ contract ForkDAO_PostFork_NewOGNounsJoin is ForkDAOBase {
         tokenIds[1] = 4;
         originalToken.setApprovalForAll(address(originalDAO), true);
         originalDAO.joinFork(tokenIds, new uint256[](0), '');
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
 
         // unpause auction, which calls mint, which should work if token's _currentNounId is set correctly
         changePrank(originalNouner);
