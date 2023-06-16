@@ -1,11 +1,11 @@
 {
   "references": [
-    { "path": "packages/n00uns-api" },
-    { "path": "packages/n00uns-assets" },
-    { "path": "packages/n00uns-bots" },
-    { "path": "packages/n00uns-contracts" },
-    { "path": "packages/n00uns-sdk" },
-    { "path": "packages/n00uns-subgraph" },
-    { "path": "packages/n00uns-webapp" }
+    { "path": "packages/vrbs-api" },
+    { "path": "packages/vrbs-assets" },
+    { "path": "packages/vrbs-bots" },
+    { "path": "packages/vrbs-contracts" },
+    { "path": "packages/vrbs-sdk" },
+    { "path": "packages/vrbs-subgraph" },
+    { "path": "packages/vrbs-webapp" }
   ]
 }
