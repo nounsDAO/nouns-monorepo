@@ -80,7 +80,13 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         forkToken.claimFromEscrow(tokensInEscrow2);
         vm.roll(block.number + 1);
 
-        // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed.
+        // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed and
+        // forking period is over
+        vm.startPrank(nounerInEscrow1);
+        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        proposeToFork(makeAddr('target'), 0, 'signature', 'data');
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
         vm.startPrank(nounerInEscrow1);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
@@ -201,6 +207,8 @@ abstract contract ForkDAOBase is DeployUtilsFork {
         forkToken.claimFromEscrow(tokenIds);
         vm.stopPrank();
         vm.roll(block.number + 1);
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
     }
 
     function bidAndSettleAuction() internal {

@@ -18,4 +18,6 @@ interface NounsTokenForkLike {
     function ownerOf(uint256 tokenId) external view returns (address owner);
 
     function remainingTokensToClaim() external view returns (uint256);
+
+    function forkingPeriodEndTimestamp() external view returns (uint256);
 }
