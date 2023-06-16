@@ -177,7 +177,7 @@ export interface EscrowDeposit {
   owner: { id: string };
   reason: string;
   tokenIDs: string[];
-  proposalIds: string[];
+  proposalIDs: number[];
 }
 
 export interface EscrowWithdrawal {
@@ -643,8 +643,8 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
   );
 };
 
-export const useProposalTitles = (ids: string[] | number[]): ProposalTitle[] | undefined => {
-  const proposals: ProposalTitle[] | undefined = useQuery(proposalTitlesQuery(ids)).data?.proposal;
+export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
+  const proposals: ProposalTitle[] | undefined = useQuery(proposalTitlesQuery(ids)).data?.proposals;
   return proposals;
 };
 
@@ -798,12 +798,28 @@ export const useExecuteProposal = () => {
 
 // fork functions 
 export const useEscrowToFork = () => {
-  console.log("useEscrowToFork", nounsDaoContract);
   const { send: escrowToFork, state: escrowToForkState } = useContractFunction(
     nounsDaoContract,
     'escrowToFork',
   );
   return { escrowToFork, escrowToForkState };
+}
+
+export const useWithdrawFromForkEscrow = () => {
+  const { send: withdrawFromForkEscrow, state: withdrawFromForkEscrowState } = useContractFunction(
+    nounsDaoContract,
+    'withdrawFromForkEscrow',
+  );
+  return { withdrawFromForkEscrow, withdrawFromForkEscrowState };
+}
+
+
+export const useJoinFork = () => {
+  const { send: joinFork, state: joinForkState } = useContractFunction(
+    nounsDaoContract,
+    'joinFork',
+  );
+  return { joinFork, joinForkState };
 }
 
 export const useIsForkPeriodActive = (): boolean => {
@@ -840,7 +856,8 @@ export const useNumTokensInForkEscrow = (): number | undefined => {
 
 export const useEscrowDepositEvents = () => {
   const { loading, data, error } = useQuery(escrowDepositEventsQuery()) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error }
-  const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit: EscrowDeposit) => {
+  const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit) => {
+    const proposalIDs = escrowDeposit.proposalIDs.map((id) => id);
     return {
       eventType: 'EscrowDeposit',
       id: escrowDeposit.id,
@@ -848,7 +865,7 @@ export const useEscrowDepositEvents = () => {
       owner: { id: escrowDeposit.owner.id },
       reason: escrowDeposit.reason,
       tokenIDs: escrowDeposit.tokenIDs,
-      proposalIds: escrowDeposit.proposalIds,
+      proposalIDs: proposalIDs,
     };
   });
 
@@ -895,5 +912,12 @@ export const useEscrowEvents = () => {
     error,
     data: sortedData,
   }
+}
 
+export const useExecuteFork = () => {
+  const { send: executeFork, state: executeForkState } = useContractFunction(
+    nounsDaoContract,
+    'executeFork',
+  );
+  return { executeFork, executeForkState };
 }

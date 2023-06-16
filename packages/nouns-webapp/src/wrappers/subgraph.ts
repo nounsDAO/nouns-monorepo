@@ -529,11 +529,13 @@ export const escrowWithdrawEventsQuery = () => gql`
   }
 `;
 
-export const proposalTitlesQuery = (ids: number[] | string[]) => gql`
+export const proposalTitlesQuery = (ids: number[]) => {
+  console.log('proposalTitlesQuery', ids, ids.join(','));
+  return gql`
   {
-    proposals(where: {id_in: ${ids}}) {
+    proposals(where: {id_in: [${ids?.join(',')}]}) {
       id
       title
     }
   }
-`;
+`};

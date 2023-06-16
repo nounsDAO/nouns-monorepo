@@ -224,7 +224,6 @@ export const useUserEscrowedNounIds = (): number[] | undefined => {
   const { data } = useQuery(
     accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
   );
-  console.log('useUserEscrowedNounIds', data);
   const escrowedNouns = data?.escrowedNouns.map((escrowedNoun: EscrowedNoun) => Number(escrowedNoun.noun.id));
   return escrowedNouns;
 }

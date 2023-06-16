@@ -18,7 +18,8 @@ const ForkEvent = ({ event }: Props) => {
   const nounCount = event.tokenIDs?.length;
   const nounLabel = nounCount > 1 ? 'Nouns' : 'Noun';
   const timestamp = dayjs(+event.createdAt * 1000).fromNow()
-  const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIds : []);
+  const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIDs : []);
+  console.log('proposalsTitles', proposalsTitles, event.eventType === "EscrowDeposit" && event.proposalIDs);
   const nounsInEvent = event.tokenIDs?.map((tokenId, i) => {
     return (
       <Link key={i} to={`/noun/${tokenId}`}>

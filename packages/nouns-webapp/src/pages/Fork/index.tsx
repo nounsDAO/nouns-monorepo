@@ -6,11 +6,13 @@ import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { useEscrowEvents, useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
+import { useEscrowEvents, useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds } from '../../wrappers/nounToken';
 import config from '../../config';
 import ForkEvent from './ForkEvent';
+import DeployForkButton from './DeployForkButton';
+import WithdrawNounsButton from './WithdrawNounsButton';
 
 interface ForkPageProps { }
 
@@ -42,6 +44,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds();
   const escrowEvents = useEscrowEvents();
+  const { withdrawFromForkEscrow, withdrawFromForkEscrowState } = useWithdrawFromForkEscrow();
 
   console.log('escrowEvents', escrowEvents);
   console.log('numTokensInForkEscrow', numTokensInForkEscrow);
@@ -60,6 +63,9 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   }, [forkThreshold, numTokensInForkEscrow]);
 
   const { account } = useEthers();
+  const handleWithdrawNouns = () => {
+    withdrawFromForkEscrow(userEscrowedNounIds);
+  }
   const handleEscrowToFork = () => {
     // escrowToFork(27, 1, "the reason");
     // escrowToFork();
@@ -84,92 +90,95 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   // }, [isForkPeriodActive]);
 
 
-  // const handleForkThresholdStateChange = useCallback((state: TransactionStatus) => {
-  //   console.log('handleForkThresholdStateChange', state)
+  const handleWithdrawFromForkEscrowState = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        break;
+      case 'Fail':
+        // setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        break;
+      case 'Exception':
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        break;
+    }
+  }, []);
+
+
+  // const handleSetApprovalStateChange = useCallback((state: TransactionStatus) => {
   //   switch (state.status) {
   //     case 'None':
-  //       // setIsLoading(false);
+  //       setIsLoading(false);
   //       break;
   //     case 'Mining':
-  //       // setIsLoading(true);
+  //       setIsLoading(true);
   //       break;
   //     case 'Success':
-  //       // setIsLoading(false);
+  //       setIsLoading(false);
   //       break;
   //     case 'Fail':
-  //       // setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-  //       // setIsLoading(false);
+  //       setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+  //       setIsLoading(false);
   //       break;
   //     case 'Exception':
   //       // setErrorMessage(
   //       //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
   //       // );
-  //       // setIsLoading(false);
+  //       setIsLoading(false);
   //       break;
   //   }
   // }, []);
 
+  // const handleEscrowToForkStateChange = useCallback((state: TransactionStatus) => {
+  //   switch (state.status) {
+  //     case 'None':
+  //       setIsLoading(false);
+  //       break;
+  //     case 'Mining':
+  //       setIsLoading(true);
+  //       break;
+  //     case 'Success':
+  //       setIsLoading(false);
+  //       // setIsVoteSuccessful(true);
+  //       break;
+  //     case 'Fail':
+  //       // setFailureCopy(<Trans>Transaction Failed</Trans>);
+  //       setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+  //       setIsLoading(false);
+  //       // setIsVoteFailed(true);
+  //       break;
+  //     case 'Exception':
+  //       // setFailureCopy(<Trans>Error</Trans>);
+  //       // setErrorMessage(
+  //       //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+  //       // );
+  //       setIsLoading(false);
+  //       // setIsVoteFailed(true);
+  //       break;
+  //   }
+  // }, []);
 
-  const handleSetApprovalStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        break;
-      case 'Fail':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        break;
-      case 'Exception':
-        // setErrorMessage(
-        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
-        // );
-        setIsLoading(false);
-        break;
-    }
-  }, []);
+  // useEffect(() => {
+  //   handleEscrowToForkStateChange(escrowToForkState);
+  // }, [escrowToForkState, handleEscrowToForkStateChange]);
 
-  const handleEscrowToForkStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        // setIsVoteSuccessful(true);
-        break;
-      case 'Fail':
-        // setFailureCopy(<Trans>Transaction Failed</Trans>);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        // setIsVoteFailed(true);
-        break;
-      case 'Exception':
-        // setFailureCopy(<Trans>Error</Trans>);
-        // setErrorMessage(
-        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
-        // );
-        setIsLoading(false);
-        // setIsVoteFailed(true);
-        break;
-    }
-  }, []);
+  // useEffect(() => {
+  //   handleSetApprovalStateChange(setApprovalState);
+  // }, [setApprovalState, handleSetApprovalStateChange]);
 
   useEffect(() => {
-    handleEscrowToForkStateChange(escrowToForkState);
-  }, [escrowToForkState, handleEscrowToForkStateChange]);
-
-  useEffect(() => {
-    handleSetApprovalStateChange(setApprovalState);
-  }, [setApprovalState, handleSetApprovalStateChange]);
+    handleWithdrawFromForkEscrowState(withdrawFromForkEscrowState);
+  }, [withdrawFromForkEscrowState, handleWithdrawFromForkEscrowState]);
 
   // useEffect(() => {
   //   handleForkThresholdStateChange(forkThresholdState);
@@ -224,10 +233,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
             )}
           </Col>
           <Col lg={6} className={classes.buttons}>
-            {currentState === 'nouns added' && (
-              <button
-                className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
-              >Withdraw Nouns</button>
+            {!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
+              <WithdrawNounsButton tokenIds={userEscrowedNounIds} />
             )}
             <button
               onClick={() => setIsModalOpen(true)}
@@ -271,10 +278,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   {currentEscrowPercentage > 0 && `${currentEscrowPercentage}%`}
                 </span>
               </div>
-              {isThresholdMet && currentState === 'escrow threshold met' && (
-                <button className={clsx(classes.button, classes.primaryButton, classes.deployButton)}>
-                  Deploy Nouns fork
-                </button>
+              {isThresholdMet && (
+                <DeployForkButton />
               )}
               {currentState === 'forking' && (
                 <div className={classes.nounsInFork}>

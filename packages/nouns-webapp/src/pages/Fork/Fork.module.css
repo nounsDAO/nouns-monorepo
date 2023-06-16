@@ -298,3 +298,41 @@ h1 {
   border-color: white;
 }
 
+.transactionModal {
+  text-align: center;
+}
+
+.transactionModal .transactionModalTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.transactionStatus {
+  font-size: 15px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+}
+
+.transactionStatus.transactionStatusError {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  background-color: var(--brand-color-red-translucent);
+}
+.transactionStatus.transactionStatusSuccess {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  background-color: var(--brand-color-green-translucent)
+}
+
+.transactionModalSpinner {
+  display: block;
+  margin: 0 auto 0.5rem;
+  max-width: 75px;
+}

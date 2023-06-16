@@ -51,11 +51,10 @@ export default function AddNounsToForkModal(props: Props) {
   const { setApproval, setApprovalState } = useSetApprovalForAll();
 
   const handleSubmission = () => {
-    console.log("handle submission")
     // if forking period 
 
     // if escrow period
-    escrowToFork([18], [1], "the reason");
+    escrowToFork(selectedNouns, selectedProposals, reasonText);
 
   }
   const handleEscrowToFork = () => {
