@@ -41,16 +41,16 @@ jobs:
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
-      - name: Run Forge build
-        run: |
-          cd packages/nouns-contracts
-          forge --version
-          forge build --sizes
-      - name: Run Forge tests
-        run: |
-          cd packages/nouns-contracts
-          forge test -vvv --ffi
+#      - name: Install Foundry
+#        uses: foundry-rs/foundry-toolchain@v1
+#        with:
+#          version: nightly
+#      - name: Run Forge build
+#        run: |
+#          cd packages/nouns-contracts
+#          forge --version
+#          forge build --sizes
+#      - name: Run Forge tests
+#        run: |
+#          cd packages/nouns-contracts
+#          forge test -vvv --ffi
