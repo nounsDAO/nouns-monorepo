@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ImageData as data, getVrbData } from '@vrbs/assets';
 import { useAppSelector } from '../../hooks';
 import fomo from '../../assets/fomo.svg';

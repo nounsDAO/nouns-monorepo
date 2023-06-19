@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import classes from './VrbIntroSection.module.css';
 import Section from '../../layout/Section';
 import { Col, Nav } from 'react-bootstrap';

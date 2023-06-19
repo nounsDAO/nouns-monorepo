@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/vrbsAuction';
 import { useEthers, useContractFunction } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';

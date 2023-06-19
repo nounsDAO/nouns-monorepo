@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
