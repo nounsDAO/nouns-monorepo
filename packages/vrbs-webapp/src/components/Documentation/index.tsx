@@ -47,15 +47,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </h1>
           <p className={classes.aboutText}>
             <Trans>
-              N00uns are an experimental attempt to improve the formation of on-chain avatar
+              Vrbs are an experimental attempt to improve the formation of on-chain avatar
               communities. While projects such as {cryptopunksLink} have attempted to bootstrap
-              digital community and identity, N00uns attempt to bootstrap identity, community,
+              digital community and identity, Vrbs attempt to bootstrap identity, community,
               governance, and a treasury that can be used by the community.
             </Trans>
           </p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             <Trans>
-              Learn more below, or start creating N00uns off-chain using the {playgroundLink}.
+              Learn more below, or start creating Vrbs off-chain using the {playgroundLink}.
             </Trans>
           </p>
         </div>
@@ -67,42 +67,42 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <ul>
                 <li>
-                  <Trans>N00uns artwork is in the {publicDomainLink}.</Trans>
+                  <Trans>Vrbs artwork is in the {publicDomainLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One N00un is trustlessly auctioned every 24 hours, forever.</Trans>
+                  <Trans>One Vrb is trustlessly auctioned every 24 hours, forever.</Trans>
                 </li>
                 <li>
                   <Trans>
-                    100% of N00un auction proceeds are trustlessly sent to the treasury.
+                    100% of Vrb auction proceeds are trustlessly sent to the treasury.
                   </Trans>
                 </li>
                 <li>
                   <Trans>Settlement of one auction kicks off the next.</Trans>
                 </li>
                 <li>
-                  <Trans>All N00uns are members of N00uns DAO.</Trans>
+                  <Trans>All Vrbs are members of Vrbs DAO.</Trans>
                 </li>
                 <li>
-                  <Trans>N00uns DAO uses a fork of {compoundGovLink}.</Trans>
+                  <Trans>Vrbs DAO uses a fork of {compoundGovLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One N00un is equal to one vote.</Trans>
+                  <Trans>One Vrb is equal to one vote.</Trans>
                 </li>
                 <li>
-                  <Trans>The treasury is controlled exclusively by N00uns via governance.</Trans>
+                  <Trans>The treasury is controlled exclusively by Vrbs via governance.</Trans>
                 </li>
                 <li>
                   <Trans>Artwork is generative and stored directly on-chain (not IPFS).</Trans>
                 </li>
                 <li>
                   <Trans>
-                    No explicit rules exist for attribute scarcity; all N00uns are equally rare.
+                    No explicit rules exist for attribute scarcity; all Vrbs are equally rare.
                   </Trans>
                 </li>
                 <li>
                   <Trans>
-                    N00unders receive rewards in the form of N00uns (10% of supply for first 5
+                    Vrbs receive rewards in the form of Vrbs (10% of supply for first 5
                     years).
                   </Trans>
                 </li>
@@ -117,23 +117,23 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                  The N00uns Auction Contract will act as a self-sufficient N00un generation and
-                  distribution mechanism, auctioning one N00un every 24 hours, forever. 100% of
-                  auction proceeds (ETH) are automatically deposited in the N00uns DAO treasury,
-                  where they are governed by N00un owners.
+                  The Vrbs Auction Contract will act as a self-sufficient Vrb generation and
+                  distribution mechanism, auctioning one Vrb every 24 hours, forever. 100% of
+                  auction proceeds (ETH) are automatically deposited in the Vrbs DAO treasury,
+                  where they are governed by Vrb owners.
                 </Trans>
               </p>
 
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  N00un to be minted and a new 24 hour auction to begin.{' '}
+                  Vrb to be minted and a new 24 hour auction to begin.{' '}
                 </Trans>
               </p>
               <p>
                 <Trans>
                   While settlement is most heavily incentivized for the winning bidder, it can be
-                  triggered by anyone, allowing the system to trustlessly auction N00uns as long as
+                  triggered by anyone, allowing the system to trustlessly auction Vrbs as long as
                   Ethereum is operational and there are interested bidders.
                 </Trans>
               </p>
@@ -141,16 +141,16 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>N00uns DAO</Trans>
+              <Trans>Vrbs DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
-                N00uns DAO utilizes a fork of {compoundGovLink} and is the main governing body of
-                the N00uns ecosystem. The N00uns DAO treasury receives 100% of ETH proceeds from
-                daily N00un auctions. Each N00un is an irrevocable member of N00uns DAO and entitled
-                to one vote in all governance matters. N00un votes are non-transferable (if you sell
-                your N00un the vote goes with it) but delegatable, which means you can assign your
-                vote to someone else as long as you own your N00un.
+                Vrbs DAO utilizes a fork of {compoundGovLink} and is the main governing body of
+                the Vrbs ecosystem. The Vrbs DAO treasury receives 100% of ETH proceeds from
+                daily Vrb auctions. Each Vrb is an irrevocable member of Vrbs DAO and entitled
+                to one vote in all governance matters. Vrb votes are non-transferable (if you sell
+                your Vrb the vote goes with it) but delegatable, which means you can assign your
+                vote to someone else as long as you own your Vrb.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
@@ -162,17 +162,17 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the N00uns DAO treasury. While N00unders initially
-                  believed that a healthy distribution of N00uns would be sufficient protection for
+                  problem of ‘51% attacks’ on the Vrbs DAO treasury. While Vrbs initially
+                  believed that a healthy distribution of Vrbs would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
-                  general consensus within the N00unders, the N00uns Foundation, and the wider
+                  general consensus within the Vrbs, the Vrbs Foundation, and the wider
                   community that a more robust game-theoretic solution should be implemented before
                   the right is removed.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The N00uns community has undertaken a preliminary exploration of proposal veto
+                  The Vrbs community has undertaken a preliminary exploration of proposal veto
                   alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult
                   problem that will require significantly more research, development and testing
                   before a satisfactory solution can be implemented.
@@ -180,17 +180,17 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
               <p>
                 <Trans>
-                  Consequently, the N00uns Foundation anticipates being the steward of the veto
-                  power until N00uns DAO is ready to implement an alternative, and therefore wishes
+                  Consequently, the Vrbs Foundation anticipates being the steward of the veto
+                  power until Vrbs DAO is ready to implement an alternative, and therefore wishes
                   to clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The N00uns Foundation considers the veto an emergency power that should not be
-                  exercised in the normal course of business. The N00uns Foundation will veto
-                  proposals that introduce non-trivial legal or existential risks to the N00uns DAO
-                  or the N00uns Foundation, including (but not necessarily limited to) proposals
+                  The Vrbs Foundation considers the veto an emergency power that should not be
+                  exercised in the normal course of business. The Vrbs Foundation will veto
+                  proposals that introduce non-trivial legal or existential risks to the Vrbs DAO
+                  or the Vrbs Foundation, including (but not necessarily limited to) proposals
                   that:
                 </Trans>
               </p>
@@ -198,7 +198,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 <li>unequally withdraw the treasury for personal gain</li>
                 <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
                 <li>
-                  attempt to alter N00un auction cadence for the purpose of maintaining or acquiring
+                  attempt to alter Vrb auction cadence for the purpose of maintaining or acquiring
                   a voting majority
                 </li>
                 <li>make upgrades to critical smart contracts without undergoing an audit</li>
@@ -214,14 +214,14 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>N00un Traits</Trans>
+              <Trans>Vrb Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  N00uns are generated randomly based Ethereum block hashes. There are no 'if'
-                  statements or other rules governing N00un trait scarcity, which makes all N00uns
-                  equally rare. As of this writing, N00uns are made up of:
+                  Vrbs are generated randomly based Ethereum block hashes. There are no 'if'
+                  statements or other rules governing Vrb trait scarcity, which makes all Vrbs
+                  equally rare. As of this writing, Vrbs are made up of:
                 </Trans>
               </p>
               <ul>
@@ -242,7 +242,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </li>
               </ul>
               <Trans>
-                You can experiment with off-chain N00un generation at the {playgroundLink}.
+                You can experiment with off-chain Vrb generation at the {playgroundLink}.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
@@ -253,8 +253,8 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p>
                 <Trans>
-                  N00uns are stored directly on Ethereum and do not utilize pointers to other
-                  networks such as IPFS. This is possible because N00un parts are compressed and
+                  Vrbs are stored directly on Ethereum and do not utilize pointers to other
+                  networks such as IPFS. This is possible because Vrb parts are compressed and
                   stored on-chain using a custom run-length encoding (RLE), which is a form of
                   lossless compression.
                 </Trans>
@@ -273,24 +273,24 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>N00un Seeder Contract</Trans>
+              <Trans>Vrb Seeder Contract</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  The N00un Seeder contract is used to determine N00un traits during the minting
+                  The Vrb Seeder contract is used to determine Vrb traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
-                  algorithm upgrades. Additionally, it can be locked by the N00uns DAO to prevent
-                  any future updates. Currently, N00un traits are determined using pseudo-random
+                  algorithm upgrades. Additionally, it can be locked by the Vrbs DAO to prevent
+                  any future updates. Currently, Vrb traits are determined using pseudo-random
                   number generation:
                 </Trans>
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), n00unId))</code>
+              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), vrbId))</code>
               <br />
               <br />
               <p>
                 <Trans>
-                  Trait generation is not truly random. Traits can be predicted when minting a N00un
+                  Trait generation is not truly random. Traits can be predicted when minting a Vrb
                   on the pending block.
                 </Trans>
               </p>
@@ -298,13 +298,13 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>N00under's Reward</Trans>
+              <Trans>Vrbder's Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'N00unders' are the group of ten builders that initiated N00uns. Here are the
-                  N00unders:
+                  'Vrbs' are the group of ten builders that initiated Vrbs. Here are the
+                  Vrbs:
                 </Trans>
               </p>
               <ul>
@@ -353,18 +353,18 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </ul>
               <p>
                 <Trans>
-                  Because 100% of N00un auction proceeds are sent to N00uns DAO, N00unders have
-                  chosen to compensate themselves with N00uns. Every 10th N00un for the first 5
-                  years of the project (N00un ids #0, #10, #20, #30 and so on) will be automatically
-                  sent to the N00under's multisig to be vested and shared among the founding members
+                  Because 100% of Vrb auction proceeds are sent to Vrbs DAO, Vrbs have
+                  chosen to compensate themselves with Vrbs. Every 10th Vrb for the first 5
+                  years of the project (Vrb ids #0, #10, #20, #30 and so on) will be automatically
+                  sent to the Vrbder's multisig to be vested and shared among the founding members
                   of the project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  N00under distributions don't interfere with the cadence of 24 hour auctions.
-                  N00uns are sent directly to the N00under's Multisig, and auctions continue on
-                  schedule with the next available N00un ID.
+                  Vrbder distributions don't interfere with the cadence of 24 hour auctions.
+                  Vrbs are sent directly to the Vrbder's Multisig, and auctions continue on
+                  schedule with the next available Vrb ID.
                 </Trans>
               </p>
             </Accordion.Body>

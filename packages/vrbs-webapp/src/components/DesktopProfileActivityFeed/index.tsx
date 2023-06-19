@@ -2,40 +2,40 @@ import React from 'react';
 import { Collapse, Table } from 'react-bootstrap';
 import {
   DelegationEvent,
-  N00unEventType,
-  N00unProfileEvent,
-  N00unWinEvent,
+  VrbEventType,
+  VrbProfileEvent,
+  WinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/vrbsActivity';
 import BrandSpinner from '../BrandSpinner';
-import DesktopDelegationEvent from '../profileEvent/event/DesktopDelegationEvent';
-import DesktopN00unWinEvent from '../profileEvent/event/DesktopN00unWinEvent';
-import DesktopProposalVoteEvent from '../profileEvent/event/DesktopProposalVoteEvent';
-import DesktopTransferEvent from '../profileEvent/event/DesktopTransferEvent';
+import DesktopDelegationEvent from '../ProfileEvent/event/DesktopDelegationEvent';
+import DesktopWinEvent from '../ProfileEvent/event/DesktopWinEvent';
+import DesktopProposalVoteEvent from '../ProfileEvent/event/DesktopProposalVoteEvent';
+import DesktopTransferEvent from '../ProfileEvent/event/DesktopTransferEvent';
 import classes from './DesktopProfileActivityFeed.module.css';
 
 interface DesktopProfileActivityFeedProps {
-  events: N00unProfileEvent[];
+  events: VrbProfileEvent[];
   aboveFoldEventCount: number;
   isExpanded: boolean;
 }
 
-const getComponentFromEvent = (event: N00unProfileEvent, key: number) => {
-  if (event.eventType === N00unEventType.PROPOSAL_VOTE) {
+const getComponentFromEvent = (event: VrbProfileEvent, key: number) => {
+  if (event.eventType === VrbEventType.PROPOSAL_VOTE) {
     return <DesktopProposalVoteEvent event={event.payload as ProposalVoteEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.DELEGATION) {
+  if (event.eventType === VrbEventType.DELEGATION) {
     return <DesktopDelegationEvent event={event.payload as DelegationEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.TRANSFER) {
+  if (event.eventType === VrbEventType.TRANSFER) {
     return <DesktopTransferEvent event={event.payload as TransferEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.AUCTION_WIN) {
-    return <DesktopN00unWinEvent event={event.payload as N00unWinEvent} key={key} />;
+  if (event.eventType === VrbEventType.AUCTION_WIN) {
+    return <DesktopWinEvent event={event.payload as WinEvent} key={key} />;
   }
 };
 
@@ -45,9 +45,9 @@ const DesktopProfileActivityFeed: React.FC<DesktopProfileActivityFeedProps> = pr
   return (
     <>
       <Table responsive hover className={classes.aboveTheFoldEventsTable}>
-        <tbody className={classes.n00unInfoPadding}>
+        <tbody className={classes.vrbInfoPadding}>
           {events?.length ? (
-            events.slice(0, aboveFoldEventCount).map((event: N00unProfileEvent, i: number) => {
+            events.slice(0, aboveFoldEventCount).map((event: VrbProfileEvent, i: number) => {
               return getComponentFromEvent(event, i);
             })
           ) : (
@@ -57,11 +57,11 @@ const DesktopProfileActivityFeed: React.FC<DesktopProfileActivityFeedProps> = pr
       </Table>
       <Collapse in={isExpanded}>
         <Table responsive hover>
-          <tbody className={classes.n00unInfoPadding}>
+          <tbody className={classes.vrbInfoPadding}>
             {events?.length ? (
               events
                 .slice(aboveFoldEventCount, events.length)
-                .map((event: N00unProfileEvent, i: number) => {
+                .map((event: VrbProfileEvent, i: number) => {
                   return getComponentFromEvent(event, i);
                 })
             ) : (

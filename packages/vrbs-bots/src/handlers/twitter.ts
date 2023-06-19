@@ -5,17 +5,17 @@ import {
   getAuctionEndingSoonTweetText,
   formatAuctionStartedTweetText,
   formatBidMessageText,
-  getN00unPngBuffer,
+  getVrbPngBuffer,
 } from '../utils';
 
 export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler {
   /**
-   * Tweet an image of the current n00un alerting users
+   * Tweet an image of the current vrb alerting users
    * to the new auction and update the tweet reply id cache
    * @param auctionId The current auction ID
    */
   async handleNewAuction(auctionId: number) {
-    const png = await getN00unPngBuffer(auctionId.toString());
+    const png = await getVrbPngBuffer(auctionId.toString());
     if (png) {
       console.log(`handleNewAuction tweeting discovered auction id ${auctionId}`);
       const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });

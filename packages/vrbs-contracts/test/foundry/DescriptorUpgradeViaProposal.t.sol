@@ -3,25 +3,25 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { N00unsToken } from '../../contracts/N00unsToken.sol';
-import { N00unsDescriptorV2 } from '../../contracts/N00unsDescriptorV2.sol';
-import { N00unsDAOLogicV1 } from '../../contracts/governance/N00unsDAOLogicV1.sol';
+import { VrbsToken } from '../../contracts/VrbsToken.sol';
+import { DescriptorV2 } from '../../contracts/DescriptorV2.sol';
+import { DAOLogicV1 } from '../../contracts/governance/DAOLogicV1.sol';
 
 contract DescriptorUpgradeViaProposalTest is Test, DeployUtils {
-    N00unsToken vrbsToken;
-    N00unsDAOLogicV1 dao;
+    VrbsToken vrbsToken;
+    DAOLogicV1 dao;
     address minter = address(2);
     address tokenHolder = address(1337);
 
     function setUp() public {
-        address n00undersDAO = address(42);
+        address vrbsDAO = address(42);
         (address tokenAddress, address daoAddress) = _deployTokenAndDAOAndPopulateDescriptor(
-            n00undersDAO,
-            n00undersDAO,
+            vrbsDAO,
+            vrbsDAO,
             minter
         );
-        vrbsToken = N00unsToken(tokenAddress);
-        dao = N00unsDAOLogicV1(daoAddress);
+        vrbsToken = VrbsToken(tokenAddress);
+        dao = DAOLogicV1(daoAddress);
 
         vm.startPrank(minter);
         vrbsToken.mint();
@@ -30,7 +30,7 @@ contract DescriptorUpgradeViaProposalTest is Test, DeployUtils {
     }
 
     function testUpgradeToV2ViaProposal() public {
-        N00unsDescriptorV2 descriptorV2 = _deployAndPopulateV2();
+        DescriptorV2 descriptorV2 = _deployAndPopulateV2();
 
         address[] memory targets = new address[](1);
         targets[0] = address(vrbsToken);

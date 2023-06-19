@@ -1,13 +1,13 @@
-import { default as N00unsAuctionHouseABI } from '../abi/contracts/N00unsAuctionHouse.sol/N00unsAuctionHouse.json';
+import { default as AuctionHouseABI } from '../abi/contracts/AuctionHouse.sol/AuctionHouse.json';
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName, ContractNamesDAOV3 } from './types';
 
 type LocalContractName =
-  | Exclude<ContractNamesDAOV3, 'N00unsDAOLogicV1' | 'N00unsDAOProxy'>
-  | 'N00unsDAOLogicV2'
-  | 'N00unsDAOProxyV2'
+  | Exclude<ContractNamesDAOV3, 'DAOLogicV1' | 'DAOProxy'>
+  | 'DAOLogicV2'
+  | 'DAOProxyV2'
   | 'WETH'
   | 'Multicall2';
 
@@ -19,7 +19,7 @@ interface Contract {
 }
 
 task('deploy-local', 'Deploy contracts to hardhat')
-  .addOptionalParam('n00undersdao', 'The n00unders DAO contract address')
+  .addOptionalParam('vrbsdao', 'The vrbs DAO contract address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
@@ -61,11 +61,11 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
-    const expectedN00unsArtAddress = ethers.utils.getContractAddress({
+    const expectedVrbsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + NOUNS_ART_NONCE_OFFSET,
     });
-    const expectedN00unsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedVrbsDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -75,24 +75,24 @@ task('deploy-local', 'Deploy contracts to hardhat')
     });
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
-      N00unsTokenv2: {
+      VrbsTokenV2: {
         args: [
           deployer.address,
           expectedAuctionHouseProxyAddress,
           proxyRegistryAddress,
         ],
       },
-      N00unsAuctionHouse: {
+      AuctionHouse: {
         waitForConfirmation: true,
       },
-      N00unsAuctionHouseProxyAdmin: {},
-      N00unsAuctionHouseProxy: {
+      AuctionHouseProxyAdmin: {},
+      AuctionHouseProxy: {
         args: [
-          () => contracts.N00unsAuctionHouse.instance?.address,
-          () => contracts.N00unsAuctionHouseProxyAdmin.instance?.address,
+          () => contracts.AuctionHouse.instance?.address,
+          () => contracts.AuctionHouseProxyAdmin.instance?.address,
           () =>
-            new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts.N00unsTokenv2.instance?.address,
+            new Interface(AuctionHouseABI).encodeFunctionData('initialize', [
+              contracts.VrbsTokenV2.instance?.address,
               contracts.WETH.instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -101,19 +101,19 @@ task('deploy-local', 'Deploy contracts to hardhat')
             ]),
         ],
       },
-      N00unsDAOExecutor: {
-        args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
+      DAOExecutor: {
+        args: [expectedVrbsDAOProxyAddress, args.timelockDelay],
       },
-      N00unsDAOLogicV2: {
+      DAOLogicV2: {
         waitForConfirmation: true,
       },
-      N00unsDAOProxyV2: {
+      DAOProxyV2: {
         args: [
-          () => contracts.N00unsDAOExecutor.instance?.address,
-          () => contracts.N00unsTokenv2.instance?.address,
-          args.n00undersdao || deployer.address,
-          () => contracts.N00unsDAOExecutor.instance?.address,
-          () => contracts.N00unsDAOLogicV2.instance?.address,
+          () => contracts.DAOExecutor.instance?.address,
+          () => contracts.VrbsTokenV2.instance?.address,
+          args.vrbsdao || deployer.address,
+          () => contracts.DAOExecutor.instance?.address,
+          () => contracts.DAOLogicV2.instance?.address,
           43200,
           args.votingDelay,
           args.proposalThresholdBps,

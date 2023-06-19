@@ -1,6 +1,6 @@
-# N00uns Serverless API
+# Vrbs Serverless API
 
-`vrbs.wtf` provides a serverless API to make fetching data about the N00uns ecosystem easier. [An Insomnia manifest is provided for example.](./docs/insomnia.json)
+`vrbs.wtf` provides a serverless API to make fetching data about the Vrbs ecosystem easier. [An Insomnia manifest is provided for example.](./docs/insomnia.json)
 
 ## API Convention
 

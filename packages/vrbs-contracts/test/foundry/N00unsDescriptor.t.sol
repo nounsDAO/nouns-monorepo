@@ -3,18 +3,18 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import 'forge-std/StdJson.sol';
-import { N00unsDescriptor } from '../../contracts/N00unsDescriptor.sol';
-import { IN00unsSeeder } from '../../contracts/interfaces/IN00unsSeeder.sol';
+import { Descriptor } from '../../contracts/Descriptor.sol';
+import { ISeeder } from '../../contracts/interfaces/ISeeder.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 import { strings } from './lib/strings.sol';
 
-contract N00unsDescriptorWithRealArtTest is DeployUtils {
+contract VrbsDescriptorWithRealArtTest is DeployUtils {
     using strings for *;
     using stdJson for string;
     using Base64 for string;
 
-    N00unsDescriptor descriptor;
+    Descriptor descriptor;
 
     function setUp() public {
         descriptor = _deployAndPopulateDescriptor();
@@ -23,15 +23,15 @@ contract N00unsDescriptorWithRealArtTest is DeployUtils {
     function testGeneratesValidTokenURI() public {
         string memory uri = descriptor.tokenURI(
             0,
-            IN00unsSeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
+            ISeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
         );
 
         string memory json = string(removeDataTypePrefix(uri).decode());
         string memory imageDecoded = string(removeDataTypePrefix(json.readString('.image')).decode());
         strings.slice memory imageSlice = imageDecoded.toSlice();
 
-        assertEq(json.readString('.name'), 'N00un 0');
-        assertEq(json.readString('.description'), 'N00un 0 is a member of the N00uns DAO');
+        assertEq(json.readString('.name'), 'Vrb 0');
+        assertEq(json.readString('.description'), 'Vrb 0 is a member of the Vrbs DAO');
         assertEq(bytes(imageDecoded).length, 6849);
         assertTrue(
             imageSlice.startsWith(

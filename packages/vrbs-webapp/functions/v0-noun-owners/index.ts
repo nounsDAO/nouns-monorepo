@@ -3,26 +3,26 @@ import { vrbsQuery } from '../theGraph';
 import * as R from 'ramda';
 import { sharedResponseHeaders } from '../utils';
 
-export interface LiteN00un {
+export interface LiteVrb {
   id: number;
   owner: string;
   delegatedTo: null | string;
 }
 
-const lightenN00un = R.pick(['id', 'owner', 'delegatedTo']);
+const lightenVrb = R.pick(['id', 'owner', 'delegatedTo']);
 
-const lightenN00uns = R.map(lightenN00un);
+const lightenVrbs = R.map(lightenVrb);
 
 const handler: Handler = async (event, context) => {
   const vrbs = await vrbsQuery();
-  const liteN00uns: LiteN00un[] = lightenN00uns(vrbs);
+  const liteVrbs: LiteVrb[] = lightenVrbs(vrbs);
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(liteN00uns),
+    body: JSON.stringify(liteVrbs),
   };
 };
 

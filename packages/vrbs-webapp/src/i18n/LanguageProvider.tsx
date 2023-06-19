@@ -3,7 +3,7 @@
  */
 import { SupportedLocale } from './locales';
 import { initialLocale, useActiveLocale } from '../hooks/useActivateLocale';
-import { dynamicActivate, N00unsI18nProvider } from './N00unsI18nProvider';
+import { dynamicActivate, VrbsI18nProvider } from './VrbsI18nProvider';
 import { ReactNode, useCallback } from 'react';
 
 dynamicActivate(initialLocale);
@@ -16,8 +16,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <N00unsI18nProvider locale={locale} forceRenderAfterLocaleChange={true} onActivate={onActivate}>
+    <VrbsI18nProvider locale={locale} forceRenderAfterLocaleChange={true} onActivate={onActivate}>
       {children}
-    </N00unsI18nProvider>
+    </VrbsI18nProvider>
   );
 }

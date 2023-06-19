@@ -1,9 +1,9 @@
 import { Handler } from '@netlify/functions';
-import { NormalizedN00un, NormalizedVote, vrbsQuery } from '../theGraph';
+import { NormalizedVrb, NormalizedVote, vrbsQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 interface ProposalVote {
-  n00unId: number;
+  vrbId: number;
   owner: string;
   delegatedTo: null | string;
   supportDetailed: number;
@@ -13,19 +13,19 @@ interface ProposalVotes {
   [key: number]: ProposalVote[];
 }
 
-const builtProposalVote = (n00un: NormalizedN00un, vote: NormalizedVote): ProposalVote => ({
-  n00unId: n00un.id,
-  owner: n00un.owner,
-  delegatedTo: n00un.delegatedTo,
+const builtProposalVote = (vrb: NormalizedVrb, vote: NormalizedVote): ProposalVote => ({
+  vrbId: vrb.id,
+  owner: vrb.owner,
+  delegatedTo: vrb.delegatedTo,
   supportDetailed: vote.supportDetailed,
 });
 
-const reduceProposalVotes = (vrbs: NormalizedN00un[]) =>
-  vrbs.reduce((acc: ProposalVotes, n00un: NormalizedN00un) => {
-    for (let i in n00un.votes) {
-      const vote = n00un.votes[i];
+const reduceProposalVotes = (vrbs: NormalizedVrb[]) =>
+  vrbs.reduce((acc: ProposalVotes, vrb: NormalizedVrb) => {
+    for (let i in vrb.votes) {
+      const vote = vrb.votes[i];
       if (!acc[vote.proposalId]) acc[vote.proposalId] = [];
-      acc[vote.proposalId].push(builtProposalVote(n00un, vote));
+      acc[vote.proposalId].push(builtProposalVote(vrb, vote));
     }
     return acc;
   }, {});

@@ -2,24 +2,24 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { N00unsDAOLogicV2 } from '../../contracts/governance/N00unsDAOLogicV2.sol';
-import { N00unsDAOProxyV2 } from '../../contracts/governance/N00unsDAOProxyV2.sol';
-import { N00unsDAOStorageV2, N00unsDAOStorageV1Adjusted } from '../../contracts/governance/N00unsDAOInterfaces.sol';
-import { N00unsDescriptorV2 } from '../../contracts/N00unsDescriptorV2.sol';
+import { DAOLogicV2 } from '../../contracts/governance/DAOLogicV2.sol';
+import { DAOProxyV2 } from '../../contracts/governance/DAOProxyV2.sol';
+import { DAOStorageV2, DAOStorageV1Adjusted } from '../../contracts/governance/DAOInterfaces.sol';
+import { DescriptorV2 } from '../../contracts/DescriptorV2.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { N00unsToken } from '../../contracts/N00unsToken.sol';
-import { N00unsSeeder } from '../../contracts/N00unsSeeder.sol';
+import { VrbsToken } from '../../contracts/VrbsToken.sol';
+import { Seeder } from '../../contracts/Seeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
-import { N00unsDAOExecutor } from '../../contracts/governance/N00unsDAOExecutor.sol';
+import { DAOExecutor } from '../../contracts/governance/DAOExecutor.sol';
 
-contract N00unsDAOLogicV2Test is Test, DeployUtils {
-    N00unsDAOLogicV2 daoLogic;
-    N00unsDAOLogicV2 daoProxy;
-    N00unsToken vrbsToken;
-    N00unsDAOExecutor timelock = new N00unsDAOExecutor(address(1), TIMELOCK_DELAY);
+contract VrbsDAOLogicV2Test is Test, DeployUtils {
+    DAOLogicV2 daoLogic;
+    DAOLogicV2 daoProxy;
+    VrbsToken vrbsToken;
+    DAOExecutor timelock = new DAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
     address admin = address(0x4);
-    address n00undersDAO = address(0x5);
+    address vrbsDAO = address(0x5);
     address minter = address(0x6);
     address proposer = address(0x7);
     uint256 votingPeriod = 6000;
@@ -29,15 +29,15 @@ contract N00unsDAOLogicV2Test is Test, DeployUtils {
     event Withdraw(uint256 amount, bool sent);
 
     function setUp() public virtual {
-        daoLogic = new N00unsDAOLogicV2();
+        daoLogic = new DAOLogicV2();
 
-        N00unsDescriptorV2 descriptor = _deployAndPopulateV2();
+        DescriptorV2 descriptor = _deployAndPopulateV2();
 
-        vrbsToken = new N00unsToken(n00undersDAO, minter, descriptor, new N00unsSeeder(), IProxyRegistry(address(0)));
+        vrbsToken = new VrbsToken(vrbsDAO, minter, descriptor, new Seeder(), IProxyRegistry(address(0)));
 
-        daoProxy = N00unsDAOLogicV2(
+        daoProxy = DAOLogicV2(
             payable(
-                new N00unsDAOProxyV2(
+                new DAOProxyV2(
                     address(timelock),
                     address(vrbsToken),
                     vetoer,
@@ -46,7 +46,7 @@ contract N00unsDAOLogicV2Test is Test, DeployUtils {
                     votingPeriod,
                     votingDelay,
                     proposalThresholdBPS,
-                    N00unsDAOStorageV2.DynamicQuorumParams({
+                    DAOStorageV2.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000
@@ -80,7 +80,7 @@ contract N00unsDAOLogicV2Test is Test, DeployUtils {
     }
 }
 
-contract CancelProposalTest is N00unsDAOLogicV2Test {
+contract CancelProposalTest is VrbsDAOLogicV2Test {
     uint256 proposalId;
 
     function setUp() public override {
@@ -101,14 +101,14 @@ contract CancelProposalTest is N00unsDAOLogicV2Test {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(N00unsDAOStorageV1Adjusted.ProposalState.Canceled));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(DAOStorageV1Adjusted.ProposalState.Canceled));
     }
 
     function testNonProposerCantCancel() public {
-        vm.expectRevert('N00unsDAO::cancel: proposer above threshold');
+        vm.expectRevert('VrbsDAO::cancel: proposer above threshold');
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(N00unsDAOStorageV1Adjusted.ProposalState.Pending));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(DAOStorageV1Adjusted.ProposalState.Pending));
     }
 
     function testAnyoneCanCancelIfProposerVotesBelowThreshold() public {
@@ -119,11 +119,11 @@ contract CancelProposalTest is N00unsDAOLogicV2Test {
 
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(N00unsDAOStorageV1Adjusted.ProposalState.Canceled));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(DAOStorageV1Adjusted.ProposalState.Canceled));
     }
 }
 
-contract WithdrawTest is N00unsDAOLogicV2Test {
+contract WithdrawTest is VrbsDAOLogicV2Test {
     function setUp() public override {
         super.setUp();
     }
@@ -144,7 +144,7 @@ contract WithdrawTest is N00unsDAOLogicV2Test {
     }
 
     function test_withdraw_revertsForNonAdmin() public {
-        vm.expectRevert(N00unsDAOLogicV2.AdminOnly.selector);
+        vm.expectRevert(DAOLogicV2.AdminOnly.selector);
         daoProxy._withdraw();
     }
 }

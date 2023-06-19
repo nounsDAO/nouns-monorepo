@@ -4,9 +4,9 @@ import classes from './MobileProposalVoteEvent.module.css';
 import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
 import { ProposalVoteEvent } from '../../../../wrappers/vrbsActivity';
 import React from 'react';
-import { getProposalVoteIcon } from '../../../../utils/n00unActivity/getProposalVoteIcon';
+import { getProposalVoteIcon } from '../../../../utils/activity/getProposalVoteIcon';
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
-import MobileN00unActivityRow from '../../activityRow/MobileN00unActivityRow';
+import MobileActivityRow from '../../activityRow/MobileActivityRow';
 
 interface MobileProposalVoteEventProps {
   event: ProposalVoteEvent;
@@ -19,7 +19,7 @@ const MobileProposalVoteEvent: React.FC<MobileProposalVoteEventProps> = props =>
     history.push(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
 
   return (
-    <MobileN00unActivityRow
+    <MobileActivityRow
       onClick={proposalOnClickHandler}
       icon={
         <Image

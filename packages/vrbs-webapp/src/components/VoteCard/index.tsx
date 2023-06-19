@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Proposal } from '../../wrappers/vrbsDao';
-import N00unImageVoteTable from '../N00unImageVoteTable';
+import VrbImageVoteTable from '../VrbImageVoteTable';
 import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
-import DelegateGroupedN00unImageVoteTable from '../DelegateGroupedN00unImageVoteTable';
+import DelegateGroupedVrbImageVoteTable from '../DelegateGroupedVrbImageVoteTable';
 import { useEthers } from '@usedapp/core';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
@@ -24,7 +24,7 @@ export enum VoteCardVariant {
 interface VoteCardProps {
   proposal: Proposal;
   percentage: number;
-  n00unIds: Array<string>;
+  vrbIds: Array<string>;
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
@@ -33,7 +33,7 @@ interface VoteCardProps {
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, n00unIds, variant, delegateView, delegateGroupedVoteData } = props;
+  const { proposal, percentage, vrbIds, variant, delegateView, delegateGroupedVoteData } = props;
 
   let titleClass;
   let titleCopy;
@@ -159,15 +159,15 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
-          <Row className={classes.n00unProfilePics}>
+          <Row className={classes.vrbProfilePics}>
             {delegateView ? (
-              <DelegateGroupedN00unImageVoteTable
+              <DelegateGroupedVrbImageVoteTable
                 filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
                 propId={parseInt(proposal.id || '0')}
                 proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
-              <N00unImageVoteTable n00unIds={n00unIds} propId={parseInt(proposal.id || '0')} />
+              <VrbImageVoteTable vrbIds={vrbIds} propId={parseInt(proposal.id || '0')} />
             )}
           </Row>
         </Card.Body>

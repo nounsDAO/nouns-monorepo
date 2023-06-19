@@ -1,7 +1,7 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 
 export interface BidEvent {
-  n00unId: BigNumberish;
+  vrbId: BigNumberish;
   sender: string;
   value: BigNumberish;
   extended: boolean;
@@ -10,25 +10,25 @@ export interface BidEvent {
 }
 
 export interface AuctionCreateEvent {
-  n00unId: BigNumberish;
+  vrbId: BigNumberish;
   startTime: BigNumberish;
   endTime: BigNumberish;
   settled: boolean;
 }
 
 export interface AuctionSettledEvent {
-  n00unId: BigNumberish;
+  vrbId: BigNumberish;
   winner: string;
   amount: BigNumberish;
 }
 
 export interface AuctionExtendedEvent {
-  n00unId: BigNumberish;
+  vrbId: BigNumberish;
   endTime: BigNumberish;
 }
 
 export interface Bid {
-  n00unId: BigNumber;
+  vrbId: BigNumber;
   sender: string;
   value: BigNumber;
   extended: boolean;

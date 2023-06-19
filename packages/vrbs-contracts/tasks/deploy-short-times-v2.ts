@@ -1,4 +1,4 @@
-import { default as N00unsAuctionHouseABI } from '../abi/contracts/N00unsAuctionHouse.sol/N00unsAuctionHouse.json';
+import { default as AuctionHouseABI } from '../abi/contracts/AuctionHouse.sol/AuctionHouse.json';
 import {
   ChainId,
   ContractDeployment,
@@ -34,10 +34,10 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times for testing')
+task('deploy-short-times-v2', 'Deploy all Vrbs contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('n00undersdao', 'The n00unders DAO contract address', undefined, types.string)
+  .addOptionalParam('vrbsdao', 'The vrbs DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -96,11 +96,11 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
-    if (!args.n00undersdao) {
+    if (!args.vrbsdao) {
       console.log(
-        `N00unders DAO address not provided. Setting to deployer (${deployer.address})...`,
+        `Vrbs DAO address not provided. Setting to deployer (${deployer.address})...`,
       );
-      args.n00undersdao = deployer.address;
+      args.vrbsdao = deployer.address;
     }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
@@ -113,7 +113,7 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
     }
 
     const nonce = await deployer.getTransactionCount();
-    const expectedN00unsArtAddress = ethers.utils.getContractAddress({
+    const expectedVrbsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + NOUNS_ART_NONCE_OFFSET,
     });
@@ -121,7 +121,7 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
-    const expectedN00unsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedVrbsDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -130,23 +130,23 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
       DeployedContract
     >;
     const contracts: Record<ContractNamesDAOV3, ContractDeployment> = {
-      N00unsTokenv2: {
+      VrbsTokenV2: {
         args: [
           deployer.address,
           expectedAuctionHouseProxyAddress,
           proxyRegistryAddress,
         ],
       },
-        N00unsAuctionHouse: {
+        AuctionHouse: {
             waitForConfirmation: true,
         },
-        N00unsAuctionHouseProxyAdmin: {},
-        N00unsAuctionHouseProxy: {
+        AuctionHouseProxyAdmin: {},
+        AuctionHouseProxy: {
             args: [
-                () => deployment.N00unsAuctionHouse.address,
-                () => deployment.N00unsAuctionHouseProxyAdmin.address,
-                () => new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
-                    deployment.N00unsTokenv2.address,
+                () => deployment.AuctionHouse.address,
+                () => deployment.AuctionHouseProxyAdmin.address,
+                () => new Interface(AuctionHouseABI).encodeFunctionData('initialize', [
+                    deployment.VrbsTokenV2.address,
                     args.weth,
                     args.auctionTimeBuffer,
                     args.auctionReservePrice,
@@ -157,7 +157,7 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
             waitForConfirmation: true,
             validateDeployment: () => {
                 const expected = expectedAuctionHouseProxyAddress.toLowerCase();
-                const actual = deployment.N00unsAuctionHouseProxy.address.toLowerCase();
+                const actual = deployment.AuctionHouseProxy.address.toLowerCase();
                 if (expected !== actual) {
                   return;
                     throw new Error(
@@ -166,19 +166,19 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
                 }
             },
         },
-        N00unsDAOExecutor: {
-            args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
+        DAOExecutor: {
+            args: [expectedVrbsDAOProxyAddress, args.timelockDelay],
         },
-        N00unsDAOLogicV2: {
+        DAOLogicV2: {
             waitForConfirmation: true,
         },
-        N00unsDAOProxyV2: {
+        DAOProxyV2: {
             args: [
-                () => deployment.N00unsDAOExecutor.address,
-                () => deployment.N00unsTokenv2.address,
-                args.n00undersdao,
-                () => deployment.N00unsDAOExecutor.address,
-                () => deployment.N00unsDAOLogicV2.address,
+                () => deployment.DAOExecutor.address,
+                () => deployment.VrbsTokenV2.address,
+                args.vrbsdao,
+                () => deployment.DAOExecutor.address,
+                () => deployment.DAOLogicV2.address,
                 args.votingPeriod,
                 args.votingDelay,
                 args.proposalThresholdBps,
@@ -190,12 +190,12 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
             ],
             waitForConfirmation: true,
             validateDeployment: () => {
-                const expected = expectedN00unsDAOProxyAddress.toLowerCase();
-                const actual = deployment.N00unsDAOProxyV2.address.toLowerCase();
+                const expected = expectedVrbsDAOProxyAddress.toLowerCase();
+                const actual = deployment.DAOProxyV2.address.toLowerCase();
                 if (expected !== actual) {
                   return;
                     throw new Error(
-                        `Unexpected N00uns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`
+                        `Unexpected Vrbs DAO proxy address. Expected: ${expected}. Actual: ${actual}.`
                     );
                 }
             },
@@ -226,11 +226,11 @@ task('deploy-short-times-v2', 'Deploy all N00uns contracts with short gov times 
 
       let nameForFactory: string;
       switch (name) {
-        case 'N00unsDAOExecutor':
-          nameForFactory = 'N00unsDAOExecutorTest';
+        case 'DAOExecutor':
+          nameForFactory = 'VrbsDAOExecutorTest';
           break;
-        case 'N00unsDAOLogicV2':
-          nameForFactory = 'N00unsDAOLogicV2Harness';
+        case 'DAOLogicV2':
+          nameForFactory = 'VrbsDAOLogicV2Harness';
           break;
         default:
           nameForFactory = name;

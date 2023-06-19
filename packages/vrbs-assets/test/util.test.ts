@@ -3,18 +3,18 @@ import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import {
   shiftRightAndCast,
   getPseudorandomPart,
-  getN00unSeedFromBlockHash,
-  getN00unData,
+  getVrbSeedFromBlockHash,
+  getVrbData,
 } from '../src/index';
 import { images } from '../src/image-data.json';
-import { N00unSeed } from '../src/types';
+import { VrbSeed } from '../src/types';
 
 const { bodies, accessories, heads, glasses } = images;
 
-describe('@n00un/assets utils', () => {
-  // Test against N00un 116, created at block 13661786
+describe('@vrb/assets utils', () => {
+  // Test against Vrb 116, created at block 13661786
   const NOUN116_ID = 116;
-  const NOUN116_SEED: N00unSeed = {
+  const NOUN116_SEED: VrbSeed = {
     background: 1,
     body: 28,
     accessory: 120,
@@ -36,7 +36,7 @@ describe('@n00un/assets utils', () => {
   });
 
   describe('getPseudorandomPart', () => {
-    it('should match N00unsSeeder.sol implementation for a pseudorandomly chosen part', () => {
+    it('should match Seeder.sol implementation for a pseudorandomly chosen part', () => {
       const headShift = 144;
       const { head } = NOUN116_SEED;
       expect(getPseudorandomPart(NOUN116_PSEUDORANDOMNESS, heads.length, headShift)).to.be.equal(
@@ -45,9 +45,9 @@ describe('@n00un/assets utils', () => {
     });
   });
 
-  describe('getN00unSeedFromBlockHash', () => {
-    it('should match N00unsSeeder.sol implementation for generating a N00un seed', () => {
-      expect(getN00unSeedFromBlockHash(NOUN116_ID, NOUN116_PREV_BLOCKHASH)).to.deep.equal(
+  describe('getVrbSeedFromBlockHash', () => {
+    it('should match Seeder.sol implementation for generating a Vrb seed', () => {
+      expect(getVrbSeedFromBlockHash(NOUN116_ID, NOUN116_PREV_BLOCKHASH)).to.deep.equal(
         NOUN116_SEED,
       );
     });

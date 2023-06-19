@@ -1,30 +1,30 @@
 import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  N00unsDescriptor,
-  N00unsDescriptor__factory as N00unsDescriptorFactory,
-  N00unsDescriptorV2,
-  N00unsDescriptorV2__factory as N00unsDescriptorV2Factory,
-  N00unsToken,
-  N00unsToken__factory as N00unsTokenFactory,
-  N00unsSeeder,
-  N00unsSeeder__factory as N00unsSeederFactory,
+  Descriptor,
+  Descriptor__factory as DescriptorFactory,
+  DescriptorV2,
+  VrbsDescriptorV2__factory as VrbsDescriptorV2Factory,
+  VrbsToken,
+  VrbsToken__factory as VrbsTokenFactory,
+  Seeder,
+  Seeder__factory as SeederFactory,
   WETH,
   WETH__factory as WethFactory,
-  N00unsDAOLogicV1,
-  N00unsDAOLogicV1Harness__factory as N00unsDaoLogicV1HarnessFactory,
-  N00unsDAOLogicV2,
-  N00unsDAOLogicV2__factory as N00unsDaoLogicV2Factory,
-  N00unsDAOProxy__factory as N00unsDaoProxyFactory,
-  N00unsDAOLogicV1Harness,
-  N00unsDAOProxyV2__factory as N00unsDaoProxyV2Factory,
-  N00unsArt__factory as N00unsArtFactory,
+  DAOLogicV1,
+  VrbsDAOLogicV1Harness__factory as VrbsDaoLogicV1HarnessFactory,
+  DAOLogicV2,
+  DAOLogicV2__factory as DaoLogicV2Factory,
+  VrbsDAOProxy__factory as VrbsDaoProxyFactory,
+  VrbsDAOLogicV1Harness,
+  VrbsDAOProxyV2__factory as VrbsDaoProxyV2Factory,
+  VrbsArt__factory as VrbsArtFactory,
   SVGRenderer__factory as SVGRendererFactory,
-  N00unsDAOExecutor__factory as N00unsDaoExecutorFactory,
-  N00unsDAOLogicV1__factory as N00unsDaoLogicV1Factory,
-  N00unsDAOExecutor,
+  VrbsDAOExecutor__factory as VrbsDaoExecutorFactory,
+  DAOLogicV1__factory as DaoLogicV1Factory,
+  DAOExecutor,
   Inflator__factory,
-  N00unsDAOStorageV2,
+  DAOStorageV2,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
@@ -52,29 +52,29 @@ export const getSigners = async (): Promise<TestSigners> => {
   };
 };
 
-export const deployN00unsDescriptor = async (
+export const deployVrbsDescriptor = async (
   deployer?: SignerWithAddress,
-): Promise<N00unsDescriptor> => {
+): Promise<Descriptor> => {
   const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const vrbsDescriptorFactory = new N00unsDescriptorFactory(
+  const DescriptorFactory = new DescriptorFactory(
     {
       'contracts/libs/NFTDescriptor.sol:NFTDescriptor': nftDescriptorLibrary.address,
     },
     signer,
   );
 
-  return vrbsDescriptorFactory.deploy();
+  return DescriptorFactory.deploy();
 };
 
-export const deployN00unsDescriptorV2 = async (
+export const deployVrbsDescriptorV2 = async (
   deployer?: SignerWithAddress,
-): Promise<N00unsDescriptorV2> => {
+): Promise<DescriptorV2> => {
   const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptorV2', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const vrbsDescriptorFactory = new N00unsDescriptorV2Factory(
+  const DescriptorFactory = new VrbsDescriptorV2Factory(
     {
       'contracts/libs/NFTDescriptorV2.sol:NFTDescriptorV2': nftDescriptorLibrary.address,
     },
@@ -82,41 +82,41 @@ export const deployN00unsDescriptorV2 = async (
   );
 
   const renderer = await new SVGRendererFactory(signer).deploy();
-  const descriptor = await vrbsDescriptorFactory.deploy(
+  const descriptor = await DescriptorFactory.deploy(
     ethers.constants.AddressZero,
     renderer.address,
   );
 
   const inflator = await new Inflator__factory(signer).deploy();
 
-  const art = await new N00unsArtFactory(signer).deploy(descriptor.address, inflator.address);
+  const art = await new VrbsArtFactory(signer).deploy(descriptor.address, inflator.address);
   await descriptor.setArt(art.address);
 
   return descriptor;
 };
 
-export const deployN00unsSeeder = async (deployer?: SignerWithAddress): Promise<N00unsSeeder> => {
-  const factory = new N00unsSeederFactory(deployer || (await getSigners()).deployer);
+export const deployVrbsSeeder = async (deployer?: SignerWithAddress): Promise<Seeder> => {
+  const factory = new SeederFactory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
 
-export const deployN00unsToken = async (
+export const deployVrbsToken = async (
   deployer?: SignerWithAddress,
-  n00undersDAO?: string,
+  vrbsDAO?: string,
   minter?: string,
   descriptor?: string,
   seeder?: string,
   proxyRegistryAddress?: string,
-): Promise<N00unsToken> => {
+): Promise<VrbsToken> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new N00unsTokenFactory(signer);
+  const factory = new VrbsTokenFactory(signer);
 
   return factory.deploy(
-    n00undersDAO || signer.address,
+    vrbsDAO || signer.address,
     minter || signer.address,
-    descriptor || (await deployN00unsDescriptorV2(signer)).address,
-    seeder || (await deployN00unsSeeder(signer)).address,
+    descriptor || (await deployVrbsDescriptorV2(signer)).address,
+    seeder || (await deployVrbsSeeder(signer)).address,
     proxyRegistryAddress || address(0),
   );
 };
@@ -127,7 +127,7 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> =>
   return factory.deploy();
 };
 
-export const populateDescriptor = async (vrbsDescriptor: N00unsDescriptor): Promise<void> => {
+export const populateDescriptor = async (vrbsDescriptor: Descriptor): Promise<void> => {
   const { bgcolors, palette, images } = ImageData;
   const { bodies, accessories, heads, glasses } = images;
 
@@ -146,7 +146,7 @@ export const populateDescriptor = async (vrbsDescriptor: N00unsDescriptor): Prom
   ]);
 };
 
-export const populateDescriptorV2 = async (vrbsDescriptor: N00unsDescriptorV2): Promise<void> => {
+export const populateDescriptorV2 = async (vrbsDescriptor: DescriptorV2): Promise<void> => {
   const { bgcolors, palette, images } = ImageDataV2;
   const { bodies, accessories, heads, glasses } = images;
 
@@ -185,18 +185,18 @@ export const deployGovAndToken = async (
   proposalThresholdBPS: number,
   quorumVotesBPS: number,
   vetoer?: string,
-): Promise<{ token: N00unsToken; gov: N00unsDAOLogicV1; timelock: N00unsDAOExecutor }> => {
-  // nonce 0: Deploy N00unsDAOExecutor
-  // nonce 1: Deploy N00unsDAOLogicV1
+): Promise<{ token: VrbsToken; gov: DAOLogicV1; timelock: DAOExecutor }> => {
+  // nonce 0: Deploy DAOExecutor
+  // nonce 1: Deploy DAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
   // nonce 3: Deploy SVGRenderer
-  // nonce 4: Deploy N00unsDescriptor
+  // nonce 4: Deploy Descriptor
   // nonce 5: Deploy Inflator
-  // nonce 6: Deploy N00unsArt
-  // nonce 7: N00unsDescriptor.setArt
-  // nonce 8: Deploy N00unsSeeder
-  // nonce 9: Deploy N00unsToken
-  // nonce 10: Deploy N00unsDAOProxy
+  // nonce 6: Deploy Art
+  // nonce 7: Descriptor.setArt
+  // nonce 8: Deploy Seeder
+  // nonce 9: Deploy VrbsToken
+  // nonce 10: Deploy DAOProxy
   // nonce 11+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
@@ -204,19 +204,19 @@ export const deployGovAndToken = async (
     nonce: (await deployer.getTransactionCount()) + 10,
   });
 
-  // Deploy N00unsDAOExecutor with pre-computed Delegator address
-  const timelock = await new N00unsDaoExecutorFactory(deployer).deploy(
+  // Deploy DAOExecutor with pre-computed Delegator address
+  const timelock = await new VrbsDaoExecutorFactory(deployer).deploy(
     govDelegatorAddress,
     timelockDelay,
   );
 
   // Deploy Delegate
-  const { address: govDelegateAddress } = await new N00unsDaoLogicV1Factory(deployer).deploy();
-  // Deploy N00uns token
-  const token = await deployN00unsToken(deployer);
+  const { address: govDelegateAddress } = await new DaoLogicV1Factory(deployer).deploy();
+  // Deploy Vrbs token
+  const token = await deployVrbsToken(deployer);
 
   // Deploy Delegator
-  await new N00unsDaoProxyFactory(deployer).deploy(
+  await new VrbsDaoProxyFactory(deployer).deploy(
     timelock.address,
     token.address,
     vetoer || address(0),
@@ -229,9 +229,9 @@ export const deployGovAndToken = async (
   );
 
   // Cast Delegator as Delegate
-  const gov = N00unsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
+  const gov = DaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptorV2(N00unsDescriptorV2Factory.connect(await token.descriptor(), deployer));
+  await populateDescriptorV2(VrbsDescriptorV2Factory.connect(await token.descriptor(), deployer));
 
   return { token, gov, timelock };
 };
@@ -240,27 +240,27 @@ export const deployGovV2AndToken = async (
   deployer: SignerWithAddress,
   timelockDelay: number,
   proposalThresholdBPS: number,
-  quorumParams: N00unsDAOStorageV2.DynamicQuorumParamsStruct,
+  quorumParams: DAOStorageV2.DynamicQuorumParamsStruct,
   vetoer?: string,
-): Promise<{ token: N00unsToken; gov: N00unsDAOLogicV2; timelock: N00unsDAOExecutor }> => {
+): Promise<{ token: VrbsToken; gov: DAOLogicV2; timelock: DAOExecutor }> => {
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
     nonce: (await deployer.getTransactionCount()) + 10,
   });
 
-  // Deploy N00unsDAOExecutor with pre-computed Delegator address
-  const timelock = await new N00unsDaoExecutorFactory(deployer).deploy(
+  // Deploy DAOExecutor with pre-computed Delegator address
+  const timelock = await new VrbsDaoExecutorFactory(deployer).deploy(
     govDelegatorAddress,
     timelockDelay,
   );
 
   // Deploy Delegate
-  const { address: govDelegateAddress } = await new N00unsDaoLogicV2Factory(deployer).deploy();
-  // Deploy N00uns token
-  const token = await deployN00unsToken(deployer);
+  const { address: govDelegateAddress } = await new DaoLogicV2Factory(deployer).deploy();
+  // Deploy Vrbs token
+  const token = await deployVrbsToken(deployer);
 
   // Deploy Delegator
-  await new N00unsDaoProxyV2Factory(deployer).deploy(
+  await new VrbsDaoProxyV2Factory(deployer).deploy(
     timelock.address,
     token.address,
     vetoer || address(0),
@@ -273,43 +273,43 @@ export const deployGovV2AndToken = async (
   );
 
   // Cast Delegator as Delegate
-  const gov = N00unsDaoLogicV2Factory.connect(govDelegatorAddress, deployer);
+  const gov = DaoLogicV2Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptorV2(N00unsDescriptorV2Factory.connect(await token.descriptor(), deployer));
+  await populateDescriptorV2(VrbsDescriptorV2Factory.connect(await token.descriptor(), deployer));
 
   return { token, gov, timelock };
 };
 
 /**
- * Return a function used to mint `amount` N00uns on the provided `token`
- * @param token The N00uns ERC721 token
- * @param amount The number of N00uns to mint
+ * Return a function used to mint `amount` Vrbs on the provided `token`
+ * @param token The Vrbs ERC721 token
+ * @param amount The number of Vrbs to mint
  */
-export const MintN00uns = (
-  token: N00unsToken,
-  burnN00undersTokens = true,
+export const MintVrbs = (
+  token: VrbsToken,
+  burnVrbsTokens = true,
 ): ((amount: number) => Promise<void>) => {
   return async (amount: number): Promise<void> => {
     for (let i = 0; i < amount; i++) {
       await token.mint();
     }
-    if (!burnN00undersTokens) return;
+    if (!burnVrbsTokens) return;
 
     await setTotalSupply(token, amount);
   };
 };
 
 /**
- * Mints or burns tokens to target a total supply. Due to N00unders' rewards tokens may be burned and tokenIds will not be sequential
+ * Mints or burns tokens to target a total supply. Due to Vrbs' rewards tokens may be burned and tokenIds will not be sequential
  */
-export const setTotalSupply = async (token: N00unsToken, newTotalSupply: number): Promise<void> => {
+export const setTotalSupply = async (token: VrbsToken, newTotalSupply: number): Promise<void> => {
   const totalSupply = (await token.totalSupply()).toNumber();
 
   if (totalSupply < newTotalSupply) {
     for (let i = 0; i < newTotalSupply - totalSupply; i++) {
       await token.mint();
     }
-    // If N00under's reward tokens were minted totalSupply will be more than expected, so run setTotalSupply again to burn extra tokens
+    // If Vrbder's reward tokens were minted totalSupply will be more than expected, so run setTotalSupply again to burn extra tokens
     await setTotalSupply(token, newTotalSupply);
   }
 
@@ -419,11 +419,11 @@ export const deployGovernorV1 = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
   quorumVotesBPs: number = MIN_QUORUM_VOTES_BPS,
-): Promise<N00unsDAOLogicV1Harness> => {
-  const { address: govDelegateAddress } = await new N00unsDaoLogicV1HarnessFactory(
+): Promise<VrbsDAOLogicV1Harness> => {
+  const { address: govDelegateAddress } = await new VrbsDaoLogicV1HarnessFactory(
     deployer,
   ).deploy();
-  const params: Parameters<N00unsDaoProxyFactory['deploy']> = [
+  const params: Parameters<VrbsDaoProxyFactory['deploy']> = [
     address(0),
     tokenAddress,
     deployer.address,
@@ -436,10 +436,10 @@ export const deployGovernorV1 = async (
   ];
 
   const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('N00unsDAOProxy', deployer)
+    await ethers.getContractFactory('DAOProxy', deployer)
   ).deploy(...params);
 
-  return N00unsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
+  return VrbsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
 };
 
 export const deployGovernorV2WithV2Proxy = async (
@@ -451,10 +451,10 @@ export const deployGovernorV2WithV2Proxy = async (
   votingDelay?: number,
   proposalThresholdBPs?: number,
   dynamicQuorumParams?: DynamicQuorumParams,
-): Promise<N00unsDAOLogicV2> => {
-  const v2LogicContract = await new N00unsDaoLogicV2Factory(deployer).deploy();
+): Promise<DAOLogicV2> => {
+  const v2LogicContract = await new DaoLogicV2Factory(deployer).deploy();
 
-  const proxy = await new N00unsDaoProxyV2Factory(deployer).deploy(
+  const proxy = await new VrbsDaoProxyV2Factory(deployer).deploy(
     timelockAddress || deployer.address,
     tokenAddress,
     vetoerAddress || deployer.address,
@@ -470,25 +470,25 @@ export const deployGovernorV2WithV2Proxy = async (
     },
   );
 
-  return N00unsDaoLogicV2Factory.connect(proxy.address, deployer);
+  return DaoLogicV2Factory.connect(proxy.address, deployer);
 };
 
 export const deployGovernorV2 = async (
   deployer: SignerWithAddress,
   proxyAddress: string,
-): Promise<N00unsDAOLogicV2> => {
-  const v2LogicContract = await new N00unsDaoLogicV2Factory(deployer).deploy();
-  const proxy = N00unsDaoProxyFactory.connect(proxyAddress, deployer);
+): Promise<DAOLogicV2> => {
+  const v2LogicContract = await new DaoLogicV2Factory(deployer).deploy();
+  const proxy = VrbsDaoProxyFactory.connect(proxyAddress, deployer);
   await proxy._setImplementation(v2LogicContract.address);
 
-  const govV2 = N00unsDaoLogicV2Factory.connect(proxyAddress, deployer);
+  const govV2 = DaoLogicV2Factory.connect(proxyAddress, deployer);
   return govV2;
 };
 
 export const deployGovernorV2AndSetQuorumParams = async (
   deployer: SignerWithAddress,
   proxyAddress: string,
-): Promise<N00unsDAOLogicV2> => {
+): Promise<DAOLogicV2> => {
   const govV2 = await deployGovernorV2(deployer, proxyAddress);
   await govV2._setDynamicQuorumParams(MIN_QUORUM_VOTES_BPS, MAX_QUORUM_VOTES_BPS, 0);
 
@@ -496,7 +496,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
 };
 
 export const propose = async (
-  gov: N00unsDAOLogicV1 | N00unsDAOLogicV2,
+  gov: DAOLogicV1 | DAOLogicV2,
   proposer: SignerWithAddress,
   stubPropUserAddress: string = address(0),
 ) => {

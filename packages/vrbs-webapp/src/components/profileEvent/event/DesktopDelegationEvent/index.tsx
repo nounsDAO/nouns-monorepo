@@ -2,7 +2,7 @@ import React from 'react';
 import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
 import { DelegationEvent } from '../../../../wrappers/vrbsActivity';
 import classes from './DesktopDelegationEvent.module.css';
-import DesktopN00unActivityRow from '../../activityRow/DesktopN00unActivityRow';
+import DesktopActivityRow from '../../activityRow/DesktopActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
@@ -17,7 +17,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
   const { event } = props;
 
   return (
-    <DesktopN00unActivityRow
+    <DesktopActivityRow
       icon={
         <div className={classes.scaleIconWrapper}>
           <ScaleIcon className={classes.scaleIcon} />

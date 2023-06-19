@@ -54,7 +54,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const walletlink = new WalletLinkConnector({
-            appName: 'N00uns.WTF',
+            appName: 'Vrbs.WTF',
             appLogoUrl: 'https://vrbs.wtf/static/media/logo.cdea1650.svg',
             url: config.app.jsonRpcUri,
             supportedChainIds,
@@ -89,7 +89,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
             chainId: CHAIN_ID,
             url: config.app.jsonRpcUri,
             manifestAppUrl: 'https://vrbs.wtf',
-            manifestEmail: 'n00unops+trezorconnect@protonmail.com',
+            manifestEmail: 'vrbops+trezorconnect@protonmail.com',
           });
           activate(trezor);
         }}

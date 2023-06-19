@@ -2,17 +2,17 @@ import { log } from '@graphprotocol/graph-ts';
 import {
   DelegateChanged,
   DelegateVotesChanged,
-  N00unCreated,
+  VrbCreated,
   Transfer,
-} from './types/N00unsToken/N00unsToken';
-import { N00un, Seed, DelegationEvent, TransferEvent } from './types/schema';
+} from './types/VrbsToken/VrbsToken';
+import { Vrb, Seed, DelegationEvent, TransferEvent } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
-export function handleN00unCreated(event: N00unCreated): void {
-  let n00unId = event.params.tokenId.toString();
+export function handleVrbCreated(event: VrbCreated): void {
+  let vrbId = event.params.tokenId.toString();
 
-  let seed = new Seed(n00unId);
+  let seed = new Seed(vrbId);
   seed.background = event.params.seed.background;
   seed.body = event.params.seed.body;
   seed.accessory = event.params.seed.accessory;
@@ -20,54 +20,54 @@ export function handleN00unCreated(event: N00unCreated): void {
   seed.glasses = event.params.seed.glasses;
   seed.save();
 
-  let n00un = N00un.load(n00unId);
-  if (n00un == null) {
-    log.error('[handleN00unCreated] N00un #{} not found. Hash: {}', [
-      n00unId,
+  let vrb = Vrb.load(vrbId);
+  if (vrb == null) {
+    log.error('[handleVrbCreated] Vrb #{} not found. Hash: {}', [
+      vrbId,
       event.transaction.hash.toHex(),
     ]);
     return;
   }
 
-  n00un.seed = seed.id;
-  n00un.save();
+  vrb.seed = seed.id;
+  vrb.save();
 }
 
 // Use WebAssembly global due to lack of closure support
-let accountN00uns: string[] = [];
+let accountVrbs: string[] = [];
 
 export function handleDelegateChanged(event: DelegateChanged): void {
   let tokenHolder = getOrCreateAccount(event.params.delegator.toHexString());
   let previousDelegate = getOrCreateDelegate(event.params.fromDelegate.toHexString());
   let newDelegate = getOrCreateDelegate(event.params.toDelegate.toHexString());
-  accountN00uns = tokenHolder.vrbs;
+  accountVrbs = tokenHolder.vrbs;
 
   tokenHolder.delegate = newDelegate.id;
   tokenHolder.save();
 
   previousDelegate.tokenHoldersRepresentedAmount =
     previousDelegate.tokenHoldersRepresentedAmount - 1;
-  let previousN00unsRepresented = previousDelegate.vrbsRepresented; // Re-assignment required to update array
-  previousDelegate.vrbsRepresented = previousN00unsRepresented.filter(
-    n => !accountN00uns.includes(n),
+  let previousVrbsRepresented = previousDelegate.vrbsRepresented; // Re-assignment required to update array
+  previousDelegate.vrbsRepresented = previousVrbsRepresented.filter(
+    n => !accountVrbs.includes(n),
   );
   newDelegate.tokenHoldersRepresentedAmount = newDelegate.tokenHoldersRepresentedAmount + 1;
-  let newN00unsRepresented = newDelegate.vrbsRepresented; // Re-assignment required to update array
-  for (let i = 0; i < accountN00uns.length; i++) {
-    newN00unsRepresented.push(accountN00uns[i]);
+  let newVrbsRepresented = newDelegate.vrbsRepresented; // Re-assignment required to update array
+  for (let i = 0; i < accountVrbs.length; i++) {
+    newVrbsRepresented.push(accountVrbs[i]);
   }
-  newDelegate.vrbsRepresented = newN00unsRepresented;
+  newDelegate.vrbsRepresented = newVrbsRepresented;
   previousDelegate.save();
   newDelegate.save();
 
-  // Log a transfer event for each N00un
-  for (let i = 0; i < accountN00uns.length; i++) {
+  // Log a transfer event for each Vrb
+  for (let i = 0; i < accountVrbs.length; i++) {
     let delegateChangedEvent = new DelegationEvent(
-      event.transaction.hash.toHexString() + '_' + accountN00uns[i],
+      event.transaction.hash.toHexString() + '_' + accountVrbs[i],
     );
     delegateChangedEvent.blockNumber = event.block.number;
     delegateChangedEvent.blockTimestamp = event.block.timestamp;
-    delegateChangedEvent.n00un = accountN00uns[i];
+    delegateChangedEvent.vrb = accountVrbs[i];
     delegateChangedEvent.previousDelegate = previousDelegate.id
       ? previousDelegate.id
       : tokenHolder.id;
@@ -96,19 +96,19 @@ export function handleDelegateVotesChanged(event: DelegateVotesChanged): void {
   governance.save();
 }
 
-let transferredN00unId: string; // Use WebAssembly global due to lack of closure support
+let transferredVrbId: string; // Use WebAssembly global due to lack of closure support
 export function handleTransfer(event: Transfer): void {
   let fromHolder = getOrCreateAccount(event.params.from.toHexString());
   let toHolder = getOrCreateAccount(event.params.to.toHexString());
   let governance = getGovernanceEntity();
-  transferredN00unId = event.params.tokenId.toString();
+  transferredVrbId = event.params.tokenId.toString();
 
   let transferEvent = new TransferEvent(
-    event.transaction.hash.toHexString() + '_' + transferredN00unId,
+    event.transaction.hash.toHexString() + '_' + transferredVrbId,
   );
   transferEvent.blockNumber = event.block.number;
   transferEvent.blockTimestamp = event.block.timestamp;
-  transferEvent.n00un = event.params.tokenId.toString();
+  transferEvent.vrb = event.params.tokenId.toString();
   transferEvent.previousHolder = fromHolder.id.toString();
   transferEvent.newHolder = toHolder.id.toString();
   transferEvent.save();
@@ -121,14 +121,14 @@ export function handleTransfer(event: Transfer): void {
     let fromHolderPreviousBalance = fromHolder.tokenBalanceRaw;
     fromHolder.tokenBalanceRaw = fromHolder.tokenBalanceRaw.minus(BIGINT_ONE);
     fromHolder.tokenBalance = fromHolder.tokenBalanceRaw;
-    let fromHolderN00uns = fromHolder.vrbs; // Re-assignment required to update array
-    fromHolder.vrbs = fromHolderN00uns.filter(n => n != transferredN00unId);
+    let fromHolderVrbs = fromHolder.vrbs; // Re-assignment required to update array
+    fromHolder.vrbs = fromHolderVrbs.filter(n => n != transferredVrbId);
 
     if (fromHolder.delegate != null) {
       let fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate as string);
-      let fromHolderN00unsRepresented = fromHolderDelegate.vrbsRepresented; // Re-assignment required to update array
-      fromHolderDelegate.vrbsRepresented = fromHolderN00unsRepresented.filter(
-        n => n != transferredN00unId,
+      let fromHolderVrbsRepresented = fromHolderDelegate.vrbsRepresented; // Re-assignment required to update array
+      fromHolderDelegate.vrbsRepresented = fromHolderVrbsRepresented.filter(
+        n => n != transferredVrbId,
       );
       fromHolderDelegate.save();
     }
@@ -167,7 +167,7 @@ export function handleTransfer(event: Transfer): void {
   );
   delegateChangedEvent.blockNumber = event.block.number;
   delegateChangedEvent.blockTimestamp = event.block.timestamp;
-  delegateChangedEvent.n00un = event.params.tokenId.toString();
+  delegateChangedEvent.vrb = event.params.tokenId.toString();
   delegateChangedEvent.previousDelegate = fromHolder.delegate
     ? fromHolder.delegate!.toString()
     : fromHolder.id.toString();
@@ -177,9 +177,9 @@ export function handleTransfer(event: Transfer): void {
   delegateChangedEvent.save();
 
   let toHolderDelegate = getOrCreateDelegate(toHolder.delegate ? toHolder.delegate! : toHolder.id);
-  let toHolderN00unsRepresented = toHolderDelegate.vrbsRepresented; // Re-assignment required to update array
-  toHolderN00unsRepresented.push(transferredN00unId);
-  toHolderDelegate.vrbsRepresented = toHolderN00unsRepresented;
+  let toHolderVrbsRepresented = toHolderDelegate.vrbsRepresented; // Re-assignment required to update array
+  toHolderVrbsRepresented.push(transferredVrbId);
+  toHolderDelegate.vrbsRepresented = toHolderVrbsRepresented;
   toHolderDelegate.save();
 
   let toHolderPreviousBalance = toHolder.tokenBalanceRaw;
@@ -187,9 +187,9 @@ export function handleTransfer(event: Transfer): void {
   toHolder.tokenBalance = toHolder.tokenBalanceRaw;
   toHolder.totalTokensHeldRaw = toHolder.totalTokensHeldRaw.plus(BIGINT_ONE);
   toHolder.totalTokensHeld = toHolder.totalTokensHeldRaw;
-  let toHolderN00uns = toHolder.vrbs; // Re-assignment required to update array
-  toHolderN00uns.push(event.params.tokenId.toString());
-  toHolder.vrbs = toHolderN00uns;
+  let toHolderVrbs = toHolder.vrbs; // Re-assignment required to update array
+  toHolderVrbs.push(event.params.tokenId.toString());
+  toHolder.vrbs = toHolderVrbs;
 
   if (toHolder.tokenBalanceRaw == BIGINT_ZERO && toHolderPreviousBalance > BIGINT_ZERO) {
     governance.currentTokenHolders = governance.currentTokenHolders.minus(BIGINT_ONE);
@@ -201,13 +201,13 @@ export function handleTransfer(event: Transfer): void {
     toHolder.delegate = toHolder.id;
   }
 
-  let n00un = N00un.load(transferredN00unId);
-  if (n00un == null) {
-    n00un = new N00un(transferredN00unId);
+  let vrb = Vrb.load(transferredVrbId);
+  if (vrb == null) {
+    vrb = new Vrb(transferredVrbId);
   }
 
-  n00un.owner = toHolder.id;
-  n00un.save();
+  vrb.owner = toHolder.id;
+  vrb.save();
 
   toHolder.save();
 }

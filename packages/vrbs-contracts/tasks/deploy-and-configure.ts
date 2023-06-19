@@ -6,7 +6,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
-  .addOptionalParam('n00undersdao', 'The n00unders DAO contract address')
+  .addOptionalParam('vrbsdao', 'The vrbs DAO contract address')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -25,7 +25,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
   .setAction(async (args, { run }) => {
-    // Deploy the N00uns DAO contracts and return deployment information
+    // Deploy the Vrbs DAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
     // Verify the contracts on Etherscan
@@ -36,24 +36,24 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     // Populate the on-chain art
     await run('populate-descriptor', {
       nftDescriptor: contracts.NFTDescriptorV2.address,
-      vrbsDescriptor: contracts.N00unsDescriptorV2.address,
+      vrbsDescriptor: contracts.DescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
-    const executorAddress = contracts.N00unsDAOExecutor.address;
-    await contracts.N00unsDescriptorV2.instance.transferOwnership(executorAddress);
-    await contracts.N00unsToken.instance.transferOwnership(executorAddress);
-    await contracts.N00unsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+    const executorAddress = contracts.DAOExecutor.address;
+    await contracts.DescriptorV2.instance.transferOwnership(executorAddress);
+    await contracts.VrbsToken.instance.transferOwnership(executorAddress);
+    await contracts.AuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
       'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the N00uns DAO executor.
+    // to the Vrbs DAO executor.
     if (args.startAuction) {
-      const auctionHouse = contracts.N00unsAuctionHouse.instance.attach(
-        contracts.N00unsAuctionHouseProxy.address,
+      const auctionHouse = contracts.AuctionHouse.instance.attach(
+        contracts.AuctionHouseProxy.address,
       );
       await auctionHouse.unpause({
         gasLimit: 1_000_000,

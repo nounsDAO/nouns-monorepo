@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useUserN00unTokenBalance, useUserVotes } from '../../wrappers/vrbsToken';
+import { useUserVrbTokenBalance, useUserVotes } from '../../wrappers/vrbsToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -76,19 +76,19 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
   const history = useHistory();
 
   const { account } = useEthers();
-  const connectedAccountN00unVotes = useUserVotes() || 0;
+  const connectedAccountVrbVotes = useUserVotes() || 0;
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const [showDelegateModal, setShowDelegateModal] = useState(false);
 
   const threshold = (useProposalThreshold() ?? 0) + 1;
-  const hasEnoughVotesToPropose = account !== undefined && connectedAccountN00unVotes >= threshold;
-  const hasN00unBalance = (useUserN00unTokenBalance() ?? 0) > 0;
+  const hasEnoughVotesToPropose = account !== undefined && connectedAccountVrbVotes >= threshold;
+  const hasVrbBalance = (useUserVrbTokenBalance() ?? 0) > 0;
 
   const nullStateCopy = () => {
     if (account !== null) {
-      if (connectedAccountN00unVotes > 0) {
+      if (connectedAccountVrbVotes > 0) {
         return <Trans>Making a proposal requires {threshold} votes</Trans>;
       }
       return <Trans>You have no Votes.</Trans>;
@@ -109,7 +109,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
           <Trans>Proposals</Trans>
         </h3>
         {hasEnoughVotesToPropose ? (
-          <div className={classes.n00unInWalletBtnWrapper}>
+          <div className={classes.vrbInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
                 className={classes.generateBtn}
@@ -119,7 +119,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
               </Button>
             </div>
 
-            {hasN00unBalance && (
+            {hasVrbBalance && (
               <div className={classes.delegateBtnWrapper}>
                 <Button
                   className={classes.changeDelegateBtn}
@@ -138,7 +138,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                 <Trans>Submit Proposal</Trans>
               </Button>
             </div>
-            {!isMobile && hasN00unBalance && (
+            {!isMobile && hasVrbBalance && (
               <div className={classes.delegateBtnWrapper}>
                 <Button
                   className={classes.changeDelegateBtn}
@@ -152,7 +152,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
         )}
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-      {isMobile && hasN00unBalance && (
+      {isMobile && hasVrbBalance && (
         <div>
           <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
             <Trans>Delegate</Trans>

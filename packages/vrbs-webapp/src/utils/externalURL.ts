@@ -10,7 +10,7 @@ export const externalURL = (externalURL: ExternalURL) => {
     case ExternalURL.twitter:
       return 'https://twitter.com/vrbsdao';
     case ExternalURL.notion:
-      return 'https://vrbs.notion.site/Explore-N00uns-a2a9dceeb1d54e10b9cbf3f931c2266f';
+      return 'https://vrbs.notion.site/Explore-Vrbs-a2a9dceeb1d54e10b9cbf3f931c2266f';
     case ExternalURL.discourse:
       return 'https://discourse.vrbs.wtf/';
     case ExternalURL.vrbsCenter:

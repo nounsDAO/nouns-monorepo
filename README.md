@@ -1,6 +1,6 @@
 # vrbs-monorepo
 
-N00uns DAO is a generative avatar art collective run by a group of crypto misfits.
+Vrbs DAO is a generative avatar art collective run by a group of crypto misfits.
 
 ## Packages
 
@@ -10,19 +10,19 @@ The [vrbs api](packages/vrbs-api) is an HTTP webserver that hosts token metadata
 
 ### vrbs-assets
 
-The [vrbs assets](packages/vrbs-assets) package holds the N00un PNG and run-length encoded image data.
+The [vrbs assets](packages/vrbs-assets) package holds the Vrb PNG and run-length encoded image data.
 
 ### vrbs-bots
 
-The [vrbs bots](packages/vrbs-bots) package contains a bot that monitors for changes in N00un auction state and notifies everyone via Twitter and Discord.
+The [vrbs bots](packages/vrbs-bots) package contains a bot that monitors for changes in Vrb auction state and notifies everyone via Twitter and Discord.
 
 ### vrbs-contracts
 
-The [vrbs contracts](packages/vrbs-contracts) is the suite of Solidity contracts powering N00uns DAO.
+The [vrbs contracts](packages/vrbs-contracts) is the suite of Solidity contracts powering Vrbs DAO.
 
 ### vrbs-sdk
 
-The [vrbs sdk](packages/vrbs-sdk) exposes the N00uns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [vrbs sdk](packages/vrbs-sdk) exposes the Vrbs contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
 
 ### vrbs-subgraph
 
@@ -30,7 +30,7 @@ In order to make retrieving more complex data from the auction history, [vrbs su
 
 ### vrbs-webapp
 
-The [vrbs webapp](packages/vrbs-webapp) is the frontend for interacting with N00un auctions as hosted at [vrbs.wtf](https://vrbs.wtf).
+The [vrbs webapp](packages/vrbs-webapp) is the frontend for interacting with Vrb auctions as hosted at [vrbs.wtf](https://vrbs.wtf).
 
 ## Quickstart
 

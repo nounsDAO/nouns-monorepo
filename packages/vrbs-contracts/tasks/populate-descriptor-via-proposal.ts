@@ -5,10 +5,10 @@ import { readFileSync } from 'fs';
 // see image-data-example-for-populate-via-proposal.json for an example input file
 task(
   'populate-descriptor-via-proposal',
-  'Populates the descriptor with color palettes and N00un parts; accepts an input JSON with missing properies.',
+  'Populates the descriptor with color palettes and Vrb parts; accepts an input JSON with missing properies.',
 )
-  .addParam('vrbsDescriptor', 'The `N00unsDescriptor` contract address')
-  .addParam('daoAddress', 'The `N00unsDAOProxy` contract address')
+  .addParam('vrbsDescriptor', 'The `Descriptor` contract address')
+  .addParam('daoAddress', 'The `DAOProxy` contract address')
   .addParam('imageDataPath', 'The path to the image data JSON file')
   .addParam('proposalTextPath', 'Path to the proposal descriptor text file')
   .setAction(
@@ -114,7 +114,7 @@ task(
         }
       }
 
-      const dao = (await ethers.getContractFactory('N00unsDAOLogicV1')).attach(daoAddress);
+      const dao = (await ethers.getContractFactory('DAOLogicV1')).attach(daoAddress);
       const propTx = await dao.propose(targets, values, signatures, calldatas, proposalText);
       await propTx.wait();
 

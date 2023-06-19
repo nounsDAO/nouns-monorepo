@@ -3,44 +3,44 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import 'forge-std/StdJson.sol';
-import { N00unsDescriptorV2 } from '../../contracts/N00unsDescriptorV2.sol';
+import { DescriptorV2 } from '../../contracts/DescriptorV2.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { ISVGRenderer } from '../../contracts/interfaces/ISVGRenderer.sol';
-import { IN00unsSeeder } from '../../contracts/interfaces/IN00unsSeeder.sol';
-import { N00unsArt } from '../../contracts/N00unsArt.sol';
-import { IN00unsArt } from '../../contracts/interfaces/IN00unsArt.sol';
+import { ISeeder } from '../../contracts/interfaces/ISeeder.sol';
+import { Art } from '../../contracts/Art.sol';
+import { IArt } from '../../contracts/interfaces/IArt.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
 import { IInflator } from '../../contracts/interfaces/IInflator.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 import { strings } from './lib/strings.sol';
 
-contract N00unsDescriptorV2Test is Test {
-    N00unsDescriptorV2 descriptor;
-    N00unsArt art;
+contract VrbsDescriptorV2Test is Test {
+    DescriptorV2 descriptor;
+    Art art;
     SVGRenderer renderer;
 
     function setUp() public {
         renderer = new SVGRenderer();
-        descriptor = new N00unsDescriptorV2(IN00unsArt(address(0)), renderer);
-        art = new N00unsArt(address(descriptor), new Inflator());
+        descriptor = new DescriptorV2(IArt(address(0)), renderer);
+        art = new Art(address(descriptor), new Inflator());
         descriptor.setArt(art);
     }
 
     function testCannotSetArtIfNotOwner() public {
         vm.prank(address(1));
         vm.expectRevert(bytes('Ownable: caller is not the owner'));
-        descriptor.setArt(IN00unsArt(address(2)));
+        descriptor.setArt(IArt(address(2)));
     }
 
     function testCannotSetArtIfPartsAreLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
-        descriptor.setArt(IN00unsArt(address(2)));
+        descriptor.setArt(IArt(address(2)));
     }
 
     function testSetArtWorks() public {
-        descriptor.setArt(IN00unsArt(address(2)));
+        descriptor.setArt(IArt(address(2)));
         assertEq(address(descriptor.art()), address(2));
     }
 
@@ -103,11 +103,11 @@ contract N00unsDescriptorV2Test is Test {
         );
 
         descriptor.toggleDataURIEnabled();
-        assertEq(descriptor.tokenURI(42, IN00unsSeeder.Seed(0, 0, 0, 0, 0)), 'https://vrbs.wtf/42');
+        assertEq(descriptor.tokenURI(42, ISeeder.Seed(0, 0, 0, 0, 0)), 'https://vrbs.wtf/42');
 
         descriptor.toggleDataURIEnabled();
         assertEq(
-            descriptor.tokenURI(42, IN00unsSeeder.Seed(0, 0, 0, 0, 0)),
+            descriptor.tokenURI(42, ISeeder.Seed(0, 0, 0, 0, 0)),
             string(
                 abi.encodePacked(
                     'data:application/json;base64,',
@@ -115,9 +115,9 @@ contract N00unsDescriptorV2Test is Test {
                         bytes(
                             abi.encodePacked(
                                 '{"name":"',
-                                'N00un 42',
+                                'Vrb 42',
                                 '", "description":"',
-                                'N00un 42 is a member of the N00uns DAO',
+                                'Vrb 42 is a member of the Vrbs DAO',
                                 '", "image": "',
                                 'data:image/svg+xml;base64,',
                                 Base64.encode(bytes('mock svg')),
@@ -133,7 +133,7 @@ contract N00unsDescriptorV2Test is Test {
     }
 
     function testBackgroundCountUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(N00unsArt.backgroundsCount.selector), abi.encode(42));
+        vm.mockCall(address(art), abi.encodeWithSelector(Art.backgroundsCount.selector), abi.encode(42));
         assertEq(descriptor.backgroundCount(), 42);
         vm.clearMockedCalls();
     }
@@ -141,9 +141,9 @@ contract N00unsDescriptorV2Test is Test {
     function testBodyCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(N00unsArt.getBodiesTrait.selector),
+            abi.encodeWithSelector(Art.getBodiesTrait.selector),
             abi.encode(
-                IN00unsArt.Trait({ storedImagesCount: 42, storagePages: new IN00unsArt.N00unArtStoragePage[](0) })
+                IArt.Trait({ storedImagesCount: 42, storagePages: new IArt.VrbArtStoragePage[](0) })
             )
         );
         assertEq(descriptor.bodyCount(), 42);
@@ -153,9 +153,9 @@ contract N00unsDescriptorV2Test is Test {
     function testAccessoryCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(N00unsArt.getAccessoriesTrait.selector),
+            abi.encodeWithSelector(Art.getAccessoriesTrait.selector),
             abi.encode(
-                IN00unsArt.Trait({ storedImagesCount: 42, storagePages: new IN00unsArt.N00unArtStoragePage[](0) })
+                IArt.Trait({ storedImagesCount: 42, storagePages: new IArt.VrbArtStoragePage[](0) })
             )
         );
         assertEq(descriptor.accessoryCount(), 42);
@@ -165,9 +165,9 @@ contract N00unsDescriptorV2Test is Test {
     function testHeadCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(N00unsArt.getHeadsTrait.selector),
+            abi.encodeWithSelector(Art.getHeadsTrait.selector),
             abi.encode(
-                IN00unsArt.Trait({ storedImagesCount: 42, storagePages: new IN00unsArt.N00unArtStoragePage[](0) })
+                IArt.Trait({ storedImagesCount: 42, storagePages: new IArt.VrbArtStoragePage[](0) })
             )
         );
         assertEq(descriptor.headCount(), 42);
@@ -177,9 +177,9 @@ contract N00unsDescriptorV2Test is Test {
     function testGlassesCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(N00unsArt.getGlassesTrait.selector),
+            abi.encodeWithSelector(Art.getGlassesTrait.selector),
             abi.encode(
-                IN00unsArt.Trait({ storedImagesCount: 42, storagePages: new IN00unsArt.N00unArtStoragePage[](0) })
+                IArt.Trait({ storedImagesCount: 42, storagePages: new IArt.VrbArtStoragePage[](0) })
             )
         );
         assertEq(descriptor.glassesCount(), 42);
@@ -421,7 +421,7 @@ contract N00unsDescriptorV2Test is Test {
     function testBackgroundsUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(IN00unsArt.backgrounds.selector, 17),
+            abi.encodeWithSelector(IArt.backgrounds.selector, 17),
             abi.encode('return value')
         );
         assertEq(descriptor.backgrounds(17), 'return value');
@@ -429,13 +429,13 @@ contract N00unsDescriptorV2Test is Test {
     }
 
     function testHeadsUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.heads.selector, 17), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.heads.selector, 17), abi.encode('return value'));
         assertEq(descriptor.heads(17), 'return value');
         vm.clearMockedCalls();
     }
 
     function testBodiesUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.bodies.selector, 17), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.bodies.selector, 17), abi.encode('return value'));
         assertEq(descriptor.bodies(17), 'return value');
         vm.clearMockedCalls();
     }
@@ -443,7 +443,7 @@ contract N00unsDescriptorV2Test is Test {
     function testAccessoriesUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(IN00unsArt.accessories.selector, 17),
+            abi.encodeWithSelector(IArt.accessories.selector, 17),
             abi.encode('return value')
         );
         assertEq(descriptor.accessories(17), 'return value');
@@ -451,25 +451,25 @@ contract N00unsDescriptorV2Test is Test {
     }
 
     function testGlassesUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.glasses.selector, 17), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.glasses.selector, 17), abi.encode('return value'));
         assertEq(descriptor.glasses(17), 'return value');
         vm.clearMockedCalls();
     }
 
     function testPalettesUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.palettes.selector, 17), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.palettes.selector, 17), abi.encode('return value'));
         assertEq(descriptor.palettes(17), 'return value');
         vm.clearMockedCalls();
     }
 
     function testGetPartsForSeedWorks() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.bodies.selector), abi.encode('the body'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.accessories.selector), abi.encode('the accessory'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.heads.selector), abi.encode('the head'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.glasses.selector), abi.encode('the glasses'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.palettes.selector), abi.encode('the palette'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.bodies.selector), abi.encode('the body'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.accessories.selector), abi.encode('the accessory'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.heads.selector), abi.encode('the head'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.glasses.selector), abi.encode('the glasses'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.palettes.selector), abi.encode('the palette'));
 
-        ISVGRenderer.Part[] memory parts = descriptor.getPartsForSeed(IN00unsSeeder.Seed(0, 0, 0, 0, 0));
+        ISVGRenderer.Part[] memory parts = descriptor.getPartsForSeed(ISeeder.Seed(0, 0, 0, 0, 0));
 
         assertEq(parts[0].image, 'the body');
         assertEq(parts[0].palette, 'the palette');
@@ -485,22 +485,22 @@ contract N00unsDescriptorV2Test is Test {
     }
 
     function _makeArtGettersNotRevert() internal {
-        vm.mockCall(address(art), abi.encodeWithSelector(N00unsArt.backgroundsCount.selector), abi.encode(123));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.backgrounds.selector), abi.encode('return value'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.bodies.selector), abi.encode('return value'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.accessories.selector), abi.encode('return value'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.heads.selector), abi.encode('return value'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.glasses.selector), abi.encode('return value'));
-        vm.mockCall(address(art), abi.encodeWithSelector(IN00unsArt.palettes.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(Art.backgroundsCount.selector), abi.encode(123));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.backgrounds.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.bodies.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.accessories.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.heads.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.glasses.selector), abi.encode('return value'));
+        vm.mockCall(address(art), abi.encodeWithSelector(IArt.palettes.selector), abi.encode('return value'));
     }
 }
 
-contract N00unsDescriptorV2WithRealArtTest is DeployUtils {
+contract VrbsDescriptorV2WithRealArtTest is DeployUtils {
     using strings for *;
     using stdJson for string;
     using Base64 for string;
 
-    N00unsDescriptorV2 descriptor;
+    DescriptorV2 descriptor;
 
     function setUp() public {
         descriptor = _deployAndPopulateV2();
@@ -509,15 +509,15 @@ contract N00unsDescriptorV2WithRealArtTest is DeployUtils {
     function testGeneratesValidTokenURI() public {
         string memory uri = descriptor.tokenURI(
             0,
-            IN00unsSeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
+            ISeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
         );
 
         string memory json = string(removeDataTypePrefix(uri).decode());
         string memory imageDecoded = string(removeDataTypePrefix(json.readString('.image')).decode());
         strings.slice memory imageSlice = imageDecoded.toSlice();
 
-        assertEq(json.readString('.name'), 'N00un 0');
-        assertEq(json.readString('.description'), 'N00un 0 is a member of the N00uns DAO');
+        assertEq(json.readString('.name'), 'Vrb 0');
+        assertEq(json.readString('.description'), 'Vrb 0 is a member of the Vrbs DAO');
         assertEq(bytes(imageDecoded).length, 6849);
         assertTrue(
             imageSlice.startsWith(

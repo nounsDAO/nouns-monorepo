@@ -1,4 +1,4 @@
-import { TransitionStyles } from '../components/N00unsTransition';
+import { TransitionStyles } from '../components/VrbsTransition';
 
 export const basicFadeInOut = {
   enteringStyle: { opacity: 1 },

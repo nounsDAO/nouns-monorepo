@@ -2,7 +2,7 @@
   "name": "@vrbs/subgraph",
   "version": "0.1.0",
   "description": "A subgraph that indexes vrbs events",
-  "author": "N00unders",
+  "author": "Vrbs",
   "homepage": "https://vrbs.wtf",
   "license": "GPL-3.0",
   "main": "build/index.js",

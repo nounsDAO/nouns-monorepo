@@ -11,7 +11,7 @@ export interface IBid {
   blockNumber: number;
   blockTimestamp: number;
   txIndex?: number;
-  n00un: {
+  vrb: {
     id: number;
     startTime?: BigNumberish;
     endTime?: BigNumberish;
@@ -109,7 +109,7 @@ export const auctionQuery = (auctionId: number) => gql`
 	  }
 	  startTime
 	  endTime
-	  n00un {
+	  vrb {
 		id
 		seed {
 		  id
@@ -144,16 +144,16 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 	  bidder {
 	  	id
 	  }
-	  n00un {
+	  vrb {
 		id
 	  }
 	}
   }
  `;
 
-export const n00unQuery = (id: string) => gql`
+export const vrbQuery = (id: string) => gql`
  {
-	n00un(id:"${id}") {
+	vrb(id:"${id}") {
 	  id
 	  seed {
 	  background
@@ -191,7 +191,7 @@ export const latestAuctionsQuery = () => gql`
       }
       startTime
       endTime
-      n00un {
+      vrb {
         id
         owner {
           id
@@ -236,9 +236,9 @@ export const latestBidsQuery = (first: number = 10) => gql`
   }  
 `;
 
-export const n00unVotingHistoryQuery = (n00unId: number, first = 1_000) => gql`
+export const vrbVotingHistoryQuery = (vrbId: number, first = 1_000) => gql`
 {
-	n00un(id: ${n00unId}) {
+	vrb(id: ${vrbId}) {
 		id
 		votes(first: ${first}) {
       blockNumber
@@ -255,9 +255,9 @@ export const n00unVotingHistoryQuery = (n00unId: number, first = 1_000) => gql`
 }
 `;
 
-export const n00unTransferHistoryQuery = (n00unId: number, first = 1_000) => gql`
+export const vrbTransferHistoryQuery = (vrbId: number, first = 1_000) => gql`
 {
-  transferEvents(where: {n00un: "${n00unId}"}, first: ${first}) {
+  transferEvents(where: {vrb: "${vrbId}"}, first: ${first}) {
     id
     previousHolder {
       id
@@ -270,9 +270,9 @@ export const n00unTransferHistoryQuery = (n00unId: number, first = 1_000) => gql
 }
 `;
 
-export const n00unDelegationHistoryQuery = (n00unId: number, first = 1_000) => gql`
+export const vrbDelegationHistoryQuery = (vrbId: number, first = 1_000) => gql`
 {
-  delegationEvents(where: {n00un: "${n00unId}"}, first: ${first}) {
+  delegationEvents(where: {vrb: "${vrbId}"}, first: ${first}) {
     id
     previousDelegate {
       id
@@ -306,7 +306,7 @@ export const proposalVotesQuery = (proposalId: string) => gql`
   }
 `;
 
-export const delegateN00unsAtBlockQuery = (delegates: string[], block: number) => gql`
+export const delegateVrbsAtBlockQuery = (delegates: string[], block: number) => gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
     id
@@ -317,7 +317,7 @@ export const delegateN00unsAtBlockQuery = (delegates: string[], block: number) =
 }
 `;
 
-export const currentlyDelegatedN00uns = (delegate: string) => gql`
+export const currentlyDelegatedVrbs = (delegate: string) => gql`
 {
   delegates(where: { id: "${delegate}"} ) {
     id
@@ -328,7 +328,7 @@ export const currentlyDelegatedN00uns = (delegate: string) => gql`
 }
 `;
 
-export const totalN00unSupplyAtPropSnapshot = (proposalId: string) => gql`
+export const totalVrbSupplyAtPropSnapshot = (proposalId: string) => gql`
 {
   proposals(where: {id: ${proposalId}}) {
     totalSupply

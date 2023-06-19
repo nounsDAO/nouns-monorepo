@@ -12,21 +12,21 @@ export enum ChainId {
 }
 
 // prettier-ignore
-export type DescriptorV1ContractNames = 'NFTDescriptor' | 'N00unsDescriptor';
+export type DescriptorV1ContractNames = 'NFTDescriptor' | 'Descriptor';
 // prettier-ignore
-export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'N00unsTokenv2' | 'N00unsDescriptorV2' | 'SVGRenderer' | 'N00unsArt' | 'Inflator';
+export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'VrbsTokenV2' | 'DescriptorV2' | 'SVGRenderer' | 'Art' | 'Inflator';
 
-export type DescriptorV3ContractNames =  'N00unsTokenv2';
+export type DescriptorV3ContractNames =  'VrbsTokenV2';
 // prettier-ignore
-export type ContractName = DescriptorV2ContractNames | 'N00unsSeeder2' | 'N00unsToken' | 'N00unsTokenv2' | 'N00unsAuctionHouse' | 'N00unsAuctionHouseProxyAdmin' | 'N00unsAuctionHouseProxy' | 'N00unsDAOExecutor' | 'N00unsDAOLogicV1' | 'N00unsDAOProxy';
+export type ContractName = DescriptorV2ContractNames | 'Seeder2' | 'VrbsToken' | 'VrbsTokenV2' | 'AuctionHouse' | 'AuctionHouseProxyAdmin' | 'AuctionHouseProxy' | 'DAOExecutor' | 'DAOLogicV1' | 'DAOProxy';
 // prettier-ignore
-export type ContractNameDescriptorV1 = DescriptorV1ContractNames | 'N00unsSeeder' | 'N00unsToken' | 'N00unsAuctionHouse' | 'N00unsAuctionHouseProxyAdmin' | 'N00unsAuctionHouseProxy' | 'N00unsDAOExecutor' | 'N00unsDAOLogicV1' | 'N00unsDAOProxy';
+export type ContractNameDescriptorV1 = DescriptorV1ContractNames | 'Seeder' | 'VrbsToken' | 'AuctionHouse' | 'AuctionHouseProxyAdmin' | 'AuctionHouseProxy' | 'DAOExecutor' | 'DAOLogicV1' | 'DAOProxy';
 // prettier-ignore
-export type ContractNamesDAOV2 = Exclude<ContractName, 'N00unsDAOLogicV1' | 'N00unsDAOProxy'> | 'N00unsDAOLogicV2' | 'N00unsDAOProxyV2';
+export type ContractNamesDAOV2 = Exclude<ContractName, 'DAOLogicV1' | 'DAOProxy'> | 'DAOLogicV2' | 'DAOProxyV2';
 
-export type ContractNameV2 = DescriptorV3ContractNames | 'N00unsTokenv2' | 'N00unsAuctionHouse' | 'N00unsAuctionHouseProxyAdmin' | 'N00unsAuctionHouseProxy' | 'N00unsDAOExecutor' | 'N00unsDAOLogicV1' | 'N00unsDAOProxy';
+export type ContractNameV2 = DescriptorV3ContractNames | 'VrbsTokenV2' | 'AuctionHouse' | 'AuctionHouseProxyAdmin' | 'AuctionHouseProxy' | 'DAOExecutor' | 'DAOLogicV1' | 'DAOProxy';
 
-export type ContractNamesDAOV3 = Exclude<ContractNameV2, 'N00unsDAOLogicV1' | 'N00unsDAOProxy'> | 'N00unsDAOLogicV2' | 'N00unsDAOProxyV2';
+export type ContractNamesDAOV3 = Exclude<ContractNameV2, 'DAOLogicV1' | 'DAOProxy'> | 'DAOLogicV2' | 'DAOProxyV2';
 
 
 export interface ContractDeployment {

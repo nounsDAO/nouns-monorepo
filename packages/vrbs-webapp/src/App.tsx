@@ -15,7 +15,7 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
-import N00undersPage from './pages/N00unders';
+import FoundersPage from './pages/Founders';
 import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
@@ -56,13 +56,13 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={AuctionPage} />
-            <Redirect from="/auction/:id" to="/n00un/:id" />
+            <Redirect from="/auction/:id" to="/vrb/:id" />
             <Route
               exact
-              path="/n00un/:id"
+              path="/vrb/:id"
               render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
             />
-            <Route exact path="/n00unders" component={N00undersPage} />
+            <Route exact path="/vrbs" component={FoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { BigNumber } from 'ethers';
-import { StandaloneN00unImage } from '../../StandaloneN00un';
+import { StandaloneVrbImage } from '../../StandaloneVrb';
 
 interface ExploreGridItemProps {
-  n00unId: number | null;
+  vrbId: number | null;
   imgSrc: string | undefined;
 }
 
@@ -20,7 +20,7 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef(
           style={isImageLoaded ? {} : { display: 'none' }}
           onLoad={() => setIsImageLoaded(true)}
           onError={() => setIsImageError(true)}
-          alt={`N00un #${props.n00unId}`}
+          alt={`Vrb #${props.vrbId}`}
         />
 
         {/* Show placeholder until image is loaded */}
@@ -34,9 +34,9 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef(
           <Placeholder xs={12} animation="glow" />
         </div>
 
-        {/* If image can't be loaded, fetch N00un image internally */}
-        {isImageError && props.n00unId && (
-          <StandaloneN00unImage n00unId={BigNumber.from(props.n00unId)} />
+        {/* If image can't be loaded, fetch Vrb image internally */}
+        {isImageError && props.vrbId && (
+          <StandaloneVrbImage vrbId={BigNumber.from(props.vrbId)} />
         )}
       </>
     );

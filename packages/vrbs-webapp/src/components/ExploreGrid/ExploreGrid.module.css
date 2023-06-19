@@ -33,13 +33,13 @@
 }
 
 .exploreGrid.sidebarHidden ul li:hover,
-.exploreGrid.sidebarHidden ul li.activeN00un button,
-.n00unHoverDisabled .exploreGrid li:hover {
+.exploreGrid.sidebarHidden ul li.activeVrb button,
+.vrbHoverDisabled .exploreGrid li:hover {
   box-shadow: none;
 }
 
-.exploreGrid.sidebarHidden .n00unIdOverlay,
-.n00unHoverDisabled .exploreGrid li:hover .n00unIdOverlay {
+.exploreGrid.sidebarHidden .vrbIdOverlay,
+.vrbHoverDisabled .exploreGrid li:hover .vrbIdOverlay {
   display: none;
 }
 
@@ -93,7 +93,7 @@
   scroll-margin: 1vh;
 }
 
-.exploreGrid .n00unIdOverlay {
+.exploreGrid .vrbIdOverlay {
   margin: 0;
   position: absolute;
   bottom: clamp(4px, 0.7vw, 8px);
@@ -107,28 +107,28 @@
   font-size: clamp(14px, 0.8vw, 24px);
 }
 
-.exploreGrid li:hover .n00unIdOverlay,
-.exploreGrid li.activeN00un:hover .n00unIdOverlay {
+.exploreGrid li:hover .vrbIdOverlay,
+.exploreGrid li.activeVrb:hover .vrbIdOverlay {
   background: #fff;
 }
 
-.exploreGrid li:hover .n00unIdOverlay,
-.exploreGrid li:focus .n00unIdOverlay,
-.exploreGrid li.activeN00un .n00unIdOverlay,
-.exploreGrid li.activeN00un:focus .n00unIdOverlay,
-.exploreGrid li.activeN00un:hover .n00unIdOverlay {
+.exploreGrid li:hover .vrbIdOverlay,
+.exploreGrid li:focus .vrbIdOverlay,
+.exploreGrid li.activeVrb .vrbIdOverlay,
+.exploreGrid li.activeVrb:focus .vrbIdOverlay,
+.exploreGrid li.activeVrb:hover .vrbIdOverlay {
   opacity: 1;
   bottom: clamp(4px, 0.7vw, 8px);
   transition: none;
 }
 
-.exploreGrid li.activeN00un .n00unIdOverlay,
-.exploreGrid li.activeN00un:focus .n00unIdOverlay,
-.exploreGrid li.activeN00un:hover .n00unIdOverlay {
+.exploreGrid li.activeVrb .vrbIdOverlay,
+.exploreGrid li.activeVrb:focus .vrbIdOverlay,
+.exploreGrid li.activeVrb:hover .vrbIdOverlay {
   bottom: clamp(4px, 0.7vw, 8px);
 }
 
-.exploreGrid .activeN00un button:focus {
+.exploreGrid .activeVrb button:focus {
   border: none;
   outline: transparent;
 }
@@ -165,11 +165,11 @@
   opacity: 1;
 }
 
-.activeN00un button {
+.activeVrb button {
   box-shadow: 0 0px 0px 4px rgba(0 0 0 / 90%);
 }
 
-.exploreGrid li.activeN00un button {
+.exploreGrid li.activeVrb button {
   background: rgba(0, 0, 0, 0.4);
 }
 
@@ -235,13 +235,13 @@
   .nav .sizing {
     display: none;
   }
-  .exploreGrid .n00unIdOverlay,
-  .exploreGrid.sidebarHidden .n00unIdOverlay,
-  .exploreGrid li:hover .n00unIdOverlay,
-  .exploreGrid li:focus .n00unIdOverlay,
-  .exploreGrid li.activeN00un .n00unIdOverlay,
-  .exploreGrid li.activeN00un:focus .n00unIdOverlay,
-  .exploreGrid li.activeN00un:hover .n00unIdOverlay {
+  .exploreGrid .vrbIdOverlay,
+  .exploreGrid.sidebarHidden .vrbIdOverlay,
+  .exploreGrid li:hover .vrbIdOverlay,
+  .exploreGrid li:focus .vrbIdOverlay,
+  .exploreGrid li.activeVrb .vrbIdOverlay,
+  .exploreGrid li.activeVrb:focus .vrbIdOverlay,
+  .exploreGrid li.activeVrb:hover .vrbIdOverlay {
     display: block;
     position: relative;
     box-shadow: none;
@@ -257,7 +257,7 @@
     border-bottom-right-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
   }
-  .activeN00un button {
+  .activeVrb button {
     box-shadow: none;
   }
 }

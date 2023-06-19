@@ -2,7 +2,7 @@ import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
 import { TransferEvent } from '../../../../wrappers/vrbsActivity';
 import classes from './MobileTransferEvent.module.css';
-import MobileN00unActivityRow from '../../activityRow/MobileN00unActivityRow';
+import MobileActivityRow from '../../activityRow/MobileActivityRow';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
@@ -16,7 +16,7 @@ const MobileTransferEvent: React.FC<MobileTransferEventProps> = props => {
   const { event } = props;
 
   return (
-    <MobileN00unActivityRow
+    <MobileActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.switchIconWrapper}>

@@ -3,8 +3,8 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { delegateN00unsAtBlockQuery } from '../../wrappers/subgraph';
-import HorizontalStackedN00uns from '../HorizontalStackedN00uns';
+import { delegateVrbsAtBlockQuery } from '../../wrappers/subgraph';
+import HorizontalStackedVrbs from '../HorizontalStackedVrbs';
 import ShortAddress from '../ShortAddress';
 import classes from './DelegateHoverCard.module.css';
 
@@ -19,7 +19,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
   const unwrappedDelegateId = delegateId ? delegateId.replace('delegate-', '') : '';
 
   const { data, loading, error } = useQuery(
-    delegateN00unsAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
+    delegateVrbsAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
   );
 
   if (loading || !data || data === undefined || data.delegates.length === 0) {
@@ -40,9 +40,9 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.stackedN00unWrapper}>
-        <HorizontalStackedN00uns
-          n00unIds={data.delegates[0].vrbsRepresented.map((n00un: { id: string }) => n00un.id)}
+      <div className={classes.stackedVrbWrapper}>
+        <HorizontalStackedVrbs
+          vrbIds={data.delegates[0].vrbsRepresented.map((vrb: { id: string }) => vrb.id)}
         />
       </div>
 
@@ -50,15 +50,15 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
         <ShortAddress address={data ? data.delegates[0].id : ''} />
       </div>
 
-      <div className={classes.n00unInfoWrapper}>
+      <div className={classes.vrbInfoWrapper}>
         <ScaleIcon height={20} width={20} className={classes.icon} />
         {numVotesForProp === 1 ? (
           <Trans>
-            Voted with<span className={classes.bold}>{numVotesForProp}</span>N00un
+            Voted with<span className={classes.bold}>{numVotesForProp}</span>Vrb
           </Trans>
         ) : (
           <Trans>
-            Voted with<span className={classes.bold}>{numVotesForProp}</span>N00uns
+            Voted with<span className={classes.bold}>{numVotesForProp}</span>Vrbs
           </Trans>
         )}
       </div>

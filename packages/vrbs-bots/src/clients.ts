@@ -2,7 +2,7 @@ import { config } from './config';
 import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
 import { Contract, providers } from 'ethers';
-import { N00unsTokenABI } from '@vrbs/contracts';
+import { VrbsTokenABI } from '@vrbs/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
 
@@ -30,11 +30,11 @@ export const twitter = new TwitterApi({
 export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
 
 /**
- * N00uns ERC721 Token Contract
+ * Vrbs ERC721 Token Contract
  */
 export const vrbsTokenContract = new Contract(
   config.vrbsTokenAddress,
-  N00unsTokenABI,
+  VrbsTokenABI,
   jsonRpcProvider,
 );
 
@@ -57,7 +57,7 @@ export const publicDiscordWebhook = new Discord.WebhookClient(
 );
 
 /**
- * Increment one of the N00uns infra counters
+ * Increment one of the Vrbs infra counters
  * @param counterName counter name to increment
  * @returns
  */

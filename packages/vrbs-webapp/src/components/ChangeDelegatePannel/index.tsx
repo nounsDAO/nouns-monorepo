@@ -10,7 +10,7 @@ import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
 import {
   useDelegateVotes,
-  useN00unTokenBalance,
+  useVrbTokenBalance,
   useUserDelegatee,
 } from '../../wrappers/vrbsToken';
 import { usePickByState } from '../../utils/pickByState';
@@ -60,7 +60,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const [delegateInputText, setDelegateInputText] = useState(delegateTo ?? '');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const [hasResolvedDeepLinkedENS, setHasResolvedDeepLinkedENS] = useState(false);
-  const availableVotes = useN00unTokenBalance(account ?? '') ?? 0;
+  const availableVotes = useVrbTokenBalance(account ?? '') ?? 0;
   const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();

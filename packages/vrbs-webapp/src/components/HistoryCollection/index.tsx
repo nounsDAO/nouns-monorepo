@@ -2,37 +2,37 @@ import { BigNumber, BigNumberish } from 'ethers';
 import Section from '../../layout/Section';
 import classes from './HistoryCollection.module.css';
 import clsx from 'clsx';
-import StandaloneN00un from '../StandaloneN00un';
-import { LoadingN00un } from '../N00un';
+import StandaloneVrb from '../StandaloneVrb';
+import { LoadingVrb } from '../Vrb';
 import config from '../../config';
 import { Container, Row } from 'react-bootstrap';
 
 interface HistoryCollectionProps {
   historyCount: number;
-  latestN00unId: BigNumberish;
+  latestVrbId: BigNumberish;
 }
 
 const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryCollectionProps) => {
-  const { historyCount, latestN00unId } = props;
+  const { historyCount, latestVrbId } = props;
 
-  if (!latestN00unId) return null;
+  if (!latestVrbId) return null;
 
-  const startAtZero = BigNumber.from(latestN00unId).sub(historyCount).lt(0);
+  const startAtZero = BigNumber.from(latestVrbId).sub(historyCount).lt(0);
 
-  let n00unIds: Array<BigNumber | null> = new Array(historyCount);
-  n00unIds = n00unIds.fill(null).map((_, i) => {
-    if (BigNumber.from(i).lt(latestN00unId)) {
+  let vrbIds: Array<BigNumber | null> = new Array(historyCount);
+  vrbIds = vrbIds.fill(null).map((_, i) => {
+    if (BigNumber.from(i).lt(latestVrbId)) {
       const index = startAtZero
         ? BigNumber.from(0)
-        : BigNumber.from(Number(latestN00unId) - historyCount);
+        : BigNumber.from(Number(latestVrbId) - historyCount);
       return index.add(i);
     } else {
       return null;
     }
   });
 
-  const vrbsContent = n00unIds.map((n00unId, i) => {
-    return !n00unId ? <LoadingN00un key={i} /> : <StandaloneN00un key={i} n00unId={n00unId} />;
+  const vrbsContent = vrbIds.map((vrbId, i) => {
+    return !vrbId ? <LoadingVrb key={i} /> : <StandaloneVrb key={i} vrbId={vrbId} />;
   });
 
   return (

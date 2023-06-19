@@ -5,7 +5,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
-} from '../src/types/N00unsDAO/N00unsDAO';
+} from '../src/types/VrbsDAO/VrbsDAO';
 import {
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,

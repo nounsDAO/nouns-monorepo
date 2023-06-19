@@ -27,12 +27,12 @@ import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
 import {
   proposalVotesQuery,
-  delegateN00unsAtBlockQuery,
+  delegateVrbsAtBlockQuery,
   ProposalVotes,
   Delegates,
   propUsingDynamicQuorum,
 } from '../../wrappers/subgraph';
-import { getN00unVotes } from '../../utils/getN00unsVotes';
+import { getVrbVotes } from '../../utils/getVrbsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
@@ -56,7 +56,7 @@ const VotePage = ({
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
-  // Toggle between N00un centric view and delegate view
+  // Toggle between Vrb centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
@@ -266,14 +266,14 @@ const VotePage = ({
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateN00unsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+    delegateVrbsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
     {
       skip: !voters?.votes?.length,
     },
   );
 
   const { delegates } = delegateSnapshot || {};
-  const delegateToN00unIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+  const delegateToVrbIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
     acc[curr.id] = curr?.vrbsRepresented?.map(nr => nr.id) ?? [];
     return acc;
   }, {});
@@ -281,7 +281,7 @@ const VotePage = ({
   const data = voters?.votes?.map(v => ({
     delegate: v.voter.id,
     supportDetailed: v.supportDetailed,
-    vrbsRepresented: delegateToN00unIds?.[v.voter.id] ?? [],
+    vrbsRepresented: delegateToVrbIds?.[v.voter.id] ?? [],
   }));
 
   const [showToast, setShowToast] = useState(true);
@@ -308,9 +308,9 @@ const VotePage = ({
   const isWalletConnected = !(activeAccount === undefined);
   const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
 
-  const forN00uns = getN00unVotes(data, 1);
-  const againstN00uns = getN00unVotes(data, 0);
-  const abstainN00uns = getN00unVotes(data, 2);
+  const forVrbs = getVrbVotes(data, 1);
+  const againstVrbs = getVrbVotes(data, 0);
+  const abstainVrbs = getVrbVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
@@ -318,7 +318,7 @@ const VotePage = ({
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
-          againstVotesAbsolute={againstN00uns.length}
+          againstVotesAbsolute={againstVrbs.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
           currentQuorum={currentQuorum}
         />
@@ -381,7 +381,7 @@ const VotePage = ({
           className={classes.toggleDelegateVoteView}
         >
           {isDelegateView ? (
-            <Trans>Switch to N00un view</Trans>
+            <Trans>Switch to Vrb view</Trans>
           ) : (
             <Trans>Switch to delegate view</Trans>
           )}
@@ -390,7 +390,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
-            n00unIds={forN00uns}
+            vrbIds={forVrbs}
             variant={VoteCardVariant.FOR}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -398,7 +398,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
-            n00unIds={againstN00uns}
+            vrbIds={againstVrbs}
             variant={VoteCardVariant.AGAINST}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -406,7 +406,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
-            n00unIds={abstainN00uns}
+            vrbIds={abstainVrbs}
             variant={VoteCardVariant.ABSTAIN}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}

@@ -1,6 +1,6 @@
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { N00unSeed, N00unData } from './types';
+import { VrbSeed, VrbData } from './types';
 import { images, bgcolors } from './image-data.json';
 
 const { bodies, accessories, heads, glasses } = images;
@@ -8,10 +8,10 @@ const { bodies, accessories, heads, glasses } = images;
 type ObjectKey = keyof typeof images;
 
 /**
- * Get encoded part and background information using a N00un seed
- * @param seed The N00un seed
+ * Get encoded part and background information using a Vrb seed
+ * @param seed The Vrb seed
  */
-export const getN00unData = (seed: N00unSeed): N00unData => {
+export const getVrbData = (seed: VrbSeed): VrbData => {
   return {
     parts: [
       bodies[seed.body],
@@ -24,10 +24,10 @@ export const getN00unData = (seed: N00unSeed): N00unData => {
 };
 
 /**
- * Generate a random N00un seed
- * @param seed The N00un seed
+ * Generate a random Vrb seed
+ * @param seed The Vrb seed
  */
-export const getRandomN00unSeed = (): N00unSeed => {
+export const getRandomVrbSeed = (): VrbSeed => {
   return {
     background: Math.floor(Math.random() * bgcolors.length),
     body: Math.floor(Math.random() * bodies.length),
@@ -53,7 +53,7 @@ export const shiftRightAndCast = (
 };
 
 /**
- * Emulates the N00unsSeeder.sol methodology for pseudorandomly selecting a part
+ * Emulates the Seeder.sol methodology for pseudorandomly selecting a part
  * @param pseudorandomness Hex representation of a number
  * @param partCount The number of parts to pseudorandomly choose from
  * @param shiftAmount The amount to right shift
@@ -70,12 +70,12 @@ export const getPseudorandomPart = (
 };
 
 /**
- * Emulates the N00unsSeeder.sol methodology for generating a N00un seed
- * @param n00unId The N00un tokenId used to create pseudorandomness
+ * Emulates the Seeder.sol methodology for generating a Vrb seed
+ * @param vrbId The Vrb tokenId used to create pseudorandomness
  * @param blockHash The block hash use to create pseudorandomness
  */
-export const getN00unSeedFromBlockHash = (n00unId: BigNumberish, blockHash: string): N00unSeed => {
-  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, n00unId]);
+export const getVrbSeedFromBlockHash = (vrbId: BigNumberish, blockHash: string): VrbSeed => {
+  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, vrbId]);
   return {
     background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),

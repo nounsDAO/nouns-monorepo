@@ -9,7 +9,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
-} from './types/N00unsDAO/N00unsDAO';
+} from './types/VrbsDAO/VrbsDAO';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,

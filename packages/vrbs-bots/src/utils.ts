@@ -36,19 +36,19 @@ export async function resolveEnsOrFormatAddress(address: string) {
 export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
- An auction has started for N00un #${auctionId}
+ An auction has started for Vrb #${auctionId}
  Learn more at https://vrbs.wtf`;
 }
 
 /**
  * Get the formatted text for a new bid.
- * @param id The auction/n00un id
+ * @param id The auction/vrb id
  * @param bid The amount of the current bid
  * @returns The bid update tweet text
  */
 export async function formatBidMessageText(id: number, bid: Bid) {
   const bidder = await resolveEnsOrFormatAddress(bid.bidder.id);
-  return `N00un ${id} has received a bid of Ξ${ethers.utils.formatEther(
+  return `Vrb ${id} has received a bid of Ξ${ethers.utils.formatEther(
     bid.amount,
   )} from ${bidder}`;
 }
@@ -62,19 +62,19 @@ export function getAuctionEndingSoonTweetText() {
 }
 
 export function formatNewGovernanceProposalText(proposal: Proposal) {
-  return `A new N00unsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
+  return `A new VrbsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
     proposal,
   )}`;
 }
 
 export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
-  return `N00uns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `Vrbs DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) has changed to status: ${proposal.status.toLocaleLowerCase()}`;
 }
 
 export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
-  return `N00uns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `Vrbs DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) expires in less than two days. Please execute it immediately!`;
 }
@@ -88,11 +88,11 @@ export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote
 }
 
 /**
- * Get the PNG buffer data of a N00un
+ * Get the PNG buffer data of a Vrb
  * @param tokenId The ERC721 token id
- * @returns The png buffer of the N00un or undefined
+ * @returns The png buffer of the Vrb or undefined
  */
-export async function getN00unPngBuffer(tokenId: string): Promise<Buffer | undefined> {
+export async function getVrbPngBuffer(tokenId: string): Promise<Buffer | undefined> {
   const dataURI = await tryF(() => vrbsTokenContract.dataURI(tokenId));
   if (isError(dataURI)) {
     console.error(`Error fetching dataURI for token ID ${tokenId}: ${dataURI.message}`);

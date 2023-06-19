@@ -3,25 +3,25 @@ import { vrbsQuery, Seed } from '../theGraph';
 import * as R from 'ramda';
 import { sharedResponseHeaders } from '../utils';
 
-interface SeededN00un {
+interface SeededVrb {
   id: number;
   seed: Seed;
 }
 
-const buildSeededN00un = R.pick(['id', 'seed']);
+const buildSeededVrb = R.pick(['id', 'seed']);
 
-const buildSeededN00uns = R.map(buildSeededN00un);
+const buildSeededVrbs = R.map(buildSeededVrb);
 
 const handler: Handler = async (event, context) => {
   const vrbs = await vrbsQuery();
-  const seededN00uns: SeededN00un[] = buildSeededN00uns(vrbs);
+  const seededVrbs: SeededVrb[] = buildSeededVrbs(vrbs);
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(seededN00uns),
+    body: JSON.stringify(seededVrbs),
   };
 };
 

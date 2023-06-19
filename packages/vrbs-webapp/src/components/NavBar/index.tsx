@@ -4,7 +4,7 @@ import logo from '../../assets/logo.svg';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
-import testnetN00un from '../../assets/testnet-n00un.png';
+import testnetImg from '../../assets/testnet.png';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
@@ -40,7 +40,7 @@ const NavBar = () => {
 
   const useStateBg =
     history.location.pathname === '/' ||
-    history.location.pathname.includes('/n00un/') ||
+    history.location.pathname.includes('/vrb/') ||
     history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
@@ -62,11 +62,11 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="N00uns DAO logo" />
+              <img src={logo} className={classes.navBarLogo} alt="Vrbs DAO logo" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className={classes.testnetImg} src={testnetN00un} alt="testnet n00un" />
+                <img className={classes.testnetImg} src={testnetImg} alt="testnet vrb" />
                 TESTNET
               </Nav.Item>
             )}
@@ -145,7 +145,7 @@ const NavBar = () => {
                 onClick={closeNav}
               >
                 <NavBarButton
-                  buttonText={<Trans>N00uns &amp; Traits</Trans>}
+                  buttonText={<Trans>Vrbs &amp; Traits</Trans>}
                   buttonIcon={<Noggles />}
                   buttonStyle={nonWalletButtonStyle}
                 />
@@ -164,7 +164,7 @@ const NavBar = () => {
                   )}
                   href="/explore"
                 >
-                  N00uns &amp; Traits
+                  Vrbs &amp; Traits
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={clsx(

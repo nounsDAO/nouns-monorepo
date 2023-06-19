@@ -1,9 +1,9 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { N00unsAuctionHouseABI } from '@vrbs/sdk';
+import { AuctionHouseABI } from '@vrbs/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
-import { isN00underN00un } from '../utils/n00underN00un';
+import { isFounderVrb } from '../utils/founderVrb';
 import { useAppSelector } from '../hooks';
 import { AuctionState } from '../state/slices/auction';
 
@@ -21,11 +21,11 @@ export interface Auction {
   bidder: string;
   endTime: EthersBN;
   startTime: EthersBN;
-  n00unId: EthersBN;
+  vrbId: EthersBN;
   settled: boolean;
 }
 
-const abi = new utils.Interface(N00unsAuctionHouseABI);
+const abi = new utils.Interface(AuctionHouseABI);
 
 export const useAuction = (auctionHouseProxyAddress: string) => {
   const auction = useContractCall<Auction>({
@@ -53,30 +53,30 @@ export const useAuctionMinBidIncPercentage = () => {
 };
 
 /**
- * Computes timestamp after which a N00un could vote
- * @param n00unId TokenId of N00un
- * @returns Unix timestamp after which N00un could vote
+ * Computes timestamp after which a Vrb could vote
+ * @param vrbId TokenId of Vrb
+ * @returns Unix timestamp after which Vrb could vote
  */
-export const useN00unCanVoteTimestamp = (n00unId: number) => {
-  const nextN00unId = n00unId + 1;
+export const useVrbCanVoteTimestamp = (vrbId: number) => {
+  const nextVrbId = vrbId + 1;
 
-  const nextN00unIdForQuery = isN00underN00un(EthersBN.from(nextN00unId))
-    ? nextN00unId + 1
-    : nextN00unId;
+  const nextVrbIdForQuery = isFounderVrb(EthersBN.from(nextVrbId))
+    ? nextVrbId + 1
+    : nextVrbId;
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  const maybeN00unCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
-    const maybeN00unId = auction.activeAuction?.n00unId;
-    return maybeN00unId
-      ? EthersBN.from(maybeN00unId).eq(EthersBN.from(nextN00unIdForQuery))
+  const maybeVrbCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
+    const maybeVrbId = auction.activeAuction?.vrbId;
+    return maybeVrbId
+      ? EthersBN.from(maybeVrbId).eq(EthersBN.from(nextVrbIdForQuery))
       : false;
   })?.activeAuction?.startTime;
 
-  if (!maybeN00unCanVoteTimestamp) {
+  if (!maybeVrbCanVoteTimestamp) {
     // This state only occurs during loading flashes
     return EthersBN.from(0);
   }
 
-  return EthersBN.from(maybeN00unCanVoteTimestamp);
+  return EthersBN.from(maybeVrbCanVoteTimestamp);
 };

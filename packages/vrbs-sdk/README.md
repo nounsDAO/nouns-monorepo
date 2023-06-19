@@ -16,7 +16,7 @@ yarn test
 
 ## Usage
 
-The N00uns SDK contains useful tooling for interacting with the N00uns protocol.
+The Vrbs SDK contains useful tooling for interacting with the Vrbs protocol.
 
 ### Contracts
 
@@ -41,7 +41,7 @@ const { vrbsTokenContract } = getContractsForChainOrThrow(ChainId.Mainnet, provi
 **Get Contract ABIs**
 
 ```ts
-import { N00unsTokenABI } from '@vrbs/sdk';
+import { VrbsTokenABI } from '@vrbs/sdk';
 ```
 
 ### Images

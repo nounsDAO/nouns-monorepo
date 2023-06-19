@@ -1,21 +1,21 @@
 import { Col } from 'react-bootstrap';
-import { StandaloneN00unWithSeed } from '../StandaloneN00un';
+import { StandaloneVrbWithSeed } from '../StandaloneVrb';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
 import { setStateBackgroundColor } from '../../state/slices/application';
-import { LoadingN00un } from '../N00un';
+import { LoadingVrb } from '../Vrb';
 import { Auction as IAuction } from '../../wrappers/vrbsAuction';
 import classes from './Auction.module.css';
-import { IN00unSeed } from '../../wrappers/vrbsToken';
-import N00underN00unContent from '../N00underN00unContent';
+import { IVrbSeed } from '../../wrappers/vrbsToken';
+import FounderVrbContent from '../FounderVrbContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { isN00underN00un } from '../../utils/n00underN00un';
+import { isFounderVrb } from '../../utils/founderVrb';
 import {
-  setNextOnDisplayAuctionN00unId,
-  setPrevOnDisplayAuctionN00unId,
+  setNextOnDisplayAuctionVrbId,
+  setPrevOnDisplayAuctionVrbId,
 } from '../../state/slices/onDisplayAuction';
-import { beige, grey } from '../../utils/n00unBgColors';
+import { beige, grey } from '../../utils/vrbBgColors';
 import pixel_border from '../../assets/pixel_border.svg';
 
 interface AuctionProps {
@@ -28,53 +28,53 @@ const Auction: React.FC<AuctionProps> = props => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
-  const lastN00unId = useAppSelector(state => state.onDisplayAuction.lastAuctionN00unId);
+  const lastVrbId = useAppSelector(state => state.onDisplayAuction.lastAuctionVrbId);
 
-  const loadedN00unHandler = (seed: IN00unSeed) => {
+  const loadedVrbHandler = (seed: IVrbSeed) => {
     dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
   };
 
   const prevAuctionHandler = () => {
-    dispatch(setPrevOnDisplayAuctionN00unId());
-    currentAuction && history.push(`/n00un/${currentAuction.n00unId.toNumber() - 1}`);
+    dispatch(setPrevOnDisplayAuctionVrbId());
+    currentAuction && history.push(`/vrb/${currentAuction.vrbId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
-    dispatch(setNextOnDisplayAuctionN00unId());
-    currentAuction && history.push(`/n00un/${currentAuction.n00unId.toNumber() + 1}`);
+    dispatch(setNextOnDisplayAuctionVrbId());
+    currentAuction && history.push(`/vrb/${currentAuction.vrbId.toNumber() + 1}`);
   };
 
-  const n00unContent = currentAuction && (
-    <div className={classes.n00unWrapper}>
-      <StandaloneN00unWithSeed
-        n00unId={currentAuction.n00unId}
-        onLoadSeed={loadedN00unHandler}
+  const vrbContent = currentAuction && (
+    <div className={classes.vrbWrapper}>
+      <StandaloneVrbWithSeed
+        vrbId={currentAuction.vrbId}
+        onLoadSeed={loadedVrbHandler}
         shouldLinkToProfile={false}
       />
     </div>
   );
 
-  const loadingN00un = (
-    <div className={classes.n00unWrapper}>
-      <LoadingN00un />
+  const loadingVrb = (
+    <div className={classes.vrbWrapper}>
+      <LoadingVrb />
     </div>
   );
 
-  const currentAuctionActivityContent = currentAuction && lastN00unId && (
+  const currentAuctionActivityContent = currentAuction && lastVrbId && (
     <AuctionActivity
       auction={currentAuction}
-      isFirstAuction={currentAuction.n00unId.eq(0)}
-      isLastAuction={currentAuction.n00unId.eq(lastN00unId)}
+      isFirstAuction={currentAuction.vrbId.eq(0)}
+      isLastAuction={currentAuction.vrbId.eq(lastVrbId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
       displayGraphDepComps={true}
     />
   );
-  const n00underN00unContent = currentAuction && lastN00unId && (
-    <N00underN00unContent
+  const founderVrbContent = currentAuction && lastVrbId && (
+    <FounderVrbContent
       mintTimestamp={currentAuction.startTime}
-      n00unId={currentAuction.n00unId}
-      isFirstAuction={currentAuction.n00unId.eq(0)}
-      isLastAuction={currentAuction.n00unId.eq(lastN00unId)}
+      vrbId={currentAuction.vrbId}
+      isFirstAuction={currentAuction.vrbId.eq(0)}
+      isLastAuction={currentAuction.vrbId.eq(lastVrbId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
     />
@@ -84,13 +84,13 @@ const Auction: React.FC<AuctionProps> = props => {
     <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
       <Container fluid="xl">
         <Row>
-          <Col lg={{ span: 6 }} className={classes.n00unContentCol}>
-            {currentAuction ? n00unContent : loadingN00un}
+          <Col lg={{ span: 6 }} className={classes.vrbContentCol}>
+            {currentAuction ? vrbContent : loadingVrb}
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {currentAuction &&
-              (isN00underN00un(currentAuction.n00unId)
-                ? n00underN00unContent
+              (isFounderVrb(currentAuction.vrbId)
+                ? founderVrbContent
                 : currentAuctionActivityContent)}
           </Col>
         </Row>

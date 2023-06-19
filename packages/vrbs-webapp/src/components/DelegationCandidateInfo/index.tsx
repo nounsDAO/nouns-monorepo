@@ -25,7 +25,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
 
   const votes = useAccountVotes(address);
 
-  const countDelegatedN00uns = votes ?? 0;
+  const countDelegatedVrbs = votes ?? 0;
 
   // Do this so that in the lag between the delegation happening on chain and the UI updating
   // we don't show that we've added the delegated votes twice
@@ -43,11 +43,11 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     }
     if (
       changeModalState !== ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-      willHaveVoteCount !== countDelegatedN00uns + votesToAdd
+      willHaveVoteCount !== countDelegatedVrbs + votesToAdd
     ) {
-      setWillHaveVoteCount(countDelegatedN00uns + votesToAdd);
+      setWillHaveVoteCount(countDelegatedVrbs + votesToAdd);
     }
-  }, [willHaveVoteCount, countDelegatedN00uns, votesToAdd, changeModalState]);
+  }, [willHaveVoteCount, countDelegatedVrbs, votesToAdd, changeModalState]);
 
   const changeDelegateInfo = usePickByState(
     changeModalState,
@@ -58,8 +58,8 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     ],
     [
       <DelegationCandidateVoteCountInfo
-        text={countDelegatedN00uns > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
-        voteCount={countDelegatedN00uns}
+        text={countDelegatedVrbs > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
+        voteCount={countDelegatedVrbs}
         isLoading={false}
       />,
       <DelegationCandidateVoteCountInfo
@@ -69,7 +69,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
       />,
       <DelegationCandidateVoteCountInfo
         text={<Trans>Now has</Trans>}
-        voteCount={countDelegatedN00uns}
+        voteCount={countDelegatedVrbs}
         isLoading={false}
       />,
     ],

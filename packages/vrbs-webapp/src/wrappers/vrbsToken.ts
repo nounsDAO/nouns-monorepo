@@ -1,18 +1,18 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { N00unsTokenABI, N00unsTokenFactory } from '@vrbs/contracts';
+import { VrbsTokenABI, VrbsTokenFactory } from '@vrbs/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
 
-interface N00unToken {
+interface VrbToken {
   name: string;
   description: string;
   image: string;
 }
 
-export interface IN00unSeed {
+export interface IVrbSeed {
   accessory: number;
   background: number;
   body: number;
@@ -20,11 +20,11 @@ export interface IN00unSeed {
   head: number;
 }
 
-export enum N00unsTokenContractFunction {
+export enum VrbsTokenContractFunction {
   delegateVotes = 'votesToDelegate',
 }
 
-const abi = new utils.Interface(N00unsTokenABI);
+const abi = new utils.Interface(VrbsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.vrbsToken);
 
 const isSeedValid = (seed: Record<string, any> | undefined) => {
@@ -34,27 +34,27 @@ const isSeedValid = (seed: Record<string, any> | undefined) => {
   return hasExpectedKeys && hasValidValues;
 };
 
-export const useN00unToken = (n00unId: EthersBN) => {
-  const [n00un] =
+export const useVrbToken = (vrbId: EthersBN) => {
+  const [vrb] =
     useContractCall<[string]>({
       abi,
       address: config.addresses.vrbsToken,
       method: 'dataURI',
-      args: [n00unId],
+      args: [vrbId],
     }) || [];
 
-  if (!n00un) {
+  if (!vrb) {
     return;
   }
 
-  const n00unImgData = n00un.split(';base64,').pop() as string;
-  const json: N00unToken = JSON.parse(atob(n00unImgData));
+  const vrbImgData = vrb.split(';base64,').pop() as string;
+  const json: VrbToken = JSON.parse(atob(vrbImgData));
 
   return json;
 };
 
-const seedArrayToObject = (seeds: (IN00unSeed & { id: string })[]) => {
-  return seeds.reduce<Record<string, IN00unSeed>>((acc, seed) => {
+const seedArrayToObject = (seeds: (IVrbSeed & { id: string })[]) => {
+  return seeds.reduce<Record<string, IVrbSeed>>((acc, seed) => {
     acc[seed.id] = {
       background: Number(seed.background),
       body: Number(seed.body),
@@ -66,7 +66,7 @@ const seedArrayToObject = (seeds: (IN00unSeed & { id: string })[]) => {
   }, {});
 };
 
-const useN00unSeeds = () => {
+const useVrbSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
@@ -82,23 +82,23 @@ const useN00unSeeds = () => {
   return cachedSeeds;
 };
 
-export const useN00unSeed = (n00unId: EthersBN): IN00unSeed => {
-  const seeds = useN00unSeeds();
-  const seed = seeds?.[n00unId.toString()];
+export const useVrbSeed = (vrbId: EthersBN): IVrbSeed => {
+  const seeds = useVrbSeeds();
+  const seed = seeds?.[vrbId.toString()];
   // prettier-ignore
   const request = seed ? false : {
     abi,
     address: config.addresses.vrbsToken,
     method: 'seeds',
-    args: [n00unId],
+    args: [vrbId],
   };
-  const response = useContractCall<IN00unSeed>(request);
+  const response = useContractCall<IVrbSeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
     if (seedCache && isSeedValid(response)) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
-        [n00unId.toString()]: {
+        [vrbId.toString()]: {
           accessory: response.accessory,
           background: response.background,
           body: response.body,
@@ -155,14 +155,14 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 };
 
 export const useDelegateVotes = () => {
-  const vrbsToken = new N00unsTokenFactory().attach(config.addresses.vrbsToken);
+  const vrbsToken = new VrbsTokenFactory().attach(config.addresses.vrbsToken);
 
   const { send, state } = useContractFunction(vrbsToken as any, 'delegate');
 
   return { send, state };
 };
 
-export const useN00unTokenBalance = (address: string): number | undefined => {
+export const useVrbTokenBalance = (address: string): number | undefined => {
   const [tokenBalance] =
     useContractCall<[EthersBN]>({
       abi,
@@ -173,7 +173,7 @@ export const useN00unTokenBalance = (address: string): number | undefined => {
   return tokenBalance?.toNumber();
 };
 
-export const useUserN00unTokenBalance = (): number | undefined => {
+export const useUserVrbTokenBalance = (): number | undefined => {
   const { account } = useEthers();
 
   const [tokenBalance] =

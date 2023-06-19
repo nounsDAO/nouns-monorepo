@@ -1,4 +1,4 @@
-import { N00unsDAOV2ABI, N00unsDaoLogicV2Factory } from '@vrbs/sdk';
+import { DAOV2ABI, DaoLogicV2Factory } from '@vrbs/sdk';
 import {
   ChainId,
   connectContractToSigner,
@@ -134,8 +134,8 @@ export interface ProposalTransaction {
   usdcValue?: number;
 }
 
-const abi = new utils.Interface(N00unsDAOV2ABI);
-const vrbsDaoContract = new N00unsDaoLogicV2Factory().attach(config.addresses.vrbsDAOProxy);
+const abi = new utils.Interface(DAOV2ABI);
+const vrbsDaoContract = new DaoLogicV2Factory().attach(config.addresses.vrbsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;

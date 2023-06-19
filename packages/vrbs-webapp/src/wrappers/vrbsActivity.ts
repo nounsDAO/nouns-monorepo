@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
-import { N00unVoteHistory } from '../components/ProfileActivityFeed';
-import { useN00unCanVoteTimestamp } from './vrbsAuction';
+import { VrbVoteHistory } from '../components/ProfileActivityFeed';
+import { useVrbCanVoteTimestamp } from './vrbsAuction';
 import { PartialProposal, Proposal, ProposalState, useAllProposals } from './vrbsDao';
 import {
   createTimestampAllProposals,
-  n00unDelegationHistoryQuery,
-  n00unTransferHistoryQuery,
-  n00unVotingHistoryQuery,
+  vrbDelegationHistoryQuery,
+  vrbTransferHistoryQuery,
+  vrbVotingHistoryQuery,
 } from './subgraph';
 
-export enum N00unEventType {
+export enum VrbEventType {
   PROPOSAL_VOTE,
   DELEGATION,
   TRANSFER,
@@ -37,32 +37,32 @@ export type DelegationEvent = {
   transactionHash: string;
 };
 
-// Wrapper type around N00un events.
+// Wrapper type around Vrb events.
 // All events are keyed by blockNumber to allow sorting.
-export type N00unProfileEvent = {
+export type VrbProfileEvent = {
   blockNumber: number;
-  eventType: N00unEventType;
-  payload: ProposalVoteEvent | DelegationEvent | TransferEvent | N00unWinEvent;
+  eventType: VrbEventType;
+  payload: ProposalVoteEvent | DelegationEvent | TransferEvent | WinEvent;
 };
 
-export type N00unWinEvent = {
-  n00unId: string | number;
+export type WinEvent = {
+  vrbId: string | number;
   winner: string;
   transactionHash: string;
 };
 
-export type N00unProfileEventFetcherResponse = {
-  data?: N00unProfileEvent[];
+export type VrbProfileEventFetcherResponse = {
+  data?: VrbProfileEvent[];
   error: boolean;
   loading: boolean;
 };
 
 /**
- * Fetch list of ProposalVoteEvents representing the voting history of the given N00un
- * @param n00unId Id of N00un who's voting history will be fetched
+ * Fetch list of ProposalVoteEvents representing the voting history of the given Vrb
+ * @param vrbId Id of Vrb who's voting history will be fetched
  */
-const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(n00unVotingHistoryQuery(n00unId));
+const useVrbProposalVoteEvents = (vrbId: number): VrbProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(vrbVotingHistoryQuery(vrbId));
 
   const {
     loading: proposalTimestampLoading,
@@ -70,7 +70,7 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
     data: proposalCreatedTimestamps,
   } = useQuery(createTimestampAllProposals());
 
-  const n00unCanVoteTimestamp = useN00unCanVoteTimestamp(n00unId);
+  const vrbCanVoteTimestamp = useVrbCanVoteTimestamp(vrbId);
 
   const { data: proposals } = useAllProposals();
 
@@ -86,9 +86,9 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
     };
   }
 
-  const n00unVotes: { [key: string]: N00unVoteHistory } = data.n00un.votes
+  const vrbVotes: { [key: string]: VrbVoteHistory } = data.vrb.votes
     .slice(0)
-    .reduce((acc: any, h: N00unVoteHistory, i: number) => {
+    .reduce((acc: any, h: VrbVoteHistory, i: number) => {
       acc[h.proposal.id] = h;
       return acc;
     }, {});
@@ -102,8 +102,8 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
       proposalCreatedTimestamps.proposals[id].createdTimestamp,
     );
 
-    // Filter props from before the N00un was born
-    if (n00unCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+    // Filter props from before the Vrb was born
+    if (vrbCanVoteTimestamp.gt(proposalCreationTimestamp)) {
       return false;
     }
     // Filter props which were cancelled and got 0 votes of any kind
@@ -117,13 +117,13 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
   });
 
   const events = filteredProposals.map((proposal: PartialProposal) => {
-    const vote = n00unVotes[proposal.id as string];
+    const vote = vrbVotes[proposal.id as string];
     const didVote = vote !== undefined;
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
       blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
-      eventType: N00unEventType.PROPOSAL_VOTE,
+      eventType: VrbEventType.PROPOSAL_VOTE,
       payload: {
         proposal,
         vote: {
@@ -132,7 +132,7 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
         },
       },
     };
-  }) as N00unProfileEvent[];
+  }) as VrbProfileEvent[];
 
   return {
     loading: false,
@@ -142,11 +142,11 @@ const useN00unProposalVoteEvents = (n00unId: number): N00unProfileEventFetcherRe
 };
 
 /**
- * Fetch list of TransferEvents for given N00un
- * @param n00unId Id of N00un who's transfer history we will fetch
+ * Fetch list of TransferEvents for given Vrb
+ * @param vrbId Id of Vrb who's transfer history we will fetch
  */
-const useN00unTransferEvents = (n00unId: number): N00unProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(n00unTransferHistoryQuery(n00unId));
+const useVrbTransferEvents = (vrbId: number): VrbProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(vrbTransferHistoryQuery(vrbId));
   if (loading) {
     return {
       loading,
@@ -173,24 +173,24 @@ const useN00unTransferEvents = (n00unId: number): N00unProfileEventFetcherRespon
       }) => {
         return {
           blockNumber: parseInt(event.blockNumber),
-          eventType: N00unEventType.TRANSFER,
+          eventType: VrbEventType.TRANSFER,
           payload: {
             from: event.previousHolder.id,
             to: event.newHolder.id,
             transactionHash: event.id.substring(0, event.id.indexOf('_')),
           } as TransferEvent,
-        } as N00unProfileEvent;
+        } as VrbProfileEvent;
       },
     ),
   };
 };
 
 /**
- * Fetch list of DelegationEvents for given N00un
- * @param n00unId Id of N00un who's transfer history we will fetch
+ * Fetch list of DelegationEvents for given Vrb
+ * @param vrbId Id of Vrb who's transfer history we will fetch
  */
-const useDelegationEvents = (n00unId: number): N00unProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(n00unDelegationHistoryQuery(n00unId));
+const useDelegationEvents = (vrbId: number): VrbProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(vrbDelegationHistoryQuery(vrbId));
   if (loading) {
     return {
       loading,
@@ -217,47 +217,47 @@ const useDelegationEvents = (n00unId: number): N00unProfileEventFetcherResponse 
       }) => {
         return {
           blockNumber: parseInt(event.blockNumber),
-          eventType: N00unEventType.DELEGATION,
+          eventType: VrbEventType.DELEGATION,
           payload: {
             previousDelegate: event.previousDelegate.id,
             newDelegate: event.newDelegate.id,
             transactionHash: event.id.substring(0, event.id.indexOf('_')),
           } as DelegationEvent,
-        } as N00unProfileEvent;
+        } as VrbProfileEvent;
       },
     ),
   };
 };
 
 /**
- * Fetch list of all events for given N00un (ex: voting, transfer, delegation, etc.)
- * @param n00unId Id of N00un who's history we will fetch
+ * Fetch list of all events for given Vrb (ex: voting, transfer, delegation, etc.)
+ * @param vrbId Id of Vrb who's history we will fetch
  */
-export const useN00unActivity = (n00unId: number): N00unProfileEventFetcherResponse => {
+export const useVrbActivity = (vrbId: number): VrbProfileEventFetcherResponse => {
   const {
     loading: loadingVotes,
     error: votesError,
     data: votesData,
-  } = useN00unProposalVoteEvents(n00unId);
+  } = useVrbProposalVoteEvents(vrbId);
   const {
-    loading: loadingN00unTransfer,
-    error: n00unTransferError,
-    data: n00unTransferData,
-  } = useN00unTransferEvents(n00unId);
+    loading: loadingVrbTransfer,
+    error: vrbTransferError,
+    data: vrbTransferData,
+  } = useVrbTransferEvents(vrbId);
   const {
     loading: loadingDelegationEvents,
     error: delegationEventsError,
     data: delegationEventsData,
-  } = useDelegationEvents(n00unId);
+  } = useDelegationEvents(vrbId);
 
-  if (loadingDelegationEvents || loadingN00unTransfer || loadingVotes) {
+  if (loadingDelegationEvents || loadingVrbTransfer || loadingVotes) {
     return {
       loading: true,
       error: false,
     };
   }
 
-  if (votesError || n00unTransferError || delegationEventsError) {
+  if (votesError || vrbTransferError || delegationEventsError) {
     return {
       loading: false,
       error: true,
@@ -265,7 +265,7 @@ export const useN00unActivity = (n00unId: number): N00unProfileEventFetcherRespo
   }
 
   if (
-    n00unTransferData === undefined ||
+    vrbTransferData === undefined ||
     votesData === undefined ||
     delegationEventsData === undefined
   ) {
@@ -276,36 +276,36 @@ export const useN00unActivity = (n00unId: number): N00unProfileEventFetcherRespo
   }
 
   const events = votesData
-    ?.concat(n00unTransferData)
+    ?.concat(vrbTransferData)
     .concat(delegationEventsData)
-    .sort((a: N00unProfileEvent, b: N00unProfileEvent) => a.blockNumber - b.blockNumber)
+    .sort((a: VrbProfileEvent, b: VrbProfileEvent) => a.blockNumber - b.blockNumber)
     .reverse();
 
-  const postProcessedEvents = events.slice(0, events.length - (n00unId % 10 === 0 ? 2 : 4));
+  const postProcessedEvents = events.slice(0, events.length - (vrbId % 10 === 0 ? 2 : 4));
 
   // Wrap this line in a try-catch to prevent edge case
   // where excessive spamming to left / right keys can cause transfer
   // and delegation data to be empty which leads to errors
   try {
-    // Parse n00un birth + win events into a single event
-    const n00unTransferFromAuctionHouse = n00unTransferData.sort(
-      (a: N00unProfileEvent, b: N00unProfileEvent) => a.blockNumber - b.blockNumber,
-    )[n00unId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-    const n00unTransferFromAuctionHouseBlockNumber = n00unTransferData.sort(
-      (a: N00unProfileEvent, b: N00unProfileEvent) => a.blockNumber - b.blockNumber,
-    )[n00unId % 10 === 0 ? 0 : 1].blockNumber;
+    // Parse vrb birth + win events into a single event
+    const vrbTransferFromAuctionHouse = vrbTransferData.sort(
+      (a: VrbProfileEvent, b: VrbProfileEvent) => a.blockNumber - b.blockNumber,
+    )[vrbId % 10 === 0 ? 0 : 1].payload as TransferEvent;
+    const vrbTransferFromAuctionHouseBlockNumber = vrbTransferData.sort(
+      (a: VrbProfileEvent, b: VrbProfileEvent) => a.blockNumber - b.blockNumber,
+    )[vrbId % 10 === 0 ? 0 : 1].blockNumber;
 
-    const n00unWinEvent = {
-      n00unId: n00unId,
-      winner: n00unTransferFromAuctionHouse.to,
-      transactionHash: n00unTransferFromAuctionHouse.transactionHash,
-    } as N00unWinEvent;
+    const vrbWinEvent = {
+      vrbId: vrbId,
+      winner: vrbTransferFromAuctionHouse.to,
+      transactionHash: vrbTransferFromAuctionHouse.transactionHash,
+    } as WinEvent;
 
     postProcessedEvents.push({
-      eventType: N00unEventType.AUCTION_WIN,
-      blockNumber: n00unTransferFromAuctionHouseBlockNumber,
-      payload: n00unWinEvent,
-    } as N00unProfileEvent);
+      eventType: VrbEventType.AUCTION_WIN,
+      blockNumber: vrbTransferFromAuctionHouseBlockNumber,
+      payload: vrbWinEvent,
+    } as VrbProfileEvent);
   } catch (e) {
     console.log(e);
   }

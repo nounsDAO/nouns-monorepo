@@ -1,9 +1,9 @@
 export { default as ImageData } from './image-data.json';
 export {
-  getN00unData,
+  getVrbData,
   getPartData,
-  getRandomN00unSeed,
+  getRandomVrbSeed,
   shiftRightAndCast,
   getPseudorandomPart,
-  getN00unSeedFromBlockHash,
+  getVrbSeedFromBlockHash,
 } from './utils';

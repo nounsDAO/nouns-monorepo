@@ -5,22 +5,22 @@ import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
-  N00unsAuctionHouse,
-  N00unsDescriptorV2__factory as N00unsDescriptorV2Factory,
-  N00unsToken,
+  AuctionHouse,
+  VrbsDescriptorV2__factory as VrbsDescriptorV2Factory,
+  VrbsToken,
   WETH,
 } from '../typechain';
-import { deployN00unsToken, deployWeth, populateDescriptorV2 } from './utils';
+import { deployVrbsToken, deployWeth, populateDescriptorV2 } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('N00unsAuctionHouse', () => {
-  let vrbsAuctionHouse: N00unsAuctionHouse;
-  let vrbsToken: N00unsToken;
+describe('AuctionHouse', () => {
+  let vrbsAuctionHouse: AuctionHouse;
+  let vrbsToken: VrbsToken;
   let weth: WETH;
   let deployer: SignerWithAddress;
-  let n00undersDAO: SignerWithAddress;
+  let vrbsDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
   let snapshotId: number;
@@ -31,7 +31,7 @@ describe('N00unsAuctionHouse', () => {
   const DURATION = 60 * 60 * 24;
 
   async function deploy(deployer?: SignerWithAddress) {
-    const auctionHouseFactory = await ethers.getContractFactory('N00unsAuctionHouse', deployer);
+    const auctionHouseFactory = await ethers.getContractFactory('AuctionHouse', deployer);
     return upgrades.deployProxy(auctionHouseFactory, [
       vrbsToken.address,
       weth.address,
@@ -39,19 +39,19 @@ describe('N00unsAuctionHouse', () => {
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
-    ]) as Promise<N00unsAuctionHouse>;
+    ]) as Promise<AuctionHouse>;
   }
 
   before(async () => {
-    [deployer, n00undersDAO, bidderA, bidderB] = await ethers.getSigners();
+    [deployer, vrbsDAO, bidderA, bidderB] = await ethers.getSigners();
 
-    vrbsToken = await deployN00unsToken(deployer, n00undersDAO.address, deployer.address);
+    vrbsToken = await deployVrbsToken(deployer, vrbsDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     vrbsAuctionHouse = await deploy(deployer);
 
     const descriptor = await vrbsToken.descriptor();
 
-    await populateDescriptorV2(N00unsDescriptorV2Factory.connect(descriptor, deployer));
+    await populateDescriptorV2(VrbsDescriptorV2Factory.connect(descriptor, deployer));
 
     await vrbsToken.setMinter(vrbsAuctionHouse.address);
   });
@@ -76,7 +76,7 @@ describe('N00unsAuctionHouse', () => {
     await expect(tx).to.be.revertedWith('Initializable: contract is already initialized');
   });
 
-  it('should allow the n00undersDAO to unpause the contract and create the first auction', async () => {
+  it('should allow the vrbsDAO to unpause the contract and create the first auction', async () => {
     const tx = await vrbsAuctionHouse.unpause();
     await tx.wait();
 
@@ -87,12 +87,12 @@ describe('N00unsAuctionHouse', () => {
   it('should revert if a user creates a bid for an inactive auction', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    const tx = vrbsAuctionHouse.connect(bidderA).createBid(n00unId.add(1), {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    const tx = vrbsAuctionHouse.connect(bidderA).createBid(vrbId.add(1), {
       value: RESERVE_PRICE,
     });
 
-    await expect(tx).to.be.revertedWith('N00un not up for auction');
+    await expect(tx).to.be.revertedWith('Vrb not up for auction');
   });
 
   it('should revert if a user creates a bid for an expired auction', async () => {
@@ -100,8 +100,8 @@ describe('N00unsAuctionHouse', () => {
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    const tx = vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    const tx = vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
@@ -111,8 +111,8 @@ describe('N00unsAuctionHouse', () => {
   it('should revert if a user creates a bid with an amount below the reserve price', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    const tx = vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    const tx = vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE - 1,
     });
 
@@ -122,11 +122,11 @@ describe('N00unsAuctionHouse', () => {
   it('should revert if a user creates a bid less than the min bid increment percentage', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE * 50,
     });
-    const tx = vrbsAuctionHouse.connect(bidderB).createBid(n00unId, {
+    const tx = vrbsAuctionHouse.connect(bidderB).createBid(vrbId, {
       value: RESERVE_PRICE * 51,
     });
 
@@ -138,13 +138,13 @@ describe('N00unsAuctionHouse', () => {
   it('should refund the previous bidder when the following user creates a bid', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
     const bidderAPostBidBalance = await bidderA.getBalance();
-    await vrbsAuctionHouse.connect(bidderB).createBid(n00unId, {
+    await vrbsAuctionHouse.connect(bidderB).createBid(vrbId, {
       value: RESERVE_PRICE * 2,
     });
     const bidderAPostRefundBalance = await bidderA.getBalance();
@@ -155,19 +155,19 @@ describe('N00unsAuctionHouse', () => {
   it('should cap the maximum bid griefing cost at 30K gas + the cost to wrap and transfer WETH', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
     const maliciousBidderFactory = new MaliciousBidderFactory(bidderA);
     const maliciousBidder = await maliciousBidderFactory.deploy();
 
     const maliciousBid = await maliciousBidder
       .connect(bidderA)
-      .bid(vrbsAuctionHouse.address, n00unId, {
+      .bid(vrbsAuctionHouse.address, vrbId, {
         value: RESERVE_PRICE,
       });
     await maliciousBid.wait();
 
-    const tx = await vrbsAuctionHouse.connect(bidderB).createBid(n00unId, {
+    const tx = await vrbsAuctionHouse.connect(bidderB).createBid(vrbId, {
       value: RESERVE_PRICE * 2,
       gasLimit: 1_000_000,
     });
@@ -180,38 +180,38 @@ describe('N00unsAuctionHouse', () => {
   it('should emit an `AuctionBid` event on a successful bid', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
-    const tx = vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const { vrbId } = await vrbsAuctionHouse.auction();
+    const tx = vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
     await expect(tx)
       .to.emit(vrbsAuctionHouse, 'AuctionBid')
-      .withArgs(n00unId, bidderA.address, RESERVE_PRICE, false);
+      .withArgs(vrbId, bidderA.address, RESERVE_PRICE, false);
   });
 
   it('should emit an `AuctionExtended` event if the auction end time is within the time buffer', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId, endTime } = await vrbsAuctionHouse.auction();
+    const { vrbId, endTime } = await vrbsAuctionHouse.auction();
 
     await ethers.provider.send('evm_setNextBlockTimestamp', [endTime.sub(60 * 5).toNumber()]); // Subtract 5 mins from current end time
 
-    const tx = vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    const tx = vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
     await expect(tx)
       .to.emit(vrbsAuctionHouse, 'AuctionExtended')
-      .withArgs(n00unId, endTime.add(60 * 10));
+      .withArgs(vrbId, endTime.add(60 * 10));
   });
 
   it('should revert if auction settlement is attempted while the auction is still active', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
     const tx = vrbsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
@@ -222,9 +222,9 @@ describe('N00unsAuctionHouse', () => {
   it('should emit `AuctionSettled` and `AuctionCreated` events if all conditions are met', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
@@ -237,11 +237,11 @@ describe('N00unsAuctionHouse', () => {
     const settledEvent = receipt.events?.find(e => e.event === 'AuctionSettled');
     const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
 
-    expect(settledEvent?.args?.n00unId).to.equal(n00unId);
+    expect(settledEvent?.args?.vrbId).to.equal(vrbId);
     expect(settledEvent?.args?.winner).to.equal(bidderA.address);
     expect(settledEvent?.args?.amount).to.equal(RESERVE_PRICE);
 
-    expect(createdEvent?.args?.n00unId).to.equal(n00unId.add(1));
+    expect(createdEvent?.args?.vrbId).to.equal(vrbId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);
     expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
   });
@@ -253,17 +253,17 @@ describe('N00unsAuctionHouse', () => {
 
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
-    expect(n00unId).to.equal(1);
+    expect(vrbId).to.equal(1);
   });
 
   it('should create a new auction if the auction house is paused and unpaused after an auction is settled', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
@@ -275,7 +275,7 @@ describe('N00unsAuctionHouse', () => {
 
     await expect(settleTx)
       .to.emit(vrbsAuctionHouse, 'AuctionSettled')
-      .withArgs(n00unId, bidderA.address, RESERVE_PRICE);
+      .withArgs(vrbId, bidderA.address, RESERVE_PRICE);
 
     const unpauseTx = await vrbsAuctionHouse.unpause();
     const receipt = await unpauseTx.wait();
@@ -283,7 +283,7 @@ describe('N00unsAuctionHouse', () => {
 
     const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
 
-    expect(createdEvent?.args?.n00unId).to.equal(n00unId.add(1));
+    expect(createdEvent?.args?.vrbId).to.equal(vrbId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);
     expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
   });
@@ -291,9 +291,9 @@ describe('N00unsAuctionHouse', () => {
   it('should settle the current auction and pause the contract if the minter is updated while the auction house is unpaused', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
-    await vrbsAuctionHouse.connect(bidderA).createBid(n00unId, {
+    await vrbsAuctionHouse.connect(bidderA).createBid(vrbId, {
       value: RESERVE_PRICE,
     });
 
@@ -305,17 +305,17 @@ describe('N00unsAuctionHouse', () => {
 
     await expect(settleTx)
       .to.emit(vrbsAuctionHouse, 'AuctionSettled')
-      .withArgs(n00unId, bidderA.address, RESERVE_PRICE);
+      .withArgs(vrbId, bidderA.address, RESERVE_PRICE);
 
     const paused = await vrbsAuctionHouse.paused();
 
     expect(paused).to.equal(true);
   });
 
-  it('should burn a N00un on auction settlement if no bids are received', async () => {
+  it('should burn a Vrb on auction settlement if no bids are received', async () => {
     await (await vrbsAuctionHouse.unpause()).wait();
 
-    const { n00unId } = await vrbsAuctionHouse.auction();
+    const { vrbId } = await vrbsAuctionHouse.auction();
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 
@@ -323,6 +323,6 @@ describe('N00unsAuctionHouse', () => {
 
     await expect(tx)
       .to.emit(vrbsAuctionHouse, 'AuctionSettled')
-      .withArgs(n00unId, '0x0000000000000000000000000000000000000000', 0);
+      .withArgs(vrbId, '0x0000000000000000000000000000000000000000', 0);
   });
 });

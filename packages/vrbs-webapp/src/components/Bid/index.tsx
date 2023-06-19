@@ -11,7 +11,7 @@ import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/vrbsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { N00unsAuctionHouseFactory } from '@vrbs/sdk';
+import { AuctionHouseFactory } from '@vrbs/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
@@ -61,7 +61,7 @@ const Bid: React.FC<{
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
-  const vrbsAuctionHouseContract = new N00unsAuctionHouseFactory().attach(
+  const vrbsAuctionHouseContract = new AuctionHouseFactory().attach(
     config.addresses.vrbsAuctionHouseProxy,
   );
 
@@ -152,7 +152,7 @@ const Bid: React.FC<{
     const value = utils.parseUnits(bidInputRef.current.value.toString(), 18);
     var status = await approve(config.addresses.vrbsAuctionHouseProxy, value);
 
-    placeBid(auction.n00unId, {
+    placeBid(auction.vrbId, {
       value,
       gasLimit: 150000, // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
@@ -263,8 +263,8 @@ const Bid: React.FC<{
   const isDisabled =
     placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
-  const fomoN00unsBtnOnClickHandler = () => {
-    // Open Fomo N00uns in a new tab
+  const fomoVrbsBtnOnClickHandler = () => {
+    // Open Fomo Vrbs in a new tab
     window.open('https://fomovrbs.wtf', '_blank')?.focus();
   };
 
@@ -314,9 +314,9 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextN00unBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoN00unsBtnOnClickHandler}>
-                <Trans>View the next n00un</Trans> ⌐◧-◧
+            <Col lg={12} className={classes.voteForNextVrbBtnWrapper}>
+              <Button className={classes.bidBtnAuctionEnded} onClick={fomoVrbsBtnOnClickHandler}>
+                <Trans>View the next vrb</Trans> ⌐◧-◧
               </Button>
             </Col>
             {/* Only show force settle button if wallet connected */}

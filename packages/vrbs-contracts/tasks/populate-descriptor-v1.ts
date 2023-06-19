@@ -2,7 +2,7 @@ import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data-v1.json';
 import { chunkArray } from '../utils';
 
-task('populate-descriptor-v1', 'Populates the descriptor with color palettes and N00un parts')
+task('populate-descriptor-v1', 'Populates the descriptor with color palettes and Vrb parts')
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptor` contract address',
@@ -11,12 +11,12 @@ task('populate-descriptor-v1', 'Populates the descriptor with color palettes and
   )
   .addOptionalParam(
     'vrbsDescriptor',
-    'The `N00unsDescriptor` contract address',
+    'The `Descriptor` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
   .setAction(async ({ nftDescriptor, vrbsDescriptor }, { ethers }) => {
-    const descriptorFactory = await ethers.getContractFactory('N00unsDescriptor', {
+    const descriptorFactory = await ethers.getContractFactory('Descriptor', {
       libraries: {
         NFTDescriptor: nftDescriptor,
       },

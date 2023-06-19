@@ -4,21 +4,21 @@ import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
 import { Trans } from '@lingui/macro';
-import { useN00unActivity } from '../../wrappers/vrbsActivity';
+import { useVrbActivity } from '../../wrappers/vrbsActivity';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
 import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
 import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
 
 interface ProfileActivityFeedProps {
-  n00unId: number;
+  vrbId: number;
 }
 
 interface ProposalInfo {
   id: number;
 }
 
-export interface N00unVoteHistory {
+export interface VrbVoteHistory {
   blockNumber: number | string;
   proposal: ProposalInfo;
   support: boolean;
@@ -27,13 +27,13 @@ export interface N00unVoteHistory {
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { n00unId } = props;
+  const { vrbId } = props;
 
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { loading, error, data } = useN00unActivity(n00unId);
+  const { loading, error, data } = useVrbActivity(vrbId);
 
   if (loading || !data || data === undefined) {
     return (
@@ -55,7 +55,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   if (error) {
     return (
       <div>
-        <Trans>Failed to fetch N00un activity history</Trans>
+        <Trans>Failed to fetch Vrb activity history</Trans>
       </div>
     );
   }
@@ -70,7 +70,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
         </div>
         {data && data.length === 0 ? (
           <div className={classes.nullStateCopy}>
-            <Trans>This N00un has no activity, since it was just created. Check back soon!</Trans>
+            <Trans>This Vrb has no activity, since it was just created. Check back soon!</Trans>
           </div>
         ) : (
           <>

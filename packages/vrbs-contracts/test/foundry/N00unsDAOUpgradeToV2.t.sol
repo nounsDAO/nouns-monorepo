@@ -2,15 +2,15 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { N00unsDAOLogicSharedBaseTest } from './helpers/N00unsDAOLogicSharedBase.t.sol';
-import { N00unsDAOLogicV1 } from '../../contracts/governance/N00unsDAOLogicV1.sol';
-import { N00unsDAOLogicV2 } from '../../contracts/governance/N00unsDAOLogicV2.sol';
-import { N00unsDAOProxy } from '../../contracts/governance/N00unsDAOProxy.sol';
-import { N00unsToken } from '../../contracts/N00unsToken.sol';
-import { N00unsDAOExecutor } from '../../contracts/governance/N00unsDAOExecutor.sol';
-import { N00unsDAOStorageV1, N00unsDAOStorageV2 } from '../../contracts/governance/N00unsDAOInterfaces.sol';
+import { VrbsDAOLogicSharedBaseTest } from './helpers/VrbsDAOLogicSharedBase.t.sol';
+import { DAOLogicV1 } from '../../contracts/governance/DAOLogicV1.sol';
+import { DAOLogicV2 } from '../../contracts/governance/DAOLogicV2.sol';
+import { DAOProxy } from '../../contracts/governance/DAOProxy.sol';
+import { VrbsToken } from '../../contracts/VrbsToken.sol';
+import { DAOExecutor } from '../../contracts/governance/DAOExecutor.sol';
+import { VrbsDAOStorageV1, DAOStorageV2 } from '../../contracts/governance/DAOInterfaces.sol';
 
-contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
+contract VrbsDAOUpgradeToV2 is VrbsDAOLogicSharedBaseTest {
     uint16 public constant MIN_QUORUM_BPS = 1000;
     uint16 public constant MAX_QUORUM_BPS = 4000;
     uint32 public constant COEFFICIENT = 1.5e6;
@@ -26,13 +26,13 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (N00unsDAOLogicV1) {
-        N00unsDAOLogicV1 daoLogic = new N00unsDAOLogicV1();
+    function deployDAOProxy() internal override returns (DAOLogicV1) {
+        DAOLogicV1 daoLogic = new DAOLogicV1();
 
         return
-            N00unsDAOLogicV1(
+            DAOLogicV1(
                 payable(
-                    new N00unsDAOProxy(
+                    new DAOProxy(
                         address(timelock),
                         address(vrbsToken),
                         vetoer,
@@ -57,7 +57,7 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vote(voter, proposalId, 1);
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == N00unsDAOStorageV1.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == VrbsDAOStorageV1.ProposalState.Defeated);
     }
 
     function testV1Sanity_proposalSucceedsWithForVotesMoreThanQuorum() public {
@@ -71,28 +71,28 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vote(voter, proposalId, 1);
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == N00unsDAOStorageV1.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(proposalId) == VrbsDAOStorageV1.ProposalState.Succeeded);
     }
 
     function testUpgradeToV2() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         mint(voter, 2);
 
         proposeAndExecuteUpgradeToV2AndSetDQParams(address(daoLogicV2));
-        address implementationPostUpgrade = N00unsDAOProxy(payable(address(daoProxy))).implementation();
+        address implementationPostUpgrade = DAOProxy(payable(address(daoProxy))).implementation();
 
         assertEq(implementationPostUpgrade, address(daoLogicV2));
 
-        N00unsDAOLogicV2 daoV2 = N00unsDAOLogicV2(payable(address(daoProxy)));
-        N00unsDAOStorageV2.DynamicQuorumParams memory dqParams = daoV2.getDynamicQuorumParamsAt(block.number);
+        DAOLogicV2 daoV2 = DAOLogicV2(payable(address(daoProxy)));
+        DAOStorageV2.DynamicQuorumParams memory dqParams = daoV2.getDynamicQuorumParamsAt(block.number);
         assertEq(dqParams.minQuorumVotesBPS, MIN_QUORUM_BPS);
         assertEq(dqParams.maxQuorumVotesBPS, MAX_QUORUM_BPS);
         assertEq(dqParams.quorumCoefficient, COEFFICIENT);
     }
 
     function testUpgradeToV2_withV1PropInFlightWithAgainstVotesStillPasses() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         address forVoter = utils.getNextUserAddress();
         address againstVoter = utils.getNextUserAddress();
@@ -113,11 +113,11 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vm.warp(block.timestamp + timelock.delay() + 1);
         daoProxy.execute(v2UpgradeProposalId);
 
-        assertTrue(daoProxy.state(v1PropId) == N00unsDAOStorageV1.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(v1PropId) == VrbsDAOStorageV1.ProposalState.Succeeded);
     }
 
     function testUpgradeToV2_newV2Prop_failsBecauseOfDQ() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         mint(voter, 2);
         address forVoter = utils.getNextUserAddress();
@@ -133,11 +133,11 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vote(againstVoter, newPropId, 0);
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(newPropId) == N00unsDAOStorageV1.ProposalState.Defeated);
+        assertTrue(daoProxy.state(newPropId) == VrbsDAOStorageV1.ProposalState.Defeated);
     }
 
     function testUpgradeToV2_newV2Prop_succeedsWithEnoughForVotes() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         mint(voter, 2);
         address forVoter = utils.getNextUserAddress();
@@ -153,11 +153,11 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vote(againstVoter, newPropId, 0);
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(newPropId) == N00unsDAOStorageV1.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(newPropId) == VrbsDAOStorageV1.ProposalState.Succeeded);
     }
 
     function testUpgradeToV2_dqParamsChange_newPropMustPassNewDQ() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         mint(voter, 2);
         proposeAndExecuteUpgradeToV2AndSetDQParams(address(daoLogicV2));
@@ -174,11 +174,11 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         vote(againstVoter, newPropId, 0);
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(newPropId) == N00unsDAOStorageV1.ProposalState.Defeated);
+        assertTrue(daoProxy.state(newPropId) == VrbsDAOStorageV1.ProposalState.Defeated);
     }
 
     function testUpgradeToV2_dqParamsChange_doesNotAffectExistingProposal() public {
-        N00unsDAOLogicV2 daoLogicV2 = new N00unsDAOLogicV2();
+        DAOLogicV2 daoLogicV2 = new DAOLogicV2();
         mint(proposer, 2);
         mint(voter, 2);
         proposeAndExecuteUpgradeToV2AndSetDQParams(address(daoLogicV2));
@@ -202,7 +202,7 @@ contract N00unsDAOUpgradeToV2 is N00unsDAOLogicSharedBaseTest {
         daoProxy.execute(dqParamsPropId);
         vm.roll(block.number + 1);
 
-        assertTrue(daoProxy.state(newPropId) == N00unsDAOStorageV1.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(newPropId) == VrbsDAOStorageV1.ProposalState.Succeeded);
     }
 
     function proposeAndExecuteUpgradeToV2AndSetDQParams(address daoLogicV2) internal returns (uint256 proposalId) {

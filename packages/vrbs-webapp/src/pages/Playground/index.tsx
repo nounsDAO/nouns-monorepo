@@ -12,11 +12,11 @@ import {
 import classes from './Playground.module.css';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import Link from '../../components/Link';
-import { ImageData, getN00unData, getRandomN00unSeed } from '@vrbs/assets';
+import { ImageData, getVrbData, getRandomVrbSeed } from '@vrbs/assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@vrbs/sdk';
 import InfoIcon from '../../assets/icons/Info.svg';
-import N00un from '../../components/N00un';
-import N00unModal from './N00unModal';
+import Vrb from '../../components/Vrb';
+import VrbModal from './VrbModal';
 import { PNG } from 'pngjs';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
@@ -34,8 +34,8 @@ interface PendingCustomTrait {
 
 const vrbsProtocolLink = (
   <Link
-    text={<Trans>N00uns Protocol</Trans>}
-    url="https://www.notion.so/N00un-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
+    text={<Trans>Vrbs Protocol</Trans>}
+    url="https://www.notion.so/Vrb-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
     leavesPage={true}
   />
 );
@@ -85,25 +85,25 @@ const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode
 };
 
 const Playground: React.FC = () => {
-  const [n00unSvgs, setN00unSvgs] = useState<string[]>();
+  const [vrbSvgs, setVrbSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
   const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
   const [initLoad, setInitLoad] = useState<boolean>(true);
-  const [displayN00un, setDisplayN00un] = useState<boolean>(false);
-  const [indexOfN00unToDisplay, setIndexOfN00unToDisplay] = useState<number>();
+  const [displayVrb, setDisplayVrb] = useState<boolean>(false);
+  const [indexOfVrbToDisplay, setIndexOfVrbToDisplay] = useState<number>();
   const [selectIndexes, setSelectIndexes] = useState<Record<string, number>>({});
   const [pendingTrait, setPendingTrait] = useState<PendingCustomTrait>();
   const [isPendingTraitValid, setPendingTraitValid] = useState<boolean>();
 
   const customTraitFileRef = useRef<HTMLInputElement>(null);
 
-  const generateN00unSvg = React.useCallback(
+  const generateVrbSvg = React.useCallback(
     (amount: number = 1) => {
       for (let i = 0; i < amount; i++) {
-        const seed = { ...getRandomN00unSeed(), ...modSeed };
-        const { parts, background } = getN00unData(seed);
+        const seed = { ...getRandomVrbSeed(), ...modSeed };
+        const { parts, background } = getVrbData(seed);
         const svg = buildSVG(parts, encoder.data.palette, background);
-        setN00unSvgs(prev => {
+        setVrbSvgs(prev => {
           return prev ? [svg, ...prev] : [svg];
         });
       }
@@ -130,10 +130,10 @@ const Playground: React.FC = () => {
     );
 
     if (initLoad) {
-      generateN00unSvg(8);
+      generateVrbSvg(8);
       setInitLoad(false);
     }
-  }, [generateN00unSvg, initLoad]);
+  }, [generateVrbSvg, initLoad]);
 
   const traitOptions = (trait: Trait) => {
     return Array.from(Array(trait.traitNames.length + 1)).map((_, index) => {
@@ -250,12 +250,12 @@ const Playground: React.FC = () => {
 
   return (
     <>
-      {displayN00un && indexOfN00unToDisplay !== undefined && n00unSvgs && (
-        <N00unModal
+      {displayVrb && indexOfVrbToDisplay !== undefined && vrbSvgs && (
+        <VrbModal
           onDismiss={() => {
-            setDisplayN00un(false);
+            setDisplayVrb(false);
           }}
-          svg={n00unSvgs[indexOfN00unToDisplay]}
+          svg={vrbSvgs[indexOfVrbToDisplay]}
         />
       )}
 
@@ -270,8 +270,8 @@ const Playground: React.FC = () => {
             </h1>
             <p>
               <Trans>
-                The playground was built using the {vrbsProtocolLink}. N00un's traits are
-                determined by the N00un Seed. The seed was generated using {vrbsAssetsLink} and
+                The playground was built using the {vrbsProtocolLink}. Vrb's traits are
+                determined by the Vrb Seed. The seed was generated using {vrbsAssetsLink} and
                 rendered using the {vrbsSDKLink}.
               </Trans>
             </p>
@@ -282,11 +282,11 @@ const Playground: React.FC = () => {
             <Col lg={12}>
               <Button
                 onClick={() => {
-                  generateN00unSvg();
+                  generateVrbSvg();
                 }}
                 className={classes.primaryBtn}
               >
-                <Trans>Generate N00uns</Trans>
+                <Trans>Generate Vrbs</Trans>
               </Button>
             </Col>
             <Row>
@@ -372,31 +372,31 @@ const Playground: React.FC = () => {
                 </Button>
               </>
             )}
-            <p className={classes.n00unYearsFooter}>
+            <p className={classes.vrbYearsFooter}>
               <Trans>
                 You've generated{' '}
-                {i18n.number(parseInt(n00unSvgs ? (n00unSvgs.length / 365).toFixed(2) : '0'))} years
-                worth of N00uns
+                {i18n.number(parseInt(vrbSvgs ? (vrbSvgs.length / 365).toFixed(2) : '0'))} years
+                worth of Vrbs
               </Trans>
             </p>
           </Col>
           <Col lg={9}>
             <Row>
-              {n00unSvgs &&
-                n00unSvgs.map((svg, i) => {
+              {vrbSvgs &&
+                vrbSvgs.map((svg, i) => {
                   return (
                     <Col xs={4} lg={3} key={i}>
                       <div
                         onClick={() => {
-                          setIndexOfN00unToDisplay(i);
-                          setDisplayN00un(true);
+                          setIndexOfVrbToDisplay(i);
+                          setDisplayVrb(true);
                         }}
                       >
-                        <N00un
+                        <Vrb
                           imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
-                          alt="n00un"
-                          className={classes.n00unImg}
-                          wrapperClassName={classes.n00unWrapper}
+                          alt="vrb"
+                          className={classes.vrbImg}
+                          wrapperClassName={classes.vrbWrapper}
                         />
                       </div>
                     </Col>

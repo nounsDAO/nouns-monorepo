@@ -3,16 +3,16 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
-import { N00unsDescriptorV2 } from '../../../contracts/N00unsDescriptorV2.sol';
+import { DescriptorV2 } from '../../../contracts/DescriptorV2.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
-import { N00unsArt } from '../../../contracts/N00unsArt.sol';
-import { N00unsDAOExecutor } from '../../../contracts/governance/N00unsDAOExecutor.sol';
-import { N00unsDAOLogicV1 } from '../../../contracts/governance/N00unsDAOLogicV1.sol';
+import { Art } from '../../../contracts/Art.sol';
+import { DAOExecutor } from '../../../contracts/governance/DAOExecutor.sol';
+import { DAOLogicV1 } from '../../../contracts/governance/DAOLogicV1.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { N00unsDescriptor } from '../../../contracts/N00unsDescriptor.sol';
-import { N00unsSeeder } from '../../../contracts/N00unsSeeder.sol';
-import { N00unsToken } from '../../../contracts/N00unsToken.sol';
-import { N00unsDAOProxy } from '../../../contracts/governance/N00unsDAOProxy.sol';
+import { Descriptor } from '../../../contracts/Descriptor.sol';
+import { Seeder } from '../../../contracts/Seeder.sol';
+import { VrbsToken } from '../../../contracts/VrbsToken.sol';
+import { DAOProxy } from '../../../contracts/governance/DAOProxy.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
@@ -22,43 +22,43 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
 
-    function _deployAndPopulateDescriptor() internal returns (N00unsDescriptor) {
-        N00unsDescriptor descriptor = new N00unsDescriptor();
+    function _deployAndPopulateDescriptor() internal returns (Descriptor) {
+        Descriptor descriptor = new Descriptor();
         _populateDescriptor(descriptor);
         return descriptor;
     }
 
-    function _deployAndPopulateV2() internal returns (N00unsDescriptorV2) {
-        N00unsDescriptorV2 descriptorV2 = _deployDescriptorV2();
+    function _deployAndPopulateV2() internal returns (DescriptorV2) {
+        DescriptorV2 descriptorV2 = _deployDescriptorV2();
         _populateDescriptorV2(descriptorV2);
         return descriptorV2;
     }
 
-    function _deployDescriptorV2() internal returns (N00unsDescriptorV2) {
+    function _deployDescriptorV2() internal returns (DescriptorV2) {
         SVGRenderer renderer = new SVGRenderer();
         Inflator inflator = new Inflator();
-        N00unsDescriptorV2 descriptorV2 = new N00unsDescriptorV2(N00unsArt(address(0)), renderer);
-        N00unsArt art = new N00unsArt(address(descriptorV2), inflator);
+        DescriptorV2 descriptorV2 = new DescriptorV2(Art(address(0)), renderer);
+        Art art = new Art(address(descriptorV2), inflator);
         descriptorV2.setArt(art);
         return descriptorV2;
     }
 
     function _deployTokenAndDAOAndPopulateDescriptor(
-        address n00undersDAO,
+        address vrbsDAO,
         address vetoer,
         address minter
     ) internal returns (address, address) {
         IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
 
-        N00unsDAOExecutor timelock = new N00unsDAOExecutor(address(1), TIMELOCK_DELAY);
-        N00unsDescriptor descriptor = new N00unsDescriptor();
-        N00unsToken vrbsToken = new N00unsToken(n00undersDAO, minter, descriptor, new N00unsSeeder(), proxyRegistry);
-        N00unsDAOProxy proxy = new N00unsDAOProxy(
+        DAOExecutor timelock = new DAOExecutor(address(1), TIMELOCK_DELAY);
+        Descriptor descriptor = new Descriptor();
+        VrbsToken vrbsToken = new VrbsToken(vrbsDAO, minter, descriptor, new Seeder(), proxyRegistry);
+        DAOProxy proxy = new DAOProxy(
             address(timelock),
             address(vrbsToken),
             vetoer,
             address(timelock),
-            address(new N00unsDAOLogicV1()),
+            address(new DAOLogicV1()),
             VOTING_PERIOD,
             VOTING_DELAY,
             PROPOSAL_THRESHOLD,

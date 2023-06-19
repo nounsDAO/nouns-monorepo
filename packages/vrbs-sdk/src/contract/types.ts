@@ -1,9 +1,9 @@
 import {
-  N00unsTokenFactory,
-  N00unsAuctionHouseFactory,
-  N00unsDescriptorFactory,
-  N00unsSeederFactory,
-  N00unsDaoLogicV2Factory,
+  VrbsTokenFactory,
+  AuctionHouseFactory,
+  DescriptorFactory,
+  SeederFactory,
+  DaoLogicV2Factory,
 } from '@vrbs/contracts';
 
 export interface ContractAddresses {
@@ -21,11 +21,11 @@ export interface ContractAddresses {
 }
 
 export interface Contracts {
-  vrbsTokenContract: ReturnType<typeof N00unsTokenFactory.connect>;
-  vrbsAuctionHouseContract: ReturnType<typeof N00unsAuctionHouseFactory.connect>;
-  vrbsDescriptorContract: ReturnType<typeof N00unsDescriptorFactory.connect>;
-  vrbsSeederContract: ReturnType<typeof N00unsSeederFactory.connect>;
-  vrbsDaoContract: ReturnType<typeof N00unsDaoLogicV2Factory.connect>;
+  vrbsTokenContract: ReturnType<typeof VrbsTokenFactory.connect>;
+  vrbsAuctionHouseContract: ReturnType<typeof AuctionHouseFactory.connect>;
+  vrbsDescriptorContract: ReturnType<typeof DescriptorFactory.connect>;
+  vrbsSeederContract: ReturnType<typeof SeederFactory.connect>;
+  vrbsDaoContract: ReturnType<typeof DaoLogicV2Factory.connect>;
 }
 
 export enum ChainId {

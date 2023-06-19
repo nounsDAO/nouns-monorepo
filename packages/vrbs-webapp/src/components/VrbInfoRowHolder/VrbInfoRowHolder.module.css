@@ -1,0 +1,50 @@
+.vrbHolderEtherscanLinkCool {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  color: var(--brand-color-blue);
+  margin-left: 5px;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.vrbHolderEtherscanLinkWarm {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  color: var(--brand-color-red);
+  margin-left: 5px;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.vrbHolderEtherscanLinkWarm:hover {
+  color: var(--brand-color-red) !important;
+  filter: brightness(110%);
+}
+
+.vrbHolderEtherscanLinkCool:hover {
+  color: var(--brand-color-blue) !important;
+  filter: brightness(110%);
+}
+
+.vrbHolderInfoContainer {
+  display: inline;
+  width: 350px;
+  height: 35px;
+}
+
+.vrbHolderLoading {
+  opacity: 0.5;
+}
+
+.linkIconSpan {
+  margin-left: 5px;
+}
+
+.linkIcon {
+  margin-bottom: 5px;
+}
+
+.heartIcon {
+  margin-bottom: 4px;
+  margin-right: 7px;
+}

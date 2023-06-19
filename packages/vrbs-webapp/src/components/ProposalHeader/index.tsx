@@ -188,7 +188,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
         <Alert variant="success" className={classes.voterIneligibleAlert}>
           <Trans>
-            Only N00uns you owned or were delegated to you before{' '}
+            Only Vrbs you owned or were delegated to you before{' '}
             {i18n.date(new Date(proposalCreationTimestamp * 1000), {
               dateStyle: 'long',
               timeStyle: 'long',

@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import config from '../../config';
 import { Proposal, useDynamicQuorumProps } from '../../wrappers/vrbsDao';
-import { totalN00unSupplyAtPropSnapshot } from '../../wrappers/subgraph';
+import { totalVrbSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
 import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
@@ -28,7 +28,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   minQuorumBps: number;
   maxQuorumBps: number;
   quorumCoefficent: number;
-  totalN00unSupply: number;
+  totalVrbSupply: number;
   onDismiss: () => void;
   currentQuorum?: number;
 }> = props => {
@@ -40,7 +40,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     quorumCoefficent,
     minQuorumBps,
     maxQuorumBps,
-    totalN00unSupply,
+    totalVrbSupply,
     currentQuorum,
   } = props;
 
@@ -55,11 +55,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   };
 
   const calcPlotFrac = () => {
-    if (Math.floor((linearToConstantCrossoverBPS * totalN00unSupply) / 10_000) <= 0) {
+    if (Math.floor((linearToConstantCrossoverBPS * totalVrbSupply) / 10_000) <= 0) {
       return 0;
     }
     return (
-      (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalN00unSupply) / 10_000)) *
+      (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalVrbSupply) / 10_000)) *
       PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace
     );
   };
@@ -89,7 +89,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
                 function of the number of Against votes a proposal has received. It increases
-                linearly as a function of the % of N00uns voting against a prop, varying between Min
+                linearly as a function of the % of Vrbs voting against a prop, varying between Min
                 Threshold and Max Threshold.
               </Trans>
             ) : (
@@ -104,21 +104,21 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           {/* Mobile - no graph content */}
           <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
-              <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalN00unSupply) / 10_000)}{' '}
-              N00uns
+              <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalVrbSupply) / 10_000)}{' '}
+              Vrbs
             </div>
 
             <div className={classes.mobileQuorumInfo}>
               <span>Current Threshold:</span>{' '}
               {Math.floor(
-                (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalN00unSupply) / 10_000,
+                (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalVrbSupply) / 10_000,
               )}{' '}
-              N00uns
+              Vrbs
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Max Threshold:</span> {Math.floor((maxQuorumBps * totalN00unSupply) / 10_000)}{' '}
-              N00uns
+              <span>Max Threshold:</span> {Math.floor((maxQuorumBps * totalVrbSupply) / 10_000)}{' '}
+              Vrbs
             </div>
           </div>
 
@@ -127,7 +127,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             <div className={classes.graphWrapper}>
               {/* Y-Axis label */}
               <div className={classes.yAxisText}>
-                <Trans>Required % of N00uns to Pass</Trans>
+                <Trans>Required % of Vrbs to Pass</Trans>
               </div>
 
               {/* Inner graph container */}
@@ -171,7 +171,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={470 + 10}
                       y={PLOTTING_CONSTANTS.height - 10}
                     >
-                      {linearToConstantCrossoverBPS / 100}% of N00uns Against
+                      {linearToConstantCrossoverBPS / 100}% of Vrbs Against
                     </text>
                   )}
                   {/* Vertical Line indicating against BPS */}
@@ -194,30 +194,30 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
-                    Max Threshold: {Math.floor((maxQuorumBps * totalN00unSupply) / 10_000)} N00uns{' '}
+                    Max Threshold: {Math.floor((maxQuorumBps * totalVrbSupply) / 10_000)} Vrbs{' '}
                     <tspan fill="var(--brand-gray-light-text)">
-                      ({maxQuorumBps / 100}% of N00uns)
+                      ({maxQuorumBps / 100}% of Vrbs)
                     </tspan>
                   </text>
                   {Math.abs(y - 10 - PLOTTING_CONSTANTS.minQHeightPlotSpace) > 100 ? (
                     <>
                       <text x="20" y="280">
-                        Min Threshold: {Math.floor((minQuorumBps * totalN00unSupply) / 10_000)}{' '}
-                        {Math.floor((minQuorumBps * totalN00unSupply) / 10_000) === 1
-                          ? 'N00un'
-                          : 'N00uns'}{' '}
+                        Min Threshold: {Math.floor((minQuorumBps * totalVrbSupply) / 10_000)}{' '}
+                        {Math.floor((minQuorumBps * totalVrbSupply) / 10_000) === 1
+                          ? 'Vrb'
+                          : 'Vrbs'}{' '}
                         <tspan fill="var(--brand-gray-light-text)">
-                          ({minQuorumBps / 100}% of N00uns)
+                          ({minQuorumBps / 100}% of Vrbs)
                         </tspan>
                       </text>
                     </>
                   ) : (
                     <>
                       <text x="550" y="280">
-                        Min Thresold: {Math.floor((minQuorumBps * totalN00unSupply) / 10_000)}{' '}
-                        N00uns{' '}
+                        Min Thresold: {Math.floor((minQuorumBps * totalVrbSupply) / 10_000)}{' '}
+                        Vrbs{' '}
                         <tspan fill="var(--brand-gray-light-text)">
-                          ({minQuorumBps / 100}% of N00uns)
+                          ({minQuorumBps / 100}% of Vrbs)
                         </tspan>
                       </text>
                     </>
@@ -225,7 +225,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   {againstVotesBps >= 400 && againstVotesAbs >= maxQuorumBps && (
                     <text x={10} y={y - 10} fill="var(--brand-gray-light-text)">
                       {Math.floor(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)}% of
-                      N00uns
+                      Vrbs
                     </text>
                   )}
                   {againstVotesBps > 4000 ? (
@@ -235,7 +235,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     >
                       Current Threshold: {currentQuorum}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'N00un' : 'N00uns'} Currently
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Vrb' : 'Vrbs'} Currently
                         Against)
                       </tspan>
                     </text>
@@ -246,14 +246,14 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     >
                       Current Threshold: {currentQuorum}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'N00un' : 'N00uns'} Currently
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Vrb' : 'Vrbs'} Currently
                         Against)
                       </tspan>
                     </text>
                   )}
                   {againstVotesAbs > 0 && (
                     <text x={x + (x < 712 ? 10 : -110)} y={310} fill="var(--brand-gray-light-text)">
-                      {Math.floor(againstVotesBps / 100)}% of N00uns
+                      {Math.floor(againstVotesBps / 100)}% of Vrbs
                     </text>
                   )}
                   {againstVotesBps >= 0.1 * maxQuorumBps && (
@@ -267,7 +267,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             </div>
 
             <div className={classes.xAxisText}>
-              <Trans>% of N00uns Currently Against</Trans>
+              <Trans>% of Vrbs Currently Against</Trans>
             </div>
           </div>
 
@@ -292,7 +292,7 @@ const DynamicQuorumInfoModal: React.FC<{
   const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
   const { data, loading, error } = useQuery(
-    totalN00unSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
+    totalVrbSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
   );
 
   const dynamicQuorumProps = useDynamicQuorumProps(
@@ -331,7 +331,7 @@ const DynamicQuorumInfoModal: React.FC<{
           }
           onDismiss={onDismiss}
           proposal={proposal}
-          totalN00unSupply={data.proposals[0].totalSupply}
+          totalVrbSupply={data.proposals[0].totalSupply}
           currentQuorum={currentQuorum}
         />,
         document.getElementById('overlay-root')!,

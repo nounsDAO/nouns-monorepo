@@ -3,27 +3,27 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { N00unsToken } from '../../contracts/N00unsToken.sol';
-import { N00unsDescriptor } from '../../contracts/N00unsDescriptor.sol';
-import { N00unsDescriptorV2 } from '../../contracts/N00unsDescriptorV2.sol';
-import { N00unsSeeder } from '../../contracts/N00unsSeeder.sol';
+import { VrbsToken } from '../../contracts/VrbsToken.sol';
+import { Descriptor } from '../../contracts/Descriptor.sol';
+import { DescriptorV2 } from '../../contracts/DescriptorV2.sol';
+import { Seeder } from '../../contracts/Seeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
-import { IN00unsSeeder } from '../../contracts/interfaces/IN00unsSeeder.sol';
+import { ISeeder } from '../../contracts/interfaces/ISeeder.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 
 contract DescriptorUpgradeTest is Test, DeployUtils {
-    N00unsToken vrbsToken;
+    VrbsToken vrbsToken;
     address minter = address(2);
-    N00unsDescriptor descriptor;
-    N00unsDescriptorV2 descriptorV2;
+    Descriptor descriptor;
+    DescriptorV2 descriptorV2;
 
     function setUp() public {
         IProxyRegistry proxyRegistry = IProxyRegistry(address(0));
-        address n00undersDAO = address(1);
+        address vrbsDAO = address(1);
 
-        descriptor = new N00unsDescriptor();
+        descriptor = new Descriptor();
         _populateDescriptor(descriptor);
-        vrbsToken = new N00unsToken(n00undersDAO, minter, descriptor, new N00unsSeeder(), proxyRegistry);
+        vrbsToken = new VrbsToken(vrbsDAO, minter, descriptor, new Seeder(), proxyRegistry);
 
         descriptorV2 = _deployAndPopulateV2();
     }
@@ -62,11 +62,11 @@ contract DescriptorUpgradeTest is Test, DeployUtils {
 
     /// @dev exports and html file with svgs to inspect manually. quite slow, so ignored by default
     function ignore_testSaveHtmlFileWithSvgs() public {
-        N00unsDescriptorV2 d = _deployAndPopulateV2();
+        DescriptorV2 d = _deployAndPopulateV2();
         uint256 max = d.headCount();
         for (uint256 i = 0; i < max; i++) {
             string memory svg = d.generateSVGImage(
-                IN00unsSeeder.Seed({
+                ISeeder.Seed({
                     background: uint48(i % d.backgroundCount()),
                     body: uint48(i % d.bodyCount()),
                     accessory: uint48(i % d.accessoryCount()),

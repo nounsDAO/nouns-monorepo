@@ -1,7 +1,7 @@
 import { config } from './config';
 import { Contract, providers } from 'ethers';
 import { NFTStorage } from 'nft.storage';
-import { N00unsTokenABI } from '@vrbs/contracts';
+import { VrbsTokenABI } from '@vrbs/contracts';
 import Redis from 'ioredis';
 
 /**
@@ -20,10 +20,10 @@ export const redis = new Redis(config.redisPort, config.redisHost);
 export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
 
 /**
- * N00uns ERC721 Token Contract
+ * Vrbs ERC721 Token Contract
  */
 export const vrbsTokenContract = new Contract(
   config.vrbsTokenAddress,
-  N00unsTokenABI,
+  VrbsTokenABI,
   jsonRpcProvider,
 );

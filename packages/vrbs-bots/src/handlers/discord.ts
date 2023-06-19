@@ -5,7 +5,7 @@ import {
   formatNewGovernanceVoteText,
   formatProposalAtRiskOfExpiryText,
   formatUpdatedGovernanceProposalStatusText,
-  getN00unPngBuffer,
+  getVrbPngBuffer,
 } from '../utils';
 import { Bid, IAuctionLifecycleHandler, Proposal, Vote } from '../types';
 
@@ -13,19 +13,19 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
   constructor(public readonly discordClients: Discord.WebhookClient[]) {}
 
   /**
-   * Send Discord message with an image of the current n00un alerting users
+   * Send Discord message with an image of the current vrb alerting users
    * @param auctionId The current auction ID
    */
   async handleNewAuction(auctionId: number) {
-    const png = await getN00unPngBuffer(auctionId.toString());
+    const png = await getVrbPngBuffer(auctionId.toString());
     if (png) {
       const attachmentName = `Auction-${auctionId}.png`;
       const attachment = new Discord.MessageAttachment(png, attachmentName);
       const message = new Discord.MessageEmbed()
         .setTitle(`New Auction Discovered`)
-        .setDescription(`An auction has started for N00un #${auctionId}`)
+        .setDescription(`An auction has started for Vrb #${auctionId}`)
         .setURL('https://vrbs.wtf')
-        .addField('N00un ID', auctionId, true)
+        .addField('Vrb ID', auctionId, true)
         .attachFiles([attachment])
         .setImage(`attachment://${attachmentName}`)
         .setTimestamp();
@@ -36,7 +36,7 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
 
   /**
    * Send Discord message with new bid event data
-   * @param auctionId N00un auction number
+   * @param auctionId Vrb auction number
    * @param bid Bid amount and ID
    */
   async handleNewBid(auctionId: number, bid: Bid) {

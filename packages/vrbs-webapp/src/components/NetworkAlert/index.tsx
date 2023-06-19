@@ -32,7 +32,7 @@ const NetworkAlert = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            N00uns DAO auctions require you to switch over {networkName()} to be able to
+            Vrbs DAO auctions require you to switch over {networkName()} to be able to
             participate.
           </p>
           <p>

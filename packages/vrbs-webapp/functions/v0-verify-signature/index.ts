@@ -2,7 +2,7 @@ import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda';
 import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
-import { isN00unDelegate, isN00unOwner, vrbsQuery } from '../theGraph';
+import { isVrbDelegate, isVrbOwner, vrbsQuery } from '../theGraph';
 
 interface ErrorReason {
   error: string;
@@ -38,10 +38,10 @@ const handler: Handler = async (event, context) => {
   // check for ownership and delegation
   let participantData = {};
   if (event.queryStringParameters.fetchParticipation && validSignature) {
-    const normalizedN00uns = await vrbsQuery();
+    const normalizedVrbs = await vrbsQuery();
     participantData = {
-      isN00unDelegate: isN00unDelegate(signer, normalizedN00uns),
-      isN00unOwner: isN00unOwner(signer, normalizedN00uns),
+      isVrbDelegate: isVrbDelegate(signer, normalizedVrbs),
+      isVrbOwner: isVrbOwner(signer, normalizedVrbs),
     };
   }
 

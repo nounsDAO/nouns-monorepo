@@ -30,9 +30,9 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
 
           <p className={classes.copy}>
             <Trans>
-              N00un votes are not transferable, but are{' '}
+              Vrb votes are not transferable, but are{' '}
               <span className={classes.emph}>delegatable</span>, which means you can assign your
-              vote to someone else as long as you own your N00un.
+              vote to someone else as long as you own your Vrb.
             </Trans>
           </p>
         </div>

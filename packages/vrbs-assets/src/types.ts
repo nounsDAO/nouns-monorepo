@@ -1,4 +1,4 @@
-export interface N00unSeed {
+export interface VrbSeed {
   background: number;
   body: number;
   accessory: number;
@@ -11,7 +11,7 @@ export interface EncodedImage {
   data: string;
 }
 
-export interface N00unData {
+export interface VrbData {
   parts: EncodedImage[];
   background: string;
 }

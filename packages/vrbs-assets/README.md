@@ -10,7 +10,7 @@ yarn
 
 ## Usage
 
-**Access N00un RLE Image Data**
+**Access Vrb RLE Image Data**
 
 ```ts
 import { ImageData } from '@vrbs/assets';
@@ -19,10 +19,10 @@ const { bgcolors, palette, images } = ImageData;
 const { bodies, accessories, heads, glasses } = images;
 ```
 
-**Get N00un Part & Background Data**
+**Get Vrb Part & Background Data**
 
 ```ts
-import { getN00unData } from '@vrbs/assets';
+import { getVrbData } from '@vrbs/assets';
 
 const seed = {
   background: 0,
@@ -31,16 +31,16 @@ const seed = {
   head: 71,
   glasses: 2,
 };
-const { parts, background } = getN00unData(seed);
+const { parts, background } = getVrbData(seed);
 ```
 
-**Emulate `N00unSeeder.sol` Pseudorandom seed generation**
+**Emulate `VrbSeeder.sol` Pseudorandom seed generation**
 
 ```ts
-import { getN00unSeedFromBlockHash } from '@vrbs/assets';
+import { getVrbSeedFromBlockHash } from '@vrbs/assets';
 
 const blockHash = '0x5014101691e81d79a2eba711e698118e1a90c9be7acb2f40d7f200134ee53e01';
-const n00unId = 116;
+const vrbId = 116;
 
 /**
  {
@@ -51,24 +51,24 @@ const n00unId = 116;
     glasses: 15
   }
 */
-const seed = getN00unSeedFromBlockHash(n00unId, blockHash);
+const seed = getVrbSeedFromBlockHash(vrbId, blockHash);
 ```
 
 ## Examples
 
-**Almost off-chain N00un Crystal Ball**
-Generate a N00un using only a block hash, which saves calls to `N00unSeeder` and `N00unDescriptor` contracts. This can be used for a faster crystal ball.
+**Almost off-chain Vrb Crystal Ball**
+Generate a Vrb using only a block hash, which saves calls to `VrbSeeder` and `VrbDescriptor` contracts. This can be used for a faster crystal ball.
 
 ```ts
 /**
  * For you to implement:
    - hook up providers with ether/web3.js
-   - get currently auctioned N00un Id from the N00unsAuctionHouse contract
-   - add 1 to the current N00un Id to get the next N00un Id (named `nextN00unId` below)
+   - get currently auctioned Vrb Id from the AuctionHouse contract
+   - add 1 to the current Vrb Id to get the next Vrb Id (named `nextVrbId` below)
    - get the latest block hash from your provider (named `latestBlockHash` below)
 */
 
-import { ImageData, getN00unSeedFromBlockHash, getN00unData } from '@vrbs/assets';
+import { ImageData, getVrbSeedFromBlockHash, getVrbData } from '@vrbs/assets';
 import { buildSVG } from '@vrbs/sdk';
 const { palette } = ImageData; // Used with `buildSVG``
 
@@ -82,7 +82,7 @@ const { palette } = ImageData; // Used with `buildSVG``
       glasses: 15
     }
 */
-const seed = getN00unSeedFromBlockHash(nextN00unId, latestBlockHash);
+const seed = getVrbSeedFromBlockHash(nextVrbId, latestBlockHash);
 
 /** 
  * OUTPUT:
@@ -93,7 +93,7 @@ const seed = getN00unSeedFromBlockHash(nextN00unId, latestBlockHash);
          data: '...'
        },
        {
-         filename: 'accessory-txt-n00un-multicolor',
+         filename: 'accessory-txt-vrb-multicolor',
          data: '...'
        },
        {
@@ -108,13 +108,13 @@ const seed = getN00unSeedFromBlockHash(nextN00unId, latestBlockHash);
      background: 'e1d7d5'
    }
 */
-const { parts, background } = getN00unData(seed);
+const { parts, background } = getVrbData(seed);
 
 const svgBinary = buildSVG(parts, palette, background);
 const svgBase64 = btoa(svgBinary);
 ```
 
-The N00un SVG can then be displayed. Here's a dummy example using React
+The Vrb SVG can then be displayed. Here's a dummy example using React
 
 ```ts
 function SVG({ svgBase64 }) {

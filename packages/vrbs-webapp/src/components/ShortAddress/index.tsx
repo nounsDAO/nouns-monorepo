@@ -1,5 +1,5 @@
 import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { resolveN00unContractAddress } from '../../utils/resolveN00unsContractAddress';
+import { resolveVrbContractAddress } from '../../utils/resolveVrbsContractAddress';
 import { useEthers } from '@usedapp/core';
 import classes from './ShortAddress.module.css';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
@@ -12,7 +12,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
   const { address, avatar, size = 24 } = props;
   const { library: provider } = useEthers();
 
-  const ens = useReverseENSLookUp(address) || resolveN00unContractAddress(address);
+  const ens = useReverseENSLookUp(address) || resolveVrbContractAddress(address);
   const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
   const shortAddress = useShortAddress(address);
 

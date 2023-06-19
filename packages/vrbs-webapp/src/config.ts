@@ -1,5 +1,5 @@
 import {
-  ContractAddresses as N00unsContractAddresses,
+  ContractAddresses as VrbsContractAddresses,
   getContractAddressesForChainOrThrow,
 } from '@vrbs/sdk';
 import { ChainId } from '@usedapp/core';
@@ -12,7 +12,7 @@ interface ExternalContractAddresses {
   tokenBuyer: string | undefined;
 }
 
-export type ContractAddresses = N00unsContractAddresses & ExternalContractAddresses;
+export type ContractAddresses = VrbsContractAddresses & ExternalContractAddresses;
 
 interface AppConfig {
   jsonRpcUri: string;
@@ -150,7 +150,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
 };
 
 const getAddresses = (): ContractAddresses => {
-  let vrbsAddresses = {} as N00unsContractAddresses;
+  let vrbsAddresses = {} as VrbsContractAddresses;
   try {
     vrbsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
   } catch {}

@@ -2,8 +2,8 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { N00unsDescriptor } from '../../../contracts/N00unsDescriptor.sol';
-import { N00unsDescriptorV2 } from '../../../contracts/N00unsDescriptorV2.sol';
+import { Descriptor } from '../../../contracts/Descriptor.sol';
+import { DescriptorV2 } from '../../../contracts/DescriptorV2.sol';
 import { Constants } from './Constants.sol';
 import { strings } from '../lib/strings.sol';
 
@@ -11,7 +11,7 @@ abstract contract DescriptorHelpers is Test, Constants {
     using strings for string;
     using strings for strings.slice;
 
-    function _populateDescriptor(N00unsDescriptor descriptor) internal {
+    function _populateDescriptor(Descriptor descriptor) internal {
         // created with `npx hardhat descriptor-v1-export-abi`
         string memory filename = './test/foundry/files/descriptor_v1/image-data.abi';
         bytes memory content = readFile(filename);
@@ -32,7 +32,7 @@ abstract contract DescriptorHelpers is Test, Constants {
         descriptor.addManyGlasses(glasses);
     }
 
-    function _populateDescriptorV2(N00unsDescriptorV2 descriptor) internal {
+    function _populateDescriptorV2(DescriptorV2 descriptor) internal {
         // created with `npx hardhat descriptor-art-to-console`
         (bytes memory palette, string[] memory backgrounds) = abi.decode(
             readFile('./test/foundry/files/descriptor_v2/paletteAndBackgrounds.abi'),

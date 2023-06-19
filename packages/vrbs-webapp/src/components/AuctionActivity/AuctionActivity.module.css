@@ -47,7 +47,7 @@ h4 {
   align-self: flex-start;
 }
 
-.modalHeaderN00unImgWrapper {
+.modalHeaderVrbImgWrapper {
   width: 150px;
   height: 150px;
 }
@@ -111,13 +111,13 @@ h4 {
     padding-left: 0rem;
   }
 
-  .fomoN00unsLink {
+  .fomoVrbsLink {
     padding-left: 14px;
   }
 }
 
 @media (max-width: 400px) {
-  .fomoN00unsLink {
+  .fomoVrbsLink {
     font-size: 14px;
   }
 }
@@ -130,18 +130,18 @@ h4 {
   }
 }
 
-.fomoN00unsLink {
+.fomoVrbsLink {
   margin-top: 0rem;
   margin-bottom: 1rem;
   transition: 0.2s ease-in-out;
 }
 
-.fomoN00unsLink svg {
+.fomoVrbsLink svg {
   opacity: 0.6;
 }
 
-.fomoN00unsLink a,
-.fomoN00unsLink:active a {
+.fomoVrbsLink a,
+.fomoVrbsLink:active a {
   font-family: 'Retro Gaming';
   font-weight: 500;
   padding-left: 0.5rem;
@@ -150,8 +150,8 @@ h4 {
   color: rgb(95, 95, 95);
 }
 
-.fomoN00unsLink:hover,
-.fomoN00unsLink:hover a {
+.fomoVrbsLink:hover,
+.fomoVrbsLink:hover a {
   text-decoration: none;
   color: black;
   opacity: 1;

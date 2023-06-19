@@ -2,38 +2,38 @@ import React from 'react';
 import { Collapse } from 'react-bootstrap';
 import {
   DelegationEvent,
-  N00unEventType,
-  N00unProfileEvent,
-  N00unWinEvent,
+  VrbEventType,
+  VrbProfileEvent,
+  WinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/vrbsActivity';
-import MobileDelegationEvent from '../profileEvent/event/MobileDelegationEvent';
-import MobileN00unWinEvent from '../profileEvent/event/MobileN00unWinEvent';
-import MobileProposalVoteEvent from '../profileEvent/event/MobileProposalVoteEvent';
-import MobileTransferEvent from '../profileEvent/event/MobileTransferEvent';
+import MobileDelegationEvent from '../ProfileEvent/event/MobileDelegationEvent';
+import MobileWinEvent from '../ProfileEvent/event/MobileWinEvent';
+import MobileProposalVoteEvent from '../ProfileEvent/event/MobileProposalVoteEvent';
+import MobileTransferEvent from '../ProfileEvent/event/MobileTransferEvent';
 
 interface MobileProfileActivityFeedProps {
-  events: N00unProfileEvent[];
+  events: VrbProfileEvent[];
   aboveFoldEventCount: number;
   isExpanded: boolean;
 }
 
-const getComponentFromEvent = (event: N00unProfileEvent, key: number) => {
-  if (event.eventType === N00unEventType.PROPOSAL_VOTE) {
+const getComponentFromEvent = (event: VrbProfileEvent, key: number) => {
+  if (event.eventType === VrbEventType.PROPOSAL_VOTE) {
     return <MobileProposalVoteEvent event={event.payload as ProposalVoteEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.DELEGATION) {
+  if (event.eventType === VrbEventType.DELEGATION) {
     return <MobileDelegationEvent event={event.payload as DelegationEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.TRANSFER) {
+  if (event.eventType === VrbEventType.TRANSFER) {
     return <MobileTransferEvent event={event.payload as TransferEvent} key={key} />;
   }
 
-  if (event.eventType === N00unEventType.AUCTION_WIN) {
-    return <MobileN00unWinEvent event={event.payload as N00unWinEvent} key={key} />;
+  if (event.eventType === VrbEventType.AUCTION_WIN) {
+    return <MobileWinEvent event={event.payload as WinEvent} key={key} />;
   }
 };
 
@@ -45,7 +45,7 @@ const MobileProfileActivityFeed: React.FC<MobileProfileActivityFeedProps> = prop
       {events
         .slice(0)
         .slice(0, aboveFoldEventCount)
-        .map((event: N00unProfileEvent, i: number) => {
+        .map((event: VrbProfileEvent, i: number) => {
           return getComponentFromEvent(event, i);
         })}
       <Collapse in={isExpanded}>
@@ -53,7 +53,7 @@ const MobileProfileActivityFeed: React.FC<MobileProfileActivityFeedProps> = prop
           {events
             .slice(0)
             .slice(aboveFoldEventCount, events.length)
-            .map((event: N00unProfileEvent, i: number) => {
+            .map((event: VrbProfileEvent, i: number) => {
               return getComponentFromEvent(event, i);
             })}
         </>

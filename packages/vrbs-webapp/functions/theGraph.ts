@@ -16,7 +16,7 @@ export interface Seed {
   glasses: number;
 }
 
-export interface NormalizedN00un {
+export interface NormalizedVrb {
   id: number;
   owner: string;
   delegatedTo: null | string;
@@ -64,31 +64,31 @@ export const normalizeSeed = (seed: any): Seed => ({
   head: Number(seed.head),
 });
 
-export const normalizeN00un = (n00un: any): NormalizedN00un => ({
-  id: Number(n00un.id),
-  owner: n00un.owner.id,
-  delegatedTo: n00un.owner.delegate?.id,
-  votes: normalizeVotes(n00un.votes),
-  seed: normalizeSeed(n00un.seed),
+export const normalizeVrb = (vrb: any): NormalizedVrb => ({
+  id: Number(vrb.id),
+  owner: vrb.owner.id,
+  delegatedTo: vrb.owner.delegate?.id,
+  votes: normalizeVotes(vrb.votes),
+  seed: normalizeSeed(vrb.seed),
 });
 
-export const normalizeN00uns = R.map(normalizeN00un);
+export const normalizeVrbs = R.map(normalizeVrb);
 
 export const normalizeVotes = R.map(normalizeVote);
 
 export const ownerFilterFactory = (address: string) =>
-  R.filter((n00un: any) => bigNumbersEqual(address, n00un.owner));
+  R.filter((vrb: any) => bigNumbersEqual(address, vrb.owner));
 
-export const isN00unOwner = (address: string, vrbs: NormalizedN00un[]) =>
+export const isVrbOwner = (address: string, vrbs: NormalizedVrb[]) =>
   ownerFilterFactory(address)(vrbs).length > 0;
 
 export const delegateFilterFactory = (address: string) =>
-  R.filter((n00un: any) => n00un.delegatedTo && bigNumbersEqual(address, n00un.delegatedTo));
+  R.filter((vrb: any) => vrb.delegatedTo && bigNumbersEqual(address, vrb.delegatedTo));
 
-export const isN00unDelegate = (address: string, vrbs: NormalizedN00un[]) =>
+export const isVrbDelegate = (address: string, vrbs: NormalizedVrb[]) =>
   delegateFilterFactory(address)(vrbs).length > 0;
 
 export const vrbsQuery = async () =>
-  normalizeN00uns(
+  normalizeVrbs(
     (await axios.post(config.app.subgraphApiUri, { query: vrbsGql })).data.data.vrbs,
   );

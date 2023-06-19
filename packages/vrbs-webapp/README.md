@@ -1,6 +1,6 @@
 # @vrbs/webapp
 
-This package contains the source for the N00uns webapp at [vrbs.wtf](https://vrbs.wtf).
+This package contains the source for the Vrbs webapp at [vrbs.wtf](https://vrbs.wtf).
 
 ## Quickstart
 
@@ -48,4 +48,4 @@ Then add an RPC provider to MetaMask to point to your local simnet.
          New RPC URL: http://localhost:8545
          Chain ID: 31337
 
-Select the network and connect to your local N00uns webapp to interact with simnet
+Select the network and connect to your local Vrbs webapp to interact with simnet

@@ -3,28 +3,28 @@ import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 import {
-  N00unsDescriptorV2__factory as N00unsDescriptorV2Factory,
-  N00unsToken,
+  VrbsDescriptorV2__factory as VrbsDescriptorV2Factory,
+  VrbsToken,
 } from '../typechain';
-import { deployN00unsToken, populateDescriptorV2 } from './utils';
+import { deployVrbsToken, populateDescriptorV2 } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('N00unsToken', () => {
-  let vrbsToken: N00unsToken;
+describe('VrbsToken', () => {
+  let vrbsToken: VrbsToken;
   let deployer: SignerWithAddress;
-  let n00undersDAO: SignerWithAddress;
+  let vrbsDAO: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, n00undersDAO] = await ethers.getSigners();
-    vrbsToken = await deployN00unsToken(deployer, n00undersDAO.address, deployer.address);
+    [deployer, vrbsDAO] = await ethers.getSigners();
+    vrbsToken = await deployVrbsToken(deployer, vrbsDAO.address, deployer.address);
 
     const descriptor = await vrbsToken.descriptor();
 
-    await populateDescriptorV2(N00unsDescriptorV2Factory.connect(descriptor, deployer));
+    await populateDescriptorV2(VrbsDescriptorV2Factory.connect(descriptor, deployer));
   });
 
   beforeEach(async () => {
@@ -35,27 +35,27 @@ describe('N00unsToken', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should allow the minter to mint a n00un to itself and a reward n00un to the n00undersDAO', async () => {
+  it('should allow the minter to mint a vrb to itself and a reward vrb to the vrbsDAO', async () => {
     const receipt = await (await vrbsToken.mint()).wait();
 
-    const [, , , n00undersN00unCreated, , , , ownersN00unCreated] = receipt.events || [];
+    const [, , , vrbsVrbCreated, , , , ownersVrbCreated] = receipt.events || [];
 
-    expect(await vrbsToken.ownerOf(0)).to.eq(n00undersDAO.address);
-    expect(n00undersN00unCreated?.event).to.eq('N00unCreated');
-    expect(n00undersN00unCreated?.args?.tokenId).to.eq(0);
-    expect(n00undersN00unCreated?.args?.seed.length).to.equal(5);
+    expect(await vrbsToken.ownerOf(0)).to.eq(vrbsDAO.address);
+    expect(vrbsVrbCreated?.event).to.eq('VrbCreated');
+    expect(vrbsVrbCreated?.args?.tokenId).to.eq(0);
+    expect(vrbsVrbCreated?.args?.seed.length).to.equal(5);
 
     expect(await vrbsToken.ownerOf(1)).to.eq(deployer.address);
-    expect(ownersN00unCreated?.event).to.eq('N00unCreated');
-    expect(ownersN00unCreated?.args?.tokenId).to.eq(1);
-    expect(ownersN00unCreated?.args?.seed.length).to.equal(5);
+    expect(ownersVrbCreated?.event).to.eq('VrbCreated');
+    expect(ownersVrbCreated?.args?.tokenId).to.eq(1);
+    expect(ownersVrbCreated?.args?.seed.length).to.equal(5);
 
-    n00undersN00unCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    vrbsVrbCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
 
-    ownersN00unCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    ownersVrbCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
@@ -66,21 +66,21 @@ describe('N00unsToken', () => {
   });
 
   it('should set name', async () => {
-    expect(await vrbsToken.name()).to.eq('N00uns');
+    expect(await vrbsToken.name()).to.eq('Vrbs');
   });
 
-  it('should allow minter to mint a n00un to itself', async () => {
+  it('should allow minter to mint a vrb to itself', async () => {
     await (await vrbsToken.mint()).wait();
 
     const receipt = await (await vrbsToken.mint()).wait();
-    const n00unCreated = receipt.events?.[3];
+    const vrbCreated = receipt.events?.[3];
 
     expect(await vrbsToken.ownerOf(2)).to.eq(deployer.address);
-    expect(n00unCreated?.event).to.eq('N00unCreated');
-    expect(n00unCreated?.args?.tokenId).to.eq(2);
-    expect(n00unCreated?.args?.seed.length).to.equal(5);
+    expect(vrbCreated?.event).to.eq('VrbCreated');
+    expect(vrbCreated?.args?.tokenId).to.eq(2);
+    expect(vrbCreated?.args?.seed.length).to.equal(5);
 
-    n00unCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    vrbCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
@@ -102,16 +102,16 @@ describe('N00unsToken', () => {
     await expect(tx).to.emit(vrbsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
   });
 
-  it('should allow minter to burn a n00un', async () => {
+  it('should allow minter to burn a vrb', async () => {
     await (await vrbsToken.mint()).wait();
 
     const tx = vrbsToken.burn(0);
-    await expect(tx).to.emit(vrbsToken, 'N00unBurned').withArgs(0);
+    await expect(tx).to.emit(vrbsToken, 'VrbBurned').withArgs(0);
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsN00unErc721Account = vrbsToken.connect(n00undersDAO);
-    await expect(account0AsN00unErc721Account.mint()).to.be.reverted;
+    const account0AsVrbErc721Account = vrbsToken.connect(vrbsDAO);
+    await expect(account0AsVrbErc721Account.mint()).to.be.reverted;
   });
 
   describe('contractURI', async () => {

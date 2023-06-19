@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Auction } from '../../wrappers/vrbsAuction';
-import { StandaloneN00unRoundedCorners } from '../StandaloneN00un';
+import { StandaloneVrbRoundedCorners } from '../StandaloneVrb';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { Bid } from '../../utils/types';
 import BidHistoryModalRow from '../BidHistoryModalRow';
@@ -19,7 +19,7 @@ const BidHistoryModalOverlay: React.FC<{
 }> = props => {
   const { onDismiss, auction } = props;
 
-  const bids = useAuctionBids(auction.n00unId);
+  const bids = useAuctionBids(auction.vrbId);
 
   return (
     <>
@@ -32,15 +32,15 @@ const BidHistoryModalOverlay: React.FC<{
       <div className={classes.modal}>
         <div className={classes.content}>
           <div className={classes.header}>
-            <div className={classes.n00unWrapper}>
-              <StandaloneN00unRoundedCorners n00unId={auction && auction.n00unId} />
+            <div className={classes.vrbWrapper}>
+              <StandaloneVrbRoundedCorners vrbId={auction && auction.vrbId} />
             </div>
 
             <div className={classes.title}>
               <h2>
                 <Trans>Bids for</Trans>
               </h2>
-              <h1>N00un {auction && auction.n00unId.toString()}</h1>
+              <h1>Vrb {auction && auction.vrbId.toString()}</h1>
             </div>
           </div>
           <div className={classes.bidWrapper}>

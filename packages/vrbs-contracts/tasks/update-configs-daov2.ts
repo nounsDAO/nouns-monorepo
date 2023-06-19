@@ -18,16 +18,16 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       const addressesPath = join(sdkPath, 'src/contract/addresses.json');
       const addresses = JSON.parse(readFileSync(addressesPath, 'utf8'));
       addresses[chainId] = {
-        vrbsToken: contracts.N00unsToken.address,
-        vrbsSeeder: contracts.N00unsSeeder2.address,
-        vrbsDescriptor: contracts.N00unsDescriptorV2.address,
+        vrbsToken: contracts.VrbsToken.address,
+        vrbsSeeder: contracts.Seeder2.address,
+        vrbsDescriptor: contracts.DescriptorV2.address,
         nftDescriptor: contracts.NFTDescriptorV2.address,
-        vrbsAuctionHouse: contracts.N00unsAuctionHouse.address,
-        vrbsAuctionHouseProxy: contracts.N00unsAuctionHouseProxy.address,
-        vrbsAuctionHouseProxyAdmin: contracts.N00unsAuctionHouseProxyAdmin.address,
-        vrbsDaoExecutor: contracts.N00unsDAOExecutor.address,
-        vrbsDAOProxy: contracts.N00unsDAOProxyV2.address,
-        vrbsDAOLogicV1: contracts.N00unsDAOLogicV2.address,
+        vrbsAuctionHouse: contracts.AuctionHouse.address,
+        vrbsAuctionHouseProxy: contracts.AuctionHouseProxy.address,
+        vrbsAuctionHouseProxyAdmin: contracts.AuctionHouseProxyAdmin.address,
+        vrbsDaoExecutor: contracts.DAOExecutor.address,
+        vrbsDAOProxy: contracts.DAOProxyV2.address,
+        vrbsDAOLogicV1: contracts.DAOLogicV2.address,
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
       try {
@@ -37,7 +37,7 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       } catch {
         console.log('Failed to re-build `@vrbs/sdk`. Please rebuild manually.');
       }
-      console.log('Addresses written to the N00uns SDK.');
+      console.log('Addresses written to the Vrbs SDK.');
 
       // Generate subgraph config
       const configName = `${network}-fork`;
@@ -45,16 +45,16 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       const subgraphConfig = {
         network,
         vrbsToken: {
-          address: contracts.N00unsToken.address,
-          startBlock: contracts.N00unsToken.instance.deployTransaction.blockNumber,
+          address: contracts.VrbsToken.address,
+          startBlock: contracts.VrbsToken.instance.deployTransaction.blockNumber,
         },
         vrbsAuctionHouse: {
-          address: contracts.N00unsAuctionHouseProxy.address,
-          startBlock: contracts.N00unsAuctionHouseProxy.instance.deployTransaction.blockNumber,
+          address: contracts.AuctionHouseProxy.address,
+          startBlock: contracts.AuctionHouseProxy.instance.deployTransaction.blockNumber,
         },
         vrbsDAO: {
-          address: contracts.N00unsDAOProxyV2.address,
-          startBlock: contracts.N00unsDAOProxyV2.instance.deployTransaction.blockNumber,
+          address: contracts.DAOProxyV2.address,
+          startBlock: contracts.DAOProxyV2.instance.deployTransaction.blockNumber,
         },
       };
       writeFileSync(subgraphConfigPath, JSON.stringify(subgraphConfig, null, 2));

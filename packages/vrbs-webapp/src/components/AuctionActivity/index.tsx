@@ -12,14 +12,14 @@ import BidHistory from '../BidHistory';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import AuctionActivityN00unTitle from '../AuctionActivityN00unTitle';
+import AuctionActivityVrbTitle from '../AuctionActivityVrbTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import N00unInfoCard from '../N00unInfoCard';
+import VrbInfoCard from '../VrbInfoCard';
 import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
@@ -108,7 +108,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </AuctionTitleAndNavWrapper> */}
             <Col lg={12}>
-              <AuctionActivityN00unTitle isCool={isCool} n00unId={auction.n00unId} />
+              <AuctionActivityVrbTitle isCool={isCool} vrbId={auction.vrbId} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
@@ -123,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 isLastAuction ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                  <Holder n00unId={auction.n00unId.toNumber()} />
+                  <Holder vrbId={auction.vrbId.toNumber()} />
                 )
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
@@ -133,10 +133,10 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         </div>
         {/* {!auctionEnded && (
           <Row className={classes.activityRow}>
-            <Col lg={12} className={classes.fomoN00unsLink}>
+            <Col lg={12} className={classes.fomoVrbsLink}>
               <FontAwesomeIcon icon={faInfoCircle} />
               <a href={'https://fomovrbs.wtf'} target={'_blank'} rel="noreferrer">
-                <Trans>Help mint the next N00un</Trans>
+                <Trans>Help mint the next Vrb</Trans>
               </a>
             </Col>
           </Row>
@@ -154,14 +154,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         {/* <Row className={classes.activityRow}> */}
           <Col lg={12}>
             {!isLastAuction ? (
-              <N00unInfoCard
-                n00unId={auction.n00unId.toNumber()}
+              <VrbInfoCard
+                vrbId={auction.vrbId.toNumber()}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (
               displayGraphDepComps && (
                 <BidHistory
-                  auctionId={auction.n00unId.toString()}
+                  auctionId={auction.vrbId.toString()}
                   max={3}
                   classes={bidHistoryClasses}
                 />

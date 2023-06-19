@@ -1,9 +1,9 @@
-.n00unWrapper {
+.vrbWrapper {
   /* align-self: flex-end; */
   width: 100%;
 }
 
-.n00unContentCol {
+.vrbContentCol {
   display: flex;
 }
 
@@ -20,7 +20,7 @@
 }
 
 @media (max-width: 991.98px) {
-  /* .n00unWrapper {
+  /* .vrbWrapper {
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
@@ -50,14 +50,14 @@
     padding-left: 0;
   } */
 
-  .n00unWrapper {
+  .vrbWrapper {
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 2rem;
   }
 
-  .n00unContentCol {
+  .vrbContentCol {
     padding: 0rem;
   }
 }

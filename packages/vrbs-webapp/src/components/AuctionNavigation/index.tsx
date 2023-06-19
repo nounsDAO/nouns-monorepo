@@ -14,18 +14,18 @@ const AuctionNavigation: React.FC<{
   const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
   const history = useHistory();
   const onDisplayAuction = useOnDisplayAuction();
-  const lastAuctionN00unId = useAppSelector(state => state.onDisplayAuction.lastAuctionN00unId);
-  const onDisplayAuctionN00unId = onDisplayAuction?.n00unId.toNumber();
+  const lastAuctionVrbId = useAppSelector(state => state.onDisplayAuction.lastAuctionVrbId);
+  const onDisplayAuctionVrbId = onDisplayAuction?.vrbId.toNumber();
 
-  // Page through N00uns via keyboard
+  // Page through Vrbs via keyboard
   // handle what happens on key press
   const handleKeyPress = useCallback(
     event => {
       if (event.key === 'ArrowLeft') {
         // This is a hack. If we don't put this the first keystoke
-        // from the n00un at / doesn't work (i.e. to go from current n00un to current n00un - 1 would take two arrow presses)
-        if (onDisplayAuctionN00unId === lastAuctionN00unId) {
-          history.push(`/n00un/${lastAuctionN00unId}`);
+        // from the vrb at / doesn't work (i.e. to go from current vrb to current vrb - 1 would take two arrow presses)
+        if (onDisplayAuctionVrbId === lastAuctionVrbId) {
+          history.push(`/vrb/${lastAuctionVrbId}`);
         }
 
         if (!isFirstAuction) {
@@ -42,8 +42,8 @@ const AuctionNavigation: React.FC<{
       history,
       isFirstAuction,
       isLastAuction,
-      lastAuctionN00unId,
-      onDisplayAuctionN00unId,
+      lastAuctionVrbId,
+      onDisplayAuctionVrbId,
       onNextAuctionClick,
       onPrevAuctionClick,
     ],

@@ -19,22 +19,22 @@ msgstr ""
 "Last-Translator: \n"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "% of N00uns Currently Against"
+msgid "% of Vrbs Currently Against"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "'N00unders' are the group of ten builders that initiated N00uns. Here are the N00unders:"
-msgstr "「N00unders」とはN00unsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
+msgid "'Vrbs' are the group of ten builders that initiated Vrbs. Here are the Vrbs:"
+msgstr "「Vrbs」とはVrbsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr "...そしてさらに3つ"
 
 #: src/components/Documentation/index.tsx
-msgid "100% of N00un auction proceeds are trustlessly sent to the treasury."
-msgstr "N00unオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
+msgid "100% of Vrb auction proceeds are trustlessly sent to the treasury."
+msgstr "Vrbオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
 
-#: src/pages/N00unders/index.tsx
+#: src/pages/Founders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5アーティスト、6.5技術者"
 
@@ -42,31 +42,31 @@ msgstr "3.5アーティスト、6.5技術者"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 #~ msgstr ""
 
-#: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
-#~ msgid "<0> N00un {0} </0>  won by <1><2/></1>"
+#: src/components/ProfileEvent/event/DesktopWinEvent/index.tsx
+#~ msgid "<0> Vrb {0} </0>  won by <1><2/></1>"
 #~ msgstr ""
 
-#: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileN00unWinEvent/index.tsx
-msgid "<0> N00un {0} </0> sent to <1><2/></1>"
+#: src/components/ProfileEvent/event/DesktopWinEvent/index.tsx
+#: src/components/ProfileEvent/event/MobileWinEvent/index.tsx
+msgid "<0> Vrb {0} </0> sent to <1><2/></1>"
 msgstr ""
 
-#: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileN00unWinEvent/index.tsx
-msgid "<0> N00un {0} </0> won by <1><2/></1>"
+#: src/components/ProfileEvent/event/DesktopWinEvent/index.tsx
+#: src/components/ProfileEvent/event/MobileWinEvent/index.tsx
+msgid "<0> Vrb {0} </0> won by <1><2/></1>"
 msgstr ""
 
 #: src/components/ByLineHoverCard/index.tsx
-msgid "<0>Delegated N00un: </0>"
-msgstr "委任N00un: "
+msgid "<0>Delegated Vrb: </0>"
+msgstr "委任Vrb: "
 
 #: src/components/ByLineHoverCard/index.tsx
-msgid "<0>Delegated N00uns: </0>"
-msgstr "委任N00un: "
+msgid "<0>Delegated Vrbs: </0>"
+msgstr "委任Vrb: "
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
@@ -76,8 +76,8 @@ msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案した�
 msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
 msgstr ""
 
-#: src/components/N00unProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
+#: src/components/ProfileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
 msgstr "不参加"
 
@@ -90,16 +90,16 @@ msgstr "棄権"
 #~ msgid "Abstain from voting on Prop {0}"
 #~ msgstr "Propへの投票を棄権する {0} "
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 msgid "Abstained on"
 msgstr "棄権しました。"
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr "付属品"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
@@ -170,17 +170,17 @@ msgstr "イーサリアムアドレス"
 msgid "Against"
 msgstr "反対"
 
-#: src/components/N00underN00unContent/index.tsx
-msgid "All N00un auction proceeds are sent to the"
-msgstr "すべてのN00unオークションの収益は、"
+#: src/components/FounderVrbContent/index.tsx
+msgid "All Vrb auction proceeds are sent to the"
+msgstr "すべてのVrbオークションの収益は、"
 
-#: src/pages/N00unders/index.tsx
-msgid "All N00un auction proceeds are sent to the N00uns DAO. For this reason, we, the project's founders (‘N00unders’) have chosen to compensate ourselves with N00uns. Every 10th n00un for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual N00unders."
-msgstr "N00unオークションの収益は全て N00uns DAOに送られます。その為、我々、プロジェクトの創設者 (N00unders) はN00unsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のN00unがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+#: src/pages/Vrbs/index.tsx
+msgid "All Vrb auction proceeds are sent to the Vrbs DAO. For this reason, we, the project's founders (‘Vrbs’) have chosen to compensate ourselves with Vrbs. Every 10th vrb for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Vrbs."
+msgstr "Vrbオークションの収益は全て Vrbs DAOに送られます。その為、我々、プロジェクトの創設者 (Vrbs) はVrbsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のVrbがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Documentation/index.tsx
-msgid "All N00uns are members of N00uns DAO."
-msgstr "N00unsは全員N00uns DAOの会員です。"
+msgid "All Vrbs are members of Vrbs DAO."
+msgstr "Vrbsは全員Vrbs DAOの会員です。"
 
 #: src/pages/CreateProposal/index.tsx
 #~ msgid "All Proposals"
@@ -215,21 +215,21 @@ msgstr "オークション終了まで"
 msgid "Back"
 msgstr "戻る"
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr "背景"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of N00un auction proceeds are sent to N00uns DAO, N00unders have chosen to compensate themselves with N00uns. Every 10th N00un for the first 5 years of the project (N00un ids #0, #10, #20, #30 and so on) will be automatically sent to the N00under's multisig to be vested and shared among the founding members of the project."
-msgstr "N00unオークションの収益の100%がN00uns DAOに送られるため、N00underは自分達をN00unsで補償することに決めました。プロジェクトの最初の5年間の間、毎回10番目のN00un (N00un ID #0, #10, #20, #30 など) が自動的にN00undersのマルチシグに送られ、プロジェクトの創設メンバー達に与えられて、共有されます。"
+msgid "Because 100% of Vrb auction proceeds are sent to Vrbs DAO, Vrbs have chosen to compensate themselves with Vrbs. Every 10th Vrb for the first 5 years of the project (Vrb ids #0, #10, #20, #30 and so on) will be automatically sent to the Vrbder's multisig to be vested and shared among the founding members of the project."
+msgstr "Vrbオークションの収益の100%がVrbs DAOに送られるため、Vrbderは自分達をVrbsで補償することに決めました。プロジェクトの最初の5年間の間、毎回10番目のVrb (Vrb ID #0, #10, #20, #30 など) が自動的にVrbsのマルチシグに送られ、プロジェクトの創設メンバー達に与えられて、共有されます。"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
-#: src/components/N00unsIntroSection/index.tsx
-msgid "Behold, an infinite work of art! N00uns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, N00uns is for everyone."
+#: src/components/VrbIntroSection/index.tsx
+msgid "Behold, an infinite work of art! Vrbs is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Vrbs is for everyone."
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Bid"
 msgstr "入札"
 
-#: src/components/N00unInfoCard/index.tsx
+#: src/components/VrbInfoCard/index.tsx
 msgid "Bid history"
 msgstr "入札履歴"
 
@@ -245,7 +245,7 @@ msgstr "入札履歴"
 msgid "Bid was placed successfully!"
 msgstr "正常に入札されました！"
 
-#: src/components/N00unInfoCard/index.tsx
+#: src/components/VrbInfoCard/index.tsx
 msgid "Bids"
 msgstr "入札"
 
@@ -257,13 +257,13 @@ msgstr "入札"
 msgid "Bids will appear here"
 msgstr "入札はここに表示されます"
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr "体"
 
-#: src/components/N00unHoverCard/index.tsx
-#: src/components/N00unInfoRowBirthday/index.tsx
+#: src/components/VrbHoverCard/index.tsx
+#: src/components/InfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "誕生"
 
@@ -271,7 +271,7 @@ msgstr "誕生"
 msgid "Cancel"
 msgstr ""
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Canceled"
@@ -329,7 +329,7 @@ msgid "Connect your wallet"
 msgstr "ウォレットに接続してください"
 
 #: src/components/Documentation/index.tsx
-msgid "Consequently, the N00uns Foundation anticipates being the steward of the veto power until N00uns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgid "Consequently, the Vrbs Foundation anticipates being the steward of the veto power until Vrbs DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
 msgstr ""
 
 #: src/components/CreateProposalButton/index.tsx
@@ -365,7 +365,7 @@ msgstr "DAO"
 msgid "Daily Auctions"
 msgstr "デイリーオークション"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Defeated"
@@ -387,7 +387,7 @@ msgstr "委任された更新に失敗しました"
 msgid "Delegate Updated!"
 msgstr "デリゲートが更新されました"
 
-#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
+#: src/components/ProfileEvent/event/MobileDelegationEvent/index.tsx
 msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr "Discourse"
 msgid "Docs"
 msgstr "ドキュメント"
 
-#: src/components/N00unsIntroSection/index.tsx
+#: src/components/VrbIntroSection/index.tsx
 msgid "Download the Free iOS App"
 msgstr ""
 
@@ -444,8 +444,8 @@ msgid "EVERY DAY,"
 msgstr "毎日"
 
 #: src/components/Documentation/index.tsx
-msgid "Each time an auction is settled, the settlement transaction will also cause a new N00un to be minted and a new 24 hour auction to begin."
-msgstr "オークションが決済される度に、決済取引によって新しいN00unがミントされ、また新たに24時間のオークションが開催されます。"
+msgid "Each time an auction is settled, the settlement transaction will also cause a new Vrb to be minted and a new 24 hour auction to begin."
+msgstr "オークションが決済される度に、決済取引によって新しいVrbがミントされ、また新たに24時間のオークションが開催されます。"
 
 #: src/pages/Vote/index.tsx
 msgid "Ended"
@@ -475,30 +475,30 @@ msgstr "投票を委任するアカウントのイーサリアムアドレスま
 msgid "Error"
 msgstr "エラー"
 
-#: src/components/N00unInfoRowBirthday/index.tsx
-msgid "Error fetching N00un birthday"
-msgstr "N00unの誕生日を取得できませんでした"
+#: src/components/InfoRowBirthday/index.tsx
+msgid "Error fetching Vrb birthday"
+msgstr "Vrbの誕生日を取得できませんでした"
 
 #: src/components/Footer/index.tsx
-#: src/components/N00unInfoCard/index.tsx
+#: src/components/VrbInfoCard/index.tsx
 msgid "Etherscan"
 msgstr "Etherscan"
 
-#: src/components/N00unsIntroSection/index.tsx
-msgid "Every new N00un pushed right to your pocket! View the current auction, remix your own N00un, and explore the entire history directly from the app."
+#: src/components/VrbIntroSection/index.tsx
+msgid "Every new Vrb pushed right to your pocket! View the current auction, remix your own Vrb, and explore the entire history directly from the app."
 msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
 msgstr "実行する"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Executed"
 msgstr "実行しました"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Expired"
@@ -523,22 +523,22 @@ msgid "Failed to fetch"
 msgstr "取得できませんでした"
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch N00un activity history"
-msgstr "N00un の活動履歴の取得に失敗しました。"
+msgid "Failed to fetch Vrb activity history"
+msgstr "Vrb の活動履歴の取得に失敗しました。"
 
 #: src/components/Holder/index.tsx
-#: src/components/N00unInfoRowHolder/index.tsx
-msgid "Failed to fetch N00un info"
-msgstr "N00unに関する情報の取得に失敗しました"
+#: src/components/VrbInfoRowHolder/index.tsx
+msgid "Failed to fetch Vrb info"
+msgstr "Vrbに関する情報の取得に失敗しました"
 
 #: src/components/VoteCard/index.tsx
 #: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr "賛成"
 
-#: src/components/N00underN00unContent/index.tsx
-msgid "For this reason, we, the project's founders (‘N00unders’) have chosen to compensate ourselves with N00uns. Every 10th N00un for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual N00unders."
-msgstr "その為、我々、プロジェクトの創設者 (N00unders) はN00unsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のN00unがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+#: src/components/FounderVrbContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Vrbs’) have chosen to compensate ourselves with Vrbs. Every 10th Vrb for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Vrbs."
+msgstr "その為、我々、プロジェクトの創設者 (Vrbs) はVrbsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のVrbがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -557,15 +557,15 @@ msgid "Gas spent on voting will be refunded to you."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
-msgid "Generate N00uns"
-msgstr "N00unsを作る"
+msgid "Generate Vrbs"
+msgstr "Vrbsを作る"
 
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Get Involved"
 msgstr ""
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr "メガネ"
@@ -582,31 +582,31 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Has"
 msgstr "票あり"
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "頭"
 
 #: src/components/Holder/index.tsx
-#: src/components/N00unHoverCard/index.tsx
+#: src/components/VrbHoverCard/index.tsx
 msgid "Held by"
 msgstr "主催者"
 
 #: src/components/AuctionActivity/index.tsx
-msgid "Help mint the next N00un"
-msgstr "次にミントされるN00unの投票をしてください"
+msgid "Help mint the next Vrb"
+msgstr "次にミントされるVrbの投票をしてください"
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopTransferEvent/index.tsx
 msgid "Holder changed from <0><1/></0> to <2><3/></2>"
 msgstr ""
 
-#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
+#: src/components/ProfileEvent/event/MobileTransferEvent/index.tsx
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-#~ msgid "In addition to the precautions taken by Compound Governance, N00unders have given themselves a special veto right to ensure that no malicious proposals can be passed while the N00un supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "コンパウンドガバナンスによる予防措置に加えて、N00unの供給量が少ない間に悪意のある議案が通らないように、N00undersは特別な拒否権を保有しています。この拒否権は、明らかに有害なガバナンスの提案が可決された場合にのみ行使され、最後の手段として使用されます。"
+#~ msgid "In addition to the precautions taken by Compound Governance, Vrbs have given themselves a special veto right to ensure that no malicious proposals can be passed while the Vrb supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+#~ msgstr "コンパウンドガバナンスによる予防措置に加えて、Vrbの供給量が少ない間に悪意のある議案が通らないように、Vrbsは特別な拒否権を保有しています。この拒否権は、明らかに有害なガバナンスの提案が可決された場合にのみ行使され、最後の手段として使用されます。"
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -620,15 +620,15 @@ msgstr ""
 msgid "Language"
 msgstr "言語"
 
-#: src/components/N00underN00unContent/index.tsx
+#: src/components/FounderVrbContent/index.tsx
 msgid "Learn more"
 msgstr "詳細はこちら"
 
 #: src/components/Documentation/index.tsx
-msgid "Learn more below, or start creating N00uns off-chain using the {playgroundLink}."
-msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いN00unsのオフチェーンの作成をすることもできます。"
+msgid "Learn more below, or start creating Vrbs off-chain using the {playgroundLink}."
+msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いVrbsのオフチェーンの作成をすることもできます。"
 
-#: src/components/N00unInfoRowHolder/index.tsx
+#: src/components/VrbInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr "ロード中..."
 
@@ -645,94 +645,94 @@ msgid "More details on how the dynamic threshold works can be found <0>here</0>.
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "N00un"
-msgstr "N00un"
+msgid "Vrb"
+msgstr "Vrb"
 
 #: src/components/Documentation/index.tsx
-msgid "N00un Seeder Contract"
-msgstr "N00unシーダー契約"
+msgid "Vrb Seeder Contract"
+msgstr "Vrbシーダー契約"
 
 #: src/components/Documentation/index.tsx
-msgid "N00un Traits"
-msgstr "N00unsの特徴"
+msgid "Vrb Traits"
+msgstr "Vrbsの特徴"
 
 #: src/components/CurrentDelegatePannel/index.tsx
-msgid "N00un votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your N00un."
-msgstr "N00unの票は譲渡できませんが (N00unの売却にはそれに応じて票も移ります)、委任することができます。"
+msgid "Vrb votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Vrb."
+msgstr "Vrbの票は譲渡できませんが (Vrbの売却にはそれに応じて票も移ります)、委任することができます。"
 
-#: src/components/AuctionActivityN00unTitle/index.tsx
-msgid "N00un {0}"
-msgstr "N00un {0}"
-
-#: src/components/Documentation/index.tsx
-msgid "N00under distributions don't interfere with the cadence of 24 hour auctions. N00uns are sent directly to the N00under's Multisig, and auctions continue on schedule with the next available N00un ID."
-msgstr "N00under配布により24時間オークションの頻度に影響が及ぶことはありません。 N00unsはN00underのマルチシグに直接送られ、オークションは次の有効なN00uns IDによって予定通り継続されます。"
+#: src/components/AuctionActivityVrbTitle/index.tsx
+msgid "Vrb {0}"
+msgstr "Vrb {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "N00under's Reward"
-msgstr "N00underへの報酬"
+msgid "Vrbder distributions don't interfere with the cadence of 24 hour auctions. Vrbs are sent directly to the Vrbder's Multisig, and auctions continue on schedule with the next available Vrb ID."
+msgstr "Vrbder配布により24時間オークションの頻度に影響が及ぶことはありません。 VrbsはVrbderのマルチシグに直接送られ、オークションは次の有効なVrbs IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx
-msgid "N00unders receive rewards in the form of N00uns (10% of supply for first 5 years)."
-msgstr "N00underには、N00unsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
+msgid "Vrbder's Reward"
+msgstr "Vrbderへの報酬"
 
 #: src/components/Documentation/index.tsx
-#~ msgid "N00unders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy N00un distribution and a community that is engaged in the governance process."
-#~ msgstr "N00underは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なN00unの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
+msgid "Vrbs receive rewards in the form of Vrbs (10% of supply for first 5 years)."
+msgstr "Vrbderには、Vrbsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
-#: src/pages/N00unders/index.tsx
-msgid "N00unders' Reward"
-msgstr "N00underへの報酬"
+#: src/components/Documentation/index.tsx
+#~ msgid "Vrbs will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Vrb distribution and a community that is engaged in the governance process."
+#~ msgstr "Vrbderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なVrbの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
+
+#: src/pages/Vrbs/index.tsx
+msgid "Vrbs' Reward"
+msgstr "Vrbderへの報酬"
 
 #: src/pages/Governance/index.tsx
-msgid "N00uns"
-msgstr "N00uns"
+msgid "Vrbs"
+msgstr "Vrbs"
 
 #: src/components/NavBar/index.tsx
-msgid "N00uns & Traits"
+msgid "Vrbs & Traits"
 msgstr ""
 
-#: src/components/N00unInfoRowHolder/index.tsx
-msgid "N00uns Auction House"
-msgstr "N00unsオークションハウス"
+#: src/components/VrbInfoRowHolder/index.tsx
+msgid "Vrbs Auction House"
+msgstr "Vrbsオークションハウス"
 
 #: src/components/Documentation/index.tsx
-#: src/components/N00underN00unContent/index.tsx
+#: src/components/FounderVrbContent/index.tsx
 #: src/pages/Governance/index.tsx
-msgid "N00uns DAO"
-msgstr "N00uns DAO"
+msgid "Vrbs DAO"
+msgstr "Vrbs DAO"
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns DAO uses a fork of {compoundGovLink}."
-msgstr "N00uns DAOは {compoundGovLink} のフォークを使用しています。"
+msgid "Vrbs DAO uses a fork of {compoundGovLink}."
+msgstr "Vrbs DAOは {compoundGovLink} のフォークを使用しています。"
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the N00uns ecosystem. The N00uns DAO treasury receives 100% of ETH proceeds from daily N00un auctions. Each N00un is an irrevocable member of N00uns DAO and entitled to one vote in all governance matters. N00un votes are non-transferable (if you sell your N00un the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your N00un."
-msgstr "N00uns DAOは {compoundGovLink} のフォークを利用しており、N00unsエコシステムの主要な統治機関です。毎日起こるN00unオークションから得られるETHの収益の100％はN00uns DAO トレジャリーにて受け取られています。各N00unはN00uns DAOの変更不可能なメンバーであり、すべてのガバナンスの問題で1票の投票権を有します。N00unの票は譲渡できませんが (N00unの売却にはそれに応じて票も移ります)、委任することができます。"
+msgid "Vrbs DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Vrbs ecosystem. The Vrbs DAO treasury receives 100% of ETH proceeds from daily Vrb auctions. Each Vrb is an irrevocable member of Vrbs DAO and entitled to one vote in all governance matters. Vrb votes are non-transferable (if you sell your Vrb the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Vrb."
+msgstr "Vrbs DAOは {compoundGovLink} のフォークを利用しており、Vrbsエコシステムの主要な統治機関です。毎日起こるVrbオークションから得られるETHの収益の100％はVrbs DAO トレジャリーにて受け取られています。各VrbはVrbs DAOの変更不可能なメンバーであり、すべてのガバナンスの問題で1票の投票権を有します。Vrbの票は譲渡できませんが (Vrbの売却にはそれに応じて票も移ります)、委任することができます。"
 
 #: src/pages/Playground/index.tsx
-msgid "N00uns Protocol"
-msgstr "N00unsプロトコル"
+msgid "Vrbs Protocol"
+msgstr "Vrbsプロトコル"
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, N00uns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
-msgstr "N00uns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、N00unsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
+msgid "Vrbs are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Vrbs attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Vrbs は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Vrbsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing N00un trait scarcity, which makes all N00uns equally rare. As of this writing, N00uns are made up of:"
-msgstr "N00unsは、イーサリアムのブロックハッシュに基づいてランダムに生成されます。N00unの特徴の希少性を管理する「if」ステートメントやその他のルールは存在しないため、すべてのN00unが等しく希少となります。現時点では、N00unsは以下のもので構成されています："
+msgid "Vrbs are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Vrb trait scarcity, which makes all Vrbs equally rare. As of this writing, Vrbs are made up of:"
+msgstr "Vrbsは、イーサリアムのブロックハッシュに基づいてランダムに生成されます。Vrbの特徴の希少性を管理する「if」ステートメントやその他のルールは存在しないため、すべてのVrbが等しく希少となります。現時点では、Vrbsは以下のもので構成されています："
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because N00un parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-msgstr "N00unはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、N00unのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
+msgid "Vrbs are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Vrb parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgstr "VrbはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、Vrbのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
 
 #: src/components/Documentation/index.tsx
-msgid "N00uns artwork is in the {publicDomainLink}."
-msgstr "N00unsのアートワークは {publicDomainLink} にあります。"
+msgid "Vrbs artwork is in the {publicDomainLink}."
+msgstr "Vrbsのアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
-msgid "N00uns govern <0>N00uns DAO</0>. N00uns can vote on proposals or delegate their vote to a third party. A minimum of <1>{vrbsRequired} {0}</1> is required to submit proposals."
-msgstr "N00unsが統治する <0>N00uns DAO</0> 。N00unsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{vrbsRequired} {0}</1> 以上が必要です。"
+msgid "Vrbs govern <0>Vrbs DAO</0>. Vrbs can vote on proposals or delegate their vote to a third party. A minimum of <1>{vrbsRequired} {0}</1> is required to submit proposals."
+msgstr "Vrbsが統治する <0>Vrbs DAO</0> 。Vrbsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{vrbsRequired} {0}</1> 以上が必要です。"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 #~ msgid "Next"
@@ -743,8 +743,8 @@ msgid "No arguments required"
 msgstr "引数は必要ありません"
 
 #: src/components/Documentation/index.tsx
-msgid "No explicit rules exist for attribute scarcity; all N00uns are equally rare."
-msgstr "N00unsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
+msgid "No explicit rules exist for attribute scarcity; all Vrbs are equally rare."
+msgstr "Vrbsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
 
 #: src/components/Proposals/index.tsx
 msgid "No proposals found"
@@ -773,15 +773,15 @@ msgid "On-Chain Artwork"
 msgstr "オンチェーンアートワーク"
 
 #: src/components/Documentation/index.tsx
-msgid "One N00un is equal to one vote."
-msgstr "1体のN00unにつき、1票の投票件を得ることができます。"
+msgid "One Vrb is equal to one vote."
+msgstr "1体のVrbにつき、1票の投票件を得ることができます。"
 
 #: src/components/Documentation/index.tsx
-msgid "One N00un is trustlessly auctioned every 24 hours, forever."
-msgstr "N00unsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
+msgid "One Vrb is trustlessly auctioned every 24 hours, forever."
+msgstr "Vrbsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
 
-#: src/components/N00unsIntroSection/index.tsx
-msgid "One N00un, Every Day, Forever."
+#: src/components/VrbIntroSection/index.tsx
+msgid "One Vrb, Every Day, Forever."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -789,10 +789,10 @@ msgid "Only 32x32 PNG images are accepted"
 msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "Only N00uns you owned or were delegated to you before {0} are eligible to vote."
-msgstr "投票できるのは {0} 以前に所有していた、または委任されたN00unsのみです。"
+msgid "Only Vrbs you owned or were delegated to you before {0} are eligible to vote."
+msgstr "投票できるのは {0} 以前に所有していた、または委任されたVrbsのみです。"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Pending"
@@ -871,7 +871,7 @@ msgstr "提案中のトランザクション"
 msgid "Queue"
 msgstr "キュー"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
@@ -886,7 +886,7 @@ msgid "Reason (Optional)"
 msgstr "理由\"(任意)\""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "Required % of N00uns to Pass"
+msgid "Required % of Vrbs to Pass"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
@@ -966,7 +966,7 @@ msgstr "投票を提出"
 msgid "Submit vote"
 msgstr "投票を提出"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Succeeded"
@@ -988,8 +988,8 @@ msgid "Switch"
 msgstr "切り替え"
 
 #: src/pages/Vote/index.tsx
-msgid "Switch to N00un view"
-msgstr "N00unビューに切り替えます"
+msgid "Switch to Vrb view"
+msgstr "Vrbビューに切り替えます"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
@@ -1008,31 +1008,31 @@ msgid "Thank you for voting."
 msgstr "投票ありがとうございます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The N00un Seeder contract is used to determine N00un traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the N00uns DAO to prevent any future updates. Currently, N00un traits are determined using pseudo-random number generation:"
-msgstr "N00unシーダー契約は、ミントのプロセスでN00unsの特徴を決定するために使用されます。シーダー契約は、今後の特徴生成アルゴリズムのアップグレードを可能にするために変更することができ、さらに、今後のアップデートを防ぐためにN00uns DAOによってロックすることも可能です。現在、N00unsの特徴は擬似乱数生成を用い決められています。"
+msgid "The Vrb Seeder contract is used to determine Vrb traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Vrbs DAO to prevent any future updates. Currently, Vrb traits are determined using pseudo-random number generation:"
+msgstr "Vrbシーダー契約は、ミントのプロセスでVrbsの特徴を決定するために使用されます。シーダー契約は、今後の特徴生成アルゴリズムのアップグレードを可能にするために変更することができ、さらに、今後のアップデートを防ぐためにVrbs DAOによってロックすることも可能です。現在、Vrbsの特徴は擬似乱数生成を用い決められています。"
 
-#: src/pages/N00unders/index.tsx
-msgid "The N00unders"
-msgstr "N00unders"
+#: src/pages/Vrbs/index.tsx
+msgid "The Vrbs"
+msgstr "Vrbs"
 
-#: src/pages/N00unders/index.tsx
-msgid "The N00unders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 N00unders, after 5 years each N00under could receive up to 1% of the N00un supply."
-msgstr "N00undersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。N00undersは10人なので、5年後には各ナウンダーは最大でN00unの供給量の1%を受け取ることができます。"
-
-#: src/components/Documentation/index.tsx
-msgid "The N00uns Auction Contract will act as a self-sufficient N00un generation and distribution mechanism, auctioning one N00un every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the N00uns DAO treasury, where they are governed by N00un owners."
-msgstr "N00unsオークション契約は、N00un生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のN00unを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にN00unの所有者によって管理されている、N00uns DAO のトレジャリーに預けられます。"
+#: src/pages/Vrbs/index.tsx
+msgid "The Vrbs reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Vrbs, after 5 years each Vrbder could receive up to 1% of the Vrb supply."
+msgstr "Vrbsの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Vrbsは10人なので、5年後には各ナウンダーは最大でVrbの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The N00uns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The N00uns Foundation will veto proposals that introduce non-trivial legal or existential risks to the N00uns DAO or the N00uns Foundation, including (but not necessarily limited to) proposals that:"
+msgid "The Vrbs Auction Contract will act as a self-sufficient Vrb generation and distribution mechanism, auctioning one Vrb every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Vrbs DAO treasury, where they are governed by Vrb owners."
+msgstr "Vrbsオークション契約は、Vrb生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のVrbを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にVrbの所有者によって管理されている、Vrbs DAO のトレジャリーに預けられます。"
+
+#: src/components/Documentation/index.tsx
+msgid "The Vrbs Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Vrbs Foundation will veto proposals that introduce non-trivial legal or existential risks to the Vrbs DAO or the Vrbs Foundation, including (but not necessarily limited to) proposals that:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The N00uns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgid "The Vrbs community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases quadratically as a function of the % of N00uns voting against a prop, varying between Min Quorum and Max Quorum."
+#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases quadratically as a function of the % of Vrbs voting against a prop, varying between Min Quorum and Max Quorum."
 #~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
@@ -1040,11 +1040,11 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of N00uns voting against a prop, varying between Min Threshold and Max Threshold."
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Vrbs voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of N00uns voting against a prop, varying between Min Treshold and Max Treshold."
+#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Vrbs voting against a prop, varying between Min Treshold and Max Treshold."
 #~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
@@ -1056,16 +1056,16 @@ msgid "The compressed parts are efficiently converted into a single base64 encod
 msgstr "圧縮されたパーツは、オンチェインで効率よく1つのbase64エンコードされたSVG画像に変換されます。そのために、各パーツは中間フォーマットにデコードされた後、オンチェーンでの文字列連結により一連のSVG rectsに変換されます。SVG全体が生成されると、それはbase64でエンコードされます。"
 
 #: src/pages/Playground/index.tsx
-msgid "The playground was built using the {vrbsProtocolLink}. N00un's traits are determined by the N00un Seed. The seed was generated using {vrbsAssetsLink} and rendered using the {vrbsSDKLink}."
-msgstr "遊び場は{vrbsProtocolLink} を使用して作られており、N00unの特徴は、N00unシードによって決まります。{vrbsAssetsLink} でシードを生成し、{vrbsSDKLink} でレンダリングされています。"
+msgid "The playground was built using the {vrbsProtocolLink}. Vrb's traits are determined by the Vrb Seed. The seed was generated using {vrbsAssetsLink} and rendered using the {vrbsSDKLink}."
+msgstr "遊び場は{vrbsProtocolLink} を使用して作られており、Vrbの特徴は、Vrbシードによって決まります。{vrbsAssetsLink} でシードを生成し、{vrbsSDKLink} でレンダリングされています。"
 
 #: src/components/Documentation/index.tsx
-msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the N00uns DAO treasury. While N00unders initially believed that a healthy distribution of N00uns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the N00unders, the N00uns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Vrbs DAO treasury. While Vrbs initially believed that a healthy distribution of Vrbs would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Vrbs, the Vrbs Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The treasury is controlled exclusively by N00uns via governance."
-msgstr "トレジャリーは、ガバナンスを通じてN00unsが独占的に管理しています。"
+msgid "The treasury is controlled exclusively by Vrbs via governance."
+msgstr "トレジャリーは、ガバナンスを通じてVrbsが独占的に管理しています。"
 
 #: src/components/Documentation/index.tsx
 msgid "There are unfortunately no algorithmic solutions for making these determinations in advance (if there were, the veto would not be required), and proposals must be considered on a case by case basis."
@@ -1076,8 +1076,8 @@ msgid "There was an error voting for your account."
 msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "This N00un has no activity, since it was just created. Check back soon!"
-msgstr "このN00unは作成されたばかりで、動きがありません。また後ほどご確認ください！"
+msgid "This Vrb has no activity, since it was just created. Check back soon!"
+msgstr "このVrbは作成されたばかりで、動きがありません。また後ほどご確認ください！"
 
 #: src/components/ProposalContent/index.tsx
 msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
@@ -1088,8 +1088,8 @@ msgid "This transaction was automatically added to refill the TokenBuyer. Propos
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "This treasury exists for <0>N00uns DAO</0> participants to allocate resources for the long-term growth and prosperity of the N00uns project."
-msgstr "このトレジャリーは、<0>N00uns DAO</0>の参加者がN00unsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
+msgid "This treasury exists for <0>Vrbs DAO</0> participants to allocate resources for the long-term growth and prosperity of the Vrbs project."
+msgstr "このトレジャリーは、<0>Vrbs DAO</0>の参加者がVrbsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
 
 #: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
@@ -1109,8 +1109,8 @@ msgstr ""
 #~ msgstr "コツ："
 
 #: src/components/Documentation/index.tsx
-msgid "Trait generation is not truly random. Traits can be predicted when minting a N00un on the pending block."
-msgstr "特徴生成は完全にランダムというわけではなく、形質は、保留中のブロックにN00unをミントする際に予想することができます。"
+msgid "Trait generation is not truly random. Traits can be predicted when minting a Vrb on the pending block."
+msgstr "特徴生成は完全にランダムというわけではなく、形質は、保留中のブロックにVrbをミントする際に予想することができます。"
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -1133,7 +1133,7 @@ msgstr "トレジャリー"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Undetermined"
@@ -1168,7 +1168,7 @@ msgstr "値"
 #~ msgid "Value in ETH (Optional)"
 #~ msgstr "ETHの価格 (任意)"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
@@ -1188,23 +1188,23 @@ msgstr "すべての入札を表示"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx
-#: src/components/N00unInfoRowHolder/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/VrbInfoRowHolder/index.tsx
+#: src/components/ProfileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopWinEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopWinEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopProposalVoteEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/ProfileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/Winner/index.tsx
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
 
 #: src/components/Bid/index.tsx
-msgid "Vote for the next N00un"
-msgstr "次のN00unに投票する"
+msgid "Vote for the next Vrb"
+msgstr "次のVrbに投票する"
 
-#: src/components/ExploreGrid/ExploreN00unDetail/index.tsx
+#: src/components/ExploreGrid/ExploreDetail/index.tsx
 msgid "Vote history"
 msgstr ""
 
@@ -1212,48 +1212,48 @@ msgstr ""
 msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 msgid "Voted against"
 msgstr "反対に投票"
 
-#: src/components/N00unProfileVoteRow/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
 
 #: src/components/DelegateHoverCard/index.tsx
-msgid "Voted with<0>{numVotesForProp}</0>N00un"
-msgstr "<0>{numVotesForProp}</0>のN00unで投票"
+msgid "Voted with<0>{numVotesForProp}</0>Vrb"
+msgstr "<0>{numVotesForProp}</0>のVrbで投票"
 
 #: src/components/DelegateHoverCard/index.tsx
-msgid "Voted with<0>{numVotesForProp}</0>N00uns"
-msgstr "<0>{numVotesForProp}</0>のN00unで投票"
+msgid "Voted with<0>{numVotesForProp}</0>Vrbs"
+msgstr "<0>{numVotesForProp}</0>のVrbで投票"
 
 #: src/components/VoteModal/index.tsx
-msgid "Voting with <0>{0}</0> N00un"
+msgid "Voting with <0>{0}</0> Vrb"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Voting with <0>{0}</0> N00uns"
+msgid "Voting with <0>{0}</0> Vrbs"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr "WTF?"
 
-#: src/components/N00unProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+#: src/components/VrbProfileVoteRow/index.tsx
+#: src/components/ProfileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "待機"
 
 #: src/components/Documentation/index.tsx
-msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction N00uns as long as Ethereum is operational and there are interested bidders."
-msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでN00unsをオークションにかけることができます。"
+msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Vrbs as long as Ethereum is operational and there are interested bidders."
+msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでVrbsをオークションにかけることができます。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
 msgstr "票になります"
 
-#: src/components/N00unInfoRowHolder/index.tsx
+#: src/components/VrbInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr "落札者"
@@ -1279,8 +1279,8 @@ msgid "You already have an active or pending proposal"
 msgstr "すでに有効または保留中の提案があります"
 
 #: src/components/Documentation/index.tsx
-msgid "You can experiment with off-chain N00un generation at the {playgroundLink}."
-msgstr "{playgroundLink} にてオフチェーンのN00un生成を試すことができます。"
+msgid "You can experiment with off-chain Vrb generation at the {playgroundLink}."
+msgstr "{playgroundLink} にてオフチェーンのVrb生成を試すことができます。"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
@@ -1319,7 +1319,7 @@ msgid "You've already delegated to this address"
 msgstr "あなたはすでにこのアドレスに委任しています"
 
 #: src/pages/Playground/index.tsx
-msgid "You've generated {0} years worth of N00uns"
+msgid "You've generated {0} years worth of Vrbs"
 msgstr "{0} 年分のナウンを生成しました"
 
 #: src/components/VoteModal/index.tsx
@@ -1414,14 +1414,14 @@ msgstr "{voteCount}票"
 msgid "{voteCount} Votes"
 msgstr "{voteCount}票"
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+#: src/components/ProfileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "{voterComponent} abstained on"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+#: src/components/ProfileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "{voterComponent} voted against"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+#: src/components/ProfileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "{voterComponent} voted for"
 msgstr ""

@@ -1,17 +1,17 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { N00unsDescriptor } from '../typechain';
+import { Descriptor } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import { LongestPart } from './types';
-import { deployN00unsDescriptor, populateDescriptor } from './utils';
+import { deployVrbsDescriptor, populateDescriptor } from './utils';
 import { ethers } from 'hardhat';
 import { appendFileSync } from 'fs';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('N00unsDescriptor', () => {
-  let vrbsDescriptor: N00unsDescriptor;
+describe('Descriptor', () => {
+  let vrbsDescriptor: Descriptor;
   let snapshotId: number;
 
   const part: LongestPart = {
@@ -26,7 +26,7 @@ describe('N00unsDescriptor', () => {
   };
 
   before(async () => {
-    vrbsDescriptor = await deployN00unsDescriptor();
+    vrbsDescriptor = await deployVrbsDescriptor();
 
     for (const [l, layer] of Object.entries(ImageData.images)) {
       for (const [i, item] of layer.entries()) {
@@ -88,8 +88,8 @@ describe('N00unsDescriptor', () => {
           'ascii',
         ),
       );
-      expect(name).to.equal(`N00un ${i}`);
-      expect(description).to.equal(`N00un ${i} is a member of the N00uns DAO`);
+      expect(name).to.equal(`Vrb ${i}`);
+      expect(description).to.equal(`Vrb ${i} is a member of the Vrbs DAO`);
       expect(image).to.not.be.undefined;
 
       appendFileSync(

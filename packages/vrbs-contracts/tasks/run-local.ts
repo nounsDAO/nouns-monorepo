@@ -16,26 +16,26 @@ task(
 
  
 
-  await contracts.N00unsAuctionHouse.instance
-    .attach(contracts.N00unsAuctionHouseProxy.instance.address)
+  await contracts.AuctionHouse.instance
+    .attach(contracts.AuctionHouseProxy.instance.address)
     .unpause({
       gasLimit: 1_000_000,
     });
 
   // Transfer ownership
-  const executorAddress = contracts.N00unsDAOExecutor.instance.address;
-  //await contracts.N00unsDescriptorV2.instance.transferOwnership(executorAddress);
-  //await contracts.N00unsToken.instance.transferOwnership(executorAddress);
-  await contracts.N00unsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
-  await contracts.N00unsAuctionHouse.instance
-    .attach(contracts.N00unsAuctionHouseProxy.instance.address)
+  const executorAddress = contracts.DAOExecutor.instance.address;
+  //await contracts.DescriptorV2.instance.transferOwnership(executorAddress);
+  //await contracts.VrbsToken.instance.transferOwnership(executorAddress);
+  await contracts.AuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+  await contracts.AuctionHouse.instance
+    .attach(contracts.AuctionHouseProxy.instance.address)
     .transferOwnership(executorAddress);
   console.log(
     'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
   );
 
   // await run('create-proposal', {
-  //   vrbsDaoProxy: contracts.N00unsDAOProxyV2.instance.address,
+  //   vrbsDaoProxy: contracts.DAOProxyV2.instance.address,
   // });
 
   const { chainId } = await ethers.provider.getNetwork();
@@ -53,12 +53,12 @@ task(
 
   console.table(accounts);
   console.log(
-    `N00un contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
+    `Vrb contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
   );
-  console.log(`Auction House Proxy address: ${contracts.N00unsAuctionHouseProxy.instance.address}`);
-  console.log(`N00uns ERC721 address: ${contracts.N00unsTokenv2.instance.address}`);
-  console.log(`N00uns DAO Executor address: ${contracts.N00unsDAOExecutor.instance.address}`);
-  console.log(`N00uns DAO Proxy address: ${contracts.N00unsDAOProxyV2.instance.address}`);
+  console.log(`Auction House Proxy address: ${contracts.AuctionHouseProxy.instance.address}`);
+  console.log(`Vrbs ERC721 address: ${contracts.VrbsTokenV2.instance.address}`);
+  console.log(`Vrbs DAO Executor address: ${contracts.DAOExecutor.instance.address}`);
+  console.log(`Vrbs DAO Proxy address: ${contracts.DAOProxyV2.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

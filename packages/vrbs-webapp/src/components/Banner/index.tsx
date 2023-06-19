@@ -1,8 +1,8 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import calendar_n00un from '../../assets/calendar_n00un.png';
-import N00un from '../N00un';
+import calendar_vrb from '../../assets/calendar_vrb.png';
+import Vrb from '../Vrb';
 import { Trans } from '@lingui/macro';
 
 const Banner = () => {
@@ -21,7 +21,7 @@ const Banner = () => {
       </Col>
       <Col lg={6}>
         <div style={{ padding: '2rem' }}>
-          <N00un imgPath={calendar_n00un} alt="n00un" />
+          <Vrb imgPath={calendar_vrb} alt="vrb" />
         </div>
       </Col>
     </Section>

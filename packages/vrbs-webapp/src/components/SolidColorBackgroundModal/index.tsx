@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import React, { useRef } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { isMobileScreen } from '../../utils/isMobile';
-import N00unsTransition from '../N00unsTransition';
+import VrbsTransition from '../VrbsTransition';
 import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
@@ -14,7 +14,7 @@ export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = prop
   const nodeRef = useRef(null);
 
   return (
-    <N00unsTransition
+    <VrbsTransition
       className={classes.backdrop}
       nodeRef={nodeRef}
       show={props.show}
@@ -39,7 +39,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
 
   return (
     <>
-      <N00unsTransition
+      <VrbsTransition
         nodeRef={exitBtnRef}
         timeout={200}
         transitionStyes={basicFadeInOut}
@@ -50,8 +50,8 @@ const SolidColorBackgroundModalOverlay: React.FC<{
             <XIcon className={classes.icon} />
           </button>
         </div>
-      </N00unsTransition>
-      <N00unsTransition
+      </VrbsTransition>
+      <VrbsTransition
         nodeRef={modalRef}
         show={show}
         className={classes.modal}
@@ -59,7 +59,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
         transitionStyes={isMobile ? mobileModalSlideInFromBottm : desktopModalSlideInFromTopAndGrow}
       >
         <>{content}</>
-      </N00unsTransition>
+      </VrbsTransition>
     </>
   );
 };

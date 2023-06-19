@@ -12,7 +12,7 @@ export const createAPI = (): Express => {
 
   app.get('/', (_req, res) => {
     res.status(200).send({
-      message: 'N00uns API Root',
+      message: 'Vrbs API Root',
     });
   });
 

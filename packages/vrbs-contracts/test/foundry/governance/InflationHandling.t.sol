@@ -2,14 +2,14 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { N00unsDAOLogicSharedBaseTest } from '../helpers/N00unsDAOLogicSharedBase.t.sol';
-import { N00unsDAOLogicV1 } from '../../../contracts/governance/N00unsDAOLogicV1.sol';
-import { N00unsDAOLogicV2 } from '../../../contracts/governance/N00unsDAOLogicV2.sol';
-import { N00unsDAOProxyV2 } from '../../../contracts/governance/N00unsDAOProxyV2.sol';
-import { N00unsDAOStorageV1, N00unsDAOStorageV2 } from '../../../contracts/governance/N00unsDAOInterfaces.sol';
+import { VrbsDAOLogicSharedBaseTest } from '../helpers/VrbsDAOLogicSharedBase.t.sol';
+import { DAOLogicV1 } from '../../../contracts/governance/DAOLogicV1.sol';
+import { DAOLogicV2 } from '../../../contracts/governance/DAOLogicV2.sol';
+import { DAOProxyV2 } from '../../../contracts/governance/DAOProxyV2.sol';
+import { VrbsDAOStorageV1, DAOStorageV2 } from '../../../contracts/governance/DAOInterfaces.sol';
 import { Utils } from '../helpers/Utils.sol';
 
-abstract contract N00unsDAOLogicV2InflationHandlingTest is N00unsDAOLogicSharedBaseTest, Utils {
+abstract contract VrbsDAOLogicV2InflationHandlingTest is VrbsDAOLogicSharedBaseTest, Utils {
     uint256 constant proposalThresholdBPS_ = 678; // 6.78%
     uint16 constant minQuorumVotesBPS = 1100; // 11%
     address tokenHolder;
@@ -21,13 +21,13 @@ abstract contract N00unsDAOLogicV2InflationHandlingTest is N00unsDAOLogicSharedB
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (N00unsDAOLogicV1) {
-        N00unsDAOLogicV2 daoLogic = new N00unsDAOLogicV2();
+    function deployDAOProxy() internal override returns (DAOLogicV1) {
+        DAOLogicV2 daoLogic = new DAOLogicV2();
 
         return
-            N00unsDAOLogicV1(
+            DAOLogicV1(
                 payable(
-                    new N00unsDAOProxyV2(
+                    new DAOProxyV2(
                         address(timelock),
                         address(vrbsToken),
                         vetoer,
@@ -36,7 +36,7 @@ abstract contract N00unsDAOLogicV2InflationHandlingTest is N00unsDAOLogicSharedB
                         votingPeriod,
                         votingDelay,
                         proposalThresholdBPS_,
-                        N00unsDAOStorageV2.DynamicQuorumParams({
+                        DAOStorageV2.DynamicQuorumParams({
                             minQuorumVotesBPS: minQuorumVotesBPS,
                             maxQuorumVotesBPS: 2000,
                             quorumCoefficient: 10000
@@ -68,7 +68,7 @@ abstract contract N00unsDAOLogicV2InflationHandlingTest is N00unsDAOLogicSharedB
     }
 }
 
-contract N00unsDAOLogicV2InflationHandling40TotalSupplyTest is N00unsDAOLogicV2InflationHandlingTest {
+contract VrbsDAOLogicV2InflationHandling40TotalSupplyTest is VrbsDAOLogicV2InflationHandlingTest {
     function setUp() public virtual override {
         super.setUp();
 
@@ -104,7 +104,7 @@ contract N00unsDAOLogicV2InflationHandling40TotalSupplyTest is N00unsDAOLogicV2I
 
         assertEq(vrbsToken.getPriorVotes(user1, block.number - 1), 2);
 
-        vm.expectRevert('N00unsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert('VrbsDAO::propose: proposer votes below proposal threshold');
         propose(user1, address(0), 0, '', '');
     }
 
@@ -124,7 +124,7 @@ contract N00unsDAOLogicV2InflationHandling40TotalSupplyTest is N00unsDAOLogicV2I
     }
 }
 
-abstract contract TotalSupply40WithAProposalState is N00unsDAOLogicV2InflationHandlingTest {
+abstract contract TotalSupply40WithAProposalState is VrbsDAOLogicV2InflationHandlingTest {
     uint256 proposalId;
 
     function setUp() public virtual override {
@@ -183,7 +183,7 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
     }
 
     function testRejectsProposalsPreviouslyAboveThresholdButNowBelowBecauseSupplyIncreased() public {
-        vm.expectRevert('N00unsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert('VrbsDAO::propose: proposer votes below proposal threshold');
         propose(user1, address(0), 0, '', '');
     }
 
@@ -207,6 +207,6 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
 
         vm.roll(block.number + votingPeriod);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(N00unsDAOStorageV1.ProposalState.Succeeded));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(VrbsDAOStorageV1.ProposalState.Succeeded));
     }
 }

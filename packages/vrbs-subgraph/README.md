@@ -8,7 +8,7 @@ A subgraph that indexes vrbs events.
 yarn
 ```
 
-## N00uns Subgraph
+## Vrbs Subgraph
 
 This repo contains the templates for compiling and deploying a graphql schema to thegraph.
 

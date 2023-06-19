@@ -4,9 +4,9 @@ import classes from './DesktopProposalVoteEvent.module.css';
 import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
 import { ProposalVoteEvent } from '../../../../wrappers/vrbsActivity';
 import React from 'react';
-import { getProposalVoteIcon } from '../../../../utils/n00unActivity/getProposalVoteIcon';
+import { getProposalVoteIcon } from '../../../../utils/activity/getProposalVoteIcon';
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
-import DesktopN00unActivityRow from '../../activityRow/DesktopN00unActivityRow';
+import DesktopActivityRow from '../../activityRow/DesktopActivityRow';
 import ReactTooltip from 'react-tooltip';
 import { Trans } from '@lingui/macro';
 
@@ -21,7 +21,7 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
     history.push(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
 
   return (
-    <DesktopN00unActivityRow
+    <DesktopActivityRow
       icon={
         <Image
           src={getProposalVoteIcon(event.proposal, event.vote.supportDetailed)}

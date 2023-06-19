@@ -12,11 +12,11 @@ import Tooltip from '../Tooltip';
 
 interface WinnerProps {
   winner: string;
-  isN00unders?: boolean;
+  isVrbs?: boolean;
 }
 
 const Winner: React.FC<WinnerProps> = props => {
-  const { winner, isN00unders } = props;
+  const { winner, isVrbs } = props;
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -27,7 +27,7 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const activeLocale = useActiveLocale();
 
-  const nonN00underN00unContent = isWinnerYou ? (
+  const nonVrbderVrbContent = isWinnerYou ? (
     <Row className={classes.youSection}>
       <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
         <h2
@@ -68,9 +68,9 @@ const Winner: React.FC<WinnerProps> = props => {
     <ShortAddress size={30} address={winner} avatar={true} />
   );
 
-  const n00underN00unContent = (
+  const founderVrbContent = (
     <a
-      href={buildEtherscanAddressLink('n00unders.eth')}
+      href={buildEtherscanAddressLink('vrbs.eth')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -82,7 +82,7 @@ const Winner: React.FC<WinnerProps> = props => {
         }}
         id="holder-etherscan-tooltip"
       >
-        n00unders.eth
+        vrbs.eth
       </Tooltip>
     </a>
   );
@@ -107,7 +107,7 @@ const Winner: React.FC<WinnerProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isN00unders ? n00underN00unContent : nonN00underN00unContent}
+            {isVrbs ? founderVrbContent : nonVrbderVrbContent}
           </h2>
         </Col>
       </Row>

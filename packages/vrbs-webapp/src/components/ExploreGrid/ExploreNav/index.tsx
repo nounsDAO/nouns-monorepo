@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 interface ExploreNavProps {
-  n00unCount: number;
+  vrbCount: number;
   sortOrder: string;
   setSortOrder: Function;
   handleSortOrderChange: Function;
@@ -15,11 +15,11 @@ interface ExploreNavProps {
 const ExploreNav: React.FC<ExploreNavProps> = props => {
   const sortOptions = [
     {
-      label: 'Latest N00uns',
+      label: 'Latest Vrbs',
       value: 'date-descending',
     },
     {
-      label: 'Oldest N00uns',
+      label: 'Oldest Vrbs',
       value: 'date-ascending',
     },
   ];
@@ -35,9 +35,9 @@ const ExploreNav: React.FC<ExploreNavProps> = props => {
         <span>
           <Trans>Explore</Trans>
         </span>{' '}
-        {props.n00unCount >= 0 && (
+        {props.vrbCount >= 0 && (
           <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <strong>{props.n00unCount}</strong> N00uns
+            <strong>{props.vrbCount}</strong> Vrbs
           </motion.span>
         )}
       </h3>

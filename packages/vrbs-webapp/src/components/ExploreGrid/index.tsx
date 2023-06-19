@@ -5,123 +5,123 @@ import ExploreGridItem from './ExploreGridItem';
 import Placeholder from 'react-bootstrap/esm/Placeholder';
 
 interface ExploreGridProps {
-  n00unCount: number;
-  activeN00un: number;
-  selectedN00un: number | undefined;
-  setActiveN00un: Function;
-  setSelectedN00un: Function;
-  setN00unsList: Function;
-  handleFocusN00un: Function;
-  isN00unHoverDisabled: boolean;
-  vrbsList: N00un[];
+  vrbCount: number;
+  activeVrb: number;
+  selectedVrb: number | undefined;
+  setActiveVrb: Function;
+  setSelectedVrb: Function;
+  setVrbsList: Function;
+  handleFocusVrb: Function;
+  isVrbHoverDisabled: boolean;
+  vrbsList: Vrb[];
   sortOrder: string;
   buttonsRef: React.MutableRefObject<(HTMLButtonElement | null)[]>;
 }
 
-// n00un.pics object
-type N00unPic = {
+// vrb.pics object
+type VrbPic = {
   id: number | null;
   svg: string | undefined;
 };
 
-type N00un = {
+type Vrb = {
   id: number | null;
   imgSrc: string | undefined;
 };
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
-  const [individualN00uns, setIndividualN00uns] = useState<N00un[]>([]);
-  const placeholderN00un: N00un = { id: null, imgSrc: undefined };
+  const [individualVrbs, setIndividualVrbs] = useState<Vrb[]>([]);
+  const placeholderVrb: Vrb = { id: null, imgSrc: undefined };
 
   // Handle events
-  const getInitialN00uns = (individualCount: number) => {
+  const getInitialVrbs = (individualCount: number) => {
     // Fetch initial vrbs by url
     const vrbs = new Array(individualCount)
-      .fill(placeholderN00un)
-      .map((x, i): N00un => {
+      .fill(placeholderVrb)
+      .map((x, i): Vrb => {
         return {
-          id: i + (props.n00unCount - individualCount),
-          imgSrc: `https://n00un.pics/${i + (props.n00unCount - individualCount)}.svg`,
+          id: i + (props.vrbCount - individualCount),
+          imgSrc: `https://vrb.pics/${i + (props.vrbCount - individualCount)}.svg`,
         };
       })
       .reverse();
 
-    setIndividualN00uns(vrbs);
+    setIndividualVrbs(vrbs);
     // After initial vrbs are set, run range calls
-    rangeCalls(props.n00unCount, vrbs);
+    rangeCalls(props.vrbCount, vrbs);
 
     // Add initial vrbs to end of placeholder array to display them first on load
-    props.setN00unsList((arr: N00un[]) => [...vrbs, ...arr]);
+    props.setVrbsList((arr: Vrb[]) => [...vrbs, ...arr]);
   };
 
   // Range calls
   const initialChunkSize = 10;
   const rangeChunkSize = 100;
-  const rangeCalls = async (n00unCount: number, individualN00uns: N00un[]) => {
-    if (n00unCount >= 0) {
-      for (let i = n00unCount - individualN00uns.length; i >= 0; i -= rangeChunkSize) {
+  const rangeCalls = async (vrbCount: number, individualVrbs: Vrb[]) => {
+    if (vrbCount >= 0) {
+      for (let i = vrbCount - individualVrbs.length; i >= 0; i -= rangeChunkSize) {
         const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
         const end = i - 1;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const vrbsRange = await fetchN00uns(start, end);
+        const vrbsRange = await fetchVrbs(start, end);
       }
     }
   };
 
-  const fetchN00uns = async (start: number, end: number) => {
-    const url = `https://n00un.pics/range?start=${start}&end=${end}`;
+  const fetchVrbs = async (start: number, end: number) => {
+    const url = `https://vrb.pics/range?start=${start}&end=${end}`;
     try {
       const response = await fetch(url);
       const json = await response.json();
-      // Convert n00un.pic svg key to generic imgSrc key
-      const rangeN00uns: N00un[] = json.reverse().map((n00un: N00unPic, i: number) => {
+      // Convert vrb.pic svg key to generic imgSrc key
+      const rangeVrbs: Vrb[] = json.reverse().map((vrb: VrbPic, i: number) => {
         return {
-          id: n00un.id,
-          imgSrc: n00un.svg,
+          id: vrb.id,
+          imgSrc: vrb.svg,
         };
       });
 
-      props.setN00unsList((arr: N00un[]) => {
-        let sliced = arr.slice(0, props.n00unCount - 1 - end).concat(rangeN00uns);
+      props.setVrbsList((arr: Vrb[]) => {
+        let sliced = arr.slice(0, props.vrbCount - 1 - end).concat(rangeVrbs);
         // if list is only individual vrbs + placeholders
         // keep individual vrbs, clear others and replace with ranges
-        if (arr[individualN00uns.length + 1].id === null) {
-          sliced = arr.slice(0, individualN00uns.length).concat(rangeN00uns);
+        if (arr[individualVrbs.length + 1].id === null) {
+          sliced = arr.slice(0, individualVrbs.length).concat(rangeVrbs);
         }
         return sliced;
       });
 
-      return rangeN00uns;
+      return rangeVrbs;
     } catch (error) {
       console.log('error fetching vrbs', error);
     }
   };
 
-  // Once n00unCount is known, run dependent functions
+  // Once vrbCount is known, run dependent functions
   useEffect(() => {
-    const placeholderN00unsData = new Array(rangeChunkSize)
-      .fill(placeholderN00un)
-      .map((x, i): N00un => {
+    const placeholderVrbsData = new Array(rangeChunkSize)
+      .fill(placeholderVrb)
+      .map((x, i): Vrb => {
         return {
           id: null,
           imgSrc: undefined,
         };
       });
-    props.setN00unsList(placeholderN00unsData);
+    props.setVrbsList(placeholderVrbsData);
 
-    if (props.n00unCount >= 0) {
-      getInitialN00uns((props.n00unCount % initialChunkSize) + 1);
+    if (props.vrbCount >= 0) {
+      getInitialVrbs((props.vrbCount % initialChunkSize) + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.n00unCount]);
+  }, [props.vrbCount]);
 
   return (
     <div
       className={cx(
         classes.exploreGrid,
-        ((props.selectedN00un !== undefined && props.selectedN00un < 0) ||
-          props.selectedN00un === undefined) &&
-          props.n00unCount >= 0 &&
+        ((props.selectedVrb !== undefined && props.selectedVrb < 0) ||
+          props.selectedVrb === undefined) &&
+          props.vrbCount >= 0 &&
           classes.sidebarHidden,
       )}
     >
@@ -129,24 +129,24 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         {(props.sortOrder === 'date-ascending'
           ? [...props.vrbsList].reverse()
           : props.vrbsList
-        ).map((n00un, i) => {
+        ).map((vrb, i) => {
           return (
-            <li className={n00un.id === props.selectedN00un ? classes.activeN00un : ''} key={i}>
+            <li className={vrb.id === props.selectedVrb ? classes.activeVrb : ''} key={i}>
               <button
-                ref={el => (props.buttonsRef.current[n00un.id ? n00un.id : -1] = el)}
-                key={`${i}${n00un.id}`}
-                onClick={e => n00un.id !== null && props.handleFocusN00un(n00un.id)}
-                onFocus={e => n00un.id !== null && props.handleFocusN00un(n00un.id)}
+                ref={el => (props.buttonsRef.current[vrb.id ? vrb.id : -1] = el)}
+                key={`${i}${vrb.id}`}
+                onClick={e => vrb.id !== null && props.handleFocusVrb(vrb.id)}
+                onFocus={e => vrb.id !== null && props.handleFocusVrb(vrb.id)}
                 onMouseOver={() =>
-                  !props.isN00unHoverDisabled && n00un.id !== null && props.setActiveN00un(n00un.id)
+                  !props.isVrbHoverDisabled && vrb.id !== null && props.setActiveVrb(vrb.id)
                 }
                 onMouseOut={() =>
-                  props.selectedN00un !== undefined && props.setActiveN00un(props.selectedN00un)
+                  props.selectedVrb !== undefined && props.setActiveVrb(props.selectedVrb)
                 }
               >
-                <ExploreGridItem n00unId={n00un.id} imgSrc={n00un.imgSrc} />
-                <p className={classes.n00unIdOverlay}>
-                  {n00un.id != null ? n00un.id : <Placeholder xs={12} animation="glow" />}
+                <ExploreGridItem vrbId={vrb.id} imgSrc={vrb.imgSrc} />
+                <p className={classes.vrbIdOverlay}>
+                  {vrb.id != null ? vrb.id : <Placeholder xs={12} animation="glow" />}
                 </p>
               </button>
             </li>

@@ -5,36 +5,36 @@ import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { useQuery } from '@apollo/client';
-import { n00unQuery } from '../../wrappers/subgraph';
+import { vrbQuery } from '../../wrappers/subgraph';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import React from 'react';
 import Tooltip from '../Tooltip';
 
 interface HolderProps {
-  n00unId: number;
-  isN00unders?: boolean;
+  vrbId: number;
+  isVrbs?: boolean;
 }
 
 const Holder: React.FC<HolderProps> = props => {
-  const { n00unId, isN00unders } = props;
+  const { vrbId, isVrbs } = props;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  const { loading, error, data } = useQuery(n00unQuery(n00unId.toString()));
+  const { loading, error, data } = useQuery(vrbQuery(vrbId.toString()));
 
   if (loading) {
     return <></>;
   } else if (error) {
     return (
       <div>
-        <Trans>Failed to fetch N00un info</Trans>
+        <Trans>Failed to fetch Vrb info</Trans>
       </div>
     );
   }
 
-  const holder = data && data.n00un.owner.id;
+  const holder = data && data.vrb.owner.id;
 
-  const nonN00underN00unContent = (
+  const nonVrbderVrbContent = (
     <a
       href={buildEtherscanAddressLink(holder)}
       target={'_blank'}
@@ -53,7 +53,7 @@ const Holder: React.FC<HolderProps> = props => {
     </a>
   );
 
-  const n00underN00unContent = 'n00unders.eth';
+  const founderVrbContent = 'vrbs.eth';
 
   return (
     <>
@@ -75,7 +75,7 @@ const Holder: React.FC<HolderProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isN00unders ? n00underN00unContent : nonN00underN00unContent}
+            {isVrbs ? founderVrbContent : nonVrbderVrbContent}
           </h2>
         </Col>
       </Row>

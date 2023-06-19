@@ -104,11 +104,11 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
       <div className={classes.voteModalSubtitle}>
         {availableVotes === 1 ? (
           <Trans>
-            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> N00un
+            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Vrb
           </Trans>
         ) : (
           <Trans>
-            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> N00uns
+            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Vrbs
           </Trans>
         )}
       </div>

@@ -4,7 +4,7 @@
   max-width: 11rem;
 }
 
-.stackedN00unWrapper {
+.stackedVrbWrapper {
   display: flex;
 }
 
@@ -44,7 +44,7 @@
   justify-content: center;
 }
 
-.n00unInfoWrapper {
+.vrbInfoWrapper {
   margin-top: 0.25rem;
   margin-bottom: 0.75rem;
   font-style: normal;

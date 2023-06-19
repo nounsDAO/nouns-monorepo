@@ -18,8 +18,8 @@ const GovernancePage = () => {
   const treasuryBalanceUSD = useTreasuryUSDValue();
 
   // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
-  const n00unSingular = <Trans>N00un</Trans>;
-  const n00unPlural = <Trans>N00uns</Trans>;
+  const vrbSingular = <Trans>Vrb</Trans>;
+  const vrbPlural = <Trans>Vrbs</Trans>;
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -29,15 +29,15 @@ const GovernancePage = () => {
             <Trans>Governance</Trans>
           </span>
           <h1>
-            <Trans>N00uns DAO</Trans>
+            <Trans>Vrbs DAO</Trans>
           </h1>
         </Row>
         <p className={classes.subheading}>
           <Trans>
-            N00uns govern <span className={classes.boldText}>N00uns DAO</span>. N00uns can vote on
+            Vrbs govern <span className={classes.boldText}>Vrbs DAO</span>. Vrbs can vote on
             proposals or delegate their vote to a third party. A minimum of{' '}
             <span className={classes.boldText}>
-              {vrbsRequired} {threshold === 0 ? n00unSingular : n00unPlural}
+              {vrbsRequired} {threshold === 0 ? vrbSingular : vrbPlural}
             </span>{' '}
             is required to submit proposals.
           </Trans>
@@ -71,9 +71,9 @@ const GovernancePage = () => {
           </Col>
           <Col className={classes.treasuryInfoText}>
             <Trans>
-              This treasury exists for <span className={classes.boldText}>N00uns DAO</span>{' '}
+              This treasury exists for <span className={classes.boldText}>Vrbs DAO</span>{' '}
               participants to allocate resources for the long-term growth and prosperity of the
-              N00uns project.
+              Vrbs project.
             </Trans>
           </Col>
         </Row>

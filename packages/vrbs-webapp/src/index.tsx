@@ -19,8 +19,8 @@ import auction, {
   setFullAuction,
 } from './state/slices/auction';
 import onDisplayAuction, {
-  setLastAuctionN00unId,
-  setOnDisplayAuctionN00unId,
+  setLastAuctionVrbId,
+  setOnDisplayAuctionVrbId,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
@@ -30,7 +30,7 @@ import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, createNetworkHttpUrl, multicallOnLocalhost } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
-import { N00unsAuctionHouseFactory } from '@vrbs/sdk';
+import { AuctionHouseFactory } from '@vrbs/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
@@ -40,7 +40,7 @@ import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'r
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { n00unPath } from './utils/history';
+import { vrbPath } from './utils/history';
 import { push } from 'connected-react-router';
 import { LanguageProvider } from './i18n/LanguageProvider';
 
@@ -116,7 +116,7 @@ const ChainSubscriber: React.FC = () => {
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    const vrbsAuctionHouseContract = N00unsAuctionHouseFactory.connect(
+    const vrbsAuctionHouseContract = AuctionHouseFactory.connect(
       config.addresses.vrbsAuctionHouseProxy,
       wsProvider,
     );
@@ -126,7 +126,7 @@ const ChainSubscriber: React.FC = () => {
     const createdFilter = vrbsAuctionHouseContract.filters.AuctionCreated(null, null, null);
     const settledFilter = vrbsAuctionHouseContract.filters.AuctionSettled(null, null, null);
     const processBidFilter = async (
-      n00unId: BigNumberish,
+      vrbId: BigNumberish,
       sender: string,
       value: BigNumberish,
       extended: boolean,
@@ -135,33 +135,33 @@ const ChainSubscriber: React.FC = () => {
       const timestamp = (await event.getBlock()).timestamp;
       const transactionHash = event.transactionHash;
       dispatch(
-        appendBid(reduxSafeBid({ n00unId, sender, value, extended, transactionHash, timestamp })),
+        appendBid(reduxSafeBid({ vrbId, sender, value, extended, transactionHash, timestamp })),
       );
     };
     const processAuctionCreated = (
-      n00unId: BigNumberish,
+      vrbId: BigNumberish,
       startTime: BigNumberish,
       endTime: BigNumberish,
     ) => {
       dispatch(
-        setActiveAuction(reduxSafeNewAuction({ n00unId, startTime, endTime, settled: false })),
+        setActiveAuction(reduxSafeNewAuction({ vrbId, startTime, endTime, settled: false })),
       );
-      const n00unIdNumber = BigNumber.from(n00unId).toNumber();
-      dispatch(push(n00unPath(n00unIdNumber)));
-      dispatch(setOnDisplayAuctionN00unId(n00unIdNumber));
-      dispatch(setLastAuctionN00unId(n00unIdNumber));
+      const vrbIdNumber = BigNumber.from(vrbId).toNumber();
+      dispatch(push(vrbPath(vrbIdNumber)));
+      dispatch(setOnDisplayAuctionVrbId(vrbIdNumber));
+      dispatch(setLastAuctionVrbId(vrbIdNumber));
     };
-    const processAuctionExtended = (n00unId: BigNumberish, endTime: BigNumberish) => {
-      dispatch(setAuctionExtended({ n00unId, endTime }));
+    const processAuctionExtended = (vrbId: BigNumberish, endTime: BigNumberish) => {
+      dispatch(setAuctionExtended({ vrbId, endTime }));
     };
-    const processAuctionSettled = (n00unId: BigNumberish, winner: string, amount: BigNumberish) => {
-      dispatch(setAuctionSettled({ n00unId, amount, winner }));
+    const processAuctionSettled = (vrbId: BigNumberish, winner: string, amount: BigNumberish) => {
+      dispatch(setAuctionSettled({ vrbId, amount, winner }));
     };
 
     // Fetch the current auction
     const currentAuction = await vrbsAuctionHouseContract.auction();
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionN00unId(currentAuction.n00unId.toNumber()));
+    dispatch(setLastAuctionVrbId(currentAuction.vrbId.toNumber()));
 
     // Fetch the previous 24 hours of bids
     const previousBids = await vrbsAuctionHouseContract.queryFilter(
@@ -173,17 +173,17 @@ const ChainSubscriber: React.FC = () => {
       processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
-    vrbsAuctionHouseContract.on(bidFilter, (n00unId, sender, value, extended, event) =>
-      processBidFilter(n00unId, sender, value, extended, event),
+    vrbsAuctionHouseContract.on(bidFilter, (vrbId, sender, value, extended, event) =>
+      processBidFilter(vrbId, sender, value, extended, event),
     );
-    vrbsAuctionHouseContract.on(createdFilter, (n00unId, startTime, endTime) =>
-      processAuctionCreated(n00unId, startTime, endTime),
+    vrbsAuctionHouseContract.on(createdFilter, (vrbId, startTime, endTime) =>
+      processAuctionCreated(vrbId, startTime, endTime),
     );
-    vrbsAuctionHouseContract.on(extendedFilter, (n00unId, endTime) =>
-      processAuctionExtended(n00unId, endTime),
+    vrbsAuctionHouseContract.on(extendedFilter, (vrbId, endTime) =>
+      processAuctionExtended(vrbId, endTime),
     );
-    vrbsAuctionHouseContract.on(settledFilter, (n00unId, winner, amount) =>
-      processAuctionSettled(n00unId, winner, amount),
+    vrbsAuctionHouseContract.on(settledFilter, (vrbId, winner, amount) =>
+      processAuctionSettled(vrbId, winner, amount),
     );
   };
   loadState();
@@ -192,7 +192,7 @@ const ChainSubscriber: React.FC = () => {
 };
 
 const PastAuctions: React.FC = () => {
-  const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionN00unId);
+  const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionVrbId);
   const { data } = useQuery(latestAuctionsQuery());
   const dispatch = useAppDispatch();
 

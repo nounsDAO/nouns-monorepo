@@ -1,9 +1,9 @@
 import {
-  N00unsTokenFactory,
-  N00unsAuctionHouseFactory,
-  N00unsDescriptorFactory,
-  N00unsSeederFactory,
-  N00unsDaoLogicV2Factory,
+  VrbsTokenFactory,
+  AuctionHouseFactory,
+  DescriptorFactory,
+  SeederFactory,
+  DaoLogicV2Factory,
 } from '@vrbs/contracts';
 import type { Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
@@ -24,23 +24,23 @@ export const getContractsForChainOrThrow = (
   const addresses = getContractAddressesForChainOrThrow(chainId);
 
   return {
-    vrbsTokenContract: N00unsTokenFactory.connect(
+    vrbsTokenContract: VrbsTokenFactory.connect(
       addresses.vrbsToken,
       signerOrProvider as Signer | Provider,
     ),
-    vrbsAuctionHouseContract: N00unsAuctionHouseFactory.connect(
+    vrbsAuctionHouseContract: AuctionHouseFactory.connect(
       addresses.vrbsAuctionHouseProxy,
       signerOrProvider as Signer | Provider,
     ),
-    vrbsDescriptorContract: N00unsDescriptorFactory.connect(
+    vrbsDescriptorContract: DescriptorFactory.connect(
       addresses.vrbsDescriptor,
       signerOrProvider as Signer | Provider,
     ),
-    vrbsSeederContract: N00unsSeederFactory.connect(
+    vrbsSeederContract: SeederFactory.connect(
       addresses.vrbsSeeder,
       signerOrProvider as Signer | Provider,
     ),
-    vrbsDaoContract: N00unsDaoLogicV2Factory.connect(
+    vrbsDaoContract: DaoLogicV2Factory.connect(
       addresses.vrbsDAOProxy,
       signerOrProvider as Signer | Provider,
     ),

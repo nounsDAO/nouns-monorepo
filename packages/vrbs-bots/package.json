@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "vrbs backend bots",
-  "author": "N00unders",
+  "author": "Vrbs DAO",
   "homepage": "https://vrbs.wtf",
   "license": "GPL-3.0",
   "main": "src/index.ts",

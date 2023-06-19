@@ -1,8 +1,8 @@
 {
   "name": "@vrbs/sdk",
   "version": "0.4.0",
-  "description": "Useful tooling for interacting with the N00uns protocol",
-  "author": "N00unders",
+  "description": "Useful tooling for interacting with the Vrbs protocol",
+  "author": "Vrbs",
   "homepage": "https://vrbs.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",

@@ -1,4 +1,4 @@
-import { default as N00unsAuctionHouseABI } from '../abi/contracts/N00unsAuctionHouse.sol/N00unsAuctionHouse.json';
+import { default as AuctionHouseABI } from '../abi/contracts/AuctionHouse.sol/AuctionHouse.json';
 import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
@@ -27,10 +27,10 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00unsToken')
+task('deploy', 'Deploys NFTDescriptor, Descriptor, Seeder, and VrbsToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('n00undersdao', 'The n00unders DAO contract address', undefined, types.string)
+  .addOptionalParam('vrbsdao', 'The vrbs DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -92,11 +92,11 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
-    if (!args.n00undersdao) {
+    if (!args.vrbsdao) {
       console.log(
-        `N00unders DAO address not provided. Setting to deployer (${deployer.address})...`,
+        `Vrbs DAO address not provided. Setting to deployer (${deployer.address})...`,
       );
-      args.n00undersdao = deployer.address;
+      args.vrbsdao = deployer.address;
     }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
@@ -109,7 +109,7 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
     }
 
     const nonce = await deployer.getTransactionCount();
-    const expectedN00unsArtAddress = ethers.utils.getContractAddress({
+    const expectedVrbsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + NOUNS_ART_NONCE_OFFSET,
     });
@@ -117,7 +117,7 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
-    const expectedN00unsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedVrbsDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -128,37 +128,37 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
     const contracts: Record<ContractName, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
-      N00unsDescriptorV2: {
-        args: [expectedN00unsArtAddress, () => deployment.SVGRenderer.address],
+      DescriptorV2: {
+        args: [expectedVrbsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
       },
       Inflator: {},
-      N00unsArt: {
-        args: [() => deployment.N00unsDescriptorV2.address, () => deployment.Inflator.address],
+      Art: {
+        args: [() => deployment.DescriptorV2.address, () => deployment.Inflator.address],
       },
-      N00unsSeeder2: {},
-      N00unsToken: {
+      Seeder2: {},
+      VrbsToken: {
         args: [
-          args.n00undersdao,
+          args.vrbsdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.N00unsDescriptorV2.address,
-          () => deployment.N00unsSeeder2.address,
+          () => deployment.DescriptorV2.address,
+          () => deployment.Seeder2.address,
           proxyRegistryAddress,
         ],
       },
-      N00unsAuctionHouse: {
+      AuctionHouse: {
         waitForConfirmation: true,
       },
-      N00unsAuctionHouseProxyAdmin: {},
-      N00unsAuctionHouseProxy: {
+      AuctionHouseProxyAdmin: {},
+      AuctionHouseProxy: {
         args: [
-          () => deployment.N00unsAuctionHouse.address,
-          () => deployment.N00unsAuctionHouseProxyAdmin.address,
+          () => deployment.AuctionHouse.address,
+          () => deployment.AuctionHouseProxyAdmin.address,
           () =>
-            new Interface(N00unsAuctionHouseABI).encodeFunctionData('initialize', [
-              deployment.N00unsToken.address,
+            new Interface(AuctionHouseABI).encodeFunctionData('initialize', [
+              deployment.VrbsToken.address,
               args.weth,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -169,7 +169,7 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedAuctionHouseProxyAddress.toLowerCase();
-          const actual = deployment.N00unsAuctionHouseProxy.address.toLowerCase();
+          const actual = deployment.AuctionHouseProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
               `Unexpected auction house proxy address. Expected: ${expected}. Actual: ${actual}.`,
@@ -177,19 +177,19 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
           }
         },
       },
-      N00unsDAOExecutor: {
-        args: [expectedN00unsDAOProxyAddress, args.timelockDelay],
+      DAOExecutor: {
+        args: [expectedVrbsDAOProxyAddress, args.timelockDelay],
       },
-      N00unsDAOLogicV1: {
+      DAOLogicV1: {
         waitForConfirmation: true,
       },
-      N00unsDAOProxy: {
+      DAOProxy: {
         args: [
-          () => deployment.N00unsDAOExecutor.address,
-          () => deployment.N00unsToken.address,
-          args.n00undersdao,
-          () => deployment.N00unsDAOExecutor.address,
-          () => deployment.N00unsDAOLogicV1.address,
+          () => deployment.DAOExecutor.address,
+          () => deployment.VrbsToken.address,
+          args.vrbsdao,
+          () => deployment.DAOExecutor.address,
+          () => deployment.DAOLogicV1.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
@@ -197,11 +197,11 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
-          const expected = expectedN00unsDAOProxyAddress.toLowerCase();
-          const actual = deployment.N00unsDAOProxy.address.toLowerCase();
+          const expected = expectedVrbsDAOProxyAddress.toLowerCase();
+          const actual = deployment.DAOProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected N00uns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected Vrbs DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },

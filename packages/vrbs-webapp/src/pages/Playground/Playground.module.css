@@ -57,16 +57,16 @@
   font-size: 15px;
   color: #8c8d92;
 }
-.n00unYearsFooter {
+.vrbYearsFooter {
   font-style: italic;
 }
-.n00unImg {
+.vrbImg {
   border-radius: 16px;
 }
-.n00unImg:hover {
+.vrbImg:hover {
   cursor: pointer;
   transform: scale(1.01);
 }
-.n00unWrapper {
+.vrbWrapper {
   margin-bottom: 1rem;
 }

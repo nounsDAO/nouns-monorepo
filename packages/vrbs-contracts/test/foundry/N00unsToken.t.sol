@@ -2,24 +2,24 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { N00unsToken } from '../../contracts/N00unsToken.sol';
-import { N00unsDescriptorV2 } from '../../contracts/N00unsDescriptorV2.sol';
-import { N00unsSeeder } from '../../contracts/N00unsSeeder.sol';
+import { VrbsToken } from '../../contracts/VrbsToken.sol';
+import { DescriptorV2 } from '../../contracts/DescriptorV2.sol';
+import { Seeder } from '../../contracts/Seeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
-import { N00unsArt } from '../../contracts/N00unsArt.sol';
+import { Art } from '../../contracts/Art.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 
-contract N00unsTokenTest is Test, DeployUtils {
-    N00unsToken vrbsToken;
-    address n00undersDAO = address(1);
+contract VrbsTokenTest is Test, DeployUtils {
+    VrbsToken vrbsToken;
+    address vrbsDAO = address(1);
     address minter = address(2);
 
     function setUp() public {
-        N00unsDescriptorV2 descriptor = _deployAndPopulateV2();
+        DescriptorV2 descriptor = _deployAndPopulateV2();
         _populateDescriptorV2(descriptor);
 
-        vrbsToken = new N00unsToken(n00undersDAO, minter, descriptor, new N00unsSeeder(), IProxyRegistry(address(0)));
+        vrbsToken = new VrbsToken(vrbsDAO, minter, descriptor, new Seeder(), IProxyRegistry(address(0)));
     }
 
     function testSymbol() public {
@@ -27,14 +27,14 @@ contract N00unsTokenTest is Test, DeployUtils {
     }
 
     function testName() public {
-        assertEq(vrbsToken.name(), 'N00uns');
+        assertEq(vrbsToken.name(), 'Vrbs');
     }
 
-    function testMintAN00unToSelfAndRewardsN00undersDao() public {
+    function testMintAVrbToSelfAndRewardsVrbsDao() public {
         vm.prank(minter);
         vrbsToken.mint();
 
-        assertEq(vrbsToken.ownerOf(0), n00undersDAO);
+        assertEq(vrbsToken.ownerOf(0), vrbsDAO);
         assertEq(vrbsToken.ownerOf(1), minter);
     }
 

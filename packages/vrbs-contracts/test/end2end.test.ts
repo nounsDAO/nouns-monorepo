@@ -5,20 +5,20 @@ import { solidity } from 'ethereum-waffle';
 
 import {
   WETH,
-  N00unsToken,
-  N00unsAuctionHouse,
-  N00unsAuctionHouse__factory as N00unsAuctionHouseFactory,
-  N00unsDescriptorV2,
-  N00unsDescriptorV2__factory as N00unsDescriptorV2Factory,
-  N00unsDAOProxy__factory as N00unsDaoProxyFactory,
-  N00unsDAOLogicV1,
-  N00unsDAOLogicV1__factory as N00unsDaoLogicV1Factory,
-  N00unsDAOExecutor,
-  N00unsDAOExecutor__factory as N00unsDaoExecutorFactory,
+  VrbsToken,
+  AuctionHouse,
+  AuctionHouse__factory as AuctionHouseFactory,
+  DescriptorV2,
+  VrbsDescriptorV2__factory as VrbsDescriptorV2Factory,
+  VrbsDAOProxy__factory as VrbsDaoProxyFactory,
+  DAOLogicV1,
+  DAOLogicV1__factory as DaoLogicV1Factory,
+  DAOExecutor,
+  VrbsDAOExecutor__factory as VrbsDaoExecutorFactory,
 } from '../typechain';
 
 import {
-  deployN00unsToken,
+  deployVrbsToken,
   deployWeth,
   populateDescriptorV2,
   address,
@@ -33,17 +33,17 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 chai.use(solidity);
 const { expect } = chai;
 
-let vrbsToken: N00unsToken;
-let vrbsAuctionHouse: N00unsAuctionHouse;
-let descriptor: N00unsDescriptorV2;
+let vrbsToken: VrbsToken;
+let vrbsAuctionHouse: AuctionHouse;
+let descriptor: DescriptorV2;
 let weth: WETH;
-let gov: N00unsDAOLogicV1;
-let timelock: N00unsDAOExecutor;
+let gov: DAOLogicV1;
+let timelock: DAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;
 let bidderA: SignerWithAddress;
-let n00undersDAO: SignerWithAddress;
+let vrbsDAO: SignerWithAddress;
 
 // Governance Config
 const TIME_LOCK_DELAY = 172_800; // 2 days
@@ -67,7 +67,7 @@ const MIN_INCREMENT_BID_PERCENTAGE = 5;
 const DURATION = 60 * 60 * 24;
 
 async function deploy() {
-  [deployer, bidderA, wethDeployer, n00undersDAO] = await ethers.getSigners();
+  [deployer, bidderA, wethDeployer, vrbsDAO] = await ethers.getSigners();
 
   // Deployed by another account to simulate real network
 
@@ -75,24 +75,24 @@ async function deploy() {
 
   // nonce 2: Deploy AuctionHouse
   // nonce 3: Deploy nftDescriptorLibraryFactory
-  // nonce 4: Deploy N00unsDescriptor
-  // nonce 5: Deploy N00unsSeeder
-  // nonce 6: Deploy N00unsToken
-  // nonce 0: Deploy N00unsDAOExecutor
-  // nonce 1: Deploy N00unsDAOLogicV1
-  // nonce 7: Deploy N00unsDAOProxy
+  // nonce 4: Deploy Descriptor
+  // nonce 5: Deploy Seeder
+  // nonce 6: Deploy VrbsToken
+  // nonce 0: Deploy DAOExecutor
+  // nonce 1: Deploy DAOLogicV1
+  // nonce 7: Deploy DAOProxy
   // nonce ++: populate Descriptor
   // nonce ++: set ownable contracts owner to timelock
 
-  // 1. DEPLOY N00uns token
-  vrbsToken = await deployN00unsToken(
+  // 1. DEPLOY Vrbs token
+  vrbsToken = await deployVrbsToken(
     deployer,
-    n00undersDAO.address,
+    vrbsDAO.address,
     deployer.address, // do not know minter/auction house yet
   );
 
   // 2a. DEPLOY AuctionHouse
-  const auctionHouseFactory = await ethers.getContractFactory('N00unsAuctionHouse', deployer);
+  const auctionHouseFactory = await ethers.getContractFactory('AuctionHouse', deployer);
   const vrbsAuctionHouseProxy = await upgrades.deployProxy(auctionHouseFactory, [
     vrbsToken.address,
     weth.address,
@@ -103,13 +103,13 @@ async function deploy() {
   ]);
 
   // 2b. CAST proxy as AuctionHouse
-  vrbsAuctionHouse = N00unsAuctionHouseFactory.connect(vrbsAuctionHouseProxy.address, deployer);
+  vrbsAuctionHouse = AuctionHouseFactory.connect(vrbsAuctionHouseProxy.address, deployer);
 
   // 3. SET MINTER
   await vrbsToken.setMinter(vrbsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = N00unsDescriptorV2Factory.connect(await vrbsToken.descriptor(), deployer);
+  descriptor = VrbsDescriptorV2Factory.connect(await vrbsToken.descriptor(), deployer);
 
   await populateDescriptorV2(descriptor);
 
@@ -119,20 +119,20 @@ async function deploy() {
     nonce: (await deployer.getTransactionCount()) + 2,
   });
 
-  // 5b. DEPLOY N00unsDAOExecutor with pre-computed Delegator address
-  timelock = await new N00unsDaoExecutorFactory(deployer).deploy(
+  // 5b. DEPLOY DAOExecutor with pre-computed Delegator address
+  timelock = await new VrbsDaoExecutorFactory(deployer).deploy(
     calculatedGovDelegatorAddress,
     TIME_LOCK_DELAY,
   );
 
   // 6. DEPLOY Delegate
-  const govDelegate = await new N00unsDaoLogicV1Factory(deployer).deploy();
+  const govDelegate = await new DaoLogicV1Factory(deployer).deploy();
 
   // 7a. DEPLOY Delegator
-  const vrbsDAOProxy = await new N00unsDaoProxyFactory(deployer).deploy(
+  const vrbsDAOProxy = await new VrbsDaoProxyFactory(deployer).deploy(
     timelock.address,
     vrbsToken.address,
-    n00undersDAO.address, // N00undersDAO is vetoer
+    vrbsDAO.address, // VrbsDAO is vetoer
     timelock.address,
     govDelegate.address,
     VOTING_PERIOD,
@@ -144,17 +144,17 @@ async function deploy() {
   expect(calculatedGovDelegatorAddress).to.equal(vrbsDAOProxy.address);
 
   // 7b. CAST Delegator as Delegate
-  gov = N00unsDaoLogicV1Factory.connect(vrbsDAOProxy.address, deployer);
+  gov = DaoLogicV1Factory.connect(vrbsDAOProxy.address, deployer);
 
-  // 8. SET N00uns owner to N00unsDAOExecutor
+  // 8. SET Vrbs owner to DAOExecutor
   await vrbsToken.transferOwnership(timelock.address);
-  // 9. SET Descriptor owner to N00unsDAOExecutor
+  // 9. SET Descriptor owner to DAOExecutor
   await descriptor.transferOwnership(timelock.address);
 
   // 10. UNPAUSE auction and kick off first mint
   await vrbsAuctionHouse.unpause();
 
-  // 11. SET Auction House owner to N00unsDAOExecutor
+  // 11. SET Auction House owner to DAOExecutor
   await vrbsAuctionHouse.transferOwnership(timelock.address);
 }
 
@@ -167,20 +167,20 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(await vrbsAuctionHouse.owner()).to.equal(timelock.address);
 
     expect(await vrbsToken.minter()).to.equal(vrbsAuctionHouse.address);
-    expect(await vrbsToken.n00undersDAO()).to.equal(n00undersDAO.address);
+    expect(await vrbsToken.vrbsDAO()).to.equal(vrbsDAO.address);
 
     expect(await gov.admin()).to.equal(timelock.address);
     expect(await timelock.admin()).to.equal(gov.address);
     expect(await gov.timelock()).to.equal(timelock.address);
 
-    expect(await gov.vetoer()).to.equal(n00undersDAO.address);
+    expect(await gov.vetoer()).to.equal(vrbsDAO.address);
 
     expect(await vrbsToken.totalSupply()).to.equal(EthersBN.from('2'));
 
-    expect(await vrbsToken.ownerOf(0)).to.equal(n00undersDAO.address);
+    expect(await vrbsToken.ownerOf(0)).to.equal(vrbsDAO.address);
     expect(await vrbsToken.ownerOf(1)).to.equal(vrbsAuctionHouse.address);
 
-    expect((await vrbsAuctionHouse.auction()).n00unId).to.equal(EthersBN.from('1'));
+    expect((await vrbsAuctionHouse.auction()).vrbId).to.equal(EthersBN.from('1'));
   });
 
   it('allows bidding, settling, and transferring ETH correctly', async () => {
@@ -237,10 +237,10 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(await ethers.provider.getBalance(address(2))).to.equal(RESERVE_PRICE);
   });
 
-  it('does not allow N00unsDAO to accept funds', async () => {
+  it('does not allow VrbsDAO to accept funds', async () => {
     let error1;
 
-    // N00unsDAO does not accept value without calldata
+    // VrbsDAO does not accept value without calldata
     try {
       await bidderA.sendTransaction({
         to: gov.address,
@@ -254,7 +254,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
 
     let error2;
 
-    // N00unsDAO does not accept value with calldata
+    // VrbsDAO does not accept value with calldata
     try {
       await bidderA.sendTransaction({
         data: '0xb6b55f250000000000000000000000000000000000000000000000000000000000000001',
@@ -268,7 +268,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(error2);
   });
 
-  it('allows N00unsDAOExecutor to receive funds', async () => {
+  it('allows DAOExecutor to receive funds', async () => {
     // test receive()
     await bidderA.sendTransaction({
       to: timelock.address,

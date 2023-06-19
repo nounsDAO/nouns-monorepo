@@ -1,8 +1,8 @@
 {
   "name": "@vrbs/assets",
   "version": "0.4.2",
-  "description": "N00uns run-length encoded image data",
-  "author": "N00unders",
+  "description": "Vrbs run-length encoded image data",
+  "author": "Vrbs DAO",
   "homepage": "https://vrbs.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",

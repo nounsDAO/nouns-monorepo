@@ -8,12 +8,12 @@ import { Trans } from '@lingui/macro';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that
- * the bid amount is not applicable to this auction. (N00under N00un)
+ * the bid amount is not applicable to this auction. (Vrbder Vrb)
  */
 export const BID_N_A = 'n/a';
 
 /**
- * Special Bid type for not applicable auctions (N00under N00uns)
+ * Special Bid type for not applicable auctions (Vrbder Vrbs)
  */
 type BidNa = typeof BID_N_A;
 

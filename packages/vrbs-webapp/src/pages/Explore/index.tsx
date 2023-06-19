@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BigNumber } from 'ethers';
 import classes from './Explore.module.css';
 import cx from 'classnames';
-import ExploreN00unDetail from '../../components/ExploreGrid/ExploreN00unDetail';
+import ExploreDetail from '../../components/ExploreGrid/ExploreDetail';
 import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/vrbsAuction';
 import { useAppSelector } from '../../hooks';
@@ -12,13 +12,13 @@ import ExploreGrid from '../../components/ExploreGrid';
 
 interface ExplorePageProps {}
 
-type N00un = {
+type Vrb = {
   id: number | null;
   imgSrc: string | undefined;
 };
 
 const ExplorePage: React.FC<ExplorePageProps> = props => {
-  // Borrowed from /src/pages/Playground/N00unModal/index.tsx
+  // Borrowed from /src/pages/Playground/VrbModal/index.tsx
   const [width, setWidth] = useState<number>(window.innerWidth);
   const isMobile: boolean = width <= 991;
   const handleWindowSizeChange = () => {
@@ -27,14 +27,14 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
   // Get number of vrbs in existence
   const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
-  const n00unCount = currentAuction ? BigNumber.from(currentAuction?.n00unId).toNumber() + 1 : -1;
+  const vrbCount = currentAuction ? BigNumber.from(currentAuction?.vrbId).toNumber() + 1 : -1;
 
   // Set state
   const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
-  const [vrbsList, setN00unsList] = useState<N00un[]>([]);
-  const [selectedN00un, setSelectedN00un] = useState<number | undefined>(undefined);
-  const [activeN00un, setActiveN00un] = useState<number>(-1);
-  const [isN00unHoverDisabled, setIsN00unHoverDisabled] = useState<boolean>(false);
+  const [vrbsList, setVrbsList] = useState<Vrb[]>([]);
+  const [selectedVrb, setSelectedVrb] = useState<number | undefined>(undefined);
+  const [activeVrb, setActiveVrb] = useState<number>(-1);
+  const [isVrbHoverDisabled, setIsVrbHoverDisabled] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('');
   const [scrollY, setScrollY] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -47,34 +47,34 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const keyboardEsc: boolean = useKeyPress('Escape');
 
   // Handle events
-  const handleN00unNavigation = (direction: string) => {
+  const handleVrbNavigation = (direction: string) => {
     if (
       (sortOrder === 'date-ascending' && direction === 'next') ||
       (sortOrder === 'date-descending' && direction === 'prev')
     ) {
-      setActiveN00un(activeN00un + 1);
-      setSelectedN00un(activeN00un + 1);
+      setActiveVrb(activeVrb + 1);
+      setSelectedVrb(activeVrb + 1);
     } else {
-      setActiveN00un(activeN00un - 1);
-      setSelectedN00un(activeN00un - 1);
+      setActiveVrb(activeVrb - 1);
+      setSelectedVrb(activeVrb - 1);
     }
   };
 
   const handleSortOrderChange = (orderValue: string) => {
     setSortOrder(orderValue);
     if (sortOrder === 'date-ascending') {
-      !isMobile && isSidebarVisible && setActiveN00un(n00unCount - 1);
-      !isMobile && isSidebarVisible && setSelectedN00un(n00unCount - 1);
+      !isMobile && isSidebarVisible && setActiveVrb(vrbCount - 1);
+      !isMobile && isSidebarVisible && setSelectedVrb(vrbCount - 1);
     } else {
-      !isMobile && isSidebarVisible && setActiveN00un(0);
-      !isMobile && isSidebarVisible && setSelectedN00un(0);
+      !isMobile && isSidebarVisible && setActiveVrb(0);
+      !isMobile && isSidebarVisible && setSelectedVrb(0);
     }
   };
 
   const handleCloseDetail = () => {
     setIsSidebarVisible(false);
-    setActiveN00un(-1);
-    setSelectedN00un(undefined);
+    setActiveVrb(-1);
+    setSelectedVrb(undefined);
     !isMobile && window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     if (isMobile) {
       const body = document.body;
@@ -88,15 +88,15 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     }
   };
 
-  const handleScrollTo = (n00unId: number) => {
-    setIsN00unHoverDisabled(true);
-    n00unId && buttonsRef.current[n00unId]?.scrollIntoView({ behavior: 'smooth' });
+  const handleScrollTo = (vrbId: number) => {
+    setIsVrbHoverDisabled(true);
+    vrbId && buttonsRef.current[vrbId]?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleFocusN00un = (n00unId: number) => {
-    n00unId >= 0 && buttonsRef.current[n00unId]?.focus();
-    setActiveN00un(n00unId);
-    setSelectedN00un(n00unId);
+  const handleFocusVrb = (vrbId: number) => {
+    vrbId >= 0 && buttonsRef.current[vrbId]?.focus();
+    setActiveVrb(vrbId);
+    setSelectedVrb(vrbId);
     setIsSidebarVisible(true);
     if (isMobile) {
       const body = document.body;
@@ -106,7 +106,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   };
 
   useEffect(() => {
-    setIsN00unHoverDisabled(true);
+    setIsVrbHoverDisabled(true);
     let amountToMove = 10;
     if (width <= 400) {
       amountToMove = 3;
@@ -118,35 +118,35 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
       amountToMove = 8;
     }
 
-    if (selectedN00un !== undefined && selectedN00un >= 0) {
+    if (selectedVrb !== undefined && selectedVrb >= 0) {
       if (keyboardEsc) {
         handleCloseDetail();
       }
       if (sortOrder === 'date-descending') {
-        if (keyboardPrev && selectedN00un + 1 < n00unCount) {
-          handleFocusN00un(selectedN00un + 1);
+        if (keyboardPrev && selectedVrb + 1 < vrbCount) {
+          handleFocusVrb(selectedVrb + 1);
         }
-        if (keyboardNext && selectedN00un - 1 >= 0) {
-          handleFocusN00un(selectedN00un - 1);
+        if (keyboardNext && selectedVrb - 1 >= 0) {
+          handleFocusVrb(selectedVrb - 1);
         }
-        if (keyboardUp && selectedN00un + amountToMove < n00unCount) {
-          handleFocusN00un(selectedN00un + amountToMove);
+        if (keyboardUp && selectedVrb + amountToMove < vrbCount) {
+          handleFocusVrb(selectedVrb + amountToMove);
         }
-        if (keyboardDown && selectedN00un - amountToMove >= 0) {
-          handleFocusN00un(selectedN00un - amountToMove);
+        if (keyboardDown && selectedVrb - amountToMove >= 0) {
+          handleFocusVrb(selectedVrb - amountToMove);
         }
       } else {
-        if (keyboardPrev && selectedN00un - 1 >= 0) {
-          handleFocusN00un(selectedN00un - 1);
+        if (keyboardPrev && selectedVrb - 1 >= 0) {
+          handleFocusVrb(selectedVrb - 1);
         }
-        if (keyboardNext && selectedN00un + 1 < n00unCount) {
-          handleFocusN00un(selectedN00un + 1);
+        if (keyboardNext && selectedVrb + 1 < vrbCount) {
+          handleFocusVrb(selectedVrb + 1);
         }
-        if (keyboardUp && selectedN00un - amountToMove >= 0) {
-          handleFocusN00un(selectedN00un - amountToMove);
+        if (keyboardUp && selectedVrb - amountToMove >= 0) {
+          handleFocusVrb(selectedVrb - amountToMove);
         }
-        if (keyboardDown && selectedN00un + amountToMove < n00unCount) {
-          handleFocusN00un(selectedN00un + amountToMove);
+        if (keyboardDown && selectedVrb + amountToMove < vrbCount) {
+          handleFocusVrb(selectedVrb + amountToMove);
         }
       }
     }
@@ -154,15 +154,15 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
 
-  // Once n00unCount is known, run dependent functions
+  // Once vrbCount is known, run dependent functions
   useEffect(() => {
-    if (n00unCount >= 0) {
-      // get latest n00un id, then replace loading sidebar state with latest n00un
-      !isMobile && setSelectedN00un(BigNumber.from(currentAuction?.n00unId).toNumber());
-      !isMobile && setActiveN00un(BigNumber.from(currentAuction?.n00unId).toNumber());
+    if (vrbCount >= 0) {
+      // get latest vrb id, then replace loading sidebar state with latest vrb
+      !isMobile && setSelectedVrb(BigNumber.from(currentAuction?.vrbId).toNumber());
+      !isMobile && setActiveVrb(BigNumber.from(currentAuction?.vrbId).toNumber());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [n00unCount]);
+  }, [vrbCount]);
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
@@ -170,10 +170,10 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
       document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
     });
 
-    // Remove block on hover over n00un
+    // Remove block on hover over vrb
     window.addEventListener('mousemove', event => {});
     onmousemove = () => {
-      setIsN00unHoverDisabled(false);
+      setIsVrbHoverDisabled(false);
     };
     return () => {
       window.removeEventListener('resize', handleWindowSizeChange);
@@ -184,29 +184,29 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     <div className={classes.exploreWrap} ref={containerRef}>
       <div className={classes.contentWrap}>
         <motion.div
-          className={cx(classes.gridWrap, isN00unHoverDisabled && classes.n00unHoverDisabled)}
+          className={cx(classes.gridWrap, isVrbHoverDisabled && classes.vrbHoverDisabled)}
           animate={{
-            maxWidth: !isMobile && selectedN00un ? '80%' : '100%',
+            maxWidth: !isMobile && selectedVrb ? '80%' : '100%',
             transition: {
               duration: 0.025,
             },
           }}
         >
           <ExploreNav
-            n00unCount={n00unCount}
+            vrbCount={vrbCount}
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
             handleSortOrderChange={handleSortOrderChange}
           />
           <ExploreGrid
-            n00unCount={n00unCount}
-            activeN00un={activeN00un}
-            selectedN00un={selectedN00un}
-            setActiveN00un={setActiveN00un}
-            setSelectedN00un={setSelectedN00un}
-            setN00unsList={setN00unsList}
-            handleFocusN00un={handleFocusN00un}
-            isN00unHoverDisabled={isN00unHoverDisabled}
+            vrbCount={vrbCount}
+            activeVrb={activeVrb}
+            selectedVrb={selectedVrb}
+            setActiveVrb={setActiveVrb}
+            setSelectedVrb={setSelectedVrb}
+            setVrbsList={setVrbsList}
+            handleFocusVrb={handleFocusVrb}
+            isVrbHoverDisabled={isVrbHoverDisabled}
             buttonsRef={buttonsRef}
             vrbsList={vrbsList}
             sortOrder={sortOrder}
@@ -215,29 +215,29 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
         <AnimatePresence initial={false}>
           {isSidebarVisible && (
-            <ExploreN00unDetail
+            <ExploreDetail
               handleCloseDetail={() => handleCloseDetail()}
-              handleN00unNavigation={handleN00unNavigation}
-              n00un={[...vrbsList].reverse()[activeN00un]}
-              n00unId={activeN00un}
-              n00unCount={n00unCount}
-              selectedN00un={selectedN00un}
+              handleVrbNavigation={handleVrbNavigation}
+              vrb={[...vrbsList].reverse()[activeVrb]}
+              vrbId={activeVrb}
+              vrbCount={vrbCount}
+              selectedVrb={selectedVrb}
               isVisible={isSidebarVisible}
               handleScrollTo={handleScrollTo}
-              setIsN00unHoverDisabled={setIsN00unHoverDisabled}
+              setIsVrbHoverDisabled={setIsVrbHoverDisabled}
               disablePrev={
-                (sortOrder === 'date-ascending' && activeN00un === 0) ||
-                (sortOrder === 'date-descending' && activeN00un === n00unCount - 1)
+                (sortOrder === 'date-ascending' && activeVrb === 0) ||
+                (sortOrder === 'date-descending' && activeVrb === vrbCount - 1)
                   ? true
                   : false
               }
               disableNext={
-                (sortOrder === 'date-ascending' && activeN00un === n00unCount - 1) ||
-                (sortOrder === 'date-descending' && activeN00un === 0)
+                (sortOrder === 'date-ascending' && activeVrb === vrbCount - 1) ||
+                (sortOrder === 'date-descending' && activeVrb === 0)
                   ? true
                   : false
               }
-              handleFocusN00un={handleFocusN00un}
+              handleFocusVrb={handleFocusVrb}
             />
           )}
         </AnimatePresence>

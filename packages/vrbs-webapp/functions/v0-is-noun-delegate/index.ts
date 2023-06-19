@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions';
-import { isN00unDelegate, vrbsQuery } from '../theGraph';
+import { isVrbDelegate, vrbsQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 const handler: Handler = async (event, context) => {
@@ -10,7 +10,7 @@ const handler: Handler = async (event, context) => {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(isN00unDelegate(event.body, vrbs)),
+    body: JSON.stringify(isVrbDelegate(event.body, vrbs)),
   };
 };
 
