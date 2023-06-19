@@ -1,0 +1,302 @@
+openapi: '3.0.3'
+info:
+  description: |
+    The Vrbs serverless API can provide projected data that may be easier to use for non-blockchain-native clients.
+
+    ## Function Versioning
+    `v0-` prefixed functions are in development and may change before becoming finalized.
+  version: '0.1.0'
+  title: 'Vrbs Serverless API'
+  license:
+    name: 'CC0'
+tags:
+  - name: 'Address Data'
+    description: 'Functions that check status of Ethereum addresses'
+  - name: 'Governance'
+    description: 'Functions for fetching governance data'
+  - name: 'Vrbs'
+    description: 'Information about Vrb tokens'
+  - name: 'Cryptography'
+    description: 'Functions for verifying identity'
+servers:
+  - url: 'https://vrbs.wtf/.netlify/functions/'
+    description: Production Deployment
+paths:
+  /v0-is-vrb-owner:
+    post:
+      tags:
+        - 'Address Data'
+      summary: 'Check if an Ethereum address owns a Vrb'
+      operationId: 'isVrbOwner'
+      requestBody:
+        description: The Ethereum address to check for Vrb ownership
+        content:
+          'text/plain':
+            schema:
+              type: string
+            example: '0x2536c09e5f5691498805884fa37811be3b2bddb4'
+      responses:
+        '200':
+          description: 'Does address own a Vrb'
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-is-vrb-delegate:
+    post:
+      tags:
+        - 'Address Data'
+      summary: 'Check if an Ethereum is delegated the voting power of a Vrb'
+      operationId: 'isVrbDelegate'
+      requestBody:
+        description: The Ethereum address to check for Vrb delegation
+        content:
+          'text/plain':
+            schema:
+              type: string
+            example: '0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e'
+      responses:
+        '200':
+          description: 'Is address delegated the voting power of a Vrb'
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-vrb-owners:
+    get:
+      summary: 'Ethereum addresses that own Vrbs or are delegated voting power'
+      tags:
+        - 'Address Data'
+      operationId: 'getVrbOwners'
+      responses:
+        '200':
+          description: 'Lite Vrb information including owners and delegates'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteVrb'
+  /v0-vrb-votes:
+    get:
+      summary: 'All Vrbs and their votes'
+      tags:
+        - 'Governance'
+      operationId: 'getVrbVotes'
+      responses:
+        '200':
+          description: 'All Vrbs and how the votes they cast in Vrbs governance proposals'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VrbWithVotes'
+  /v0-proposal-votes:
+    get:
+      summary: 'All governance proposals and their votes'
+      tags:
+        - 'Governance'
+      operationId: 'getProposalVotes'
+      responses:
+        '200':
+          description: 'All governance proposals and an array of votes cast'
+          content:
+            application/json:
+              schema:
+                type: object
+  /v0-vrb-seeds:
+    get:
+      summary: 'All Vrbs and their seeds'
+      tags:
+        - 'Vrbs'
+      operationId: 'getVrbSeeds'
+      responses:
+        '200':
+          description: 'All Vrbs and their seeds'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VrbWithSeeds'
+  /v0-verify-signature:
+    post:
+      summary: 'Verify an ethereum signed message'
+      tags:
+        - 'Cryptography'
+      operationId: 'getProposalVotes'
+      parameters:
+        - name: fetchParticipation
+          in: 'query'
+          description: If set to true and the signature is valid, fetch to see if the signer owns or is delegated a Vrb
+          schema:
+            type: boolean
+          example: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifySignatureRequest'
+            example:
+              message: "I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\n\nThis is me testing the Vrbs serverless API"
+              signer: '0x28f1F4ea77Af433c45366151F6f9906435d9DB19'
+              signature": '0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b'
+      responses:
+        '200':
+          description: 'All governance proposals and an array of votes cast'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifySignatureResponse'
+components:
+  schemas:
+    NormalizedVote:
+      type: object
+      description: A Vrbs proposal vote
+      properties:
+        proposalId:
+          type: integer
+          format: uint256
+          description: The ID of the Vrbs Governance proposal
+        supportDetailed:
+          type: integer
+          format: uint256
+          description: 'The integer support value: against (0), for (1), or abstain (2)'
+    Seed:
+      type: object
+      description: The attributes that make up a Vrb's seed
+      properties:
+        head:
+          type: integer
+        body:
+          type: integer
+        background:
+          type: integer
+        accessory:
+          type: integer
+        glasses:
+          type: integer
+    NormalizedVrb:
+      type: object
+      description: A Vrb record
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+        delegatedTo:
+          type: string
+          description: The address that the Vrb's voting power is delegated to
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NormalizedVote'
+        seed:
+          $ref: '#/components/schemas/Seed'
+    ProposalVote:
+      type: object
+      description: How a Vrb voted on a governance proposal
+      properties:
+        vrbId:
+          type: integer
+        owner:
+          type: string
+          description: The owner of the Vrb
+        delegatedTo:
+          type: string
+          description: The Ethereum address the Vrb's voting power is delegated
+        supportDetailed:
+          type: integer
+          description: 'The integer support value: against (0), for (1), or abstain (2)'
+    ProposalVotes:
+      type: object
+      description: A map of Vrb governance proposal ID to an array of votes
+    VrbWithSeeds:
+      type: object
+      description: A Vrb and its seed attributes
+      properties:
+        id:
+          type: integer
+          format: uint256
+        seed:
+          type: object
+          $ref: '#/components/schemas/Seed'
+    VrbWithVotes:
+      type: object
+      description: How a Vrb has voted on Vrbs governance proposals
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the Vrb
+        delegatedTo:
+          type: string
+          description: The Ethereum address a Vrb's voting power has been delegated to
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NormalizedVote'
+    LiteVrb:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the Vrb
+        delegatedTo:
+          type: string
+          description: The Ethereum address a Vrb's voting power has been delegated to
+    VerifySignatureRequest:
+      type: object
+      required:
+        - 'message'
+        - 'signature'
+        - 'signer'
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        signer:
+          type: string
+          description: The address attesting to have signed the message
+    VerifySignatureResponse:
+      type: object
+      required:
+        - 'message'
+        - 'signature'
+        - 'providedSignature'
+        - 'recoveredAddress'
+        - 'validSignature'
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        providedSigner:
+          type: string
+          description: The signer address provided in the request
+        recoveredAddress:
+          type: string
+          description: The address recovered from the signature
+        validSignature:
+          type: boolean
+          description: If the supplied signature is valid
+        isVrbOwner:
+          type: boolean
+          description: If the signature is valid and the address owns a Vrb
+        isVrbDelegate:
+          type: boolean
+          description: If the signature is valid and the address is delegated a Vrb

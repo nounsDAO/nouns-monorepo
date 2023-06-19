@@ -1,0 +1,8 @@
+{
+  "name": "Vrbs",
+  "description": "One Vrb, every day, forever.\r\n\r\nvrbs.wtf",
+  "image": "ipfs://QmNdUibRHNqX2byJLtCD3ofn65cfCtvXdQnV87wRjqWf96",
+  "external_link": "https://vrbs.wtf",
+  "seller_fee_basis_points": 0,
+  "fee_recipient": "0x0000000000000000000000000000000000000000"
+}

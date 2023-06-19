@@ -1,0 +1,63 @@
+{
+  "1": {
+    "vrbsToken": "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
+    "vrbsSeeder": "0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515",
+    "vrbsDescriptor": "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63",
+    "nftDescriptor": "0x0BBAd8c947210ab6284699605ce2a61780958264",
+    "vrbsAuctionHouse": "0xF15a943787014461d94da08aD4040f79Cd7c124e",
+    "vrbsAuctionHouseProxy": "0x830BD73E4184ceF73443C15111a1DF14e495C706",
+    "vrbsAuctionHouseProxyAdmin": "0xC1C119932d78aB9080862C5fcb964029f086401e",
+    "vrbsDaoExecutor": "0x0BC3807Ec262cB779b38D65b38158acC3bfedE10",
+    "vrbsDAOProxy": "0x6f3E6272A167e8AcCb32072d08E0957F9c79223d",
+    "vrbsDAOLogicV1": "0xa43aFE317985726E4e194eb061Af77fbCb43F944",
+    "vrbsDAOLogicV2": "0xCaCF365eDA93F07741a80D4F39a773BAaBb3a873"
+  },
+  "4": {
+    "vrbsToken": "0x65dA5EbD09f0C6CA1DFc5EaA5639626ccd5DaD06",
+    "vrbsSeeder": "0x62F257406e9C1752c65d60ADF5D283FEe55C6301",
+    "vrbsDescriptor": "0x8B7Ec9f2ad70C10F4Ba5D352D6691B9BFF2F628b",
+    "nftDescriptor": "0xc905C0c663394181F44809854497D8783b743A21",
+    "vrbsAuctionHouse": "0xF2d27387353161d77FCD918E7f4DE07A5f77aba3",
+    "vrbsAuctionHouseProxy": "0xDAF873A2Ae77D570da094B52A8eC50Ef8885b2c4",
+    "vrbsAuctionHouseProxyAdmin": "0xFE3347665088A7933044941822e6e46EF70771f8",
+    "vrbsDaoExecutor": "0x06C0BaC8E6a697eC883372d3e9Db9B200fF93C03",
+    "vrbsDAOProxy": "0xF5ab6f74c557c6e8B96EeF0371F9CfCf9F5e4b26",
+    "vrbsDAOLogicV1": "0x27c9e62fc1F1334eb2A090506675Ec31df878E00"
+  },
+  "5": {
+    "vrbsToken": "0x1d0030f304b542D5A5F77CC0E5945fd79ec89D8E",
+    "vrbsSeeder": "0xF6a38E8235916334268da317EC84F5dfcfB9e023",
+    "vrbsDescriptor": "0xB6D0AF8C27930E13005Bf447d54be8235724a102",
+    "nftDescriptor": "0x9417e5d955e6e1deA90499Baa527C9d6360b737f",
+    "vrbsAuctionHouse": "0x047B373629148A30299e11a1582d9EAd8181ff46",
+    "vrbsAuctionHouseProxy": "0xC143D0F48E0ba1e547Ff0fE489b4DC7A90063683",
+    "vrbsAuctionHouseProxyAdmin": "0xC6Fb7F9707ba1E0B0fC008bFC72c4C1DA255695E",
+    "vrbsDaoExecutor": "0x2f12ABA664E6D2b4DDD264E2a175d29703836AaE",
+    "vrbsDAOProxy": "0xD08faCeb444dbb6b063a51C2ddFb564Fa0f8Dce0",
+    "vrbsDAOLogicV1": "0x4B245a12e8D449e79120526C350262B587Eb3b7d"
+  },
+  "80001": {
+    "vrbsToken": "0xE050c0DD74CE3B9A201E2504755f5120053Be35D",
+    "vrbsSeeder": "0xDbb5129405620A476134dD22053098cB1634851b",
+    "vrbsDescriptor": "0xe686bf88eE5BDE38C4E4200933a4d10894F84a8B",
+    "nftDescriptor": "0x2B2327965dD50C55Ed8264b1302d4032f4D2b41b",
+    "vrbsAuctionHouse": "0xfd84558C3259CaA45565dA3433Be76fD90862eCd",
+    "vrbsAuctionHouseProxy": "0xBE9E875Cb86A52541e4CA1F8428083606D7B275b",
+    "vrbsAuctionHouseProxyAdmin": "0x4205957511353483d987AEEBaFEE61E3C4C18726",
+    "vrbsDaoExecutor": "0xd83cD0aDF8B793bF00281ff25Bf5b9DDA2AD5080",
+    "vrbsDAOProxy": "0xbB499E04d9318E8C9Ebd6876b25d2540bF3Ab4F3",
+    "vrbsDAOLogicV1": "0x2aa568289538d1925B8FC56C6268b04a37B07313"
+  },
+  "31337": {
+    "vrbsToken": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+    "vrbsSeeder": "0x0165878a594ca255338adfa4d48449f69242eb8f",
+    "vrbsDescriptor": "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+    "nftDescriptor": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+    "vrbsAuctionHouse": "0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6",
+    "vrbsAuctionHouseProxy": "0x610178da211fef7d417bc0e6fed39f05609ad788",
+    "vrbsAuctionHouseProxyAdmin": "0x8a791620dd6260079bf849dc5567adc3f2fdc318",
+    "vrbsDaoExecutor": "0xb7f8bc63bbcad18155201308c8f3540b07f84f5e",
+    "vrbsDAOProxy": "0x0dcd1bf9a1b36ce34237eeafef220932846bcd82",
+    "vrbsDAOLogicV1": "0xa51c1fc2f0d1a1b8494ed1fe312d7c3a78ed91c0"
+  }
+}

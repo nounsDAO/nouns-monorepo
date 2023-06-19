@@ -1,0 +1,158 @@
+.wrapper {
+  padding: 1rem 1rem;
+  color: var(--brand-black);
+  align-self: flex-start !important;
+}
+
+.informationRow {
+  margin-bottom: 2px;
+}
+
+.activityRow {
+  margin-bottom: 2px;
+  background-color: white;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.modalHeader {
+  border-bottom: none;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.modalTitleWrapper {
+  color: var(--brand-black);
+}
+
+.modalTitleWrapper h1 {
+  font-size: xx-large;
+  margin-left: 2rem;
+}
+
+.modalHeader button {
+  align-self: flex-start;
+}
+
+.modalHeaderVrbImgWrapper {
+  width: 150px;
+  height: 150px;
+}
+
+.currentBidColCool {
+  border-right: 2px solid rgb(213, 215, 225);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.currentBidColWarm {
+  border-right: 2px solid rgb(225 215 213);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.auctionTimerCol {
+  padding-left: 0rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.section h4 {
+  font-family: 'Retro Gaming';
+  font-size: 17px;
+  line-height: 25px;
+}
+
+.section h2 {
+  font-family: 'Retro Gaming';
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.bidSection {
+  padding:20px;
+}
+
+@media (max-width: 992px) {
+  h1 {
+    padding-top: 12px;
+  }
+
+  .wrapper {
+    padding: 1rem;
+  }
+
+  .auctionTimerCol {
+    margin-left: 6px;
+    margin-top: 6px;
+    padding-left: 0rem;
+  }
+
+  .currentBidColCool {
+    border-right: 0px;
+    padding-left: 0rem;
+  }
+
+  .currentBidColWarm {
+    border-right: 0px;
+    padding-left: 0rem;
+  }
+
+  .fomoVrbsLink {
+    padding-left: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .fomoVrbsLink {
+    font-size: 14px;
+  }
+}
+
+/* Fix Firefox navigation arrow alignment issues */
+@-moz-document url-prefix() {
+  .colAlignCenter {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.fomoVrbsLink {
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  transition: 0.2s ease-in-out;
+}
+
+.fomoVrbsLink svg {
+  opacity: 0.6;
+}
+
+.fomoVrbsLink a,
+.fomoVrbsLink:active a {
+  font-family: 'Retro Gaming';
+  font-weight: 500;
+  padding-left: 0.5rem;
+  text-decoration: none;
+  opacity: 1;
+  color: rgb(95, 95, 95);
+}
+
+.fomoVrbsLink:hover,
+.fomoVrbsLink:hover a {
+  text-decoration: none;
+  color: black;
+  opacity: 1;
+}
