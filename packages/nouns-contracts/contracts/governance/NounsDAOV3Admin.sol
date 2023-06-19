@@ -32,6 +32,7 @@ library NounsDAOV3Admin {
     error ForkPeriodTooLong();
     error InvalidObjectionPeriodDurationInBlocks();
     error InvalidProposalUpdatablePeriodInBlocks();
+    error VoteSnapshotSwitchAlreadySet();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -470,9 +471,12 @@ library NounsDAOV3Admin {
      * Sets it to the next proposal id.
      */
     function _setVoteSnapshotBlockSwitchProposalId(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) {
-        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+        if (oldVoteSnapshotBlockSwitchProposalId > 0) {
+            revert VoteSnapshotSwitchAlreadySet();
+        }
 
+        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
         emit VoteSnapshotBlockSwitchProposalIdSet(
