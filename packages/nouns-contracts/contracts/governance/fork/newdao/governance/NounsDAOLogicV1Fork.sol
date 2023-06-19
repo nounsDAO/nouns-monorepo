@@ -207,16 +207,25 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
             nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
         }
 
+        address[] memory erc20TokensToIncludeInQuit_ = erc20TokensToIncludeInQuit;
+        uint256[] memory balancesToSend = new uint256[](erc20TokensToIncludeInQuit_.length);
+
+        // Capture balances to send before actually sending them, to avoid reentrancy risk
+        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
-            uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
-            bool erc20Sent = timelock.sendERC20(msg.sender, address(erc20token), tokensToSend);
-            if (!erc20Sent) revert QuitERC20TransferFailed();
+            balancesToSend[i] = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
         }
 
-        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
+        // Send ETH and ERC20 tokens
         bool ethSent = timelock.sendETH(msg.sender, ethToSend);
         if (!ethSent) revert QuitETHTransferFailed();
+
+        for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
+            IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit_[i]);
+            bool erc20Sent = timelock.sendERC20(msg.sender, address(erc20token), balancesToSend[i]);
+            if (!erc20Sent) revert QuitERC20TransferFailed();
+        }
 
         emit Quit(msg.sender, tokenIds);
     }

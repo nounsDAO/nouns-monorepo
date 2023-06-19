@@ -2,6 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
+import 'forge-std/Common.sol';
 
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
 import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
@@ -13,7 +14,7 @@ import { NounsDAOStorageV1Fork } from '../../../../contracts/governance/fork/new
 import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
 import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
-import { ERC20Mock } from '../../helpers/ERC20Mock.sol';
+import { ERC20Mock, IERC20Receiver } from '../../helpers/ERC20Mock.sol';
 import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
@@ -293,9 +294,11 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
     uint256[] quitterTokens;
     ERC20Mock token1;
     ERC20Mock token2;
+    uint256 constant ETH_BALANCE = 120 ether;
     uint256 constant TOKEN1_BALANCE = 12345;
     uint256 constant TOKEN2_BALANCE = 8765;
     address[] tokens;
+    uint256 ethPerNoun;
 
     function setUp() public override {
         super.setUp();
@@ -306,9 +309,11 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         dao._setErc20TokensToIncludeInQuit(tokens);
 
         // Send ETH to the DAO
-        vm.deal(address(dao.timelock()), 120 ether);
+        vm.deal(address(dao.timelock()), ETH_BALANCE);
 
         mintNounsToQuitter();
+
+        ethPerNoun = ETH_BALANCE / token.totalSupply();
 
         vm.prank(quitter);
         token.setApprovalForAll(address(dao), true);
@@ -362,6 +367,27 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.prank(quitter);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitERC20TransferFailed.selector));
         dao.quit(quitterTokens);
+    }
+
+    function test_quit_givenERC20CallbackReentranceToJoinFork_doesntAllowStealingFunds() public {
+        ERC20Mock(tokens[0]).setCallbackOnNextTransfer(true);
+        uint256[] memory reentranceTokens = new uint256[](1);
+        reentranceTokens[0] = token.tokenOfOwnerByIndex(quitter, token.balanceOf(quitter) - 1) + 1;
+        MaliciousCallbackForker attacker = new MaliciousCallbackForker(
+            token,
+            token.escrow().dao(),
+            address(dao),
+            reentranceTokens,
+            ethPerNoun
+        );
+        transferQuitterTokens(address(attacker));
+        vm.prank(address(attacker));
+        token.setApprovalForAll(address(dao), true);
+
+        vm.prank(address(attacker));
+        dao.quit(quitterTokens);
+
+        assertEq(address(attacker).balance, 24 ether);
     }
 
     function transferQuitterTokens(address to) internal {
@@ -470,3 +496,40 @@ contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase
 }
 
 contract ETHBlocker {}
+
+contract MaliciousCallbackForker is IERC20Receiver, CommonBase {
+    NounsTokenFork token;
+    address originalDAO;
+    address forkDAO;
+    uint256[] tokenIdsToReenterWith;
+    uint256 ethPerNoun;
+    bool reentered;
+
+    constructor(
+        NounsTokenFork token_,
+        address originalDAO_,
+        address forkDAO_,
+        uint256[] memory tokenIdsToReenterWith_,
+        uint256 ethPerNoun_
+    ) {
+        token = token_;
+        originalDAO = originalDAO_;
+        forkDAO = forkDAO_;
+        tokenIdsToReenterWith = tokenIdsToReenterWith_;
+        ethPerNoun = ethPerNoun_;
+    }
+
+    function onERC20Received(address from, uint256 amount) external {
+        if (!reentered) {
+            reentered = true;
+
+            // Simulating joinFork on original DAO
+            address treasury = address(NounsDAOLogicV1Fork(forkDAO).timelock());
+            vm.deal(treasury, treasury.balance + ethPerNoun);
+            vm.prank(originalDAO);
+            token.claimDuringForkPeriod(address(this), tokenIdsToReenterWith);
+        }
+    }
+
+    receive() external payable {}
+}
