@@ -736,7 +736,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     function adjustedTotalSupply() public view returns (uint256) {
-        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
+        return nouns.totalSupply() - nouns.balanceOf(address(timelock)) + nouns.remainingTokensToClaim();
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
