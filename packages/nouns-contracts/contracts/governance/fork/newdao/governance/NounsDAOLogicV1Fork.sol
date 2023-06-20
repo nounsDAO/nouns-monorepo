@@ -612,7 +612,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldVotingDelay = votingDelay;
         votingDelay = newVotingDelay;
 
-        emit VotingDelaySet(oldVotingDelay, votingDelay);
+        emit VotingDelaySet(oldVotingDelay, newVotingDelay);
     }
 
     /**
@@ -628,7 +628,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldVotingPeriod = votingPeriod;
         votingPeriod = newVotingPeriod;
 
-        emit VotingPeriodSet(oldVotingPeriod, votingPeriod);
+        emit VotingPeriodSet(oldVotingPeriod, newVotingPeriod);
     }
 
     /**
@@ -646,7 +646,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldProposalThresholdBPS = proposalThresholdBPS;
         proposalThresholdBPS = newProposalThresholdBPS;
 
-        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
+        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
     }
 
     /**
@@ -663,7 +663,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldQuorumVotesBPS = quorumVotesBPS;
         quorumVotesBPS = newQuorumVotesBPS;
 
-        emit QuorumVotesBPSSet(oldQuorumVotesBPS, quorumVotesBPS);
+        emit QuorumVotesBPSSet(oldQuorumVotesBPS, newQuorumVotesBPS);
     }
 
     /**
