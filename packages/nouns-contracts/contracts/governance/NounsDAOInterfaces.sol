@@ -613,13 +613,13 @@ interface IForkDAODeployer {
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
-    function sendETH(address newDAOTreasury, uint256 ethToSend) external returns (bool success);
+    function sendETH(address recipient, uint256 ethToSend) external;
 
     function sendERC20(
-        address newDAOTreasury,
+        address recipient,
         address erc20Token,
         uint256 tokensToSend
-    ) external returns (bool success);
+    ) external;
 }
 
 interface INounsDAOForkEscrow {
