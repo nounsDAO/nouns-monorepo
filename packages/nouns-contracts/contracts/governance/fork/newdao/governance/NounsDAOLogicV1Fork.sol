@@ -716,10 +716,9 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         if (msg.sender != admin) revert AdminOnly();
         checkForDuplicates(erc20tokens);
 
-        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
-        erc20TokensToIncludeInQuit = erc20tokens;
+        emit ERC20TokensToIncludeInQuitSet(erc20TokensToIncludeInQuit, erc20tokens);
 
-        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
+        erc20TokensToIncludeInQuit = erc20tokens;
     }
 
     /**
@@ -751,16 +750,14 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     function checkForDuplicates(address[] calldata erc20tokens) internal pure {
-        address[] memory seenTokens = new address[](erc20tokens.length);
         for (uint256 i = 0; i < erc20tokens.length; i++) {
-            address erc20token = erc20tokens[i];
-            if (erc20token == address(0)) revert TokenCantBeAddressZero();
+            if (erc20tokens[i] == address(0)) revert TokenCantBeAddressZero();
 
-            for (uint256 j = 0; j < i; j++) {
-                if (erc20token == seenTokens[j]) revert DuplicateTokenAddress();
+            if (i < erc20tokens.length - 1) {
+                for (uint256 j = i + 1; j < erc20tokens.length; j++) {
+                    if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
+                }
             }
-
-            seenTokens[i] = erc20token;
         }
     }
 }
