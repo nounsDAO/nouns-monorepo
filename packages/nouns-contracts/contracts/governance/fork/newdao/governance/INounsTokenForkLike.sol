@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 interface INounsTokenForkLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);

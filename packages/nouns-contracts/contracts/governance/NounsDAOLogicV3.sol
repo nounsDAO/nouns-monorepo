@@ -53,7 +53,7 @@
 //                                                                 ┖> Defeated
 //
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
