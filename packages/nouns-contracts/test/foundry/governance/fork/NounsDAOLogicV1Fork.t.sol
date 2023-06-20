@@ -519,7 +519,7 @@ contract MaliciousCallbackForker is IERC20Receiver, CommonBase {
         ethPerNoun = ethPerNoun_;
     }
 
-    function onERC20Received(address from, uint256 amount) external {
+    function onERC20Received(address, uint256) external {
         if (!reentered) {
             reentered = true;
 
