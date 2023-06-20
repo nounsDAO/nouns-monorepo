@@ -105,8 +105,6 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
-    error QuitETHTransferFailed();
-    error QuitERC20TransferFailed();
     error TokenCantBeAddressZero();
     error DuplicateTokenAddress();
 
@@ -212,13 +210,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
-            bool erc20Sent = timelock.sendERC20(msg.sender, address(erc20token), tokensToSend);
-            if (!erc20Sent) revert QuitERC20TransferFailed();
+            timelock.sendERC20(msg.sender, address(erc20token), tokensToSend);
         }
 
         uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
-        bool ethSent = timelock.sendETH(msg.sender, ethToSend);
-        if (!ethSent) revert QuitETHTransferFailed();
+        timelock.sendETH(payable(msg.sender), ethToSend);
 
         emit Quit(msg.sender, tokenIds);
     }

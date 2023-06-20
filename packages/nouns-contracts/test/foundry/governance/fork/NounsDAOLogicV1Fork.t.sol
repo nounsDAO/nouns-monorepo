@@ -380,7 +380,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.startPrank(address(reentrancyQuitter));
         token.setApprovalForAll(address(dao), true);
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        vm.expectRevert('Address: unable to send value, recipient may have reverted');
         dao.quit(quitterTokens);
     }
 
@@ -391,7 +391,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.startPrank(address(blocker));
         token.setApprovalForAll(address(dao), true);
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        vm.expectRevert('Address: unable to send value, recipient may have reverted');
         dao.quit(quitterTokens);
     }
 
@@ -399,7 +399,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         token1.setFailNextTransfer(true);
 
         vm.prank(quitter);
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitERC20TransferFailed.selector));
+        vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
         dao.quit(quitterTokens);
     }
 
