@@ -98,7 +98,7 @@ import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgrade
 import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';
 import { NounsDAOStorageV1Fork } from './NounsDAOStorageV1Fork.sol';
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
+import { INounsTokenForkLike } from './INounsTokenForkLike.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
@@ -181,7 +181,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
         admin = timelock_;
         timelock = NounsDAOExecutorV2(payable(timelock_));
-        nouns = NounsTokenForkLike(nouns_);
+        nouns = INounsTokenForkLike(nouns_);
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;

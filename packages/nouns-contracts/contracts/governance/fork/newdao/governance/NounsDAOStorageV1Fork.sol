@@ -3,7 +3,7 @@
 pragma solidity ^0.8.6;
 
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
+import { INounsTokenForkLike } from './INounsTokenForkLike.sol';
 
 /**
  * @title Storage for `NounsDAOLogicV1Fork`.
@@ -43,7 +43,7 @@ contract NounsDAOStorageV1Fork {
     NounsDAOExecutorV2 public timelock;
 
     /// @notice The address of the Nouns tokens
-    NounsTokenForkLike public nouns;
+    INounsTokenForkLike public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public _proposals;
