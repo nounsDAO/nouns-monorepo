@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.6;
 
-contract NounsDAOEvents {
+contract NounsDAOEventsFork {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
         uint256 id,

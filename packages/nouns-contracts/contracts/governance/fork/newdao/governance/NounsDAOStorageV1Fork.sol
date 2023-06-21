@@ -3,15 +3,21 @@
 pragma solidity ^0.8.6;
 
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
+import { INounsTokenForkLike } from './INounsTokenForkLike.sol';
 
 /**
- * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV1. Create a new
- * contract which implements NounsDAOStorageV1 and following the naming convention
- * NounsDAOStorageVX.
+ * @title Storage for `NounsDAOLogicV1Fork`.
+ * @dev Based on NounsDAOStorageV1, with the following changes:
+ * - vetoer is removed.
+ * - Vetoed proposal state removed.
+ * - implementation is removed, instead it's stored in the ERC-1967 storage slot.
+ * - proposals renamed to _proposals to enable the explicit getter, which solves the stack too deep issue with the
+ *   default getter.
+ * - creationBlock added to Proposal struct, similar to V2, to solve the votingDelay editing bug.
+ * @notice For future upgrades, do not change NounsDAOStorageV1Fork. Create a new
+ * contract which implements NounsDAOStorageV1Fork.
  */
-contract NounsDAOStorageV1 {
+contract NounsDAOStorageV1Fork {
     /// @notice Administrator for this contract
     address public admin;
 
@@ -37,7 +43,7 @@ contract NounsDAOStorageV1 {
     NounsDAOExecutorV2 public timelock;
 
     /// @notice The address of the Nouns tokens
-    NounsTokenForkLike public nouns;
+    INounsTokenForkLike public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public _proposals;

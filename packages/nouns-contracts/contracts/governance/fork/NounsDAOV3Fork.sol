@@ -26,8 +26,6 @@ library NounsDAOV3Fork {
     error ForkPeriodNotActive();
     error ForkPeriodActive();
     error AdminOnly();
-    error ETHTransferFailed();
-    error ERC20TransferFailed();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
@@ -131,7 +129,7 @@ library NounsDAOV3Fork {
 
     /**
      * @notice Joins a fork while a fork is active
-     * Sends the tokens to the escrow contract.
+     * Sends the tokens to the timelock contract.
      * Sends a prorated part of the treasury to the new fork DAO's treasury.
      * Mints new tokens in the new fork DAO with the same token ids.
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
@@ -145,10 +143,11 @@ library NounsDAOV3Fork {
         if (!isForkPeriodActive(ds)) revert ForkPeriodNotActive();
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
+        address timelock = address(ds.timelock);
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
@@ -217,15 +216,13 @@ library NounsDAOV3Fork {
         INounsDAOExecutorV2 timelock = ds.timelock;
         uint256 ethToSend = (address(timelock).balance * tokenCount) / totalSupply;
 
-        bool ethSent = timelock.sendETH(newDAOTreasury, ethToSend);
-        if (!ethSent) revert ETHTransferFailed();
+        timelock.sendETH(newDAOTreasury, ethToSend);
 
         uint256 erc20Count = ds.erc20TokensToIncludeInFork.length;
         for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
-            bool erc20Sent = timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
-            if (!erc20Sent) revert ERC20TransferFailed();
+            timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
         }
     }
 }

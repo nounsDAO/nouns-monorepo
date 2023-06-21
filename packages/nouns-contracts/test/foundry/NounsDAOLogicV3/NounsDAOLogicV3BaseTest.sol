@@ -92,6 +92,14 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         forkEscrow = address(dao.forkEscrow());
     }
 
+    function mintTo(address to) internal returns (uint256 tokenID) {
+        vm.startPrank(minter);
+        tokenID = nounsToken.mint();
+        nounsToken.transferFrom(minter, to, tokenID);
+        vm.stopPrank();
+        vm.roll(block.number + 1);
+    }
+
     function propose(
         address proposer,
         address target,

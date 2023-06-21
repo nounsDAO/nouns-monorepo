@@ -4,6 +4,11 @@ pragma solidity ^0.8.15;
 import 'forge-std/Script.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
 
+/**
+ * @notice A script that proposes additional ownership and funds transfers from treasury (executor) V1 to V2.
+ * @dev We have to have this additional proposal because we're limited to 10 txs per proposal, and the main upgrade
+ * proposal has hit that limit.
+ */
 contract ProposeTimelockMigrationCleanupMainnet is Script {
     NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
@@ -45,7 +50,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 5;
+        uint8 numTxs = 6;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -85,6 +90,13 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'setApprovalForAll(address,bool)';
         calldatas[i] = abi.encode(timelockV2, true);
+
+        // Transfer DAO-owned Nouns to timelockV2
+        i++;
+        targets[i] = nounsToken;
+        values[i] = 0;
+        signatures[i] = 'transferFrom(address,address,uint256)';
+        calldatas[i] = abi.encode(timelockV1, timelockV2, 687);
 
         proposalId = daoProxy.proposeOnTimelockV1(targets, values, signatures, calldatas, description);
     }

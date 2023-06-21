@@ -9,7 +9,7 @@ import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
-import { NounsDAOStorageV1 } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOStorageV1.sol';
+import { NounsDAOStorageV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOStorageV1Fork.sol';
 import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
 import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
@@ -341,7 +341,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.startPrank(address(reentrancyQuitter));
         token.setApprovalForAll(address(dao), true);
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        vm.expectRevert('Address: unable to send value, recipient may have reverted');
         dao.quit(quitterTokens);
     }
 
@@ -352,7 +352,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.startPrank(address(blocker));
         token.setApprovalForAll(address(dao), true);
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        vm.expectRevert('Address: unable to send value, recipient may have reverted');
         dao.quit(quitterTokens);
     }
 
@@ -360,7 +360,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         token1.setFailNextTransfer(true);
 
         vm.prank(quitter);
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitERC20TransferFailed.selector));
+        vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
         dao.quit(quitterTokens);
     }
 

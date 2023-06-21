@@ -26,6 +26,16 @@ import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { INounsDAOForkEscrow } from '../../../NounsDAOInterfaces.sol';
 
+/**
+ * @dev This contract is a fork of NounsToken, with the following changes:
+ * - Added upgradeablity via UUPSUpgradeable.
+ * - Inheriting from an unmodified ERC721, so that the double Transfer event emission that
+ *   NounsToken performs is gone, in favor of the standard single event.
+ * - Added functions to claim tokens from a Nouns Fork escrow, or during the forking period.
+ * - Removed the proxyRegistry feature that whitelisted OpenSea.
+ * - Removed `noundersDAO` and the founder reward every 10 mints.
+ * For additional context see `ERC721CheckpointableUpgradeable`.
+ */
 contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721CheckpointableUpgradeable, UUPSUpgradeable {
     error OnlyOwner();
     error OnlyTokenOwnerCanClaim();
@@ -154,13 +164,24 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
      * @param tokenIds The token IDs to claim
      */
     function claimDuringForkPeriod(address to, uint256[] calldata tokenIds) external {
+        uint256 currentNounId = _currentNounId;
+        uint256 maxNounId = 0;
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
-        if (block.timestamp > forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
+        if (block.timestamp >= forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
             _mintWithOriginalSeed(to, nounId);
+
+            if (tokenIds[i] > maxNounId) maxNounId = tokenIds[i];
         }
+
+        // This treats an important case:
+        // During a forking period, people can buy new Nouns on auction, with a higher ID than the auction ID at forking
+        // They can then join the fork with those IDs
+        // If we don't increment currentNounId, unpausing the fork auction house would revert
+        // Since it would attempt to mint a noun with an ID that already exists
+        if (maxNounId >= currentNounId) _currentNounId = maxNounId + 1;
     }
 
     /**

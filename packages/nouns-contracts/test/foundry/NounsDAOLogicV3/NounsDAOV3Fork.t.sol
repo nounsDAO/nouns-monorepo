@@ -221,14 +221,14 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         dao.joinFork(tokenIds, new uint256[](0), '');
     }
 
-    event ETHSent(address indexed to, uint256 amount, bool success);
-    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount, bool success);
+    event ETHSent(address indexed to, uint256 amount);
+    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount);
 
     function test_executeFork() public {
         vm.expectEmit(true, true, true, true);
-        emit ETHSent(address(forkDAODeployer.mockTreasury()), 250 ether, true);
+        emit ETHSent(address(forkDAODeployer.mockTreasury()), 250 ether);
         vm.expectEmit(true, true, true, true);
-        emit ERC20Sent(address(forkDAODeployer.mockTreasury()), address(erc20Mock), 75 ether, true);
+        emit ERC20Sent(address(forkDAODeployer.mockTreasury()), address(erc20Mock), 75 ether);
         vm.expectEmit(true, true, true, true);
         emit NounsDAOV3Fork.ExecuteFork(
             0,
@@ -347,15 +347,13 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
 
-        // DAO can withdraw the tokens sent in joinFork
+        // Tokens are in the OG DAO timelock
         tokenIds = [7, 8, 9];
-        vm.expectEmit(true, true, true, true);
-        emit NounsDAOV3Fork.DAOWithdrawNounsFromEscrow(tokenIds, address(1));
-        vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(timelock));
 
-        assertEq(dao.nouns().ownerOf(7), address(1));
-        assertEq(dao.nouns().ownerOf(8), address(1));
+        // Timelock can move the tokens
+        vm.startPrank(address(timelock));
+        dao.nouns().transferFrom(address(timelock), address(1), 9);
         assertEq(dao.nouns().ownerOf(9), address(1));
     }
 
@@ -490,14 +488,14 @@ contract DAOFork_SendFundsFailureTest is DAOForkSignaledOverThresholdState {
     function test_givenERC20TransferFailure_reverts() public {
         erc20Mock.setFailNextTransfer(true);
 
-        vm.expectRevert(NounsDAOV3Fork.ERC20TransferFailed.selector);
+        vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
         dao.executeFork();
     }
 
     function test_givenETHTransferFailure_reverts() public {
         forkDAODeployer.setTreasury(address(new ETHBlocker()));
 
-        vm.expectRevert(NounsDAOV3Fork.ETHTransferFailed.selector);
+        vm.expectRevert('Address: unable to send value, recipient may have reverted');
         dao.executeFork();
     }
 }

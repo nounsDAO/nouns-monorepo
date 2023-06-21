@@ -22,6 +22,7 @@ import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
+import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
@@ -247,6 +248,7 @@ library NounsDAOV3Proposals {
             description,
             proposalId
         );
+        if (signers.length == 0) revert MustProvideSignatures();
         if (votes <= propThreshold) revert VotesBelowProposalThreshold();
 
         newProposal.signers = signers;
@@ -817,13 +819,28 @@ library NounsDAOV3Proposals {
         bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
 
         signers = new address[](proposerSignatures.length);
+        uint256 numSigners = 0;
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
-            address signer = signers[i] = proposerSignatures[i].signer;
 
+            address signer = proposerSignatures[i].signer;
             checkNoActiveProp(ds, signer);
+
+            uint256 signerVotes = nouns.getPriorVotes(signer, block.number - 1);
+            if (signerVotes == 0) {
+                continue;
+            }
+
+            signers[numSigners++] = signer;
             ds.latestProposalIds[signer] = proposalId;
-            votes += nouns.getPriorVotes(signer, block.number - 1);
+            votes += signerVotes;
+        }
+
+        if (numSigners < proposerSignatures.length) {
+            // this assembly trims the signer array, getting rid of unused cells
+            assembly {
+                mstore(signers, numSigners)
+            }
         }
 
         checkNoActiveProp(ds, msg.sender);
@@ -874,7 +891,7 @@ library NounsDAOV3Proposals {
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint64 updatePeriodEndBlock = uint64(block.number + ds.proposalUpdatablePeriodInBlocks);
+        uint64 updatePeriodEndBlock = SafeCast.toUint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
         uint256 endBlock = startBlock + ds.votingPeriod;
 
@@ -889,7 +906,7 @@ library NounsDAOV3Proposals {
         newProposal.startBlock = startBlock;
         newProposal.endBlock = endBlock;
         newProposal.totalSupply = adjustedTotalSupply;
-        newProposal.creationBlock = uint64(block.number);
+        newProposal.creationBlock = SafeCast.toUint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 

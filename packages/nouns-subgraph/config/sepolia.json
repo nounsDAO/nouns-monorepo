@@ -11,5 +11,9 @@
   "nounsDAO": {
     "address": "0x35d2670d7C8931AACdd37C89Ddcb0638c3c44A57",
     "startBlock": 3594636
+  },
+  "nounsDAOData": {
+    "address": "0x9040f720AA8A693F950B9cF94764b4b06079D002",
+    "startBlock": 3691326
   }
 }
