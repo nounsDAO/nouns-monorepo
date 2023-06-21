@@ -119,11 +119,6 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     }
 
     function test_setVoteSnapshotBlockSwitchProposalId_setsToNextProposalId() public {
-        vm.prank(address(dao.timelock()));
-        dao._setVoteSnapshotBlockSwitchProposalId();
-
-        assertEq(dao.voteSnapshotBlockSwitchProposalId(), 1);
-
         // overwrite proposalCount
         vm.store(address(dao), bytes32(uint256(8)), bytes32(uint256(100)));
 
@@ -131,6 +126,15 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setVoteSnapshotBlockSwitchProposalId();
 
         assertEq(dao.voteSnapshotBlockSwitchProposalId(), 101);
+    }
+
+    function test_setVoteSnapshotBlockSwitchProposalId_revertsIfCalledTwice() public {
+        vm.prank(address(dao.timelock()));
+        dao._setVoteSnapshotBlockSwitchProposalId();
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOV3Admin.VoteSnapshotSwitchAlreadySet.selector);
+        dao._setVoteSnapshotBlockSwitchProposalId();
     }
 
     function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {
