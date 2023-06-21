@@ -45,7 +45,7 @@
 // - The proxy pattern from Compound's old Transparent-like proxy, to OpenZeppelin's recommended UUPS pattern.
 //
 // - `propose`
-//   - uses `adjutedTotalSupply`
+//   - uses `adjustedTotalSupply`
 //   - includes a new 'delayed governance' feature which gives forkers from the original DAO time to claim their tokens
 //     with this new DAO; proposals are not allowed until all tokens are claimed, or until the delay expiration
 //     timestamp is reached.
@@ -77,7 +77,7 @@
 //   the proposal's voting start block to align with the parameters
 //   stored with the proposal
 //
-// - Veto ability which allows `veteor` to halt any proposal at any stage unless
+// - Veto ability which allows `vetoer` to halt any proposal at any stage unless
 //   the proposal is executed.
 //   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
 //   A `vetoed` flag was added to the `Proposal` struct to support this.

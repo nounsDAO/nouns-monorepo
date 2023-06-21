@@ -211,7 +211,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
     fallback() external payable {}
 
     function sendETH(address payable recipient, uint256 ethToSend) external {
-        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::sendETH: Call must come from admin.');
 
         recipient.sendValue(ethToSend);
 
@@ -223,7 +223,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         address erc20Token,
         uint256 tokensToSend
     ) external {
-        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::sendERC20: Call must come from admin.');
 
         IERC20(erc20Token).safeTransfer(recipient, tokensToSend);
 
