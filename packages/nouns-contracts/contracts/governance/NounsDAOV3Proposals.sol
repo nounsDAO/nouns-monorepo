@@ -233,6 +233,7 @@ library NounsDAOV3Proposals {
             description,
             proposalId
         );
+        if (signers.length == 0) revert MustProvideSignatures();
 
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
@@ -811,13 +812,28 @@ library NounsDAOV3Proposals {
         bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
 
         signers = new address[](proposerSignatures.length);
+        uint256 numSigners = 0;
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
-            address signer = signers[i] = proposerSignatures[i].signer;
 
+            address signer = proposerSignatures[i].signer;
             checkNoActiveProp(ds, signer);
+
+            uint256 signerVotes = nouns.getPriorVotes(signer, block.number - 1);
+            if (signerVotes == 0) {
+                continue;
+            }
+
+            signers[numSigners++] = signer;
             ds.latestProposalIds[signer] = proposalId;
-            votes += nouns.getPriorVotes(signer, block.number - 1);
+            votes += signerVotes;
+        }
+
+        if (numSigners < proposerSignatures.length) {
+            // this assembly trims the signer array, getting rid of unused cells
+            assembly {
+                mstore(signers, numSigners)
+            }
         }
 
         checkNoActiveProp(ds, msg.sender);

@@ -336,7 +336,7 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
 
-    function test_givenProposerWithEnoughVotesAndSignerWithNoVotes_worksAndEmitsEvents() public {
+    function test_givenProposerWithEnoughVotesAndSignerWithNoVotes_reverts() public {
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
         uint256 expirationTimestamp = block.timestamp + 1234;
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures = new NounsDAOStorageV3.ProposerSignature[](1);
@@ -346,10 +346,7 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
             expirationTimestamp
         );
 
-        address[] memory expectedSigners = new address[](1);
-        expectedSigners[0] = signerWithNoVotes;
-        expectNewPropEvents(txs, proposerWithVote, dao.proposalCount() + 1, 0, 0, expectedSigners);
-
+        vm.expectRevert(NounsDAOV3Proposals.MustProvideSignatures.selector);
         vm.prank(proposerWithVote);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
@@ -396,6 +393,46 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposerWithNoVotes);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
+    }
+
+    function test_givenOnesOfSignersHasNoVotes_signerIsFilteredOut() public {
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
+        uint256 expirationTimestamp = block.timestamp + 1234;
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures = new NounsDAOStorageV3.ProposerSignature[](2);
+        proposerSignatures[0] = NounsDAOStorageV3.ProposerSignature(
+            signProposal(
+                proposerWithNoVotes,
+                signerWithNoVotesPK,
+                txs,
+                'description',
+                expirationTimestamp,
+                address(dao)
+            ),
+            signerWithNoVotes,
+            expirationTimestamp
+        );
+        proposerSignatures[1] = NounsDAOStorageV3.ProposerSignature(
+            signProposal(proposerWithNoVotes, signerWithVote2PK, txs, 'description', expirationTimestamp, address(dao)),
+            signerWithVote2,
+            expirationTimestamp
+        );
+
+        address[] memory expectedSigners = new address[](1);
+        expectedSigners[0] = signerWithVote2;
+        expectNewPropEvents(txs, proposerWithNoVotes, dao.proposalCount() + 1, 0, 0, expectedSigners);
+
+        vm.prank(proposerWithNoVotes);
+        uint256 proposalId = dao.proposeBySigs(
+            proposerSignatures,
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            'description'
+        );
+
+        NounsDAOStorageV3.ProposalCondensed memory proposal = dao.proposalsV3(proposalId);
+        assertEq(proposal.signers, expectedSigners);
     }
 
     function test_givenProposerWithNoVotesAndTwoSignersWithEnoughVotes_worksAndEmitsEvents() public {
