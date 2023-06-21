@@ -331,7 +331,7 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
             expirationTimestamp
         );
 
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
         vm.prank(proposerWithVote);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
@@ -475,6 +475,41 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
 
         NounsDAOStorageV3.ProposalCondensed memory proposal = dao.proposalsV3(proposalId);
         assertEq(proposal.signers, expectedSigners);
+    }
+
+    function test_givenProposerWithNoVotesAndTwoSignaturesBySameSigner_reverts() public {
+        // Minting to push a single signer below threshold
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 6; ++i) {
+            nounsToken.mint();
+        }
+        vm.roll(block.number + 1);
+        vm.stopPrank();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
+        uint256 expirationTimestamp = block.timestamp + 1234;
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures = new NounsDAOStorageV3.ProposerSignature[](2);
+        proposerSignatures[0] = NounsDAOStorageV3.ProposerSignature(
+            signProposal(proposerWithNoVotes, signerWithVote1PK, txs, 'description', expirationTimestamp, address(dao)),
+            signerWithVote1,
+            expirationTimestamp
+        );
+        proposerSignatures[1] = NounsDAOStorageV3.ProposerSignature(
+            signProposal(
+                proposerWithNoVotes,
+                signerWithVote1PK,
+                txs,
+                'description',
+                expirationTimestamp + 1,
+                address(dao)
+            ),
+            signerWithVote1,
+            expirationTimestamp + 1
+        );
+
+        vm.prank(proposerWithNoVotes);
+        vm.expectRevert(NounsDAOV3Proposals.ProposerAlreadyHasALiveProposal.selector);
+        dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
 
     function test_givenProposerWithNoVotesAndERC1271SignerWithEnoughVotes_worksAndEmitsEvents() public {
