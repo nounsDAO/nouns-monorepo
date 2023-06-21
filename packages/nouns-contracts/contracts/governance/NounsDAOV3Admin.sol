@@ -95,6 +95,9 @@ library NounsDAOV3Admin {
     /// @notice Emitted when the erc20 tokens to include in a fork are set
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
+    /// @notice Emitted when the fork escrow contract address is set
+    event ForkEscrowSet(address oldForkEscrow, address newForkEscrow);
+
     /// @notice Emitted when the during of the forking period is set
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
 
@@ -519,6 +522,8 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the fork escrow contract
      */
     function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
+        emit ForkEscrowSet(address(ds.forkEscrow), newForkEscrow);
+
         ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
 
