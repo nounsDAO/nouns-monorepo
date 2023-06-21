@@ -45,6 +45,16 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setForkPeriod(14 days + 1);
     }
 
+    function test_setForkPeriod_limitedByLowerBound() public {
+        vm.startPrank(address(dao.timelock()));
+
+        // doesn't revert
+        dao._setForkPeriod(2 days);
+
+        vm.expectRevert(NounsDAOV3Admin.ForkPeriodTooShort.selector);
+        dao._setForkPeriod(2 days - 1);
+    }
+
     function test_setForkThresholdBPS_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
         dao._setForkThresholdBPS(2000);
