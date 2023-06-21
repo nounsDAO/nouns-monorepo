@@ -105,6 +105,7 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
+    error TokensMustBeASubsetOfWhitelistedTokens();
     error GovernanceBlockedDuringForkingPeriod();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
@@ -198,6 +199,22 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      * @param tokenIds The token ids to quit with
      */
     function quit(uint256[] calldata tokenIds) external nonReentrant {
+        quitInternal(tokenIds, erc20TokensToIncludeInQuit);
+    }
+
+    function quit(uint256[] calldata tokenIds, address[] memory erc20TokensToInclude) external nonReentrant {
+        // check that erc20TokensToInclude is a subset of `erc20TokensToIncludeInQuit`
+        address[] memory erc20TokensToIncludeInQuit_ = erc20TokensToIncludeInQuit;
+        for (uint256 i = 0; i < erc20TokensToInclude.length; i++) {
+            if (!isAddressIn(erc20TokensToInclude[i], erc20TokensToIncludeInQuit_)) {
+                revert TokensMustBeASubsetOfWhitelistedTokens();
+            }
+        }
+
+        quitInternal(tokenIds, erc20TokensToInclude);
+    }
+
+    function quitInternal(uint256[] calldata tokenIds, address[] memory erc20TokensToInclude) internal {
         checkGovernanceActive();
 
         uint256 totalSupply = adjustedTotalSupply();
@@ -206,23 +223,29 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
             nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
         }
 
-        address[] memory erc20TokensToIncludeInQuit_ = erc20TokensToIncludeInQuit;
-        uint256[] memory balancesToSend = new uint256[](erc20TokensToIncludeInQuit_.length);
+        uint256[] memory balancesToSend = new uint256[](erc20TokensToInclude.length);
 
         // Capture balances to send before actually sending them, to avoid the risk of external calls changing balances.
         uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
-        for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
-            IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
+        for (uint256 i = 0; i < erc20TokensToInclude.length; i++) {
+            IERC20 erc20token = IERC20(erc20TokensToInclude[i]);
             balancesToSend[i] = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
         }
 
         // Send ETH and ERC20 tokens
         timelock.sendETH(payable(msg.sender), ethToSend);
-        for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
-            timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
+        for (uint256 i = 0; i < erc20TokensToInclude.length; i++) {
+            timelock.sendERC20(msg.sender, erc20TokensToInclude[i], balancesToSend[i]);
         }
 
         emit Quit(msg.sender, tokenIds);
+    }
+
+    function isAddressIn(address a, address[] memory addresses) internal pure returns (bool) {
+        for (uint256 i = 0; i < addresses.length; i++) {
+            if (addresses[i] == a) return true;
+        }
+        return false;
     }
 
     struct ProposalTemp {

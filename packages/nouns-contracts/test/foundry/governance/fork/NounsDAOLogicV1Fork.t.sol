@@ -298,6 +298,9 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
         dao.quit(tokens);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        dao.quit(tokens, new address[](0));
     }
 
     function test_quit_givenFullClaim_works() public {
@@ -383,6 +386,36 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         assertEq(quitter.balance, 24 ether);
         assertEq(token1.balanceOf(quitter), (TOKEN1_BALANCE * 2) / 10);
         assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
+    }
+
+    function test_quit_allowsChoosingErc20TokensToInclude() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](1);
+        tokensToInclude[0] = address(token2);
+        dao.quit(quitterTokens, tokensToInclude);
+
+        assertEq(quitter.balance, 24 ether);
+        assertEq(token1.balanceOf(quitter), 0);
+        assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
+    }
+
+    function test_quit_allowsExcludingAllErc20Tokens() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](0);
+        dao.quit(quitterTokens, tokensToInclude);
+
+        assertEq(quitter.balance, 24 ether);
+        assertEq(token1.balanceOf(quitter), 0);
+        assertEq(token2.balanceOf(quitter), 0);
+    }
+
+    function test_quit_withErc20TokensToIncludes_revertsIfNotASubset() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](2);
+        tokensToInclude[0] = address(token2);
+        tokensToInclude[1] = makeAddr('random addr');
+        vm.expectRevert(NounsDAOLogicV1Fork.TokensMustBeASubsetOfWhitelistedTokens.selector);
+        dao.quit(quitterTokens, tokensToInclude);
     }
 
     function test_quit_reentranceReverts() public {
