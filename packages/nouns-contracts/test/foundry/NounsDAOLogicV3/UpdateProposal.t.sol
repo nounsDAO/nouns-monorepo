@@ -59,9 +59,13 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
     }
 
     function test_givenPropWithSigners_reverts() public {
-        vm.prank(proposer);
+        vm.startPrank(proposer);
         dao.cancel(proposalId);
+        
         (address signer, uint256 signerPK) = makeAddrAndKey('signer');
+        nounsToken.transferFrom(proposer, signer, 1);
+        vm.roll(block.number + 1);
+
         uint256 expirationTimestamp = block.timestamp + 1234;
         uint256 propId = proposeBySigs(
             proposer,

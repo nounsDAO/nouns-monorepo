@@ -50,7 +50,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 5;
+        uint8 numTxs = 6;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -90,6 +90,13 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'setApprovalForAll(address,bool)';
         calldatas[i] = abi.encode(timelockV2, true);
+
+        // Transfer DAO-owned Nouns to timelockV2
+        i++;
+        targets[i] = nounsToken;
+        values[i] = 0;
+        signatures[i] = 'transferFrom(address,address,uint256)';
+        calldatas[i] = abi.encode(timelockV1, timelockV2, 687);
 
         proposalId = daoProxy.proposeOnTimelockV1(targets, values, signatures, calldatas, description);
     }

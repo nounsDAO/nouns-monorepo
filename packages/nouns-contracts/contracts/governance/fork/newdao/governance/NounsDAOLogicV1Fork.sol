@@ -98,15 +98,13 @@ import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgrade
 import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';
 import { NounsDAOStorageV1Fork } from './NounsDAOStorageV1Fork.sol';
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
+import { INounsTokenForkLike } from './INounsTokenForkLike.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
-    error QuitETHTransferFailed();
-    error QuitERC20TransferFailed();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
     event Quit(address indexed msgSender, uint256[] tokenIds);
@@ -183,7 +181,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
         admin = timelock_;
         timelock = NounsDAOExecutorV2(payable(timelock_));
-        nouns = NounsTokenForkLike(nouns_);
+        nouns = INounsTokenForkLike(nouns_);
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
@@ -218,12 +216,9 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         }
 
         // Send ETH and ERC20 tokens
-        bool ethSent = timelock.sendETH(msg.sender, ethToSend);
-        if (!ethSent) revert QuitETHTransferFailed();
-
+        timelock.sendETH(payable(msg.sender), ethToSend);
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
-            bool erc20Sent = timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
-            if (!erc20Sent) revert QuitERC20TransferFailed();
+            timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
         }
 
         emit Quit(msg.sender, tokenIds);
