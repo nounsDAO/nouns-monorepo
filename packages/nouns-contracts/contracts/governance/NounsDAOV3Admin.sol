@@ -110,17 +110,17 @@ library NounsDAOV3Admin {
     /// @notice The maximum setable proposal threshold
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
-    /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 7_200; // 24 hours
+    /// @notice The minimum setable voting period in blocks
+    uint256 public constant MIN_VOTING_PERIOD_BLOCKS = 1 days / 12;
 
-    /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 100_800; // 2 weeks
+    /// @notice The max setable voting period in blocks
+    uint256 public constant MAX_VOTING_PERIOD_BLOCKS = 2 weeks / 12;
 
-    /// @notice The min setable voting delay
-    uint256 public constant MIN_VOTING_DELAY = 1;
+    /// @notice The min setable voting delay in blocks
+    uint256 public constant MIN_VOTING_DELAY_BLOCKS = 1;
 
-    /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 100_800; // 2 weeks
+    /// @notice The max setable voting delay in blocks
+    uint256 public constant MAX_VOTING_DELAY_BLOCKS = 2 weeks / 12;
 
     /// @notice The lower bound of minimum quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS_LOWER_BOUND = 200; // 200 basis points or 2%
@@ -157,7 +157,7 @@ library NounsDAOV3Admin {
      */
     function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external onlyAdmin(ds) {
         require(
-            newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
+            newVotingDelay >= MIN_VOTING_DELAY_BLOCKS && newVotingDelay <= MAX_VOTING_DELAY_BLOCKS,
             'NounsDAO::_setVotingDelay: invalid voting delay'
         );
         uint256 oldVotingDelay = ds.votingDelay;
@@ -172,7 +172,7 @@ library NounsDAOV3Admin {
      */
     function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external onlyAdmin(ds) {
         require(
-            newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
+            newVotingPeriod >= MIN_VOTING_PERIOD_BLOCKS && newVotingPeriod <= MAX_VOTING_PERIOD_BLOCKS,
             'NounsDAO::_setVotingPeriod: invalid voting period'
         );
         uint256 oldVotingPeriod = ds.votingPeriod;

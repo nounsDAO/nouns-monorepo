@@ -85,29 +85,29 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return NounsDAOV3Admin.MAX_PROPOSAL_THRESHOLD_BPS;
     }
 
-    /// @notice The minimum setable voting period
+    /// @notice The minimum setable voting period in blocks
     function MIN_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_PERIOD;
+        return NounsDAOV3Admin.MIN_VOTING_PERIOD_BLOCKS;
     }
 
-    /// @notice The max setable voting period
+    /// @notice The max setable voting period in blocks
     function MAX_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_PERIOD;
+        return NounsDAOV3Admin.MAX_VOTING_PERIOD_BLOCKS;
     }
 
-    /// @notice The min setable voting delay
+    /// @notice The min setable voting delay in blocks
     function MIN_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_DELAY;
+        return NounsDAOV3Admin.MIN_VOTING_DELAY_BLOCKS;
     }
 
-    /// @notice The max setable voting delay
+    /// @notice The max setable voting delay in blocks
     function MAX_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_DELAY;
+        return NounsDAOV3Admin.MAX_VOTING_DELAY_BLOCKS;
     }
 
     /// @notice The maximum number of actions that can be included in a proposal
-    function proposalMaxOperations() public pure returns (uint256) {
-        return NounsDAOV3Proposals.proposalMaxOperations;
+    function PROPOSAL_MAX_OPERATIONS() public pure returns (uint256) {
+        return NounsDAOV3Proposals.PROPOSAL_MAX_OPERATIONS;
     }
 
     /**

@@ -136,7 +136,7 @@ library NounsDAOV3Proposals {
     }
 
     /// @notice The maximum number of actions that can be included in a proposal
-    uint256 public constant proposalMaxOperations = 10; // 10 actions
+    uint256 public constant PROPOSAL_MAX_OPERATIONS = 10; // 10 actions
 
     bytes32 public constant DOMAIN_TYPEHASH =
         keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
@@ -967,7 +967,7 @@ library NounsDAOV3Proposals {
             txs.targets.length != txs.calldatas.length
         ) revert ProposalInfoArityMismatch();
         if (txs.targets.length == 0) revert MustProvideActions();
-        if (txs.targets.length > proposalMaxOperations) revert TooManyActions();
+        if (txs.targets.length > PROPOSAL_MAX_OPERATIONS) revert TooManyActions();
     }
 
     function verifyProposalSignature(
