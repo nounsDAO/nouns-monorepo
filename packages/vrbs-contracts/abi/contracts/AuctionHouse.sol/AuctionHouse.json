@@ -5,7 +5,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
         "type": "uint256"
       },
       {
@@ -36,7 +36,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
         "type": "uint256"
       },
       {
@@ -61,7 +61,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
         "type": "uint256"
       },
       {
@@ -106,7 +106,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
         "type": "uint256"
       },
       {
@@ -189,7 +189,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
         "type": "uint256"
       },
       {
@@ -225,15 +225,21 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "vrbId",
+        "name": "n00unId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bidAmount",
         "type": "uint256"
       }
     ],
     "name": "createBid",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
+  {"inputs":[{"internalType":"uint256","name":"n00unId","type":"uint256"},{"internalType":"uint256","name":"bidAmount","type":"uint256"}],"name":"createBidWithToken","outputs":[],"stateMutability":"nonpayable","type":"function"},
   {
     "inputs": [],
     "name": "duration",
@@ -250,8 +256,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IVrbsToken",
-        "name": "_vrbs",
+        "internalType": "contract IN00unsToken",
+        "name": "_n00uns",
         "type": "address"
       },
       {
@@ -300,10 +306,10 @@
   },
   {
     "inputs": [],
-    "name": "vrbs",
+    "name": "n00uns",
     "outputs": [
       {
-        "internalType": "contract IVrbsToken",
+        "internalType": "contract IN00unsToken",
         "name": "",
         "type": "address"
       }

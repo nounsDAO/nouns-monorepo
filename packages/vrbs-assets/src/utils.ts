@@ -14,12 +14,12 @@ type ObjectKey = keyof typeof images;
 export const getVrbData = (seed: VrbSeed): VrbData => {
   return {
     parts: [
-      bodies[seed.body],
-      accessories[seed.accessory],
-      heads[seed.head],
-      glasses[seed.glasses],
+      bodies[0],
+      accessories[0],
+      heads[0],
+      glasses[0],
   ],
-  background: bgcolors[seed.background],
+  background: bgcolors[0],
   };
 };
 

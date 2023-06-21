@@ -104,49 +104,13 @@ contract AuctionHouse is
         _settleAuction();
     }
 
-    /**
-     * @notice Create a bid for a Vrb, with a given amount.
-     * @dev This contract only accepts payment in ETH.
-     */
-    function createBid(uint256 vrbId) external payable override nonReentrant {
-        IAuctionHouse.Auction memory _auction = auction;
-
-        require(_auction.vrbId == vrbId, 'Vrb not up for auction');
-        require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
-            'Must send more than last bid by minBidIncrementPercentage amount'
-        );
-
-        address payable lastBidder = _auction.bidder;
-
-        // Refund the last bidder, if applicable
-        if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
-        }
-
-        auction.amount = msg.value;
-        auction.bidder = payable(msg.sender);
-
-        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
-        if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
-        }
-
-        emit AuctionBid(_auction.vrbId, msg.sender, msg.value, extended);
-
-        if (extended) {
-            emit AuctionExtended(_auction.vrbId, _auction.endTime);
-        }
-    }
+  
 
     function setBiddingToken(IERC20 _biddingToken) external onlyOwner {
         biddingToken = _biddingToken;
     }
 
-    function createBidWithToken(uint256 vrbId, uint256 bidAmount) external nonReentrant {
+    function createBid(uint256 vrbId, uint256 bidAmount) external nonReentrant {
         IAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.vrbId == vrbId, 'Vrb not up for auction');

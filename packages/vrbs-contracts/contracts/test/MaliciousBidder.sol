@@ -6,7 +6,7 @@ import { IAuctionHouse } from '../interfaces/IAuctionHouse.sol';
 
 contract MaliciousBidder {
     function bid(IAuctionHouse auctionHouse, uint256 tokenId) public payable {
-        auctionHouse.createBid{ value: msg.value }(tokenId);
+        // auctionHouse.createBid{ value: msg.value }(tokenId);
     }
 
     receive() external payable {

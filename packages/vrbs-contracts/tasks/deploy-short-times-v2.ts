@@ -227,10 +227,10 @@ task('deploy-short-times-v2', 'Deploy all Vrbs contracts with short gov times fo
       let nameForFactory: string;
       switch (name) {
         case 'DAOExecutor':
-          nameForFactory = 'VrbsDAOExecutorTest';
+          nameForFactory = 'DAOExecutorTest';
           break;
         case 'DAOLogicV2':
-          nameForFactory = 'VrbsDAOLogicV2Harness';
+          nameForFactory = 'DAOLogicV2Harness';
           break;
         default:
           nameForFactory = name;
