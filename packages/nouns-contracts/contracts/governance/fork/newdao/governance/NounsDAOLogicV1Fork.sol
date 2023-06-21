@@ -105,6 +105,7 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
+    error GovernanceBlockedDuringForkingPeriod();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
     event Quit(address indexed msgSender, uint256[] tokenIds);
@@ -342,13 +343,18 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     /**
      * @notice Internal function that reverts if the governance is not active yet. Governance becomes active as soon as
-     * one of these conditions is met:
+     * the forking period ended and one of these conditions is met:
      * 1. All tokens are claimed
      * 2. The delayed governance expiration timestamp is reached
      */
     function checkGovernanceActive() internal view {
-        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
+        if (block.timestamp < nouns.forkingPeriodEndTimestamp()) {
+            revert GovernanceBlockedDuringForkingPeriod();
+        }
+
+        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0) {
             revert WaitingForTokensToClaimOrExpiration();
+        }
     }
 
     /**
