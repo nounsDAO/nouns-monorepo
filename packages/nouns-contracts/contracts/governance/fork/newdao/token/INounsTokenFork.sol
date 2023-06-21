@@ -26,8 +26,6 @@ interface INounsTokenFork is IERC721Upgradeable {
 
     event NounBurned(uint256 indexed tokenId);
 
-    event NoundersDAOUpdated(address noundersDAO);
-
     event MinterUpdated(address minter);
 
     event MinterLocked();

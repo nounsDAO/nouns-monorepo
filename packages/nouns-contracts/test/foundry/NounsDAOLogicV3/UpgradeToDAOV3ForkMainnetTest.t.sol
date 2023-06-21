@@ -263,6 +263,8 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 0);
         assertEq(address(timelockV2).balance, expectedV2Balance);
         assertTrue(IERC721(LILNOUNS_MAINNET).isApprovedForAll(address(NOUNS_TIMELOCK_V1_MAINNET), address(timelockV2)));
+        assertEq(nouns.balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 0);
+        assertEq(nouns.ownerOf(687), address(timelockV2));
     }
 
     function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {

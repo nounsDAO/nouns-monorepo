@@ -630,7 +630,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
 
     /**
-     * @notice Admin function for setting the voting delay
+     * @notice Admin function for setting the voting delay. Best to set voting delay to at least a few days, to give
+     * voters time to make sense of proposals, e.g. 21,600 blocks which should be at least 3 days.
      * @param newVotingDelay new voting delay, in blocks
      */
     function _setVotingDelay(uint256 newVotingDelay) external {

@@ -40,10 +40,15 @@
 pragma solidity ^0.8.6;
 
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import { Initializable } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
+import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
 contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
+    using SafeERC20 for IERC20;
+    using Address for address payable;
+
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
@@ -71,8 +76,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         bytes data,
         uint256 eta
     );
-    event ETHSent(address indexed to, uint256 amount, bool success);
-    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount, bool success);
+    event ETHSent(address indexed to, uint256 amount);
+    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount);
 
     string public constant NAME = 'NounsDAOExecutorV2';
 
@@ -205,24 +210,24 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
 
     fallback() external payable {}
 
-    function sendETH(address newDAOTreasury, uint256 ethToSend) external returns (bool success) {
+    function sendETH(address payable recipient, uint256 ethToSend) external {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
-        (success, ) = newDAOTreasury.call{ value: ethToSend }('');
+        recipient.sendValue(ethToSend);
 
-        emit ETHSent(newDAOTreasury, ethToSend, success);
+        emit ETHSent(recipient, ethToSend);
     }
 
     function sendERC20(
-        address newDAOTreasury,
+        address recipient,
         address erc20Token,
         uint256 tokensToSend
-    ) external returns (bool success) {
+    ) external {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
-        success = IERC20(erc20Token).transfer(newDAOTreasury, tokensToSend);
+        IERC20(erc20Token).safeTransfer(recipient, tokensToSend);
 
-        emit ERC20Sent(newDAOTreasury, erc20Token, tokensToSend, success);
+        emit ERC20Sent(recipient, erc20Token, tokensToSend);
     }
 
     /**

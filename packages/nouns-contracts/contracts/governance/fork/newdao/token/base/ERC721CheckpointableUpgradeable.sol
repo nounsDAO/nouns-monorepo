@@ -144,7 +144,7 @@ abstract contract ERC721CheckpointableUpgradeable is ERC721EnumerableUpgradeable
     ) public {
         require(delegatee != address(0), 'ERC721Checkpointable::delegateBySig: delegatee cannot be zero address');
         bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name())), getChainId(), address(this))
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name())), block.chainid, address(this))
         );
         bytes32 structHash = keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, nonce, expiry));
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
@@ -289,13 +289,5 @@ abstract contract ERC721CheckpointableUpgradeable is ERC721EnumerableUpgradeable
     ) internal pure returns (uint96) {
         require(b <= a, errorMessage);
         return a - b;
-    }
-
-    function getChainId() internal view returns (uint256) {
-        uint256 chainId;
-        assembly {
-            chainId := chainid()
-        }
-        return chainId;
     }
 }
