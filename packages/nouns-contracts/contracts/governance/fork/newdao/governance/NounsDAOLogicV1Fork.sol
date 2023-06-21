@@ -205,14 +205,21 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
             nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
         }
 
-        for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
+        address[] memory erc20TokensToIncludeInQuit_ = erc20TokensToIncludeInQuit;
+        uint256[] memory balancesToSend = new uint256[](erc20TokensToIncludeInQuit_.length);
+
+        // Capture balances to send before actually sending them, to avoid the risk of external calls changing balances.
+        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
+        for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
-            uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
-            timelock.sendERC20(msg.sender, address(erc20token), tokensToSend);
+            balancesToSend[i] = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
         }
 
-        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
+        // Send ETH and ERC20 tokens
         timelock.sendETH(payable(msg.sender), ethToSend);
+        for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
+            timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
+        }
 
         emit Quit(msg.sender, tokenIds);
     }
