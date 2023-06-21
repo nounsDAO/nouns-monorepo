@@ -218,7 +218,9 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         // Send ETH and ERC20 tokens
         timelock.sendETH(payable(msg.sender), ethToSend);
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit_.length; i++) {
-            timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
+            if (balancesToSend[i] > 0) {
+                timelock.sendERC20(msg.sender, erc20TokensToIncludeInQuit_[i], balancesToSend[i]);
+            }
         }
 
         emit Quit(msg.sender, tokenIds);

@@ -10,6 +10,7 @@ interface IERC20Receiver {
 contract ERC20Mock is ERC20 {
     bool public failNextTransfer;
     bool public callbackNextTransfer;
+    bool public wasTransferCalled;
 
     constructor() ERC20('Mock', 'MOCK') {}
 
@@ -18,6 +19,7 @@ contract ERC20Mock is ERC20 {
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
+        wasTransferCalled = true;
         super.transfer(recipient, amount);
         if (callbackNextTransfer) {
             callbackNextTransfer = false;
@@ -36,5 +38,9 @@ contract ERC20Mock is ERC20 {
 
     function setCallbackOnNextTransfer(bool callbackNextTransfer_) external {
         callbackNextTransfer = callbackNextTransfer_;
+    }
+
+    function setWasTransferCalled(bool wasTransferCalled_) external {
+        wasTransferCalled = wasTransferCalled_;
     }
 }

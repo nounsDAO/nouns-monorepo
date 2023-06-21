@@ -222,7 +222,9 @@ library NounsDAOV3Fork {
         for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
-            timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
+            if (tokensToSend > 0) {
+                timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
+            }
         }
     }
 }
