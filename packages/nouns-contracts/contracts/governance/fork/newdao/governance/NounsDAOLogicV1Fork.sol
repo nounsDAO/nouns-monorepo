@@ -105,6 +105,7 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1Fork, NounsDAOEventsFork {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
+    error GovernanceBlockedDuringForkingPeriod();
     error QuitETHTransferFailed();
     error QuitERC20TransferFailed();
 
@@ -345,7 +346,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      */
     function checkGovernanceActive() internal view {
         if (block.timestamp < nouns.forkingPeriodEndTimestamp()) {
-            revert WaitingForTokensToClaimOrExpiration();
+            revert GovernanceBlockedDuringForkingPeriod();
         }
 
         if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0) {

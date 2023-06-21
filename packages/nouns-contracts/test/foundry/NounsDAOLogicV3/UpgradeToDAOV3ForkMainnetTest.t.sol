@@ -221,6 +221,10 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         signatures = [''];
         calldatas = [bytes('')];
 
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
+        forkDao.propose(targets, values, signatures, calldatas, 'new prop');
+
+        vm.warp(block.timestamp + 7 days);
         vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
         forkDao.propose(targets, values, signatures, calldatas, 'new prop');
 

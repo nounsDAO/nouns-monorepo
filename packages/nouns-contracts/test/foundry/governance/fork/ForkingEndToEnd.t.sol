@@ -54,16 +54,23 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         // of that is 8 ETH.
         assertEqUint(forkTreasuryAddress.balance, 8 ether);
 
-        // Asserting that delayed governance is working - no one should be able to propose until all fork tokens have
-        // been claimed, or until the delay period expires.
-        // Later in this test we make sure we CAN propose once all tokens have been claimed.
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        // Governance is blocked during forking period
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
         // Two additional Nouners join the fork during the forking period.
         // This should grow the ETH balance sent from OG DAO to fork DAO.
         joinFork(nounerForkJoiner1);
         joinFork(nounerForkJoiner2);
+
+        // Forking period finished
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
+
+        // Asserting that delayed governance is working - no one should be able to propose until all fork tokens have
+        // been claimed, or until the delay period expires.
+        // Later in this test we make sure we CAN propose once all tokens have been claimed.
+        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
         // Asserting the expected ETH amount was sent. We're now at two thirds of OG Nouns forking, so we expect
         // two thirds of the ETH to be sent, which is 16 out of the original 24.
@@ -82,11 +89,6 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
 
         // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed and
         // forking period is over
-        vm.startPrank(nounerInEscrow1);
-        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
-        proposeToFork(makeAddr('target'), 0, 'signature', 'data');
-
-        vm.warp(forkToken.forkingPeriodEndTimestamp());
         vm.startPrank(nounerInEscrow1);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 

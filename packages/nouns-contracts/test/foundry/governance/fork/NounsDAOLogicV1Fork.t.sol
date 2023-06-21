@@ -220,7 +220,7 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
         // mining one block so proposer prior votes getter sees their tokens.
         vm.roll(block.number + 1);
 
-        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
         propose();
     }
 
@@ -239,7 +239,7 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
 
         token.setApprovalForAll(address(dao), true);
 
-        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
         dao.quit(tokens);
     }
 
