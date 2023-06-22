@@ -133,7 +133,7 @@ library NounsDAOV3Admin {
     uint256 public constant MIN_QUORUM_VOTES_BPS_UPPER_BOUND = 2_000; // 2,000 basis points or 20%
 
     /// @notice The upper bound of maximum quorum votes basis points
-    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
+    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 6,000 basis points or 60%
 
     /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
     uint256 public constant MAX_FORK_PERIOD = 14 days;
