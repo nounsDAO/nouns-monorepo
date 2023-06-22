@@ -45,6 +45,7 @@ library NounsDAOV3Proposals {
     error VetoerBurned();
     error VetoerOnly();
     error CantVetoExecutedProposal();
+    error VotesBelowProposalThreshold();
 
     /// @notice An event emitted when a proposal has been vetoed by vetoAddress
     event ProposalVetoed(uint256 id);
@@ -226,16 +227,10 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
-        (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
-            ds,
-            proposerSignatures,
-            txs,
-            description,
-            proposalId
-        );
-
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
-        uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
+
+        uint256 propThreshold = proposalThreshold(ds, adjustedTotalSupply);
+
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             proposalId,
@@ -243,6 +238,19 @@ library NounsDAOV3Proposals {
             adjustedTotalSupply,
             txs
         );
+
+        // important that the proposal is created before the verification call in order to ensure
+        // the same signer is not trying to sign this proposal more than once
+        (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
+            ds,
+            proposerSignatures,
+            txs,
+            description,
+            proposalId
+        );
+        if (signers.length == 0) revert MustProvideSignatures();
+        if (votes <= propThreshold) revert VotesBelowProposalThreshold();
+
         newProposal.signers = signers;
 
         emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(adjustedTotalSupply), txs, description);
@@ -540,8 +548,9 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
 
         proposal.vetoed = true;
+        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
         for (uint256 i = 0; i < proposal.targets.length; i++) {
-            ds.timelock.cancelTransaction(
+            timelock.cancelTransaction(
                 proposal.targets[i],
                 proposal.values[i],
                 proposal.signatures[i],
@@ -811,13 +820,28 @@ library NounsDAOV3Proposals {
         bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
 
         signers = new address[](proposerSignatures.length);
+        uint256 numSigners = 0;
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
-            address signer = signers[i] = proposerSignatures[i].signer;
 
+            address signer = proposerSignatures[i].signer;
             checkNoActiveProp(ds, signer);
+
+            uint256 signerVotes = nouns.getPriorVotes(signer, block.number - 1);
+            if (signerVotes == 0) {
+                continue;
+            }
+
+            signers[numSigners++] = signer;
             ds.latestProposalIds[signer] = proposalId;
-            votes += nouns.getPriorVotes(signer, block.number - 1);
+            votes += signerVotes;
+        }
+
+        if (numSigners < proposerSignatures.length) {
+            // this assembly trims the signer array, getting rid of unused cells
+            assembly {
+                mstore(signers, numSigners)
+            }
         }
 
         checkNoActiveProp(ds, msg.sender);
@@ -933,7 +957,7 @@ library NounsDAOV3Proposals {
         uint256 adjustedTotalSupply
     ) internal view returns (uint256 propThreshold) {
         propThreshold = proposalThreshold(ds, adjustedTotalSupply);
-        require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
+        if (votes <= propThreshold) revert VotesBelowProposalThreshold();
     }
 
     function checkProposalTxs(ProposalTxs memory txs) internal pure {

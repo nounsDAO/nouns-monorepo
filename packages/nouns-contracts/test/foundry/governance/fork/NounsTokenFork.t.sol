@@ -79,7 +79,7 @@ contract NounsTokenFork_ClaimDuringForkPeriod_Test is NounsTokenForkBase {
     }
 
     function test_givenForkingPeriodExpired_reverts() public {
-        vm.warp(token.forkingPeriodEndTimestamp() + 1);
+        vm.warp(token.forkingPeriodEndTimestamp());
 
         vm.prank(originalDAO);
         vm.expectRevert(abi.encodeWithSelector(NounsTokenFork.OnlyDuringForkingPeriod.selector));

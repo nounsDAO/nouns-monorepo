@@ -12,6 +12,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { INounsTokenForkLike } from '../../../contracts/governance/fork/newdao/governance/INounsTokenForkLike.sol';
 import { Utils } from './Utils.sol';
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
@@ -125,6 +126,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         dao._setProposalThresholdBPS(proposalThresholdBPS);
         dao._setQuorumVotesBPS(1000);
         vm.stopPrank();
+
+        vm.warp(INounsTokenForkLike(tokenAddress).forkingPeriodEndTimestamp());
 
         return NounsDAOLogicV1(daoAddress);
     }
