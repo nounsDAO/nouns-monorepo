@@ -107,6 +107,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     error WaitingForTokensToClaimOrExpiration();
     error TokensMustBeASubsetOfWhitelistedTokens();
     error GovernanceBlockedDuringForkingPeriod();
+    error DuplicateTokenAddress();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
     event Quit(address indexed msgSender, uint256[] tokenIds);
@@ -750,11 +751,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      */
     function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
         if (msg.sender != admin) revert AdminOnly();
+        checkForDuplicates(erc20tokens);
 
-        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
+        emit ERC20TokensToIncludeInQuitSet(erc20TokensToIncludeInQuit, erc20tokens);
+
         erc20TokensToIncludeInQuit = erc20tokens;
-
-        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
     }
 
     /**
@@ -783,5 +784,13 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     function _authorizeUpgrade(address) internal view override {
         require(msg.sender == admin, 'NounsDAO::_authorizeUpgrade: admin only');
+    }
+
+    function checkForDuplicates(address[] calldata erc20tokens) internal pure {
+        for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
+            for (uint256 j = i + 1; j < erc20tokens.length; j++) {
+                if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
+            }
+        }
     }
 }

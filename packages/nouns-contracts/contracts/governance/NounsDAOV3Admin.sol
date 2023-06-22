@@ -34,6 +34,7 @@ library NounsDAOV3Admin {
     error InvalidObjectionPeriodDurationInBlocks();
     error InvalidProposalUpdatablePeriodInBlocks();
     error VoteSnapshotSwitchAlreadySet();
+    error DuplicateTokenAddress();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -510,6 +511,8 @@ library NounsDAOV3Admin {
         external
         onlyAdmin(ds)
     {
+        checkForDuplicates(erc20tokens);
+
         emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
 
         ds.erc20TokensToIncludeInFork = erc20tokens;
@@ -586,5 +589,13 @@ library NounsDAOV3Admin {
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
         require(n <= type(uint32).max, errorMessage);
         return uint32(n);
+    }
+
+    function checkForDuplicates(address[] calldata erc20tokens) internal pure {
+        for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
+            for (uint256 j = i + 1; j < erc20tokens.length; j++) {
+                if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
+            }
+        }
     }
 }

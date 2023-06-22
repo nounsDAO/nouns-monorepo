@@ -64,6 +64,35 @@ abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     }
 }
 
+contract NounsDAOLogicV1Fork_setErc20TokensToIncludeInQuit_Test is NounsDAOLogicV1ForkBase {
+    event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
+    function test_givenDuplicateAddressesInInput_reverts() public {
+        address[] memory tokens = new address[](2);
+        tokens[0] = address(42);
+        tokens[1] = address(42);
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOLogicV1Fork.DuplicateTokenAddress.selector);
+        dao._setErc20TokensToIncludeInQuit(tokens);
+    }
+
+    function test_givenNoDuplicatesInInput_works() public {
+        address[] memory tokens = new address[](2);
+        tokens[0] = address(42);
+        tokens[1] = address(43);
+
+        vm.expectEmit(true, true, true, true);
+        emit ERC20TokensToIncludeInQuitSet(new address[](0), tokens);
+
+        vm.prank(address(dao.timelock()));
+        dao._setErc20TokensToIncludeInQuit(tokens);
+
+        assertEq(dao.erc20TokensToIncludeInQuit(0), address(42));
+        assertEq(dao.erc20TokensToIncludeInQuit(1), address(43));
+    }
+}
+
 contract NounsDAOLogicV1Fork_votingDelayBugFix_Test is NounsDAOLogicV1ForkBase {
     uint256 proposalId;
     uint256 creationBlock;
