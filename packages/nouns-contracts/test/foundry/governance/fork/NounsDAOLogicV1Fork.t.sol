@@ -16,6 +16,8 @@ import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 import { ERC20Mock, IERC20Receiver } from '../../helpers/ERC20Mock.sol';
 import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.sol';
+import { NounsAuctionHouse } from '../../../../contracts/NounsAuctionHouse.sol';
+import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
@@ -196,17 +198,18 @@ abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
     function setUp() public virtual override {
         originalDAO = _deployDAOV3();
         originalToken = originalDAO.nouns();
-        address originalMinter = originalToken.minter();
+        NounsAuctionHouse originalMinter = NounsAuctionHouse(originalToken.minter());
 
         // Minting original tokens
-        vm.startPrank(originalMinter);
-        originalToken.mint();
-        originalToken.mint();
-        originalToken.transferFrom(originalMinter, proposer, 1);
-        originalToken.transferFrom(originalMinter, owner1, 2);
+        vm.prank(address(originalDAO.timelock()));
+        originalMinter.unpause();
+        bidAndSettleAuction(originalMinter, proposer);
+        bidAndSettleAuction(originalMinter, owner1);
+        assertEq(originalToken.ownerOf(1), proposer);
+        assertEq(originalToken.ownerOf(2), owner1);
 
         // Escrowing original tokens
-        changePrank(proposer);
+        vm.startPrank(proposer);
         originalToken.setApprovalForAll(address(originalDAO), true);
         uint256[] memory proposerTokens = new uint256[](1);
         proposerTokens[0] = 1;
@@ -225,6 +228,32 @@ abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
         dao = NounsDAOLogicV1Fork(daoAddress);
         token = NounsTokenFork(tokenAddress);
         timelock = treasuryAddress;
+    }
+
+    function bidAndSettleAuction(NounsAuctionHouse auctionHouse, address buyer) internal {
+        vm.deal(buyer, buyer.balance + 0.1 ether);
+        vm.startPrank(buyer);
+        INounsAuctionHouse.Auction memory auction = getAuction(auctionHouse);
+        uint256 newNounId = auction.nounId;
+        auctionHouse.createBid{ value: 0.1 ether }(newNounId);
+        vm.warp(block.timestamp + auction.endTime);
+        auctionHouse.settleCurrentAndCreateNewAuction();
+        assertEq(auctionHouse.nouns().ownerOf(newNounId), buyer);
+        vm.roll(block.number + 1);
+        vm.stopPrank();
+    }
+
+    function getAuction(NounsAuctionHouse auctionHouse) internal view returns (INounsAuctionHouse.Auction memory) {
+        (
+            uint256 nounId,
+            uint256 amount,
+            uint256 startTime,
+            uint256 endTime,
+            address payable bidder,
+            bool settled
+        ) = auctionHouse.auction();
+
+        return INounsAuctionHouse.Auction(nounId, amount, startTime, endTime, bidder, settled);
     }
 }
 
@@ -349,7 +378,7 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
         assertEq(proposer.balance, 5 ether);
     }
 
-    function test_quit_givenTokensToClaimAndDelayedGovernanceExpires_works() public {
+    function test_quit_givenTokensToClaimAndDelayedGovernanceExpires_worksAndKeepsProRataForUnclaimedTokens() public {
         vm.deal(timelock, 10 ether);
         uint256[] memory tokens = new uint256[](1);
         tokens[0] = 1;
@@ -361,7 +390,16 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
         token.setApprovalForAll(address(dao), true);
 
         dao.quit(tokens);
-        assertEq(proposer.balance, 10 ether);
+        assertEq(proposer.balance, 5 ether);
+
+        changePrank(owner1);
+        tokens[0] = 2;
+        token.claimFromEscrow(tokens);
+
+        // showing that the late claimer's quit pro rata is preserved
+        token.setApprovalForAll(address(dao), true);
+        dao.quit(tokens);
+        assertEq(owner1.balance, 5 ether);
     }
 }
 
@@ -540,7 +578,7 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
     }
 }
 
-contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase {
+contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is ForkWithEscrow {
     uint256 constant TOTAL_MINTED = 20;
     uint256 constant MIN_ID_FOR_QUITTER = TOTAL_MINTED - ((2 * TOTAL_MINTED) / 10); // 20% of tokens go to quitter
 
@@ -574,6 +612,8 @@ contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase
         dao._setProposalThresholdBPS(1000);
         dao._setQuorumVotesBPS(2000);
         vm.stopPrank();
+
+        vm.warp(dao.delayedGovernanceExpirationTimestamp());
     }
 
     function test_proposalThreshold_usesAdjustedTotalSupply() public {
@@ -601,6 +641,18 @@ contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase
 
         assertEq(dao.proposals(proposalId).proposalThreshold, 1);
         assertEq(dao.proposals(proposalId).quorumVotes, 3);
+    }
+
+    function test_adjustedTotalSupply_includesTokensNotYetClaimed() public {
+        uint256 expectedSupply = TOTAL_MINTED + token.remainingTokensToClaim();
+        assertEq(dao.adjustedTotalSupply(), expectedSupply);
+
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 2;
+        vm.prank(owner1);
+        token.claimFromEscrow(tokens);
+
+        assertEq(dao.adjustedTotalSupply(), expectedSupply);
     }
 }
 
