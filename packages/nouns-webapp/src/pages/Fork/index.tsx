@@ -15,11 +15,6 @@ import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
 
 interface ForkPageProps { }
-
-const dummyData = {
-  states: ['escrow', 'nouns added', 'escrow threshold met', 'forking'],
-  userNouns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-}
 const now = new Date();
 const dummyForkingDates = {
   startTime: now.getTime() / 1000,
@@ -30,7 +25,7 @@ const nounsInFork = Array.from(Array(160), (_, x) => Math.floor(Math.random() * 
 
 const ForkPage: React.FC<ForkPageProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentState, setCurrentState] = useState('escrow');
+  const [currentState, setCurrentState] = useState('pre-escrow');
   const [isThresholdMet, setIsThresholdMet] = useState(false);
   const [thresholdPercentage, setThresholdPercentage] = useState(0);
   const [currentEscrowPercentage, setCurrentEscrowPercentage] = useState(0);
@@ -44,14 +39,17 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds();
   const escrowEvents = useEscrowEvents();
+  const [isEscrowPeriodActive, setIsEscrowPeriodActive] = useState(false); // true if not forking and 1 or more nouns in escrow
+
   const { withdrawFromForkEscrow, withdrawFromForkEscrowState } = useWithdrawFromForkEscrow();
 
-  console.log('escrowEvents', escrowEvents);
-  console.log('numTokensInForkEscrow', numTokensInForkEscrow);
-  console.log('userEscrowedNounIds', userEscrowedNounIds);
   useEffect(() => {
     if (isForkPeriodActive) {
       setCurrentState('forking');
+    }
+    if (!isForkPeriodActive && numTokensInForkEscrow !== undefined && numTokensInForkEscrow >= 1) {
+      setIsEscrowPeriodActive(true);
+      setCurrentState('escrow');
     }
   }, [forkThreshold]);
 
@@ -63,16 +61,16 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   }, [forkThreshold, numTokensInForkEscrow]);
 
   const { account } = useEthers();
-  const handleWithdrawNouns = () => {
-    withdrawFromForkEscrow(userEscrowedNounIds);
-  }
-  const handleEscrowToFork = () => {
-    // escrowToFork(27, 1, "the reason");
-    // escrowToFork();
-  }
-  const handleSetApproval = () => {
-    setApproval(config.addresses.nounsDAOProxy, true);
-  }
+  // const handleWithdrawNouns = () => {
+  //   withdrawFromForkEscrow(userEscrowedNounIds);
+  // }
+  // const handleEscrowToFork = () => {
+  //   // escrowToFork(27, 1, "the reason");
+  //   // escrowToFork();
+  // }
+  // const handleSetApproval = () => {
+  //   setApproval(config.addresses.nounsDAOProxy, true);
+  // }
 
   useEffect(() => {
     if (forkThreshold && totalSupply && numTokensInForkEscrow) {
@@ -188,7 +186,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   return (
     <>
       {/* temp state changer */}
-      <div className={classes.tempStateChanger}>
+      {/* <div className={classes.tempStateChanger}>
         <button
           className={clsx(currentState === 'escrow' && classes.active)}
           onClick={() => setCurrentState('escrow')}>escrow</button>
@@ -201,16 +199,20 @@ const ForkPage: React.FC<ForkPageProps> = props => {
         <button
           className={clsx(currentState === 'forking' && classes.active)}
           onClick={() => setCurrentState('forking')}>forking</button>
-      </div>
+      </div> */}
       <Section fullWidth={false} className='al'>
-        <div className={classes.pageHeader}>
-
+        <div className={clsx(
+          classes.pageHeader,
+          !isEscrowPeriodActive && !isForkPeriodActive && classes.emptyState
+        )}>
           <Col lg={6}>
             <span className={clsx(classes.forkStatus)}>
               {currentState === 'escrow' && 'Escrow'}
               {currentState === 'nouns added' && 'Escrow'}
               {currentState === 'escrow threshold met' && 'Escrow'}
               {currentState === 'forking' && 'Forking'}
+              {currentState === 'pre-escrow' && 'Pre-escrow'}
+
               {" "}Period
             </span>
             <h1><Trans>Nouns DAO Fork</Trans></h1>
@@ -232,13 +234,17 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               <p>{forkThreshold || '...'} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold</p>
             )}
           </Col>
-          <Col lg={6} className={classes.buttons}>
+          <Col lg={6} className={clsx(
+            classes.buttons,
+            !isEscrowPeriodActive && !isForkPeriodActive && classes.emptyState
+          )}>
             {!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
               <WithdrawNounsButton tokenIds={userEscrowedNounIds} />
             )}
             <button
               onClick={() => setIsModalOpen(true)}
               className={clsx(classes.button, classes.primaryButton)}>
+              {currentState === 'pre-escrow' && 'Add Nouns to Start Escrow Period'}
               {(currentState === 'escrow' || currentState === 'escrow threshold met' || currentState === 'nouns added') && 'Add Nouns to escrow'}
               {currentState === 'forking' && 'Join fork'}
             </button>
@@ -261,45 +267,46 @@ const ForkPage: React.FC<ForkPageProps> = props => {
           </div>
         </Section>
       )}
-      <div className={clsx(classes.forkTimelineWrapper, currentState === 'forking' && classes.isForkingPeriod)}>
-        <Container>
-          <Row className={classes.forkTimeline}>
-            <Col lg={3} className={classes.sidebar}>
-              <div className={classes.summary}>
-                <span>
-                  {(currentState === 'escrow' || currentState === 'nouns added' || currentState === 'escrow threshold met') && 'in escrow'}
-                  {currentState === 'forking' && 'joined this fork'}
-                </span>
-                <strong>
-                  {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
-                  {" "}Nouns
-                </strong>
-                <span>
-                  {currentEscrowPercentage > 0 && `${currentEscrowPercentage}%`}
-                </span>
-              </div>
-              {isThresholdMet && (
-                <DeployForkButton />
-              )}
-              {currentState === 'forking' && (
-                <div className={classes.nounsInFork}>
-                  {nounsInFork.map((nounId) => (
-                    <a href={`/noun/${nounId}`}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
-                  ))}
+      {isEscrowPeriodActive || isForkPeriodActive && (
+        <div className={clsx(classes.forkTimelineWrapper, currentState === 'forking' && classes.isForkingPeriod)}>
+          <Container>
+            <Row className={classes.forkTimeline}>
+              <Col lg={3} className={classes.sidebar}>
+                <div className={classes.summary}>
+                  <span>
+                    {(currentState === 'escrow' || currentState === 'nouns added' || currentState === 'escrow threshold met') && 'in escrow'}
+                    {currentState === 'forking' && 'joined this fork'}
+                  </span>
+                  <strong>
+                    {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
+                    {" "}Nouns
+                  </strong>
+                  <span>
+                    {currentEscrowPercentage > 0 && `${currentEscrowPercentage}%`}
+                  </span>
                 </div>
-              )}
-            </Col>
-            <Col lg={9} className={classes.events}>
-              {/* {currentState === 'nouns added' && ( */}
-              {userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
-                <div className={clsx(classes.userNouns, classes.callout)}>
-                  <p>
-                    Your Noun{userEscrowedNounIds.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
-                  </p>
-                </div>
-              )}
-              {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} />)}
-              {/* {currentState === 'forking' && (
+                {isThresholdMet && (
+                  <DeployForkButton />
+                )}
+                {currentState === 'forking' && (
+                  <div className={classes.nounsInFork}>
+                    {nounsInFork.map((nounId) => (
+                      <a href={`/noun/${nounId}`}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
+                    ))}
+                  </div>
+                )}
+              </Col>
+              <Col lg={9} className={classes.events}>
+                {/* {currentState === 'nouns added' && ( */}
+                {userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
+                  <div className={clsx(classes.userNouns, classes.callout)}>
+                    <p>
+                      Your Noun{userEscrowedNounIds.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
+                    </p>
+                  </div>
+                )}
+                {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} />)}
+                {/* {currentState === 'forking' && (
                 <>
                   <div className={classes.forkTimelineItem}>
                     <header>
@@ -338,7 +345,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     </header>
                   </div>
                 </>)} */}
-              {/* <div className={classes.forkTimelineItem}>
+                {/* <div className={classes.forkTimelineItem}>
                 <header>
                   <span className={classes.timestamp}>2 days ago</span>
                   <h3 className={classes.eventTitle}>Noun123.eth added 6 Nouns</h3>
@@ -363,7 +370,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   </div>
                 </header>
               </div> */}
-              {/* <div className={clsx(classes.forkTimelineItem, classes.eventRemove)}>
+                {/* <div className={clsx(classes.forkTimelineItem, classes.eventRemove)}>
                 <header>
                   <span className={classes.timestamp}>4 days ago</span>
                   <h3 className={classes.eventTitle}>NounABC.eth withdrew 3 Nouns from escrow</h3>
@@ -421,10 +428,11 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                   </div>
                 </header>
               </div> */}
-            </Col>
-          </Row>
-        </Container>
-      </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      )}
       {account && (
         <>
           <AddNounsToForkModal

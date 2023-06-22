@@ -29,6 +29,17 @@ h1 {
 .pageHeader a:hover {
   text-decoration: none;
 }
+.pageHeader.emptyState {
+  flex-direction: column;
+    align-items: center;
+}
+/* center header items in empty state */
+.pageHeader.emptyState > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .button {
   border-radius: 8px;
@@ -76,6 +87,14 @@ h1 {
   align-items: flex-end;
   justify-content: flex-end;
   gap: 20px;
+}
+
+.buttons.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .forkStatus {
