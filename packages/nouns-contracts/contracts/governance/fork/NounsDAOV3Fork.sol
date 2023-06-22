@@ -225,6 +225,9 @@ library NounsDAOV3Fork {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
     }
 
+    /**
+     * @notice Returns true if noun holders can currently join a fork
+     */
     function isForkPeriodActive(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (bool) {
         return ds.forkEndTimestamp > block.timestamp;
     }
