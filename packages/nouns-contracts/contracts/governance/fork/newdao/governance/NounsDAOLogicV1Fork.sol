@@ -92,7 +92,7 @@
 //   implement `receive()` or `fallback()` functions.
 //
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';

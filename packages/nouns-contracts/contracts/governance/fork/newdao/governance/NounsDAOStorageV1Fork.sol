@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { INounsTokenForkLike } from './INounsTokenForkLike.sol';

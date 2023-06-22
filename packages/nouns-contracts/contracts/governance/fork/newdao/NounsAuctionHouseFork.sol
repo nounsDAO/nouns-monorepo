@@ -27,7 +27,7 @@
 // - Proxy pattern changed from Transparent to UUPS.
 // - Owner is set in the initialize function, instead of in a follow-up transaction.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';

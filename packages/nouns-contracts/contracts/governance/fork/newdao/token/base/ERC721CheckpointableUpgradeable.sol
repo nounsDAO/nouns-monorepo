@@ -43,7 +43,7 @@
 //   This avoids the delegator needing to "delegate to self" with an additional transaction
 // - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { ERC721EnumerableUpgradeable } from '@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol';
 
