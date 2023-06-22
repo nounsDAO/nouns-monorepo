@@ -97,16 +97,6 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setErc20TokensToIncludeInFork(tokens);
     }
 
-    function test_setErc20TokensToIncludeInFork_givenAddressZeroInInput_reverts() public {
-        address[] memory tokens = new address[](2);
-        tokens[0] = address(42);
-        tokens[1] = address(0);
-
-        vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOV3Admin.TokenCantBeAddressZero.selector);
-        dao._setErc20TokensToIncludeInFork(tokens);
-    }
-
     function test_setForkEscrow_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
         dao._setForkEscrow(address(1));

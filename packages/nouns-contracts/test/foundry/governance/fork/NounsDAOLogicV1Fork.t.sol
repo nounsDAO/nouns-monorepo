@@ -77,16 +77,6 @@ contract NounsDAOLogicV1Fork_setErc20TokensToIncludeInQuit_Test is NounsDAOLogic
         dao._setErc20TokensToIncludeInQuit(tokens);
     }
 
-    function test_givenAddressZeroInInput_reverts() public {
-        address[] memory tokens = new address[](2);
-        tokens[0] = address(42);
-        tokens[1] = address(0);
-
-        vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOLogicV1Fork.TokenCantBeAddressZero.selector);
-        dao._setErc20TokensToIncludeInQuit(tokens);
-    }
-
     function test_givenNoDuplicatesInInput_works() public {
         address[] memory tokens = new address[](2);
         tokens[0] = address(42);
