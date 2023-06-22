@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { ERC721CheckpointableUpgradeable } from './base/ERC721CheckpointableUpgradeable.sol';
@@ -63,7 +63,7 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
     /// @notice How many tokens are still available to be claimed by Nouners who put their original Nouns in escrow
     uint256 public remainingTokensToClaim;
 
-    /// @notice The forking period expiration timestamp, afterwhich new tokens cannot be claimed by the original DAO
+    /// @notice The forking period expiration timestamp, after which new tokens cannot be claimed by the original DAO
     uint256 public forkingPeriodEndTimestamp;
 
     /// @notice Whether the minter can be updated

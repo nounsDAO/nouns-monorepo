@@ -37,7 +37,7 @@
 // - is upgradable via UUPSUpgradeable. uses intializer instead of constructor.
 // - `GRACE_PERIOD` has been increased from 14 days to 21 days to allow more time in case of a forking period
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
@@ -106,7 +106,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
         delay = delay_;
 
-        emit NewDelay(delay);
+        emit NewDelay(delay_);
     }
 
     function acceptAdmin() public {
@@ -114,7 +114,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         admin = msg.sender;
         pendingAdmin = address(0);
 
-        emit NewAdmin(admin);
+        emit NewAdmin(msg.sender);
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
@@ -124,7 +124,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         );
         pendingAdmin = pendingAdmin_;
 
-        emit NewPendingAdmin(pendingAdmin);
+        emit NewPendingAdmin(pendingAdmin_);
     }
 
     function queueTransaction(
@@ -211,7 +211,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
     fallback() external payable {}
 
     function sendETH(address payable recipient, uint256 ethToSend) external {
-        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::sendETH: Call must come from admin.');
 
         recipient.sendValue(ethToSend);
 
@@ -223,7 +223,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         address erc20Token,
         uint256 tokensToSend
     ) external {
-        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::sendERC20: Call must come from admin.');
 
         IERC20(erc20Token).safeTransfer(recipient, tokensToSend);
 

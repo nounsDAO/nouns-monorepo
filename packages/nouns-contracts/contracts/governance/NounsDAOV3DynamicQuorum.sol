@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
@@ -121,7 +121,7 @@ library NounsDAOV3DynamicQuorum {
     }
 
     /**
-     * @notice Current min quorum votes using Noun adjusted total supply
+     * @notice Current min quorum votes using Nouns adjusted total supply
      */
     function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
         internal
@@ -132,7 +132,7 @@ library NounsDAOV3DynamicQuorum {
     }
 
     /**
-     * @notice Current max quorum votes using Noun adjusted total supply
+     * @notice Current max quorum votes using Nouns adjusted total supply
      */
     function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
         internal

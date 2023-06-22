@@ -45,7 +45,7 @@
 // - The proxy pattern from Compound's old Transparent-like proxy, to OpenZeppelin's recommended UUPS pattern.
 //
 // - `propose`
-//   - uses `adjutedTotalSupply`
+//   - uses `adjustedTotalSupply`
 //   - includes a new 'delayed governance' feature which gives forkers from the original DAO time to claim their tokens
 //     with this new DAO; proposals are not allowed until all tokens are claimed, or until the delay expiration
 //     timestamp is reached.
@@ -77,7 +77,7 @@
 //   the proposal's voting start block to align with the parameters
 //   stored with the proposal
 //
-// - Veto ability which allows `veteor` to halt any proposal at any stage unless
+// - Veto ability which allows `vetoer` to halt any proposal at any stage unless
 //   the proposal is executed.
 //   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
 //   A `vetoed` flag was added to the `Proposal` struct to support this.
@@ -92,7 +92,7 @@
 //   implement `receive()` or `fallback()` functions.
 //
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAOEventsFork } from './NounsDAOEventsFork.sol';
@@ -107,6 +107,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     error WaitingForTokensToClaimOrExpiration();
     error TokensMustBeASubsetOfWhitelistedTokens();
     error GovernanceBlockedDuringForkingPeriod();
+    error DuplicateTokenAddress();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
     event Quit(address indexed msgSender, uint256[] tokenIds);
@@ -650,7 +651,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldVotingDelay = votingDelay;
         votingDelay = newVotingDelay;
 
-        emit VotingDelaySet(oldVotingDelay, votingDelay);
+        emit VotingDelaySet(oldVotingDelay, newVotingDelay);
     }
 
     /**
@@ -666,7 +667,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldVotingPeriod = votingPeriod;
         votingPeriod = newVotingPeriod;
 
-        emit VotingPeriodSet(oldVotingPeriod, votingPeriod);
+        emit VotingPeriodSet(oldVotingPeriod, newVotingPeriod);
     }
 
     /**
@@ -684,7 +685,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldProposalThresholdBPS = proposalThresholdBPS;
         proposalThresholdBPS = newProposalThresholdBPS;
 
-        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
+        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
     }
 
     /**
@@ -701,7 +702,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         uint256 oldQuorumVotesBPS = quorumVotesBPS;
         quorumVotesBPS = newQuorumVotesBPS;
 
-        emit QuorumVotesBPSSet(oldQuorumVotesBPS, quorumVotesBPS);
+        emit QuorumVotesBPSSet(oldQuorumVotesBPS, newQuorumVotesBPS);
     }
 
     /**
@@ -750,11 +751,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
      */
     function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
         if (msg.sender != admin) revert AdminOnly();
+        checkForDuplicates(erc20tokens);
 
-        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
+        emit ERC20TokensToIncludeInQuitSet(erc20TokensToIncludeInQuit, erc20tokens);
+
         erc20TokensToIncludeInQuit = erc20tokens;
-
-        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
     }
 
     /**
@@ -783,5 +784,13 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     function _authorizeUpgrade(address) internal view override {
         require(msg.sender == admin, 'NounsDAO::_authorizeUpgrade: admin only');
+    }
+
+    function checkForDuplicates(address[] calldata erc20tokens) internal pure {
+        for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
+            for (uint256 j = i + 1; j < erc20tokens.length; j++) {
+                if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
+            }
+        }
     }
 }

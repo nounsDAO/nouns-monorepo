@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import '../governance/NounsDAOLogicV3.sol';
 import { NounsDAOV3Admin } from '../governance/NounsDAOV3Admin.sol';

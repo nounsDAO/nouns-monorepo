@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
@@ -34,6 +34,7 @@ library NounsDAOV3Admin {
     error InvalidObjectionPeriodDurationInBlocks();
     error InvalidProposalUpdatablePeriodInBlocks();
     error VoteSnapshotSwitchAlreadySet();
+    error DuplicateTokenAddress();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -95,6 +96,9 @@ library NounsDAOV3Admin {
     /// @notice Emitted when the erc20 tokens to include in a fork are set
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
+    /// @notice Emitted when the fork escrow contract address is set
+    event ForkEscrowSet(address oldForkEscrow, address newForkEscrow);
+
     /// @notice Emitted when the during of the forking period is set
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
 
@@ -110,17 +114,17 @@ library NounsDAOV3Admin {
     /// @notice The maximum setable proposal threshold
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
-    /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 7_200; // 24 hours
+    /// @notice The minimum setable voting period in blocks
+    uint256 public constant MIN_VOTING_PERIOD_BLOCKS = 1 days / 12;
 
-    /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 100_800; // 2 weeks
+    /// @notice The max setable voting period in blocks
+    uint256 public constant MAX_VOTING_PERIOD_BLOCKS = 2 weeks / 12;
 
-    /// @notice The min setable voting delay
-    uint256 public constant MIN_VOTING_DELAY = 1;
+    /// @notice The min setable voting delay in blocks
+    uint256 public constant MIN_VOTING_DELAY_BLOCKS = 1;
 
-    /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 100_800; // 2 weeks
+    /// @notice The max setable voting delay in blocks
+    uint256 public constant MAX_VOTING_DELAY_BLOCKS = 2 weeks / 12;
 
     /// @notice The lower bound of minimum quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS_LOWER_BOUND = 200; // 200 basis points or 2%
@@ -129,7 +133,7 @@ library NounsDAOV3Admin {
     uint256 public constant MIN_QUORUM_VOTES_BPS_UPPER_BOUND = 2_000; // 2,000 basis points or 20%
 
     /// @notice The upper bound of maximum quorum votes basis points
-    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
+    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 6,000 basis points or 60%
 
     /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
     uint256 public constant MAX_FORK_PERIOD = 14 days;
@@ -157,7 +161,7 @@ library NounsDAOV3Admin {
      */
     function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external onlyAdmin(ds) {
         require(
-            newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
+            newVotingDelay >= MIN_VOTING_DELAY_BLOCKS && newVotingDelay <= MAX_VOTING_DELAY_BLOCKS,
             'NounsDAO::_setVotingDelay: invalid voting delay'
         );
         uint256 oldVotingDelay = ds.votingDelay;
@@ -172,7 +176,7 @@ library NounsDAOV3Admin {
      */
     function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external onlyAdmin(ds) {
         require(
-            newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
+            newVotingPeriod >= MIN_VOTING_PERIOD_BLOCKS && newVotingPeriod <= MAX_VOTING_PERIOD_BLOCKS,
             'NounsDAO::_setVotingPeriod: invalid voting period'
         );
         uint256 oldVotingPeriod = ds.votingPeriod;
@@ -287,7 +291,7 @@ library NounsDAOV3Admin {
         ds.pendingAdmin = address(0);
 
         emit NewAdmin(oldAdmin, ds.admin);
-        emit NewPendingAdmin(oldPendingAdmin, ds.pendingAdmin);
+        emit NewPendingAdmin(oldPendingAdmin, address(0));
     }
 
     /**
@@ -510,6 +514,8 @@ library NounsDAOV3Admin {
         external
         onlyAdmin(ds)
     {
+        checkForDuplicates(erc20tokens);
+
         emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
 
         ds.erc20TokensToIncludeInFork = erc20tokens;
@@ -519,6 +525,8 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the fork escrow contract
      */
     function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
+        emit ForkEscrowSet(address(ds.forkEscrow), newForkEscrow);
+
         ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
 
@@ -586,5 +594,13 @@ library NounsDAOV3Admin {
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
         require(n <= type(uint32).max, errorMessage);
         return uint32(n);
+    }
+
+    function checkForDuplicates(address[] calldata erc20tokens) internal pure {
+        for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
+            for (uint256 j = i + 1; j < erc20tokens.length; j++) {
+                if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
+            }
+        }
     }
 }
