@@ -5,8 +5,8 @@ pragma solidity ^0.8.6;
 contract NounsDAOEventsFork {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
-        uint256 id,
-        address proposer,
+        uint256 indexed id,
+        address indexed proposer,
         address[] targets,
         uint256[] values,
         string[] signatures,
@@ -18,8 +18,8 @@ contract NounsDAOEventsFork {
 
     /// @notice An event emitted when a new proposal is created, which includes additional information
     event ProposalCreatedWithRequirements(
-        uint256 id,
-        address proposer,
+        uint256 indexed id,
+        address indexed proposer,
         address[] targets,
         uint256[] values,
         string[] signatures,
@@ -37,16 +37,16 @@ contract NounsDAOEventsFork {
     /// @param support Support value for the vote. 0=against, 1=for, 2=abstain
     /// @param votes Number of votes which were cast by the voter
     /// @param reason The reason given for the vote by the voter
-    event VoteCast(address indexed voter, uint256 proposalId, uint8 support, uint256 votes, string reason);
+    event VoteCast(address indexed voter, uint256 indexed proposalId, uint8 support, uint256 votes, string reason);
 
     /// @notice An event emitted when a proposal has been canceled
-    event ProposalCanceled(uint256 id);
+    event ProposalCanceled(uint256 indexed id);
 
     /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
-    event ProposalQueued(uint256 id, uint256 eta);
+    event ProposalQueued(uint256 indexed id, uint256 eta);
 
     /// @notice An event emitted when a proposal has been executed in the NounsDAOExecutor
-    event ProposalExecuted(uint256 id);
+    event ProposalExecuted(uint256 indexed id);
 
     /// @notice An event emitted when the voting delay is set
     event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay);
@@ -64,8 +64,8 @@ contract NounsDAOEventsFork {
     event QuorumVotesBPSSet(uint256 oldQuorumVotesBPS, uint256 newQuorumVotesBPS);
 
     /// @notice Emitted when pendingAdmin is changed
-    event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
+    event NewPendingAdmin(address indexed oldPendingAdmin, address indexed newPendingAdmin);
 
     /// @notice Emitted when pendingAdmin is accepted, which means admin is updated
-    event NewAdmin(address oldAdmin, address newAdmin);
+    event NewAdmin(address indexed oldAdmin, address indexed newAdmin);
 }
