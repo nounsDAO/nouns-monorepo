@@ -167,7 +167,7 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
         uint256 currentNounId = _currentNounId;
         uint256 maxNounId = 0;
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
-        if (block.timestamp > forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
+        if (block.timestamp >= forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
