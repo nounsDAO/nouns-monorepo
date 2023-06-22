@@ -477,6 +477,26 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         dao.quit(quitterTokens);
     }
 
+    function test_quit_givenZeroERC20Balance_doesNotCallTransfer() public {
+        address treasury = address(dao.timelock());
+        ERC20Mock zeroBalanceToken = ERC20Mock(tokens[0]);
+
+        // zero out treasury balance of one token
+        vm.startPrank(treasury);
+        zeroBalanceToken.transfer(address(1), zeroBalanceToken.balanceOf(treasury));
+        assertEq(zeroBalanceToken.balanceOf(treasury), 0);
+        vm.stopPrank();
+
+        ERC20Mock(tokens[0]).setWasTransferCalled(false);
+        ERC20Mock(tokens[1]).setWasTransferCalled(false);
+
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+
+        assertFalse(ERC20Mock(tokens[0]).wasTransferCalled());
+        assertTrue(ERC20Mock(tokens[1]).wasTransferCalled());
+    }
+
     function transferQuitterTokens(address to) internal {
         uint256 quitterBalance = token.balanceOf(quitter);
         uint256[] memory tokenIds = new uint256[](quitterBalance);
