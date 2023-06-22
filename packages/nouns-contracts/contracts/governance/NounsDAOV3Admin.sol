@@ -288,7 +288,7 @@ library NounsDAOV3Admin {
         ds.pendingAdmin = address(0);
 
         emit NewAdmin(oldAdmin, ds.admin);
-        emit NewPendingAdmin(oldPendingAdmin, ds.pendingAdmin);
+        emit NewPendingAdmin(oldPendingAdmin, address(0));
     }
 
     /**

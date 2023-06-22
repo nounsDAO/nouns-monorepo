@@ -106,7 +106,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
         delay = delay_;
 
-        emit NewDelay(delay);
+        emit NewDelay(delay_);
     }
 
     function acceptAdmin() public {
@@ -114,7 +114,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         admin = msg.sender;
         pendingAdmin = address(0);
 
-        emit NewAdmin(admin);
+        emit NewAdmin(msg.sender);
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
@@ -124,7 +124,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         );
         pendingAdmin = pendingAdmin_;
 
-        emit NewPendingAdmin(pendingAdmin);
+        emit NewPendingAdmin(pendingAdmin_);
     }
 
     function queueTransaction(
