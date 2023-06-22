@@ -697,7 +697,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         require(msg.sender == admin, 'NounsDAO::_setQuorumVotesBPS: admin only');
         require(
             newQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS && newQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS,
-            'NounsDAO::_setProposalThreshold: invalid proposal threshold'
+            'NounsDAO::_setQuorumVotesBPS: invalid proposal threshold'
         );
         uint256 oldQuorumVotesBPS = quorumVotesBPS;
         quorumVotesBPS = newQuorumVotesBPS;
