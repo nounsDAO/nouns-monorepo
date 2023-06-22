@@ -71,6 +71,8 @@ contract NounsDAOLogicV1Fork_votingDelayBugFix_Test is NounsDAOLogicV1ForkBase {
     function setUp() public override {
         super.setUp();
 
+        vm.warp(token.forkingPeriodEndTimestamp());
+
         proposalId = propose();
         creationBlock = block.number;
 
@@ -104,6 +106,8 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
 
     function setUp() public override {
         super.setUp();
+
+        vm.warp(token.forkingPeriodEndTimestamp());
 
         vm.prank(timelock);
         dao._setProposalThresholdBPS(1_000);
@@ -198,6 +202,46 @@ abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
 contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
     function setUp() public override {
         super.setUp();
+
+        vm.warp(token.forkingPeriodEndTimestamp());
+    }
+
+    function test_propose_givenFullClaim_duringForkingPeriod_reverts() public {
+        vm.warp(token.forkingPeriodEndTimestamp() - 1);
+
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.prank(proposer);
+        token.claimFromEscrow(tokens);
+
+        tokens[0] = 2;
+        vm.prank(owner1);
+        token.claimFromEscrow(tokens);
+
+        // mining one block so proposer prior votes getter sees their tokens.
+        vm.roll(block.number + 1);
+
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
+        propose();
+    }
+
+    function test_quit_givenFullClaim_duringForkingPeriod_reverts() public {
+        vm.warp(token.forkingPeriodEndTimestamp() - 1);
+
+        vm.deal(timelock, 10 ether);
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 2;
+        vm.prank(owner1);
+        token.claimFromEscrow(tokens);
+
+        vm.startPrank(proposer);
+        tokens[0] = 1;
+        token.claimFromEscrow(tokens);
+
+        token.setApprovalForAll(address(dao), true);
+
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
+        dao.quit(tokens);
     }
 
     function test_propose_givenTokenToClaim_reverts() public {
@@ -254,6 +298,9 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
         dao.quit(tokens);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        dao.quit(tokens, new address[](0));
     }
 
     function test_quit_givenFullClaim_works() public {
@@ -303,6 +350,8 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
     function setUp() public override {
         super.setUp();
 
+        vm.warp(token.forkingPeriodEndTimestamp());
+
         // Set up ERC20s owned by the DAO
         mintERC20s();
         vm.prank(address(dao.timelock()));
@@ -339,6 +388,36 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
     }
 
+    function test_quit_allowsChoosingErc20TokensToInclude() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](1);
+        tokensToInclude[0] = address(token2);
+        dao.quit(quitterTokens, tokensToInclude);
+
+        assertEq(quitter.balance, 24 ether);
+        assertEq(token1.balanceOf(quitter), 0);
+        assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
+    }
+
+    function test_quit_allowsExcludingAllErc20Tokens() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](0);
+        dao.quit(quitterTokens, tokensToInclude);
+
+        assertEq(quitter.balance, 24 ether);
+        assertEq(token1.balanceOf(quitter), 0);
+        assertEq(token2.balanceOf(quitter), 0);
+    }
+
+    function test_quit_withErc20TokensToIncludes_revertsIfNotASubset() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](2);
+        tokensToInclude[0] = address(token2);
+        tokensToInclude[1] = makeAddr('random addr');
+        vm.expectRevert(NounsDAOLogicV1Fork.TokensMustBeASubsetOfWhitelistedTokens.selector);
+        dao.quit(quitterTokens, tokensToInclude);
+    }
+
     function test_quit_reentranceReverts() public {
         MaliciousForkDAOQuitter reentrancyQuitter = new MaliciousForkDAOQuitter(dao);
         transferQuitterTokens(address(reentrancyQuitter));
@@ -367,27 +446,6 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.prank(quitter);
         vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
         dao.quit(quitterTokens);
-    }
-
-    function test_quit_givenERC20CallbackReentranceToJoinFork_doesntAllowStealingFunds() public {
-        ERC20Mock(tokens[0]).setCallbackOnNextTransfer(true);
-        uint256[] memory reentranceTokens = new uint256[](1);
-        reentranceTokens[0] = token.tokenOfOwnerByIndex(quitter, token.balanceOf(quitter) - 1) + 1;
-        MaliciousCallbackForker attacker = new MaliciousCallbackForker(
-            token,
-            token.escrow().dao(),
-            address(dao),
-            reentranceTokens,
-            ethPerNoun
-        );
-        transferQuitterTokens(address(attacker));
-        vm.prank(address(attacker));
-        token.setApprovalForAll(address(dao), true);
-
-        vm.prank(address(attacker));
-        dao.quit(quitterTokens);
-
-        assertEq(address(attacker).balance, 24 ether);
     }
 
     function test_quit_givenZeroERC20Balance_doesNotCallTransfer() public {
@@ -462,6 +520,8 @@ contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase
 
     function setUp() public override {
         super.setUp();
+
+        vm.warp(token.forkingPeriodEndTimestamp());
 
         address minter = token.minter();
         vm.startPrank(minter);
