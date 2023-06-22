@@ -3,7 +3,7 @@ import classes from './Fork.module.css';
 import { Trans } from '@lingui/macro';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { useIsApproved, useSetApprovalForAll } from '../../wrappers/nounToken';
+import { useIsApprovedForAll, useSetApprovalForAll } from '../../wrappers/nounToken';
 import config from '../../config';
 import { useEscrowToFork } from '../../wrappers/nounsDao';
 import { ethers } from 'ethers';
@@ -19,7 +19,7 @@ function EscrowButtons({ }: Props) {
   const [isApprovalLoading, setIsApprovalLoading] = useState(false);
   const { escrowToFork, escrowToForkState } = useEscrowToFork();
   const { setApproval, setApprovalState } = useSetApprovalForAll();
-  const { getIsApproved, getIsApprovedState } = useIsApproved();
+  const isApprovedForAll = useIsApprovedForAll();
   const { account } = useEthers();
   const provider = useReadonlyProvider();
   // const handleEscrowToFork = () => {
@@ -140,11 +140,6 @@ function EscrowButtons({ }: Props) {
   useEffect(() => {
     handleSetApprovalStateChange(setApprovalState);
   }, [setApprovalState, handleSetApprovalStateChange]);
-
-  useEffect(() => {
-    handleGetIsApprovedState(getIsApprovedState);
-  }, [getIsApprovedState, handleGetIsApprovedState]);
-
 
   return (
     <>

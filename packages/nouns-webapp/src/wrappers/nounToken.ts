@@ -3,9 +3,8 @@ import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { Delegates, accountEscrowedNounsQuery, currentlyDelegatedNouns, nounsIndex, ownedNounsQuery, seedsQuery } from './subgraph';
+import { accountEscrowedNounsQuery, ownedNounsQuery, seedsQuery } from './subgraph';
 import { useEffect } from 'react';
-import { props } from 'ramda';
 
 interface NounToken {
   name: string;
@@ -34,7 +33,6 @@ export enum NounsTokenContractFunction {
 
 const abi = new utils.Interface(NounsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
-// const nounsTokenContract = new NounsTokenFactory().attach(config.addresses.nounsToken);
 const nounsTokenContract = NounsTokenFactory.connect(config.addresses.nounsToken, undefined!);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
 
@@ -218,9 +216,6 @@ export const useUserOwnedNounIds = (): number[] | undefined => {
 
 export const useUserEscrowedNounIds = (): number[] | undefined => {
   const { account } = useEthers();
-  const { data: nounsIndexData } = useQuery(
-    nounsIndex(),
-  );
   const { data } = useQuery(
     accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
   );
@@ -233,7 +228,24 @@ export const useSetApprovalForAll = () => {
   return { setApproval, setApprovalState };
 }
 
-export const useIsApproved = () => {
-  const { send: getIsApproved, state: getIsApprovedState } = useContractFunction(nounsTokenContract, 'isApprovedForAll');
-  return { getIsApproved, getIsApprovedState };
+export const useIsApprovedForAll = () => {
+  const { account } = useEthers();
+  const [isApprovedForAll] = useContractCall<[EthersBN]>({
+    abi,
+    address: config.addresses.nounsToken,
+    method: 'isApprovedForAll',
+    args: [
+      account,
+      config.addresses.nounsDAOProxy
+    ],
+  }) || [];
+  return isApprovedForAll || false;
+
+}
+export const useApproveTokenId = () => {
+  const { send: approveTokenId, state: approveTokenIdState } = useContractFunction(
+    nounsDaoContract,
+    'approve',
+  );
+  return { approveTokenId, approveTokenIdState };
 }
