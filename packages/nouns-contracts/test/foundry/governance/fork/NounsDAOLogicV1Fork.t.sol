@@ -362,6 +362,15 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
 
         dao.quit(tokens);
         assertEq(proposer.balance, 5 ether);
+
+        changePrank(owner1);
+        tokens[0] = 2;
+        token.claimFromEscrow(tokens);
+
+        // showing that the late claimer's quit pro rata is preserved
+        token.setApprovalForAll(address(dao), true);
+        dao.quit(tokens);
+        assertEq(owner1.balance, 5 ether);
     }
 }
 
