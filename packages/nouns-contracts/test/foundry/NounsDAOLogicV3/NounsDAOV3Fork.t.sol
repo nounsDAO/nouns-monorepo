@@ -248,6 +248,19 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 75e18);
     }
 
+    function test_executeFork_givenERC20ZeroBalance_doesNotCallTransfer() public {
+        // zero out treasury's token balance
+        vm.startPrank(address(timelock));
+        erc20Mock.transfer(address(1), erc20Mock.balanceOf(address(timelock)));
+        vm.stopPrank();
+
+        erc20Mock.setWasTransferCalled(false);
+
+        dao.executeFork();
+
+        assertFalse(erc20Mock.wasTransferCalled());
+    }
+
     function test_unsignalForkUnderThreshold_blocksExecuteFork() public {
         tokenIds = [1, 2, 3];
 
