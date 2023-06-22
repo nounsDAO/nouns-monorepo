@@ -41,7 +41,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-6d6f854679a7f16e157ff1f05491163ec9bd27d9
+          version: nightly
       - name: Run Forge build
         run: |
           cd packages/nouns-contracts
