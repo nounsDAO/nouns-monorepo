@@ -6,15 +6,9 @@ import { useAllProposals, useEscrowToFork } from '../../wrappers/nounsDao'
 import clsx from 'clsx'
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
-import { current } from '@reduxjs/toolkit'
-import { ethers } from 'ethers'
 import { TransactionStatus, useEthers } from '@usedapp/core'
-import { useBlockNumber } from '@usedapp/core';
-import { useGetOwnedNounIds } from '../../hooks/useGetOwnedNounIds'
-import { gql, useQuery } from '@apollo/client'
-import { Delegates, currentlyDelegatedNouns, delegateNounsAtBlockQuery, nounsIndex, ownedNounsQuery, partialProposalsQuery, propUsingDynamicQuorum } from '../../wrappers/subgraph'
 import config from '../../config';
-import { useSetApprovalForAll, useUserOwnedNounIds, useUserVotes } from '../../wrappers/nounToken'
+import { useSetApprovalForAll, useUserOwnedNounIds, useUserVotes, useIsApprovedForAll, useApproveTokenId } from '../../wrappers/nounToken'
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
@@ -24,10 +18,6 @@ type Props = {
   selectLabel: string;
   selectDescription: string;
   account: string;
-}
-
-const dummyData = {
-  ownedNouns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
 }
 
 export default function AddNounsToForkModal(props: Props) {
@@ -43,13 +33,14 @@ export default function AddNounsToForkModal(props: Props) {
     )
   });
   const ownedNouns = useUserOwnedNounIds();
+  const { approveTokenId, approveTokenIdState } = useApproveTokenId();
 
   // handle transactions 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { escrowToFork, escrowToForkState } = useEscrowToFork();
   const { setApproval, setApprovalState } = useSetApprovalForAll();
-
+  const isApprovedForAll = useIsApprovedForAll();
   const handleSubmission = () => {
     // if forking period 
 
@@ -57,6 +48,21 @@ export default function AddNounsToForkModal(props: Props) {
     escrowToFork(selectedNouns, selectedProposals, reasonText);
 
   }
+
+
+  const handleApproveTokenIds = async (nounIds: number[]) => {
+    nounIds.map(async (nounId) => {
+      await approveTokenId(config.addresses.nounsDAOProxy, nounId);
+    })
+  };
+
+  // const handleApproveTokenIds = (nounIds: number[]) => {
+  //   console.log('handleApproveTokenIds', nounIds)
+  //   nounIds.map((nounId) => {
+  //     approveTokenId(nounId);
+  //   })
+  // }
+
   const handleEscrowToFork = () => {
     // escrowToFork(27, 1, "the reason");
     // escrowToFork();
@@ -118,6 +124,35 @@ export default function AddNounsToForkModal(props: Props) {
     }
   }, []);
 
+  const handleApproveTokenIdStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
+        setIsLoading(false);
+        // setIsVoteSuccessful(true);
+        break;
+      case 'Fail':
+        // setFailureCopy(<Trans>Transaction Failed</Trans>);
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+      case 'Exception':
+        // setFailureCopy(<Trans>Error</Trans>);
+        // setErrorMessage(
+        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
+        // );
+        setIsLoading(false);
+        // setIsVoteFailed(true);
+        break;
+    }
+  }, []);
+
   useEffect(() => {
     handleEscrowToForkStateChange(escrowToForkState);
   }, [escrowToForkState, handleEscrowToForkStateChange]);
@@ -125,6 +160,10 @@ export default function AddNounsToForkModal(props: Props) {
   useEffect(() => {
     handleSetApprovalStateChange(setApprovalState);
   }, [setApprovalState, handleSetApprovalStateChange]);
+
+  useEffect(() => {
+    handleApproveTokenIdStateChange(approveTokenIdState);
+  }, [approveTokenIdState, handleApproveTokenIdStateChange]);
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
@@ -234,146 +273,174 @@ export default function AddNounsToForkModal(props: Props) {
         })}
       </div>
       <div className={classes.modalActions}>
+        {/* {isApprovedForAll ? ( */}
         <button
           className={clsx(classes.button, classes.primaryButton)}
           disabled={selectedNouns.length === 0}
           onClick={() => {
+            isApprovedForAll ? handleSubmission() : handleApproveTokenIds(selectedNouns)
             // props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
             handleSubmission()
           }}
         >
-          Add {selectedNouns.length > 0 && selectedNouns.length} Nouns to {props.isForkingPeriod ? 'fork' : 'escrow'}
+          Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
         </button>
-        <button
-          className={clsx(classes.button, classes.primaryButton)}
-          disabled={selectedNouns.length === 0}
-          onClick={() => {
-            handleSetApproval()
-          }}
-        >
-          Set Approval
-        </button>
-        <p>
-          {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
-        </p>
-      </div>
-    </div >
+        {/* ) : (
+          <>
 
-  )
-  const forkingModalContent = (
-    <div className={classes.modalContent}>
-      <h2 className={classes.modalTitle}>
-        <Trans>
-          Join the fork
-        </Trans>
-      </h2>
-      <p className={classes.modalDescription}>
-        <Trans>
-          By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
-        </Trans>
-      </p>
-      <div className={classes.fields}>
-        <InputGroup className={classes.inputs}>
-          <div>
-            <FormText><strong>Reason</strong> (optional)</FormText>
-            <FormControl
-              className={classes.reasonInput}
-              value={reasonText}
-              onChange={e => setReasonText(e.target.value)}
-              placeholder={"Your reason for forking"}
-            />
-          </div>
-          <div>
-            <FormText><strong>Proposals that triggered this decision</strong> (optional)</FormText>
-            <FormSelect
-              className={classes.selectMenu}
-              onChange={(e) => {
-                setSelectedProposals([...selectedProposals, +e.target.value]);
-              }}
-            >
-              <option>Select proposal(s)</option>
-              {proposalsList}
-            </FormSelect>
-          </div>
-        </InputGroup>
-      </div>
-      <div className={classes.selectedProposals}>
-        {selectedProposals.map((proposalId) => {
-          const prop = proposals.find((proposal) => proposal.id && +proposal.id === proposalId);
-          return (
-            <div className={classes.selectedProposal}>
-              <span><a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer"><strong>{prop?.id}</strong> {prop?.title}</a></span>
-              <button
-                onClick={() => {
-                  const newSelectedProposals = selectedProposals.filter((id) => id !== proposalId);
-                  setSelectedProposals(newSelectedProposals);
-                }}
-                className={classes.removeButton}><MinusCircleIcon /></button>
-            </div>
-          )
-        })
-        }
-      </div>
-      <div className={classes.sectionHeader}>
-        <div className={classes.sectionLabel}>
-          <p>
-            <strong>
-              <Trans>
-                Select Nouns to join the fork
-              </Trans>
-            </strong>
-          </p>
-          <p>
-            <Trans>
-              Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period
-            </Trans>
-          </p>
-        </div>
-        <button
-          onClick={() => {
-            selectedNouns.length === ownedNouns?.length ?
-              setSelectedNouns([]) :
-              setSelectedNouns(ownedNouns || [])
-          }}
-        >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
-      </div>
-      <div className={classes.nounsList}>
-        {ownedNouns && ownedNouns.map((nounId: number) => {
-          return (
+
             <button
+              className={clsx(classes.button, classes.primaryButton)}
+              disabled={selectedNouns.length === 0}
               onClick={() => {
-                selectedNouns.includes(nounId) ?
-                  setSelectedNouns(selectedNouns.filter((id) => id !== nounId)) :
-                  setSelectedNouns([...selectedNouns, nounId]);
+                handleApproveTokenIds(selectedNouns)
               }}
-              className={clsx(classes.nounButton, selectedNouns.includes(nounId) && classes.selectedNounButton)}
             >
-              <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
-              Noun {nounId}
+              Approve {selectedNouns.length > 0 && selectedNouns.length} Nouns
             </button>
-          )
-        })}
-      </div>
-      <div className={classes.modalActions}>
-        <button
-          className={clsx(classes.button, classes.primaryButton)}
-          disabled={selectedNouns.length === 0}
-          onClick={() => {
-            handleSubmission()
-          }}
-        // onClick={() => {
-        //   props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
-        // }}
-        >
-          Add {selectedNouns.length > 0 && selectedNouns.length} Nouns to {props.isForkingPeriod ? 'fork' : 'escrow'}
-        </button>
-        <p>
-          {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
-        </p>
+
+          </>
+
+        )} */}
+
+        {!isApprovedForAll && (
+          <>
+            <p className={classes.approvalNote}>You'll be asked to approve each noun individually. Or you can <button
+              // className={clsx(classes.button, classes.primaryButton)}
+              disabled={selectedNouns.length === 0}
+              onClick={() => {
+                handleSetApproval()
+              }}
+            >
+              approve all
+            </button></p>
+            {selectedNouns.length > 0 && (<hr />)}
+          </>
+        )}
+        {selectedNouns.length > 0 && (
+          <p>
+            Adding {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
+          </p>
+        )}
+
       </div>
     </div >
 
   )
+  // const forkingModalContent = (
+  //   <div className={classes.modalContent}>
+  //     <h2 className={classes.modalTitle}>
+  //       <Trans>
+  //         Join the fork
+  //       </Trans>
+  //     </h2>
+  //     <p className={classes.modalDescription}>
+  //       <Trans>
+  //         By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
+  //       </Trans>
+  //     </p>
+  //     <div className={classes.fields}>
+  //       <InputGroup className={classes.inputs}>
+  //         <div>
+  //           <FormText><strong>Reason</strong> (optional)</FormText>
+  //           <FormControl
+  //             className={classes.reasonInput}
+  //             value={reasonText}
+  //             onChange={e => setReasonText(e.target.value)}
+  //             placeholder={"Your reason for forking"}
+  //           />
+  //         </div>
+  //         <div>
+  //           <FormText><strong>Proposals that triggered this decision</strong> (optional)</FormText>
+  //           <FormSelect
+  //             className={classes.selectMenu}
+  //             onChange={(e) => {
+  //               setSelectedProposals([...selectedProposals, +e.target.value]);
+  //             }}
+  //           >
+  //             <option>Select proposal(s)</option>
+  //             {proposalsList}
+  //           </FormSelect>
+  //         </div>
+  //       </InputGroup>
+  //     </div>
+  //     <div className={classes.selectedProposals}>
+  //       {selectedProposals.map((proposalId) => {
+  //         const prop = proposals.find((proposal) => proposal.id && +proposal.id === proposalId);
+  //         return (
+  //           <div className={classes.selectedProposal}>
+  //             <span><a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer"><strong>{prop?.id}</strong> {prop?.title}</a></span>
+  //             <button
+  //               onClick={() => {
+  //                 const newSelectedProposals = selectedProposals.filter((id) => id !== proposalId);
+  //                 setSelectedProposals(newSelectedProposals);
+  //               }}
+  //               className={classes.removeButton}><MinusCircleIcon /></button>
+  //           </div>
+  //         )
+  //       })
+  //       }
+  //     </div>
+  //     <div className={classes.sectionHeader}>
+  //       <div className={classes.sectionLabel}>
+  //         <p>
+  //           <strong>
+  //             <Trans>
+  //               Select Nouns to join the fork
+  //             </Trans>
+  //           </strong>
+  //         </p>
+  //         <p>
+  //           <Trans>
+  //             Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period
+  //           </Trans>
+  //         </p>
+  //       </div>
+  //       <button
+  //         onClick={() => {
+  //           selectedNouns.length === ownedNouns?.length ?
+  //             setSelectedNouns([]) :
+  //             setSelectedNouns(ownedNouns || [])
+  //         }}
+  //       >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
+  //     </div>
+  //     <div className={classes.nounsList}>
+  //       {ownedNouns && ownedNouns.map((nounId: number) => {
+  //         return (
+  //           <button
+  //             onClick={() => {
+  //               selectedNouns.includes(nounId) ?
+  //                 setSelectedNouns(selectedNouns.filter((id) => id !== nounId)) :
+  //                 setSelectedNouns([...selectedNouns, nounId]);
+  //             }}
+  //             className={clsx(classes.nounButton, selectedNouns.includes(nounId) && classes.selectedNounButton)}
+  //           >
+  //             <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
+  //             Noun {nounId}
+  //           </button>
+  //         )
+  //       })}
+  //     </div>
+  //     <div className={classes.modalActions}>
+  //       <button
+  //         className={clsx(classes.button, classes.primaryButton)}
+  //         disabled={selectedNouns.length === 0}
+  //         onClick={() => {
+  //           handleSubmission()
+  //         }}
+  //       // onClick={() => {
+  //       //   props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
+  //       // }}
+  //       >
+  //         Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
+  //       </button>
+  //       <p>
+  //         {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
+  //       </p>
+  //     </div>
+  //   </div >
+
+  // )
   return (
     <>
       <SolidColorBackgroundModal

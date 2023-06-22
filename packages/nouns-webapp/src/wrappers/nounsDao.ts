@@ -1,4 +1,4 @@
-import { NounsDAOV2ABI, NounsDAOV3ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
+import { NounsDAOV3ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -19,7 +19,6 @@ import {
   proposalQuery,
   partialProposalsQuery,
   proposalVersionsQuery,
-  accountEscrowedNounsQuery,
   escrowDepositEventsQuery,
   escrowWithdrawEventsQuery,
   proposalTitlesQuery,

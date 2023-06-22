@@ -1,13 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx';
 import classes from './Fork.module.css';
-import { useExecuteFork, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao'
+import { useWithdrawFromForkEscrow } from '../../wrappers/nounsDao'
 import { Trans } from '@lingui/macro';
 import { TransactionStatus } from '@usedapp/core';
 import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { set } from 'ramda';
-import { error } from 'console';
-import { Spinner } from 'react-bootstrap';
 
 type Props = {
   tokenIds: number[];

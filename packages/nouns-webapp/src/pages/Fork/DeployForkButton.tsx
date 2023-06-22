@@ -5,11 +5,8 @@ import { useExecuteFork } from '../../wrappers/nounsDao'
 import { Trans } from '@lingui/macro';
 import { TransactionStatus } from '@usedapp/core';
 import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { Spinner } from 'react-bootstrap';
 
-type Props = {}
-
-function DeployForkButton({ }: Props) {
+function DeployForkButton() {
   const { executeFork, executeForkState } = useExecuteFork();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -92,7 +89,6 @@ function DeployForkButton({ }: Props) {
         content={modalContent}
       />
     </>
-
   )
 }
 
