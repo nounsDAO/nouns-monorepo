@@ -107,7 +107,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     error WaitingForTokensToClaimOrExpiration();
     error TokensMustBeASubsetOfWhitelistedTokens();
     error GovernanceBlockedDuringForkingPeriod();
-    error TokenCantBeAddressZero();
     error DuplicateTokenAddress();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);

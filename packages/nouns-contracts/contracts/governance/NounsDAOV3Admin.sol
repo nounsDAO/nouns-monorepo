@@ -34,7 +34,6 @@ library NounsDAOV3Admin {
     error InvalidObjectionPeriodDurationInBlocks();
     error InvalidProposalUpdatablePeriodInBlocks();
     error VoteSnapshotSwitchAlreadySet();
-    error TokenCantBeAddressZero();
     error DuplicateTokenAddress();
 
     /// @notice Emitted when proposal threshold basis points is set
