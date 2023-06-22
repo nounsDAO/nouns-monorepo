@@ -563,7 +563,8 @@ library NounsDAOV3Proposals {
     }
 
     /**
-     * @notice Cancels a proposal only if sender is the proposer, or proposer delegates dropped below proposal threshold
+     * @notice Cancels a proposal only if sender is the proposer or a signer, or proposer & signers voting power
+     * dropped below proposal threshold
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {

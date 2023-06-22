@@ -183,7 +183,7 @@ library NounsDAOV3Admin {
 
     /**
      * @notice Admin function for setting the proposal threshold basis points
-     * @dev newProposalThresholdBPS must be greater than the hardcoded min
+     * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
      * @param newProposalThresholdBPS new proposal threshold
      */
     function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)

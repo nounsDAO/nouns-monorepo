@@ -132,6 +132,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
+     * @param forkEscrow_ The escrow contract used for creating forks
+     * @param forkDAODeployer_ The contract used to deploy new forked DAOs
      * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param daoParams_ Initial DAO parameters
      * @param dynamicQuorumParams_ The initial dynamic quorum parameters
@@ -375,7 +377,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Cancels a proposal only if sender is the proposer, or proposer delegates dropped below proposal threshold
+     * @notice Cancels a proposal only if sender is the proposer or a signer, or proposer & signers voting power
+     * dropped below proposal threshold
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(uint256 proposalId) external {
@@ -648,7 +651,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Admin function for setting the proposal threshold basis points
-     * @dev newProposalThresholdBPS must be greater than the hardcoded min
+     * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
      * @param newProposalThresholdBPS new proposal threshold
      */
     function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
@@ -876,16 +879,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      *       quorumCoefficient * againstVotesBPS
      * @dev Note the coefficient is a fixed point integer with 6 decimals
      * @param againstVotes Number of against-votes in the proposal
-     * @param totalSupply The total supply of Nouns at the time of proposal creation
+     * @param adjustedTotalSupply_ The adjusted total supply of Nouns at the time of proposal creation
      * @param params Configurable parameters for calculating the quorum based on againstVotes. See `DynamicQuorumParams` definition for additional details.
      * @return quorumVotes The required quorum
      */
     function dynamicQuorumVotes(
         uint256 againstVotes,
-        uint256 totalSupply,
+        uint256 adjustedTotalSupply_,
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
-        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, totalSupply, params);
+        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, adjustedTotalSupply_, params);
     }
 
     /**
@@ -900,14 +903,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Current min quorum votes using Noun total supply
+     * @notice Current min quorum votes using Noun adjusted total supply
      */
     function minQuorumVotes() public view returns (uint256) {
         return ds.minQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
-     * @notice Current max quorum votes using Noun total supply
+     * @notice Current max quorum votes using Noun adjusted total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
         return ds.maxQuorumVotes(ds.adjustedTotalSupply());
