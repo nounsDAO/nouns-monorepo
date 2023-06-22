@@ -30,8 +30,10 @@ library NounsDAOV3Admin {
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
     error ForkPeriodTooLong();
+    error ForkPeriodTooShort();
     error InvalidObjectionPeriodDurationInBlocks();
     error InvalidProposalUpdatablePeriodInBlocks();
+    error VoteSnapshotSwitchAlreadySet();
     error TokenCantBeAddressZero();
     error DuplicateTokenAddress();
 
@@ -133,6 +135,9 @@ library NounsDAOV3Admin {
 
     /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
     uint256 public constant MAX_FORK_PERIOD = 14 days;
+
+    /// @notice Lower bound for forking period
+    uint256 public constant MIN_FORK_PERIOD = 2 days;
 
     /// @notice Upper bound for objection period duration in blocks.
     uint256 public constant MAX_OBJECTION_PERIOD_BLOCKS = 7 days / 12;
@@ -473,9 +478,12 @@ library NounsDAOV3Admin {
      * Sets it to the next proposal id.
      */
     function _setVoteSnapshotBlockSwitchProposalId(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) {
-        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+        if (oldVoteSnapshotBlockSwitchProposalId > 0) {
+            revert VoteSnapshotSwitchAlreadySet();
+        }
 
+        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
         ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
         emit VoteSnapshotBlockSwitchProposalIdSet(
@@ -521,6 +529,10 @@ library NounsDAOV3Admin {
     function _setForkPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkPeriod) external onlyAdmin(ds) {
         if (newForkPeriod > MAX_FORK_PERIOD) {
             revert ForkPeriodTooLong();
+        }
+
+        if (newForkPeriod < MIN_FORK_PERIOD) {
+            revert ForkPeriodTooShort();
         }
 
         emit ForkPeriodSet(ds.forkPeriod, newForkPeriod);
