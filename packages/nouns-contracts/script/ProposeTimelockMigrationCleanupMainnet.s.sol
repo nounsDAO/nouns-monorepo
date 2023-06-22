@@ -15,8 +15,9 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
     address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
     address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
-    address public constant DESCRIPTOR_MAINNET = 0x6229c811D04501523C6058bfAAc29c91bb586268;
     address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
+    address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
+    address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -30,7 +31,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
             NOUNS_TIMELOCK_V1_MAINNET,
             timelockV2,
             NOUNS_TOKEN_MAINNET,
-            DESCRIPTOR_MAINNET,
             AUCTION_HOUSE_PROXY_ADMIN_MAINNET,
             LILNOUNS_MAINNET,
             description
@@ -45,7 +45,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         address timelockV1,
         address timelockV2,
         address nounsToken,
-        address descriptor,
         address auctionHouseProxyAdmin,
         address lilNouns,
         string memory description
@@ -56,22 +55,8 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         string[] memory signatures = new string[](numTxs);
         bytes[] memory calldatas = new bytes[](numTxs);
 
-        // Change nouns token owner
-        uint256 i = 0;
-        targets[i] = nounsToken;
-        values[i] = 0;
-        signatures[i] = 'transferOwnership(address)';
-        calldatas[i] = abi.encode(timelockV2);
-
-        // Change descriptor owner
-        i++;
-        targets[i] = descriptor;
-        values[i] = 0;
-        signatures[i] = 'transferOwnership(address)';
-        calldatas[i] = abi.encode(timelockV2);
-
         // Change auction house proxy admin owner
-        i++;
+        uint256 i = 0;
         targets[i] = auctionHouseProxyAdmin;
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
@@ -97,6 +82,20 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'transferFrom(address,address,uint256)';
         calldatas[i] = abi.encode(timelockV1, timelockV2, 687);
+
+        // Transfer ownership of TokenBuyer
+        i++;
+        targets[i] = TOKEN_BUYER_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        // Transfer ownership of Payer
+        i++;
+        targets[i] = PAYER_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
 
         proposalId = daoProxy.proposeOnTimelockV1(targets, values, signatures, calldatas, description);
     }
