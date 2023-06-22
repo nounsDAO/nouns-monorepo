@@ -507,13 +507,22 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @notice Withdraws nouns from the fork escrow to the treasury after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     */
+    function withdrawDAONounsFromEscrowToTreasury(uint256[] calldata tokenIds) external {
+        ds.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+    }
+
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed to an address other than the treasury
      * @dev Only the DAO can call this function
      * @param tokenIds the tokenIds to withdraw
      * @param to the address to send the nouns to
      */
-    function withdrawDAONounsFromEscrow(uint256[] calldata tokenIds, address to) external {
-        ds.withdrawDAONounsFromEscrow(tokenIds, to);
+    function withdrawDAONounsFromEscrowIncreasingTotalSupply(uint256[] calldata tokenIds, address to) external {
+        ds.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, to);
     }
 
     /**

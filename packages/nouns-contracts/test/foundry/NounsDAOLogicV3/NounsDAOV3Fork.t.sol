@@ -94,7 +94,10 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
 
     function test_withdrawDAONounsFromEscrow_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Fork.AdminOnly.selector);
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+
+        vm.expectRevert(NounsDAOV3Fork.AdminOnly.selector);
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
     }
 
     function test_givenThresholdSetToZero_requiresOneTokenInEscrowToFork() public {
@@ -176,9 +179,13 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
 
     function test_withdrawTokens_reverts() public {
         tokenIds = [1];
-        vm.prank(address(dao.timelock()));
+        vm.startPrank(address(dao.timelock()));
+
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
     }
 }
 
@@ -260,9 +267,13 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
 
     function test_withdrawTokens_reverts() public {
         tokenIds = [1];
-        vm.prank(address(dao.timelock()));
+        vm.startPrank(address(dao.timelock()));
+
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
     }
 
     function test_proposalThresholdIsLowered() public {
@@ -357,14 +368,26 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         assertEq(dao.nouns().ownerOf(9), address(1));
     }
 
-    function test_withdrawTokens() public {
+    function test_withdrawTokensToAddress() public {
         tokenIds = [1, 2, 3];
         vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOV3Fork.DAONounsSupplyIncreasedFromEscrow(3, address(1));
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
 
         assertEq(dao.nouns().ownerOf(1), address(1));
         assertEq(dao.nouns().ownerOf(2), address(1));
         assertEq(dao.nouns().ownerOf(3), address(1));
+    }
+
+    function test_withdrawTokensToTreasury() public {
+        tokenIds = [1, 2, 3];
+        vm.prank(address(dao.timelock()));
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+
+        assertEq(dao.nouns().ownerOf(1), address(dao.timelock()));
+        assertEq(dao.nouns().ownerOf(2), address(dao.timelock()));
+        assertEq(dao.nouns().ownerOf(3), address(dao.timelock()));
     }
 }
 
@@ -393,9 +416,17 @@ contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriod
     function test_withdrawTokens() public {
         tokenIds = [1, 2, 3];
         vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(1));
+    }
+
+    function test_withdrawTokensToTreasury() public {
+        tokenIds = [1, 2, 3];
+        vm.prank(address(dao.timelock()));
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(dao.timelock()));
     }
 
     function test_signalOnNewFork() public {
@@ -442,9 +473,13 @@ contract DAOSecondForkSignaledUnderThresholdTest is DAOSecondForkSignaledUnderTh
 
     function test_withdrawTokens_reverts() public {
         tokenIds = [11];
-        vm.prank(address(dao.timelock()));
+        vm.startPrank(address(dao.timelock()));
+
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
+
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawDAONounsFromEscrowToTreasury(tokenIds);
     }
 }
 
@@ -478,7 +513,7 @@ contract DAOSecondForkSignaledOverThresholdTest is DAOSecondForkSignaledOverThre
 
         tokenIds = [11, 12, 13];
         vm.prank(address(dao.timelock()));
-        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+        dao.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, address(1));
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(1));
     }

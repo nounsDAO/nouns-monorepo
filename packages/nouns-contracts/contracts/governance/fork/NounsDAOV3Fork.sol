@@ -26,6 +26,7 @@ library NounsDAOV3Fork {
     error ForkPeriodNotActive();
     error ForkPeriodActive();
     error AdminOnly();
+    error UseAlternativeWithdrawFunction();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
@@ -59,6 +60,9 @@ library NounsDAOV3Fork {
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
+
+    /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
+    event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
 
     /**
      * @notice Escrow Nouns to contribute to the fork threshold
@@ -156,16 +160,39 @@ library NounsDAOV3Fork {
     }
 
     /**
-     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @notice Withdraws nouns from the fork escrow to the treasury after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     */
+    function withdrawDAONounsFromEscrowToTreasury(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds)
+        external
+    {
+        withdrawDAONounsFromEscrow(ds, tokenIds, address(ds.timelock));
+    }
+
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed to an address other than the treasury
      * @dev Only the DAO can call this function
      * @param tokenIds the tokenIds to withdraw
      * @param to the address to send the nouns to
      */
-    function withdrawDAONounsFromEscrow(
+    function withdrawDAONounsFromEscrowIncreasingTotalSupply(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256[] calldata tokenIds,
         address to
     ) external {
+        if (to == address(ds.timelock)) revert UseAlternativeWithdrawFunction();
+
+        withdrawDAONounsFromEscrow(ds, tokenIds, to);
+
+        emit DAONounsSupplyIncreasedFromEscrow(tokenIds.length, to);
+    }
+
+    function withdrawDAONounsFromEscrow(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256[] calldata tokenIds,
+        address to
+    ) private {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
