@@ -255,6 +255,9 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
+
+    /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
+    event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
 }
 
 contract NounsDAOProxyStorage {
