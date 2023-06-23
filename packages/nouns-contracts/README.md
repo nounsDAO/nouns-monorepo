@@ -24,6 +24,7 @@ One Noun is generated and auctioned every day, forever. All Noun artwork is stor
 
 | Contract              | Chain   | Address                                    |
 |-----------------------|---------|--------------------------------------------|
+| CryptopunksVote       | Goerli  | 0x5CC68fCb6B18eb05d7008330191494e9ecAd948F |
 | CryptopunksVote       | Goerli  | 0x4C92061D1Ab6768F8267E7BC10c516CBA4c85b99 |
 | WrappedPunk (mock)    | Goerli  | 0xDE513f5783C86D71501b4fC6cCD16e0Ecd6D3230 |
 | OG Cryptopunks (mock) | Goerli  | 0x85B353Ba06d16a237F24CB370ea291972F9bDd42 |
