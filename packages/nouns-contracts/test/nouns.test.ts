@@ -114,7 +114,7 @@ describe('NToken', () => {
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('CRYPTOPUNKS');
+    expect(await nounsToken.name()).to.eq('PUNKS');
   });
 
   it('should allow minter to mint a noun to itself', async () => {
@@ -245,14 +245,14 @@ describe('NToken', () => {
 
   describe('metadata', async () => {
     it('should get default name', async () => {
-      expect(await nounsToken.name()).to.eq('CRYPTOPUNKS');
+      expect(await nounsToken.name()).to.eq('PUNKS');
     });
     it('should get default symbol', async () => {
       expect(await nounsToken.symbol()).to.eq('Ͼ');
     });
     it('the owner can change the name', async () => {
-      await nounsToken.setName('CRYPTOPUNKS-2');
-      expect(await nounsToken.name()).to.eq('CRYPTOPUNKS-2');
+      await nounsToken.setName('PUNKS-2');
+      expect(await nounsToken.name()).to.eq('PUNKS-2');
     });
     it('the owner can change the symbol', async () => {
       await nounsToken.setSymbol('Ͼ-2');
@@ -260,7 +260,7 @@ describe('NToken', () => {
     });
     it('only owner can change the name', async () => {
       const [, nonOwner] = await ethers.getSigners();
-      const tx = nounsToken.connect(nonOwner).setName('CRYPTOPUNKS-2');
+      const tx = nounsToken.connect(nonOwner).setName('PUNKS-2');
       await expect(tx).to.be.revertedWith('Ownable: caller is not the owner');
     });
     it('only owner can change the symbol', async () => {
@@ -269,20 +269,20 @@ describe('NToken', () => {
       await expect(tx).to.be.revertedWith('Ownable: caller is not the owner');
     });
     it('a name change emits the event', async () => {
-      const tx = nounsToken.setName('CRYPTOPUNKS-2');
+      const tx = nounsToken.setName('PUNKS-2');
       await expect(tx)
         .to.emit(nounsToken, 'MetadataUpdated')
-        .withArgs('CRYPTOPUNKS-2', 'Ͼ');
+        .withArgs('PUNKS-2', 'Ͼ');
     });
     it('a name change emits the event', async () => {
       const tx = nounsToken.setSymbol('Ͼ-2');
       await expect(tx)
         .to.emit(nounsToken, 'MetadataUpdated')
-        .withArgs('CRYPTOPUNKS', 'Ͼ-2');
+        .withArgs('PUNKS', 'Ͼ-2');
     });
     it('the owner cannot change the name when locked', async () => {
       await nounsToken.lockMetadata();
-      const tx = nounsToken.setName('CRYPTOPUNKS-2');
+      const tx = nounsToken.setName('PUNKS-2');
       await expect(tx).to.be.revertedWith('Metadata is locked');
     });
     it('the owner cannot change the symbol when locked', async () => {

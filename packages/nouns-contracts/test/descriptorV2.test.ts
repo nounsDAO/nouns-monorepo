@@ -93,8 +93,8 @@ describe('NDescriptorV2', () => {
         'ascii',
       ),
     );
-    expect(name).to.equal('CryptoPunk 0');
-    expect(description).to.equal('CryptoPunk 0 is a member of the CryptoPunks DAO');
+    expect(name).to.equal('Punk 0');
+    expect(description).to.equal('Punk 0 is a member of the Punks DAO');
     expect(image).to.not.be.undefined;
   }).timeout(1_000_000);
 

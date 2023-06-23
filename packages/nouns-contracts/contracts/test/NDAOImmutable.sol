@@ -32,8 +32,8 @@ contract NDAOImmutable is NDAOLogicV1 {
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) public override {
-        require(msg.sender == admin, 'CryptopunksDAO::initialize: admin only');
-        require(address(timelock) == address(0), 'CryptopunksDAO::initialize: can only initialize once');
+        require(msg.sender == admin, 'PunksDAO::initialize: admin only');
+        require(address(timelock) == address(0), 'PunksDAO::initialize: can only initialize once');
 
         timelock = IDAOExecutor(timelock_);
         npunks = NTokenLike(npunks_);
