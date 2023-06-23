@@ -224,8 +224,14 @@ export const useUserEscrowedNounIds = (): number[] | undefined => {
 }
 
 export const useSetApprovalForAll = () => {
+  let isApprovedForAll = false;
   const { send: setApproval, state: setApprovalState } = useContractFunction(nounsTokenContract, 'setApprovalForAll');
-  return { setApproval, setApprovalState };
+  console.log('setApprovalState', setApprovalState);
+  if (setApprovalState.status === 'Success') {
+    isApprovedForAll = true;
+  }
+
+  return { setApproval, setApprovalState, isApprovedForAll };
 }
 
 export const useIsApprovedForAll = () => {
@@ -242,9 +248,9 @@ export const useIsApprovedForAll = () => {
   return isApprovedForAll || false;
 
 }
-export const useApproveTokenId = () => {
+export const useSetApprovalForTokenId = () => {
   const { send: approveTokenId, state: approveTokenIdState } = useContractFunction(
-    nounsDaoContract,
+    nounsTokenContract,
     'approve',
   );
   return { approveTokenId, approveTokenIdState };
