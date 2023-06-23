@@ -778,6 +778,10 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         return nouns.totalSupply() - nouns.balanceOf(address(timelock)) + nouns.remainingTokensToClaim();
     }
 
+    function erc20TokensToIncludeInQuitArray() public view returns(address[] memory) {
+        return erc20TokensToIncludeInQuit;
+    }
+
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
         return (number * bps) / 10000;
     }
@@ -787,6 +791,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     }
 
     function checkForDuplicates(address[] calldata erc20tokens) internal pure {
+        if (erc20tokens.length == 0) return;
+
         for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
             for (uint256 j = i + 1; j < erc20tokens.length; j++) {
                 if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
