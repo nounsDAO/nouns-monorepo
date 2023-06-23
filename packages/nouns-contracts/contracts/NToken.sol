@@ -138,7 +138,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
-        __name = 'CRYPTOPUNKS';
+        __name = 'PUNKS';
         __symbol = '\u03FE';
     }
 
