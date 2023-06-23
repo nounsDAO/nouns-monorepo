@@ -17,7 +17,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Sepolia]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
 };
 const cryptopunksVoteContracts: Record<number, string> = {
-  [ChainId.Goerli]: '0x4C92061D1Ab6768F8267E7BC10c516CBA4c85b99',
+  [ChainId.Goerli]: '0x5CC68fCb6B18eb05d7008330191494e9ecAd948F',
   [ChainId.Sepolia]: '0x225EB996209af94F45Bd71c35fDB032feF96b8e4',
 };
 
