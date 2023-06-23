@@ -106,7 +106,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /// @notice The maximum number of actions that can be included in a proposal
-    function PROPOSAL_MAX_OPERATIONS() public pure returns (uint256) {
+    function proposalMaxOperations() public pure returns (uint256) {
         return NounsDAOV3Proposals.PROPOSAL_MAX_OPERATIONS;
     }
 
