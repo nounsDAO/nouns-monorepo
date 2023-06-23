@@ -87,6 +87,17 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         assertEq(dao.erc20TokensToIncludeInFork(), tokens);
     }
 
+    function test_setErc20TokensToIncludeInFork_allowsEmptyArray() public {
+        tokens = new address[](0);
+
+        vm.prank(address(dao.timelock()));
+        vm.expectEmit(true, true, true, true);
+        emit ERC20TokensToIncludeInForkSet(new address[](0), tokens);
+        dao._setErc20TokensToIncludeInFork(tokens);
+
+        assertEq(dao.erc20TokensToIncludeInFork(), tokens);
+    }
+
     function test_setErc20TokensToIncludeInFork_givenDuplicateAddressesInInput_reverts() public {
         address[] memory tokens = new address[](2);
         tokens[0] = address(42);

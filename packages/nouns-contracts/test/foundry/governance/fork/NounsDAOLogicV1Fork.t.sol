@@ -93,6 +93,18 @@ contract NounsDAOLogicV1Fork_setErc20TokensToIncludeInQuit_Test is NounsDAOLogic
         assertEq(dao.erc20TokensToIncludeInQuit(0), address(42));
         assertEq(dao.erc20TokensToIncludeInQuit(1), address(43));
     }
+
+    function test_allowsEmptyArray() public {
+        address[] memory tokens = new address[](0);
+
+        vm.expectEmit(true, true, true, true);
+        emit ERC20TokensToIncludeInQuitSet(new address[](0), tokens);
+
+        vm.prank(address(dao.timelock()));
+        dao._setErc20TokensToIncludeInQuit(tokens);
+
+        assertEq(dao.erc20TokensToIncludeInQuitArray(), tokens);
+    }
 }
 
 contract NounsDAOLogicV1Fork_votingDelayBugFix_Test is NounsDAOLogicV1ForkBase {
