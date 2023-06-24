@@ -54,9 +54,8 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const walletlink = new WalletLinkConnector({
-            appName: 'Crypto Punks 2',
-              appLogoUrl:'',
-            // appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
+            appName: 'Punks',
+            appLogoUrl: '../../assets/P.png',
             url: config.app.jsonRpcUri,
             supportedChainIds,
           });
