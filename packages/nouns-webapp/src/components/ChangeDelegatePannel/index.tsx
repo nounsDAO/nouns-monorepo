@@ -305,11 +305,11 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             <div className={classes.headingWrapper}>
               <div className={classes.avatarWrapper}>
                 <div className={classes.avatar}>
-                  <img src={pIcon} alt="New CryptoPunks" />
+                  <img src={pIcon} alt="New Punks" />
                 </div>
               </div>
               <div className={classes.headingText}>
-                <Trans>New CryptoPunks</Trans>
+                <Trans>New Punks</Trans>
               </div>
             </div>
             {primaryButton}

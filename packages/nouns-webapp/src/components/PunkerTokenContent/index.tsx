@@ -110,9 +110,9 @@ const PunkerTokenContent: React.FC<{
               .{' '}
               <Trans>
                 For this reason, we, the project's founders (‘Punkers’) have chosen to compensate
-                ourselves with CryptoPunks. Every 10th Punk for the first 5 years of the project
-                will be sent to our multisig (5/10), where it will be vested and distributed to
-                individual Punkers.
+                ourselves with Punks. Every 10th Punk for the first 5 years of the project will be
+                sent to our multisig (5/10), where it will be vested and distributed to individual
+                Punkers.
               </Trans>
             </li>
           </ul>

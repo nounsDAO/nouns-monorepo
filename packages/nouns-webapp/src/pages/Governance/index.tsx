@@ -33,8 +33,8 @@ const GovernancePage = () => {
           </h1>
         </Row>
         <p className={classes.subheading}>
-          CryptoPunks govern <span className={classes.boldText}>Punkers DAO</span>. CryptoPunks can
-          vote on proposals or delegate their vote to a third party. A minimum of{' '}
+          Punks govern <span className={classes.boldText}>Punkers DAO</span>. Punks can vote on
+          proposals or delegate their vote to a third party. A minimum of{' '}
           <span className={classes.boldText}>
             {cryptopunksRequired} {threshold === 0 ? nounSingular : nounPlural}
           </span>{' '}
@@ -71,7 +71,7 @@ const GovernancePage = () => {
             <Trans>
               This treasury exists for <span className={classes.boldText}>Punkers DAO</span>{' '}
               participants to allocate resources for the long-term growth and prosperity of the
-              CryptoPunks project.
+              Punks project.
             </Trans>
           </Col>
         </Row>
