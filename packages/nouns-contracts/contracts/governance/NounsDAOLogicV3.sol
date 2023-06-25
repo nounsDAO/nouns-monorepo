@@ -223,6 +223,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
+     * Signers are regarded as co-proposers, and therefore have the ability to cancel the proposal at any time.
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
      * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
      * @param targets Target addresses for proposal calls
@@ -249,12 +250,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Invalidates a signature that may be used for signing a proposal.
+     * @notice Invalidates a signature that may be used for signing a new proposal.
      * Once a signature is canceled, the sender can no longer use it again.
      * If the sender changes their mind and want to sign the proposal, they can change the expiry timestamp
      * in order to produce a new signature.
      * The signature will only be invalidated when used by the sender. If used by a different account, it will
      * not be invalidated.
+     * Cancelling a signature for an existing proposal will have no effect. Signers have the ability to cancel
+     * a proposal they signed if necessary.
      * @param sig The signature to cancel
      */
     function cancelSig(bytes calldata sig) external {
