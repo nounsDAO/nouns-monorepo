@@ -13,13 +13,13 @@ type Props = {
 
 
 const ForkEvent = ({ event }: Props) => {
-  console.log('event details', event);
+  // console.log('event details', event);
   const actionLabel = event.eventType === 'EscrowDeposit' ? 'added' : 'removed';
   const nounCount = event.tokenIDs?.length;
   const nounLabel = nounCount > 1 ? 'Nouns' : 'Noun';
   const timestamp = dayjs(+event.createdAt * 1000).fromNow()
   const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIDs : []);
-  console.log('proposalsTitles', proposalsTitles, event.eventType === "EscrowDeposit" && event.proposalIDs);
+  // console.log('proposalsTitles', proposalsTitles, event.eventType === "EscrowDeposit" && event.proposalIDs);
   const nounsInEvent = event.tokenIDs?.map((tokenId, i) => {
     return (
       <Link key={i} to={`/noun/${tokenId}`}>
@@ -48,25 +48,23 @@ const ForkEvent = ({ event }: Props) => {
   );
 
   return (
-    <div className={classes.forkTimelineItem}>
+    <div className={classes.forkTimelineItem} id={event.id}>
       <header>
         <span className={classes.timestamp}>
-          {timestamp}
-          {/* 3 hours ago */}
+          <a href={`#${event.id}`}>
+            {timestamp}
+          </a>
         </span>
         <h3 className={classes.eventTitle}>
           {ownerLink} {actionLabel} {nounCount} {nounLabel}
-          {/* NounXYZ.eth added 2 Nouns */}
         </h3>
-        {event.eventType === "EscrowDeposit" && (
+        {event.eventType === "EscrowDeposit" && event.reason && (
           <p className={classes.message}>{event.reason}</p>
         )}
         <div className={classes.nounsList}>
           {nounsInEvent}
-          {/* <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a>
-          <a href={`/noun/${Math.floor(Math.random() * 737)}`}><img src={`https://noun.pics/${Math.floor(Math.random() * 737)}`} alt="noun" className={classes.nounImage} /></a> */}
         </div>
-        {event.eventType === "EscrowDeposit" && proposalsList && (
+        {event.eventType === "EscrowDeposit" && proposalsList && proposalsList.length > 0 && (
           <div className={classes.proposals}>
             <p className={classes.sectionLabel}>
               <Trans>Offending proposals</Trans>

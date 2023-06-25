@@ -8,11 +8,11 @@ import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
 import { useEscrowEvents, useEscrowToFork, useForkThreshold, useIsForkPeriodActive, useNumTokensInForkEscrow, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
 import { TransactionStatus, useEthers } from '@usedapp/core';
-import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds } from '../../wrappers/nounToken';
-import config from '../../config';
+import { useSetApprovalForAll, useTotalSupply, useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
 import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
+import { useScrollToLocation } from '../../hooks/useScrollToLocation';
 
 interface ForkPageProps { }
 const now = new Date();
@@ -29,6 +29,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const [isThresholdMet, setIsThresholdMet] = useState(false);
   const [thresholdPercentage, setThresholdPercentage] = useState(0);
   const [currentEscrowPercentage, setCurrentEscrowPercentage] = useState(0);
+  const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { escrowToFork, escrowToForkState } = useEscrowToFork();
@@ -37,11 +38,51 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   const totalSupply = useTotalSupply();
   const forkThreshold = useForkThreshold();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
-  const userEscrowedNounIds = useUserEscrowedNounIds();
+  // const getUserEscrowedNounIds = useUserEscrowedNounIds();
+  const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval);
+  // const getUserOwnedNouns = useUserOwnedNounIds();
+  // const { userOwnedNounIdsLoading, userOwnedNouns, userOwnedNounIdsError, refetchUserOwnedNounIds } = useUserOwnedNounIds();
+  const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
   const escrowEvents = useEscrowEvents();
   const [isEscrowPeriodActive, setIsEscrowPeriodActive] = useState(false); // true if not forking and 1 or more nouns in escrow
-
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const { withdrawFromForkEscrow, withdrawFromForkEscrowState } = useWithdrawFromForkEscrow();
+
+  // const [userOwnedNouns, setUserOwnedNouns] = useState<number[] | undefined>(ownedNouns);
+  // const [userEscrowedNounIds, setUserEscrowedNounIds] = useState<number[] | undefined>(escrowedNouns);
+  // console.log('getUserOwnedNouns', getUserOwnedNouns, 'userOwnedNouns', userOwnedNouns, 'userEscrowedNounIds', userEscrowedNounIds);
+
+
+
+  useScrollToLocation();
+
+  const refetchForkData = () => {
+    userOwnedNounIds.refetch();
+    userEscrowedNounIds.refetch();
+    escrowEvents.refetch();
+  }
+
+  useEffect(() => {
+    // trigger data updates on modal close
+    refetchForkData();
+    console.log(isForkPeriodActive, numTokensInForkEscrow, forkThreshold);
+  }, [isModalOpen, isWithdrawModalOpen, isForkPeriodActive]);
+
+  // useEffect(() => {
+  //   console.log('userOwnedNounIdsLoading', userOwnedNounIdsLoading);
+  //   console.log('ownedNouns', ownedNouns);
+  //   console.log('userOwnedNounIdsError', userOwnedNounIdsError);
+  //   setUserOwnedNouns(ownedNouns);
+  //   setUserEscrowedNounIds(escrowedNouns);
+  // }, [userOwnedNounIdsLoading, userEscrowedNounIdsLoading]);
+
+  // useEffect(() => {
+  //   console.log('userOwnedNounIdsLoading', userOwnedNounIdsLoading);
+  //   console.log('ownedNouns', ownedNouns);
+  //   console.log('userOwnedNouns', userOwnedNouns);
+  //   setUserOwnedNouns(ownedNouns);
+  //   // setUserEscrowedNounIds(escrowedNouns);
+  // }, [userOwnedNounIdsRefetch]);
 
   useEffect(() => {
     if (isForkPeriodActive) {
@@ -54,26 +95,17 @@ const ForkPage: React.FC<ForkPageProps> = props => {
   }, [forkThreshold]);
 
   useEffect(() => {
-    if ((numTokensInForkEscrow && forkThreshold) && numTokensInForkEscrow >= forkThreshold) {
+    if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow >= forkThreshold) {
       setIsThresholdMet(true);
       setCurrentState('escrow threshold met');
     }
   }, [forkThreshold, numTokensInForkEscrow]);
 
   const { account } = useEthers();
-  // const handleWithdrawNouns = () => {
-  //   withdrawFromForkEscrow(userEscrowedNounIds);
-  // }
-  // const handleEscrowToFork = () => {
-  //   // escrowToFork(27, 1, "the reason");
-  //   // escrowToFork();
-  // }
-  // const handleSetApproval = () => {
-  //   setApproval(config.addresses.nounsDAOProxy, true);
-  // }
 
   useEffect(() => {
-    if (forkThreshold && totalSupply && numTokensInForkEscrow) {
+    if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
+      console.log('forkThreshold', forkThreshold, 'totalSupply', totalSupply, 'numTokensInForkEscrow', numTokensInForkEscrow);
       const percentage = (forkThreshold / totalSupply) * 100;
       setThresholdPercentage(+percentage.toFixed(2));
       const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
@@ -81,11 +113,6 @@ const ForkPage: React.FC<ForkPageProps> = props => {
     }
   }, [forkThreshold, totalSupply, numTokensInForkEscrow]);
 
-  // useEffect(() => {
-  //   if (isForkPeriodActive) {
-  //     setCurrentState('forking');
-  //   }
-  // }, [isForkPeriodActive]);
 
 
   const handleWithdrawFromForkEscrowState = useCallback((state: TransactionStatus) => {
@@ -185,6 +212,9 @@ const ForkPage: React.FC<ForkPageProps> = props => {
 
   return (
     <>
+      {userOwnedNounIds.data && userOwnedNounIds.data.map((nounId) => (
+        nounId
+      ))}
       {/* temp state changer */}
       {/* <div className={classes.tempStateChanger}>
         <button
@@ -203,7 +233,7 @@ const ForkPage: React.FC<ForkPageProps> = props => {
       <Section fullWidth={false} className='al'>
         <div className={clsx(
           classes.pageHeader,
-          !isEscrowPeriodActive && !isForkPeriodActive && classes.emptyState
+          !escrowEvents.data && classes.emptyState
         )}>
           <Col lg={6}>
             <span className={clsx(classes.forkStatus)}>
@@ -231,23 +261,25 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                 rel='noreferrer'
               >Timelock</a></p>
             ) : (
-              <p>{forkThreshold || '...'} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold</p>
+              <p>{forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold</p>
             )}
           </Col>
           <Col lg={6} className={clsx(
             classes.buttons,
             !isEscrowPeriodActive && !isForkPeriodActive && classes.emptyState
           )}>
-            {!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
-              <WithdrawNounsButton tokenIds={userEscrowedNounIds} />
+            {!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0 && (
+              <WithdrawNounsButton tokenIds={userEscrowedNounIds.data} isWithdrawModalOpen={setIsWithdrawModalOpen} isForkPeriodActive={isForkPeriodActive} setDataFetchPollInterval={setDataFetchPollInterval} />
             )}
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className={clsx(classes.button, classes.primaryButton)}>
-              {currentState === 'pre-escrow' && 'Add Nouns to Start Escrow Period'}
-              {(currentState === 'escrow' || currentState === 'escrow threshold met' || currentState === 'nouns added') && 'Add Nouns to escrow'}
-              {currentState === 'forking' && 'Join fork'}
-            </button>
+            {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className={clsx(classes.button, classes.primaryButton)}>
+                {currentState === 'pre-escrow' && 'Add Nouns to Start Escrow Period'}
+                {(currentState === 'escrow' || currentState === 'escrow threshold met' || currentState === 'nouns added') && 'Add Nouns to escrow'}
+                {currentState === 'forking' && 'Join fork'}
+              </button>
+            )}
             {/* <button className={clsx(classes.button, classes.primaryButton)}
               onClick={async () => {
                 setApproval(config.addresses.nounsDAOProxy, true);
@@ -267,7 +299,8 @@ const ForkPage: React.FC<ForkPageProps> = props => {
           </div>
         </Section>
       )}
-      {isEscrowPeriodActive || isForkPeriodActive && (
+      {/* {(isEscrowPeriodActive || isForkPeriodActive) && ( */}
+      {escrowEvents.data && (
         <div className={clsx(classes.forkTimelineWrapper, currentState === 'forking' && classes.isForkingPeriod)}>
           <Container>
             <Row className={classes.forkTimeline}>
@@ -277,10 +310,12 @@ const ForkPage: React.FC<ForkPageProps> = props => {
                     {(currentState === 'escrow' || currentState === 'nouns added' || currentState === 'escrow threshold met') && 'in escrow'}
                     {currentState === 'forking' && 'joined this fork'}
                   </span>
-                  <strong>
-                    {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
-                    {" "}Nouns
-                  </strong>
+                  {numTokensInForkEscrow && (
+                    <strong>
+                      {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
+                      {" "}Noun{numTokensInForkEscrow > 1 && 's'}
+                    </strong>
+                  )}
                   <span>
                     {currentEscrowPercentage > 0 && `${currentEscrowPercentage}%`}
                   </span>
@@ -298,10 +333,10 @@ const ForkPage: React.FC<ForkPageProps> = props => {
               </Col>
               <Col lg={9} className={classes.events}>
                 {/* {currentState === 'nouns added' && ( */}
-                {userEscrowedNounIds && userEscrowedNounIds.length > 0 && (
+                {userEscrowedNounIds.data && userEscrowedNounIds.data.length > 0 && (
                   <div className={clsx(classes.userNouns, classes.callout)}>
                     <p>
-                      Your Noun{userEscrowedNounIds.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
+                      Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.data.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
                     </p>
                   </div>
                 )}
@@ -444,6 +479,10 @@ const ForkPage: React.FC<ForkPageProps> = props => {
             selectLabel={'Select Nouns to escrow'}
             selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
             account={account}
+            ownedNouns={userOwnedNounIds.data}
+            userEscrowedNouns={userEscrowedNounIds.data}
+            refetchData={refetchForkData}
+            setDataFetchPollInterval={setDataFetchPollInterval}
           />
           {/* {currentState === 'forking' ? (
             <AddNounsToForkModal
