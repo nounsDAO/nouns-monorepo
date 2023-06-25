@@ -49,6 +49,7 @@ const ForkEvent = ({ event }: Props) => {
 
   return (
     <div className={classes.forkTimelineItem} id={event.id}>
+      <a href={`#${event.id}`} className={classes.eventPoint} />
       <header>
         <span className={classes.timestamp}>
           <a href={`#${event.id}`}>

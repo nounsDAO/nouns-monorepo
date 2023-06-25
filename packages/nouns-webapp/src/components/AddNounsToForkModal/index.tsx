@@ -8,9 +8,12 @@ import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
 import { TransactionStatus, useEthers } from '@usedapp/core'
 import config from '../../config';
-import { useSetApprovalForAll, useUserOwnedNounIds, useUserVotes, useIsApprovedForAll, useSetApprovalForTokenId } from '../../wrappers/nounToken'
+import { useSetApprovalForAll, useIsApprovedForAll, useSetApprovalForTokenId } from '../../wrappers/nounToken'
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { buildEtherscanTxLink } from '../../utils/etherscan'
+import link from '../../assets/icons/Link.svg';
+
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
@@ -20,6 +23,10 @@ type Props = {
   selectLabel: string;
   selectDescription: string;
   account: string;
+  ownedNouns: number[] | undefined;
+  userEscrowedNouns: number[] | undefined;
+  refetchData: Function;
+  setDataFetchPollInterval: Function;
 }
 
 export default function AddNounsToForkModal(props: Props) {
@@ -28,48 +35,49 @@ export default function AddNounsToForkModal(props: Props) {
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
+  const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
+  // const { approveTokenId, approveTokenIdState } = useSetApprovalForTokenId();
+  // approval transactions
+  const [isApprovalWaiting, setIsApprovalWaiting] = useState(false);
+  const [isApprovalLoading, setIsApprovalLoading] = useState(false);
+  const [approvalErrorMessage, setApprovalErrorMessage] = useState<ReactNode>('');
+  const [isApprovalTxSuccessful, setIsApprovalTxSuccessful] = useState(false);
+  // handle transactions 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [isTxSuccessful, setIsTxSuccessful] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ReactNode>('');
+  const { escrowToFork, escrowToForkState } = useEscrowToFork();
+  const { setApproval, setApprovalState } = useSetApprovalForAll();
   const { data: proposals } = useAllProposals();
+  const isApprovedForAll = useIsApprovedForAll();
   const proposalsList = proposals?.map((proposal, i) => {
     return (
       <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
     )
   });
-  const ownedNouns = useUserOwnedNounIds();
-  const { approveTokenId, approveTokenIdState } = useSetApprovalForTokenId();
 
-  // approval transactions
-  const [isApprovalWaiting, setIsApprovalWaiting] = useState(false);
-  const [isApprovalLoading, setIsApprovalLoading] = useState(false);
-  const [isApprovalError, setIsApprovalError] = useState(false);
-  const [approvalErrorMessage, setApprovalErrorMessage] = useState<ReactNode>('');
-  const [isApprovalTxSuccessful, setIsApprovalTxSuccessful] = useState(false);
-
-  // handle transactions 
-  const [isLoading, setIsLoading] = useState(false);
-
-
-  const [isWaiting, setIsWaiting] = useState(false);
-  const [isTxSuccessful, setIsTxSuccessful] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ReactNode>('');
-  const { escrowToFork, escrowToForkState } = useEscrowToFork();
-  const { setApproval, setApprovalState, isApprovedForAll } = useSetApprovalForAll();
-  // const isApprovedForAll = useIsApprovedForAll();
-  console.log('isApprovedForAll', isApprovedForAll)
-  console.log('isWaiting', isWaiting)
+  useEffect(() => {
+    let nounIds = props.ownedNouns || [];
+    if (props.ownedNouns && props.userEscrowedNouns) {
+      const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
+      nounIds = nouns.sort((a, b) => a - b);
+    }
+    setOwnedNouns(nounIds);
+  }, [props.ownedNouns, props.userEscrowedNouns]);
 
   const clearTransactionState = () => {
+    // clear all transaction states
     setIsWaiting(false);
     setIsLoading(false);
-    setIsError(false);
     setIsTxSuccessful(false);
     setErrorMessage('');
     setIsApprovalWaiting(false);
     setIsApprovalLoading(false);
-    setIsApprovalError(false);
     setApprovalErrorMessage('');
     setIsApprovalTxSuccessful(false);
     setIsTwoStepProcess(false);
+    props.setDataFetchPollInterval(0);
   }
   const clearState = () => {
     setIsConfirmModalOpen(false);
@@ -80,177 +88,34 @@ export default function AddNounsToForkModal(props: Props) {
     clearTransactionState();
   }
 
-  const checkApprovalStatus = () => {
-    console.log('checkApprovalStatus', approveTokenIdState)
-    // if (approveTokenIdState.status === 'Success') {
-    //   setIsLoading(false);
-    //   setIsWaiting(false);
-    //   return approveTokenIdState
-    // } else if (approveTokenIdState.status === 'Fail' || approveTokenIdState.status === 'Exception') {
-    //   setIsLoading(false);
-    //   setIsWaiting(false);
-    //   return approveTokenIdState
-    // } else {
-    console.log('setTimeout');
-    setTimeout(checkApprovalStatus, 500)
-    // }
-    return approveTokenIdState
-  }
-
-
-  const handleSubmission = () => {
+  const handleSubmission = (selectedNouns: number[]) => {
     clearTransactionState();
-    console.log('approval status', approveTokenIdState.status)
     if (isApprovedForAll) {
       // if approved for all
-      setIsWaiting(false);
-      setIsLoading(true);
-      escrowToFork(selectedNouns, selectedProposals, reasonText);
+      addNounsToEscrow(selectedNouns);
     } else {
       setIsTwoStepProcess(true);
       setApproval(config.addresses.nounsDAOProxy, true);
-      // check approval for each noun // removed for now to simplify. ran into trouble with state returning for all requests instead of just one at a time
+      // removed noun-specific approvals for now to simplify. ran into trouble with state returning for all requests instead of just one at a time
       // handleApproveAndAddTokenIds(selectedNouns);
     }
-
   }
+  // const handleApproveAndAddTokenIds = async (nounIds: number[]) => {
+  //   const approvals = Promise.all(nounIds.map(async (nounId) => {
+  //     // check if approved
+  //     // if not approved
+  //     approveTokenId(config.addresses.nounsDAOProxy, nounId);
+  //   }))
+  // };
 
-  const handleApproveAll = async (nounIds: number[]) => {
-    // handleSetApproval();
-    setApproval(config.addresses.nounsDAOProxy, true);
-  }
-
-  const handleApproveAndAddTokenIds = async (nounIds: number[]) => {
-    const approvals = Promise.all(nounIds.map(async (nounId) => {
-      // check if approved
-      // if not approved
-
-      approveTokenId(config.addresses.nounsDAOProxy, nounId);
-      // const status = checkApprovalStatus();
-      // if (status.status === 'Success') {
-      //   console.log('approved')
-      //   return status
-      // }
-      // checkApprovalStatus(status);
-      // if (!isAwaitingApproval) {
-      //   return approveTokenIdState
-      // } else {
-      //   console.log('isAwaitingApproval', isAwaitingApproval)
-
-      // }
-
-
-
-      // console.log('approveTokenIdState', approveTokenIdState);
-      // TODO: need to wait until error or success
-      // console.log('switch handleApproveAndAddTokenIds', approveTokenIdState.status);
-      // switch (approveTokenIdState.status) {
-
-      //   // case 'None':
-      //   //   console.log('None')
-      //   //   setIsLoading(false);
-      //   //   break;
-      //   // case 'Mining':
-      //   //   console.log('Mining')
-      //   //   // setIsLoading(true);
-      //   //   break;
-      //   case 'Success':
-      //     setIsLoading(false);
-      //     return approveTokenIdState
-      //     // setIsVoteSuccessful(true);
-      //     break;
-      //   case 'Fail':
-      //     // setFailureCopy(<Trans>Transaction Failed</Trans>);
-      //     // setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-      //     setIsLoading(false);
-      //     return approveTokenIdState;
-      //   // setIsVoteFailed(true);
-      //   // break;
-      //   case 'Exception':
-      //     // setFailureCopy(<Trans>Error</Trans>);
-      //     // setErrorMessage(
-      //     //   state?.errorMessage || <Trans>Please try again.</Trans>,
-      //     // );
-      //     setIsError(true);
-      //     setIsLoading(false);
-      //     return approveTokenIdState
-      //   // setIsVoteFailed(true);
-      //   // break;
-      // }
-      // return approveTokenIdState
-
-    }))
-
-    // const allApproved = (await approvals).every((result) => {
-    //   console.log('result', result, result.status)
-    //   // result.status === 'Success'
-    //   return result.status === 'Success'
-    // })
-
-    // const allApproved = (await approvals).every((result) => result?.status === 'Success');
-
-    // await approvals.then((results) => {
-    //   console.log('results', results)
-    //   if (allApproved) {
-    //     console.log('allApproved', allApproved)
-    //     return allApproved
-    //   }
-
-    // }).catch((error) => {
-    //   console.log('error handleApproveAndAddTokenIds', error)
-    // });
-
-
-    // if (allApproved) {
-    //   setIsWaiting(false);
-    //   setIsLoading(true);
-    //   escrowToFork(nounIds, selectedProposals, reasonText);
-    // }
-    // else {
-    //   console.log('not allApproved')
-    //   setIsWaiting(false);
-    //   // setErrorMessage('not allApproved')
-    // }
-
-
-    // console.log('approvals', await approvals)
-    // .then((results) => {
-    //   console.log('results', results)
-    //   const allApproved = results.every((result) => result.status === 'Success')
-    //   if (allApproved) {
-    //     console.log('allApproved')
-    //     escrowToFork(nounIds, selectedProposals, reasonText);
-    //   }
-    //   else {
-    //     console.log('not allApproved')
-    //   }
-    // }).catch((error) => {
-    //   console.log('error handleApproveAndAddTokenIds', error)
-    // })
-    // return approvals;
-  };
-
-  // const handleApproveTokenIds = (nounIds: number[]) => {
-  //   console.log('handleApproveTokenIds', nounIds)
-  //   nounIds.map((nounId) => {
-  //     approveTokenId(nounId);
-  //   })
-  // }
-
-  const handleEscrowToFork = () => {
-    // escrowToFork(27, 1, "the reason");
-    // escrowToFork();
+  const addNounsToEscrow = (selectedNouns: number[]) => {
+    setIsWaiting(true);
+    setIsLoading(false);
+    escrowToFork(selectedNouns, selectedProposals, reasonText);
   }
 
 
-  const [approvalQueue, setApprovalQueue] = useState<{ id: number, status: string }[]>([]);
-
-
-  const handleSetApproval = () => {
-    setApproval(config.addresses.nounsDAOProxy, true);
-  }
-
-  const handleSetApprovalForAllAndAddToEscrowStateChange = useCallback((state: TransactionStatus) => {
+  const handleSetApprovalForAllAndAddToEscrowStateChange = useCallback((state: TransactionStatus, selectedNouns: number[]) => {
     switch (state.status) {
       case 'None':
         setIsApprovalLoading(false);
@@ -264,8 +129,9 @@ export default function AddNounsToForkModal(props: Props) {
         break;
       case 'Success':
         setIsApprovalLoading(false);
+        setIsApprovalTxSuccessful(true);
         // successfully approved, now escrow
-        escrowToFork(selectedNouns, selectedProposals, reasonText);
+        addNounsToEscrow(selectedNouns);
         break;
       case 'Fail':
         setApprovalErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
@@ -286,93 +152,47 @@ export default function AddNounsToForkModal(props: Props) {
       case 'None':
         setIsLoading(false);
         break;
+      case 'PendingSignature':
+        setIsWaiting(true);
+        break;
       case 'Mining':
+        setIsWaiting(false);
         setIsLoading(true);
+        // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
+        props.setDataFetchPollInterval(100);
         break;
       case 'Success':
         setIsLoading(false);
-        // setIsVoteSuccessful(true);
+        setIsTxSuccessful(true);
+        // if successful, disable nouns in list from being added to escrow again
+        props.refetchData();
+        setSelectedNouns([]);
         break;
       case 'Fail':
-        // setFailureCopy(<Trans>Transaction Failed</Trans>);
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
-        // setIsVoteFailed(true);
         break;
       case 'Exception':
-        // setFailureCopy(<Trans>Error</Trans>);
-        // setErrorMessage(
-        //   // getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
-        // );
+        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         setIsWaiting(false);
-        // setIsVoteFailed(true);
         break;
     }
   }, []);
-
-  // const handleApproveTokenIdStateChange = useCallback((state: TransactionStatus) => {
-  //   switch (state.status) {
-  //     case 'None':
-  //       setIsLoading(false);
-  //       setIsWaiting(false);
-  //       // setIsAwaitingApproval(false);
-  //       break;
-  //     case 'Mining':
-  //       setIsLoading(true);
-  //       setIsWaiting(false);
-  //       break;
-  //     case 'Success':
-  //       setIsLoading(false);
-  //       // setIsAwaitingApproval(false);
-  //       // setIsVoteSuccessful(true);
-  //       break;
-  //     case 'Fail':
-  //       // setFailureCopy(<Trans>Transaction Failed</Trans>);
-  //       setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-  //       setIsLoading(false);
-  //       setIsWaiting(false);
-  //       // setIsAwaitingApproval(false);
-  //       // setIsVoteFailed(true);
-  //       break;
-  //     case 'Exception':
-  //       // setFailureCopy(<Trans>Error</Trans>);
-  //       setErrorMessage(
-  //         state?.errorMessage || <Trans>Please try again.</Trans>,
-  //       );
-  //       setIsLoading(false);
-  //       setIsWaiting(false);
-  //       // setIsAwaitingApproval(false);
-  //       // setIsVoteFailed(true);
-  //       break;
-  //   }
-  // }, []);
 
   useEffect(() => {
     handleEscrowToForkStateChange(escrowToForkState);
   }, [escrowToForkState, handleEscrowToForkStateChange]);
 
   useEffect(() => {
-    handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState);
+    handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
   }, [setApprovalState, handleSetApprovalForAllAndAddToEscrowStateChange]);
-
-  // useEffect(() => {
-  //   console.log('approveTokenIdState', approveTokenIdState)
-  //   // if (isAwaitingApproval) {
-  //   //   checkApprovalStatus();
-  //   // }
-  //   handleApproveTokenIdStateChange(approveTokenIdState);
-  // }, [approveTokenIdState, handleApproveTokenIdStateChange]);
-
-
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
       <h2 className={classes.modalTitle}>Confirm</h2>
       <p className={classes.modalDescription}>By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.</p>
-      <button className={clsx(classes.button, classes.primaryButton)}
-      // onClick={() => setIsConfirmModalOpen(false)}
-      >Join</button>
+      <button className={clsx(classes.button, classes.primaryButton)}>Join</button>
       <button className={clsx(classes.button, classes.secondaryButton)}
         onClick={() => setIsConfirmModalOpen(false)}
       >Cancel</button>
@@ -450,58 +270,67 @@ export default function AddNounsToForkModal(props: Props) {
         </div>
         <button
           onClick={() => {
-            ownedNouns && selectedNouns.length === ownedNouns.length ?
+            approvalErrorMessage && clearTransactionState();
+            props.ownedNouns && selectedNouns.length === props.ownedNouns.length ?
               setSelectedNouns([]) :
-              setSelectedNouns(ownedNouns || [])
+              setSelectedNouns(props.ownedNouns || [])
           }}
-        >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
+          disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
+        >
+          {selectedNouns.length === props.ownedNouns?.length ? 'Unselect' : "Select"} all
+        </button>
       </div>
       <div className={classes.nounsList}>
         {ownedNouns && ownedNouns.map((nounId: number) => {
           return (
             <button
               onClick={() => {
+                (approvalErrorMessage || errorMessage || isTxSuccessful) && clearTransactionState();
                 selectedNouns.includes(nounId) ?
                   setSelectedNouns(selectedNouns.filter((id) => id !== nounId)) :
                   setSelectedNouns([...selectedNouns, nounId]);
               }}
-              disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
-              className={clsx(classes.nounButton, selectedNouns.includes(nounId) && classes.selectedNounButton)}
+              disabled={
+                (isWaiting || isLoading || isApprovalWaiting || isApprovalLoading) ||
+                props.userEscrowedNouns?.includes(nounId)
+              }
+              className={clsx(
+                classes.nounButton,
+                selectedNouns.includes(nounId) && classes.selectedNounButton,
+                props.userEscrowedNouns?.includes(nounId) && classes.escrowedNoun
+              )}
             >
-              <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
-              Noun {nounId}
+              <div>
+                <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
+                Noun {nounId}
+              </div>
+              {props.userEscrowedNouns?.includes(nounId) && <span className={classes.escrowedNounLabel}>{props.isForkingPeriod ? 'in fork' : 'in escrow'}</span>}
             </button>
           )
         })}
       </div>
       <div className={classes.modalActions}>
-
-        {/* {isApprovedForAll ? ( */}
-        {!(approvalErrorMessage || errorMessage) && (
+        {!(approvalErrorMessage || errorMessage || isTxSuccessful || isApprovalTxSuccessful) && (
           <button
             className={clsx(classes.button, classes.primaryButton, (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) && classes.loadingButton)}
             disabled={
               selectedNouns.length === 0 || isWaiting || isLoading || isApprovalWaiting || isApprovalLoading
             }
             onClick={() => {
-              // isApprovedForAll ? handleSubmission() : handleApproveTokenIds(selectedNouns)
-              // props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
-              handleSubmission();
+              handleSubmission(selectedNouns);
             }}
           >
-            {/* {!isWaiting && !isLoading && !isTxSuccessful && !isError && ( */}
             {!isWaiting && !isLoading && !isApprovalWaiting && !isApprovalLoading && (
               <>
-                Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
+                Add Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
               </>
             )}
-
             <span>
               {(isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
               {(isApprovalWaiting) && 'Awaiting approval'}
               {(isWaiting) && 'Awaiting confirmation'}
               {isApprovalLoading && 'Approving'}
-              {isLoading && 'Adding'}
+              {isLoading && `Adding to ${props.isForkingPeriod ? 'fork' : 'escrow'}`}
             </span>
           </button>
         )}
@@ -515,58 +344,53 @@ export default function AddNounsToForkModal(props: Props) {
             >Try again</button>
           </p>
         )}
+        {isTxSuccessful && (
+          <>
+            <p className={clsx(classes.statusMessage, classes.successMessage)}>
+              <a href={escrowToForkState.transaction && `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`} target="_blank" rel="noreferrer">
+                Your Noun{selectedNouns.length > 1 ? 's have' : ' has'} been added to Escrow.
+                {escrowToForkState.transaction && (
+                  <img src={link} width={16} alt="link symbol" />
+                )}
+              </a>
+              {ownedNouns && ownedNouns?.length > selectedNouns.length && (
+                <button
+                  onClick={() => {
+                    clearTransactionState();
+                  }}
+                >Add additional Nouns</button>
+              )}
+            </p>
+          </>
+        )}
         {isTwoStepProcess && (
           <>
             <ul className={classes.steps}>
               <li>
                 <strong>
-                  {/* <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color='green' /> */}
-                  {/* <span className={classes.spinner}><Spinner animation="border" /></span> */}
                   {(isApprovalWaiting || isApprovalLoading) && <span className={classes.spinner}><Spinner animation="border" /></span>}
-                  {isApprovalTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} />}
+                  {isApprovalTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
                   {approvalErrorMessage && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
                 </strong>
                 <Trans>Set approval</Trans>
               </li>
               <li>
                 <strong>
-                  {(isWaiting || isLoading) && <Spinner animation="border" />}
-                  {isTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} />}
+                  {(isWaiting || isLoading) && <span className={classes.spinner}><Spinner animation="border" /></span>}
+                  {isTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
                   {(errorMessage || approvalErrorMessage) && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
                   {(!(isWaiting || isLoading || isTxSuccessful || errorMessage || approvalErrorMessage)) && <span className={classes.placeholder}></span>}
                 </strong>
-                <Trans>Add Nouns to escrow</Trans>
+                <Trans>Add {selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to escrow</Trans>
               </li>
-
             </ul>
           </>
         )}
-
-        {isTxSuccessful && <p className={classes.statusMessage}>Success! Your Nouns have been approved.</p>}
-        {/* {isError && errorMessage} */}
-        {/* ) : (
-          <>
-
-
-            <button
-              className={clsx(classes.button, classes.primaryButton)}
-              disabled={selectedNouns.length === 0}
-              onClick={() => {
-                handleApproveTokenIds(selectedNouns)
-              }}
-            >
-              Approve {selectedNouns.length > 0 && selectedNouns.length} Nouns
-            </button>
-
-          </>
-
-        )} */}
-
-        {!isApprovedForAll || !(isWaiting || isLoading || isTxSuccessful || errorMessage || approvalErrorMessage) && (
+        {!isApprovedForAll && (!isApprovalWaiting || !isApprovalLoading) && (
           <p className={classes.approvalNote}>You'll be asked to approve access</p>
         )}
 
-        {/* todo: add back in to support approve individual ids */}
+        {/* temp code commented out. todo: add back in to support approve individual ids */}
         {/* {!isApprovedForAll && (
           <>
             <p className={classes.approvalNote}>You'll be asked to approve each noun individually. Or you can <button
@@ -581,147 +405,31 @@ export default function AddNounsToForkModal(props: Props) {
             {selectedNouns.length > 0 && (<hr />)}
           </>
         )} */}
-        {selectedNouns.length > 0 && (
-          <p>
-            Adding {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
-          </p>
+        {(selectedNouns.length > 0 && !isTxSuccessful) && (
+          <>
+            <p className={classes.selectedNouns}>
+              Adding {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
+            </p>
+          </>
         )}
-
       </div>
-
-      <hr />
-      <button
+      {/* <button
         onClick={() => {
           setApproval(config.addresses.nounsDAOProxy, false);
         }}
-      >revoke approval</button>
+      >revoke approval</button> */}
+
     </div >
-
   )
-  // const forkingModalContent = (
-  //   <div className={classes.modalContent}>
-  //     <h2 className={classes.modalTitle}>
-  //       <Trans>
-  //         Join the fork
-  //       </Trans>
-  //     </h2>
-  //     <p className={classes.modalDescription}>
-  //       <Trans>
-  //         By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
-  //       </Trans>
-  //     </p>
-  //     <div className={classes.fields}>
-  //       <InputGroup className={classes.inputs}>
-  //         <div>
-  //           <FormText><strong>Reason</strong> (optional)</FormText>
-  //           <FormControl
-  //             className={classes.reasonInput}
-  //             value={reasonText}
-  //             onChange={e => setReasonText(e.target.value)}
-  //             placeholder={"Your reason for forking"}
-  //           />
-  //         </div>
-  //         <div>
-  //           <FormText><strong>Proposals that triggered this decision</strong> (optional)</FormText>
-  //           <FormSelect
-  //             className={classes.selectMenu}
-  //             onChange={(e) => {
-  //               setSelectedProposals([...selectedProposals, +e.target.value]);
-  //             }}
-  //           >
-  //             <option>Select proposal(s)</option>
-  //             {proposalsList}
-  //           </FormSelect>
-  //         </div>
-  //       </InputGroup>
-  //     </div>
-  //     <div className={classes.selectedProposals}>
-  //       {selectedProposals.map((proposalId) => {
-  //         const prop = proposals.find((proposal) => proposal.id && +proposal.id === proposalId);
-  //         return (
-  //           <div className={classes.selectedProposal}>
-  //             <span><a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer"><strong>{prop?.id}</strong> {prop?.title}</a></span>
-  //             <button
-  //               onClick={() => {
-  //                 const newSelectedProposals = selectedProposals.filter((id) => id !== proposalId);
-  //                 setSelectedProposals(newSelectedProposals);
-  //               }}
-  //               className={classes.removeButton}><MinusCircleIcon /></button>
-  //           </div>
-  //         )
-  //       })
-  //       }
-  //     </div>
-  //     <div className={classes.sectionHeader}>
-  //       <div className={classes.sectionLabel}>
-  //         <p>
-  //           <strong>
-  //             <Trans>
-  //               Select Nouns to join the fork
-  //             </Trans>
-  //           </strong>
-  //         </p>
-  //         <p>
-  //           <Trans>
-  //             Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the forking period
-  //           </Trans>
-  //         </p>
-  //       </div>
-  //       <button
-  //         onClick={() => {
-  //           selectedNouns.length === ownedNouns?.length ?
-  //             setSelectedNouns([]) :
-  //             setSelectedNouns(ownedNouns || [])
-  //         }}
-  //       >{selectedNouns.length === ownedNouns?.length ? 'Unselect' : "Select"} all</button>
-  //     </div>
-  //     <div className={classes.nounsList}>
-  //       {ownedNouns && ownedNouns.map((nounId: number) => {
-  //         return (
-  //           <button
-  //             onClick={() => {
-  //               selectedNouns.includes(nounId) ?
-  //                 setSelectedNouns(selectedNouns.filter((id) => id !== nounId)) :
-  //                 setSelectedNouns([...selectedNouns, nounId]);
-  //             }}
-  //             className={clsx(classes.nounButton, selectedNouns.includes(nounId) && classes.selectedNounButton)}
-  //           >
-  //             <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
-  //             Noun {nounId}
-  //           </button>
-  //         )
-  //       })}
-  //     </div>
-  //     <div className={classes.modalActions}>
-  //       <button
-  //         className={clsx(classes.button, classes.primaryButton)}
-  //         disabled={selectedNouns.length === 0}
-  //         onClick={() => {
-  //           handleSubmission()
-  //         }}
-  //       // onClick={() => {
-  //       //   props.isForkingPeriod ? setIsConfirmModalOpen(true) : props.setIsModalOpen(false)
-  //       // }}
-  //       >
-  //         Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
-  //       </button>
-  //       <p>
-  //         {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
-  //       </p>
-  //     </div>
-  //   </div >
 
-  // )
   return (
     <>
       <SolidColorBackgroundModal
         show={props.isModalOpen && !isConfirmModalOpen}
         onDismiss={() => {
-          // props.setIsModalOpen(false);
-          // setIsConfirmModalOpen(false);
+          setSelectedNouns([]);
           clearState();
         }}
-        // content={props.isForkingPeriod ? forkingModalContent : modalContent}
         content={modalContent}
       />
       <SolidColorBackgroundModal

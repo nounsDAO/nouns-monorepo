@@ -165,9 +165,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 
 export const useDelegateVotes = () => {
   const nounsToken = new NounsTokenFactory().attach(config.addresses.nounsToken);
-
   const { send, state } = useContractFunction(nounsToken, 'delegate');
-
   return { send, state };
 };
 
@@ -205,22 +203,29 @@ export const useTotalSupply = (): number | undefined => {
   return totalSupply?.toNumber();
 };
 
-export const useUserOwnedNounIds = (): number[] | undefined => {
+export const useUserOwnedNounIds = (pollInterval: number) => {
   const { account } = useEthers();
-  const { data } = useQuery(
+  const { loading, data, error, refetch } = useQuery(
     ownedNounsQuery(account?.toLowerCase() ?? ''),
+    {
+      pollInterval: pollInterval,
+    }
   );
-  const ownedNouns = data?.nouns?.map((noun: NounId) => Number(noun.id));
-  return ownedNouns;
+  const userOwnedNouns: number[] = data?.nouns?.map((noun: NounId) => Number(noun.id));
+  return { loading, data: userOwnedNouns, error, refetch };
 }
 
-export const useUserEscrowedNounIds = (): number[] | undefined => {
+export const useUserEscrowedNounIds = (pollInterval: number) => {
+  console.log('useUserEscrowedNounIds pollInterval', pollInterval);
   const { account } = useEthers();
-  const { data } = useQuery(
+  const { loading, data, error, refetch } = useQuery(
     accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
+    {
+      pollInterval: pollInterval,
+    }
   );
-  const escrowedNouns = data?.escrowedNouns.map((escrowedNoun: EscrowedNoun) => Number(escrowedNoun.noun.id));
-  return escrowedNouns;
+  const userEscrowedNounIds: number[] = data?.escrowedNouns.map((escrowedNoun: EscrowedNoun) => Number(escrowedNoun.noun.id));
+  return { loading, data: userEscrowedNounIds, error, refetch };
 }
 
 export const useSetApprovalForAll = () => {

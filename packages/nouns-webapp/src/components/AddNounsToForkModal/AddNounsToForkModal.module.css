@@ -46,6 +46,11 @@
   opacity: 0.75;
   text-decoration: none;
 }
+.sectionHeader button:disabled {
+  text-decoration: none;
+  opacity: 0.75;
+  cursor: not-allowed;
+}
 .sectionLabel {
   width: 70%;
   @media (max-width: 991px) {
@@ -66,28 +71,36 @@
   align-items: center;
 }
 .nounButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
+  position: relative;
+  padding: 10px;
   border-radius: 12px;
   background-color: #fff;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  gap: 10px;
   text-align: left;
   width: auto;
   font-family: "Londrina Solid", sans-serif;
   font-size: 20px;
-  border: 2px solid #D3D3D3;
+  border: 2px solid rgba(0, 0, 0, 0.25);
   @media (max-width: 991px) {
     width: 100%;
   }
 }
+.nounButton > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
 
-.nounButton:hover {
-  border: 2px solid #5E5E5E;
+.nounButton:hover, .selectedNounButton:hover {
+  box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
+}
+
+.nounButton:disabled { 
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .nounButton img {
@@ -96,7 +109,35 @@
 }
 
 .selectedNounButton {
-  border: 2px solid #000;
+  border: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.nounButton.escrowedNoun {
+  opacity: 1;
+  border-color: #e8e8e8;
+  overflow: hidden;
+}
+.escrowedNoun > div {
+  opacity: 0.65;
+}
+.escrowedNoun:hover  {
+  border-color: #e8e8e8;
+  box-shadow: none;
+}
+
+.escrowedNounLabel {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'PT Root UI';
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 0;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  border-bottom: 1px solid #e6e6e6;
 }
 
 /* proposals */
@@ -214,6 +255,7 @@
   font-weight: bold;
   background-color: #fff !important;
   border: 1px solid #e6e6e6;
+  width: 100%;
 }
 p.statusMessage {
   color: #14161b;
@@ -245,14 +287,31 @@ p.statusMessage {
   text-decoration: underline;
   cursor: pointer; 
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   color: #14161b;
   display: block;
-  width: 100%;
+  width: auto;
 }
 .statusMessage button:hover {
   text-decoration: none;
 }
+.statusMessage.successMessage a {
+  color: var(--brand-color-green);
+  text-decoration: none;
+}
+.statusMessage.successMessage a:hover img {
+  opacity: 0.75;
+}
+.statusMessage.successMessage a img {
+  position: relative;
+  top: -2px;
+  transition: all 0.125s ease-in-out;
+}
+.selectedNouns {
+  color: #14161b;
+  font-size: 15px;
+}
+
 
 
 
@@ -277,8 +336,6 @@ p.statusMessage {
   width: 20px;
   height: 20px;
   display: inline-block;
-  position: relative;
-  top: 1px;
   margin-right: 3px;
 }
 
@@ -297,8 +354,9 @@ p.statusMessage {
   animation: pulse 1.5s ease-out;
   animation-iteration-count: infinite; 
   opacity: 0.5;
+  position: relative;
+  top: 3px;
 }
-
 
 @keyframes pulse {
   0% { 

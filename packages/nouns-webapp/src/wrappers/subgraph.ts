@@ -539,3 +539,8 @@ export const proposalTitlesQuery = (ids: number[]) => {
     }
   }
 `};
+
+export const forkDetailsQuery = (id: string) => gql`
+  {
+
+  }`
