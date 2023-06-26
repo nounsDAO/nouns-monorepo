@@ -2,7 +2,7 @@
     "references": [
         { "path": "packages/punks-api" },
         { "path": "packages/nouns-assets" },
-        { "path": "packages/nouns-bots" },
+        { "path": "packages/punks-bots" },
         { "path": "packages/nouns-contracts" },
         { "path": "packages/nouns-sdk" },
         { "path": "packages/nouns-subgraph" },

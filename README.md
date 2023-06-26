@@ -16,9 +16,9 @@ The [punks api](packages/punks-api) is an HTTP webserver that hosts token metada
 
 The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-length encoded image data.
 
-### nouns-bots
+### punks-bots
 
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+The [punks bots](packages/punks-bots) package contains a bot that monitors for changes in Punks auction state and notifies everyone via Twitter and Discord.
 
 ### nouns-contracts
 

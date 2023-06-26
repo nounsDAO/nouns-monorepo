@@ -14,8 +14,8 @@ ADD . .
 # Install any package specific dependencies
 RUN yarn
 
-WORKDIR /app/packages/nouns-bots
+WORKDIR /app/packages/punks-bots
 
 RUN yarn build
 
-CMD [ "node",  "/app/packages/nouns-bots/dist/index.js"]
+CMD [ "node",  "/app/packages/punks-bots/dist/index.js"]
