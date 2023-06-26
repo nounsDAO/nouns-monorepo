@@ -1,4 +1,4 @@
-# @nouns/subgraph
+# @punks/subgraph
 
 A subgraph that indexes punks events.
 

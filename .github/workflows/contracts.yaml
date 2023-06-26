@@ -7,7 +7,7 @@ on:
   pull_request:
     paths:
       - 'packages/nouns-contracts/**'
-      - 'packages/nouns-subgraph/**'
+      - 'packages/punks-subgraph/**'
     branches:
       - '**'
 
