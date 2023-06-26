@@ -1,6 +1,6 @@
 {
     "references": [
-        { "path": "packages/nouns-api" },
+        { "path": "packages/punks-api" },
         { "path": "packages/nouns-assets" },
         { "path": "packages/nouns-bots" },
         { "path": "packages/nouns-contracts" },

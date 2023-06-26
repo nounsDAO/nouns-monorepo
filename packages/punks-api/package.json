@@ -1,10 +1,8 @@
 {
-  "name": "@nouns/api",
+  "name": "@punks/api",
   "private": true,
   "version": "0.1.0",
   "description": "nouns backend api",
-  "author": "Nounders",
-  "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "main": "src/index.ts",
   "directories": {
