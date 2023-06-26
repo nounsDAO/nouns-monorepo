@@ -866,8 +866,8 @@ export const useNumTokensInForkEscrow = (): number | undefined => {
   return numTokensInForkEscrow?.toNumber();
 }
 
-export const useEscrowDepositEvents = () => {
-  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery()) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error, refetch: () => void }
+export const useEscrowDepositEvents = (forkId: number) => {
+  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId)) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error, refetch: () => void }
   const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit) => {
     const proposalIDs = escrowDeposit.proposalIDs.map((id) => id);
     return {
@@ -889,8 +889,8 @@ export const useEscrowDepositEvents = () => {
   };
 }
 
-export const useEscrowWithdrawalEvents = () => {
-  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery()) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error, refetch: () => void };
+export const useEscrowWithdrawalEvents = (forkId: number) => {
+  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery(forkId)) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error, refetch: () => void };
   const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
     return {
       eventType: 'EscrowWithdrawal',
@@ -909,9 +909,9 @@ export const useEscrowWithdrawalEvents = () => {
   };
 }
 
-export const useEscrowEvents = () => {
-  const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents();
-  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents();
+export const useEscrowEvents = (forkId: number) => {
+  const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(forkId);
+  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(forkId);
 
   const loading = depositsLoading || withdrawalsLoading;
   const error = depositsError || withdrawalsError;

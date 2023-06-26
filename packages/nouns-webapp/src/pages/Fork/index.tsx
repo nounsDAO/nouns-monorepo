@@ -48,7 +48,7 @@ const ForkPage = ({
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval);
   const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
-  const escrowEvents = useEscrowEvents();
+  const escrowEvents = useEscrowEvents(+id);
   const forkDetails = useForkDetails(id || '');
   const { account } = useEthers();
 
