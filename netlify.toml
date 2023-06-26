@@ -15,8 +15,8 @@
   REACT_APP_ENABLE_HISTORY = "true"
 
 [functions]
-  directory = "packages/nouns-webapp/functions"
+  directory = "packages/punks-webapp/functions"
 
 [build]
-  command = "yarn workspace @nouns/webapp build"
-  publish = "packages/nouns-webapp/build"
+  command = "yarn workspace @punks/webapp build"
+  publish = "packages/punks-webapp/build"

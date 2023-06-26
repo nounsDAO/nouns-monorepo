@@ -20,8 +20,8 @@ yarn task:run-local
 In the second shell:
 
 ```sh
-# Switch to nouns-webapp
-cd packages/nouns-webapp
+# Switch to punks-webapp
+cd packages/punks-webapp
 # Copy local example environment file
 cp .env.example.local .env
 # Start local development

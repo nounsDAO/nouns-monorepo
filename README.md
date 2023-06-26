@@ -32,9 +32,9 @@ The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, 
 
 In order to make retrieving more complex data from the auction history, [nouns subgraph](packages/nouns-subgraph) contains subgraph manifests that are deployed onto [The Graph](https://thegraph.com).
 
-### nouns-webapp
+### punks-webapp
 
-The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with Noun auctions as hosted at [nouns.wtf](https://nouns.wtf).
+The [punks webapp](packages/punks-webapp) is the frontend for interacting with Punks auctions as hosted at [nouns.wtf](https://nouns.wtf).
 
 ## Quickstart
 
