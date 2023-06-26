@@ -32,11 +32,28 @@ h1 {
 
 .pageHeader.emptyState {
   flex-direction: column;
-    align-items: center;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  @media (min-width: 992px) {
+    min-height: 50vh;
+  }
+}
+
+.pageHeader.emptyState header h1 {
+  @media (min-width: 992px) {
+    font-size: 56px;
+  }
+}
+
+.pageHeader .note {
+  opacity: 0.8;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 /* center header items in empty state */
-.pageHeader.emptyState > div {
+.pageHeader.emptyState > div, .pageHeader.emptyState > div > header {
   display: flex;
   flex-direction: column;
   justify-content: center;

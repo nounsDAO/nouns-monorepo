@@ -41,6 +41,7 @@ const ForkPage = ({
   const [forkStatusLabel, setForkStatusLabel] = useState('Escrow');
   const [addNounsButtonLabel, setAddNounsButtonLabel] = useState('Add Nouns to escrow');
   const [isForked, setIsForked] = useState(false);
+  const [isNewForkPage, setIsNewForkPage] = useState(false);
   const isForkPeriodActive = useIsForkPeriodActive();
   const totalSupply = useTotalSupply();
   const forkThreshold = useForkThreshold();
@@ -48,7 +49,7 @@ const ForkPage = ({
   const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval);
   const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
   const escrowEvents = useEscrowEvents();
-  const forkDetails = useForkDetails(id);
+  const forkDetails = useForkDetails(id || '');
   const { account } = useEthers();
 
   useScrollToLocation();
@@ -96,6 +97,10 @@ const ForkPage = ({
       setThresholdPercentage(+percentage.toFixed(2));
       setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
     }
+
+    if (id === 'new') {
+      setIsNewForkPage(true);
+    }
   }, [isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply]);
 
   // useEffect(() => {
@@ -115,42 +120,76 @@ const ForkPage = ({
 
   return (
     <>
-      <Section fullWidth={false} className='al'>
-        <div className={clsx(
-          classes.pageHeader,
-          !escrowEvents.data && classes.emptyState,
-          isForked && classes.isForked
-        )}>
-          <Col lg={6}>
-            <span className={clsx(classes.forkStatus)}>
-              {forkStatusLabel}
-            </span>
-            <h1><Trans>Nouns DAO Fork{isForked && ` #${id}`}</Trans></h1>
-            {!isForkPeriodActive || !isForked && (
-              <p><Trans>
-                {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold
-              </Trans></p>
-            )}
-
-          </Col>
-          {!isForked && (
-            <Col lg={6} className={clsx(
-              classes.buttons,
-              !escrowEvents.data && classes.emptyState
-            )}>
-              {!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0 && (
-                <WithdrawNounsButton tokenIds={userEscrowedNounIds.data} isWithdrawModalOpen={setIsWithdrawModalOpen} setDataFetchPollInterval={setDataFetchPollInterval} />
-              )}
+      <Section fullWidth={false} className='h-100'>
+        {isNewForkPage ? (
+          <div className={clsx(
+            classes.pageHeader,
+            classes.emptyState,
+          )}>
+            <Col lg={12}>
+              <header>
+                <span className={clsx(classes.forkStatus)}>
+                  {forkStatusLabel}
+                </span>
+                <h1><Trans>Nouns DAO Fork</Trans></h1>
+                <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
+              </header>
               {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className={clsx(classes.button, classes.primaryButton)}>
+                  className={clsx(classes.button, classes.primaryButton)}
+                  disabled={userOwnedNounIds.data.length === 0}
+                >
                   {addNounsButtonLabel}
                 </button>
               )}
+              <p className={classes.note}><Trans>
+                {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the fork threshold
+              </Trans></p>
             </Col>
-          )}
-        </div>
+
+          </div>
+        ) : (
+          <div className={clsx(
+            classes.pageHeader,
+            (!escrowEvents.data || isNewForkPage) && classes.emptyState,
+            isForked && classes.isForked
+          )}>
+            <Col lg={6}>
+              <span className={clsx(classes.forkStatus)}>
+                {forkStatusLabel}
+              </span>
+              <h1><Trans>Nouns DAO Fork{isForked && ` #${id}`}</Trans></h1>
+              {!isForkPeriodActive || !isForked && (
+                <p><Trans>
+                  {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold
+                </Trans></p>
+              )}
+
+            </Col>
+            {!isForked && (
+              <Col lg={6} className={clsx(
+                classes.buttons,
+                !escrowEvents.data && classes.emptyState
+              )}>
+                {(!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0) && (
+                  <WithdrawNounsButton tokenIds={userEscrowedNounIds.data} isWithdrawModalOpen={setIsWithdrawModalOpen} setDataFetchPollInterval={setDataFetchPollInterval} />
+                )}
+                {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className={clsx(classes.button, classes.primaryButton)}
+                    disabled={userOwnedNounIds.data.length === 0}
+                  >
+                    {addNounsButtonLabel}
+                  </button>
+                )}
+              </Col>
+            )}
+          </div>
+        )}
+
+
       </Section>
       {isForkPeriodActive && (
         <Section fullWidth={false}>
@@ -201,7 +240,7 @@ const ForkPage = ({
           </div>
         </Section>
       )}
-      {escrowEvents.data && (
+      {!isNewForkPage && escrowEvents.data && (
         <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod)}>
           <Container>
             <Row className={classes.forkTimeline}>
