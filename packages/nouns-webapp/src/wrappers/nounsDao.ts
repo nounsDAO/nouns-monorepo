@@ -22,6 +22,8 @@ import {
   escrowDepositEventsQuery,
   escrowWithdrawEventsQuery,
   proposalTitlesQuery,
+  forksQuery,
+  forkDetailsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -192,6 +194,17 @@ export interface ProposalTitle {
   title: string;
 }
 
+export interface Fork {
+  id: string;
+  forkID: string;
+  executed: boolean;
+  executedAt: string;
+  forkTreasury: string;
+  forkToken: string;
+  tokensForkingCount: number;
+  tokensInEscrowCount: number;
+  forkingPeriodEndTimestamp: string;
+}
 
 const abi = new utils.Interface(NounsDAOV3ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
@@ -920,14 +933,24 @@ export const useEscrowEvents = () => {
 }
 
 
-export const useForkDetails = () => {
-  const { loading: forkDetailsLoading, data: forkDetails, error: forkDetailsError, refetch: refetchForkDetails } = useQuery(escrowDepositEventsQuery());
-
+export const useForkDetails = (id: string) => {
+  const { loading, data: forkData, error, refetch: refetchForkDetails } = useQuery(forkDetailsQuery(id.toString())) as { loading: boolean, data: { fork: Fork }, error: Error, refetch: () => void };
+  const data = forkData?.fork as Fork;
   return {
-    forkDetailsLoading,
-    forkDetails,
-    forkDetailsError,
+    loading,
+    data,
+    error,
     refetchForkDetails,
+  }
+}
+
+export const useForks = () => {
+  const { loading, data: forksData, error } = useQuery(forksQuery()) as { loading: boolean, data: { forks: Fork[] }, error: Error };
+  const data = forksData?.forks;
+  return {
+    loading,
+    data,
+    error
   }
 }
 

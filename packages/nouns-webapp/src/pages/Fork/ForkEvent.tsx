@@ -13,13 +13,11 @@ type Props = {
 
 
 const ForkEvent = ({ event }: Props) => {
-  // console.log('event details', event);
   const actionLabel = event.eventType === 'EscrowDeposit' ? 'added' : 'removed';
   const nounCount = event.tokenIDs?.length;
   const nounLabel = nounCount > 1 ? 'Nouns' : 'Noun';
   const timestamp = dayjs(+event.createdAt * 1000).fromNow()
   const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIDs : []);
-  // console.log('proposalsTitles', proposalsTitles, event.eventType === "EscrowDeposit" && event.proposalIDs);
   const nounsInEvent = event.tokenIDs?.map((tokenId, i) => {
     return (
       <Link key={i} to={`/noun/${tokenId}`}>
@@ -72,9 +70,6 @@ const ForkEvent = ({ event }: Props) => {
             </p>
             <ul>
               {proposalsList}
-              {/* <li><a href="/vote/282"><strong>282</strong> Dynamic Quorum Updates</a></li>
-              <li><a href="/vote/123"><strong>123</strong> Prop 56 FUN Frames Re-evaluation</a></li>
-              <li><a href="/vote/282"><strong>99</strong> Sailing PR campaign, Korea Blockchain Week 2022 [6,7 August]</a></li> */}
             </ul>
           </div>
         )}

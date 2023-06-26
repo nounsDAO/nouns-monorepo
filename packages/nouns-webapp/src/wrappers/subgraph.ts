@@ -530,7 +530,6 @@ export const escrowWithdrawEventsQuery = () => gql`
 `;
 
 export const proposalTitlesQuery = (ids: number[]) => {
-  console.log('proposalTitlesQuery', ids, ids.join(','));
   return gql`
   {
     proposals(where: {id_in: [${ids?.join(',')}]}) {
@@ -542,5 +541,31 @@ export const proposalTitlesQuery = (ids: number[]) => {
 
 export const forkDetailsQuery = (id: string) => gql`
   {
-
+    fork(id: ${id}) {
+      id
+      forkID
+      executed
+      executedAt
+      forkTreasury
+      forkToken
+      tokensForkingCount
+      tokensInEscrowCount
+      forkingPeriodEndTimestamp
+    }
   }`
+
+export const forksQuery = () => gql`
+  {
+    forks {
+      id
+      forkID
+      executed
+      executedAt
+      forkTreasury
+      forkToken
+      tokensForkingCount
+      tokensInEscrowCount
+      forkingPeriodEndTimestamp
+    }
+  }
+`;

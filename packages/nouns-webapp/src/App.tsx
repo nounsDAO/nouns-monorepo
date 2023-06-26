@@ -29,10 +29,10 @@ import CandidatePage from './pages/Candidate';
 import EditProposalPage from './pages/EditProposal';
 import EditCandidatePage from './pages/EditCandidate';
 import ProposalHistory from './pages/ProposalHistory';
-
 import CandidateProposals from './pages/CandidateProposals';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
 import ForkPage from './pages/Fork';
+import ForksPage from './pages/Forks';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -90,7 +90,8 @@ function App() {
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />
-            <Route exact path="/fork" component={ForkPage} />
+            <Route exact path="/fork/:id" component={ForkPage} />
+            <Route exact path="/fork" component={ForksPage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
