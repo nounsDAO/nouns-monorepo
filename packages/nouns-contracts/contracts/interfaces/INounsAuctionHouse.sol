@@ -35,7 +35,7 @@ interface INounsAuctionHouse {
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, string comment);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
@@ -53,6 +53,8 @@ interface INounsAuctionHouse {
 
     function createBid(uint256 nounId) external payable;
 
+    function createBidWithComment(uint256 nounId, string calldata comment) external payable;
+    
     function pause() external;
 
     function unpause() external;
