@@ -94,6 +94,9 @@ type Bid @entity {
   "The auction being bid in"
   auction: Auction!
 
+  "The comment left by the bidder"
+  comment: String
+
   "The timestamp of the block the bid is in"
   blockTimestamp: BigInt!
 }
