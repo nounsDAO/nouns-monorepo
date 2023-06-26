@@ -3,8 +3,8 @@ import path from 'path'
 
 import { task, types } from 'hardhat/config'
 import { parse } from 'csv-parse'
-import nameDoc from '../../nouns-assets/src/config/punk_name.json'
-import probDoc from '../../nouns-assets/src/config/probability.json'
+import nameDoc from '../../punks-assets/src/config/punk_name.json'
+import probDoc from '../../punks-assets/src/config/probability.json'
 
 const fileList = [
     '0-999.csv',
@@ -21,7 +21,7 @@ const fileList = [
 
 const getAllRowsFromCSV = (fileName: string) => {
     const rows: Array<any> = []
-    const filePath = path.join(__dirname, `../../nouns-assets/src/config/og_punks/${fileName}`)
+    const filePath = path.join(__dirname, `../../punks-assets/src/config/og_punks/${fileName}`)
     return new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(parse({ delimiter: ",", from_line: 2 }))

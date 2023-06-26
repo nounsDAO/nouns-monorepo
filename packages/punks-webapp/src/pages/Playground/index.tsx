@@ -12,7 +12,7 @@ import {
 import classes from './Playground.module.css';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState, useCallback } from 'react';
 import Link from '../../components/Link';
-import { ImageData, getPunkData, getRandomPunkSeed, type2PunkBasic } from '@nouns/assets';
+import { ImageData, getPunkData, getRandomPunkSeed, type2PunkBasic } from '@punks/assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@punks/sdk';
 import InfoIcon from '../../assets/icons/Info.svg';
 import Noun from '../../components/Punk';
@@ -42,8 +42,8 @@ const nounsProtocolLink = (
 
 const nounsAssetsLink = (
   <Link
-    text="nouns-assets"
-    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-assets"
+    text="punks-assets"
+    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/punks-assets"
     leavesPage={true}
   />
 );

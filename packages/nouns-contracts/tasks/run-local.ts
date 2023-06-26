@@ -1,6 +1,6 @@
 import { TASK_COMPILE, TASK_NODE } from 'hardhat/builtin-tasks/task-names';
 import { task } from 'hardhat/config';
-import probDoc from '../../nouns-assets/src/config/probability.json'
+import probDoc from '../../punks-assets/src/config/probability.json'
 
 task(
   'run-local',

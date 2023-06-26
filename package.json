@@ -6,8 +6,8 @@
     "build": "lerna run build",
     "test": "lerna run --parallel test",
     "clean": "lerna run --parallel clean",
-    "prepare": "lerna run prepare --scope=@nouns/{assets,contracts,sdk}",
-    "prep": "lerna run prepare --scope=@nouns/{assets,sdk}",
+    "prepare": "lerna run prepare --scope=@punks/{assets,contracts,sdk}",
+    "prep": "lerna run prepare --scope=@punks/{assets,sdk}",
     "lint": "eslint 'packages/**/*.ts' --fix",
     "format": "prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'"
   },

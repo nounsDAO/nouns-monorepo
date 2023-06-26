@@ -1,7 +1,7 @@
 import { Result } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import * as fs from 'fs';
-import probDoc from '../../nouns-assets/src/config/probability.json'
+import probDoc from '../../punks-assets/src/config/probability.json'
 import ImageData from '../files/image-data-v2.json';
 
 

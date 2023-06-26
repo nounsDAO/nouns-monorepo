@@ -2,10 +2,10 @@ import fs from 'fs'
 import path from 'path'
 
 import { parse } from 'csv-parse'
-import nameDoc from '../../nouns-assets/src/config/punk_name.json'
-import probDoc from '../../nouns-assets/src/config/probability.json'
+import nameDoc from '../../punks-assets/src/config/punk_name.json'
+import probDoc from '../../punks-assets/src/config/probability.json'
 
-import { ImageData as data, getPunkData } from '@nouns/assets'
+import { ImageData as data, getPunkData } from '@punks/assets'
 import { buildSVG } from '../src'
 
 interface Accessory {
@@ -34,7 +34,7 @@ const fileList = [
 
 const getAllRowsFromCSV = (fileName: string) => {
     const rows: Array<any> = []
-    const filePath = path.join(__dirname, `../../nouns-assets/src/config/og_punks/${fileName}`)
+    const filePath = path.join(__dirname, `../../punks-assets/src/config/og_punks/${fileName}`)
     return new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(parse({ delimiter: ",", from_line: 2 }))

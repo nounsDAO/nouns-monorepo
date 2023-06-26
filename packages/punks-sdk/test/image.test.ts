@@ -41,7 +41,7 @@ describe('Image', () => {
     it('builds the same svg for all images', async () => {
       const transparent: [string, number] = ['', 0];
 
-      const filepaths = glob.sync(join(__dirname, '../../nouns-assets/images/+(1|2|3|4)*/*.png'));
+      const filepaths = glob.sync(join(__dirname, '../../punks-assets/images/+(1|2|3|4)*/*.png'));
 
       for (const filepath of filepaths) {
         const { rle: rle1, colors: colors1 } = await encodeSingleLineRLE(filepath);

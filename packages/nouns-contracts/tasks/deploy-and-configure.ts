@@ -1,6 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
-import probDoc from '../../nouns-assets/src/config/probability.json'
+import probDoc from '../../punks-assets/src/config/probability.json'
 
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')

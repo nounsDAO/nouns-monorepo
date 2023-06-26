@@ -1,9 +1,7 @@
 {
-  "name": "@nouns/assets",
+  "name": "@punks/assets",
   "version": "0.4.0",
-  "description": "Nouns run-length encoded image data",
-  "author": "Nounders",
-  "homepage": "https://nouns.wtf",
+  "description": "Punks run-length encoded image data",
   "license": "GPL-3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
