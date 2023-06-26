@@ -17,7 +17,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "devDependencies": {
-    "@nouns/sdk": "^0.2.0",
+    "@punks/sdk": "^0.2.0",
     "@types/pngjs": "^6.0.1",
     "chai": "^4.2.0",
     "mocha": "^8.4.0",

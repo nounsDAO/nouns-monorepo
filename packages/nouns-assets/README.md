@@ -69,7 +69,7 @@ Generate a Noun using only a block hash, which saves calls to `NounSeeder` and `
 */
 
 import { ImageData, getNounSeedFromBlockHash, getNounData } from '@nouns/assets';
-import { buildSVG } from '@nouns/sdk';
+import { buildSVG } from '@punks/sdk';
 const { palette } = ImageData; // Used with `buildSVG``
 
 /**

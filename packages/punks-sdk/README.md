@@ -1,4 +1,4 @@
-# @nouns/sdk
+# @punks/sdk
 
 ## Development
 
@@ -16,32 +16,32 @@ yarn test
 
 ## Usage
 
-The Nouns SDK contains useful tooling for interacting with the Nouns protocol.
+The Nouns SDK contains useful tooling for interacting with the Punks protocol.
 
 ### Contracts
 
 **Get Contract Addresses**
 
 ```ts
-import { ChainId, getContractAddressesForChainOrThrow } from '@nouns/sdk';
+import { ChainId, getContractAddressesForChainOrThrow } from '@punks/sdk';
 
-const { nounsToken } = getContractAddressesForChainOrThrow(ChainId.Mainnet);
+const { nToken } = getContractAddressesForChainOrThrow(ChainId.Mainnet);
 ```
 
 **Get Contract Instances**
 
 ```ts
-import { ChainId, getContractsForChainOrThrow } from '@nouns/sdk';
+import { ChainId, getContractsForChainOrThrow } from '@punks/sdk';
 
 const provider = new providers.JsonRpcProvider(RPC_URL);
 
-const { nounsTokenContract } = getContractsForChainOrThrow(ChainId.Mainnet, provider);
+const { nTokenContract } = getContractsForChainOrThrow(ChainId.Mainnet, provider);
 ```
 
 **Get Contract ABIs**
 
 ```ts
-import { NounsTokenABI } from '@nouns/sdk';
+import { NounsTokenABI } from '@punks/sdk';
 ```
 
 ### Images
@@ -49,7 +49,7 @@ import { NounsTokenABI } from '@nouns/sdk';
 **Run-length Encode Images**
 
 ```ts
-import { PNGCollectionEncoder } from '@nouns/sdk';
+import { PNGCollectionEncoder } from '@punks/sdk';
 import { readPngFile } from 'node-libpng';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -77,7 +77,7 @@ encode();
 **Create SVGs from Run-length Encoded Data**
 
 ```ts
-import { buildSVG } from '@nouns/sdk';
+import { buildSVG } from '@punks/sdk';
 
 const svg = buildSVG(RLE_PARTS, PALETTE_COLORS, BACKGROUND_COLOR);
 ```

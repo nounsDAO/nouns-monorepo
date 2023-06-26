@@ -1,4 +1,4 @@
-import { ContractAddresses as PunkContractAddresses } from '@nouns/sdk';
+import { ContractAddresses as PunkContractAddresses } from '@punks/sdk';
 import { ChainId } from '@usedapp/core';
 import addresses from './addresses.json';
 
@@ -101,7 +101,7 @@ const externalAddresses: Record<ExtendedSupportedChains, ExternalContractAddress
   },
 };
 
-// TODO remove when added properly to nouns-sdk
+// TODO remove when added properly to punks-sdk
 const getContractAddressesForChainOrThrow = (chainId: number): ContractAddresses => {
   // @ts-ignore
   const _addresses: Record<string, ContractAddresses> = addresses;

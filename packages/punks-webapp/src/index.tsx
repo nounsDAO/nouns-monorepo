@@ -30,7 +30,7 @@ import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, ChainSepolia, createNetworkHttpUrl } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
-import { NAuctionHouseFactory } from '@nouns/sdk';
+import { NAuctionHouseFactory } from '@punks/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';

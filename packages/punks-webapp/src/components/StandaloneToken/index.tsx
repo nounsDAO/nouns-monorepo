@@ -1,5 +1,5 @@
 import { ImageData as data, getPunkData } from '@nouns/assets';
-import { buildSVG } from '@nouns/sdk';
+import { buildSVG } from '@punks/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { ISeed, useNSeed } from '../../wrappers/nToken';
 import Punk from '../Punk';

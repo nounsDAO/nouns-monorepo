@@ -13,7 +13,7 @@ import classes from './Playground.module.css';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState, useCallback } from 'react';
 import Link from '../../components/Link';
 import { ImageData, getPunkData, getRandomPunkSeed, type2PunkBasic } from '@nouns/assets';
-import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@punks/sdk';
 import InfoIcon from '../../assets/icons/Info.svg';
 import Noun from '../../components/Punk';
 import NounModal from './NounModal';
@@ -50,8 +50,8 @@ const nounsAssetsLink = (
 
 const nounsSDKLink = (
   <Link
-    text="nouns-sdk"
-    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk"
+    text="punks-sdk"
+    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/punks-sdk"
     leavesPage={true}
   />
 );

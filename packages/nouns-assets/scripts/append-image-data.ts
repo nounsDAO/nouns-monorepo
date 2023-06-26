@@ -1,4 +1,4 @@
-import { ImageData } from '@nouns/sdk/src/image/types';
+import { ImageData } from '@punks/sdk/src/image/types';
 import { promises as fs } from 'fs';
 
 /**

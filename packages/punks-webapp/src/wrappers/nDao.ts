@@ -1,4 +1,4 @@
-import { NDAOABI, NDaoLogicV1Factory } from '@nouns/sdk';
+import { NDAOABI, NDaoLogicV1Factory } from '@punks/sdk';
 import {
   ChainId,
   useBlockMeta,

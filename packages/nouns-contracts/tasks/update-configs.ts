@@ -16,7 +16,7 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
       const { name: network, chainId } = await ethers.provider.getNetwork();
 
       // Update SDK addresses
-      const sdkPath = join(__dirname, '../../nouns-sdk');
+      const sdkPath = join(__dirname, '../../punks-sdk');
       const addressesPath = join(sdkPath, 'src/contract/addresses.json');
       const addresses = JSON.parse(readFileSync(addressesPath, 'utf8'));
       addresses[chainId] = {
@@ -41,9 +41,9 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
           cwd: sdkPath,
         });
       } catch {
-        console.log('Failed to re-build `@nouns/sdk`. Please rebuild manually.');
+        console.log('Failed to re-build `@punks/sdk`. Please rebuild manually.');
       }
-      console.log('Addresses written to the Nouns SDK.');
+      console.log('Addresses written to the Punks SDK.');
 
       // Generate subgraph config
       const configName = `${network}-fork`;

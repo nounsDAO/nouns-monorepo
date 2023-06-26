@@ -4,7 +4,7 @@
         { "path": "packages/nouns-assets" },
         { "path": "packages/punks-bots" },
         { "path": "packages/nouns-contracts" },
-        { "path": "packages/nouns-sdk" },
+        { "path": "packages/punks-sdk" },
         { "path": "packages/punks-subgraph" },
         { "path": "packages/punks-webapp" },
     ]

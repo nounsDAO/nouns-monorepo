@@ -26,7 +26,7 @@ The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contrac
 
 ### punks-sdk
 
-The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [punks sdk](packages/punks-sdk) exposes the Punks contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
 
 ### punks-subgraph
 

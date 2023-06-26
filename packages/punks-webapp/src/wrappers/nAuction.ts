@@ -1,6 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { NAuctionHouseABI } from '@nouns/sdk';
+import { NAuctionHouseABI } from '@punks/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 import { isNounderNoun } from '../utils/nounderNoun';

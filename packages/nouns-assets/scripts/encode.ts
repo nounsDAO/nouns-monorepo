@@ -1,4 +1,4 @@
-import { PNGCollectionEncoder, PngImage } from '@nouns/sdk';
+import { PNGCollectionEncoder, PngImage } from '@punks/sdk';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { readPngImage } from './utils';
