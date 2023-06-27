@@ -2,7 +2,7 @@ import { config } from './config';
 import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
 import { Contract, providers } from 'ethers';
-import { NTokenABI } from '@nouns/contracts';
+import { NTokenABI } from '@punks/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
 

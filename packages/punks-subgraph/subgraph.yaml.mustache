@@ -23,7 +23,7 @@ dataSources:
         - Punk
       abis:
         - name: NAuctionHouse
-          file: ../nouns-contracts/abi/contracts/NAuctionHouse.sol/NAuctionHouse.json
+          file: ../punks-contracts/abi/contracts/NAuctionHouse.sol/NAuctionHouse.json
       eventHandlers:
         - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
@@ -53,7 +53,7 @@ dataSources:
         - Governance
       abis:
         - name: NToken
-          file: ../nouns-contracts/abi/contracts/NToken.sol/NToken.json
+          file: ../punks-contracts/abi/contracts/NToken.sol/NToken.json
       eventHandlers:
         - event: PunkCreated(indexed uint256,(uint8,uint8,(uint16,uint16)[]))
           handler: handlePunkCreated
@@ -83,7 +83,7 @@ dataSources:
         - Governance
       abis:
         - name: NDAO
-          file: ../nouns-contracts/abi/contracts/governance/NDAOLogicV1.sol/NDAOLogicV1.json
+          file: ../punks-contracts/abi/contracts/governance/NDAOLogicV1.sol/NDAOLogicV1.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
@@ -116,7 +116,7 @@ dataSources:
         - Governance
       abis:
         - name: CryptopunksVote
-          file: ../nouns-contracts/abi/contracts/CryptopunksVote.sol/CryptopunksVote.json
+          file: ../punks-contracts/abi/contracts/CryptopunksVote.sol/CryptopunksVote.json
       eventHandlers:
         - event: DelegateChanged(address,indexed address,indexed address,indexed uint256)
           handler: handleOGPunkDelegateChanged
@@ -139,7 +139,7 @@ dataSources:
         - Account
       abis:
         - name: OGCryptopunks
-          file: ../nouns-contracts/abi/contracts/interfaces/ICryptopunks.sol/ICryptopunks.json
+          file: ../punks-contracts/abi/contracts/interfaces/ICryptopunks.sol/ICryptopunks.json
       eventHandlers:
         - event: Assign(indexed address,uint256)
           handler: handleOGPunkAssign
@@ -162,7 +162,7 @@ dataSources:
         - Account
       abis:
         - name: WrappedPunk
-          file: ../nouns-contracts/abi/contracts/test/WrappedPunkMock.sol/WrappedPunkMock.json
+          file: ../punks-contracts/abi/contracts/test/WrappedPunkMock.sol/WrappedPunkMock.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

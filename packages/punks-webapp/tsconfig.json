@@ -16,7 +16,7 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../nouns-contracts/tsconfig.build.json"
+      "path": "../punks-contracts/tsconfig.build.json"
     }
   ]
 }

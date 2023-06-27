@@ -1,7 +1,7 @@
 import { config } from './config';
 import { Contract, providers } from 'ethers';
 import { NFTStorage } from 'nft.storage';
-import { NTokenABI } from '@nouns/contracts';
+import { NTokenABI } from '@punks/contracts';
 import Redis from 'ioredis';
 
 /**

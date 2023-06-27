@@ -11,8 +11,8 @@ In the first shell:
 ```sh
 # Install all dependencies and build contract artifacts
 yarn
-# Switch to nouns-contracts
-cd packages/nouns-contracts
+# Switch to punks-contracts
+cd packages/punks-contracts
 # Start local simnet
 yarn task:run-local
 ```

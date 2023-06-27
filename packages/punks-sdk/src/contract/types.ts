@@ -4,7 +4,7 @@ import {
   NDescriptorFactory,
   NSeederFactory,
   NDaoLogicV1Factory,
-} from '@nouns/contracts';
+} from '@punks/contracts';
 
 export interface ContractAddresses {
   nToken: string;

@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
     paths:
-      - 'packages/nouns-contracts/**'
+      - 'packages/punks-contracts/**'
       - 'packages/punks-subgraph/**'
     branches:
       - '**'
@@ -32,11 +32,11 @@ jobs:
       - run: yarn build
       - name: Run contract tests
         run: |
-          cd packages/nouns-contracts
+          cd packages/punks-contracts
           yarn test
       - name: Run contract coverage
         run: |
-          cd packages/nouns-contracts
+          cd packages/punks-contracts
           yarn coverage
       - name: Uninstall Yarn
         if: always()
@@ -47,10 +47,10 @@ jobs:
 #          version: nightly
 #      - name: Run Forge build
 #        run: |
-#          cd packages/nouns-contracts
+#          cd packages/punks-contracts
 #          forge --version
 #          forge build --sizes
 #      - name: Run Forge tests
 #        run: |
-#          cd packages/nouns-contracts
+#          cd packages/punks-contracts
 #          forge test -vvv --ffi

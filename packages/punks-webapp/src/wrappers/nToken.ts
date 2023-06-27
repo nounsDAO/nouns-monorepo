@@ -1,6 +1,6 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NTokenABI, NTokenFactory } from '@nouns/contracts';
+import { NTokenABI, NTokenFactory } from '@punks/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';

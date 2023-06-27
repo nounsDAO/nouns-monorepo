@@ -12,4 +12,4 @@ export {
   NDescriptorFactory,
   NSeederFactory,
   NDaoLogicV1Factory,
-} from '@nouns/contracts';
+} from '@punks/contracts';

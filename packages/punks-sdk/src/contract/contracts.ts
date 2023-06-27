@@ -4,7 +4,7 @@ import {
   NDescriptorFactory,
   NSeederFactory,
   NDaoLogicV1Factory,
-} from '@nouns/contracts';
+} from '@punks/contracts';
 import type { Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { getContractAddressesForChainOrThrow } from './addresses';

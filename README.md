@@ -20,9 +20,9 @@ The [punks assets](packages/punks-assets) package holds the Punks PNG and run-le
 
 The [punks bots](packages/punks-bots) package contains a bot that monitors for changes in Punks auction state and notifies everyone via Twitter and Discord.
 
-### nouns-contracts
+### punks-contracts
 
-The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
+The [punks contracts](packages/punks-contracts) is the suite of Solidity contracts powering Punks DAO.
 
 ### punks-sdk
 
