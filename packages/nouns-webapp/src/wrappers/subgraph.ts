@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 export interface IBid {
   id: string;
+  comment: string;
   bidder: {
     id: string;
   };
@@ -125,6 +126,7 @@ export const auctionQuery = (auctionId: number) => gql`
 	  }
 	  bids {
 		id
+    comment
 		blockNumber
 		txIndex
 		amount
@@ -137,6 +139,7 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
 	bids(where:{auction: "${auctionId}"}) {
 	  id
+    comment
 	  amount
 	  blockNumber
 	  blockTimestamp
@@ -150,6 +153,28 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 	}
   }
  `;
+
+export const bidsByAuctionQueryForWinningBid = (auctionId: string) => gql`
+{
+ bids(where:{auction: "${auctionId}", comment_not: null}, orderBy: amount, orderDirection: desc) {
+   id
+   comment
+   amount
+   blockNumber
+   blockTimestamp
+   txIndex
+   bidder {
+     id
+   }
+   noun {
+   id
+   owner {
+		id
+	  }
+   }
+ }
+ }
+`;
 
 export const nounQuery = (id: string) => gql`
  {
@@ -219,6 +244,7 @@ export const latestBidsQuery = (first: number = 10) => gql`
 	  orderDirection: desc
 	) {
 	  id
+    comment
 	  bidder {
 		id
 	  }

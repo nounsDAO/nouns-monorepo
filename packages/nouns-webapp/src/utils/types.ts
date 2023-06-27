@@ -5,6 +5,7 @@ export interface BidEvent {
   sender: string;
   value: BigNumberish;
   extended: boolean;
+  comment: string;
   transactionHash: string;
   timestamp: BigNumberish;
 }
@@ -32,6 +33,7 @@ export interface Bid {
   sender: string;
   value: BigNumber;
   extended: boolean;
+  comment: string;
   transactionHash: string;
   timestamp: BigNumber;
 }
