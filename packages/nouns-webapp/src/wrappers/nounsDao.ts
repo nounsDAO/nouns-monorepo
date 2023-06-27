@@ -934,13 +934,13 @@ export const useEscrowEvents = (forkId: number) => {
 
 
 export const useForkDetails = (id: string) => {
-  const { loading, data: forkData, error, refetch: refetchForkDetails } = useQuery(forkDetailsQuery(id.toString())) as { loading: boolean, data: { fork: Fork }, error: Error, refetch: () => void };
+  const { loading, data: forkData, error, refetch } = useQuery(forkDetailsQuery(id.toString())) as { loading: boolean, data: { fork: Fork }, error: Error, refetch: () => void };
   const data = forkData?.fork as Fork;
   return {
     loading,
     data,
     error,
-    refetchForkDetails,
+    refetch,
   }
 }
 

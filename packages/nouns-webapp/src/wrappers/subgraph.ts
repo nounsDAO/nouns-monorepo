@@ -489,12 +489,13 @@ export const ownedNounsQuery = (owner: string) => gql`
   }
 `;
 
-export const accountEscrowedNounsQuery = (owner: string) => gql`
+export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
   {
-    escrowedNouns(
-      where: {owner_: {id: "${owner}"}}
-    ) {
+    escrowedNouns(where: {owner_: {id: "${owner}"}}) {
       noun {
+        id
+      }
+      fork {
         id
       }
     }

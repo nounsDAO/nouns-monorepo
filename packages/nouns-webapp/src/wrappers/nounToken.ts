@@ -15,8 +15,12 @@ interface NounToken {
 interface NounId {
   id: string;
 }
+interface ForkId {
+  id: string;
+}
 interface EscrowedNoun {
   noun: NounId;
+  fork: ForkId;
 }
 
 export interface INounSeed {
@@ -215,23 +219,35 @@ export const useUserOwnedNounIds = (pollInterval: number) => {
   return { loading, data: userOwnedNouns, error, refetch };
 }
 
-export const useUserEscrowedNounIds = (pollInterval: number) => {
-  console.log('useUserEscrowedNounIds pollInterval', pollInterval);
+export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { account } = useEthers();
   const { loading, data, error, refetch } = useQuery(
-    accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
+    accountEscrowedNounsQuery(account?.toLowerCase() ?? '', forkId),
     {
       pollInterval: pollInterval,
     }
   );
-  const userEscrowedNounIds: number[] = data?.escrowedNouns.map((escrowedNoun: EscrowedNoun) => Number(escrowedNoun.noun.id));
+  // filter escrowed nouns to just this fork
+  const userEscrowedNounIds: number[] = data?.escrowedNouns.reduce((acc: number[], escrowedNoun: EscrowedNoun) => {
+    if (escrowedNoun.fork.id === forkId) {
+      acc.push(+escrowedNoun.noun.id);
+    }
+    return acc;
+  }, []);
+
+  // const userEscrowedNounIds: number[] = data?.escrowedNouns.d((escrowedNoun: EscrowedNoun) => {
+  //   if (escrowedNoun.fork.id === forkId) {
+  //     return +escrowedNoun.noun.id;
+  //   }
+  //   // return escrowedNoun.fork.id === forkId && Number(escrowedNoun.noun.id);
+  //   // return escrowedNoun.fork.id === forkId && Number(escrowedNoun.noun.id);
+  // });
   return { loading, data: userEscrowedNounIds, error, refetch };
 }
 
 export const useSetApprovalForAll = () => {
   let isApprovedForAll = false;
   const { send: setApproval, state: setApprovalState } = useContractFunction(nounsTokenContract, 'setApprovalForAll');
-  console.log('setApprovalState', setApprovalState);
   if (setApprovalState.status === 'Success') {
     isApprovedForAll = true;
   }

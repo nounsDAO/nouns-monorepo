@@ -36,19 +36,19 @@ export default function AddNounsToForkModal(props: Props) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
   const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
-  // const { approveTokenId, approveTokenIdState } = useSetApprovalForTokenId();
   // approval transactions
   const [isApprovalWaiting, setIsApprovalWaiting] = useState(false);
   const [isApprovalLoading, setIsApprovalLoading] = useState(false);
   const [approvalErrorMessage, setApprovalErrorMessage] = useState<ReactNode>('');
   const [isApprovalTxSuccessful, setIsApprovalTxSuccessful] = useState(false);
+  const { setApproval, setApprovalState } = useSetApprovalForAll();
   // handle transactions 
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { escrowToFork, escrowToForkState } = useEscrowToFork();
-  const { setApproval, setApprovalState } = useSetApprovalForAll();
+  // etc
   const { data: proposals } = useAllProposals();
   const isApprovedForAll = useIsApprovedForAll();
   const proposalsList = proposals?.map((proposal, i) => {

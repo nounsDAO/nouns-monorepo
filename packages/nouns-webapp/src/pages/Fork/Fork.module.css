@@ -246,7 +246,7 @@ h1 {
   padding-bottom: 0;
 }
 
-.forkTimelineItem:last-child::before {
+.forkTimelineItem:last-child:not(.isOnlyEvent)::before {
   content: none;
 }
 

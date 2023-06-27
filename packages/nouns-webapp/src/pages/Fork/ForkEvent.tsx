@@ -6,13 +6,14 @@ import { Link } from 'react-router-dom';
 import ShortAddress from '../../components/ShortAddress';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
+import clsx from 'clsx';
 
 type Props = {
   event: EscrowDeposit | EscrowWithdrawal
+  isOnlyEvent: boolean;
 }
 
-
-const ForkEvent = ({ event }: Props) => {
+const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   const actionLabel = event.eventType === 'EscrowDeposit' ? 'added' : 'removed';
   const nounCount = event.tokenIDs?.length;
   const nounLabel = nounCount > 1 ? 'Nouns' : 'Noun';
@@ -46,7 +47,7 @@ const ForkEvent = ({ event }: Props) => {
   );
 
   return (
-    <div className={classes.forkTimelineItem} id={event.id}>
+    <div className={clsx(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)} id={event.id}>
       <a href={`#${event.id}`} className={classes.eventPoint} />
       <header>
         <span className={classes.timestamp}>
