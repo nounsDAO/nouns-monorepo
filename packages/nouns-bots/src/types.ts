@@ -13,6 +13,7 @@ export interface Account {
 
 export interface Bid {
   id: string;
+  comment: string | null;
   amount: string;
   bidder: Account;
 }

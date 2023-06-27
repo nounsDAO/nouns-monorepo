@@ -17,6 +17,7 @@ export async function getLastAuctionBids(): Promise<AuctionBids> {
           endTime
           bids(orderBy: blockNumber, orderDirection: desc, first: 1) {
             id
+            comment
             amount
             bidder {
               id
