@@ -38,12 +38,13 @@ export class WalletConnectV2Connector extends AbstractConnector {
           // Methods and events based on what is used on nouns.wtf and the ethereum-provider lib found at:
           // https://github.com/WalletConnect/walletconnect-monorepo/blob/v2.0/providers/ethereum-provider/src/constants/rpc.ts
           // If the wallet doesn't support non optional methods, it will not allow the connection.
-          methods: ['eth_sendTransaction', 'personal_sign'],
+          methods: ['eth_sendTransaction'],
           optionalMethods: [
             'eth_accounts',
             'eth_requestAccounts',
+            'eth_sendRawTransaction',
+            'eth_signTransaction',
             'wallet_switchEthereumChain',
-            'wallet_addEthereumChain'
           ],
           events: ['chainChanged', 'accountsChanged'],
           optionalEvents: ['disconnect']
