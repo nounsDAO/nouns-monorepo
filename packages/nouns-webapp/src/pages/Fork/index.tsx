@@ -29,27 +29,31 @@ const ForkPage = ({
   },
 }: RouteComponentProps<{ id: string }>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isThresholdMet, setIsThresholdMet] = useState(false);
+  const [isForked, setIsForked] = useState(false);
+  const [isForkPeriodActive, setIsForkPeriodActive] = useState(false);
+  const [isNewForkPage, setIsNewForkPage] = useState(false);
   const [thresholdPercentage, setThresholdPercentage] = useState(0);
   const [currentEscrowPercentage, setCurrentEscrowPercentage] = useState(0);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
-  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [forkStatusLabel, setForkStatusLabel] = useState('Escrow');
   const [addNounsButtonLabel, setAddNounsButtonLabel] = useState('Add Nouns to escrow');
-  const [isForked, setIsForked] = useState(false);
-  const [isNewForkPage, setIsNewForkPage] = useState(false);
-  const isForkPeriodActive = useIsForkPeriodActive();
+  // const isForkPeriodActive = useIsForkPeriodActive();
   const totalSupply = useTotalSupply();
   const forkThreshold = useForkThreshold();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval, id);
   const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
-  const escrowEvents = useEscrowEvents(+id);
-  const forkDetails = useForkDetails(id || '');
-  const forks = useForks();
+  const escrowEvents = useEscrowEvents(dataFetchPollInterval, +id);
+  const forkDetails = useForkDetails(dataFetchPollInterval, id || '');
+  const forks = useForks(dataFetchPollInterval);
   const { account } = useEthers();
 
-  console.log('userEscrowedNounIds.data', userEscrowedNounIds.data);
+  // console.log('userEscrowedNounIds.data', userEscrowedNounIds.data);
+  console.log('forkDetails.data', forkDetails.data);
+  console.log('forks.data', forks.data);
 
   useScrollToLocation();
 
@@ -58,6 +62,7 @@ const ForkPage = ({
     userEscrowedNounIds.refetch();
     escrowEvents.refetch();
     forkDetails.refetch();
+    forks.refetch();
   }
 
   // const handleNewForkStarted = () => {
@@ -68,35 +73,39 @@ const ForkPage = ({
   useEffect(() => {
     // trigger data updates on modal close
     refetchForkData();
-  }, [isModalOpen, isWithdrawModalOpen, isForkPeriodActive]);
+  }, [isModalOpen, isWithdrawModalOpen, isDeployModalOpen, isForkPeriodActive]);
 
   useEffect(() => {
-    if (forkDetails.data) {
-      if (forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000) {
-        // 'forking'
-        setForkStatusLabel('Forking');
-        setAddNounsButtonLabel('Join fork');
-      } else if (forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000) {
-        // 'forked' === executed and forking period ended
-        setIsForked(true);
-        setForkStatusLabel('Forked');
-      } else if (!forkDetails.data.forkingPeriodEndTimestamp && forkDetails.data.tokensInEscrowCount) {
-        // 'escrow'
-        setForkStatusLabel('Escrow');
-        setAddNounsButtonLabel('Add Nouns to escrow');
-      } else {
-        // 'pre-escrow'
-        setForkStatusLabel('Pre-escrow');
-        setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
-        if (forks.data && +id === +forks.data[forks.data.length - 1].id + 1) {
-          setIsNewForkPage(true);
-        }
-      }
+    if (forkDetails?.data?.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000) {
+      // 'forking'
+      setForkStatusLabel('Forking');
+      setAddNounsButtonLabel('Join fork');
+      setIsForkPeriodActive(true);
+    } else if (forkDetails?.data?.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000) {
+      // 'forked' === executed and forking period ended
+      setIsForked(true);
+      setForkStatusLabel('Forked');
+    } else if (!forkDetails?.data?.forkingPeriodEndTimestamp && forkDetails?.data?.tokensInEscrowCount) {
+      // 'escrow'
+      setForkStatusLabel('Escrow');
+      setAddNounsButtonLabel('Add Nouns to escrow');
+    } else {
+      // 'pre-escrow'
+      setForkStatusLabel('Pre-escrow');
+      setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
+    }
+    // match id to upcoming fork id
+    if (forks?.data && +id === +forks.data[forks.data.length - 1].id + 1) {
+      setIsNewForkPage(true);
+    } else {
+      setIsNewForkPage(false);
     }
 
     // threshold
     if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow >= forkThreshold) {
       setIsThresholdMet(true);
+    } else {
+      setIsThresholdMet(false);
     }
     if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
       const percentage = (forkThreshold / totalSupply) * 100;
@@ -115,7 +124,7 @@ const ForkPage = ({
 
 
 
-  }, [isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
+  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
 
   // useEffect(() => {
   //   if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow >= forkThreshold) {
@@ -144,9 +153,9 @@ const ForkPage = ({
     );
   }
 
-  if (forks.error || forkDetails.error || userEscrowedNounIds.error || userOwnedNounIds.error || escrowEvents.error || forks.error) {
-    return <Trans>Failed to fetch</Trans>;
-  }
+  // if (forks.error || forkDetails.error || userEscrowedNounIds.error || userOwnedNounIds.error || escrowEvents.error) {
+  //   return <Trans>Failed to fetch</Trans>;
+  // }
 
   if (forks.data && +id > +forks.data[forks.data.length - 1].id + 1) {
     // fork doesn't exist
@@ -213,7 +222,12 @@ const ForkPage = ({
                 !escrowEvents.data && classes.emptyState
               )}>
                 {(!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0) && (
-                  <WithdrawNounsButton tokenIds={userEscrowedNounIds.data} isWithdrawModalOpen={setIsWithdrawModalOpen} setDataFetchPollInterval={setDataFetchPollInterval} />
+                  <WithdrawNounsButton
+                    tokenIds={userEscrowedNounIds.data}
+                    isWithdrawModalOpen={isWithdrawModalOpen}
+                    setIsWithdrawModalOpen={setIsWithdrawModalOpen}
+                    setDataFetchPollInterval={setDataFetchPollInterval}
+                  />
                 )}
                 {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
                   <button
@@ -308,9 +322,16 @@ const ForkPage = ({
                     </span>
                   )}
                 </div>
-                {!isForkPeriodActive && isThresholdMet && (
-                  <DeployForkButton isWithdrawModalOpen={setIsWithdrawModalOpen} setDataFetchPollInterval={setDataFetchPollInterval} />
-                )}
+
+                <DeployForkButton
+                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  refetchData={refetchForkData}
+                  isDeployModalOpen={isDeployModalOpen}
+                  setIsDeployModalOpen={setIsDeployModalOpen}
+                  isForkPeriodActive={isForkPeriodActive}
+                  isThresholdMet={isThresholdMet}
+                />
+
                 {isForkPeriodActive && (
                   <div className={classes.nounsInFork}>
                     {nounsInFork.map((nounId) => (

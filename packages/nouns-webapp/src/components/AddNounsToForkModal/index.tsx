@@ -159,7 +159,7 @@ export default function AddNounsToForkModal(props: Props) {
         setIsWaiting(false);
         setIsLoading(true);
         // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
-        props.setDataFetchPollInterval(100);
+        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
         setIsLoading(false);
@@ -268,17 +268,19 @@ export default function AddNounsToForkModal(props: Props) {
             </Trans>
           </p>
         </div>
-        <button
-          onClick={() => {
-            approvalErrorMessage && clearTransactionState();
-            props.ownedNouns && selectedNouns.length === props.ownedNouns.length ?
-              setSelectedNouns([]) :
-              setSelectedNouns(props.ownedNouns || [])
-          }}
-          disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
-        >
-          {selectedNouns.length === props.ownedNouns?.length ? 'Unselect' : "Select"} all
-        </button>
+        {props.userEscrowedNouns && ownedNouns && ownedNouns?.length > props.userEscrowedNouns.length && (
+          <button
+            onClick={() => {
+              approvalErrorMessage && clearTransactionState();
+              props.ownedNouns && selectedNouns.length === props.ownedNouns.length ?
+                setSelectedNouns([]) :
+                setSelectedNouns(props.ownedNouns || [])
+            }}
+            disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
+          >
+            {selectedNouns.length === props.ownedNouns?.length ? 'Unselect' : "Select"} all
+          </button>
+        )}
       </div>
       <div className={classes.nounsList}>
         {ownedNouns && ownedNouns.map((nounId: number) => {
@@ -322,7 +324,7 @@ export default function AddNounsToForkModal(props: Props) {
           >
             {!isWaiting && !isLoading && !isApprovalWaiting && !isApprovalLoading && (
               <>
-                Add Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
+                Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
               </>
             )}
             <span>
@@ -353,7 +355,7 @@ export default function AddNounsToForkModal(props: Props) {
                   <img src={link} width={16} alt="link symbol" />
                 )}
               </a>
-              {ownedNouns && ownedNouns?.length > selectedNouns.length && (
+              {props.userEscrowedNouns && ownedNouns && ownedNouns?.length > props.userEscrowedNouns.length && (
                 <button
                   onClick={() => {
                     clearTransactionState();

@@ -6,18 +6,21 @@ import { Trans } from '@lingui/macro';
 import { TransactionStatus } from '@usedapp/core';
 import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
+import { Spinner } from 'react-bootstrap';
 
 type Props = {
-  isWithdrawModalOpen: Function;
+  isDeployModalOpen: boolean;
+  isForkPeriodActive: boolean;
+  isThresholdMet: boolean;
   setDataFetchPollInterval: Function;
+  refetchData: Function;
+  setIsDeployModalOpen: Function;
 }
 
 function DeployForkButton(props: Props) {
   const { executeFork, executeForkState } = useExecuteFork();
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
 
@@ -25,27 +28,28 @@ function DeployForkButton(props: Props) {
     switch (state.status) {
       case 'None':
         setIsLoading(false);
+        setIsWaiting(false);
         break;
       case 'PendingSignature':
         setIsWaiting(true);
+        setErrorMessage('');
         break;
       case 'Mining':
         setIsLoading(true);
         setIsWaiting(false);
+        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
         setIsLoading(false);
-        setIsWaiting(false);
         setIsTxSuccessful(true);
+        props.refetchData();
         break;
       case 'Fail':
-        setIsError(true);
         setErrorMessage(<>{state?.errorMessage}<br /><Trans>Please try again.</Trans></> || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         setIsWaiting(false);
         break;
       case 'Exception':
-        setIsError(true);
         setErrorMessage(<>{state?.errorMessage}<br /><Trans>Please try again.</Trans></> || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         setIsWaiting(false);
@@ -67,41 +71,46 @@ function DeployForkButton(props: Props) {
         classes.transactionStatus,
         isLoading && classes.transactionStatusLoading,
         isTxSuccessful && classes.transactionStatusSuccess,
-        isError && classes.transactionStatusError,
+        errorMessage && classes.transactionStatusError,
       )}>
         {isWaiting && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Awaiting confirmation</>}
         {isLoading && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Deploying</>}
         {isTxSuccessful && <>
           <Trans>Success! The fork has been deployed.</Trans>
+          <br />
           {executeForkState.transaction && <a href={`${buildEtherscanTxLink(executeForkState.transaction.hash)}`} target="_blank" rel="noreferrer"><Trans>View on Etherscan</Trans></a>}
         </>}
-        {isError && errorMessage}
+        {errorMessage && errorMessage}
       </p>
     </div>
   );
 
   return (
     <>
-      <button
-        className={clsx(classes.button, classes.primaryButton, classes.deployButton)}
-        onClick={() => {
-          setIsModalOpen(true);
-          executeFork();
-        }
-        }
-      >
-        <Trans>Deploy Nouns fork</Trans>
-      </button>
+      {!props.isForkPeriodActive && props.isThresholdMet && (
+        <button
+          className={clsx(classes.button, classes.primaryButton, classes.deployButton)}
+          onClick={() => {
+            props.setIsDeployModalOpen(true);
+            executeFork();
+          }}
+          disabled={isLoading || isWaiting}
+        >
+          {isLoading || isWaiting ?
+            <div className={classes.spinner}>
+              <Spinner animation="border" />
+            </div>
+            :
+            <Trans>Deploy Nouns fork</Trans>
+          }
+        </button>
+      )}
       <SolidColorBackgroundModal
-        show={isModalOpen}
+        show={props.isDeployModalOpen}
         onDismiss={() => {
-          setIsModalOpen(false);
-          setIsLoading(false);
-          setIsWaiting(false);
           setIsTxSuccessful(false);
-          setIsError(false);
           setErrorMessage('');
-          props.isWithdrawModalOpen(false);
+          props.setIsDeployModalOpen(false);
           props.setDataFetchPollInterval(0);
         }}
         content={modalContent}

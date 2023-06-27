@@ -866,8 +866,11 @@ export const useNumTokensInForkEscrow = (): number | undefined => {
   return numTokensInForkEscrow?.toNumber();
 }
 
-export const useEscrowDepositEvents = (forkId: number) => {
-  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId)) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error, refetch: () => void }
+export const useEscrowDepositEvents = (pollInterval: number, forkId: number) => {
+  const { loading, data, error, refetch } = useQuery(
+    escrowDepositEventsQuery(forkId), {
+    pollInterval: pollInterval,
+  }) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error, refetch: () => void }
   const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit) => {
     const proposalIDs = escrowDeposit.proposalIDs.map((id) => id);
     return {
@@ -889,8 +892,11 @@ export const useEscrowDepositEvents = (forkId: number) => {
   };
 }
 
-export const useEscrowWithdrawalEvents = (forkId: number) => {
-  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery(forkId)) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error, refetch: () => void };
+export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: number) => {
+  const { loading, data, error, refetch } = useQuery(
+    escrowWithdrawEventsQuery(forkId), {
+    pollInterval: pollInterval,
+  }) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error, refetch: () => void };
   const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
     return {
       eventType: 'EscrowWithdrawal',
@@ -899,7 +905,8 @@ export const useEscrowWithdrawalEvents = (forkId: number) => {
       owner: { id: escrowWithdrawal.owner.id },
       tokenIDs: escrowWithdrawal.tokenIDs,
     };
-  });
+  },
+  );
 
   return {
     loading,
@@ -909,9 +916,9 @@ export const useEscrowWithdrawalEvents = (forkId: number) => {
   };
 }
 
-export const useEscrowEvents = (forkId: number) => {
-  const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(forkId);
-  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(forkId);
+export const useEscrowEvents = (pollInterval: number, forkId: number) => {
+  const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(pollInterval, forkId);
+  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(pollInterval, forkId);
 
   const loading = depositsLoading || withdrawalsLoading;
   const error = depositsError || withdrawalsError;
@@ -933,8 +940,11 @@ export const useEscrowEvents = (forkId: number) => {
 }
 
 
-export const useForkDetails = (id: string) => {
-  const { loading, data: forkData, error, refetch } = useQuery(forkDetailsQuery(id.toString())) as { loading: boolean, data: { fork: Fork }, error: Error, refetch: () => void };
+export const useForkDetails = (pollInterval: number, id: string) => {
+  const { loading, data: forkData, error, refetch } = useQuery(
+    forkDetailsQuery(id.toString()), {
+    pollInterval: pollInterval,
+  }) as { loading: boolean, data: { fork: Fork }, error: Error, refetch: () => void };
   const data = forkData?.fork as Fork;
   return {
     loading,
@@ -944,13 +954,17 @@ export const useForkDetails = (id: string) => {
   }
 }
 
-export const useForks = () => {
-  const { loading, data: forksData, error } = useQuery(forksQuery()) as { loading: boolean, data: { forks: Fork[] }, error: Error };
+export const useForks = (pollInterval: number) => {
+  const { loading, data: forksData, error, refetch } = useQuery(
+    forksQuery(), {
+    pollInterval: pollInterval,
+  }) as { loading: boolean, data: { forks: Fork[] }, error: Error, refetch: () => void };
   const data = forksData?.forks;
   return {
     loading,
     data,
-    error
+    error,
+    refetch,
   }
 }
 

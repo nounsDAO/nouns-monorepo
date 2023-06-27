@@ -9,7 +9,8 @@ import { buildEtherscanTxLink } from '../../utils/etherscan';
 
 type Props = {
   tokenIds: number[];
-  isWithdrawModalOpen: Function;
+  isWithdrawModalOpen: boolean;
+  setIsWithdrawModalOpen: Function;
   setDataFetchPollInterval: Function;
 }
 
@@ -85,24 +86,23 @@ function WithdrawNounsButton(props: Props) {
         className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
         onClick={() => {
           withdrawFromForkEscrow(props.tokenIds);
-          setIsModalOpen(true);
-          props.isWithdrawModalOpen(true);
+          // setIsModalOpen(true);
           setIsWaiting(true);
+          props.setIsWithdrawModalOpen(true);
         }}
-        disabled={isLoading}
+        disabled={isLoading || isWaiting}
       >
         <Trans>Withdraw Nouns from escrow</Trans>
       </button>
       <SolidColorBackgroundModal
-        show={isModalOpen}
+        show={props.isWithdrawModalOpen}
         onDismiss={() => {
-          setIsModalOpen(false);
           setIsLoading(false);
           setIsWaiting(false);
           setIsTxSuccessful(false);
           setIsError(false);
           setErrorMessage('');
-          props.isWithdrawModalOpen(false);
+          props.setIsWithdrawModalOpen(false);
           props.setDataFetchPollInterval(0);
         }}
         content={modalContent}

@@ -106,6 +106,10 @@ h1 {
   background-color: var(--brand-color-red);
   color: white;
   border-color: var(--brand-color-red);
+  width: 100%;
+}
+.deployButton:disabled {
+  opacity: 0.5;
 }
 
 .buttons {
