@@ -14,7 +14,7 @@ task(
   )
   .setAction(async ({ exportPath }, { ethers }) => {
     const { bgcolors, palette, images } = ImageData;
-    let { bodies, accessories, heads, glasses } = images;
+    const { bodies, accessories, heads, glasses } = images;
 
     const abiEncoded = ethers.utils.defaultAbiCoder.encode(
       ['string[]', 'string[]', 'bytes[]', 'bytes[]', 'bytes[]', 'bytes[]'],

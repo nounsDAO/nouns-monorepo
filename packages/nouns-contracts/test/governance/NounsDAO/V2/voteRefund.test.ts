@@ -345,7 +345,7 @@ describe('Vote Refund', () => {
     return block.baseFeePerGas!.add(MAX_PRIORITY_FEE_CAP);
   }
 
-  async function fundGov(ethAmount: string = '100') {
+  async function fundGov(ethAmount = '100') {
     await deployer.sendTransaction({ to: gov.address, value: ethers.utils.parseEther(ethAmount) });
   }
 
