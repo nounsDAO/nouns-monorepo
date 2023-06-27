@@ -5,8 +5,14 @@ import { useExecuteFork } from '../../wrappers/nounsDao'
 import { Trans } from '@lingui/macro';
 import { TransactionStatus } from '@usedapp/core';
 import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 
-function DeployForkButton() {
+type Props = {
+  isWithdrawModalOpen: Function;
+  setDataFetchPollInterval: Function;
+}
+
+function DeployForkButton(props: Props) {
   const { executeFork, executeForkState } = useExecuteFork();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -19,6 +25,9 @@ function DeployForkButton() {
     switch (state.status) {
       case 'None':
         setIsLoading(false);
+        break;
+      case 'PendingSignature':
+        setIsWaiting(true);
         break;
       case 'Mining':
         setIsLoading(true);
@@ -53,7 +62,7 @@ function DeployForkButton() {
       <h2 className={classes.transactionModalTitle}>
         <Trans>Deploy Fork</Trans>
       </h2>
-      <p>Deploying a Nouns fork and beginning the forking period</p>
+      <p><Trans>Deploying a Nouns fork and beginning the forking period</Trans></p>
       <p className={clsx(
         classes.transactionStatus,
         isLoading && classes.transactionStatusLoading,
@@ -62,7 +71,10 @@ function DeployForkButton() {
       )}>
         {isWaiting && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Awaiting confirmation</>}
         {isLoading && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Deploying</>}
-        {isTxSuccessful && 'Success! Your Nouns have been withdrawn.'}
+        {isTxSuccessful && <>
+          <Trans>Success! The fork has been deployed.</Trans>
+          {executeForkState.transaction && <a href={`${buildEtherscanTxLink(executeForkState.transaction.hash)}`} target="_blank" rel="noreferrer"><Trans>View on Etherscan</Trans></a>}
+        </>}
         {isError && errorMessage}
       </p>
     </div>
@@ -72,9 +84,13 @@ function DeployForkButton() {
     <>
       <button
         className={clsx(classes.button, classes.primaryButton, classes.deployButton)}
-        onClick={() => executeFork()}
+        onClick={() => {
+          setIsModalOpen(true);
+          executeFork();
+        }
+        }
       >
-        Deploy Nouns fork
+        <Trans>Deploy Nouns fork</Trans>
       </button>
       <SolidColorBackgroundModal
         show={isModalOpen}
@@ -85,6 +101,8 @@ function DeployForkButton() {
           setIsTxSuccessful(false);
           setIsError(false);
           setErrorMessage('');
+          props.isWithdrawModalOpen(false);
+          props.setDataFetchPollInterval(0);
         }}
         content={modalContent}
       />

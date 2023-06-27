@@ -88,6 +88,9 @@ const ForkPage = ({
         // 'pre-escrow'
         setForkStatusLabel('Pre-escrow');
         setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
+        if (forks.data && +id === +forks.data[forks.data.length - 1].id + 1) {
+          setIsNewForkPage(true);
+        }
       }
     }
 
@@ -110,10 +113,7 @@ const ForkPage = ({
     //   setIsNewForkPage(true);
     // }
 
-    if (forks.data && +id === +forks.data[forks.data.length - 1].id + 1) {
-      // new fork page
-      setIsNewForkPage(true);
-    }
+
 
   }, [isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
 
@@ -161,7 +161,6 @@ const ForkPage = ({
 
   return (
     <>
-      {/* <button onClick={() => handleNewForkStarted()}>handleNewForkStarted</button > */}
       <Section fullWidth={false} className='h-100'>
         {isNewForkPage ? (
           <div className={clsx(
@@ -285,60 +284,59 @@ const ForkPage = ({
           </Section>
         )
       }
-      {
-        !isNewForkPage && escrowEvents.data && (
-          <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod)}>
-            <Container>
-              <Row className={classes.forkTimeline}>
-                <Col lg={3} className={classes.sidebar}>
-                  <div className={classes.summary}>
-                    <span>
-                      {isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}
-                    </span>
-                    <strong>
-                      {isForkPeriodActive || isForked ? <>
-                        {forkDetails.data?.tokensForkingCount !== undefined ? forkDetails.data?.tokensInEscrowCount : '...'}
-                      </> : <>
-                        {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
-                      </>}
+      {!isNewForkPage && escrowEvents.data && (
+        <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod)}>
+          <Container>
+            <Row className={classes.forkTimeline}>
+              <Col lg={3} className={classes.sidebar}>
+                <div className={classes.summary}>
+                  <span>
+                    {isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}
+                  </span>
+                  <strong>
+                    {isForkPeriodActive || isForked ? <>
+                      {forkDetails.data?.tokensForkingCount !== undefined ? forkDetails.data?.tokensInEscrowCount : '...'}
+                    </> : <>
+                      {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
+                    </>}
 
-                      {" "}Noun{numTokensInForkEscrow === 1 ? '' : 's'}
-                    </strong>
-                    {!isForkPeriodActive || !isForked && (
-                      <span>
-                        {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}%`}
-                      </span>
-                    )}
+                    {" "}Noun{numTokensInForkEscrow === 1 ? '' : 's'}
+                  </strong>
+                  {!isForkPeriodActive || !isForked && (
+                    <span>
+                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}%`}
+                    </span>
+                  )}
+                </div>
+                {!isForkPeriodActive && isThresholdMet && (
+                  <DeployForkButton isWithdrawModalOpen={setIsWithdrawModalOpen} setDataFetchPollInterval={setDataFetchPollInterval} />
+                )}
+                {isForkPeriodActive && (
+                  <div className={classes.nounsInFork}>
+                    {nounsInFork.map((nounId) => (
+                      <a href={`/noun/${nounId}`}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
+                    ))}
                   </div>
-                  {!isForkPeriodActive && isThresholdMet && (
-                    <DeployForkButton />
-                  )}
-                  {isForkPeriodActive && (
-                    <div className={classes.nounsInFork}>
-                      {nounsInFork.map((nounId) => (
-                        <a href={`/noun/${nounId}`}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
-                      ))}
-                    </div>
-                  )}
-                </Col>
-                <Col lg={9} className={classes.events}>
-                  {!isForked && userEscrowedNounIds.data && userEscrowedNounIds.data.length > 0 && (
-                    <div className={clsx(classes.userNouns, classes.callout)}>
-                      <p>
-                        Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.data.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
-                      </p>
-                    </div>
-                  )}
-                  {/* if forked, add fork event to top of list */}
-                  {isForked && (
-                    <ForkDeployEvent forkDetails={forkDetails.data} />
-                  )}
-                  {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />)}
-                </Col>
-              </Row>
-            </Container>
-          </div >
-        )
+                )}
+              </Col>
+              <Col lg={9} className={classes.events}>
+                {!isForked && userEscrowedNounIds.data && userEscrowedNounIds.data.length > 0 && (
+                  <div className={clsx(classes.userNouns, classes.callout)}>
+                    <p>
+                      Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.data.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
+                    </p>
+                  </div>
+                )}
+                {/* if forked, add fork event to top of list */}
+                {isForked && (
+                  <ForkDeployEvent forkDetails={forkDetails.data} />
+                )}
+                {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />)}
+              </Col>
+            </Row>
+          </Container>
+        </div >
+      )
       }
       {
         account && (
