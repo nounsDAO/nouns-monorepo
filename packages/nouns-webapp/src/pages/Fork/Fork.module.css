@@ -52,6 +52,42 @@ h1 {
   margin-top: 10px;
 }
 
+.pageHeader .status {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.pageHeader .status .backButton {
+  -webkit-appearance: none;
+  padding: 0;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  line-height: 1.85;
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: border 0.125s ease-in-out;
+  color: rgb(95, 95, 95);
+  text-decoration: none;
+}
+.pageHeader .status .spacer {
+  /* spacer to keep label centered */
+  width: 2rem;
+  height: 2rem;
+  opacity: 0;
+}
+
+.pageHeader .status .backButton:hover {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
 /* center header items in empty state */
 .pageHeader.emptyState > div, .pageHeader.emptyState > div > header {
   display: flex;

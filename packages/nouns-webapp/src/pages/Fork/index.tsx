@@ -13,7 +13,7 @@ import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
 import { useScrollToLocation } from '../../hooks/useScrollToLocation';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import ForkDeployEvent from './ForkDeployEvent';
@@ -174,9 +174,12 @@ const ForkPage = ({
           )}>
             <Col lg={12}>
               <header>
-                <span className={clsx(classes.forkStatus)}>
-                  {forkStatusLabel}
-                </span>
+                <div className={classes.status}>
+                  <Link to="/fork">back</Link>
+                  <span className={clsx(classes.forkStatus)}>
+                    {forkStatusLabel}
+                  </span>
+                </div>
                 <h1><Trans>Fork Nouns DAO</Trans></h1>
                 <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
               </header>
@@ -201,9 +204,14 @@ const ForkPage = ({
             isForked && classes.isForked
           )}>
             <Col lg={6}>
-              <span className={clsx(classes.forkStatus)}>
-                {forkStatusLabel}
-              </span>
+              <div className={classes.status}>
+                <Link className={classes.backButton} to="/fork">←</Link>
+                {/* <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button> */}
+                <span className={clsx(classes.forkStatus)}>
+                  {forkStatusLabel}
+                </span>
+                <div className={classes.spacer} />
+              </div>
               <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
               {!isForkPeriodActive || !isForked && (
                 <p><Trans>
@@ -238,8 +246,6 @@ const ForkPage = ({
             )}
           </div>
         )}
-
-
       </Section>
       {isForkPeriodActive && forkDetails.data.forkingPeriodEndTimestamp && (
         <Section fullWidth={false}>
