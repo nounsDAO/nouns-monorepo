@@ -51,24 +51,6 @@
   margin-right: auto;
 }
 
-.transitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-}
-
-.transitionStateButton:hover {
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-.transitionStateButtonSection {
-  border-top: 0px;
-}
-
 .button {
   border-radius: 8px;
   font-family: 'PT Root UI';
@@ -80,6 +62,25 @@
   padding: 10px 16px;
   height: fit-content;
   border: none;
+}
+
+.transitionStateButton {
+  /* height: 50px; */
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  padding: 10px 16px;
+  background-color: #000;
+  color: hsl(0, 0%, 100%);
+}
+
+.transitionStateButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.transitionStateButtonSection {
+  border-top: 0px;
 }
 
 .destructiveTransitionStateButton {

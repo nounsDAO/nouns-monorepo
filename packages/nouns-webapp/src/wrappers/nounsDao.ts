@@ -833,6 +833,7 @@ export const useExecuteProposal = () => {
     nounsDaoContract,
     'execute',
   );
+  console.log('useExecuteProposal', executeProposalState)
   return { executeProposal, executeProposalState };
 };
 

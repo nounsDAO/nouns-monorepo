@@ -186,14 +186,26 @@ const VotePage = ({
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
 
-  const isUpdateable = proposal && currentBlock && isProposalUpdatable(proposal, currentBlock);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
   const isProposalSigner = account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
-  const isProposer = proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-  const isCancellable = isInNonFinalState && (isProposalSigner || isProposer);
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
+  const isProposer = () => (proposal?.proposer?.toLowerCase() === account?.toLowerCase());
+  const isUpdateable = () => {
+    if (proposal && currentBlock && isProposalUpdatable(proposal, currentBlock)) {
+      return true;
+    }
+    return false;
+  }
+
+  const isCancellable = () => {
+    if (isInNonFinalState && (isProposalSigner || isProposer())) {
+      return true;
+    }
+    return false;
+  }
 
   const isAwaitingStateChange = () => {
+    console.log('isAwaitingStateChange proposal?.eta', proposal?.eta);
     if (hasSucceeded) {
       return true;
     }
@@ -204,11 +216,23 @@ const VotePage = ({
   };
 
   const isAwaitingDestructiveStateChange = () => {
-    if (isCancellable) {
+    if (isCancellable()) {
       return true;
     }
     return false;
   };
+
+  const isActionable = () => {
+    if (isAwaitingStateChange()) {
+      return true;
+    } else if (isAwaitingDestructiveStateChange()) {
+      return true;
+    } else if (isUpdateable()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   const startOrEndTimeCopy = () => {
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
@@ -243,9 +267,9 @@ const VotePage = ({
     };
   })();
 
-  const destructiveStateButtonAction = isCancellable ? <Trans>Cancel</Trans> : '';
+  const destructiveStateButtonAction = isCancellable() ? <Trans>Cancel</Trans> : '';
   const destructiveStateAction = (() => {
-    if (isCancellable) {
+    if (isCancellable()) {
       return () => {
         if (proposal?.id) {
           return cancelProposal(proposal.id);
@@ -504,66 +528,72 @@ const VotePage = ({
                 </div>
               </div>
             )}
-            {((isProposer && isCancellable && isUpdateable) || (isProposalSigner && isCancellable)) && (
+
+            {/* {((isCancellable && isUpdateable) || (isProposalSigner && isCancellable)) && ( */}
+            {isActionable() && (
               <div className={classes.proposerOptionsWrapper}>
                 <div className={classes.proposerOptions}>
                   <p>
                     <span className={classes.proposerOptionsHeader}>
                       <Trans>
-                        {isProposalSigner ? 'Signer' : 'Proposer'} functions
+                        Proposal functions
                       </Trans>
                     </span>
-                    {isProposer && isUpdateable && (
+                    {isProposer() && isUpdateable() && (
                       <>
                         <Trans>This proposal can be edited for the next </Trans>{' '}
                         {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}.
                       </>
                     )}
-                    {isCancellable && (
+                    {isCancellable() && (
                       <>
-                        <Trans>This proposal can be canceled for the next </Trans>{' '}
+                        <Trans>This proposal can be canceled for </Trans>{' '}
                         {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
                       </>
                     )}
                   </p>
+
                   <div className="d-flex gap-3">
-                    {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
-                      <>
-                        {isAwaitingStateChange() && (
-                          <Button
-                            onClick={moveStateAction}
-                            disabled={isQueuePending || isExecutePending}
-                            variant="dark"
-                            className={classes.transitionStateButton}
-                          >
-                            {isQueuePending || isExecutePending ? (
-                              <Spinner animation="border" />
-                            ) : (
-                              <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                            )}
-                          </Button>
-                        )}
+                    {/* {(isAwaitingStateChange || isAwaitingDestructiveStateChange) && ( */}
+                    <>
+                      {isAwaitingStateChange() && (
+                        <Button
+                          onClick={moveStateAction}
+                          disabled={isQueuePending || isExecutePending}
+                          variant="dark"
+                          className={(clsx(
+                            classes.transitionStateButton,
+                            classes.button
+                          ))}
+                        >
+                          {isQueuePending || isExecutePending ? (
+                            <Spinner animation="border" />
+                          ) : (
+                            <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                          )}
+                        </Button>
+                      )}
 
-                        {isAwaitingDestructiveStateChange() && (
-                          <Button
-                            onClick={destructiveStateAction}
-                            disabled={isCancelPending}
-                            className={clsx(
-                              classes.destructiveTransitionStateButton,
-                              classes.button,
-                            )}
-                          >
-                            {isCancelPending ? (
-                              <Spinner animation="border" />
-                            ) : (
-                              <Trans>{destructiveStateButtonAction} Proposal </Trans>
-                            )}
-                          </Button>
-                        )}
-                      </>
-                    )}
+                      {isAwaitingDestructiveStateChange() && (
+                        <Button
+                          onClick={destructiveStateAction}
+                          disabled={isCancelPending}
+                          className={clsx(
+                            classes.destructiveTransitionStateButton,
+                            classes.button,
+                          )}
+                        >
+                          {isCancelPending ? (
+                            <Spinner animation="border" />
+                          ) : (
+                            <Trans>{destructiveStateButtonAction} Proposal </Trans>
+                          )}
+                        </Button>
+                      )}
+                    </>
+                    {/* )} */}
 
-                    {isProposer && isUpdateable && (
+                    {isProposer() && isUpdateable() && (
                       <Link
                         to={`/vote/${id}/edit`}
                         className={clsx(classes.primaryButton, classes.button)}
@@ -577,46 +607,46 @@ const VotePage = ({
             )}
           </Col>
         </Row>
-        {!isUpdateable && (
-          <>
-            <p
-              onClick={() => setIsDelegateView(!isDelegateView)}
-              className={classes.toggleDelegateVoteView}
-            >
-              {isDelegateView ? (
-                <Trans>Switch to Noun view</Trans>
-              ) : (
-                <Trans>Switch to delegate view</Trans>
-              )}
-            </p>
-            <Row>
-              <VoteCard
-                proposal={proposal}
-                percentage={forPercentage}
-                nounIds={forNouns}
-                variant={VoteCardVariant.FOR}
-                delegateView={isDelegateView}
-                delegateGroupedVoteData={data}
-              />
-              <VoteCard
-                proposal={proposal}
-                percentage={againstPercentage}
-                nounIds={againstNouns}
-                variant={VoteCardVariant.AGAINST}
-                delegateView={isDelegateView}
-                delegateGroupedVoteData={data}
-              />
-              <VoteCard
-                proposal={proposal}
-                percentage={abstainPercentage}
-                nounIds={abstainNouns}
-                variant={VoteCardVariant.ABSTAIN}
-                delegateView={isDelegateView}
-                delegateGroupedVoteData={data}
-              />
-            </Row>
-          </>
-        )}
+        {/* {!isUpdateable && ( */}
+        <>
+          <p
+            onClick={() => setIsDelegateView(!isDelegateView)}
+            className={classes.toggleDelegateVoteView}
+          >
+            {isDelegateView ? (
+              <Trans>Switch to Noun view</Trans>
+            ) : (
+              <Trans>Switch to delegate view</Trans>
+            )}
+          </p>
+          <Row>
+            <VoteCard
+              proposal={proposal}
+              percentage={forPercentage}
+              nounIds={forNouns}
+              variant={VoteCardVariant.FOR}
+              delegateView={isDelegateView}
+              delegateGroupedVoteData={data}
+            />
+            <VoteCard
+              proposal={proposal}
+              percentage={againstPercentage}
+              nounIds={againstNouns}
+              variant={VoteCardVariant.AGAINST}
+              delegateView={isDelegateView}
+              delegateGroupedVoteData={data}
+            />
+            <VoteCard
+              proposal={proposal}
+              percentage={abstainPercentage}
+              nounIds={abstainNouns}
+              variant={VoteCardVariant.ABSTAIN}
+              delegateView={isDelegateView}
+              delegateGroupedVoteData={data}
+            />
+          </Row>
+        </>
+        {/* )} */}
 
         {/* TODO abstract this into a component  */}
         <Row>
