@@ -16,10 +16,8 @@ const ForkingPeriodTimer: React.FC<{
 
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
-
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
   auctionTimerRef.current = auctionTimer;
-
   const timerDuration = dayjs.duration(auctionTimerRef.current, 's');
   const endTimeUnix = Math.floor(Date.now() / 1000) + auctionTimerRef.current;
 

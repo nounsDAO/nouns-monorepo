@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classes from './AddNounsToForkModal.module.css'
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
 import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap'
-import { useAllProposals, useEscrowToFork } from '../../wrappers/nounsDao'
+import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao'
 import clsx from 'clsx'
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
@@ -48,6 +48,7 @@ export default function AddNounsToForkModal(props: Props) {
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { escrowToFork, escrowToForkState } = useEscrowToFork();
+  const { joinFork, joinForkState } = useJoinFork();
   // etc
   const { data: proposals } = useAllProposals();
   const isApprovedForAll = useIsApprovedForAll();
@@ -111,7 +112,11 @@ export default function AddNounsToForkModal(props: Props) {
   const addNounsToEscrow = (selectedNouns: number[]) => {
     setIsWaiting(true);
     setIsLoading(false);
-    escrowToFork(selectedNouns, selectedProposals, reasonText);
+    if (props.isForkingPeriod) {
+      joinFork(selectedNouns, selectedProposals, reasonText);
+    } else {
+      escrowToFork(selectedNouns, selectedProposals, reasonText);
+    }
   }
 
 
@@ -147,7 +152,7 @@ export default function AddNounsToForkModal(props: Props) {
     }
   }, []);
 
-  const handleEscrowToForkStateChange = useCallback((state: TransactionStatus) => {
+  const handleAddToForkStateChange = useCallback((state: TransactionStatus) => {
     switch (state.status) {
       case 'None':
         setIsLoading(false);
@@ -181,8 +186,12 @@ export default function AddNounsToForkModal(props: Props) {
   }, []);
 
   useEffect(() => {
-    handleEscrowToForkStateChange(escrowToForkState);
-  }, [escrowToForkState, handleEscrowToForkStateChange]);
+    if (props.isForkingPeriod) {
+      handleAddToForkStateChange(joinForkState);
+    } else {
+      handleAddToForkStateChange(escrowToForkState);
+    }
+  }, [escrowToForkState, joinForkState, handleAddToForkStateChange]);
 
   useEffect(() => {
     handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
@@ -203,14 +212,21 @@ export default function AddNounsToForkModal(props: Props) {
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
         <Trans>
-          Add Nouns to escrow
+          {props.isForkingPeriod ? 'Join fork' : 'Add Nouns to escrow'}
         </Trans>
       </h2>
+
       <p className={classes.modalDescription}>
         <Trans>
-          Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.
+          {!props.isForkingPeriod ?
+            <>Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.</>
+            : <>
+              By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
+            </>
+          }
         </Trans>
       </p>
+
       <div className={classes.fields}>
         <InputGroup className={classes.inputs}>
           <div>
@@ -258,13 +274,13 @@ export default function AddNounsToForkModal(props: Props) {
           <p>
             <strong>
               <Trans>
-                Select Nouns to escrow
+                Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}
               </Trans>
             </strong>
           </p>
           <p>
             <Trans>
-              Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.
+              Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods.
             </Trans>
           </p>
         </div>
@@ -350,7 +366,7 @@ export default function AddNounsToForkModal(props: Props) {
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <a href={escrowToForkState.transaction && `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`} target="_blank" rel="noreferrer">
-                Your Noun{selectedNouns.length > 1 ? 's have' : ' has'} been added to Escrow.
+                Your Noun{selectedNouns.length > 1 ? 's have' : ' has'} been added to {props.isForkingPeriod ? 'the fork' : 'escrow'}
                 {escrowToForkState.transaction && (
                   <img src={link} width={16} alt="link symbol" />
                 )}

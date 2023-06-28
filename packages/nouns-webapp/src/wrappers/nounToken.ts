@@ -12,7 +12,7 @@ interface NounToken {
   image: string;
 }
 
-interface NounId {
+export interface NounId {
   id: string;
 }
 interface ForkId {
@@ -234,14 +234,6 @@ export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => 
     }
     return acc;
   }, []);
-
-  // const userEscrowedNounIds: number[] = data?.escrowedNouns.d((escrowedNoun: EscrowedNoun) => {
-  //   if (escrowedNoun.fork.id === forkId) {
-  //     return +escrowedNoun.noun.id;
-  //   }
-  //   // return escrowedNoun.fork.id === forkId && Number(escrowedNoun.noun.id);
-  //   // return escrowedNoun.fork.id === forkId && Number(escrowedNoun.noun.id);
-  // });
   return { loading, data: userEscrowedNounIds, error, refetch };
 }
 

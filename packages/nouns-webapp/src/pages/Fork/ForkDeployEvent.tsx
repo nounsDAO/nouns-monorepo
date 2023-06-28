@@ -9,14 +9,14 @@ import dayjs from 'dayjs';
 
 type Props = {
   forkDetails: Fork;
+  // event: ForkCycleEvent;
 }
 
-
-const ForkDeployEvent = ({ forkDetails }: Props) => {
+const ForkCycleEvent = ({ forkDetails }: Props) => {
   const actionLabel = "Fork deployed";
   const nounCount = forkDetails?.tokensInEscrowCount;
   const nounLabel = nounCount > 1 ? 'Nouns' : 'Noun';
-  const timestamp = dayjs(+forkDetails?.forkingPeriodEndTimestamp * 1000).fromNow()
+  const timestamp = dayjs(forkDetails?.forkingPeriodEndTimestamp && +forkDetails?.forkingPeriodEndTimestamp * 1000).fromNow()
   // need data for deployer address and tx hash
   const ownerLink = (
     <a
@@ -47,4 +47,4 @@ const ForkDeployEvent = ({ forkDetails }: Props) => {
   )
 }
 
-export default ForkDeployEvent
+export default ForkCycleEvent

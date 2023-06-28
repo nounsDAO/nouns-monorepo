@@ -7,7 +7,10 @@ type Props = {}
 const ForksPage: React.FC<Props> = props => {
   const forks = useForks(0);
   const now = new Date();
-  const isLatestForkFinished = forks.data && forks.data[forks.data.length - 1].executed && +forks.data[forks.data.length - 1].forkingPeriodEndTimestamp < now.getTime() / 1000;
+  const currentTime = now.getTime() / 1000;
+  const timestamp = forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
+  const isLatestForkFinished = forks.data && timestamp && currentTime && +timestamp < currentTime;
+  // const isLatestForkFinished = forks.data && forks.data[forks.data.length - 1].executed && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp && +forks.data[forks.data.length - 1].forkingPeriodEndTimestamp < now.getTime() / 1000;
   const nextForkId = forks.data && forks.data.length;
   return (
     <div>

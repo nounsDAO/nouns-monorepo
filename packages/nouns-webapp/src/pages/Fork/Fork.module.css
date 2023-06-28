@@ -138,9 +138,8 @@ h1 {
 
 /* timeline */
 
-.forkTimelineWrapper.isForkingPeriod {
+.forkTimelineWrapper.isForkingPeriod, .forkTimelineWrapper.isForked {
   border-top: none;
-  
   margin-top: 0;
 }
 
@@ -190,10 +189,17 @@ h1 {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-between;
+  @media (max-width: 991px) {
+    display: none;
+  }
+}
+.nounsInFork a, .nounsInFork .phantom {
+  width: calc(calc(100% / 4) - 8px);
 }
 .nounsInFork img {
   border-radius: 6px;
-  max-width: 40px;
+  /* max-width: 40px; */
+  
 }
 
 /* timeline */
@@ -314,6 +320,8 @@ h1 {
 .nounImage {
   border-radius: 6px;
   max-width: 50px;
+  width: 100%;
+  aspect-ratio: 1/1;
 }
 
 .sectionLabel {
@@ -428,4 +436,14 @@ h1 {
   display: block;
   margin: 0 auto 0.5rem;
   max-width: 75px;
+}
+
+.pageLoadingSpinner {
+  margin: 0 auto 0.5rem;
+  max-width: 75px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
 }
