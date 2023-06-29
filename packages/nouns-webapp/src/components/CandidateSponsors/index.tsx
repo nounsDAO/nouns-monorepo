@@ -1,3 +1,4 @@
+import React from 'react';
 import { Trans } from '@lingui/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { useCallback, useEffect, useState } from 'react';
@@ -5,35 +6,34 @@ import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useProposeBySigs } from '../../wrappers/nounsData';
 import { useProposalThreshold } from '../../wrappers/nounsDao';
-import { ProposalCandidate, useCandidateProposal } from '../../wrappers/nounsData';
+import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
-import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
-import React from 'react';
-import { useUserVotes } from '../../wrappers/nounToken';
-import classes from './CandidateSponsors.module.css';
+import { Delegates } from '../../wrappers/subgraph';
+import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import classes from './CandidateSponsors.module.css';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
-import { useQuery } from '@apollo/client';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;
   slug: string;
-  signatures?: {
-    reason: string;
-    expirationTimestamp: number;
-    sig: string;
-    canceled: boolean;
-    signer: {
-      id: string;
-      proposals: {
-        id: string;
-      }[];
-    };
-  }[];
   isProposer: boolean;
   id: string;
+  handleRefetchCandidateData: Function;
+  setDataFetchPollInterval: Function;
+}
+
+const deDupeSigners = (signers: string[]) => {
+  const uniqueSigners: string[] = [];
+  signers.forEach(signer => {
+    if (!uniqueSigners.includes(signer)) {
+      uniqueSigners.push(signer);
+    }
+  }
+  );
+  return uniqueSigners;
 }
 
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
@@ -41,21 +41,51 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
-  const [isVoteCountUpdated, setIsVoteCountUpdated] = React.useState<boolean>(false);
+  const [currentBlock, setCurrentBlock] = React.useState<number>();
+  const [signatures, setSignatures] = useState<any[]>([]);
+  const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
+  const { account } = useEthers();
   const blockNumber = useBlockNumber();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const threshold = useProposalThreshold();
-  const signers = props.candidate.version.versionSignatures?.map(signature => signature.signer.id);
-  const candidateProposal = useCandidateProposal(props.id);
-  const { account } = useEthers();
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
-  );
 
+  useEffect(() => {
+    // prevent live-updating the block resulting in undefined block number
+    if (blockNumber && !currentBlock) {
+      setCurrentBlock(blockNumber);
+    }
+  }, [blockNumber]);
+  const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
+  const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, currentBlock || 0);
   const handleSignerCountDecrease = (decreaseAmount: number) => {
-    setSignedVotes(updatedSignerCount => updatedSignerCount - decreaseAmount);
-    setIsVoteCountUpdated(true);
+    setSignedVotes(signedVotes => signedVotes - decreaseAmount);
   };
+  const filterSignersByVersion = (delegateSnapshot: Delegates) => {
+    const activeSigs = props.candidate.version.versionSignatures.filter(sig => sig.canceled === false)
+    let votes = 0;
+    const sigs = activeSigs.map((signature, i) => {
+      if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
+        activeSigs.splice(i, 1);
+      }
+      if (signature.signer.id.toUpperCase() === account?.toUpperCase()) {
+        setIsAccountSigner(true);
+      }
+      delegateSnapshot.delegates?.map(delegate => {
+        if (delegate.id === signature.signer.id) {
+          votes += delegate.nounsRepresented.length;
+        }
+        return delegate;
+      });
+      return signature;
+    });
+    setSignedVotes(votes);
+    return sigs;
+  };
+
+  const handleSignatureRemoved = () => {
+    setIsAccountSigner(false);
+    handleSignerCountDecrease(1);
+  }
 
   useEffect(() => {
     if (threshold !== undefined) {
@@ -64,28 +94,10 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   }, [threshold]);
 
   useEffect(() => {
-    // only set the vote count if the count hasn't been updated by remove/add signature
-    // this prevents the count from being reset to the stale value
-    if (!isVoteCountUpdated) {
-      if (props.signatures && signedVotes === 0) {
-        props.signatures.map((signature, i) => {
-          if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
-            props.signatures?.splice(i, 1);
-          }
-          if (signature.signer.id.toUpperCase() === account?.toUpperCase()) {
-            setIsAccountSigner(true);
-          }
-          delegateSnapshot?.delegates?.map(delegate => {
-            if (delegate.id === signature.signer.id) {
-              setSignedVotes(signedVotes => signedVotes + delegate.nounsRepresented.length);
-            }
-            return delegate;
-          });
-          return signature;
-        });
-      }
+    if (delegateSnapshot.data && !isCancelOverlayVisible) {
+      setSignatures(filterSignersByVersion(delegateSnapshot.data));
     }
-  }, [props.signatures, delegateSnapshot, signedVotes, account, isVoteCountUpdated]);
+  }, [props.candidate, delegateSnapshot.data]);
 
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
@@ -102,6 +114,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         break;
       case 'Mining':
         setProposePending(true);
+        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
         setModal({
@@ -110,6 +123,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           show: true,
         });
         setProposePending(false);
+        props.handleRefetchCandidateData();
         break;
       case 'Fail':
         setModal({
@@ -132,12 +146,12 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   const submitProposalOnChain = async () => {
     await proposeBySigs(
-      props.signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
-      candidateProposal?.version.targets,
-      candidateProposal?.version.values,
-      candidateProposal?.version.signatures,
-      candidateProposal?.version.calldatas,
-      candidateProposal?.version.description,
+      signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
+      props.candidate.version.targets,
+      props.candidate.version.values,
+      props.candidate.version.signatures,
+      props.candidate.version.calldatas,
+      props.candidate.version.description,
     );
   };
 
@@ -165,25 +179,34 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           )}
         </p>
         <ul className={classes.sponsorsList}>
-          {props.signatures &&
-            props.signatures.map(signature => {
+          {signatures &&
+            signatures.map(signature => {
+              const voteCount = delegateSnapshot.data?.delegates?.find(
+                delegate => delegate.id === signature.signer.id,
+              )?.nounsRepresented.length;
+              if (!voteCount) return null;
               if (signature.canceled) return null;
               return (
                 <Signature
                   key={signature.signer.id}
                   reason={signature.reason}
+                  voteCount={voteCount}
                   expirationTimestamp={signature.expirationTimestamp}
                   signer={signature.signer.id}
                   isAccountSigner={isAccountSigner}
                   sig={signature.sig}
                   handleSignerCountDecrease={handleSignerCountDecrease}
+                  handleRefetchCandidateData={props.handleRefetchCandidateData}
+                  setIsAccountSigner={setIsAccountSigner}
+                  handleSignatureRemoved={handleSignatureRemoved}
+                  setIsCancelOverlayVisible={setIsCancelOverlayVisible}
                 />
               );
             })}
-          {props.signatures &&
+          {signatures &&
             requiredVotes &&
             signedVotes < requiredVotes &&
-            Array(requiredVotes - props.signatures.length)
+            Array(requiredVotes - signatures.length)
               .fill('')
               .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
 
@@ -230,26 +253,34 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.15 }}
             >
-              <button className={classes.closeButton} onClick={() => setIsFormDisplayed(false)}>
+              <button className={classes.closeButton} onClick={() => {
+                setIsFormDisplayed(false);
+                props.setDataFetchPollInterval(0);
+              }}>
                 &times;
               </button>
               <SignatureForm
                 id={props.id}
                 transactionState={addSignatureTransactionState}
                 setTransactionState={setAddSignatureTransactionState}
+                setIsFormDisplayed={setIsFormDisplayed}
+                candidate={props.candidate}
+                handleRefetchCandidateData={props.handleRefetchCandidateData}
+                setDataFetchPollInterval={props.setDataFetchPollInterval}
               />
             </motion.div>
           ) : null}
         </AnimatePresence>
       </div>
-
       <div className={classes.aboutText}>
         <p>
-          <strong>About sponsoring proposal candidates</strong>
+          <strong><Trans>About sponsoring proposal candidates</Trans></strong>
         </p>
         <p>
-          Once a signed proposal is on-chain, signers will need to wait until the proposal is queued
-          or defeated before putting another proposal on-chain.
+          <Trans>
+            Once a signed proposal is on-chain, signers will need to wait until the proposal is queued
+            or defeated before putting another proposal on-chain.
+          </Trans>
         </p>
       </div>
     </div>

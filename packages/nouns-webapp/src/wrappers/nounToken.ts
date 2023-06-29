@@ -3,7 +3,7 @@ import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { accountEscrowedNounsQuery, ownedNounsQuery, seedsQuery } from './subgraph';
+import { Delegates, accountEscrowedNounsQuery, delegateNounsAtBlockQuery, ownedNounsQuery, seedsQuery } from './subgraph';
 import { useEffect } from 'react';
 
 interface NounToken {
@@ -268,3 +268,11 @@ export const useSetApprovalForTokenId = () => {
   );
   return { approveTokenId, approveTokenIdState };
 }
+
+export const useDelegateNounsAtBlockQuery = (signers: string[], block: number) => {
+  const { loading, data, error } = useQuery<Delegates>(
+    delegateNounsAtBlockQuery(signers, block),
+  );
+  console.log('useDelegateNounsAtBlockQuery block: ', block, { loading, data, error });
+  return { loading, data, error };
+};

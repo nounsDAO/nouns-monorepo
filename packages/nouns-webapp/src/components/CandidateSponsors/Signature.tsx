@@ -1,22 +1,24 @@
 import React, { useEffect } from 'react';
 import classes from './CandidateSponsors.module.css';
 import clsx from 'clsx';
-import { useBlockNumber } from '@usedapp/core';
 import { useCancelSignature } from '../../wrappers/nounsDao';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useQuery } from '@apollo/client';
-import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 type CandidateSignatureProps = {
   reason: string;
   expirationTimestamp: number;
   signer: string;
+  voteCount: number;
   isAccountSigner: boolean;
   sig: string;
   handleSignerCountDecrease: Function;
+  handleRefetchCandidateData: Function;
+  setIsAccountSigner: Function;
+  handleSignatureRemoved: Function;
+  setIsCancelOverlayVisible: Function;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -29,14 +31,8 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   }>();
   dayjs.extend(relativeTime);
   const expiration = dayjs(dayjs.unix(props.expirationTimestamp / 1000)).fromNow();
-  // get votes for signer
-  const blockNumber = useBlockNumber();
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery([props.signer], blockNumber || 0),
-  );
   const { cancelSig, cancelSigState } = useCancelSignature();
   async function cancel() {
-    // await
     await cancelSig(props.sig);
   }
 
@@ -55,7 +51,8 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           show: true,
         });
         setIsCancelSignaturePending(false);
-        props.handleSignerCountDecrease(delegateSnapshot?.delegates[0]?.nounsRepresented.length);
+        props.setIsAccountSigner(false);
+        props.handleSignerCountDecrease(props.voteCount);
         break;
       case 'Fail':
         setCancelStatusOverlay({
@@ -74,13 +71,15 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         setIsCancelSignaturePending(false);
         break;
     }
-    // todo: make these deps more specific
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelSigState, setCancelStatusOverlay]);
-
   return (
-    <li className={classes.sponsor}>
-      <div className={classes.sponsorInteriorWrapper}>
+    <li className={clsx(classes.sponsor,
+      cancelStatusOverlay?.show && classes.cancelOverlay
+    )}>
+      <div className={clsx(classes.sponsorInteriorWrapper,
+        cancelSigState.status === "Success" && classes.hidden
+      )}>
         <div className={classes.details}>
           <div className={classes.sponsorInfo}>
             <p className={classes.sponsorName}>
@@ -91,7 +90,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             <p className={classes.expiration}>Expires {expiration}</p>
           </div>
           <p className={classes.voteCount}>
-            {delegateSnapshot?.delegates[0]?.nounsRepresented.length} votes
+            {props.voteCount} vote{props.voteCount !== 1 && 's'}
           </p>
         </div>
         {props.reason && (
@@ -120,33 +119,39 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 onClick={() => {
                   cancel();
                   setIsCancelSignaturePending(true);
+                  props.setIsCancelOverlayVisible(true);
                 }}
               >
                 Remove sponsorship
               </button>
             )}
-
-            <div className={classes.cancelStatusOverlayWrapper}>
-              {cancelStatusOverlay?.show && (
-                <div className={classes.cancelStatusOverlay}>
-                  {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && (
-                    <button
-                      className={classes.closeButton}
-                      onClick={() => {
-                        setCancelStatusOverlay(undefined);
-                      }}
-                    >
-                      &times;
-                    </button>
-                  )}
-                  <div className={classes.cancelStatusOverlayTitle}>
-                    {cancelStatusOverlay.title}
-                  </div>
-                  <div className={classes.cancelStatusOverlayMessage}>
-                    {cancelStatusOverlay.message}
-                  </div>
-                </div>
-              )}
+          </div>
+        )}
+      </div>
+      <div className={classes.cancelStatusOverlayWrapper}>
+        {cancelStatusOverlay?.show && (
+          <div className={clsx(
+            classes.cancelStatusOverlay,
+            (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && classes.errorMessage,
+            cancelSigState.status === 'Success' && classes.successMessage
+          )}>
+            {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail' || cancelSigState.status === 'Success') && (
+              <button
+                className={classes.closeButton}
+                onClick={() => {
+                  props.handleRefetchCandidateData();
+                  setCancelStatusOverlay(undefined);
+                  props.setIsCancelOverlayVisible(false);
+                }}
+              >
+                &times;
+              </button>
+            )}
+            <div className={classes.cancelStatusOverlayTitle}>
+              {cancelStatusOverlay.title}
+            </div>
+            <div className={classes.cancelStatusOverlayMessage}>
+              {cancelStatusOverlay.message}
             </div>
           </div>
         )}

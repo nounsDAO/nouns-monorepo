@@ -199,6 +199,10 @@
   }
 }
 
+.versionHistory {
+  display: inline-block;
+}
+
 .versionHistory a {
   color: #14161b !important;
   font-size: 14px;
@@ -212,7 +216,7 @@
   margin-right: 5px;
 }
 
-.versionHistory:hover strong {
+.versionHistory a:hover strong {
   background-color: #e6e6e6;
 }
 

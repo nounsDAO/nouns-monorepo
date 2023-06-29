@@ -54,7 +54,7 @@ export const useAddSignature = () => {
     nounsDAOData,
     'addSignature',
   );
-
+  console.log('useAddSignature', addSignatureState);
   return { addSignature, addSignatureState };
 };
 
@@ -64,11 +64,12 @@ export const useCandidateProposals = () => {
   return { loading, data, error };
 };
 
-export const useCandidateProposal = (id: string, toUpdate?: boolean) => {
-  return parseSubgraphCandidate(
-    useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
-    toUpdate,
-  );
+export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean,) => {
+  const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
+    pollInterval: pollInterval || 0,
+  });
+  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, toUpdate);
+  return { loading, data: parsedData, error, refetch };
 };
 
 export const useCandidateProposalVersions = (id: string) => {

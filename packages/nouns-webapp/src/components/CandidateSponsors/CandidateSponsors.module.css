@@ -26,7 +26,9 @@
   line-height: 1.1;
   color: #646465;
 }
-
+.sponsorInteriorWrapper.hidden {
+  opacity: 0;
+}
 .sponsorsList {
   text-align: left;
   padding: 0;
@@ -51,10 +53,14 @@
   margin: 0;
   padding: 0;
 }
+
 .sponsorsList li.sponsor {
   background-color: #fbfbfc;
   border-width: 1px;
   position: relative;
+}
+.sponsorsList li.sponsor.cancelOverlay {
+  min-height: 75px;
 }
 
 .sponsorsList li.placeholder {
@@ -214,7 +220,7 @@
 .formOverlay .closeButton,
 .cancelStatusOverlay .closeButton {
   position: absolute;
-  top: 10px;
+  top: 6px;
   right: 10px;
   font-size: 20px;
   color: #000;
@@ -227,7 +233,7 @@
 .formWrapper {
   text-align: left;
   width: 100%;
-  padding: 15px;
+  padding: 15px 2rem;
 }
 .formWrapper input,
 .formWrapper textarea {
@@ -293,10 +299,26 @@
   font-weight: bold;
   text-align: center;
 }
+.cancelStatusOverlayMessage {
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 4px;
+}
+.cancelStatusOverlay.errorMessage {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  /* background-color: var(--brand-color-red-translucent); */
+}
+.cancelStatusOverlay.successMessage {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  /* background-color: var(--brand-color-green-translucent) */
+}
 
 .loadingNoggles {
   margin: 0 auto;
-  max-width: 90px;
+  padding: 10px;
+  max-width: 60px;
 }
 
 .submitSignatureStatusOverlay {
@@ -304,9 +326,166 @@
   z-index: 100;
   background-color: #fff;
 }
-.closeLink {
+
+.submitSignatureStatusOverlay p { 
+  text-align: center;
+  font-weight: normal;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+.submitSignatureStatusOverlay strong { 
+  font-weight: bold;
+  font-size: 18px;
+}
+
+button.closeLink {
   text-decoration: underline;
   border: none;
   background-color: transparent;
   font-weight: bold;
+  margin: 0 auto;
+  font-size: 14px;
+  text-align: center;
+}
+.closeLink:hover {
+  text-decoration: none;
+}
+
+.fields.disabled {
+  opacity: 0.5;
+}
+
+/* submission status */
+.transactionModalSpinner {
+  display: block;
+  margin: 0 auto 0.5rem;
+  max-width: 45px;
+}
+.loadingButton {
+  border-radius: 8px;
+  color: #14161b;
+  font-size: 15px;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  background-color: rgba(0,0,0,0.05);
+  border: 1px solid #e6e6e6;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+p.statusMessage {
+  color: #14161b;
+  font-size: 14px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  transition: all 0.125s ease-in-out;
+}
+.statusMessage.errorMessage {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  background-color: var(--brand-color-red-translucent);
+}
+.statusMessage.successMessage {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  background-color: var(--brand-color-green-translucent)
+}
+.statusMessage button {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer; 
+  padding: 0;
+  margin: 0 auto;
+  color: #14161b;
+  display: block;
+  width: auto;
+  font-size: 14px;
+}
+.statusMessage button:hover {
+  text-decoration: none;
+}
+.statusMessage.successMessage a {
+  color: var(--brand-color-green);
+  text-decoration: none;
+}
+.statusMessage.successMessage a:hover img {
+  opacity: 0.75;
+}
+.statusMessage.successMessage a img {
+  position: relative;
+  top: -1px;
+  margin-left: 2px;
+  transition: all 0.125s ease-in-out;
+}
+
+
+/* 2 step process */
+.steps {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps li {
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.steps:last-child {
+  margin-bottom: 0;
+}
+
+.steps strong {
+  position: relative;
+  top: 2px;
+}
+
+.steps strong, .steps .spinner-border {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+.steps .spinner > div {
+  width: 18px !important;
+  height: 18px;
+  height: 100%;
+  opacity: 0.5;
+}
+.steps .placeholder {
+  width: 18px;
+  height: 18px; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  display: inline-block;
+  animation: pulse 1.5s ease-out;
+  animation-iteration-count: infinite; 
+  opacity: 0.5;
+  position: relative;
+  top: 3px;
+}
+
+@keyframes pulse {
+  0% { 
+      opacity: 0.5;
+  }
+  50% { 
+      opacity: 1.0;
+  }
+  100% { 
+      opacity: 0.5;
+  }
 }

@@ -33,19 +33,26 @@ const CandidatePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
-  const candidate: ProposalCandidate | undefined = useCandidateProposal(id);
+  const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
+  const candidate = useCandidateProposal(id, dataFetchPollInterval);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = !(activeAccount === undefined);
   const { account } = useEthers();
 
   useEffect(() => {
-    if (candidate && account) {
-      setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
+    if (candidate.data && account) {
+      setIsProposer(candidate.data.proposer.toLowerCase() === account.toLowerCase());
     }
   }, [candidate, account]);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  console.log('dataFetchPollInterval', dataFetchPollInterval);
+
+  const handleRefetchCandidateData = () => {
+    candidate.refetch();
+  };
 
   const onTransactionStateChange = useCallback(
     (
@@ -107,8 +114,8 @@ const CandidatePage = ({
 
   const destructiveStateAction = (() => {
     return () => {
-      if (candidate?.id) {
-        return cancelCandidate(candidate.slug);
+      if (candidate?.data?.id) {
+        return cancelCandidate(candidate.data.slug);
       }
     };
   })();
@@ -116,14 +123,14 @@ const CandidatePage = ({
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
-        {candidate && (
+        {candidate.data && (
           <CandidateHeader
-            title={candidate.version.title}
-            id={candidate.id}
-            proposer={candidate.proposer}
-            versionsCount={candidate.versionsCount}
-            createdTransactionHash={candidate.createdTransactionHash}
-            lastUpdatedTimestamp={candidate.lastUpdatedTimestamp}
+            title={candidate.data.version.title}
+            id={candidate.data.id}
+            proposer={candidate.data.proposer}
+            versionsCount={candidate.data.versionsCount}
+            createdTransactionHash={candidate.data.createdTransactionHash}
+            lastUpdatedTimestamp={candidate.data.lastUpdatedTimestamp}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => { }}
@@ -161,19 +168,21 @@ const CandidatePage = ({
           </Col>
         </Row>
       )}
-      {candidate && (
+      {candidate.data && (
         <Row>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
-            <ProposalCandidateContent proposal={candidate} />
+            <ProposalCandidateContent proposal={candidate.data} />
           </Col>
           <Col lg={4}>
             <CandidateSponsors
-              candidate={candidate}
-              slug={candidate.slug ?? ''}
-              id={candidate.id}
+              candidate={candidate.data}
+              slug={candidate.data.slug ?? ''}
+              id={candidate.data.id}
               // only show signatures that are not canceled
-              signatures={candidate.version.versionSignatures.filter(sig => sig.canceled === false)}
+              // signatures={candidate.data.version.versionSignatures.filter(sig => sig.canceled === false)}
               isProposer={isProposer}
+              handleRefetchCandidateData={handleRefetchCandidateData}
+              setDataFetchPollInterval={setDataFetchPollInterval}
             />
           </Col>
         </Row>

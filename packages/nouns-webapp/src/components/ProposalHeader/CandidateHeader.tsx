@@ -60,13 +60,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           <Trans>Connect a wallet to vote.</Trans>
         </div>
       )}
-      {/* <Button
-        className={disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn}
-        disabled={disableVoteButton}
-        onClick={submitButtonClickHandler}
-      >
-        <Trans>Submit vote</Trans>
-      </Button> */}
     </>
   );
 

@@ -234,3 +234,14 @@
   font-size: 14px;
   color: var(--brand-gray-light-text);
 }
+
+.spinner {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

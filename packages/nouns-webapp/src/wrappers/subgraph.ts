@@ -419,7 +419,11 @@ export const proposalVotesQuery = (proposalId: string) => gql`
   }
 `;
 
-export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
+export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => {
+  console.log('query delegateNounsAtBlockQuery');
+  console.log('delegates', delegates);
+  console.log('block', block);
+  return gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
     id
@@ -428,7 +432,7 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
     }
   }
 }
-`;
+`};
 
 export const currentlyDelegatedNouns = (delegate: string) => gql`
 {
