@@ -24,6 +24,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { useUserVotes } from '../../wrappers/nounToken';
 
 interface EditProposalProps {
   isCandidate?: boolean;
@@ -57,6 +58,10 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const { updateProposal, updateProposalState } = useUpdateProposal();
   const { updateProposalDescription, updateProposalDescriptionState } = useUpdateProposalDescription();
   const { updateProposalTransactions, updateProposaTransactionsState } = useUpdateProposalTransactions();
+  const availableVotes = useUserVotes();
+  const hasEnoughVote = Boolean(
+    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
+  );
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -328,7 +333,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
-  // set initial values on page load and as they're changed
+  // set initial values on page load 
   useEffect(() => {
     if (proposal && !titleValue && !bodyValue && !proposalTransactions.length && !originalTitleValue && !originalBodyValue && !originalProposalTransactions.length) {
       const transactions = proposal.details.map(txn => {
@@ -348,6 +353,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
     return null;
@@ -421,7 +427,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
-          hasEnoughVote={true}
+          hasEnoughVote={hasEnoughVote}
           isFormInvalid={(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ? false : true}
           handleCreateProposal={handleUpdateProposal}
         />

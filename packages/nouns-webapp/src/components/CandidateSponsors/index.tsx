@@ -4,7 +4,7 @@ import { useBlockNumber, useEthers } from '@usedapp/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useProposeBySigs } from '../../wrappers/nounsData';
+import { CandidateSignature, useProposeBySigs } from '../../wrappers/nounsData';
 import { useProposalThreshold } from '../../wrappers/nounsDao';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
@@ -15,6 +15,7 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import classes from './CandidateSponsors.module.css';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
+import SelectSponsorsToPropose from './SelectSponsorsToPropose';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;
@@ -41,11 +42,12 @@ const deDupeSigners = (signers: string[]) => {
 
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
   // const [currentBlock, setCurrentBlock] = React.useState<number>();
-  const [signatures, setSignatures] = useState<any[]>([]);
+  const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
   const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
   const { account } = useEthers();
   // const blockNumber = useBlockNumber();
@@ -152,6 +154,15 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const submitProposalOnChain = async () => {
     const proposalSigs = signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
     console.log('proposalSigs', proposalSigs);
+    const proposalData = {
+      sigs: proposalSigs,
+      targets: props.candidate.version.targets,
+      values: props.candidate.version.values,
+      signatures: props.candidate.version.signatures,
+      calldatas: props.candidate.version.calldatas,
+      description: props.candidate.version.description,
+    }
+    console.log('proposalData', proposalData);
     await proposeBySigs(
       signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
       props.candidate.version.targets,
@@ -159,138 +170,169 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       props.candidate.version.signatures,
       props.candidate.version.calldatas,
       props.candidate.version.description,
+      // props.candidate.version.targets,
+      // props.candidate.version.values,
+      // props.candidate.version.signatures,
+      // props.candidate.version.calldatas,
+      // props.candidate.version.description,
     );
   };
 
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.interiorWrapper}>
-        {props.requiredVotes && signedVotes >= props.requiredVotes && (
-          <p className={classes.thresholdMet}>
-            <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
-          </p>
-        )}
-        <h4 className={classes.header}>
-          <strong>
-            {signedVotes >= 0 ? signedVotes : '...'} of {props.requiredVotes || '...'} Sponsored Votes
-          </strong>
-        </h4>
-        <p className={classes.subhead}>
-          {props.requiredVotes && signedVotes >= props.requiredVotes ? (
-            <Trans>
-              This candidate has met the required threshold, but Nouns voters can still add support
-              until it’s put on-chain.
-            </Trans>
-          ) : (
-            <>Proposal candidates must meet the required Nouns vote threshold.</>
-          )}
-        </p>
-        <ul className={classes.sponsorsList}>
-          {signatures &&
-            signatures.map(signature => {
-              const voteCount = delegateSnapshot.data?.delegates?.find(
-                delegate => delegate.id === signature.signer.id,
-              )?.nounsRepresented.length;
-              if (!voteCount) return null;
-              if (signature.canceled) return null;
-              return (
-                <Signature
-                  key={signature.signer.id}
-                  reason={signature.reason}
-                  voteCount={voteCount}
-                  expirationTimestamp={signature.expirationTimestamp}
-                  signer={signature.signer.id}
-                  isAccountSigner={isAccountSigner && signature.signer.id.toLowerCase() === account?.toLowerCase()}
-                  sig={signature.sig}
-                  handleSignerCountDecrease={handleSignerCountDecrease}
-                  handleRefetchCandidateData={props.handleRefetchCandidateData}
-                  setIsAccountSigner={setIsAccountSigner}
-                  handleSignatureRemoved={handleSignatureRemoved}
-                  setIsCancelOverlayVisible={setIsCancelOverlayVisible}
-                />
-              );
-            })}
-          {signatures &&
-            props.requiredVotes &&
-            signedVotes < props.requiredVotes &&
-            Array(props.requiredVotes - signatures.length)
-              .fill('')
-              .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
+  console.log('signatures list', signatures)
 
-          {props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes ? (
-            <button className={classes.button}
-              disabled={isProposePending}
-              onClick={() => submitProposalOnChain()}>
-              Submit on-chain
-            </button>
-          ) : (
-            <>
-              {!isAccountSigner && (
-                <>
-                  {connectedAccountNounVotes > 0 ? (
-                    <button
-                      className={classes.button}
-                      onClick={() => setIsFormDisplayed(!isFormDisplayed)}
-                    >
-                      Sponsor
-                    </button>
-                  ) : (
-                    <div className={classes.withoutVotesMsg}>
-                      <p>
-                        <Trans>Sponsoring a proposal requires at least one Noun vote</Trans>
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-            </>
+  return (
+    <>
+      {delegateSnapshot.data && (
+        <SelectSponsorsToPropose
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          signatures={signatures}
+          delegateSnapshot={delegateSnapshot.data}
+          requiredVotes={props.requiredVotes}
+          candidate={props.candidate}
+        />
+      )}
+
+      <div className={classes.wrapper}>
+        <div className={classes.interiorWrapper}>
+          {props.requiredVotes && signedVotes >= props.requiredVotes && (
+            <p className={classes.thresholdMet}>
+              <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
+            </p>
           )}
-        </ul>
-        <AnimatePresence>
-          {addSignatureTransactionState === 'Success' && (
-            <div className="transactionStatus success">
-              <p>Success!</p>
-            </div>
-          )}
-          {isFormDisplayed ? (
-            <motion.div
-              className={classes.formOverlay}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.15 }}
-            >
-              <button className={classes.closeButton} onClick={() => {
-                setIsFormDisplayed(false);
-                props.setDataFetchPollInterval(0);
-              }}>
-                &times;
-              </button>
-              <SignatureForm
-                id={props.id}
-                transactionState={addSignatureTransactionState}
-                setTransactionState={setAddSignatureTransactionState}
-                setIsFormDisplayed={setIsFormDisplayed}
-                candidate={props.candidate}
-                handleRefetchCandidateData={props.handleRefetchCandidateData}
-                setDataFetchPollInterval={props.setDataFetchPollInterval}
-              />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+          <h4 className={classes.header}>
+            <strong>
+              {signedVotes >= 0 ? signedVotes : '...'} of {props.requiredVotes || '...'} Sponsored Votes
+            </strong>
+          </h4>
+          <p className={classes.subhead}>
+            {props.requiredVotes && signedVotes >= props.requiredVotes ? (
+              <Trans>
+                This candidate has met the required threshold, but Nouns voters can still add support
+                until it’s put on-chain.
+              </Trans>
+            ) : (
+              <>Proposal candidates must meet the required Nouns vote threshold.</>
+            )}
+          </p>
+          <ul className={classes.sponsorsList}>
+            {signatures &&
+              signatures.map(signature => {
+                const voteCount = delegateSnapshot.data?.delegates?.find(
+                  delegate => delegate.id === signature.signer.id,
+                )?.nounsRepresented.length;
+                if (!voteCount) return null;
+                if (signature.canceled) return null;
+                return (
+                  <Signature
+                    key={signature.signer.id}
+                    reason={signature.reason}
+                    voteCount={voteCount}
+                    expirationTimestamp={signature.expirationTimestamp}
+                    signer={signature.signer.id}
+                    isAccountSigner={isAccountSigner && signature.signer.id.toLowerCase() === account?.toLowerCase()}
+                    sig={signature.sig}
+                    handleSignerCountDecrease={handleSignerCountDecrease}
+                    handleRefetchCandidateData={props.handleRefetchCandidateData}
+                    setIsAccountSigner={setIsAccountSigner}
+                    handleSignatureRemoved={handleSignatureRemoved}
+                    setIsCancelOverlayVisible={setIsCancelOverlayVisible}
+                  />
+                );
+              })}
+            {signatures &&
+              props.requiredVotes &&
+              signedVotes < props.requiredVotes &&
+              Array(props.requiredVotes - signatures.length)
+                .fill('')
+                .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
+
+            {props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes ? (
+              <>
+                <button className={classes.button}
+                  disabled={isProposePending}
+                  // onClick={() => submitProposalOnChain()}>
+                  onClick={() => setIsModalOpen(true)}>
+                  Submit on-chain
+                </button>
+                {!isAccountSigner && connectedAccountNounVotes > 0 && (
+                  <button
+                    className={classes.button}
+                    onClick={() => setIsFormDisplayed(!isFormDisplayed)}
+                  >
+                    Sponsor
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                {!isAccountSigner && (
+                  <>
+                    {connectedAccountNounVotes > 0 ? (
+                      <button
+                        className={classes.button}
+                        onClick={() => setIsFormDisplayed(!isFormDisplayed)}
+                      >
+                        Sponsor
+                      </button>
+                    ) : (
+                      <div className={classes.withoutVotesMsg}>
+                        <p>
+                          <Trans>Sponsoring a proposal requires at least one Noun vote</Trans>
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </ul>
+          <AnimatePresence>
+            {addSignatureTransactionState === 'Success' && (
+              <div className="transactionStatus success">
+                <p>Success!</p>
+              </div>
+            )}
+            {isFormDisplayed ? (
+              <motion.div
+                className={classes.formOverlay}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.15 }}
+              >
+                <button className={classes.closeButton} onClick={() => {
+                  setIsFormDisplayed(false);
+                  props.setDataFetchPollInterval(0);
+                }}>
+                  &times;
+                </button>
+                <SignatureForm
+                  id={props.id}
+                  transactionState={addSignatureTransactionState}
+                  setTransactionState={setAddSignatureTransactionState}
+                  setIsFormDisplayed={setIsFormDisplayed}
+                  candidate={props.candidate}
+                  handleRefetchCandidateData={props.handleRefetchCandidateData}
+                  setDataFetchPollInterval={props.setDataFetchPollInterval}
+                />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </div>
+        <div className={classes.aboutText}>
+          <p>
+            <strong><Trans>About sponsoring proposal candidates</Trans></strong>
+          </p>
+          <p>
+            <Trans>
+              Once a signed proposal is on-chain, signers will need to wait until the proposal is queued
+              or defeated before putting another proposal on-chain.
+            </Trans>
+          </p>
+        </div>
       </div>
-      <div className={classes.aboutText}>
-        <p>
-          <strong><Trans>About sponsoring proposal candidates</Trans></strong>
-        </p>
-        <p>
-          <Trans>
-            Once a signed proposal is on-chain, signers will need to wait until the proposal is queued
-            or defeated before putting another proposal on-chain.
-          </Trans>
-        </p>
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -186,6 +186,9 @@ const VotePage = ({
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
 
+  console.log('proposal', proposal);
+  console.log('currentBlock', currentBlock);
+
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
   const isProposalSigner = account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
@@ -205,7 +208,6 @@ const VotePage = ({
   }
 
   const isAwaitingStateChange = () => {
-    console.log('isAwaitingStateChange proposal?.eta', proposal?.eta);
     if (hasSucceeded) {
       return true;
     }
@@ -223,7 +225,9 @@ const VotePage = ({
   };
 
   const isActionable = () => {
-    if (isAwaitingStateChange()) {
+    if (isUpdateable() && !(isProposer() || isProposalSigner)) {
+      return false;
+    } else if (isAwaitingStateChange()) {
       return true;
     } else if (isAwaitingDestructiveStateChange()) {
       return true;
@@ -543,6 +547,7 @@ const VotePage = ({
                       <>
                         <Trans>This proposal can be edited for the next </Trans>{' '}
                         {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}.
+                        {' '}
                       </>
                     )}
                     {isCancellable() && (

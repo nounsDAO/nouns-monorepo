@@ -1,8 +1,8 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import classes from './CandidateSponsors.module.css'
+import classes from './SelectSponsorsToPropose.module.css'
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
 import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap'
-import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao'
+import { Proposal, useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao'
 import clsx from 'clsx'
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
@@ -13,26 +13,33 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buildEtherscanTxLink } from '../../utils/etherscan'
 import link from '../../assets/icons/Link.svg';
+import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData'
+import ShortAddress from '../ShortAddress'
+import { Delegates } from '../../wrappers/subgraph'
 
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
-  isForkingPeriod: boolean;
-  title: string;
-  description: string;
-  selectLabel: string;
-  selectDescription: string;
-  account: string;
-  ownedNouns: number[] | undefined;
-  userEscrowedNouns: number[] | undefined;
-  refetchData: Function;
-  setDataFetchPollInterval: Function;
+  signatures: CandidateSignature[];
+  delegateSnapshot: Delegates;
+  requiredVotes: number;
+  candidate: ProposalCandidate;
+  // isForkingPeriod: boolean;
+  // title: string;
+  // description: string;
+  // selectLabel: string;
+  // selectDescription: string;
+  // account: string;
+  // ownedNouns: number[] | undefined;
+  // userEscrowedNouns: number[] | undefined;
+  // refetchData: Function;
+  // setDataFetchPollInterval: Function;
 }
 
 export default function SelectSponsorsToPropose(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
-  const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
+  const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
   const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
@@ -52,20 +59,35 @@ export default function SelectSponsorsToPropose(props: Props) {
   // etc
   const { data: proposals } = useAllProposals();
   const isApprovedForAll = useIsApprovedForAll();
+  const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
   const proposalsList = proposals?.map((proposal, i) => {
     return (
       <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
     )
   });
 
+  const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
+
   useEffect(() => {
-    let nounIds = props.ownedNouns || [];
-    if (props.ownedNouns && props.userEscrowedNouns) {
-      const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
-      nounIds = nouns.sort((a, b) => a - b);
+    if (props.delegateSnapshot.delegates) {
+      const voteCount = selectedSignatures.reduce((acc, sig) => {
+        const votes = props.delegateSnapshot.delegates.find(
+          delegate => delegate.id === sig.signer.id,
+        )?.nounsRepresented.length || 0;
+        return acc + votes;
+      }, 0);
+      setSelectedVoteCount(voteCount);
     }
-    setOwnedNouns(nounIds);
-  }, [props.ownedNouns, props.userEscrowedNouns]);
+  }, [selectedSignatures, props.delegateSnapshot.delegates]);
+
+  // useEffect(() => {
+  //   let nounIds = props.ownedNouns || [];
+  //   if (props.ownedNouns && props.userEscrowedNouns) {
+  //     const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
+  //     nounIds = nouns.sort((a, b) => a - b);
+  //   }
+  //   setOwnedNouns(nounIds);
+  // }, [props.ownedNouns, props.userEscrowedNouns]);
 
   const clearTransactionState = () => {
     // clear all transaction states
@@ -78,70 +100,31 @@ export default function SelectSponsorsToPropose(props: Props) {
     setApprovalErrorMessage('');
     setIsApprovalTxSuccessful(false);
     setIsTwoStepProcess(false);
-    props.setDataFetchPollInterval(0);
+    // props.setDataFetchPollInterval(0);
   }
   const clearState = () => {
     setIsConfirmModalOpen(false);
     props.setIsModalOpen(false);
-    setSelectedNouns([]);
+    setSelectedSignatures([]);
     setSelectedProposals([]);
     setReasonText('');
     clearTransactionState();
   }
 
-  const handleSubmission = (selectedNouns: number[]) => {
+  const handleSubmission = async (selectedSignatures: CandidateSignature[]) => {
     clearTransactionState();
-    if (isApprovedForAll) {
-      addNounsToEscrow(selectedNouns);
-    } else {
-      setIsTwoStepProcess(true);
-      setApproval(config.addresses.nounsDAOProxy, true);
-    }
+    const proposalSigs = selectedSignatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    await proposeBySigs(
+      proposalSigs,
+      props.candidate.version.targets,
+      props.candidate.version.values,
+      props.candidate.version.signatures,
+      props.candidate.version.calldatas,
+      props.candidate.version.description,
+    );
   }
 
-  const addNounsToEscrow = (selectedNouns: number[]) => {
-    setIsWaiting(true);
-    setIsLoading(false);
-    if (props.isForkingPeriod) {
-      joinFork(selectedNouns, selectedProposals, reasonText);
-    } else {
-      escrowToFork(selectedNouns, selectedProposals, reasonText);
-    }
-  }
-
-  const handleSetApprovalForAllAndAddToEscrowStateChange = useCallback((state: TransactionStatus, selectedNouns: number[]) => {
-    switch (state.status) {
-      case 'None':
-        setIsApprovalLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsApprovalWaiting(true);
-        break;
-      case 'Mining':
-        setIsApprovalLoading(true);
-        setIsApprovalWaiting(false);
-        break;
-      case 'Success':
-        setIsApprovalLoading(false);
-        setIsApprovalTxSuccessful(true);
-        // successfully approved, now escrow
-        addNounsToEscrow(selectedNouns);
-        break;
-      case 'Fail':
-        setApprovalErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsApprovalLoading(false);
-        break;
-      case 'Exception':
-        setApprovalErrorMessage(
-          state?.errorMessage || <Trans>Please try again.</Trans>,
-        );
-        setIsApprovalLoading(false);
-        setIsApprovalWaiting(false);
-        break;
-    }
-  }, []);
-
-  const handleAddToForkStateChange = useCallback((state: TransactionStatus) => {
+  const handleProposeStateChange = useCallback((state: TransactionStatus) => {
     switch (state.status) {
       case 'None':
         setIsLoading(false);
@@ -152,15 +135,11 @@ export default function SelectSponsorsToPropose(props: Props) {
       case 'Mining':
         setIsWaiting(false);
         setIsLoading(true);
-        // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
-        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
         setIsLoading(false);
         setIsTxSuccessful(true);
-        // if successful, disable nouns in list from being added to escrow again
-        props.refetchData();
-        setSelectedNouns([]);
+        setSelectedSignatures([]);
         break;
       case 'Fail':
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
@@ -175,143 +154,86 @@ export default function SelectSponsorsToPropose(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (props.isForkingPeriod) {
-      handleAddToForkStateChange(joinForkState);
-    } else {
-      handleAddToForkStateChange(escrowToForkState);
-    }
-  }, [escrowToForkState, joinForkState, handleAddToForkStateChange]);
+    handleProposeStateChange(proposeBySigsState);
+  }, [proposeBySigsState, handleProposeStateChange]);
 
-  useEffect(() => {
-    handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
-  }, [setApprovalState, handleSetApprovalForAllAndAddToEscrowStateChange]);
 
-  const confirmModalContent = (
-    <div className={classes.confirmModalContent}>
-      <h2 className={classes.modalTitle}>Confirm</h2>
-      <p className={classes.modalDescription}>By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.</p>
-      <button className={clsx(classes.button, classes.primaryButton)}>Join</button>
-      <button className={clsx(classes.button, classes.secondaryButton)}
-        onClick={() => setIsConfirmModalOpen(false)}
-      >Cancel</button>
-    </div>
-  );
+  const submitProposalOnChain = async () => {
+    const proposalSigs = selectedSignatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    await proposeBySigs(
+      proposalSigs,
+      props.candidate.version.targets,
+      props.candidate.version.values,
+      props.candidate.version.signatures,
+      props.candidate.version.calldatas,
+      props.candidate.version.description,
+    );
+  };
+
 
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
         <Trans>
-          {props.isForkingPeriod ? 'Join fork' : 'Add Nouns to escrow'}
+          Choose sponsors
         </Trans>
       </h2>
-
       <p className={classes.modalDescription}>
         <Trans>
-          {!props.isForkingPeriod ?
-            <>Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.</>
-            : <>
-              By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
-            </>
-          }
+          Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {props.requiredVotes}.
         </Trans>
       </p>
-
-      <div className={classes.fields}>
-        <InputGroup className={classes.inputs}>
-          <div>
-            <FormText><strong>Reason</strong> (optional)</FormText>
-            <FormControl
-              className={classes.reasonInput}
-              value={reasonText}
-              onChange={e => setReasonText(e.target.value)}
-              placeholder={"Your reason for forking"}
-            />
-          </div>
-          <div>
-            <FormText><strong>Proposals that triggered this decision</strong> (optional)</FormText>
-            <FormSelect
-              className={classes.selectMenu}
-              onChange={(e) => {
-                setSelectedProposals([...selectedProposals, +e.target.value]);
-              }}
-            >
-              <option>Select proposal(s)</option>
-              {proposalsList}
-            </FormSelect>
-          </div>
-        </InputGroup>
-      </div>
-      <div className={classes.selectedProposals}>
-        {selectedProposals.map((proposalId) => {
-          const prop = proposals.find((proposal) => proposal.id && +proposal.id === proposalId);
-          return (
-            <div className={classes.selectedProposal}>
-              <span><a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer"><strong>{prop?.id}</strong> {prop?.title}</a></span>
-              <button
-                onClick={() => {
-                  const newSelectedProposals = selectedProposals.filter((id) => id !== proposalId);
-                  setSelectedProposals(newSelectedProposals);
-                }}
-                className={classes.removeButton}><MinusCircleIcon /></button>
-            </div>
-          )
-        })
-        }
-      </div>
       <div className={classes.sectionHeader}>
         <div className={classes.sectionLabel}>
           <p>
             <strong>
               <Trans>
-                Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}
+                Select signatures
               </Trans>
             </strong>
           </p>
-          <p>
-            <Trans>
-              Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods.
-            </Trans>
-          </p>
         </div>
-        {props.userEscrowedNouns && ownedNouns && ownedNouns?.length > props.userEscrowedNouns.length && (
+        {props.signatures && !isTxSuccessful && (
           <button
             onClick={() => {
               approvalErrorMessage && clearTransactionState();
-              props.ownedNouns && selectedNouns.length === props.ownedNouns.length ?
-                setSelectedNouns([]) :
-                setSelectedNouns(props.ownedNouns || [])
+              props.signatures && selectedSignatures.length === props.signatures.length ?
+                setSelectedSignatures([]) :
+                setSelectedSignatures(props.signatures || [])
             }}
             disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
           >
-            {selectedNouns.length === props.ownedNouns?.length ? 'Unselect' : "Select"} all
+            {selectedSignatures.length === props.signatures?.length ? 'Unselect' : "Select"} all
           </button>
         )}
       </div>
-      <div className={classes.nounsList}>
-        {ownedNouns && ownedNouns.map((nounId: number) => {
+      <div className={classes.list}>
+        {props.signatures && props.signatures.map((signature: CandidateSignature) => {
+          const voteCount = props.delegateSnapshot.delegates?.find(
+            delegate => delegate.id === signature.signer.id,
+          )?.nounsRepresented.length;
           return (
             <button
               onClick={() => {
-                (approvalErrorMessage || errorMessage || isTxSuccessful) && clearTransactionState();
-                selectedNouns.includes(nounId) ?
-                  setSelectedNouns(selectedNouns.filter((id) => id !== nounId)) :
-                  setSelectedNouns([...selectedNouns, nounId]);
+                // (approvalErrorMessage || errorMessage || isTxSuccessful) && clearTransactionState();
+                selectedSignatures.includes(signature) ?
+                  setSelectedSignatures(selectedSignatures.filter((sig) => sig.signer !== signature.signer)) :
+                  setSelectedSignatures([...selectedSignatures, signature]);
               }}
               disabled={
-                (isWaiting || isLoading || isApprovalWaiting || isApprovalLoading) ||
-                props.userEscrowedNouns?.includes(nounId)
+                (isWaiting || isLoading || isApprovalWaiting || isApprovalLoading || isTxSuccessful)
               }
               className={clsx(
-                classes.nounButton,
-                selectedNouns.includes(nounId) && classes.selectedNounButton,
-                props.userEscrowedNouns?.includes(nounId) && classes.escrowedNoun
+                classes.selectButton,
+                selectedSignatures.includes(signature) && classes.selectedButton,
               )}
             >
               <div>
-                <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
-                Noun {nounId}
+                <ShortAddress address={signature.signer.id} />
+                <p className={classes.voteCount}>
+                  {voteCount} vote{voteCount !== 1 && 's'}
+                </p>
               </div>
-              {props.userEscrowedNouns?.includes(nounId) && <span className={classes.escrowedNounLabel}>{props.isForkingPeriod ? 'in fork' : 'in escrow'}</span>}
             </button>
           )
         })}
@@ -321,15 +243,15 @@ export default function SelectSponsorsToPropose(props: Props) {
           <button
             className={clsx(classes.button, classes.primaryButton, (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) && classes.loadingButton)}
             disabled={
-              selectedNouns.length === 0 || isWaiting || isLoading || isApprovalWaiting || isApprovalLoading
+              selectedVoteCount < props.requiredVotes || isWaiting || isLoading || isApprovalWaiting || isApprovalLoading
             }
             onClick={() => {
-              handleSubmission(selectedNouns);
+              handleSubmission(selectedSignatures);
             }}
           >
             {!isWaiting && !isLoading && !isApprovalWaiting && !isApprovalLoading && (
               <>
-                Add {selectedNouns.length > 0 && selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to {props.isForkingPeriod ? 'fork' : 'escrow'}
+                Submit {selectedVoteCount} votes
               </>
             )}
             <span>
@@ -337,7 +259,7 @@ export default function SelectSponsorsToPropose(props: Props) {
               {(isApprovalWaiting) && 'Awaiting approval'}
               {(isWaiting) && 'Awaiting confirmation'}
               {isApprovalLoading && 'Approving'}
-              {isLoading && `Adding to ${props.isForkingPeriod ? 'fork' : 'escrow'}`}
+              {isLoading && `Submitting proposal`}
             </span>
           </button>
         )}
@@ -354,71 +276,18 @@ export default function SelectSponsorsToPropose(props: Props) {
         {isTxSuccessful && (
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
-              <a href={escrowToForkState.transaction && `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`} target="_blank" rel="noreferrer">
-                Your Noun{selectedNouns.length > 1 ? 's have' : ' has'} been added to {props.isForkingPeriod ? 'the fork' : 'escrow'}
-                {escrowToForkState.transaction && (
+              <strong>Success!</strong> <br />
+              <a href={proposeBySigsState.transaction && `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`} target="_blank" rel="noreferrer">
+                Your candidate is now a proposal
+                {proposeBySigsState.transaction && (
                   <img src={link} width={16} alt="link symbol" />
                 )}
               </a>
-              {props.userEscrowedNouns && ownedNouns && ownedNouns?.length > props.userEscrowedNouns.length && (
-                <button
-                  onClick={() => {
-                    clearTransactionState();
-                  }}
-                >Add additional Nouns</button>
-              )}
             </p>
           </>
-        )}
-        {isTwoStepProcess && (
-          <>
-            <ul className={classes.steps}>
-              <li>
-                <strong>
-                  {(isApprovalWaiting || isApprovalLoading) && <span className={classes.spinner}><Spinner animation="border" /></span>}
-                  {isApprovalTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
-                  {approvalErrorMessage && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
-                </strong>
-                <Trans>Set approval</Trans>
-              </li>
-              <li>
-                <strong>
-                  {(isWaiting || isLoading) && <span className={classes.spinner}><Spinner animation="border" /></span>}
-                  {isTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
-                  {(errorMessage || approvalErrorMessage) && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
-                  {(!(isWaiting || isLoading || isTxSuccessful || errorMessage || approvalErrorMessage)) && <span className={classes.placeholder}></span>}
-                </strong>
-                <Trans>Add {selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to escrow</Trans>
-              </li>
-            </ul>
-          </>
-        )}
-        {!isApprovedForAll && (!isApprovalWaiting || !isApprovalLoading) && (
-          <p className={classes.approvalNote}>You'll be asked to approve access</p>
         )}
 
-        {/* temp code commented out. todo: add back in to support approve individual ids */}
-        {/* {!isApprovedForAll && (
-          <>
-            <p className={classes.approvalNote}>You'll be asked to approve each noun individually. Or you can <button
-              // className={clsx(classes.button, classes.primaryButton)}
-              disabled={selectedNouns.length === 0}
-              onClick={() => {
-                handleSetApproval()
-              }}
-            >
-              approve all
-            </button></p>
-            {selectedNouns.length > 0 && (<hr />)}
-          </>
-        )} */}
-        {(selectedNouns.length > 0 && !isTxSuccessful) && (
-          <>
-            <p className={classes.selectedNouns}>
-              Adding {selectedNouns.map((nounId) => `Noun ${nounId}`).join(', ')}
-            </p>
-          </>
-        )}
+
       </div>
 
     </div >
@@ -427,18 +296,15 @@ export default function SelectSponsorsToPropose(props: Props) {
   return (
     <>
       <SolidColorBackgroundModal
-        show={props.isModalOpen && !isConfirmModalOpen}
+        show={props.isModalOpen}
         onDismiss={() => {
-          setSelectedNouns([]);
+          setSelectedSignatures([]);
           clearState();
+          props.setIsModalOpen(false);
         }}
         content={modalContent}
       />
-      <SolidColorBackgroundModal
-        show={isConfirmModalOpen}
-        onDismiss={() => setIsConfirmModalOpen(false)}
-        content={confirmModalContent}
-      />
+
     </>
   )
 }

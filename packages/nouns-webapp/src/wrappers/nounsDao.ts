@@ -688,10 +688,7 @@ export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined =>
   return proposals;
 };
 
-export const useProposalVersions = (
-  id: string | number,
-  toUpdate?: boolean,
-): ProposalVersion[] | undefined => {
+export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
   const proposalVersions = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
   const sortedProposalVersions =
     proposalVersions &&

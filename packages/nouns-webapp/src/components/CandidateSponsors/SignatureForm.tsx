@@ -112,7 +112,6 @@ function SignatureForm(props: Props) {
   }
 
   const getSignature = async () => {
-    console.log('getSignature');
     setIsGetSignatureWaiting(true);
     let signature;
 
@@ -128,9 +127,8 @@ function SignatureForm(props: Props) {
         proposalId: proposalIdToUpdate,
       };
       signature = await signer!._signTypedData(domain, updateProposalTypes, value);
-      console.log('await signature', signature);
     } else {
-      // if (!candidateProposal) return;
+      if (!props.candidate) return;
       const value = {
         proposer: props.candidate.proposer,
         targets: props.candidate.version.targets,
@@ -140,7 +138,6 @@ function SignatureForm(props: Props) {
         description: props.candidate.version.description,
         expiry: expirationDate,
       };
-
       signature = await signer!._signTypedData(domain, createProposalTypes, value).then(
         (sig: any) => {
           console.log('sig', sig);
@@ -153,10 +150,7 @@ function SignatureForm(props: Props) {
         setGetSignatureErrorMessage(err.message);
         setIsGetSignatureWaiting(false);
       });
-      console.log('await signature', signature);
     }
-    console.log('signature', signature);
-    console.log('signer', signer);
     return signature;
   }
 
@@ -164,6 +158,7 @@ function SignatureForm(props: Props) {
     // if (!candidateProposal) return;
 
     const signature = await getSignature();
+    console.log('signature', signature);
     if (signature) {
       setIsGetSignatureWaiting(false);
       setIsWaiting(true);
@@ -175,6 +170,7 @@ function SignatureForm(props: Props) {
         props.candidate.version.calldatas,
         props.candidate.version.description,
       );
+      console.log('>>> encodedProp', encodedProp)
       // signature set, submit signature
       await addSignature(
         signature,
