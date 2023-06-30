@@ -19,7 +19,6 @@ function WithdrawNounsButton(props: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const handleWithdrawFromForkEscrowStateChange = useCallback((state: TransactionStatus) => {

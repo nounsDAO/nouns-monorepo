@@ -1,16 +1,9 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classes from './SelectSponsorsToPropose.module.css'
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
-import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap'
-import { Proposal, useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao'
 import clsx from 'clsx'
-import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
-import { TransactionStatus, useEthers } from '@usedapp/core'
-import config from '../../config';
-import { useSetApprovalForAll, useIsApprovedForAll, useSetApprovalForTokenId } from '../../wrappers/nounToken'
-import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { TransactionStatus } from '@usedapp/core'
 import { buildEtherscanTxLink } from '../../utils/etherscan'
 import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData'
@@ -24,50 +17,16 @@ type Props = {
   delegateSnapshot: Delegates;
   requiredVotes: number;
   candidate: ProposalCandidate;
-  // isForkingPeriod: boolean;
-  // title: string;
-  // description: string;
-  // selectLabel: string;
-  // selectDescription: string;
-  // account: string;
-  // ownedNouns: number[] | undefined;
-  // userEscrowedNouns: number[] | undefined;
-  // refetchData: Function;
-  // setDataFetchPollInterval: Function;
 }
 
 export default function SelectSponsorsToPropose(props: Props) {
-  const [reasonText, setReasonText] = React.useState('');
-  const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
   const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
-  const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
-  const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
-  // approval transactions
-  const [isApprovalWaiting, setIsApprovalWaiting] = useState(false);
-  const [isApprovalLoading, setIsApprovalLoading] = useState(false);
-  const [approvalErrorMessage, setApprovalErrorMessage] = useState<ReactNode>('');
-  const [isApprovalTxSuccessful, setIsApprovalTxSuccessful] = useState(false);
-  const { setApproval, setApprovalState } = useSetApprovalForAll();
-  // handle transactions 
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
-  const { escrowToFork, escrowToForkState } = useEscrowToFork();
-  const { joinFork, joinForkState } = useJoinFork();
-  // etc
-  const { data: proposals } = useAllProposals();
-  const isApprovedForAll = useIsApprovedForAll();
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
-  const proposalsList = proposals?.map((proposal, i) => {
-    return (
-      <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
-    )
-  });
-
   const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
-
   useEffect(() => {
     if (props.delegateSnapshot.delegates) {
       const voteCount = selectedSignatures.reduce((acc, sig) => {
@@ -80,34 +39,16 @@ export default function SelectSponsorsToPropose(props: Props) {
     }
   }, [selectedSignatures, props.delegateSnapshot.delegates]);
 
-  // useEffect(() => {
-  //   let nounIds = props.ownedNouns || [];
-  //   if (props.ownedNouns && props.userEscrowedNouns) {
-  //     const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
-  //     nounIds = nouns.sort((a, b) => a - b);
-  //   }
-  //   setOwnedNouns(nounIds);
-  // }, [props.ownedNouns, props.userEscrowedNouns]);
-
   const clearTransactionState = () => {
     // clear all transaction states
     setIsWaiting(false);
     setIsLoading(false);
     setIsTxSuccessful(false);
     setErrorMessage('');
-    setIsApprovalWaiting(false);
-    setIsApprovalLoading(false);
-    setApprovalErrorMessage('');
-    setIsApprovalTxSuccessful(false);
-    setIsTwoStepProcess(false);
-    // props.setDataFetchPollInterval(0);
   }
   const clearState = () => {
-    setIsConfirmModalOpen(false);
     props.setIsModalOpen(false);
     setSelectedSignatures([]);
-    setSelectedProposals([]);
-    setReasonText('');
     clearTransactionState();
   }
 
@@ -157,20 +98,6 @@ export default function SelectSponsorsToPropose(props: Props) {
     handleProposeStateChange(proposeBySigsState);
   }, [proposeBySigsState, handleProposeStateChange]);
 
-
-  const submitProposalOnChain = async () => {
-    const proposalSigs = selectedSignatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
-    await proposeBySigs(
-      proposalSigs,
-      props.candidate.version.targets,
-      props.candidate.version.values,
-      props.candidate.version.signatures,
-      props.candidate.version.calldatas,
-      props.candidate.version.description,
-    );
-  };
-
-
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
@@ -196,12 +123,11 @@ export default function SelectSponsorsToPropose(props: Props) {
         {props.signatures && !isTxSuccessful && (
           <button
             onClick={() => {
-              approvalErrorMessage && clearTransactionState();
               props.signatures && selectedSignatures.length === props.signatures.length ?
                 setSelectedSignatures([]) :
                 setSelectedSignatures(props.signatures || [])
             }}
-            disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
+            disabled={isWaiting || isLoading}
           >
             {selectedSignatures.length === props.signatures?.length ? 'Unselect' : "Select"} all
           </button>
@@ -215,13 +141,12 @@ export default function SelectSponsorsToPropose(props: Props) {
           return (
             <button
               onClick={() => {
-                // (approvalErrorMessage || errorMessage || isTxSuccessful) && clearTransactionState();
                 selectedSignatures.includes(signature) ?
                   setSelectedSignatures(selectedSignatures.filter((sig) => sig.signer !== signature.signer)) :
                   setSelectedSignatures([...selectedSignatures, signature]);
               }}
               disabled={
-                (isWaiting || isLoading || isApprovalWaiting || isApprovalLoading || isTxSuccessful)
+                (isWaiting || isLoading || isTxSuccessful)
               }
               className={clsx(
                 classes.selectButton,
@@ -239,33 +164,31 @@ export default function SelectSponsorsToPropose(props: Props) {
         })}
       </div>
       <div className={classes.modalActions}>
-        {!(approvalErrorMessage || errorMessage || isTxSuccessful || isApprovalTxSuccessful) && (
+        {!(errorMessage || isTxSuccessful) && (
           <button
-            className={clsx(classes.button, classes.primaryButton, (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) && classes.loadingButton)}
+            className={clsx(classes.button, classes.primaryButton, (isWaiting || isLoading) && classes.loadingButton)}
             disabled={
-              selectedVoteCount < props.requiredVotes || isWaiting || isLoading || isApprovalWaiting || isApprovalLoading
+              selectedVoteCount < props.requiredVotes || isWaiting || isLoading
             }
             onClick={() => {
               handleSubmission(selectedSignatures);
             }}
           >
-            {!isWaiting && !isLoading && !isApprovalWaiting && !isApprovalLoading && (
+            {!isWaiting && !isLoading && (
               <>
                 Submit {selectedVoteCount} votes
               </>
             )}
             <span>
-              {(isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
-              {(isApprovalWaiting) && 'Awaiting approval'}
+              {(isWaiting || isLoading) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
               {(isWaiting) && 'Awaiting confirmation'}
-              {isApprovalLoading && 'Approving'}
               {isLoading && `Submitting proposal`}
             </span>
           </button>
         )}
-        {(approvalErrorMessage || errorMessage) && (
+        {(errorMessage) && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
-            {approvalErrorMessage || errorMessage}
+            {errorMessage}
             <button
               onClick={() => {
                 clearTransactionState();
@@ -304,7 +227,6 @@ export default function SelectSponsorsToPropose(props: Props) {
         }}
         content={modalContent}
       />
-
     </>
   )
 }

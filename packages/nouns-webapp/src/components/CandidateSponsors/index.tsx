@@ -1,11 +1,10 @@
 import React from 'react';
 import { Trans } from '@lingui/macro';
-import { useBlockNumber, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { CandidateSignature, useProposeBySigs } from '../../wrappers/nounsData';
-import { useProposalThreshold } from '../../wrappers/nounsDao';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates } from '../../wrappers/subgraph';
@@ -49,8 +48,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
   const { account } = useEthers();
   const connectedAccountNounVotes = useUserVotes() || 0;
-  const threshold = useProposalThreshold();
-
   const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock);
   const handleSignerCountDecrease = (decreaseAmount: number) => {
@@ -78,24 +75,16 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return sigs;
   };
 
-  console.log('props.candidate', props.candidate);
-
   const handleSignatureRemoved = () => {
     setIsAccountSigner(false);
     handleSignerCountDecrease(1);
   }
 
-  // useEffect(() => {
-  //   if (threshold !== undefined) {
-  //     setRequiredVotes(threshold + 1);
-  //   }
-  // }, [threshold]);
-
   useEffect(() => {
     if (delegateSnapshot.data && !isCancelOverlayVisible) {
       setSignatures(filterSignersByVersion(delegateSnapshot.data));
     }
-  }, [props.candidate, delegateSnapshot.data]);
+  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, filterSignersByVersion]);
 
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
@@ -140,36 +129,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         setProposePending(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposeBySigsState, setModal]);
-
-  const submitProposalOnChain = async () => {
-    const proposalSigs = signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
-    console.log('proposalSigs', proposalSigs);
-    const proposalData = {
-      sigs: proposalSigs,
-      targets: props.candidate.version.targets,
-      values: props.candidate.version.values,
-      signatures: props.candidate.version.signatures,
-      calldatas: props.candidate.version.calldatas,
-      description: props.candidate.version.description,
-    }
-    console.log('proposalData', proposalData);
-    await proposeBySigs(
-      signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
-      props.candidate.version.targets,
-      props.candidate.version.values,
-      props.candidate.version.signatures,
-      props.candidate.version.calldatas,
-      props.candidate.version.description,
-      // props.candidate.version.targets,
-      // props.candidate.version.values,
-      // props.candidate.version.signatures,
-      // props.candidate.version.calldatas,
-      // props.candidate.version.description,
-    );
-  };
-
-  console.log('signatures list', signatures)
 
   return (
     <>
@@ -242,7 +203,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
               <>
                 <button className={classes.button}
                   disabled={isProposePending}
-                  // onClick={() => submitProposalOnChain()}>
                   onClick={() => setIsModalOpen(true)}>
                   Submit on-chain
                 </button>

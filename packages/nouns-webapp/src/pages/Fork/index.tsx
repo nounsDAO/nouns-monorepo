@@ -6,9 +6,9 @@ import Section from '../../layout/Section';
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { Fork, useEscrowEvents, useForkDetails, useForkThreshold, useForks, useIsForkPeriodActive, useNumTokensInForkEscrow, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
+import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useIsForkPeriodActive, useNumTokensInForkEscrow, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
 import { useEthers } from '@usedapp/core';
-import { NounId, useTotalSupply, useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
+import { useTotalSupply, useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
 import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
@@ -16,7 +16,6 @@ import { useScrollToLocation } from '../../hooks/useScrollToLocation';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
-import ForkDeployEvent from './ForkDeployEvent';
 import NotFoundPage from '../NotFound';
 
 const now = new Date();
@@ -38,9 +37,6 @@ const ForkPage = ({
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [forkStatusLabel, setForkStatusLabel] = useState('Escrow');
   const [addNounsButtonLabel, setAddNounsButtonLabel] = useState('Add Nouns to escrow');
-  const [nounsInFork, setNounsInFork] = useState([0]);
-  const [test, setTest] = useState<string[]>([]);
-  // const isForkPeriodActive = useIsForkPeriodActive();
   const totalSupply = useTotalSupply();
   const forkThreshold = useForkThreshold();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
@@ -51,7 +47,6 @@ const ForkPage = ({
   const forks = useForks(dataFetchPollInterval);
   const { account } = useEthers();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
-  console.log('escrowEvents', escrowEvents);
 
   useScrollToLocation();
   const refetchForkData = () => {
@@ -99,47 +94,14 @@ const ForkPage = ({
     } else {
       setIsThresholdMet(false);
     }
-    console.log('forkThreshold', forkThreshold, "totalSupply", totalSupply, "numTokensInForkEscrow", numTokensInForkEscrow);
     if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
-      console.log('forkThreshold', forkThreshold, "totalSupply", totalSupply, "numTokensInForkEscrow", numTokensInForkEscrow);
       const percentage = (forkThreshold / totalSupply) * 100;
       const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
-      console.log('percentage', percentage, 'currentPercentage', currentPercentage);
       setThresholdPercentage(+percentage.toFixed(2));
       setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
     }
   }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
 
-  // useEffect(() => {
-  //   console.log('forkDetails?.data?.joinedNouns', forkDetails?.data?.joinedNouns);
-  //   // if (isForkPeriodActive) {
-  //   const nouns = forkDetails?.data?.joinedNouns.map((joined) => joined.noun.id) || [];
-  //   // setTest(["test"])
-  //   // setNounsInFork([1, 2]);
-  //   // } else {
-  //   // setNounsInFork(forkDetails?.data?.escrowedNouns.map((escrowed) => escrowed.noun.id) || []);
-  //   // }
-  // }, [forkDetails]);
-
-  // useEffect(() => {
-  //   if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow >= forkThreshold) {
-  //     setIsThresholdMet(true);
-  //   }
-  // }, [forkThreshold, numTokensInForkEscrow]);
-
-  // useEffect(() => {
-  //   if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
-  //     const percentage = (forkThreshold / totalSupply) * 100;
-  //     const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
-  //     setThresholdPercentage(+percentage.toFixed(2));
-  //     setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
-  //   }
-  // }, [forkThreshold, totalSupply, numTokensInForkEscrow]);
-  // if (+id > +forks.data[forks.data.length - 1].id) {
-  //   return false;
-  // }
-
-  // if (!forkDetails.data || !totalSupply || !forkThreshold || !numTokensInForkEscrow || !userEscrowedNounIds.data || !userOwnedNounIds.data || !escrowEvents.data || !forks.data) {
   if (!forks.data || !forkDetails.data) {
     return (
       <div className={clsx(classes.spinner, classes.pageLoadingSpinner)}>
@@ -149,20 +111,10 @@ const ForkPage = ({
     );
   }
 
-  // if (forks.error || forkDetails.error || userEscrowedNounIds.error || userOwnedNounIds.error || escrowEvents.error) {
-  //   return <Trans>Failed to fetch</Trans>;
-  // }
-
   if (forks.data && +id > +forks.data[forks.data.length - 1].id + 1) {
     // fork doesn't exist
     return <NotFoundPage />;
   }
-
-  // if (+id === +forks.data[forks.data.length - 1].id + 1) {
-  //   // new fork page
-  //   setIsNewForkPage(true);
-  // }
-
 
   return (
     <>
@@ -206,14 +158,13 @@ const ForkPage = ({
             <Col lg={6}>
               <div className={classes.status}>
                 <Link className={classes.backButton} to="/fork">←</Link>
-                {/* <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button> */}
                 <span className={clsx(classes.forkStatus)}>
                   {forkStatusLabel}
                 </span>
                 <div className={classes.spacer} />
               </div>
               <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
-              {!isForkPeriodActive || !isForked && (
+              {(!isForkPeriodActive || !isForked) && (
                 <p><Trans>
                   {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold
                 </Trans></p>
@@ -318,10 +269,10 @@ const ForkPage = ({
               <Col lg={3} className={classes.sidebar}>
                 <div className={classes.summary}>
                   <span>
-                    {isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}
+                    {(isForkPeriodActive || isForked) ? 'in fork' : 'in escrow'}
                   </span>
                   <strong>
-                    {isForkPeriodActive || isForked ? <>
+                    {(isForkPeriodActive || isForked) ? <>
                       {forkDetails.data?.tokensForkingCount !== undefined ? forkDetails.data?.tokensForkingCount : '...'}
                     </> : <>
                       {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
@@ -329,7 +280,7 @@ const ForkPage = ({
 
                     {" "}Noun{numTokensInForkEscrow === 1 ? '' : 's'}
                   </strong>
-                  {!isForkPeriodActive || !isForked && (
+                  {(!isForkPeriodActive || !isForked) && (
                     <span>
                       {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}%`}
                     </span>
@@ -345,7 +296,7 @@ const ForkPage = ({
                   isThresholdMet={isThresholdMet}
                 />
 
-                {isForkPeriodActive || isForked && (
+                {(isForkPeriodActive || isForked) && (
                   <div className={classes.nounsInFork}>
                     {forkDetails.data.addedNouns.map((nounId) => (
                       <a href={`/noun/${nounId}`} target='_blank' rel='noreferrer'><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
@@ -365,10 +316,6 @@ const ForkPage = ({
                     </p>
                   </div>
                 )}
-                {/* if forked, add fork event to top of list */}
-                {/* {isForked || isForkPeriodActive && (
-                  <ForkDeployEvent forkDetails={forkDetails.data} />
-                )} */}
                 {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />)}
               </Col>
             </Row>

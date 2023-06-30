@@ -6,9 +6,9 @@ import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/no
 import clsx from 'clsx'
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro'
-import { TransactionStatus, useEthers } from '@usedapp/core'
+import { TransactionStatus } from '@usedapp/core'
 import config from '../../config';
-import { useSetApprovalForAll, useIsApprovedForAll, useSetApprovalForTokenId } from '../../wrappers/nounToken'
+import { useSetApprovalForAll, useIsApprovedForAll } from '../../wrappers/nounToken'
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buildEtherscanTxLink } from '../../utils/etherscan'
@@ -150,6 +150,7 @@ export default function AddNounsToForkModal(props: Props) {
         setIsApprovalWaiting(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddToForkStateChange = useCallback((state: TransactionStatus) => {
@@ -183,6 +184,7 @@ export default function AddNounsToForkModal(props: Props) {
         setIsWaiting(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -191,10 +193,12 @@ export default function AddNounsToForkModal(props: Props) {
     } else {
       handleAddToForkStateChange(escrowToForkState);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [escrowToForkState, joinForkState, handleAddToForkStateChange]);
 
   useEffect(() => {
     handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setApprovalState, handleSetApprovalForAllAndAddToEscrowStateChange]);
 
   const confirmModalContent = (

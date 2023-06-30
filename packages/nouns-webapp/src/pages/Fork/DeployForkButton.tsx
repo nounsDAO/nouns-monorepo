@@ -55,6 +55,7 @@ function DeployForkButton(props: Props) {
         setIsWaiting(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

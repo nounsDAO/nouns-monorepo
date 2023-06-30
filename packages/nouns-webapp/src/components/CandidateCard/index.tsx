@@ -7,9 +7,7 @@ import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { props } from 'ramda';
 import { useState, useEffect } from 'react';
-import account from '../../state/slices/account';
 import { Delegates } from '../../wrappers/subgraph';
 import { useDelegateNounsAtBlockQuery } from '../../wrappers/nounToken';
 import { useBlockNumber } from '@usedapp/core';
@@ -18,7 +16,6 @@ type Props = {
   candidate: PartialProposalCandidate;
   nounsRequired: number;
 };
-
 
 const deDupeSigners = (signers: string[]) => {
   const uniqueSigners: string[] = [];
@@ -30,7 +27,6 @@ const deDupeSigners = (signers: string[]) => {
   );
   return uniqueSigners;
 }
-
 
 function CandidateCard(props: Props) {
   const [currentBlock, setCurrentBlock] = useState<number>();
@@ -65,14 +61,15 @@ function CandidateCard(props: Props) {
       console.log('filterSignersByVersion(delegateSnapshot.data)', filterSignersByVersion(delegateSnapshot.data));
       setSignatures(filterSignersByVersion(delegateSnapshot.data));
     }
-  }, [props.candidate, delegateSnapshot.data]);
+
+  }, [props.candidate, delegateSnapshot.data, filterSignersByVersion]);
 
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number
     if (blockNumber && !currentBlock) {
       setCurrentBlock(blockNumber);
     }
-  }, [blockNumber]);
+  }, [blockNumber, currentBlock]);
   return (
     <Link
       className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
@@ -96,7 +93,7 @@ function CandidateCard(props: Props) {
         <div className={classes.footer}>
           <div className={classes.candidateSponsors}>
             <CandidateSponsors
-              signers={props.candidate.latestVersion.versionSignatures}
+              signers={signatures}
               nounsRequired={props.nounsRequired}
               currentBlock={currentBlock && currentBlock - 1}
             />

@@ -38,8 +38,6 @@ export enum NounsTokenContractFunction {
 const abi = new utils.Interface(NounsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 const nounsTokenContract = NounsTokenFactory.connect(config.addresses.nounsToken, undefined!);
-const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
-
 const isSeedValid = (seed: Record<string, any> | undefined) => {
   const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
   const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));

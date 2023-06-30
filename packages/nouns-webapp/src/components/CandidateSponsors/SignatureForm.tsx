@@ -5,7 +5,7 @@ import { Trans } from '@lingui/macro';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { ethers } from 'ethers';
 import config, { CHAIN_ID } from '../../config';
-import { useCandidateProposal, useAddSignature, ProposalCandidate } from '../../wrappers/nounsData';
+import { useAddSignature, ProposalCandidate } from '../../wrappers/nounsData';
 import clsx from 'clsx';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,26 +60,16 @@ function SignatureForm(props: Props) {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const { library } = useEthers();
   const signer = library?.getSigner();
-
-  const [proposalIdToUpdate,
-    // setProposalIdToUpdate
-    // todo: does this need to be set? 
-  ] = useState('');
-
-  // const candidateProposal = useCandidateProposal(props.id);
+  const [proposalIdToUpdate] = useState('');
   const { addSignature, addSignatureState } = useAddSignature();
-
   const [isGetSignatureWaiting, setIsGetSignatureWaiting] = useState(false);
   const [isGetSignaturePending, setIsGetSignaturePending] = useState(false);
   const [isGetSignatureTxSuccessful, setIsGetSignatureTxSuccessful] = useState(false);
   const [getSignatureErrorMessage, setGetSignatureErrorMessage] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
-  // const [isAddSignaturePending, setIsAddSignaturePending] = useState(false);
-  // const [isAddSignatureWaiting, setIsAddSignatureWaiting] = useState(false);
   async function calcProposalEncodeData(
     proposer: any,
     targets: any,
@@ -181,53 +171,6 @@ function SignatureForm(props: Props) {
         reasonText,
       );
     }
-    // let signature;
-
-    // // get signature
-    // setIsAddSignatureWaiting(true);
-    // if (proposalIdToUpdate && candidateProposal) {
-    //   const value = {
-    //     proposer: candidateProposal.proposer,
-    //     targets: candidateProposal.version.targets,
-    //     values: candidateProposal.version.values,
-    //     signatures: candidateProposal.version.signatures,
-    //     calldatas: candidateProposal.version.calldatas,
-    //     description: candidateProposal.version.description,
-    //     expiry: expirationDate,
-    //     proposalId: proposalIdToUpdate,
-    //   };
-    //   signature = await signer!._signTypedData(domain, updateProposalTypes, value);
-    // } else {
-    //   if (!candidateProposal) return;
-    //   const value = {
-    //     proposer: candidateProposal.proposer,
-    //     targets: candidateProposal.version.targets,
-    //     values: candidateProposal.version.values,
-    //     signatures: candidateProposal.version.signatures,
-    //     calldatas: candidateProposal.version.calldatas,
-    //     description: candidateProposal.version.description,
-    //     expiry: expirationDate,
-    //   };
-    //   signature = await signer!._signTypedData(domain, createProposalTypes, value);
-    // }
-
-    // const encodedProp = await calcProposalEncodeData(
-    //   candidateProposal.proposer,
-    //   candidateProposal.version.targets,
-    //   candidateProposal.version.values,
-    //   candidateProposal.version.signatures,
-    //   candidateProposal.version.calldatas,
-    //   candidateProposal.version.description,
-    // );
-
-    // await addSignature(
-    //   signature,
-    //   expirationDate,
-    //   candidateProposal.proposer,
-    //   candidateProposal.slug,
-    //   encodedProp,
-    //   reasonText,
-    // );
   }
 
   const clearTransactionState = () => {
@@ -244,12 +187,6 @@ function SignatureForm(props: Props) {
     props.setDataFetchPollInterval(0);
   }
 
-  const [submitSignatureStatusMessage, setSubmitSignatureStatusMessage] = React.useState<{
-    title: string;
-    message: string;
-    show: boolean;
-  }>();
-
   const handleAddSignatureState = useCallback((state: TransactionStatus) => {
     switch (state.status) {
       case 'None':
@@ -265,36 +202,22 @@ function SignatureForm(props: Props) {
         props.setDataFetchPollInterval(50);
         break;
       case 'Success':
-        setSubmitSignatureStatusMessage({
-          title: 'Success',
-          message: 'Signature added',
-          show: true,
-        });
         setIsTxSuccessful(true);
         setIsLoading(false);
-        // props.handleRefetchCandidateData();
         break;
       case 'Fail':
         setErrorMessage(state.errorMessage);
-        // setSubmitSignatureStatusMessage({
-        //   title: 'Transaction Failed',
-        //   message: 'There was a problem submitting the signature.',
-        //   show: true,
-        // });
+
         setIsLoading(false);
         setIsWaiting(false);
         break;
       case 'Exception':
         setErrorMessage(state.errorMessage);
-        // setSubmitSignatureStatusMessage({
-        //   title: 'Error',
-        //   message: 'There was a problem submitting the signature.',
-        //   show: true,
-        // });
         setIsLoading(false);
         setIsWaiting(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -310,9 +233,6 @@ function SignatureForm(props: Props) {
   console.log('errors: ', errorMessage, getSignatureErrorMessage);
   return (
     <div className={classes.formWrapper}>
-      {/* {!candidateProposal ? (
-        <h4 className={classes.formLabel}>Error loading candidate details</h4>
-      ) : ( */}
       <>
         <div className={clsx(
           classes.fields,
@@ -342,7 +262,6 @@ function SignatureForm(props: Props) {
               className={classes.button}
               onClick={() => {
                 sign();
-                // not using pending status while waiting for user to sign the first signature because rejected signatures are not caught
               }}
               disabled={props.transactionState === 'Mining' || expirationDate === undefined}
             >
@@ -350,9 +269,6 @@ function SignatureForm(props: Props) {
             </button>
           )}
         </div>
-
-
-        {/* {submitSignatureStatusMessage?.show && ( */}
 
         {isOverlayVisible && (
           <div className={classes.submitSignatureStatusOverlay}>
@@ -418,43 +334,9 @@ function SignatureForm(props: Props) {
                 &times;
               </button>
             )}
-            {/* <p>
-                <strong>
-                  <Trans>
-                    {submitSignatureStatusMessage?.title}
-                  </Trans>
-                </strong>
-              </p> */}
-            {/* {submitSignatureStatusMessage?.title === 'Success' ? (
-                <p>
-                  <strong>
-                    <Trans>
-                      {submitSignatureStatusMessage?.message}
-                    </Trans>
-                  </strong>
-                </p>
-              ) : (
-                <p>
-                  {submitSignatureStatusMessage?.message}
-                  <button
-                    className={classes.closeLink}
-                    onClick={() => {
-                      setSubmitSignatureStatusMessage(undefined);
-                      setIsGetSignatureWaiting(false);
-                      setIsGetSignaturePending(false);
-                      setIsLoading(false);
-                      setIsWaiting(false);
-
-                    }}
-                  >
-                    <Trans>Please try again</Trans>
-                  </button>
-                </p>
-              )} */}
           </div>
         )}
       </>
-      {/* )} */}
     </div>
   );
 }

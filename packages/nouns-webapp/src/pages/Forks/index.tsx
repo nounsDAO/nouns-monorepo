@@ -14,7 +14,6 @@ const ForksPage: React.FC<Props> = props => {
   const currentTime = now.getTime() / 1000;
   const timestamp = forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
   const isLatestForkFinished = forks.data && timestamp && currentTime && +timestamp < currentTime;
-  // const isLatestForkFinished = forks.data && forks.data[forks.data.length - 1].executed && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp && +forks.data[forks.data.length - 1].forkingPeriodEndTimestamp < now.getTime() / 1000;
   const nextForkId = forks.data && forks.data.length;
   return (
     <div>
@@ -34,8 +33,6 @@ const ForksPage: React.FC<Props> = props => {
               proposals or delegate their vote to a third party.
             </Trans>
           </p>
-
-
         </Col>
       </Section>
       {/* if latest fork id is finished forking, display a callout with an option to start a new fork. */}
@@ -45,11 +42,9 @@ const ForksPage: React.FC<Props> = props => {
 
             {forks.data && forks.data.map((fork: Fork, i: number) => {
               return (
-                <div key={i}>
-                  <Link to={`/fork/${fork.id}`}>
-                    {fork.id}
-                  </Link>
-                </div>
+                <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
+                  {fork.id}
+                </Link>
               )
             })}
           </Row>

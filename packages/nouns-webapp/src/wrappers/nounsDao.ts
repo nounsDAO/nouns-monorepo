@@ -944,8 +944,6 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
 
 // helper function to add fork cycle events to escrow events
 const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[], forkDetails: Fork) => {
-  const now = new Date();
-  const currentTime = now.getTime() / 1000;
   const endTimestamp = forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
   const started: ForkCycleEvent = {
     eventType: 'ForkStarted',
@@ -960,34 +958,15 @@ const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | F
   const forkEnded: ForkCycleEvent = {
     eventType: 'ForkingEnded',
     id: 'fork-ended',
-    // createdAt: endTimestamp && forkDetails.executed && endTimestamp < currentTime ? null : endTimestamp ? `${endTimestamp + 1}` : null,
     createdAt: endTimestamp ? endTimestamp.toString() : null,
   };
   const forkEvents: ForkCycleEvent[] = [
     started,
     executed,
     forkEnded,
-    // {
-    //   eventType: 'ForkStarted',
-    //   id: 'fork-started',
-    //   createdAt: `${(+events[0]?.createdAt - 1)}`,
-    // },
-    // {
-    //   eventType: 'ForkExecuted',
-    //   id: 'fork-executed',
-    //   createdAt: forkDetails.executedAt,
-    // },
-    // {
-    //   eventType: 'ForkingEnded',
-    //   id: 'fork-ended',
-    //   createdAt: forkDetails.forkingPeriodEndTimestamp,
-    // },
   ];
   const sortedEvents = [...events, ...forkEvents].sort((a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent, b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent) => {
     return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
-  });
-  const filteredEvents = sortedEvents.filter((event: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent) => {
-    return event.createdAt !== '0';
   });
   return sortedEvents;
 }
@@ -995,15 +974,11 @@ const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | F
 export const useEscrowEvents = (pollInterval: number, forkId: string) => {
   const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(pollInterval, forkId);
   const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(pollInterval, forkId);
-  const { loading: forkDetailsLoading, data: forkDetails, error: forkDetailsError, refetch: refetchForkDetails } = useForkDetails(pollInterval, forkId);
+  const { loading: forkDetailsLoading, data: forkDetails, error: forkDetailsError } = useForkDetails(pollInterval, forkId);
 
-  const loading = depositsLoading || withdrawalsLoading;
-  const error = depositsError || withdrawalsError;
+  const loading = depositsLoading || withdrawalsLoading || forkDetailsLoading;
+  const error = depositsError || withdrawalsError || forkDetailsError;
   const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents];
-
-  // const sortedData = data.sort((a: EscrowDeposit | EscrowWithdrawal, b: EscrowDeposit | EscrowWithdrawal) => {
-  //   return a.createdAt > b.createdAt ? -1 : 1;
-  // });
   // get fork details to pass to forkCycleEvents
   const events = eventsWithforkCycleEvents(data, forkDetails);
 

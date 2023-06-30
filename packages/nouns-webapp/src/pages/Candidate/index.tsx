@@ -17,11 +17,7 @@ import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
 import { useProposalThreshold } from '../../wrappers/nounsDao';
-import {
-  ProposalCandidate,
-  useCancelCandidate,
-  useCandidateProposal,
-} from '../../wrappers/nounsData';
+import { useCancelCandidate, useCandidateProposal } from '../../wrappers/nounsData';
 import { useUserVotes } from '../../wrappers/nounToken';
 
 dayjs.extend(utc);
@@ -51,7 +47,7 @@ const CandidatePage = ({
     if (blockNumber && !currentBlock) {
       setCurrentBlock(blockNumber);
     }
-  }, [blockNumber]);
+  }, [blockNumber, currentBlock]);
 
 
   useEffect(() => {

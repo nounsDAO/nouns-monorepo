@@ -3,7 +3,6 @@ import classes from './CandidateSponsors.module.css';
 import { CandidateSignature } from '../../wrappers/nounsData';
 import CandidateSponsorImage from './CandidateSponsorImage';
 import { useQuery } from '@apollo/client';
-import { useBlockNumber } from '@usedapp/core';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import { Link } from 'react-router-dom';
 

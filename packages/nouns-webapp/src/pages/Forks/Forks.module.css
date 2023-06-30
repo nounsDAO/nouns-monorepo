@@ -43,3 +43,25 @@ p {
   margin-left: auto;
   margin-right: auto;
 }
+
+.forkCard {
+  padding: 1rem;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e3e8;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #f4f4f8;
+  font-size: 22px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 1rem;
+}
+.forkCard:hover {
+  background: white;
+  color: inherit !important;
+  cursor: pointer;
+}
