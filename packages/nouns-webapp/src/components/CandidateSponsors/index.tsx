@@ -23,6 +23,9 @@ interface CandidateSponsorsProps {
   id: string;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
+  currentBlock: number;
+  requiredVotes: number;
+  userVotes: number;
 }
 
 const deDupeSigners = (signers: string[]) => {
@@ -38,25 +41,25 @@ const deDupeSigners = (signers: string[]) => {
 
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
-  const [requiredVotes, setRequiredVotes] = React.useState<number>();
+  // const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
-  const [currentBlock, setCurrentBlock] = React.useState<number>();
+  // const [currentBlock, setCurrentBlock] = React.useState<number>();
   const [signatures, setSignatures] = useState<any[]>([]);
   const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
   const { account } = useEthers();
-  const blockNumber = useBlockNumber();
+  // const blockNumber = useBlockNumber();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const threshold = useProposalThreshold();
 
-  useEffect(() => {
-    // prevent live-updating the block resulting in undefined block number
-    if (blockNumber && !currentBlock) {
-      setCurrentBlock(blockNumber);
-    }
-  }, [blockNumber]);
+  // useEffect(() => {
+  //   // prevent live-updating the block resulting in undefined block number
+  //   if (blockNumber && !currentBlock) {
+  //     setCurrentBlock(blockNumber);
+  //   }
+  // }, [blockNumber]);
   const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
-  const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, currentBlock || 0);
+  const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock);
   const handleSignerCountDecrease = (decreaseAmount: number) => {
     setSignedVotes(signedVotes => signedVotes - decreaseAmount);
   };
@@ -67,7 +70,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
         activeSigs.splice(i, 1);
       }
-      if (signature.signer.id.toUpperCase() === account?.toUpperCase()) {
+      if (signature.signer.id.toLowerCase() === account?.toLowerCase()) {
         setIsAccountSigner(true);
       }
       delegateSnapshot.delegates?.map(delegate => {
@@ -82,16 +85,18 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return sigs;
   };
 
+  console.log('props.candidate', props.candidate);
+
   const handleSignatureRemoved = () => {
     setIsAccountSigner(false);
     handleSignerCountDecrease(1);
   }
 
-  useEffect(() => {
-    if (threshold !== undefined) {
-      setRequiredVotes(threshold + 1);
-    }
-  }, [threshold]);
+  // useEffect(() => {
+  //   if (threshold !== undefined) {
+  //     setRequiredVotes(threshold + 1);
+  //   }
+  // }, [threshold]);
 
   useEffect(() => {
     if (delegateSnapshot.data && !isCancelOverlayVisible) {
@@ -145,6 +150,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   }, [proposeBySigsState, setModal]);
 
   const submitProposalOnChain = async () => {
+    const proposalSigs = signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    console.log('proposalSigs', proposalSigs);
     await proposeBySigs(
       signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
       props.candidate.version.targets,
@@ -158,18 +165,18 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.interiorWrapper}>
-        {requiredVotes && signedVotes >= requiredVotes && (
+        {props.requiredVotes && signedVotes >= props.requiredVotes && (
           <p className={classes.thresholdMet}>
             <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
           </p>
         )}
         <h4 className={classes.header}>
           <strong>
-            {signedVotes >= 0 ? signedVotes : '...'} of {requiredVotes || '...'} Sponsored Votes
+            {signedVotes >= 0 ? signedVotes : '...'} of {props.requiredVotes || '...'} Sponsored Votes
           </strong>
         </h4>
         <p className={classes.subhead}>
-          {requiredVotes && signedVotes >= requiredVotes ? (
+          {props.requiredVotes && signedVotes >= props.requiredVotes ? (
             <Trans>
               This candidate has met the required threshold, but Nouns voters can still add support
               until it’s put on-chain.
@@ -193,7 +200,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   voteCount={voteCount}
                   expirationTimestamp={signature.expirationTimestamp}
                   signer={signature.signer.id}
-                  isAccountSigner={isAccountSigner}
+                  isAccountSigner={isAccountSigner && signature.signer.id.toLowerCase() === account?.toLowerCase()}
                   sig={signature.sig}
                   handleSignerCountDecrease={handleSignerCountDecrease}
                   handleRefetchCandidateData={props.handleRefetchCandidateData}
@@ -204,13 +211,13 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
               );
             })}
           {signatures &&
-            requiredVotes &&
-            signedVotes < requiredVotes &&
-            Array(requiredVotes - signatures.length)
+            props.requiredVotes &&
+            signedVotes < props.requiredVotes &&
+            Array(props.requiredVotes - signatures.length)
               .fill('')
               .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
 
-          {props.isProposer && requiredVotes && signedVotes >= requiredVotes ? (
+          {props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes ? (
             <button className={classes.button}
               disabled={isProposePending}
               onClick={() => submitProposalOnChain()}>

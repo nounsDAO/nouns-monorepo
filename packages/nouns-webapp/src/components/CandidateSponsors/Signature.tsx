@@ -128,34 +128,34 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           </div>
         )}
       </div>
-      <div className={classes.cancelStatusOverlayWrapper}>
-        {cancelStatusOverlay?.show && (
-          <div className={clsx(
-            classes.cancelStatusOverlay,
-            (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && classes.errorMessage,
-            cancelSigState.status === 'Success' && classes.successMessage
-          )}>
-            {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail' || cancelSigState.status === 'Success') && (
-              <button
-                className={classes.closeButton}
-                onClick={() => {
-                  props.handleRefetchCandidateData();
-                  setCancelStatusOverlay(undefined);
-                  props.setIsCancelOverlayVisible(false);
-                }}
-              >
-                &times;
-              </button>
-            )}
-            <div className={classes.cancelStatusOverlayTitle}>
-              {cancelStatusOverlay.title}
-            </div>
-            <div className={classes.cancelStatusOverlayMessage}>
-              {cancelStatusOverlay.message}
-            </div>
+
+      {cancelStatusOverlay?.show && (
+        <div className={clsx(
+          classes.cancelStatusOverlay,
+          (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && classes.errorMessage,
+          cancelSigState.status === 'Success' && classes.successMessage
+        )}>
+          {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail' || cancelSigState.status === 'Success') && (
+            <button
+              className={classes.closeButton}
+              onClick={() => {
+                props.handleRefetchCandidateData();
+                setCancelStatusOverlay(undefined);
+                props.setIsCancelOverlayVisible(false);
+              }}
+            >
+              &times;
+            </button>
+          )}
+          <div className={classes.cancelStatusOverlayTitle}>
+            {cancelStatusOverlay.title}
           </div>
-        )}
-      </div>
+          <div className={classes.cancelStatusOverlayMessage}>
+            {cancelStatusOverlay.message}
+          </div>
+        </div>
+      )}
+
     </li>
   );
 };

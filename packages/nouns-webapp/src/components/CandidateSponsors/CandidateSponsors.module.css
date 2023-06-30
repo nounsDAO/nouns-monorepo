@@ -217,6 +217,10 @@
   border: 1px solid #e6e6e6;
 }
 
+.cancelStatusOverlay {
+  z-index: 3;
+}
+
 .formOverlay .closeButton,
 .cancelStatusOverlay .closeButton {
   position: absolute;

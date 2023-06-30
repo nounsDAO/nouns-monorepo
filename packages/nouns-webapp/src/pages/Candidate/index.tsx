@@ -2,7 +2,7 @@ import { Row, Col, Button, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Candidate.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -16,11 +16,13 @@ import { ReactNode } from 'react-markdown/lib/react-markdown';
 import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
+import { useProposalThreshold } from '../../wrappers/nounsDao';
 import {
   ProposalCandidate,
   useCancelCandidate,
   useCandidateProposal,
 } from '../../wrappers/nounsData';
+import { useUserVotes } from '../../wrappers/nounToken';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,11 +36,23 @@ const CandidatePage = ({
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
+  const [currentBlock, setCurrentBlock] = useState<number>();
   const candidate = useCandidateProposal(id, dataFetchPollInterval);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = !(activeAccount === undefined);
+  const blockNumber = useBlockNumber();
   const { account } = useEthers();
+  const threshold = useProposalThreshold();
+  const userVotes = useUserVotes();
+
+  useEffect(() => {
+    // prevent live-updating the block resulting in undefined block number
+    if (blockNumber && !currentBlock) {
+      setCurrentBlock(blockNumber);
+    }
+  }, [blockNumber]);
+
 
   useEffect(() => {
     if (candidate.data && account) {
@@ -174,16 +188,19 @@ const CandidatePage = ({
             <ProposalCandidateContent proposal={candidate.data} />
           </Col>
           <Col lg={4}>
-            <CandidateSponsors
-              candidate={candidate.data}
-              slug={candidate.data.slug ?? ''}
-              id={candidate.data.id}
-              // only show signatures that are not canceled
-              // signatures={candidate.data.version.versionSignatures.filter(sig => sig.canceled === false)}
-              isProposer={isProposer}
-              handleRefetchCandidateData={handleRefetchCandidateData}
-              setDataFetchPollInterval={setDataFetchPollInterval}
-            />
+            {currentBlock && threshold !== undefined && userVotes !== undefined && (
+              <CandidateSponsors
+                candidate={candidate.data}
+                slug={candidate.data.slug ?? ''}
+                id={candidate.data.id}
+                isProposer={isProposer}
+                handleRefetchCandidateData={handleRefetchCandidateData}
+                setDataFetchPollInterval={setDataFetchPollInterval}
+                currentBlock={currentBlock - 1}
+                requiredVotes={threshold + 1}
+                userVotes={userVotes}
+              />
+            )}
           </Col>
         </Row>
       )}

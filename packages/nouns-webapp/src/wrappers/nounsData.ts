@@ -139,6 +139,7 @@ export const useProposeBySigs = () => {
     nounsDaoContract,
     'proposeBySigs',
   );
+  console.log('useProposeBySigs', proposeBySigsState);
   return { proposeBySigs, proposeBySigsState };
 };
 
