@@ -1,6 +1,6 @@
 export enum ExternalURL {
   twitter,
-  notion,
+  charmverse,
   discourse,
   nounsCenter,
 }
@@ -8,11 +8,11 @@ export enum ExternalURL {
 export const externalURL = (externalURL: ExternalURL) => {
   switch (externalURL) {
     case ExternalURL.twitter:
-      return 'https://twitter.com/nounsdao';
-    case ExternalURL.notion:
-      return 'https://nouns.notion.site/Explore-Nouns-a2a9dceeb1d54e10b9cbf3f931c2266f';
+      return 'https://twitter.com/atxdao';
+    case ExternalURL.charmverse:
+      return 'https://app.charmverse.io/join?domain=atx-dao';
     case ExternalURL.discourse:
-      return 'https://discourse.nouns.wtf/';
+      return 'https://atxdao.freeflarum.com/';
     case ExternalURL.nounsCenter:
       return 'https://nouns.center/';
   }
