@@ -118,6 +118,7 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
+    
   } catch {}
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
@@ -125,6 +126,7 @@ const getAddresses = (): ContractAddresses => {
 const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
+  atxDaoAddress: '0x0B306BF915C4d645ff596e518fAf3F9669b97016'
 };
 
 export default config;

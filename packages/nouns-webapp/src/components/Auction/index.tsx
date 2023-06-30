@@ -5,6 +5,7 @@ import { Row, Container } from 'react-bootstrap';
 import { setStateBackgroundColor } from '../../state/slices/application';
 import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import { AtxDaoNFT, useCall } from '../../wrappers/atxDaoNFT';
 import classes from './Auction.module.css';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
@@ -23,6 +24,8 @@ interface AuctionProps {
 
 const Auction: React.FC<AuctionProps> = props => {
   const { auction: currentAuction } = props;
+
+  useCall('ownerOf', [1])
 
   const history = useHistory();
   const dispatch = useAppDispatch();

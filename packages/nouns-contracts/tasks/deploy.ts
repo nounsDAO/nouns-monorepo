@@ -202,6 +202,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           }
         },
       },
+      ATXDAONFT_V2: {}
     };
 
     for (const [name, contract] of Object.entries(contracts)) {

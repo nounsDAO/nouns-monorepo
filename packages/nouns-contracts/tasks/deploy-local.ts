@@ -5,11 +5,12 @@ import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
 type LocalContractName =
-  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'>
+  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'ATXDAONFT_V2'>
   | 'NounsDAOLogicV2'
   | 'NounsDAOProxyV2'
   | 'WETH'
-  | 'Multicall2';
+  | 'Multicall2'
+  | 'ATXDAONFT_V2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -144,9 +145,12 @@ task('deploy-local', 'Deploy contracts to hardhat')
         waitForConfirmation: true,
       },
       Multicall2: {},
+      ATXDAONFT_V2: {},
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
+
+
       const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
       });

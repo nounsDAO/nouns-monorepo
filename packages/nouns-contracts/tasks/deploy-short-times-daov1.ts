@@ -192,6 +192,7 @@ task('deploy-short-times-daov1', 'Deploy all Nouns contracts with short gov time
           }
         },
       },
+      ATXDAONFT_V2: {}
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
