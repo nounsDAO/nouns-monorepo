@@ -171,7 +171,7 @@ h1 {
   border: 1px solid #e6e6e6;
   border-radius: 6px;
 }
-.pageHeader.emptyState .forkStatus, .pageHeader.isForked .forkStatus {
+.pageHeader.emptyState .status, .pageHeader.isForked .forkStatus {
   justify-content: center;
 }
 

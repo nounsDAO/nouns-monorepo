@@ -128,11 +128,12 @@ const ForkPage = ({
           )}>
             <Col lg={12}>
               <header>
-                <div className={classes.status}>
-                  <Link to="/fork">back</Link>
+                <div className={(classes.status)}>
+                  <Link className={classes.backButton} to="/fork">←</Link>
                   <span className={clsx(classes.forkStatus)}>
                     {forkStatusLabel}
                   </span>
+                  <div className={classes.spacer} />
                 </div>
                 <h1><Trans>Fork Nouns DAO</Trans></h1>
                 <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
