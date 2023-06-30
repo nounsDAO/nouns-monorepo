@@ -12,6 +12,7 @@ import ModalTitle from '../../../ModalTitle';
 export enum SupportedCurrency {
   ETH = 'ETH',
   WETH = 'WETH',
+  STETH = 'STETH',
   USDC = 'USDC',
 }
 
@@ -40,18 +41,13 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
 
       <BrandDropdown
         label={'Currency'}
-        value={currency === SupportedCurrency.ETH ? 'ETH' : 'USDC'}
-        onChange={e => {
-          if (e.target.value === 'ETH') {
-            setCurrency(SupportedCurrency.ETH);
-          } else {
-            setCurrency(SupportedCurrency.USDC);
-          }
-        }}
+        value={currency}
+        onChange={e => setCurrency(SupportedCurrency[e.target.value as SupportedCurrency])}
         chevronTop={38}
       >
-        <option value="ETH">ETH</option>
         <option value="USDC">USDC</option>
+        <option value="ETH">ETH</option>
+        <option value="STETH">stETH</option>
       </BrandDropdown>
 
       <BrandNumericEntry
@@ -61,7 +57,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
           setAmount(e.value);
           setFormattedAmount(e.formattedValue);
         }}
-        placeholder={currency === SupportedCurrency.ETH ? '0 ETH' : '0 USDC'}
+        placeholder={`0 ${currency}`}
         isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 
