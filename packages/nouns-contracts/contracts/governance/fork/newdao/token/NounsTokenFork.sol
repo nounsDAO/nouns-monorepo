@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { ERC721CheckpointableUpgradeable } from './base/ERC721CheckpointableUpgradeable.sol';
@@ -63,7 +63,7 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
     /// @notice How many tokens are still available to be claimed by Nouners who put their original Nouns in escrow
     uint256 public remainingTokensToClaim;
 
-    /// @notice The forking period expiration timestamp, afterwhich new tokens cannot be claimed by the original DAO
+    /// @notice The forking period expiration timestamp, after which new tokens cannot be claimed by the original DAO
     uint256 public forkingPeriodEndTimestamp;
 
     /// @notice Whether the minter can be updated
@@ -164,13 +164,24 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
      * @param tokenIds The token IDs to claim
      */
     function claimDuringForkPeriod(address to, uint256[] calldata tokenIds) external {
+        uint256 currentNounId = _currentNounId;
+        uint256 maxNounId = 0;
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
-        if (block.timestamp > forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
+        if (block.timestamp >= forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
             _mintWithOriginalSeed(to, nounId);
+
+            if (tokenIds[i] > maxNounId) maxNounId = tokenIds[i];
         }
+
+        // This treats an important case:
+        // During a forking period, people can buy new Nouns on auction, with a higher ID than the auction ID at forking
+        // They can then join the fork with those IDs
+        // If we don't increment currentNounId, unpausing the fork auction house would revert
+        // Since it would attempt to mint a noun with an ID that already exists
+        if (maxNounId >= currentNounId) _currentNounId = maxNounId + 1;
     }
 
     /**
@@ -189,9 +200,7 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
     }
 
     /**
-     * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at 0,
-     * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @notice Mint a Noun to the minter
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {

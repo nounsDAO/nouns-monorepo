@@ -53,7 +53,7 @@
 //                                                                 ┖> Defeated
 //
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
@@ -85,29 +85,29 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return NounsDAOV3Admin.MAX_PROPOSAL_THRESHOLD_BPS;
     }
 
-    /// @notice The minimum setable voting period
+    /// @notice The minimum setable voting period in blocks
     function MIN_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_PERIOD;
+        return NounsDAOV3Admin.MIN_VOTING_PERIOD_BLOCKS;
     }
 
-    /// @notice The max setable voting period
+    /// @notice The max setable voting period in blocks
     function MAX_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_PERIOD;
+        return NounsDAOV3Admin.MAX_VOTING_PERIOD_BLOCKS;
     }
 
-    /// @notice The min setable voting delay
+    /// @notice The min setable voting delay in blocks
     function MIN_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_DELAY;
+        return NounsDAOV3Admin.MIN_VOTING_DELAY_BLOCKS;
     }
 
-    /// @notice The max setable voting delay
+    /// @notice The max setable voting delay in blocks
     function MAX_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_DELAY;
+        return NounsDAOV3Admin.MAX_VOTING_DELAY_BLOCKS;
     }
 
     /// @notice The maximum number of actions that can be included in a proposal
     function proposalMaxOperations() public pure returns (uint256) {
-        return NounsDAOV3Proposals.proposalMaxOperations;
+        return NounsDAOV3Proposals.PROPOSAL_MAX_OPERATIONS;
     }
 
     /**
@@ -132,6 +132,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
+     * @param forkEscrow_ The escrow contract used for creating forks
+     * @param forkDAODeployer_ The contract used to deploy new forked DAOs
      * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param daoParams_ Initial DAO parameters
      * @param dynamicQuorumParams_ The initial dynamic quorum parameters
@@ -221,6 +223,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
+     * Signers are regarded as co-proposers, and therefore have the ability to cancel the proposal at any time.
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
      * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
      * @param targets Target addresses for proposal calls
@@ -247,12 +250,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Invalidates a signature that may be used for signing a proposal.
+     * @notice Invalidates a signature that may be used for signing a new proposal.
      * Once a signature is canceled, the sender can no longer use it again.
      * If the sender changes their mind and want to sign the proposal, they can change the expiry timestamp
      * in order to produce a new signature.
      * The signature will only be invalidated when used by the sender. If used by a different account, it will
      * not be invalidated.
+     * Cancelling a signature for an existing proposal will have no effect. Signers have the ability to cancel
+     * a proposal they signed if necessary.
      * @param sig The signature to cancel
      */
     function cancelSig(bytes calldata sig) external {
@@ -375,7 +380,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Cancels a proposal only if sender is the proposer, or proposer delegates dropped below proposal threshold
+     * @notice Cancels a proposal only if sender is the proposer or a signer, or proposer & signers voting power
+     * dropped below proposal threshold
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(uint256 proposalId) external {
@@ -507,13 +513,22 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @notice Withdraws nouns from the fork escrow to the treasury after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     */
+    function withdrawDAONounsFromEscrowToTreasury(uint256[] calldata tokenIds) external {
+        ds.withdrawDAONounsFromEscrowToTreasury(tokenIds);
+    }
+
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed to an address other than the treasury
      * @dev Only the DAO can call this function
      * @param tokenIds the tokenIds to withdraw
      * @param to the address to send the nouns to
      */
-    function withdrawDAONounsFromEscrow(uint256[] calldata tokenIds, address to) external {
-        ds.withdrawDAONounsFromEscrow(tokenIds, to);
+    function withdrawDAONounsFromEscrowIncreasingTotalSupply(uint256[] calldata tokenIds, address to) external {
+        ds.withdrawDAONounsFromEscrowIncreasingTotalSupply(tokenIds, to);
     }
 
     /**
@@ -630,7 +645,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
 
     /**
-     * @notice Admin function for setting the voting delay
+     * @notice Admin function for setting the voting delay. Best to set voting delay to at least a few days, to give
+     * voters time to make sense of proposals, e.g. 21,600 blocks which should be at least 3 days.
      * @param newVotingDelay new voting delay, in blocks
      */
     function _setVotingDelay(uint256 newVotingDelay) external {
@@ -647,7 +663,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Admin function for setting the proposal threshold basis points
-     * @dev newProposalThresholdBPS must be greater than the hardcoded min
+     * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
      * @param newProposalThresholdBPS new proposal threshold
      */
     function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
@@ -875,16 +891,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      *       quorumCoefficient * againstVotesBPS
      * @dev Note the coefficient is a fixed point integer with 6 decimals
      * @param againstVotes Number of against-votes in the proposal
-     * @param totalSupply The total supply of Nouns at the time of proposal creation
+     * @param adjustedTotalSupply_ The adjusted total supply of Nouns at the time of proposal creation
      * @param params Configurable parameters for calculating the quorum based on againstVotes. See `DynamicQuorumParams` definition for additional details.
      * @return quorumVotes The required quorum
      */
     function dynamicQuorumVotes(
         uint256 againstVotes,
-        uint256 totalSupply,
+        uint256 adjustedTotalSupply_,
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
-        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, totalSupply, params);
+        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, adjustedTotalSupply_, params);
     }
 
     /**
@@ -899,14 +915,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Current min quorum votes using Noun total supply
+     * @notice Current min quorum votes using Nouns adjusted total supply
      */
     function minQuorumVotes() public view returns (uint256) {
         return ds.minQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
-     * @notice Current max quorum votes using Noun total supply
+     * @notice Current max quorum votes using Nouns adjusted total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
         return ds.maxQuorumVotes(ds.adjustedTotalSupply());

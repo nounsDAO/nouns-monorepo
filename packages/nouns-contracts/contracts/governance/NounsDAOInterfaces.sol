@@ -255,6 +255,9 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
+
+    /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
+    event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
 }
 
 contract NounsDAOProxyStorage {
@@ -613,13 +616,13 @@ interface IForkDAODeployer {
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
-    function sendETH(address newDAOTreasury, uint256 ethToSend) external returns (bool success);
+    function sendETH(address recipient, uint256 ethToSend) external;
 
     function sendERC20(
-        address newDAOTreasury,
+        address recipient,
         address erc20Token,
         uint256 tokensToSend
-    ) external returns (bool success);
+    ) external;
 }
 
 interface INounsDAOForkEscrow {

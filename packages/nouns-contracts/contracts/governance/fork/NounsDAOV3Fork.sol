@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { NounsDAOStorageV3, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../NounsDAOInterfaces.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
@@ -26,8 +26,7 @@ library NounsDAOV3Fork {
     error ForkPeriodNotActive();
     error ForkPeriodActive();
     error AdminOnly();
-    error ETHTransferFailed();
-    error ERC20TransferFailed();
+    error UseAlternativeWithdrawFunction();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
@@ -61,6 +60,9 @@ library NounsDAOV3Fork {
 
     /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
     event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
+
+    /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
+    event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
 
     /**
      * @notice Escrow Nouns to contribute to the fork threshold
@@ -158,16 +160,39 @@ library NounsDAOV3Fork {
     }
 
     /**
-     * @notice Withdraws nouns from the fork escrow after the fork has been executed
+     * @notice Withdraws nouns from the fork escrow to the treasury after the fork has been executed
+     * @dev Only the DAO can call this function
+     * @param tokenIds the tokenIds to withdraw
+     */
+    function withdrawDAONounsFromEscrowToTreasury(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds)
+        external
+    {
+        withdrawDAONounsFromEscrow(ds, tokenIds, address(ds.timelock));
+    }
+
+    /**
+     * @notice Withdraws nouns from the fork escrow after the fork has been executed to an address other than the treasury
      * @dev Only the DAO can call this function
      * @param tokenIds the tokenIds to withdraw
      * @param to the address to send the nouns to
      */
-    function withdrawDAONounsFromEscrow(
+    function withdrawDAONounsFromEscrowIncreasingTotalSupply(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256[] calldata tokenIds,
         address to
     ) external {
+        if (to == address(ds.timelock)) revert UseAlternativeWithdrawFunction();
+
+        withdrawDAONounsFromEscrow(ds, tokenIds, to);
+
+        emit DAONounsSupplyIncreasedFromEscrow(tokenIds.length, to);
+    }
+
+    function withdrawDAONounsFromEscrow(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256[] calldata tokenIds,
+        address to
+    ) private {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -200,6 +225,9 @@ library NounsDAOV3Fork {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
     }
 
+    /**
+     * @notice Returns true if noun holders can currently join a fork
+     */
     function isForkPeriodActive(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (bool) {
         return ds.forkEndTimestamp > block.timestamp;
     }
@@ -218,15 +246,15 @@ library NounsDAOV3Fork {
         INounsDAOExecutorV2 timelock = ds.timelock;
         uint256 ethToSend = (address(timelock).balance * tokenCount) / totalSupply;
 
-        bool ethSent = timelock.sendETH(newDAOTreasury, ethToSend);
-        if (!ethSent) revert ETHTransferFailed();
+        timelock.sendETH(newDAOTreasury, ethToSend);
 
         uint256 erc20Count = ds.erc20TokensToIncludeInFork.length;
         for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
-            bool erc20Sent = timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
-            if (!erc20Sent) revert ERC20TransferFailed();
+            if (tokensToSend > 0) {
+                timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
+            }
         }
     }
 }

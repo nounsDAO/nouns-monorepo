@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
+import { INounsTokenForkLike } from './INounsTokenForkLike.sol';
 
 /**
  * @title Storage for `NounsDAOLogicV1Fork`.
@@ -30,7 +30,7 @@ contract NounsDAOStorageV1Fork {
     /// @notice The duration of voting on a proposal, in blocks
     uint256 public votingPeriod;
 
-    /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
+    /// @notice The basis point number of votes to exceed in order for a voter to become a proposer. *DIFFERS from GovernerBravo
     uint256 public proposalThresholdBPS;
 
     /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
@@ -43,7 +43,7 @@ contract NounsDAOStorageV1Fork {
     NounsDAOExecutorV2 public timelock;
 
     /// @notice The address of the Nouns tokens
-    NounsTokenForkLike public nouns;
+    INounsTokenForkLike public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public _proposals;

@@ -45,6 +45,16 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setForkPeriod(14 days + 1);
     }
 
+    function test_setForkPeriod_limitedByLowerBound() public {
+        vm.startPrank(address(dao.timelock()));
+
+        // doesn't revert
+        dao._setForkPeriod(2 days);
+
+        vm.expectRevert(NounsDAOV3Admin.ForkPeriodTooShort.selector);
+        dao._setForkPeriod(2 days - 1);
+    }
+
     function test_setForkThresholdBPS_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
         dao._setForkThresholdBPS(2000);
@@ -75,6 +85,27 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setErc20TokensToIncludeInFork(tokens);
 
         assertEq(dao.erc20TokensToIncludeInFork(), tokens);
+    }
+
+    function test_setErc20TokensToIncludeInFork_allowsEmptyArray() public {
+        tokens = new address[](0);
+
+        vm.prank(address(dao.timelock()));
+        vm.expectEmit(true, true, true, true);
+        emit ERC20TokensToIncludeInForkSet(new address[](0), tokens);
+        dao._setErc20TokensToIncludeInFork(tokens);
+
+        assertEq(dao.erc20TokensToIncludeInFork(), tokens);
+    }
+
+    function test_setErc20TokensToIncludeInFork_givenDuplicateAddressesInInput_reverts() public {
+        address[] memory tokens = new address[](2);
+        tokens[0] = address(42);
+        tokens[1] = address(42);
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOV3Admin.DuplicateTokenAddress.selector);
+        dao._setErc20TokensToIncludeInFork(tokens);
     }
 
     function test_setForkEscrow_onlyAdmin() public {
@@ -109,11 +140,6 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     }
 
     function test_setVoteSnapshotBlockSwitchProposalId_setsToNextProposalId() public {
-        vm.prank(address(dao.timelock()));
-        dao._setVoteSnapshotBlockSwitchProposalId();
-
-        assertEq(dao.voteSnapshotBlockSwitchProposalId(), 1);
-
         // overwrite proposalCount
         vm.store(address(dao), bytes32(uint256(8)), bytes32(uint256(100)));
 
@@ -121,6 +147,15 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setVoteSnapshotBlockSwitchProposalId();
 
         assertEq(dao.voteSnapshotBlockSwitchProposalId(), 101);
+    }
+
+    function test_setVoteSnapshotBlockSwitchProposalId_revertsIfCalledTwice() public {
+        vm.prank(address(dao.timelock()));
+        dao._setVoteSnapshotBlockSwitchProposalId();
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert(NounsDAOV3Admin.VoteSnapshotSwitchAlreadySet.selector);
+        dao._setVoteSnapshotBlockSwitchProposalId();
     }
 
     function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {

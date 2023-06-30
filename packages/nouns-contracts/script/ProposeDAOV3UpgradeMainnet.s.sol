@@ -16,9 +16,9 @@ contract ProposeDAOV3UpgradeMainnet is Script {
     uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
-    address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
-    address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
+    address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
+    address public constant DESCRIPTOR_MAINNET = 0x6229c811D04501523C6058bfAAc29c91bb586268;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -104,18 +104,6 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         calldatas[i] = '';
 
         i++;
-        targets[i] = TOKEN_BUYER_MAINNET;
-        values[i] = 0;
-        signatures[i] = 'transferOwnership(address)';
-        calldatas[i] = abi.encode(timelockV2);
-
-        i++;
-        targets[i] = PAYER_MAINNET;
-        values[i] = 0;
-        signatures[i] = 'transferOwnership(address)';
-        calldatas[i] = abi.encode(timelockV2);
-
-        i++;
         targets[i] = AUCTION_HOUSE_PROXY_MAINNET;
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
@@ -133,6 +121,21 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         signatures[i] = 'transferEntireBalance(address,address)';
         calldatas[i] = abi.encode(STETH_MAINNET, timelockV2);
 
+        // Change nouns token owner
+        i++;
+        targets[i] = NOUNS_TOKEN_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        // Change descriptor owner
+        i++;
+        targets[i] = DESCRIPTOR_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        // This must be the last transaction, because starting now, execution will be from timelockV2
         i++;
         targets[i] = address(daoProxy);
         values[i] = 0;

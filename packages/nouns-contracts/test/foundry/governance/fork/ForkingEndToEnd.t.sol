@@ -54,16 +54,23 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         // of that is 8 ETH.
         assertEqUint(forkTreasuryAddress.balance, 8 ether);
 
-        // Asserting that delayed governance is working - no one should be able to propose until all fork tokens have
-        // been claimed, or until the delay period expires.
-        // Later in this test we make sure we CAN propose once all tokens have been claimed.
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        // Governance is blocked during forking period
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
         // Two additional Nouners join the fork during the forking period.
         // This should grow the ETH balance sent from OG DAO to fork DAO.
         joinFork(nounerForkJoiner1);
         joinFork(nounerForkJoiner2);
+
+        // Forking period finished
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
+
+        // Asserting that delayed governance is working - no one should be able to propose until all fork tokens have
+        // been claimed, or until the delay period expires.
+        // Later in this test we make sure we CAN propose once all tokens have been claimed.
+        vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
+        proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
         // Asserting the expected ETH amount was sent. We're now at two thirds of OG Nouns forking, so we expect
         // two thirds of the ETH to be sent, which is 16 out of the original 24.
@@ -80,7 +87,8 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         forkToken.claimFromEscrow(tokensInEscrow2);
         vm.roll(block.number + 1);
 
-        // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed.
+        // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed and
+        // forking period is over
         vm.startPrank(nounerInEscrow1);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
@@ -172,19 +180,23 @@ abstract contract ForkDAOBase is DeployUtilsFork {
     address originalNouner = makeAddr('original nouner');
     address newNouner = makeAddr('new nouner');
     address proposalRecipient = makeAddr('recipient');
+    address joiningNouner = makeAddr('joining nouner');
 
-    function setUp() public {
+    function setUp() public virtual {
         originalDAO = _deployDAOV3();
         originalToken = originalDAO.nouns();
         address originalMinter = originalToken.minter();
+        vm.startPrank(address(originalDAO.timelock()));
+        NounsAuctionHouseFork(originalMinter).unpause();
+        vm.stopPrank();
 
-        vm.startPrank(originalMinter);
-        originalToken.mint();
-        originalToken.mint();
-        originalToken.transferFrom(originalMinter, originalNouner, 1);
-        originalToken.transferFrom(originalMinter, originalNouner, 2);
+        vm.deal(originalNouner, 1 ether);
+        vm.deal(joiningNouner, 1 ether);
 
-        changePrank(originalNouner);
+        bidAndSettleOriginalAuction(originalNouner);
+        bidAndSettleOriginalAuction(originalNouner);
+
+        vm.startPrank(originalNouner);
         uint256[] memory tokenIds = new uint256[](2);
         tokenIds[0] = 1;
         tokenIds[1] = 2;
@@ -203,17 +215,27 @@ abstract contract ForkDAOBase is DeployUtilsFork {
         vm.roll(block.number + 1);
     }
 
-    function bidAndSettleAuction() internal {
-        INounsAuctionHouse.Auction memory auction = getAuction();
-        uint256 newNounId = auction.nounId;
-        forkAuction.createBid{ value: 0.1 ether }(newNounId);
-        vm.warp(block.timestamp + auction.endTime);
-        forkAuction.settleCurrentAndCreateNewAuction();
-        assertEq(forkToken.ownerOf(newNounId), newNouner);
-        vm.roll(block.number + 1);
+    function bidAndSettleForkAuction(address buyer) internal {
+        bidAndSettleAuction(forkAuction, buyer);
     }
 
-    function getAuction() internal view returns (INounsAuctionHouse.Auction memory) {
+    function bidAndSettleOriginalAuction(address buyer) internal {
+        bidAndSettleAuction(NounsAuctionHouseFork(originalToken.minter()), buyer);
+    }
+
+    function bidAndSettleAuction(NounsAuctionHouseFork auctionHouse, address buyer) internal {
+        vm.startPrank(buyer);
+        INounsAuctionHouse.Auction memory auction = getAuction(auctionHouse);
+        uint256 newNounId = auction.nounId;
+        auctionHouse.createBid{ value: 0.1 ether }(newNounId);
+        vm.warp(block.timestamp + auction.endTime);
+        auctionHouse.settleCurrentAndCreateNewAuction();
+        assertEq(auctionHouse.nouns().ownerOf(newNounId), buyer);
+        vm.roll(block.number + 1);
+        vm.stopPrank();
+    }
+
+    function getAuction(NounsAuctionHouseFork auctionHouse) internal view returns (INounsAuctionHouse.Auction memory) {
         (
             uint256 nounId,
             uint256 amount,
@@ -221,7 +243,7 @@ abstract contract ForkDAOBase is DeployUtilsFork {
             uint256 endTime,
             address payable bidder,
             bool settled
-        ) = forkAuction.auction();
+        ) = auctionHouse.auction();
 
         return INounsAuctionHouse.Auction(nounId, amount, startTime, endTime, bidder, settled);
     }
@@ -252,7 +274,15 @@ abstract contract ForkDAOBase is DeployUtilsFork {
     }
 }
 
-contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
+abstract contract ForkDAOPostForkingPeriodBase is ForkDAOBase {
+    function setUp() public virtual override {
+        super.setUp();
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
+    }
+}
+
+contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOPostForkingPeriodBase {
     function test_resumeAuctionViaProposal_buyOnAuctionAndPropose() public {
         // Execute the proposal to resume the auction
         vm.startPrank(originalNouner);
@@ -262,10 +292,11 @@ contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
 
         // Buy a fork noun on auction as newNouner
         vm.deal(newNouner, 1 ether);
-        changePrank(newNouner);
-        bidAndSettleAuction();
+        vm.stopPrank();
+        bidAndSettleForkAuction(newNouner);
 
         // Execute a proposal created by newNouner
+        vm.startPrank(newNouner);
         vm.deal(address(forkTreasury), 0.142 ether);
         uint256 transferProp = proposeToForkAndRollToVoting(proposalRecipient, 0.142 ether, '', '');
         forkDAO.castVote(transferProp, 1);
@@ -276,7 +307,7 @@ contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
     }
 }
 
-contract ForkDAOCanUpgradeItsTokenTest is ForkDAOBase {
+contract ForkDAOCanUpgradeItsTokenTest is ForkDAOPostForkingPeriodBase {
     function test_upgradeTokenWorks() public {
         vm.expectRevert();
         TokenUpgrade(address(forkToken)).theUpgradeWorked();
@@ -293,6 +324,34 @@ contract ForkDAOCanUpgradeItsTokenTest is ForkDAOBase {
         queueAndExecute(propId);
 
         assertTrue(TokenUpgrade(address(forkToken)).theUpgradeWorked());
+    }
+}
+
+contract ForkDAO_PostFork_NewOGNounsJoin is ForkDAOBase {
+    function test_forkAuctionHouseUnpauseWorks() public {
+        // buy new nouns on auction
+        bidAndSettleOriginalAuction(joiningNouner);
+        bidAndSettleOriginalAuction(joiningNouner);
+
+        // join the fork with new noun IDs
+        vm.startPrank(joiningNouner);
+        uint256[] memory tokenIds = new uint256[](2);
+        tokenIds[0] = 3;
+        tokenIds[1] = 4;
+        originalToken.setApprovalForAll(address(originalDAO), true);
+        originalDAO.joinFork(tokenIds, new uint256[](0), '');
+
+        vm.warp(forkToken.forkingPeriodEndTimestamp());
+
+        // unpause auction, which calls mint, which should work if token's _currentNounId is set correctly
+        changePrank(originalNouner);
+        uint256 unpauseAuctionPropId = proposeToForkAndRollToVoting(address(forkAuction), 0, 'unpause()', '');
+        forkDAO.castVote(unpauseAuctionPropId, 1);
+        queueAndExecute(unpauseAuctionPropId);
+
+        // if the unpause tx fails because of a failed mint, auction house pauses itself
+        assertFalse(forkAuction.paused());
+        assertEq(getAuction(forkAuction).nounId, 5);
     }
 }
 

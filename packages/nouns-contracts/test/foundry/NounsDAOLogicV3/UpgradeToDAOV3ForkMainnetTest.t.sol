@@ -172,14 +172,6 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(daoV3.voteSnapshotBlockSwitchProposalId(), 299);
     }
 
-    function test_TokenBuyer_changedOwner() public {
-        assertEq(IOwnable(TOKEN_BUYER_MAINNET).owner(), address(timelockV2));
-    }
-
-    function test_Payer_changedOwner() public {
-        assertEq(IOwnable(PAYER_MAINNET).owner(), address(timelockV2));
-    }
-
     function test_transfersAllstETH() public {
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 1);
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), STETH_BALANCE - 1);
@@ -221,6 +213,10 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         signatures = [''];
         calldatas = [bytes('')];
 
+        vm.expectRevert(NounsDAOLogicV1Fork.GovernanceBlockedDuringForkingPeriod.selector);
+        forkDao.propose(targets, values, signatures, calldatas, 'new prop');
+
+        vm.warp(block.timestamp + 7 days);
         vm.expectRevert(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector);
         forkDao.propose(targets, values, signatures, calldatas, 'new prop');
 
@@ -259,6 +255,10 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 0);
         assertEq(address(timelockV2).balance, expectedV2Balance);
         assertTrue(IERC721(LILNOUNS_MAINNET).isApprovedForAll(address(NOUNS_TIMELOCK_V1_MAINNET), address(timelockV2)));
+        assertEq(nouns.balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 0);
+        assertEq(nouns.ownerOf(687), address(timelockV2));
+        assertEq(IOwnable(TOKEN_BUYER_MAINNET).owner(), address(timelockV2));
+        assertEq(IOwnable(PAYER_MAINNET).owner(), address(timelockV2));
     }
 
     function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {

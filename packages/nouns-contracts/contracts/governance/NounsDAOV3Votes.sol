@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
@@ -213,10 +213,10 @@ library NounsDAOV3Votes {
         address voter,
         uint8 support
     ) internal returns (uint96) {
-        require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
+        require(support <= 2, 'NounsDAO::castVoteDuringVotingPeriodInternal: invalid vote type');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
-        require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
+        require(receipt.hasVoted == false, 'NounsDAO::castVoteDuringVotingPeriodInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
         uint96 votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposalId, proposal));
@@ -264,7 +264,7 @@ library NounsDAOV3Votes {
     }
 
     /**
-     * @notice Internal function that handles against votes during an objetion period.
+     * @notice Internal function that handles against votes during an objection period.
      * @dev Assumes it's being called by `castVoteInternal` which ensures:
      * 1. The proposal is in the objection period state.
      * 2. The vote is an against vote.

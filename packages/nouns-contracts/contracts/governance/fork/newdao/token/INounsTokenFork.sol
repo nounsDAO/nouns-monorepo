@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { IERC721Upgradeable } from '@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol';
 import { INounsDescriptorMinimal } from '../../../../interfaces/INounsDescriptorMinimal.sol';
@@ -25,8 +25,6 @@ interface INounsTokenFork is IERC721Upgradeable {
     event NounCreated(uint256 indexed tokenId, INounsSeeder.Seed seed);
 
     event NounBurned(uint256 indexed tokenId);
-
-    event NoundersDAOUpdated(address noundersDAO);
 
     event MinterUpdated(address minter);
 
