@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom';
 type Props = {
   signers: CandidateSignature[];
   nounsRequired: number;
+  currentBlock?: number;
 };
 
-function CandidateSponsors({ signers, nounsRequired }: Props) {
+function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
   const [signerSpots, setSignerSpots] = useState<CandidateSignature[]>();
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
-  const currentBlock = useBlockNumber();
   const signerIds = signers?.map(s => s.signer.id) ?? [];
 
   const { data: delegateSnapshot } = useQuery<Delegates>(
@@ -40,7 +40,8 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
   }, [signers, nounsRequired]);
 
   console.log('todo: add signerCountOverflow element', signerCountOverflow);
-
+  const placeholderCount = nounsRequired - signers.length;
+  const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
   return (
     <div className={classes.sponsors}>
       {signerSpots &&
@@ -53,11 +54,9 @@ function CandidateSponsors({ signers, nounsRequired }: Props) {
             </Link>
           );
         })}
-      {Array(nounsRequired - signers.length)
-        .fill(0)
-        .map((_, index) => (
-          <div className={classes.emptySponsorSpot} />
-        ))}
+      {placeholderArray.map((_) => (
+        <div className={classes.emptySponsorSpot} />
+      ))}
     </div>
   );
 }

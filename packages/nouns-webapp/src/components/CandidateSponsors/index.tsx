@@ -43,23 +43,14 @@ const deDupeSigners = (signers: string[]) => {
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
-  // const [currentBlock, setCurrentBlock] = React.useState<number>();
   const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
   const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
   const { account } = useEthers();
-  // const blockNumber = useBlockNumber();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const threshold = useProposalThreshold();
 
-  // useEffect(() => {
-  //   // prevent live-updating the block resulting in undefined block number
-  //   if (blockNumber && !currentBlock) {
-  //     setCurrentBlock(blockNumber);
-  //   }
-  // }, [blockNumber]);
   const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock);
   const handleSignerCountDecrease = (decreaseAmount: number) => {

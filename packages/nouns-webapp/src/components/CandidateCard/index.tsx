@@ -1,54 +1,114 @@
 import classes from './CandidateCard.module.css';
 import clsx from 'clsx';
-import { PartialProposalCandidate } from '../../wrappers/nounsData';
+import { CandidateSignature, PartialProposalCandidate } from '../../wrappers/nounsData';
 import CandidateSponsors from './CandidateSponsors';
 import ShortAddress from '../ShortAddress';
 import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { props } from 'ramda';
+import { useState, useEffect } from 'react';
+import account from '../../state/slices/account';
+import { Delegates } from '../../wrappers/subgraph';
+import { useDelegateNounsAtBlockQuery } from '../../wrappers/nounToken';
+import { useBlockNumber } from '@usedapp/core';
 
 type Props = {
   candidate: PartialProposalCandidate;
   nounsRequired: number;
 };
 
-function CandidateCard({ candidate, nounsRequired }: Props) {
+
+const deDupeSigners = (signers: string[]) => {
+  const uniqueSigners: string[] = [];
+  signers.forEach(signer => {
+    if (!uniqueSigners.includes(signer)) {
+      uniqueSigners.push(signer);
+    }
+  }
+  );
+  return uniqueSigners;
+}
+
+
+function CandidateCard(props: Props) {
+  const [currentBlock, setCurrentBlock] = useState<number>();
+  const [signedVotes, setSignedVotes] = useState<number>(0);
+  const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
+  const signers = deDupeSigners(props.candidate.latestVersion.versionSignatures?.map(signature => signature.signer.id));
+  const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, currentBlock ?? 0);
+  const blockNumber = useBlockNumber();
+  const filterSignersByVersion = (delegateSnapshot: Delegates) => {
+    const activeSigs = props.candidate.latestVersion.versionSignatures.filter(sig => sig.canceled === false)
+    let votes = 0;
+    console.log('activeSigs', activeSigs);
+    console.log('props.candidate.latestVersion.versionSignatures', props.candidate.latestVersion);
+    const sigs = activeSigs.map((signature, i) => {
+      if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
+        activeSigs.splice(i, 1);
+      }
+      delegateSnapshot.delegates?.map(delegate => {
+        if (delegate.id === signature.signer.id) {
+          votes += delegate.nounsRepresented.length;
+        }
+        return delegate;
+      });
+      return signature;
+    });
+    setSignedVotes(votes);
+    return sigs;
+  };
+  useEffect(() => {
+    if (delegateSnapshot.data) {
+      console.log('delegateSnapshot.data', delegateSnapshot.data);
+      console.log('filterSignersByVersion(delegateSnapshot.data)', filterSignersByVersion(delegateSnapshot.data));
+      setSignatures(filterSignersByVersion(delegateSnapshot.data));
+    }
+  }, [props.candidate, delegateSnapshot.data]);
+
+  useEffect(() => {
+    // prevent live-updating the block resulting in undefined block number
+    if (blockNumber && !currentBlock) {
+      setCurrentBlock(blockNumber);
+    }
+  }, [blockNumber]);
   return (
     <Link
       className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
-      to={`/candidates/${candidate.id}`}
+      to={`/candidates/${props.candidate.id}`}
     >
       <div className={classes.title}>
         <span className={classes.candidateTitle}>
-          <span>{candidate.latestVersion.title}</span>
+          <span>{props.candidate.latestVersion.title}</span>
         </span>
         <p className={classes.proposer}>
           by{' '}
           <a
-            href={buildEtherscanAddressLink(candidate.proposer || '')}
+            href={buildEtherscanAddressLink(props.candidate.proposer || '')}
             target="_blank"
             rel="noreferrer"
           >
-            <ShortAddress address={candidate.proposer || ''} avatar={false} />
+            <ShortAddress address={props.candidate.proposer || ''} avatar={false} />
           </a>
         </p>
 
         <div className={classes.footer}>
           <div className={classes.candidateSponsors}>
             <CandidateSponsors
-              signers={candidate.latestVersion.versionSignatures}
-              nounsRequired={nounsRequired}
+              signers={props.candidate.latestVersion.versionSignatures}
+              nounsRequired={props.nounsRequired}
+              currentBlock={currentBlock && currentBlock - 1}
             />
             <span className={classes.sponsorCount}>
               <strong>
-                {candidate.latestVersion.versionSignatures.length} / {nounsRequired}
+                {signedVotes} / {props.nounsRequired}
               </strong>{' '}
               <Trans>sponsors</Trans>
             </span>
           </div>
           <p className={classes.timestamp}>
-            {dayjs.unix(candidate.lastUpdatedTimestamp).fromNow()}
+            {dayjs.unix(props.candidate.lastUpdatedTimestamp).fromNow()}
           </p>
         </div>
       </div>

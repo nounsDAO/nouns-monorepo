@@ -119,7 +119,14 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
         versionSignatures {
           signer {
             id
+            proposals {
+              id
+            }
           }
+          sig
+          expirationTimestamp
+          canceled
+          reason
         }
       }
     }
