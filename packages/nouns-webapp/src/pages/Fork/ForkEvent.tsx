@@ -84,7 +84,7 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
 
   return (
     <div className={clsx(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)} id={event.id}>
-      <a href={`#${event.id}`} className={classes.eventPoint}></a>
+      <a href={`#${event.id}`} className={classes.eventPoint}>{""}</a>
       <header>
         <span className={classes.timestamp}>
           <a href={`#${event.id}`}>

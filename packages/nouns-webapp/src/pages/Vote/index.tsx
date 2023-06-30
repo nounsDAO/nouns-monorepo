@@ -71,11 +71,11 @@ const getCountdownCopy = (
       : undefined;
 
   return (
-    <Trans>
+    <>
       {dayjs(endDate)
         .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
         .fromNow(true)}
-    </Trans>
+    </>
   );
 };
 
@@ -94,11 +94,11 @@ const getUpdatableCountdownCopy = (
       : undefined;
 
   return (
-    <Trans>
+    <>
       {dayjs(endDate)
         .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
         .fromNow(true)}
-    </Trans>
+    </>
   );
 };
 
@@ -271,7 +271,7 @@ const VotePage = ({
     };
   })();
 
-  const destructiveStateButtonAction = isCancellable() ? <Trans>Cancel</Trans> : '';
+  const destructiveStateButtonAction = isCancellable() ? 'Cancel' : '';
   const destructiveStateAction = (() => {
     if (isCancellable()) {
       return () => {
@@ -533,7 +533,6 @@ const VotePage = ({
               </div>
             )}
 
-            {/* {((isCancellable && isUpdateable) || (isProposalSigner && isCancellable)) && ( */}
             {isActionable() && (
               <div className={classes.proposerOptionsWrapper}>
                 <div className={classes.proposerOptions}>
@@ -574,7 +573,7 @@ const VotePage = ({
                           {isQueuePending || isExecutePending ? (
                             <Spinner animation="border" />
                           ) : (
-                            <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                            <>{moveStateButtonAction} Proposal ⌐◧-◧</>
                           )}
                         </Button>
                       )}
@@ -591,7 +590,7 @@ const VotePage = ({
                           {isCancelPending ? (
                             <Spinner animation="border" />
                           ) : (
-                            <Trans>{destructiveStateButtonAction} Proposal </Trans>
+                            <>{destructiveStateButtonAction} Proposal </>
                           )}
                         </Button>
                       )}

@@ -145,9 +145,9 @@ const ForkPage = ({
                   {addNounsButtonLabel}
                 </button>
               )}
-              <p className={classes.note}><Trans>
+              <p className={classes.note}>
                 {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the fork threshold
-              </Trans></p>
+              </p>
             </Col>
           </div>
         ) : (
@@ -164,11 +164,11 @@ const ForkPage = ({
                 </span>
                 <div className={classes.spacer} />
               </div>
-              <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
+              <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
               {(!isForkPeriodActive || !isForked) && (
-                <p><Trans>
+                <p>
                   {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold
-                </Trans></p>
+                </p>
               )}
 
             </Col>
@@ -218,18 +218,22 @@ const ForkPage = ({
           <div className={clsx(classes.callout, classes.isForked)}>
             {forkDetails.data.forkingPeriodEndTimestamp && (
               <p>
-                <Trans><strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong></Trans>
+                <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
               </p>
             )}
             <p>Fork contracts:{" "}
-              {/* awaiting data */}
-              {/* <a
-                  href={buildEtherscanAddressLink(forkDetails.data.TKTK)}
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  Governor
-                </a>,{" "} */}
+              {/* TODO:awaiting data */}
+              {forkDetails.data.forkToken && (
+                <>
+                  <a
+                    href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
+                    target='_blank'
+                    rel='noreferrer'
+                  >
+                    Governor
+                  </a>, {" "}
+                </>
+              )}
               {forkDetails.data.forkTreasury && (
                 <>
                   <a
@@ -252,12 +256,14 @@ const ForkPage = ({
                   </a>,{" "}
                 </>
               )}
-              {/* awaiting data */}
-              {/* <a
-                  href={buildEtherscanAddressLink(forkDetails.data.TKTK)}
+              {/* TODO: awaiting data */}
+              {forkDetails.data.forkToken && (
+                <a
+                  href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
                   target='_blank'
                   rel='noreferrer'
-                >Timelock</a> */}
+                >Timelock</a>
+              )}
             </p>
           </div>
         </Section>

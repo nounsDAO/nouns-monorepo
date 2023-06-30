@@ -57,7 +57,7 @@ h1 {
   text-align: center;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
 }
@@ -77,7 +77,7 @@ h1 {
   color: rgb(95, 95, 95);
   text-decoration: none;
 }
-.pageHeader .status .spacer {
+.pageHeader.emptyState .status .spacer {
   /* spacer to keep label centered */
   width: 2rem;
   height: 2rem;
@@ -170,6 +170,9 @@ h1 {
   padding: 6px 10px;
   border: 1px solid #e6e6e6;
   border-radius: 6px;
+}
+.pageHeader.emptyState .forkStatus, .pageHeader.isForked .forkStatus {
+  justify-content: center;
 }
 
 /* timeline */
