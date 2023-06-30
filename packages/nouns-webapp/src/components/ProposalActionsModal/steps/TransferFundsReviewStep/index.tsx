@@ -19,14 +19,13 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
       calldata: '0x',
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
+    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()]; 
     onActionAdd({
       address: config.addresses.steth,
       value: '0',
       signature: 'transfer(address,uint256)',
-      calldata: utils.defaultAbiCoder.encode(
-        ['address', 'uint256'],
-        [state.address, utils.parseEther(state.amount?.toString() ?? '0').toString()],
-      ),
+      decodedCalldata: JSON.stringify(values),
+      calldata: utils.defaultAbiCoder.encode(['address', 'uint256'], values),
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
     const signature = 'sendOrRegisterDebt(address,uint256)';
