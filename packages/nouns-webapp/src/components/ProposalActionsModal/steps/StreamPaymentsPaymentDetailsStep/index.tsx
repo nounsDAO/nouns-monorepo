@@ -16,7 +16,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
 
   const [amount, setAmount] = useState<string>(state.amount ?? '');
   const [currency, setCurrency] = useState<SupportedCurrency.WETH | SupportedCurrency.USDC>(
-    SupportedCurrency.WETH,
+    SupportedCurrency.USDC,
   );
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState(state.address ?? '');
@@ -51,8 +51,8 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
         }}
         chevronTop={38}
       >
-        <option value="WETH">WETH</option>
         <option value="USDC">USDC</option>
+        <option value="WETH">WETH</option>
       </BrandDropdown>
 
       <BrandNumericEntry
