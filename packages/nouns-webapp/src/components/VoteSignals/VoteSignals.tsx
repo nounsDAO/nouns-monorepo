@@ -205,30 +205,30 @@ function VoteSignals(props: Props) {
                             Abstain
                           </button>
                         </div>
-                        {(isTransactionPending || hasUserVoted) && (
-                          <>
-                            <input
-                              type="text"
-                              className={classes.reasonInput}
-                              placeholder="Optional reason"
-                              value={reasonText}
-                              disabled={isTransactionPending}
-                              onChange={event => setReasonText(event.target.value)}
-                            />
+                        {/* {(isTransactionPending || hasUserVoted) && ( */}
+                        <>
+                          <input
+                            type="text"
+                            className={classes.reasonInput}
+                            placeholder="Optional reason"
+                            value={reasonText}
+                            disabled={isTransactionPending}
+                            onChange={event => setReasonText(event.target.value)}
+                          />
 
-                            <button
-                              className={clsx(classes.button, classes.submit)}
-                              disabled={isTransactionPending}
-                              onClick={() =>
-                                props.proposal.id &&
-                                support !== undefined &&
-                                handleFeedbackSubmit(+props.proposal.id, support, reasonText)
-                              }
-                            >
-                              Submit
-                            </button>
-                          </>
-                        )}
+                          <button
+                            className={clsx(classes.button, classes.submit)}
+                            disabled={support === undefined || isTransactionPending}
+                            onClick={() =>
+                              props.proposal.id &&
+                              support !== undefined &&
+                              handleFeedbackSubmit(+props.proposal.id, support, reasonText)
+                            }
+                          >
+                            Submit
+                          </button>
+                        </>
+                        {/* )} */}
                       </>
                     ) : (
                       <div className={classes.voted}>

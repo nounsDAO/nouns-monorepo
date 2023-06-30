@@ -203,6 +203,14 @@
 .feedbackForm button.abstain {
   background: var(--brand-gray-light-text);
 }
+.feedbackForm button.submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.feedbackForm button.submit:disabled:hover {
+  outline: 2px solid transparent;
+  border: 2px solid transparent;
+}
 
 .reasonInput {
   padding: 10px;
