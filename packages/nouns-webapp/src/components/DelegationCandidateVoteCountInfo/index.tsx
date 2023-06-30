@@ -1,5 +1,4 @@
 import classes from './DelegationCandidateVoteCountInfo.module.css';
-import { Trans } from '@lingui/macro';
 import React from 'react';
 import BrandSpinner from '../BrandSpinner';
 
