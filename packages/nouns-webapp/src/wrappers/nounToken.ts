@@ -1,6 +1,6 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsDaoLogicV3Factory, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { Delegates, accountEscrowedNounsQuery, delegateNounsAtBlockQuery, ownedNounsQuery, seedsQuery } from './subgraph';

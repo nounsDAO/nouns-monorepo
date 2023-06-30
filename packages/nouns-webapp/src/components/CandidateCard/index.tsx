@@ -38,8 +38,6 @@ function CandidateCard(props: Props) {
   const filterSignersByVersion = (delegateSnapshot: Delegates) => {
     const activeSigs = props.candidate.latestVersion.versionSignatures.filter(sig => sig.canceled === false)
     let votes = 0;
-    console.log('activeSigs', activeSigs);
-    console.log('props.candidate.latestVersion.versionSignatures', props.candidate.latestVersion);
     const sigs = activeSigs.map((signature, i) => {
       if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
         activeSigs.splice(i, 1);
@@ -57,12 +55,10 @@ function CandidateCard(props: Props) {
   };
   useEffect(() => {
     if (delegateSnapshot.data) {
-      console.log('delegateSnapshot.data', delegateSnapshot.data);
-      console.log('filterSignersByVersion(delegateSnapshot.data)', filterSignersByVersion(delegateSnapshot.data));
       setSignatures(filterSignersByVersion(delegateSnapshot.data));
     }
-
-  }, [props.candidate, delegateSnapshot.data, filterSignersByVersion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.candidate, delegateSnapshot.data]);
 
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number

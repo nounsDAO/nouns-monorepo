@@ -60,6 +60,7 @@ p {
   color: inherit;
   margin-bottom: 1rem;
 }
+
 .forkCard:hover {
   background: white;
   color: inherit !important;

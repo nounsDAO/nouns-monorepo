@@ -3,17 +3,17 @@ import classes from './Fork.module.css';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
 import Section from '../../layout/Section';
-import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useIsForkPeriodActive, useNumTokensInForkEscrow, useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
+import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
 import { useEthers } from '@usedapp/core';
 import { useTotalSupply, useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
 import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
 import { useScrollToLocation } from '../../hooks/useScrollToLocation';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import NotFoundPage from '../NotFound';
@@ -60,6 +60,7 @@ const ForkPage = ({
   useEffect(() => {
     // trigger data updates on modal close
     refetchForkData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen, isWithdrawModalOpen, isDeployModalOpen, isForkPeriodActive]);
 
   useEffect(() => {

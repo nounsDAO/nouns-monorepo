@@ -1,10 +1,8 @@
 import React from 'react';
 import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { CandidateSignature, useProposeBySigs } from '../../wrappers/nounsData';
+import { useEffect, useState } from 'react';
+import { CandidateSignature } from '../../wrappers/nounsData';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates } from '../../wrappers/subgraph';
@@ -84,53 +82,14 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     if (delegateSnapshot.data && !isCancelOverlayVisible) {
       setSignatures(filterSignersByVersion(delegateSnapshot.data));
     }
-  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, filterSignersByVersion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible]);
 
-  const [isProposePending, setProposePending] = useState(false);
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
   const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<
     'None' | 'Success' | 'Mining' | 'Fail' | 'Exception'
   >('None');
 
-  useEffect(() => {
-    switch (proposeBySigsState.status) {
-      case 'None':
-        setProposePending(false);
-        break;
-      case 'Mining':
-        setProposePending(true);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        props.handleRefetchCandidateData();
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: proposeBySigsState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: proposeBySigsState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposeBySigsState, setModal]);
+
 
   return (
     <>
@@ -202,7 +161,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             {props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes ? (
               <>
                 <button className={classes.button}
-                  disabled={isProposePending}
                   onClick={() => setIsModalOpen(true)}>
                   Submit on-chain
                 </button>

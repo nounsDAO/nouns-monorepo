@@ -830,7 +830,6 @@ export const useExecuteProposal = () => {
     nounsDaoContract,
     'execute',
   );
-  console.log('useExecuteProposal', executeProposalState)
   return { executeProposal, executeProposalState };
 };
 
@@ -1000,11 +999,7 @@ export const useForkDetails = (pollInterval: number, id: string) => {
   }) as { loading: boolean, data: { fork: ForkSubgraphEntity }, error: Error, refetch: () => void };
   const joined = forkData?.fork?.joinedNouns?.map((item) => item.noun.id) ?? [];
   const escrowed = forkData?.fork?.escrowedNouns?.map((item) => item.noun.id) ?? [];
-  console.log(forkData);
-  // const data = forkData?.fork;
   const addedNouns = [...escrowed, ...joined];
-  // const sortedNouns = [...forkData?.fork?.joinedNouns, ...forkData?.fork?.escrowedNouns].sort((a, b) => { return a.noun.id > b.noun.id ? 1 : -1 });
-
   const data = {
     ...forkData?.fork,
     addedNouns: addedNouns,
@@ -1017,10 +1012,10 @@ export const useForkDetails = (pollInterval: number, id: string) => {
   }
 }
 
-export const useForks = (pollInterval: number) => {
+export const useForks = (pollInterval?: number) => {
   const { loading, data: forksData, error, refetch } = useQuery(
     forksQuery(), {
-    pollInterval: pollInterval,
+    pollInterval: pollInterval || 0,
   }) as { loading: boolean, data: { forks: Fork[] }, error: Error, refetch: () => void };
   const data = forksData?.forks;
   return {

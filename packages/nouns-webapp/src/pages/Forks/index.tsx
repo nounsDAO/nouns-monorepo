@@ -9,12 +9,12 @@ import classes from './Forks.module.css';
 type Props = {}
 
 const ForksPage: React.FC<Props> = props => {
-  const forks = useForks(0);
+  const forks = useForks();
   const now = new Date();
   const currentTime = now.getTime() / 1000;
-  const timestamp = forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
+  const timestamp = forks.data && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
   const isLatestForkFinished = forks.data && timestamp && currentTime && +timestamp < currentTime;
-  const nextForkId = forks.data && forks.data.length;
+  const nextForkId = forks.data && forks.data?.length;
   return (
     <div>
       <Section fullWidth={false} className={classes.section}>
@@ -43,7 +43,9 @@ const ForksPage: React.FC<Props> = props => {
             {forks.data && forks.data.map((fork: Fork, i: number) => {
               return (
                 <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
-                  {fork.id}
+                  <div className={classes.title}>
+                    Nouns DAO Fork #{fork.id}
+                  </div>
                 </Link>
               )
             })}

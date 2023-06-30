@@ -141,7 +141,7 @@ const Proposals = ({
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
                   onClick={() => setActiveTab(index)}
                 >
-                  <Trans>{tab}</Trans>
+                  {tab}
                 </button>
               ))}
             </div>
