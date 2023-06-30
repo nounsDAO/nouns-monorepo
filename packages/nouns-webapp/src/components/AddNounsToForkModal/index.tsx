@@ -17,6 +17,7 @@ import link from '../../assets/icons/Link.svg';
 type Props = {
   setIsModalOpen: Function;
   isModalOpen: boolean;
+  isConfirmModalOpen: boolean;
   isForkingPeriod: boolean;
   title: string;
   description: string;
@@ -27,13 +28,13 @@ type Props = {
   userEscrowedNouns: number[] | undefined;
   refetchData: Function;
   setDataFetchPollInterval: Function;
+  setIsConfirmModalOpen: Function;
 }
 
 export default function AddNounsToForkModal(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
   const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
   // approval transactions
@@ -81,7 +82,7 @@ export default function AddNounsToForkModal(props: Props) {
     props.setDataFetchPollInterval(0);
   }
   const clearState = () => {
-    setIsConfirmModalOpen(false);
+    props.setIsConfirmModalOpen(false);
     props.setIsModalOpen(false);
     setSelectedNouns([]);
     setSelectedProposals([]);
@@ -205,9 +206,17 @@ export default function AddNounsToForkModal(props: Props) {
     <div className={classes.confirmModalContent}>
       <h2 className={classes.modalTitle}>Confirm</h2>
       <p className={classes.modalDescription}>By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.</p>
-      <button className={clsx(classes.button, classes.primaryButton)}>Join</button>
+      <button
+        className={clsx(classes.button, classes.primaryButton)}
+        onClick={() => {
+          props.setIsConfirmModalOpen(false);
+          props.setIsModalOpen(true);
+        }}
+      >Join</button>
       <button className={clsx(classes.button, classes.secondaryButton)}
-        onClick={() => setIsConfirmModalOpen(false)}
+        onClick={() => {
+          props.setIsConfirmModalOpen(false);
+        }}
       >Cancel</button>
     </div>
   );
@@ -215,20 +224,16 @@ export default function AddNounsToForkModal(props: Props) {
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
-        <Trans>
-          {props.isForkingPeriod ? 'Join fork' : 'Add Nouns to escrow'}
-        </Trans>
+        {props.isForkingPeriod ? 'Join fork' : 'Add Nouns to escrow'}
       </h2>
 
       <p className={classes.modalDescription}>
-        <Trans>
-          {!props.isForkingPeriod ?
-            <>Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.</>
-            : <>
-              By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
-            </>
-          }
-        </Trans>
+        {!props.isForkingPeriod ?
+          <>Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals.</>
+          : <>
+            By joining this fork you are giving up your Nouns to be retrieved in the new fork. This cannot be undone.
+          </>
+        }
       </p>
 
       <div className={classes.fields}>
@@ -447,7 +452,7 @@ export default function AddNounsToForkModal(props: Props) {
   return (
     <>
       <SolidColorBackgroundModal
-        show={props.isModalOpen && !isConfirmModalOpen}
+        show={props.isModalOpen && !props.isConfirmModalOpen}
         onDismiss={() => {
           setSelectedNouns([]);
           clearState();
@@ -455,8 +460,8 @@ export default function AddNounsToForkModal(props: Props) {
         content={modalContent}
       />
       <SolidColorBackgroundModal
-        show={isConfirmModalOpen}
-        onDismiss={() => setIsConfirmModalOpen(false)}
+        show={props.isConfirmModalOpen}
+        onDismiss={() => props.setIsConfirmModalOpen(false)}
         content={confirmModalContent}
       />
     </>

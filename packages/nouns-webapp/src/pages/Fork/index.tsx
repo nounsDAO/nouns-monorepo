@@ -26,6 +26,7 @@ const ForkPage = ({
   },
 }: RouteComponentProps<{ id: string }>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isThresholdMet, setIsThresholdMet] = useState(false);
@@ -187,7 +188,13 @@ const ForkPage = ({
                 )}
                 {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
                   <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      if (isForkPeriodActive) {
+                        setIsConfirmModalOpen(true);
+                      } else {
+                        setIsModalOpen(true);
+                      }
+                    }}
                     className={clsx(classes.button, classes.primaryButton)}
                     disabled={userOwnedNounIds.data.length === 0}
                   >
@@ -336,6 +343,7 @@ const ForkPage = ({
             <AddNounsToForkModal
               setIsModalOpen={setIsModalOpen}
               isModalOpen={isModalOpen}
+              isConfirmModalOpen={isConfirmModalOpen}
               isForkingPeriod={isForkPeriodActive}
               title={'Add Nouns to escrow'}
               description={"Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
@@ -346,6 +354,7 @@ const ForkPage = ({
               userEscrowedNouns={userEscrowedNounIds.data}
               refetchData={refetchForkData}
               setDataFetchPollInterval={setDataFetchPollInterval}
+              setIsConfirmModalOpen={setIsConfirmModalOpen}
             />
           </>
         )
