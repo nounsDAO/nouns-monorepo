@@ -50,12 +50,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   return (
     <>
-      <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
-        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
-      ) : (
-        <NounsIntroSection />
-      )}
+      <NounsIntroSection />
       <Documentation
         backgroundColor={
           onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
