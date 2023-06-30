@@ -31,6 +31,14 @@
 p {
   padding-top: 1rem;
 }
+p a {
+  color: #14161b;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+p a:hover {
+  text-decoration: none;
+}
 
 @media (max-width: 992px) {
   .section {
@@ -65,4 +73,8 @@ p {
   background: white;
   color: inherit !important;
   cursor: pointer;
+}
+.startFork {
+  text-align: center;
+  width: 100%;
 }

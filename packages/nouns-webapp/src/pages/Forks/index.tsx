@@ -53,12 +53,13 @@ const ForksPage: React.FC<Props> = props => {
           <Row>
             {isLatestForkFinished && nextForkId && (
               <div>
-                <p>
-                  The latest fork is finished forking. Start a new fork.
+                <p className={classes.startFork}>
+                  There are no active forks. {" "}
+                  <Link to={`/fork/${nextForkId}`}>
+                    Start a new fork
+                  </Link>
                 </p>
-                <Link to={`/fork/${nextForkId}`}>
-                  Start a new fork
-                </Link>
+
               </div>
             )}
           </Row>
