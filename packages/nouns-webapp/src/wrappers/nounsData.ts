@@ -128,10 +128,12 @@ export const useSendFeedback = () => {
   return { sendFeedback, sendFeedbackState };
 };
 
-export const useProposalFeedback = (id: string) => {
-  const { loading, data, error } = useQuery(proposalFeedbacksQuery(id));
+export const useProposalFeedback = (id: string, pollInterval?: number) => {
+  const { loading, data, error, refetch } = useQuery(proposalFeedbacksQuery(id), {
+    pollInterval: pollInterval || 0,
+  });
 
-  return { loading, data, error };
+  return { loading, data, error, refetch };
 };
 
 export const useProposeBySigs = () => {

@@ -24,6 +24,7 @@ type Props = {
 function VoteSignals(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
+  const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [forFeedback, setForFeedback] = useState<any[]>([]);
   const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
@@ -32,7 +33,7 @@ function VoteSignals(props: Props) {
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
   const { sendFeedback, sendFeedbackState } = useSendFeedback();
   const { account } = useEthers();
-  const { data } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0');
+  const { data, refetch } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0', dataFetchPollInterval);
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
@@ -102,13 +103,11 @@ function VoteSignals(props: Props) {
         break;
       case 'Mining':
         setIsTransactionPending(true);
+        setDataFetchPollInterval(50);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Your feedback has been added!</Trans>,
-          show: true,
-        });
+        // don't show modal. just update feedback
+        refetch();
         setIsTransactionPending(false);
         setHasUserVoted(true);
         break;
@@ -119,6 +118,7 @@ function VoteSignals(props: Props) {
           show: true,
         });
         setIsTransactionPending(false);
+        setDataFetchPollInterval(0);
         break;
       case 'Exception':
         setModal({
@@ -127,6 +127,7 @@ function VoteSignals(props: Props) {
           show: true,
         });
         setIsTransactionPending(false);
+        setDataFetchPollInterval(0);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
