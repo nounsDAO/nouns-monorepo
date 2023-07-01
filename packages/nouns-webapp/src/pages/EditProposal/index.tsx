@@ -34,9 +34,9 @@ interface EditProposalProps {
 }
 
 const EditProposalPage: React.FC<EditProposalProps> = props => {
-  const [
-    isProposalEdited,
-    setIsProposalEdited] = useState(false);
+  const [isProposalEdited, setIsProposalEdited] = useState(false);
+  const [isTitleEdited, setIsTitleEdited] = useState(false);
+  const [isBodyEdited, setIsBodyEdited] = useState(false);
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
@@ -72,6 +72,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');
   };
+  const isolatedDescription = proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -90,8 +91,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         }
       });
       setProposalTransactions([...proposalTransactions, ...transactionsArray]);
-
       setShowTransactionFormModal(false);
+      setIsProposalEdited(true);
     },
     [proposalTransactions, totalUSDCPayment],
   );
@@ -151,9 +152,9 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     (title: string) => {
       setTitleValue(title);
       if (title === proposal?.title) {
-        setIsProposalEdited(false);
+        setIsTitleEdited(false);
       } else {
-        setIsProposalEdited(true);
+        setIsTitleEdited(true);
       }
     },
     [setTitleValue, proposal?.title],
@@ -162,15 +163,18 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const handleBodyInput = useCallback(
     (body: string) => {
       setBodyValue(body);
-      if (body === proposal?.description) {
-        setIsProposalEdited(false);
+      if (body === isolatedDescription) {
+        setIsBodyEdited(false);
       } else {
-        setIsProposalEdited(true);
+        setIsBodyEdited(true);
       }
     },
-    [setBodyValue, proposal?.description],
+    [setBodyValue, isolatedDescription],
   );
 
+  useEffect(() => {
+    (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
+  }, [isTitleEdited, isBodyEdited, proposalTransactions]);
 
   useEffect(() => {
     switch (updateProposalState.status) {

@@ -33,6 +33,8 @@ interface EditCandidateProps {
 
 const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [isProposalEdited, setIsProposalEdited] = useState(false);
+  const [isTitleEdited, setIsTitleEdited] = useState(false);
+  const [isBodyEdited, setIsBodyEdited] = useState(false);
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
@@ -51,7 +53,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const updateCandidateCost = useGetCreateCandidateCost();
   const { account } = useEthers();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -70,8 +71,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       });
       setProposalTransactions([...proposalTransactions, ...transactionsArray]);
       setShowTransactionFormModal(false);
+      setIsProposalEdited(true);
     },
-    // todo: make params more specific
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [proposalTransactions, totalUSDCPayment],
   );
@@ -81,10 +82,15 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-    // todo: make params more specific
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [proposalTransactions, totalUSDCPayment],
   );
+
+  const removeTitleFromDescription = (description: string, title: string) => {
+    const titleRegex = new RegExp(`# ${title}\n\n`);
+    return description.replace(titleRegex, '');
+  };
+  const isolatedDescription = candidate.data?.version.description && removeTitleFromDescription(candidate.data.version.description, titleValue);
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -133,24 +139,30 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     (title: string) => {
       setTitleValue(title);
       if (title === candidate.data?.version.title) {
-        setIsProposalEdited(false);
+        setIsTitleEdited(false);
       } else {
-        setIsProposalEdited(true);
+        setIsTitleEdited(true);
       }
     },
     [setTitleValue, candidate.data?.version.title],
   );
+
   const handleBodyInput = useCallback(
     (body: string) => {
       setBodyValue(body);
-      if (body === candidate.data?.version?.description) {
-        setIsProposalEdited(false);
+      if (body === isolatedDescription) {
+        setIsBodyEdited(false);
       } else {
-        setIsProposalEdited(true);
+        setIsBodyEdited(true);
       }
     },
-    [setBodyValue, candidate.data?.version?.description],
+    [setBodyValue, candidate.data?.version?.description, isolatedDescription],
   );
+
+  useEffect(() => {
+    (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
+  }, [isTitleEdited, isBodyEdited, proposalTransactions]);
+
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
@@ -170,7 +182,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
+          message: <Trans>Candidate updated!</Trans>,
           show: true,
         });
         setProposePending(false);
@@ -194,10 +206,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     }
   }, [updateProposalCandidateState, setModal]);
 
-  const removeTitleFromDescription = (description: string, title: string) => {
-    const titleRegex = new RegExp(`# ${title}\n\n`);
-    return description.replace(titleRegex, '');
-  };
 
   useEffect(() => {
     if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
@@ -246,7 +254,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       />
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
-          <Link to={'/vote'}>
+          <Link to={'/vote#candidates'}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
@@ -289,6 +297,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         <ProposalEditor
           title={titleValue}
           body={processProposalDescriptionText(bodyValue, titleValue)}
+          // handleContentChange={handleContentChange}
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
@@ -312,21 +321,20 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         />
         <p className={classes.feeNotice}>
           {!hasEnoughVote && (
-            <Trans>
+            <>
               {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
               submission
-            </Trans>
+            </>
           )}
         </p>
         <p className="text-center pt-0">
-          <Trans>
-            Updating this proposal candidate will clear all previous signers.
+          <>
             {proposal && proposal.versionSignatures?.length > 0 ? (
-              <>This candidate currently has {proposal.versionSignatures?.length} signatures.</>
+              <>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.versionSignatures?.length} signatures.</>
             ) : (
               ''
             )}
-          </Trans>
+          </>
         </p>
       </Col>
     </Section>
