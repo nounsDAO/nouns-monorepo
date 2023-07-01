@@ -3,7 +3,7 @@ import { PartialProposalCandidate, ProposalCandidate } from '../../wrappers/noun
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
@@ -97,6 +97,15 @@ const Proposals = ({
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
   const tabs = ['Proposals', 'Candidates'];
+  const { hash } = useLocation();
+  console.log('hash', hash)
+
+  useEffect(() => {
+    if (hash === '#candidates') {
+      setActiveTab(1);
+    }
+  }
+    , [hash]);
 
   // Get candidates
   const { loading, error, data: allCandidates } = useCandidateProposals();

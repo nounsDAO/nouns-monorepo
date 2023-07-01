@@ -57,9 +57,6 @@ const CandidatePage = ({
   }, [candidate, account]);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
-  console.log('dataFetchPollInterval', dataFetchPollInterval);
-
   const handleRefetchCandidateData = () => {
     candidate.refetch();
   };

@@ -156,7 +156,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setIsBodyEdited(true);
       }
     },
-    [setBodyValue, candidate.data?.version?.description, isolatedDescription],
+    [setBodyValue, isolatedDescription],
   );
 
   useEffect(() => {

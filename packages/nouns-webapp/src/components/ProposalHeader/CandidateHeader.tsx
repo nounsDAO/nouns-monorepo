@@ -84,7 +84,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   return (
     <>
       <div className={classes.backButtonWrapper}>
-        <Link to={'/vote'}>
+        <Link to={props.isCandidate ? '/vote#candidates' : '/vote'}>
           <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
         </Link>
       </div>
