@@ -103,6 +103,10 @@ h1 {
   align-items: center;
   width: 100%;
 }
+.pageHeader.isForked .status {
+  justify-content: center;
+}
+
 
 .button {
   border-radius: 8px;
