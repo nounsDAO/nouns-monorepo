@@ -1,6 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalVersion } from '../../wrappers/nounsDao';
+import { ProposalDetail, ProposalVersion } from '../../wrappers/nounsDao';
 import classes from '../ProposalHistory/Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps } from 'react-router-dom';
@@ -20,6 +20,7 @@ import remarkBreaks from 'remark-breaks';
 import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
 import { useCandidateProposalVersions } from '../../wrappers/nounsData';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
+import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,7 +35,8 @@ const CandidateHistoryPage = ({
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
-  const proposalVersions = proposal?.versions;
+  const proposalVersions = proposal?.versions.reverse();
+  console.log('proposalVersions', proposalVersions);
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   console.log('todo: add loading and error states', loading, error);
 
@@ -66,6 +68,13 @@ const CandidateHistoryPage = ({
     );
   };
 
+  const stringifyTransactions = (details: ProposalDetail[]) => {
+    return details.map((d, i) => {
+      return d.target + d.functionSig + d.value + d.callData;
+    }
+    ).join('');
+  };
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
@@ -78,7 +87,7 @@ const CandidateHistoryPage = ({
             }
             id={proposal.id}
             proposer={proposal.proposer}
-            versionsCount={proposal.versionsCount}
+            versionsCount={0} // hide version number on history page
             createdTransactionHash={proposal.createdTransactionHash}
             lastUpdatedTimestamp={proposal.lastUpdatedTimestamp}
             isCandidate={true}
@@ -108,17 +117,33 @@ const CandidateHistoryPage = ({
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}
                   renderContent={highlightSyntax}
+                  showDiffOnly={false}
                 />
                 <Row>
                   <Col className={classes.section}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
-                    <p>Version {activeVersion}</p>
+
+                    <ProposalTransactionsDiffs
+                      activeVersionNumber={activeVersion}
+                      oldTransactions={proposalVersions[activeVersion - 2].details}
+                      newTransactions={proposalVersions[activeVersion - 1].details}
+                    />
+                    {/* <ReactDiffViewer
+                      oldValue={stringifyTransactions(proposalVersions[activeVersion - 1].details)}
+                      newValue={stringifyTransactions(proposalVersions[activeVersion - 2].details)}
+                      splitView={false}
+                      hideLineNumbers={true}
+                      extraLinesSurroundingDiff={10000}
+                      renderContent={highlightSyntax}
+                      disableWordDiff={true}
+                    /> */}
+                    {/* <p>Version {activeVersion}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
 
                     <p>Version {activeVersion - 1}</p>
-                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
+                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} /> */}
                   </Col>
                 </Row>
               </div>
@@ -159,8 +184,8 @@ const CandidateHistoryPage = ({
             </div>
           </Col>
         </Row>
-      </Col>
-    </Section>
+      </Col >
+    </Section >
   );
 };
 

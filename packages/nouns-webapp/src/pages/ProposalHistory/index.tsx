@@ -1,6 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
+import { ProposalDetail, useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps, } from 'react-router-dom';
@@ -64,6 +64,14 @@ const ProposalHistory = ({
     );
   };
 
+  const stringifyTransactions = (details: ProposalDetail[]) => {
+    return details.map((d, i) => {
+      return d.target + d.functionSig + d.value + d.callData;
+    }
+    ).join('');
+  };
+
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
@@ -102,17 +110,27 @@ const ProposalHistory = ({
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}
                   renderContent={highlightSyntax}
+                  disableWordDiff={true}
                 />
                 <Row>
                   <Col className={classes.section}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
-                    <p>Version {activeVersion}</p>
+                    <ReactDiffViewer
+                      oldValue={stringifyTransactions(proposalVersions[activeVersion - 1].details)}
+                      newValue={stringifyTransactions(proposalVersions[activeVersion - 2].details)}
+                      splitView={false}
+                      hideLineNumbers={true}
+                      extraLinesSurroundingDiff={10000}
+                      renderContent={highlightSyntax}
+                    // disableWordDiff={true}
+                    />
+                    {/* <p>Version {activeVersion}</p>
                     <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
 
                     <p>Version {activeVersion - 1}</p>
-                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
+                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} /> */}
                   </Col>
                 </Row>
               </div>
