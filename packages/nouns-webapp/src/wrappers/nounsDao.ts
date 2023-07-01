@@ -8,7 +8,7 @@ import {
   connectContractToSigner,
   useEthers,
 } from '@usedapp/core';
-import { utils, BigNumber as EthersBN, ethers } from 'ethers';
+import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
