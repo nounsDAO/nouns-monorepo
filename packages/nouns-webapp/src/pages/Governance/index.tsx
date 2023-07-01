@@ -29,18 +29,17 @@ const GovernancePage = () => {
             <Trans>Governance</Trans>
           </span>
           <h1>
-            <Trans>Nouns DAO</Trans>
+            <Trans>ATX DAO Proposals</Trans>
           </h1>
         </Row>
         <p className={classes.subheading}>
-          <Trans>
-            Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
-            proposals or delegate their vote to a third party. A minimum of{' '}
-            <span className={classes.boldText}>
-              {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
-            </span>{' '}
-            is required to submit proposals.
-          </Trans>
+          Proposals are how we coordinate and accomplish our goals as an organization.
+          All initiatives within the DAO which involve the use of treasury funds or leveraging the ATX DAO
+          brand must be publicly proposed and voted on.
+        </p>
+        <p className={classes.subheading}>
+          Any DAO member can submit a proposal. It is recommended that members use <a href="https://atxdao.freeflarum.com/">the forum</a> to
+          gather feedback on their proposal before putting it to a vote.
         </p>
 
         <Row className={classes.treasuryInfoCard}>
@@ -71,9 +70,8 @@ const GovernancePage = () => {
           </Col>
           <Col className={classes.treasuryInfoText}>
             <Trans>
-              This treasury exists for <span className={classes.boldText}>Nouns DAO</span>{' '}
-              participants to allocate resources for the long-term growth and prosperity of the
-              Nouns project.
+              This treasury exists for <span className={classes.boldText}>ATX DAO</span>{' '}
+              members to allocate resources in ways that will further our goals.
             </Trans>
           </Col>
         </Row>

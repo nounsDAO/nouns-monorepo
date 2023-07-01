@@ -79,7 +79,7 @@ const NounsIntroSection = () => {
 
       <Section fullWidth={false} className={classes.iosSection}>
         <Col lg={6}>
-          <div className={classes.textWrapper}>
+          <div className={classes.textWrapper} style={{ paddingBottom: '4rem' }}>
             <h1>
               Get Paid
             </h1>
