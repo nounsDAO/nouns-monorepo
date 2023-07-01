@@ -253,3 +253,9 @@
   justify-content: center;
   align-items: center;
 }
+
+.loadingNoggles {
+  margin: 0 auto;
+  padding: 10px;
+  max-width: 60px;
+}

@@ -25,6 +25,7 @@ function VoteSignals(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
+  const [isTransactionWaiting, setIsTransactionWaiting] = useState(false);
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [forFeedback, setForFeedback] = useState<any[]>([]);
   const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
@@ -101,7 +102,11 @@ function VoteSignals(props: Props) {
       case 'None':
         setIsTransactionPending(false);
         break;
+      case 'PendingSignature':
+        setIsTransactionWaiting(true);
+        break;
       case 'Mining':
+        setIsTransactionWaiting(false);
         setIsTransactionPending(true);
         setDataFetchPollInterval(50);
         break;
@@ -118,6 +123,7 @@ function VoteSignals(props: Props) {
           show: true,
         });
         setIsTransactionPending(false);
+        setIsTransactionWaiting(false);
         setDataFetchPollInterval(0);
         break;
       case 'Exception':
@@ -127,11 +133,14 @@ function VoteSignals(props: Props) {
           show: true,
         });
         setIsTransactionPending(false);
+        setIsTransactionWaiting(false);
         setDataFetchPollInterval(0);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendFeedbackState, setModal]);
+
+  console.log('isTransactionWaiting', isTransactionWaiting, isTransactionPending, props.proposal);
 
   return (
     <>
@@ -165,71 +174,82 @@ function VoteSignals(props: Props) {
                     {!hasUserVoted ? (
                       <>
                         <p>Add your feedback</p>
-                        <div className={classes.buttons}>
-                          <button
-                            className={clsx(
-                              classes.button,
-                              classes.for,
-                              support === undefined && classes.noSupportSelected,
-                              support && support === 1
-                                ? classes.selectedSupport
-                                : classes.unselectedSupport,
-                            )}
-                            onClick={() => setSupport(1)}
-                          >
-                            For
-                          </button>
-                          <button
-                            className={clsx(
-                              classes.button,
-                              classes.against,
-                              support === undefined && classes.noSupportSelected,
-                              support !== undefined && support === 0
-                                ? classes.selectedSupport
-                                : classes.unselectedSupport,
-                            )}
-                            onClick={() => setSupport(0)}
-                          >
-                            Against
-                          </button>
-                          <button
-                            className={clsx(
-                              classes.button,
-                              classes.abstain,
-                              support === undefined && classes.noSupportSelected,
-                              support && support === 2
-                                ? classes.selectedSupport
-                                : classes.unselectedSupport,
-                            )}
-                            onClick={() => setSupport(2)}
-                          >
-                            Abstain
-                          </button>
-                        </div>
-                        {/* {(isTransactionPending || hasUserVoted) && ( */}
-                        <>
-                          <input
-                            type="text"
-                            className={classes.reasonInput}
-                            placeholder="Optional reason"
-                            value={reasonText}
-                            disabled={isTransactionPending}
-                            onChange={event => setReasonText(event.target.value)}
-                          />
 
-                          <button
-                            className={clsx(classes.button, classes.submit)}
-                            disabled={support === undefined || isTransactionPending}
-                            onClick={() =>
-                              props.proposal.id &&
-                              support !== undefined &&
-                              handleFeedbackSubmit(+props.proposal.id, support, reasonText)
-                            }
-                          >
-                            Submit
-                          </button>
-                        </>
-                        {/* )} */}
+                        {(isTransactionWaiting || isTransactionPending) ? (
+                          <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+                        ) : (
+                          <>
+                            <div className={classes.buttons}>
+                              <button
+                                className={clsx(
+                                  classes.button,
+                                  classes.for,
+                                  support === undefined && classes.noSupportSelected,
+                                  support && support === 1
+                                    ? classes.selectedSupport
+                                    : classes.unselectedSupport,
+                                )}
+                                disabled={isTransactionPending || isTransactionWaiting}
+                                onClick={() => setSupport(1)}
+                              >
+                                For
+                              </button>
+                              <button
+                                className={clsx(
+                                  classes.button,
+                                  classes.against,
+                                  support === undefined && classes.noSupportSelected,
+                                  support !== undefined && support === 0
+                                    ? classes.selectedSupport
+                                    : classes.unselectedSupport,
+                                )}
+                                disabled={isTransactionPending || isTransactionWaiting}
+                                onClick={() => setSupport(0)}
+                              >
+                                Against
+                              </button>
+                              <button
+                                className={clsx(
+                                  classes.button,
+                                  classes.abstain,
+                                  support === undefined && classes.noSupportSelected,
+                                  support && support === 2
+                                    ? classes.selectedSupport
+                                    : classes.unselectedSupport,
+                                )}
+                                disabled={isTransactionPending || isTransactionWaiting}
+                                onClick={() => setSupport(2)}
+                              >
+                                Abstain
+                              </button>
+                            </div>
+                            <>
+                              <input
+                                type="text"
+                                className={classes.reasonInput}
+                                placeholder="Optional reason"
+                                value={reasonText}
+                                disabled={isTransactionPending || isTransactionWaiting}
+                                onChange={event => setReasonText(event.target.value)}
+                              />
+                              <button
+                                className={clsx(classes.button, classes.submit)}
+                                disabled={support === undefined || isTransactionPending || isTransactionWaiting}
+                                onClick={() => {
+                                  setIsTransactionWaiting(true);
+                                  props.proposal.id &&
+                                    support !== undefined &&
+                                    handleFeedbackSubmit(+props.proposal.id, support, reasonText)
+                                }
+                                }
+                              >
+                                Submit
+                              </button>
+
+
+                            </>
+                          </>
+                        )}
                       </>
                     ) : (
                       <div className={classes.voted}>
