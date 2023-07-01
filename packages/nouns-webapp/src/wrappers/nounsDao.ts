@@ -143,6 +143,7 @@ export interface PartialProposalSubgraphEntity {
   quorumVotes: string;
   objectionPeriodEndBlock: string;
   updatePeriodEndBlock: string;
+  signers: { id: string }[];
 }
 
 export interface ProposalSubgraphEntity
@@ -153,7 +154,6 @@ export interface ProposalSubgraphEntity
   createdTransactionHash: string;
   proposer: { id: string };
   proposalThreshold: string;
-  signers: { id: string }[];
 }
 
 interface PartialProposalData {
@@ -491,16 +491,17 @@ const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
 const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
-  proposal: PartialProposalSubgraphEntity,
+  proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
   gracePeriod?: number
 ) => {
   const status = ProposalState[proposal.status];
+
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
-
-    if (blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
+    if (blockNumber <= parseInt(proposal.updatePeriodEndBlock) && proposal.signers.length === 0) {
+      // proposedBySigs not eligible for update
       return ProposalState.UPDATABLE;
     }
 

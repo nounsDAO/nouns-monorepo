@@ -205,15 +205,6 @@ const parseSubgraphCandidateVersions = (
   if (!candidateVersions) {
     return;
   }
-
-  console.log('parseSubgraphCandidateVersions', candidateVersions);
-  // const sortedCandidateVersions =
-  //   candidateVersions &&
-  //   candidateVersions.versions.sort((a, b) =>
-  //     a.createdTimestamp > b.createdTimestamp ? 1 : -1,
-  //   );
-
-  // const versions = sortedCandidateVersions.map((version, i) => {
   const versions = candidateVersions.versions.map((version, i) => {
     const description = version.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
@@ -232,10 +223,11 @@ const parseSubgraphCandidateVersions = (
       details: details,
       createdAt: version.createdTimestamp,
       updateMessage: version.updateMessage,
-      versionNumber: i + 1,
+      versionNumber: candidateVersions.versions.length - i,
     };
   });
 
+  console.log('versions', versions);
   return {
     id: candidateVersions.id,
     title:

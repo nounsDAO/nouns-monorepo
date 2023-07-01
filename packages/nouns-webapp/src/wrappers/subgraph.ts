@@ -101,6 +101,9 @@ export const partialProposalsQuery = (first = 1_000) => gql`
     endBlock
     updatePeriodEndBlock
     objectionPeriodEndBlock
+    signers {
+      id
+    }
   }
 }
 `;
