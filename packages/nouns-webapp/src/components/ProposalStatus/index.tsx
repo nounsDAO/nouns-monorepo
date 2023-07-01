@@ -16,11 +16,11 @@ const statusVariant = (status: ProposalState | undefined) => {
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
       return classes.danger;
+    case ProposalState.UPDATABLE:
+      return classes.updatable;
     case ProposalState.QUEUED:
     case ProposalState.CANCELLED:
     case ProposalState.EXPIRED:
-    case ProposalState.UPDATABLE:
-      return classes.updatable;
     default:
       return classes.secondary;
   }

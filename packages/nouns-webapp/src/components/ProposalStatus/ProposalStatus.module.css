@@ -9,6 +9,7 @@
   padding-right: 0.65rem;
   padding-top: 0.36rem;
   padding-bottom: 0.36rem;
+  border: 2px solid transparent;
 }
 
 .primary {
@@ -28,7 +29,10 @@
 }
 
 .updatable {
-  background-color: #f0ad4e;
+  border: 2px solid #f0ad4e;
+  background-color: #fff;
+  /* slightly darker text for legibility */
+  color: #dc9e46;
 }
 
 .votePageProposalStatus {

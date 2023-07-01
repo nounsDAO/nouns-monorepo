@@ -1,4 +1,4 @@
-import { NounsDAOV3ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
+import { NounsDAOExecutorV2ABI, NounsDAOV3ABI, NounsDaoLogicV3Factory, NounsDaoExecutorV2Factory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -8,7 +8,7 @@ import {
   connectContractToSigner,
   useEthers,
 } from '@usedapp/core';
-import { utils, BigNumber as EthersBN } from 'ethers';
+import { utils, BigNumber as EthersBN, ethers } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
@@ -235,7 +235,9 @@ export interface ForkSubgraphEntity {
 }
 
 const abi = new utils.Interface(NounsDAOV3ABI);
+const executorAbi = new utils.Interface(NounsDAOExecutorV2ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
+const nounsDaoExecutorContract = NounsDaoExecutorV2Factory.connect(config.addresses.nounsDaoExecutor, undefined!);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -490,30 +492,28 @@ const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
   proposal: PartialProposalSubgraphEntity,
+  gracePeriod?: number
 ) => {
   const status = ProposalState[proposal.status];
-
-  if (status === ProposalState.PENDING) {
+  if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
+
     if (blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
       return ProposalState.UPDATABLE;
     }
+
     if (blockNumber <= parseInt(proposal.startBlock)) {
       return ProposalState.PENDING;
     }
 
-    return ProposalState.ACTIVE;
-  }
-  if (status === ProposalState.ACTIVE) {
-    if (!blockNumber) {
-      return ProposalState.UNDETERMINED;
+    if (parseInt(proposal.objectionPeriodEndBlock) > 0 && blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+      return ProposalState.OBJECTION_PERIOD;
     }
-    if (blockNumber > parseInt(proposal.endBlock)) {
-      if (parseInt(proposal.objectionPeriodEndBlock) > 0) {
-        return ProposalState.OBJECTION_PERIOD;
-      }
+
+    // if past endblock, but onchain status hasn't been changed
+    if (blockNumber > parseInt(proposal.endBlock) + parseInt(proposal.objectionPeriodEndBlock)) {
       const forVotes = new BigNumber(proposal.forVotes);
       if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
@@ -522,18 +522,22 @@ const getProposalState = (
         return ProposalState.SUCCEEDED;
       }
     }
-    return status;
+    return ProposalState.ACTIVE;
   }
+
+  // if queued, check if expired
   if (status === ProposalState.QUEUED) {
     if (!blockTimestamp || !proposal.executionETA) {
       return ProposalState.UNDETERMINED;
     }
+    // TODO: pull from contract to account for change during fork period
     const GRACE_PERIOD = 14 * 60 * 60 * 24;
     if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
       return ProposalState.EXPIRED;
     }
     return status;
   }
+
   return status;
 };
 
@@ -541,6 +545,7 @@ const parsePartialSubgraphProposal = (
   proposal: PartialProposalSubgraphEntity | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
+  gracePeriod?: number
 ) => {
   if (!proposal) {
     return;
@@ -549,7 +554,7 @@ const parsePartialSubgraphProposal = (
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, gracePeriod),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
     forCount: parseInt(proposal.forVotes),
@@ -565,6 +570,7 @@ const parseSubgraphProposal = (
   blockNumber: number | undefined,
   timestamp: number | undefined,
   toUpdate?: boolean,
+  gracePeriod?: number
 ) => {
   if (!proposal) {
     return;
@@ -581,7 +587,7 @@ const parseSubgraphProposal = (
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, gracePeriod),
     proposalThreshold: parseInt(proposal.proposalThreshold),
     quorumVotes: parseInt(proposal.quorumVotes),
     forCount: parseInt(proposal.forVotes),
@@ -675,6 +681,7 @@ export const useAllProposals = (): PartialProposalData => {
 export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
+
   return parseSubgraphProposal(
     useQuery(proposalQuery(id)).data?.proposal,
     blockNumber,
@@ -1034,3 +1041,15 @@ export const useExecuteFork = () => {
   );
   return { executeFork, executeForkState };
 }
+
+export const useGracePeriod = () => {
+  const [gracePeriod] =
+    useContractCall<[any]>({
+      executorAbi,
+      address: nounsDaoExecutorContract.address,
+      method: 'GRACE_PERIOD',
+      args: [],
+    }) || [];
+
+  return gracePeriod?.toNumber();
+};
