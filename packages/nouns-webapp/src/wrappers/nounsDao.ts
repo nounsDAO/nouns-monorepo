@@ -697,13 +697,13 @@ export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined =>
 };
 
 export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
-  const proposalVersions = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
+  const proposalVersions: ProposalVersion[] = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
   const sortedProposalVersions =
     proposalVersions &&
     [...proposalVersions].sort((a: ProposalVersion, b: ProposalVersion) =>
       a.createdAt > b.createdAt ? 1 : -1,
     );
-  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: any, i: number) => {
+  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: ProposalVersion, i: number) => {
     return {
       id: proposalVersion.id,
       versionNumber: i + 1,
@@ -715,7 +715,7 @@ export const useProposalVersions = (id: string | number): ProposalVersion[] | un
       signatures: proposalVersion.signatures,
       calldatas: proposalVersion.calldatas,
       title: proposalVersion.title,
-      details: formatProposalTransactionDetails(proposalVersion),
+      details: formatProposalTransactionDetails(proposalVersion.details),
       proposal: {
         id: proposalVersion.proposal.id,
       },

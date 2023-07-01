@@ -74,7 +74,7 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
 
 export const useCandidateProposalVersions = (id: string) => {
   const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
-  const versions = data && parseSubgraphCandidateVersions(data.proposalCandidate);
+  const versions: ProposalCandidateVersions = data && parseSubgraphCandidateVersions(data.proposalCandidate);
   return { loading, data: versions, error };
 };
 
@@ -205,7 +205,11 @@ const parseSubgraphCandidateVersions = (
   if (!candidateVersions) {
     return;
   }
-  const versions = candidateVersions.versions.map((version, i) => {
+  const versionsList = candidateVersions.versions.map((version) => version);
+  const versionsByDate = versionsList.sort((a, b) => {
+    return b.createdTimestamp - a.createdTimestamp;
+  });
+  const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
     const description = version.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
       targets: version.targets,
@@ -214,9 +218,7 @@ const parseSubgraphCandidateVersions = (
       calldatas: version.calldatas,
       encodedProposalHash: version.encodedProposalHash,
     };
-
     const details = formatProposalTransactionDetails(transactionDetails);
-
     return {
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
       description: description ?? 'No description.',
@@ -227,19 +229,18 @@ const parseSubgraphCandidateVersions = (
     };
   });
 
-  console.log('versions', versions);
   return {
     id: candidateVersions.id,
-    title:
-      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
-      'Untitled',
-    description: candidateVersions.latestVersion.description ?? 'No description.',
     slug: candidateVersions.slug,
     proposer: candidateVersions.proposer,
     lastUpdatedTimestamp: candidateVersions.lastUpdatedTimestamp,
     canceled: candidateVersions.canceled,
     versionsCount: candidateVersions.versions.length,
     createdTransactionHash: candidateVersions.createdTransactionHash,
+    title:
+      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
+      'Untitled',
+    description: candidateVersions.latestVersion.description ?? 'No description.',
     versions: versions,
   };
 };
@@ -320,6 +321,15 @@ export interface ProposalCandidateInfo {
   createdTransactionHash: string;
 }
 
+export interface ProposalCandidateVersionContent {
+  title: string;
+  description: string;
+  details: ProposalDetail[];
+  createdAt: number;
+  updateMessage: string;
+  versionNumber: number;
+}
+
 export interface ProposalCandidateVersion {
   title: string;
   description: string;
@@ -364,4 +374,11 @@ export interface PartialProposalCandidate extends ProposalCandidateInfo {
       };
     }[];
   };
+}
+
+
+export interface ProposalCandidateVersions extends ProposalCandidateInfo {
+  title: string;
+  description: string;
+  versions: ProposalCandidateVersionContent[];
 }
