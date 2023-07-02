@@ -12,6 +12,7 @@ import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
   buttonIcon?: React.ReactNode;
+  buttonText: string;
 }
 
 type Props = {
@@ -51,7 +52,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
         }}
       >
         <NavBarButton
-          buttonText={<Trans>Explore</Trans>}
+          buttonText={props.buttonText}
           buttonIcon={props.buttonIcon}
           buttonStyle={buttonStyle}
           isDropdown={true}

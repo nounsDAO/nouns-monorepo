@@ -11,7 +11,7 @@ import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faCodeFork, faFile, faFileLines, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -46,8 +46,8 @@ const NavBar = () => {
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
-    ? NavBarButtonStyle.COOL_INFO
-    : NavBarButtonStyle.WARM_INFO;
+      ? NavBarButtonStyle.COOL_INFO
+      : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
 
@@ -92,13 +92,87 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
-              <NavBarButton
-                buttonText={<Trans>DAO</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
+            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+              <Nav.Link
+                as={Link}
+                to="/vote"
+                className={classes.nounsNavLink}
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={<Trans>Proposals</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faFile} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                to="/vote#candidates"
+                className={classes.nounsNavLink}
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={<Trans>Candidates</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                to="/fork"
+                className={classes.nounsNavLink}
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={<Trans>Forks</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+            </div>
+            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+              <NavDropdown buttonText="DAO" buttonIcon={<FontAwesomeIcon icon={faUsers} />} buttonStyle={nonWalletButtonStyle}>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/vote"
+                >
+                  <Trans>Proposals</Trans>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/vote#candidates"
+                >
+                  <Trans>Candidates</Trans>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/fork"
+                >
+                  <Trans>Forks</Trans>
+                </Dropdown.Item>
+              </NavDropdown>
+            </div>
             <Nav.Link
               href={externalURL(ExternalURL.nounsCenter)}
               className={classes.nounsNavLink}
@@ -152,7 +226,7 @@ const NavBar = () => {
               </Nav.Link>
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
-              <NavDropdown buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
+              <NavDropdown buttonText="Explore" buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
                 <Dropdown.Item
                   className={clsx(
                     usePickByState(
