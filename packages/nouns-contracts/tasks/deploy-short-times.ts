@@ -203,6 +203,8 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
           }
         },
       },
+      ATXDAONFT_V2: {},
+      RepTokens: {}
     };
 
     for (const [name, contract] of Object.entries(contracts)) {

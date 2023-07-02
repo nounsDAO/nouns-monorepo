@@ -37,6 +37,8 @@ function App() {
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
+
+
   return (
     <div className={`${classes.wrapper}`}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
@@ -49,7 +51,7 @@ function App() {
       )}
       <BrowserRouter>
         <AvatarProvider
-          provider={chainId === ChainId.Mainnet ? library : undefined}
+          provider={(chainId === ChainId.Mainnet ? library : undefined)}
           batchLookups={true}
         >
           <NavBar />
