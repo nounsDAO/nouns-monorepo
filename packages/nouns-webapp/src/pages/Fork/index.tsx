@@ -107,7 +107,8 @@ const ForkPage = ({
       setThresholdPercentage(+percentage.toFixed(2));
       handlePercentageToThreshold();
     }
-  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id, handlePercentageToThreshold]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
 
   useEffect(() => {
     // set page layout based on data
