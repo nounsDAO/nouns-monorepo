@@ -1,6 +1,6 @@
 import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { PartialProposalCandidate, ProposalCandidate } from '../../wrappers/nounsData';
-import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -114,7 +114,6 @@ const Proposals = ({
 
   // Get candidates
   const { loading, error, data: allCandidates } = useCandidateProposals();
-  console.log('allCandidates', allCandidates)
   const nullStateCopy = () => {
     if (account !== null) {
       if (connectedAccountNounVotes > 0) {
@@ -159,8 +158,7 @@ const Proposals = ({
                 </button>
               ))}
             </div>
-
-            {hasEnoughVotesToPropose ? (
+            {!isMobile && hasEnoughVotesToPropose ? (
               <div className={classes.nounInWalletBtnWrapper}>
                 <div className={classes.submitProposalButtonWrapper}>
                   <Button
@@ -185,11 +183,12 @@ const Proposals = ({
             ) : (
               <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
                 {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-                <div className={classes.nullBtnWrapper}>
+                {!isMobile && <div className={classes.nullBtnWrapper}>
                   <Button className={classes.generateBtnDisabled}>
                     <Trans>Submit Proposal</Trans>
                   </Button>
                 </div>
+                }
                 {!isMobile && hasNounBalance && (
                   <div className={classes.delegateBtnWrapper}>
                     <Button
@@ -202,17 +201,44 @@ const Proposals = ({
                 )}
               </div>
             )}
-            {/* </div> */}
           </Col>
         </Section>
       </div>
-      {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
+
       {isMobile && hasNounBalance && (
-        <div>
-          <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
-            <Trans>Delegate</Trans>
-          </Button>
-        </div>
+        <Container>
+          <div className='w-100'>
+            <Row>
+              <Col>
+                <div className={classes.nullStateCopy}>{nullStateCopy()}</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div className={classes.nounInWalletBtnWrapper}>
+                  <div className={classes.submitProposalButtonWrapper}>
+                    <Button
+                      className={classes.generateBtn}
+                      onClick={() => history.push('create-proposal')}
+                    >
+                      <Trans>Submit Proposal</Trans>
+                    </Button>
+                  </div>
+                  {hasNounBalance && (
+                    <div className={classes.delegateBtnWrapper}>
+                      <Button
+                        className={classes.changeDelegateBtn}
+                        onClick={() => setShowDelegateModal(true)}
+                      >
+                        <Trans>Delegate</Trans>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Container>
       )}
       <Section fullWidth={false} className={classes.section}>
         {activeTab === 0 && (
@@ -342,7 +368,7 @@ const Proposals = ({
           </Col>
         )}
       </Section>
-    </div>
+    </div >
   );
 };
 export default Proposals;

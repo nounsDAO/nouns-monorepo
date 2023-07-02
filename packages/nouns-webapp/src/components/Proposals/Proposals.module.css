@@ -164,7 +164,12 @@
   color: var(--brand-gray-light-text);
   font-size: 16px;
   line-height: 22.4px;
+  @media (max-width: 992px) {
+    text-align: center;
+    margin: 0;
+  }
 }
+
 
 .mobileCountdownWrapper {
   display: none;
@@ -206,7 +211,9 @@
   }
 
   .nullStateCopy {
-    margin-top: 0rem;
+    margin-top: 0;
+    margin-right: 0;
+    text-align: center;
   }
 
   .proposalTitle {
@@ -216,6 +223,9 @@
 
   .nounInWalletBtnWrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .headerWrapper {
