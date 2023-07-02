@@ -10,7 +10,8 @@ type LocalContractName =
   | 'NounsDAOProxyV2'
   | 'WETH'
   | 'Multicall2'
-  | 'ATXDAONFT_V2';
+  | 'ATXDAONFT_V2'
+  | 'RepTokens';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -146,6 +147,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
       },
       Multicall2: {},
       ATXDAONFT_V2: {},
+      RepTokens: {}
     };
 
     for (const [name, contract] of Object.entries(contracts)) {

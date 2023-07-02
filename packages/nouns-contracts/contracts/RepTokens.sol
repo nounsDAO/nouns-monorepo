@@ -37,18 +37,13 @@ contract RepTokens is
     //id 0 = lifetime token
     //id 1 = transferable token
     constructor(
-        address[] memory admins,
-        uint256 _maxMintAmountPerTx
     )
         ERC1155(
             "ipfs://bafybeiaz55w6kf7ar2g5vzikfbft2qoexknstfouu524l7q3mliutns2u4/{id}"
         )
     {
-        for (uint256 i = 0; i < admins.length; i++) {
-            _setupRole(DEFAULT_ADMIN_ROLE, admins[i]);
-        }
-
-        maxMintAmountPerTx = _maxMintAmountPerTx;
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        maxMintAmountPerTx = 15;
     }
 
     function uri(
