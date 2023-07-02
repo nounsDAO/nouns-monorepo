@@ -120,163 +120,171 @@ const ForkPage = ({
 
   return (
     <>
-      <Section fullWidth={false} className='h-100'>
-        {isNewForkPage ? (
-          <div className={clsx(
-            classes.pageHeader,
-            classes.emptyState,
-          )}>
-            <Col lg={12}>
-              <header>
-                <div className={(classes.status)}>
-                  <Link className={classes.backButton} to="/fork">←</Link>
-                  <span className={clsx(classes.forkStatus)}>
-                    {forkStatusLabel}
-                  </span>
-                  <div className={classes.spacer} />
-                </div>
-                <h1><Trans>Fork Nouns DAO</Trans></h1>
-                <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
-              </header>
-              {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className={clsx(classes.button, classes.primaryButton)}
-                  disabled={userOwnedNounIds.data.length === 0}
-                >
-                  {addNounsButtonLabel}
-                </button>
-              )}
-              <p className={classes.note}>
-                {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the fork threshold
-              </p>
-            </Col>
-          </div>
-        ) : (
-          <div className={clsx(
-            classes.pageHeader,
-            (!escrowEvents.data || isNewForkPage) && classes.emptyState,
-            isForked && classes.isForked
-          )}>
-            <Col lg={6}>
-              <div className={classes.status}>
-                <Link className={classes.backButton} to="/fork">←</Link>
-                <span className={clsx(classes.forkStatus)}>
-                  {forkStatusLabel}
-                </span>
-                <div className={classes.spacer} />
-              </div>
-              <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
-              {(!isForkPeriodActive || !isForked) && (
-                <p>
-                  {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}%)`) || '...'} are required to meet the threshold
-                </p>
-              )}
-
-            </Col>
-            {!isForked && (
-              <Col lg={6} className={clsx(
-                classes.buttons,
-                !escrowEvents.data && classes.emptyState
-              )}>
-                {(!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0) && (
-                  <WithdrawNounsButton
-                    tokenIds={userEscrowedNounIds.data}
-                    isWithdrawModalOpen={isWithdrawModalOpen}
-                    setIsWithdrawModalOpen={setIsWithdrawModalOpen}
-                    setDataFetchPollInterval={setDataFetchPollInterval}
-                  />
-                )}
+      <Section fullWidth={true} className='h-100'>
+        <Row>
+          {isNewForkPage ? (
+            <div className={clsx(
+              classes.pageHeader,
+              classes.emptyState,
+            )}>
+              <Col lg={12}>
+                <header>
+                  <div className={(classes.status)}>
+                    <Link className={classes.backButton} to="/fork">←</Link>
+                    <span className={clsx(classes.forkStatus)}>
+                      {forkStatusLabel}
+                    </span>
+                    <div className={classes.spacer} />
+                  </div>
+                  <h1><Trans>Fork Nouns DAO</Trans></h1>
+                  <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
+                </header>
                 {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
                   <button
-                    onClick={() => {
-                      if (isForkPeriodActive) {
-                        setIsConfirmModalOpen(true);
-                      } else {
-                        setIsModalOpen(true);
-                      }
-                    }}
+                    onClick={() => setIsModalOpen(true)}
                     className={clsx(classes.button, classes.primaryButton)}
                     disabled={userOwnedNounIds.data.length === 0}
                   >
                     {addNounsButtonLabel}
                   </button>
                 )}
+                <p className={classes.note}>
+                  {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to meet the fork threshold
+                </p>
               </Col>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className={clsx(
+              classes.pageHeader,
+              (!escrowEvents.data || isNewForkPage) && classes.emptyState,
+              isForked && classes.isForked
+            )}>
+              <Col lg={6}>
+                <div className={classes.status}>
+                  <Link className={classes.backButton} to="/fork">←</Link>
+                  <span className={clsx(classes.forkStatus)}>
+                    {forkStatusLabel}
+                  </span>
+                  <div className={classes.spacer} />
+                </div>
+                <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
+                {(!isForkPeriodActive || !isForked) && (
+                  <p>
+                    {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to meet the threshold
+                  </p>
+                )}
+
+              </Col>
+              {!isForked && (
+                <Col lg={6} className={clsx(
+                  classes.buttons,
+                  !escrowEvents.data && classes.emptyState
+                )}>
+                  {(!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0) && (
+                    <WithdrawNounsButton
+                      tokenIds={userEscrowedNounIds.data}
+                      isWithdrawModalOpen={isWithdrawModalOpen}
+                      setIsWithdrawModalOpen={setIsWithdrawModalOpen}
+                      setDataFetchPollInterval={setDataFetchPollInterval}
+                    />
+                  )}
+                  {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
+                    <button
+                      onClick={() => {
+                        if (isForkPeriodActive) {
+                          setIsConfirmModalOpen(true);
+                        } else {
+                          setIsModalOpen(true);
+                        }
+                      }}
+                      className={clsx(classes.button, classes.primaryButton)}
+                      disabled={userOwnedNounIds.data.length === 0}
+                    >
+                      {addNounsButtonLabel}
+                    </button>
+                  )}
+                </Col>
+              )}
+            </div>
+          )}
+        </Row>
       </Section>
       {isForkPeriodActive && forkDetails.data.forkingPeriodEndTimestamp && (
         <Section fullWidth={false}>
-          <div className={clsx(classes.countdown, classes.callout)}>
-            <ForkingPeriodTimer
-              endTime={+forkDetails.data.forkingPeriodEndTimestamp}
-              isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
-            />
-            <p>
-              time left to return Nouns and join this fork.
-            </p>
-          </div>
+          <Row>
+            <Col>
+              <div className={clsx(classes.countdown, classes.callout)}>
+                <ForkingPeriodTimer
+                  endTime={+forkDetails.data.forkingPeriodEndTimestamp}
+                  isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
+                />
+                <p>
+                  time left to return Nouns and join this fork.
+                </p>
+              </div>
+            </Col>
+          </Row>
         </Section>
-      )
-      }
+      )}
       {isForked && (
         <Section fullWidth={false}>
-          <div className={clsx(classes.callout, classes.isForked)}>
-            {forkDetails.data.forkingPeriodEndTimestamp && (
-              <p>
-                <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
-              </p>
-            )}
-            <p>Fork contracts:{" "}
-              {/* TODO:awaiting data */}
-              {forkDetails.data.forkToken && (
-                <>
-                  <a
-                    href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                    target='_blank'
-                    rel='noreferrer'
-                  >
-                    Governor
-                  </a>, {" "}
-                </>
-              )}
-              {forkDetails.data.forkTreasury && (
-                <>
-                  <a
-                    href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
-                    target='_blank'
-                    rel='noreferrer'
-                  >
-                    Treasury
-                  </a>,{" "}
-                </>
-              )}
-              {forkDetails.data.forkToken && (
-                <>
-                  <a
-                    href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                    target='_blank'
-                    rel='noreferrer'
-                  >
-                    Token
-                  </a>,{" "}
-                </>
-              )}
-              {/* TODO: awaiting data */}
-              {forkDetails.data.forkToken && (
-                <a
-                  href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                  target='_blank'
-                  rel='noreferrer'
-                >Timelock</a>
-              )}
-            </p>
-          </div>
+          <Row>
+            <Col>
+              <div className={clsx(classes.callout, classes.isForked)}>
+                {forkDetails.data.forkingPeriodEndTimestamp && (
+                  <p>
+                    <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
+                  </p>
+                )}
+                <p>Fork contracts:{" "}
+                  {/* TODO:awaiting data */}
+                  {forkDetails.data.forkToken && (
+                    <>
+                      <a
+                        href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        Governor
+                      </a>, {" "}
+                    </>
+                  )}
+                  {forkDetails.data.forkTreasury && (
+                    <>
+                      <a
+                        href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        Treasury
+                      </a>,{" "}
+                    </>
+                  )}
+                  {forkDetails.data.forkToken && (
+                    <>
+                      <a
+                        href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        Token
+                      </a>,{" "}
+                    </>
+                  )}
+                  {/* TODO: awaiting data */}
+                  {forkDetails.data.forkToken && (
+                    <a
+                      href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
+                      target='_blank'
+                      rel='noreferrer'
+                    >Timelock</a>
+                  )}
+                </p>
+              </div>
+            </Col>
+          </Row>
         </Section>
-      )
-      }
+      )}
       {!isNewForkPage && escrowEvents.data && (
         <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod, isForked && classes.isForked)}>
           <Container>
@@ -297,7 +305,7 @@ const ForkPage = ({
                   </strong>
                   {(!isForkPeriodActive || !isForked) && (
                     <span>
-                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}%`}
+                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of required nouns`}
                     </span>
                   )}
                 </div>
