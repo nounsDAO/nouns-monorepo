@@ -1,11 +1,25 @@
+.sponsorsWrapOverflow {
+  @media screen and (min-width: 992px) {
+    max-width: 200px;
+    overflow: visible;
+  }
+}
+.sponsorsWrapOverflow .sponsors {
+  @media screen and (min-width: 992px) {
+    width: 100vh;
+  }
+}
 .sponsors {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   align-content: center;
   gap: 5px;
+  @media screen and (min-width: 992px) {
+    justify-content: flex-start;
+  }
 }
 .sponsorAvatar {
   max-width: 32px;
@@ -20,6 +34,5 @@
   height: 32px;
   border-radius: 100%;
   background: #e8e8ec;
-
   border: 1px dashed #a7a7aa;
 }

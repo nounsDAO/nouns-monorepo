@@ -5,6 +5,7 @@ import CandidateSponsorImage from './CandidateSponsorImage';
 import { useQuery } from '@apollo/client';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 type Props = {
   signers: CandidateSignature[];
@@ -16,7 +17,6 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
   const [signerSpots, setSignerSpots] = useState<CandidateSignature[]>();
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const signerIds = signers?.map(s => s.signer.id) ?? [];
-
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0),
   );
@@ -26,7 +26,6 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
     return acc;
   }, {});
   const nounIds = Object.values(delegateToNounIds ?? {}).flat();
-
   React.useEffect(() => {
     if (signers && signers.length < nounsRequired) {
       setSignerSpots(signers);
@@ -38,21 +37,24 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
     }
   }, [signers, nounsRequired]);
 
-  console.log('todo: add signerCountOverflow element', signerCountOverflow);
   const placeholderCount = nounsRequired - signers.length;
   const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
   return (
-    <div className={classes.sponsors}>
-      {signerSpots &&
-        signerSpots.length > 0 &&
-        delegateToNounIds &&
-        nounIds.map(nounId => {
-          return (
-            <Link to={`/noun/${nounId}`} className={classes.sponsorAvatar}>
-              <CandidateSponsorImage nounId={+nounId} />
-            </Link>
-          );
-        })}
+    <div className={clsx(classes.sponsorsWrap,
+      signerCountOverflow > 0 && classes.sponsorsWrapOverflow,
+    )}>
+      <div className={classes.sponsors}>
+        {signerSpots &&
+          signerSpots.length > 0 &&
+          delegateToNounIds &&
+          nounIds.map((nounId, i) => {
+            return (
+              <Link to={`/noun/${nounId}`} className={classes.sponsorAvatar}>
+                <CandidateSponsorImage nounId={+nounId} />
+              </Link>
+            );
+          })}
+      </div>
       {placeholderArray.map((_) => (
         <div className={classes.emptySponsorSpot} />
       ))}

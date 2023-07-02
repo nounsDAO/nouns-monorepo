@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import classes from './CandidateSponsors.module.css';
 import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
@@ -104,7 +104,6 @@ function SignatureForm(props: Props) {
   const getSignature = async () => {
     setIsGetSignatureWaiting(true);
     let signature;
-
     if (proposalIdToUpdate) {
       const value = {
         proposer: props.candidate.proposer,
@@ -130,13 +129,11 @@ function SignatureForm(props: Props) {
       };
       signature = await signer!._signTypedData(domain, createProposalTypes, value).then(
         (sig: any) => {
-          console.log('sig', sig);
           setIsGetSignatureWaiting(false);
           setIsGetSignatureTxSuccessful(true);
           return sig;
         },
       ).catch((err: any) => {
-        console.log('err', err);
         setGetSignatureErrorMessage(err.message);
         setIsGetSignatureWaiting(false);
       });
@@ -145,10 +142,7 @@ function SignatureForm(props: Props) {
   }
 
   async function sign() {
-    // if (!candidateProposal) return;
-
     const signature = await getSignature();
-    console.log('signature', signature);
     if (signature) {
       setIsGetSignatureWaiting(false);
       setIsWaiting(true);
@@ -160,7 +154,6 @@ function SignatureForm(props: Props) {
         props.candidate.version.calldatas,
         props.candidate.version.description,
       );
-      console.log('>>> encodedProp', encodedProp)
       // signature set, submit signature
       await addSignature(
         signature,
@@ -230,7 +223,6 @@ function SignatureForm(props: Props) {
     }
   }, [isWaiting, isLoading, isTxSuccessful, errorMessage, isGetSignatureWaiting, isGetSignaturePending, isGetSignatureTxSuccessful, getSignatureErrorMessage]);
 
-  console.log('errors: ', errorMessage, getSignatureErrorMessage);
   return (
     <div className={classes.formWrapper}>
       <>

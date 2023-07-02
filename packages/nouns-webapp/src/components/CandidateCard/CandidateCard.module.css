@@ -30,9 +30,12 @@
   padding-top: 10px;
   margin-top: 10px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .candidateSponsors {
@@ -40,7 +43,12 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 5px;
+  @media screen and (min-width: 768px) {
+    overflow: hidden;
+    justify-content: flex-start;
+  }
 }
 
 .candidateSponsors span {
@@ -71,4 +79,19 @@
   font-weight: bold;
   margin: 0;
   padding: 0;
+}
+
+.sponsorCount.sponsorCountOverflow {
+  @media screen and (min-width: 992px) {
+    height: 100%;
+    padding: 10px 40px;
+    margin-left: -25px;
+    background: linear-gradient(90deg, rgba(244,244,248,0) 0%, rgba(244,244,248,0.9) 15%, rgba(244,244,248,1) 25%, rgba(244,244,248,1) 100%);
+  }
+}
+
+.candidateLink:hover .sponsorCount.sponsorCountOverflow {
+  @media screen and (min-width: 992px) {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 100%);
+  }
 }

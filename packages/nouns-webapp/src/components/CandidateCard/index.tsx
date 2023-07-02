@@ -93,7 +93,9 @@ function CandidateCard(props: Props) {
               nounsRequired={props.nounsRequired}
               currentBlock={currentBlock && currentBlock - 1}
             />
-            <span className={classes.sponsorCount}>
+            <span className={clsx(classes.sponsorCount,
+              signers.length - props.nounsRequired > 0 && classes.sponsorCountOverflow
+            )}>
               <strong>
                 {signedVotes} / {props.nounsRequired}
               </strong>{' '}
