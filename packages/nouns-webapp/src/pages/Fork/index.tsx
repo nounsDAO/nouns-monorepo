@@ -31,6 +31,7 @@ const ForkPage = ({
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isThresholdMet, setIsThresholdMet] = useState(false);
   const [isForked, setIsForked] = useState(false);
+  const [isPageDataLoaded, setIsPageDataLoaded] = useState(false);
   const [isForkPeriodActive, setIsForkPeriodActive] = useState(false);
   const [isNewForkPage, setIsNewForkPage] = useState(false);
   const [thresholdPercentage, setThresholdPercentage] = useState(0);
@@ -58,6 +59,18 @@ const ForkPage = ({
     forks.refetch();
   }
 
+  const handlePercentageToThreshold = () => {
+    if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
+      if (isForkPeriodActive || isForked) {
+        const currentPercentage = (forkDetails.data.tokensForkingCount / forkThreshold) * 100;
+        setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
+      } else {
+        const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
+        setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
+      }
+    }
+  }
+
   useEffect(() => {
     // trigger data updates on modal close
     refetchForkData();
@@ -83,13 +96,6 @@ const ForkPage = ({
       setForkStatusLabel('Pre-escrow');
       setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
     }
-    // match id to upcoming fork id
-    if (forks?.data && +id === +forks.data[forks.data.length - 1].id + 1) {
-      setIsNewForkPage(true);
-    } else {
-      setIsNewForkPage(false);
-    }
-
     // threshold
     if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow > forkThreshold) {
       setIsThresholdMet(true);
@@ -98,16 +104,27 @@ const ForkPage = ({
     }
     if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
       const percentage = (forkThreshold / totalSupply) * 100;
-      const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
       setThresholdPercentage(+percentage.toFixed(2));
-      setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
+      handlePercentageToThreshold();
     }
   }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
 
-  if (!forks.data || !forkDetails.data) {
+  useEffect(() => {
+    // set page layout based on data
+    if (forks.data && forkDetails.data) {
+      // match id to upcoming fork id
+      if (forks?.data && +id === +forks.data[forks.data.length - 1].id + 1) {
+        setIsNewForkPage(true);
+      } else {
+        setIsNewForkPage(false);
+      }
+      setIsPageDataLoaded(true);
+    }
+  }, [forks.data, forkDetails.data]);
+
+  if (!isPageDataLoaded) {
     return (
       <div className={clsx(classes.spinner, classes.pageLoadingSpinner)}>
-        {/* <Spinner animation="border" /> */}
         <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
       </div>
     );
@@ -120,7 +137,7 @@ const ForkPage = ({
 
   return (
     <>
-      <Section fullWidth={true} className='h-100'>
+      <Section fullWidth={false} className='h-100'>
         <Row>
           {isNewForkPage ? (
             <div className={clsx(
@@ -168,8 +185,8 @@ const ForkPage = ({
                   <div className={classes.spacer} />
                 </div>
                 <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
-                {(!isForkPeriodActive || !isForked) && (
-                  <p>
+                {!isForked && (
+                  <p className={classes.note}>
                     {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to meet the threshold
                   </p>
                 )}
@@ -300,14 +317,26 @@ const ForkPage = ({
                     </> : <>
                       {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
                     </>}
-
-                    {" "}Noun{numTokensInForkEscrow === 1 ? '' : 's'}
+                    {" "}Noun{(isForkPeriodActive || isForked) ?
+                      forkDetails.data?.tokensForkingCount === 1 ? '' : 's'
+                      : numTokensInForkEscrow === 1 ? '' : 's'}
                   </strong>
-                  {(!isForkPeriodActive || !isForked) && (
+
+                  {(isForkPeriodActive || isForked) ? (
+                    <span>
+                      {`${currentEscrowPercentage}% of required nouns`}
+                    </span>
+                  ) : (
                     <span>
                       {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of required nouns`}
                     </span>
                   )}
+                  {/* {(!isForkPeriodActive || !isForked) && (
+                    <span>
+                      {isForkPeriodActive.toString()} | {isForked.toString()} |
+                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of required nouns`}
+                    </span>
+                  )} */}
                 </div>
 
                 <DeployForkButton

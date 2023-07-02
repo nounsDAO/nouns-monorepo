@@ -46,8 +46,9 @@ h1 {
   }
 }
 
-.pageHeader .note {
-  opacity: 0.8;
+.note {
+  color: var(--brand-gray-dark-text);
+  opacity: 0.6;
   font-size: 14px;
   margin-top: 10px;
 }
