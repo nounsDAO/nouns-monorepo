@@ -79,6 +79,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
   const handleRemoveProposalAction = useCallback(
     (index: number) => {
+      setIsProposalEdited(true);
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
@@ -161,7 +162,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
   useEffect(() => {
     (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
-  }, [isTitleEdited, isBodyEdited, proposalTransactions]);
+  }, [isTitleEdited, isBodyEdited]);
 
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,

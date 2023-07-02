@@ -174,7 +174,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
 
   useEffect(() => {
     (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
-  }, [isTitleEdited, isBodyEdited, proposalTransactions]);
+  }, [isTitleEdited, isBodyEdited]);
 
   useEffect(() => {
     switch (updateProposalState.status) {
