@@ -1,9 +1,10 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Col, Nav } from 'react-bootstrap';
+import { Col, Nav, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
-import nounsIosGif from '../../assets/nouns-ios.gif';
+import distributionImage from '../../assets/distribution.svg';
+import guildsImage from '../../assets/squares.png';
 import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 
 const NounsIntroSection = () => {
@@ -45,9 +46,8 @@ const NounsIntroSection = () => {
         </Col>
       </Section>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6} className={`${classes.youtubeEmbedContainer} order-lg-1 order-2`}>
-
-
+        <Col lg={6} className={classes.guildImgContainer}>
+          <img src={guildsImage} className={classes.guildImg}/>
           <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
 
           </small>
@@ -61,18 +61,35 @@ const NounsIntroSection = () => {
             <p>
               Check out the Guild Pages to see ongoing projects!
             </p>
-            <p>
-              <b>Ecosystem Guild</b><br/>
-              Empower local artists and businesses to participate in web3
-            </p>
-            <p>
-              <b>Community Guild</b><br/>
-              Connect and unite Austin's crypto communities
-            </p>
-            <p>
-              <b>Policy Guild</b><br/>
-              Advise our government on better crypto policy
-            </p>
+            <Card onClick={(e) => {
+              e.preventDefault();
+              window.location.href='http://google.com';
+            }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
+              <p>
+                <b>Ecosystem Guild</b><br/>
+                Empower local artists and businesses with web3
+              </p>
+            </Card>
+
+            <Card onClick={(e) => {
+              e.preventDefault();
+              window.location.href='http://google.com';
+            }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
+              <p>
+                <b>Community Guild</b><br/>
+                Connect and unite Austin's crypto communities
+              </p>
+            </Card>
+
+            <Card onClick={(e) => {
+              e.preventDefault();
+              window.location.href='http://google.com';
+            }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem' }}>
+              <p>
+                <b>Policy Guild</b><br/>
+                Advise our government on better crypto policy
+              </p>
+            </Card>
           </div>
         </Col>
       </Section>
@@ -100,7 +117,7 @@ const NounsIntroSection = () => {
           </div>
         </Col>
         <Col lg={6} className={classes.iosImgContainer}>
-
+          <img src={distributionImage} className={classes.iosImg} alt="Giving Circle Illustration" />
         </Col>
       </Section>
     </>
