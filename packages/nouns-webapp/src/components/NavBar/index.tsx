@@ -93,6 +93,13 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
+            <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
+              <NavBarButton
+                buttonText={<Trans>REP</Trans>}
+                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.charmverse)}
               className={classes.nounsNavLink}
