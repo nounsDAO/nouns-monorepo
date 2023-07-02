@@ -115,6 +115,9 @@ li.transactionDiffsRow {
 .transactionDiffsRow :global(td:nth-child(even)) {
   width: calc(50% - 25px) !important;
 }
+.transactionDiffsRow :global(td:nth-child(odd)) {
+  padding-right: 5px;
+}
 
 .transactionDiffsRow table:first-of-type {
   margin-left:0;

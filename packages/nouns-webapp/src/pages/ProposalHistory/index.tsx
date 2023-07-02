@@ -1,6 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalDetail, useProposal, useProposalVersions } from '../../wrappers/nounsDao';
+import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps, } from 'react-router-dom';
@@ -18,7 +18,7 @@ import ReactMarkdown from 'react-markdown';
 import { Trans } from '@lingui/macro';
 import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
-import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
+import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,14 +63,6 @@ const ProposalHistory = ({
       />
     );
   };
-
-  const stringifyTransactions = (details: ProposalDetail[]) => {
-    return details.map((d, i) => {
-      return d.target + d.functionSig + d.value + d.callData;
-    }
-    ).join('');
-  };
-
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -117,20 +109,19 @@ const ProposalHistory = ({
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
-                    <ReactDiffViewer
+                    <ProposalTransactionsDiffs
+                      activeVersionNumber={activeVersion}
+                      oldTransactions={proposalVersions[activeVersion - 2].details}
+                      newTransactions={proposalVersions[activeVersion - 1].details}
+                    />
+                    {/* <ReactDiffViewer
                       oldValue={stringifyTransactions(proposalVersions[activeVersion - 1].details)}
                       newValue={stringifyTransactions(proposalVersions[activeVersion - 2].details)}
                       splitView={false}
                       hideLineNumbers={true}
                       extraLinesSurroundingDiff={10000}
                       renderContent={highlightSyntax}
-                    // disableWordDiff={true}
-                    />
-                    {/* <p>Version {activeVersion}</p>
-                    <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
-
-                    <p>Version {activeVersion - 1}</p>
-                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} /> */}
+                    /> */}
                   </Col>
                 </Row>
               </div>
@@ -140,12 +131,6 @@ const ProposalHistory = ({
             <div className={classes.versionHistory}>
               <div className={classes.versionHistoryHeader}>
                 <h2>Version History</h2>
-                <button
-                  className={classes.diffsLink}
-                  onClick={() => setIsDiffsVisible(!isDiffsVisible)}
-                >
-                  View diffs
-                </button>
               </div>
               <div className={classes.versionsList}>
                 {proposalVersions &&
@@ -165,6 +150,14 @@ const ProposalHistory = ({
                     })
                     .reverse()}
               </div>
+              {activeVersion > 1 && (
+                <button
+                  className={classes.diffsLink}
+                  onClick={() => setIsDiffsVisible(!isDiffsVisible)}
+                >
+                  {isDiffsVisible ? 'Hide' : ' View'} diffs
+                </button>
+              )}
             </div>
           </Col>
         </Row>

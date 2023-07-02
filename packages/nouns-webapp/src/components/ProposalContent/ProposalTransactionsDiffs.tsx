@@ -1,19 +1,7 @@
-import { Fragment } from 'react';
 import { ProposalDetail } from '../../wrappers/nounsDao';
 import classes from './ProposalContent.module.css';
-import { InformationCircleIcon } from '@heroicons/react/solid';
-import { Trans } from '@lingui/macro';
-import config from '../../config';
-import { utils } from 'ethers';
-import { linkIfAddress } from '.';
-import ShortAddress from '../ShortAddress';
 import ReactDiffViewer from 'react-diff-viewer';
-import clsx from 'clsx';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import ProposalTransaction from './ProposalTransaction';
-
 
 type Props = {
   oldTransactions: ProposalDetail[];
@@ -38,25 +26,15 @@ export default function ProposalTransactions({ oldTransactions, newTransactions,
       callData: tx.callData,
     };
   };
-  console.log('oldTransactions', oldTransactions);
-  console.log('newTransactions', newTransactions);
   const longerArray = oldTransactions.length > newTransactions.length ? oldTransactions : newTransactions;
   const transactions = Array.from({ length: longerArray.length }, (_, i) => {
     const oldTx = buildTxObject(oldTransactions[i]);
     const newTx = buildTxObject(newTransactions[i]);
-
     return {
       oldTx: oldTx,
       newTx: newTx,
     };
   });
-  const inlineText = (str: string) => {
-    return (
-      <>
-        {str}
-      </>
-    );
-  };
 
   const stringifyTx = (tx: ProposalDetail) => {
     const item = (
@@ -72,27 +50,8 @@ export default function ProposalTransactions({ oldTransactions, newTransactions,
     return item === '';
   };
 
-  const highlightSyntax = (str: string) => (
-    <span
-      style={{ display: 'inline' }}
-    >{str === '' ? 'empty' : str}
-    </span>
-  );
-
-
-
-  console.log('transaction diffs', transactions);
-
   return (
     <div>
-      {/* <div className={classes.diffsHeader}>
-        <p className={classes.diffsHeaderLeft}>
-          Version {activeVersionNumber - 1}
-        </p>
-        <p className={classes.diffsHeaderRight}>
-          This version
-        </p>
-      </div> */}
       <ol className={classes.transactionDiffsList}>
         {transactions.map((
           tx: {

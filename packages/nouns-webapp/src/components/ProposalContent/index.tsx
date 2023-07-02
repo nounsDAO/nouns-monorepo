@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail, ProposalTransactionDetails } from '../../wrappers/nounsDao';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
@@ -40,7 +40,6 @@ export const transactionLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { description, title, details } = props;
-
   return (
     <>
       <Row>

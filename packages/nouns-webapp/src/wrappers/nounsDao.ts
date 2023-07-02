@@ -394,7 +394,7 @@ const concatSelectorToCalldata = (signature: string, callData: string) => {
 };
 
 export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
-  return details.targets.map((target: string, i: number) => {
+  return details?.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(
       // Handle both logs and subgraph responses
@@ -577,11 +577,19 @@ const parseSubgraphProposal = (
     return;
   }
   const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  const transactionDetails: ProposalTransactionDetails = {
+    targets: proposal.targets,
+    values: proposal.values,
+    signatures: proposal.signatures,
+    calldatas: proposal.calldatas,
+    encodedProposalHash: proposal.encodedProposalHash,
+  };
+
   let details;
   if (toUpdate) {
-    details = formatProposalTransactionDetailsToUpdate(proposal);
+    details = formatProposalTransactionDetailsToUpdate(transactionDetails);
   } else {
-    details = formatProposalTransactionDetails(proposal);
+    details = formatProposalTransactionDetails(transactionDetails);
   }
   return {
     id: proposal.id,
@@ -704,6 +712,13 @@ export const useProposalVersions = (id: string | number): ProposalVersion[] | un
       a.createdAt > b.createdAt ? 1 : -1,
     );
   const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: ProposalVersion, i: number) => {
+    const details: ProposalTransactionDetails = {
+      targets: proposalVersion.targets,
+      values: proposalVersion.values,
+      signatures: proposalVersion.signatures,
+      calldatas: proposalVersion.calldatas,
+      encodedProposalHash: '',
+    }
     return {
       id: proposalVersion.id,
       versionNumber: i + 1,
@@ -715,7 +730,7 @@ export const useProposalVersions = (id: string | number): ProposalVersion[] | un
       signatures: proposalVersion.signatures,
       calldatas: proposalVersion.calldatas,
       title: proposalVersion.title,
-      details: formatProposalTransactionDetails(proposalVersion.details),
+      details: formatProposalTransactionDetails(details),
       proposal: {
         id: proposalVersion.proposal.id,
       },

@@ -1,6 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalDetail, ProposalVersion } from '../../wrappers/nounsDao';
 import classes from '../ProposalHistory/Vote.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps } from 'react-router-dom';
@@ -131,12 +130,7 @@ const CandidateHistoryPage = ({
                 <h2>
                   <Trans>Version History</Trans>
                 </h2>
-                <button
-                  className={classes.diffsLink}
-                  onClick={() => setIsDiffsVisible(!isDiffsVisible)}
-                >
-                  <Trans>View diffs</Trans>
-                </button>
+
               </div>
               <div className={classes.versionsList}>
                 {proposalVersions &&
@@ -157,6 +151,14 @@ const CandidateHistoryPage = ({
                     })
                     .reverse()}
               </div>
+              {activeVersion > 1 && (
+                <button
+                  className={classes.diffsLink}
+                  onClick={() => setIsDiffsVisible(!isDiffsVisible)}
+                >
+                  {isDiffsVisible ? 'Hide' : ' View'} diffs
+                </button>
+              )}
             </div>
           </Col>
         </Row>

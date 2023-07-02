@@ -246,10 +246,14 @@
 }
 .versionHistory .version:hover {
   background-color: #e6e6eb;
+  border: 1px solid rgba(0,0,0,0.2);
 }
 
+.versionHistory .version.activeVersion h4 {
+  color: var(--brand-gray-dark-text);
+}
 .versionHistory .version.activeVersion {
-  border: 1px solid #e6e6e6;
+  border: 1px solid rgba(0,0,0,0.4);
   background-color: #fff;
 }
 
@@ -265,11 +269,12 @@
 .versionHistory .version h4 {
   font-size: 14px;
   color: var(--brand-gray-light-text);
+  line-height: 1;
 }
 
 .versionHistory .version h4,
 .versionHistory .message {
-  color: black;
+  color: var(--brand-gray-light-text);
   font-weight: bold;
   margin: 0;
   padding: 0;
@@ -295,8 +300,21 @@
   margin: 0;
   border: 0;
   background: transparent;
-  color: var(--brand-color-red);
+  text-align: center;
+  margin: 1rem auto 0;
+  display: block;
+  color: var(--brand-gray-light-text);
 }
+.diffsLink:hover {
+  text-decoration: underline;
+}
+/* .diffsLink {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand-color-red);
+} */
 
 .diffsWrapper table:first-of-type {
   margin-left: -10px;
