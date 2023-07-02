@@ -80,6 +80,17 @@
   bottom: 0;
 }
 
+.guildImgContainer {
+  padding: 0;
+  position: relative;
+}
+
+.guildImg {
+  max-width: 100%;
+  height: 35rem;
+  bottom: 0;
+}
+
 .dlFromAppStoreImg {
   margin-top: 2rem;
   width: 10rem;
