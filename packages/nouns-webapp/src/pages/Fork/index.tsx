@@ -107,7 +107,7 @@ const ForkPage = ({
       setThresholdPercentage(+percentage.toFixed(2));
       handlePercentageToThreshold();
     }
-  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
+  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id, handlePercentageToThreshold]);
 
   useEffect(() => {
     // set page layout based on data
@@ -120,7 +120,7 @@ const ForkPage = ({
       }
       setIsPageDataLoaded(true);
     }
-  }, [forks.data, forkDetails.data]);
+  }, [forks.data, forkDetails.data, id]);
 
   if (!isPageDataLoaded) {
     return (
