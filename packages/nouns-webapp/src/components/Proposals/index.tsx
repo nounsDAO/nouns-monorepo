@@ -98,14 +98,19 @@ const Proposals = ({
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
   const tabs = ['Proposals', 'Candidates'];
   const { hash } = useLocation();
-  console.log('hash', hash)
 
   useEffect(() => {
     if (hash === '#candidates') {
       setActiveTab(1);
     }
-  }
-    , [hash]);
+  }, [hash]);
+  useEffect(() => {
+    if (activeTab === 1) {
+      history.push('/vote#candidates')
+    } else {
+      history.push('/vote')
+    }
+  }, [activeTab, history])
 
   // Get candidates
   const { loading, error, data: allCandidates } = useCandidateProposals();
