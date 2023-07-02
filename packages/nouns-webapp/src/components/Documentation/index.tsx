@@ -30,6 +30,20 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       leavesPage={true}
     />
   );
+  const blueprintLink = (
+    <Link
+      text={<Trans>ATX DAO Blueprint</Trans>}
+      url="https://snapshot.org/#/atxdao.eth/proposal/0x8cfd82908b44e88c5715f16124faa1040f64b8d55161524148e7d1cd5b9d5b58"
+      leavesPage={true}
+    />
+  );
+  const dao2Link = (
+    <Link
+      text={<Trans>ATX DAO 2.0</Trans>}
+      url="https://snapshot.org/#/atxdao.eth/proposal/0x42f1f945ddf51b5afb85bfa53f851769dd252c8c7b09121b9e0fb0dfbac85435"
+      leavesPage={true}
+    />
+  );
   return (
     <Section
       fullWidth={false}
@@ -39,67 +53,29 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>
-            <Trans>WTF?</Trans>
+            <Trans>What about...</Trans>
           </h1>
-          <p className={classes.aboutText}>
-            <Trans>
-              Nouns are an experimental attempt to improve the formation of on-chain avatar
-              communities. While projects such as {cryptopunksLink} have attempted to bootstrap
-              digital community and identity, Nouns attempt to bootstrap identity, community,
-              governance, and a treasury that can be used by the community.
-            </Trans>
-          </p>
-          <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
-            <Trans>
-              Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
-            </Trans>
+          <p className={classes.aboutText} style={{ paddingBottom: '3rem' }}>
           </p>
         </div>
         <Accordion flush>
           <Accordion.Item eventKey="0" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Summary</Trans>
+              <Trans>Why we're here?</Trans>
             </Accordion.Header>
             <Accordion.Body>
-              <ul>
-                <li>
-                  <Trans>Nouns artwork is in the {publicDomainLink}.</Trans>
-                </li>
-                <li>
-                  <Trans>One Noun is trustlessly auctioned every 24 hours, forever.</Trans>
-                </li>
-                <li>
-                  <Trans>100% of Noun auction proceeds are trustlessly sent to the treasury.</Trans>
-                </li>
-                <li>
-                  <Trans>Settlement of one auction kicks off the next.</Trans>
-                </li>
-                <li>
-                  <Trans>All Nouns are members of Nouns DAO.</Trans>
-                </li>
-                <li>
-                  <Trans>Nouns DAO uses a fork of {compoundGovLink}.</Trans>
-                </li>
-                <li>
-                  <Trans>One Noun is equal to one vote.</Trans>
-                </li>
-                <li>
-                  <Trans>The treasury is controlled exclusively by Nouns via governance.</Trans>
-                </li>
-                <li>
-                  <Trans>Artwork is generative and stored directly on-chain (not IPFS).</Trans>
-                </li>
-                <li>
-                  <Trans>
-                    No explicit rules exist for attribute scarcity; all Nouns are equally rare.
-                  </Trans>
-                </li>
-                <li>
-                  <Trans>
-                    Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
-                  </Trans>
-                </li>
-              </ul>
+              <p>
+                Our goals as an organization are laid out in the original {blueprintLink} and {dao2Link} proposals.
+              </p>
+              <p>
+                ATX DAO is a democratic group of crypto enthusiasts building a cohesive network of developers, artists,
+                investors and crypto professionals in Austin, Texas. The DAO organizes social events, provides education
+                to the community, and assists in the creation of new blockchain tools.
+              </p>
+              <p>
+                We aim to partner with artists, local businesses, crypto funds, social clubs, and protocols to become the
+                de facto networking resource for crypto in our region.
+              </p>
             </Accordion.Body>
           </Accordion.Item>
 
