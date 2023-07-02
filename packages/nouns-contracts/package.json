@@ -25,13 +25,15 @@
     "prepare": "yarn build"
   },
   "devDependencies": {
-    "solidity-coverage": "0.7.21",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
-    "@openzeppelin/contracts": "^4.1.0",
+    "@openzeppelin/contracts": "^4.7.3",
+    "operator-filter-registry": "^1.4.2",
     "@openzeppelin/contracts-upgradeable": "^4.1.0",
     "@openzeppelin/hardhat-upgrades": "^1.8.2",
+    "@opengsn/contracts": "^3.0.0-beta.6",
+
     "@typechain/ethers-v5": "^10.0.0",
     "@typechain/hardhat": "^6.0.0",
     "@types/express": "^4.17.11",
@@ -45,10 +47,13 @@
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
     "shx": "^0.3.3",
+    "solidity-coverage": "0.7.21",
     "ts-node": "^10.0.0",
     "typechain": "^8.0.0"
   },
   "dependencies": {
-    "ethers": "^5.6.8"
+    "@opengsn/contracts": "^3.0.0-beta.6",
+    "ethers": "^5.6.8",
+    "operator-filter-registry": "^1.4.2"
   }
 }

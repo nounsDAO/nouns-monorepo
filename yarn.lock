@@ -4065,15 +4065,27 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
+"@opengsn/contracts@^3.0.0-beta.6":
+  version "3.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@opengsn/contracts/-/contracts-3.0.0-beta.6.tgz#3455b7c249922a087422721689239a7d539d1138"
+  integrity sha512-zqd7BG339Uq5bfx40CwKXr2waaJqLN9qBVllcWhKBGnkZPKR59wVIPh2zTNzvLorndMRWB3TnOQxAr6tZKjwGQ==
+  dependencies:
+    "@openzeppelin/contracts" "^4.2.0"
+
 "@openzeppelin/contracts-upgradeable@^4.1.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.4.0.tgz#85161d87c840c5bce2b6ed0c727b407e774852ae"
   integrity sha512-hIEyWJHu7bDTv6ckxOaV+K3+7mVzhjtyvp3QSaz56Rk5PscXtPAbkiNTb3yz6UJCWHPWpxVyULVgZ6RubuFEZg==
 
-"@openzeppelin/contracts@^4.1.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.4.0.tgz#4a1df71f736c31230bbbd634dfb006a756b51e6b"
-  integrity sha512-dlKiZmDvJnGRLHojrDoFZJmsQVeltVeoiRN7RK+cf2FmkhASDEblE0RiaYdxPNsUZa6mRG8393b9bfyp+V5IAw==
+"@openzeppelin/contracts-upgradeable@^4.8.2":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.9.2.tgz#a817c75688f8daede420052fbcb34e52482e769e"
+  integrity sha512-siviV3PZV/fHfPaoIC51rf1Jb6iElkYWnNYZ0leO23/ukXuvOyoC/ahy8jqiV7g+++9Nuo3n/rk5ajSN/+d/Sg==
+
+"@openzeppelin/contracts@^4.2.0", "@openzeppelin/contracts@^4.7.3":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.9.2.tgz#1cb2d5e4d3360141a17dbc45094a8cad6aac16c1"
+  integrity sha512-mO+y6JaqXjWeMh9glYVzVu8HYPGknAAnWyxTRhGeckOruyXQMNnlcW6w/Dx9ftLeIQk6N+ZJFuVmTwF7lEIFrg==
 
 "@openzeppelin/hardhat-upgrades@^1.8.2":
   version "1.12.0"
@@ -8878,17 +8890,7 @@ concat-stream@^1.5.0, concat-stream@^1.5.1, concat-stream@^1.6.0, concat-stream@
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-concat-stream@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-2.0.0.tgz#414cf5af790a48c60ab9be4527d56d5e41133cb1"
-  integrity sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==
-  dependencies:
-    buffer-from "^1.0.0"
-    inherits "^2.0.3"
-    readable-stream "^3.0.2"
-    typedarray "^0.0.6"
-
-"concat-stream@github:hugomrdias/concat-stream#feat/smaller":
+concat-stream@^2.0.0, "concat-stream@github:hugomrdias/concat-stream#feat/smaller":
   version "2.0.0"
   resolved "https://codeload.github.com/hugomrdias/concat-stream/tar.gz/057bc7b5d6d8df26c8cf00a3f151b6721a0a8034"
   dependencies:
@@ -18048,6 +18050,14 @@ open@^7.0.2, open@^7.4.2:
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
+
+operator-filter-registry@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/operator-filter-registry/-/operator-filter-registry-1.4.2.tgz#55a3aa8d360b4bc69e53cfe7259453fd25495f7e"
+  integrity sha512-BwbzpYUtYePAotSV+TMT0r4TU/eGjlhYKohbhu9sf1g/T3KLRMIfUau6bJp8QyLSCBODr6ega34lj4RakbredQ==
+  dependencies:
+    "@openzeppelin/contracts" "^4.7.3"
+    "@openzeppelin/contracts-upgradeable" "^4.8.2"
 
 opn@^5.5.0:
   version "5.5.0"
