@@ -51,7 +51,7 @@ function App() {
       )}
       <BrowserRouter>
         <AvatarProvider
-          provider={new useEthers.providers.Web3Provider((chainId === ChainId.Mainnet ? library : undefined))}
+          provider={(chainId === ChainId.Mainnet ? library : undefined)}
           batchLookups={true}
         >
           <NavBar />
