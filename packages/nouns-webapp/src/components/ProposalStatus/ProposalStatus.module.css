@@ -1,4 +1,4 @@
-.proposalStatus {
+.proposalStatus, .forkStatus {
   font-family: 'PT Root UI';
   font-weight: bold;
   color: white;

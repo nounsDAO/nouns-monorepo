@@ -124,7 +124,7 @@ const NavBar = () => {
                 onClick={closeNav}
               >
                 <NavBarButton
-                  buttonText={<Trans>Forks</Trans>}
+                  buttonText={<Trans>Fork</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
@@ -169,7 +169,7 @@ const NavBar = () => {
                   )}
                   href="/fork"
                 >
-                  <Trans>Forks</Trans>
+                  <Trans>Fork</Trans>
                 </Dropdown.Item>
               </NavDropdown>
             </div>

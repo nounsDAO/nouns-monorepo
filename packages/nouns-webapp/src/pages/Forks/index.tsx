@@ -1,10 +1,12 @@
 import React from 'react'
-import { Fork, useForks } from '../../wrappers/nounsDao';
+import { Fork, ProposalState, useForks } from '../../wrappers/nounsDao';
 import { Link } from 'react-router-dom';
 import Section from '../../layout/Section';
 import { Col, Row } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import classes from './Forks.module.css';
+import clsx from 'clsx';
+import ProposalStatus from '../../components/ProposalStatus';
 
 type Props = {}
 
@@ -24,15 +26,15 @@ const ForksPage: React.FC<Props> = props => {
               <Trans>Governance</Trans>
             </span>
             <h1>
-              <Trans>Forks</Trans>
+              <Trans>Fork</Trans>
             </h1>
           </Row>
-          <p className={classes.subheading}>
+          <p className={clsx(classes.subheading, 'm-0')}>
             <Trans>
-              TKTKTK Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
-              proposals or delegate their vote to a third party.
+              Forking is the crypto-native way for groups of token holders to exit together into a new instance of their protocol, resulting in maximal conservation of momentum in the ecosystem.
             </Trans>
           </p>
+          <p className={clsx(classes.subheading, 'mt-0')}><a href="https://mirror.xyz/0x10072dfc23771101dC042fD0014f263316a6E400/iN0FKOn_oYVBzlJkwPwK2mhzaeL8K2-W80u82F7fHj8" target='_blank' rel='noreferrer'>Learn more about Nouns Fork</a></p>
         </Col>
       </Section>
       {/* if latest fork id is finished forking, display a callout with an option to start a new fork. */}
@@ -46,17 +48,22 @@ const ForksPage: React.FC<Props> = props => {
                   <div className={classes.title}>
                     Nouns DAO Fork #{fork.id}
                   </div>
+                  <div
+                    className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
+                  >
+                    <ProposalStatus status={fork.executed ? ProposalState.EXECUTED : ProposalState.ACTIVE}></ProposalStatus>
+                  </div>
                 </Link>
               )
-            })}
+            }).reverse()}
           </Row>
           <Row>
             {isLatestForkFinished && nextForkId && (
               <div>
                 <p className={classes.startFork}>
-                  There are no active forks. {" "}
+                  <Trans>There are no active forks.</Trans> {" "}
                   <Link to={`/fork/${nextForkId}`}>
-                    Start a new fork
+                    <Trans>Start a new fork</Trans>
                   </Link>
                 </p>
 
