@@ -358,6 +358,7 @@
   border-radius: 12px;
   text-align: center;
   text-decoration: none;
+  margin-top: 1rem;
 }
 .candidatesSidebar .button.disabled {
   background-color: #f4f4f8;

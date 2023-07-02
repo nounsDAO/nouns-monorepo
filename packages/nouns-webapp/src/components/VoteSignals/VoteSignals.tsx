@@ -140,8 +140,6 @@ function VoteSignals(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendFeedbackState, setModal]);
 
-  console.log('isTransactionWaiting', isTransactionWaiting, isTransactionPending, props.proposal);
-
   return (
     <>
       {props.proposal.id && (

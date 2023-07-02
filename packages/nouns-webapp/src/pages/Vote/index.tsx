@@ -185,10 +185,6 @@ const VotePage = ({
     ProposalState.QUEUED,
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
-
-  console.log('proposal', proposal);
-  console.log('currentBlock', currentBlock);
-
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
   const isProposalSigner = account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;

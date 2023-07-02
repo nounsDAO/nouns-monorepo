@@ -54,7 +54,6 @@ export const useAddSignature = () => {
     nounsDAOData,
     'addSignature',
   );
-  console.log('useAddSignature', addSignatureState);
   return { addSignature, addSignatureState };
 };
 
@@ -141,7 +140,6 @@ export const useProposeBySigs = () => {
     nounsDaoContract,
     'proposeBySigs',
   );
-  console.log('useProposeBySigs', proposeBySigsState);
   return { proposeBySigs, proposeBySigsState };
 };
 

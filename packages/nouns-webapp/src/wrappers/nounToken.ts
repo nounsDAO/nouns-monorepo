@@ -271,6 +271,5 @@ export const useDelegateNounsAtBlockQuery = (signers: string[], block: number) =
   const { loading, data, error } = useQuery<Delegates>(
     delegateNounsAtBlockQuery(signers, block),
   );
-  console.log('useDelegateNounsAtBlockQuery block: ', block, { loading, data, error });
   return { loading, data, error };
 };
