@@ -93,7 +93,6 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
         </span>
         <h3 className={classes.eventTitle}>
           {isCycleEvent ? (actionLabel) : (<>{ownerLink} {actionLabel} {nounCount}</>)}
-
         </h3>
         {event.eventType === "EscrowDeposit" && event.reason && (
           <p className={classes.message}>{event.reason}</p>
