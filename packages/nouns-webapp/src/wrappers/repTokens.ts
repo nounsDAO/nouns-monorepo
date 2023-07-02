@@ -1,10 +1,10 @@
 
 import { useContractCall } from '@usedapp/core';
-import atxDaoABI from './atxDaoNFTAbi';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import config from '../config';
+import repTokensABI from './repTokensAbi';
 
-const abi = new utils.Interface(atxDaoABI);
+const abi = new utils.Interface(repTokensABI);
 
 export interface RepTokens {
     mintCount: EthersBN;
@@ -13,7 +13,7 @@ export interface RepTokens {
 export const useRepCall = (funcName: string, funcArgs: any[]) => {
     const nft = useContractCall<RepTokens>({
         abi,
-        address: config.atxDaoAddress,
+        address: config.repTokensAddress,
         method: funcName,
         args: funcArgs
     });
