@@ -212,11 +212,8 @@ const CreateCandidatePage = () => {
           </h3>
         </div>
         <Alert variant="secondary" className={classes.voterIneligibleAlert}>
-          {/* TODO: add real copy */}
           <Trans>
-            Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum
-            massa justo sit amet risus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus.
-          </Trans>
+            Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.          </Trans>
           <br />
           <br />
 

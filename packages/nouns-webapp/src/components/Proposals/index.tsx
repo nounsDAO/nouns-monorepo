@@ -348,11 +348,9 @@ const Proposals = ({
                     <Trans>About Proposal Candidates</Trans>
                   </strong>
                 </h4>
-                {/* TODO: add real copy */}
                 <p>
                   <Trans>
-                    Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus
-                    ac facilisis in, egestas eget quam.
+                    Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.
                   </Trans>
                 </p>
                 <h5>
