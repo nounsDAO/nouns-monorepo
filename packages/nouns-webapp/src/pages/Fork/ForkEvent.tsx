@@ -35,7 +35,7 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
         setNounCount('');
         setNounsInEvent([]);
         break;
-      case 'EscrowDeposit' || 'EscrowWithdrawal':
+      case 'EscrowDeposit':
         setActionLabel('added');
         setNounCount(event.tokenIDs?.length > 1 ? `${event.tokenIDs?.length} Nouns` : `Noun ${event.tokenIDs?.[0]}`);
         setNounsInEvent(event.tokenIDs?.map((tokenId, i) => {
@@ -58,6 +58,24 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
         break;
       case 'EscrowWithdrawal':
         setActionLabel('removed');
+        setNounCount(event.tokenIDs?.length > 1 ? `${event.tokenIDs?.length} Nouns` : `Noun ${event.tokenIDs?.[0]}`);
+        setNounsInEvent(event.tokenIDs?.map((tokenId, i) => {
+          return (
+            <Link key={i} to={`/noun/${tokenId}`}>
+              <img src={`https://noun.pics/${tokenId}`} alt={`Noun ${tokenId}`} className={classes.nounImage} />
+            </Link>
+          )
+        }));
+        setOwnerLink(
+          <a
+            href={buildEtherscanAddressLink(event.owner.id || '')}
+            target="_blank"
+            rel="noreferrer"
+            className={classes.proposerLinkJp}
+          >
+            <ShortAddress address={event.owner.id || ''} avatar={false} />
+          </a>
+        )
         break;
     }
   }, []);

@@ -325,11 +325,11 @@ const ForkPage = ({
 
                   {(isForkPeriodActive || isForked) ? (
                     <span>
-                      {`${currentEscrowPercentage}% of Nouns required`}
+                      {`${currentEscrowPercentage}% to threshold`}
                     </span>
                   ) : (
                     <span>
-                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of Nouns required`}
+                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% to threshold`}
                     </span>
                   )}
                 </div>
