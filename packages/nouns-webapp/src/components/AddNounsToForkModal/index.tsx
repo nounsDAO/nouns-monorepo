@@ -281,9 +281,9 @@ export default function AddNounsToForkModal(props: Props) {
         <div className={classes.sectionLabel}>
           <p>
             <strong>
-              <Trans>
-                Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}
-              </Trans>
+
+              Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}
+
             </strong>
           </p>
           <p>
