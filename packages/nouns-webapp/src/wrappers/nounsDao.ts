@@ -1069,3 +1069,23 @@ export const useGracePeriod = () => {
 
   return gracePeriod?.toNumber();
 };
+
+export const useAdjustedTotalSupply = (): number | undefined => {
+  const [totalSupply] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'adjustedTotalSupply',
+    }) || [];
+  return totalSupply?.toNumber();
+};
+
+export const useForkThresholdBPS = (): number | undefined => {
+  const [forkThresholdBPS] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'forkThresholdBPS',
+    }) || [];
+  return forkThresholdBPS?.toNumber();
+};

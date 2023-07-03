@@ -6,9 +6,9 @@ import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useNumTokensInForkEscrow } from '../../wrappers/nounsDao';
+import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useNumTokensInForkEscrow, useAdjustedTotalSupply, useForkThresholdBPS } from '../../wrappers/nounsDao';
 import { useEthers } from '@usedapp/core';
-import { useTotalSupply, useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
+import { useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
 import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
@@ -39,8 +39,9 @@ const ForkPage = ({
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [forkStatusLabel, setForkStatusLabel] = useState('Escrow');
   const [addNounsButtonLabel, setAddNounsButtonLabel] = useState('Add Nouns to escrow');
-  const totalSupply = useTotalSupply();
+  const adjustedTotalSupply = useAdjustedTotalSupply();
   const forkThreshold = useForkThreshold();
+  const forkThresholdBPS = useForkThresholdBPS();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
   const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval, id);
   const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
@@ -60,12 +61,12 @@ const ForkPage = ({
   }
 
   const handlePercentageToThreshold = () => {
-    if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
+    if (forkThreshold !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
       if (isForkPeriodActive || isForked) {
-        const currentPercentage = (forkDetails.data.tokensForkingCount / forkThreshold) * 100;
+        const currentPercentage = (forkDetails.data.tokensForkingCount / (forkThreshold + 1)) * 100;
         setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
       } else {
-        const currentPercentage = (numTokensInForkEscrow / forkThreshold) * 100;
+        const currentPercentage = (numTokensInForkEscrow / (forkThreshold + 1)) * 100;
         setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
       }
     }
@@ -102,13 +103,13 @@ const ForkPage = ({
     } else {
       setIsThresholdMet(false);
     }
-    if (forkThreshold !== undefined && totalSupply && numTokensInForkEscrow) {
-      const percentage = (forkThreshold / totalSupply) * 100;
-      setThresholdPercentage(+percentage.toFixed(2));
+    if (forkThresholdBPS !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
+      const percentage = forkThresholdBPS / 100;
+      setThresholdPercentage(+percentage.toFixed());
       handlePercentageToThreshold();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, totalSupply, forks.data, id]);
+  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, adjustedTotalSupply, forks.data, id]);
 
   useEffect(() => {
     // set page layout based on data
@@ -167,7 +168,7 @@ const ForkPage = ({
                   </button>
                 )}
                 <p className={classes.note}>
-                  {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to meet the fork threshold
+                  More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to pass the fork threshold
                 </p>
               </Col>
             </div>
@@ -188,10 +189,9 @@ const ForkPage = ({
                 <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
                 {!isForked && (
                   <p className={classes.note}>
-                    {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to meet the threshold
+                    More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`)} are required to pass the threshold
                   </p>
                 )}
-
               </Col>
               {!isForked && (
                 <Col lg={6} className={clsx(
@@ -325,19 +325,13 @@ const ForkPage = ({
 
                   {(isForkPeriodActive || isForked) ? (
                     <span>
-                      {`${currentEscrowPercentage}% of required nouns`}
+                      {`${currentEscrowPercentage}% of Nouns required`}
                     </span>
                   ) : (
                     <span>
-                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of required nouns`}
+                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of Nouns required`}
                     </span>
                   )}
-                  {/* {(!isForkPeriodActive || !isForked) && (
-                    <span>
-                      {isForkPeriodActive.toString()} | {isForked.toString()} |
-                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% of required nouns`}
-                    </span>
-                  )} */}
                 </div>
 
                 <DeployForkButton
