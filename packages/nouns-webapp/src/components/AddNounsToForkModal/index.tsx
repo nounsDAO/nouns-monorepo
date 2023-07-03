@@ -55,9 +55,15 @@ export default function AddNounsToForkModal(props: Props) {
   const isApprovedForAll = useIsApprovedForAll();
   const proposalsList = proposals?.map((proposal, i) => {
     return (
-      <option key={i} value={proposal.id}>{proposal.id} - {proposal.title}</option>
+      <option
+        key={i}
+        value={proposal.id}
+        disabled={(proposal.id && selectedProposals.includes(+proposal.id)) ? true : false}
+      >
+        {proposal.id} - {proposal.title}
+      </option>
     )
-  });
+  }).reverse();
 
   useEffect(() => {
     let nounIds = props.ownedNouns || [];
@@ -98,17 +104,8 @@ export default function AddNounsToForkModal(props: Props) {
     } else {
       setIsTwoStepProcess(true);
       setApproval(config.addresses.nounsDAOProxy, true);
-      // removed noun-specific approvals for now to simplify. ran into trouble with state returning for all requests instead of just one at a time
-      // handleApproveAndAddTokenIds(selectedNouns);
     }
   }
-  // const handleApproveAndAddTokenIds = async (nounIds: number[]) => {
-  //   const approvals = Promise.all(nounIds.map(async (nounId) => {
-  //     // check if approved
-  //     // if not approved
-  //     approveTokenId(config.addresses.nounsDAOProxy, nounId);
-  //   }))
-  // };
 
   const addNounsToEscrow = (selectedNouns: number[]) => {
     setIsWaiting(true);
@@ -241,6 +238,7 @@ export default function AddNounsToForkModal(props: Props) {
           <div>
             <FormText><strong>Reason</strong> (optional)</FormText>
             <FormControl
+              aria-label="Your reason for forking"
               className={classes.reasonInput}
               value={reasonText}
               onChange={e => setReasonText(e.target.value)}
@@ -250,22 +248,23 @@ export default function AddNounsToForkModal(props: Props) {
           <div>
             <FormText><strong>Proposals that triggered this decision</strong> (optional)</FormText>
             <FormSelect
+              aria-label="Select proposal(s)"
               className={classes.selectMenu}
               onChange={(e) => {
-                setSelectedProposals([...selectedProposals, +e.target.value]);
+                setSelectedProposals([+e.target.value, ...selectedProposals]);
               }}
             >
-              <option>Select proposal(s)</option>
+              <option selected={true} disabled={true}>Select proposal(s)</option>
               {proposalsList}
             </FormSelect>
           </div>
         </InputGroup>
       </div>
       <div className={classes.selectedProposals}>
-        {selectedProposals.map((proposalId) => {
+        {selectedProposals.map((proposalId, i) => {
           const prop = proposals.find((proposal) => proposal.id && +proposal.id === proposalId);
           return (
-            <div className={classes.selectedProposal}>
+            <div className={classes.selectedProposal} key={i}>
               <span><a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer"><strong>{prop?.id}</strong> {prop?.title}</a></span>
               <button
                 onClick={() => {
@@ -416,22 +415,6 @@ export default function AddNounsToForkModal(props: Props) {
         {!isApprovedForAll && (!isApprovalWaiting || !isApprovalLoading) && (
           <p className={classes.approvalNote}>You'll be asked to approve access</p>
         )}
-
-        {/* temp code commented out. todo: add back in to support approve individual ids */}
-        {/* {!isApprovedForAll && (
-          <>
-            <p className={classes.approvalNote}>You'll be asked to approve each noun individually. Or you can <button
-              // className={clsx(classes.button, classes.primaryButton)}
-              disabled={selectedNouns.length === 0}
-              onClick={() => {
-                handleSetApproval()
-              }}
-            >
-              approve all
-            </button></p>
-            {selectedNouns.length > 0 && (<hr />)}
-          </>
-        )} */}
         {(selectedNouns.length > 0 && !isTxSuccessful) && (
           <>
             <p className={classes.selectedNouns}>
@@ -440,12 +423,6 @@ export default function AddNounsToForkModal(props: Props) {
           </>
         )}
       </div>
-      {/* <button
-        onClick={() => {
-          setApproval(config.addresses.nounsDAOProxy, false);
-        }}
-      >revoke approval</button> */}
-
     </div >
   )
 
