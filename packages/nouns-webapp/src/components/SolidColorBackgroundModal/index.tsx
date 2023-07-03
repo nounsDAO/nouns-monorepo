@@ -9,7 +9,6 @@ import {
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
 } from '../../utils/cssTransitionUtils';
-import { use } from 'chai';
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);
@@ -50,9 +49,8 @@ const SolidColorBackgroundModalOverlay: React.FC<{
       root.style.position = '';
       root.style.top = '';
       window.scrollTo(0, parseInt(scrollY || '0') * -1);
-
     }
-  }, [show]);
+  }, [show, root]);
 
   return (
     <>
