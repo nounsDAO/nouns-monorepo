@@ -7,10 +7,11 @@ import {
   ProposalCandidateUpdated,
   SignatureAdded,
 } from './types/NounsDAOData/NounsDAOData';
-import { ProposalCandidateVersion } from './types/schema';
+import { ProposalCandidateContent, ProposalCandidateVersion } from './types/schema';
 import {
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
+  getOrCreateProposalCandidateContent,
   getOrCreateProposalCandidateSignature,
   getOrCreateProposalCandidateVersion,
   getOrCreateProposalFeedback,
@@ -40,6 +41,7 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
     event.params.description,
     event.params.encodedProposalHash,
     event.block,
+    candidate.proposer,
   );
 
   candidate.latestVersion = version.id;
@@ -64,6 +66,7 @@ export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated):
     event.params.description,
     event.params.encodedProposalHash,
     event.block,
+    candidate.proposer,
     event.params.reason,
   );
 
@@ -92,16 +95,17 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   const candidate = getOrCreateProposalCandidate(candidateId);
 
   const latestVersion = ProposalCandidateVersion.load(candidate.latestVersion)!;
-  if (latestVersion.encodedProposalHash != event.params.encodedPropHash) {
+  const latestContent = ProposalCandidateContent.load(latestVersion.content)!;
+  if (latestContent.encodedProposalHash != event.params.encodedPropHash) {
     log.error('Wrong encodedProposalHash. Latest version: {}. Event: {}. tx_hash: {}', [
-      latestVersion.encodedProposalHash.toHexString(),
+      latestContent.encodedProposalHash.toHexString(),
       event.params.encodedPropHash.toHexString(),
       event.transaction.hash.toHexString(),
     ]);
     return;
   }
 
-  candidateSig.version = candidate.latestVersion;
+  candidateSig.content = latestVersion.content;
   candidateSig.signer = getOrCreateDelegate(event.params.signer.toHexString()).id;
   candidateSig.sig = event.params.sig;
   candidateSig.expirationTimestamp = event.params.expirationTimestamp;
@@ -139,20 +143,27 @@ function captureProposalCandidateVersion(
   description: string,
   encodedProposalHash: Bytes,
   block: ethereum.Block,
+  proposer: Bytes,
   updateMessage: string = '',
 ): ProposalCandidateVersion {
+  const content = getOrCreateProposalCandidateContent(encodedProposalHash.toHexString());
+  content.targets = targets;
+  content.values = values;
+  content.signatures = signatures;
+  content.calldatas = calldatas;
+  content.description = description;
+  content.title = extractTitle(description);
+  content.proposer = proposer;
+  content.encodedProposalHash = encodedProposalHash;
+  content.matchingProposalIds = [];
+  content.save();
+
   const versionId = txHash.concat('-').concat(logIndex);
   const version = getOrCreateProposalCandidateVersion(versionId);
+  version.content = content.id;
   version.proposal = candidateId;
   version.createdTimestamp = block.timestamp;
   version.createdBlock = block.number;
-  version.targets = targets;
-  version.values = values;
-  version.signatures = signatures;
-  version.calldatas = calldatas;
-  version.description = description.split('\\n').join('\n');
-  version.title = extractTitle(description);
-  version.encodedProposalHash = encodedProposalHash;
   version.updateMessage = updateMessage;
   version.save();
 

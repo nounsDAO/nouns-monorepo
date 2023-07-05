@@ -1,4 +1,4 @@
-import { Bytes, log, ethereum, store } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store, BigInt } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -29,6 +29,7 @@ import {
   getOrCreateDynamicQuorumParams,
   getOrCreateProposalVersion,
   getOrCreateFork,
+  calcEncodedProposalHash,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -50,6 +51,7 @@ import {
   ForkJoin,
   ForkJoinedNoun,
   EscrowedNoun,
+  ProposalCandidateContent,
 } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
@@ -351,6 +353,18 @@ function captureProposalVersion(
   previousVersion.description = proposal.description;
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
+
+  markProposalCandidateIfExists(proposal);
+}
+
+function markProposalCandidateIfExists(proposal: Proposal): void {
+  const hash = calcEncodedProposalHash(proposal);
+  const candidate = ProposalCandidateContent.load(hash.toHexString());
+  if (candidate !== null) {
+    const ids = candidate.matchingProposalIds || [];
+    candidate.matchingProposalIds = ids!.concat([BigInt.fromString(proposal.id)]);
+    candidate.save();
+  }
 }
 
 export function handleEscrowedToFork(event: EscrowedToFork): void {
