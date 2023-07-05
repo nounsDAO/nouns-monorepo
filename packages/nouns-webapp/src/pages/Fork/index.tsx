@@ -289,14 +289,6 @@ const ForkPage = ({
                       </a>,{" "}
                     </>
                   )}
-                  {/* TODO: awaiting data */}
-                  {forkDetails.data.forkToken && (
-                    <a
-                      href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                      target='_blank'
-                      rel='noreferrer'
-                    >Timelock</a>
-                  )}
                 </p>
               </div>
             </Col>
