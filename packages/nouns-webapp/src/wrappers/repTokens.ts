@@ -10,14 +10,13 @@ export interface RepTokens {
     mintCount: EthersBN;
   }
 
-export const useRepCall = (funcName: string, funcArgs: any[]) => {
-    const nft = useContractCall<RepTokens>({
+export const useRepCall = async (funcName: string, funcArgs: any[]) => {
+    const result = useContractCall<RepTokens>({
         abi,
         address: config.repTokensAddress,
         method: funcName,
         args: funcArgs
     });
 
-    console.log(nft);
-    return nft /* as AtxDaoNFT */ ;
+    return result;
 }
