@@ -39,6 +39,7 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
     event.params.signatures,
     event.params.calldatas,
     event.params.description,
+    event.params.proposalIdToUpdate,
     event.params.encodedProposalHash,
     event.block,
     candidate.proposer,
@@ -64,6 +65,7 @@ export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated):
     event.params.signatures,
     event.params.calldatas,
     event.params.description,
+    event.params.proposalIdToUpdate,
     event.params.encodedProposalHash,
     event.block,
     candidate.proposer,
@@ -141,6 +143,7 @@ function captureProposalCandidateVersion(
   signatures: string[],
   calldatas: Bytes[],
   description: string,
+  proposalIdToUpdate: BigInt,
   encodedProposalHash: Bytes,
   block: ethereum.Block,
   proposer: Bytes,
@@ -152,6 +155,7 @@ function captureProposalCandidateVersion(
   content.signatures = signatures;
   content.calldatas = calldatas;
   content.description = description;
+  content.proposalIdToUpdate = proposalIdToUpdate;
   content.title = extractTitle(description);
   content.proposer = proposer;
   content.encodedProposalHash = encodedProposalHash;
