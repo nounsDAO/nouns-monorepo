@@ -261,10 +261,11 @@ const CreateCandidatePage = () => {
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          hasActiveOrPendingProposal={checkHasActiveOrPendingProposalOrCandidate(
-            latestProposal,
+          hasActiveOrPendingProposal={(latestProposal && checkHasActiveOrPendingProposalOrCandidate(
+            latestProposal.status,
+            latestProposal.proposer,
             account,
-          )}
+          )) ?? false}
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}
         />

@@ -38,16 +38,15 @@ export const checkIsEligibleToPropose = (
 };
 
 export const checkHasActiveOrPendingProposalOrCandidate = (
-  latestProposal: Proposal | undefined,
+  latestProposalStatus: ProposalState,
+  latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (
-    latestProposal &&
-    account &&
-    (latestProposal?.status === ProposalState.ACTIVE ||
-      latestProposal?.status === ProposalState.PENDING ||
-      latestProposal?.status === ProposalState.UPDATABLE) &&
-    latestProposal.proposer?.toLowerCase() === account?.toLowerCase()
+  if (account && latestProposalProposer &&
+    (latestProposalStatus === ProposalState.ACTIVE ||
+      latestProposalStatus === ProposalState.PENDING ||
+      latestProposalStatus === ProposalState.UPDATABLE) &&
+    latestProposalProposer.toLowerCase() === account?.toLowerCase()
   ) {
     return true;
   }

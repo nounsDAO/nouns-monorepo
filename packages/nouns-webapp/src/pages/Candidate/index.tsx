@@ -64,7 +64,8 @@ const CandidatePage = ({
     console.log('if (latestProposal && account) {');
     if (latestProposal && account) {
       const status = checkHasActiveOrPendingProposalOrCandidate(
-        latestProposal,
+        latestProposal.status,
+        latestProposal.proposer,
         account,
       );
       setIsSignerWithActiveOrPendingProposal(status);

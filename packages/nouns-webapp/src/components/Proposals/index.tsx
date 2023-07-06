@@ -327,7 +327,7 @@ const Proposals = ({
                     .map((c, i) => {
                       return (
                         <div>
-                          <CandidateCard candidate={c} key={c.id} nounsRequired={nounsRequired} />
+                          <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} />
                         </div>
                       );
                     })
@@ -353,11 +353,6 @@ const Proposals = ({
                     Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.
                   </Trans>
                 </p>
-                <h5>
-                  <strong>
-                    <Trans>Current threshold: </Trans> {threshold} Nouns
-                  </strong>
-                </h5>
                 <Link to="/create-candidate" className={clsx(classes.button)}>
                   Create a candidate
                 </Link>

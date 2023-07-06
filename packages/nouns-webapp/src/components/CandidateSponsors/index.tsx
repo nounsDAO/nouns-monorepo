@@ -57,7 +57,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   };
   const hasActiveOrPendingProposal = (latestProposal: Proposal, account: string) => {
     const status = checkHasActiveOrPendingProposalOrCandidate(
-      latestProposal,
+      latestProposal.status,
+      latestProposal.id,
       account,
     );
     return status;
