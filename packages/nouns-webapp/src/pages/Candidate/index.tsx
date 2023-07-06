@@ -16,9 +16,10 @@ import { ReactNode } from 'react-markdown/lib/react-markdown';
 import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
-import { useProposalThreshold } from '../../wrappers/nounsDao';
+import { useProposal, useProposalCount, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useCancelCandidate, useCandidateProposal } from '../../wrappers/nounsData';
 import { useUserVotes } from '../../wrappers/nounToken';
+import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,6 +34,7 @@ const CandidatePage = ({
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>();
+  const [isSignerWithActiveOrPendingProposal, setIsSignerWithActiveOrPendingProposal] = useState<boolean | undefined>(undefined);
   const candidate = useCandidateProposal(id, dataFetchPollInterval);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -41,6 +43,8 @@ const CandidatePage = ({
   const { account } = useEthers();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
+  const latestProposalId = useProposalCount();
+  const latestProposal = useProposal(latestProposalId ?? 0);
 
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number
@@ -55,6 +59,17 @@ const CandidatePage = ({
       setIsProposer(candidate.data.proposer.toLowerCase() === account.toLowerCase());
     }
   }, [candidate, account]);
+
+  useEffect(() => {
+    console.log('if (latestProposal && account) {');
+    if (latestProposal && account) {
+      const status = checkHasActiveOrPendingProposalOrCandidate(
+        latestProposal,
+        account,
+      );
+      setIsSignerWithActiveOrPendingProposal(status);
+    }
+  }, [latestProposal, account]);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const handleRefetchCandidateData = () => {
@@ -192,6 +207,8 @@ const CandidatePage = ({
                 currentBlock={currentBlock - 1}
                 requiredVotes={threshold + 1}
                 userVotes={userVotes}
+                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                latestProposal={latestProposal}
               />
             )}
           </Col>

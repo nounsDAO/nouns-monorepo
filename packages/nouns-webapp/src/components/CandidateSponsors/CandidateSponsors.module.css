@@ -59,6 +59,7 @@
   border-width: 1px;
   position: relative;
 }
+
 .sponsorsList li.sponsor.cancelOverlay {
   min-height: 75px;
 }
@@ -67,6 +68,10 @@
   border-style: dashed;
   border-width: 2px;
   min-height: 40px;
+}
+
+.sponsorsList li.sponsor.sponsorInvalid .reason, .sponsorsList li.sponsor.sponsorInvalid .details {
+  opacity: 0.5;
 }
 
 .details {
@@ -480,6 +485,17 @@ p.statusMessage {
   opacity: 0.5;
   position: relative;
   top: 3px;
+}
+
+.sponsorInvalidLabel {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
 }
 
 @keyframes pulse {

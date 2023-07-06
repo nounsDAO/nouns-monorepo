@@ -19,6 +19,7 @@ type CandidateSignatureProps = {
   setIsAccountSigner: Function;
   handleSignatureRemoved: Function;
   setIsCancelOverlayVisible: Function;
+  signerHasActiveOrPendingProposal?: boolean;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -75,8 +76,14 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   }, [cancelSigState, setCancelStatusOverlay]);
   return (
     <li className={clsx(classes.sponsor,
-      cancelStatusOverlay?.show && classes.cancelOverlay
+      cancelStatusOverlay?.show && classes.cancelOverlay,
+      props.signerHasActiveOrPendingProposal && classes.sponsorInvalid,
     )}>
+      {props.signerHasActiveOrPendingProposal && (
+        <div className={classes.sponsorInvalidLabel}>
+          This sponsor has an active or pending proposal. Signatures are invalid while a sponsor has an active or pending proposal.
+        </div>
+      )}
       <div className={clsx(classes.sponsorInteriorWrapper,
         cancelSigState.status === "Success" && classes.hidden
       )}>

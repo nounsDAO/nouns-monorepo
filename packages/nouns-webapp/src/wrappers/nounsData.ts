@@ -1,6 +1,6 @@
 import { utils } from 'ethers';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@nouns/contracts';
-import { useContractCall, useContractFunction } from '@usedapp/core';
+import { useBlockNumber, useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
   candidateProposalQuery,
@@ -18,6 +18,7 @@ import {
   removeMarkdownStyle,
 } from './nounsDao';
 import * as R from 'ramda';
+import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
@@ -67,7 +68,9 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
   const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
     pollInterval: pollInterval || 0,
   });
-  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, toUpdate);
+  const blockNumber = useBlockNumber();
+  const timestamp = useBlockTimestamp(blockNumber);
+  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, toUpdate, blockNumber, timestamp);
   return { loading, data: parsedData, error, refetch };
 };
 
@@ -154,6 +157,8 @@ export const useUpdateProposalBySigs = () => {
 const parseSubgraphCandidate = (
   candidate: ProposalCandidateSubgraphEntity | undefined,
   toUpdate?: boolean,
+  blockNumber?: number,
+  timestamp?: number,
 ) => {
   if (!candidate) {
     return;
