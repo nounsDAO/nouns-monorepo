@@ -95,7 +95,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   }
 
   useEffect(() => {
-    console.log('delegateSnapshot.data', delegateSnapshot.data);
     if (delegateSnapshot.data && !isCancelOverlayVisible && props.latestProposal) {
       setSignatures(filterSigners(delegateSnapshot.data));
     }

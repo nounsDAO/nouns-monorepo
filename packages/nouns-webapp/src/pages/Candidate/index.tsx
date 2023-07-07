@@ -61,7 +61,6 @@ const CandidatePage = ({
   }, [candidate, account]);
 
   useEffect(() => {
-    console.log('if (latestProposal && account) {');
     if (latestProposal && account) {
       const status = checkHasActiveOrPendingProposalOrCandidate(
         latestProposal.status,
