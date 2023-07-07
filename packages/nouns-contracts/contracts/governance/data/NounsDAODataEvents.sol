@@ -54,6 +54,13 @@ contract NounsDAODataEvents {
         string reason
     );
     event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
+    event CandidateFeedbackSent(
+        address indexed msgSender,
+        address indexed proposer,
+        string slug,
+        uint8 support,
+        string reason
+    );
     event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
     event ETHWithdrawn(address indexed to, uint256 amount);

@@ -156,3 +156,5 @@ dataSources:
           handler: handleSignatureAdded
         - event: FeedbackSent(indexed address,uint256,uint8,string)
           handler: handleFeedbackSent
+        - event: CandidateFeedbackSent(indexed address,indexed address,string,uint8,string)
+          handler: handleCandidateFeedbackSent

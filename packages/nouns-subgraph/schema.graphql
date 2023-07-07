@@ -539,6 +539,32 @@ type ProposalFeedback @entity(immutable: true) {
   reason: String
 }
 
+type CandidateFeedback @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "This feedback's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The feedback's creation block"
+  createdBlock: BigInt!
+
+  "The proposal candidate this feedback is provided on"
+  candidate: ProposalCandidate!
+
+  "The voter account providing the feedback"
+  voter: Delegate!
+
+  "The integer support value: against (0), for (1), or abstain (2)"
+  supportDetailed: Int!
+
+  "Amount of votes voter had when feedback was submitted"
+  votes: BigInt!
+
+  "The optional feedback reason free text"
+  reason: String
+}
+
 type Fork @entity {
   "The fork ID given by the escrow contract"
   id: ID!

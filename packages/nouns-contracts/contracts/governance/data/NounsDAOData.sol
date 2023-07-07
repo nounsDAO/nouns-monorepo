@@ -261,6 +261,26 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     }
 
     /**
+     * @notice Send feedback on a proposal candidate. Meant to be used prior to submitting the candidate as a proposal,
+     * to help proposers refine their candidate.
+     * @param proposer the proposer of the candidate.
+     * @param slug the slug of the candidate.
+     * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
+     * @param reason their free text feedback.
+     */
+    function sendCandidateFeedback(
+        address proposer,
+        string memory slug,
+        uint8 support,
+        string memory reason
+    ) external {
+        if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
+        if (support > 2) revert InvalidSupportValue();
+
+        emit CandidateFeedbackSent(msg.sender, proposer, slug, support, reason);
+    }
+
+    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ADMIN (OWNER) FUNCTIONS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

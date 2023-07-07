@@ -478,6 +478,77 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         data.sendFeedback(1, 1, 'some reason');
     }
 
+    function test_sendCandidateFeedback_revertsWhenCandidateDoesntExist() public {
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugDoesNotExist.selector));
+        data.sendCandidateFeedback(address(this), 'some slug', 1, 'some reason');
+    }
+
+    function test_sendCandidateFeedback_revertsWithBadSupportValue() public {
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            'some description',
+            slug,
+            0
+        );
+        string memory reason = 'some reason';
+        uint8 support = 3;
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.InvalidSupportValue.selector));
+        data.sendCandidateFeedback(address(this), 'some slug', support, reason);
+    }
+
+    function test_sendCandidateFeedback_emitsEventForNouner() public {
+        address nouner = makeAddr('nouner');
+        tokenLikeMock.setPriorVotes(nouner, block.number - 1, 3);
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            'some description',
+            slug,
+            0
+        );
+        string memory reason = 'some reason';
+        uint8 support = 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit CandidateFeedbackSent(nouner, address(this), slug, support, reason);
+
+        vm.prank(nouner);
+        data.sendCandidateFeedback(address(this), 'some slug', support, reason);
+    }
+
+    function test_sendCandidateFeedback_emitsEventForNonNouner() public {
+        address nonNouner = makeAddr('non nouner');
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            'some description',
+            slug,
+            0
+        );
+        string memory reason = 'some reason';
+        uint8 support = 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit CandidateFeedbackSent(nonNouner, address(this), slug, support, reason);
+
+        vm.prank(nonNouner);
+        data.sendCandidateFeedback(address(this), 'some slug', support, reason);
+    }
+
     function test_setCreateCandidateCost_revertsForNonAdmin() public {
         vm.expectRevert('Ownable: caller is not the owner');
         data.setCreateCandidateCost(0.42 ether);

@@ -1,6 +1,7 @@
 import { Bytes, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
 import { extractTitle } from './custom-types/ParsedProposalV3';
 import {
+  CandidateFeedbackSent,
   FeedbackSent,
   ProposalCandidateCanceled,
   ProposalCandidateCreated,
@@ -9,6 +10,8 @@ import {
 } from './types/NounsDAOData/NounsDAOData';
 import { ProposalCandidateContent, ProposalCandidateVersion } from './types/schema';
 import {
+  candidateID,
+  getOrCreateCandidateFeedback,
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
   getOrCreateProposalCandidateContent,
@@ -18,8 +21,9 @@ import {
 } from './utils/helpers';
 
 export function handleProposalCandidateCreated(event: ProposalCandidateCreated): void {
-  const id = event.params.msgSender.toHexString().concat('-').concat(event.params.slug);
-  const candidate = getOrCreateProposalCandidate(id);
+  const candidate = getOrCreateProposalCandidate(
+    candidateID(event.params.msgSender, event.params.slug),
+  );
 
   candidate.proposer = event.params.msgSender;
   candidate.slug = event.params.slug;
@@ -50,8 +54,9 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
 }
 
 export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated): void {
-  const candidateId = event.params.msgSender.toHexString().concat('-').concat(event.params.slug);
-  const candidate = getOrCreateProposalCandidate(candidateId);
+  const candidate = getOrCreateProposalCandidate(
+    candidateID(event.params.msgSender, event.params.slug),
+  );
 
   candidate.lastUpdatedTimestamp = event.block.timestamp;
   candidate.lastUpdatedBlock = event.block.number;
@@ -77,8 +82,9 @@ export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated):
 }
 
 export function handleProposalCandidateCanceled(event: ProposalCandidateCanceled): void {
-  const candidateId = event.params.msgSender.toHexString().concat('-').concat(event.params.slug);
-  const candidate = getOrCreateProposalCandidate(candidateId);
+  const candidate = getOrCreateProposalCandidate(
+    candidateID(event.params.msgSender, event.params.slug),
+  );
 
   candidate.canceled = true;
   candidate.canceledTimestamp = event.block.timestamp;
@@ -93,8 +99,9 @@ export function handleSignatureAdded(event: SignatureAdded): void {
     .concat('-')
     .concat(event.params.sig.toHexString());
   const candidateSig = getOrCreateProposalCandidateSignature(sigId);
-  const candidateId = event.params.proposer.toHexString().concat('-').concat(event.params.slug);
-  const candidate = getOrCreateProposalCandidate(candidateId);
+  const candidate = getOrCreateProposalCandidate(
+    candidateID(event.params.proposer, event.params.slug),
+  );
 
   const latestVersion = ProposalCandidateVersion.load(candidate.latestVersion)!;
   const latestContent = ProposalCandidateContent.load(latestVersion.content)!;
@@ -127,6 +134,23 @@ export function handleFeedbackSent(event: FeedbackSent): void {
   feedback.createdTimestamp = event.block.timestamp;
   feedback.createdBlock = event.block.number;
   feedback.proposal = event.params.proposalId.toString();
+  feedback.voter = delegate.id;
+  feedback.supportDetailed = event.params.support;
+  feedback.votes = delegate.delegatedVotes;
+  feedback.reason = event.params.reason;
+
+  feedback.save();
+}
+
+export function handleCandidateFeedbackSent(event: CandidateFeedbackSent): void {
+  const id = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+  const feedback = getOrCreateCandidateFeedback(id);
+  const delegate = getOrCreateDelegate(event.params.msgSender.toHexString());
+  const candidate = candidateID(event.params.proposer, event.params.slug);
+
+  feedback.createdTimestamp = event.block.timestamp;
+  feedback.createdBlock = event.block.number;
+  feedback.candidate = candidate;
   feedback.voter = delegate.id;
   feedback.supportDetailed = event.params.support;
   feedback.votes = delegate.delegatedVotes;
