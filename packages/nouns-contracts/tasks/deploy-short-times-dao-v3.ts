@@ -223,6 +223,10 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           () => deployment.NounsDAOLogicV1Fork.address,
           () => deployment.NounsDAOExecutorV2.address,
           60 * 60 * 24 * 30, // 30 days
+          36000,
+          36000,
+          25,
+          1000,
         ],
       },
       NounsDAOProxyV3: {
@@ -271,6 +275,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
               deployment.NounsDAOExecutorProxy.address,
               args.createCandidateCost,
               args.updateCandidateCost,
+              expectedNounsDAOProxyAddress,
             ]),
         ],
       },

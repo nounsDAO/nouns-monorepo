@@ -23,8 +23,11 @@ import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
+import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
 contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
+    using Address for address payable;
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -64,6 +67,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     uint256 public updateCandidateCost;
     /// @notice The state of which (proposer,slug) pairs have been used to create a proposal candidate.
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
+    /// @notice The account to send ETH fees to.
+    address payable public feeRecipient;
 
     constructor(address nounsToken_, address nounsDao_) {
         nounsToken = NounsTokenLike(nounsToken_);
@@ -79,12 +84,14 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     function initialize(
         address admin,
         uint256 createCandidateCost_,
-        uint256 updateCandidateCost_
+        uint256 updateCandidateCost_,
+        address payable feeRecipient_
     ) external initializer {
         _transferOwnership(admin);
 
         createCandidateCost = createCandidateCost_;
         updateCandidateCost = updateCandidateCost_;
+        feeRecipient = feeRecipient_;
     }
 
     /**
@@ -125,6 +132,10 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         );
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
+        }
+
+        if (msg.value > 0) {
+            feeRecipient.sendValue(msg.value);
         }
 
         emit ProposalCandidateCreated(
@@ -172,6 +183,10 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         );
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
+        }
+
+        if (msg.value > 0) {
+            feeRecipient.sendValue(msg.value);
         }
 
         emit ProposalCandidateUpdated(
@@ -298,6 +313,13 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         updateCandidateCost = newUpdateCandidateCost;
 
         emit UpdateCandidateCostSet(oldUpdateCandidateCost, newUpdateCandidateCost);
+    }
+
+    function setFeeRecipient(address payable newFeeRecipient) external onlyOwner {
+        address oldFeeRecipient = feeRecipient;
+        feeRecipient = newFeeRecipient;
+
+        emit FeeRecipientSet(oldFeeRecipient, newFeeRecipient);
     }
 
     /**
