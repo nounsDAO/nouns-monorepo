@@ -43,11 +43,6 @@
   },
   {
     "inputs": [],
-    "name": "MustBeNouner",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "MustBeNounerOrPaySufficientFee",
     "type": "error"
   },
@@ -145,12 +140,6 @@
         "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint96",
-        "name": "votes",
-        "type": "uint96"
       },
       {
         "indexed": false,

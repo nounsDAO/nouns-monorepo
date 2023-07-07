@@ -455,11 +455,6 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         data.addSignature(sig, expiration, proposer, slug, 0, encodedProp, reason);
     }
 
-    function test_sendFeedback_revertsForNonNouner() public {
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNouner.selector));
-        data.sendFeedback(1, 1, 'reason');
-    }
-
     function test_sendFeedback_revertsWithBadSupportValue() public {
         tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
 
@@ -471,7 +466,14 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         tokenLikeMock.setPriorVotes(address(this), block.number - 1, 3);
 
         vm.expectEmit(true, true, true, true);
-        emit FeedbackSent(address(this), 1, 3, 1, 'some reason');
+        emit FeedbackSent(address(this), 1, 1, 'some reason');
+
+        data.sendFeedback(1, 1, 'some reason');
+    }
+
+    function test_sendFeedback_emitsEventForNonNouner() public {
+        vm.expectEmit(true, true, true, true);
+        emit FeedbackSent(address(this), 1, 1, 'some reason');
 
         data.sendFeedback(1, 1, 'some reason');
     }

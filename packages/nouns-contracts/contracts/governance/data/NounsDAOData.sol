@@ -34,7 +34,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error MustBeNounerOrPaySufficientFee();
     error SlugAlreadyUsed();
     error SlugDoesNotExist();
-    error MustBeNouner();
     error AmountExceedsBalance();
     error FailedWithdrawingETH(bytes data);
     error InvalidSignature();
@@ -257,10 +256,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         string memory reason
     ) external {
         if (support > 2) revert InvalidSupportValue();
-        uint96 votes = nounsToken.getPriorVotes(msg.sender, block.number - PRIOR_VOTES_BLOCKS_AGO);
-        if (votes == 0) revert MustBeNouner();
 
-        emit FeedbackSent(msg.sender, proposalId, votes, support, reason);
+        emit FeedbackSent(msg.sender, proposalId, support, reason);
     }
 
     /**
