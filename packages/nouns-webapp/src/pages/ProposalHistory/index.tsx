@@ -2,16 +2,16 @@ import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
+import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
+import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import { RouteComponentProps, } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
@@ -19,6 +19,10 @@ import { Trans } from '@lingui/macro';
 import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
+import ProposalStatus from '../../components/ProposalStatus';
+import { i18n } from '@lingui/core';
+import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+import { Link } from 'react-router-dom';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,7 +38,6 @@ const ProposalHistory = ({
   const [showToast, setShowToast] = useState(true);
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   useEffect(() => {
     if (versionNumber) {
@@ -53,7 +56,6 @@ const ProposalHistory = ({
     }
   }, [showToast]);
 
-  const isWalletConnected = !(activeAccount === undefined);
   const highlightSyntax = (str: string) => {
     return (
       <ReactMarkdown
@@ -63,22 +65,58 @@ const ProposalHistory = ({
       />
     );
   };
+  const headerDiffs = (str: string) => {
+    return (
+      <h1 className={classes.titleDiffs}>{str}</h1>
+    );
+  };
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
         {proposal && (
-          <ProposalHeader
-            title={
-              proposalVersions
-                ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
-                : proposal.title
-            }
-            proposal={proposal}
-            isActiveForVoting={false}
-            isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => null}
-          />
+          <>
+            <div className={headerClasses.backButtonWrapper}>
+              <Link to={`/vote/${id}`}>
+                <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+              </Link>
+            </div>
+            <div className={headerClasses.headerRow}>
+              <span>
+                <div className="d-flex">
+                  <div>
+                    <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                  </div>
+                  <div>
+                    <ProposalStatus
+                      status={proposal?.status}
+                      className={headerClasses.proposalStatus}
+                    />
+                  </div>
+                </div>
+              </span>
+              <div className={headerClasses.proposalTitleWrapper}>
+                <div className={clsx(headerClasses.proposalTitle, classes.proposalTitle)}>
+                  {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
+                    <div className={classes.diffsWrapper}>
+                      <ReactDiffViewer
+                        oldValue={proposalVersions[activeVersion - 2].title}
+                        newValue={proposalVersions[activeVersion - 1].title}
+                        splitView={false}
+                        hideLineNumbers={true}
+                        extraLinesSurroundingDiff={10000}
+                        renderContent={headerDiffs}
+                        disableWordDiff={true}
+                        showDiffOnly={false}
+                      />
+                    </div>
+                  ) : (
+                    <h1>{proposal.title} </h1>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </Col>
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
@@ -95,9 +133,14 @@ const ProposalHistory = ({
               )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
+                <Col className={clsx(classes.section, 'm-0 p-0')}>
+                  <h5>
+                    <Trans>Description</Trans>
+                  </h5>
+                </Col>
                 <ReactDiffViewer
-                  oldValue={proposalVersions[activeVersion - 2].description}
-                  newValue={proposalVersions[activeVersion - 1].description}
+                  oldValue={processProposalDescriptionText(proposalVersions[activeVersion - 2].description, proposalVersions[activeVersion - 2].title)}
+                  newValue={processProposalDescriptionText(proposalVersions[activeVersion - 1].description, proposalVersions[activeVersion - 1].title)}
                   splitView={false}
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}
@@ -114,14 +157,6 @@ const ProposalHistory = ({
                       oldTransactions={proposalVersions[activeVersion - 2].details}
                       newTransactions={proposalVersions[activeVersion - 1].details}
                     />
-                    {/* <ReactDiffViewer
-                      oldValue={stringifyTransactions(proposalVersions[activeVersion - 1].details)}
-                      newValue={stringifyTransactions(proposalVersions[activeVersion - 2].details)}
-                      splitView={false}
-                      hideLineNumbers={true}
-                      extraLinesSurroundingDiff={10000}
-                      renderContent={highlightSyntax}
-                    /> */}
                   </Col>
                 </Row>
               </div>
@@ -152,7 +187,9 @@ const ProposalHistory = ({
               </div>
               {activeVersion > 1 && (
                 <button
-                  className={classes.diffsLink}
+                  className={clsx(classes.diffsLink,
+                    isDiffsVisible ? classes.diffsLinkActive : classes.diffsLinkInactive
+                  )}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}
                 >
                   {isDiffsVisible ? 'Hide' : ' View'} diffs

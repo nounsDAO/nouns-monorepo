@@ -1,14 +1,15 @@
 import { Row, Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from '../ProposalHistory/Vote.module.css';
+import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
-import { RouteComponentProps } from 'react-router-dom';
+import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
@@ -17,8 +18,8 @@ import { Trans } from '@lingui/macro';
 import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
 import { ProposalCandidateVersionContent, useCandidateProposalVersions } from '../../wrappers/nounsData';
-import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
+import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -29,13 +30,11 @@ const CandidateHistoryPage = ({
     params: { id, versionNumber },
   },
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-  // const { data: proposal } = useCandidateProposalVersions(id);
   const proposal = useCandidateProposalVersions(id);
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
   const proposalVersions = proposal?.data?.versions.reverse();
-  const activeAccount = useAppSelector(state => state?.account.activeAccount);
 
   useEffect(() => {
     if (versionNumber) {
@@ -54,7 +53,6 @@ const CandidateHistoryPage = ({
     }
   }, [showToast]);
 
-  const isWalletConnected = !(activeAccount === undefined);
   const highlightSyntax = (str: string) => {
     return (
       <ReactMarkdown
@@ -65,26 +63,54 @@ const CandidateHistoryPage = ({
     );
   };
 
+  const headerDiffs = (str: string) => {
+    return (
+      <h1 className={classes.titleDiffs}>{str}</h1>
+    );
+  };
+
+  console.log('proposal.data', proposal.data);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
-        {proposal.data && (
-          <CandidateHeader
-            title={
-              proposalVersions
-                ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
-                : proposal.data.title
-            }
-            id={proposal.data.id}
-            proposer={proposal.data.proposer}
-            versionsCount={0} // hide version number on history page
-            createdTransactionHash={proposal.data.createdTransactionHash}
-            lastUpdatedTimestamp={proposal.data.lastUpdatedTimestamp}
-            isCandidate={true}
-            isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => null}
-          />
-        )}
+        <div className={headerClasses.backButtonWrapper}>
+          <Link to={`/candidates/${id}`}>
+            <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+          </Link>
+        </div>
+        <div className={headerClasses.headerRow}>
+          <span>
+            <div className="d-flex">
+              <div>
+                <Trans>Proposal Candidate</Trans>
+              </div>
+            </div>
+          </span>
+          <div className={headerClasses.proposalTitleWrapper}>
+            <div className={clsx(headerClasses.proposalTitle, classes.proposalTitle)}>
+              {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
+                <div className={classes.diffsWrapper}>
+                  <ReactDiffViewer
+                    oldValue={proposalVersions[activeVersion - 2].title}
+                    newValue={proposalVersions[activeVersion - 1].title}
+                    splitView={false}
+                    hideLineNumbers={true}
+                    extraLinesSurroundingDiff={10000}
+                    renderContent={headerDiffs}
+                    disableWordDiff={true}
+                    showDiffOnly={false}
+                  />
+                </div>
+              ) : (
+                <h1>{proposalVersions
+                  ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
+                  : proposal.data?.title} </h1>
+              )}
+            </div>
+          </div>
+        </div>
+
       </Col>
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
@@ -100,9 +126,14 @@ const CandidateHistoryPage = ({
               )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
+                <Col className={clsx(classes.section, 'm-0 p-0')}>
+                  <h5>
+                    <Trans>Description</Trans>
+                  </h5>
+                </Col>
                 <ReactDiffViewer
-                  oldValue={proposalVersions[activeVersion - 2].description}
-                  newValue={proposalVersions[activeVersion - 1].description}
+                  oldValue={processProposalDescriptionText(proposalVersions[activeVersion - 2].description, proposalVersions[activeVersion - 2].title)}
+                  newValue={processProposalDescriptionText(proposalVersions[activeVersion - 1].description, proposalVersions[activeVersion - 1].title)}
                   splitView={false}
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}

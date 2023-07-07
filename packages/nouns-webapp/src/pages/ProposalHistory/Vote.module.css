@@ -296,29 +296,32 @@
 }
 
 .diffsLink {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
+  border: 2px solid transparent;
   text-align: center;
   margin: 1rem auto 0;
   display: block;
-  color: var(--brand-gray-light-text);
+  color: #fff;
+  background: #000;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
 }
-.diffsLink:hover {
-  text-decoration: underline;
+.diffsLink.diffsLinkActive {
+  background: #fff;
+  color: #000;
+  border: 3px solid #000;
 }
-/* .diffsLink {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
-  color: var(--brand-color-red);
-} */
-
 .diffsWrapper table:first-of-type {
   margin-left: -10px;
   @media (min-width: 992px) {
     margin-left: -30px;
   }
+}
+
+.diffsWrapper :global(pre) {
+  min-width: 8px;
+}
+.proposalTitle {
+  width: 100%;
 }
