@@ -24,6 +24,7 @@ import {
   proposalTitlesQuery,
   forksQuery,
   forkDetailsQuery,
+  activePendingUpdatableProposersQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -160,6 +161,15 @@ interface PartialProposalData {
   data: PartialProposal[];
   error?: Error;
   loading: boolean;
+}
+
+export interface ProposalProposerAndSigners {
+  proposer: {
+    id: string;
+  }
+  signers: {
+    id: string;
+  }[]
 }
 
 export interface ProposalTransaction {
@@ -1088,4 +1098,57 @@ export const useForkThresholdBPS = (): number | undefined => {
       method: 'forkThresholdBPS',
     }) || [];
   return forkThresholdBPS?.toNumber();
+};
+
+export const useActivePendingUpdatableProposers = () => {
+  const blockNumber = useBlockNumber();
+  const { loading, data: proposals, error } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as { loading: boolean, data: { proposals: ProposalProposerAndSigners[] }, error: Error };
+  let data: string[] = [];
+  proposals?.proposals.length > 0 && proposals.proposals.map((proposal) => {
+    console.log('proposal', proposal);
+    data.push(proposal.proposer.id);
+    proposal.signers.map((signer: { id: string; }) => {
+      data.push(signer.id);
+      return signer.id;
+    });
+    return proposal.proposer.id;
+  });
+
+  return {
+    loading,
+    data,
+    error,
+  }
+}
+
+export const useHasActiveOrPendingProposalOrCandidate = (account: string, timestamp: number) => {
+  const { data } = useQuery(activePendingUpdatableProposersQuery(1000, timestamp));
+  // check to see if returned proposals have a proposer that matches the account
+  const hasActiveOrPendingProposalOrCandidate = data?.proposals?.some((proposal: ProposalSubgraphEntity) => {
+    if (proposal.proposer.id.toLowerCase() === account.toLowerCase()) {
+      return true;
+    }
+    if (proposal.signers.some((signer: { id: string }) => signer.id.toLowerCase() === account.toLowerCase())) {
+      return true;
+    }
+    return false;
+  });
+
+  return hasActiveOrPendingProposalOrCandidate;
+}
+
+export const checkHasActiveOrPendingProposalOrCandidate = (
+  latestProposalStatus: ProposalState,
+  latestProposalProposer: string | undefined,
+  account: string | null | undefined,
+) => {
+  if (account && latestProposalProposer &&
+    (latestProposalStatus === ProposalState.ACTIVE ||
+      latestProposalStatus === ProposalState.PENDING ||
+      latestProposalStatus === ProposalState.UPDATABLE) &&
+    latestProposalProposer.toLowerCase() === account?.toLowerCase()
+  ) {
+    return true;
+  }
+  return false;
 };

@@ -108,6 +108,23 @@ export const partialProposalsQuery = (first = 1_000) => gql`
 }
 `;
 
+export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => gql`
+{
+  proposals(
+    where: {
+      or: [{status: PENDING, endBlock_gt: ${currentBlock}}, {status: ACTIVE, endBlock_gt: ${currentBlock}}], 
+    }
+    ) {
+    proposer {
+      id
+    }
+    signers {
+      id 
+    }
+  }
+}
+`;
+
 export const candidateProposalsQuery = (first = 1_000) => gql`
   {
     proposalCandidates {

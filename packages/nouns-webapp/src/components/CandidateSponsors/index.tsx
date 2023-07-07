@@ -10,7 +10,7 @@ import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounT
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
-import { Proposal } from '../../wrappers/nounsDao';
+import { Proposal, useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
 import classes from './CandidateSponsors.module.css';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
@@ -49,6 +49,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
   const [isCancelOverlayVisible, setIsCancelOverlayVisible] = useState<boolean>(false);
   const { account } = useEthers();
+  const activePendingProposers = useActivePendingUpdatableProposers();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock);
@@ -71,21 +72,18 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     }
   }, [account, props.candidate.version.versionSignatures]);
 
-  const filterSigners = (delegateSnapshot: Delegates, latestProposal?: Proposal) => {
+  const filterSigners = (delegateSnapshot: Delegates) => {
     const activeSigs = props.candidate.version.versionSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     let votes = 0;
-    const sigs = activeSigs.filter((signature, i) => {
+    let sigs: { reason: string; expirationTimestamp: number; sig: string; canceled: boolean; signer: { id: string; proposals: { id: string; }[]; }; }[] = [];
+    activeSigs.forEach((signature) => {
       // don't count votes from signers who have active or pending proposals
-      if (latestProposal && !hasActiveOrPendingProposal(latestProposal, signature.signer.id)) {
-        delegateSnapshot.delegates?.map(delegate => {
-          if (delegate.id === signature.signer.id) {
-            votes += delegate.nounsRepresented.length;
-          }
-          return null;
-        });
-      }
-      // still return signature so we can show it with a label
-      return signature;
+      delegateSnapshot.delegates?.forEach((delegate) => {
+        if (delegate.id === signature.signer.id && !activePendingProposers.data.includes(signature.signer.id)) {
+          votes += delegate.nounsRepresented.length;
+        }
+      });
+      sigs.push(signature);
     });
     setSignedVotes(votes);
     return sigs;
@@ -97,8 +95,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   }
 
   useEffect(() => {
+    console.log('delegateSnapshot.data', delegateSnapshot.data);
     if (delegateSnapshot.data && !isCancelOverlayVisible && props.latestProposal) {
-      setSignatures(filterSigners(delegateSnapshot.data, props.latestProposal));
+      setSignatures(filterSigners(delegateSnapshot.data));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, props.latestProposal]);
@@ -169,7 +168,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                         setIsAccountSigner={setIsAccountSigner}
                         handleSignatureRemoved={handleSignatureRemoved}
                         setIsCancelOverlayVisible={setIsCancelOverlayVisible}
-                        signerHasActiveOrPendingProposal={props.latestProposal && hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) ? true : false}
+                        signerHasActiveOrPendingProposal={activePendingProposers.data.includes(signature.signer.id) ? true : false}
                       />
                     );
                   })}
