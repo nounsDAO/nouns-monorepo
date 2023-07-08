@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { CandidateSignature, PartialProposalCandidate } from '../../wrappers/nounsData';
 import CandidateSponsors from './CandidateSponsors';
 import ShortAddress from '../ShortAddress';
-import dayjs from 'dayjs';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';

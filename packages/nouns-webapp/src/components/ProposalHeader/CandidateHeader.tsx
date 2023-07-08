@@ -14,7 +14,6 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
-import dayjs from 'dayjs';
 import { relativeTimestamp } from '../../utils/timeUtils';
 
 interface CandidateHeaderProps {
@@ -81,9 +80,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       <span className={classes.propTransactionHash}>{transactionLink(createdTransactionHash)}</span>
     </Trans>
   );
-
-
-
 
   return (
     <>
