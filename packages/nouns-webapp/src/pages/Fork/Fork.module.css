@@ -223,6 +223,15 @@ h1 {
   color: #14161b;
   opacity: 0.6;
 }
+
+.timestamp a span {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  margin-left: 8px;
+  font-family: 'PT Root UI';
+  font-size: 13px;
+}
+
 .summary strong {
   font-family: 'Londrina Solid';
   font-size: 42px;
@@ -241,9 +250,7 @@ h1 {
   width: calc(calc(100% / 4) - 8px);
 }
 .nounsInFork img {
-  border-radius: 6px;
-  /* max-width: 40px; */
-  
+  border-radius: 6px;  
 }
 
 /* timeline */
@@ -296,6 +303,12 @@ h1 {
   opacity: 1;
 }
 
+.forkTimelineItem:hover a span {
+  display: inline-block;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out;
+}
+
 .forkTimelineItem:last-child {
   padding-bottom: 0;
 }
@@ -317,9 +330,6 @@ h1 {
   transition: all 0.2s ease-in-out;
 }
 
-.timestamp a:hover {
-  text-decoration: underline;
-}
 
 .eventTitle {
   font-size: 20px;

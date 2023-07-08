@@ -87,6 +87,7 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
 
   const isCycleEvent = event.eventType === 'ForkStarted' || event.eventType === "ForkExecuted" || event.eventType === 'ForkingEnded';
   const timestamp = event.createdAt && dayjs(+event.createdAt * 1000).fromNow()
+  const dateTime = event.createdAt && dayjs(+event.createdAt * 1000).format('MMMM D, YYYY, h:mm A');
   const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIDs : []);
   const proposalsList = proposalsTitles?.map((proposal, i) => {
     return (
@@ -107,6 +108,9 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
         <span className={classes.timestamp}>
           <a href={`#${event.id}`}>
             {timestamp}
+            <span>
+              {dateTime}
+            </span>
           </a>
         </span>
         <h3 className={classes.eventTitle}>
