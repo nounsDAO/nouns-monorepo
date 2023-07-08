@@ -224,6 +224,7 @@ export const latestAuctionsQuery = () => gql`
       }
       bids {
         id
+        comment
         amount
         blockNumber
         blockTimestamp
