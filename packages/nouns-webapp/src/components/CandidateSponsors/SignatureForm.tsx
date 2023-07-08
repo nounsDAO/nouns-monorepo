@@ -329,6 +329,12 @@ function SignatureForm(props: Props) {
           </div>
         )}
       </>
+      <p className={classes.note}>
+        <Trans>
+          Once a signed proposal is onchain, signers will need to wait until the proposal is queued
+          or defeated before putting another proposal onchain.
+        </Trans>
+      </p>
     </div>
   );
 }

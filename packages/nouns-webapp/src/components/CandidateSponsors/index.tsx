@@ -139,7 +139,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                 {props.requiredVotes && signedVotes >= props.requiredVotes ? (
                   <Trans>
                     This candidate has met the required threshold, but Nouns voters can still add support
-                    until it’s put on-chain.
+                    until it’s put onchain.
                   </Trans>
                 ) : (
                   <>Proposal candidates must meet the required Nouns vote threshold.</>
@@ -183,7 +183,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   <>
                     <button className={classes.button}
                       onClick={() => setIsModalOpen(true)}>
-                      Submit on-chain
+                      Submit onchain
                     </button>
                     {!isAccountSigner && connectedAccountNounVotes > 0 && (
                       <button
@@ -260,8 +260,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           </p>
           <p>
             <Trans>
-              Once a signed proposal is on-chain, signers will need to wait until the proposal is queued
-              or defeated before putting another proposal on-chain.
+              Once a signed proposal is onchain, signers will need to wait until the proposal is queued
+              or defeated before putting another proposal onchain.
             </Trans>
           </p>
         </div>
