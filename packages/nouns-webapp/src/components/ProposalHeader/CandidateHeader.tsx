@@ -15,6 +15,7 @@ import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
 import dayjs from 'dayjs';
+import { relativeTimestamp } from '../../utils/timeUtils';
 
 interface CandidateHeaderProps {
   title: string;
@@ -80,6 +81,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       <span className={classes.propTransactionHash}>{transactionLink(createdTransactionHash)}</span>
     </Trans>
   );
+
+
+
 
   return (
     <>
@@ -158,13 +162,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             <strong>Version {versionsCount}</strong>{' '}
             <span>
               {versionsCount === 1 ? 'created' : 'updated'}{' '}
-              {dayjs(lastUpdatedTimestamp * 1000).fromNow()}
+
+              {relativeTimestamp(lastUpdatedTimestamp)}
             </span>
           </Link>
         ) : (
           <span>
             {versionsCount === 1 ? 'created' : 'updated'}{' '}
-            {dayjs(lastUpdatedTimestamp * 1000).fromNow()}
+            {relativeTimestamp(lastUpdatedTimestamp)}
           </span>
         )}
       </p>

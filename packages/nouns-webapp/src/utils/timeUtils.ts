@@ -28,3 +28,15 @@ export const timestampFromBlockNumber = (targetBlock: number, currentBlock: numb
   );
   return timestamp;
 };
+
+
+export const relativeTimestamp = (timestamp: number) => {
+  const now = dayjs();
+  const proposedAt = dayjs(timestamp * 1000);
+  const diff = now.diff(proposedAt, 'minutes');
+  if (diff < 15) {
+    return "just now";
+  } else {
+    return proposedAt.fromNow();
+  }
+};

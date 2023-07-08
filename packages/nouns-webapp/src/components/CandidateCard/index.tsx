@@ -12,6 +12,7 @@ import { Delegates } from '../../wrappers/subgraph';
 import { useDelegateNounsAtBlockQuery } from '../../wrappers/nounToken';
 import { useBlockNumber } from '@usedapp/core';
 import { PartialProposal, useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
+import { relativeTimestamp } from '../../utils/timeUtils';
 
 type Props = {
   candidate: PartialProposalCandidate;
@@ -108,7 +109,7 @@ function CandidateCard(props: Props) {
             </span>
           </div>
           <p className={classes.timestamp}>
-            {dayjs.unix(props.candidate.lastUpdatedTimestamp).fromNow()}
+            {relativeTimestamp(props.candidate.lastUpdatedTimestamp)}
           </p>
         </div>
       </div>
