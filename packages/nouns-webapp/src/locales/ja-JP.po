@@ -334,6 +334,10 @@ msgstr "WalletConnect データを消去"
 msgid "Close"
 msgstr "近い"
 
+#: src/components/NounInfoRowComment/index.tsx
+msgid "Comment"
+msgstr "コメント"
+
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr "コンパウンドガバナンス"

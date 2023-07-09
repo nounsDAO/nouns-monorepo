@@ -7,8 +7,8 @@ import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import React from 'react';
 import Identicon from '../Identicon';
 
-const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
-  const { address, avatar, size = 24 } = props;
+const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number; largeText?: boolean }> = props => {
+  const { address, avatar, size = 24, largeText = false } = props;
   const { library: provider } = useEthers();
 
   const ens = useReverseENSLookUp(address) || resolveNounContractAddress(address);
@@ -17,7 +17,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
 
   if (avatar) {
     return (
-      <div className={classes.shortAddress}>
+      <div className={largeText ? classes.shortAddressLargeText: classes.shortAddress}>
         {avatar && (
           <div key={address}>
             <Identicon size={size} address={address} provider={provider} />

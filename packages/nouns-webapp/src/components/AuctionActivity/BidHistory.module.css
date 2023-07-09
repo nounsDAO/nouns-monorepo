@@ -8,6 +8,7 @@
   list-style-type: none;
   row-gap: 0.5rem;
   padding: 0;
+  margin-bottom: 8px;
   margin-top: 1rem;
 }
 
@@ -91,6 +92,11 @@
 
 .rightSectionWrapper {
   display: flex;
+  flex-direction: column;
+}
+
+.bidItemRightSectionWrapper {
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -102,6 +108,10 @@
   margin-right: 1rem;
   font-size: 18px;
   padding-top: 2px;
+}
+
+.bidComment {
+  color: gray;
 }
 
 .bidRowCool .bidAmount {

@@ -329,6 +329,10 @@ msgstr "Clear WalletConnect Data"
 msgid "Close"
 msgstr "Close"
 
+#: src/components/NounInfoRowComment/index.tsx
+msgid "Comment"
+msgstr "Comment"
+
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr "Compound Governance"

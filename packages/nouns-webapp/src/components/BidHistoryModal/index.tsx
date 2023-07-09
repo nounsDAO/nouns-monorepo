@@ -8,18 +8,21 @@ import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { Bid } from '../../utils/types';
 import BidHistoryModalRow from '../BidHistoryModalRow';
 import { Trans } from '@lingui/macro';
+import { BigNumber as EthersBN } from 'ethers';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const BidHistoryModalOverlay: React.FC<{
+export const BidHistoryModalOverlay: React.FC<{
   auction: Auction;
   onDismiss: () => void;
 }> = props => {
   const { onDismiss, auction } = props;
 
   const bids = useAuctionBids(auction.nounId);
+
+  console.log(`bids: nounId:${auction.nounId} ${JSON.stringify(bids)}`);
 
   return (
     <>

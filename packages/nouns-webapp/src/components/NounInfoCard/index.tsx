@@ -9,6 +9,7 @@ import _BidsIcon from '../../assets/icons/Bids.svg';
 import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import NounInfoRowHolder from '../NounInfoRowHolder';
 import NounInfoRowButton from '../NounInfoRowButton';
+import NounInfoRowComment from '../NounInfoRowComment';
 import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
@@ -35,6 +36,9 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
       </Col>
       <Col lg={12} className={classes.nounInfoRow}>
         <NounInfoRowHolder nounId={nounId} />
+      </Col>
+      <Col lg={12} className={classes.nounInfoRow}>
+        <NounInfoRowComment nounId={nounId} />
       </Col>
       <Col lg={12} className={classes.nounInfoRow}>
         <NounInfoRowButton

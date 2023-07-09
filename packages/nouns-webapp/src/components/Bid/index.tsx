@@ -1,5 +1,5 @@
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
-import { useEthers, useContractFunction } from '@usedapp/core';
+import { useEthers, useContractFunction, TransactionStatus } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
@@ -63,6 +63,7 @@ const Bid: React.FC<{
   const bidInputRef = useRef<HTMLInputElement>(null);
 
   const [bidInput, setBidInput] = useState('');
+  const [bidComment, setBidComment] = useState('');
 
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -88,6 +89,12 @@ const Bid: React.FC<{
     nounsAuctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
+
+  const { send: placeBidWithComment, state: placeBidWithCommentState } = useContractFunction(
+    nounsAuctionHouseContract,
+    AuctionHouseContractFunction.createBidWithComment,
+  );
+
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
     nounsAuctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
@@ -129,10 +136,22 @@ const Bid: React.FC<{
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });
-    placeBid(auction.nounId, {
-      value,
-      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
-    });
+    if (bidComment.trim() === '') {
+      placeBid(auction.nounId, {
+        value,
+        gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    } else {
+      const COMMENT_GAS_COST_PER_BYTE = 8;
+      const additionalGasForComment = Buffer.byteLength(bidComment) * COMMENT_GAS_COST_PER_BYTE;
+
+      const totalGas = gasLimit.add(10_000).add(additionalGasForComment);
+
+      placeBidWithComment(auction.nounId, bidComment, {
+        value,
+        gasLimit: gasLimit.add(totalGas), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    }
   };
 
   const settleAuctionHandler = () => {
@@ -145,16 +164,25 @@ const Bid: React.FC<{
     }
   };
 
+  const clearCommentInput = useCallback(() => {
+    if (bidComment.trim() !== '') {
+      setBidComment('');
+    }
+  }, [bidComment]);
+
   // successful bid using redux store state
   useEffect(() => {
     if (!account) return;
+
+    const state: TransactionStatus =
+      bidComment.trim() === '' ? placeBidState : placeBidWithCommentState;
 
     // tx state is mining
     const isMiningUserTx = placeBidState.status === 'Mining';
     // allows user to rebid against themselves so long as it is not the same tx
     const isCorrectTx = currentBid(bidInputRef).isEqualTo(new BigNumber(auction.amount.toString()));
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
-      placeBidState.status = 'Success';
+      state.status = 'Success';
       setModal({
         title: <Trans>Success</Trans>,
         message: <Trans>Bid was placed successfully!</Trans>,
@@ -162,8 +190,17 @@ const Bid: React.FC<{
       });
       setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });
       clearBidInput();
+      clearCommentInput();
     }
-  }, [auction, placeBidState, account, setModal]);
+  }, [
+    auction,
+    placeBidState,
+    placeBidWithCommentState,
+    account,
+    setModal,
+    bidComment,
+    clearCommentInput,
+  ]);
 
   // placing bid transaction state hook
   useEffect(() => {
@@ -245,6 +282,7 @@ const Bid: React.FC<{
     window.open('https://fomonouns.wtf', '_blank')?.focus();
   };
 
+  const commentCopy = 'leave a comment with your bid (optional)';
   const isWalletConnected = activeAccount !== undefined;
 
   return (
@@ -252,7 +290,7 @@ const Bid: React.FC<{
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      <InputGroup>
+      <InputGroup className={classes.inputGroup}>
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
@@ -305,6 +343,22 @@ const Bid: React.FC<{
           </>
         )}
       </InputGroup>
+
+      {!auctionEnded && (
+        <>
+          <InputGroup>
+            <span className={classes.customPlaceholderBidComment}>
+              {!auctionEnded && bidComment.trim() === '' ? commentCopy : ''}
+            </span>
+            <FormControl
+              className={classes.commentInput}
+              as="textarea"
+              onChange={e => setBidComment(e.target.value)}
+              value={bidComment}
+            />
+          </InputGroup>
+        </>
+      )}
     </>
   );
 };

@@ -333,6 +333,10 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#: src/components/NounInfoRowComment/index.tsx
+msgid "Comment"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr ""

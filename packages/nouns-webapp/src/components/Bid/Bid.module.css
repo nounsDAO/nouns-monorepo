@@ -69,6 +69,36 @@
   box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
 }
 
+.commentCopy {
+  padding-top: 0;
+  font-size: small;
+  margin-left: 0.25rem;
+  margin-bottom: 0.3rem;
+}
+
+.commentInput {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: auto;
+  height: 100px;
+  color: black;
+  border-radius: 12px !important;
+  box-shadow: inset 0px 0px 0px 1px #fff;
+  background-color: white;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.commentInput:focus {
+  box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
+}
+
 .customPlaceholder {
   color: var(--brand-cool-light-text);
   font-family: 'PT Root UI';
@@ -88,6 +118,20 @@
   font-size: 25px;
   z-index: 1;
   pointer-events: none;
+}
+
+.customPlaceholderBidComment {
+  position: absolute;
+  opacity: 0.3;
+  top: 15%;
+  left: 3%;
+  color: var(--brand-cool-light-text);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 15px;
+  z-index: 1;
+  pointer-events: none;
+  text-align: left;
 }
 
 .activityRow .form-floating {
@@ -152,6 +196,17 @@
     left: 3.5%;
     top: 16%;
   }
+
+  .commentInput {
+    border: none;
+    border: 1px solid #8c8d9275;
+  }
+
+  .customPlaceholderBidComment {
+    left: 3.5%;
+    top: 16%;
+  }
+
   .emergencySettleWrapper {
     text-align: center;
   }
@@ -170,4 +225,8 @@
   display: inline;
   margin: 0;
   padding: 0;
+}
+
+.inputGroup {
+  margin-bottom: 6px;
 }

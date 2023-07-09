@@ -30,7 +30,7 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
           </div>
           <div className={classes.bidDate}>{date}</div>
         </div>
-        <div className={classes.rightSectionWrapper}>
+        <div className={classes.bidItemRightSectionWrapper}>
           <div className={classes.bidAmount}>{bidAmount}</div>
           <div className={classes.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
