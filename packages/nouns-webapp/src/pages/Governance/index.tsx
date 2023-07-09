@@ -75,6 +75,8 @@ const GovernancePage = () => {
             </Trans>
           </Col>
         </Row>
+
+
         <Proposals proposals={proposals} />
       </Col>
     </Section>
