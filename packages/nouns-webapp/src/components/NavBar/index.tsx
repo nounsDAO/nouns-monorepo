@@ -29,7 +29,7 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
-import { AtxDaoNFT, useCall } from '../../wrappers/atxDaoNFT';
+import { AtxDaoNFT, useNFTCall } from '../../wrappers/atxDaoNFT';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -39,7 +39,7 @@ const NavBar = () => {
   const treasuryBalance = useTreasuryBalance();
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  let balanceArr = useCall('balanceOf', [activeAccount]);
+  let balanceArr = useNFTCall('balanceOf', [activeAccount]);
   let balance;
   if (balanceArr !== undefined) {
     balance = balanceArr[0].toNumber();

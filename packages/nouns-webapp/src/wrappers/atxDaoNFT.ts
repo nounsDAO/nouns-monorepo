@@ -18,5 +18,5 @@ export const useNFTCall = (funcName: string, funcArgs: any[]) => {
         args: funcArgs
     });
 
-    return result;
+    return result as any;
 }
