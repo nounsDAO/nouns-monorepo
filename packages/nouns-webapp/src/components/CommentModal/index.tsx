@@ -6,7 +6,6 @@ import ShortAddress from '../ShortAddress';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
 import { BigNumber as EthersBN } from '@ethersproject/bignumber';
-import dayjs from 'dayjs';
 import _CommentIcon from '../../assets/icons/Comment.svg';
 import { Image } from 'react-bootstrap';
 import { i18n } from '@lingui/core';
@@ -26,9 +25,6 @@ export const CommentModalOverlay: React.FC<{
   const { onDismiss, bidder, comment, amount, timestamp, nounId } = props;
 
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(amount).toString())} />;
-  const date = `${dayjs(timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
-    timestamp.toNumber() * 1000,
-  ).format('hh:mm a')}`;
 
   return (
     <>

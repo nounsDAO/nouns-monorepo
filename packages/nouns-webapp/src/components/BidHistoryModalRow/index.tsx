@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
-import dayjs from 'dayjs';
 import BigNumber from 'bignumber.js';
 import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { Bid } from '../../utils/types';
@@ -16,8 +15,6 @@ import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
 import { i18n } from '@lingui/core';
 import { shortENS, useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import { useAppSelector } from '../../hooks';
-import { BigNumberish } from 'ethers';
 
 interface BidHistoryModalRowProps {
   bid: Bid;
