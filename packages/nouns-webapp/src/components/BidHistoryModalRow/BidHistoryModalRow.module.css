@@ -7,6 +7,12 @@
   background-color: white;
 }
 
+.bidRow:hover {
+  background: rgb(234, 234, 239);
+  color: inherit !important;
+  cursor: pointer;
+}
+
 .expandedBidRow {
   min-height: 72px;
   max-height: none;
