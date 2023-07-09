@@ -21,7 +21,6 @@ export const BidHistoryModalOverlay: React.FC<{
 
   const bids = useAuctionBids(auction.nounId);
 
-  console.log(`bids: nounId:${auction.nounId} ${JSON.stringify(bids)}`);
 
   return (
     <>
