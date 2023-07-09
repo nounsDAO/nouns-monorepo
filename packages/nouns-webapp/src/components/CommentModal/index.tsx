@@ -9,6 +9,7 @@ import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import _CommentIcon from '../../assets/icons/Comment.svg';
 import { Image } from 'react-bootstrap';
 import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/macro';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
@@ -39,7 +40,10 @@ export const CommentModalOverlay: React.FC<{
           <div className={classes.bidWrapper}>
             <div className={classes.header}>
               <div className={classes.title}>
-                <h2>{`Bid for Noun ${nounId}`}</h2>
+                <h2>
+                  <Trans>Bid for</Trans>
+                  {` Noun ${nounId.toString()}`}
+                </h2>
               </div>
             </div>
 
