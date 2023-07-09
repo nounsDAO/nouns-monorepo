@@ -2,6 +2,7 @@ import { ConnectorUpdate } from '@web3-react/types'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import type WalletConnectProvider from '@walletconnect/ethereum-provider'
 import { EthereumProviderOptions } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider'
+import { CHAIN_ID } from '../config'
 
 export class WalletConnectV2Connector extends AbstractConnector {
   provider?: typeof WalletConnectProvider.prototype
@@ -47,7 +48,8 @@ export class WalletConnectV2Connector extends AbstractConnector {
             'wallet_switchEthereumChain',
           ],
           events: ['chainChanged', 'accountsChanged'],
-          optionalEvents: ['disconnect']
+          optionalEvents: ['disconnect'],
+          optionalChains: [CHAIN_ID]
         })
       }
     )
