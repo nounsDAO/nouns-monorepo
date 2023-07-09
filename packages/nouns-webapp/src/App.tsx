@@ -34,9 +34,38 @@ function App() {
     // Local account array updated
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
-
+  
   const alertModal = useAppSelector(state => state.application.alertModal);
 
+  console.log(account);
+
+  
+  let output;
+  if (account !== null) {
+    console.log("IS NULL");
+    output = <div>
+    <Switch>
+      <Route exact path="/" component={AuctionPage} />
+      <Redirect from="/auction/:id" to="/noun/:id" />
+      <Route
+        exact
+        path="/noun/:id"
+        render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
+      />
+
+
+      <Route exact path="/rep" component={RepPage} />
+      <Route exact path="/create-proposal" component={CreateProposalPage} />
+      <Route exact path="/vote" component={GovernancePage} />
+      <Route exact path="/vote/:id" component={VotePage} />
+      <Route exact path="/playground" component={Playground} />
+      <Route exact path="/delegate" component={DelegatePage} />
+      <Route exact path="/explore" component={ExplorePage} />
+      <Route component={NotFoundPage} />
+    </Switch>
+    <Footer />
+    </div>
+  }
 
 
   return (
@@ -55,24 +84,7 @@ function App() {
           batchLookups={true}
         >
           <NavBar />
-          <Switch>
-            <Route exact path="/" component={AuctionPage} />
-            <Redirect from="/auction/:id" to="/noun/:id" />
-            <Route
-              exact
-              path="/noun/:id"
-              render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
-            />
-            <Route exact path="/rep" component={RepPage} />
-            <Route exact path="/create-proposal" component={CreateProposalPage} />
-            <Route exact path="/vote" component={GovernancePage} />
-            <Route exact path="/vote/:id" component={VotePage} />
-            <Route exact path="/playground" component={Playground} />
-            <Route exact path="/delegate" component={DelegatePage} />
-            <Route exact path="/explore" component={ExplorePage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-          <Footer />
+          { output }
         </AvatarProvider>
       </BrowserRouter>
     </div>

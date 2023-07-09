@@ -19,7 +19,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
 import NavDropdown from '../NavDropdown';
 import { Dropdown } from 'react-bootstrap';
@@ -29,8 +29,19 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
+import { AtxDaoNFT, useCall } from '../../wrappers/atxDaoNFT';
 
 const NavBar = () => {
+
+  useEffect(() => {
+    // Local account array updated
+    getMe();
+  }, []);
+
+  function getMe() {
+    useCall('ownerOf', [activeAccount])
+  }
+
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -51,6 +62,55 @@ const NavBar = () => {
     : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
+
+  let output;
+  console.log(activeAccount);
+
+if (activeAccount !== undefined) {
+
+  let output2;
+  useCall
+  output = <div><Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+  <NavBarButton
+    buttonText={<Trans>Proposals</Trans>}
+    buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+    buttonStyle={nonWalletButtonStyle}
+  />
+</Nav.Link>
+<Nav.Link
+  href={externalURL(ExternalURL.charmverse)}
+  className={classes.nounsNavLink}
+  target="_blank"
+  rel="noreferrer"
+  onClick={closeNav}
+>
+  <NavBarButton
+    buttonText={"Docs"}
+    buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
+    buttonStyle={nonWalletButtonStyle}
+  />
+</Nav.Link>
+<Nav.Link
+  href={externalURL(ExternalURL.discourse)}
+  className={classes.nounsNavLink}
+  target="_blank"
+  rel="noreferrer"
+  onClick={closeNav}
+>
+  <NavBarButton
+    buttonText={<Trans>Discourse</Trans>}
+    buttonIcon={<FontAwesomeIcon icon={faComments} />}
+    buttonStyle={nonWalletButtonStyle}
+  />
+</Nav.Link>
+<Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
+  <NavBarButton
+    buttonText={<Trans>REP</Trans>}
+    buttonIcon={<FontAwesomeIcon icon={faCoins} />}
+    buttonStyle={nonWalletButtonStyle}
+  />
+</Nav.Link></div>
+}
 
   return (
     <>
@@ -87,48 +147,9 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
-              <NavBarButton
-                buttonText={<Trans>Proposals</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <Nav.Link
-              href={externalURL(ExternalURL.charmverse)}
-              className={classes.nounsNavLink}
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={"Docs"}
-                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <Nav.Link
-              href={externalURL(ExternalURL.discourse)}
-              className={classes.nounsNavLink}
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Discourse</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faComments} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
-              <NavBarButton
-                buttonText={<Trans>REP</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faCoins} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+            { output }
           </Navbar.Collapse>
+          <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
         </Container>
       </Navbar>
     </>

@@ -66,6 +66,10 @@
   z-index: 3;
 }
 
+.nounsNavLink {
+  display: inline-block;
+}
+
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited,
