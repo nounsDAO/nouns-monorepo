@@ -11,7 +11,7 @@ export interface AtxDaoNFT {
   }
 
 export const useCall = (funcName: string, funcArgs: any[]) => {
-    const nft = useContractCall<AtxDaoNFT>({
+    const nft = useContractCall({
         abi,
         address: config.atxDaoAddress,
         method: funcName,

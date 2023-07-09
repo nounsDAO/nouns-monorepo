@@ -24,12 +24,14 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
+import { AtxDaoNFT, useCall } from './wrappers/atxDaoNFT';
 
 function App() {
   const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
+  
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
