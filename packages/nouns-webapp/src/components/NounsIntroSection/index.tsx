@@ -8,17 +8,6 @@ import guildsImage from '../../assets/squares.png';
 import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 
 const NounsIntroSection = () => {
-  const prophouseLink = (
-    <a
-      href="https://prop.house/"
-      target="_blank"
-      rel="noreferrer"
-      className={classes.nounsIntroLinks}
-    >
-      <Trans>Prop House</Trans>
-    </a>
-  );
-
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
@@ -61,7 +50,9 @@ const NounsIntroSection = () => {
             <p>
               Check out the Guild Pages to see ongoing projects!
             </p>
-            <Card onClick={(e) => {
+            <Card
+            className={classes.card}
+            onClick={(e) => {
               e.preventDefault();
               window.location.href='http://google.com';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
@@ -71,7 +62,9 @@ const NounsIntroSection = () => {
               </p>
             </Card>
 
-            <Card onClick={(e) => {
+            <Card
+            className={classes.card}
+            onClick={(e) => {
               e.preventDefault();
               window.location.href='http://google.com';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
@@ -81,7 +74,9 @@ const NounsIntroSection = () => {
               </p>
             </Card>
 
-            <Card onClick={(e) => {
+            <Card
+            className={classes.card}
+            onClick={(e) => {
               e.preventDefault();
               window.location.href='http://google.com';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem' }}>

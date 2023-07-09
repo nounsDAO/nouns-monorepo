@@ -1,4 +1,4 @@
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Card } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import Link from '../../components/Link';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -17,9 +18,13 @@ const GovernancePage = () => {
   const treasuryBalance = useTreasuryBalance();
   const treasuryBalanceUSD = useTreasuryUSDValue();
 
-  // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
-  const nounSingular = <Trans>Noun</Trans>;
-  const nounPlural = <Trans>Nouns</Trans>;
+  const forumLink = (
+    <Link
+      text={<Trans>the forum</Trans>}
+      url="https://atxdao.freeflarum.com/"
+      leavesPage={true}
+    />
+  );
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -38,46 +43,26 @@ const GovernancePage = () => {
           brand must be publicly proposed and voted on.
         </p>
         <p className={classes.subheading}>
-          Any DAO member can submit a proposal. It is recommended that members use <a href="https://atxdao.freeflarum.com/">the forum</a> to
+          Any DAO member can submit a proposal. It is recommended that members use {forumLink} to
           gather feedback on their proposal before putting it to a vote.
         </p>
-
-        <Row className={classes.treasuryInfoCard}>
-          <Col lg={8} className={classes.treasuryAmtWrapper}>
-            <Row className={classes.headerRow}>
-              <span>
-                <Trans>Treasury</Trans>
-              </span>
-            </Row>
-            <Row>
-              <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
-                <h1 className={classes.ethSymbol}>Ξ</h1>
-                <h1>
-                  {treasuryBalance &&
-                    i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)))}
-                </h1>
-              </Col>
-              <Col className={classes.usdTreasuryAmt}>
-                <h1 className={classes.usdBalance}>
-                  {treasuryBalanceUSD &&
-                    i18n.number(Number(treasuryBalanceUSD.toFixed(0)), {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                </h1>
-              </Col>
-            </Row>
-          </Col>
-          <Col className={classes.treasuryInfoText}>
-            <Trans>
-              This treasury exists for <span className={classes.boldText}>ATX DAO</span>{' '}
-              members to allocate resources in ways that will further our goals.
-            </Trans>
-          </Col>
-        </Row>
-
-
-        <Proposals proposals={proposals} />
+        <Card
+        className={classes.card}
+        onClick={(e) => {
+          e.preventDefault();
+          window.location.href='https://snapshot.org/#/atxdao.eth';
+        }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
+          <Row>
+            <Col style={{padding: '40px'}}>
+              <b>Snapshot Proposals</b>
+            </Col>
+            <Col style={{padding: '10px', marginRight: '3rem'}}>
+              <img
+              style={{ width: '5rem', float: 'right'}}
+              src="https://pbs.twimg.com/profile_images/1305394576602013698/Tvz6UU5R_400x400.jpg"></img>
+            </Col>
+          </Row>
+        </Card>
       </Col>
     </Section>
   );
