@@ -43,6 +43,7 @@ export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
   extended: bid.extended,
   comment: bid.comment,
   transactionHash: bid.transactionHash,
+  transactionIndex: bid.transactionIndex,
   timestamp: bid.timestamp,
 });
 

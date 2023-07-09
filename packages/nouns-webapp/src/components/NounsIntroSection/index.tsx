@@ -49,10 +49,12 @@ const NounsIntroSection = () => {
             <Nav.Link as={Link} to="/vote/113">
               Prop 113
             </Nav.Link>{' '}
-            and minted in{' '}
-            <Nav.Link as={Link} to="/vote/190">
-              Prop 190
-            </Nav.Link>
+            <span className={classes.videoMintedSubtitle}>
+              and minted in{' '}
+              <Nav.Link as={Link} to="/vote/190">
+                Prop 190
+              </Nav.Link>
+            </span>
           </small>
         </Col>
       </Section>
@@ -81,7 +83,7 @@ const NounsIntroSection = () => {
             </h1>
             <p>
               <Trans>
-                There’s a way for everyone to get involved with Nouns. From whimsical endeavors like
+                There's a way for everyone to get involved with Nouns. From whimsical endeavors like
                 naming a frog, to ambitious projects like constructing a giant float for the Rose
                 Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of
                 all sizes and domains.

@@ -7,6 +7,7 @@ export interface BidEvent {
   extended: boolean;
   comment: string;
   transactionHash: string;
+  transactionIndex: number;
   timestamp: BigNumberish;
 }
 
@@ -35,5 +36,6 @@ export interface Bid {
   extended: boolean;
   comment: string;
   transactionHash: string;
+  transactionIndex: number;
   timestamp: BigNumber;
 }

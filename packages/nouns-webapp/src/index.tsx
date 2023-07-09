@@ -29,7 +29,7 @@ import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, createNetworkHttpUrl, multicallOnLocalhost } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish, Event } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -128,12 +128,12 @@ const ChainSubscriber: React.FC = () => {
       value: BigNumberish,
       extended: boolean,
       comment: string,
-      event: any,
+      event: Event,
     ) => {
       const timestamp = (await event.getBlock()).timestamp;
-      const transactionHash = event.transactionHash;
+      const { transactionHash, transactionIndex } = event;
       dispatch(
-        appendBid(reduxSafeBid({ nounId, sender, value, extended, comment, transactionHash, timestamp })),
+        appendBid(reduxSafeBid({ nounId, sender, value, extended, comment, transactionHash, transactionIndex, timestamp })),
       );
     };
     const processAuctionCreated = (
