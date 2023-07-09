@@ -1,3 +1,11 @@
+.centerScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
 .navBarBrand {
   position: relative;
   z-index: 2;

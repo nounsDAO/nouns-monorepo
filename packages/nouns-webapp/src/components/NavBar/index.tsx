@@ -3,7 +3,7 @@ import classes from './NavBar.module.css';
 import logo from '../../assets/logo.png';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { Nav, Navbar, Container, Row, Col } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
@@ -63,51 +63,7 @@ const NavBar = () => {
 
 if (activeAccount !== undefined) {
   if (balance > 0) {
-    output = <div><Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
-    <NavBarButton
-      buttonText={<Trans>Proposals</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link
-    href={externalURL(ExternalURL.charmverse)}
-    className={classes.nounsNavLink}
-    target="_blank"
-    rel="noreferrer"
-    onClick={closeNav}
-  >
-    <NavBarButton
-      buttonText={"Docs"}
-      buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link
-    href={externalURL(ExternalURL.discourse)}
-    className={classes.nounsNavLink}
-    target="_blank"
-    rel="noreferrer"
-    onClick={closeNav}
-  >
-    <NavBarButton
-      buttonText={<Trans>Discourse</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faComments} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
-    <NavBarButton
-      buttonText={<Trans>REP</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faCoins} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link></div>
-  }
-}
-
-  return (
-    <>
+    output =
       <Navbar
         expand="xl"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
@@ -141,11 +97,79 @@ if (activeAccount !== undefined) {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end">
-            { output }
+            {
+              <div>
+              <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+              <NavBarButton
+                buttonText={<Trans>Proposals</Trans>}
+                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+              </Nav.Link>
+              <Nav.Link
+                href={externalURL(ExternalURL.charmverse)}
+                className={classes.nounsNavLink}
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={"Docs"}
+                  buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              <Nav.Link
+                href={externalURL(ExternalURL.discourse)}
+                className={classes.nounsNavLink}
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={<Trans>Discourse</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faComments} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
+                <NavBarButton
+                  buttonText={<Trans>REP</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faCoins} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              </div>
+            }
           </Navbar.Collapse>
           <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
         </Container>
       </Navbar>
+  } else {
+    output = <div><p>???</p></div>
+  }
+} else {
+  output =
+  <Container className={classes.centerScreen}>
+    <div>
+        <div style={{textAlign: 'center'}}>
+          <img
+            style={{ width: '10rem'}}
+            src={logo}
+            alt="ATX DAO Logo"
+          ></img>
+        </div>
+        <p>
+        Welcome to the ATX DAO Member Portal!<br/> Please verify your membership.
+        </p>
+        <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+    </div>
+  </Container>
+}
+
+  return (
+    <>
+      {output}
     </>
   );
 };
