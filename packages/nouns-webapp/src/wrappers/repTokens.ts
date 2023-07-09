@@ -8,9 +8,10 @@ const abi = new utils.Interface(repTokensABI);
 
 export interface RepTokens {
     mintCount: EthersBN;
+    uri: string;
   }
 
-export const useRepCall = async (funcName: string, funcArgs: any[]) => {
+export const useRepCall = (funcName: string, funcArgs: any[]) => {
     const result = useContractCall<RepTokens>({
         abi,
         address: config.repTokensAddress,
@@ -18,5 +19,5 @@ export const useRepCall = async (funcName: string, funcArgs: any[]) => {
         args: funcArgs
     });
 
-    return result;
+    return result as any;
 }
