@@ -64,12 +64,7 @@ function App() {
               render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
             />
             <Route exact path="/rep" component={RepPage} />
-            <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
-            <Route exact path="/vote/:id" component={VotePage} />
-            <Route exact path="/playground" component={Playground} />
-            <Route exact path="/delegate" component={DelegatePage} />
-            <Route exact path="/explore" component={ExplorePage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />

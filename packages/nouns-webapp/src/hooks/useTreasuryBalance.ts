@@ -1,5 +1,6 @@
 import { useEtherBalance } from '@usedapp/core';
 import useLidoBalance from './useLidoBalance';
+import useUSDCBalance from './useUSDCBalance';
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
 import config from '../config';
@@ -29,5 +30,7 @@ export const useTreasuryUSDValue = () => {
   const treasuryBalanceETH = Number(
     ethers.utils.formatEther(useTreasuryBalance()?.toString() || '0'),
   );
-  return etherPrice * treasuryBalanceETH;
+  const usdcBalance = useUSDCBalance();
+  const zero = BigNumber.from(0);
+  return etherPrice * treasuryBalanceETH + Number(usdcBalance ?? '0');
 };
