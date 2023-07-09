@@ -12,6 +12,7 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -93,13 +94,6 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
-              <NavBarButton
-                buttonText={<Trans>REP</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.charmverse)}
               className={classes.nounsNavLink}
@@ -108,7 +102,7 @@ const NavBar = () => {
               onClick={closeNav}
             >
               <NavBarButton
-                buttonText={<Trans>Docs</Trans>}
+                buttonText={"Docs"}
                 buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
                 buttonStyle={nonWalletButtonStyle}
               />
@@ -123,6 +117,13 @@ const NavBar = () => {
               <NavBarButton
                 buttonText={<Trans>Discourse</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faComments} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
+            <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
+              <NavBarButton
+                buttonText={<Trans>REP</Trans>}
+                buttonIcon={<FontAwesomeIcon icon={faCoins} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>

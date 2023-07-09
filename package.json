@@ -46,5 +46,8 @@
       "yarn lint",
       "yarn format"
     ]
+  },
+  "dependencies": {
+    "@snapshot-labs/snapshot.js": "^0.4.103"
   }
 }

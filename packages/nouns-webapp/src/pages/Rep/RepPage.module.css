@@ -1,0 +1,108 @@
+.heading {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.headerRow h1 {
+  color: #14161b;
+  font-size: 56px;
+  font-family: 'Londrina Solid';
+}
+
+.subheading {
+  color: var(--brand-dark-green);
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.boldText {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+p {
+  padding-top: 1rem;
+}
+
+@media (max-width: 992px) {
+  .section {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.treasuryInfoCard {
+  margin-bottom: 3rem;
+  border-radius: 20px;
+  border: 1px solid #e2e3e8;
+}
+
+.treasuryAmtWrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.usdTreasuryAmt {
+  padding-top: 0.2rem;
+}
+
+.ethTreasuryAmt {
+  display: flex;
+  height: 3rem;
+  min-width: 9rem;
+  padding-top: 0.2rem;
+}
+
+.ethTreasuryAmt h1 {
+  font-size: 36px;
+  font-family: 'Londrina Solid';
+}
+
+.usdBalance {
+  font-size: 36px;
+  font-family: 'Londrina Solid';
+}
+
+.ethSymbol {
+  font-family: 'PT Root UI' !important;
+  margin-right: 0.5rem;
+}
+
+.usdBalance {
+  color: var(--brand-gray-light-text);
+  font-family: 'Londrina Solid';
+}
+
+.treasuryInfoText {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+}
+
+@media (min-width: 992px) {
+  .treasuryAmtWrapper {
+    border-right: 2px solid #e2e3e8;
+  }
+
+  .ethTreasuryAmt {
+    border-right: 2px solid #e2e3e8;
+  }
+}
