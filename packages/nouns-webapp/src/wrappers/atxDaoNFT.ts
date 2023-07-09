@@ -10,14 +10,13 @@ export interface AtxDaoNFT {
     mintCount: EthersBN;
   }
 
-export const useCall = (funcName: string, funcArgs: any[]) => {
-    const nft = useContractCall<AtxDaoNFT>({
+export const useNFTCall = (funcName: string, funcArgs: any[]) => {
+    const result = useContractCall<AtxDaoNFT>({
         abi,
         address: config.atxDaoAddress,
         method: funcName,
         args: funcArgs
     });
 
-    console.log(nft);
-    return nft /* as AtxDaoNFT */ ;
+    return result;
 }
