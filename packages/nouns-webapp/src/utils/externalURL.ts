@@ -5,11 +5,14 @@ export enum ExternalURL {
   nounsCenter,
   instagram,
   linkedin,
-  jobPortal
+  jobPortal,
+  discord
 }
 
 export const externalURL = (externalURL: ExternalURL) => {
   switch (externalURL) {
+    case ExternalURL.discord:
+      return 'https://discord.gg/fCG8B9vN7z';
     case ExternalURL.twitter:
       return 'https://twitter.com/atxdao';
     case ExternalURL.charmverse:

@@ -13,11 +13,13 @@ const Footer = () => {
   const instagramURL = externalURL(ExternalURL.instagram);
   const linkedinURL = externalURL(ExternalURL.linkedin);
   const jobPortalURL = externalURL(ExternalURL.jobPortal);
+  const discordURL = externalURL(ExternalURL.discord);
 
   return (
     <div className={classes.wrapper}>
       <Container className={classes.container}>
         <footer className={classes.footerSignature}>
+          <Link text={<Trans>Discord</Trans>} url={discordURL} leavesPage={true} />
           <Link text={<Trans>Twitter</Trans>} url={twitterURL} leavesPage={true} />
           <Link text={<Trans>LinkedIn</Trans>} url={linkedinURL} leavesPage={true} />
           <Link text={<Trans>Instagram</Trans>} url={instagramURL} leavesPage={true} />
