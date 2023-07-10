@@ -41,7 +41,7 @@ describe('getOrCreateDynamicQuorumParams', () => {
     proposal.signatures = ['some signature'];
     proposal.calldatas = [Bytes.fromUTF8('some data')];
 
-    const hash = calcEncodedProposalHash(proposal);
+    const hash = calcEncodedProposalHash(proposal, false);
     assert.bytesEquals(
       Bytes.fromHexString('0xcf95b7d08d761ff0bf1223220f45b79baffbce6c8bcceb8df5399cbc6d22c40d'),
       hash,
@@ -55,10 +55,16 @@ describe('getOrCreateDynamicQuorumParams', () => {
     proposal.signatures = ['some signature', 'hello()'];
     proposal.calldatas = [Bytes.fromUTF8('some data'), Bytes.fromHexString('0xaabbccdd')];
 
-    const hash2 = calcEncodedProposalHash(proposal);
+    const hash2 = calcEncodedProposalHash(proposal, false);
     assert.bytesEquals(
       Bytes.fromHexString('0x5d6f3b870407fff8109c6c9469173eef879d0d2eaf3de0fb5770b7f48f760101'),
       hash2,
+    );
+
+    const hash3 = calcEncodedProposalHash(proposal, true);
+    assert.bytesEquals(
+      Bytes.fromHexString('0xdc10157349778884412d140419c22ab67aa7a84a4f23dead50533a9aca0fbb28'),
+      hash3,
     );
   });
 });

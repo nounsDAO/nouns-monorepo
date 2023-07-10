@@ -468,6 +468,9 @@ type ProposalCandidateContent @entity {
   "The full proposal description, which includes the title"
   description: String!
 
+  "The proposal id that this content is updating. 0 if it's a new proposal"
+  proposalIdToUpdate: BigInt!
+
   "The proposal title, parsed from the description"
   title: String!
 

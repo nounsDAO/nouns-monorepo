@@ -146,13 +146,13 @@ dataSources:
         - name: NounsDAOData
           file: ../nouns-contracts/abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json
       eventHandlers:
-        - event: ProposalCandidateCreated(indexed address,address[],uint256[],string[],bytes[],string,string,bytes32)
+        - event: ProposalCandidateCreated(indexed address,address[],uint256[],string[],bytes[],string,string,uint256,bytes32)
           handler: handleProposalCandidateCreated
-        - event: ProposalCandidateUpdated(indexed address,address[],uint256[],string[],bytes[],string,string,bytes32,string)
+        - event: ProposalCandidateUpdated(indexed address,address[],uint256[],string[],bytes[],string,string,uint256,bytes32,string)
           handler: handleProposalCandidateUpdated
         - event: ProposalCandidateCanceled(indexed address,string)
           handler: handleProposalCandidateCanceled
-        - event: SignatureAdded(indexed address,bytes,uint256,address,string,bytes32,bytes32,string)
+        - event: SignatureAdded(indexed address,bytes,uint256,address,string,uint256,bytes32,bytes32,string)
           handler: handleSignatureAdded
         - event: FeedbackSent(indexed address,uint256,uint96,uint8,string)
           handler: handleFeedbackSent

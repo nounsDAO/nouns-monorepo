@@ -22,8 +22,9 @@ import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
+import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
 
-contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
+contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -44,43 +45,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
      *   EVENTS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
-
-    event ProposalCandidateCreated(
-        address indexed msgSender,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description,
-        string slug,
-        bytes32 encodedProposalHash
-    );
-    event ProposalCandidateUpdated(
-        address indexed msgSender,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description,
-        string slug,
-        bytes32 encodedProposalHash,
-        string reason
-    );
-    event ProposalCandidateCanceled(address indexed msgSender, string slug);
-    event SignatureAdded(
-        address indexed signer,
-        bytes sig,
-        uint256 expirationTimestamp,
-        address proposer,
-        string slug,
-        bytes32 encodedPropHash,
-        bytes32 sigDigest,
-        string reason
-    );
-    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint96 votes, uint8 support, string reason);
-    event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
-    event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
-    event ETHWithdrawn(address indexed to, uint256 amount);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -139,6 +103,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
      * @param calldatas the candidate proposal calldatas.
      * @param description the candidate proposal description.
      * @param slug the candidate proposal slug string, used alognside the proposer to uniquely identify candidates.
+     * @param proposalIdToUpdate if this is an update to an existing proposal, the ID of the proposal to update, otherwise 0.
      */
     function createProposalCandidate(
         address[] memory targets,
@@ -146,7 +111,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        string memory slug
+        string memory slug,
+        uint256 proposalIdToUpdate
     ) external payable {
         if (!isNouner(msg.sender) && msg.value < createCandidateCost) revert MustBeNounerOrPaySufficientFee();
         if (propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugAlreadyUsed();
@@ -158,6 +124,9 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
             NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
             description
         );
+        if (proposalIdToUpdate > 0) {
+            encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
+        }
 
         emit ProposalCandidateCreated(
             msg.sender,
@@ -167,6 +136,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
             calldatas,
             description,
             slug,
+            proposalIdToUpdate,
             keccak256(encodedProp)
         );
     }
@@ -180,6 +150,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
      * @param calldatas the candidate proposal calldatas.
      * @param description the candidate proposal description.
      * @param slug the candidate proposal slug string, used alognside the proposer to uniquely identify candidates.
+     * @param proposalIdToUpdate if this is an update to an existing proposal, the ID of the proposal to update, otherwise 0.
      * @param reason the free text reason and context for the update.
      */
     function updateProposalCandidate(
@@ -189,6 +160,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
         bytes[] memory calldatas,
         string memory description,
         string memory slug,
+        uint256 proposalIdToUpdate,
         string memory reason
     ) external payable {
         if (!isNouner(msg.sender) && msg.value < updateCandidateCost) revert MustBeNounerOrPaySufficientFee();
@@ -199,6 +171,9 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
             NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
             description
         );
+        if (proposalIdToUpdate > 0) {
+            encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
+        }
 
         emit ProposalCandidateUpdated(
             msg.sender,
@@ -208,6 +183,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
             calldatas,
             description,
             slug,
+            proposalIdToUpdate,
             keccak256(encodedProp),
             reason
         );
@@ -231,6 +207,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
      * @param expirationTimestamp the signature's expiration timestamp.
      * @param proposer the proposer account that posted the candidate proposal with the provided slug.
      * @param slug the slug of the proposal candidate signer signed on.
+     * @param proposalIdToUpdate if this is an update to an existing proposal, the ID of the proposal to update, otherwise 0.
      * @param encodedProp the abi encoding of the candidate version signed; should be identical to the output of
      * the `NounsDAOV3Proposals.calcProposalEncodeData` function.
      * @param reason signer's reason free text.
@@ -240,17 +217,17 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
         uint256 expirationTimestamp,
         address proposer,
         string memory slug,
+        uint256 proposalIdToUpdate,
         bytes memory encodedProp,
         string memory reason
     ) external {
         if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
 
-        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(
-            NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
-            encodedProp,
-            expirationTimestamp,
-            nounsDao
-        );
+        bytes32 typeHash = proposalIdToUpdate == 0
+            ? NounsDAOV3Proposals.PROPOSAL_TYPEHASH
+            : NounsDAOV3Proposals.UPDATE_PROPOSAL_TYPEHASH;
+
+        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(typeHash, encodedProp, expirationTimestamp, nounsDao);
 
         if (!SignatureChecker.isValidSignatureNow(msg.sender, sigDigest, sig)) revert InvalidSignature();
 
@@ -260,6 +237,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable {
             expirationTimestamp,
             proposer,
             slug,
+            proposalIdToUpdate,
             keccak256(encodedProp),
             sigDigest,
             reason
