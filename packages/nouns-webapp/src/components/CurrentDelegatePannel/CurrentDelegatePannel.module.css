@@ -3,7 +3,7 @@
 }
 
 .title {
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   display: flex;
   flex-direction: column;
   line-height: 42px;
@@ -14,7 +14,7 @@
 
 .copy {
   font-weight: 500;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   color: var(--brand-cool-dark-text);
 }
 

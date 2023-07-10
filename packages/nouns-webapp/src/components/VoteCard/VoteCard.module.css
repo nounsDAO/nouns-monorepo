@@ -1,16 +1,16 @@
 .voteCardHeaderTextEn {
   font-size: 22px;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .voteCardHeaderTextNonEn {
   font-size: 16px;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .voteCardVoteCount {
   font-size: 22px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   margin-top: 0.15rem;
 }

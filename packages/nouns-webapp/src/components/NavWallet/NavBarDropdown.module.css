@@ -3,7 +3,7 @@
   border-radius: 10px;
   font-size: 16px;
   line-height: 16px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   padding: 0px 0px 0px 14px;
   transition: all 0.125s ease-in-out;
@@ -122,7 +122,7 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;

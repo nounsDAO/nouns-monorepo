@@ -51,12 +51,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       style={{ background: props.backgroundColor }}
     >
       <Col lg={{ span: 10, offset: 1 }}>
-        <div className={classes.headerWrapper}>
+        <div className={classes.headerWrapper} style={{ paddingBottom: '2rem' }}>
           <h1>
             <Trans>What about...</Trans>
           </h1>
-          <p className={classes.aboutText} style={{ paddingBottom: '3rem' }}>
-          </p>
         </div>
         <Accordion flush>
           <Accordion.Item eventKey="0" className={classes.accordionItem}>

@@ -42,7 +42,7 @@
   background: #fff;
   font-size: 16px;
   line-height: 1;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   position: relative;
   display: grid;
@@ -89,10 +89,10 @@
   padding: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: transparent;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-size: 16px;
   line-height: 16px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
 }
 

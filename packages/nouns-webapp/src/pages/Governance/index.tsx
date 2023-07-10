@@ -20,7 +20,7 @@ const GovernancePage = () => {
 
   const forumLink = (
     <Link
-      text={<Trans>the forum</Trans>}
+      text="the forum"
       url="https://atxdao.freeflarum.com/"
       leavesPage={true}
     />
