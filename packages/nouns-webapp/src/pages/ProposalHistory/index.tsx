@@ -128,7 +128,7 @@ const ProposalHistory = ({
                   description={proposalVersions[activeVersion - 1].description}
                   title={proposalVersions[activeVersion - 1].title}
                   details={proposalVersions[activeVersion - 1].details}
-                  isV3Proposal={true}
+                  hasSidebar={true}
                 />
               )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (

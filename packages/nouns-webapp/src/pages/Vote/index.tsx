@@ -84,8 +84,6 @@ const VotePage = ({
     params: { id },
   },
 }: RouteComponentProps<{ id: string }>) => {
-  // TODO: set this to true when we want to enable v3 proposals
-  const [isv3Proposal, setIsV3Proposal] = useState<boolean>(true);
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
@@ -256,11 +254,6 @@ const VotePage = ({
   })();
 
   useEffect(() => {
-    // temp set v3 proposals layout
-    setIsV3Proposal(true);
-  }, []);
-
-  useEffect(() => {
     if (
       currentBlock &&
       proposal?.status === ProposalState.OBJECTION_PERIOD &&
@@ -426,7 +419,7 @@ const VotePage = ({
         availableVotes={availableVotes || 0}
         isObjectionPeriod={isObjectionPeriod}
       />
-      <Col lg={isv3Proposal ? 12 : 10} className={classes.wrapper}>
+      <Col lg={isUpdateable() ? 12 : 10} className={classes.wrapper}>
         {proposal && (
           <ProposalHeader
             proposal={proposal}
@@ -439,7 +432,7 @@ const VotePage = ({
           />
         )}
       </Col>
-      <Col lg={isv3Proposal ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
             .filter(txn => txn?.functionSig.includes('createStream'))
@@ -448,7 +441,6 @@ const VotePage = ({
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
                 return <></>;
               }
-
               return (
                 <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
                   <span className={classes.boldedLabel}>
@@ -575,46 +567,46 @@ const VotePage = ({
             )}
           </Col>
         </Row>
-        {/* {!isUpdateable && ( */}
-        <>
-          <p
-            onClick={() => setIsDelegateView(!isDelegateView)}
-            className={classes.toggleDelegateVoteView}
-          >
-            {isDelegateView ? (
-              <Trans>Switch to Noun view</Trans>
-            ) : (
-              <Trans>Switch to delegate view</Trans>
-            )}
-          </p>
-          <Row>
-            <VoteCard
-              proposal={proposal}
-              percentage={forPercentage}
-              nounIds={forNouns}
-              variant={VoteCardVariant.FOR}
-              delegateView={isDelegateView}
-              delegateGroupedVoteData={data}
-            />
-            <VoteCard
-              proposal={proposal}
-              percentage={againstPercentage}
-              nounIds={againstNouns}
-              variant={VoteCardVariant.AGAINST}
-              delegateView={isDelegateView}
-              delegateGroupedVoteData={data}
-            />
-            <VoteCard
-              proposal={proposal}
-              percentage={abstainPercentage}
-              nounIds={abstainNouns}
-              variant={VoteCardVariant.ABSTAIN}
-              delegateView={isDelegateView}
-              delegateGroupedVoteData={data}
-            />
-          </Row>
-        </>
-        {/* )} */}
+        {!isUpdateable() && (
+          <>
+            <p
+              onClick={() => setIsDelegateView(!isDelegateView)}
+              className={classes.toggleDelegateVoteView}
+            >
+              {isDelegateView ? (
+                <Trans>Switch to Noun view</Trans>
+              ) : (
+                <Trans>Switch to delegate view</Trans>
+              )}
+            </p>
+            <Row>
+              <VoteCard
+                proposal={proposal}
+                percentage={forPercentage}
+                nounIds={forNouns}
+                variant={VoteCardVariant.FOR}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+              <VoteCard
+                proposal={proposal}
+                percentage={againstPercentage}
+                nounIds={againstNouns}
+                variant={VoteCardVariant.AGAINST}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+              <VoteCard
+                proposal={proposal}
+                percentage={abstainPercentage}
+                nounIds={abstainNouns}
+                variant={VoteCardVariant.ABSTAIN}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+            </Row>
+          </>
+        )}
 
         {/* TODO abstract this into a component  */}
         <Row>
@@ -703,7 +695,7 @@ const VotePage = ({
         </Row>
       </Col>
 
-      {isv3Proposal && proposal?.status === ProposalState.UPDATABLE ? (
+      {isUpdateable() ? (
         <div className={classes.v3ProposalWrapper}>
           <Row>
             <Col xl={8} lg={12}>
@@ -711,7 +703,7 @@ const VotePage = ({
                 description={proposal.description}
                 title={proposal.title}
                 details={proposal.details}
-                isV3Proposal={isv3Proposal}
+                hasSidebar={true}
               />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
@@ -725,11 +717,13 @@ const VotePage = ({
         </div>
       ) : (
         <Row>
-          <ProposalContent
-            description={proposal.description}
-            title={proposal.title}
-            details={proposal.details}
-          />
+          <Col xl={10} lg={12} className='m-auto'>
+            <ProposalContent
+              description={proposal.description}
+              title={proposal.title}
+              details={proposal.details}
+            />
+          </Col>
         </Row>
       )}
     </Section>

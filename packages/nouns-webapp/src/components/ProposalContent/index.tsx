@@ -16,7 +16,7 @@ interface ProposalContentProps {
   description: string;
   title: string;
   details: ProposalDetail[];
-  isV3Proposal?: boolean;
+  hasSidebar?: boolean;
 }
 
 export const linkIfAddress = (content: string) => {
@@ -43,7 +43,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
   return (
     <>
       <Row>
-        <Col className={clsx(classes.section, props.isV3Proposal && classes.v3Proposal)}>
+        <Col className={clsx(classes.section, props.hasSidebar && classes.hasSidebar)}>
           <h5>
             <Trans>Description</Trans>
           </h5>

@@ -20,6 +20,20 @@ const GovernancePage = () => {
   // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
   const nounSingular = <Trans>Noun</Trans>;
   const nounPlural = <Trans>Nouns</Trans>;
+  const subHeading = (<Trans>
+    Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
+    proposals or delegate their vote to a third party. A minimum of{' '}
+    <span className={classes.boldText}>
+      {nounsRequired ? (
+        <>
+          {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
+        </>
+      ) : (
+        '...'
+      )}
+    </span>{' '}
+    is required to submit proposals.
+  </Trans>)
 
   return (
     <>
@@ -34,20 +48,7 @@ const GovernancePage = () => {
             </h1>
           </Row>
           <p className={classes.subheading}>
-            <Trans>
-              Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
-              proposals or delegate their vote to a third party. A minimum of{' '}
-              <span className={classes.boldText}>
-                {nounsRequired ? (
-                  <>
-                    {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
-                  </>
-                ) : (
-                  '...'
-                )}
-              </span>{' '}
-              is required to submit proposals.
-            </Trans>
+            {subHeading}
           </p>
 
           <Row className={classes.treasuryInfoCard}>
