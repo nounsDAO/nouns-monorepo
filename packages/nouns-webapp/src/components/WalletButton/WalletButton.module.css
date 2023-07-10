@@ -6,6 +6,7 @@
   background-color: rgba(211, 211, 211, 0.664);
   color: var(--brand-black);
   border: none;
+  font-family: 'Inter' !important;
 }
 .walletButton img {
   margin-right: 10px;

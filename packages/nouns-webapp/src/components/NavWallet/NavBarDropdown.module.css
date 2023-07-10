@@ -1,9 +1,9 @@
 .wrapper {
   height: 40px;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 16px;
-  font-family: 'Calistoga';
+  font-family: 'Inter';
   font-weight: bold;
   padding: 0px 0px 0px 14px;
   transition: all 0.125s ease-in-out;
@@ -122,9 +122,9 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-family: 'Calistoga';
+  font-family: 'Inter';
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 16px;
   padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
   transition: all 0.125s ease-in-out;
@@ -144,8 +144,8 @@
 @media (max-width: 992px) {
   .wrapper,
   .button {
-    height: 48px;
-    font-size: 18px;
+    height: 38px;
+    font-size: 15px;
   }
 }
 
