@@ -13,6 +13,7 @@ import {
   ProposalFeedback,
   Fork,
   ProposalCandidateContent,
+  CandidateFeedback,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -211,6 +212,14 @@ export function getOrCreateProposalFeedback(id: string): ProposalFeedback {
   return feedback;
 }
 
+export function getOrCreateCandidateFeedback(id: string): CandidateFeedback {
+  let feedback = CandidateFeedback.load(id);
+  if (feedback == null) {
+    feedback = new CandidateFeedback(id);
+  }
+  return feedback;
+}
+
 export function getOrCreateFork(id: BigInt): Fork {
   let fork = Fork.load(id.toString());
   if (fork == null) {
@@ -220,6 +229,10 @@ export function getOrCreateFork(id: BigInt): Fork {
     fork.tokensForkingCount = 0;
   }
   return fork;
+}
+
+export function candidateID(proposer: Address, slug: string): string {
+  return proposer.toHexString().concat('-').concat(slug);
 }
 
 function keccak256Bytes(bytes: Bytes): Bytes {

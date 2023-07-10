@@ -34,7 +34,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error MustBeNounerOrPaySufficientFee();
     error SlugAlreadyUsed();
     error SlugDoesNotExist();
-    error MustBeNouner();
     error AmountExceedsBalance();
     error FailedWithdrawingETH(bytes data);
     error InvalidSignature();
@@ -257,10 +256,28 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         string memory reason
     ) external {
         if (support > 2) revert InvalidSupportValue();
-        uint96 votes = nounsToken.getPriorVotes(msg.sender, block.number - PRIOR_VOTES_BLOCKS_AGO);
-        if (votes == 0) revert MustBeNouner();
 
-        emit FeedbackSent(msg.sender, proposalId, votes, support, reason);
+        emit FeedbackSent(msg.sender, proposalId, support, reason);
+    }
+
+    /**
+     * @notice Send feedback on a proposal candidate. Meant to be used prior to submitting the candidate as a proposal,
+     * to help proposers refine their candidate.
+     * @param proposer the proposer of the candidate.
+     * @param slug the slug of the candidate.
+     * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
+     * @param reason their free text feedback.
+     */
+    function sendCandidateFeedback(
+        address proposer,
+        string memory slug,
+        uint8 support,
+        string memory reason
+    ) external {
+        if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
+        if (support > 2) revert InvalidSupportValue();
+
+        emit CandidateFeedbackSent(msg.sender, proposer, slug, support, reason);
     }
 
     /**
