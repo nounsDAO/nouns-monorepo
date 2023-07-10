@@ -24,6 +24,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
+import { AtxDaoNFT, useNFTCall } from './wrappers/atxDaoNFT';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -38,21 +39,25 @@ function App() {
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
-  console.log(account);
-
+  let balanceArr = useNFTCall('balanceOf', [account]);
+  let balance;
+  if (balanceArr !== undefined) {
+    balance = balanceArr[0].toNumber();
+  }
 
   let output;
   if (account !== null) {
-    console.log("IS NULL");
-    output = <div>
-    <Switch>
-      <Route exact path="/" component={AuctionPage} />
-      <Route exact path="/rep" component={RepPage} />
-      <Route exact path="/vote" component={GovernancePage} />
-      <Route component={NotFoundPage} />
-    </Switch>
-    <Footer />
-    </div>
+    if (balance > 0) {
+      output = <div>
+      <Switch>
+        <Route exact path="/" component={AuctionPage} />
+        <Route exact path="/rep" component={RepPage} />
+        <Route exact path="/vote" component={GovernancePage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+      <Footer />
+      </div>
+    }
   }
 
 
