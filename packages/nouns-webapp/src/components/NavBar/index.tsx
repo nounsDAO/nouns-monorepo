@@ -73,6 +73,7 @@ const NavBar = () => {
   console.log(balance);
 
   if (activeAccount !== undefined) {
+    //return to > 0 after testing
     if (balance >= 0) {
       output =
         <Navbar
