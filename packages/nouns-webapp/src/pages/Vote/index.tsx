@@ -56,29 +56,6 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const getCountdownCopy = (
-  proposal: PartialProposal,
-  currentBlock: number,
-  locale: SupportedLocale,
-) => {
-  const timestamp = Date.now();
-  const endDate =
-    proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
-      : undefined;
-
-  return (
-    <>
-      {dayjs(endDate)
-        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
-        .fromNow(true)}
-    </>
-  );
-};
-
 const getUpdatableCountdownCopy = (
   proposal: PartialProposal,
   currentBlock: number,
@@ -548,7 +525,6 @@ const VotePage = ({
                   </p>
 
                   <div className="d-flex gap-3">
-                    {/* {(isAwaitingStateChange || isAwaitingDestructiveStateChange) && ( */}
                     <>
                       {isAwaitingStateChange() && (
                         <Button
@@ -585,8 +561,6 @@ const VotePage = ({
                         </Button>
                       )}
                     </>
-                    {/* )} */}
-
                     {isProposer() && isUpdateable() && (
                       <Link
                         to={`/vote/${id}/edit`}
