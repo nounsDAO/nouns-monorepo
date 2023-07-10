@@ -146,39 +146,53 @@ const NavBar = () => {
         </Navbar>
     } else {
       output =
+      <div>
       <Container className={classes.centerScreen}>
         <div>
             <div style={{textAlign: 'center'}}>
               <img
-                style={{ width: '10rem'}}
+                className={classes.centeredLogo}
                 src={logo}
                 alt="ATX DAO Logo"
               ></img>
             </div>
-            <p>
-            We're looking for a membership associated with this address.<br/>
-            Click below if you would like to try another account.
-            </p>
+            <h4 style={{ paddingTop: '20rem'}}>
+            Membership Check
+            </h4>
             <div className={classes.center}>
               <NavWallet address={activeAccount || '0'} />{' '}
             </div>
         </div>
       </Container>
+      <body className={classes.loaderContainer}>
+          <img
+            className={classes.centeredLogo}
+            style={{ width: '10rem'}}
+            src={logo}
+            alt="ATX DAO Logo"
+          ></img>
+          <div className={classes.loader}>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+          </div>
+      </body>
+      </div>
     }
   }
   else {
     output =
     <Container className={classes.centerScreen}>
       <div>
-          <div style={{textAlign: 'center'}}>
-            <img
-              style={{ width: '10rem'}}
-              src={logo}
-              alt="ATX DAO Logo"
-            ></img>
-          </div>
+          <img
+            style={{ width: '10rem', paddingBottom: '3rem'}}
+            src={logo}
+            alt="ATX DAO Logo"
+          ></img>
+          <h3>ATX DAO Member Portal</h3>
           <p>
-          Welcome to the ATX DAO Member Portal!<br/> Please verify your membership.
+          Please verify your membership
           </p>
           <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
       </div>
