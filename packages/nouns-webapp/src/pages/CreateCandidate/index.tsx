@@ -155,6 +155,7 @@ const CreateCandidatePage = () => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
+      0,// proposalIdToUpdate
       { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
@@ -204,7 +205,7 @@ const CreateCandidatePage = () => {
 
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
-          <Link to={'/vote'}>
+          <Link to={'/vote#candidates'}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
