@@ -80,9 +80,9 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 const supportedChainURLs = {
+  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
   [ChainId.Hardhat]: 'http://localhost:8545',
-  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId.Polygon]: createNetworkHttpUrl('polygon')
 };
 
