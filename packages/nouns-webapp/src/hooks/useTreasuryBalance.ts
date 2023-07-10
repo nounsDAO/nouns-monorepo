@@ -33,5 +33,5 @@ export const useTreasuryUSDValue = () => {
   const ethValue = etherPrice * treasuryBalanceETH
   const zero = BigNumber.from(0);
   const usdcBalance = useUSDCBalance()?.div(10**6);
-  return (usdcBalance ?? zero).add(ethValue ?? zero);
+  return (usdcBalance ?? zero);
 };

@@ -84,7 +84,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='http://google.com';
+              window.location.href='https://app.charmverse.io/atx-dao/page-6656633176995772';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
                 <b>Innovation Guild</b><br/>
@@ -96,7 +96,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='http://google.com';
+              window.location.href='https://app.charmverse.io/atx-dao/page-11010455919205131';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
                 <b>Community Guild</b><br/>
@@ -108,7 +108,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='http://google.com';
+              window.location.href='https://app.charmverse.io/atx-dao/page-11010455919205131';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem' }}>
               <p>
                 <b>Advocacy Guild</b><br/>

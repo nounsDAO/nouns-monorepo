@@ -32,15 +32,11 @@ import clsx from 'clsx';
 import { AtxDaoNFT, useNFTCall } from '../../wrappers/atxDaoNFT';
 
 const NavBar = () => {
-
-  console.log("Entered nav bar");
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
-  console.log("Entered nav bar 2");
-  // const treasuryBalance = useTreasuryUSDValue();
-  console.log("Entered nav bar 3");
+  const treasuryBalance = useTreasuryUSDValue();
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -87,7 +83,7 @@ const NavBar = () => {
                 <img src={logo} className={classes.navBarLogo} alt="ATX DAO Logo" />
               </Navbar.Brand>
               <Nav.Item>
-                {/* {treasuryBalance && (
+                {treasuryBalance && (
                   <Nav.Link
                     href={daoEtherscanLink}
                     className={classes.nounsNavLink}
@@ -99,7 +95,7 @@ const NavBar = () => {
                       treasuryStyle={nonWalletButtonStyle}
                     />
                   </Nav.Link>
-                )} */}
+                )}
               </Nav.Item>
             </div>
             <Navbar.Toggle
