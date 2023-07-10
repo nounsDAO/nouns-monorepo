@@ -1105,7 +1105,6 @@ export const useActivePendingUpdatableProposers = () => {
   const { loading, data: proposals, error } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as { loading: boolean, data: { proposals: ProposalProposerAndSigners[] }, error: Error };
   let data: string[] = [];
   proposals?.proposals.length > 0 && proposals.proposals.map((proposal) => {
-    console.log('proposal', proposal);
     data.push(proposal.proposer.id);
     proposal.signers.map((signer: { id: string; }) => {
       data.push(signer.id);
@@ -1152,3 +1151,16 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
   }
   return false;
 };
+
+export const useIsDaoGteV3 = (): boolean => {
+  const [forkDAODeployer] =
+    useContractCall({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'forkDAODeployer',
+    }) || [];
+  if (forkDAODeployer) {
+    return true;
+  }
+  return false
+}

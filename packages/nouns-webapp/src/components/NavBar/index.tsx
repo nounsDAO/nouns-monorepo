@@ -28,8 +28,10 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
+import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
 
 const NavBar = () => {
+  const isDaoGteV3 = useIsDaoGteV3();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -50,6 +52,48 @@ const NavBar = () => {
       : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
+
+  const v3DaoNavItem = <NavDropdown buttonText="DAO" buttonIcon={<FontAwesomeIcon icon={faUsers} />} buttonStyle={nonWalletButtonStyle}>
+    <Dropdown.Item
+      className={clsx(
+        usePickByState(
+          navDropdownClasses.whiteInfoSelectedBottom,
+          navDropdownClasses.coolInfoSelected,
+          navDropdownClasses.warmInfoSelected,
+          history,
+        ),
+      )}
+      href="/vote"
+    >
+      <Trans>Proposals</Trans>
+    </Dropdown.Item>
+    <Dropdown.Item
+      className={clsx(
+        usePickByState(
+          navDropdownClasses.whiteInfoSelectedBottom,
+          navDropdownClasses.coolInfoSelected,
+          navDropdownClasses.warmInfoSelected,
+          history,
+        ),
+      )}
+      href="/vote#candidates"
+    >
+      <Trans>Candidates</Trans>
+    </Dropdown.Item>
+    <Dropdown.Item
+      className={clsx(
+        usePickByState(
+          navDropdownClasses.whiteInfoSelectedBottom,
+          navDropdownClasses.coolInfoSelected,
+          navDropdownClasses.warmInfoSelected,
+          history,
+        ),
+      )}
+      href="/fork"
+    >
+      <Trans>Fork</Trans>
+    </Dropdown.Item>
+  </NavDropdown>;
 
   return (
     <>
@@ -100,78 +144,58 @@ const NavBar = () => {
                 onClick={closeNav}
               >
                 <NavBarButton
-                  buttonText={<Trans>Proposals</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={faFile} />}
+                  buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faUsers} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/vote#candidates"
-                className={classes.nounsNavLink}
-                onClick={closeNav}
-              >
-                <NavBarButton
-                  buttonText={<Trans>Candidates</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
-                  buttonStyle={nonWalletButtonStyle}
-                />
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/fork"
-                className={classes.nounsNavLink}
-                onClick={closeNav}
-              >
-                <NavBarButton
-                  buttonText={<Trans>Fork</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
-                  buttonStyle={nonWalletButtonStyle}
-                />
-              </Nav.Link>
+              {isDaoGteV3 && (
+                <>
+                  <Nav.Link
+                    as={Link}
+                    to="/vote#candidates"
+                    className={classes.nounsNavLink}
+                    onClick={closeNav}
+                  >
+                    <NavBarButton
+                      buttonText={<Trans>Candidates</Trans>}
+                      buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      buttonStyle={nonWalletButtonStyle}
+                    />
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/fork"
+                    className={classes.nounsNavLink}
+                    onClick={closeNav}
+                  >
+                    <NavBarButton
+                      buttonText={<Trans>Fork</Trans>}
+                      buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
+                      buttonStyle={nonWalletButtonStyle}
+                    />
+                  </Nav.Link>
+                </>
+              )}
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
-              <NavDropdown buttonText="DAO" buttonIcon={<FontAwesomeIcon icon={faUsers} />} buttonStyle={nonWalletButtonStyle}>
-                <Dropdown.Item
-                  className={clsx(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                      history,
-                    ),
-                  )}
-                  href="/vote"
+              {isDaoGteV3 ? (
+                v3DaoNavItem
+              ) :
+                <Nav.Link
+                  as={Link}
+                  to="/vote"
+                  className={classes.nounsNavLink}
+                  onClick={closeNav}
                 >
-                  <Trans>Proposals</Trans>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={clsx(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                      history,
-                    ),
-                  )}
-                  href="/vote#candidates"
-                >
-                  <Trans>Candidates</Trans>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={clsx(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                      history,
-                    ),
-                  )}
-                  href="/fork"
-                >
-                  <Trans>Fork</Trans>
-                </Dropdown.Item>
-              </NavDropdown>
+                  <NavBarButton
+                    buttonText={<Trans>DAO</Trans>}
+                    buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                    buttonStyle={nonWalletButtonStyle}
+                  />
+                </Nav.Link>
+              }
+
             </div>
             <Nav.Link
               href={externalURL(ExternalURL.nounsCenter)}
