@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, ethereum } from '@graphprotocol/graph-ts';
 import {
   Account,
   Delegate,
@@ -12,6 +12,7 @@ import {
   ProposalCandidateSignature,
   ProposalFeedback,
   Fork,
+  ProposalCandidateContent,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -186,6 +187,14 @@ export function getOrCreateProposalCandidateVersion(id: string): ProposalCandida
   return version;
 }
 
+export function getOrCreateProposalCandidateContent(id: string): ProposalCandidateContent {
+  let content = ProposalCandidateContent.load(id);
+  if (content == null) {
+    content = new ProposalCandidateContent(id);
+  }
+  return content;
+}
+
 export function getOrCreateProposalCandidateSignature(id: string): ProposalCandidateSignature {
   let sig = ProposalCandidateSignature.load(id);
   if (sig == null) {
@@ -211,4 +220,57 @@ export function getOrCreateFork(id: BigInt): Fork {
     fork.tokensForkingCount = 0;
   }
   return fork;
+}
+
+function keccak256Bytes(bytes: Bytes): Bytes {
+  return Bytes.fromByteArray(crypto.keccak256(bytes));
+}
+
+/**
+ * encodes the proposal content as done in `NounsDAOV3Proposals.calcProposalEncodeData`
+ * and hashes it with keccak256
+ */
+export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): Bytes {
+  let signatureHashes = Bytes.fromUTF8('');
+  for (let i = 0; i < proposal.signatures!.length; i++) {
+    signatureHashes = signatureHashes.concat(
+      keccak256Bytes(Bytes.fromUTF8(proposal.signatures![i])),
+    );
+  }
+  let calldatasHashes = Bytes.fromUTF8('');
+  for (let i = 0; i < proposal.calldatas!.length; i++) {
+    calldatasHashes = calldatasHashes.concat(keccak256Bytes(proposal.calldatas![i]));
+  }
+  let targetsConcat = Bytes.fromUTF8('');
+  for (let i = 0; i < proposal.targets!.length; i++) {
+    targetsConcat = targetsConcat.concat(
+      Bytes.fromHexString(proposal.targets![i].toHex().replace('0x', '').padStart(64, '0')),
+    );
+  }
+  let valuesConcat = Bytes.fromUTF8('');
+  for (let i = 0; i < proposal.values!.length; i++) {
+    valuesConcat = valuesConcat.concat(
+      Bytes.fromHexString(proposal.values![i].toHex().replace('0x', '').padStart(64, '0')),
+    );
+  }
+
+  let params = new ethereum.Tuple();
+  params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer)));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(targetsConcat)));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(valuesConcat)));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(signatureHashes)));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(calldatasHashes)));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description))));
+
+  let proposalEncodeData = ethereum.encode(ethereum.Value.fromTuple(params))!;
+
+  if (isUpdate) {
+    const proposalId = Bytes.fromHexString(
+      BigInt.fromString(proposal.id).toHex().replace('0x', '').padStart(64, '0'),
+    );
+    proposalEncodeData = proposalId.concat(proposalEncodeData);
+  }
+
+  const hashedProposal = keccak256Bytes(proposalEncodeData);
+  return hashedProposal;
 }

@@ -439,6 +439,20 @@ type ProposalCandidateVersion @entity(immutable: true) {
   "The version's creation block"
   createdBlock: BigInt!
 
+  "The update message of this version, relevant when it's an update"
+  updateMessage: String!
+
+  "The proposal content"
+  content: ProposalCandidateContent!
+}
+
+type ProposalCandidateContent @entity {
+  "The encoded proposal hash"
+  id: ID!
+
+  "The proposer account"
+  proposer: Bytes!
+
   "Targets data for the change"
   targets: [Bytes!]
 
@@ -454,25 +468,28 @@ type ProposalCandidateVersion @entity(immutable: true) {
   "The full proposal description, which includes the title"
   description: String!
 
+  "The proposal id that this content is updating. 0 if it's a new proposal"
+  proposalIdToUpdate: BigInt!
+
   "The proposal title, parsed from the description"
   title: String!
 
-  "The hash of the abi encoded proposal data"
+  "The encoded proposal hash in bytes"
   encodedProposalHash: Bytes!
 
-  "The update message of this version, relevant when it's an update"
-  updateMessage: String!
+  "IDs of proposals (not candidates) with the same content"
+  matchingProposalIds: [BigInt!]
 
-  "This version's signatures by signers"
-  versionSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "version")
+  "This proposal's content signatures by signers"
+  contentSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "content")
 }
 
 type ProposalCandidateSignature @entity {
   "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
   id: ID!
 
-  "The candidate version this signature is signing on"
-  version: ProposalCandidateVersion!
+  "The candidate content this signature is signing on"
+  content: ProposalCandidateContent!
 
   "The signing account"
   signer: Delegate!

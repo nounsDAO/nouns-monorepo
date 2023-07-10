@@ -378,6 +378,9 @@ export function createProposalCandidateCreatedEvent(
   );
   newEvent.parameters.push(new ethereum.EventParam('slug', ethereum.Value.fromString(slug)));
   newEvent.parameters.push(
+    new ethereum.EventParam('proposalIdToUpdate', ethereum.Value.fromUnsignedBigInt(BIGINT_ZERO)),
+  );
+  newEvent.parameters.push(
     new ethereum.EventParam('encodedProposalHash', ethereum.Value.fromBytes(encodedProposalHash)),
   );
 
@@ -408,6 +411,9 @@ export function createSignatureAddedEvent(
     new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
   );
   newEvent.parameters.push(new ethereum.EventParam('slug', ethereum.Value.fromString(slug)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposalIdToUpdate', ethereum.Value.fromUnsignedBigInt(BIGINT_ZERO)),
+  );
   newEvent.parameters.push(
     new ethereum.EventParam('encodedPropHash', ethereum.Value.fromBytes(encodedPropHash)),
   );

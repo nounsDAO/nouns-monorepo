@@ -3,49 +3,13 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
+import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAODataEvents.sol';
 import { NounsDAODataProxy } from '../../contracts/governance/data/NounsDAODataProxy.sol';
 import { NounsTokenLikeMock } from './helpers/NounsTokenLikeMock.sol';
 import { NounsDAOV3Proposals } from '../../contracts/governance/NounsDAOV3Proposals.sol';
 import { SigUtils } from './helpers/SigUtils.sol';
 
-contract NounsDAODataTest is Test, SigUtils {
-    event ProposalCandidateCreated(
-        address indexed msgSender,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description,
-        string slug,
-        bytes32 encodedProposalHash
-    );
-    event ProposalCandidateUpdated(
-        address indexed msgSender,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description,
-        string slug,
-        bytes32 encodedProposalHash,
-        string reason
-    );
-    event ProposalCandidateCanceled(address indexed msgSender, string slug);
-    event SignatureAdded(
-        address indexed signer,
-        bytes sig,
-        uint256 expirationTimestamp,
-        address proposer,
-        string slug,
-        bytes32 encodedPropHash,
-        bytes32 sigDigest,
-        string reason
-    );
-    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint96 votes, uint8 support, string reason);
-    event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
-    event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
-    event ETHWithdrawn(address indexed to, uint256 amount);
-
+contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
     NounsTokenLikeMock tokenLikeMock;
     NounsDAODataProxy proxy;
     NounsDAOData data;
@@ -74,7 +38,49 @@ contract NounsDAODataTest is Test, SigUtils {
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, 'description', 'slug');
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, 'description', 'slug', 0);
+    }
+
+    function test_encodedPropDigest() public {
+        // Used to compare values with the subgraph code generating the same thing
+        // see calcEncodedProposalHash in helpers.ts
+        string memory description = 'some description';
+        address target = address(0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa);
+        address proposer = address(0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB);
+        uint256 value = 300;
+        string memory signature = 'some signature';
+        bytes memory callData = 'some data';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(target, value, signature, callData);
+
+        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        bytes32 digest = keccak256(encodedProp);
+
+        assertEq(digest, 0xcf95b7d08d761ff0bf1223220f45b79baffbce6c8bcceb8df5399cbc6d22c40d);
+
+        address[] memory targets = new address[](2);
+        targets[0] = target;
+        targets[1] = 0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC;
+        uint256[] memory values = new uint256[](2);
+        values[0] = value;
+        values[1] = 500;
+        string[] memory signatures = new string[](2);
+        signatures[0] = signature;
+        signatures[1] = 'hello()';
+        bytes[] memory calldatas = new bytes[](2);
+        calldatas[0] = callData;
+        calldatas[1] = hex'aabbccdd';
+
+        txs = NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
+        encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        digest = keccak256(encodedProp);
+
+        assertEq(digest, 0x5d6f3b870407fff8109c6c9469173eef879d0d2eaf3de0fb5770b7f48f760101);
+
+        uint256 proposalIdToUpdate = 1;
+        encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
+        digest = keccak256(encodedProp);
+
+        assertEq(digest, 0xdc10157349778884412d140419c22ab67aa7a84a4f23dead50533a9aca0fbb28);
     }
 
     function test_createProposalCandidate_worksForNouner() public {
@@ -93,10 +99,11 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             description,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
         );
 
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
     function test_createProposalCandidate_worksForNonNounerWithEnoughPayment() public {
@@ -113,6 +120,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             description,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
         );
 
@@ -122,7 +130,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
     }
 
@@ -143,10 +152,11 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             description,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
         );
 
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
     function test_createProposalCandidate_revertsOnSlugReuseBySameProposer() public {
@@ -154,10 +164,10 @@ contract NounsDAODataTest is Test, SigUtils {
         string memory slug = 'some slug';
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugAlreadyUsed.selector));
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
     function test_createProposalCandidate_worksWithSameSlugButDifferentProposers() public {
@@ -167,10 +177,10 @@ contract NounsDAODataTest is Test, SigUtils {
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
         tokenLikeMock.setPriorVotes(otherProposer, block.number - 1, 1);
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
 
         vm.prank(otherProposer);
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
     function test_updateProposalCandidate_revertsForNonNounerAndNoPayment() public {
@@ -183,7 +193,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
@@ -194,6 +205,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             description,
             slug,
+            0,
             'reason'
         );
     }
@@ -210,6 +222,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             'description',
             'slug',
+            0,
             'reason'
         );
     }
@@ -219,7 +232,7 @@ contract NounsDAODataTest is Test, SigUtils {
         string memory description = 'some description';
         string memory slug = 'some slug';
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
-        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
         string memory updateDescription = 'new description';
 
         vm.expectEmit(true, true, true, true);
@@ -231,6 +244,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
@@ -242,6 +256,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             'reason'
         );
     }
@@ -256,7 +271,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
         string memory updateDescription = 'new description';
 
@@ -269,6 +285,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
@@ -280,6 +297,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             'reason'
         );
     }
@@ -296,7 +314,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
         string memory updateDescription = 'new description';
 
@@ -309,6 +328,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
@@ -320,6 +340,7 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
+            0,
             'reason'
         );
     }
@@ -337,7 +358,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             'description',
-            'slug'
+            'slug',
+            0
         );
 
         vm.expectEmit(true, true, true, true);
@@ -352,7 +374,7 @@ contract NounsDAODataTest is Test, SigUtils {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugDoesNotExist.selector));
         vm.prank(signer);
-        data.addSignature(sig, 1234, address(this), 'slug', 'encoded proposal', 'reason');
+        data.addSignature(sig, 1234, address(this), 'slug', 0, 'encoded proposal', 'reason');
     }
 
     function test_addSignature_revertsWhenSenderIsntSigner() public {
@@ -365,7 +387,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
 
         (, uint256 signerKey) = makeAddrAndKey('signer');
@@ -386,7 +409,7 @@ contract NounsDAODataTest is Test, SigUtils {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.InvalidSignature.selector));
         vm.prank(makeAddr('not signer'));
-        data.addSignature(sig, expiration, proposer, slug, encodedProp, reason);
+        data.addSignature(sig, expiration, proposer, slug, 0, encodedProp, reason);
     }
 
     function test_addSignature_emitsEvent() public {
@@ -399,7 +422,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             description,
-            slug
+            slug,
+            0
         );
 
         (address signer, uint256 signerKey) = makeAddrAndKey('signer');
@@ -425,10 +449,10 @@ contract NounsDAODataTest is Test, SigUtils {
         );
 
         vm.expectEmit(true, true, true, true);
-        emit SignatureAdded(signer, sig, expiration, proposer, slug, keccak256(encodedProp), sigDigest, reason);
+        emit SignatureAdded(signer, sig, expiration, proposer, slug, 0, keccak256(encodedProp), sigDigest, reason);
 
         vm.prank(signer);
-        data.addSignature(sig, expiration, proposer, slug, encodedProp, reason);
+        data.addSignature(sig, expiration, proposer, slug, 0, encodedProp, reason);
     }
 
     function test_sendFeedback_revertsForNonNouner() public {

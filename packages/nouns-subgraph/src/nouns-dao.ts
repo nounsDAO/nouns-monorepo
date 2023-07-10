@@ -1,4 +1,4 @@
-import { Bytes, log, ethereum, store } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store, BigInt } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -29,6 +29,7 @@ import {
   getOrCreateDynamicQuorumParams,
   getOrCreateProposalVersion,
   getOrCreateFork,
+  calcEncodedProposalHash,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -50,6 +51,7 @@ import {
   ForkJoin,
   ForkJoinedNoun,
   EscrowedNoun,
+  ProposalCandidateContent,
 } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
@@ -127,7 +129,7 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
 
   proposal.save();
 
-  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal);
+  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal, false);
 }
 
 export function handleProposalUpdated(event: ProposalUpdated): void {
@@ -148,6 +150,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -165,6 +168,7 @@ export function handleProposalDescriptionUpdated(event: ProposalDescriptionUpdat
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -184,6 +188,7 @@ export function handleProposalTransactionsUpdated(event: ProposalTransactionsUpd
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -337,6 +342,7 @@ function captureProposalVersion(
   txHash: string,
   logIndex: string,
   proposal: Proposal,
+  isUpdate: boolean,
   updateMessage: string = '',
 ): void {
   const versionId = txHash.concat('-').concat(logIndex);
@@ -351,6 +357,18 @@ function captureProposalVersion(
   previousVersion.description = proposal.description;
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
+
+  markProposalCandidateIfExists(proposal, isUpdate);
+}
+
+function markProposalCandidateIfExists(proposal: Proposal, isUpdate: boolean): void {
+  const hash = calcEncodedProposalHash(proposal, isUpdate);
+  const candidate = ProposalCandidateContent.load(hash.toHexString());
+  if (candidate !== null) {
+    const ids = candidate.matchingProposalIds || [];
+    candidate.matchingProposalIds = ids!.concat([BigInt.fromString(proposal.id)]);
+    candidate.save();
+  }
 }
 
 export function handleEscrowedToFork(event: EscrowedToFork): void {

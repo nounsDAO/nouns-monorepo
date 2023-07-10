@@ -5,10 +5,12 @@ import {
   describe,
   beforeEach,
   afterEach,
+  log,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   ProposalCandidate,
+  ProposalCandidateContent,
   ProposalCandidateSignature,
   ProposalCandidateVersion,
 } from '../src/types/schema';
@@ -83,18 +85,20 @@ describe('nouns-dao-data', () => {
       assert.bigIntEquals(blockTimestamp, candidate.createdTimestamp);
       assert.bigIntEquals(blockNumber, candidate.createdBlock);
 
-      const version = ProposalCandidateVersion.load(candidate.latestVersion!)!;
+      const version = ProposalCandidateVersion.load(candidate.latestVersion)!;
       assert.stringEquals(candidate.id, version.proposal);
       assert.bigIntEquals(blockTimestamp, version.createdTimestamp);
       assert.bigIntEquals(blockNumber, version.createdBlock);
-      assert.bytesEquals(targets[0], version.targets![0]);
-      assert.bigIntEquals(values[0], version.values![0]);
-      assert.stringEquals(signatures[0], version.signatures![0]);
-      assert.bytesEquals(calldatas[0], version.calldatas![0]);
-      assert.stringEquals(description, version.description);
-      assert.stringEquals(title, version.title);
-      assert.bytesEquals(encodedProposalHash, version.encodedProposalHash);
       assert.stringEquals('', version.updateMessage);
+
+      const content = ProposalCandidateContent.load(version.content)!;
+      assert.bytesEquals(targets[0], content.targets![0]);
+      assert.bigIntEquals(values[0], content.values![0]);
+      assert.stringEquals(signatures[0], content.signatures![0]);
+      assert.bytesEquals(calldatas[0], content.calldatas![0]);
+      assert.stringEquals(description, content.description);
+      assert.stringEquals(title, content.title);
+      assert.bytesEquals(encodedProposalHash, content.encodedProposalHash);
     });
 
     test('add signature', () => {
@@ -120,14 +124,15 @@ describe('nouns-dao-data', () => {
         candidateProposer.toHexString().concat('-').concat(slug),
       )!;
 
-      const version = ProposalCandidateVersion.load(candidate.latestVersion!);
-      assert.i32Equals(version!.versionSignatures.length, 1);
+      const version = ProposalCandidateVersion.load(candidate.latestVersion);
+      const content = ProposalCandidateContent.load(version!.content);
+      assert.i32Equals(content!.contentSignatures.length, 1);
       assert.stringEquals(
-        version!.versionSignatures[0],
+        content!.contentSignatures[0],
         signerWithDelegate.toHexString().concat('-').concat(sig.toHexString()),
       );
 
-      const signature = ProposalCandidateSignature.load(version!.versionSignatures[0])!;
+      const signature = ProposalCandidateSignature.load(content!.contentSignatures[0])!;
       assert.stringEquals(signature.signer, signerWithDelegate.toHexString());
       assert.bytesEquals(signature.sig, sig);
       assert.bigIntEquals(signature.expirationTimestamp, expiry);
