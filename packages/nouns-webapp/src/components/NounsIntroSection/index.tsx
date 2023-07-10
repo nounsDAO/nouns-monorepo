@@ -1,10 +1,10 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Col, Nav, Card } from 'react-bootstrap';
+import { Col, Row, Nav, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
-import distributionImage from '../../assets/distribution.svg';
-import guildsImage from '../../assets/squares.png';
+import distributionImage from '../../assets/givingCircle.jpeg';
+import guildsImage from '../../assets/gala.jpeg';
 import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 
 const NounsIntroSection = () => {
@@ -28,18 +28,19 @@ const NounsIntroSection = () => {
             title="Google Calendar"
             frameBorder="1"
           ></iframe>
-
-          <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
-            This is the official ATX DAO events calendar - click the plus button to add it!
-          </small>
+          <Row style={{textAlign:'center'}}>
+            <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
+              This is the official ATX DAO events calendar - click the plus button to add it!
+            </small>
+          </Row>
         </Col>
       </Section>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6} className={classes.guildImgContainer}>
-          <img src={guildsImage} className={classes.guildImg}/>
-          <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
-
-          </small>
+        <Col lg={6}>
+          <div className={classes.container}>
+            <img style ={{marginLeft:'-100px', width:'130%', border:'2px solid #555'}} src={guildsImage} alt="Giving Circle Photo" />
+            <div className={classes.overlay}></div>
+          </div>
         </Col>
 
         <Col lg={6} className={`order-lg-2 order-1`}>
@@ -48,7 +49,7 @@ const NounsIntroSection = () => {
               Get Involved
             </h1>
             <p>
-              Check out the Guild Pages to see ongoing projects!
+              Check out the Guild Pages for related projects!
             </p>
             <Card
             className={classes.card}
@@ -111,8 +112,11 @@ const NounsIntroSection = () => {
             </p>
           </div>
         </Col>
-        <Col lg={6} className={classes.iosImgContainer}>
-          <img src={distributionImage} className={classes.iosImg} alt="Giving Circle Illustration" />
+        <Col lg={6}>
+          <div className={classes.container}>
+            <img style ={{width:'100%', border:'2px solid #555'}} src={distributionImage} alt="Giving Circle Photo" />
+            <div className={classes.overlay}></div>
+          </div>
         </Col>
       </Section>
     </>
