@@ -23,11 +23,8 @@ import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
-import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
 contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
-    using Address for address payable;
-
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -134,9 +131,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
 
-        if (msg.value > 0) {
-            feeRecipient.sendValue(msg.value);
-        }
+        sendValueToRecipient();
 
         emit ProposalCandidateCreated(
             msg.sender,
@@ -185,9 +180,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
 
-        if (msg.value > 0) {
-            feeRecipient.sendValue(msg.value);
-        }
+        sendValueToRecipient();
 
         emit ProposalCandidateUpdated(
             msg.sender,
@@ -343,6 +336,15 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      *   INTERNAL
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    function sendValueToRecipient() internal {
+        address feeRecipient_ = feeRecipient;
+        if (msg.value > 0 && feeRecipient_ != address(0)) {
+            // choosing to not revert upon failure here because owner can always use
+            // the withdraw function instead.
+            feeRecipient_.call{ value: msg.value }('');
+        }
+    }
 
     function isNouner(address account) internal view returns (bool) {
         return nounsToken.getPriorVotes(account, block.number - PRIOR_VOTES_BLOCKS_AGO) > 0;

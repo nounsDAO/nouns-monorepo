@@ -140,6 +140,42 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         assertEq(feeRecipient.balance - recipientBalanceBefore, data.createCandidateCost());
     }
 
+    function test_createProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+
+        vm.prank(dataAdmin);
+        data.setFeeRecipient(payable(address(0)));
+
+        uint256 contractBalanceBefore = address(data).balance;
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCandidateCreated(
+            address(this),
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0,
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+        );
+
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0
+        );
+
+        assertEq(address(data).balance - contractBalanceBefore, data.createCandidateCost());
+    }
+
     function test_createProposalCandidate_worksForNonNounerWhenPaymentConfigIsZero() public {
         vm.prank(dataAdmin);
         data.setCreateCandidateCost(0);
@@ -308,6 +344,54 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         );
 
         assertEq(feeRecipient.balance - recipientBalanceBefore, data.updateCandidateCost());
+    }
+
+    function test_updateProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0
+        );
+        string memory updateDescription = 'new description';
+
+        vm.prank(dataAdmin);
+        data.setFeeRecipient(payable(address(0)));
+
+        uint256 contractBalanceBefore = address(data).balance;
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCandidateUpdated(
+            address(this),
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            0,
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            'reason'
+        );
+
+        data.updateProposalCandidate{ value: data.updateCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            0,
+            'reason'
+        );
+
+        assertEq(address(data).balance - contractBalanceBefore, data.updateCandidateCost());
     }
 
     function test_updateProposalCandidate_worksForNonNounerWhenPaymentConfigIsZero() public {
