@@ -114,7 +114,7 @@
 .nounBirthday > div {
   opacity: 0.6;
   font-size: 0.8rem;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   line-height: 1;
   /* override fixed dimensions set for use on auction page */
@@ -141,7 +141,7 @@ h2 {
 .activityLink {
   text-align: center;
   font-size: 1rem;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   margin-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -164,7 +164,7 @@ h2 {
   margin-bottom: 0;
   padding: 15px;
   border-radius: var(--border-radius);
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
 }
 
 .traitsList li {
@@ -203,7 +203,7 @@ h2 {
 }
 
 .detail h2 {
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .detailNounImage img {

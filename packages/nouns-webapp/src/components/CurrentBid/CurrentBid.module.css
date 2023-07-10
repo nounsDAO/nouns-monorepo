@@ -1,17 +1,17 @@
 .section span {
   font-size: 3rem;
   font-weight: bold;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 18px;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 32px;
   margin-bottom: 0px !important;

@@ -37,7 +37,7 @@
 .section h5 {
   font-size: 1.7rem;
   margin-top: 1rem;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .voterIneligibleAlert {
@@ -56,7 +56,7 @@
 .transitionStateButton {
   height: 50px;
   border-radius: 8px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 24px;
   transition: all 0.125s ease-in-out;
@@ -75,7 +75,7 @@
   height: 50px;
   border-radius: 8px;
   border-color: var(--brand-color-red);
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 24px;
   transition: all 0.125s ease-in-out;
@@ -91,7 +91,7 @@
 .destructiveTransitionStateButtonSection {
   height: 50px;
   border-radius: 8px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 24px;
   transition: all 0.125s ease-in-out;
@@ -119,18 +119,18 @@
 .voteMetadataRow h1 {
   font-size: 20px;
   color: var(--brand-gray-light-text);
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .voteMetadataRow span {
   font-size: 14px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   color: var(--brand-gray-light-text);
 }
 
 .voteMetadataRow h3 {
   font-size: 18px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
 }
 

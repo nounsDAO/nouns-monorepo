@@ -1,10 +1,10 @@
 .wrapper {
   height: 40px;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  font-family: 'Inter';
+  font-weight: 600;
   padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;
   box-shadow: none !important;

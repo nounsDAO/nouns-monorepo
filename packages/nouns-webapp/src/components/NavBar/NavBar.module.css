@@ -59,8 +59,8 @@
 
 .disconnectBtn {
   cursor: pointer;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  font-family: 'Inter';
+  font-weight: medium;
 }
 
 .disconnectBtn:hover,
@@ -89,9 +89,9 @@
 .nounsNavLink:active,
 .nounsNavLink:visited,
 .nounsNavDropdownButton > button {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 0.9rem;
+  font-family: 'Inter';
+  font-weight: medium;
+  font-size: 16px;
   padding: 0.3rem 0.3rem !important;
   color: black !important;
 }
@@ -131,7 +131,7 @@
   border-radius: 10px;
   font-size: 16px;
   line-height: 16px;
-  font-family: 'PT Root UI';
+  font-family: 'Inter';
   font-weight: bold;
   padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;

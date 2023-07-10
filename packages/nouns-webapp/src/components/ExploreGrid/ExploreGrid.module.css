@@ -103,7 +103,7 @@
   padding: 4px 6px;
   line-height: 1;
   box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   font-size: clamp(14px, 0.8vw, 24px);
 }
 
@@ -152,7 +152,7 @@
 
 .exploreGrid li .label {
   text-align: center;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   margin: 0;
   padding: 0;
   opacity: 0;

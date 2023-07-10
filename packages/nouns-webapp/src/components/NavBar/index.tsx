@@ -156,8 +156,8 @@ const NavBar = () => {
               ></img>
             </div>
             <p>
-            We can't find a membership associated with this address.<br/>
-            Would you like to try another account?
+            We're looking for a membership associated with this address.<br/>
+            Click below if you would like to try another account.
             </p>
             <div className={classes.center}>
               <NavWallet address={activeAccount || '0'} />{' '}

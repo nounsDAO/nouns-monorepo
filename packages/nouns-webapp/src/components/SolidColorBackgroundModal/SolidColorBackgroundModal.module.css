@@ -36,7 +36,7 @@
 }
 
 .modal {
-  font-family: 'PT Root UI', sans-serif;
+  font-family: 'Calistoga', sans-serif;
   font-weight: bold;
   position: absolute;
   top: 15vh;
@@ -57,7 +57,7 @@
 }
 
 .modal .title {
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   display: flex;
   flex-direction: column;
 }

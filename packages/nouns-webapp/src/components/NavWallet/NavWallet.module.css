@@ -20,11 +20,12 @@
 }
 
 .connectContentMobileText {
-  font-family: 'PT Root UI';
+  font-family: 'Inter';
   font-weight: bold;
-  font-size: 18px;
-  margin-top: 1rem;
-  height: 2rem;
+  font-size: 16px;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  height: 1.5rem;
   width: fit-content;
 }
 

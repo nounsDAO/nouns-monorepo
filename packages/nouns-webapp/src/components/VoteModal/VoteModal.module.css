@@ -1,6 +1,6 @@
 .voteModalTitle {
   text-align: center;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   font-size: 36px;
 }
 
@@ -16,11 +16,11 @@
 }
 
 .voteModal {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
 }
 
 .propTitle {
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   font-size: 32px;
   margin-bottom: 5px;
 }
@@ -93,7 +93,7 @@
   font-size: 18px;
   margin-bottom: 2rem;
   text-align: center;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
 }
 
@@ -152,7 +152,7 @@
 }
 
 .gasFreeVotingCopy {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-size: 14px;
   color: var(--brand-gray-light-text);
   opacity: 0.75;

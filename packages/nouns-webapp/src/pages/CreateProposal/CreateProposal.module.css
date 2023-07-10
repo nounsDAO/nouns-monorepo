@@ -1,5 +1,5 @@
 .createProposalPage {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
 }
 
 .createProposalPage a {
@@ -14,7 +14,7 @@
 
 .heading {
   margin: 1rem 0;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   font-size: 42px;
 }
 
@@ -45,7 +45,7 @@
 .proposalActionButton {
   height: 50px;
   border-radius: 8px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 24px;
   transition: all 0.125s ease-in-out;
@@ -72,7 +72,7 @@
 .createProposalButton {
   height: 50px;
   border-radius: 8px;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: bold;
   font-size: 18px;
   transition: all 0.125s ease-in-out;

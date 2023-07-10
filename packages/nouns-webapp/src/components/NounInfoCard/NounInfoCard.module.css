@@ -1,7 +1,7 @@
 .nounInfoHeader {
   display: inline-block;
   padding-left: 0rem;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 @media only screen and (max-width: 600px) {
@@ -23,7 +23,7 @@
 }
 
 .nounInfoRow {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: 500;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -33,6 +33,6 @@
 
 .nounInfoRowText {
   padding-left: 4;
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-family: bold;
 }

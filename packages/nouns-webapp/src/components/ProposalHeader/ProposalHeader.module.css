@@ -13,12 +13,12 @@
 .headerRow span {
   color: #8c8d92;
   font-size: 24px;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 .headerRow h1 {
   color: #14161b;
   font-size: 42px;
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
 }
 
 .proposalStatus {
@@ -28,7 +28,7 @@
 
 .connectWalletText {
   color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: 500;
   font-size: 16px;
   min-width: 12rem;
@@ -37,7 +37,7 @@
 
 .noVotesText {
   color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: 500;
   font-size: 16px;
   margin-bottom: 1.15rem;
@@ -109,7 +109,7 @@
 }
 
 .voterIneligibleAlert {
-  font-family: 'PT Root UI';
+  font-family: 'Calistoga';
   font-weight: 500;
   background-color: #e2e3e8;
   color: black;
@@ -123,7 +123,7 @@
 }
 
 .byLineWrapper h3 {
-  font-family: 'Londrina Solid';
+  font-family: 'Inter';
   color: var(--brand-gray-light-text);
   margin-left: 3rem;
   font-size: 24px;
