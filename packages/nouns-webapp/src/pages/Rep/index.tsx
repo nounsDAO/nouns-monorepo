@@ -7,10 +7,18 @@ import { useAppSelector } from '../../hooks';
 import { RepTokens, useRepCall } from '../../wrappers/repTokens';
 import useFetch from './useFetch';
 import useCallJake from './useCallJake';
+import { CHAIN_ID } from '../../config';
 
 const RepPage = () => {
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  console.log(CHAIN_ID);
+  
+  if (CHAIN_ID === 1) {
+    //load through ethers
+  } else {
+    //load through usedapp
+  }
 
   // const testBalance = useCallJake('balanceOf', [activeAccount, 0]);
   // const testBalance2 = useCallJake('balanceOf', [activeAccount, 1]);
