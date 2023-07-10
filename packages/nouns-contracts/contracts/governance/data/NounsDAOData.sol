@@ -34,7 +34,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error MustBeNounerOrPaySufficientFee();
     error SlugAlreadyUsed();
     error SlugDoesNotExist();
-    error MustBeNouner();
     error AmountExceedsBalance();
     error FailedWithdrawingETH(bytes data);
     error InvalidSignature();
@@ -65,6 +64,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     uint256 public updateCandidateCost;
     /// @notice The state of which (proposer,slug) pairs have been used to create a proposal candidate.
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
+    /// @notice The account to send ETH fees to.
+    address payable public feeRecipient;
 
     constructor(address nounsToken_, address nounsDao_) {
         nounsToken = NounsTokenLike(nounsToken_);
@@ -80,12 +81,14 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     function initialize(
         address admin,
         uint256 createCandidateCost_,
-        uint256 updateCandidateCost_
+        uint256 updateCandidateCost_,
+        address payable feeRecipient_
     ) external initializer {
         _transferOwnership(admin);
 
         createCandidateCost = createCandidateCost_;
         updateCandidateCost = updateCandidateCost_;
+        feeRecipient = feeRecipient_;
     }
 
     /**
@@ -127,6 +130,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
+
+        sendValueToRecipient();
 
         emit ProposalCandidateCreated(
             msg.sender,
@@ -174,6 +179,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
+
+        sendValueToRecipient();
 
         emit ProposalCandidateUpdated(
             msg.sender,
@@ -257,10 +264,28 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         string memory reason
     ) external {
         if (support > 2) revert InvalidSupportValue();
-        uint96 votes = nounsToken.getPriorVotes(msg.sender, block.number - PRIOR_VOTES_BLOCKS_AGO);
-        if (votes == 0) revert MustBeNouner();
 
-        emit FeedbackSent(msg.sender, proposalId, votes, support, reason);
+        emit FeedbackSent(msg.sender, proposalId, support, reason);
+    }
+
+    /**
+     * @notice Send feedback on a proposal candidate. Meant to be used prior to submitting the candidate as a proposal,
+     * to help proposers refine their candidate.
+     * @param proposer the proposer of the candidate.
+     * @param slug the slug of the candidate.
+     * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
+     * @param reason their free text feedback.
+     */
+    function sendCandidateFeedback(
+        address proposer,
+        string memory slug,
+        uint8 support,
+        string memory reason
+    ) external {
+        if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
+        if (support > 2) revert InvalidSupportValue();
+
+        emit CandidateFeedbackSent(msg.sender, proposer, slug, support, reason);
     }
 
     /**
@@ -281,6 +306,13 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         updateCandidateCost = newUpdateCandidateCost;
 
         emit UpdateCandidateCostSet(oldUpdateCandidateCost, newUpdateCandidateCost);
+    }
+
+    function setFeeRecipient(address payable newFeeRecipient) external onlyOwner {
+        address oldFeeRecipient = feeRecipient;
+        feeRecipient = newFeeRecipient;
+
+        emit FeeRecipientSet(oldFeeRecipient, newFeeRecipient);
     }
 
     /**
@@ -304,6 +336,15 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      *   INTERNAL
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    function sendValueToRecipient() internal {
+        address feeRecipient_ = feeRecipient;
+        if (msg.value > 0 && feeRecipient_ != address(0)) {
+            // choosing to not revert upon failure here because owner can always use
+            // the withdraw function instead.
+            feeRecipient_.call{ value: msg.value }('');
+        }
+    }
 
     function isNouner(address account) internal view returns (bool) {
         return nounsToken.getPriorVotes(account, block.number - PRIOR_VOTES_BLOCKS_AGO) > 0;

@@ -25,10 +25,11 @@ contract DeployDAOV3DataContractsBase is Script {
         NounsDAOData dataLogic = new NounsDAOData(address(daoProxy.nouns()), address(daoProxy));
 
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,uint256,uint256)',
+            'initialize(address,uint256,uint256,address)',
             timelockV2Proxy,
             CREATE_CANDIDATE_COST,
-            0
+            0,
+            address(daoProxy)
         );
         dataProxy = new NounsDAODataProxy(address(dataLogic), initCallData);
 

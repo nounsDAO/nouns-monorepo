@@ -43,11 +43,6 @@
   },
   {
     "inputs": [],
-    "name": "MustBeNouner",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "MustBeNounerOrPaySufficientFee",
     "type": "error"
   },
@@ -97,6 +92,43 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "msgSender",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "slug",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "CandidateFeedbackSent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "oldCreateCandidateCost",
@@ -137,6 +169,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "oldFeeRecipient",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "FeeRecipientSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "msgSender",
         "type": "address"
       },
@@ -145,12 +196,6 @@
         "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint96",
-        "name": "votes",
-        "type": "uint96"
       },
       {
         "indexed": false,
@@ -553,6 +598,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "feeRecipient",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -568,6 +626,11 @@
         "internalType": "uint256",
         "name": "updateCandidateCost_",
         "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "feeRecipient_",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -648,6 +711,34 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "slug",
+        "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "support",
+        "type": "uint8"
+      },
+      {
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "sendCandidateFeedback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
@@ -677,6 +768,19 @@
       }
     ],
     "name": "setCreateCandidateCost",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "newFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeRecipient",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
