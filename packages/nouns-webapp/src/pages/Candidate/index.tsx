@@ -147,7 +147,7 @@ const CandidatePage = ({
       <Col lg={12} className={classes.wrapper}>
         {candidate.data && (
           <CandidateHeader
-            title={candidate.data.version.title}
+            title={candidate.data.version.content.title}
             id={candidate.data.id}
             proposer={candidate.data.proposer}
             versionsCount={candidate.data.versionsCount}

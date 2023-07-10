@@ -91,7 +91,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');
   };
-  const isolatedDescription = candidate.data?.version.description && removeTitleFromDescription(candidate.data.version.description, titleValue);
+  const isolatedDescription = candidate.data?.version.content.description && removeTitleFromDescription(candidate.data.version.content.description, titleValue);
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -139,13 +139,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
-      if (title === candidate.data?.version.title) {
+      if (title === candidate.data?.version.content.title) {
         setIsTitleEdited(false);
       } else {
         setIsTitleEdited(true);
       }
     },
-    [setTitleValue, candidate.data?.version.title],
+    [setTitleValue, candidate.data?.version.content.title],
   );
 
   const handleBodyInput = useCallback(
@@ -210,7 +210,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
   useEffect(() => {
     if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
-      const transactions = candidate.data?.version.details.map(
+      const transactions = candidate.data?.version.content.details.map(
         (txn: { target: any; value: any; callData: any; functionSig: any }) => {
           return {
             address: txn.target,
@@ -220,8 +220,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           };
         },
       );
-      setTitleValue(proposal.title);
-      setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
+      setTitleValue(proposal.content.title);
+      setBodyValue(removeTitleFromDescription(proposal.content.description, proposal.content.title));
       setProposalTransactions(transactions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -330,8 +330,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         </p>
         <p className="text-center pt-0">
           <>
-            {proposal && proposal.versionSignatures?.length > 0 ? (
-              <>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.versionSignatures?.length} signatures.</>
+            {proposal && proposal.content.contentSignatures?.length > 0 ? (
+              <>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.content.contentSignatures?.length} signatures.</>
             ) : (
               ''
             )}

@@ -107,11 +107,11 @@ function SignatureForm(props: Props) {
     if (proposalIdToUpdate) {
       const value = {
         proposer: props.candidate.proposer,
-        targets: props.candidate.version.targets,
-        values: props.candidate.version.values,
-        signatures: props.candidate.version.signatures,
-        calldatas: props.candidate.version.calldatas,
-        description: props.candidate.version.description,
+        targets: props.candidate.version.content.targets,
+        values: props.candidate.version.content.values,
+        signatures: props.candidate.version.content.signatures,
+        calldatas: props.candidate.version.content.calldatas,
+        description: props.candidate.version.content.description,
         expiry: expirationDate,
         proposalId: proposalIdToUpdate,
       };
@@ -120,11 +120,11 @@ function SignatureForm(props: Props) {
       if (!props.candidate) return;
       const value = {
         proposer: props.candidate.proposer,
-        targets: props.candidate.version.targets,
-        values: props.candidate.version.values,
-        signatures: props.candidate.version.signatures,
-        calldatas: props.candidate.version.calldatas,
-        description: props.candidate.version.description,
+        targets: props.candidate.version.content.targets,
+        values: props.candidate.version.content.values,
+        signatures: props.candidate.version.content.signatures,
+        calldatas: props.candidate.version.content.calldatas,
+        description: props.candidate.version.content.description,
         expiry: expirationDate,
       };
       signature = await signer!._signTypedData(domain, createProposalTypes, value).then(
@@ -148,11 +148,11 @@ function SignatureForm(props: Props) {
       setIsWaiting(true);
       const encodedProp = await calcProposalEncodeData(
         props.candidate.proposer,
-        props.candidate.version.targets,
-        props.candidate.version.values,
-        props.candidate.version.signatures,
-        props.candidate.version.calldatas,
-        props.candidate.version.description,
+        props.candidate.version.content.targets,
+        props.candidate.version.content.values,
+        props.candidate.version.content.signatures,
+        props.candidate.version.content.calldatas,
+        props.candidate.version.content.description,
       );
       // signature set, submit signature
       await addSignature(

@@ -57,11 +57,11 @@ export default function SelectSponsorsToPropose(props: Props) {
     const proposalSigs = selectedSignatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
     await proposeBySigs(
       proposalSigs,
-      props.candidate.version.targets,
-      props.candidate.version.values,
-      props.candidate.version.signatures,
-      props.candidate.version.calldatas,
-      props.candidate.version.description,
+      props.candidate.version.content.targets,
+      props.candidate.version.content.values,
+      props.candidate.version.content.signatures,
+      props.candidate.version.content.calldatas,
+      props.candidate.version.content.description,
     );
   }
 

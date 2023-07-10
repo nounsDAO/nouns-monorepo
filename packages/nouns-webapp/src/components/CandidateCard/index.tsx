@@ -34,12 +34,12 @@ function CandidateCard(props: Props) {
   const [currentBlock, setCurrentBlock] = useState<number>();
   const [signedVotes, setSignedVotes] = useState<number>(0);
   const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
-  const signers = deDupeSigners(props.candidate.latestVersion.versionSignatures?.map(signature => signature.signer.id));
+  const signers = deDupeSigners(props.candidate.latestVersion.content.contentSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, currentBlock ?? 0);
   const blockNumber = useBlockNumber();
   const activePendingProposers = useActivePendingUpdatableProposers();
   const filterSigners = (delegateSnapshot: Delegates, latestProposal?: PartialProposal) => {
-    const activeSigs = props.candidate.latestVersion.versionSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
+    const activeSigs = props.candidate.latestVersion.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     let votes = 0;
     let sigs: { reason: string; expirationTimestamp: number; sig: string; canceled: boolean; signer: { id: string; proposals: { id: string; }[]; }; }[] = [];
     activeSigs.forEach((signature) => {
@@ -78,7 +78,7 @@ function CandidateCard(props: Props) {
     >
       <div className={classes.title}>
         <span className={classes.candidateTitle}>
-          <span>{props.candidate.latestVersion.title}</span>
+          <span>{props.candidate.latestVersion.content.title}</span>
         </span>
         <p className={classes.proposer}>
           by{' '}

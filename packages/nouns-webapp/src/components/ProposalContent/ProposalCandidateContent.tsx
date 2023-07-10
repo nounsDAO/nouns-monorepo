@@ -45,12 +45,12 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
           <h5>
             <Trans>Description</Trans>
           </h5>
-          {proposal?.version.description && (
+          {proposal?.version.content.description && (
             <ReactMarkdown
               className={classes.markdown}
               children={processProposalDescriptionText(
-                proposal.version.description,
-                proposal.version.title,
+                proposal.version.content.description,
+                proposal.version.content.title,
               )}
               remarkPlugins={[remarkBreaks]}
             />
@@ -63,7 +63,7 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
             <h5>
               <Trans>Proposed Transactions</Trans>
             </h5>
-            <ProposalTransactions details={proposal.version.details} />
+            <ProposalTransactions details={proposal.version.content.details} />
           </Col>
         </Row>
       )}

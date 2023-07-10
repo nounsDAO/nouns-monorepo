@@ -51,7 +51,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const { account } = useEthers();
   const activePendingProposers = useActivePendingUpdatableProposers();
   const connectedAccountNounVotes = useUserVotes() || 0;
-  const signers = deDupeSigners(props.candidate.version.versionSignatures?.map(signature => signature.signer.id));
+  const signers = deDupeSigners(props.candidate.version.content.contentSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock);
   const handleSignerCountDecrease = (decreaseAmount: number) => {
     setSignedVotes(signedVotes => signedVotes - decreaseAmount);
@@ -66,14 +66,14 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   };
 
   useEffect(() => {
-    const activeSigs = props.candidate.version.versionSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
+    const activeSigs = props.candidate.version.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     if (activeSigs.filter(sig => sig.signer.id.toLowerCase() === account?.toLowerCase()).length > 0) {
       setIsAccountSigner(true);
     }
-  }, [account, props.candidate.version.versionSignatures]);
+  }, [account, props.candidate.version.content.contentSignatures]);
 
   const filterSigners = (delegateSnapshot: Delegates) => {
-    const activeSigs = props.candidate.version.versionSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
+    const activeSigs = props.candidate.version.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     let votes = 0;
     let sigs: { reason: string; expirationTimestamp: number; sig: string; canceled: boolean; signer: { id: string; proposals: { id: string; }[]; }; }[] = [];
     activeSigs.forEach((signature) => {

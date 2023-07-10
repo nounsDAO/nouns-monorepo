@@ -135,18 +135,20 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
       canceled
       createdTransactionHash
       latestVersion {
-        title
-        versionSignatures {
-          signer {
-            id
-            proposals {
+        content {
+          title
+          contentSignatures {
+            signer {
               id
+              proposals {
+                id
+              }
             }
+            sig
+            expirationTimestamp
+            canceled
+            reason
           }
-          sig
-          expirationTimestamp
-          canceled
-          reason
         }
       }
     }

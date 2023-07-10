@@ -38,7 +38,6 @@ const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDA
 export const useCreateProposalCandidate = () => {
   const { send: createProposalCandidate, state: createProposalCandidateState } =
     useContractFunction(nounsDAOData, 'createProposalCandidate');
-
   return { createProposalCandidate, createProposalCandidateState };
 };
 
@@ -189,15 +188,17 @@ const parseSubgraphCandidate = (
     versionsCount: candidate.versions.length,
     createdTransactionHash: candidate.createdTransactionHash,
     version: {
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-      description: description ?? 'No description.',
-      details: details,
-      transactionHash: details.encodedProposalHash,
-      versionSignatures: candidate.latestVersion.versionSignatures,
-      targets: candidate.latestVersion.targets,
-      values: candidate.latestVersion.values,
-      signatures: candidate.latestVersion.signatures,
-      calldatas: candidate.latestVersion.calldatas,
+      content: {
+        title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+        description: description ?? 'No description.',
+        details: details,
+        transactionHash: details.encodedProposalHash,
+        contentSignatures: candidate.latestVersion.versionSignatures,
+        targets: candidate.latestVersion.targets,
+        values: candidate.latestVersion.values,
+        signatures: candidate.latestVersion.signatures,
+        calldatas: candidate.latestVersion.calldatas,
+      }
     },
   };
 };
@@ -334,37 +335,15 @@ export interface ProposalCandidateVersionContent {
 }
 
 export interface ProposalCandidateVersion {
-  title: string;
-  description: string;
-  details: ProposalDetail[];
-  targets: string[];
-  values: string[];
-  signatures: string[];
-  calldatas: string[];
-  versionSignatures: {
-    reason: string;
-    expirationTimestamp: number;
-    sig: string;
-    canceled: boolean;
-    signer: {
-      id: string;
-      proposals: {
-        id: string;
-      }[];
-    };
-  }[];
-}
-
-export interface ProposalCandidate extends ProposalCandidateInfo {
-  version: ProposalCandidateVersion;
-}
-
-export interface PartialProposalCandidate extends ProposalCandidateInfo {
-  lastUpdatedTimestamp: number;
-  latestVersion: {
+  content: {
     title: string;
     description: string;
-    versionSignatures: {
+    details: ProposalDetail[];
+    targets: string[];
+    values: string[];
+    signatures: string[];
+    calldatas: string[];
+    contentSignatures: {
       reason: string;
       expirationTimestamp: number;
       sig: string;
@@ -376,6 +355,32 @@ export interface PartialProposalCandidate extends ProposalCandidateInfo {
         }[];
       };
     }[];
+  }
+}
+
+export interface ProposalCandidate extends ProposalCandidateInfo {
+  version: ProposalCandidateVersion;
+}
+
+export interface PartialProposalCandidate extends ProposalCandidateInfo {
+  lastUpdatedTimestamp: number;
+  latestVersion: {
+    content: {
+      title: string;
+      description: string;
+      contentSignatures: {
+        reason: string;
+        expirationTimestamp: number;
+        sig: string;
+        canceled: boolean;
+        signer: {
+          id: string;
+          proposals: {
+            id: string;
+          }[];
+        };
+      }[];
+    }
   };
 }
 
