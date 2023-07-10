@@ -3,7 +3,7 @@ import classes from './NavBar.module.css';
 import logo from '../../assets/logo.png';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { Nav, Navbar, Container, Row, Col } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
@@ -59,93 +59,134 @@ const NavBar = () => {
   const closeNav = () => setIsNavExpanded(false);
 
   let output;
-  console.log(activeAccount);
 
-if (activeAccount !== undefined) {
-  if (balance > 0) {
-    output = <div><Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
-    <NavBarButton
-      buttonText={<Trans>Proposals</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link
-    href={externalURL(ExternalURL.charmverse)}
-    className={classes.nounsNavLink}
-    target="_blank"
-    rel="noreferrer"
-    onClick={closeNav}
-  >
-    <NavBarButton
-      buttonText={"Docs"}
-      buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link
-    href={externalURL(ExternalURL.discourse)}
-    className={classes.nounsNavLink}
-    target="_blank"
-    rel="noreferrer"
-    onClick={closeNav}
-  >
-    <NavBarButton
-      buttonText={<Trans>Discourse</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faComments} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link>
-  <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
-    <NavBarButton
-      buttonText={<Trans>REP</Trans>}
-      buttonIcon={<FontAwesomeIcon icon={faCoins} />}
-      buttonStyle={nonWalletButtonStyle}
-    />
-  </Nav.Link></div>
-  }
-}
-
-  return (
-    <>
-      <Navbar
-        expand="xl"
-        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
-        className={classes.navBarCustom}
-        expanded={isNavExpanded}
-      >
-        <Container style={{ maxWidth: 'unset' }}>
-          <div className={classes.brandAndTreasuryWrapper}>
-            <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="ATX DAO Logo" />
-            </Navbar.Brand>
-            <Nav.Item>
-              {treasuryBalance && (
+  if (activeAccount !== undefined) {
+    if (balance > 0) {
+      output =
+        <Navbar
+          expand="xl"
+          style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+          className={classes.navBarCustom}
+          expanded={isNavExpanded}
+        >
+          <Container style={{ maxWidth: 'unset' }}>
+            <div className={classes.brandAndTreasuryWrapper}>
+              <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+                <img src={logo} className={classes.navBarLogo} alt="ATX DAO Logo" />
+              </Navbar.Brand>
+              <Nav.Item>
+                {treasuryBalance && (
+                  <Nav.Link
+                    href={daoEtherscanLink}
+                    className={classes.nounsNavLink}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <NavBarTreasury
+                      treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                      treasuryStyle={nonWalletButtonStyle}
+                    />
+                  </Nav.Link>
+                )}
+              </Nav.Item>
+            </div>
+            <Navbar.Toggle
+              className={classes.navBarToggle}
+              aria-controls="basic-navbar-nav"
+              onClick={() => setIsNavExpanded(!isNavExpanded)}
+            />
+            <Navbar.Collapse className="justify-content-end">
+              {
+                <div>
+                <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+                <NavBarButton
+                  buttonText={<Trans>Proposals</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+                </Nav.Link>
                 <Nav.Link
-                  href={daoEtherscanLink}
+                  href={externalURL(ExternalURL.charmverse)}
                   className={classes.nounsNavLink}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={closeNav}
                 >
-                  <NavBarTreasury
-                    treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
-                    treasuryStyle={nonWalletButtonStyle}
+                  <NavBarButton
+                    buttonText={"Docs"}
+                    buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                    buttonStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
-              )}
-            </Nav.Item>
+                <Nav.Link
+                  href={externalURL(ExternalURL.discourse)}
+                  className={classes.nounsNavLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={closeNav}
+                >
+                  <NavBarButton
+                    buttonText={<Trans>Discourse</Trans>}
+                    buttonIcon={<FontAwesomeIcon icon={faComments} />}
+                    buttonStyle={nonWalletButtonStyle}
+                  />
+                </Nav.Link>
+                <Nav.Link as={Link} to="/rep" className={classes.nounsNavLink} onClick={closeNav}>
+                  <NavBarButton
+                    buttonText={<Trans>REP</Trans>}
+                    buttonIcon={<FontAwesomeIcon icon={faCoins} />}
+                    buttonStyle={nonWalletButtonStyle}
+                  />
+                </Nav.Link>
+                </div>
+              }
+            </Navbar.Collapse>
+            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+          </Container>
+        </Navbar>
+    } else {
+      output =
+      <Container className={classes.centerScreen}>
+        <div>
+            <div style={{textAlign: 'center'}}>
+              <img
+                style={{ width: '10rem'}}
+                src={logo}
+                alt="ATX DAO Logo"
+              ></img>
+            </div>
+            <p>
+            We can't find a membership associated with this address.<br/>
+            Would you like to try another account?
+            </p>
+            <div className={classes.center}>
+              <NavWallet address={activeAccount || '0'} />{' '}
+            </div>
+        </div>
+      </Container>
+    }
+  }
+  else {
+    output =
+    <Container className={classes.centerScreen}>
+      <div>
+          <div style={{textAlign: 'center'}}>
+            <img
+              style={{ width: '10rem'}}
+              src={logo}
+              alt="ATX DAO Logo"
+            ></img>
           </div>
-          <Navbar.Toggle
-            className={classes.navBarToggle}
-            aria-controls="basic-navbar-nav"
-            onClick={() => setIsNavExpanded(!isNavExpanded)}
-          />
-          <Navbar.Collapse className="justify-content-end">
-            { output }
-          </Navbar.Collapse>
+          <p>
+          Welcome to the ATX DAO Member Portal!<br/> Please verify your membership.
+          </p>
           <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
-        </Container>
-      </Navbar>
+      </div>
+    </Container>
+  }
+  return (
+    <>
+      {output}
     </>
   );
 };
