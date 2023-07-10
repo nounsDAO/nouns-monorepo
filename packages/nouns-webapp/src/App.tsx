@@ -66,8 +66,6 @@ function App() {
     }
   }
 
-  console.log('this is chain id: ' + CHAIN_ID);
-
   return (
     <div className={`${classes.wrapper}`}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}

@@ -69,15 +69,21 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                in the crypto industry and a better city as a whole. We are a group of friends and collaborators with a shared 
                treasury and ideas about how to use it.</p>
 
-            <a href="https://www.youtube.com/watch?v=ZvC-WN10E5o" target="#">A New Austin Institution</a>.
-
+            {/* <a href="https://www.youtube.com/watch?v=ZvC-WN10E5o" target="#">A New Austin Institution</a>. */}
+            <br/>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/ZvC-WN10E5o" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            <br/>
+            <br/>
             <p>ATX DAO was founded in October 2021 as a social organization and has grown into a new Austin institution.
               Due to the combined efforts of the membership base, ATX DAO has established itself as a leading City DAO,
               responsible for accomplishing tasks many would have deemed impossible from a group of people operating in an organic, 
               decentralized, and grassroots manner.</p>
 
-            <a href="https://www.youtube.com/watch?v=NUh8UGEXjJ4" target="#">Introducing ATX DAO</a>.
-
+            {/* <a href="https://www.youtube.com/watch?v=NUh8UGEXjJ4" target="#">Introducing ATX DAO</a>. */}
+            <br/>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/NUh8UGEXjJ4" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            <br/>
+            <br/>
 <p>As a DAO, each member is able to <a href="https://snapshot.org/#/atxdao.eth" target="#">create a proposal and vote on the future of our organization</a>. Membership is signified by an NFT and anyone with an NFT can create a proposal 
    about what the organization should do and what the treasury should be spent on. This makes ATX DAO 
    the most democratic institution in the city, and our bottom-up, self-governing system is an innovative 

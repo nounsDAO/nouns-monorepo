@@ -6,7 +6,9 @@ export enum ExternalURL {
   instagram,
   linkedin,
   jobPortal,
-  discord
+  discord,
+  github,
+  telegram
 }
 
 export const externalURL = (externalURL: ExternalURL) => {
@@ -27,5 +29,9 @@ export const externalURL = (externalURL: ExternalURL) => {
       return 'https://www.linkedin.com/company/atxdao/mycompany/';
     case ExternalURL.jobPortal:
       return 'https://atxdao.pallet.com/talent/welcome';
+    case ExternalURL.github:
+      return 'https://github.com/ATXDAO';
+    case ExternalURL.telegram:
+      return 'https://t.me/+7NTAE2d5fLJlYWE5';
   }
 };
