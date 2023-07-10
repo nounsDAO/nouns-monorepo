@@ -545,12 +545,6 @@ const VotePage = ({
                         {' '}
                       </>
                     )}
-                    {isCancellable() && (
-                      <>
-                        <Trans>This proposal can be canceled for </Trans>{' '}
-                        {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
-                      </>
-                    )}
                   </p>
 
                   <div className="d-flex gap-3">
