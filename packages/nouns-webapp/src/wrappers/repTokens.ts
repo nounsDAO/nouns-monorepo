@@ -12,7 +12,7 @@ export interface RepTokens {
 
 export const useRepCall = (funcName: string, funcArgs: any[]) => {
 
-    let customHttpProvider = new ethers.providers.JsonRpcProvider("https://polygon-mainnet.infura.io/v3/ecbce20c9ec548f6a84b1c3f41f99549");
+    let customHttpProvider = new ethers.providers.JsonRpcProvider("https://polygon-mainnet.infura.io/v3/");
 
     const contract = new Contract('0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2', abi, customHttpProvider);
     console.log(contract);

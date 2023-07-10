@@ -38,11 +38,17 @@ function App() {
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
+  console.log(account);
+  
   let balanceArr = useNFTCall('balanceOf', [account]);
-  let balance;
+  console.log("balanceArr");
+  console.log(balanceArr);
+
+  let balance = 0;
   if (balanceArr !== undefined) {
-    balance = balanceArr[0].toNumber();
+    // balance = balanceArr[0].toNumber();
   }
+  console.log(balance);
 
   let output;
   if (account !== null) {
