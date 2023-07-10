@@ -192,6 +192,10 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
           () => contracts.NounsDAOLogicV1Fork.instance?.address,
           () => contracts.NounsDAOExecutorV2.instance?.address,
           60 * 60 * 24 * 30, // 30 days
+          36000,
+          36000,
+          25,
+          1000,
         ],
       },
       NounsDAOProxyV3: {
@@ -232,6 +236,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
               contracts.NounsDAOExecutorProxy.instance?.address,
               args.createCandidateCost,
               args.updateCandidateCost,
+              expectedNounsDAOProxyAddress,
             ]),
         ],
       },

@@ -64,6 +64,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     uint256 public updateCandidateCost;
     /// @notice The state of which (proposer,slug) pairs have been used to create a proposal candidate.
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
+    /// @notice The account to send ETH fees to.
+    address payable public feeRecipient;
 
     constructor(address nounsToken_, address nounsDao_) {
         nounsToken = NounsTokenLike(nounsToken_);
@@ -79,12 +81,14 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     function initialize(
         address admin,
         uint256 createCandidateCost_,
-        uint256 updateCandidateCost_
+        uint256 updateCandidateCost_,
+        address payable feeRecipient_
     ) external initializer {
         _transferOwnership(admin);
 
         createCandidateCost = createCandidateCost_;
         updateCandidateCost = updateCandidateCost_;
+        feeRecipient = feeRecipient_;
     }
 
     /**
@@ -126,6 +130,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
+
+        sendValueToRecipient();
 
         emit ProposalCandidateCreated(
             msg.sender,
@@ -173,6 +179,8 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         if (proposalIdToUpdate > 0) {
             encodedProp = abi.encodePacked(proposalIdToUpdate, encodedProp);
         }
+
+        sendValueToRecipient();
 
         emit ProposalCandidateUpdated(
             msg.sender,
@@ -300,6 +308,13 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         emit UpdateCandidateCostSet(oldUpdateCandidateCost, newUpdateCandidateCost);
     }
 
+    function setFeeRecipient(address payable newFeeRecipient) external onlyOwner {
+        address oldFeeRecipient = feeRecipient;
+        feeRecipient = newFeeRecipient;
+
+        emit FeeRecipientSet(oldFeeRecipient, newFeeRecipient);
+    }
+
     /**
      * @notice Withdraw ETH from this contract's balance. Only owner can call this function.
      * @param to the recipient.
@@ -321,6 +336,15 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      *   INTERNAL
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    function sendValueToRecipient() internal {
+        address feeRecipient_ = feeRecipient;
+        if (msg.value > 0 && feeRecipient_ != address(0)) {
+            // choosing to not revert upon failure here because owner can always use
+            // the withdraw function instead.
+            feeRecipient_.call{ value: msg.value }('');
+        }
+    }
 
     function isNouner(address account) internal view returns (bool) {
         return nounsToken.getPriorVotes(account, block.number - PRIOR_VOTES_BLOCKS_AGO) > 0;

@@ -169,6 +169,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "oldFeeRecipient",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "FeeRecipientSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "msgSender",
         "type": "address"
       },
@@ -579,6 +598,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "feeRecipient",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -594,6 +626,11 @@
         "internalType": "uint256",
         "name": "updateCandidateCost_",
         "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "feeRecipient_",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -731,6 +768,19 @@
       }
     ],
     "name": "setCreateCandidateCost",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "newFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeRecipient",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

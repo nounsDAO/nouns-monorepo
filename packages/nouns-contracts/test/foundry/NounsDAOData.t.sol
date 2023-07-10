@@ -15,16 +15,18 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
     address nounsDao = makeAddr('nouns dao');
+    address feeRecipient = makeAddr('fee recipient');
 
     function setUp() public {
         tokenLikeMock = new NounsTokenLikeMock();
         NounsDAOData logic = new NounsDAOData(address(tokenLikeMock), nounsDao);
 
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,uint256,uint256)',
+            'initialize(address,uint256,uint256,address)',
             address(dataAdmin),
             0.01 ether,
-            0.01 ether
+            0.01 ether,
+            feeRecipient
         );
 
         proxy = new NounsDAODataProxy(address(logic), initCallData);
@@ -110,6 +112,7 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         string memory description = 'some description';
         string memory slug = 'some slug';
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        uint256 recipientBalanceBefore = feeRecipient.balance;
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCandidateCreated(
@@ -133,6 +136,44 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
             slug,
             0
         );
+
+        assertEq(feeRecipient.balance - recipientBalanceBefore, data.createCandidateCost());
+    }
+
+    function test_createProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+
+        vm.prank(dataAdmin);
+        data.setFeeRecipient(payable(address(0)));
+
+        uint256 contractBalanceBefore = address(data).balance;
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCandidateCreated(
+            address(this),
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0,
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+        );
+
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0
+        );
+
+        assertEq(address(data).balance - contractBalanceBefore, data.createCandidateCost());
     }
 
     function test_createProposalCandidate_worksForNonNounerWhenPaymentConfigIsZero() public {
@@ -275,6 +316,7 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
             0
         );
         string memory updateDescription = 'new description';
+        uint256 recipientBalanceBefore = feeRecipient.balance;
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCandidateUpdated(
@@ -300,6 +342,56 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
             0,
             'reason'
         );
+
+        assertEq(feeRecipient.balance - recipientBalanceBefore, data.updateCandidateCost());
+    }
+
+    function test_updateProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0
+        );
+        string memory updateDescription = 'new description';
+
+        vm.prank(dataAdmin);
+        data.setFeeRecipient(payable(address(0)));
+
+        uint256 contractBalanceBefore = address(data).balance;
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCandidateUpdated(
+            address(this),
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            0,
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            'reason'
+        );
+
+        data.updateProposalCandidate{ value: data.updateCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            0,
+            'reason'
+        );
+
+        assertEq(address(data).balance - contractBalanceBefore, data.updateCandidateCost());
     }
 
     function test_updateProposalCandidate_worksForNonNounerWhenPaymentConfigIsZero() public {
@@ -577,6 +669,23 @@ contract NounsDAODataTest is Test, SigUtils, NounsDAODataEvents {
         data.setUpdateCandidateCost(0.42 ether);
 
         assertEq(data.updateCandidateCost(), 0.42 ether);
+    }
+
+    function test_setFeeRecipient_revertsForNonAdmin() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        data.setFeeRecipient(payable(makeAddr('new fee recipient')));
+    }
+
+    function test_setFeeRecipient_worksForAdmin() public {
+        address payable newFeeRecipient = payable(makeAddr('new fee recipient'));
+
+        vm.expectEmit(true, true, true, true);
+        emit FeeRecipientSet(feeRecipient, newFeeRecipient);
+
+        vm.prank(dataAdmin);
+        data.setFeeRecipient(newFeeRecipient);
+
+        assertEq(data.feeRecipient(), newFeeRecipient);
     }
 
     function test_withdrawETH_revertsForNonAdmin() public {
