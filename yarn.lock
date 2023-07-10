@@ -5347,7 +5347,7 @@
 
 "@types/react@17.0.1":
   version "17.0.1"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.1.tgz#eb1f1407dea8da3bc741879c1192aa703ab9975b"
   integrity sha512-w8t9f53B2ei4jeOqf/gxtc2Sswnc3LBK5s0DyJcg5xd10tMHXts2N31cKjWfH9IC/JvEPa/YF1U4YeP1t4R6HQ==
   dependencies:
     "@types/prop-types" "*"
@@ -5668,7 +5668,7 @@
 
 "@usedapp/core@0.9.1":
   version "0.9.1"
-  resolved "https://registry.npmjs.org/@usedapp/core/-/core-0.9.1.tgz"
+  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.9.1.tgz#b895caabf4bfe7f1bfda00651b60812b3437156f"
   integrity sha512-Xhv3EZPVdkwn1J1qX7vC4GwPEfYU03cqRdWf2HupkWoEyCwkj/QrOpeoYz0TEWVlIle948kaBhDe+HKr48cKSw==
   dependencies:
     "@types/react" "17.0.1"
@@ -5914,7 +5914,7 @@
 
 "@web3-react/core@6.1.1":
   version "6.1.1"
-  resolved "https://registry.npmjs.org/@web3-react/core/-/core-6.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/@web3-react/core/-/core-6.1.1.tgz#06c853890723f600b387b738a4b71ef41d5cccb7"
   integrity sha512-HKXOgPNCmFvrVsed+aW/HlVhwzs8t3b+nzg3BoxgJQo/5yLiJXSumHRBdUrPxhBQiHkHRZiVPAvzf/8JMnm74Q==
   dependencies:
     "@ethersproject/keccak256" "^5.0.0-beta.130"
@@ -5964,7 +5964,7 @@
 
 "@web3-react/network-connector@6.1.5":
   version "6.1.5"
-  resolved "https://registry.npmjs.org/@web3-react/network-connector/-/network-connector-6.1.5.tgz"
+  resolved "https://registry.yarnpkg.com/@web3-react/network-connector/-/network-connector-6.1.5.tgz#1fcce1dc7b03dac23fcc01ad0b0c870cb0e39e0b"
   integrity sha512-Uwk8iMG8YCnTeKmyXt3Q7QJN28qTs0YTTW8/aes2R26KmYWCk3GdL2eal0QcXUixJy/IjrhXzbwzHgpneJqrWg==
   dependencies:
     "@web3-react/abstract-connector" "^6.0.7"
@@ -13076,9 +13076,9 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
-"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
+"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
+  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"

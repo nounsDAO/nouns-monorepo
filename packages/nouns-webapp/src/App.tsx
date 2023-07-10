@@ -31,7 +31,6 @@ function App() {
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
-
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
@@ -47,7 +46,7 @@ function App() {
 
   let output;
   if (account !== null) {
-    if (balance > 0) {
+    if (balance >= 0) {
       output = <div>
       <Switch>
         <Route exact path="/" component={AuctionPage} />

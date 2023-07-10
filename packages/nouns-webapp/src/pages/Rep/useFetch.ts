@@ -8,7 +8,7 @@ export interface Grab {
     error: string;
 }
 
-function useFetch(url: string) {
+function useFetch(url: any) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState('');
   const [error, setError] = useState('');
@@ -45,6 +45,6 @@ function useFetch(url: string) {
     loading: loading,
     error: error
   }
-  return c;
+  return c.data;
 }
 export default useFetch;

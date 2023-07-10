@@ -6,19 +6,25 @@ import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
 import { RepTokens, useRepCall } from '../../wrappers/repTokens';
 import useFetch from './useFetch';
+import useCallJake from './useCallJake';
 
 const RepPage = () => {
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const soulboundBalance = useRepCall('balanceOf', [activeAccount, 0]);
-  const transferableBalance = useRepCall('balanceOf', [activeAccount, 1]);
-  console.log("trying call");
-  const soulboundTokenURI = useRepCall('uri', [0]);
-  const soulboundJson = useFetch(soulboundTokenURI);
+  // const testBalance = useCallJake('balanceOf', [activeAccount, 0]);
+  // const testBalance2 = useCallJake('balanceOf', [activeAccount, 1]);
+  // console.log(testBalance);
+  // console.log(testBalance2);
 
-  const redeemableTokenURI = useRepCall('uri', [1]);
-  const redeemableJson = useFetch(redeemableTokenURI);
+  // const soulboundBalance = useCallJake('balanceOf', [activeAccount, 0]);
+  // const transferableBalance = useCallJake('balanceOf', [activeAccount, 1]);
+  // console.log("trying call");
+  // const soulboundTokenURI = useCallJake('uri', [0]);
+  // const soulboundJson = useFetch(soulboundTokenURI);
+
+  // const redeemableTokenURI = useCallJake('uri', [1]);
+  // const redeemableJson = useFetch(redeemableTokenURI);
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -67,29 +73,41 @@ const RepPage = () => {
             <h3 style={{marginBottom:'2rem', marginTop:'1rem'}}>Your REP Tokens</h3>
             <Col sm={12} md={6}>
               <div className={classes.container}>
-                {
+                {/* {
                   redeemableJson.data === undefined ?
                   <div></div> :
                   <img src={redeemableJson.data?.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
+                } */}
                 <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>{Number(transferableBalance)}</h3>
+                <h3 className={classes.centered }>
+                  {/* {Number(transferableBalance)} */}
+                  </h3>
               </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>{redeemableJson.data?.name}</h4>
-              <p style={{textAlign: 'center'}}>{redeemableJson.data?.description}</p>
+              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                {/* {redeemableJson.data?.name} */}
+              </h4>
+              <p style={{textAlign: 'center'}}>
+                {/* {redeemableJson.data?.description} */}
+                </p>
             </Col>
             <Col sm={12} md={6}>
               <div className={classes.container}>
-                {
+                {/* {
                 soulboundJson.data === undefined ?
                 <div></div> :
                 <img src={soulboundJson.data?.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
+                } */}
                 <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>{Number(soulboundBalance)}</h3>
+                <h3 className={classes.centered }>
+                  {/* {Number(soulboundBalance)} */}
+                </h3>
               </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>{soulboundJson.data?.name}</h4>
-              <p  style={{textAlign: 'center'}}>{soulboundJson.data?.description}</p>
+              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                {/* {soulboundJson.data?.name} */}
+                </h4>
+              <p  style={{textAlign: 'center'}}>
+                {/* {soulboundJson.data?.description} */}
+                </p>
             </Col>
           </Row>
         </Card>
