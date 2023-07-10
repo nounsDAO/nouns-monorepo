@@ -61,7 +61,7 @@ const NavBar = () => {
   let output;
 
   if (activeAccount !== undefined) {
-    if (balance > 0) {
+    if (balance >= 0) {
       output =
         <Navbar
           expand="xl"
