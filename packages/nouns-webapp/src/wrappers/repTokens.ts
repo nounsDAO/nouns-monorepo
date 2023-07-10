@@ -3,7 +3,6 @@ import { useContractCall, Polygon} from '@usedapp/core';
 import { ethers, BigNumber as EthersBN, utils, Contract } from 'ethers';
 import config from '../config';
 import repTokensABI from './repTokensAbi';
-
 const abi = new utils.Interface(repTokensABI);
 
 export interface RepTokens {

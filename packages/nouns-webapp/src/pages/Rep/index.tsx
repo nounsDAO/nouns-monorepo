@@ -6,19 +6,25 @@ import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
 import { RepTokens, useRepCall } from '../../wrappers/repTokens';
 import useFetch from './useFetch';
+import useCallJake from './useCallJake';
 
 const RepPage = () => {
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const soulboundBalance = useRepCall('balanceOf', [activeAccount, 0]);
-  const transferableBalance = useRepCall('balanceOf', [activeAccount, 1]);
-  console.log("trying call");
-  const soulboundTokenURI = useRepCall('uri', [0]);
-  const soulboundJson = useFetch(soulboundTokenURI);
+  // const testBalance = useCallJake('balanceOf', [activeAccount, 0]);
+  // const testBalance2 = useCallJake('balanceOf', [activeAccount, 1]);
+  // console.log(testBalance);
+  // console.log(testBalance2);
 
-  const redeemableTokenURI = useRepCall('uri', [1]);
-  const redeemableJson = useFetch(redeemableTokenURI);
+  // const soulboundBalance = useCallJake('balanceOf', [activeAccount, 0]);
+  // const transferableBalance = useCallJake('balanceOf', [activeAccount, 1]);
+  // console.log("trying call");
+  // const soulboundTokenURI = useCallJake('uri', [0]);
+  // const soulboundJson = useFetch(soulboundTokenURI);
+
+  // const redeemableTokenURI = useCallJake('uri', [1]);
+  // const redeemableJson = useFetch(redeemableTokenURI);
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -33,7 +39,7 @@ const RepPage = () => {
           <span>
             <Trans>Your Tokens:</Trans>
           </span>
-          <span>
+          {/* <span>
             <Trans>Lifetime: {soulboundBalance}</Trans>
           </span>
           <span>
@@ -41,22 +47,27 @@ const RepPage = () => {
           </span>
           <span>
             { 
-              soulboundJson.data === undefined ?
+              soulboundJson === undefined ?
               <div></div> : 
-              <img src={soulboundJson.data?.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/> 
+              <div><img src={soulboundJson.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/> 
+            <p>{soulboundJson.name}</p>
+            <p>{soulboundJson.description}</p>  
+              </div>
             }
-            <p>{soulboundJson.data?.name}</p>
-            <p>{soulboundJson.data?.description}</p>
+            
           </span>
           <span>
           { 
-              redeemableJson.data === undefined ?
+              redeemableJson === undefined ?
               <div></div> : 
-              <img src={redeemableJson.data?.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/> 
+              <div>
+                <img src={redeemableJson.image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/> 
+            
+              <p>{redeemableJson.name}</p>
+              <p>{redeemableJson.description}</p>
+              </div>
             }
-            <p>{redeemableJson.data?.name}</p>
-            <p>{redeemableJson.data?.description}</p>
-          </span>
+          </span> */}
         </Row>
         <p style={{ textAlign: 'justify' }}>
           A on-chain reputation system for tracking and rewarding contributions. REP consists of an ERC1155 smart contract with two tokens on the Polygon Network. An equal amount of both tokens will be awarded to community members when distributed.
