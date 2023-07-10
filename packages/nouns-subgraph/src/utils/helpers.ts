@@ -230,7 +230,7 @@ function keccak256Bytes(bytes: Bytes): Bytes {
  * encodes the proposal content as done in `NounsDAOV3Proposals.calcProposalEncodeData`
  * and hashes it with keccak256
  */
-export function calcEncodedProposalHash(proposal: Proposal): Bytes {
+export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): Bytes {
   let signatureHashes = Bytes.fromUTF8('');
   for (let i = 0; i < proposal.signatures!.length; i++) {
     signatureHashes = signatureHashes.concat(
@@ -262,8 +262,15 @@ export function calcEncodedProposalHash(proposal: Proposal): Bytes {
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(calldatasHashes)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description))));
 
-  const proposalEncodeData = ethereum.encode(ethereum.Value.fromTuple(params))!;
-  const hashedProposal = keccak256Bytes(proposalEncodeData);
+  let proposalEncodeData = ethereum.encode(ethereum.Value.fromTuple(params))!;
 
+  if (isUpdate) {
+    const proposalId = Bytes.fromHexString(
+      BigInt.fromString(proposal.id).toHex().replace('0x', '').padStart(64, '0'),
+    );
+    proposalEncodeData = proposalId.concat(proposalEncodeData);
+  }
+
+  const hashedProposal = keccak256Bytes(proposalEncodeData);
   return hashedProposal;
 }

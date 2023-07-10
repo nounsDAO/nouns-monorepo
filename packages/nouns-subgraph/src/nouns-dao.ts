@@ -129,7 +129,7 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
 
   proposal.save();
 
-  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal);
+  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal, false);
 }
 
 export function handleProposalUpdated(event: ProposalUpdated): void {
@@ -150,6 +150,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -167,6 +168,7 @@ export function handleProposalDescriptionUpdated(event: ProposalDescriptionUpdat
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -186,6 +188,7 @@ export function handleProposalTransactionsUpdated(event: ProposalTransactionsUpd
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
     proposal,
+    true,
     event.params.updateMessage,
   );
 }
@@ -339,6 +342,7 @@ function captureProposalVersion(
   txHash: string,
   logIndex: string,
   proposal: Proposal,
+  isUpdate: boolean,
   updateMessage: string = '',
 ): void {
   const versionId = txHash.concat('-').concat(logIndex);
@@ -354,11 +358,11 @@ function captureProposalVersion(
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
 
-  markProposalCandidateIfExists(proposal);
+  markProposalCandidateIfExists(proposal, isUpdate);
 }
 
-function markProposalCandidateIfExists(proposal: Proposal): void {
-  const hash = calcEncodedProposalHash(proposal);
+function markProposalCandidateIfExists(proposal: Proposal, isUpdate: boolean): void {
+  const hash = calcEncodedProposalHash(proposal, isUpdate);
   const candidate = ProposalCandidateContent.load(hash.toHexString());
   if (candidate !== null) {
     const ids = candidate.matchingProposalIds || [];
