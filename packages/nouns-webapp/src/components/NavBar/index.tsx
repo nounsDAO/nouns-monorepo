@@ -27,7 +27,7 @@ import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
-import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
+import { useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
 import { AtxDaoNFT, useNFTCall } from '../../wrappers/atxDaoNFT';
 
@@ -36,7 +36,7 @@ const NavBar = () => {
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
-  const treasuryBalance = useTreasuryBalance();
+  const treasuryBalance = useTreasuryUSDValue();
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   let balanceArr = useNFTCall('balanceOf', [activeAccount]);
@@ -83,7 +83,7 @@ const NavBar = () => {
                     rel="noreferrer"
                   >
                     <NavBarTreasury
-                      treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                      treasuryBalance={Number(treasuryBalance).toFixed(0)}
                       treasuryStyle={nonWalletButtonStyle}
                     />
                   </Nav.Link>
