@@ -77,6 +77,42 @@ contract NounsDAODataTest is Test, SigUtils {
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, 'description', 'slug');
     }
 
+    function test_encodedPropDigest() public {
+        // Used to compare values with the subgraph code generating the same thing
+        // see calcEncodedProposalHash in helpers.ts
+        string memory description = 'some description';
+        address target = address(0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa);
+        address proposer = address(0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB);
+        uint256 value = 300;
+        string memory signature = 'some signature';
+        bytes memory callData = 'some data';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(target, value, signature, callData);
+
+        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        bytes32 digest = keccak256(encodedProp);
+
+        assertEq(digest, 0xcf95b7d08d761ff0bf1223220f45b79baffbce6c8bcceb8df5399cbc6d22c40d);
+
+        address[] memory targets = new address[](2);
+        targets[0] = target;
+        targets[1] = 0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC;
+        uint256[] memory values = new uint256[](2);
+        values[0] = value;
+        values[1] = 500;
+        string[] memory signatures = new string[](2);
+        signatures[0] = signature;
+        signatures[1] = 'hello()';
+        bytes[] memory calldatas = new bytes[](2);
+        calldatas[0] = callData;
+        calldatas[1] = hex'aabbccdd';
+
+        txs = NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
+        encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        digest = keccak256(encodedProp);
+
+        assertEq(digest, 0x5d6f3b870407fff8109c6c9469173eef879d0d2eaf3de0fb5770b7f48f760101);
+    }
+
     function test_createProposalCandidate_worksForNouner() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
