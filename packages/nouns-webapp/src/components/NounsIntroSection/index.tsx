@@ -2,10 +2,36 @@ import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Nav, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
-import { Link } from 'react-router-dom';
+import Link from '../../components/Link';
 import distributionImage from '../../assets/givingCircle.jpeg';
 import guildsImage from '../../assets/gala.jpeg';
 import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
+
+const contributorSetupLink = (
+  <Link
+    text="Contributor Setup Request"
+    url="https://docs.google.com/forms/d/e/1FAIpQLSfJVNSXgSLZNWiQ_0I8I6dkQgcV2t22k9VbwK8k8HnUt_Upww/viewform"
+    leavesPage={true}
+  />
+);
+
+const contributionFormLink = (
+  <Link
+    text="Ongoing Contribution Form"
+    url="https://docs.google.com/forms/d/e/1FAIpQLSc7cys4_uUSZqBScKidWV1udWI42lFpzh7_F8XR1BlGaE6_mA/viewform?usp=sf_link"
+    leavesPage={true}
+  />
+);
+
+const discordLink = (
+  <Link
+    text="our discord"
+    url="https://discord.gg/xkAseAucRU"
+    leavesPage={true}
+  />
+);
+
+<a href="https://forms.gle/jWiv7k8HoRzs6KQb6">Ongoing Contribution Form</a>
 
 const NounsIntroSection = () => {
   return (
@@ -18,7 +44,10 @@ const NounsIntroSection = () => {
               the DAO!
             </h1>
             <p>
-                Here you can find all the tools and info you need to get involved in our events, projects, and governance.
+              Here you can find all the tools and info you need to get involved in our events, projects, and governance.
+            </p>
+            <p>
+              If you're new here, try getting started with a couple quests! Just hop in {discordLink} and use <code>/onboard-me</code>
             </p>
           </div>
         </Col>
@@ -49,7 +78,7 @@ const NounsIntroSection = () => {
               Get Involved
             </h1>
             <p>
-              Check out the Guild Pages for related projects!
+              Check out our Guild Projects!
             </p>
             <Card
             className={classes.card}
@@ -58,8 +87,8 @@ const NounsIntroSection = () => {
               window.location.href='http://google.com';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
-                <b>Ecosystem Guild</b><br/>
-                Empower local artists and businesses with web3
+                <b>Innovation Guild</b><br/>
+                Foster web3 innovation with artists, local businesses, and entrepreneurs.
               </p>
             </Card>
 
@@ -71,7 +100,7 @@ const NounsIntroSection = () => {
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
                 <b>Community Guild</b><br/>
-                Connect and unite Austin's crypto communities
+                Unite and give back to the Austin community and beyond.
               </p>
             </Card>
 
@@ -82,8 +111,8 @@ const NounsIntroSection = () => {
               window.location.href='http://google.com';
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem' }}>
               <p>
-                <b>Policy Guild</b><br/>
-                Advise our government on better crypto policy
+                <b>Advocacy Guild</b><br/>
+                Advocate for the benefits of web3 to the government and general population.
               </p>
             </Card>
           </div>
@@ -97,18 +126,19 @@ const NounsIntroSection = () => {
               Get Paid
             </h1>
             <p>
-              Every month we host a <b>giving circle</b> where we distribute <b>$1000 USDC</b> to reward DAO members for contributing!
+              During the <i>Monthly Member Meeting</i> at Keiretsu, we host a giving circle where we distribute <b>$1000 USDC</b> to reward DAO members for contributing!
             </p>
             <p>
-              This event is an opportunity to showcase contributions that members have submitted from the past month.
-              DAO members can recognize and reward each other’s contributions by distributing points to these contributions.
-            </p>
-            <p>
-              At the end of the giving circle members will receive a percentage of the compensation pool,
+              This event is an opportunity to showcase contributions that members have submitted from the past month. DAO members can recognize and reward each other’s
+              contributions by distributing points for these contributions. At the end of the giving circle, members will receive a percentage of the compensation pool,
               based on how many points their contributions received over the total number of distributed points.
             </p>
             <p>
-              Fill out the <a href="https://forms.gle/jWiv7k8HoRzs6KQb6">Contributor Setup Request</a> form to submit contributions to our next giving circle!
+              To participate, first time contributors need to fill out the {contributorSetupLink} form.
+              Then submit the {contributionFormLink} to feature your contributions in the next giving circle.
+            </p>
+            <p>
+              Additionally, any ATX DAO member may create a project proposal and include a compensation structure.
             </p>
           </div>
         </Col>
