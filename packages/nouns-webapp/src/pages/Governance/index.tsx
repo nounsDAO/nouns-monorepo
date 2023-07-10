@@ -1,22 +1,12 @@
 import { Col, Row, Card } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
-import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
-import { utils } from 'ethers/lib/ethers';
 import clsx from 'clsx';
-import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import Link from '../../components/Link';
 
 const GovernancePage = () => {
-  const { data: proposals } = useAllProposals();
-  const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
-
-  const treasuryBalance = useTreasuryBalance();
-  const treasuryBalanceUSD = useTreasuryUSDValue();
 
   const forumLink = (
     <Link
