@@ -3,6 +3,9 @@ export enum ExternalURL {
   charmverse,
   discourse,
   nounsCenter,
+  instagram,
+  linkedin,
+  jobPortal
 }
 
 export const externalURL = (externalURL: ExternalURL) => {
@@ -15,6 +18,11 @@ export const externalURL = (externalURL: ExternalURL) => {
       return 'https://atxdao.freeflarum.com/';
     case ExternalURL.nounsCenter:
       return 'https://nouns.center/';
-      
+    case ExternalURL.instagram:
+      return 'https://www.instagram.com/atx.dao/';
+    case ExternalURL.linkedin:
+      return 'https://www.linkedin.com/company/atxdao/mycompany/';
+    case ExternalURL.jobPortal:
+      return 'https://atxdao.pallet.com/talent/welcome';
   }
 };
