@@ -11,6 +11,7 @@ import { CHAIN_ID } from '../../config';
 import { ethers } from 'ethers';
 import repTokensABI from "../../wrappers/repTokensAbi";
 import axios from 'axios';
+import config from '../../config';
 
 const RepPage = () => {
 
@@ -26,14 +27,25 @@ const RepPage = () => {
   useEffect(()=> {
     async function callMe() {
       // To connect to a custom URL:
-      let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
-      let customHttpProvider = new ethers.providers.JsonRpcProvider(url);
 
+      let provider;
+      let contractAddress;
+
+      if (CHAIN_ID === 1) {
+        let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
+        contractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
+        provider = new ethers.providers.JsonRpcProvider(url);
+      } else {
+        provider = new ethers.providers.JsonRpcProvider();
+        contractAddress = config.addresses.repTokensAddress;
+      }
+
+    
       //load through ethers
       const contract = new ethers.Contract(
-        '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2',
+        contractAddress as string,
         repTokensABI,
-        customHttpProvider
+        provider
       );
 
       if (activeAccount) {
