@@ -11,7 +11,6 @@ const RepPage = () => {
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-
   const soulboundBalance = useRepCall('balanceOf', [activeAccount, 0]);
   const transferableBalance = useRepCall('balanceOf', [activeAccount, 1]);
   console.log("trying call");

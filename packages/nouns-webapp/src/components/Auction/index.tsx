@@ -18,31 +18,12 @@ import {
 } from '../../state/slices/onDisplayAuction';
 import { beige, grey } from '../../utils/nounBgColors';
 
-import { AtxDaoNFT, useNFTCall } from '../../wrappers/atxDaoNFT';
-import { RepTokens, useRepCall } from '../../wrappers/repTokens';
-
 interface AuctionProps {
   auction?: IAuction;
 }
 
 const Auction: React.FC<AuctionProps> = props => {
   const { auction: currentAuction } = props;
-
-
-  const useNFT = async ()=> {
-      const val = useNFTCall('ownerOf', [1]);
-      console.log(val);
-  }
-
-  useNFT();
-
-  const useRep = async ()=> {
-    const val = await useRepCall(`balanceOf`, ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 0]);
-    console.log(val);
-  }
-
-  useRep();
-
 
   const history = useHistory();
   const dispatch = useAppDispatch();

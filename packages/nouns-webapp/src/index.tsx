@@ -83,6 +83,7 @@ const supportedChainURLs = {
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
   [ChainId.Hardhat]: 'http://localhost:8545',
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
+  [ChainId.Polygon]: createNetworkHttpUrl('polygon')
 };
 
 // prettier-ignore
