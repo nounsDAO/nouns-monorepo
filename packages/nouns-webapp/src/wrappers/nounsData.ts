@@ -58,9 +58,10 @@ export const useAddSignature = () => {
 };
 
 export const useCandidateProposals = () => {
-  const { loading, data, error } = useQuery(candidateProposalsQuery());
+  const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
 
-  return { loading, data, error };
+  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 || candidate.canceled);
+  return { loading, data: unmatchedCandidates?.reverse(), error };
 };
 
 export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean,) => {
@@ -384,6 +385,9 @@ export interface PartialProposalCandidate extends ProposalCandidateInfo {
           }[];
         };
       }[];
+      matchingProposalIds: {
+        id: string;
+      }[]
     }
   };
 }

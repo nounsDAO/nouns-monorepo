@@ -149,6 +149,9 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
             canceled
             reason
           }
+          matchingProposalIds {
+            id
+          }
         }
       }
     }

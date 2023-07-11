@@ -29,7 +29,6 @@ import CandidatePage from './pages/Candidate';
 import EditProposalPage from './pages/EditProposal';
 import EditCandidatePage from './pages/EditCandidate';
 import ProposalHistory from './pages/ProposalHistory';
-import CandidateProposals from './pages/CandidateProposals';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
 import ForkPage from './pages/Fork';
 import ForksPage from './pages/Forks';
@@ -73,7 +72,6 @@ function App() {
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
-            <Route exact path="/candidates" component={CandidateProposals} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />

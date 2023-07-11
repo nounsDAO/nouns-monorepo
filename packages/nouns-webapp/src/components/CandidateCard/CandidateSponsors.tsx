@@ -48,7 +48,7 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
           delegateToNounIds &&
           nounIds.map((nounId, i) => {
             return (
-              <CandidateSponsorImage nounId={+nounId} />
+              <CandidateSponsorImage nounId={+nounId} key={i} />
             );
           })}
       </div>

@@ -5,7 +5,6 @@ import CandidateSponsors from './CandidateSponsors';
 import ShortAddress from '../ShortAddress';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { useState, useEffect } from 'react';
 import { Delegates } from '../../wrappers/subgraph';
 import { useDelegateNounsAtBlockQuery } from '../../wrappers/nounToken';
@@ -82,13 +81,15 @@ function CandidateCard(props: Props) {
         </span>
         <p className={classes.proposer}>
           by{' '}
-          <a
+          {/* <a
             href={buildEtherscanAddressLink(props.candidate.proposer || '')}
             target="_blank"
             rel="noreferrer"
-          >
+          > */}
+          <span className={classes.proposerAddress}>
             <ShortAddress address={props.candidate.proposer || ''} avatar={false} />
-          </a>
+          </span>
+          {/* </a> */}
         </p>
 
         <div className={classes.footer}>

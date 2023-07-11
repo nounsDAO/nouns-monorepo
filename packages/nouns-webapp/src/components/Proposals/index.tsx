@@ -1,5 +1,4 @@
 import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
-import { PartialProposalCandidate, ProposalCandidate } from '../../wrappers/nounsData';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -86,9 +85,9 @@ const Proposals = ({
 }) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [candidates, setCandidates] = useState<PartialProposalCandidate[]>([]);
   const { account } = useEthers();
   const history = useHistory();
+  const { data: candidates } = useCandidateProposals();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
@@ -112,8 +111,6 @@ const Proposals = ({
     }
   }, [activeTab, history])
 
-  // Get candidates
-  const { loading, error, data: allCandidates } = useCandidateProposals();
   const nullStateCopy = () => {
     if (account !== null) {
       if (connectedAccountNounVotes > 0) {
@@ -123,18 +120,6 @@ const Proposals = ({
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
-
-  useEffect(() => {
-    if (!loading && !error && allCandidates) {
-      const filteredCandidates: PartialProposalCandidate[] = allCandidates[
-        'proposalCandidates'
-      ].filter((candidate: ProposalCandidate) => candidate.canceled === false);
-      setCandidates(filteredCandidates);
-    }
-    if (error) {
-      console.error(error);
-    }
-  }, [loading, error, allCandidates]);
 
   return (
     <div className={classes.proposals}>
