@@ -88,8 +88,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
     Membership is signified by an NFT and 1 NFT = 1 vote. Anyone with an NFT can create a proposal 
     about what the organization should do and what the treasury should be spent on. 
     This makes ATX DAO the most democratic institution in the city, and our bottom-up, self-governing system is an 
-    innovative structure that puts us in a position to have an impact in ways never before seen in Austin."
-    and "If you're new here, try getting started with a couple quests!
+    innovative structure that puts us in a position to have an impact in ways never before seen in Austin.
    </p>
             </Accordion.Body>
           </Accordion.Item>
