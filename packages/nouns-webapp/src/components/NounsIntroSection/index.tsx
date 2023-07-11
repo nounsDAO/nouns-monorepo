@@ -37,7 +37,7 @@ const NounsIntroSection = () => {
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6}>
+        <Col sm={12} lg={6}>
           <div className={classes.textWrapper}>
             <h1>
               Welcome to <br />
