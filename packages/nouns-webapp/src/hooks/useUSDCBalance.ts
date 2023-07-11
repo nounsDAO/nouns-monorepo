@@ -20,8 +20,8 @@ function useUSDCBalance(): BigNumber | undefined {
   }, [library]);
 
   useEffect(() => {
-    if (!usdcContract || !addresses.nounsDaoExecutor) return;
-    usdcContract.balanceOf(addresses.nounsDaoExecutor).then(setBalance);
+    if (!usdcContract || !addresses.atxDaoTreasury) return;
+    usdcContract.balanceOf(addresses.atxDaoTreasury).then(setBalance);
   }, [usdcContract]);
 
   return balance;
