@@ -12,8 +12,6 @@ interface ExternalContractAddresses {
   tokenBuyer: string | undefined;
   nounsStreamFactory: string | undefined;
   weth: string | undefined;
-  atxDaoAddress: string | undefined;
-  repTokensAddress: string | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -25,7 +23,7 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Mainnet | ChainId.Polygon | ChainId.Hardhat | ChainId.Goerli;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
 
 interface CacheBucket {
   name: string;
@@ -47,12 +45,11 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt(
-  // process.env.REACT_APP_CHAIN_ID ?? 
-  '1');
-console.log('this is chain id: ' + CHAIN_ID);
+export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
+
+export const WALLET_CONNECT_V2_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
@@ -81,13 +78,6 @@ const app: Record<SupportedChains, AppConfig> = {
       'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
-  [ChainId.Polygon]: {
-    jsonRpcUri: createNetworkHttpUrl('polygon'),
-    wsRpcUri: createNetworkWsUrl('polygon'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
-    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
-  },
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
@@ -105,9 +95,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
     chainlinkEthUsdc: undefined,
     nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
-
-    atxDaoAddress: undefined,
-    repTokensAddress: undefined
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
@@ -117,19 +104,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
     weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
-    atxDaoAddress: '0x63f8F23ce0f3648097447622209E95A391c44b00',
-    repTokensAddress: undefined
-  },
-  [ChainId.Polygon]: {
-    lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
-    usdcToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
-    payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
-    tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
-    weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
-    atxDaoAddress: undefined,
-    repTokensAddress: "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2"
   },
   [ChainId.Hardhat]: {
     lidoToken: undefined,
@@ -139,8 +113,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     chainlinkEthUsdc: undefined,
     weth: undefined,
     nounsStreamFactory: undefined,
-    atxDaoAddress: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
-    repTokensAddress: '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1'
   },
 };
 
@@ -148,7 +120,6 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-
   } catch {}
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
