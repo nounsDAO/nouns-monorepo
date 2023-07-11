@@ -84,10 +84,13 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <iframe width="560" height="315" src="https://www.youtube.com/embed/NUh8UGEXjJ4" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
             <br/>
             <br/>
-<p>As a DAO, each member is able to <a href="https://snapshot.org/#/atxdao.eth" target="#">create a proposal and vote on the future of our organization</a>. Membership is signified by an NFT and anyone with an NFT can create a proposal 
-   about what the organization should do and what the treasury should be spent on. This makes ATX DAO 
-   the most democratic institution in the city, and our bottom-up, self-governing system is an innovative 
-   structure that puts us in a position to have an impact in ways never before seen in Austin.</p>
+<p>As a DAO, each member is able to <a href="https://snapshot.org/#/atxdao.eth" target="#">create a proposal and vote on the future of our organization</a>.
+    Membership is signified by an NFT and 1 NFT = 1 vote. Anyone with an NFT can create a proposal 
+    about what the organization should do and what the treasury should be spent on. 
+    This makes ATX DAO the most democratic institution in the city, and our bottom-up, self-governing system is an 
+    innovative structure that puts us in a position to have an impact in ways never before seen in Austin."
+    and "If you're new here, try getting started with a couple quests!
+   </p>
             </Accordion.Body>
           </Accordion.Item>
 
@@ -122,7 +125,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
-              <b>Subscribe to the <a href="https://discord.com/channels/@me/592915049044115461/1127655529473392791" target="#">events calendar</a> to stay informed about ATX DAO events.</b>
+              <b>Subscribe to the <a href="https://calendar.google.com/calendar/u/0/r?cid=c_k4h21h5hj127usvnf4lgvbkvd8@group.calendar.google.com" target="#">events calendar</a> to stay informed about ATX DAO events.</b>
               <br/>
               <b>- Weekly</b> <br/>Every Monday at 5:30 PM we have an open floor conversation in Discord Voice. Every Tuesday at 5:30 PM is the weekly Engineering meeting in Discord Voice. 
               <br/>
