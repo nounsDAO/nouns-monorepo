@@ -47,7 +47,7 @@ export class WalletConnectV2Connector extends AbstractConnector {
           ],
           events: ['chainChanged', 'accountsChanged'],
           optionalEvents: ['disconnect']
-        })
+        } as EthereumProviderOptions)
       }
     )
 

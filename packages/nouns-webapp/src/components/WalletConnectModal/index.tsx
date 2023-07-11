@@ -3,7 +3,7 @@ import WalletButton from '../WalletButton';
 import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { InjectedConnector, NoEthereumProviderError } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { WalletConnectV2Connector } from '../../utils/walletconnectV2Connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
@@ -11,6 +11,7 @@ import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID, WALLET_CONNECT_V2_PROJECT_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
 import { Trans } from '@lingui/macro';
+import { EthereumProviderOptions } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider'
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
@@ -47,7 +48,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
             rpcMap: {
               [CHAIN_ID]: config.app.jsonRpcUri,
             },
-          });
+          } as EthereumProviderOptions);
           activate(walletConnectV2);
         }}
         walletType={WALLET_TYPE.walletconnect}
