@@ -100,7 +100,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                ATX DAO is registered with the Secretary of State as ATX DAO Public Relations LLC. This entity is used to interact with vendors and sponsors, handle legal agreements, and protect members from liability related to events and public-facing activities. Funds from the Gnosis Safe are released to this LLC as needed. In order to see the full net worth of the treasury, review the financial statements. We are currently working with a lawyer to wrap the full membership body into a UNA (unincorporated nonprofit association).
+                ATX DAO is registered with the Secretary of State as ATX DAO Public Relations LLC. This entity is used to interact with vendors and sponsors, handle legal agreements, and protect members from liability related to events and public-facing activities. Funds from the Gnosis Safe are released to this LLC as needed. In order to see the full net worth of the treasury, review the <a href="https://app.charmverse.io/atx-dao/page-1665440576207129" target="#">financial statements</a>. We are currently working with a lawyer to wrap the full membership body into a UNA (unincorporated nonprofit association).
                 </Trans>
               </p>
             </Accordion.Body>
