@@ -165,28 +165,32 @@ export const candidateProposalQuery = (id: string) => gql`
     createdTransactionHash
     canceled
     versions {
-      title
+      content {
+        title
+      }
     }
     latestVersion {
-      title
-      description
-      targets
-      values
-      signatures
-      calldatas
-      encodedProposalHash
-      versionSignatures {
-        id
-        signer {
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+        contentSignatures {
           id
-          proposals {
+          signer {
             id
+            proposals {
+              id
+            }
           }
+          sig
+          expirationTimestamp
+          canceled
+          reason
         }
-        sig
-        expirationTimestamp
-        canceled
-        reason
       }
     }
   }
@@ -204,19 +208,22 @@ export const candidateProposalVersionsQuery = (id: string) => gql`
     createdTransactionHash
     versions {
       id
-      title
-      description
-      targets
-      values
-      signatures
-      calldatas
-      encodedProposalHash
       createdTimestamp
       updateMessage
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+      }
     }
     latestVersion {
       id
     }
+  }
   }
 }
 `;

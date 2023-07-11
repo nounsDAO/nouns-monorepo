@@ -162,15 +162,15 @@ const parseSubgraphCandidate = (
   if (!candidate) {
     return;
   }
-  const description = candidate.latestVersion.description
+  const description = candidate.latestVersion.content.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^['"]|['"]$)/g, '');
   const transactionDetails: ProposalTransactionDetails = {
-    targets: candidate.latestVersion.targets,
-    values: candidate.latestVersion.values,
-    signatures: candidate.latestVersion.signatures,
-    calldatas: candidate.latestVersion.calldatas,
-    encodedProposalHash: candidate.latestVersion.encodedProposalHash,
+    targets: candidate.latestVersion.content.targets,
+    values: candidate.latestVersion.content.values,
+    signatures: candidate.latestVersion.content.signatures,
+    calldatas: candidate.latestVersion.content.calldatas,
+    encodedProposalHash: candidate.latestVersion.content.encodedProposalHash,
   };
   let details;
   if (toUpdate) {
@@ -193,11 +193,11 @@ const parseSubgraphCandidate = (
         description: description ?? 'No description.',
         details: details,
         transactionHash: details.encodedProposalHash,
-        contentSignatures: candidate.latestVersion.versionSignatures,
-        targets: candidate.latestVersion.targets,
-        values: candidate.latestVersion.values,
-        signatures: candidate.latestVersion.signatures,
-        calldatas: candidate.latestVersion.calldatas,
+        contentSignatures: candidate.latestVersion.content.contentSignatures,
+        targets: candidate.latestVersion.content.targets,
+        values: candidate.latestVersion.content.values,
+        signatures: candidate.latestVersion.content.signatures,
+        calldatas: candidate.latestVersion.content.calldatas,
       }
     },
   };
@@ -251,28 +251,32 @@ const parseSubgraphCandidateVersions = (
 
 export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
   versions: {
-    title: string;
+    content: {
+      title: string;
+    }
   }[];
   latestVersion: {
-    title: string;
-    description: string;
-    targets: string[];
-    values: string[];
-    signatures: string[];
-    calldatas: string[];
-    encodedProposalHash: string;
-    versionSignatures: {
-      reason: string;
-      expirationTimestamp: number;
-      sig: string;
-      canceled: boolean;
-      signer: {
-        id: string;
-        proposals: {
+    content: {
+      title: string;
+      description: string;
+      targets: string[];
+      values: string[];
+      signatures: string[];
+      calldatas: string[];
+      encodedProposalHash: string;
+      contentSignatures: {
+        reason: string;
+        expirationTimestamp: number;
+        sig: string;
+        canceled: boolean;
+        signer: {
           id: string;
-        }[];
-      };
-    }[];
+          proposals: {
+            id: string;
+          }[];
+        };
+      }[];
+    }
   };
 }
 

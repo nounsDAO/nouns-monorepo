@@ -4,7 +4,6 @@ import { CandidateSignature } from '../../wrappers/nounsData';
 import CandidateSponsorImage from './CandidateSponsorImage';
 import { useQuery } from '@apollo/client';
 import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 type Props = {
@@ -49,9 +48,7 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
           delegateToNounIds &&
           nounIds.map((nounId, i) => {
             return (
-              <Link to={`/noun/${nounId}`} className={classes.sponsorAvatar}>
-                <CandidateSponsorImage nounId={+nounId} />
-              </Link>
+              <CandidateSponsorImage nounId={+nounId} />
             );
           })}
       </div>

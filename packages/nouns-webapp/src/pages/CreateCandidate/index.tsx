@@ -155,7 +155,7 @@ const CreateCandidatePage = () => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
-      0,// proposalIdToUpdate
+      0,// proposalIdToUpdate - use 0 for new proposals
       { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
