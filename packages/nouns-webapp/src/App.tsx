@@ -52,6 +52,7 @@ function App() {
 
   let output;
   if (account !== null) {
+    //return to > 0 after testing
     if (balance >= 0) {
       output = <div>
       <Switch>
@@ -64,8 +65,6 @@ function App() {
       </div>
     }
   }
-
-  console.log('this is chain id: ' + CHAIN_ID);
 
   return (
     <div className={`${classes.wrapper}`}>

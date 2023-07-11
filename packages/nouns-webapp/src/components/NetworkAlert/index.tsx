@@ -32,7 +32,7 @@ const NetworkAlert = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Nouns DAO auctions require you to switch over {networkName()} to be able to participate.
+            ATX DAO require you to switch over {networkName()} to be able to participate.
           </p>
           <p>
             <b>To get started, please switch your network by following the instructions below:</b>

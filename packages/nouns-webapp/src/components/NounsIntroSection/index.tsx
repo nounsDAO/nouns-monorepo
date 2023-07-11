@@ -47,7 +47,7 @@ const NounsIntroSection = () => {
               Here you can find all the tools and info you need to get involved in our events, projects, and governance.
             </p>
             <p>
-              If you're new here, try getting started with a couple quests! Just hop in {discordLink} and use <code>/onboard-me</code>
+              If you're new here, hop in our {discordLink} and use <code>/onboard-me</code>
             </p>
           </div>
         </Col>
