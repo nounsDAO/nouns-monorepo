@@ -1,9 +1,11 @@
 import { useEtherBalance } from '@usedapp/core';
 import useLidoBalance from './useLidoBalance';
 import useUSDCBalance from './useUSDCBalance';
+import useUSDTBalance from './useUSDTBalance';
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
 import config from '../config';
+import { formatEther } from '@ethersproject/units'
 import { BigNumber, ethers } from 'ethers';
 
 /**
@@ -26,12 +28,16 @@ export const useTreasuryBalance = () => {
  * @returns USD value of treasury assets (ETH + Lido + USDC) at current exchange rate
  */
 export const useTreasuryUSDValue = () => {
+  const zero = BigNumber.from(0);
+
   const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));
   const treasuryBalanceETH = Number(
-    ethers.utils.formatEther(useTreasuryBalance()?.toString() || '0'),
+    ethers.utils.formatEther(useEtherBalance('0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23')?.toString() || '0'),
   );
-  const ethValue = etherPrice * treasuryBalanceETH
-  const zero = BigNumber.from(0);
+  const ethValue = Number(etherPrice * treasuryBalanceETH);
+
   const usdcBalance = useUSDCBalance()?.div(10**6);
-  return (usdcBalance ?? zero);
+  const usdtBalance = useUSDTBalance()?.div(10**6);
+
+  return Number((usdcBalance ?? zero).add(usdtBalance ?? zero)) + ethValue;
 };

@@ -51,10 +51,8 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt(
-  // process.env.REACT_APP_CHAIN_ID ??
-  '1');
-console.log('this is chain id: ' + CHAIN_ID);
+export const CHAIN_ID: SupportedChains = parseInt( '1');
+const INFURA_PROJECT_ID = '2dd05b4bb4b6476cb6bc714808ddb098';
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
@@ -117,7 +115,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     usdcToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    usdtToken: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    usdtToken: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
