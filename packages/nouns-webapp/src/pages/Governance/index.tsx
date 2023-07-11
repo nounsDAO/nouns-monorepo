@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import Link from '../../components/Link';
+import snapshotImage from '../../assets/snapshot.jpeg';
 
 const GovernancePage = () => {
 
@@ -49,7 +50,7 @@ const GovernancePage = () => {
             <Col style={{padding: '10px', marginRight: '3rem'}}>
               <img
               style={{ width: '5rem', float: 'right'}}
-              src="../../assets/snapshot.jpeg"></img>
+              src={snapshotImage}></img>
             </Col>
           </Row>
         </Card>

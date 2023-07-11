@@ -127,6 +127,14 @@
 }
 
 @media (max-width: 992px) {
+  .container {
+    padding-top:5%;
+    padding-bottom:5%;
+    margin-left:15%;
+    margin-right:15%;
+    width:70%;
+  }
+
   .videoSection {
     padding: 0 !important;
   }
@@ -137,8 +145,8 @@
   }
 
   .textWrapper {
-    margin-left: 20px;
-    padding: 2rem;
+    margin-left: 15px;
+    padding: 1rem;
   }
 
   .textWrapper h1 {
@@ -165,9 +173,8 @@
   }
 
   .videoSubtitle {
-    top: unset;
-    bottom: -40px;
-    padding: 0 2.5rem;
+    top: 200px;
+    padding: 2rem 2.5rem;
   }
 
   .iosImgContainer {
