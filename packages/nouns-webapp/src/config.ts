@@ -4,6 +4,8 @@ import {
 } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
 
+export const WALLET_CONNECT_V2_PROJECT_ID = '501e80c0ce3d8633938fc821b41fabfd';
+
 interface ExternalContractAddresses {
   lidoToken: string | undefined;
   usdcToken: string | undefined;

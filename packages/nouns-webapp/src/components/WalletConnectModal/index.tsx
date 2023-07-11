@@ -3,14 +3,15 @@ import WalletButton from '../WalletButton';
 import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { InjectedConnector, NoEthereumProviderError } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { WalletConnectV2Connector } from '../../utils/walletconnectV2Connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
-import config, { CHAIN_ID } from '../../config';
+import config, { CHAIN_ID, WALLET_CONNECT_V2_PROJECT_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
 import { Trans } from '@lingui/macro';
+import { EthereumProviderOptions } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider'
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
@@ -40,14 +41,15 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       />
       <WalletButton
         onClick={() => {
-          const walletlink = new WalletConnectConnector({
-            supportedChainIds,
-            chainId: CHAIN_ID,
-            rpc: {
+          const walletConnectV2 = new WalletConnectV2Connector({
+            projectId: WALLET_CONNECT_V2_PROJECT_ID,
+            showQrModal: true,
+            chains: supportedChainIds,
+            rpcMap: {
               [CHAIN_ID]: config.app.jsonRpcUri,
             },
-          });
-          activate(walletlink);
+          } as EthereumProviderOptions);
+          activate(walletConnectV2);
         }}
         walletType={WALLET_TYPE.walletconnect}
       />
