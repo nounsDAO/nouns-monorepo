@@ -9,6 +9,7 @@ export const WALLET_CONNECT_V2_PROJECT_ID = '501e80c0ce3d8633938fc821b41fabfd';
 interface ExternalContractAddresses {
   lidoToken: string | undefined;
   usdcToken: string | undefined;
+  usdtToken: string | undefined;
   chainlinkEthUsdc: string | undefined;
   payerContract: string | undefined;
   tokenBuyer: string | undefined;
@@ -50,8 +51,10 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt( '1');
-const INFURA_PROJECT_ID = '2dd05b4bb4b6476cb6bc714808ddb098';
+export const CHAIN_ID: SupportedChains = parseInt(
+  // process.env.REACT_APP_CHAIN_ID ??
+  '1');
+console.log('this is chain id: ' + CHAIN_ID);
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
@@ -100,6 +103,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
     usdcToken: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
+    usdtToken: undefined,
     weth: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     payerContract: '0xD4A3bf1dF54699E63A2ef7F490E8E22b27B945f0',
     tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
@@ -113,6 +117,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     usdcToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+    usdtToken: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
@@ -125,6 +130,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Polygon]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     usdcToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+    usdtToken: undefined,
     chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
@@ -137,6 +143,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Hardhat]: {
     lidoToken: undefined,
     usdcToken: undefined,
+    usdtToken: undefined,
     payerContract: undefined,
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,

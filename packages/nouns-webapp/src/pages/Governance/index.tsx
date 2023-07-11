@@ -49,7 +49,7 @@ const GovernancePage = () => {
             <Col style={{padding: '10px', marginRight: '3rem'}}>
               <img
               style={{ width: '5rem', float: 'right'}}
-              src="https://pbs.twimg.com/profile_images/1305394576602013698/Tvz6UU5R_400x400.jpg"></img>
+              src="../../assets/snapshot.jpeg"></img>
             </Col>
           </Row>
         </Card>
