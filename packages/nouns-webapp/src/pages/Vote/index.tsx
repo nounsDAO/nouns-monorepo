@@ -3,6 +3,7 @@ import Section from '../../layout/Section';
 import {
   PartialProposal,
   ProposalState,
+  ProposalVersion,
   useCancelProposal,
   useCurrentQuorum,
   useExecuteProposal,
@@ -51,6 +52,7 @@ import VoteSignals from '../../components/VoteSignals/VoteSignals';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 import { isProposalUpdatable } from '../../utils/proposals';
+import { useProposalFeedback } from '../../wrappers/nounsData';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -92,6 +94,7 @@ const VotePage = ({
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
+  const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
   const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
     streamAddress: string;
     startTime: number;
@@ -115,6 +118,7 @@ const VotePage = ({
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
+  const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -143,13 +147,19 @@ const VotePage = ({
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // Only count available votes as of the proposal created block
-  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock);
+  const userVotes = useUserVotesAsOfBlock(proposal?.createdBlock);
 
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
     proposal && proposal.id ? parseInt(proposal.id) : 0,
     dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
   );
+
+  const getVersionTimestamp = (proposalVersions: ProposalVersion[]) => {
+    const versionDetails =
+      proposalVersions[proposalVersions.length - 1];
+    return versionDetails?.createdAt;
+  }
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isInNonFinalState = [
@@ -416,7 +426,7 @@ const VotePage = ({
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
         proposalId={proposal?.id}
-        availableVotes={availableVotes || 0}
+        availableVotes={userVotes || 0}
         isObjectionPeriod={isObjectionPeriod}
       />
       <Col lg={isUpdateable() ? 12 : 10} className={classes.wrapper}>
@@ -707,11 +717,15 @@ const VotePage = ({
               />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
-              <VoteSignals
-                proposalVersions={proposalVersions}
-                availableVotes={availableVotes}
-                proposal={proposal}
-              />
+              {proposalVersions && (
+                <VoteSignals
+                  feedback={proposalFeedback.data?.proposalFeedbacks}
+                  proposalId={proposal.id}
+                  versionTimestamp={getVersionTimestamp(proposalVersions)}
+                  userVotes={userVotes}
+                  setDataFetchPollInterval={setDataFetchPollInterval}
+                />
+              )}
             </Col>
           </Row>
         </div>

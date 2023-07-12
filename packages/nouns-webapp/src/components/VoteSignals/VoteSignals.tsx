@@ -16,9 +16,11 @@ import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
 
 type Props = {
-  availableVotes?: number;
-  proposal: Proposal;
-  proposalVersions?: ProposalVersion[];
+  proposalId?: string;
+  versionTimestamp: number;
+  feedback?: VoteSignalDetail[];
+  userVotes?: number;
+  setDataFetchPollInterval: (interval: number) => void;
 };
 
 function VoteSignals(props: Props) {
@@ -34,7 +36,7 @@ function VoteSignals(props: Props) {
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
   const { sendFeedback, sendFeedbackState } = useSendFeedback();
   const { account } = useEthers();
-  const { data, refetch } = useProposalFeedback(props.proposal.id ? props.proposal.id : '0', dataFetchPollInterval);
+  // const { data, refetch } = useProposalFeedback(props.proposalId ? props.proposalId : '0', dataFetchPollInterval);
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
@@ -42,19 +44,13 @@ function VoteSignals(props: Props) {
     let againstIt: VoteSignalDetail[] = [];
     let abstainIt: VoteSignalDetail[] = [];
 
-    if (data) {
-      // get latest version number
-      const versionDetails =
-        props.proposalVersions && props.proposalVersions[props.proposalVersions.length - 1];
-      const versionCreatedTimestamp = versionDetails?.createdAt;
+    if (props.feedback) {
       // filter feedback to this version
-      let versionFeedback = data.proposalFeedbacks;
-      if (versionCreatedTimestamp) {
-        versionFeedback =
-          versionCreatedTimestamp &&
-          data.proposalFeedbacks.filter(
-            (feedback: VoteSignalDetail) => feedback.createdTimestamp >= +versionCreatedTimestamp,
-          );
+      let versionFeedback = props.feedback;
+      if (props.versionTimestamp) {
+        versionFeedback = props.feedback.filter(
+          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= +props.versionTimestamp,
+        );
       }
       // sort feedback
       versionFeedback.map((feedback: VoteSignalDetail) => {
@@ -82,7 +78,7 @@ function VoteSignals(props: Props) {
         return feedback;
       });
     }
-  }, [data, props.proposalVersions, account]);
+  }, [props.feedback, props.versionTimestamp, account]);
 
   async function handleFeedbackSubmit(
     proposalId: number,
@@ -112,7 +108,7 @@ function VoteSignals(props: Props) {
         break;
       case 'Success':
         // don't show modal. just update feedback
-        refetch();
+        // refetch();
         setIsTransactionPending(false);
         setHasUserVoted(true);
         break;
@@ -142,7 +138,7 @@ function VoteSignals(props: Props) {
 
   return (
     <>
-      {props.proposal.id && (
+      {props.proposalId && (
         <div className={classes.voteSignals}>
           <div className={classes.header}>
             <h2>
@@ -156,7 +152,7 @@ function VoteSignals(props: Props) {
             </p>
           </div>
           <div className={classes.wrapper}>
-            {!data ? (
+            {!props.feedback ? (
               <div className={classes.spinner}>
                 <Spinner animation="border" />
               </div>
@@ -167,7 +163,7 @@ function VoteSignals(props: Props) {
                   <VoteSignalGroup voteSignals={againstFeedback} support={0} />
                   <VoteSignalGroup voteSignals={abstainFeedback} support={2} />
                 </div>
-                {props.availableVotes !== undefined && props.availableVotes > 0 && (
+                {props.userVotes !== undefined && props.userVotes > 0 && (
                   <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                     {!hasUserVoted ? (
                       <>
@@ -235,9 +231,9 @@ function VoteSignals(props: Props) {
                                 disabled={support === undefined || isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
                                   setIsTransactionWaiting(true);
-                                  props.proposal.id &&
+                                  props.proposalId &&
                                     support !== undefined &&
-                                    handleFeedbackSubmit(+props.proposal.id, support, reasonText)
+                                    handleFeedbackSubmit(+props.proposalId, support, reasonText)
                                 }
                                 }
                               >
