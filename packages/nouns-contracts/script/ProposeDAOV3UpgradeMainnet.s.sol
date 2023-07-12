@@ -16,6 +16,9 @@ contract ProposeDAOV3UpgradeMainnet is Script {
     uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
+    address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
+    address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
+
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
     address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
     address public constant DESCRIPTOR_MAINNET = 0x6229c811D04501523C6058bfAAc29c91bb586268;
@@ -30,8 +33,10 @@ contract ProposeDAOV3UpgradeMainnet is Script {
 
         string memory description = vm.readFile(vm.envString('PROPOSAL_DESCRIPTION_FILE'));
 
-        address[] memory erc20TokensToIncludeInFork = new address[](1);
+        address[] memory erc20TokensToIncludeInFork = new address[](3);
         erc20TokensToIncludeInFork[0] = STETH_MAINNET;
+        erc20TokensToIncludeInFork[1] = WSTETH_MAINNET;
+        erc20TokensToIncludeInFork[2] = RETH_MAINNET;
 
         vm.startBroadcast(proposerKey);
 
