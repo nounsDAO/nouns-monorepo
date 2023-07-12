@@ -199,7 +199,7 @@ const NavBar = () => {
             src={logo}
             alt="ATX DAO Logo"
           ></img>
-          <h3>ATX DAO Member Portal</h3>
+          <h3>Member Portal</h3>
           <p>
           Please verify your membership
           </p>
