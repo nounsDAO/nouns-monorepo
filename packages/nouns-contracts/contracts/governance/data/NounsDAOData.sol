@@ -67,7 +67,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     /// @notice The account to send ETH fees to.
     address payable public feeRecipient;
 
-    constructor(address nounsToken_, address nounsDao_) {
+    constructor(address nounsToken_, address nounsDao_) initializer {
         nounsToken = NounsTokenLike(nounsToken_);
         nounsDao = nounsDao_;
     }

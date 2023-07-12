@@ -116,6 +116,8 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
         _;
     }
 
+    constructor() initializer {}
+
     function initialize(
         address _owner,
         address _minter,
