@@ -253,18 +253,16 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           ) : (
             <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
           )}
+          <div className={classes.aboutText}>
+            <p>
+              <Trans>
+                Once a signed proposal is onchain, signers will need to wait until the proposal is queued
+                or defeated before putting another proposal onchain.
+              </Trans>
+            </p>
+          </div>
         </div>
-        <div className={classes.aboutText}>
-          <p>
-            <strong><Trans>About sponsoring proposal candidates</Trans></strong>
-          </p>
-          <p>
-            <Trans>
-              Once a signed proposal is onchain, signers will need to wait until the proposal is queued
-              or defeated before putting another proposal onchain.
-            </Trans>
-          </p>
-        </div>
+
       </div>
     </>
   );

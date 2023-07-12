@@ -1,17 +1,17 @@
 .wrapper {
-  position: sticky;
+  /* position: sticky;
   top: 20px;
   @media (max-width: 1200px) {
     position: relative;
     top: 0;
-  }
+  } */
 }
 
 .interiorWrapper {
   border: 1px solid #e6e6e6;
   padding: 15px;
   border-radius: 12px;
-  text-align: center;
+  text-align: left;
 }
 
 .header {
@@ -24,7 +24,7 @@
   padding-top: 0;
   font-size: 14px;
   line-height: 1.1;
-  color: #646465;
+  color: var(--brand-gray-light-text);
 }
 .sponsorInteriorWrapper.hidden {
   opacity: 0;
@@ -278,7 +278,7 @@
 
 .aboutText {
   font-size: 14px;
-  color: #646465;
+  color: var(--brand-gray-light-text);
   line-height: 1.2;
   margin-top: 15px;
 }

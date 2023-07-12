@@ -41,7 +41,7 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
   return (
     <>
       <Row>
-        <Col className={clsx(classes.section, classes.v3Proposal)}>
+        <Col className={clsx(classes.section, classes.v3Proposal, classes.hasSidebar)}>
           <h5>
             <Trans>Description</Trans>
           </h5>

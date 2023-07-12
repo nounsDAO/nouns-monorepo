@@ -291,3 +291,11 @@ a.primaryButton:hover {
   margin: 0;
   display: block;
 }
+/* 
+.sidebar {
+  @media (min-width: 993px) {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+  }
+} */

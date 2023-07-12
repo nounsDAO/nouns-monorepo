@@ -5,16 +5,22 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 12px;
-  position: sticky;
-  top: 20px;
   overflow: hidden;
+  @media (min-width: 993px) {
+    position: sticky;
+    top: 20px;
+  }
+}
+.isCandidate .wrapper {
+  position: relative;
+  top: 0;
 }
 
 .header {
   margin: 1rem 0;
 }
 
-.header p {
+.header p, .isCandidate .descriptionBelow {
   font-size: 16px;
   font-family: 'PT Root UI';
   color: var(--brand-gray-light-text);
@@ -258,4 +264,14 @@
   margin: 0 auto;
   padding: 10px;
   max-width: 60px;
+}
+
+.isCandidate h2 {
+  font-size: 20px;
+  margin-top: 2rem;
+}
+.isCandidate .descriptionBelow {
+  margin-top: 0.5rem;
+  font-size: 14px;
+  line-height: 1.2;
 }

@@ -146,17 +146,19 @@ function VoteSignals(props: Props) {
   return (
     <>
       {props.proposalId && (
-        <div className={classes.voteSignals}>
+        <div className={clsx(classes.voteSignals, props.isCandidate && classes.isCandidate)}>
           <div className={classes.header}>
             <h2>
               <Trans>Pre-voting feedback</Trans>
             </h2>
-            {/* <p>
-              <Trans>
-                Nouns voters can cast voting signals to give proposers of pending proposals an idea of
-                how they intend to vote and helpful guidance on proposal changes to change their vote.
-              </Trans>
-            </p> */}
+            {!props.isCandidate && (
+              <p>
+                <Trans>
+                  Nouns voters can cast voting signals to give proposers of pending proposals an idea of
+                  how they intend to vote and helpful guidance on proposal changes to change their vote.
+                </Trans>
+              </p>
+            )}
           </div>
           <div className={classes.wrapper}>
             {!props.feedback ? (
@@ -283,6 +285,14 @@ function VoteSignals(props: Props) {
               </>
             )}
           </div>
+          {props.isCandidate && (
+            <p className={classes.descriptionBelow}>
+              <Trans>
+                Nouns voters can cast voting signals to give proposers of pending proposals an idea of
+                how they intend to vote and helpful guidance on proposal changes to change their vote.
+              </Trans>
+            </p>
+          )}
         </div>
       )}
     </>

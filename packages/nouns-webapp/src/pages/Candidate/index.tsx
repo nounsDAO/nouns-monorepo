@@ -203,7 +203,7 @@ const CandidatePage = ({
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate.data} />
           </Col>
-          <Col lg={4}>
+          <Col lg={4} className={classes.sidebar}>
             {currentBlock && threshold !== undefined && userVotes !== undefined && (
               <CandidateSponsors
                 candidate={candidate.data}
