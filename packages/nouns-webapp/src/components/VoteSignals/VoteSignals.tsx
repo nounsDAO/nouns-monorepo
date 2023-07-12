@@ -5,10 +5,8 @@ import clsx from 'clsx';
 import VoteSignalGroup from './VoteSignalGroup';
 import {
   VoteSignalDetail,
-  useProposalFeedback,
   useSendFeedback,
 } from '../../wrappers/nounsData';
-import { Proposal, ProposalVersion } from '../../wrappers/nounsDao';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useAppDispatch } from '../../hooks';
 import { useEthers } from '@usedapp/core';
@@ -17,16 +15,19 @@ import { Spinner } from 'react-bootstrap';
 
 type Props = {
   proposalId?: string;
+  proposer?: string;
   versionTimestamp: number;
   feedback?: VoteSignalDetail[];
   userVotes?: number;
+  isCandidate?: boolean;
+  candidateSlug?: string;
   setDataFetchPollInterval: (interval: number) => void;
+  handleRefetch: Function;
 };
 
 function VoteSignals(props: Props) {
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
-  const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [isTransactionWaiting, setIsTransactionWaiting] = useState(false);
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [forFeedback, setForFeedback] = useState<any[]>([]);
@@ -34,9 +35,8 @@ function VoteSignals(props: Props) {
   const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
-  const { sendFeedback, sendFeedbackState } = useSendFeedback();
+  const { sendFeedback, sendFeedbackState } = useSendFeedback(props.isCandidate === true ? 'candidate' : 'proposal');
   const { account } = useEthers();
-  // const { data, refetch } = useProposalFeedback(props.proposalId ? props.proposalId : '0', dataFetchPollInterval);
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
@@ -84,11 +84,18 @@ function VoteSignals(props: Props) {
     proposalId: number,
     supportNum: number,
     reason: string | null,
+    candidateSlug?: string,
+    proposer?: string,
   ) {
     if (supportNum > 2) {
       return;
     }
-    await sendFeedback(proposalId, supportNum, reason);
+    if (props.isCandidate === true && candidateSlug && proposer) {
+      await sendFeedback(proposer, candidateSlug, supportNum, reason);
+    } else {
+      await sendFeedback(proposalId, supportNum, reason);
+    }
+
   }
 
   const dispatch = useAppDispatch();
@@ -104,11 +111,11 @@ function VoteSignals(props: Props) {
       case 'Mining':
         setIsTransactionWaiting(false);
         setIsTransactionPending(true);
-        setDataFetchPollInterval(50);
+        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
         // don't show modal. just update feedback
-        // refetch();
+        props.handleRefetch();
         setIsTransactionPending(false);
         setHasUserVoted(true);
         break;
@@ -120,7 +127,7 @@ function VoteSignals(props: Props) {
         });
         setIsTransactionPending(false);
         setIsTransactionWaiting(false);
-        setDataFetchPollInterval(0);
+        props.setDataFetchPollInterval(0);
         break;
       case 'Exception':
         setModal({
@@ -130,7 +137,7 @@ function VoteSignals(props: Props) {
         });
         setIsTransactionPending(false);
         setIsTransactionWaiting(false);
-        setDataFetchPollInterval(0);
+        props.setDataFetchPollInterval(0);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,12 +151,12 @@ function VoteSignals(props: Props) {
             <h2>
               <Trans>Pre-voting feedback</Trans>
             </h2>
-            <p>
+            {/* <p>
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea of
                 how they intend to vote and helpful guidance on proposal changes to change their vote.
               </Trans>
-            </p>
+            </p> */}
           </div>
           <div className={classes.wrapper}>
             {!props.feedback ? (
@@ -233,7 +240,7 @@ function VoteSignals(props: Props) {
                                   setIsTransactionWaiting(true);
                                   props.proposalId &&
                                     support !== undefined &&
-                                    handleFeedbackSubmit(+props.proposalId, support, reasonText)
+                                    handleFeedbackSubmit(+props.proposalId, support, reasonText, props.candidateSlug, props.proposer)
                                 }
                                 }
                               >

@@ -3,6 +3,7 @@ import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@n
 import { useBlockNumber, useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
+  candidateFeedbacksQuery,
   candidateProposalQuery,
   candidateProposalVersionsQuery,
   candidateProposalsQuery,
@@ -122,10 +123,10 @@ export const useCancelSignature = () => {
   return { cancelSignature };
 };
 
-export const useSendFeedback = () => {
+export const useSendFeedback = (proposalType?: 'proposal' | 'candidate') => {
   const { send: sendFeedback, state: sendFeedbackState } = useContractFunction(
     nounsDAOData,
-    'sendFeedback',
+    proposalType === 'candidate' ? 'sendCandidateFeedback' : 'sendFeedback',
   );
   return { sendFeedback, sendFeedbackState };
 };
@@ -134,6 +135,15 @@ export const useProposalFeedback = (id: string, pollInterval?: number) => {
   const { loading, data, error, refetch } = useQuery(proposalFeedbacksQuery(id), {
     pollInterval: pollInterval || 0,
   });
+
+  return { loading, data, error, refetch };
+};
+
+export const useCandidateFeedback = (id: string, pollInterval?: number) => {
+  const { loading, data: results, error, refetch } = useQuery(candidateFeedbacksQuery(id), {
+    pollInterval: pollInterval || 0,
+  });
+  const data: VoteSignalDetail[] = results?.candidateFeedbacks.map((feedback: VoteSignalDetail) => feedback);
 
   return { loading, data, error, refetch };
 };

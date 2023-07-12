@@ -436,7 +436,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           handleCreateProposal={handleUpdateProposal}
         />
         {props.isCandidate && (
-          <p className="text-center">This will clear all previous sponsors and feedback votes</p>
+          <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans></p>
         )}
       </Col>
     </Section>

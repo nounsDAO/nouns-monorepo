@@ -17,9 +17,10 @@ import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
 import { useProposal, useProposalCount, useProposalThreshold } from '../../wrappers/nounsDao';
-import { useCancelCandidate, useCandidateProposal } from '../../wrappers/nounsData';
+import { useCancelCandidate, useCandidateFeedback, useCandidateProposal } from '../../wrappers/nounsData';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
+import VoteSignals from '../../components/VoteSignals/VoteSignals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -45,6 +46,11 @@ const CandidatePage = ({
   const userVotes = useUserVotes();
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
+  const feedback = useCandidateFeedback(id, dataFetchPollInterval);
+
+  const handleRefetchData = () => {
+    feedback.refetch();
+  };
 
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number
@@ -142,6 +148,8 @@ const CandidatePage = ({
     };
   })();
 
+
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
@@ -211,6 +219,17 @@ const CandidatePage = ({
                 latestProposal={latestProposal}
               />
             )}
+            <VoteSignals
+              proposalId={candidate.data.id}
+              proposer={candidate.data.proposer}
+              versionTimestamp={candidate.data?.lastUpdatedTimestamp}
+              feedback={feedback.data}
+              userVotes={userVotes}
+              isCandidate={true}
+              candidateSlug={candidate.data.slug}
+              setDataFetchPollInterval={setDataFetchPollInterval}
+              handleRefetch={handleRefetchData}
+            />
           </Col>
         </Row>
       )}

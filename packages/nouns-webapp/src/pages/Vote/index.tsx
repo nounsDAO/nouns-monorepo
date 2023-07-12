@@ -275,6 +275,10 @@ const VotePage = ({
     }
   }, [currentBlock, proposal?.status, proposal?.objectionPeriodEndBlock]);
 
+  const handleRefetchData = () => {
+    proposalFeedback.refetch();
+  };
+
   const onTransactionStateChange = useCallback(
     (
       tx: TransactionStatus,
@@ -724,6 +728,7 @@ const VotePage = ({
                   versionTimestamp={getVersionTimestamp(proposalVersions)}
                   userVotes={userVotes}
                   setDataFetchPollInterval={setDataFetchPollInterval}
+                  handleRefetch={handleRefetchData}
                 />
               )}
             </Col>

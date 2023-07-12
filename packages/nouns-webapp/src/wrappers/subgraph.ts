@@ -519,6 +519,22 @@ export const proposalFeedbacksQuery = (proposalId: string) => gql`
     }
   }
 `;
+export const candidateFeedbacksQuery = (candidateId: string) => gql`
+  {
+    candidateFeedbacks(where: {candidate_:{id: "${candidateId}"}}) {
+      supportDetailed
+      votes
+      reason
+      createdTimestamp
+      voter {
+        id
+      }
+      candidate {
+        id
+      }
+    }
+  }
+`;
 
 
 export const ownedNounsQuery = (owner: string) => gql`

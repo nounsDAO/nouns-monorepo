@@ -242,6 +242,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       candidate.data?.slug, // Slug
+      0, // proposalIdToUpdate
       commitMessage,
     );
   };
@@ -328,6 +329,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             </>
           )}
         </p>
+        <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans></p>
         <p className="text-center pt-0">
           <>
             {proposal && proposal.content.contentSignatures?.length > 0 ? (
