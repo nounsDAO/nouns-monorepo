@@ -126,7 +126,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <Trans>
               <b>Subscribe to the <a href="https://calendar.google.com/calendar/u/0/r?cid=c_k4h21h5hj127usvnf4lgvbkvd8@group.calendar.google.com" target="#">events calendar</a> to stay informed about ATX DAO events.</b>
               <br/>
-              <b>- Weekly</b> <br/>Every Monday at 5:30 PM we have an open floor conversation in Discord Voice. Every Tuesday at 5:30 PM is the weekly Engineering meeting in Discord Voice. 
+              <b>- Weekly</b> <br/>Every Monday at 5:30 PM we have an open floor conversation in Discord Voice. Every Wednesday at 8:00 PM is the weekly Engineering meeting in Discord Voice. 
               <br/>
               <b>- Monthly</b> <br/> On the first Tuesday or Wednesday of every month, we meet at Keiretsu from 6-8 PM to socialize, strategize, and reward contributions via the giving circle. Pizza and beverages are provided. On the final Thursday of the month, we host a public hacker meetup. 
               <br/>
