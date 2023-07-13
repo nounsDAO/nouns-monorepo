@@ -523,8 +523,8 @@ const VotePage = ({
                     </span>
                     {isProposer() && isUpdateable() && (
                       <>
-                        <Trans>This proposal can be edited for the next </Trans>{' '}
-                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}.
+                        <Trans>This proposal can be edited for </Trans>{' '}
+                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}
                         {' '}
                       </>
                     )}
