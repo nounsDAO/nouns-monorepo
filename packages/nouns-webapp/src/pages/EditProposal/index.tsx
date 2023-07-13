@@ -25,9 +25,9 @@ import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import { useUserVotes } from '../../wrappers/nounToken';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '../../wrappers/nounsData';
 
 interface EditProposalProps {
-  isCandidate?: boolean;
   match: {
     params: { id: string };
   };
@@ -47,6 +47,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const [isProposePending, setProposePending] = useState(false);
   const [originalTitleValue, setOriginalTitleValue] = useState('');
   const [originalBodyValue, setOriginalBodyValue] = useState('');
+  const [slug, setSlug] = useState('');
   const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
     ProposalDetail[]
   >([]);
@@ -58,7 +59,9 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const { updateProposal, updateProposalState } = useUpdateProposal();
   const { updateProposalDescription, updateProposalDescriptionState } = useUpdateProposalDescription();
   const { updateProposalTransactions, updateProposaTransactionsState } = useUpdateProposalTransactions();
+  const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
+  const createCandidateCost = useGetCreateCandidateCost();
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
@@ -73,6 +76,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     return description.replace(titleRegex, '');
   };
   const isolatedDescription = proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
+  const isProposedBySigners = proposal?.signers && proposal?.signers?.length > 0 ? true : false;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -151,13 +155,19 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
+      setSlug(
+        title
+          .toLowerCase()
+          .replace(/ /g, '-')
+          .replace(/[^\w-]+/g, ''),
+      );
       if (title === proposal?.title) {
         setIsTitleEdited(false);
       } else {
         setIsTitleEdited(true);
       }
     },
-    [setTitleValue, proposal?.title],
+    [setTitleValue, setSlug, proposal?.title],
   );
 
   const handleBodyInput = useCallback(
@@ -281,6 +291,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   }, [updateProposaTransactionsState, setModal, updateProposaTransactionsState?.errorMessage]);
 
+  const isProposer = () => {
+    if (proposal?.proposer?.toLowerCase() === account?.toLowerCase()) {
+      return true;
+    }
+    return false;
+  };
+
   const isTransactionsEdited = () => {
     if (originalProposalTransactions.length !== proposalTransactions.length) {
       return true
@@ -337,6 +354,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
+
   // set initial values on page load 
   useEffect(() => {
     if (proposal && !titleValue && !bodyValue && !proposalTransactions.length && !originalTitleValue && !originalBodyValue && !originalProposalTransactions.length) {
@@ -345,10 +363,16 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           address: txn.target,
           value: txn.value ?? '0',
           calldata: txn.callData,
-          signature: txn.functionSig,
+          signature: txn.functionSig ?? '',
         };
       });
       setTitleValue(proposal.title);
+      setSlug(
+        proposal.title
+          .toLowerCase()
+          .replace(/ /g, '-')
+          .replace(/[^\w-]+/g, ''),
+      );
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
@@ -358,8 +382,56 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleCreateNewCandidate = async () => {
+    await createProposalCandidate(
+      proposalTransactions.map(({ address }) => address), // Targets
+      proposalTransactions.map(({ value }) => value ?? '0'), // Values
+      proposalTransactions.map(({ signature }) => signature), // Signatures
+      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+      `# ${titleValue}\n\n${bodyValue}`, // Description
+      slug, // Slug
+      props.match.params.id,// proposalIdToUpdate - use 0 for new proposals
+      { value: availableVotes! > 0 ? 0 : createCandidateCost },
+    );
+  };
 
-  if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
+  // used if updating a proposal that was created by signers
+  useEffect(() => {
+    switch (createProposalCandidateState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: <Trans>Proposal Candidate Created!</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+  }, [createProposalCandidateState, setModal]);
+
+  if (!isProposer()) {
     return null;
   }
 
@@ -418,25 +490,27 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <InputGroup className={classes.commitMessage}>
-          <FormControl
-            value={commitMessage}
-            onChange={e => setCommitMessage(e.target.value)}
-            placeholder="Optional commit message"
-          />
-        </InputGroup>
+        {!isProposedBySigners && (
+          <InputGroup className={classes.commitMessage}>
+            <FormControl
+              value={commitMessage}
+              onChange={e => setCommitMessage(e.target.value)}
+              placeholder="Optional commit message"
+            />
+          </InputGroup>
+        )}
 
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
-          hasEnoughVote={hasEnoughVote}
+          hasEnoughVote={isProposer() ? true : hasEnoughVote}
           isFormInvalid={(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ? false : true}
-          handleCreateProposal={handleUpdateProposal}
+          handleCreateProposal={isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal}
         />
-        {props.isCandidate && (
-          <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans></p>
+        {isProposedBySigners && (
+          <p className="text-center"><Trans>This will create a new proposal candidate requiring the original signers to resign to update the onchain proposal.</Trans></p>
         )}
       </Col>
     </Section>
