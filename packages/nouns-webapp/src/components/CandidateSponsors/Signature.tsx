@@ -81,7 +81,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     )}>
       {props.signerHasActiveOrPendingProposal && (
         <div className={classes.sponsorInvalidLabel}>
-          This sponsor has an active or pending proposal. Signatures are invalid while a sponsor has an active or pending proposal.
+          This signature is invalid while the signer has an active or pending proposal.
         </div>
       )}
       <div className={clsx(classes.sponsorInteriorWrapper,
