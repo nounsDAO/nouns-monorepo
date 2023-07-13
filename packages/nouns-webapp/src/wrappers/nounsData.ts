@@ -189,7 +189,6 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-
   return {
     id: candidate.id,
     slug: candidate.slug,
@@ -198,6 +197,7 @@ const parseSubgraphCandidate = (
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
     createdTransactionHash: candidate.createdTransactionHash,
+    isProposal: candidate.latestVersion.content.matchingProposalIds.length > 0,
     version: {
       content: {
         title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
@@ -287,6 +287,9 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
           }[];
         };
       }[];
+      matchingProposalIds: {
+        id: string;
+      }[]
     }
   };
 }
@@ -338,6 +341,7 @@ export interface ProposalCandidateInfo {
   canceled: boolean;
   versionsCount: number;
   createdTransactionHash: string;
+  isProposal: boolean;
 }
 
 export interface ProposalCandidateVersionContent {

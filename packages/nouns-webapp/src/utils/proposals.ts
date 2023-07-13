@@ -1,9 +1,6 @@
 import { Proposal, ProposalState } from '../wrappers/nounsDao';
 
 export const isProposalUpdatable = (proposal: Proposal, currentBlock: number) => {
-  if (proposal.signers.length > 0) {
-    return false;
-  }
   return (
     (proposal?.status === ProposalState.UPDATABLE || proposal?.status === ProposalState.PENDING) && currentBlock <= proposal.updatePeriodEndBlock
   );

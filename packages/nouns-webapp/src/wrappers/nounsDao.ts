@@ -510,8 +510,7 @@ const getProposalState = (
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
-    if (proposal.updatePeriodEndBlock && blockNumber <= parseInt(proposal.updatePeriodEndBlock) && proposal.signers.length === 0) {
-      // proposedBySigs not eligible for update
+    if (proposal.updatePeriodEndBlock && blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
       return ProposalState.UPDATABLE;
     }
 
