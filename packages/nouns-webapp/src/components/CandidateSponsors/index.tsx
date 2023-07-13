@@ -179,7 +179,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     .fill('')
                     .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
 
-                {props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes ? (
+                {(props.isProposer && props.requiredVotes && signedVotes >= props.requiredVotes && !props.candidate.isProposal) ? (
                   <>
                     <button className={classes.button}
                       onClick={() => setIsModalOpen(true)}>
@@ -196,7 +196,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   </>
                 ) : (
                   <>
-                    {!isAccountSigner && (
+                    {!isAccountSigner && !props.candidate.isProposal && (
                       <>
                         {connectedAccountNounVotes > 0 ? (
                           <button
@@ -263,7 +263,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           </div>
         </div>
 
-      </div>
+      </div >
     </>
   );
 };

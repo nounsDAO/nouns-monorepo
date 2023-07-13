@@ -6,6 +6,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ShortAddress from '../ShortAddress';
+import { Trans } from '@lingui/macro';
 
 type CandidateSignatureProps = {
   reason: string;
@@ -81,7 +82,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     )}>
       {props.signerHasActiveOrPendingProposal && (
         <div className={classes.sponsorInvalidLabel}>
-          This signature is invalid while the signer has an active or pending proposal.
+          <Trans>
+            This signature is invalid while the signer has an active or pending proposal.
+          </Trans>
         </div>
       )}
       <div className={clsx(classes.sponsorInteriorWrapper,
@@ -129,7 +132,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                   props.setIsCancelOverlayVisible(true);
                 }}
               >
-                Remove sponsorship
+                <Trans>Remove sponsorship</Trans>
               </button>
             )}
           </div>

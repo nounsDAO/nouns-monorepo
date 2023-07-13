@@ -47,6 +47,9 @@ const CandidatePage = ({
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const feedback = useCandidateFeedback(id, dataFetchPollInterval);
+  const [isProposal, setIsProposal] = useState<boolean>(false);
+  console.log('candidate', candidate);
+  console.log('latestProposal', latestProposal);
 
   const handleRefetchData = () => {
     feedback.refetch();
@@ -64,6 +67,9 @@ const CandidatePage = ({
     if (candidate.data && account) {
       setIsProposer(candidate.data.proposer.toLowerCase() === account.toLowerCase());
     }
+    if (candidate.data?.isProposal) {
+      setIsProposal(true);
+    }
   }, [candidate, account]);
 
   useEffect(() => {
@@ -76,6 +82,7 @@ const CandidatePage = ({
       setIsSignerWithActiveOrPendingProposal(status);
     }
   }, [latestProposal, account]);
+
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const handleRefetchCandidateData = () => {
@@ -167,7 +174,7 @@ const CandidatePage = ({
           />
         )}
       </Col>
-      {isProposer && (
+      {isProposer && !isProposal && (
         <Row>
           <Col lg={12}>
             <div className={classes.editCandidate}>
@@ -194,6 +201,19 @@ const CandidatePage = ({
                   {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
                 </Link>
               </div>
+            </div>
+          </Col>
+        </Row>
+      )}
+      {isProposal && (
+        <Row>
+          <Col lg={12}>
+            <div className={classes.editCandidate}>
+              <p>
+                <Trans>
+                  This proposal candidate has been proposed onchain.
+                </Trans>
+              </p>
             </div>
           </Col>
         </Row>
