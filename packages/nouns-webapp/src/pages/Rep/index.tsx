@@ -26,8 +26,6 @@ const RepPage = () => {
 
   useEffect(()=> {
     async function callMe() {
-      // To connect to a custom URL:
-
       let provider;
       let contractAddress;
 
@@ -40,8 +38,6 @@ const RepPage = () => {
         contractAddress = config.addresses.repTokensAddress;
       }
 
-    
-      //load through ethers
       const contract = new ethers.Contract(
         contractAddress as string,
         repTokensABI,
@@ -114,7 +110,7 @@ const RepPage = () => {
       </Row>
       <Col sm={12} md={6} className={classes.wrapper}>
         <p>
-          A on-chain reputation system for tracking and rewarding contributions. REP consists of an ERC1155 smart contract with two tokens on the Polygon Network. An equal amount of both tokens will be awarded to community members when distributed.
+          An on-chain reputation system for tracking and rewarding contributions. REP consists of an ERC1155 smart contract with two tokens on the Polygon Network. An equal amount of both tokens will be awarded to community members when distributed.
         </p>
         <Row>
           <Col sm={12} md={6}>
