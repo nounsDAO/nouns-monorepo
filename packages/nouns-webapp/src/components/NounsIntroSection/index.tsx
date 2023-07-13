@@ -47,7 +47,7 @@ const NounsIntroSection = () => {
               Here you can find all the tools and info you need to get involved in our events, projects, and governance.
             </p>
             <p>
-              If you're new here, hop in our {discordLink} and use <code>/onboard-me</code>
+              If you're new here, hop in our {discordLink} and type <code>/onboard-me</code> into any channel!
             </p>
           </div>
         </Col>
@@ -84,7 +84,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='https://app.charmverse.io/atx-dao/page-6656633176995772';
+              window.open('https://app.charmverse.io/atx-dao/page-6656633176995772', `_blank`);
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
                 <b>Innovation Guild</b><br/>
@@ -96,7 +96,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='https://app.charmverse.io/atx-dao/page-11010455919205131';
+              window.open('https://app.charmverse.io/atx-dao/page-11010455919205131', `_blank`);
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem', marginBottom: '1rem'}}>
               <p>
                 <b>Community Guild</b><br/>
@@ -108,7 +108,7 @@ const NounsIntroSection = () => {
             className={classes.card}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href='https://app.charmverse.io/atx-dao/page-11010455919205131';
+              window.open('https://app.charmverse.io/atx-dao/page-11010455919205131', `_blank`);
             }}  style={{ cursor: "pointer", padding: '1rem', paddingLeft: '2rem' }}>
               <p>
                 <b>Advocacy Guild</b><br/>
