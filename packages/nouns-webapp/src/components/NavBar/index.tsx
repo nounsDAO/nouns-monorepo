@@ -40,18 +40,12 @@ const NavBar = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-
   let balance = 0;
-
-  console.log("trying to call balance");
   let balanceArr = useNFTCall('balanceOf', [activeAccount]);
-  console.log("trying to convert balance");
-
-
   if (balanceArr !== undefined) {
     balance = balanceArr[0].toNumber();
   }
-  console.log(balance);
+
   const useStateBg =
     history.location.pathname === '/' ||
     history.location.pathname.includes('/noun/') ||
@@ -70,7 +64,7 @@ const NavBar = () => {
 
   if (activeAccount !== undefined) {
     //return to > 0 after testing
-    if (balance >= 0) {
+    if (balance > 0) {
       output =
         <Navbar
           expand="xl"
@@ -166,14 +160,14 @@ const NavBar = () => {
               ></img>
             </div>
             <h4 style={{ paddingTop: '20rem'}}>
-            Membership Check
+            Please connect a wallet that contains an ATX DAO Membership NFT!
             </h4>
             <div className={classes.center}>
               <NavWallet address={activeAccount || '0'} />{' '}
             </div>
         </div>
       </Container>
-      <body className={classes.loaderContainer}>
+      <div className={classes.loaderContainer}>
           <img
             className={classes.centeredLogo}
             style={{ width: '10rem'}}
@@ -186,7 +180,7 @@ const NavBar = () => {
               <span></span>
               <span></span>
           </div>
-      </body>
+      </div>
       </div>
     }
   }
