@@ -165,6 +165,7 @@
   gap: 10px;
   @media (max-width: 767px) {
     flex-direction: column;
+    width: 100%;
   }
 }
 
@@ -179,6 +180,9 @@
   cursor: pointer;
   outline: 2px solid transparent;
   border: 2px solid transparent;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 }
 
 .feedbackForm .button:hover {
