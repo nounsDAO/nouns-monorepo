@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 /**
  * @notice A script that proposes additional ownership and funds transfers from treasury (executor) V1 to V2.
@@ -18,6 +19,8 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
+    address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
+    address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -49,7 +52,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 6;
+        uint8 numTxs = 8;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -96,6 +99,20 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
         calldatas[i] = abi.encode(timelockV2);
+
+        // Transfer wstETH to timelockV2
+        i++;
+        targets[i] = WSTETH_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transfer(address,uint256)';
+        calldatas[i] = abi.encode(timelockV2, IERC20(WSTETH_MAINNET).balanceOf(timelockV1));
+
+        // Transfer rETH to timelockV2
+        i++;
+        targets[i] = RETH_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transfer(address,uint256)';
+        calldatas[i] = abi.encode(timelockV2, IERC20(RETH_MAINNET).balanceOf(timelockV1));
 
         proposalId = daoProxy.proposeOnTimelockV1(targets, values, signatures, calldatas, description);
     }

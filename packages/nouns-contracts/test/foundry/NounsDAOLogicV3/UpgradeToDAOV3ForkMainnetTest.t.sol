@@ -51,9 +51,13 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     uint256 public constant INITIAL_ETH_IN_TREASURY = 12919915363316446110962;
     uint256 public constant STETH_BALANCE = 14931432047776533741220;
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
+    address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
+    address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
+    uint256 public constant WSTETH_BALANCE = 30198455111480986884; // the real balance at block 17676551
+    uint256 public constant RETH_BALANCE = 524814561404234556282; // a rough approximation of the post-TWAMM balance
 
     NounsDAOExecutorV2 timelockV2;
     NounsDAOLogicV3 daoV3;
@@ -68,6 +72,14 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 17315040);
 
         assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, INITIAL_ETH_IN_TREASURY);
+
+        // Give timelock v1 some wstETH
+        deal(WSTETH_MAINNET, address(NOUNS_TIMELOCK_V1_MAINNET), WSTETH_BALANCE);
+        assertEq(IERC20(WSTETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), WSTETH_BALANCE);
+
+        // Give timelock v1 some rETH
+        deal(RETH_MAINNET, address(NOUNS_TIMELOCK_V1_MAINNET), RETH_BALANCE);
+        assertEq(IERC20(RETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), RETH_BALANCE);
 
         // give ourselves voting power
         vm.prank(NOUNDERS);
@@ -151,8 +163,10 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
 
     function test_forkParams() public {
         address[] memory erc20TokensToIncludeInFork = daoV3.erc20TokensToIncludeInFork();
-        assertEq(erc20TokensToIncludeInFork.length, 1);
+        assertEq(erc20TokensToIncludeInFork.length, 3);
         assertEq(erc20TokensToIncludeInFork[0], STETH_MAINNET);
+        assertEq(erc20TokensToIncludeInFork[1], WSTETH_MAINNET);
+        assertEq(erc20TokensToIncludeInFork[2], RETH_MAINNET);
 
         assertEq(daoV3.forkPeriod(), 7 days);
         assertEq(daoV3.forkThresholdBPS(), 2000);
@@ -259,6 +273,8 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(nouns.ownerOf(687), address(timelockV2));
         assertEq(IOwnable(TOKEN_BUYER_MAINNET).owner(), address(timelockV2));
         assertEq(IOwnable(PAYER_MAINNET).owner(), address(timelockV2));
+        assertEq(IERC20(WSTETH_MAINNET).balanceOf(address(timelockV2)), WSTETH_BALANCE);
+        assertEq(IERC20(RETH_MAINNET).balanceOf(address(timelockV2)), RETH_BALANCE);
     }
 
     function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {
