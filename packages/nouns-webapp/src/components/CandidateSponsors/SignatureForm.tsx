@@ -52,6 +52,7 @@ type Props = {
   candidate: ProposalCandidate;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
+  proposalIdToUpdate: number;
 };
 
 function SignatureForm(props: Props) {
@@ -60,7 +61,6 @@ function SignatureForm(props: Props) {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const { library } = useEthers();
   const signer = library?.getSigner();
-  const [proposalIdToUpdate] = useState('');
   const { addSignature, addSignatureState } = useAddSignature();
   const [isGetSignatureWaiting, setIsGetSignatureWaiting] = useState(false);
   const [isGetSignaturePending, setIsGetSignaturePending] = useState(false);
@@ -104,8 +104,9 @@ function SignatureForm(props: Props) {
   const getSignature = async () => {
     setIsGetSignatureWaiting(true);
     let signature;
-    if (proposalIdToUpdate) {
+    if (props.proposalIdToUpdate > 0) {
       const value = {
+        proposalId: props.proposalIdToUpdate,
         proposer: props.candidate.proposer,
         targets: props.candidate.version.content.targets,
         values: props.candidate.version.content.values,
@@ -113,9 +114,17 @@ function SignatureForm(props: Props) {
         calldatas: props.candidate.version.content.calldatas,
         description: props.candidate.version.content.description,
         expiry: expirationDate,
-        proposalId: proposalIdToUpdate,
       };
-      signature = await signer!._signTypedData(domain, updateProposalTypes, value);
+      signature = await signer!._signTypedData(domain, updateProposalTypes, value).then(
+        (sig: any) => {
+          setIsGetSignatureWaiting(false);
+          setIsGetSignatureTxSuccessful(true);
+          return sig;
+        },
+      ).catch((err: any) => {
+        setGetSignatureErrorMessage(err.message);
+        setIsGetSignatureWaiting(false);
+      });
     } else {
       if (!props.candidate) return;
       const value = {
@@ -154,13 +163,16 @@ function SignatureForm(props: Props) {
         props.candidate.version.content.calldatas,
         props.candidate.version.content.description,
       );
+
+      const encodedPropUpdate = ethers.utils.solidityPack(['uint256', 'bytes'], [props.proposalIdToUpdate, encodedProp])
       // signature set, submit signature
       await addSignature(
         signature,
         expirationDate,
         props.candidate.proposer,
         props.candidate.slug,
-        encodedProp,
+        props.proposalIdToUpdate, // proposalIdToUpdate
+        props.proposalIdToUpdate > 0 ? encodedPropUpdate : encodedProp,
         reasonText,
       );
     }
@@ -199,12 +211,13 @@ function SignatureForm(props: Props) {
         setIsLoading(false);
         break;
       case 'Fail':
+        props.setDataFetchPollInterval(0);
         setErrorMessage(state.errorMessage);
-
         setIsLoading(false);
         setIsWaiting(false);
         break;
       case 'Exception':
+        props.setDataFetchPollInterval(0);
         setErrorMessage(state.errorMessage);
         setIsLoading(false);
         setIsWaiting(false);
@@ -223,6 +236,29 @@ function SignatureForm(props: Props) {
     }
   }, [isWaiting, isLoading, isTxSuccessful, errorMessage, isGetSignatureWaiting, isGetSignaturePending, isGetSignatureTxSuccessful, getSignatureErrorMessage]);
 
+  const [dateErrorMessage, setDateErrorMessage] = useState<string>('');
+  // const handleDateChange = (e: any) => {
+  //   // don't allow past dates
+  //   const today = new Date();
+  //   const date = +dayjs(e.target.value);
+  //   if (+dayjs(e.target.value) > +dayjs(today)) {
+  //     // e.target.value = today.toISOString().split('T')[0];
+  //     // setExpirationDate(+dayjs(e.target.value));
+  //     setDateErrorMessage('');
+  //   } else {
+  //     setDateErrorMessage('Date must be in the future');
+  //   }
+  // };
+
+  useEffect(() => {
+    if (expirationDate === undefined) return;
+    const today = new Date();
+    if (+dayjs(expirationDate) > +dayjs(today)) {
+      setDateErrorMessage('');
+    } else {
+      setDateErrorMessage('Date must be in the future');
+    }
+  }, [expirationDate]);
   return (
     <div className={classes.formWrapper}>
       <>
@@ -243,8 +279,10 @@ function SignatureForm(props: Props) {
             type="date"
             min={new Date().toISOString().split('T')[0]} // only future dates
             onChange={e => setExpirationDate(+dayjs(e.target.value))}
+            // onChange={e => handleDateChange(e)}
             disabled={isWaiting || isLoading}
           />
+          {dateErrorMessage && <p className={classes.dateErrorMessage}>{dateErrorMessage}</p>}
         </div>
         <div className="text-center">
           {(isWaiting || isLoading) ? (
@@ -255,7 +293,7 @@ function SignatureForm(props: Props) {
               onClick={() => {
                 sign();
               }}
-              disabled={props.transactionState === 'Mining' || expirationDate === undefined}
+              disabled={props.transactionState === 'Mining' || expirationDate === undefined || dateErrorMessage !== ''}
             >
               Sponsor
             </button>
