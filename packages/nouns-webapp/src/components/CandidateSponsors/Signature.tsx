@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ShortAddress from '../ShortAddress';
 import { Trans } from '@lingui/macro';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type CandidateSignatureProps = {
   reason: string;
@@ -15,12 +17,12 @@ type CandidateSignatureProps = {
   voteCount: number;
   isAccountSigner: boolean;
   sig: string;
-  handleSignerCountDecrease: Function;
   handleRefetchCandidateData: Function;
+  setDataFetchPollInterval: Function;
   setIsAccountSigner: Function;
-  handleSignatureRemoved: Function;
   setIsCancelOverlayVisible: Function;
   signerHasActiveOrPendingProposal?: boolean;
+  isUpdateToProposal?: boolean;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -45,18 +47,19 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         break;
       case 'Mining':
         setIsCancelSignaturePending(true);
+        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
+        props.handleRefetchCandidateData();
         setCancelStatusOverlay({
           title: 'Success',
           message: 'Signature removed',
           show: true,
         });
         setIsCancelSignaturePending(false);
-        props.setIsAccountSigner(false);
-        props.handleSignerCountDecrease(props.voteCount);
         break;
       case 'Fail':
+        props.setDataFetchPollInterval(0);
         setCancelStatusOverlay({
           title: 'Transaction Failed',
           message: cancelSigState?.errorMessage || 'Please try again.',
@@ -65,6 +68,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         setIsCancelSignaturePending(false);
         break;
       case 'Exception':
+        props.setDataFetchPollInterval(0);
         setCancelStatusOverlay({
           title: 'Error',
           message: cancelSigState?.errorMessage || 'Please try again.',
@@ -137,6 +141,12 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             )}
           </div>
         )}
+        {props.isUpdateToProposal && !props.isAccountSigner && (
+          <p className={classes.sigStatus}>
+            <span><FontAwesomeIcon icon={faCircleCheck} /></span>
+            <Trans>Re-signed</Trans>
+          </p>
+        )}
       </div>
 
       {cancelStatusOverlay?.show && (
@@ -152,6 +162,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 props.handleRefetchCandidateData();
                 setCancelStatusOverlay(undefined);
                 props.setIsCancelOverlayVisible(false);
+                cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
               }}
             >
               &times;
