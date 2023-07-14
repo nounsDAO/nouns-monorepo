@@ -11,13 +11,23 @@ import { VoteSignalDetail } from '../../wrappers/nounsData';
 type Props = {
   voteSignals: VoteSignalDetail[];
   support: number;
+  isExpanded?: boolean;
 };
 
 const VoteSignalGroup = (props: Props) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   useEffect(() => {
-    if (props.support === 1 && props.voteSignals.length > 0) {
+    if (props.isExpanded) {
       setIsExpanded(true);
+    } else {
+      // expand on render if there's any feedback in For, then try Against, then Abstain
+      if (props.support === 1 && props.voteSignals.length > 0) {
+        setIsExpanded(true);
+      } else if (props.support === 0 && props.voteSignals.length > 0) {
+        setIsExpanded(true);
+      } else if (props.support === 2 && props.voteSignals.length > 0) {
+        setIsExpanded(true);
+      }
     }
   }, [props.support, props.voteSignals.length]);
 
@@ -32,6 +42,7 @@ const VoteSignalGroup = (props: Props) => {
           props.voteSignals.length > 0 && 'cursor-default',
         )}
         onClick={() => props.voteSignals.length > 0 && setIsExpanded(!isExpanded)}
+        disabled={props.voteSignals.length === 0}
       >
         <p>
           {props.voteSignals.length}{' '}
@@ -59,54 +70,32 @@ const VoteSignalGroup = (props: Props) => {
         )}
       </button>
       <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            key={props.support}
-            className={classes.voteSignalsList}
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: {
-                opacity: 1,
-                height: 'auto',
-                transition: {
-                  duration: 0.1,
-                  when: 'beforeChildren',
-                },
-              },
-              collapsed: {
-                opacity: 0,
-                height: 0,
-                transition: {
-                  duration: 0.1,
-                  when: 'afterChildren',
-                },
-              },
-            }}
-          >
-            {props.voteSignals.map((voteSignal, i) => (
+        <motion.div
+          key={props.support}
+          className={clsx(isExpanded && classes.voteSignalsList)}
+        >
+          {isExpanded &&
+            props.voteSignals.map((voteSignal, i) => (
               <motion.div
                 key={i}
-                initial="collapsed"
-                animate="open"
-                exit="collapsed"
-                variants={{
-                  open: {
-                    opacity: 1,
-                    height: 'auto',
-                    transition: {
-                      delay: i * 0.05,
-                      duration: 0.05,
-                    },
+                initial={{
+                  opacity: 0,
+                  height: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                  height: 'auto',
+                  transition: {
+                    delay: i * 0.05,
+                    duration: 0.05,
                   },
-                  collapsed: {
-                    opacity: 0,
-                    height: 0,
-                    transition: {
-                      delay: i * 0.02,
-                      duration: 0.05,
-                    },
+                }}
+                exit={{
+                  opacity: 0,
+                  height: 0,
+                  transition: {
+                    delay: i * 0.02,
+                    duration: 0.05,
                   },
                 }}
               >
@@ -118,11 +107,12 @@ const VoteSignalGroup = (props: Props) => {
                   reason={voteSignal.reason}
                 />
               </motion.div>
-            ))}
-          </motion.div>
-        )}
+            ))
+          }
+        </motion.div>
+        {/* )} */}
       </AnimatePresence>
-    </div>
+    </div >
   );
 };
 

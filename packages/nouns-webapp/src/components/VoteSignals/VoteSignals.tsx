@@ -11,7 +11,7 @@ import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useAppDispatch } from '../../hooks';
 import { useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
-import { Spinner } from 'react-bootstrap';
+import { FormControl, Spinner } from 'react-bootstrap';
 
 type Props = {
   proposalId?: string;
@@ -35,6 +35,7 @@ function VoteSignals(props: Props) {
   const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
+  const [expandedGroup, setExpandedGroup] = useState<number | undefined>(undefined);
   const { sendFeedback, sendFeedbackState } = useSendFeedback(props.isCandidate === true ? 'candidate' : 'proposal');
   const { account } = useEthers();
   const supportText = ['Against', 'For', 'Abstain'];
@@ -118,6 +119,7 @@ function VoteSignals(props: Props) {
         props.handleRefetch();
         setIsTransactionPending(false);
         setHasUserVoted(true);
+        setExpandedGroup(support);
         break;
       case 'Fail':
         setModal({
@@ -142,6 +144,22 @@ function VoteSignals(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendFeedbackState, setModal]);
+
+  const userFeedbackAdded = <Trans>You provided{' '}
+    <span
+      className={clsx(
+        userVoteSupport?.supportDetailed === 1 && classes.forText,
+        userVoteSupport?.supportDetailed === 0 && classes.againstText,
+        userVoteSupport?.supportDetailed === 2 && classes.abstainText,
+      )}
+    >
+      {userVoteSupport &&
+        supportText[userVoteSupport.supportDetailed].toLowerCase()}
+    </span>{' '}
+    feedback{' '}
+    {userVoteSupport?.createdTimestamp &&
+      dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
+  </Trans>
 
   return (
     <>
@@ -168,20 +186,22 @@ function VoteSignals(props: Props) {
             ) : (
               <>
                 <div className={classes.voteSignalGroupsList}>
-                  <VoteSignalGroup voteSignals={forFeedback} support={1} />
-                  <VoteSignalGroup voteSignals={againstFeedback} support={0} />
-                  <VoteSignalGroup voteSignals={abstainFeedback} support={2} />
+                  <VoteSignalGroup voteSignals={forFeedback} support={1} isExpanded={expandedGroup === 1} />
+                  <VoteSignalGroup voteSignals={againstFeedback} support={0} isExpanded={expandedGroup === 0} />
+                  <VoteSignalGroup voteSignals={abstainFeedback} support={2} isExpanded={expandedGroup === 2} />
                 </div>
                 {props.userVotes !== undefined && props.userVotes > 0 && (
                   <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                     {!hasUserVoted ? (
                       <>
-                        <p>Add your feedback</p>
-
                         {(isTransactionWaiting || isTransactionPending) ? (
-                          <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+                          <>
+                            <p><Trans>Adding your feedback</Trans></p>
+                            <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+                          </>
                         ) : (
                           <>
+                            <p><Trans>Add your feedback</Trans></p>
                             <div className={classes.buttons}>
                               <button
                                 className={clsx(
@@ -193,9 +213,9 @@ function VoteSignals(props: Props) {
                                     : classes.unselectedSupport,
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
-                                onClick={() => setSupport(1)}
+                                onClick={() => support === 1 ? setSupport(undefined) : setSupport(1)}
                               >
-                                For
+                                <Trans>For</Trans>
                               </button>
                               <button
                                 className={clsx(
@@ -207,9 +227,11 @@ function VoteSignals(props: Props) {
                                     : classes.unselectedSupport,
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
-                                onClick={() => setSupport(0)}
+                                onClick={() =>
+                                  support === 0 ? setSupport(undefined) : setSupport(0)
+                                }
                               >
-                                Against
+                                <Trans>Against</Trans>
                               </button>
                               <button
                                 className={clsx(
@@ -221,19 +243,21 @@ function VoteSignals(props: Props) {
                                     : classes.unselectedSupport,
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
-                                onClick={() => setSupport(2)}
+                                onClick={() => {
+                                  support === 2 ? setSupport(undefined) : setSupport(2)
+                                }}
                               >
-                                Abstain
+                                <Trans>Abstain</Trans>
                               </button>
                             </div>
                             <>
-                              <input
-                                type="text"
+                              <FormControl
                                 className={classes.reasonInput}
                                 placeholder="Optional reason"
                                 value={reasonText}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onChange={event => setReasonText(event.target.value)}
+                                as="textarea"
                               />
                               <button
                                 className={clsx(classes.button, classes.submit)}
@@ -246,10 +270,8 @@ function VoteSignals(props: Props) {
                                 }
                                 }
                               >
-                                Submit
+                                <Trans>Submit</Trans>
                               </button>
-
-
                             </>
                           </>
                         )}
@@ -257,21 +279,7 @@ function VoteSignals(props: Props) {
                     ) : (
                       <div className={classes.voted}>
                         <p>
-                          <Trans>You provided{' '}
-                            <span
-                              className={clsx(
-                                userVoteSupport?.supportDetailed === 1 && classes.forText,
-                                userVoteSupport?.supportDetailed === 0 && classes.againstText,
-                                userVoteSupport?.supportDetailed === 2 && classes.abstainText,
-                              )}
-                            >
-                              {userVoteSupport &&
-                                supportText[userVoteSupport.supportDetailed].toLowerCase()}
-                            </span>{' '}
-                            feedback{' '}
-                            {userVoteSupport?.createdTimestamp &&
-                              dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
-                          </Trans>
+                          {userFeedbackAdded}
                         </p>
                         {userVoteSupport?.reason && (
                           <div className={classes.userVotedReason}>

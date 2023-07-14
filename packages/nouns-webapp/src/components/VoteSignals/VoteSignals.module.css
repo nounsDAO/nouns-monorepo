@@ -180,17 +180,19 @@
   cursor: pointer;
   outline: 2px solid transparent;
   border: 2px solid transparent;
+  transition: all 0.125s ease-in-out;
   @media (max-width: 767px) {
     width: 100%;
   }
 }
 
-.feedbackForm .button:hover {
-  outline: 2px solid rgba(0, 0, 0, 0.6);
+.feedbackForm .button:hover, .feedbackForm .button:focus {
+  outline: 2px solid rgba(0, 0, 0, 0.05);
   border: 2px solid #fff;
+  opacity: 0.8 !important;
 }
 
-.feedbackForm button.selectedSupport {
+.feedbackForm button.selectedSupport, .feedbackForm .button.selectedSupport:focus, .feedbackForm .button.selectedSupport:hover, .feedbackForm .button.selectedSupport:active {
   border: 2px solid #fff;
   outline: 2px solid #000;
 }
@@ -214,12 +216,13 @@
   background: var(--brand-gray-light-text);
 }
 .feedbackForm button.submit:disabled {
-  opacity: 0.4;
+  opacity: 0.2;
   cursor: not-allowed;
 }
 .feedbackForm button.submit:disabled:hover {
   outline: 2px solid transparent;
   border: 2px solid transparent;
+  opacity: 0.2 !important;
 }
 
 .reasonInput {
