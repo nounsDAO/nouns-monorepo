@@ -9,14 +9,18 @@ import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData'
 import ShortAddress from '../ShortAddress'
 import { Delegates } from '../../wrappers/subgraph'
+import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao'
 
 type Props = {
-  setIsModalOpen: Function;
   isModalOpen: boolean;
   signatures: CandidateSignature[];
   delegateSnapshot: Delegates;
   requiredVotes: number;
   candidate: ProposalCandidate;
+  blockNumber: number;
+  setIsModalOpen: Function;
+  handleRefetchCandidateData: Function;
+  setDataFetchPollInterval: Function;
 }
 
 export default function SelectSponsorsToPropose(props: Props) {
@@ -27,6 +31,7 @@ export default function SelectSponsorsToPropose(props: Props) {
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
   const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
+  const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber);
   useEffect(() => {
     if (props.delegateSnapshot.delegates) {
       const voteCount = selectedSignatures.reduce((acc, sig) => {
@@ -74,19 +79,23 @@ export default function SelectSponsorsToPropose(props: Props) {
         setIsWaiting(true);
         break;
       case 'Mining':
+        props.setDataFetchPollInterval(50);
         setIsWaiting(false);
         setIsLoading(true);
         break;
       case 'Success':
+        props.handleRefetchCandidateData();
         setIsLoading(false);
         setIsTxSuccessful(true);
         setSelectedSignatures([]);
         break;
       case 'Fail':
+        props.setDataFetchPollInterval(0);
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         break;
       case 'Exception':
+        props.setDataFetchPollInterval(0);
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         setIsWaiting(false);
@@ -140,13 +149,14 @@ export default function SelectSponsorsToPropose(props: Props) {
           )?.nounsRepresented.length;
           return (
             <button
+              key={signature.sig}
               onClick={() => {
                 selectedSignatures.includes(signature) ?
                   setSelectedSignatures(selectedSignatures.filter((sig) => sig.signer !== signature.signer)) :
                   setSelectedSignatures([...selectedSignatures, signature]);
               }}
               disabled={
-                (isWaiting || isLoading || isTxSuccessful)
+                (isWaiting || isLoading || isTxSuccessful || activePendingProposers.data.includes(signature.signer.id))
               }
               className={clsx(
                 classes.selectButton,

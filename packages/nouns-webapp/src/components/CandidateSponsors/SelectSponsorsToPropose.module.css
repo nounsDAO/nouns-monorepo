@@ -46,7 +46,7 @@
   opacity: 0.75;
   text-decoration: none;
 }
-.sectionHeader button:disabled {
+.sectionHeader button:disabled, .sectionHeader button:disabled:hover {
   text-decoration: none;
   opacity: 0.75;
   cursor: not-allowed;
@@ -99,9 +99,10 @@
   box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
 }
 
-.selectButton:disabled { 
+.selectButton:disabled, .selectButton:disabled:hover { 
   opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .selectButton img {
