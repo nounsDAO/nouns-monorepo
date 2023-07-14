@@ -137,6 +137,7 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
       latestVersion {
         content {
           title
+          proposalIdToUpdate
           contentSignatures {
             signer {
               id
@@ -181,6 +182,7 @@ export const candidateProposalQuery = (id: string) => gql`
         signatures
         calldatas
         encodedProposalHash
+        proposalIdToUpdate
         contentSignatures {
           id
           signer {
@@ -193,6 +195,9 @@ export const candidateProposalQuery = (id: string) => gql`
           expirationTimestamp
           canceled
           reason
+        }
+        matchingProposalIds {
+          id
         }
       }
     }

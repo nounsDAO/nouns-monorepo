@@ -26,6 +26,7 @@ interface CandidateHeaderProps {
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isCandidate?: boolean;
+  isUpdateToProposal?: boolean;
   submitButtonClickHandler: () => void;
 }
 
@@ -39,6 +40,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     lastUpdatedTimestamp,
     isActiveForVoting,
     isWalletConnected,
+    isUpdateToProposal
   } = props;
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
@@ -81,6 +83,8 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     </Trans>
   );
 
+  const subHead = <Trans>{isUpdateToProposal ? <strong>Update</strong> : ''} Proposal Candidate</Trans>;
+
   return (
     <>
       <div className={classes.backButtonWrapper}>
@@ -95,7 +99,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             <span>
               <div className="d-flex">
                 <div>
-                  <Trans>Proposal Candidate</Trans>
+                  {subHead}
                 </div>
               </div>
             </span>
@@ -163,10 +167,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             </span>
           </Link>
         ) : (
-          <span>
-            {versionsCount === 1 ? 'created' : 'updated'}{' '}
-            {relativeTimestamp(lastUpdatedTimestamp)}
-          </span>
+          <>
+            <strong>Version {versionsCount}</strong>{' '}
+            <span>
+              {versionsCount === 1 ? 'created' : 'updated'}{' '}
+
+              {relativeTimestamp(lastUpdatedTimestamp)}
+            </span>
+          </>
         )}
       </p>
 

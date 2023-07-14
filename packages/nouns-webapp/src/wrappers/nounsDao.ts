@@ -1099,8 +1099,7 @@ export const useForkThresholdBPS = (): number | undefined => {
   return forkThresholdBPS?.toNumber();
 };
 
-export const useActivePendingUpdatableProposers = () => {
-  const blockNumber = useBlockNumber();
+export const useActivePendingUpdatableProposers = (blockNumber: number) => {
   const { loading, data: proposals, error } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as { loading: boolean, data: { proposals: ProposalProposerAndSigners[] }, error: Error };
   let data: string[] = [];
   proposals?.proposals.length > 0 && proposals.proposals.map((proposal) => {

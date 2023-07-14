@@ -34,7 +34,7 @@ export const relativeTimestamp = (timestamp: number) => {
   const now = dayjs();
   const proposedAt = dayjs(timestamp * 1000);
   const diff = now.diff(proposedAt, 'minutes');
-  if (diff < 15) {
+  if (diff < 3) {
     return "just now";
   } else {
     return proposedAt.fromNow();

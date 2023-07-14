@@ -36,7 +36,7 @@ function CandidateCard(props: Props) {
   const signers = deDupeSigners(props.candidate.latestVersion.content.contentSignatures?.map(signature => signature.signer.id));
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, currentBlock ?? 0);
   const blockNumber = useBlockNumber();
-  const activePendingProposers = useActivePendingUpdatableProposers();
+  const activePendingProposers = useActivePendingUpdatableProposers(currentBlock ?? 0);
   const filterSigners = (delegateSnapshot: Delegates, latestProposal?: PartialProposal) => {
     const activeSigs = props.candidate.latestVersion.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     let votes = 0;

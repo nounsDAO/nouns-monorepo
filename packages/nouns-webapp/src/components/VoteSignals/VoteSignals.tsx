@@ -23,6 +23,7 @@ type Props = {
   candidateSlug?: string;
   setDataFetchPollInterval: (interval: number) => void;
   handleRefetch: Function;
+  isFeedbackClosed?: boolean;
 };
 
 function VoteSignals(props: Props) {
@@ -161,13 +162,15 @@ function VoteSignals(props: Props) {
       dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
   </Trans>
 
+  const title = <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
+
   return (
     <>
       {props.proposalId && (
         <div className={clsx(classes.voteSignals, props.isCandidate && classes.isCandidate)}>
           <div className={classes.header}>
             <h2>
-              <Trans>Pre-voting feedback</Trans>
+              {title}
             </h2>
             {!props.isCandidate && (
               <p>
@@ -190,7 +193,7 @@ function VoteSignals(props: Props) {
                   <VoteSignalGroup voteSignals={againstFeedback} support={0} isExpanded={expandedGroup === 0} />
                   <VoteSignalGroup voteSignals={abstainFeedback} support={2} isExpanded={expandedGroup === 2} />
                 </div>
-                {props.userVotes !== undefined && props.userVotes > 0 && (
+                {!props.isFeedbackClosed && props.userVotes !== undefined && props.userVotes > 0 && (
                   <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                     {!hasUserVoted ? (
                       <>

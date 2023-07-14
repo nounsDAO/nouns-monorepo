@@ -16,7 +16,7 @@ import { ReactNode } from 'react-markdown/lib/react-markdown';
 import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
-import { useProposal, useProposalCount, useProposalThreshold } from '../../wrappers/nounsDao';
+import { ProposalState, useProposal, useProposalCount, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useCancelCandidate, useCandidateFeedback, useCandidateProposal } from '../../wrappers/nounsData';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
@@ -48,6 +48,10 @@ const CandidatePage = ({
   const latestProposal = useProposal(latestProposalId ?? 0);
   const feedback = useCandidateFeedback(id, dataFetchPollInterval);
   const [isProposal, setIsProposal] = useState<boolean>(false);
+  const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
+  const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
+  const isParentProposalUpdatable = originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  console.log('originalProposal', originalProposal);
   console.log('candidate', candidate);
   console.log('latestProposal', latestProposal);
 
@@ -69,6 +73,9 @@ const CandidatePage = ({
     }
     if (candidate.data?.isProposal) {
       setIsProposal(true);
+    }
+    if (candidate.data?.proposalIdToUpdate && +candidate.data?.proposalIdToUpdate > 0) {
+      setIsUpdateToProposal(true);
     }
   }, [candidate, account]);
 
@@ -170,6 +177,7 @@ const CandidatePage = ({
             lastUpdatedTimestamp={candidate.data.lastUpdatedTimestamp}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
+            isUpdateToProposal={isUpdateToProposal}
             submitButtonClickHandler={() => { }}
           />
         )}
@@ -205,6 +213,21 @@ const CandidatePage = ({
           </Col>
         </Row>
       )}
+      {/* notice for proposal updates */}
+      {candidate.data?.proposalIdToUpdate && !isProposer && (
+        <Row>
+          <Col lg={12}>
+            <div className={clsx(classes.editCandidate, 'mt-4')}>
+              <p>
+                <Trans>
+                  <strong>Note: </strong>
+                  This candidate is an update to <Link to={`/vote/${candidate.data?.proposalIdToUpdate}`}>Proposal {candidate.data?.proposalIdToUpdate}</Link>.
+                </Trans>
+              </p>
+            </div>
+          </Col>
+        </Row>
+      )}
       {isProposal && (
         <Row>
           <Col lg={12}>
@@ -212,48 +235,63 @@ const CandidatePage = ({
               <p>
                 <Trans>
                   This proposal candidate has been proposed onchain.
-                </Trans>
+                </Trans>{" "}
+                {candidate.data?.matchingProposalIds[0] && (
+                  < Link to={`/vote/${candidate.data?.matchingProposalIds[0]}`}>View the proposal here</Link>
+                )}
               </p>
             </div>
           </Col>
         </Row>
-      )}
-      {candidate.data && (
-        <Row>
-          <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
-            <ProposalCandidateContent proposal={candidate.data} />
-          </Col>
-          <Col lg={4} className={classes.sidebar}>
-            {currentBlock && threshold !== undefined && userVotes !== undefined && (
-              <CandidateSponsors
-                candidate={candidate.data}
-                slug={candidate.data.slug ?? ''}
-                id={candidate.data.id}
-                isProposer={isProposer}
-                handleRefetchCandidateData={handleRefetchCandidateData}
-                setDataFetchPollInterval={setDataFetchPollInterval}
-                currentBlock={currentBlock - 1}
-                requiredVotes={threshold + 1}
+      )
+      }
+      {
+        candidate.data && (
+          <Row>
+            <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
+              <ProposalCandidateContent proposal={candidate.data} />
+            </Col>
+            <Col lg={4} className={classes.sidebar}>
+              {(currentBlock && threshold !== undefined && userVotes !== undefined && !candidate.data.isProposal) ? (
+                <CandidateSponsors
+                  candidate={candidate.data}
+                  slug={candidate.data.slug ?? ''}
+                  id={candidate.data.id}
+                  isProposer={isProposer}
+                  handleRefetchCandidateData={handleRefetchCandidateData}
+                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  currentBlock={currentBlock - 1}
+                  requiredVotes={threshold + 1}
+                  userVotes={userVotes}
+                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                  latestProposal={latestProposal}
+                  isUpdateToProposal={isUpdateToProposal}
+                  originalProposal={originalProposal}
+                />
+              ) : (
+                <>
+                  {/* <div className={classes.sponsorsLoading}>
+                    <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
+                  </div> */}
+                </>
+              )}
+              <VoteSignals
+                proposalId={candidate.data.id}
+                proposer={candidate.data.proposer}
+                versionTimestamp={candidate.data?.lastUpdatedTimestamp}
+                feedback={feedback.data}
                 userVotes={userVotes}
-                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                latestProposal={latestProposal}
+                isCandidate={true}
+                candidateSlug={candidate.data.slug}
+                setDataFetchPollInterval={setDataFetchPollInterval}
+                handleRefetch={handleRefetchData}
+                isFeedbackClosed={isUpdateToProposal && !isParentProposalUpdatable}
               />
-            )}
-            <VoteSignals
-              proposalId={candidate.data.id}
-              proposer={candidate.data.proposer}
-              versionTimestamp={candidate.data?.lastUpdatedTimestamp}
-              feedback={feedback.data}
-              userVotes={userVotes}
-              isCandidate={true}
-              candidateSlug={candidate.data.slug}
-              setDataFetchPollInterval={setDataFetchPollInterval}
-              handleRefetch={handleRefetchData}
-            />
-          </Col>
-        </Row>
-      )}
-    </Section>
+            </Col>
+          </Row>
+        )
+      }
+    </Section >
   );
 };
 

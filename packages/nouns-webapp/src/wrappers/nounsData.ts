@@ -157,11 +157,11 @@ export const useProposeBySigs = () => {
 };
 
 export const useUpdateProposalBySigs = () => {
-  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(
+  const { send: updateProposalBySigs, state: updateProposalBySigsState } = useContractFunction(
     nounsDaoContract,
     'updateProposalBySigs',
   );
-  return { updateProposalBySigs, updateProposalBySigState };
+  return { updateProposalBySigs, updateProposalBySigsState };
 };
 
 const parseSubgraphCandidate = (
@@ -189,6 +189,7 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
+
   return {
     id: candidate.id,
     slug: candidate.slug,
@@ -198,6 +199,8 @@ const parseSubgraphCandidate = (
     versionsCount: candidate.versions.length,
     createdTransactionHash: candidate.createdTransactionHash,
     isProposal: candidate.latestVersion.content.matchingProposalIds.length > 0,
+    proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
+    matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
     version: {
       content: {
         title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
@@ -275,6 +278,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
       signatures: string[];
       calldatas: string[];
       encodedProposalHash: string;
+      proposalIdToUpdate: string;
       contentSignatures: {
         reason: string;
         expirationTimestamp: number;

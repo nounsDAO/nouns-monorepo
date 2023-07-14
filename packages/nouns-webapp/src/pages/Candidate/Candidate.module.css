@@ -291,11 +291,23 @@ a.primaryButton:hover {
   margin: 0;
   display: block;
 }
-/* 
+
+.sponsorsLoading {
+  border: 1px solid #e6e6e6;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.sponsorsLoading img {
+  display: block;
+  margin: 0 auto;
+  max-width: 45px;
+}
+
 .sidebar {
+  margin-top: 1rem;
   @media (min-width: 993px) {
-    position: sticky;
-    top: 20px;
-    height: fit-content;
+    margin-top: 1.5rem;
   }
-} */
+}
