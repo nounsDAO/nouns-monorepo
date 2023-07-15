@@ -455,7 +455,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           <b>
             <Trans>Note</Trans>
           </b>
-          : <Trans>Editing a proposal will clear all previous feedback</Trans>
+          :{" "}
+          {isProposedBySigners ? (
+            <Trans>This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal.</Trans>
+          ) : (
+            <Trans>Editing a proposal will clear all previous feedback</Trans>
+          )}
+
         </Alert>
         <div className="d-grid">
           <Button
@@ -509,9 +515,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           isFormInvalid={(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ? false : true}
           handleCreateProposal={isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal}
         />
-        {isProposedBySigners && (
-          <p className="text-center"><Trans>This will create a new proposal candidate requiring the original signers to resign to update the onchain proposal.</Trans></p>
-        )}
       </Col>
     </Section>
   );
