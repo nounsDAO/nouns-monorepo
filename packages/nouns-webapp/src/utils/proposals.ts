@@ -1,8 +1,8 @@
 import { Proposal, ProposalState } from '../wrappers/nounsDao';
 
-export const isProposalUpdatable = (proposal: Proposal, currentBlock: number) => {
+export const isProposalUpdatable = (proposalState: ProposalState, proposalUpdatePeriodEndBlock: number, currentBlock: number) => {
   return (
-    (proposal?.status === ProposalState.UPDATABLE || proposal?.status === ProposalState.PENDING) && currentBlock <= proposal.updatePeriodEndBlock
+    (proposalState === ProposalState.UPDATABLE || proposalState === ProposalState.PENDING) && currentBlock <= proposalUpdatePeriodEndBlock
   );
 };
 

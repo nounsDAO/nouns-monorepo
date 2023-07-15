@@ -175,7 +175,7 @@ const VotePage = ({
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
   const isProposer = () => (proposal?.proposer?.toLowerCase() === account?.toLowerCase());
   const isUpdateable = () => {
-    if (proposal && currentBlock && isProposalUpdatable(proposal, currentBlock)) {
+    if (proposal && currentBlock && isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)) {
       return true;
     }
     return false;

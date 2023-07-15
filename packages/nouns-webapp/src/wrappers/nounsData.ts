@@ -62,7 +62,10 @@ export const useCandidateProposals = () => {
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
 
   const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 || candidate.canceled);
-  return { loading, data: unmatchedCandidates?.reverse(), error };
+  const sortedCandidates = unmatchedCandidates?.sort((a, b) => {
+    return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
+  });
+  return { loading, data: sortedCandidates, error };
 };
 
 export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean,) => {
@@ -189,6 +192,9 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
+  const sortedSignatures = [...candidate.latestVersion.content.contentSignatures].sort((a, b) => {
+    return b.expirationTimestamp - a.expirationTimestamp;
+  });
 
   return {
     id: candidate.id,
@@ -207,7 +213,7 @@ const parseSubgraphCandidate = (
         description: description ?? 'No description.',
         details: details,
         transactionHash: details.encodedProposalHash,
-        contentSignatures: candidate.latestVersion.content.contentSignatures,
+        contentSignatures: sortedSignatures,
         targets: candidate.latestVersion.content.targets,
         values: candidate.latestVersion.content.values,
         signatures: candidate.latestVersion.content.signatures,
@@ -391,6 +397,7 @@ export interface PartialProposalCandidate extends ProposalCandidateInfo {
     content: {
       title: string;
       description: string;
+      proposalIdToUpdate: string;
       contentSignatures: {
         reason: string;
         expirationTimestamp: number;

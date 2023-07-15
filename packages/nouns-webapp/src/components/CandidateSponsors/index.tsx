@@ -300,6 +300,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       <>
                         {(props.isProposer && isThresholdMet) ? (
                           <>
+                            {/* no sign button for proposers */}
                             <button className={classes.button}
                               onClick={() => {
                                 props.isUpdateToProposal ?
@@ -308,14 +309,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                               }}>
                               Submit onchain
                             </button>
-                            {/* {!isAccountSigner && connectedAccountNounVotes > 0 && (
-                              <button
-                                className={classes.button}
-                                onClick={() => setIsFormDisplayed(!isFormDisplayed)}
-                              >
-                                {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
-                              </button>
-                            )} */}
                           </>
                         ) : (
                           <>

@@ -23,6 +23,7 @@ import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
 import { Link } from 'react-router-dom';
 import { useCandidateProposals } from '../../wrappers/nounsData';
+import { isProposalUpdatable } from '../../utils/proposals';
 
 dayjs.extend(relativeTime);
 
@@ -310,6 +311,11 @@ const Proposals = ({
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
+                      if (+c.latestVersion.content.proposalIdToUpdate > 0) {
+                        const prop = proposals.find((p) => p.id === c.latestVersion.content.proposalIdToUpdate);
+                        let isOriginalPropUpdatable = prop && currentBlock && isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, currentBlock) ? true : false;
+                        if (!isOriginalPropUpdatable) return null;
+                      }
                       return (
                         <div>
                           <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} />
