@@ -193,7 +193,7 @@ const parseSubgraphCandidate = (
     details = formatProposalTransactionDetails(transactionDetails);
   }
   const sortedSignatures = [...candidate.latestVersion.content.contentSignatures].sort((a, b) => {
-    return b.expirationTimestamp - a.expirationTimestamp;
+    return a.expirationTimestamp - b.expirationTimestamp;
   });
 
   return {

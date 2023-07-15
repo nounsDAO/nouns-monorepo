@@ -207,6 +207,7 @@ function SignatureForm(props: Props) {
         props.setDataFetchPollInterval(50);
         break;
       case 'Success':
+        props.handleRefetchCandidateData();
         setIsTxSuccessful(true);
         setIsLoading(false);
         break;

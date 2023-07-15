@@ -91,6 +91,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return { sigs, voteCount };
   };
 
+  console.log('props.candidate.version.content.contentSignatures', props.candidate.version.content.contentSignatures)
+
   useEffect(() => {
     if (delegateSnapshot.data && !isCancelOverlayVisible && props.latestProposal && activePendingProposers.data) {
       const { sigs, voteCount } = filterSigners(delegateSnapshot.data, activePendingProposers.data, props.candidate.version.content.contentSignatures);

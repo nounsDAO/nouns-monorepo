@@ -330,12 +330,12 @@
 .cancelStatusOverlay.errorMessage {
   color: var(--brand-color-red);
   border-color: var(--brand-color-red-translucent);
-  /* background-color: var(--brand-color-red-translucent); */
+  background: transparent;
 }
 .cancelStatusOverlay.successMessage {
   color: var(--brand-color-green);
   border-color: var(--brand-color-green);
-  /* background-color: var(--brand-color-green-translucent) */
+  background: transparent;
 }
 
 .loadingNoggles {
