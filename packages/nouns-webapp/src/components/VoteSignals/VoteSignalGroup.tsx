@@ -29,7 +29,7 @@ const VoteSignalGroup = (props: Props) => {
         setIsExpanded(true);
       }
     }
-  }, [props.support, props.voteSignals.length]);
+  }, [props.support, props.voteSignals.length, props.isExpanded]);
 
   return (
     <div className={classes.voteSignalGroup}>
@@ -110,7 +110,6 @@ const VoteSignalGroup = (props: Props) => {
             ))
           }
         </motion.div>
-        {/* )} */}
       </AnimatePresence>
     </div >
   );

@@ -6,10 +6,8 @@ import { Trans } from '@lingui/macro'
 import { TransactionStatus } from '@usedapp/core'
 import { buildEtherscanTxLink } from '../../utils/etherscan'
 import link from '../../assets/icons/Link.svg';
-import { CandidateSignature, ProposalCandidate, useProposeBySigs, useUpdateProposalBySigs } from '../../wrappers/nounsData'
-import ShortAddress from '../ShortAddress'
-import { Delegates } from '../../wrappers/subgraph'
-import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao'
+import { CandidateSignature, ProposalCandidate, useUpdateProposalBySigs } from '../../wrappers/nounsData'
+import { Link } from 'react-router-dom'
 
 type Props = {
   isModalOpen: boolean;
@@ -23,15 +21,11 @@ type Props = {
 }
 
 export default function SubmitUpdateProposal(props: Props) {
-  const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
-  const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
-  const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
   const [reason, setReason] = useState<string>('');
-  const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber);
   const { updateProposalBySigs, updateProposalBySigsState } = useUpdateProposalBySigs();
 
 
@@ -44,8 +38,8 @@ export default function SubmitUpdateProposal(props: Props) {
   }
   const clearState = () => {
     props.setIsModalOpen(false);
-    setSelectedSignatures([]);
     clearTransactionState();
+    setReason('');
   }
   const handleSubmitUpdateToProposal = async () => {
     clearTransactionState();
@@ -121,7 +115,7 @@ export default function SubmitUpdateProposal(props: Props) {
           >
             {!isWaiting && !isLoading && (
               <>
-                Submit {selectedVoteCount} votes
+                Submit update
               </>
             )}
             <span>
@@ -145,9 +139,9 @@ export default function SubmitUpdateProposal(props: Props) {
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <strong>Success!</strong> <br />
-              <a href={proposeBySigsState.transaction && `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`} target="_blank" rel="noreferrer">
-                Your candidate is now a proposal
-                {proposeBySigsState.transaction && (
+              <a href={updateProposalBySigsState.transaction && `${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`} target="_blank" rel="noreferrer">
+                <Link to={`/vote/${props.proposalIdToUpdate}`}>Proposal {props.proposalIdToUpdate} has been updated</Link>
+                {updateProposalBySigsState.transaction && (
                   <img src={link} width={16} alt="link symbol" />
                 )}
               </a>
@@ -164,7 +158,6 @@ export default function SubmitUpdateProposal(props: Props) {
       <SolidColorBackgroundModal
         show={props.isModalOpen}
         onDismiss={() => {
-          setSelectedSignatures([]);
           clearState();
           props.setIsModalOpen(false);
         }}

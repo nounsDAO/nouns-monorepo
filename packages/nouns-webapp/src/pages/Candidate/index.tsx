@@ -51,9 +51,6 @@ const CandidatePage = ({
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
   const isParentProposalUpdatable = originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
-  console.log('originalProposal', originalProposal);
-  console.log('candidate', candidate);
-  console.log('latestProposal', latestProposal);
 
   const handleRefetchData = () => {
     feedback.refetch();

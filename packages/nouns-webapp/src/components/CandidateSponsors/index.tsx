@@ -1,15 +1,15 @@
-import React, { ReactNode, useCallback } from 'react';
+import React from 'react';
 import { Trans } from '@lingui/macro';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
-import { CandidateSignature, useUpdateProposalBySigs } from '../../wrappers/nounsData';
+import { CandidateSignature } from '../../wrappers/nounsData';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates } from '../../wrappers/subgraph';
 import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { checkHasActiveOrPendingProposalOrCandidate, isProposalUpdatable } from '../../utils/proposals';
+import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
 import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
 import classes from './CandidateSponsors.module.css';
 import Signature from './Signature';
@@ -17,8 +17,6 @@ import SignatureForm from './SignatureForm';
 import SelectSponsorsToPropose from './SelectSponsorsToPropose';
 import clsx from 'clsx';
 import SubmitUpdateProposal from './SubmitUpdateProposal';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import ShortAddress from '../ShortAddress';
 import OriginalSignature from './OriginalSignature';
 import { Link } from 'react-router-dom';
 
@@ -52,6 +50,7 @@ const deDupeSigners = (signers: string[]) => {
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotesCount, setSignedVotesCount] = React.useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
   const [isOriginalSigner, setIsOriginalSigner] = useState<boolean>(false);
@@ -61,17 +60,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [blockNumber, setBlockNumber] = useState<number>();
   const [signers, setSigners] = useState<string[]>();
   const [originalSigners, setOriginalSigners] = useState<string[]>();
-  const [originalSignersCount, setOriginalSignersCount] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
-  const [isTxSuccessful, setIsTxSuccessful] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { account } = useEthers();
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers ?? [], blockNumber ?? 0);
   const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(originalSigners ?? [], blockNumber ?? 0);
-  const { updateProposalBySigs, updateProposalBySigsState } = useUpdateProposalBySigs();
   const hasActiveOrPendingProposal = (latestProposal: Proposal, account: string) => {
     const status = checkHasActiveOrPendingProposalOrCandidate(
       latestProposal.status,
@@ -150,7 +143,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       } else {
         setIsOriginalSigner(false);
       }
-      setOriginalSignersCount(props.originalProposal.signers.length);
     }
   }, [props.originalProposal, account]);
 
@@ -168,57 +160,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<
     'None' | 'Success' | 'Mining' | 'Fail' | 'Exception'
   >('None');
-
-  // TODO: move submit onchain to modal and add field to enter message
-  const handleSubmitUpdateToProposal = async () => {
-    // clearTransactionState();
-    console.log('handleSubmitUpdateToProposal', props.originalProposal?.id);
-    console.log('signatures', signatures);
-    const proposalSigs = signatures?.map((s) => [s.sig, s.signer.id, s.expirationTimestamp]);
-    await updateProposalBySigs(
-      props.originalProposal?.id,
-      proposalSigs,
-      props.candidate.version.content.targets,
-      props.candidate.version.content.values,
-      props.candidate.version.content.signatures,
-      props.candidate.version.content.calldatas,
-      props.candidate.version.content.description,
-      "" // TODO: where to put an update message?
-    );
-  }
-
-
-  const handleUpdateProposalStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        setIsWaiting(false);
-        setIsLoading(true);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        break;
-      case 'Fail':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        break;
-      case 'Exception':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-  }, []);
-
-  useEffect(() => {
-    handleUpdateProposalStateChange(updateProposalBySigsState);
-  }, [updateProposalBySigsState, handleUpdateProposalStateChange]);
 
   return (
     <>
@@ -241,8 +182,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       )}
       {props.latestProposal && delegateSnapshot.data && blockNumber && props.isUpdateToProposal && (
         <SubmitUpdateProposal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isUpdateModalOpen}
+          setIsModalOpen={setIsUpdateModalOpen}
           signatures={
             signatures.filter((signature) => (
               props.latestProposal && !hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) && signature)
@@ -368,7 +309,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             <button className={classes.button}
                               onClick={() => {
                                 props.isUpdateToProposal ?
-                                  handleSubmitUpdateToProposal() :
+                                  setIsUpdateModalOpen(true) :
                                   setIsModalOpen(true)
 
                               }}>

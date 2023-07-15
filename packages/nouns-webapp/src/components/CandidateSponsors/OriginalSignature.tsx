@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classes from './CandidateSponsors.module.css';
-import clsx from 'clsx';
-import { useCancelSignature } from '../../wrappers/nounsDao';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import ShortAddress from '../ShortAddress';
 import { Trans } from '@lingui/macro';
 
