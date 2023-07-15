@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import classes from './SelectSponsorsToPropose.module.css'
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
 import clsx from 'clsx'
@@ -8,6 +8,7 @@ import { buildEtherscanTxLink } from '../../utils/etherscan'
 import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useUpdateProposalBySigs } from '../../wrappers/nounsData'
 import { Link } from 'react-router-dom'
+import { FormControl } from 'react-bootstrap'
 
 type Props = {
   isModalOpen: boolean;
@@ -28,7 +29,6 @@ export default function SubmitUpdateProposal(props: Props) {
   const [reason, setReason] = useState<string>('');
   const { updateProposalBySigs, updateProposalBySigsState } = useUpdateProposalBySigs();
 
-
   const clearTransactionState = () => {
     // clear all transaction states
     setIsWaiting(false);
@@ -46,13 +46,13 @@ export default function SubmitUpdateProposal(props: Props) {
     const proposalSigs = props.signatures?.map((s) => [s.sig, s.signer.id, s.expirationTimestamp]);
     await updateProposalBySigs(
       props.proposalIdToUpdate,
-      proposalSigs,
+      proposalSigs.reverse(), // TODO: these sigs need to be in the same order as the original proposal was received
       props.candidate.version.content.targets,
       props.candidate.version.content.values,
       props.candidate.version.content.signatures,
       props.candidate.version.content.calldatas,
       props.candidate.version.content.description,
-      reason // TODO: where to put an update message?
+      reason,
     );
   }
 
@@ -93,7 +93,7 @@ export default function SubmitUpdateProposal(props: Props) {
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
         <Trans>
-          Submit onchain
+          Update proposal
         </Trans>
       </h2>
       <p className={classes.modalDescription}>
@@ -101,7 +101,13 @@ export default function SubmitUpdateProposal(props: Props) {
           Add an optional message for the changes to the proposal
         </Trans>
       </p>
-
+      <FormControl
+        as="textarea"
+        placeholder={'Optional message'}
+        value={reason}
+        onChange={e => setReason(e.target.value)}
+        className={classes.reasonTextarea}
+      />
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
@@ -125,6 +131,7 @@ export default function SubmitUpdateProposal(props: Props) {
             </span>
           </button>
         )}
+
         {(errorMessage) && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}

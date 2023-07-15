@@ -74,15 +74,13 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return status;
   };
   const isParentProposalUpdatable = props.originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
-  console.log('signers', props.originalProposal?.signers);
   const filterSigners = (delegateSnapshot: Delegates, activePendingProposers: string[], signers: CandidateSignature[]) => {
     const activeSigs = signers.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
     let voteCount = 0;
-    // let sigs: { reason: string; expirationTimestamp: number; sig: string; canceled: boolean; signer: { id: string; proposals: { id: string; }[]; }; }[] = [];
     let sigs: CandidateSignature[] = [];
     activeSigs.forEach((signature) => {
       // don't count votes from signers who have active or pending proposals
-      if (activePendingProposers.length > 0 && !activePendingProposers.includes(signature.signer.id)) {
+      if (!activePendingProposers.includes(signature.signer.id)) {
         const delegateVoteCount = delegateSnapshot.delegates?.find(
           delegate => delegate.id === signature.signer.id,
         )?.nounsRepresented.length || 0;
@@ -101,8 +99,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       }
       // if updateProposal
       if (props.isUpdateToProposal) {
-        console.log('if (props.isUpdateToProposal && props.originalProposal?.signers) {');
-        console.log('voteCount', voteCount)
         // no need to filter out signers with active or pending proposals here 
         const activeSigs = props.candidate.version.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
         setSignedVotesCount(activeSigs.length);
@@ -278,7 +274,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       })}
                     {props.isUpdateToProposal ? (
                       <>
-                        {/* {props.originalProposal?.signers && props.originalProposal.signers.length > signedVotesCount && */}
                         {props.originalProposal?.signers.map((ogSigner, i) => {
                           const sigVoteCount = originalSignersDelegateSnapshot.data?.delegates?.find(
                             delegate => delegate.id === ogSigner.id,
@@ -305,24 +300,22 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       <>
                         {(props.isProposer && isThresholdMet) ? (
                           <>
-
                             <button className={classes.button}
                               onClick={() => {
                                 props.isUpdateToProposal ?
                                   setIsUpdateModalOpen(true) :
                                   setIsModalOpen(true)
-
                               }}>
                               Submit onchain
                             </button>
-                            {!isAccountSigner && connectedAccountNounVotes > 0 && (
+                            {/* {!isAccountSigner && connectedAccountNounVotes > 0 && (
                               <button
                                 className={classes.button}
                                 onClick={() => setIsFormDisplayed(!isFormDisplayed)}
                               >
                                 {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
                               </button>
-                            )}
+                            )} */}
                           </>
                         ) : (
                           <>
@@ -392,14 +385,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           ) : (
             <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
           )}
-          {/* <div className={classes.aboutText}>
-            <p>
-              <Trans>
-                Once a signed proposal is onchain, signers will need to wait until the proposal is queued
-                or defeated before putting another proposal onchain.
-              </Trans>
-            </p>
-          </div> */}
         </div>
       </div >
     </>
