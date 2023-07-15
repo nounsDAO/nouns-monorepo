@@ -567,6 +567,7 @@ const parsePartialSubgraphProposal = (
     status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, gracePeriod),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
+    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
     forCount: parseInt(proposal.forVotes),
     againstCount: parseInt(proposal.againstVotes),
     abstainCount: parseInt(proposal.abstainVotes),
