@@ -211,7 +211,7 @@ const CandidatePage = ({
         </Row>
       )}
       {/* notice for proposal updates */}
-      {candidate.data?.proposalIdToUpdate && !isProposer && (
+      {candidate.data?.proposalIdToUpdate && +candidate.data?.proposalIdToUpdate > 0 && !isProposer && (
         <Row>
           <Col lg={12}>
             <div className={clsx(classes.editCandidate, 'mt-4')}>
