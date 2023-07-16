@@ -10,6 +10,7 @@ import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../w
 import ShortAddress from '../ShortAddress'
 import { Delegates } from '../../wrappers/subgraph'
 import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao'
+import { Link } from 'react-router-dom'
 
 type Props = {
   isModalOpen: boolean;
@@ -59,16 +60,21 @@ export default function SelectSponsorsToPropose(props: Props) {
 
   const handleSubmission = async (selectedSignatures: CandidateSignature[]) => {
     clearTransactionState();
-    const proposalSigs = selectedSignatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    // sort sigs by address to ensure order matches update proposal sigs
+    const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
     await proposeBySigs(
-      proposalSigs,
+      sortedSigs,
       props.candidate.version.content.targets,
       props.candidate.version.content.values,
       props.candidate.version.content.signatures,
       props.candidate.version.content.calldatas,
       props.candidate.version.content.description,
     );
+
   }
+
+  console.log('selectedSignatures order', selectedSignatures);
 
   const handleProposeStateChange = useCallback((state: TransactionStatus) => {
     switch (state.status) {
@@ -217,13 +223,14 @@ export default function SelectSponsorsToPropose(props: Props) {
                   <img src={link} width={16} alt="link symbol" />
                 )}
               </a>
+              <br />
+              {props.candidate.matchingProposalIds[0] && (
+                <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>View the proposal</Link>
+              )}
             </p>
           </>
         )}
-
-
       </div>
-
     </div >
   )
 

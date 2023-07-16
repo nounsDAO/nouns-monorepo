@@ -44,9 +44,12 @@ export default function SubmitUpdateProposal(props: Props) {
   const handleSubmitUpdateToProposal = async () => {
     clearTransactionState();
     const proposalSigs = props.signatures?.map((s) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    // sort sigs by address to ensure order matches original candidate sigs
+    const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
+    console.log('sortedSigs', sortedSigs);
     await updateProposalBySigs(
       props.proposalIdToUpdate,
-      proposalSigs.reverse(), // TODO: these sigs need to be in the same order as the original proposal was received
+      sortedSigs,
       props.candidate.version.content.targets,
       props.candidate.version.content.values,
       props.candidate.version.content.signatures,

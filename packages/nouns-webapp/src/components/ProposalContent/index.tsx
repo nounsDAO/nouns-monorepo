@@ -11,6 +11,7 @@ import { Trans } from '@lingui/macro';
 import EnsOrLongAddress from '../EnsOrLongAddress';
 import clsx from 'clsx';
 import ProposalTransactions from './ProposalTransactions';
+import linkIcon from '../../assets/icons/Link.svg';
 
 interface ProposalContentProps {
   description: string;
@@ -34,6 +35,13 @@ export const transactionLink = (content: string) => {
   return (
     <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
       {content.substring(0, 7)}
+    </a>
+  );
+};
+export const transactionIconLink = (content: string) => {
+  return (
+    <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
+      <img src={linkIcon} width={16} alt="link symbol" />
     </a>
   );
 };
