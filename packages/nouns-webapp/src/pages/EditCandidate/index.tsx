@@ -41,9 +41,12 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
+  const { account } = useEthers();
+  const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
   const candidate = useCandidateProposal(props.match.params.id, 0, true); // get updatable transaction details
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
+  const createCandidateCost = useGetCreateCandidateCost();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -51,8 +54,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetCreateCandidateCost();
-  const { account } = useEthers();
-  const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
+
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -244,6 +246,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       0, // proposalIdToUpdate
       commitMessage,
+      { value: availableVotes! > 0 ? 0 : createCandidateCost }, // Fee for non-nouners
     );
   };
 

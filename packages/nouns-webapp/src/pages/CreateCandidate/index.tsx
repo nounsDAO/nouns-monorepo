@@ -157,7 +157,7 @@ const CreateCandidatePage = () => {
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
       0,// proposalIdToUpdate - use 0 for new proposals
-      { value: availableVotes! > 0 ? 0 : createCandidateCost },
+      { value: availableVotes! > 0 ? 0 : createCandidateCost }, // Fee for non-nouners
     );
   };
 
