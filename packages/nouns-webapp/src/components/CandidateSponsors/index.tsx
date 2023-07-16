@@ -159,6 +159,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     'None' | 'Success' | 'Mining' | 'Fail' | 'Exception'
   >('None');
 
+  const refetchData = () => {
+    console.log('refetchData');
+    props.handleRefetchCandidateData();
+  };
+
   return (
     <>
       {props.latestProposal && delegateSnapshot.data && blockNumber && (
@@ -263,7 +268,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             signer={signature.signer.id}
                             isAccountSigner={signature.signer.id.toLowerCase() === account?.toLowerCase()}
                             sig={signature.sig}
-                            handleRefetchCandidateData={props.handleRefetchCandidateData}
+                            handleRefetchCandidateData={refetchData}
                             setDataFetchPollInterval={props.setDataFetchPollInterval}
                             setIsAccountSigner={setIsAccountSigner}
                             setIsCancelOverlayVisible={setIsCancelOverlayVisible}
@@ -282,7 +287,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                           )?.nounsRepresented.length;
                           if (signers?.includes(ogSigner.id.toLowerCase())) return null;
                           if (!sigVoteCount || !activePendingProposers) return null;
-                          return <OriginalSignature key={i} signer={ogSigner.id} voteCount={sigVoteCount} />
+                          return <OriginalSignature key={i} signer={ogSigner.id} voteCount={sigVoteCount} isParentProposalUpdatable={isParentProposalUpdatable} />
                         }
                         )}
                       </>
