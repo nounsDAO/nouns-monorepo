@@ -296,7 +296,8 @@ function SignatureForm(props: Props) {
               }}
               disabled={props.transactionState === 'Mining' || expirationDate === undefined || dateErrorMessage !== ''}
             >
-              Sponsor
+
+              {props.proposalIdToUpdate ? 'Re-sign' : 'Sponsor'}
             </button>
           )}
         </div>
