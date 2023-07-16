@@ -438,6 +438,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         setProposePending(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProposalCandidateState, setModal]);
 
   console.log('is edited?', isProposalEdited, isTitleEdited, isBodyEdited, isTransactionsEdited(), isDescriptionEdited());

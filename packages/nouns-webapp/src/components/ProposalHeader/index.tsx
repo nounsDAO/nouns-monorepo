@@ -25,8 +25,7 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
-import dayjs from 'dayjs';
-import { relativeTimestamp, timestampFromBlockNumber } from '../../utils/timeUtils';
+import { relativeTimestamp } from '../../utils/timeUtils';
 
 interface ProposalHeaderProps {
   title?: string;
