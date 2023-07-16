@@ -164,6 +164,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     props.handleRefetchCandidateData();
   };
 
+  const handleSignatureRemoved = (voteCount: number) => {
+    setSignedVotesCount(signedVotesCount - voteCount);
+    setIsThresholdMet(signedVotesCount - voteCount >= props.requiredVotes ? true : false);
+  };
+
   return (
     <>
       {props.latestProposal && delegateSnapshot.data && blockNumber && (
@@ -268,14 +273,16 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             signer={signature.signer.id}
                             isAccountSigner={signature.signer.id.toLowerCase() === account?.toLowerCase()}
                             sig={signature.sig}
-                            handleRefetchCandidateData={refetchData}
                             setDataFetchPollInterval={props.setDataFetchPollInterval}
-                            setIsAccountSigner={setIsAccountSigner}
-                            setIsCancelOverlayVisible={setIsCancelOverlayVisible}
                             signerHasActiveOrPendingProposal={
                               !props.isUpdateToProposal && activePendingProposers.data.includes(signature.signer.id) ? true : false
                             }
                             isUpdateToProposal={props.isUpdateToProposal}
+                            isParentProposalUpdatable={isParentProposalUpdatable}
+                            handleRefetchCandidateData={refetchData}
+                            setIsAccountSigner={setIsAccountSigner}
+                            setIsCancelOverlayVisible={setIsCancelOverlayVisible}
+                            handleSignatureRemoved={handleSignatureRemoved}
                           />
                         );
                       })}
@@ -324,7 +331,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                                 (props.isUpdateToProposal && isOriginalSigner && !isAccountSigner)) &&
                               (
                                 <>
-                                  {connectedAccountNounVotes > 0 ? (
+                                  {!props.isProposer && connectedAccountNounVotes > 0 ? (
                                     <button
                                       className={classes.button}
                                       onClick={() => setIsFormDisplayed(!isFormDisplayed)}

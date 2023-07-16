@@ -17,12 +17,14 @@ type CandidateSignatureProps = {
   voteCount: number;
   isAccountSigner: boolean;
   sig: string;
+  signerHasActiveOrPendingProposal?: boolean;
+  isUpdateToProposal?: boolean;
+  isParentProposalUpdatable?: boolean;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
   setIsAccountSigner: Function;
   setIsCancelOverlayVisible: Function;
-  signerHasActiveOrPendingProposal?: boolean;
-  isUpdateToProposal?: boolean;
+  handleSignatureRemoved: Function;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -47,10 +49,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         break;
       case 'Mining':
         setIsCancelSignaturePending(true);
-        props.setDataFetchPollInterval(50);
         break;
       case 'Success':
-        props.handleRefetchCandidateData();
+        props.handleSignatureRemoved(props.voteCount);
         setCancelStatusOverlay({
           title: 'Success',
           message: 'Signature removed',
@@ -59,7 +60,6 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         setIsCancelSignaturePending(false);
         break;
       case 'Fail':
-        props.setDataFetchPollInterval(0);
         setCancelStatusOverlay({
           title: 'Transaction Failed',
           message: cancelSigState?.errorMessage || 'Please try again.',
@@ -101,7 +101,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 <ShortAddress address={props.signer} />
               </a>
             </p>
-            <p className={classes.expiration}>Expires {expiration}</p>
+            <p className={classes.expiration}>{props.isUpdateToProposal && !props.isParentProposalUpdatable ? 'Expired' : 'Expires'}{" "}{expiration}</p>
           </div>
           <p className={classes.voteCount}>
             {props.voteCount} vote{props.voteCount !== 1 && 's'}

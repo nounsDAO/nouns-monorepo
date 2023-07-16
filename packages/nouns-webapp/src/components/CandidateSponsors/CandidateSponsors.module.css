@@ -3,6 +3,7 @@
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   text-align: left;
+  transition: height 0.125s ease-in-out;
 }
 
 .interiorWrapper {
@@ -211,20 +212,21 @@
   padding: 0.7rem 1rem 0.5rem;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
+.thresholdMet img {
+  position: relative;
+  top: 1px;
+}
 
 .formOverlay {
-  /* position: absolute; */
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0.5rem 0;
   background-color: rgba(255, 255, 255);
   z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  /* border: 1px solid #e6e6e6; */
 }
 
 .cancelStatusOverlay {
@@ -234,7 +236,7 @@
 .formOverlay .closeButton,
 .cancelStatusOverlay .closeButton {
   position: absolute;
-  top: 3px;
+  top: 0;
   right: 10px;
   font-size: 20px;
   color: #000;
@@ -243,11 +245,14 @@
   background: transparent;
   z-index: 99;
 }
+.formOverlay .closeButton {
+  top: 3px;
+}
 
 .formWrapper {
   text-align: left;
   width: 100%;
-  padding: 1.5rem 1rem 1rem;
+  padding: 1rem;
 }
 .formWrapper input,
 .formWrapper textarea {
@@ -256,7 +261,6 @@
 .formWrapper button {
   display: block;
   margin: 0 auto;
-  font-size: 18px;
 }
 
 .formLabel {
@@ -330,12 +334,12 @@
 .cancelStatusOverlay.errorMessage {
   color: var(--brand-color-red);
   border-color: var(--brand-color-red-translucent);
-  background: transparent;
+  background: #fbfbfc;
 }
 .cancelStatusOverlay.successMessage {
   color: var(--brand-color-green);
   border-color: var(--brand-color-green);
-  background: transparent;
+  background: #fbfbfc;
 }
 
 .loadingNoggles {
@@ -402,11 +406,12 @@ button.closeLink {
 p.statusMessage {
   color: #14161b;
   font-size: 14px;
+  line-height: 1.1;
   margin-bottom: 1rem;
   padding: 1rem;
   text-align: center;
   font-family: 'PT Root UI';
-  font-weight: bold;
+  font-weight: normal;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
   transition: all 0.125s ease-in-out;
@@ -428,7 +433,7 @@ p.statusMessage {
   text-decoration: underline;
   cursor: pointer; 
   padding: 0;
-  margin: 0 auto;
+  margin: 8px auto 0;
   color: #14161b;
   display: block;
   width: auto;
