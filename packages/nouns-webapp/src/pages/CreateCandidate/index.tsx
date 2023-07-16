@@ -29,6 +29,7 @@ import {
   checkEnoughVotes,
   checkHasActiveOrPendingProposalOrCandidate,
 } from '../../utils/proposals';
+import { buildCandidateSlug } from '../../utils/candidateURL';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -171,7 +172,7 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created!</Trans>,
+          message: <Trans>Proposal Candidate Created! <br /> <Link to={`/candidates/${account && buildCandidateSlug(account, slug)}`}>View the proposal</Link></Trans>,
           show: true,
         });
         setProposePending(false);
@@ -212,6 +213,7 @@ const CreateCandidatePage = () => {
             <Trans>Create Proposal Candidate</Trans>
           </h3>
         </div>
+
         <Alert variant="secondary" className={classes.voterIneligibleAlert}>
           <Trans>
             Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.          </Trans>
