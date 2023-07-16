@@ -10,9 +10,12 @@
   margin-top: 0.1rem;
   position: absolute;
   left: -3rem;
-  @media (max-width: 992px) {
+  @media (max-width: 1040px) {
     position: relative;
     left: 0;
+  }
+  @media (max-width: 414px) {
+    display: none;
   }
 }
 .backButtonWrapper {
@@ -134,7 +137,7 @@
 .byLineWrapper h3 {
   font-family: 'Londrina Solid';
   color: var(--brand-gray-light-text);
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .byLineContentWrapper {
@@ -174,29 +177,6 @@
 
 .byLineContentWrapper h3 {
   margin-left: 0.5rem;
-}
-
-@media (max-width: 450px) {
-  .byLineWrapper {
-    flex-direction: column;
-  }
-
-  .byLineContentWrapper {
-    margin-left: 2.5rem;
-  }
-
-  .proposalByLineWrapperJp {
-    flex-direction: column;
-    display: flex;
-  }
-
-  .proposerJp {
-    margin-left: 0.5rem;
-  }
-
-  .proposedByJp {
-    margin-left: 0.5rem;
-  }
 }
 
 .versionHistory {

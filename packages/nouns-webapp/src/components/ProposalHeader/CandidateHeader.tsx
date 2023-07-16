@@ -8,7 +8,7 @@ import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { Trans } from '@lingui/macro';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionLink } from '../ProposalContent';
+import { transactionIconLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
@@ -76,15 +76,8 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     </a>
   );
 
-  const proposedAtTransactionHash = (
-    <Trans>
-      at{' '}
-      <span className={classes.propTransactionHash}>{transactionLink(createdTransactionHash)}</span>
-    </Trans>
-  );
-
   const subHead = <Trans>{isUpdateToProposal ? <strong>Update</strong> : ''} Proposal Candidate</Trans>;
-
+  const transactionLink = transactionIconLink(createdTransactionHash);
   return (
     <>
       <div className={classes.backButtonWrapper}>
@@ -128,9 +121,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
               <Trans>
                 <span className={classes.proposedByJp}>Proposed by: </span>
                 <span className={classes.proposerJp}>{proposerLink}</span>
-                <span className={classes.propTransactionWrapperJp}>
-                  {proposedAtTransactionHash}
-                </span>
+                {transactionLink}
               </Trans>
             </div>
           </HoverCard>
@@ -146,9 +137,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
               >
                 <h3>
                   {proposerLink}
-                  <span className={classes.propTransactionWrapper}>
-                    {proposedAtTransactionHash}
-                  </span>
+                  {transactionLink}
                 </h3>
               </HoverCard>
             </div>

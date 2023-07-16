@@ -99,6 +99,7 @@ export interface PartialProposal {
 export interface Proposal extends PartialProposal {
   description: string;
   createdBlock: number;
+  createdTimestamp: number;
   proposer: string | undefined;
   proposalThreshold: number;
   details: ProposalDetail[];
@@ -153,6 +154,7 @@ export interface ProposalSubgraphEntity
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
+  createdTimestamp: string;
   proposer: { id: string };
   proposalThreshold: string;
 }
@@ -615,6 +617,7 @@ const parseSubgraphProposal = (
     createdBlock: parseInt(proposal.createdBlock),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
+    createdTimestamp: parseInt(proposal.createdTimestamp),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: details,
     transactionHash: proposal.createdTransactionHash,

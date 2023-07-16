@@ -33,7 +33,7 @@ export const timestampFromBlockNumber = (targetBlock: number, currentBlock: numb
 export const relativeTimestamp = (timestamp: number) => {
   const now = dayjs();
   const proposedAt = dayjs(timestamp * 1000);
-  const diff = now.diff(proposedAt, 'minutes');
+  const diff = now.diff(proposedAt, 'minute');
   if (diff < 3) {
     return "just now";
   } else {

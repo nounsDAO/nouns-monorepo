@@ -67,6 +67,7 @@ export const proposalQuery = (id: string | number) => gql`
     abstainVotes
     createdTransactionHash
     createdBlock
+    createdTimestamp
     startBlock
     endBlock
     updatePeriodEndBlock

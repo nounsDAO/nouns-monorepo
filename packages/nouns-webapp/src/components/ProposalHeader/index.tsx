@@ -19,13 +19,14 @@ import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionLink } from '../ProposalContent';
+import { transactionIconLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
 import dayjs from 'dayjs';
+import { relativeTimestamp, timestampFromBlockNumber } from '../../utils/timeUtils';
 
 interface ProposalHeaderProps {
   title?: string;
@@ -63,7 +64,9 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
-  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
+  // const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
+  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<number | null>(null);
+  const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
@@ -73,14 +76,17 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const activeLocale = useActiveLocale();
   const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
-
+  console.log('props.proposal', props.proposal);
   useEffect(() => {
-    if (currentBlock && hasManyVersions) {
+    if (hasManyVersions) {
       const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
-      const date = latestProposalVersion && new Date(+latestProposalVersion.createdAt * 1000);
-      date && setUpdatedTimestamp(date);
+      latestProposalVersion && setUpdatedTimestamp(+latestProposalVersion.createdAt);
+    } else {
+      // const createdAtTimestampFromBlock = currentBlock && timestampFromBlockNumber(props.proposal?.createdBlock, currentBlock);
+      setCreatedTimestamp(props.proposal.createdTimestamp);
     }
-  }, [currentBlock, hasManyVersions, props.proposalVersions]);
+
+  }, [currentBlock, hasManyVersions, props.proposalVersions, props.proposal]);
 
   const voteButton = (
     <>
@@ -118,14 +124,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     </a>
   );
 
-  const proposedAtTransactionHash = (
-    <Trans>
-      at{' '}
-      <span className={classes.propTransactionHash}>
-        {transactionLink(proposal.transactionHash)}
-      </span>
-    </Trans>
-  );
+  const transactionLink = transactionIconLink(proposal.transactionHash);
 
   return (
     <>
@@ -185,16 +184,13 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               <Trans>
                 <span className={classes.proposedByJp}>Proposed by: </span>
                 <span className={classes.proposerJp}>{proposer}</span>
-                <span className={classes.propTransactionWrapperJp}>
-                  {proposedAtTransactionHash}
-                </span>
+                {transactionLink}
               </Trans>
             </div>
           </HoverCard>
         ) : (
           <>
             <h3>Proposed by</h3>
-
             <div className={classes.byLineContentWrapper}>
               <HoverCard
                 hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
@@ -203,9 +199,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               >
                 <h3>
                   {proposer}
-                  <span className={classes.propTransactionWrapper}>
-                    {proposedAtTransactionHash}
-                  </span>
+                  {transactionLink}
                 </h3>
               </HoverCard>
             </div>
@@ -213,14 +207,26 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         )}
       </div>
 
-      {hasManyVersions && (
-        <p className={classes.versionHistory}>
+
+      <p className={classes.versionHistory}>
+        {hasManyVersions ? (
           <Link to={`/vote/${proposal.id}/history/`}>
-            <strong>Version {props.versionNumber}</strong>{' '}
-            <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
+            <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
+            <span>updated{" "}
+              {updatedTimestamp && relativeTimestamp(updatedTimestamp)}
+            </span>
           </Link>
-        </p>
-      )}
+        ) : (
+          <>
+            <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
+            <span>created{" "}
+              {createdTimestamp && relativeTimestamp(createdTimestamp)}
+            </span>
+          </>
+        )}
+      </p>
+
+
 
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>
