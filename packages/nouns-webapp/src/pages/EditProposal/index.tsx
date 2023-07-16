@@ -109,6 +109,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     [proposalTransactions, totalUSDCPayment],
   );
 
+
+
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
@@ -314,6 +316,9 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   };
 
   const isDescriptionEdited = () => {
+    console.log('isDescriptionEdited', originalTitleValue, titleValue, originalBodyValue, bodyValue);
+    console.log('originalTitleValue !== titleValue', originalTitleValue !== titleValue);
+    console.log('originalBodyValue !== bodyValue', originalBodyValue !== bodyValue);
     return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false
   };
 
@@ -376,7 +381,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
-      setOriginalBodyValue(proposal.description);
+      setOriginalBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setOriginalProposalTransactions(proposal.details);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -407,7 +412,11 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created!</Trans>,
+          message: <Trans>Proposal Candidate Created!
+            <br />
+            <Link to={`/candidates/${slug}`}>View the candidate</Link>
+
+          </Trans>,
           show: true,
         });
         setProposePending(false);
@@ -430,6 +439,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         break;
     }
   }, [createProposalCandidateState, setModal]);
+
+  console.log('is edited?', isProposalEdited, isTitleEdited, isBodyEdited, isTransactionsEdited(), isDescriptionEdited());
 
   if (!isProposer()) {
     return null;

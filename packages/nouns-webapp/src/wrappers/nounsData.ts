@@ -192,7 +192,10 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const sortedSignatures = [...candidate.latestVersion.content.contentSignatures].sort((a, b) => {
+  const filteredSignatures = candidate.latestVersion.content.contentSignatures.filter((signature: CandidateSignature) => {
+    return signature.canceled === false && signature.expirationTimestamp > timestamp! / 1000;
+  });
+  const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
   });
 
@@ -352,6 +355,9 @@ export interface ProposalCandidateInfo {
   versionsCount: number;
   createdTransactionHash: string;
   isProposal: boolean;
+  matchingProposalIds: {
+    id: string;
+  }[]
 }
 
 export interface ProposalCandidateVersionContent {
