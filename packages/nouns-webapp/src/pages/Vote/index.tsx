@@ -12,7 +12,7 @@ import {
   useProposalVersions,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
@@ -154,9 +154,10 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Only count available votes as of the proposal created block
+  // If v3, get user votes as of start block, otherwise get user votes as of created block
   const userVotes = useUserVotesAsOfBlock(isDaoGteV3 ? proposal?.startBlock : proposal?.createdBlock);
-
+  // Get user votes as of current block to use in vote signals
+  const userVotesNow = useUserVotes() || 0;
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
     proposal && proposal.id ? parseInt(proposal.id) : 0,
@@ -734,7 +735,7 @@ const VotePage = ({
                   feedback={proposalFeedback.data?.proposalFeedbacks}
                   proposalId={proposal.id}
                   versionTimestamp={getVersionTimestamp(proposalVersions)}
-                  userVotes={userVotes}
+                  userVotes={userVotesNow}
                   setDataFetchPollInterval={setDataFetchPollInterval}
                   handleRefetch={handleRefetchData}
                 />
