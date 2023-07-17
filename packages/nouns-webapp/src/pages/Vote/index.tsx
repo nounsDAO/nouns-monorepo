@@ -7,6 +7,7 @@ import {
   useCancelProposal,
   useCurrentQuorum,
   useExecuteProposal,
+  useHasVotedOnProposal,
   useIsDaoGteV3,
   useProposal,
   useProposalVersions,
@@ -121,12 +122,9 @@ const VotePage = ({
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
-  const determineProposalEndBlock = (proposal: PartialProposal) => {
-    if (proposal && proposal.objectionPeriodEndBlock > 0) {
-      return proposal.objectionPeriodEndBlock
-    }
-    return proposal?.endBlock;
-  }
+
+  const hasVoted = useHasVotedOnProposal(proposal?.id);
+
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -139,7 +137,7 @@ const VotePage = ({
       )
       : undefined;
 
-  const endBlock = proposal && determineProposalEndBlock(proposal);
+  const endBlock = (currentBlock && proposal?.endBlock && isObjectionPeriod && currentBlock > proposal?.endBlock) ? proposal?.objectionPeriodEndBlock : proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
@@ -169,7 +167,8 @@ const VotePage = ({
       proposalVersions[proposalVersions.length - 1];
     return versionDetails?.createdAt;
   }
-
+  console.log('current block', currentBlock)
+  console.log('objection period block', proposal?.objectionPeriodEndBlock)
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isInNonFinalState = [
     ProposalState.UPDATABLE,
@@ -244,7 +243,12 @@ const VotePage = ({
     }
     return endDate;
   };
-
+  const objectionEnd = () => {
+    const time = proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock), 'seconds')
+      : undefined;
+    return time;
+  };
   const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
@@ -272,18 +276,26 @@ const VotePage = ({
     }
   })();
 
+  const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  })
+  const objectionEndDate = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    dateStyle: 'long',
+  });
+  const objectionNoteCopy = isObjectionPeriod ? <Trans>Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.</Trans> : <></>;
+
+
   useEffect(() => {
-    if (
-      currentBlock &&
-      proposal?.status === ProposalState.OBJECTION_PERIOD &&
-      proposal?.objectionPeriodEndBlock >= currentBlock
+    if (proposal && currentBlock &&
+      proposal?.objectionPeriodEndBlock > 0 && currentBlock <= proposal?.objectionPeriodEndBlock
     ) {
       setIsObjectionPeriod(true);
     } else {
       setIsObjectionPeriod(false);
     }
-  }, [currentBlock, proposal?.status, proposal?.objectionPeriodEndBlock]);
-
+  }, [currentBlock, proposal?.status, proposal]);
   const handleRefetchData = () => {
     proposalFeedback.refetch();
   };
@@ -422,6 +434,7 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
@@ -495,7 +508,7 @@ const VotePage = ({
             })}
         <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
           <Col className="d-grid gap-4">
-            {isObjectionPeriod && (
+            {userVotes && !hasVoted && isObjectionPeriod ? (
               <div className={classes.objectionWrapper}>
                 <div className={classes.objection}>
                   <div className={classes.objectionHeader}>
@@ -519,7 +532,7 @@ const VotePage = ({
                   </button>
                 </div>
               </div>
-            )}
+            ) : null}
 
             {isActionable() && (
               <div className={classes.proposerOptionsWrapper}>
@@ -695,6 +708,14 @@ const VotePage = ({
                     </h3>
                   </div>
                 </div>
+                {currentBlock && isObjectionPeriod && currentBlock <= proposal?.objectionPeriodEndBlock && (
+                  <div className={classes.objectionPeriodActive}>
+                    <p><strong><Trans>Objection period triggered</Trans></strong></p>
+                    {currentBlock < proposal?.endBlock && (
+                      <p>{objectionNoteCopy}</p>
+                    )}
+                  </div>
+                )}
               </Card.Body>
             </Card>
           </Col>

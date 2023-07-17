@@ -138,6 +138,19 @@
   min-width: fit-content;
   text-align: right;
 }
+.objectionPeriodActive {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  color: var(--brand-gray-light-text);
+}
+.objectionPeriodActive p {
+  margin: 0 0 0.25rem;
+  padding: 0;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.1;
+}
 
 .snapshotBlock {
   text-align: right;
