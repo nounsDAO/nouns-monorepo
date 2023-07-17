@@ -17,6 +17,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import NotFoundPage from '../NotFound';
+import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
 
 const now = new Date();
 
@@ -50,7 +51,7 @@ const ForkPage = ({
   const forks = useForks(dataFetchPollInterval);
   const { account } = useEthers();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
-
+  const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury || '');
   useScrollToLocation();
   const refetchForkData = () => {
     userOwnedNounIds.refetch();
@@ -259,8 +260,8 @@ const ForkPage = ({
                   </p>
                 )}
                 <p>Fork contracts:{" "}
-                  {/* TODO:awaiting data */}
-                  {forkDetails.data.forkToken && (
+                  {/* TODO:get gov contract from token or treasury? */}
+                  {/* {forkDetails.data.forkToken && (
                     <>
                       <a
                         href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
@@ -270,7 +271,7 @@ const ForkPage = ({
                         Governor
                       </a>, {" "}
                     </>
-                  )}
+                  )} */}
                   {forkDetails.data.forkTreasury && (
                     <>
                       <a
@@ -290,9 +291,12 @@ const ForkPage = ({
                         rel='noreferrer'
                       >
                         Token
-                      </a>,{" "}
+                      </a>
                     </>
                   )}
+                </p>
+                <p>Fork treasury balance:
+                  Ξ{forkTreasuryBalance} eth
                 </p>
               </div>
             </Col>
