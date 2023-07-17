@@ -3,6 +3,7 @@ import Section from '../../layout/Section';
 import {
   ProposalState,
   ProposalTransaction,
+  useIsDaoGteV3,
   useProposal,
   useProposalCount,
   useProposalThreshold,
@@ -50,6 +51,7 @@ const CreateProposalPage = () => {
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
+  const isDaoGteV3 = useIsDaoGteV3();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -285,14 +287,16 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <div className={classes.timelockSelect}>
-          <Form.Check
-            type='checkbox'
-            id={`timelockV1Checkbox`}
-            label="Propose on timelock V1"
-            onChange={() => setIsProposeOnV1(!isProposeOnV1)}
-          />
-        </div>
+        {isDaoGteV3 && (
+          <div className={classes.timelockSelect}>
+            <Form.Check
+              type='checkbox'
+              id={`timelockV1Checkbox`}
+              label="Propose on timelock V1"
+              onChange={() => setIsProposeOnV1(!isProposeOnV1)}
+            />
+          </div>
+        )}
         <CreateProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
