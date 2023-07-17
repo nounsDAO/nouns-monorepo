@@ -121,6 +121,12 @@ const VotePage = ({
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
+  const determineProposalEndBlock = (proposal: PartialProposal) => {
+    if (proposal && proposal.objectionPeriodEndBlock > 0) {
+      return proposal.objectionPeriodEndBlock
+    }
+    return proposal?.endBlock;
+  }
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -133,7 +139,7 @@ const VotePage = ({
       )
       : undefined;
 
-  const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
+  const endBlock = proposal && determineProposalEndBlock(proposal);
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
