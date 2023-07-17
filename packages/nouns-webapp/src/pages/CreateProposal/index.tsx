@@ -1,4 +1,4 @@
-import { Col, Alert, Button } from 'react-bootstrap';
+import { Col, Alert, Button, Form } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -7,11 +7,12 @@ import {
   useProposalCount,
   useProposalThreshold,
   usePropose,
+  useProposeOnTimelockV1,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
 import { Link } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
+import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import CreateProposalButton from '../../components/CreateProposalButton';
@@ -34,12 +35,14 @@ const CreateProposalPage = () => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
+  const [isProposeOnV1, setIsProposeOnV1] = useState(false);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
   const { account } = useEthers();
   const { propose, proposeState } = usePropose();
+  const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const ethNeeded = useEthNeeded(
@@ -150,16 +153,28 @@ const CreateProposalPage = () => {
   const handleCreateProposal = async () => {
     if (!proposalTransactions?.length) return;
 
-    await propose(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-    );
+    if (isProposeOnV1) {
+      console.log('proposeOnTimelockV1')
+      await proposeOnTimelockV1(
+        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ value }) => value ?? '0'), // Values
+        proposalTransactions.map(({ signature }) => signature), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+        `# ${titleValue}\n\n${bodyValue}`, // Description
+      );
+    } else {
+      await propose(
+        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ value }) => value ?? '0'), // Values
+        proposalTransactions.map(({ signature }) => signature), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+        `# ${titleValue}\n\n${bodyValue}`, // Description
+      );
+    }
+
   };
 
-  useEffect(() => {
+  const handleAddProposalState = useCallback((state: TransactionStatus) => {
     switch (proposeState.status) {
       case 'None':
         setProposePending(false);
@@ -192,7 +207,51 @@ const CreateProposalPage = () => {
         setProposePending(false);
         break;
     }
-  }, [proposeState, setModal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // useEffect(() => {
+  //   switch (proposeState.status) {
+  //     case 'None':
+  //       setProposePending(false);
+  //       break;
+  //     case 'Mining':
+  //       setProposePending(true);
+  //       break;
+  //     case 'Success':
+  //       setModal({
+  //         title: <Trans>Success</Trans>,
+  //         message: <Trans>Proposal Created!</Trans>,
+  //         show: true,
+  //       });
+  //       setProposePending(false);
+  //       break;
+  //     case 'Fail':
+  //       setModal({
+  //         title: <Trans>Transaction Failed</Trans>,
+  //         message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+  //         show: true,
+  //       });
+  //       setProposePending(false);
+  //       break;
+  //     case 'Exception':
+  //       setModal({
+  //         title: <Trans>Error</Trans>,
+  //         message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+  //         show: true,
+  //       });
+  //       setProposePending(false);
+  //       break;
+  //   }
+  // }, [proposeState, setModal]);
+
+  useEffect(() => {
+    if (isProposeOnV1) {
+      handleAddProposalState(proposeOnTimelockV1State);
+    } else {
+      handleAddProposalState(proposeState);
+    }
+  }, [propose, proposeState, proposeOnTimelockV1, proposeOnTimelockV1State]);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -261,6 +320,14 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
+        <div className={classes.timelockSelect}>
+          <Form.Check
+            type='checkbox'
+            id={`timelockV1Checkbox`}
+            label="Propose on timelock V1"
+            onChange={() => setIsProposeOnV1(!isProposeOnV1)}
+          />
+        </div>
         <CreateProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
