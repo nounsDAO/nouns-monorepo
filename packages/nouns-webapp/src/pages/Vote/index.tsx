@@ -167,8 +167,6 @@ const VotePage = ({
       proposalVersions[proposalVersions.length - 1];
     return versionDetails?.createdAt;
   }
-  console.log('current block', currentBlock)
-  console.log('objection period block', proposal?.objectionPeriodEndBlock)
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isInNonFinalState = [
     ProposalState.UPDATABLE,
@@ -249,6 +247,16 @@ const VotePage = ({
       : undefined;
     return time;
   };
+
+  const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  })
+  const objectionEndDate = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    dateStyle: 'long',
+  });
+  const objectionNoteCopy = <>Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.</>;
   const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
@@ -275,16 +283,6 @@ const VotePage = ({
       };
     }
   })();
-
-  const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZoneName: 'short',
-  })
-  const objectionEndDate = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
-    dateStyle: 'long',
-  });
-  const objectionNoteCopy = isObjectionPeriod ? <Trans>Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.</Trans> : <></>;
 
 
   useEffect(() => {
