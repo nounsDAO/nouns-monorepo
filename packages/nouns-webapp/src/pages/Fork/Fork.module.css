@@ -95,6 +95,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 640px;
 }
 
 .pageHeader.isForked > div {

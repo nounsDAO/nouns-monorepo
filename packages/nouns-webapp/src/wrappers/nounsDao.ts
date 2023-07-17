@@ -821,6 +821,11 @@ export const usePropose = () => {
   return { propose, proposeState };
 };
 
+export const useProposeOnTimelockV1 = () => {
+  const { send: proposeOnTimelockV1, state: proposeOnTimelockV1State } = useContractFunction(nounsDaoContract, 'proposeOnTimelockV1');
+  return { proposeOnTimelockV1, proposeOnTimelockV1State };
+};
+
 export const useUpdateProposal = () => {
   const { send: updateProposal, state: updateProposalState } = useContractFunction(
     nounsDaoContract,

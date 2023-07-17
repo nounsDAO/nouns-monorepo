@@ -115,7 +115,7 @@ const ForkPage = ({
     // set page layout based on data
     if (forks.data && forkDetails.data) {
       // match id to upcoming fork id
-      if (forks?.data && +id === +forks.data[forks.data.length - 1].id + 1) {
+      if (forks?.data.length === 0 || (forks?.data.length > 0 && +id === +forks.data[forks.data.length - 1].id + 1)) {
         setIsNewForkPage(true);
       } else {
         setIsNewForkPage(false);
@@ -132,7 +132,7 @@ const ForkPage = ({
     );
   }
 
-  if (forks.data && +id > +forks.data[forks.data.length - 1].id + 1) {
+  if (forks.data.length > 0 && +id > +forks.data[forks.data.length - 1].id + 1) {
     // fork doesn't exist
     return <NotFoundPage />;
   }
@@ -156,7 +156,11 @@ const ForkPage = ({
                     <div className={classes.spacer} />
                   </div>
                   <h1><Trans>Fork Nouns DAO</Trans></h1>
-                  <p className='mb-4'><Trans>short intro about what it means to fork TKTK</Trans></p>
+                  <p className='mb-4'>
+                    <Trans>
+                      Any token holder can signal to fork (exit) in response to a governance proposal. If a quorum of {thresholdPercentage}% of tokens signals to exit, the fork will succeed.
+                    </Trans>
+                  </p>
                 </header>
                 {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
                   <button
@@ -167,9 +171,9 @@ const ForkPage = ({
                     {addNounsButtonLabel}
                   </button>
                 )}
-                <p className={classes.note}>
+                {/* <p className={classes.note}>
                   More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to pass the fork threshold
-                </p>
+                </p> */}
               </Col>
             </div>
           ) : (

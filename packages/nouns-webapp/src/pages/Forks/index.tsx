@@ -14,7 +14,7 @@ const ForksPage: React.FC<Props> = props => {
   const forks = useForks();
   const now = new Date();
   const currentTime = now.getTime() / 1000;
-  const timestamp = forks.data && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
+  const timestamp = forks.data.length > 0 && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
   const isLatestForkFinished = forks.data && timestamp && currentTime && +timestamp < currentTime;
   const nextForkId = forks.data && forks.data?.length;
   return (
@@ -58,7 +58,7 @@ const ForksPage: React.FC<Props> = props => {
             }).reverse()}
           </Row>
           <Row>
-            {isLatestForkFinished && nextForkId && (
+            {(!timestamp || (isLatestForkFinished && nextForkId)) && (
               <div>
                 <p className={classes.startFork}>
                   <Trans>There are no active forks.</Trans> {" "}
@@ -66,7 +66,6 @@ const ForksPage: React.FC<Props> = props => {
                     <Trans>Start a new fork</Trans>
                   </Link>
                 </p>
-
               </div>
             )}
           </Row>
