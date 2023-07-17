@@ -1,4 +1,4 @@
-import { Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Candidate.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -162,6 +162,26 @@ const CandidatePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {/* notice for proposal updates */}
+      {candidate.data?.proposalIdToUpdate && +candidate.data?.proposalIdToUpdate > 0 && !isProposer && (
+        <Alert variant="warning">
+          <Trans>
+            <strong>Note: </strong>
+            This candidate is an update to <Link to={`/vote/${candidate.data?.proposalIdToUpdate}`}>Proposal {candidate.data?.proposalIdToUpdate}</Link>.
+          </Trans>
+        </Alert>
+      )}
+      {isProposal && (
+        <Alert variant="success">
+          <Trans>
+            <strong>Note: </strong>
+            This proposal candidate has been proposed onchain.
+          </Trans>{" "}
+          {candidate.data?.matchingProposalIds[0] && (
+            < Link to={`/vote/${candidate.data?.matchingProposalIds[0]}`}>View the proposal here</Link>
+          )}
+        </Alert>
+      )}
       <Col lg={12} className={classes.wrapper}>
         {candidate.data && (
           <CandidateHeader
@@ -209,38 +229,7 @@ const CandidatePage = ({
           </Col>
         </Row>
       )}
-      {/* notice for proposal updates */}
-      {candidate.data?.proposalIdToUpdate && +candidate.data?.proposalIdToUpdate > 0 && !isProposer && (
-        <Row>
-          <Col lg={12}>
-            <div className={clsx(classes.editCandidate, 'mt-4')}>
-              <p>
-                <Trans>
-                  <strong>Note: </strong>
-                  This candidate is an update to <Link to={`/vote/${candidate.data?.proposalIdToUpdate}`}>Proposal {candidate.data?.proposalIdToUpdate}</Link>.
-                </Trans>
-              </p>
-            </div>
-          </Col>
-        </Row>
-      )}
-      {isProposal && (
-        <Row>
-          <Col lg={12}>
-            <div className={classes.editCandidate}>
-              <p>
-                <Trans>
-                  This proposal candidate has been proposed onchain.
-                </Trans>{" "}
-                {candidate.data?.matchingProposalIds[0] && (
-                  < Link to={`/vote/${candidate.data?.matchingProposalIds[0]}`}>View the proposal here</Link>
-                )}
-              </p>
-            </div>
-          </Col>
-        </Row>
-      )
-      }
+
       {
         candidate.data && (
           <Row>
