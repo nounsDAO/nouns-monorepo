@@ -58,7 +58,7 @@ const ForksPage: React.FC<Props> = props => {
             }).reverse()}
           </Row>
           <Row>
-            {(!timestamp || (isLatestForkFinished && nextForkId)) && (
+            {((isLatestForkFinished && nextForkId)) && (
               <div>
                 <p className={classes.startFork}>
                   <Trans>There are no active forks.</Trans> {" "}

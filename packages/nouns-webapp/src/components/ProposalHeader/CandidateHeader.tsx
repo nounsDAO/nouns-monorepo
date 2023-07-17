@@ -76,7 +76,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     </a>
   );
 
-  const subHead = <Trans>{isUpdateToProposal ? <strong>Update</strong> : ''} Proposal Candidate</Trans>;
+  const subHead = <>{isUpdateToProposal ? <strong>Update</strong> : ''} Proposal Candidate</>;
   const transactionLink = transactionIconLink(createdTransactionHash);
   return (
     <>
@@ -87,7 +87,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       </div>
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
-
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">

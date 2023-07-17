@@ -158,9 +158,9 @@ const ForkPage = ({
                   </div>
                   <h1><Trans>Fork Nouns DAO</Trans></h1>
                   <p className='mb-4'>
-                    <Trans>
-                      Any token holder can signal to fork (exit) in response to a governance proposal. If a quorum of {thresholdPercentage}% of tokens signals to exit, the fork will succeed.
-                    </Trans>
+                    {/* TODO: add Trans back in */}
+                    Any token holder can signal to fork (exit) in response to a governance proposal. If a quorum of {thresholdPercentage}% of tokens signals to exit, the fork will succeed.
+
                   </p>
                 </header>
                 {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (

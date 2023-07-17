@@ -143,9 +143,10 @@ const NavBar = () => {
                 className={classes.nounsNavLink}
                 onClick={closeNav}
               >
+                {/* TODO: add Trans back in */}
                 <NavBarButton
-                  buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faUsers} />}
+                  buttonText={<>{isDaoGteV3 ? 'Proposals' : 'DAO'}</>}
+                  buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faFile} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
