@@ -97,3 +97,15 @@
   border: 1px solid #aaa;
   border-radius: 8px;
 }
+button.modalButtonLink {
+  font-weight: bold;
+  text-decoration: underline;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+button.modalButtonLink:hover {
+  text-decoration: none;
+  background-color: transparent;
+}

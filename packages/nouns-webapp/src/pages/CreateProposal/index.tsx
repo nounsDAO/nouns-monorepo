@@ -12,7 +12,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -37,6 +37,7 @@ const CreateProposalPage = () => {
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
   const [isProposeOnV1, setIsProposeOnV1] = useState(false);
+  const [previousProposalId, setPreviousProposalId] = useState<number | undefined>(undefined);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
@@ -46,6 +47,7 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const history = useHistory();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -83,6 +85,13 @@ const CreateProposalPage = () => {
     },
     [proposalTransactions, totalUSDCPayment],
   );
+
+  useEffect(() => {
+    // only set this once 
+    if (latestProposalId !== undefined && !previousProposalId) {
+      setPreviousProposalId(latestProposalId);
+    }
+  }, [latestProposalId, previousProposalId]);
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -156,7 +165,6 @@ const CreateProposalPage = () => {
     if (!proposalTransactions?.length) return;
 
     if (isProposeOnV1) {
-      console.log('proposeOnTimelockV1')
       await proposeOnTimelockV1(
         proposalTransactions.map(({ address }) => address), // Targets
         proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -173,13 +181,19 @@ const CreateProposalPage = () => {
         `# ${titleValue}\n\n${bodyValue}`, // Description
       );
     }
-
   };
 
-  const handleAddProposalState = useCallback((state: TransactionStatus) => {
+  const handleAddProposalState = useCallback((proposeState: TransactionStatus, previousProposalId?: number) => {
     switch (proposeState.status) {
       case 'None':
         setProposePending(false);
+        break;
+      case 'PendingSignature':
+        setModal({
+          title: <Trans>Awaiting signature</Trans>,
+          message: " ",
+          show: true,
+        });
         break;
       case 'Mining':
         setProposePending(true);
@@ -187,7 +201,18 @@ const CreateProposalPage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
+          message: <Trans>Proposal Created!<br />
+            {previousProposalId && (
+              <button
+                className={classes.modalButtonLink}
+                onClick={() => {
+                  setModal({ title: '', message: '', show: false });
+                  history.push(`/vote/${previousProposalId + 1} `);
+                }}>
+                View Proposal {previousProposalId + 1}
+              </button>
+            )}
+          </Trans>,
           show: true,
         });
         setProposePending(false);
@@ -214,10 +239,11 @@ const CreateProposalPage = () => {
 
   useEffect(() => {
     if (isProposeOnV1) {
-      handleAddProposalState(proposeOnTimelockV1State);
+      handleAddProposalState(proposeOnTimelockV1State, previousProposalId);
     } else {
-      handleAddProposalState(proposeState);
+      handleAddProposalState(proposeState, previousProposalId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propose, proposeState, proposeOnTimelockV1, proposeOnTimelockV1State, isProposeOnV1, handleAddProposalState]);
 
   return (
