@@ -985,11 +985,11 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
 // helper function to add fork cycle events to escrow events
 const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[], forkDetails: Fork) => {
   const endTimestamp = forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
-  const started: ForkCycleEvent = {
-    eventType: 'ForkStarted',
-    id: 'fork-started',
-    createdAt: `${(events[0]?.createdAt && +events[0]?.createdAt - 1)}`,
-  };
+  // const started: ForkCycleEvent = {
+  //   eventType: 'ForkStarted',
+  //   id: 'fork-started',
+  //   createdAt: `${(events[0]?.createdAt && +events[0]?.createdAt - 1)}`,
+  // };
   const executed: ForkCycleEvent = {
     eventType: 'ForkExecuted',
     id: 'fork-executed',
@@ -1001,7 +1001,7 @@ const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | F
     createdAt: endTimestamp ? endTimestamp.toString() : null,
   };
   const forkEvents: ForkCycleEvent[] = [
-    started,
+    // started,
     executed,
     forkEnded,
   ];
