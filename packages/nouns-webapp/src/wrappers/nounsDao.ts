@@ -520,7 +520,7 @@ const getProposalState = (
       return ProposalState.PENDING;
     }
 
-    if (parseInt(proposal.objectionPeriodEndBlock) > 0 && blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+    if (blockNumber > +proposal.endBlock && parseInt(proposal.objectionPeriodEndBlock) > 0 && blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
       return ProposalState.OBJECTION_PERIOD;
     }
 
