@@ -7,6 +7,7 @@ import {
   useCancelProposal,
   useCurrentQuorum,
   useExecuteProposal,
+  useIsDaoGteV3,
   useProposal,
   useProposalVersions,
   useQueueProposal,
@@ -118,6 +119,7 @@ const VotePage = ({
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
+  const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
 
   // Get and format date from data
@@ -147,7 +149,7 @@ const VotePage = ({
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // Only count available votes as of the proposal created block
-  const userVotes = useUserVotesAsOfBlock(proposal?.createdBlock);
+  const userVotes = useUserVotesAsOfBlock(isDaoGteV3 ? proposal?.startBlock : proposal?.createdBlock);
 
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
@@ -698,9 +700,9 @@ const VotePage = ({
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>
-                      <Trans>Taken at block</Trans>
+                      {isDaoGteV3 ? <Trans>Taken on start block</Trans> : <Trans>Taken on created block</Trans>}
                     </span>
-                    <h3>{proposal.createdBlock}</h3>
+                    <h3>{isDaoGteV3 ? proposal.startBlock : proposal.createdBlock}</h3>
                   </div>
                 </div>
               </Card.Body>
