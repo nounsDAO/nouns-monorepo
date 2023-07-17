@@ -210,48 +210,13 @@ const CreateProposalPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   switch (proposeState.status) {
-  //     case 'None':
-  //       setProposePending(false);
-  //       break;
-  //     case 'Mining':
-  //       setProposePending(true);
-  //       break;
-  //     case 'Success':
-  //       setModal({
-  //         title: <Trans>Success</Trans>,
-  //         message: <Trans>Proposal Created!</Trans>,
-  //         show: true,
-  //       });
-  //       setProposePending(false);
-  //       break;
-  //     case 'Fail':
-  //       setModal({
-  //         title: <Trans>Transaction Failed</Trans>,
-  //         message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-  //         show: true,
-  //       });
-  //       setProposePending(false);
-  //       break;
-  //     case 'Exception':
-  //       setModal({
-  //         title: <Trans>Error</Trans>,
-  //         message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-  //         show: true,
-  //       });
-  //       setProposePending(false);
-  //       break;
-  //   }
-  // }, [proposeState, setModal]);
-
   useEffect(() => {
     if (isProposeOnV1) {
       handleAddProposalState(proposeOnTimelockV1State);
     } else {
       handleAddProposalState(proposeState);
     }
-  }, [propose, proposeState, proposeOnTimelockV1, proposeOnTimelockV1State]);
+  }, [propose, proposeState, proposeOnTimelockV1, proposeOnTimelockV1State, isProposeOnV1, handleAddProposalState]);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
