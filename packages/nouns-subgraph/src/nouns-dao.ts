@@ -19,6 +19,7 @@ import {
   WithdrawFromForkEscrow,
   ExecuteFork,
   JoinFork,
+  ProposalCreatedOnTimelockV1,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -64,6 +65,14 @@ export function handleProposalCreatedWithRequirementsV3(
   event: ProposalCreatedWithRequirements,
 ): void {
   handleProposalCreated(ParsedProposalV3.fromV3Event(event));
+}
+
+export function handleProposalCreatedOnTimelockV1(
+  event: ProposalCreatedOnTimelockV1
+): void {
+  let proposal = getOrCreateProposal(event.params.id.toString());
+  proposal.onTimelockV1 = true;
+  proposal.save();
 }
 
 export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
