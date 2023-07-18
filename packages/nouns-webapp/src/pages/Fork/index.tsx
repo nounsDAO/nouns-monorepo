@@ -232,7 +232,7 @@ const ForkPage = ({
           )}
         </Row>
       </Section>
-      {isForked || isForkPeriodActive && (
+      {(isForked || isForkPeriodActive) && (
         <Section fullWidth={false}>
           <Row>
             <Col>
@@ -361,15 +361,12 @@ const ForkPage = ({
                   </div>
                 )}
                 {escrowEvents.data && escrowEvents.data.map((event, i) => {
-                  console.log('now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp', now.getTime() / 1000, forkDetails.data.forkingPeriodEndTimestamp)
-                  console.log(event.createdAt && forkDetails.data.forkingPeriodEndTimestamp && now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp);
                   if (event?.eventType === 'ForkingEnded') {
-                    if ((event.createdAt && forkDetails.data.forkingPeriodEndTimestamp) && now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp) {
-                      return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
+                    if ((event.createdAt && forkDetails.data.forkingPeriodEndTimestamp) && now.getTime() / 1000 < +forkDetails.data.forkingPeriodEndTimestamp) {
+                      return null
                     }
-                  } else {
-                    return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
                   }
+                  return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
                 })}
               </Col>
             </Row>
