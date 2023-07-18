@@ -57,6 +57,7 @@ const CreateProposalPage = () => {
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
+      console.log('transactions', transactions);
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
 
       transactionsArray.forEach(transaction => {
@@ -182,7 +183,7 @@ const CreateProposalPage = () => {
       );
     }
   };
-
+  console.log('proposalTransactions', proposalTransactions);
   const handleAddProposalState = useCallback((proposeState: TransactionStatus, previousProposalId?: number) => {
     switch (proposeState.status) {
       case 'None':
@@ -202,7 +203,7 @@ const CreateProposalPage = () => {
         setModal({
           title: <Trans>Success</Trans>,
           message: <Trans>Proposal Created!<br />
-            {previousProposalId && (
+            {/* {previousProposalId && (
               <button
                 className={classes.modalButtonLink}
                 onClick={() => {
@@ -211,7 +212,7 @@ const CreateProposalPage = () => {
                 }}>
                 View Proposal {previousProposalId + 1}
               </button>
-            )}
+            )} */}
           </Trans>,
           show: true,
         });
