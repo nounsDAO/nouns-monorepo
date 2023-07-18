@@ -92,6 +92,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
 
     mapping(bytes32 => bool) public queuedTransactions;
 
+    constructor() initializer {}
+
     function initialize(address admin_, uint256 delay_) public virtual initializer {
         require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::constructor: Delay must exceed minimum delay.');
         require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
