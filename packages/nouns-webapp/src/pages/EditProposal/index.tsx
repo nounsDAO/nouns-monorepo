@@ -26,6 +26,7 @@ import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '../../wrappers/nounsData';
+import { utils } from 'ethers';
 
 interface EditProposalProps {
   match: {
@@ -81,7 +82,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
-
       transactionsArray.forEach(transaction => {
         if (!transaction.address.startsWith('0x')) {
           transaction.address = `0x${transaction.address}`;
@@ -105,6 +105,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     (index: number) => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
+      setIsProposalEdited(true);
     },
     [proposalTransactions, totalUSDCPayment],
   );
@@ -316,9 +317,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   };
 
   const isDescriptionEdited = () => {
-    console.log('isDescriptionEdited', originalTitleValue, titleValue, originalBodyValue, bodyValue);
-    console.log('originalTitleValue !== titleValue', originalTitleValue !== titleValue);
-    console.log('originalBodyValue !== bodyValue', originalBodyValue !== bodyValue);
     return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false
   };
 
@@ -329,7 +327,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     // check to see if only description or only transactions are edited
     if (isDescriptionEdited() && !isTransactionsEdited()) {
       // only update description
-      updateProposalDescription(
+      await updateProposalDescription(
         proposal.id,
         `# ${titleValue}\n\n${bodyValue}`,
         commitMessage,
@@ -337,7 +335,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
     if (!isDescriptionEdited() && isTransactionsEdited()) {
       // only update transactions
-      updateProposalTransactions(
+      await updateProposalTransactions(
         proposal.id,
         proposalTransactions.map(({ address }) => address), // Targets
         proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -359,14 +357,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
-
   // set initial values on page load 
   useEffect(() => {
     if (proposal && !titleValue && !bodyValue && !proposalTransactions.length && !originalTitleValue && !originalBodyValue && !originalProposalTransactions.length) {
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
-          value: txn.value ?? '0',
+          value: utils.parseUnits(txn.value ?? '0', 18).toString(),
           calldata: txn.callData,
           signature: txn.functionSig ?? '',
         };
