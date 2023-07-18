@@ -61,6 +61,14 @@ contract AuctionHouse is
 
  IERC20 public biddingToken;
 
+ uint256[] public availableTokenIds;
+
+ // Array to store the addresses that will receive a portion of the auction proceeds
+address payable[] public beneficiaries;
+// Array to store the corresponding percentages for each beneficiary
+uint8[] public beneficiaryPercentages;
+
+
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -106,32 +114,26 @@ contract AuctionHouse is
 
   
 
-    function setBiddingToken(IERC20 _biddingToken) external onlyOwner {
-        biddingToken = _biddingToken;
-    }
-
-    function createBid(uint256 vrbId, uint256 bidAmount) external nonReentrant {
+   
+     function createBid(uint256 vrbId) external payable override nonReentrant {
         IAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.vrbId == vrbId, 'Vrb not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(bidAmount >= reservePrice, 'Must send at least reservePrice');
+        require(msg.value >= reservePrice, 'Must send at least reservePrice');
         require(
-            bidAmount >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
-
-        // Transfer the bid amount from the bidder to the contract
-        biddingToken.transferFrom(msg.sender, address(this), bidAmount);
 
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            biddingToken.transfer(lastBidder, _auction.amount);
+            _safeTransferETHWithFallback(lastBidder, _auction.amount);
         }
 
-        auction.amount = bidAmount;
+        auction.amount = msg.value;
         auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
@@ -140,14 +142,27 @@ contract AuctionHouse is
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-        emit AuctionBid(_auction.vrbId, msg.sender, bidAmount, extended);
+        emit AuctionBid(_auction.vrbId, msg.sender, msg.value, extended);
 
         if (extended) {
             emit AuctionExtended(_auction.vrbId, _auction.endTime);
         }
     }
 
+ 
 
+
+function setBeneficiaries(address payable[] calldata _beneficiaries, uint8[] calldata _beneficiaryPercentages) external onlyOwner {
+    require(_beneficiaries.length == _beneficiaryPercentages.length, "Input arrays must have the same length");
+    uint8 totalPercentage;
+    for(uint i = 0; i < _beneficiaryPercentages.length; i++) {
+        totalPercentage += _beneficiaryPercentages[i];
+    }
+    require(totalPercentage == 100, "Total percentages must add up to 100");
+
+    beneficiaries = _beneficiaries;
+    beneficiaryPercentages = _beneficiaryPercentages;
+}
 
 
 
@@ -204,58 +219,87 @@ contract AuctionHouse is
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
     }
 
-    /**
-     * @notice Create an auction.
-     * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
-     * If the mint reverts, the minter was updated without pausing this contract first. To remedy this,
-     * catch the revert and pause this contract.
-     */
+    
+
     function _createAuction() internal {
-        try vrbs.mint() returns (uint256 vrbId) {
-            uint256 startTime = block.timestamp;
-            uint256 endTime = startTime + duration;
+        require(availableTokenIds.length > 0, "No available tokens to auction");
 
-            auction = Auction({
-                vrbId: vrbId,
-                amount: 0,
-                startTime: startTime,
-                endTime: endTime,
-                bidder: payable(0),
-                settled: false
-            });
+        // Get a random index
+        uint256 randomIndex = _getRandomIndex(availableTokenIds.length);
 
-            emit AuctionCreated(vrbId, startTime, endTime);
-        } catch Error(string memory) {
-            _pause();
-        }
+        // Get the tokenId from the random index
+        uint256 tokenId = availableTokenIds[randomIndex];
+
+        // Remove the token from the list of available tokens
+        _removeFromavailableTokenIds(randomIndex);
+
+        uint256 startTime = block.timestamp;
+        uint256 endTime = startTime + duration;
+
+        auction = Auction({
+            vrbId: tokenId,
+            amount: 0,
+            startTime: startTime,
+            endTime: endTime,
+            bidder: payable(0),
+            settled: false
+        });
+
+        emit AuctionCreated(tokenId, startTime, endTime);
     }
 
    
-       /**
-     * @notice Settle an auction, finalizing the bid and paying out to the owner.
-     * @dev If there are no bids, the Vrb is burned.
-     */
     function _settleAuction() internal {
-        IAuctionHouse.Auction memory _auction = auction;
+    IAuctionHouse.Auction memory _auction = auction;
 
-        require(_auction.startTime != 0, "Auction hasn't begun");
-        require(!_auction.settled, 'Auction has already been settled');
-        require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
+    require(_auction.startTime != 0, "Auction hasn't begun");
+    require(!_auction.settled, 'Auction has already been settled');
+    require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
 
-        auction.settled = true;
+    auction.settled = true;
 
-        if (_auction.bidder == address(0)) {
-            vrbs.burn(_auction.vrbId);
-        } else {
-            vrbs.transferFrom(address(this), _auction.bidder, _auction.vrbId);
-        }
-
-        if (_auction.amount > 0) {
-            biddingToken.transfer(owner(), _auction.amount);
-        }
-
-        emit AuctionSettled(_auction.vrbId, _auction.bidder, _auction.amount);
+    if (_auction.bidder == address(0)) {
+        vrbs.burn(_auction.vrbId);
+    } else {
+        vrbs.transferFrom(address(this), _auction.bidder, _auction.vrbId);
+        
     }
+
+    if (_auction.amount > 0) {
+       for (uint i = 0; i < beneficiaries.length; i++) {
+            uint256 share = _auction.amount * beneficiaryPercentages[i] / 100;
+
+              _safeTransferETHWithFallback(owner(),share);
+        }
+    }
+
+    emit AuctionSettled(_auction.vrbId, _auction.bidder, _auction.amount);
+}
+
+
+  
+
+  /**
+     * @notice Add multiple token IDs to the available list.
+     * @dev This function can only be called by the owner.
+     */
+    function addTokenIds(uint256[] calldata _tokenIds) external onlyOwner {
+        for (uint256 i = 0; i < _tokenIds.length; i++) {
+            availableTokenIds.push(_tokenIds[i]);
+        }
+
+    }
+
+// Random index generator
+function _getRandomIndex(uint256 _length) internal view returns (uint256) {
+    return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp))) % _length;
+}
+
+// Remove token from available tokens list
+function _removeFromavailableTokenIds(uint256 index) internal {
+    availableTokenIds[index] = availableTokenIds[availableTokenIds.length-1];
+    availableTokenIds.pop();
+}
 
 
     /**

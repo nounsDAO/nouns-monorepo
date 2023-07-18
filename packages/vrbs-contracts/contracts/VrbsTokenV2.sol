@@ -87,6 +87,9 @@ contract VrbsTokenV2 is Ownable, ERC721Checkpointable {
        string private _tokenURISuffix;
     string private _tokenBaseURI = "";
 
+mapping(uint256 => bool) private _tokenIdMinted;
+uint256[] private _existingTokenIds;
+
 
     /**
      * @notice Require that the minter has not been locked.
@@ -187,10 +190,17 @@ contract VrbsTokenV2 is Ownable, ERC721Checkpointable {
         ));
     }
     
-      // Function to set SVG base64 for a tokenId
-    function setTokenSVG(uint256 tokenId, string calldata svgB64) external onlyOwner {
-        _tokenSVGB64[tokenId] = svgB64;
-    }
+function addToken(uint256 tokenId, string calldata svgB64) external onlyOwner {
+    require(!_tokenIdMinted[tokenId], "Token ID is already minted");
+    _tokenSVGB64[tokenId] = svgB64;
+    _existingTokenIds.push(tokenId);
+    _tokenIdMinted[tokenId] = true; // Set this token as minted
+}
+
+function setTokenSvg(uint256 tokenId, string calldata svgB64) external onlyOwner {
+    require(_tokenIdMinted[tokenId], "Token ID does not exist");
+    _tokenSVGB64[tokenId] = svgB64;
+}
 
     function tokenURI(uint256 tokenId) public view override(ERC721) returns(string memory) {
         require(_exists(tokenId), "Cannot query non-existent token");
@@ -211,22 +221,34 @@ function random(uint256 _upper) internal view returns (uint256) {
     return randomnumber;
 }
 
-// Mint function
+// Modify the mint function
 function mint() public onlyMinter returns (uint256) {
-    // Generate a random tokenId that does not exist yet
-    uint256 newTokenId = random(1e6); // Assuming a cap of 1 million tokens, adjust as needed
-    while (EnumerableSet.contains(mintedIds, newTokenId)) {
-        newTokenId = random(1e6);
+    // Check if there are any tokenIds left to mint
+    require(_existingTokenIds.length > 0, "No token IDs left to mint");
+
+    // Always mint the first tokenId in _existingTokenIds
+    uint256 tokenIdToMint = _existingTokenIds[0];
+
+    // Remove the tokenId from _existingTokenIds and mark it as minted
+    _removeTokenId(tokenIdToMint);
+    _tokenIdMinted[tokenIdToMint] = true;
+
+    // Continue with your minting logic
+    _mintTo(minter, tokenIdToMint);
+
+    return tokenIdToMint;
+}
+
+// Helper function to remove a tokenId from _existingTokenIds
+function _removeTokenId(uint256 tokenIdToRemove) private {
+    for (uint256 i = 0; i < _existingTokenIds.length; i++) {
+        if (_existingTokenIds[i] == tokenIdToRemove) {
+            // If we find the tokenId, we move the last element into its place and then shorten the array by 1
+            _existingTokenIds[i] = _existingTokenIds[_existingTokenIds.length - 1];
+            _existingTokenIds.pop();
+            return;
+        }
     }
-    
-    // Add the tokenId to the set of mintedIds
-    EnumerableSet.add(mintedIds, newTokenId);
-    
-    // Continue your minting logic with the newly generated tokenId
-    if (newTokenId <= 1820 && newTokenId % 10 == 0) {
-        _mintTo(vrbsDAO, newTokenId++);
-    }
-    return _mintTo(minter, newTokenId);
 }
 
     /**
