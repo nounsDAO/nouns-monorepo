@@ -203,7 +203,9 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         quitInternal(tokenIds, erc20TokensToIncludeInQuit);
     }
 
-    function quit(uint256[] calldata tokenIds, address[] memory erc20TokensToInclude) external nonReentrant {
+    function quit(uint256[] calldata tokenIds, address[] calldata erc20TokensToInclude) external nonReentrant {
+        checkForDuplicates(erc20TokensToInclude);
+
         // check that erc20TokensToInclude is a subset of `erc20TokensToIncludeInQuit`
         address[] memory erc20TokensToIncludeInQuit_ = erc20TokensToIncludeInQuit;
         for (uint256 i = 0; i < erc20TokensToInclude.length; i++) {
@@ -778,7 +780,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         return nouns.totalSupply() - nouns.balanceOf(address(timelock)) + nouns.remainingTokensToClaim();
     }
 
-    function erc20TokensToIncludeInQuitArray() public view returns(address[] memory) {
+    function erc20TokensToIncludeInQuitArray() public view returns (address[] memory) {
         return erc20TokensToIncludeInQuit;
     }
 
