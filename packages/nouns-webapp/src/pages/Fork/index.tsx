@@ -232,36 +232,31 @@ const ForkPage = ({
           )}
         </Row>
       </Section>
-      {isForkPeriodActive && forkDetails.data.forkingPeriodEndTimestamp && (
+      {isForked || isForkPeriodActive && (
         <Section fullWidth={false}>
           <Row>
             <Col>
-              <div className={clsx(classes.countdown, classes.callout)}>
-                <ForkingPeriodTimer
-                  endTime={+forkDetails.data.forkingPeriodEndTimestamp}
-                  isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
-                />
-                <p>
-                  time left to return Nouns and join this fork.
-                </p>
-              </div>
-            </Col>
-          </Row>
-        </Section>
-      )}
-      {isForked && (
-        <Section fullWidth={false}>
-          <Row>
-            <Col>
-              <div className={clsx(classes.callout, classes.isForked)}>
-                {forkDetails.data.forkingPeriodEndTimestamp && (
-                  <p>
-                    <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
-                  </p>
+              <div className={classes.callout}>
+                {forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
+                  <div className={clsx(classes.countdown)}>
+                    <ForkingPeriodTimer
+                      endTime={+forkDetails.data.forkingPeriodEndTimestamp}
+                      isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
+                    />
+                    <p>
+                      time left to return Nouns and join this fork
+                    </p>
+                  </div>
                 )}
-                <p>Fork contracts:{" "}
-                  {/* TODO:get gov contract from token or treasury? */}
-                  {/* {forkDetails.data.forkToken && (
+                <div className={clsx(classes.isForked)}>
+                  {forkDetails.data.forkingPeriodEndTimestamp && (
+                    <p>
+                      <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
+                    </p>
+                  )}
+                  <p>Fork contracts:{" "}
+                    {/* TODO:get gov contract from token or treasury? */}
+                    {/* {forkDetails.data.forkToken && (
                     <>
                       <a
                         href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
@@ -272,37 +267,39 @@ const ForkPage = ({
                       </a>, {" "}
                     </>
                   )} */}
-                  {forkDetails.data.forkTreasury && (
-                    <>
-                      <a
-                        href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
-                        target='_blank'
-                        rel='noreferrer'
-                      >
-                        Treasury
-                      </a>,{" "}
-                    </>
-                  )}
-                  {forkDetails.data.forkToken && (
-                    <>
-                      <a
-                        href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                        target='_blank'
-                        rel='noreferrer'
-                      >
-                        Token
-                      </a>
-                    </>
-                  )}
-                </p>
-                <p>Fork treasury balance:
-                  Ξ{forkTreasuryBalance} eth
-                </p>
+                    {forkDetails.data.forkTreasury && (
+                      <>
+                        <a
+                          href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          Treasury
+                        </a>,{" "}
+                      </>
+                    )}
+                    {forkDetails.data.forkToken && (
+                      <>
+                        <a
+                          href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          Token
+                        </a>
+                      </>
+                    )}
+                  </p>
+                  <p>Fork treasury balance:
+                    Ξ{forkTreasuryBalance} eth
+                  </p>
+                </div>
               </div>
             </Col>
           </Row>
         </Section>
       )}
+
       {!isNewForkPage && escrowEvents.data && (
         <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod, isForked && classes.isForked)}>
           <Container>
