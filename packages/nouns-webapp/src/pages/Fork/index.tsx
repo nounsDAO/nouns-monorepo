@@ -363,7 +363,17 @@ const ForkPage = ({
                     </p>
                   </div>
                 )}
-                {escrowEvents.data && escrowEvents.data.map((event, i) => <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />)}
+                {escrowEvents.data && escrowEvents.data.map((event, i) => {
+                  console.log('now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp', now.getTime() / 1000, forkDetails.data.forkingPeriodEndTimestamp)
+                  console.log(event.createdAt && forkDetails.data.forkingPeriodEndTimestamp && now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp);
+                  if (event?.eventType === 'ForkingEnded') {
+                    if ((event.createdAt && forkDetails.data.forkingPeriodEndTimestamp) && now.getTime() / 1000 > +forkDetails.data.forkingPeriodEndTimestamp) {
+                      return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
+                    }
+                  } else {
+                    return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
+                  }
+                })}
               </Col>
             </Row>
           </Container>
