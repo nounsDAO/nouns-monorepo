@@ -47,7 +47,7 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const history = useHistory();
+  // const history = useHistory();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
