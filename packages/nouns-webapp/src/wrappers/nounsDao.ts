@@ -539,7 +539,7 @@ const getProposalState = (
     }
 
     // if past endblock, but onchain status hasn't been changed
-    if (blockNumber > parseInt(proposal.endBlock) + parseInt(proposal.objectionPeriodEndBlock)) {
+    if (blockNumber > parseInt(proposal.endBlock) && blockNumber > parseInt(proposal.objectionPeriodEndBlock)) {
       const forVotes = new BigNumber(proposal.forVotes);
       if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
