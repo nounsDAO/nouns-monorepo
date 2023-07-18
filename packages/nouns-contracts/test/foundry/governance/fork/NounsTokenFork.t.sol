@@ -12,9 +12,11 @@ import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { IProxyRegistry } from '../../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
+import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 
 abstract contract NounsTokenForkBase is DeployUtilsFork {
     NounsTokenFork token;
+    NounsTokenFork tokenImpl;
     NounsToken originalToken;
     uint32 forkId;
     NounsSeeder seeder;
@@ -49,7 +51,8 @@ abstract contract NounsTokenForkBase is DeployUtilsFork {
         tokenIds.push(4);
         tokenIds.push(2);
 
-        token = new NounsTokenFork();
+        tokenImpl = new NounsTokenFork();
+        token = NounsTokenFork(address(new ERC1967Proxy(address(tokenImpl), '')));
         token.initialize(treasury, minter, escrow, forkId, 0, 3, block.timestamp + FORK_PERIOD);
         vm.startPrank(token.owner());
         token.setSeeder(seeder);

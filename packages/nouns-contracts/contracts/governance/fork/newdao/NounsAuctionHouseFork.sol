@@ -68,6 +68,8 @@ contract NounsAuctionHouseFork is
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
+    constructor() initializer {}
+
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.

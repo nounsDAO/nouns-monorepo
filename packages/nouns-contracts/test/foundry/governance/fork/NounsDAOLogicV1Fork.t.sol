@@ -478,6 +478,15 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
     }
 
+    function test_quit_doesntAllowDuplicatesInErc20TokensToInclude() public {
+        vm.prank(quitter);
+        address[] memory tokensToInclude = new address[](2);
+        tokensToInclude[0] = address(token2);
+        tokensToInclude[1] = address(token2);
+        vm.expectRevert(NounsDAOLogicV1Fork.DuplicateTokenAddress.selector);
+        dao.quit(quitterTokens, tokensToInclude);
+    }
+
     function test_quit_allowsExcludingAllErc20Tokens() public {
         vm.prank(quitter);
         address[] memory tokensToInclude = new address[](0);

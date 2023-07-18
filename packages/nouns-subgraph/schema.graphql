@@ -274,6 +274,9 @@ type Proposal @entity {
 
   "Feedback posts associated to this proposal"
   feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
+
+  "True if the proposal was created via proposeOnTimelockV1"
+  onTimelockV1: Boolean
 }
 
 type ProposalVersion @entity(immutable: true) {

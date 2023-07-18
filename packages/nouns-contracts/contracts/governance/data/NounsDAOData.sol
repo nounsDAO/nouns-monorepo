@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
-import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
+import { SignatureChecker } from '../../external/openzeppelin/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
 
@@ -67,7 +67,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     /// @notice The account to send ETH fees to.
     address payable public feeRecipient;
 
-    constructor(address nounsToken_, address nounsDao_) {
+    constructor(address nounsToken_, address nounsDao_) initializer {
         nounsToken = NounsTokenLike(nounsToken_);
         nounsDao = nounsDao_;
     }

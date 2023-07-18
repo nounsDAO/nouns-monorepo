@@ -90,6 +90,8 @@ dataSources:
           handler: handleProposalCreatedWithRequirements
         - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirementsV3
+        - event: ProposalCreatedOnTimelockV1(uint256)
+          handler: handleProposalCreatedOnTimelockV1
         - event: ProposalCanceled(uint256)
           handler: handleProposalCanceled
         - event: ProposalVetoed(uint256)

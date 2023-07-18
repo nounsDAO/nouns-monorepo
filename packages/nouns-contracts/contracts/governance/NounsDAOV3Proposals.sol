@@ -20,8 +20,8 @@ pragma solidity ^0.8.19;
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
-import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
-import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
+import { SignatureChecker } from '../external/openzeppelin/SignatureChecker.sol';
+import { ECDSA } from '../external/openzeppelin/ECDSA.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Proposals {

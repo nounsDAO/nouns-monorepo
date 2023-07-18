@@ -15,7 +15,8 @@ import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegist
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 
 contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
-    address proposerWithVote = makeAddr('proposerWithVote');
+    address proposerWithVote;
+    uint256 proposerWithVotePK;
     address proposerWithNoVotes = makeAddr('proposerWithNoVotes');
     address signerWithNoVotes;
     uint256 signerWithNoVotesPK;
@@ -27,6 +28,7 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
     function setUp() public override {
         super.setUp();
 
+        (proposerWithVote, proposerWithVotePK) = makeAddrAndKey('proposerWithVote');
         (signerWithNoVotes, signerWithNoVotesPK) = makeAddrAndKey('signerWithNoVotes');
         (signerWithVote1, signerWithVote1PK) = makeAddrAndKey('signerWithVote1');
         (signerWithVote2, signerWithVote2PK) = makeAddrAndKey('signerWithVote2');
@@ -374,6 +376,30 @@ contract ProposeBySigsTest is NounsDAOLogicV3BaseTest {
         expectNewPropEvents(txs, proposerWithVote, dao.proposalCount() + 1, 1, 0, expectedSigners);
 
         vm.prank(proposerWithVote);
+        dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
+    }
+
+    function test_givenProposerIsAlsoSigner_reverts() public {
+        // Minting to push proposer below threshold, while if counted twice will have enough
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 6; ++i) {
+            nounsToken.mint();
+        }
+        vm.roll(block.number + 1);
+        vm.stopPrank();
+        assertEq(dao.proposalThreshold(), 1);
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
+        uint256 expirationTimestamp = block.timestamp + 1234;
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures = new NounsDAOStorageV3.ProposerSignature[](1);
+        proposerSignatures[0] = NounsDAOStorageV3.ProposerSignature(
+            signProposal(proposerWithVote, proposerWithVotePK, txs, 'description', expirationTimestamp, address(dao)),
+            proposerWithVote,
+            expirationTimestamp
+        );
+
+        vm.prank(proposerWithVote);
+        vm.expectRevert(NounsDAOV3Proposals.ProposerAlreadyHasALiveProposal.selector);
         dao.proposeBySigs(proposerSignatures, txs.targets, txs.values, txs.signatures, txs.calldatas, 'description');
     }
 
