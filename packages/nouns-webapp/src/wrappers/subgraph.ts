@@ -578,6 +578,20 @@ export const escrowDepositEventsQuery = (forkId: string) => gql`
     }
   }
 `;
+export const forkJoinsQuery = (forkId: string) => gql`
+  {
+    forkJoins (where: {fork: "${forkId}"}) {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      reason
+      tokenIDs
+      proposalIDs
+    }
+  }
+`;
 
 export const escrowWithdrawEventsQuery = (forkId: string) => gql`
   {

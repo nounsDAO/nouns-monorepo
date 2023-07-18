@@ -25,6 +25,7 @@ import {
   forksQuery,
   forkDetailsQuery,
   activePendingUpdatableProposersQuery,
+  forkJoinsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -184,7 +185,7 @@ export interface ProposalTransaction {
 }
 
 export interface EscrowDeposit {
-  eventType: 'EscrowDeposit';
+  eventType: 'EscrowDeposit' | 'ForkJoin';
   id: string;
   createdAt: string;
   owner: { id: string };
@@ -1018,20 +1019,49 @@ const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | F
     executed,
     forkEnded,
   ];
+
   const sortedEvents = [...events, ...forkEvents].sort((a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent, b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent) => {
     return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
   });
   return sortedEvents;
 }
 
+export const useForkJoins = (pollInterval: number, forkId: string) => {
+  const { loading, data, error, refetch } = useQuery(
+    forkJoinsQuery(forkId), {
+    pollInterval: pollInterval,
+  }) as { loading: boolean, data: { forkJoins: EscrowDeposit[] }, error: Error, refetch: () => void };
+
+  const forkJoins = data?.forkJoins?.map((forkJoin) => {
+    const proposalIDs = forkJoin.proposalIDs.map((id) => id);
+    return {
+      eventType: 'ForkJoin',
+      id: forkJoin.id,
+      createdAt: forkJoin.createdAt,
+      owner: { id: forkJoin.owner.id },
+      fork: { id: forkId },
+      reason: forkJoin.reason,
+      tokenIDs: forkJoin.tokenIDs,
+      proposalIDs: proposalIDs,
+    };
+  });
+
+  return {
+    loading,
+    error,
+    data: forkJoins as EscrowDeposit[] ?? [],
+    refetch
+  };
+}
+
 export const useEscrowEvents = (pollInterval: number, forkId: string) => {
   const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(pollInterval, forkId);
   const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(pollInterval, forkId);
   const { loading: forkDetailsLoading, data: forkDetails, error: forkDetailsError } = useForkDetails(pollInterval, forkId);
-
-  const loading = depositsLoading || withdrawalsLoading || forkDetailsLoading;
-  const error = depositsError || withdrawalsError || forkDetailsError;
-  const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents];
+  const { loading: forkJoinsLoading, data: forkJoins, error: forkJoinsError, refetch: refetchForkJoins } = useForkJoins(pollInterval, forkId);
+  const loading = depositsLoading || withdrawalsLoading || forkDetailsLoading || forkJoinsLoading;
+  const error = depositsError || withdrawalsError || forkDetailsError || forkJoinsError;
+  const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents, ...forkJoins];
   // get fork details to pass to forkCycleEvents
   const events = eventsWithforkCycleEvents(data, forkDetails);
 
@@ -1042,6 +1072,7 @@ export const useEscrowEvents = (pollInterval: number, forkId: string) => {
     refetch: () => {
       refetchEscrowDepositEvents();
       refetchEscrowWithdrawalEvents();
+      refetchForkJoins();
     }
   }
 }
