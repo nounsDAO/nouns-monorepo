@@ -109,3 +109,11 @@ button.modalButtonLink:hover {
   text-decoration: none;
   background-color: transparent;
 }
+
+.note {
+  font-size: 14px;
+  color: var(--text-light-gray);
+  margin: 0;
+  padding: 0;
+}
+.note a {color: var(--text-light-gray);}

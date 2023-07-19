@@ -27,6 +27,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -54,6 +55,8 @@ const CreateProposalPage = () => {
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
   const isDaoGteV3 = useIsDaoGteV3();
+  // todo: how to get v1 timelock address?
+  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -315,13 +318,18 @@ const CreateProposalPage = () => {
           onBodyInput={handleBodyInput}
         />
         {isDaoGteV3 && (
-          <div className={classes.timelockSelect}>
-            <Form.Check
-              type='checkbox'
-              id={`timelockV1Checkbox`}
-              label="Propose on timelock V1"
-              onChange={() => setIsProposeOnV1(!isProposeOnV1)}
-            />
+          <div className={classes.timelockOption}>
+            <div className={classes.timelockSelect}>
+              <Form.Check
+                type='checkbox'
+                id={`timelockV1Checkbox`}
+                label="Propose on treasury V1"
+                onChange={() => setIsProposeOnV1(!isProposeOnV1)}
+              />
+            </div>
+            <p className={classes.note}>
+              Used to interact with any assets owned by the <a href={daoEtherscanLink} target='_blank' rel="noreferrer">original treasury</a>
+            </p>
           </div>
         )}
         <CreateProposalButton
