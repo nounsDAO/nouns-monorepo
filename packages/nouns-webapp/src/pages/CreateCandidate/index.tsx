@@ -2,8 +2,6 @@ import { Col, Alert, Button } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalTransaction,
-  useProposal,
-  useProposalCount,
   useProposalThreshold,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
@@ -27,7 +25,6 @@ import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
 import {
   checkEnoughVotes,
-  checkHasActiveOrPendingProposalOrCandidate,
 } from '../../utils/proposals';
 import { buildCandidateSlug } from '../../utils/candidateURL';
 
@@ -40,8 +37,6 @@ const CreateCandidatePage = () => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const { account } = useEthers();
-  const latestProposalId = useProposalCount();
-  const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
@@ -265,11 +260,7 @@ const CreateCandidatePage = () => {
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          hasActiveOrPendingProposal={(latestProposal && checkHasActiveOrPendingProposalOrCandidate(
-            latestProposal.status,
-            latestProposal.proposer,
-            account,
-          )) ?? false}
+          hasActiveOrPendingProposal={false} // not needed for candidates
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}
         />
