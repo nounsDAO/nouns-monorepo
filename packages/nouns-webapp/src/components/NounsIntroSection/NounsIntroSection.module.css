@@ -138,6 +138,10 @@
   .videoSubtitle {
     bottom: -30px;
   }
+
+  .videoMintedSubtitle {
+    display: none;
+  }
 }
 
 .nounsIntroLinks {

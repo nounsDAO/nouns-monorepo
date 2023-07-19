@@ -188,7 +188,7 @@ msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-#~ msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 days and last for 5 days."
+#~ msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 #~ msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
@@ -462,7 +462,7 @@ msgid "CryptoPunks"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-#~ msgid "Cryptopunks"
+#~ msgid "CryptoPunks"
 #~ msgstr "クリプトパンクス"
 
 #: src/components/CurrentDelegatePannel/index.tsx
@@ -1469,6 +1469,10 @@ msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "There was an error withdrawing to your wallet."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx

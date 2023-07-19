@@ -295,7 +295,7 @@ const CreateProposalPage = () => {
           onRemoveProposalTransaction={handleRemoveProposalAction}
         />
 
-        {totalUSDCPayment > 0 && (
+        {totalUSDCPayment > 0 && tokenBuyerTopUpEth !== '0' && (
           <Alert variant="secondary" className={classes.tokenBuyerNotif}>
             <b>
               <Trans>Note</Trans>

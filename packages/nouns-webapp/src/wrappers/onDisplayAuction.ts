@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { useAppSelector } from '../hooks';
+import { compareBids } from '../utils/compareBids';
 import { generateEmptyNounderAuction, isNounderNoun } from '../utils/nounderNoun';
 import { Bid, BidEvent } from '../utils/types';
 import { Auction } from './nounsAuction';
@@ -22,15 +23,14 @@ const deserializeBid = (reduxSafeBid: BidEvent): Bid => {
     value: BigNumber.from(reduxSafeBid.value),
     extended: reduxSafeBid.extended,
     transactionHash: reduxSafeBid.transactionHash,
+    transactionIndex: reduxSafeBid.transactionIndex,
     timestamp: BigNumber.from(reduxSafeBid.timestamp),
   };
 };
 const deserializeBids = (reduxSafeBids: BidEvent[]): Bid[] => {
   return reduxSafeBids
     .map(bid => deserializeBid(bid))
-    .sort((a: Bid, b: Bid) => {
-      return b.timestamp.toNumber() - a.timestamp.toNumber();
-    });
+    .sort((a: Bid, b: Bid) => compareBids(a, b));
 };
 
 const useOnDisplayAuction = (): Auction | undefined => {

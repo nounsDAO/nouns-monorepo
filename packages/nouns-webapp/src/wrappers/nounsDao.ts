@@ -300,6 +300,27 @@ const removeItalics = (text: string | null): string | null =>
   text ? text.replace(/__/g, '') : text;
 
 export const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+/**
+ * Add missing schemes to markdown links in a proposal's description.
+ * @param descriptionText The description text of a proposal
+ */
+const addMissingSchemes = (descriptionText: string | undefined) => {
+  const regex = /\[(.*?)\]\(((?!https?:\/\/|#)[^)]+)\)/g;
+  const replacement = '[$1](https://$2)';
+
+  return descriptionText?.replace(regex, replacement);
+};
+
+/**
+ * Replace invalid dropbox image download links in a proposal's description.
+ * @param descriptionText The description text of a proposal
+ */
+const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) => {
+  const regex = /(https:\/\/www.dropbox.com\/([^?]+))\?dl=1/g;
+  const replacement = '$1?raw=1';
+
+  return descriptionText?.replace(regex, replacement);
+}
 
 export const useCurrentQuorum = (
   nounsDao: string,
@@ -602,7 +623,11 @@ const parseSubgraphProposal = (
   if (!proposal) {
     return;
   }
-  const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  const description = addMissingSchemes(
+    replaceInvalidDropboxImageLinks(
+      proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
+    ),
+  );
   const transactionDetails: ProposalTransactionDetails = {
     targets: proposal.targets,
     values: proposal.values,
@@ -686,7 +711,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
     return {
       data: proposals.map((p, i) => {
         const proposal = p?.[0];
-        const description = logs[i]?.description?.replace(/\\n/g, '\n');
+        const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
           title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',

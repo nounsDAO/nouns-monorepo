@@ -41,6 +41,7 @@ export function formatTokenAmount(amount?: string, currency?: SupportedCurrency)
     case SupportedCurrency.USDC:
       return Math.round(parseFloat(amt) * 1_000_000).toString();
     case SupportedCurrency.WETH:
+    case SupportedCurrency.STETH:
       return utils.parseEther(amt).toString();
     default:
       return amt;
@@ -53,6 +54,8 @@ export function getTokenAddressForCurrency(currency?: SupportedCurrency) {
       return config.addresses.usdcToken;
     case SupportedCurrency.WETH:
       return config.addresses.weth;
+    case SupportedCurrency.STETH:
+      return config.addresses.steth;
     default:
       return '';
   }
