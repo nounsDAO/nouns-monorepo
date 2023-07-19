@@ -204,3 +204,6 @@
 .versionHistory span {
   opacity: 0.7;
 }
+.proposalSponsors {
+  margin-left: 0.5rem;
+}

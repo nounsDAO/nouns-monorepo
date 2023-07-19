@@ -63,7 +63,7 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
-  // const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
+
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<number | null>(null);
   const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
@@ -123,7 +123,44 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     </a>
   );
 
+  const sponsorLink = (sponsor: string) => {
+    return <a
+      href={buildEtherscanAddressLink(sponsor)}
+      target="_blank"
+      rel="noreferrer"
+      className={classes.proposerLinkJp}
+    >
+      <ShortAddress address={sponsor} avatar={false} />
+    </a>
+  }
+
+
+
+  const getProposalSponsors = (signers: { id: string }[]) => {
+    if (signers.length > 0) {
+      const sponsors = signers.map((signer: { id: string }) => {
+        return <a
+          href={buildEtherscanAddressLink(signer.id)}
+          target="_blank"
+          rel="noreferrer"
+          className={classes.proposerLinkJp}
+        >
+          <ShortAddress address={signer.id} avatar={false} />
+        </a>
+      }
+      )
+      return sponsors;
+    } else {
+      return null;
+    }
+  }
+  const proposalSponsors = getProposalSponsors(props.proposal.signers);
+
+
+
+
   const transactionLink = transactionIconLink(proposal.transactionHash);
+  console.log('proposalSponsors', proposalSponsors)
 
   return (
     <>
@@ -183,6 +220,14 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               <Trans>
                 <span className={classes.proposedByJp}>Proposed by: </span>
                 <span className={classes.proposerJp}>{proposer}</span>
+                {props.proposal.signers.length > 0 && (
+                  <div className={classes.proposalSponsors}>
+                    <span className={classes.proposedByJp}>Sponsored by: </span>
+                    {props.proposal.signers.map((signer: { id: string }) => {
+                      return sponsorLink(signer.id)
+                    })}
+                  </div>
+                )}
                 {transactionLink}
               </Trans>
             </div>
@@ -198,10 +243,21 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               >
                 <h3>
                   {proposer}
-                  {transactionLink}
                 </h3>
               </HoverCard>
             </div>
+            <h3>
+              {props.proposal.signers.length > 0 && (
+                <div className={classes.proposalSponsors}>
+                  <span className={classes.proposedByJp}>Sponsored by </span>
+                  {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                    return sponsorLink(signer.id)
+                  })}
+                </div>
+              )}
+            </h3>
+            {transactionLink}
+
           </>
         )}
       </div>
