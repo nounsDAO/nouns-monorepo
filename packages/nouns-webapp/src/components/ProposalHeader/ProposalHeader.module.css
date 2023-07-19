@@ -156,6 +156,8 @@
   margin-left: 0.37rem;
   margin-right: 0.25rem;
   color: var(--brand-gray-light-text);
+  display: flex;
+  flex-direction: row;
 }
 
 .proposedByJp {
@@ -179,9 +181,14 @@
   margin-left: 0.5rem;
 }
 
+.linkIcon {
+  position: relative;
+  top: -3px;
+}
+
 .versionHistory {
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .versionHistory a {
@@ -206,4 +213,7 @@
 }
 .proposalSponsors {
   margin-left: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 5px
 }

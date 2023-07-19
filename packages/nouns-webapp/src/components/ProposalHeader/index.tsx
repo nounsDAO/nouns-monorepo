@@ -133,34 +133,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       <ShortAddress address={sponsor} avatar={false} />
     </a>
   }
-
-
-
-  const getProposalSponsors = (signers: { id: string }[]) => {
-    if (signers.length > 0) {
-      const sponsors = signers.map((signer: { id: string }) => {
-        return <a
-          href={buildEtherscanAddressLink(signer.id)}
-          target="_blank"
-          rel="noreferrer"
-          className={classes.proposerLinkJp}
-        >
-          <ShortAddress address={signer.id} avatar={false} />
-        </a>
-      }
-      )
-      return sponsors;
-    } else {
-      return null;
-    }
-  }
-  const proposalSponsors = getProposalSponsors(props.proposal.signers);
-
-
-
-
   const transactionLink = transactionIconLink(proposal.transactionHash);
-  console.log('proposalSponsors', proposalSponsors)
 
   return (
     <>
@@ -211,27 +184,45 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
       <div className={classes.byLineWrapper}>
         {activeLocale === Locales.ja_JP ? (
-          <HoverCard
-            hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-            tip={proposal && proposal.proposer ? proposal.proposer : ''}
-            id="byLineHoverCard"
-          >
-            <div className={classes.proposalByLineWrapperJp}>
-              <Trans>
-                <span className={classes.proposedByJp}>Proposed by: </span>
-                <span className={classes.proposerJp}>{proposer}</span>
-                {props.proposal.signers.length > 0 && (
-                  <div className={classes.proposalSponsors}>
-                    <span className={classes.proposedByJp}>Sponsored by: </span>
-                    {props.proposal.signers.map((signer: { id: string }) => {
-                      return sponsorLink(signer.id)
-                    })}
-                  </div>
-                )}
-                {transactionLink}
-              </Trans>
-            </div>
-          </HoverCard>
+          <>
+            <HoverCard
+              hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+              tip={proposal && proposal.proposer ? proposal.proposer : ''}
+              id="byLineHoverCard"
+            >
+              <div className={classes.proposalByLineWrapperJp}>
+                <Trans>
+                  <span className={classes.proposedByJp}>Proposed by: </span>
+                  <span className={classes.proposerJp}>{proposer}</span>
+                  <span className={classes.linkIcon}>
+                    {transactionLink}
+                  </span>
+
+                </Trans>
+              </div>
+            </HoverCard>
+            {props.proposal.signers.length > 0 && (
+              <div className={classes.proposalSponsors}>
+                <h3>
+                  <span className={classes.proposedByJp}><Trans>Sponsored by</Trans></span>
+                </h3>{" "}
+                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                  return <>
+                    <HoverCard
+                      hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+                      tip={signer.id ? signer.id : ''}
+                      id="byLineHoverCard"
+                    >
+                      <h3>
+                        {sponsorLink(signer.id)}
+                      </h3>
+                    </HoverCard>
+                  </>
+                })}
+              </div>
+            )}
+          </>
+
         ) : (
           <>
             <h3>Proposed by</h3>
@@ -246,17 +237,33 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 </h3>
               </HoverCard>
             </div>
-            <h3>
-              {props.proposal.signers.length > 0 && (
-                <div className={classes.proposalSponsors}>
-                  <span className={classes.proposedByJp}>Sponsored by </span>
-                  {props.proposal.signers.map((signer: { id: string }, i: number) => {
-                    return sponsorLink(signer.id)
-                  })}
-                </div>
-              )}
-            </h3>
-            {transactionLink}
+            <span className={classes.linkIcon}>
+              {transactionLink}
+            </span>
+
+            {props.proposal.signers.length > 0 && (
+              <div className={classes.proposalSponsors}>
+                <h3>
+                  <span className={classes.proposedByJp}>Sponsored by</span>
+                </h3>{" "}
+                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                  return <>
+                    <HoverCard
+                      hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+                      tip={signer.id ? signer.id : ''}
+                      id="byLineHoverCard"
+                    >
+                      <h3>
+                        {sponsorLink(signer.id)}
+                      </h3>
+                    </HoverCard>
+                  </>
+                })}
+              </div>
+            )}
+
+
+
 
           </>
         )}

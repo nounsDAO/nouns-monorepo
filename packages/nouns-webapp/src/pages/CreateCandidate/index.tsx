@@ -7,7 +7,6 @@ import {
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link, useHistory } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { withStepProgress } from 'react-stepz';
 import ProposalEditor from '../../components/ProposalEditor';
