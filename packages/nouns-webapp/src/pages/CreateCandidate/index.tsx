@@ -6,12 +6,12 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { withStepProgress } from 'react-stepz';
 import ProposalEditor from '../../components/ProposalEditor';
 import ProposalTransactions from '../../components/ProposalTransactions';
-import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { Trans } from '@lingui/macro';
@@ -26,7 +26,6 @@ import CreateCandidateButton from '../../components/CreateCandidateButton';
 import {
   checkEnoughVotes,
 } from '../../utils/proposals';
-import { buildCandidateSlug } from '../../utils/candidateURL';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -36,7 +35,6 @@ const CreateCandidatePage = () => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
-  const { account } = useEthers();
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
@@ -45,6 +43,7 @@ const CreateCandidatePage = () => {
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const history = useHistory();
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -167,7 +166,16 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created! <br /> <Link to={`/vote#candidates/${account && buildCandidateSlug(account, slug)}`}>Back to candidates</Link></Trans>,
+          message: <Trans>Proposal Candidate Created! <br />
+            <button
+              className={classes.modalButtonLink}
+              onClick={() => {
+                setModal({ title: '', message: '', show: false });
+                history.push(`/vote#candidates`);
+              }}>
+              Back to candidates
+            </button>
+          </Trans>,
           show: true,
         });
         setProposePending(false);
