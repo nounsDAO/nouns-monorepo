@@ -12,7 +12,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -47,7 +47,7 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  // const history = useHistory();
+  const history = useHistory();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
@@ -203,16 +203,16 @@ const CreateProposalPage = () => {
         setModal({
           title: <Trans>Success</Trans>,
           message: <Trans>Proposal Created!<br />
-            {/* {previousProposalId && (
+            {previousProposalId && (
               <button
                 className={classes.modalButtonLink}
                 onClick={() => {
                   setModal({ title: '', message: '', show: false });
-                  history.push(`/vote/${previousProposalId + 1} `);
+                  history.push(`/vote/`);
                 }}>
-                View Proposal {previousProposalId + 1}
+                Back to proposals
               </button>
-            )} */}
+            )}
           </Trans>,
           show: true,
         });
