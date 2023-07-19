@@ -181,6 +181,7 @@
 
 .versionHistory {
   display: inline-block;
+  font-size: 14px;
 }
 
 .versionHistory a {
