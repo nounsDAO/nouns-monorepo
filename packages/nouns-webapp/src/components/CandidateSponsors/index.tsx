@@ -91,8 +91,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return { sigs, voteCount };
   };
 
-  console.log('props.candidate.version.content.contentSignatures', props.candidate.version.content.contentSignatures)
-
   useEffect(() => {
     if (delegateSnapshot.data && !isCancelOverlayVisible && props.latestProposal && activePendingProposers.data) {
       const { sigs, voteCount } = filterSigners(delegateSnapshot.data, activePendingProposers.data, props.candidate.version.content.contentSignatures);
@@ -106,8 +104,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         setSignedVotesCount(activeSigs.length);
         props.originalProposal?.signers && setIsThresholdMet(activeSigs.length >= props.originalProposal?.signers?.length ? true : false);
         const dedupedSigners = props.originalProposal?.signers && deDupeSigners(props.originalProposal?.signers?.map(signature => signature.id));
-        console.log('deduped original Signers', dedupedSigners);
-        console.log('originalSigners', originalSigners);
         if (originalSigners?.length !== dedupedSigners?.length) {
           setOriginalSigners(dedupedSigners);
         }
@@ -160,7 +156,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   >('None');
 
   const refetchData = () => {
-    console.log('refetchData');
     props.handleRefetchCandidateData();
   };
 
@@ -171,7 +166,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   return (
     <>
-      {props.latestProposal && delegateSnapshot.data && blockNumber && (
+      {delegateSnapshot.data && blockNumber && (
         <SelectSponsorsToPropose
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
@@ -188,7 +183,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           handleRefetchCandidateData={props.handleRefetchCandidateData}
         />
       )}
-      {props.latestProposal && delegateSnapshot.data && blockNumber && props.isUpdateToProposal && (
+      {delegateSnapshot.data && blockNumber && props.isUpdateToProposal && (
         <SubmitUpdateProposal
           isModalOpen={isUpdateModalOpen}
           setIsModalOpen={setIsUpdateModalOpen}
@@ -212,7 +207,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         )}
         <div className={clsx(classes.interiorWrapper, isFormDisplayed && classes.formOverlayVisible)}>
 
-          {signatures && props.latestProposal ? (
+          {signatures ? (
             <>
               {!isFormDisplayed ? (
                 <>

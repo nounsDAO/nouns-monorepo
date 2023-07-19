@@ -163,15 +163,15 @@ const ForkPage = ({
 
                   </p>
                 </header>
-                {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
-                  <button
-                    onClick={() => setIsModalOpen(true)}
-                    className={clsx(classes.button, classes.primaryButton)}
-                    disabled={userOwnedNounIds.data.length === 0}
-                  >
-                    {addNounsButtonLabel}
-                  </button>
-                )}
+                {/* {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && ( */}
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className={clsx(classes.button, classes.primaryButton)}
+                  disabled={userOwnedNounIds.data.length === 0}
+                >
+                  {addNounsButtonLabel}
+                </button>
+                {/* )} */}
                 {/* <p className={classes.note}>
                   More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to pass the fork threshold
                 </p> */}
@@ -211,21 +211,21 @@ const ForkPage = ({
                       setDataFetchPollInterval={setDataFetchPollInterval}
                     />
                   )}
-                  {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && (
-                    <button
-                      onClick={() => {
-                        if (isForkPeriodActive) {
-                          setIsConfirmModalOpen(true);
-                        } else {
-                          setIsModalOpen(true);
-                        }
-                      }}
-                      className={clsx(classes.button, classes.primaryButton)}
-                      disabled={userOwnedNounIds.data.length === 0}
-                    >
-                      {addNounsButtonLabel}
-                    </button>
-                  )}
+                  {/* {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && ( */}
+                  <button
+                    onClick={() => {
+                      if (isForkPeriodActive) {
+                        setIsConfirmModalOpen(true);
+                      } else {
+                        setIsModalOpen(true);
+                      }
+                    }}
+                    className={clsx(classes.button, classes.primaryButton)}
+                    disabled={userOwnedNounIds.data.length === 0}
+                  >
+                    {addNounsButtonLabel}
+                  </button>
+                  {/* )} */}
                 </Col>
               )}
             </div>

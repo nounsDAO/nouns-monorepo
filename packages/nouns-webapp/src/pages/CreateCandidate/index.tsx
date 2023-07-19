@@ -172,7 +172,7 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created! <br /> <Link to={`/candidates/${account && buildCandidateSlug(account, slug)}`}>View the candidate</Link></Trans>,
+          message: <Trans>Proposal Candidate Created! <br /> <Link to={`/vote#candidates/${account && buildCandidateSlug(account, slug)}`}>Back to candidates</Link></Trans>,
           show: true,
         });
         setProposePending(false);

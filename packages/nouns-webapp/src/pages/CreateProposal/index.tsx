@@ -189,13 +189,13 @@ const CreateProposalPage = () => {
       case 'None':
         setProposePending(false);
         break;
-      case 'PendingSignature':
-        setModal({
-          title: <Trans>Awaiting signature</Trans>,
-          message: " ",
-          show: true,
-        });
-        break;
+      // case 'PendingSignature':
+      //   setModal({
+      //     title: <Trans>Awaiting signature</Trans>,
+      //     message: " ",
+      //     show: true,
+      //   });
+      //   break;
       case 'Mining':
         setProposePending(true);
         break;

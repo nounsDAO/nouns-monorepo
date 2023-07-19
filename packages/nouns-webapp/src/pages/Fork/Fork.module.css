@@ -130,6 +130,10 @@ h1 {
   text-decoration: none;
 }
 
+.primaryButton:disabled, .primaryButton:disabled:hover {
+  opacity: 0.5;
+}
+
 .button:hover {
   opacity: 0.75;
 }
