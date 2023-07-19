@@ -11,6 +11,7 @@ import ShortAddress from '../ShortAddress'
 import { Delegates } from '../../wrappers/subgraph'
 import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao'
 import { Link } from 'react-router-dom'
+import { Alert } from 'react-bootstrap'
 
 type Props = {
   isModalOpen: boolean;
@@ -126,6 +127,11 @@ export default function SelectSponsorsToPropose(props: Props) {
           Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {props.requiredVotes}.
         </Trans>
       </p>
+      <Alert className={classes.modalDescription} variant="warning">
+        <Trans><strong>Note: </strong>
+          All signers on an onchain proposal have permission to cancel the proposal.
+        </Trans>
+      </Alert>
       <div className={classes.sectionHeader}>
         <div className={classes.sectionLabel}>
           <p>
