@@ -105,7 +105,7 @@ function CandidateCard(props: Props) {
               <strong>
                 {signedVotes} / {props.nounsRequired}
               </strong>{' '}
-              <Trans>sponsors</Trans>
+              <Trans>sponsored votes</Trans>
             </span>
           </div>
           <p className={classes.timestamp}>

@@ -41,6 +41,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   async function cancel() {
     await cancelSig(props.sig);
   }
+  const timestampNow = Date.now();
+  console.log('timestampNow', timestampNow)
+  console.log('props.expirationTimestamp', props.expirationTimestamp)
 
   useEffect(() => {
     switch (cancelSigState.status) {
@@ -101,7 +104,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 <ShortAddress address={props.signer} />
               </a>
             </p>
-            <p className={classes.expiration}>{props.isUpdateToProposal && !props.isParentProposalUpdatable ? 'Expired' : 'Expires'}{" "}{expiration}</p>
+            <p className={classes.expiration}>{(props.isUpdateToProposal && !props.isParentProposalUpdatable) || (props.expirationTimestamp < timestampNow) ? 'Expired' : 'Expires'} {expiration}</p>
           </div>
           <p className={classes.voteCount}>
             {props.voteCount} vote{props.voteCount !== 1 && 's'}
