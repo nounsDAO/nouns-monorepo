@@ -1240,3 +1240,13 @@ export const useIsDaoGteV3 = (): boolean => {
   }
   return false
 }
+
+export const useTimelockV1Contract = (): string | undefined => {
+  const [timelockV1] =
+    useContractCall({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'timelockV1',
+    }) || [];
+  return timelockV1;
+}
