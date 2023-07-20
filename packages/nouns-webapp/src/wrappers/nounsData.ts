@@ -62,7 +62,6 @@ export const useAddSignature = () => {
 
 export const useCandidateProposals = () => {
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  console.log('candidates', candidates)
   const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
   const sortedCandidates = unmatchedCandidates?.sort((a, b) => {
     return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
@@ -232,7 +231,7 @@ const parseSubgraphCandidate = (
 const formatCandidateTransactionDetailsToUpdate = (
   details: ProposalTransactionDetails | Result,
 ) => {
-  console.log('formatCandidateTransactionDetailsToUpdate');
+
   return details?.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(

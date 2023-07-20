@@ -6,7 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useUserNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
+import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -95,7 +95,7 @@ const Proposals = ({
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
+  const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
   const tabs = ['Proposals', 'Candidates'];
   const { hash } = useLocation();
 
@@ -139,6 +139,7 @@ const Proposals = ({
                 <button
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
                   onClick={() => setActiveTab(index)}
+                  key={index}
                 >
                   {tab}
                 </button>
@@ -317,7 +318,7 @@ const Proposals = ({
                         if (!isOriginalPropUpdatable) return null;
                       }
                       return (
-                        <div>
+                        <div key={i}>
                           <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} />
                         </div>
                       );
