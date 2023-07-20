@@ -205,7 +205,7 @@ const CreateProposalPage = () => {
         setModal({
           title: <Trans>Success</Trans>,
           message: <Trans>Proposal Created!<br />
-            {previousProposalId && (
+            {/* {previousProposalId && (
               <button
                 className={classes.modalButtonLink}
                 onClick={() => {
@@ -214,7 +214,7 @@ const CreateProposalPage = () => {
                 }}>
                 Back to proposals
               </button>
-            )}
+            )} */}
           </Trans>,
           show: true,
         });
