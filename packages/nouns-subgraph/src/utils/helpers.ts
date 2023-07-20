@@ -200,6 +200,7 @@ export function getOrCreateProposalCandidateSignature(id: string): ProposalCandi
   let sig = ProposalCandidateSignature.load(id);
   if (sig == null) {
     sig = new ProposalCandidateSignature(id);
+    sig.canceled = false;
   }
   return sig;
 }

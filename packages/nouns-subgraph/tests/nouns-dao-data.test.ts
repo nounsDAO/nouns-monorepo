@@ -139,6 +139,7 @@ describe('nouns-dao-data', () => {
       assert.bytesEquals(signature.encodedProposalHash, encodedProposalHash);
       assert.bytesEquals(signature.sigDigest, sigDigest);
       assert.stringEquals(signature.reason, reason);
+      assert.booleanEquals(signature.canceled, false);
     });
 
     test('skips signature if encodedProposalHash does not match latest version', () => {
