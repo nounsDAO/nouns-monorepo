@@ -106,7 +106,7 @@ const ProposalHistory = ({
                         hideLineNumbers={true}
                         extraLinesSurroundingDiff={10000}
                         renderContent={headerDiffs}
-                        disableWordDiff={true}
+                        disableWordDiff={false}
                         showDiffOnly={false}
                       />
                     </div>
@@ -146,6 +146,7 @@ const ProposalHistory = ({
                   extraLinesSurroundingDiff={10000}
                   renderContent={highlightSyntax}
                   disableWordDiff={true}
+                  showDiffOnly={false}
                 />
                 <Row>
                   <Col className={classes.section}>
