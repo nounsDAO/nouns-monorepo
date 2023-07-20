@@ -165,7 +165,7 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created! <br />
+          message: <Trans>Candidate Created! <br />
             <button
               className={classes.modalButtonLink}
               onClick={() => {

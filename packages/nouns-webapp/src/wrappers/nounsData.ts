@@ -280,13 +280,13 @@ const parseSubgraphCandidateVersions = (
     return b.createdTimestamp - a.createdTimestamp;
   });
   const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
-    const description = version.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+    const description = version.content.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
-      targets: version.targets,
-      values: version.values,
-      signatures: version.signatures,
-      calldatas: version.calldatas,
-      encodedProposalHash: version.encodedProposalHash,
+      targets: version.content.targets,
+      values: version.content.values,
+      signatures: version.content.signatures,
+      calldatas: version.content.calldatas,
+      encodedProposalHash: version.content.encodedProposalHash,
     };
     const details = formatProposalTransactionDetails(transactionDetails);
     return {
@@ -361,6 +361,15 @@ export interface ProposalCandidateVersionsSubgraphEntity extends ProposalCandida
     encodedProposalHash: string;
     updateMessage: string;
     createdTimestamp: number;
+    content: {
+      title: string;
+      description: string;
+      targets: string[];
+      values: string[];
+      signatures: string[];
+      calldatas: string[];
+      encodedProposalHash: string;
+    }
   }[];
   latestVersion: {
     id: string;

@@ -3,7 +3,7 @@ import Section from '../../layout/Section';
 import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -24,6 +24,7 @@ import {
   useCandidateProposal,
 } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
+import { buildCandidateSlug } from '../../utils/candidateURL';
 
 interface EditCandidateProps {
   match: {
@@ -54,7 +55,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetCreateCandidateCost();
-
+  const history = useHistory();
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -66,7 +67,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         if (!transaction.calldata.startsWith('0x')) {
           transaction.calldata = `0x${transaction.calldata}`;
         }
-
         if (transaction.usdcValue) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
@@ -173,7 +173,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  console.log('proposalTransactions', proposalTransactions)
 
   useEffect(() => {
     switch (updateProposalCandidateState.status) {
@@ -186,7 +185,17 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Candidate updated!</Trans>,
+          message: <Trans>Candidate updated!
+            <button
+              className={classes.modalButtonLink}
+              onClick={() => {
+                setModal({ title: '', message: '', show: false });
+                history.push(`/candidates/${account && buildCandidateSlug(account, props.match.params.id)}`);
+              }}>
+              View candidate
+            </button>
+          </Trans>
+          ,
           show: true,
         });
         setProposePending(false);
@@ -208,6 +217,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setProposePending(false);
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProposalCandidateState, setModal]);
 
 

@@ -428,7 +428,7 @@ export const concatSelectorToCalldata = (signature: string, callData: string) =>
 };
 
 export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
-  return details?.targets.map((target: string, i: number) => {
+  return details?.targets?.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(
       // Handle both logs and subgraph responses
