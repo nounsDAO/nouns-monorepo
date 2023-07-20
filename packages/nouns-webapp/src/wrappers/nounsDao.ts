@@ -420,7 +420,7 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
-const concatSelectorToCalldata = (signature: string, callData: string) => {
+export const concatSelectorToCalldata = (signature: string, callData: string) => {
   if (signature) {
     return `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}`;
   }
@@ -635,6 +635,7 @@ const parseSubgraphProposal = (
     calldatas: proposal.calldatas,
     encodedProposalHash: proposal.encodedProposalHash,
   };
+
 
   let details;
   if (toUpdate) {

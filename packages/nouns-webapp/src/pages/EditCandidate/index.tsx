@@ -173,6 +173,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  console.log('proposalTransactions', proposalTransactions)
 
   useEffect(() => {
     switch (updateProposalCandidateState.status) {
