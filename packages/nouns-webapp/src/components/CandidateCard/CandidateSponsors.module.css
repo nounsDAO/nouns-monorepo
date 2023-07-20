@@ -1,3 +1,8 @@
+.sponsorsWrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+}
 .sponsorsWrapOverflow {
   @media screen and (min-width: 992px) {
     max-width: 200px;
