@@ -13,7 +13,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -49,7 +49,6 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const history = useHistory();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
