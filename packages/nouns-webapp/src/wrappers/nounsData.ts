@@ -62,8 +62,8 @@ export const useAddSignature = () => {
 
 export const useCandidateProposals = () => {
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-
-  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 || candidate.canceled);
+  console.log('candidates', candidates)
+  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
   const sortedCandidates = unmatchedCandidates?.sort((a, b) => {
     return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
   });

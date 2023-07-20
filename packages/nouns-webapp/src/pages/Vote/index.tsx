@@ -106,6 +106,7 @@ const VotePage = ({
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
+  const [willHaveObjectionPeriod, setWillHaveObjectionPeriod] = useState<boolean>(false);
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
   const activeLocale = useActiveLocale();
@@ -285,15 +286,7 @@ const VotePage = ({
   })();
 
 
-  useEffect(() => {
-    if (proposal && currentBlock &&
-      proposal?.objectionPeriodEndBlock > 0 && currentBlock <= proposal?.objectionPeriodEndBlock
-    ) {
-      setIsObjectionPeriod(true);
-    } else {
-      setIsObjectionPeriod(false);
-    }
-  }, [currentBlock, proposal?.status, proposal]);
+
   const handleRefetchData = () => {
     proposalFeedback.refetch();
   };
@@ -408,6 +401,27 @@ const VotePage = ({
     }
   }, [showToast]);
 
+  const isWalletConnected = !(activeAccount === undefined);
+  const isActiveForVoting =
+    proposal?.status === ProposalState.ACTIVE ||
+    proposal?.status === ProposalState.OBJECTION_PERIOD;
+
+  useEffect(() => {
+    if (proposal && currentBlock &&
+      proposal?.objectionPeriodEndBlock > 0 && currentBlock > proposal?.endBlock && currentBlock <= proposal?.objectionPeriodEndBlock
+    ) {
+      setIsObjectionPeriod(true);
+    } else {
+      setIsObjectionPeriod(false);
+    }
+    if (proposal && proposal.objectionPeriodEndBlock > 0) {
+      setWillHaveObjectionPeriod(true);
+    } else {
+      setWillHaveObjectionPeriod(false);
+    }
+  }, [currentBlock, proposal?.status, proposal]);
+
+
   if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (
       <div className={classes.spinner}>
@@ -419,16 +433,12 @@ const VotePage = ({
   if (error || dqError) {
     return <Trans>Failed to fetch</Trans>;
   }
-
-  const isWalletConnected = !(activeAccount === undefined);
-  const isActiveForVoting =
-    proposal?.status === ProposalState.ACTIVE ||
-    proposal?.status === ProposalState.OBJECTION_PERIOD;
-
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
+
+
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -706,7 +716,7 @@ const VotePage = ({
                     </h3>
                   </div>
                 </div>
-                {currentBlock && isObjectionPeriod && currentBlock <= proposal?.objectionPeriodEndBlock && (
+                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && currentBlock <= proposal?.objectionPeriodEndBlock && (
                   <div className={classes.objectionPeriodActive}>
                     <p><strong><Trans>Objection period triggered</Trans></strong></p>
                     {currentBlock < proposal?.endBlock && (
