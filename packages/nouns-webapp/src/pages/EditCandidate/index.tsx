@@ -3,7 +3,7 @@ import Section from '../../layout/Section';
 import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -24,7 +24,6 @@ import {
   useCandidateProposal,
 } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
-import { buildCandidateSlug } from '../../utils/candidateURL';
 
 interface EditCandidateProps {
   match: {
@@ -55,7 +54,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetCreateCandidateCost();
-  const history = useHistory();
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
