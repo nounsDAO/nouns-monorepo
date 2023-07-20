@@ -106,7 +106,7 @@ const VotePage = ({
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
-  const [willHaveObjectionPeriod, setWillHaveObjectionPeriod] = useState<boolean>(false);
+  // const [willHaveObjectionPeriod, setWillHaveObjectionPeriod] = useState<boolean>(false);
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
   const activeLocale = useActiveLocale();
@@ -414,11 +414,11 @@ const VotePage = ({
     } else {
       setIsObjectionPeriod(false);
     }
-    if (proposal && proposal.objectionPeriodEndBlock > 0) {
-      setWillHaveObjectionPeriod(true);
-    } else {
-      setWillHaveObjectionPeriod(false);
-    }
+    // if (proposal && proposal.objectionPeriodEndBlock > 0) {
+    //   setWillHaveObjectionPeriod(true);
+    // } else {
+    //   setWillHaveObjectionPeriod(false);
+    // }
   }, [currentBlock, proposal?.status, proposal]);
 
 
@@ -716,7 +716,7 @@ const VotePage = ({
                     </h3>
                   </div>
                 </div>
-                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && currentBlock <= proposal?.objectionPeriodEndBlock && (
+                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && (
                   <div className={classes.objectionPeriodActive}>
                     <p><strong><Trans>Objection period triggered</Trans></strong></p>
                     {currentBlock < proposal?.endBlock && (
