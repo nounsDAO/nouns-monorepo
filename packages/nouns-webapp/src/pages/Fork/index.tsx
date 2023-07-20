@@ -158,23 +158,19 @@ const ForkPage = ({
                   </div>
                   <h1><Trans>Fork Nouns DAO</Trans></h1>
                   <p className='mb-4'>
-                    {/* TODO: add Trans back in */}
-                    Any token holder can signal to fork (exit) in response to a governance proposal. If a quorum of {thresholdPercentage}% of tokens signals to exit, the fork will succeed.
-
+                    <Trans>
+                      Any token holder can signal to fork (exit) in response to a governance proposal. If a {thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '}quorum of tokens signal to exit, the fork will succeed.
+                    </Trans>
                   </p>
                 </header>
-                {/* {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && ( */}
                 <button
                   onClick={() => setIsModalOpen(true)}
                   className={clsx(classes.button, classes.primaryButton)}
-                  disabled={userOwnedNounIds.data.length === 0}
+                  disabled={userOwnedNounIds?.data?.length === 0}
                 >
                   {addNounsButtonLabel}
                 </button>
-                {/* )} */}
-                {/* <p className={classes.note}>
-                  More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${thresholdPercentage}% of the DAO)`)} are required to pass the fork threshold
-                </p> */}
+
               </Col>
             </div>
           ) : (
@@ -191,10 +187,12 @@ const ForkPage = ({
                   </span>
                   <div className={classes.spacer} />
                 </div>
-                <h1>Nouns DAO Fork{isForked ? ` #${id}` : ''}</h1>
+                <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
                 {!isForked && (
                   <p className={classes.note}>
-                    More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`)} are required to pass the threshold
+                    <Trans>
+                      More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`)} are required to pass the threshold
+                    </Trans>
                   </p>
                 )}
               </Col>
@@ -211,7 +209,6 @@ const ForkPage = ({
                       setDataFetchPollInterval={setDataFetchPollInterval}
                     />
                   )}
-                  {/* {userOwnedNounIds.data && userOwnedNounIds.data.length > 0 && ( */}
                   <button
                     onClick={() => {
                       if (isForkPeriodActive) {
@@ -221,11 +218,10 @@ const ForkPage = ({
                       }
                     }}
                     className={clsx(classes.button, classes.primaryButton)}
-                    disabled={userOwnedNounIds.data.length === 0}
+                    disabled={userOwnedNounIds?.data?.length === 0}
                   >
                     {addNounsButtonLabel}
                   </button>
-                  {/* )} */}
                 </Col>
               )}
             </div>

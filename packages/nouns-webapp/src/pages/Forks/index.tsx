@@ -15,12 +15,8 @@ const ForksPage: React.FC<Props> = props => {
   const now = new Date();
   const currentTime = now.getTime() / 1000;
   const timestamp = forks.data?.length > 0 && forks.data[forks.data.length - 1].forkingPeriodEndTimestamp;
-  const isLatestForkFinished = forks.data && timestamp && currentTime && +timestamp < currentTime;
-  const nextForkId = forks.data && forks.data?.length;
-
-  console.log('isLatestForkFinished', isLatestForkFinished);
-  console.log('nextForkId', nextForkId);
-  console.log('forks', forks)
+  const isLatestForkFinished = forks?.data && timestamp && currentTime && +timestamp < currentTime;
+  const nextForkId = forks?.data && forks.data?.length;
 
   return (
     <div>
@@ -47,7 +43,7 @@ const ForksPage: React.FC<Props> = props => {
         <Col lg={10} className={classes.wrapper}>
           <Row className={classes.forksList}>
 
-            {forks.data && forks.data.map((fork: Fork, i: number) => {
+            {forks?.data && forks.data.map((fork: Fork, i: number) => {
               return (
                 <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
                   <div className={classes.title}>
@@ -63,7 +59,7 @@ const ForksPage: React.FC<Props> = props => {
             }).reverse()}
           </Row>
           <Row>
-            {(((forks.data.length === 0) || (isLatestForkFinished && nextForkId))) && (
+            {(((forks?.data?.length === 0) || (isLatestForkFinished && nextForkId))) && (
               <div>
                 <p className={classes.startFork}>
                   <Trans>There are no active forks.</Trans> {" "}
