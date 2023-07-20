@@ -233,7 +233,6 @@ export const candidateProposalVersionsQuery = (id: string) => gql`
       id
     }
   }
-  }
 }
 `;
 
@@ -268,24 +267,24 @@ export const auctionQuery = (auctionId: number) => gql`
 	  startTime
 	  endTime
 	  noun {
-		id
-		seed {
-		  id
-		  background
-		  body
-		  accessory
-		  head
-		  glasses
-		}
-		owner {
-		  id
-		}
+      id
+      seed {
+        id
+        background
+        body
+        accessory
+        head
+        glasses
+      }
+      owner {
+        id
+      }
 	  }
 	  bids {
-		id
-		blockNumber
-		txIndex
-		amount
+      id
+      blockNumber
+      txIndex
+      amount
 	  }
 	}
 }
