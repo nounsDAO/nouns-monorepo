@@ -186,6 +186,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setModal({
           title: <Trans>Success</Trans>,
           message: <Trans>Candidate updated!
+            {/* <br />
             <button
               className={classes.modalButtonLink}
               onClick={() => {
@@ -193,7 +194,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
                 history.push(`/candidates/${account && buildCandidateSlug(account, props.match.params.id)}`);
               }}>
               View candidate
-            </button>
+            </button> */}
           </Trans>
           ,
           show: true,
