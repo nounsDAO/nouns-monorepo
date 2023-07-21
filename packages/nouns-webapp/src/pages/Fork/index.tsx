@@ -125,6 +125,7 @@ const ForkPage = ({
     }
   }, [forks.data, forkDetails.data, id]);
 
+
   if (!isPageDataLoaded) {
     return (
       <div className={clsx(classes.spinner, classes.pageLoadingSpinner)}>
@@ -338,12 +339,12 @@ const ForkPage = ({
 
                 {(isForkPeriodActive || isForked) && (
                   <div className={classes.nounsInFork}>
-                    {forkDetails.data.addedNouns.map((nounId) => (
-                      <a href={`/noun/${nounId}`} target='_blank' rel='noreferrer'><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
+                    {forkDetails.data.addedNouns.map((nounId, i) => (
+                      <a href={`/noun/${nounId}`} target='_blank' rel='noreferrer' key={i}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
                     ))}
                     {/* add phantom elements to align boxes */}
                     {phantomListItems.map((i) => (
-                      <div className={clsx(classes.nounImage, classes.phantom)} />
+                      <div className={clsx(classes.nounImage, classes.phantom)} key={i} />
                     ))}
                   </div>
                 )}
