@@ -503,10 +503,11 @@ export const formatProposalTransactionDetailsToUpdate = (
         value: utils.formatEther(value),
       };
     } else {
+      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
       return {
         target,
         functionSig: signature,
-        callData: callData,
+        callData: decoded.join(),
         value: utils.formatEther(value),
       };
     }
