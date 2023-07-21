@@ -13,15 +13,13 @@ import { useQuery } from '@apollo/client';
 import {
   ProposalDetail,
   ProposalTransactionDetails,
-  concatSelectorToCalldata,
   extractTitle,
   formatProposalTransactionDetails,
+  formatProposalTransactionDetailsToUpdate,
   removeMarkdownStyle,
 } from './nounsDao';
 import * as R from 'ramda';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
-import { Result } from 'ethers/lib/utils';
-import { BigNumber as EthersBN } from 'ethers';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
@@ -189,7 +187,7 @@ const parseSubgraphCandidate = (
   };
   let details;
   if (toUpdate) {
-    details = formatCandidateTransactionDetailsToUpdate(transactionDetails);
+    details = formatProposalTransactionDetailsToUpdate(transactionDetails);
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
@@ -226,47 +224,6 @@ const parseSubgraphCandidate = (
     },
   };
 };
-
-
-const formatCandidateTransactionDetailsToUpdate = (
-  details: ProposalTransactionDetails | Result,
-) => {
-
-  return details?.targets.map((target: string, i: number) => {
-    const signature: string = details.signatures[i];
-    const value = EthersBN.from(
-      // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i],
-    );
-    const callData = details.calldatas[i];
-    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
-    if (!name || !types) {
-      // If there's no signature and calldata is present, display the raw calldata
-      if (callData && callData !== '0x') {
-        return {
-          target,
-          functionSig: signature,
-          callData: concatSelectorToCalldata(signature, callData),
-          value: value,
-        };
-      }
-      return {
-        target,
-        functionSig: signature,
-        callData: concatSelectorToCalldata(signature, callData),
-        value: value,
-      };
-    } else {
-      return {
-        target,
-        functionSig: signature,
-        callData: callData,
-        value: value,
-      };
-    }
-  });
-};
-
 
 const parseSubgraphCandidateVersions = (
   candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined,

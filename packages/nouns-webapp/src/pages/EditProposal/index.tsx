@@ -26,7 +26,6 @@ import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '../../wrappers/nounsData';
-import { utils } from 'ethers';
 
 interface EditProposalProps {
   match: {
@@ -321,6 +320,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   };
 
   const handleUpdateProposal = async () => {
+    console.log('handleUpdateProposal');
+    console.log('proposalTransactions', proposalTransactions);
     if (!proposalTransactions?.length) return;
     if (proposal === undefined) return;
 
@@ -363,7 +364,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
-          value: utils.parseUnits(txn.value ?? '0', 18).toString(),
+          // value: utils.parseUnits(txn.value ?? '0', 18).toString(),
+          value: txn.value ?? '0',
           calldata: txn.callData,
           signature: txn.functionSig ?? '',
         };
@@ -484,6 +486,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         <ProposalTransactions
           proposalTransactions={proposalTransactions}
           onRemoveProposalTransaction={handleRemoveProposalAction}
+          isProposalUpdate={true}
         />
 
         {totalUSDCPayment > 0 && (

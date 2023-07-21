@@ -283,6 +283,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         <ProposalTransactions
           proposalTransactions={proposalTransactions}
           onRemoveProposalTransaction={handleRemoveProposalAction}
+          isProposalUpdate={true}
         />
 
         {totalUSDCPayment > 0 && (

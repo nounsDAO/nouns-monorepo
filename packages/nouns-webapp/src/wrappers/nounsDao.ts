@@ -485,32 +485,12 @@ export const formatProposalTransactionDetailsToUpdate = (
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i],
     );
     const callData = details.calldatas[i];
-    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
-    if (!name || !types) {
-      // If there's no signature and calldata is present, display the raw calldata
-      if (callData && callData !== '0x') {
-        return {
-          target,
-          functionSig: signature,
-          callData: concatSelectorToCalldata(signature, callData),
-          value: utils.formatEther(value),
-        };
-      }
-      return {
-        target,
-        functionSig: signature,
-        callData: concatSelectorToCalldata(signature, callData),
-        value: utils.formatEther(value),
-      };
-    } else {
-      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
-      return {
-        target,
-        functionSig: signature,
-        callData: decoded.join(),
-        value: utils.formatEther(value),
-      };
-    }
+    return {
+      target,
+      functionSig: signature,
+      callData: callData,
+      value: value,
+    };
   });
 };
 
