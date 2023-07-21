@@ -6,7 +6,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { withStepProgress } from 'react-stepz';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -42,7 +42,6 @@ const CreateCandidatePage = () => {
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const history = useHistory();
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -165,16 +164,7 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Candidate Created! <br />
-            <button
-              className={classes.modalButtonLink}
-              onClick={() => {
-                setModal({ title: '', message: '', show: false });
-                history.push(`/vote#candidates`);
-              }}>
-              Back to candidates
-            </button>
-          </Trans>,
+          message: <Trans>Candidate Created!</Trans>,
           show: true,
         });
         setProposePending(false);

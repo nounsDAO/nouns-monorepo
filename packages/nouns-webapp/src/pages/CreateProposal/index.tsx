@@ -190,13 +190,6 @@ const CreateProposalPage = () => {
       case 'None':
         setProposePending(false);
         break;
-      // case 'PendingSignature':
-      //   setModal({
-      //     title: <Trans>Awaiting signature</Trans>,
-      //     message: " ",
-      //     show: true,
-      //   });
-      //   break;
       case 'Mining':
         setProposePending(true);
         break;
@@ -204,16 +197,6 @@ const CreateProposalPage = () => {
         setModal({
           title: <Trans>Success</Trans>,
           message: <Trans>Proposal Created!<br />
-            {/* {previousProposalId && (
-              <button
-                className={classes.modalButtonLink}
-                onClick={() => {
-                  setModal({ title: '', message: '', show: false });
-                  history.push(`/vote/`);
-                }}>
-                Back to proposals
-              </button>
-            )} */}
           </Trans>,
           show: true,
         });
@@ -315,8 +298,8 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        {isDaoGteV3 && (
-          <div className={classes.timelockOption}>
+        {isDaoGteV3 && config.featureToggles.proposeOnV1 && (
+          <div className={classes.timelockOption}>test
             <div className={classes.timelockSelect}>
               <Form.Check
                 type='checkbox'

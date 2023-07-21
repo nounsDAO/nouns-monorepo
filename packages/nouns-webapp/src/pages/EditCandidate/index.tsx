@@ -183,18 +183,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Candidate updated!
-            {/* <br />
-            <button
-              className={classes.modalButtonLink}
-              onClick={() => {
-                setModal({ title: '', message: '', show: false });
-                history.push(`/candidates/${account && buildCandidateSlug(account, props.match.params.id)}`);
-              }}>
-              View candidate
-            </button> */}
-          </Trans>
-          ,
+          message: <Trans>Candidate updated!</Trans>,
           show: true,
         });
         setProposePending(false);
