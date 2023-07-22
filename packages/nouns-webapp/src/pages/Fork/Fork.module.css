@@ -456,16 +456,13 @@ h1 {
 .transactionModal {
   text-align: center;
 }
-
-.transactionModal .transactionModalTitle {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 0;
+.transactionModal p {
+margin-bottom: 0;
 }
 
 .transactionStatus {
   font-size: 15px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 1rem;
   text-align: center;
   font-family: 'PT Root UI';
@@ -508,4 +505,9 @@ h1 {
   justify-content: center;
   align-items: center;
   opacity: 0.5;
+}
+.thresholdCount {
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1)
 }

@@ -19,9 +19,9 @@ import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import {
-  useGetCreateCandidateCost,
   useUpdateProposalCandidate,
   useCandidateProposal,
+  useGetUpdateCandidateCost,
 } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 
@@ -46,14 +46,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const candidate = useCandidateProposal(props.match.params.id, 0, true); // get updatable transaction details
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-  const createCandidateCost = useGetCreateCandidateCost();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
   const proposal = candidate.data?.version;
-  const updateCandidateCost = useGetCreateCandidateCost();
+  const updateCandidateCost = useGetUpdateCandidateCost();
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -245,7 +244,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       0, // proposalIdToUpdate
       commitMessage,
-      { value: availableVotes! > 0 ? 0 : createCandidateCost }, // Fee for non-nouners
+      { value: availableVotes! > 0 ? 0 : updateCandidateCost }, // Fee for non-nouners
     );
   };
 

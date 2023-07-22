@@ -163,7 +163,7 @@ export default function AddNounsToForkModal(props: Props) {
         setIsWaiting(false);
         setIsLoading(true);
         // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
-        props.setDataFetchPollInterval(50);
+        props.setDataFetchPollInterval(20);
         break;
       case 'Success':
         setIsLoading(false);
@@ -175,11 +175,13 @@ export default function AddNounsToForkModal(props: Props) {
       case 'Fail':
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
+        props.setDataFetchPollInterval(0);
         break;
       case 'Exception':
         setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
         setIsLoading(false);
         setIsWaiting(false);
+        props.setDataFetchPollInterval(0);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -325,6 +327,7 @@ export default function AddNounsToForkModal(props: Props) {
                 selectedNouns.includes(nounId) && classes.selectedNounButton,
                 props.userEscrowedNouns?.includes(nounId) && classes.escrowedNoun
               )}
+              key={nounId}
             >
               <div>
                 <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
@@ -374,7 +377,7 @@ export default function AddNounsToForkModal(props: Props) {
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <a href={escrowToForkState.transaction && `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`} target="_blank" rel="noreferrer">
-                Your Noun{selectedNouns.length > 1 ? 's have' : ' has'} been added to {props.isForkingPeriod ? 'the fork' : 'escrow'}
+                Your Nouns have been added to {props.isForkingPeriod ? 'the fork' : 'escrow'}
                 {escrowToForkState.transaction && (
                   <img src={link} width={16} alt="link symbol" />
                 )}
@@ -407,7 +410,7 @@ export default function AddNounsToForkModal(props: Props) {
                   {(errorMessage || approvalErrorMessage) && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
                   {(!(isWaiting || isLoading || isTxSuccessful || errorMessage || approvalErrorMessage)) && <span className={classes.placeholder}></span>}
                 </strong>
-                <Trans>Add {selectedNouns.length} Noun{selectedNouns.length === 1 ? '' : 's'} to escrow</Trans>
+                <Trans>Add to escrow</Trans>
               </li>
             </ul>
           </>

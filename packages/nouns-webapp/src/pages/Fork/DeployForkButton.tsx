@@ -67,7 +67,7 @@ function DeployForkButton(props: Props) {
       <h2 className={classes.transactionModalTitle}>
         <Trans>Deploy Fork</Trans>
       </h2>
-      <p><Trans>Deploying a Nouns fork and beginning the forking period</Trans></p>
+      <p><Trans>Deploying Nouns fork and beginning the forking period</Trans></p>
       <p className={clsx(
         classes.transactionStatus,
         isLoading && classes.transactionStatusLoading,
