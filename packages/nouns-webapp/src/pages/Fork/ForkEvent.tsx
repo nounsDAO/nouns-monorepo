@@ -109,7 +109,7 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   const isCycleEvent = event.eventType === 'ForkStarted' || event.eventType === "ForkExecuted" || event.eventType === 'ForkingEnded';
   const timestamp = event.createdAt && dayjs(+event.createdAt * 1000).fromNow()
   const dateTime = event.createdAt && dayjs(+event.createdAt * 1000).format('MMMM D, YYYY, h:mm A');
-  const proposalsTitles = useProposalTitles(event.eventType === "EscrowDeposit" ? event.proposalIDs : []);
+  const proposalsTitles = useProposalTitles((event.eventType === "EscrowDeposit" || event.eventType === "ForkJoin") ? event.proposalIDs : []);
   const proposalsList = proposalsTitles?.map((proposal, i) => {
     return (
       <li key={i}>
@@ -143,7 +143,7 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
         <div className={classes.nounsList}>
           {nounsInEvent}
         </div>
-        {event.eventType === "EscrowDeposit" && proposalsList && proposalsList.length > 0 && (
+        {(event.eventType === "EscrowDeposit" || event.eventType === "ForkJoin") && proposalsList && proposalsList.length > 0 && (
           <div className={classes.proposals}>
             <p className={classes.sectionLabel}>
               <Trans>Offending proposal{proposalsList.length === 1 ? '' : 's'}</Trans>
