@@ -56,6 +56,12 @@ export enum ProposalState {
   OBJECTION_PERIOD,
   UPDATABLE,
 }
+export enum ForkState {
+  UNDETERMINED = -1,
+  ESCROW,
+  ACTIVE,
+  EXECUTED,
+}
 
 interface ProposalCallResult {
   id: EthersBN;
