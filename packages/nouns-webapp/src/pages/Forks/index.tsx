@@ -1,12 +1,12 @@
 import React from 'react'
-import { Fork, ProposalState, useForks } from '../../wrappers/nounsDao';
+import { Fork, ForkState, useForks } from '../../wrappers/nounsDao';
 import { Link } from 'react-router-dom';
 import Section from '../../layout/Section';
 import { Col, Row } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import classes from './Forks.module.css';
 import clsx from 'clsx';
-import ProposalStatus from '../../components/ProposalStatus';
+import ForkStatus from '../../components/ForkStatus';
 
 type Props = {}
 
@@ -44,6 +44,14 @@ const ForksPage: React.FC<Props> = props => {
           <Row className={classes.forksList}>
 
             {forks?.data && forks.data.map((fork: Fork, i: number) => {
+              const isForkPeriodActive = fork.forkingPeriodEndTimestamp && currentTime && +fork.forkingPeriodEndTimestamp > currentTime;
+              let status = ForkState.ESCROW;
+              if (isForkPeriodActive) {
+                status = ForkState.ACTIVE;
+              } else if (fork.executed) {
+                status = ForkState.EXECUTED;
+              }
+
               return (
                 <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
                   <div className={classes.title}>
@@ -52,7 +60,9 @@ const ForksPage: React.FC<Props> = props => {
                   <div
                     className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
                   >
-                    <ProposalStatus status={fork.executed ? ProposalState.EXECUTED : ProposalState.ACTIVE}></ProposalStatus>
+                    {/* <ForkStatus status={
+                      fork.executed ? ForkState.EXECUTED : ForkState.ACTIVE} /> */}
+                    <ForkStatus status={status} />
                   </div>
                 </Link>
               )
