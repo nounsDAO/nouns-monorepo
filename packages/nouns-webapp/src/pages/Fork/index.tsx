@@ -18,6 +18,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import NotFoundPage from '../NotFound';
 import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
+import { utils } from 'ethers/lib/ethers';
 
 const now = new Date();
 
@@ -189,7 +190,7 @@ const ForkPage = ({
                   <div className={classes.spacer} />
                 </div>
                 <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
-                {!isForked && (
+                {!isForked && !isForkPeriodActive && (
                   <p className={classes.note}>
                     <Trans>
                       More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`)} are required to pass the threshold
@@ -231,69 +232,55 @@ const ForkPage = ({
       </Section>
       {(isForked || isForkPeriodActive) && (
         <Section fullWidth={false}>
-          <Row>
-            <Col>
-              <div className={classes.callout}>
-                {forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
-                  <div className={clsx(classes.countdown)}>
-                    <ForkingPeriodTimer
-                      endTime={+forkDetails.data.forkingPeriodEndTimestamp}
-                      isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
-                    />
-                    <p>
-                      time left to return Nouns and join this fork
-                    </p>
-                  </div>
+          <Col>
+            <div className={classes.callout}>
+              {forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
+                <div className={clsx(classes.countdown)}>
+                  <ForkingPeriodTimer
+                    endTime={+forkDetails.data.forkingPeriodEndTimestamp}
+                    isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
+                  />
+                  <p>
+                    time left to return Nouns and join this fork
+                  </p>
+                </div>
+              )}
+              <div className={clsx(classes.isForked)}>
+                {forkDetails.data.forkingPeriodEndTimestamp && (
+                  <p>
+                    <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
+                  </p>
                 )}
-                <div className={clsx(classes.isForked)}>
-                  {forkDetails.data.forkingPeriodEndTimestamp && (
-                    <p>
-                      <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
-                    </p>
+                <p>Fork contracts:{" "}
+                  {forkDetails.data.forkTreasury && (
+                    <>
+                      <a
+                        href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        Treasury
+                      </a>,{" "}
+                    </>
                   )}
-                  <p>Fork contracts:{" "}
-                    {/* TODO:get gov contract from token or treasury? */}
-                    {/* {forkDetails.data.forkToken && (
+                  {forkDetails.data.forkToken && (
                     <>
                       <a
                         href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
                         target='_blank'
                         rel='noreferrer'
                       >
-                        Governor
-                      </a>, {" "}
+                        Token
+                      </a>
                     </>
-                  )} */}
-                    {forkDetails.data.forkTreasury && (
-                      <>
-                        <a
-                          href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
-                          target='_blank'
-                          rel='noreferrer'
-                        >
-                          Treasury
-                        </a>,{" "}
-                      </>
-                    )}
-                    {forkDetails.data.forkToken && (
-                      <>
-                        <a
-                          href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                          target='_blank'
-                          rel='noreferrer'
-                        >
-                          Token
-                        </a>
-                      </>
-                    )}
-                  </p>
-                  <p>Fork treasury balance:
-                    Ξ{forkTreasuryBalance} eth
-                  </p>
-                </div>
+                  )}
+                </p>
+                <p>Fork treasury balance:
+                  Ξ{Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
+                </p>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </Col>
         </Section>
       )}
 
@@ -316,16 +303,13 @@ const ForkPage = ({
                       forkDetails.data?.tokensForkingCount === 1 ? '' : 's'
                       : numTokensInForkEscrow === 1 ? '' : 's'}
                   </strong>
-
-                  {(isForkPeriodActive || isForked) ? (
-                    <span>
-                      {`${currentEscrowPercentage}% to threshold`}
-                    </span>
-                  ) : (
-                    <span>
-                      {currentEscrowPercentage !== undefined && `${currentEscrowPercentage}% to threshold`}
+                  {(isForkPeriodActive || isForked) ? null : (
+                    <span className={classes.thresholdCount}>
+                      {currentEscrowPercentage >= 100 ? `threshold met` : `${currentEscrowPercentage}% of threshold`}
                     </span>
                   )}
+
+
                 </div>
 
                 <DeployForkButton

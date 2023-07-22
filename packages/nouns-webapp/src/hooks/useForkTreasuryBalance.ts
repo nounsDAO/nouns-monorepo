@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useEthers } from '@usedapp/core';
-import { utils } from 'ethers';
+import { useEtherBalance } from '@usedapp/core';
+import { BigNumber } from 'ethers';
+import useLidoBalance from './useLidoBalance';
 
 function useForkTreasuryBalance(treasuryContractAddress?: string) {
-  const { library } = useEthers();
+  const ethBalance = useEtherBalance(treasuryContractAddress);
+  const lidoBalanceAsETH = useLidoBalance(treasuryContractAddress);
 
-  const [balance, setBalance] = useState<number | undefined>();
-
-  useEffect(() => {
-    if (!library || !treasuryContractAddress) return;
-    library.getBalance(treasuryContractAddress).then((value) => setBalance(+utils.formatEther(value)));
-  }, [library, treasuryContractAddress]);
-
-  return balance?.toFixed(2);
+  const zero = BigNumber.from(0);
+  return ethBalance?.add(lidoBalanceAsETH ?? zero) ?? zero;
 }
 
 export default useForkTreasuryBalance;
