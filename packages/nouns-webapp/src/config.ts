@@ -148,6 +148,12 @@ const getAddresses = (): ContractAddresses => {
 const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
+  featureToggles: {
+    proposeOnV1: false,
+    candidates: true,
+    fork: true,
+  }
+
 };
 
 export default config;

@@ -52,6 +52,32 @@ const NavBar = () => {
       : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
+  const buttonClasses = usePickByState(
+    navDropdownClasses.whiteInfoSelectedBottom,
+    navDropdownClasses.coolInfoSelected,
+    navDropdownClasses.warmInfoSelected,
+    history,
+  );
+  const candidatesNavItam = (
+    config.featureToggles.candidates ? (
+      <Dropdown.Item
+        className={buttonClasses}
+        href="/vote#candidates"
+      >
+        <Trans>Candidates</Trans>
+      </Dropdown.Item>
+    ) : (null)
+  );
+  const forkNavItem = (
+    config.featureToggles.fork ? (
+      <Dropdown.Item
+        className={buttonClasses}
+        href="/fork"
+      >
+        <Trans>Fork</Trans>
+      </Dropdown.Item>
+    ) : (null)
+  );
 
   const v3DaoNavItem = <NavDropdown buttonText="DAO" buttonIcon={<FontAwesomeIcon icon={faUsers} />} buttonStyle={nonWalletButtonStyle}>
     <Dropdown.Item
@@ -67,32 +93,8 @@ const NavBar = () => {
     >
       <Trans>Proposals</Trans>
     </Dropdown.Item>
-    <Dropdown.Item
-      className={clsx(
-        usePickByState(
-          navDropdownClasses.whiteInfoSelectedBottom,
-          navDropdownClasses.coolInfoSelected,
-          navDropdownClasses.warmInfoSelected,
-          history,
-        ),
-      )}
-      href="/vote#candidates"
-    >
-      <Trans>Candidates</Trans>
-    </Dropdown.Item>
-    <Dropdown.Item
-      className={clsx(
-        usePickByState(
-          navDropdownClasses.whiteInfoSelectedBottom,
-          navDropdownClasses.coolInfoSelected,
-          navDropdownClasses.warmInfoSelected,
-          history,
-        ),
-      )}
-      href="/fork"
-    >
-      <Trans>Fork</Trans>
-    </Dropdown.Item>
+    {candidatesNavItam}
+    {forkNavItem}
   </NavDropdown>;
 
   return (
@@ -143,9 +145,8 @@ const NavBar = () => {
                 className={classes.nounsNavLink}
                 onClick={closeNav}
               >
-                {/* TODO: add Trans back in */}
                 <NavBarButton
-                  buttonText={<>{isDaoGteV3 ? 'Proposals' : 'DAO'}</>}
+                  buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faFile} />}
                   buttonStyle={nonWalletButtonStyle}
                 />

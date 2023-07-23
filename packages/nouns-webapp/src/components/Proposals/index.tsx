@@ -24,6 +24,7 @@ import CandidateCard from '../CandidateCard';
 import { Link } from 'react-router-dom';
 import { useCandidateProposals } from '../../wrappers/nounsData';
 import { isProposalUpdatable } from '../../utils/proposals';
+import config from '../../config';
 
 dayjs.extend(relativeTime);
 
@@ -96,7 +97,7 @@ const Proposals = ({
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
-  const tabs = ['Proposals', 'Candidates'];
+  const tabs = ['Proposals', config.featureToggles.candidates && 'Candidates'];
   const { hash } = useLocation();
 
   useEffect(() => {
