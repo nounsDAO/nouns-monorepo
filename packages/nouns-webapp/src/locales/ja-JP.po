@@ -265,6 +265,10 @@ msgstr "Nounsは全員Nouns DAOの会員です。"
 msgid "Already has"
 msgstr "すでに持っています"
 
+#: src/pages/Fork/index.tsx
+msgid "Any token holder can signal to fork (exit) in response to a governance proposal. If a {0}quorum of tokens signal to exit, the fork will succeed."
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Arguments"
 msgstr "引数"
@@ -981,6 +985,10 @@ msgstr "NounはEthereum上に直接保存されるため、IPFSのような他�
 #: src/components/Documentation/index.tsx
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
+
+#: src/pages/Governance/index.tsx
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
+msgstr ""
 
 #: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -1960,6 +1968,11 @@ msgstr ""
 
 #: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "{0}"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx

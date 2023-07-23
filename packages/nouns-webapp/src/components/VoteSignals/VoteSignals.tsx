@@ -161,8 +161,7 @@ function VoteSignals(props: Props) {
     {userVoteSupport?.createdTimestamp &&
       dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
   </Trans>
-  // TODO: Add Trans back in
-  const title = <>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</>
+  const title = <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
 
   return (
     <>

@@ -260,6 +260,10 @@ msgstr "All Nouns are members of Nouns DAO."
 msgid "Already has"
 msgstr "Already has"
 
+#: src/pages/Fork/index.tsx
+msgid "Any token holder can signal to fork (exit) in response to a governance proposal. If a {0}quorum of tokens signal to exit, the fork will succeed."
+msgstr "Any token holder can signal to fork (exit) in response to a governance proposal. If a {0}quorum of tokens signal to exit, the fork will succeed."
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Arguments"
 msgstr "Arguments"
@@ -976,6 +980,10 @@ msgstr "Nouns are stored directly on Ethereum and do not utilize pointers to oth
 #: src/components/Documentation/index.tsx
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns artwork is in the {publicDomainLink}."
+
+#: src/pages/Governance/index.tsx
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
+msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
 
 #: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -1960,6 +1968,11 @@ msgstr "sponsored votes"
 #: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
 msgstr "starts {0}"
+
+#: src/components/NavBar/index.tsx
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "{0}"
+msgstr "{0}"
 
 #: src/components/VoteCard/index.tsx
 #~ msgid "{0} <0>Address </0>"
