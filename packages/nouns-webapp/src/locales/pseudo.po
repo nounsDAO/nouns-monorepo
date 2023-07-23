@@ -38,8 +38,12 @@ msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
 msgstr ""
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+#~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+#~ msgstr ""
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -67,6 +71,10 @@ msgstr ""
 msgid "<0>Delegated Nouns: </0>"
 msgstr ""
 
+#: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
+msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
+msgstr ""
+
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
 msgstr ""
@@ -84,8 +92,12 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "<0>Proposed by: </0><1>{proposer}</1>{transactionLink}"
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
 msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+#~ msgid "<0>Proposed by: </0><1>{proposer}</1>{transactionLink}"
+#~ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
@@ -183,10 +195,6 @@ msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-#~ msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
-#~ msgstr ""
-
-#: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr ""
 
@@ -198,13 +206,17 @@ msgstr ""
 #~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
 #~ msgstr ""
 
+#: src/components/AddNounsToForkModal/index.tsx
+msgid "Add to escrow"
+msgstr ""
+
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Add your feedback"
 msgstr ""
 
 #: src/components/AddNounsToForkModal/index.tsx
-msgid "Add {0} Noun{1} to escrow"
-msgstr ""
+#~ msgid "Add {0} Noun{1} to escrow"
+#~ msgstr ""
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Adding your feedback"
@@ -278,7 +290,6 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/CandidateSponsors/OriginalSignature.tsx
-#: src/pages/CreateProposal/index.tsx
 msgid "Awaiting signature"
 msgstr ""
 
@@ -368,6 +379,10 @@ msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
+msgstr ""
+
+#: src/pages/CreateCandidate/index.tsx
+msgid "Candidate Created!"
 msgstr ""
 
 #: src/pages/EditCandidate/index.tsx
@@ -535,8 +550,12 @@ msgid "Deploy Nouns fork"
 msgstr ""
 
 #: src/pages/Fork/DeployForkButton.tsx
-msgid "Deploying a Nouns fork and beginning the forking period"
+msgid "Deploying Nouns fork and beginning the forking period"
 msgstr ""
+
+#: src/pages/Fork/DeployForkButton.tsx
+#~ msgid "Deploying a Nouns fork and beginning the forking period"
+#~ msgstr ""
 
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 #: src/components/ProposalContent/index.tsx
@@ -668,6 +687,7 @@ msgstr ""
 msgid "Execute"
 msgstr ""
 
+#: src/components/ForkStatus/index.tsx
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -725,6 +745,10 @@ msgstr ""
 
 #: src/pages/Fork/index.tsx
 msgid "Fork Nouns DAO"
+msgstr ""
+
+#: src/components/ForkStatus/index.tsx
+msgid "Forking"
 msgstr ""
 
 #: src/pages/Forks/index.tsx
@@ -796,6 +820,10 @@ msgstr ""
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr ""
 
+#: src/components/ForkStatus/index.tsx
+msgid "In Escrow"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 #~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 #~ msgstr ""
@@ -834,6 +862,10 @@ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "More details on how the dynamic threshold works can be found <0>here</0>."
+msgstr ""
+
+#: src/pages/Fork/index.tsx
+msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
@@ -927,6 +959,10 @@ msgstr ""
 #: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
+msgstr ""
+
+#: src/pages/Fork/index.tsx
+msgid "Nouns DAO Fork{0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1115,8 +1151,8 @@ msgid "Proposal Candidate"
 msgstr ""
 
 #: src/pages/CreateCandidate/index.tsx
-msgid "Proposal Candidate Created! <0/> <1>View the candidate</1>"
-msgstr ""
+#~ msgid "Proposal Candidate Created! <0/> <1>View the candidate</1>"
+#~ msgstr ""
 
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
@@ -1289,6 +1325,10 @@ msgstr ""
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Signature request"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Sponsored by"
 msgstr ""
 
 #: src/components/CandidateSponsors/index.tsx
@@ -1491,8 +1531,8 @@ msgid "There's a way for everyone to get involved with Nouns. From whimsical end
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-msgstr ""
+#~ msgid "There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
+#~ msgstr ""
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
@@ -1587,6 +1627,7 @@ msgstr ""
 msgid "Twitter"
 msgstr ""
 
+#: src/components/ForkStatus/index.tsx
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -1937,8 +1978,12 @@ msgid "seconds"
 msgstr ""
 
 #: src/components/CandidateCard/index.tsx
-msgid "sponsors"
+msgid "sponsored votes"
 msgstr ""
+
+#: src/components/CandidateCard/index.tsx
+#~ msgid "sponsors"
+#~ msgstr ""
 
 #: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
