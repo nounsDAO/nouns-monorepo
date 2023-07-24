@@ -6,7 +6,7 @@ import { CandidateSignature } from '../../wrappers/nounsData';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates } from '../../wrappers/subgraph';
-import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
+import { useAccountVotes, useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
@@ -63,6 +63,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const { account } = useEthers();
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const connectedAccountNounVotes = useUserVotes() || 0;
+  const proposerNounVotes = useAccountVotes(props.candidate.proposer) || 0;
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers ?? [], blockNumber ?? 0);
   const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(originalSigners ?? [], blockNumber ?? 0);
   const hasActiveOrPendingProposal = (latestProposal: Proposal, account: string) => {
@@ -108,9 +109,13 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           setOriginalSigners(dedupedSigners);
         }
       } else {
+        if (props.candidate.proposerVotes >= props.requiredVotes) {
+          setIsThresholdMet(true);
+        } else {
+          setIsThresholdMet(voteCount >= props.candidate.requiredVotes ? true : false);
+        }
         if (voteCount !== signedVotesCount) {
           setSignedVotesCount(voteCount);
-          setIsThresholdMet(voteCount >= props.requiredVotes ? true : false);
         }
       }
     }
@@ -121,7 +126,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, props.latestProposal, activePendingProposers.data, signedVotesCount, props.requiredVotes, signatures.length, signers?.length]);
+  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, props.latestProposal, activePendingProposers.data, signedVotesCount, props.candidate.requiredVotes, signatures.length, signers?.length, proposerNounVotes]);
 
   useEffect(() => {
     if (!blockNumber) {
@@ -161,9 +166,19 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   const handleSignatureRemoved = (voteCount: number) => {
     setSignedVotesCount(signedVotesCount - voteCount);
-    setIsThresholdMet(signedVotesCount - voteCount >= props.requiredVotes ? true : false);
+    setIsThresholdMet(signedVotesCount - voteCount >= props.candidate.requiredVotes ? true : false);
   };
 
+  // useEffect(() => {
+  //   // set votes needed on render
+  //   if (props.isUpdateToProposal) {
+  //     setNumVotesNeeded(props.originalProposal?.signers.length || 0);
+  //   } else {
+  //     setNumVotesNeeded(props.requiredVotes - proposerNounVotes);
+  //   }
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [props.requiredVotes, props.originalProposal?.signers.length, props.isUpdateToProposal, proposerNounVotes]);
   return (
     <>
       {delegateSnapshot.data && blockNumber && (
@@ -176,7 +191,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             )
           }
           delegateSnapshot={delegateSnapshot.data}
-          requiredVotes={props.requiredVotes}
+          requiredVotes={props.candidate.requiredVotes}
           candidate={props.candidate}
           blockNumber={blockNumber}
           setDataFetchPollInterval={props.setDataFetchPollInterval}
@@ -215,21 +230,28 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     <strong>
                       {props.isUpdateToProposal ? (
                         <>
-                          {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.originalProposal?.signers.length || '...'} {""}
-                          {props.isUpdateToProposal ? (
-                            'Original signed votes'
-                          ) : (
-                            'Sponsored Votes'
-                          )}
+                          {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.originalProposal?.signers.length || '...'}{" "}
+                          original signed votes
                         </>
                       ) : (
                         <>
-                          {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.requiredVotes || '...'} Sponsored Votes
+                          {signedVotesCount === 0 && props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                            <>
+                              <Trans>No sponsored votes needed</Trans>
+                            </>
+                          ) : (
+                            <>
+                              {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.candidate.proposerVotes > props.candidate.requiredVotes ? <em className={classes.naVotesLabel}>n/a</em> : props.candidate.requiredVotes !== undefined ? props.candidate.requiredVotes : '...'} sponsored votes
+                            </>
+                          )}
                         </>
                       )}
 
                     </strong>
                   </h4>
+                  {props.candidate.proposerVotes > 0 && !props.isUpdateToProposal && (
+                    <p className={classes.proposerVotesLabel}><Trans>Proposer has {props.candidate.proposerVotes} vote{props.candidate.proposerVotes > 1 ? 's' : ''}</Trans></p>
+                  )}
                   <p className={classes.subhead}>
                     {isThresholdMet && !props.isUpdateToProposal ? (
                       <Trans>
@@ -295,8 +317,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       </>
                     ) : (
                       <>
-                        {props.requiredVotes > signedVotesCount &&
-                          Array(props.requiredVotes - signedVotesCount
+                        {props.candidate.requiredVotes > signedVotesCount &&
+                          Array(props.candidate.requiredVotes - signedVotesCount
                           )
                             .fill('')
                             .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}

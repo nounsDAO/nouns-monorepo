@@ -96,3 +96,13 @@
     background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 100%);
   }
 }
+.naVotesLabel {
+  font-size: 0.8rem;
+  font-family: monospace;
+  font-weight: normal;
+  opacity: 0.5;
+  font-style: normal;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0.2);
+}

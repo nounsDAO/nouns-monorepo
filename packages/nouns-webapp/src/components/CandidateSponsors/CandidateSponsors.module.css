@@ -208,7 +208,7 @@
   color: var(--brand-color-green);
   font-weight: bold;
   font-size: 14px;
-  margin: -4px 0 0.5rem;
+  margin: -4px 0 0;
   padding: 0.7rem 1rem 0.5rem;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
@@ -550,6 +550,24 @@ p.inactiveCandidate {
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   text-align: center;
+}
+p.proposerVotesLabel {
+  font-size: 14px;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  color: var(--brand-gray-light-text)
+}
+.naVotesLabel {
+  font-size: 1rem;
+  font-family: monospace;
+  font-weight: normal;
+  opacity: 0.36;
+  font-style: normal;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0.2);
+  position: relative;
+  top: -0.1em;
 }
 @keyframes pulse {
   0% { 

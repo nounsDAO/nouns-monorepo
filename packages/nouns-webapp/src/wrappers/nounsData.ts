@@ -17,9 +17,12 @@ import {
   formatProposalTransactionDetails,
   formatProposalTransactionDetailsToUpdate,
   removeMarkdownStyle,
+  useProposalThreshold,
 } from './nounsDao';
 import * as R from 'ramda';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
+import { useDelegateNounsAtBlockQuery } from './nounToken';
+import { useEffect, useState } from 'react';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
@@ -59,21 +62,51 @@ export const useAddSignature = () => {
 };
 
 export const useCandidateProposals = () => {
+  const [blockNumber, setBlockNumber] = useState<number>(0);
+  const currentBlock = useBlockNumber();
+  useEffect(() => {
+    // prevent blockNumber from being reset to 0 on new blocks
+    if (blockNumber === 0) {
+      setBlockNumber(currentBlock || blockNumber);
+    }
+  }, [currentBlock, blockNumber]);
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
   const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
-  const sortedCandidates = unmatchedCandidates?.sort((a, b) => {
+  const activeCandidateProposers = unmatchedCandidates?.map((candidate: PartialProposalCandidate) => candidate.proposer);
+  const proposerDelegates = useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
+  const threshold = useProposalThreshold() || 0;
+  const candidatesData = unmatchedCandidates?.map((candidate: PartialProposalCandidate, i: number) => {
+    const proposerVotes = (proposerDelegates.data && proposerDelegates.data.delegates[i].nounsRepresented.length) || 0;
+    const requiredVotes = ((threshold + 1) - proposerVotes) > 0 ? (threshold + 1) - proposerVotes : 0;
+    return {
+      ...candidate,
+      requiredVotes: requiredVotes,
+      proposerVotes: proposerVotes,
+    }
+  });
+  candidatesData?.sort((a, b) => {
     return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
   });
-  return { loading, data: sortedCandidates, error };
+  return { loading, data: candidatesData, error };
 };
 
-export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean,) => {
+export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean) => {
+  const [blockNumber, setBlockNumber] = useState<number>(0);
+  const currentBlock = useBlockNumber();
+  useEffect(() => {
+    // prevent blockNumber from triggering a re-render when it's already set
+    if (blockNumber === 0) {
+      setBlockNumber(currentBlock || blockNumber);
+    }
+  }, [currentBlock, blockNumber]);
   const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
     pollInterval: pollInterval || 0,
   });
-  const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
-  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, toUpdate, blockNumber, timestamp);
+  const threshold = useProposalThreshold() || 0;
+  const proposerDelegates = useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
+  const proposerNounVotes = (proposerDelegates.data && proposerDelegates.data.delegates[0].nounsRepresented.length) || 0;
+  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, proposerNounVotes, threshold, toUpdate, blockNumber, timestamp);
   return { loading, data: parsedData, error, refetch };
 };
 
@@ -168,6 +201,8 @@ export const useUpdateProposalBySigs = () => {
 
 const parseSubgraphCandidate = (
   candidate: ProposalCandidateSubgraphEntity | undefined,
+  proposerVotes: number,
+  threshold: number,
   toUpdate?: boolean,
   blockNumber?: number,
   timestamp?: number,
@@ -197,6 +232,7 @@ const parseSubgraphCandidate = (
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
   });
+  const requiredVotes = ((threshold + 1) - proposerVotes) > 0 ? (threshold + 1) - proposerVotes : 0;
 
   return {
     id: candidate.id,
@@ -209,6 +245,8 @@ const parseSubgraphCandidate = (
     isProposal: candidate.latestVersion.content.matchingProposalIds.length > 0,
     proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
     matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
+    requiredVotes: requiredVotes,
+    proposerVotes: proposerVotes,
     version: {
       content: {
         title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
@@ -363,6 +401,8 @@ export interface ProposalCandidateInfo {
   versionsCount: number;
   createdTransactionHash: string;
   isProposal: boolean;
+  requiredVotes: number;
+  proposerVotes: number;
   matchingProposalIds: {
     id: string;
   }[]

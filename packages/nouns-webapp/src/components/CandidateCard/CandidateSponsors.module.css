@@ -9,11 +9,6 @@
     overflow: visible;
   }
 }
-.sponsorsWrapOverflow .sponsors {
-  @media screen and (min-width: 992px) {
-    width: 100vh;
-  }
-}
 .sponsors {
   display: flex;
   flex-direction: row;

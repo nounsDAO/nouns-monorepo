@@ -87,6 +87,7 @@ const Proposals = ({
 }) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [blockNumber, setBlockNumber] = useState<number>(0);
   const { account } = useEthers();
   const history = useHistory();
   const { data: candidates } = useCandidateProposals();
@@ -99,6 +100,13 @@ const Proposals = ({
   const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
   const tabs = ['Proposals', config.featureToggles.candidates && 'Candidates'];
   const { hash } = useLocation();
+
+  useEffect(() => {
+    // prevent blockNumber from triggering a re-render when it's already set
+    if (blockNumber === 0) {
+      setBlockNumber(currentBlock || blockNumber);
+    }
+  }, [currentBlock, blockNumber]);
 
   useEffect(() => {
     if (hash === '#candidates') {
@@ -255,7 +263,7 @@ const Proposals = ({
                             <ClockIcon height={16} width={16} />
                           </span>{' '}
                           <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, currentBlock || 0, activeLocale)}
+                            {getCountdownCopy(p, blockNumber || 0, activeLocale)}
                           </span>
                         </div>
                       </div>
@@ -315,12 +323,12 @@ const Proposals = ({
                     .map((c, i) => {
                       if (+c.latestVersion.content.proposalIdToUpdate > 0) {
                         const prop = proposals.find((p) => p.id === c.latestVersion.content.proposalIdToUpdate);
-                        let isOriginalPropUpdatable = prop && currentBlock && isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, currentBlock) ? true : false;
+                        let isOriginalPropUpdatable = prop && blockNumber && isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber) ? true : false;
                         if (!isOriginalPropUpdatable) return null;
                       }
                       return (
                         <div key={i}>
-                          <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} />
+                          <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} currentBlock={blockNumber ? blockNumber - 1 : 0} />
                         </div>
                       );
                     })

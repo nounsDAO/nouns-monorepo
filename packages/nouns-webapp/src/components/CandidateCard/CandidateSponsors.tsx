@@ -30,7 +30,7 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
       setSignerSpots(signers);
     } else if (signers && signers.length > nounsRequired) {
       setSignerCountOverflow(signers.length - nounsRequired);
-      setSignerSpots(signers.slice(0, nounsRequired));
+      setSignerSpots(signers.slice(0, nounsRequired || 3));
     } else {
       setSignerSpots(signers);
     }
