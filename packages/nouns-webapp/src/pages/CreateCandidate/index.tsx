@@ -22,9 +22,6 @@ import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import { useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
-import {
-  checkEnoughVotes,
-} from '../../utils/proposals';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -42,6 +39,7 @@ const CreateCandidatePage = () => {
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const hasVotes = availableVotes && availableVotes > 0;
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -139,7 +137,7 @@ const CreateCandidatePage = () => {
     [proposalTransactions, titleValue, bodyValue],
   );
 
-  const hasEnoughVote = checkEnoughVotes(availableVotes, proposalThreshold);
+
   const handleCreateProposal = async () => {
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
@@ -149,7 +147,7 @@ const CreateCandidatePage = () => {
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
       0,// proposalIdToUpdate - use 0 for new proposals
-      { value: availableVotes! > 0 ? 0 : createCandidateCost }, // Fee for non-nouners
+      { value: hasVotes ? 0 : createCandidateCost }, // Fee for non-nouners
     );
   };
 
@@ -262,7 +260,7 @@ const CreateCandidatePage = () => {
           handleCreateProposal={handleCreateProposal}
         />
         <p className={classes.feeNotice}>
-          {!hasEnoughVote && (
+          {!hasVotes && (
             <Trans>
               {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
               submission

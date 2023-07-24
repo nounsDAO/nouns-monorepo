@@ -45,6 +45,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
   const candidate = useCandidateProposal(props.match.params.id, 0, true); // get updatable transaction details
   const availableVotes = useUserVotes();
+  const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
@@ -163,9 +164,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
   }, [isTitleEdited, isBodyEdited]);
 
-  const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
-  );
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
@@ -244,7 +242,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       0, // proposalIdToUpdate
       commitMessage,
-      { value: availableVotes! > 0 ? 0 : updateCandidateCost }, // Fee for non-nouners
+      { value: hasVotes ? 0 : updateCandidateCost }, // Fee for non-nouners
     );
   };
 
@@ -324,7 +322,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           isCandidate={true}
         />
         <p className={classes.feeNotice}>
-          {!hasEnoughVote && (
+          {!hasVotes && (
             <>
               {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
               submission
@@ -335,7 +333,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         <p className="text-center pt-0">
           <>
             {proposal && proposal.content.contentSignatures?.length > 0 ? (
-              <>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.content.contentSignatures?.length} signatures.</>
+              <Trans>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.content.contentSignatures?.length} signatures.</Trans>
             ) : (
               ''
             )}
