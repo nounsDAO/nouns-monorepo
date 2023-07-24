@@ -70,8 +70,8 @@ function CandidateCard(props: Props) {
   useEffect(() => {
     if (proposerDelegates.data) {
       const voteCount = proposerDelegates.data.delegates[0].nounsRepresented.length;
-      setProposerVoteCount(voteCount);
       const requiredVotes = ((props.nounsRequired) - voteCount) > 0 ? (props.nounsRequired) - voteCount : 0;
+      setProposerVoteCount(voteCount);
       setNounsRequired(requiredVotes);
     }
 
@@ -97,13 +97,15 @@ function CandidateCard(props: Props) {
           <div className={classes.candidateSponsors}>
             <CandidateSponsors
               signers={signatures}
-              nounsRequired={proposerVoteCount ? (nounsRequired - proposerVoteCount) : nounsRequired}
+              nounsRequired={nounsRequired}
               currentBlock={props.currentBlock && props.currentBlock - 1}
+              isThresholdMetByProposer={proposerVoteCount && proposerVoteCount >= props.nounsRequired ? true : false}
             />
             {proposerDelegates.data ? (
               <span className={clsx(classes.sponsorCount,
                 signers.length - nounsRequired > 0 && classes.sponsorCountOverflow
               )}>
+
                 <strong>
                   {signedVotesCount >= 0 ? signedVotesCount : '...'} / {proposerVoteCount && proposerVoteCount > nounsRequired ? <em className={classes.naVotesLabel}>n/a</em> : nounsRequired}
                 </strong>

@@ -10,10 +10,11 @@ type Props = {
   signers: CandidateSignature[];
   nounsRequired: number;
   currentBlock?: number;
+  isThresholdMetByProposer?: boolean;
 };
 
-function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
-  const [signerSpots, setSignerSpots] = useState<CandidateSignature[]>();
+function CandidateSponsors({ signers, nounsRequired, currentBlock, isThresholdMetByProposer }: Props) {
+  const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const signerIds = signers?.map(s => s.signer.id) ?? [];
   const { data: delegateSnapshot } = useQuery<Delegates>(
@@ -25,17 +26,9 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
     return acc;
   }, {});
   const nounIds = Object.values(delegateToNounIds ?? {}).flat();
-  React.useEffect(() => {
-    if (signers && signers.length < nounsRequired) {
-      setSignerSpots(signers);
-    } else if (signers && signers.length > nounsRequired) {
-      setSignerCountOverflow(signers.length - nounsRequired);
-      setSignerSpots(signers.slice(0, nounsRequired || 3));
-    } else {
-      setSignerSpots(signers);
-    }
-  }, [signers, nounsRequired]);
-
+  if (signers.length > maxVisibleSpots) {
+    setSignerCountOverflow(signers.length - maxVisibleSpots);
+  }
   const placeholderCount = nounsRequired - signers.length;
   const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
   return (
@@ -43,14 +36,12 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock }: Props) {
       signerCountOverflow > 0 && classes.sponsorsWrapOverflow,
     )}>
       <div className={classes.sponsors}>
-        {signerSpots &&
-          signerSpots.length > 0 &&
-          delegateToNounIds &&
-          nounIds.map((nounId, i) => {
-            return (
-              <CandidateSponsorImage nounId={+nounId} key={i} />
-            );
-          })}
+        {nounIds.map((nounId, i) => {
+          if (i >= maxVisibleSpots) return null;
+          return (
+            <CandidateSponsorImage nounId={+nounId} key={i} />
+          );
+        })}
       </div>
       {placeholderArray.map((_) => (
         <div className={classes.emptySponsorSpot} />

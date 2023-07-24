@@ -71,12 +71,12 @@ export const useCandidateProposals = () => {
     }
   }, [currentBlock, blockNumber]);
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
+  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length >= 0 && candidate.canceled === false);
   const activeCandidateProposers = unmatchedCandidates?.map((candidate: PartialProposalCandidate) => candidate.proposer);
   const proposerDelegates = useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
   const threshold = useProposalThreshold() || 0;
   const candidatesData = unmatchedCandidates?.map((candidate: PartialProposalCandidate, i: number) => {
-    const proposerVotes = (proposerDelegates.data && proposerDelegates.data.delegates[i].nounsRepresented.length) || 0;
+    const proposerVotes = (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) || 0;
     const requiredVotes = ((threshold + 1) - proposerVotes) > 0 ? (threshold + 1) - proposerVotes : 0;
     return {
       ...candidate,
@@ -105,7 +105,7 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
   const timestamp = useBlockTimestamp(blockNumber);
   const threshold = useProposalThreshold() || 0;
   const proposerDelegates = useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
-  const proposerNounVotes = (proposerDelegates.data && proposerDelegates.data.delegates[0].nounsRepresented.length) || 0;
+  const proposerNounVotes = (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
   const parsedData = parseSubgraphCandidate(data?.proposalCandidate, proposerNounVotes, threshold, toUpdate, blockNumber, timestamp);
   return { loading, data: parsedData, error, refetch };
 };
