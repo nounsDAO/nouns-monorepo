@@ -69,7 +69,7 @@ function CandidateCard(props: Props) {
   // get proposer votes on each card here to prevent inaccurate counts during loading
   useEffect(() => {
     if (proposerDelegates.data) {
-      const voteCount = proposerDelegates.data.delegates[0].nounsRepresented.length;
+      const voteCount = proposerDelegates.data.delegates[0]?.nounsRepresented.length;
       const requiredVotes = ((props.nounsRequired) - voteCount) > 0 ? (props.nounsRequired) - voteCount : 0;
       setProposerVoteCount(voteCount);
       setNounsRequired(requiredVotes);
