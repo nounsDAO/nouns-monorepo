@@ -885,6 +885,10 @@ msgstr "Nounsは全て等しく希少なため、属性の希少性について�
 msgid "No proposals found"
 msgstr "提案が見つかりません"
 
+#: src/components/CandidateSponsors/index.tsx
+msgid "No sponsored votes needed"
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
@@ -1208,6 +1212,10 @@ msgstr "提案中のトランザクション"
 
 #: src/pages/Candidate/index.tsx
 msgid "Proposer functions"
+msgstr ""
+
+#: src/components/CandidateSponsors/index.tsx
+msgid "Proposer has {0} vote{1}"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -1535,6 +1543,10 @@ msgstr ""
 msgid "This proposal can be edited for"
 msgstr ""
 
+#: src/components/ProposalContent/index.tsx
+msgid "This proposal interacts with the <0>original treasury</0>"
+msgstr ""
+
 #: src/pages/EditProposal/index.tsx
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr ""
@@ -1646,6 +1658,10 @@ msgstr ""
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "Update proposal candidates must be re-signed by the original signers."
+msgstr ""
+
+#: src/pages/EditCandidate/index.tsx
+msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
 msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx

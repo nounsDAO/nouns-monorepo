@@ -880,6 +880,10 @@ msgstr "No explicit rules exist for attribute scarcity; all Nouns are equally ra
 msgid "No proposals found"
 msgstr "No proposals found"
 
+#: src/components/CandidateSponsors/index.tsx
+msgid "No sponsored votes needed"
+msgstr "No sponsored votes needed"
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
@@ -1204,6 +1208,10 @@ msgstr "Proposed Transactions"
 #: src/pages/Candidate/index.tsx
 msgid "Proposer functions"
 msgstr "Proposer functions"
+
+#: src/components/CandidateSponsors/index.tsx
+msgid "Proposer has {0} vote{1}"
+msgstr "Proposer has {0} vote{1}"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
@@ -1530,6 +1538,10 @@ msgstr "This candidate has met the required threshold, but Nouns voters can stil
 msgid "This proposal can be edited for"
 msgstr "This proposal can be edited for"
 
+#: src/components/ProposalContent/index.tsx
+msgid "This proposal interacts with the <0>original treasury</0>"
+msgstr "This proposal interacts with the <0>original treasury</0>"
+
 #: src/pages/EditProposal/index.tsx
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
@@ -1642,6 +1654,10 @@ msgstr "Update proposal"
 #: src/components/CandidateSponsors/index.tsx
 msgid "Update proposal candidates must be re-signed by the original signers."
 msgstr "Update proposal candidates must be re-signed by the original signers."
+
+#: src/pages/EditCandidate/index.tsx
+msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
+msgstr "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Updating..."
