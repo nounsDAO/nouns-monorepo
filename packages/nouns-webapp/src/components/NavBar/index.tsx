@@ -153,30 +153,34 @@ const NavBar = () => {
               </Nav.Link>
               {isDaoGteV3 && (
                 <>
-                  <Nav.Link
-                    as={Link}
-                    to="/vote#candidates"
-                    className={classes.nounsNavLink}
-                    onClick={closeNav}
-                  >
-                    <NavBarButton
-                      buttonText={<Trans>Candidates</Trans>}
-                      buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
-                      buttonStyle={nonWalletButtonStyle}
-                    />
-                  </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to="/fork"
-                    className={classes.nounsNavLink}
-                    onClick={closeNav}
-                  >
-                    <NavBarButton
-                      buttonText={<Trans>Fork</Trans>}
-                      buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
-                      buttonStyle={nonWalletButtonStyle}
-                    />
-                  </Nav.Link>
+                  {config.featureToggles.candidates && (
+                    <Nav.Link
+                      as={Link}
+                      to="/vote#candidates"
+                      className={classes.nounsNavLink}
+                      onClick={closeNav}
+                    >
+                      <NavBarButton
+                        buttonText={<Trans>Candidates</Trans>}
+                        buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
+                        buttonStyle={nonWalletButtonStyle}
+                      />
+                    </Nav.Link>
+                  )}
+                  {config.featureToggles.fork && (
+                    <Nav.Link
+                      as={Link}
+                      to="/fork"
+                      className={classes.nounsNavLink}
+                      onClick={closeNav}
+                    >
+                      <NavBarButton
+                        buttonText={<Trans>Fork</Trans>}
+                        buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
+                        buttonStyle={nonWalletButtonStyle}
+                      />
+                    </Nav.Link>
+                  )}
                 </>
               )}
             </div>
