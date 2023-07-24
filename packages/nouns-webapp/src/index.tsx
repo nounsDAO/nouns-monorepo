@@ -34,7 +34,7 @@ import config, {
   multicallOnLocalhost,
 } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish, Event } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -145,12 +145,12 @@ const ChainSubscriber: React.FC = () => {
       sender: string,
       value: BigNumberish,
       extended: boolean,
-      event: any,
+      event: Event,
     ) => {
       const timestamp = (await event.getBlock()).timestamp;
-      const transactionHash = event.transactionHash;
+      const { transactionHash, transactionIndex } = event;
       dispatch(
-        appendBid(reduxSafeBid({ nounId, sender, value, extended, transactionHash, timestamp })),
+        appendBid(reduxSafeBid({ nounId, sender, value, extended, transactionHash, transactionIndex, timestamp })),
       );
     };
     const processAuctionCreated = (

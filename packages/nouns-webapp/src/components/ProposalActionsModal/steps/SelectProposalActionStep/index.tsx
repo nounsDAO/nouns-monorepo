@@ -43,9 +43,9 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
           <hr />
           <b>Supported Action Types</b>
           <hr />
-          <b>• Transfer Funds: </b>Send a fixed amount of ETH or USDC.
+          <b>• Transfer Funds: </b>Send USDC, ETH, or stETH.
           <br />
-          <b>• Stream Funds: </b>Stream a fixed amount of WETH or USDC.
+          <b>• Stream Funds: </b>Stream USDC or WETH over time.
           <br />
           <b>• Function Call: </b>Call a contract function.
         </Trans>

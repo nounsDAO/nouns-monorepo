@@ -1,12 +1,13 @@
 import { BigNumber } from 'ethers';
+import { Bid } from './types';
 
-const blockMultiple = BigNumber.from(1_000_000);
+const timestampMultiple = BigNumber.from(1_000_000);
 
-const generateBidScore = (bid: any) =>
-  BigNumber.from(bid.blockNumber).mul(blockMultiple).add(BigNumber.from(bid.txIndex));
+const generateBidScore = (bid: Bid) =>
+  BigNumber.from(bid.timestamp).mul(timestampMultiple).add(bid.transactionIndex);
 
-export const compareBids = (bidA: any, bidB: any): number => {
+export const compareBids = (bidA: Bid, bidB: Bid): number => {
   const aScore = generateBidScore(bidA);
   const bScore = generateBidScore(bidB);
-  return aScore.sub(bScore).toNumber();
+  return bScore.sub(aScore).toNumber();
 };

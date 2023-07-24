@@ -12,6 +12,7 @@ interface ExternalContractAddresses {
   tokenBuyer: string | undefined;
   nounsStreamFactory: string | undefined;
   weth: string | undefined;
+  steth: string | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -49,6 +50,8 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
+
+export const WALLET_CONNECT_V2_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
@@ -96,6 +99,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
     usdcToken: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
     weth: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+    steth: '0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F',
     payerContract: '0xD4A3bf1dF54699E63A2ef7F490E8E22b27B945f0',
     tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
     chainlinkEthUsdc: undefined,
@@ -117,6 +121,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
     weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    steth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
   },
   [ChainId.Hardhat]: {
@@ -126,6 +131,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
     weth: undefined,
+    steth: undefined,
     nounsStreamFactory: undefined,
   },
 };
