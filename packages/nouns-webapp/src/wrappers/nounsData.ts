@@ -71,7 +71,7 @@ export const useCandidateProposals = () => {
     }
   }, [currentBlock, blockNumber]);
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length >= 0 && candidate.canceled === false);
+  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
   const activeCandidateProposers = unmatchedCandidates?.map((candidate: PartialProposalCandidate) => candidate.proposer);
   const proposerDelegates = useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
   const threshold = useProposalThreshold() || 0;
