@@ -34,30 +34,35 @@ function CandidateCard(props: Props) {
   const [signatures, setSignatures] = useState<CandidateSignature[]>([]);
   const [signers, setSigners] = useState<string[]>([]);
   const [proposerVoteCount, setProposerVoteCount] = useState<number>();
-  const [nounsRequired, setNounsRequired] = useState<number>(0);
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers, props.currentBlock ?? 0);
   const activePendingProposers = useActivePendingUpdatableProposers(props.currentBlock ?? 0);
   const proposerDelegates = useDelegateNounsAtBlockQuery([props.candidate.proposer], props.currentBlock ?? 0) || 0;
-  const filterSigners = (delegateSnapshot: Delegates, latestProposal?: PartialProposal) => {
+  const filterSigners = (delegateSnapshot: Delegates, activePendingProposers: string[], signers: CandidateSignature[]) => {
     const activeSigs = props.candidate.latestVersion.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
-    let votes = 0;
-    let sigs: { reason: string; expirationTimestamp: number; sig: string; canceled: boolean; signer: { id: string; proposals: { id: string; }[]; }; }[] = [];
+    let voteCount = 0;
+    let sigs: CandidateSignature[] = [];
     activeSigs.forEach((signature) => {
       // don't count votes from signers who have active or pending proposals
-      delegateSnapshot.delegates?.forEach((delegate) => {
-        if (delegate.id === signature.signer.id && !activePendingProposers.data.includes(signature.signer.id)) {
-          votes += delegate.nounsRepresented.length;
-          sigs.push(signature);
-        }
-      });
+      if (!activePendingProposers.includes(signature.signer.id)) {
+        const delegateVoteCount = delegateSnapshot.delegates?.find(
+          delegate => delegate.id === signature.signer.id,
+        )?.nounsRepresented.length || 0;
+        voteCount += delegateVoteCount;
+        sigs.push(signature);
+      }
     });
-    setSignedVotesCount(votes);
-    return sigs;
+    return { sigs, voteCount };
   };
 
   useEffect(() => {
-    if (delegateSnapshot.data) {
-      props.latestProposal && setSignatures(filterSigners(delegateSnapshot.data, props.latestProposal));
+    if (delegateSnapshot.data && props.latestProposal && activePendingProposers.data) {
+      const { sigs, voteCount } = filterSigners(delegateSnapshot.data, activePendingProposers.data, props.candidate.latestVersion.content.contentSignatures);
+      if (sigs.length !== signatures.length) {
+        setSignatures(sigs);
+      }
+      if (voteCount !== signedVotesCount) {
+        setSignedVotesCount(voteCount);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.candidate, delegateSnapshot.data]);
@@ -70,12 +75,9 @@ function CandidateCard(props: Props) {
   useEffect(() => {
     if (proposerDelegates.data) {
       const voteCount = proposerDelegates.data.delegates[0]?.nounsRepresented.length;
-      const requiredVotes = ((props.nounsRequired) - voteCount) > 0 ? (props.nounsRequired) - voteCount : 0;
       setProposerVoteCount(voteCount);
-      setNounsRequired(requiredVotes);
     }
-
-  }, [proposerDelegates.data, props.nounsRequired]);
+  }, [proposerDelegates.data]);
 
   return (
     <Link
@@ -97,17 +99,16 @@ function CandidateCard(props: Props) {
           <div className={classes.candidateSponsors}>
             <CandidateSponsors
               signers={signatures}
-              nounsRequired={nounsRequired}
+              nounsRequired={props.candidate.requiredVotes}
               currentBlock={props.currentBlock && props.currentBlock - 1}
-              isThresholdMetByProposer={proposerVoteCount && proposerVoteCount >= props.nounsRequired ? true : false}
+              isThresholdMetByProposer={proposerVoteCount && proposerVoteCount >= props.candidate.requiredVotes ? true : false}
             />
             {proposerDelegates.data ? (
               <span className={clsx(classes.sponsorCount,
-                signers.length - nounsRequired > 0 && classes.sponsorCountOverflow
+                signers.length - props.candidate.requiredVotes > 0 && classes.sponsorCountOverflow
               )}>
-
                 <strong>
-                  {signedVotesCount >= 0 ? signedVotesCount : '...'} / {proposerVoteCount && proposerVoteCount > nounsRequired ? <em className={classes.naVotesLabel}>n/a</em> : nounsRequired}
+                  {signedVotesCount >= 0 ? signedVotesCount : '...'} / {proposerVoteCount && proposerVoteCount > props.candidate.requiredVotes ? <em className={classes.naVotesLabel}>n/a</em> : props.candidate.requiredVotes}
                 </strong>
                 {' '}
                 <Trans>sponsored votes</Trans>

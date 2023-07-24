@@ -29,20 +29,23 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock, isThresholdMe
   if (signers.length > maxVisibleSpots) {
     setSignerCountOverflow(signers.length - maxVisibleSpots);
   }
-  const placeholderCount = nounsRequired - signers.length;
+  const placeholderCount = (isThresholdMetByProposer && nounIds.length === 0) ? 1 : nounsRequired - nounIds.length;
   const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
+
   return (
     <div className={clsx(classes.sponsorsWrap,
       signerCountOverflow > 0 && classes.sponsorsWrapOverflow,
     )}>
-      <div className={classes.sponsors}>
-        {nounIds.map((nounId, i) => {
-          if (i >= maxVisibleSpots) return null;
-          return (
-            <CandidateSponsorImage nounId={+nounId} key={i} />
-          );
-        })}
-      </div>
+      {nounIds.length > 0 && (
+        <div className={classes.sponsors}>
+          {nounIds.map((nounId, i) => {
+            if (i >= maxVisibleSpots) return null;
+            return (
+              <CandidateSponsorImage nounId={+nounId} key={i} />
+            );
+          })}
+        </div>
+      )}
       {placeholderArray.map((_) => (
         <div className={classes.emptySponsorSpot} />
       ))}

@@ -169,16 +169,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     setIsThresholdMet(signedVotesCount - voteCount >= props.candidate.requiredVotes ? true : false);
   };
 
-  // useEffect(() => {
-  //   // set votes needed on render
-  //   if (props.isUpdateToProposal) {
-  //     setNumVotesNeeded(props.originalProposal?.signers.length || 0);
-  //   } else {
-  //     setNumVotesNeeded(props.requiredVotes - proposerNounVotes);
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [props.requiredVotes, props.originalProposal?.signers.length, props.isUpdateToProposal, proposerNounVotes]);
   return (
     <>
       {delegateSnapshot.data && blockNumber && (
