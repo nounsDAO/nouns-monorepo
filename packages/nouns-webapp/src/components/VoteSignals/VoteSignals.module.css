@@ -172,6 +172,7 @@
 
 .feedbackForm button {
   padding: 10px 16px;
+  line-height: 1;
   border: 0;
   border-radius: 10px;
   background-color: #000;
