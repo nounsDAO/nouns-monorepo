@@ -34,6 +34,12 @@
   /* slightly darker text for legibility */
   color: #dc9e46;
 }
+.objection {
+  border: 2px solid var(--brand-color-red);
+  background-color: #fff;
+  /* slightly darker text for legibility */
+  color: var(--brand-color-red);
+}
 
 .votePageProposalStatus {
   margin-top: 0.8rem;

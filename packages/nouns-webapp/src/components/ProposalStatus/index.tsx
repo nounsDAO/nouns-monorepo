@@ -8,8 +8,9 @@ const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
-    case ProposalState.OBJECTION_PERIOD:
       return classes.primary;
+    case ProposalState.OBJECTION_PERIOD:
+      return classes.objection;
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
       return classes.success;
