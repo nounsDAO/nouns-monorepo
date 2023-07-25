@@ -52,8 +52,8 @@ const NounsIntroSection = () => {
             </p>
           </div>
         </Col>
-        <Col lg={6} style={{marginTop:'-100px'}}>
-          <Row style={{textAlign:'center'}}>
+        <Col lg={6} style={{marginTop:'10px'}}>
+          <Row style={{textAlign:'center', marginBottom:'150px'}}>
             <Card
             className={classes.card}
             onClick={(e) => {
