@@ -64,7 +64,7 @@ const NounsIntroSection = () => {
               className={classes.card}
               onClick={(e) => {
                 e.preventDefault();
-                window.open('https://app.charmverse.io/atx-dao/page-6656633176995772', `_blank`);
+                window.open('https://calendar.google.com/calendar/u/0/r?cid=c_k4h21h5hj127usvnf4lgvbkvd8@group.calendar.google.com', `_blank`);
               }}  style={{ cursor: "pointer", padding: '0.2rem', width: '200px', margin: 'auto'}}>
               <a href="https://calendar.google.com/calendar/u/0/r?cid=c_k4h21h5hj127usvnf4lgvbkvd8@group.calendar.google.com">
               <img style ={{width:'100%', border:'2px solid rgb(60 135 249)'}} src={googleCalendarImage} alt="Google Calendar" /></a>
