@@ -42,8 +42,6 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     await cancelSig(props.sig);
   }
   const timestampNow = Date.now();
-  console.log('timestampNow', timestampNow)
-  console.log('props.expirationTimestamp', props.expirationTimestamp)
 
   useEffect(() => {
     switch (cancelSigState.status) {
