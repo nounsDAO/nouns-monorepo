@@ -364,7 +364,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
-          // value: utils.parseUnits(txn.value ?? '0', 18).toString(),
           value: txn.value ?? '0',
           calldata: txn.callData,
           signature: txn.functionSig ?? '',

@@ -54,6 +54,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
+
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -205,7 +206,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProposalCandidateState, setModal]);
 
-
+  // set initial values on page load 
   useEffect(() => {
     if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
       const transactions = candidate.data?.version.content.details.map(
@@ -242,7 +243,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       0, // proposalIdToUpdate
       commitMessage,
-      { value: hasVotes ? 0 : updateCandidateCost }, // Fee for non-nouners
+      { value: hasVotes ? 0 : (updateCandidateCost ?? 0) }, // Fee for non-nouners
     );
   };
 
@@ -321,24 +322,24 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           handleCreateProposal={handleUpdateProposal}
           isCandidate={true}
         />
-        <p className={classes.feeNotice}>
-          {!hasVotes && (
+
+        {!hasVotes && updateCandidateCost && +ethers.utils.formatEther(updateCandidateCost) > 0 && (
+          <p className={classes.feeNotice}>
+            {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
+            submission
+          </p>
+
+        )}
+
+        <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans>
+          {proposal && proposal.content.contentSignatures?.length > 0 && (
             <>
-              {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
-              submission
+              <br />
+              <Trans>This candidate currently has {proposal.content.contentSignatures?.length} signatures.</Trans>
             </>
           )}
         </p>
-        <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans></p>
-        <p className="text-center pt-0">
-          <>
-            {proposal && proposal.content.contentSignatures?.length > 0 ? (
-              <Trans>Updating this proposal candidate will clear all previous signers. {" "} This candidate currently has {proposal.content.contentSignatures?.length} signatures.</Trans>
-            ) : (
-              ''
-            )}
-          </>
-        </p>
+
       </Col>
     </Section>
   );
