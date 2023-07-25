@@ -14,7 +14,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
-    address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
     address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
     address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
@@ -33,7 +32,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
             NOUNS_DAO_PROXY_MAINNET,
             NOUNS_TIMELOCK_V1_MAINNET,
             timelockV2,
-            NOUNS_TOKEN_MAINNET,
             AUCTION_HOUSE_PROXY_ADMIN_MAINNET,
             LILNOUNS_MAINNET,
             description
@@ -47,12 +45,11 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         NounsDAOLogicV3 daoProxy,
         address timelockV1,
         address timelockV2,
-        address nounsToken,
         address auctionHouseProxyAdmin,
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 8;
+        uint8 numTxs = 7;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -78,13 +75,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'setApprovalForAll(address,bool)';
         calldatas[i] = abi.encode(timelockV2, true);
-
-        // Transfer DAO-owned Nouns to timelockV2
-        i++;
-        targets[i] = nounsToken;
-        values[i] = 0;
-        signatures[i] = 'transferFrom(address,address,uint256)';
-        calldatas[i] = abi.encode(timelockV1, timelockV2, 687);
 
         // Transfer ownership of TokenBuyer
         i++;
