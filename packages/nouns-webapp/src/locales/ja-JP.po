@@ -1164,6 +1164,7 @@ msgid "Proposal Created!<0/>"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
+#: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
 msgstr "提案が実行されました！"
 
@@ -1323,6 +1324,10 @@ msgstr "少なく表示する"
 #: src/components/NavWallet/index.tsx
 msgid "Sign out"
 msgstr "サインアウト"
+
+#: src/components/CandidateSponsors/Signature.tsx
+msgid "Signature invalid while signer has an active or pending proposal"
+msgstr ""
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Signature request"
@@ -1535,6 +1540,10 @@ msgstr ""
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
 
+#: src/pages/EditCandidate/index.tsx
+msgid "This candidate currently has {0} signatures."
+msgstr ""
+
 #: src/components/CandidateSponsors/index.tsx
 msgid "This candidate has met the required threshold, but Nouns voters can still add support until it’s put onchain."
 msgstr ""
@@ -1552,8 +1561,8 @@ msgid "This proposal was created by candidate signatures. Editing the proposal w
 msgstr ""
 
 #: src/components/CandidateSponsors/Signature.tsx
-msgid "This signature is invalid while the signer has an active or pending proposal."
-msgstr ""
+#~ msgid "This signature is invalid while the signer has an active or pending proposal."
+#~ msgstr ""
 
 #: src/components/ProposalContent/ProposalTransaction.tsx
 #: src/components/ProposalContent/ProposalTransactions.tsx
@@ -1661,8 +1670,8 @@ msgid "Update proposal candidates must be re-signed by the original signers."
 msgstr ""
 
 #: src/pages/EditCandidate/index.tsx
-msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
-msgstr ""
+#~ msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
+#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Updating..."

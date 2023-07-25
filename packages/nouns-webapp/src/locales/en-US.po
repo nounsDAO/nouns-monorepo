@@ -1159,6 +1159,7 @@ msgid "Proposal Created!<0/>"
 msgstr "Proposal Created!<0/>"
 
 #: src/pages/Vote/index.tsx
+#: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
 msgstr "Proposal Executed!"
 
@@ -1318,6 +1319,10 @@ msgstr "Show fewer"
 #: src/components/NavWallet/index.tsx
 msgid "Sign out"
 msgstr "Sign out"
+
+#: src/components/CandidateSponsors/Signature.tsx
+msgid "Signature invalid while signer has an active or pending proposal"
+msgstr "Signature invalid while signer has an active or pending proposal"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Signature request"
@@ -1530,6 +1535,10 @@ msgstr "There's a way for everyone to get involved with Nouns. From whimsical en
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "This Noun has no activity, since it was just created. Check back soon!"
 
+#: src/pages/EditCandidate/index.tsx
+msgid "This candidate currently has {0} signatures."
+msgstr "This candidate currently has {0} signatures."
+
 #: src/components/CandidateSponsors/index.tsx
 msgid "This candidate has met the required threshold, but Nouns voters can still add support until it’s put onchain."
 msgstr "This candidate has met the required threshold, but Nouns voters can still add support until it’s put onchain."
@@ -1547,8 +1556,8 @@ msgid "This proposal was created by candidate signatures. Editing the proposal w
 msgstr "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 
 #: src/components/CandidateSponsors/Signature.tsx
-msgid "This signature is invalid while the signer has an active or pending proposal."
-msgstr "This signature is invalid while the signer has an active or pending proposal."
+#~ msgid "This signature is invalid while the signer has an active or pending proposal."
+#~ msgstr "This signature is invalid while the signer has an active or pending proposal."
 
 #: src/components/ProposalContent/ProposalTransaction.tsx
 #: src/components/ProposalContent/ProposalTransactions.tsx
@@ -1656,8 +1665,8 @@ msgid "Update proposal candidates must be re-signed by the original signers."
 msgstr "Update proposal candidates must be re-signed by the original signers."
 
 #: src/pages/EditCandidate/index.tsx
-msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
-msgstr "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
+#~ msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
+#~ msgstr "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Updating..."
