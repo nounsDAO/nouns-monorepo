@@ -7,6 +7,7 @@ import {
   useCancelProposal,
   useCurrentQuorum,
   useExecuteProposal,
+  useExecuteProposalOnTimelockV1,
   useHasVotedOnProposal,
   useIsDaoGteV3,
   useProposal,
@@ -120,13 +121,11 @@ const VotePage = ({
   } = useQuery(propUsingDynamicQuorum(id ?? '0'));
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
+  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } = useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
-
   const hasVoted = useHasVotedOnProposal(proposal?.id);
-
-
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
@@ -269,7 +268,11 @@ const VotePage = ({
     }
     return () => {
       if (proposal?.id) {
-        return executeProposal(proposal.id);
+        if (proposal?.onTimelockV1) {
+          return executeProposalOnTimelockV1(proposal.id);
+        } else {
+          return executeProposal(proposal.id);
+        }
       }
     };
   })();
@@ -284,8 +287,6 @@ const VotePage = ({
       };
     }
   })();
-
-
 
   const handleRefetchData = () => {
     proposalFeedback.refetch();
@@ -359,6 +360,16 @@ const VotePage = ({
   );
 
   useEffect(
+    () =>
+      onTransactionStateChange(
+        executeProposalOnTimelockV1State,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
+    [executeProposalOnTimelockV1State, onTransactionStateChange, setModal],
+  );
+
+  useEffect(
     () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
     [cancelProposalState, onTransactionStateChange, setModal],
   );
@@ -414,11 +425,6 @@ const VotePage = ({
     } else {
       setIsObjectionPeriod(false);
     }
-    // if (proposal && proposal.objectionPeriodEndBlock > 0) {
-    //   setWillHaveObjectionPeriod(true);
-    // } else {
-    //   setWillHaveObjectionPeriod(false);
-    // }
   }, [currentBlock, proposal?.status, proposal]);
 
 
@@ -438,11 +444,8 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
-
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
-
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
@@ -756,6 +759,7 @@ const VotePage = ({
                 title={proposal.title}
                 details={proposal.details}
                 hasSidebar={true}
+                proposeOnV1={proposal.onTimelockV1}
               />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
@@ -779,6 +783,7 @@ const VotePage = ({
               description={proposal.description}
               title={proposal.title}
               details={proposal.details}
+              proposeOnV1={proposal.onTimelockV1}
             />
           </Col>
         </Row>

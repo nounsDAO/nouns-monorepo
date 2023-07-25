@@ -1,10 +1,10 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail } from '../../wrappers/nounsDao';
+import { ProposalDetail, useTimelockV1Contract } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
+import { buildEtherscanAddressLink, buildEtherscanHoldingsLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
@@ -18,6 +18,7 @@ interface ProposalContentProps {
   title: string;
   details: ProposalDetail[];
   hasSidebar?: boolean;
+  proposeOnV1?: boolean;
 }
 
 export const linkIfAddress = (content: string) => {
@@ -48,6 +49,9 @@ export const transactionIconLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { description, title, details } = props;
+  const timelockV1Contract = useTimelockV1Contract();
+  const daoEtherscanLink = buildEtherscanHoldingsLink(timelockV1Contract ?? '');
+
   return (
     <>
       <Row>
@@ -70,6 +74,11 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <h5>
               <Trans>Proposed Transactions</Trans>
             </h5>
+            {props.proposeOnV1 && (
+              <Alert variant="warning" className="mb-4">
+                <Trans>This proposal interacts with the <a href={daoEtherscanLink} target='_blank' rel="noreferrer">original treasury</a></Trans>
+              </Alert>
+            )}
             <ProposalTransactions details={details} />
           </Col>
         </Row>

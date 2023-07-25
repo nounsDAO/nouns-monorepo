@@ -112,6 +112,7 @@ export interface Proposal extends PartialProposal {
   details: ProposalDetail[];
   transactionHash: string;
   signers: { id: string }[];
+  onTimelockV1: boolean;
 }
 
 export interface ProposalVersion {
@@ -164,6 +165,7 @@ export interface ProposalSubgraphEntity
   createdTimestamp: string;
   proposer: { id: string };
   proposalThreshold: string;
+  onTimelockV1: boolean;
 }
 
 interface PartialProposalData {
@@ -651,6 +653,7 @@ const parseSubgraphProposal = (
     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
     signers: proposal.signers,
+    onTimelockV1: proposal.onTimelockV1 === null ? false : true,
   };
 };
 
@@ -899,6 +902,13 @@ export const useExecuteProposal = () => {
     'execute',
   );
   return { executeProposal, executeProposalState };
+};
+export const useExecuteProposalOnTimelockV1 = () => {
+  const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } = useContractFunction(
+    nounsDaoContract,
+    'executeOnTimelockV1',
+  );
+  return { executeProposalOnTimelockV1, executeProposalOnTimelockV1State };
 };
 
 // fork functions 
@@ -1237,4 +1247,14 @@ export const useTimelockV1Contract = (): string | undefined => {
       method: 'timelockV1',
     }) || [];
   return timelockV1;
+}
+
+export const useLastMinuteWindowInBlocks = (): number | undefined => {
+  const [lastMinuteWindowInBlocks] =
+    useContractCall({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'lastMinuteWindowInBlocks',
+    }) || [];
+  return lastMinuteWindowInBlocks?.toNumber();
 }

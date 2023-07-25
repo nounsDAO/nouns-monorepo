@@ -165,7 +165,6 @@ const CreateProposalPage = () => {
 
   const handleCreateProposal = async () => {
     if (!proposalTransactions?.length) return;
-
     if (isProposeOnV1) {
       await proposeOnTimelockV1(
         proposalTransactions.map(({ address }) => address), // Targets
@@ -299,7 +298,7 @@ const CreateProposalPage = () => {
           onBodyInput={handleBodyInput}
         />
         {isDaoGteV3 && config.featureToggles.proposeOnV1 && (
-          <div className={classes.timelockOption}>test
+          <div className={classes.timelockOption}>
             <div className={classes.timelockSelect}>
               <Form.Check
                 type='checkbox'
