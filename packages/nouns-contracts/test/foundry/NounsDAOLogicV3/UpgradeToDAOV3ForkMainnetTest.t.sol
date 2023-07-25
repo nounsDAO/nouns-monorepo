@@ -58,6 +58,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     uint256 initialETHInTreasury;
     uint256 expectedTreasuryV2ETHBalanceAfterFirstProposal;
     uint256 stETHBalance;
+    uint256 stETHBuffer;
     NounsDAOExecutorV2 timelockV2;
     NounsDAOLogicV3 daoV3;
 
@@ -75,6 +76,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         stETHBalance = IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET));
         initialETHInTreasury = address(NOUNS_TIMELOCK_V1_MAINNET).balance;
         expectedTreasuryV2ETHBalanceAfterFirstProposal = upgradePropScript.ETH_TO_SEND_TO_NEW_TIMELOCK();
+        stETHBuffer = upgradePropScript.STETH_BUFFER();
 
         // give ourselves voting power
         vm.prank(NOUNDERS);
@@ -184,13 +186,18 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(daoV3.voteSnapshotBlockSwitchProposalId(), 348);
     }
 
-    function test_transfersAllstETH() public {
-        assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 1);
-        assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), stETHBalance - 1);
+    function test_transfersAllstETHExceptTheBuffer() public {
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), stETHBuffer);
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), stETHBalance - stETHBuffer - 1);
     }
 
-    function test_AuctionHouse_changedOwner() public {
+    function test_AuctionHouseProxyAndAdmin_changedOwner() public {
         assertEq(IOwnable(AUCTION_HOUSE_PROXY_MAINNET).owner(), address(timelockV2));
+        assertEq(Ownable(AUCTION_HOUSE_PROXY_ADMIN_MAINNET).owner(), address(timelockV2));
+    }
+
+    function test_descriptor_changedOwner() public {
+        assertEq(Ownable(DESCRIPTOR_MAINNET).owner(), address(timelockV2));
     }
 
     function test_AuctionHouseRevenueGoesToNewTimelock() public {
@@ -262,14 +269,13 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         voteAndExecuteProposal();
 
         assertEq(nouns.owner(), address(timelockV2));
-        assertEq(Ownable(DESCRIPTOR_MAINNET).owner(), address(timelockV2));
-        assertEq(Ownable(AUCTION_HOUSE_PROXY_ADMIN_MAINNET).owner(), address(timelockV2));
         assertEq(address(NOUNS_TIMELOCK_V1_MAINNET).balance, 0);
         assertEq(address(timelockV2).balance, expectedV2Balance);
         assertTrue(IERC721(LILNOUNS_MAINNET).isApprovedForAll(address(NOUNS_TIMELOCK_V1_MAINNET), address(timelockV2)));
         assertEq(nouns.balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), 0);
         assertEq(IOwnable(TOKEN_BUYER_MAINNET).owner(), address(timelockV2));
         assertEq(IOwnable(PAYER_MAINNET).owner(), address(timelockV2));
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), stETHBalance - 1);
         assertEq(IERC20(WSTETH_MAINNET).balanceOf(address(timelockV2)), wstETHExpectedBalance);
         assertEq(IERC20(RETH_MAINNET).balanceOf(address(timelockV2)), rETHExpectedBalance);
     }
