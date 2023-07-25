@@ -75,13 +75,11 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const activeLocale = useActiveLocale();
   const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
-  console.log('props.proposal', props.proposal);
   useEffect(() => {
     if (hasManyVersions) {
       const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
       latestProposalVersion && setUpdatedTimestamp(+latestProposalVersion.createdAt);
     } else {
-      // const createdAtTimestampFromBlock = currentBlock && timestampFromBlockNumber(props.proposal?.createdBlock, currentBlock);
       setCreatedTimestamp(props.proposal.createdTimestamp);
     }
 
