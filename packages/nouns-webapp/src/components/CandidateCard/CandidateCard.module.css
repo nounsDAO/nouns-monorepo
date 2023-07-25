@@ -13,6 +13,10 @@
   text-decoration: none;
   color: inherit;
   margin-bottom: 1rem;
+  text-align: center;
+  @media screen and (min-width: 768px) {
+    text-align: left;
+  }
 }
 
 .candidateLink:hover {
@@ -30,11 +34,12 @@
   padding-top: 10px;
   margin-top: 10px;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   justify-content: space-between;
-  /* align-items: center; */
+  align-items: center;
   @media screen and (min-width: 768px) {
     flex-direction: row;
+    align-items: flex-start;
   }
 }
 
