@@ -1227,13 +1227,7 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
 };
 
 export const useIsDaoGteV3 = (): boolean => {
-  const [forkDAODeployer] =
-    useContractCall({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'forkDAODeployer',
-    }) || [];
-  if (forkDAODeployer) {
+  if (config.featureToggles.daoGteV3) {
     return true;
   }
   return false
