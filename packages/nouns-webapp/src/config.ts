@@ -69,7 +69,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.2/gn',
+    subgraphApiUri: 'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.3/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId_Sepolia]: {
