@@ -48,8 +48,8 @@ const NavBar = () => {
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
-    ? NavBarButtonStyle.COOL_INFO
-    : NavBarButtonStyle.WARM_INFO;
+      ? NavBarButtonStyle.COOL_INFO
+      : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
@@ -58,7 +58,7 @@ const NavBar = () => {
     navDropdownClasses.warmInfoSelected,
     history,
   );
-  const candidatesNavItam = config.featureToggles.candidates ? (
+  const candidatesNavItem = config.featureToggles.candidates ? (
     <Dropdown.Item className={buttonClasses} href="/vote#candidates">
       <Trans>Candidates</Trans>
     </Dropdown.Item>
@@ -88,7 +88,7 @@ const NavBar = () => {
       >
         <Trans>Proposals</Trans>
       </Dropdown.Item>
-      {candidatesNavItam}
+      {candidatesNavItem}
       {forkNavItem}
     </NavDropdown>
   );
