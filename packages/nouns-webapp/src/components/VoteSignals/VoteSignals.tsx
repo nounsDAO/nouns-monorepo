@@ -3,10 +3,7 @@ import classes from './VoteSignals.module.css';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
 import VoteSignalGroup from './VoteSignalGroup';
-import {
-  VoteSignalDetail,
-  useSendFeedback,
-} from '../../wrappers/nounsData';
+import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useAppDispatch } from '../../hooks';
 import { useEthers } from '@usedapp/core';
@@ -37,7 +34,9 @@ function VoteSignals(props: Props) {
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
   const [expandedGroup, setExpandedGroup] = useState<number | undefined>(undefined);
-  const { sendFeedback, sendFeedbackState } = useSendFeedback(props.isCandidate === true ? 'candidate' : 'proposal');
+  const { sendFeedback, sendFeedbackState } = useSendFeedback(
+    props.isCandidate === true ? 'candidate' : 'proposal',
+  );
   const { account } = useEthers();
   const supportText = ['Against', 'For', 'Abstain'];
 
@@ -97,7 +96,6 @@ function VoteSignals(props: Props) {
     } else {
       await sendFeedback(proposalId, supportNum, reason);
     }
-
   }
 
   const dispatch = useAppDispatch();
@@ -146,36 +144,39 @@ function VoteSignals(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendFeedbackState, setModal]);
 
-  const userFeedbackAdded = <Trans>You provided{' '}
-    <span
-      className={clsx(
-        userVoteSupport?.supportDetailed === 1 && classes.forText,
-        userVoteSupport?.supportDetailed === 0 && classes.againstText,
-        userVoteSupport?.supportDetailed === 2 && classes.abstainText,
-      )}
-    >
-      {userVoteSupport &&
-        supportText[userVoteSupport.supportDetailed].toLowerCase()}
-    </span>{' '}
-    feedback{' '}
-    {userVoteSupport?.createdTimestamp &&
-      dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
-  </Trans>
-  const title = <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
+  const userFeedbackAdded = (
+    <Trans>
+      You provided{' '}
+      <span
+        className={clsx(
+          userVoteSupport?.supportDetailed === 1 && classes.forText,
+          userVoteSupport?.supportDetailed === 0 && classes.againstText,
+          userVoteSupport?.supportDetailed === 2 && classes.abstainText,
+        )}
+      >
+        {userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()}
+      </span>{' '}
+      feedback{' '}
+      {userVoteSupport?.createdTimestamp &&
+        dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
+    </Trans>
+  );
+  const title = (
+    <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
+  );
 
   return (
     <>
       {props.proposalId && (
         <div className={clsx(classes.voteSignals, props.isCandidate && classes.isCandidate)}>
           <div className={classes.header}>
-            <h2>
-              {title}
-            </h2>
+            <h2>{title}</h2>
             {!props.isCandidate && (
               <p>
                 <Trans>
-                  Nouns voters can cast voting signals to give proposers of pending proposals an idea of
-                  how they intend to vote and helpful guidance on proposal changes to change their vote.
+                  Nouns voters can cast voting signals to give proposers of pending proposals an
+                  idea of how they intend to vote and helpful guidance on proposal changes to change
+                  their vote.
                 </Trans>
               </p>
             )}
@@ -188,22 +189,42 @@ function VoteSignals(props: Props) {
             ) : (
               <>
                 <div className={classes.voteSignalGroupsList}>
-                  <VoteSignalGroup voteSignals={forFeedback} support={1} isExpanded={expandedGroup === 1} />
-                  <VoteSignalGroup voteSignals={againstFeedback} support={0} isExpanded={expandedGroup === 0} />
-                  <VoteSignalGroup voteSignals={abstainFeedback} support={2} isExpanded={expandedGroup === 2} />
+                  <VoteSignalGroup
+                    voteSignals={forFeedback}
+                    support={1}
+                    isExpanded={expandedGroup === 1}
+                  />
+                  <VoteSignalGroup
+                    voteSignals={againstFeedback}
+                    support={0}
+                    isExpanded={expandedGroup === 0}
+                  />
+                  <VoteSignalGroup
+                    voteSignals={abstainFeedback}
+                    support={2}
+                    isExpanded={expandedGroup === 2}
+                  />
                 </div>
                 {!props.isFeedbackClosed && props.userVotes !== undefined && props.userVotes > 0 && (
                   <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                     {!hasUserVoted ? (
                       <>
-                        {(isTransactionWaiting || isTransactionPending) ? (
+                        {isTransactionWaiting || isTransactionPending ? (
                           <>
-                            <p><Trans>Adding your feedback</Trans></p>
-                            <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+                            <p>
+                              <Trans>Adding your feedback</Trans>
+                            </p>
+                            <img
+                              src="/loading-noggles.svg"
+                              alt="loading"
+                              className={classes.loadingNoggles}
+                            />
                           </>
                         ) : (
                           <>
-                            <p><Trans>Add your feedback</Trans></p>
+                            <p>
+                              <Trans>Add your feedback</Trans>
+                            </p>
                             <div className={classes.buttons}>
                               <button
                                 className={clsx(
@@ -215,7 +236,9 @@ function VoteSignals(props: Props) {
                                     : classes.unselectedSupport,
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
-                                onClick={() => support === 1 ? setSupport(undefined) : setSupport(1)}
+                                onClick={() =>
+                                  support === 1 ? setSupport(undefined) : setSupport(1)
+                                }
                               >
                                 <Trans>For</Trans>
                               </button>
@@ -246,7 +269,7 @@ function VoteSignals(props: Props) {
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
-                                  support === 2 ? setSupport(undefined) : setSupport(2)
+                                  support === 2 ? setSupport(undefined) : setSupport(2);
                                 }}
                               >
                                 <Trans>Abstain</Trans>
@@ -263,14 +286,23 @@ function VoteSignals(props: Props) {
                               />
                               <button
                                 className={clsx(classes.button, classes.submit)}
-                                disabled={support === undefined || isTransactionPending || isTransactionWaiting}
+                                disabled={
+                                  support === undefined ||
+                                  isTransactionPending ||
+                                  isTransactionWaiting
+                                }
                                 onClick={() => {
                                   setIsTransactionWaiting(true);
                                   props.proposalId &&
                                     support !== undefined &&
-                                    handleFeedbackSubmit(+props.proposalId, support, reasonText, props.candidateSlug, props.proposer)
-                                }
-                                }
+                                    handleFeedbackSubmit(
+                                      +props.proposalId,
+                                      support,
+                                      reasonText,
+                                      props.candidateSlug,
+                                      props.proposer,
+                                    );
+                                }}
                               >
                                 <Trans>Submit</Trans>
                               </button>
@@ -280,9 +312,7 @@ function VoteSignals(props: Props) {
                       </>
                     ) : (
                       <div className={classes.voted}>
-                        <p>
-                          {userFeedbackAdded}
-                        </p>
+                        <p>{userFeedbackAdded}</p>
                         {userVoteSupport?.reason && (
                           <div className={classes.userVotedReason}>
                             <p>&ldquo;{userVoteSupport.reason}&rdquo;</p>
@@ -298,8 +328,9 @@ function VoteSignals(props: Props) {
           {props.isCandidate && (
             <p className={classes.descriptionBelow}>
               <Trans>
-                Nouns voters can cast voting signals to give proposers of pending proposals an idea of
-                how they intend to vote and helpful guidance on proposal changes to change their vote.
+                Nouns voters can cast voting signals to give proposers of pending proposals an idea
+                of how they intend to vote and helpful guidance on proposal changes to change their
+                vote.
               </Trans>
             </p>
           )}

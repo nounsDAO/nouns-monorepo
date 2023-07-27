@@ -246,14 +246,14 @@
 }
 .versionHistory .version:hover {
   background-color: #e6e6eb;
-  border: 1px solid rgba(0,0,0,0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .versionHistory .version.activeVersion h4 {
   color: var(--brand-gray-dark-text);
 }
 .versionHistory .version.activeVersion {
-  border: 1px solid rgba(0,0,0,0.4);
+  border: 1px solid rgba(0, 0, 0, 0.4);
   background-color: #fff;
 }
 

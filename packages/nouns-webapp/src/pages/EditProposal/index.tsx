@@ -57,8 +57,10 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { account } = useEthers();
   const { updateProposal, updateProposalState } = useUpdateProposal();
-  const { updateProposalDescription, updateProposalDescriptionState } = useUpdateProposalDescription();
-  const { updateProposalTransactions, updateProposaTransactionsState } = useUpdateProposalTransactions();
+  const { updateProposalDescription, updateProposalDescriptionState } =
+    useUpdateProposalDescription();
+  const { updateProposalTransactions, updateProposaTransactionsState } =
+    useUpdateProposalTransactions();
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
   const createCandidateCost = useGetCreateCandidateCost();
@@ -75,7 +77,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');
   };
-  const isolatedDescription = proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
+  const isolatedDescription =
+    proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
   const isProposedBySigners = proposal?.signers && proposal?.signers?.length > 0 ? true : false;
 
   const handleAddProposalAction = useCallback(
@@ -108,8 +111,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     },
     [proposalTransactions, totalUSDCPayment],
   );
-
-
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -185,7 +186,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   );
 
   useEffect(() => {
-    (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
+    isTitleEdited || isBodyEdited ? setIsProposalEdited(true) : setIsProposalEdited(false);
   }, [isTitleEdited, isBodyEdited]);
 
   useEffect(() => {
@@ -302,26 +303,24 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
 
   const isTransactionsEdited = () => {
     if (originalProposalTransactions.length !== proposalTransactions.length) {
-      return true
+      return true;
     }
     for (let i = 0; i < originalProposalTransactions.length; i++) {
       if (
         originalProposalTransactions[i].target !== proposalTransactions[i].address ||
         originalProposalTransactions[i].value !== proposalTransactions[i].value
       ) {
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   };
 
   const isDescriptionEdited = () => {
-    return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false
+    return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false;
   };
 
   const handleUpdateProposal = async () => {
-    console.log('handleUpdateProposal');
-    console.log('proposalTransactions', proposalTransactions);
     if (!proposalTransactions?.length) return;
     if (proposal === undefined) return;
 
@@ -332,7 +331,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         proposal.id,
         `# ${titleValue}\n\n${bodyValue}`,
         commitMessage,
-      )
+      );
     }
     if (!isDescriptionEdited() && isTransactionsEdited()) {
       // only update transactions
@@ -343,8 +342,9 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
         proposalTransactions.map(({ calldata }) => calldata), // Calldatas
         commitMessage,
-      )
-    } if (isDescriptionEdited() && isTransactionsEdited()) {
+      );
+    }
+    if (isDescriptionEdited() && isTransactionsEdited()) {
       // update all
       await updateProposal(
         proposal.id, // proposalId
@@ -358,9 +358,17 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
-  // set initial values on page load 
+  // set initial values on page load
   useEffect(() => {
-    if (proposal && !titleValue && !bodyValue && !proposalTransactions.length && !originalTitleValue && !originalBodyValue && !originalProposalTransactions.length) {
+    if (
+      proposal &&
+      !titleValue &&
+      !bodyValue &&
+      !proposalTransactions.length &&
+      !originalTitleValue &&
+      !originalBodyValue &&
+      !originalProposalTransactions.length
+    ) {
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
@@ -393,7 +401,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
-      props.match.params.id,// proposalIdToUpdate - use 0 for new proposals
+      props.match.params.id, // proposalIdToUpdate - use 0 for new proposals
       { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
@@ -410,11 +418,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Candidate Created!
-            <br />
-            <Link to={`/candidates/${slug}`}>View the candidate</Link>
-
-          </Trans>,
+          message: (
+            <Trans>
+              Proposal Candidate Created!
+              <br />
+              <Link to={`/candidates/${slug}`}>View the candidate</Link>
+            </Trans>
+          ),
           show: true,
         });
         setProposePending(false);
@@ -438,8 +448,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProposalCandidateState, setModal]);
-
-  console.log('is edited?', isProposalEdited, isTitleEdited, isBodyEdited, isTransactionsEdited(), isDescriptionEdited());
 
   if (!isProposer()) {
     return null;
@@ -465,13 +473,16 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           <b>
             <Trans>Note</Trans>
           </b>
-          :{" "}
+          :{' '}
           {isProposedBySigners ? (
-            <Trans>This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal.</Trans>
+            <Trans>
+              This proposal was created by candidate signatures. Editing the proposal will create a
+              new proposal candidate requiring the original signers to resign to update the onchain
+              proposal.
+            </Trans>
           ) : (
             <Trans>Editing a proposal will clear all previous feedback</Trans>
           )}
-
         </Alert>
         <div className="d-grid">
           <Button
@@ -523,8 +534,12 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={isProposer() ? true : hasEnoughVote}
-          isFormInvalid={(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ? false : true}
-          handleCreateProposal={isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal}
+          isFormInvalid={
+            isProposalEdited || isTransactionsEdited() || isDescriptionEdited() ? false : true
+          }
+          handleCreateProposal={
+            isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal
+          }
         />
       </Col>
     </Section>

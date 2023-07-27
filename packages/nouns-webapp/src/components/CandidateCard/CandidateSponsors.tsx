@@ -13,7 +13,12 @@ type Props = {
   isThresholdMetByProposer?: boolean;
 };
 
-function CandidateSponsors({ signers, nounsRequired, currentBlock, isThresholdMetByProposer }: Props) {
+function CandidateSponsors({
+  signers,
+  nounsRequired,
+  currentBlock,
+  isThresholdMetByProposer,
+}: Props) {
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const signerIds = signers?.map(s => s.signer.id) ?? [];
@@ -29,24 +34,26 @@ function CandidateSponsors({ signers, nounsRequired, currentBlock, isThresholdMe
   if (signers.length > maxVisibleSpots) {
     setSignerCountOverflow(signers.length - maxVisibleSpots);
   }
-  const placeholderCount = (isThresholdMetByProposer && nounIds.length === 0) ? 1 : nounsRequired - nounIds.length;
+  const placeholderCount =
+    isThresholdMetByProposer && nounIds.length === 0 ? 1 : nounsRequired - nounIds.length;
   const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
 
   return (
-    <div className={clsx(classes.sponsorsWrap,
-      signerCountOverflow > 0 && classes.sponsorsWrapOverflow,
-    )}>
+    <div
+      className={clsx(
+        classes.sponsorsWrap,
+        signerCountOverflow > 0 && classes.sponsorsWrapOverflow,
+      )}
+    >
       {nounIds.length > 0 && (
         <div className={classes.sponsors}>
           {nounIds.map((nounId, i) => {
             if (i >= maxVisibleSpots) return null;
-            return (
-              <CandidateSponsorImage nounId={+nounId} key={i} />
-            );
+            return <CandidateSponsorImage nounId={+nounId} key={i} />;
           })}
         </div>
       )}
-      {placeholderArray.map((_) => (
+      {placeholderArray.map(_ => (
         <div className={classes.emptySponsorSpot} />
       ))}
     </div>

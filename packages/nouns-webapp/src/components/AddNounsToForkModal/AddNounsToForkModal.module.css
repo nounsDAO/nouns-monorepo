@@ -8,10 +8,12 @@
   margin-bottom: 10px;
   width: 100%;
 }
-.inputs input, .inputs select {
+.inputs input,
+.inputs select {
   padding: 10px 12px;
 }
-.inputs small, .sectionLabel p {
+.inputs small,
+.sectionLabel p {
   font-size: 16px;
   color: #14161b;
   font-weight: normal;
@@ -19,7 +21,8 @@
 .inputs small strong {
   font-weight: bold;
 }
-.reasonInput, .selectMenu {
+.reasonInput,
+.selectMenu {
   width: 100% !important;
   border-radius: 6px !important;
 }
@@ -80,7 +83,7 @@
   text-align: left;
   /* width: auto; */
   width: calc(33% - 6px);
-  font-family: "Londrina Solid", sans-serif;
+  font-family: 'Londrina Solid', sans-serif;
   font-size: 20px;
   line-height: 1;
   border: 2px solid rgba(0, 0, 0, 0.25);
@@ -96,11 +99,12 @@
   gap: 10px;
 }
 
-.nounButton:hover, .selectedNounButton:hover {
+.nounButton:hover,
+.selectedNounButton:hover {
   box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
 }
 
-.nounButton:disabled { 
+.nounButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -122,7 +126,7 @@
 .escrowedNoun > div {
   opacity: 0.65;
 }
-.escrowedNoun:hover  {
+.escrowedNoun:hover {
   border-color: #e8e8e8;
   box-shadow: none;
 }
@@ -150,7 +154,7 @@
 }
 .selectedProposal {
   background-color: white;
-  border: 2px solid #D3D3D3;
+  border: 2px solid #d3d3d3;
   padding: 6px 10px;
   border-radius: 8px;
   display: flex;
@@ -167,7 +171,7 @@
   text-decoration: underline;
 }
 .selectedProposal span {
-  font-family: "Londrina Solid", sans-serif;
+  font-family: 'Londrina Solid', sans-serif;
 }
 .removeButton {
   border: none;
@@ -189,11 +193,11 @@
 
 /* confirm */
 .modalActions {
-  text-align: center; 
+  text-align: center;
   margin: 20px 0;
 }
 
-.modalActions p { 
+.modalActions p {
   margin: 10px 0;
   padding: 0;
   opacity: 0.7;
@@ -234,7 +238,7 @@
   background: transparent;
   font-weight: bold;
   text-decoration: underline;
-  cursor: pointer; 
+  cursor: pointer;
   padding: 0;
   margin: 0;
   color: #14161b;
@@ -280,14 +284,14 @@ p.statusMessage {
 .statusMessage.successMessage {
   color: var(--brand-color-green);
   border-color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent)
+  background-color: var(--brand-color-green-translucent);
 }
 .statusMessage button {
   border: none;
   background: transparent;
   font-weight: bold;
   text-decoration: underline;
-  cursor: pointer; 
+  cursor: pointer;
   padding: 0;
   margin: 0 auto;
   color: #14161b;
@@ -314,9 +318,6 @@ p.statusMessage {
   font-size: 15px;
 }
 
-
-
-
 /* 2 step process */
 .steps {
   list-style-type: none;
@@ -334,7 +335,8 @@ p.statusMessage {
   margin-bottom: 0;
 }
 
-.steps strong, .steps .spinner-border {
+.steps strong,
+.steps .spinner-border {
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -349,25 +351,25 @@ p.statusMessage {
 }
 .steps .placeholder {
   width: 18px;
-  height: 18px; 
+  height: 18px;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 100%;
   display: inline-block;
   animation: pulse 1.5s ease-out;
-  animation-iteration-count: infinite; 
+  animation-iteration-count: infinite;
   opacity: 0.5;
   position: relative;
   top: 3px;
 }
 
 @keyframes pulse {
-  0% { 
-      opacity: 0.5;
+  0% {
+    opacity: 0.5;
   }
-  50% { 
-      opacity: 1.0;
+  50% {
+    opacity: 1;
   }
-  100% { 
-      opacity: 0.5;
+  100% {
+    opacity: 0.5;
   }
 }

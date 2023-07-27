@@ -48,8 +48,8 @@ const NavBar = () => {
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
-      ? NavBarButtonStyle.COOL_INFO
-      : NavBarButtonStyle.WARM_INFO;
+    ? NavBarButtonStyle.COOL_INFO
+    : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
@@ -58,44 +58,40 @@ const NavBar = () => {
     navDropdownClasses.warmInfoSelected,
     history,
   );
-  const candidatesNavItam = (
-    config.featureToggles.candidates ? (
-      <Dropdown.Item
-        className={buttonClasses}
-        href="/vote#candidates"
-      >
-        <Trans>Candidates</Trans>
-      </Dropdown.Item>
-    ) : (null)
-  );
-  const forkNavItem = (
-    config.featureToggles.fork ? (
-      <Dropdown.Item
-        className={buttonClasses}
-        href="/fork"
-      >
-        <Trans>Fork</Trans>
-      </Dropdown.Item>
-    ) : (null)
-  );
-
-  const v3DaoNavItem = <NavDropdown buttonText="DAO" buttonIcon={<FontAwesomeIcon icon={faUsers} />} buttonStyle={nonWalletButtonStyle}>
-    <Dropdown.Item
-      className={clsx(
-        usePickByState(
-          navDropdownClasses.whiteInfoSelectedBottom,
-          navDropdownClasses.coolInfoSelected,
-          navDropdownClasses.warmInfoSelected,
-          history,
-        ),
-      )}
-      href="/vote"
-    >
-      <Trans>Proposals</Trans>
+  const candidatesNavItam = config.featureToggles.candidates ? (
+    <Dropdown.Item className={buttonClasses} href="/vote#candidates">
+      <Trans>Candidates</Trans>
     </Dropdown.Item>
-    {candidatesNavItam}
-    {forkNavItem}
-  </NavDropdown>;
+  ) : null;
+  const forkNavItem = config.featureToggles.fork ? (
+    <Dropdown.Item className={buttonClasses} href="/fork">
+      <Trans>Fork</Trans>
+    </Dropdown.Item>
+  ) : null;
+
+  const v3DaoNavItem = (
+    <NavDropdown
+      buttonText="DAO"
+      buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+      buttonStyle={nonWalletButtonStyle}
+    >
+      <Dropdown.Item
+        className={clsx(
+          usePickByState(
+            navDropdownClasses.whiteInfoSelectedBottom,
+            navDropdownClasses.coolInfoSelected,
+            navDropdownClasses.warmInfoSelected,
+            history,
+          ),
+        )}
+        href="/vote"
+      >
+        <Trans>Proposals</Trans>
+      </Dropdown.Item>
+      {candidatesNavItam}
+      {forkNavItem}
+    </NavDropdown>
+  );
 
   return (
     <>
@@ -139,12 +135,7 @@ const NavBar = () => {
           />
           <Navbar.Collapse className="justify-content-end">
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
-              <Nav.Link
-                as={Link}
-                to="/vote"
-                className={classes.nounsNavLink}
-                onClick={closeNav}
-              >
+              <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faFile} />}
@@ -187,21 +178,15 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               {isDaoGteV3 ? (
                 v3DaoNavItem
-              ) :
-                <Nav.Link
-                  as={Link}
-                  to="/vote"
-                  className={classes.nounsNavLink}
-                  onClick={closeNav}
-                >
+              ) : (
+                <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                   <NavBarButton
                     buttonText={<Trans>DAO</Trans>}
                     buttonIcon={<FontAwesomeIcon icon={faUsers} />}
                     buttonStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
-              }
-
+              )}
             </div>
             <Nav.Link
               href={externalURL(ExternalURL.nounsCenter)}
@@ -256,7 +241,11 @@ const NavBar = () => {
               </Nav.Link>
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
-              <NavDropdown buttonText="Explore" buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
+              <NavDropdown
+                buttonText="Explore"
+                buttonIcon={<Noggles />}
+                buttonStyle={nonWalletButtonStyle}
+              >
                 <Dropdown.Item
                   className={clsx(
                     usePickByState(

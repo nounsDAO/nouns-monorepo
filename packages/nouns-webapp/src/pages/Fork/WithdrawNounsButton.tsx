@@ -1,7 +1,7 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import classes from './Fork.module.css';
-import { useWithdrawFromForkEscrow } from '../../wrappers/nounsDao'
+import { useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
 import { Trans } from '@lingui/macro';
 import { TransactionStatus } from '@usedapp/core';
 import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
@@ -12,7 +12,7 @@ type Props = {
   isWithdrawModalOpen: boolean;
   setIsWithdrawModalOpen: Function;
   setDataFetchPollInterval: Function;
-}
+};
 
 function WithdrawNounsButton(props: Props) {
   const { withdrawFromForkEscrow, withdrawFromForkEscrowState } = useWithdrawFromForkEscrow();
@@ -37,13 +37,29 @@ function WithdrawNounsButton(props: Props) {
         break;
       case 'Fail':
         setIsError(true);
-        setErrorMessage(<>{state?.errorMessage}<br /><Trans>Please try again.</Trans></> || <Trans>Please try again.</Trans>);
+        setErrorMessage(
+          (
+            <>
+              {state?.errorMessage}
+              <br />
+              <Trans>Please try again.</Trans>
+            </>
+          ) || <Trans>Please try again.</Trans>,
+        );
         setIsLoading(false);
         setIsWaiting(false);
         break;
       case 'Exception':
         setIsError(true);
-        setErrorMessage(<>{state?.errorMessage}<br /><Trans>Please try again.</Trans></> || <Trans>Please try again.</Trans>);
+        setErrorMessage(
+          (
+            <>
+              {state?.errorMessage}
+              <br />
+              <Trans>Please try again.</Trans>
+            </>
+          ) || <Trans>Please try again.</Trans>,
+        );
         setIsLoading(false);
         setIsWaiting(false);
         break;
@@ -59,21 +75,50 @@ function WithdrawNounsButton(props: Props) {
       <h2 className={classes.transactionModalTitle}>
         <Trans>Withdraw Nouns from escrow</Trans>
       </h2>
-      <p>Withdrawing {props.tokenIds.map((nounId) => `Noun ${nounId}`).join(', ')}
-      </p>
-      <p className={clsx(
-        classes.transactionStatus,
-        classes.withdrawStatus,
-        isLoading && classes.transactionStatusLoading,
-        isTxSuccessful && classes.transactionStatusSuccess,
-        isError && classes.transactionStatusError,
-      )}>
-        {isWaiting && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Awaiting confirmation</>}
-        {isLoading && <><img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />Withdrawing</>}
-        {isTxSuccessful && <>
-          Success! Your Nouns have been withdrawn.
-          {withdrawFromForkEscrowState.transaction && <a href={`${buildEtherscanTxLink(withdrawFromForkEscrowState.transaction.hash)}`} target="_blank" rel="noreferrer">View on Etherscan</a>}
-        </>}
+      <p>Withdrawing {props.tokenIds.map(nounId => `Noun ${nounId}`).join(', ')}</p>
+      <p
+        className={clsx(
+          classes.transactionStatus,
+          classes.withdrawStatus,
+          isLoading && classes.transactionStatusLoading,
+          isTxSuccessful && classes.transactionStatusSuccess,
+          isError && classes.transactionStatusError,
+        )}
+      >
+        {isWaiting && (
+          <>
+            <img
+              src="/loading-noggles.svg"
+              alt="loading"
+              className={classes.transactionModalSpinner}
+            />
+            Awaiting confirmation
+          </>
+        )}
+        {isLoading && (
+          <>
+            <img
+              src="/loading-noggles.svg"
+              alt="loading"
+              className={classes.transactionModalSpinner}
+            />
+            Withdrawing
+          </>
+        )}
+        {isTxSuccessful && (
+          <>
+            Success! Your Nouns have been withdrawn.
+            {withdrawFromForkEscrowState.transaction && (
+              <a
+                href={`${buildEtherscanTxLink(withdrawFromForkEscrowState.transaction.hash)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View on Etherscan
+              </a>
+            )}
+          </>
+        )}
         {isError && errorMessage}
       </p>
     </div>
@@ -107,7 +152,7 @@ function WithdrawNounsButton(props: Props) {
         content={modalContent}
       />
     </>
-  )
+  );
 }
 
-export default WithdrawNounsButton
+export default WithdrawNounsButton;

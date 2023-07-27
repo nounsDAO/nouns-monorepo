@@ -71,19 +71,30 @@ export const useCandidateProposals = () => {
     }
   }, [currentBlock, blockNumber]);
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter((candidate: PartialProposalCandidate) => candidate.latestVersion.content.matchingProposalIds.length === 0 && candidate.canceled === false);
-  const activeCandidateProposers = unmatchedCandidates?.map((candidate: PartialProposalCandidate) => candidate.proposer);
-  const proposerDelegates = useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
+  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter(
+    (candidate: PartialProposalCandidate) =>
+      candidate.latestVersion.content.matchingProposalIds.length === 0 &&
+      candidate.canceled === false,
+  );
+  const activeCandidateProposers = unmatchedCandidates?.map(
+    (candidate: PartialProposalCandidate) => candidate.proposer,
+  );
+  const proposerDelegates =
+    useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
   const threshold = useProposalThreshold() || 0;
-  const candidatesData = unmatchedCandidates?.map((candidate: PartialProposalCandidate, i: number) => {
-    const proposerVotes = (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) || 0;
-    const requiredVotes = ((threshold + 1) - proposerVotes) > 0 ? (threshold + 1) - proposerVotes : 0;
-    return {
-      ...candidate,
-      requiredVotes: requiredVotes,
-      proposerVotes: proposerVotes,
-    }
-  });
+  const candidatesData = unmatchedCandidates?.map(
+    (candidate: PartialProposalCandidate, i: number) => {
+      const proposerVotes =
+        (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) ||
+        0;
+      const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
+      return {
+        ...candidate,
+        requiredVotes: requiredVotes,
+        proposerVotes: proposerVotes,
+      };
+    },
+  );
   candidatesData?.sort((a, b) => {
     return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
   });
@@ -104,15 +115,25 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
   });
   const timestamp = useBlockTimestamp(blockNumber);
   const threshold = useProposalThreshold() || 0;
-  const proposerDelegates = useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
-  const proposerNounVotes = (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
-  const parsedData = parseSubgraphCandidate(data?.proposalCandidate, proposerNounVotes, threshold, toUpdate, blockNumber, timestamp);
+  const proposerDelegates =
+    useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
+  const proposerNounVotes =
+    (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
+  const parsedData = parseSubgraphCandidate(
+    data?.proposalCandidate,
+    proposerNounVotes,
+    threshold,
+    toUpdate,
+    blockNumber,
+    timestamp,
+  );
   return { loading, data: parsedData, error, refetch };
 };
 
 export const useCandidateProposalVersions = (id: string) => {
   const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
-  const versions: ProposalCandidateVersions = data && parseSubgraphCandidateVersions(data.proposalCandidate);
+  const versions: ProposalCandidateVersions =
+    data && parseSubgraphCandidateVersions(data.proposalCandidate);
   return { loading, data: versions, error };
 };
 
@@ -139,7 +160,6 @@ export const useGetUpdateCandidateCost = () => {
     args: [],
   });
 
-  console.log('updateCandidateCost', updateCandidateCost);
   if (!updateCandidateCost) {
     return;
   }
@@ -176,10 +196,17 @@ export const useProposalFeedback = (id: string, pollInterval?: number) => {
 };
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {
-  const { loading, data: results, error, refetch } = useQuery(candidateFeedbacksQuery(id), {
+  const {
+    loading,
+    data: results,
+    error,
+    refetch,
+  } = useQuery(candidateFeedbacksQuery(id), {
     pollInterval: pollInterval || 0,
   });
-  const data: VoteSignalDetail[] = results?.candidateFeedbacks.map((feedback: VoteSignalDetail) => feedback);
+  const data: VoteSignalDetail[] = results?.candidateFeedbacks.map(
+    (feedback: VoteSignalDetail) => feedback,
+  );
 
   return { loading, data, error, refetch };
 };
@@ -227,13 +254,15 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const filteredSignatures = candidate.latestVersion.content.contentSignatures.filter((signature: CandidateSignature) => {
-    return signature.canceled === false && signature.expirationTimestamp > timestamp! / 1000;
-  });
+  const filteredSignatures = candidate.latestVersion.content.contentSignatures.filter(
+    (signature: CandidateSignature) => {
+      return signature.canceled === false && signature.expirationTimestamp > timestamp! / 1000;
+    },
+  );
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
   });
-  const requiredVotes = ((threshold + 1) - proposerVotes) > 0 ? (threshold + 1) - proposerVotes : 0;
+  const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
 
   return {
     id: candidate.id,
@@ -259,7 +288,7 @@ const parseSubgraphCandidate = (
         values: candidate.latestVersion.content.values,
         signatures: candidate.latestVersion.content.signatures,
         calldatas: candidate.latestVersion.content.calldatas,
-      }
+      },
     },
   };
 };
@@ -270,12 +299,14 @@ const parseSubgraphCandidateVersions = (
   if (!candidateVersions) {
     return;
   }
-  const versionsList = candidateVersions.versions.map((version) => version);
+  const versionsList = candidateVersions.versions.map(version => version);
   const versionsByDate = versionsList.sort((a, b) => {
     return b.createdTimestamp - a.createdTimestamp;
   });
   const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
-    const description = version.content.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+    const description = version.content.description
+      ?.replace(/\\n/g, '\n')
+      .replace(/(^['"]|['"]$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
       targets: version.content.targets,
       values: version.content.values,
@@ -314,7 +345,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
   versions: {
     content: {
       title: string;
-    }
+    };
   }[];
   latestVersion: {
     content: {
@@ -340,8 +371,8 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
       }[];
       matchingProposalIds: {
         id: string;
-      }[]
-    }
+      }[];
+    };
   };
 }
 
@@ -364,7 +395,7 @@ export interface ProposalCandidateVersionsSubgraphEntity extends ProposalCandida
       signatures: string[];
       calldatas: string[];
       encodedProposalHash: string;
-    }
+    };
   }[];
   latestVersion: {
     id: string;
@@ -406,7 +437,7 @@ export interface ProposalCandidateInfo {
   proposerVotes: number;
   matchingProposalIds: {
     id: string;
-  }[]
+  }[];
 }
 
 export interface ProposalCandidateVersionContent {
@@ -439,7 +470,7 @@ export interface ProposalCandidateVersion {
         }[];
       };
     }[];
-  }
+  };
 }
 
 export interface ProposalCandidate extends ProposalCandidateInfo {
@@ -467,11 +498,10 @@ export interface PartialProposalCandidate extends ProposalCandidateInfo {
       }[];
       matchingProposalIds: {
         id: string;
-      }[]
-    }
+      }[];
+    };
   };
 }
-
 
 export interface ProposalCandidateVersions extends ProposalCandidateInfo {
   title: string;

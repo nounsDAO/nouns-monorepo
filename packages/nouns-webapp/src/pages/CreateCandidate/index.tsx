@@ -1,9 +1,6 @@
 import { Col, Alert, Button } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import {
-  ProposalTransaction,
-  useProposalThreshold,
-} from '../../wrappers/nounsDao';
+import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';
@@ -137,7 +134,6 @@ const CreateCandidatePage = () => {
     [proposalTransactions, titleValue, bodyValue],
   );
 
-
   const handleCreateProposal = async () => {
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
@@ -146,7 +142,7 @@ const CreateCandidatePage = () => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
-      0,// proposalIdToUpdate - use 0 for new proposals
+      0, // proposalIdToUpdate - use 0 for new proposals
       { value: hasVotes ? 0 : createCandidateCost }, // Fee for non-nouners
     );
   };
@@ -207,7 +203,9 @@ const CreateCandidatePage = () => {
 
         <Alert variant="secondary" className={classes.voterIneligibleAlert}>
           <Trans>
-            Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.          </Trans>
+            Proposal candidates can be created by anyone. If a candidate receives enough signatures
+            by Nouns voters, it can be promoted to a proposal.{' '}
+          </Trans>
           <br />
           <br />
 

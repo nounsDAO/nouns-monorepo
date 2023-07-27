@@ -13,7 +13,6 @@ const ForkingPeriodTimer: React.FC<{
   endTime: number;
   isPeriodEnded: boolean;
 }> = props => {
-
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
@@ -23,7 +22,7 @@ const ForkingPeriodTimer: React.FC<{
 
   // timer logic
   useEffect(() => {
-    const timeLeft = (props.endTime) - dayjs().unix();
+    const timeLeft = props.endTime - dayjs().unix();
 
     setAuctionTimer(timeLeft);
 
@@ -60,14 +59,16 @@ const ForkingPeriodTimer: React.FC<{
             {flooredDays > 0 && (
               <span>
                 {`${Math.floor(timerDuration.days())}`}
-                <span className={classes.small}>{" "}
+                <span className={classes.small}>
+                  {' '}
                   <Trans>days</Trans>
                 </span>
               </span>
             )}
             <span>
               {`${Math.floor(timerDuration.hours())}`}
-              <span className={classes.small}>{" "}
+              <span className={classes.small}>
+                {' '}
                 <Trans>hours</Trans>
               </span>
             </span>
@@ -75,7 +76,8 @@ const ForkingPeriodTimer: React.FC<{
           <div className={classes.timerSection}>
             <span>
               {`${flooredMinutes}`}
-              <span className={classes.small}>{" "}
+              <span className={classes.small}>
+                {' '}
                 <Trans>minutes</Trans>
               </span>
             </span>
@@ -83,7 +85,8 @@ const ForkingPeriodTimer: React.FC<{
           <div className={classes.timerSectionFinal}>
             <span>
               {`${flooredSeconds}`}
-              <span className={classes.small}>{" "}
+              <span className={classes.small}>
+                {' '}
                 <Trans>seconds</Trans>
               </span>
             </span>

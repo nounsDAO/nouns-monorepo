@@ -92,7 +92,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');
   };
-  const isolatedDescription = candidate.data?.version.content.description && removeTitleFromDescription(candidate.data.version.content.description, titleValue);
+  const isolatedDescription =
+    candidate.data?.version.content.description &&
+    removeTitleFromDescription(candidate.data.version.content.description, titleValue);
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -162,7 +164,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
 
   useEffect(() => {
-    (isTitleEdited || isBodyEdited) ? setIsProposalEdited(true) : setIsProposalEdited(false);
+    isTitleEdited || isBodyEdited ? setIsProposalEdited(true) : setIsProposalEdited(false);
   }, [isTitleEdited, isBodyEdited]);
 
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
@@ -206,7 +208,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProposalCandidateState, setModal]);
 
-  // set initial values on page load 
+  // set initial values on page load
   useEffect(() => {
     if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
       const transactions = candidate.data?.version.content.details.map(
@@ -220,7 +222,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         },
       );
       setTitleValue(proposal.content.title);
-      setBodyValue(removeTitleFromDescription(proposal.content.description, proposal.content.title));
+      setBodyValue(
+        removeTitleFromDescription(proposal.content.description, proposal.content.title),
+      );
       setProposalTransactions(transactions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -243,7 +247,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       0, // proposalIdToUpdate
       commitMessage,
-      { value: hasVotes ? 0 : (updateCandidateCost ?? 0) }, // Fee for non-nouners
+      { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
     );
   };
 
@@ -328,18 +332,20 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
             submission
           </p>
-
         )}
 
-        <p className="text-center"><Trans>This will clear all previous sponsors and feedback votes</Trans>
+        <p className="text-center">
+          <Trans>This will clear all previous sponsors and feedback votes</Trans>
           {proposal && proposal.content.contentSignatures?.length > 0 && (
             <>
               <br />
-              <Trans>This candidate currently has {proposal.content.contentSignatures?.length} signatures.</Trans>
+              <Trans>
+                This candidate currently has {proposal.content.contentSignatures?.length}{' '}
+                signatures.
+              </Trans>
             </>
           )}
         </p>
-
       </Col>
     </Section>
   );

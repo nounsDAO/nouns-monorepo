@@ -8,10 +8,12 @@
   margin-bottom: 10px;
   width: 100%;
 }
-.inputs input, .inputs select {
+.inputs input,
+.inputs select {
   padding: 10px 12px;
 }
-.inputs small, .sectionLabel p {
+.inputs small,
+.sectionLabel p {
   font-size: 16px;
   color: #14161b;
   font-weight: normal;
@@ -19,7 +21,8 @@
 .inputs small strong {
   font-weight: bold;
 }
-.reasonInput, .selectMenu {
+.reasonInput,
+.selectMenu {
   width: 100% !important;
   border-radius: 6px !important;
 }
@@ -46,7 +49,8 @@
   opacity: 0.75;
   text-decoration: none;
 }
-.sectionHeader button:disabled, .sectionHeader button:disabled:hover {
+.sectionHeader button:disabled,
+.sectionHeader button:disabled:hover {
   text-decoration: none;
   opacity: 0.75;
   cursor: not-allowed;
@@ -79,7 +83,7 @@
   transition: all 0.2s ease-in-out;
   text-align: left;
   width: 100%;
-  font-family: "Londrina Solid", sans-serif;
+  font-family: 'Londrina Solid', sans-serif;
   font-size: 20px;
   line-height: 1;
   border: 2px solid rgba(0, 0, 0, 0.25);
@@ -95,11 +99,13 @@
   gap: 10px;
 }
 
-.selectButton:hover, .selectedButton:hover {
+.selectButton:hover,
+.selectedButton:hover {
   box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
 }
 
-.selectButton:disabled, .selectButton:disabled:hover { 
+.selectButton:disabled,
+.selectButton:disabled:hover {
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
@@ -114,14 +120,13 @@
   border: 2px solid rgba(0, 0, 0, 0.75);
 }
 
-
 /* confirm */
 .modalActions {
-  text-align: center; 
+  text-align: center;
   margin: 20px 0;
 }
 
-.modalActions p { 
+.modalActions p {
   margin: 10px 0;
   padding: 0;
   opacity: 0.7;
@@ -162,7 +167,7 @@
   background: transparent;
   font-weight: bold;
   text-decoration: underline;
-  cursor: pointer; 
+  cursor: pointer;
   padding: 0;
   margin: 0;
   color: #14161b;
@@ -208,14 +213,14 @@ p.statusMessage {
 .statusMessage.successMessage {
   color: var(--brand-color-green);
   border-color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent)
+  background-color: var(--brand-color-green-translucent);
 }
 .statusMessage button {
   border: none;
   background: transparent;
   font-weight: bold;
   text-decoration: underline;
-  cursor: pointer; 
+  cursor: pointer;
   padding: 0;
   margin: 0 auto;
   color: #14161b;
@@ -242,9 +247,6 @@ p.statusMessage {
   font-size: 15px;
 }
 
-
-
-
 /* 2 step process */
 .steps {
   list-style-type: none;
@@ -262,7 +264,8 @@ p.statusMessage {
   margin-bottom: 0;
 }
 
-.steps strong, .steps .spinner-border {
+.steps strong,
+.steps .spinner-border {
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -277,12 +280,12 @@ p.statusMessage {
 }
 .steps .placeholder {
   width: 18px;
-  height: 18px; 
+  height: 18px;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 100%;
   display: inline-block;
   animation: pulse 1.5s ease-out;
-  animation-iteration-count: infinite; 
+  animation-iteration-count: infinite;
   opacity: 0.5;
   position: relative;
   top: 3px;
@@ -299,13 +302,13 @@ p.statusMessage {
 }
 
 @keyframes pulse {
-  0% { 
-      opacity: 0.5;
+  0% {
+    opacity: 0.5;
   }
-  50% { 
-      opacity: 1.0;
+  50% {
+    opacity: 1;
   }
-  100% { 
-      opacity: 0.5;
+  100% {
+    opacity: 0.5;
   }
 }

@@ -71,9 +71,9 @@ const getUpdatableCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   return (
@@ -122,7 +122,8 @@ const VotePage = ({
   } = useQuery(propUsingDynamicQuorum(id ?? '0'));
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
-  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } = useExecuteProposalOnTimelockV1();
+  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } =
+    useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
@@ -134,12 +135,15 @@ const VotePage = ({
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
-  const endBlock = (currentBlock && proposal?.endBlock && isObjectionPeriod && currentBlock > proposal?.endBlock) ? proposal?.objectionPeriodEndBlock : proposal?.endBlock;
+  const endBlock =
+    currentBlock && proposal?.endBlock && isObjectionPeriod && currentBlock > proposal?.endBlock
+      ? proposal?.objectionPeriodEndBlock
+      : proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
@@ -155,7 +159,9 @@ const VotePage = ({
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // If v3, get user votes as of start block, otherwise get user votes as of created block
-  const userVotes = useUserVotesAsOfBlock(isDaoGteV3 ? proposal?.startBlock : proposal?.createdBlock);
+  const userVotes = useUserVotesAsOfBlock(
+    isDaoGteV3 ? proposal?.startBlock : proposal?.createdBlock,
+  );
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
   const currentQuorum = useCurrentQuorum(
@@ -165,10 +171,9 @@ const VotePage = ({
   );
 
   const getVersionTimestamp = (proposalVersions: ProposalVersion[]) => {
-    const versionDetails =
-      proposalVersions[proposalVersions.length - 1];
+    const versionDetails = proposalVersions[proposalVersions.length - 1];
     return versionDetails?.createdAt;
-  }
+  };
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isInNonFinalState = [
     ProposalState.UPDATABLE,
@@ -179,22 +184,27 @@ const VotePage = ({
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
-  const isProposalSigner = account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const isProposalSigner =
+    account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
-  const isProposer = () => (proposal?.proposer?.toLowerCase() === account?.toLowerCase());
+  const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isUpdateable = () => {
-    if (proposal && currentBlock && isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)) {
+    if (
+      proposal &&
+      currentBlock &&
+      isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
+    ) {
       return true;
     }
     return false;
-  }
+  };
 
   const isCancellable = () => {
     if (isInNonFinalState && (isProposalSigner || isProposer())) {
       return true;
     }
     return false;
-  }
+  };
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -225,7 +235,7 @@ const VotePage = ({
     } else {
       return false;
     }
-  }
+  };
 
   const startOrEndTimeCopy = () => {
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
@@ -244,9 +254,13 @@ const VotePage = ({
     return endDate;
   };
   const objectionEnd = () => {
-    const time = proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock), 'seconds')
-      : undefined;
+    const time =
+      proposal && timestamp && currentBlock
+        ? dayjs(timestamp).add(
+            AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
+            'seconds',
+          )
+        : undefined;
     return time;
   };
 
@@ -254,11 +268,15 @@ const VotePage = ({
     hour: 'numeric',
     minute: '2-digit',
     timeZoneName: 'short',
-  })
+  });
   const objectionEndDate = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
     dateStyle: 'long',
   });
-  const objectionNoteCopy = <>Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.</>;
+  const objectionNoteCopy = (
+    <>
+      Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.
+    </>
+  );
   const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
@@ -420,15 +438,18 @@ const VotePage = ({
     proposal?.status === ProposalState.OBJECTION_PERIOD;
 
   useEffect(() => {
-    if (proposal && currentBlock &&
-      proposal?.objectionPeriodEndBlock > 0 && currentBlock > proposal?.endBlock && currentBlock <= proposal?.objectionPeriodEndBlock
+    if (
+      proposal &&
+      currentBlock &&
+      proposal?.objectionPeriodEndBlock > 0 &&
+      currentBlock > proposal?.endBlock &&
+      currentBlock <= proposal?.objectionPeriodEndBlock
     ) {
       setIsObjectionPeriod(true);
     } else {
       setIsObjectionPeriod(false);
     }
   }, [currentBlock, proposal?.status, proposal]);
-
 
   if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (
@@ -552,15 +573,12 @@ const VotePage = ({
                 <div className={classes.proposerOptions}>
                   <p>
                     <span className={classes.proposerOptionsHeader}>
-                      <Trans>
-                        Proposal functions
-                      </Trans>
+                      <Trans>Proposal functions</Trans>
                     </span>
                     {isProposer() && isUpdateable() && (
                       <>
                         <Trans>This proposal can be edited for </Trans>{' '}
-                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}
-                        {' '}
+                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}{' '}
                       </>
                     )}
                   </p>
@@ -572,10 +590,7 @@ const VotePage = ({
                           onClick={moveStateAction}
                           disabled={isQueuePending || isExecutePending}
                           variant="dark"
-                          className={(clsx(
-                            classes.transitionStateButton,
-                            classes.button
-                          ))}
+                          className={clsx(classes.transitionStateButton, classes.button)}
                         >
                           {isQueuePending || isExecutePending ? (
                             <Spinner animation="border" />
@@ -589,10 +604,7 @@ const VotePage = ({
                         <Button
                           onClick={destructiveStateAction}
                           disabled={isCancelPending}
-                          className={clsx(
-                            classes.destructiveTransitionStateButton,
-                            classes.button,
-                          )}
+                          className={clsx(classes.destructiveTransitionStateButton, classes.button)}
                         >
                           {isCancelPending ? (
                             <Spinner animation="border" />
@@ -723,10 +735,12 @@ const VotePage = ({
                 </div>
                 {currentBlock && proposal?.objectionPeriodEndBlock > 0 && (
                   <div className={classes.objectionPeriodActive}>
-                    <p><strong><Trans>Objection period triggered</Trans></strong></p>
-                    {currentBlock < proposal?.endBlock && (
-                      <p>{objectionNoteCopy}</p>
-                    )}
+                    <p>
+                      <strong>
+                        <Trans>Objection period triggered</Trans>
+                      </strong>
+                    </p>
+                    {currentBlock < proposal?.endBlock && <p>{objectionNoteCopy}</p>}
                   </div>
                 )}
               </Card.Body>
@@ -741,9 +755,19 @@ const VotePage = ({
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>
-                      {(voteSnapshotBlockSwitchProposalId !== undefined && +id >= voteSnapshotBlockSwitchProposalId) ? <Trans>Taken on start block</Trans> : <Trans>Taken on created block</Trans>}
+                      {voteSnapshotBlockSwitchProposalId !== undefined &&
+                      +id >= voteSnapshotBlockSwitchProposalId ? (
+                        <Trans>Taken on start block</Trans>
+                      ) : (
+                        <Trans>Taken on created block</Trans>
+                      )}
                     </span>
-                    <h3>{(voteSnapshotBlockSwitchProposalId !== undefined && +id >= voteSnapshotBlockSwitchProposalId) ? proposal.startBlock : proposal.createdBlock}</h3>
+                    <h3>
+                      {voteSnapshotBlockSwitchProposalId !== undefined &&
+                      +id >= voteSnapshotBlockSwitchProposalId
+                        ? proposal.startBlock
+                        : proposal.createdBlock}
+                    </h3>
                   </div>
                 </div>
               </Card.Body>
@@ -780,7 +804,7 @@ const VotePage = ({
         </div>
       ) : (
         <Row>
-          <Col xl={10} lg={12} className='m-auto'>
+          <Col xl={10} lg={12} className="m-auto">
             <ProposalContent
               description={proposal.description}
               title={proposal.title}

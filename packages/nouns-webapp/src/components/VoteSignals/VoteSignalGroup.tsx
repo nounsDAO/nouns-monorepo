@@ -70,10 +70,7 @@ const VoteSignalGroup = (props: Props) => {
         )}
       </button>
       <AnimatePresence>
-        <motion.div
-          key={props.support}
-          className={clsx(isExpanded && classes.voteSignalsList)}
-        >
+        <motion.div key={props.support} className={clsx(isExpanded && classes.voteSignalsList)}>
           {isExpanded &&
             props.voteSignals.map((voteSignal, i) => (
               <motion.div
@@ -107,11 +104,10 @@ const VoteSignalGroup = (props: Props) => {
                   reason={voteSignal.reason}
                 />
               </motion.div>
-            ))
-          }
+            ))}
         </motion.div>
       </AnimatePresence>
-    </div >
+    </div>
   );
 };
 

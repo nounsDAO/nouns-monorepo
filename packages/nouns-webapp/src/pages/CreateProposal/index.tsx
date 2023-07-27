@@ -89,7 +89,7 @@ const CreateProposalPage = () => {
   );
 
   useEffect(() => {
-    // only set this once 
+    // only set this once
     if (latestProposalId !== undefined && !previousProposalId) {
       setPreviousProposalId(latestProposalId);
     }
@@ -184,42 +184,48 @@ const CreateProposalPage = () => {
     }
   };
 
-  const handleAddProposalState = useCallback((proposeState: TransactionStatus, previousProposalId?: number) => {
-    switch (proposeState.status) {
-      case 'None':
-        setProposePending(false);
-        break;
-      case 'Mining':
-        setProposePending(true);
-        break;
-      case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!<br />
-          </Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddProposalState = useCallback(
+    (proposeState: TransactionStatus, previousProposalId?: number) => {
+      switch (proposeState.status) {
+        case 'None':
+          setProposePending(false);
+          break;
+        case 'Mining':
+          setProposePending(true);
+          break;
+        case 'Success':
+          setModal({
+            title: <Trans>Success</Trans>,
+            message: (
+              <Trans>
+                Proposal Created!
+                <br />
+              </Trans>
+            ),
+            show: true,
+          });
+          setProposePending(false);
+          break;
+        case 'Fail':
+          setModal({
+            title: <Trans>Transaction Failed</Trans>,
+            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setProposePending(false);
+          break;
+        case 'Exception':
+          setModal({
+            title: <Trans>Error</Trans>,
+            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setProposePending(false);
+          break;
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [],
+  );
 
   useEffect(() => {
     if (isProposeOnV1) {
@@ -228,7 +234,14 @@ const CreateProposalPage = () => {
       handleAddProposalState(proposeState, previousProposalId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propose, proposeState, proposeOnTimelockV1, proposeOnTimelockV1State, isProposeOnV1, handleAddProposalState]);
+  }, [
+    propose,
+    proposeState,
+    proposeOnTimelockV1,
+    proposeOnTimelockV1State,
+    isProposeOnV1,
+    handleAddProposalState,
+  ]);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -301,14 +314,17 @@ const CreateProposalPage = () => {
           <div className={classes.timelockOption}>
             <div className={classes.timelockSelect}>
               <Form.Check
-                type='checkbox'
+                type="checkbox"
                 id={`timelockV1Checkbox`}
                 label="Propose on treasury V1"
                 onChange={() => setIsProposeOnV1(!isProposeOnV1)}
               />
             </div>
             <p className={classes.note}>
-              Used to interact with any assets owned by the <a href={daoEtherscanLink} target='_blank' rel="noreferrer">original treasury</a>
+              Used to interact with any assets owned by the{' '}
+              <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
+                original treasury
+              </a>
             </p>
           </div>
         )}

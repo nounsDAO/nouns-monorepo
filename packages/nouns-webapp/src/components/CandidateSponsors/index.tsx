@@ -6,11 +6,19 @@ import { CandidateSignature } from '../../wrappers/nounsData';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Delegates } from '../../wrappers/subgraph';
-import { useAccountVotes, useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
+import {
+  useAccountVotes,
+  useDelegateNounsAtBlockQuery,
+  useUserVotes,
+} from '../../wrappers/nounToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
-import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
+import {
+  Proposal,
+  ProposalState,
+  useActivePendingUpdatableProposers,
+} from '../../wrappers/nounsDao';
 import classes from './CandidateSponsors.module.css';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
@@ -42,10 +50,9 @@ const deDupeSigners = (signers: string[]) => {
     if (!uniqueSigners.includes(signer)) {
       uniqueSigners.push(signer);
     }
-  }
-  );
+  });
   return uniqueSigners;
-}
+};
 
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotesCount, setSignedVotesCount] = React.useState<number>(0);
@@ -65,7 +72,10 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const connectedAccountNounVotes = useUserVotes() || 0;
   const proposerNounVotes = useAccountVotes(props.candidate.proposer) || 0;
   const delegateSnapshot = useDelegateNounsAtBlockQuery(signers ?? [], blockNumber ?? 0);
-  const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(originalSigners ?? [], blockNumber ?? 0);
+  const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(
+    originalSigners ?? [],
+    blockNumber ?? 0,
+  );
   const hasActiveOrPendingProposal = (latestProposal: Proposal, account: string) => {
     const status = checkHasActiveOrPendingProposalOrCandidate(
       latestProposal.status,
@@ -74,17 +84,24 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     );
     return status;
   };
-  const isParentProposalUpdatable = props.originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
-  const filterSigners = (delegateSnapshot: Delegates, activePendingProposers: string[], signers: CandidateSignature[]) => {
-    const activeSigs = signers.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
+  const isParentProposalUpdatable =
+    props.originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  const filterSigners = (
+    delegateSnapshot: Delegates,
+    activePendingProposers: string[],
+    signers: CandidateSignature[],
+  ) => {
+    const activeSigs = signers.filter(
+      sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000),
+    );
     let voteCount = 0;
     let sigs: CandidateSignature[] = [];
-    activeSigs.forEach((signature) => {
+    activeSigs.forEach(signature => {
       // don't count votes from signers who have active or pending proposals
       if (!activePendingProposers.includes(signature.signer.id)) {
-        const delegateVoteCount = delegateSnapshot.delegates?.find(
-          delegate => delegate.id === signature.signer.id,
-        )?.nounsRepresented.length || 0;
+        const delegateVoteCount =
+          delegateSnapshot.delegates?.find(delegate => delegate.id === signature.signer.id)
+            ?.nounsRepresented.length || 0;
         voteCount += delegateVoteCount;
       }
       sigs.push(signature);
@@ -93,18 +110,34 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   };
 
   useEffect(() => {
-    if (delegateSnapshot.data && !isCancelOverlayVisible && props.latestProposal && activePendingProposers.data) {
-      const { sigs, voteCount } = filterSigners(delegateSnapshot.data, activePendingProposers.data, props.candidate.version.content.contentSignatures);
+    if (
+      delegateSnapshot.data &&
+      !isCancelOverlayVisible &&
+      props.latestProposal &&
+      activePendingProposers.data
+    ) {
+      const { sigs, voteCount } = filterSigners(
+        delegateSnapshot.data,
+        activePendingProposers.data,
+        props.candidate.version.content.contentSignatures,
+      );
       if (sigs.length !== signatures.length) {
         setSignatures(sigs);
       }
       // if updateProposal
       if (props.isUpdateToProposal) {
-        // no need to filter out signers with active or pending proposals here 
-        const activeSigs = props.candidate.version.content.contentSignatures.filter(sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000))
+        // no need to filter out signers with active or pending proposals here
+        const activeSigs = props.candidate.version.content.contentSignatures.filter(
+          sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000),
+        );
         setSignedVotesCount(activeSigs.length);
-        props.originalProposal?.signers && setIsThresholdMet(activeSigs.length >= props.originalProposal?.signers?.length ? true : false);
-        const dedupedSigners = props.originalProposal?.signers && deDupeSigners(props.originalProposal?.signers?.map(signature => signature.id));
+        props.originalProposal?.signers &&
+          setIsThresholdMet(
+            activeSigs.length >= props.originalProposal?.signers?.length ? true : false,
+          );
+        const dedupedSigners =
+          props.originalProposal?.signers &&
+          deDupeSigners(props.originalProposal?.signers?.map(signature => signature.id));
         if (originalSigners?.length !== dedupedSigners?.length) {
           setOriginalSigners(dedupedSigners);
         }
@@ -119,14 +152,26 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         }
       }
     }
-    const dedupedSigners = deDupeSigners(props.candidate.version.content.contentSignatures?.map(signature => signature.signer.id));
+    const dedupedSigners = deDupeSigners(
+      props.candidate.version.content.contentSignatures?.map(signature => signature.signer.id),
+    );
     if (signers?.length !== dedupedSigners.length) {
       setSigners(dedupedSigners);
     }
 
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.candidate, delegateSnapshot.data, isCancelOverlayVisible, props.latestProposal, activePendingProposers.data, signedVotesCount, props.candidate.requiredVotes, signatures.length, signers?.length, proposerNounVotes]);
+  }, [
+    props.candidate,
+    delegateSnapshot.data,
+    isCancelOverlayVisible,
+    props.latestProposal,
+    activePendingProposers.data,
+    signedVotesCount,
+    props.candidate.requiredVotes,
+    signatures.length,
+    signers?.length,
+    proposerNounVotes,
+  ]);
 
   useEffect(() => {
     if (!blockNumber) {
@@ -136,7 +181,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   useEffect(() => {
     if (props.originalProposal && props.originalProposal.signers && account) {
-      const originalSigners = props.originalProposal.signers.map((signer) => signer.id.toLowerCase());
+      const originalSigners = props.originalProposal.signers.map(signer => signer.id.toLowerCase());
       if (originalSigners.includes(account.toLowerCase())) {
         setIsOriginalSigner(true);
       } else {
@@ -147,7 +192,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   useEffect(() => {
     if (signatures && account) {
-      const isAccountSigner = signatures.find((signature) => signature.signer.id.toLowerCase() === account?.toLowerCase());
+      const isAccountSigner = signatures.find(
+        signature => signature.signer.id.toLowerCase() === account?.toLowerCase(),
+      );
       if (isAccountSigner) {
         setIsAccountSigner(true);
       } else {
@@ -175,11 +222,12 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         <SelectSponsorsToPropose
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          signatures={
-            signatures.filter((signature) => (
-              props.latestProposal && !hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) && signature)
-            )
-          }
+          signatures={signatures.filter(
+            signature =>
+              props.latestProposal &&
+              !hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) &&
+              signature,
+          )}
           delegateSnapshot={delegateSnapshot.data}
           requiredVotes={props.candidate.requiredVotes}
           candidate={props.candidate}
@@ -192,11 +240,12 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         <SubmitUpdateProposal
           isModalOpen={isUpdateModalOpen}
           setIsModalOpen={setIsUpdateModalOpen}
-          signatures={
-            signatures.filter((signature) => (
-              props.latestProposal && !hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) && signature)
-            )
-          }
+          signatures={signatures.filter(
+            signature =>
+              props.latestProposal &&
+              !hasActiveOrPendingProposal(props.latestProposal, signature.signer.id) &&
+              signature,
+          )}
           candidate={props.candidate}
           blockNumber={blockNumber}
           setDataFetchPollInterval={props.setDataFetchPollInterval}
@@ -210,8 +259,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
           </p>
         )}
-        <div className={clsx(classes.interiorWrapper, isFormDisplayed && classes.formOverlayVisible)}>
-
+        <div
+          className={clsx(classes.interiorWrapper, isFormDisplayed && classes.formOverlayVisible)}
+        >
           {signatures ? (
             <>
               {!isFormDisplayed ? (
@@ -220,33 +270,46 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     <strong>
                       {props.isUpdateToProposal ? (
                         <>
-                          {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.originalProposal?.signers.length || '...'}{" "}
-                          original signed votes
+                          {signedVotesCount >= 0 ? signedVotesCount : '...'} of{' '}
+                          {props.originalProposal?.signers.length || '...'} original signed votes
                         </>
                       ) : (
                         <>
-                          {signedVotesCount === 0 && props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                          {signedVotesCount === 0 &&
+                          props.candidate.proposerVotes > props.candidate.requiredVotes ? (
                             <>
                               <Trans>No sponsored votes needed</Trans>
                             </>
                           ) : (
                             <>
-                              {signedVotesCount >= 0 ? signedVotesCount : '...'} of {props.candidate.proposerVotes > props.candidate.requiredVotes ? <em className={classes.naVotesLabel}>n/a</em> : props.candidate.requiredVotes !== undefined ? props.candidate.requiredVotes : '...'} sponsored votes
+                              {signedVotesCount >= 0 ? signedVotesCount : '...'} of{' '}
+                              {props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                                <em className={classes.naVotesLabel}>n/a</em>
+                              ) : props.candidate.requiredVotes !== undefined ? (
+                                props.candidate.requiredVotes
+                              ) : (
+                                '...'
+                              )}{' '}
+                              sponsored votes
                             </>
                           )}
                         </>
                       )}
-
                     </strong>
                   </h4>
                   {props.candidate.proposerVotes > 0 && !props.isUpdateToProposal && (
-                    <p className={classes.proposerVotesLabel}><Trans>Proposer has {props.candidate.proposerVotes} vote{props.candidate.proposerVotes > 1 ? 's' : ''}</Trans></p>
+                    <p className={classes.proposerVotesLabel}>
+                      <Trans>
+                        Proposer has {props.candidate.proposerVotes} vote
+                        {props.candidate.proposerVotes > 1 ? 's' : ''}
+                      </Trans>
+                    </p>
                   )}
                   <p className={classes.subhead}>
                     {isThresholdMet && !props.isUpdateToProposal ? (
                       <Trans>
-                        This candidate has met the required threshold, but Nouns voters can still add support
-                        until it’s put onchain.
+                        This candidate has met the required threshold, but Nouns voters can still
+                        add support until it’s put onchain.
                       </Trans>
                     ) : (
                       <>
@@ -265,7 +328,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   <ul className={classes.sponsorsList}>
                     {signatures &&
                       signatures.map(signature => {
-                        console.log('delegateSnapshot', delegateSnapshot);
                         const sigVoteCount = delegateSnapshot.data?.delegates?.find(
                           delegate => delegate.id === signature.signer.id,
                         )?.nounsRepresented.length;
@@ -278,11 +340,16 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             voteCount={sigVoteCount}
                             expirationTimestamp={signature.expirationTimestamp}
                             signer={signature.signer.id}
-                            isAccountSigner={signature.signer.id.toLowerCase() === account?.toLowerCase()}
+                            isAccountSigner={
+                              signature.signer.id.toLowerCase() === account?.toLowerCase()
+                            }
                             sig={signature.sig}
                             setDataFetchPollInterval={props.setDataFetchPollInterval}
                             signerHasActiveOrPendingProposal={
-                              !props.isUpdateToProposal && activePendingProposers.data.includes(signature.signer.id) ? true : false
+                              !props.isUpdateToProposal &&
+                              activePendingProposers.data.includes(signature.signer.id)
+                                ? true
+                                : false
                             }
                             isUpdateToProposal={props.isUpdateToProposal}
                             isParentProposalUpdatable={isParentProposalUpdatable}
@@ -296,64 +363,87 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     {props.isUpdateToProposal ? (
                       <>
                         {props.originalProposal?.signers.map((ogSigner, i) => {
-                          const sigVoteCount = originalSignersDelegateSnapshot.data?.delegates?.find(
-                            delegate => delegate.id === ogSigner.id,
-                          )?.nounsRepresented.length;
+                          const sigVoteCount =
+                            originalSignersDelegateSnapshot.data?.delegates?.find(
+                              delegate => delegate.id === ogSigner.id,
+                            )?.nounsRepresented.length;
                           if (signers?.includes(ogSigner.id.toLowerCase())) return null;
                           if (!sigVoteCount || !activePendingProposers) return null;
-                          return <OriginalSignature key={i} signer={ogSigner.id} voteCount={sigVoteCount} isParentProposalUpdatable={isParentProposalUpdatable} />
-                        }
-                        )}
+                          return (
+                            <OriginalSignature
+                              key={i}
+                              signer={ogSigner.id}
+                              voteCount={sigVoteCount}
+                              isParentProposalUpdatable={isParentProposalUpdatable}
+                            />
+                          );
+                        })}
                       </>
                     ) : (
                       <>
                         {props.candidate.requiredVotes > signedVotesCount &&
-                          Array(props.candidate.requiredVotes - signedVotesCount
-                          )
+                          Array(props.candidate.requiredVotes - signedVotesCount)
                             .fill('')
-                            .map((_s, i) => <li className={classes.placeholder} key={i}> </li>)}
+                            .map((_s, i) => (
+                              <li className={classes.placeholder} key={i}>
+                                {' '}
+                              </li>
+                            ))}
                       </>
                     )}
 
                     {props.isUpdateToProposal && !isParentProposalUpdatable ? (
-                      <p className={classes.inactiveCandidate}><strong><Link to={`/vote/${props.originalProposal?.id}`}>Proposal {props.originalProposal?.id}</Link></strong> is no longer updatable</p>
+                      <p className={classes.inactiveCandidate}>
+                        <strong>
+                          <Link to={`/vote/${props.originalProposal?.id}`}>
+                            Proposal {props.originalProposal?.id}
+                          </Link>
+                        </strong>{' '}
+                        is no longer updatable
+                      </p>
                     ) : (
                       <>
-                        {(props.isProposer && isThresholdMet) ? (
+                        {props.isProposer && isThresholdMet ? (
                           <>
                             {/* no sign button for proposers */}
-                            <button className={classes.button}
+                            <button
+                              className={classes.button}
                               onClick={() => {
-                                props.isUpdateToProposal ?
-                                  setIsUpdateModalOpen(true) :
-                                  setIsModalOpen(true)
-                              }}>
+                                props.isUpdateToProposal
+                                  ? setIsUpdateModalOpen(true)
+                                  : setIsModalOpen(true);
+                              }}
+                            >
                               Submit onchain
                             </button>
                           </>
                         ) : (
                           <>
-                            {
-                              ((!props.isUpdateToProposal && !isAccountSigner && !props.candidate.isProposal) ||
-                                (props.isUpdateToProposal && isOriginalSigner && !isAccountSigner)) &&
-                              (
-                                <>
-                                  {!props.isProposer && connectedAccountNounVotes > 0 ? (
-                                    <button
-                                      className={classes.button}
-                                      onClick={() => setIsFormDisplayed(!isFormDisplayed)}
-                                    >
-                                      {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
-                                    </button>
-                                  ) : (
-                                    <div className={classes.withoutVotesMsg}>
-                                      <p>
-                                        <Trans>Sponsoring a proposal requires at least one Noun vote</Trans>
-                                      </p>
-                                    </div>
-                                  )}
-                                </>
-                              )}
+                            {((!props.isUpdateToProposal &&
+                              !isAccountSigner &&
+                              !props.candidate.isProposal) ||
+                              (props.isUpdateToProposal &&
+                                isOriginalSigner &&
+                                !isAccountSigner)) && (
+                              <>
+                                {!props.isProposer && connectedAccountNounVotes > 0 ? (
+                                  <button
+                                    className={classes.button}
+                                    onClick={() => setIsFormDisplayed(!isFormDisplayed)}
+                                  >
+                                    {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
+                                  </button>
+                                ) : (
+                                  <div className={classes.withoutVotesMsg}>
+                                    <p>
+                                      <Trans>
+                                        Sponsoring a proposal requires at least one Noun vote
+                                      </Trans>
+                                    </p>
+                                  </div>
+                                )}
+                              </>
+                            )}
                           </>
                         )}
                       </>
@@ -375,10 +465,13 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.15 }}
                     >
-                      <button className={classes.closeButton} onClick={() => {
-                        setIsFormDisplayed(false);
-                        props.setDataFetchPollInterval(0);
-                      }}>
+                      <button
+                        className={classes.closeButton}
+                        onClick={() => {
+                          setIsFormDisplayed(false);
+                          props.setDataFetchPollInterval(0);
+                        }}
+                      >
                         &times;
                       </button>
                       <SignatureForm
@@ -389,7 +482,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                         candidate={props.candidate}
                         handleRefetchCandidateData={props.handleRefetchCandidateData}
                         setDataFetchPollInterval={props.setDataFetchPollInterval}
-                        proposalIdToUpdate={props.originalProposal?.id ? +props.originalProposal?.id : 0}
+                        proposalIdToUpdate={
+                          props.originalProposal?.id ? +props.originalProposal?.id : 0
+                        }
                       />
                     </motion.div>
                   ) : null}
@@ -397,10 +492,14 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
               )}
             </>
           ) : (
-            <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
+            <img
+              src="/loading-noggles.svg"
+              alt="loading"
+              className={classes.transactionModalSpinner}
+            />
           )}
         </div>
-      </div >
+      </div>
     </>
   );
 };

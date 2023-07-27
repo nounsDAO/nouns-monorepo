@@ -67,9 +67,7 @@ export function handleProposalCreatedWithRequirementsV3(
   handleProposalCreated(ParsedProposalV3.fromV3Event(event));
 }
 
-export function handleProposalCreatedOnTimelockV1(
-  event: ProposalCreatedOnTimelockV1
-): void {
+export function handleProposalCreatedOnTimelockV1(event: ProposalCreatedOnTimelockV1): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
   proposal.onTimelockV1 = true;
   proposal.save();

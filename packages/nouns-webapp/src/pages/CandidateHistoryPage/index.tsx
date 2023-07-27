@@ -17,7 +17,10 @@ import ReactMarkdown from 'react-markdown';
 import { Trans } from '@lingui/macro';
 import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
-import { ProposalCandidateVersionContent, useCandidateProposalVersions } from '../../wrappers/nounsData';
+import {
+  ProposalCandidateVersionContent,
+  useCandidateProposalVersions,
+} from '../../wrappers/nounsData';
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 
@@ -64,19 +67,17 @@ const CandidateHistoryPage = ({
   };
 
   const headerDiffs = (str: string) => {
-    return (
-      <h1 className={classes.titleDiffs}>{str}</h1>
-    );
+    return <h1 className={classes.titleDiffs}>{str}</h1>;
   };
-
-  console.log('proposal.data', proposal.data);
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={12} className={classes.wrapper}>
         <div className={headerClasses.backButtonWrapper}>
           <Link to={`/candidates/${id}`}>
-            <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+            <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
+              ←
+            </button>
           </Link>
         </div>
         <div className={headerClasses.headerRow}>
@@ -103,27 +104,28 @@ const CandidateHistoryPage = ({
                   />
                 </div>
               ) : (
-                <h1>{proposalVersions
-                  ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
-                  : proposal.data?.title} </h1>
+                <h1>
+                  {proposalVersions
+                    ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
+                    : proposal.data?.title}{' '}
+                </h1>
               )}
             </div>
           </div>
         </div>
-
       </Col>
       <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
-                <ProposalContent
-                  description={proposalVersions[activeVersion - 1].description}
-                  title={proposalVersions[activeVersion - 1].title}
-                  details={proposalVersions[activeVersion - 1].details}
-                  hasSidebar={true}
-                />
-              )}
+              <ProposalContent
+                description={proposalVersions[activeVersion - 1].description}
+                title={proposalVersions[activeVersion - 1].title}
+                details={proposalVersions[activeVersion - 1].details}
+                hasSidebar={true}
+              />
+            )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
                 <Col className={clsx(classes.section, 'm-0 p-0')}>
@@ -132,8 +134,14 @@ const CandidateHistoryPage = ({
                   </h5>
                 </Col>
                 <ReactDiffViewer
-                  oldValue={processProposalDescriptionText(proposalVersions[activeVersion - 2].description, proposalVersions[activeVersion - 2].title)}
-                  newValue={processProposalDescriptionText(proposalVersions[activeVersion - 1].description, proposalVersions[activeVersion - 1].title)}
+                  oldValue={processProposalDescriptionText(
+                    proposalVersions[activeVersion - 2].description,
+                    proposalVersions[activeVersion - 2].title,
+                  )}
+                  newValue={processProposalDescriptionText(
+                    proposalVersions[activeVersion - 1].description,
+                    proposalVersions[activeVersion - 1].title,
+                  )}
                   splitView={false}
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}
@@ -161,7 +169,6 @@ const CandidateHistoryPage = ({
                 <h2>
                   <Trans>Version History</Trans>
                 </h2>
-
               </div>
               <div className={classes.versionsList}>
                 {proposalVersions &&
@@ -193,8 +200,8 @@ const CandidateHistoryPage = ({
             </div>
           </Col>
         </Row>
-      </Col >
-    </Section >
+      </Col>
+    </Section>
   );
 };
 

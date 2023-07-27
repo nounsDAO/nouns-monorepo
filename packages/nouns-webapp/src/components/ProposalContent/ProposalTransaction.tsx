@@ -2,16 +2,15 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import config from '../../config';
 import { utils } from 'ethers';
-import React, { Fragment } from 'react'
+import React, { Fragment } from 'react';
 import { linkIfAddress } from '.';
 import { ProposalDetail } from '../../wrappers/nounsDao';
 import ShortAddress from '../ShortAddress';
 import classes from './ProposalContent.module.css';
 
-
 type Props = {
   transaction: ProposalDetail;
-}
+};
 
 export default function ProposalTransaction({ transaction }: Props) {
   return (
@@ -45,8 +44,8 @@ export default function ProposalTransaction({ transaction }: Props) {
           </div>
           <div>
             <Trans>
-              This transaction was automatically added to refill the TokenBuyer. Proposers do
-              not receive this ETH.
+              This transaction was automatically added to refill the TokenBuyer. Proposers do not
+              receive this ETH.
             </Trans>
           </div>
         </div>
@@ -69,5 +68,5 @@ export default function ProposalTransaction({ transaction }: Props) {
         </div>
       )}
     </li>
-  )
+  );
 }

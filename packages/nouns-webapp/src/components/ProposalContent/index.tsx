@@ -4,7 +4,11 @@ import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import { ProposalDetail, useTimelockV1Contract } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
-import { buildEtherscanAddressLink, buildEtherscanHoldingsLink, buildEtherscanTxLink } from '../../utils/etherscan';
+import {
+  buildEtherscanAddressLink,
+  buildEtherscanHoldingsLink,
+  buildEtherscanTxLink,
+} from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
@@ -76,7 +80,12 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             </h5>
             {props.proposeOnV1 && (
               <Alert variant="warning" className="mb-4">
-                <Trans>This proposal interacts with the <a href={daoEtherscanLink} target='_blank' rel="noreferrer">original treasury</a></Trans>
+                <Trans>
+                  This proposal interacts with the{' '}
+                  <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
+                    original treasury
+                  </a>
+                </Trans>
               </Alert>
             )}
             <ProposalTransactions details={details} />

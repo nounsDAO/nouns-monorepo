@@ -77,7 +77,6 @@
   margin-top: 0;
 }
 
-
 /* transaction diffs */
 .transactionDiffsList {
   padding: 0;
@@ -102,7 +101,8 @@ li.transactionDiffsRow {
   background-color: #fafbfc !important;
 }
 
-.transactionDiffsRow :global(table), .transactionDiffsRow :global(tbody) {
+.transactionDiffsRow :global(table),
+.transactionDiffsRow :global(tbody) {
   display: block;
 }
 
@@ -120,7 +120,7 @@ li.transactionDiffsRow {
 }
 
 .transactionDiffsRow table:first-of-type {
-  margin-left:0;
+  margin-left: 0;
   @media (min-width: 992px) {
     margin-left: 0;
   }

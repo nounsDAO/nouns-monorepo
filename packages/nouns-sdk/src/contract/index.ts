@@ -17,5 +17,5 @@ export {
   NounsDaoLogicV1Factory,
   NounsDaoLogicV2Factory,
   NounsDaoLogicV3Factory,
-  NounsDaoExecutorV2Factory
+  NounsDaoExecutorV2Factory,
 } from '@nouns/contracts';

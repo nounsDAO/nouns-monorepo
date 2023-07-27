@@ -8,7 +8,7 @@ type OriginalSignatureProps = {
   voteCount: number;
   signer: string;
   isParentProposalUpdatable: boolean;
-}
+};
 
 const OriginalSignature: React.FC<OriginalSignatureProps> = props => {
   return (
@@ -26,15 +26,14 @@ const OriginalSignature: React.FC<OriginalSignatureProps> = props => {
         </p>
       </div>
       <p className={classes.sigStatus}>
-        {props.isParentProposalUpdatable ?
+        {props.isParentProposalUpdatable ? (
           <Trans>Awaiting signature</Trans>
-          :
+        ) : (
           <Trans>Did not re-sign</Trans>
-        }
-
+        )}
       </p>
     </li>
-  )
-}
+  );
+};
 
-export default OriginalSignature
+export default OriginalSignature;

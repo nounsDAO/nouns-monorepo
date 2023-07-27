@@ -116,7 +116,9 @@ button.modalButtonLink:hover {
   margin: 0;
   padding: 0;
 }
-.note a {color: var(--text-light-gray);}
+.note a {
+  color: var(--text-light-gray);
+}
 
 .timelockOption {
   margin: 1rem 0;

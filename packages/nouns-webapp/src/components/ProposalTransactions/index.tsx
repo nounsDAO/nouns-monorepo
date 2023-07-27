@@ -10,7 +10,7 @@ const ProposalTransactions = ({
   className,
   proposalTransactions,
   onRemoveProposalTransaction,
-  isProposalUpdate
+  isProposalUpdate,
 }: {
   className?: string;
   proposalTransactions: ProposalTransaction[];
@@ -18,13 +18,14 @@ const ProposalTransactions = ({
   isProposalUpdate?: boolean;
 }) => {
   const getPopover = (tx: ProposalTransaction) => {
-    let calldata = tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata
+    let calldata =
+      tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let [name, types] = tx.signature.substring(0, tx.signature.length - 1)?.split(/\((.*)/s);
     if (isProposalUpdate && types) {
       const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), tx.calldata);
       calldata = JSON.stringify([decoded.join()]);
-    };
+    }
 
     return (
       <Popover className={classes.popover} id="transaction-details-popover">
@@ -63,7 +64,7 @@ const ProposalTransactions = ({
           </Row>
         </Popover.Body>
       </Popover>
-    )
+    );
   };
 
   return (
@@ -93,7 +94,7 @@ const ProposalTransactions = ({
               </button>
             </div>
           </OverlayTrigger>
-        )
+        );
       })}
     </div>
   );

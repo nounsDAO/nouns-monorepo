@@ -42,7 +42,6 @@ const SolidColorBackgroundModalOverlay: React.FC<{
       // When the modal is shown, we want a fixed body
       root.style.position = 'fixed';
       root.style.top = `-${window.scrollY}px`;
-
     } else {
       // When the modal is hidden, we want to remain at the top of the scroll position
       const scrollY = document.body.style.top;

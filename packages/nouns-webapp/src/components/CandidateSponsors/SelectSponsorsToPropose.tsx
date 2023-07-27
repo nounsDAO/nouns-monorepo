@@ -1,17 +1,17 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import classes from './SelectSponsorsToPropose.module.css'
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
-import clsx from 'clsx'
-import { Trans } from '@lingui/macro'
-import { TransactionStatus } from '@usedapp/core'
-import { buildEtherscanTxLink } from '../../utils/etherscan'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import classes from './SelectSponsorsToPropose.module.css';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import clsx from 'clsx';
+import { Trans } from '@lingui/macro';
+import { TransactionStatus } from '@usedapp/core';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
-import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData'
-import ShortAddress from '../ShortAddress'
-import { Delegates } from '../../wrappers/subgraph'
-import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao'
-import { Link } from 'react-router-dom'
-import { Alert } from 'react-bootstrap'
+import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
+import ShortAddress from '../ShortAddress';
+import { Delegates } from '../../wrappers/subgraph';
+import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
+import { Link } from 'react-router-dom';
+import { Alert } from 'react-bootstrap';
 
 type Props = {
   isModalOpen: boolean;
@@ -23,7 +23,7 @@ type Props = {
   setIsModalOpen: Function;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
-}
+};
 
 export default function SelectSponsorsToPropose(props: Props) {
   const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
@@ -37,9 +37,9 @@ export default function SelectSponsorsToPropose(props: Props) {
   useEffect(() => {
     if (props.delegateSnapshot.delegates) {
       const voteCount = selectedSignatures.reduce((acc, sig) => {
-        const votes = props.delegateSnapshot.delegates.find(
-          delegate => delegate.id === sig.signer.id,
-        )?.nounsRepresented.length || 0;
+        const votes =
+          props.delegateSnapshot.delegates.find(delegate => delegate.id === sig.signer.id)
+            ?.nounsRepresented.length || 0;
         return acc + votes;
       }, 0);
       setSelectedVoteCount(voteCount);
@@ -52,16 +52,20 @@ export default function SelectSponsorsToPropose(props: Props) {
     setIsLoading(false);
     setIsTxSuccessful(false);
     setErrorMessage('');
-  }
+  };
   const clearState = () => {
     props.setIsModalOpen(false);
     setSelectedSignatures([]);
     clearTransactionState();
-  }
+  };
 
   const handleSubmission = async (selectedSignatures: CandidateSignature[]) => {
     clearTransactionState();
-    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => [
+      s.sig,
+      s.signer.id,
+      s.expirationTimestamp,
+    ]);
     // sort sigs by address to ensure order matches update proposal sigs
     const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
     await proposeBySigs(
@@ -72,10 +76,7 @@ export default function SelectSponsorsToPropose(props: Props) {
       props.candidate.version.content.calldatas,
       props.candidate.version.content.description,
     );
-
-  }
-
-  console.log('selectedSignatures order', selectedSignatures);
+  };
 
   const handleProposeStateChange = useCallback((state: TransactionStatus) => {
     switch (state.status) {
@@ -118,17 +119,17 @@ export default function SelectSponsorsToPropose(props: Props) {
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
-        <Trans>
-          Choose sponsors
-        </Trans>
+        <Trans>Choose sponsors</Trans>
       </h2>
       <p className={classes.modalDescription}>
         <Trans>
-          Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {props.requiredVotes}.
+          Select signatures to submit with your proposal. The total number of signatures must be
+          greater than the proposal threshold of {props.requiredVotes}.
         </Trans>
       </p>
       <Alert className={classes.modalDescription} variant="warning">
-        <Trans><strong>Note: </strong>
+        <Trans>
+          <strong>Note: </strong>
           All signers on an onchain proposal have permission to cancel the proposal.
         </Trans>
       </Alert>
@@ -136,109 +137,126 @@ export default function SelectSponsorsToPropose(props: Props) {
         <div className={classes.sectionLabel}>
           <p>
             <strong>
-              <Trans>
-                Select signatures
-              </Trans>
+              <Trans>Select signatures</Trans>
             </strong>
           </p>
         </div>
         {props.signatures && !isTxSuccessful && (
           <button
             onClick={() => {
-              props.signatures && selectedSignatures.length === props.signatures.length ?
-                setSelectedSignatures([]) :
-                setSelectedSignatures(props.signatures || [])
+              props.signatures && selectedSignatures.length === props.signatures.length
+                ? setSelectedSignatures([])
+                : setSelectedSignatures(props.signatures || []);
             }}
             disabled={isWaiting || isLoading}
           >
-            {selectedSignatures.length === props.signatures?.length ? 'Unselect' : "Select"} all
+            {selectedSignatures.length === props.signatures?.length ? 'Unselect' : 'Select'} all
           </button>
         )}
       </div>
       <div className={classes.list}>
-        {props.signatures && props.signatures.map((signature: CandidateSignature) => {
-          const voteCount = props.delegateSnapshot.delegates?.find(
-            delegate => delegate.id === signature.signer.id,
-          )?.nounsRepresented.length;
-          return (
-            <button
-              key={signature.sig}
-              onClick={() => {
-                selectedSignatures.includes(signature) ?
-                  setSelectedSignatures(selectedSignatures.filter((sig) => sig.signer !== signature.signer)) :
-                  setSelectedSignatures([...selectedSignatures, signature]);
-              }}
-              disabled={
-                (isWaiting || isLoading || isTxSuccessful || activePendingProposers.data.includes(signature.signer.id))
-              }
-              className={clsx(
-                classes.selectButton,
-                selectedSignatures.includes(signature) && classes.selectedButton,
-              )}
-            >
-              <div>
-                <ShortAddress address={signature.signer.id} />
-                <p className={classes.voteCount}>
-                  {voteCount} vote{voteCount !== 1 && 's'}
-                </p>
-              </div>
-            </button>
-          )
-        })}
+        {props.signatures &&
+          props.signatures.map((signature: CandidateSignature) => {
+            const voteCount = props.delegateSnapshot.delegates?.find(
+              delegate => delegate.id === signature.signer.id,
+            )?.nounsRepresented.length;
+            return (
+              <button
+                key={signature.sig}
+                onClick={() => {
+                  selectedSignatures.includes(signature)
+                    ? setSelectedSignatures(
+                        selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                      )
+                    : setSelectedSignatures([...selectedSignatures, signature]);
+                }}
+                disabled={
+                  isWaiting ||
+                  isLoading ||
+                  isTxSuccessful ||
+                  activePendingProposers.data.includes(signature.signer.id)
+                }
+                className={clsx(
+                  classes.selectButton,
+                  selectedSignatures.includes(signature) && classes.selectedButton,
+                )}
+              >
+                <div>
+                  <ShortAddress address={signature.signer.id} />
+                  <p className={classes.voteCount}>
+                    {voteCount} vote{voteCount !== 1 && 's'}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
       </div>
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
-            className={clsx(classes.button, classes.primaryButton, (isWaiting || isLoading) && classes.loadingButton)}
-            disabled={
-              selectedVoteCount < props.requiredVotes || isWaiting || isLoading
-            }
+            className={clsx(
+              classes.button,
+              classes.primaryButton,
+              (isWaiting || isLoading) && classes.loadingButton,
+            )}
+            disabled={selectedVoteCount < props.requiredVotes || isWaiting || isLoading}
             onClick={() => {
               handleSubmission(selectedSignatures);
             }}
           >
-            {!isWaiting && !isLoading && (
-              <>
-                Submit {selectedVoteCount} votes
-              </>
-            )}
+            {!isWaiting && !isLoading && <>Submit {selectedVoteCount} votes</>}
             <span>
-              {(isWaiting || isLoading) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
-              {(isWaiting) && 'Awaiting confirmation'}
+              {(isWaiting || isLoading) && (
+                <img
+                  src="/loading-noggles.svg"
+                  alt="loading"
+                  className={classes.transactionModalSpinner}
+                />
+              )}
+              {isWaiting && 'Awaiting confirmation'}
               {isLoading && `Submitting proposal`}
             </span>
           </button>
         )}
-        {(errorMessage) && (
+        {errorMessage && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
               onClick={() => {
                 clearTransactionState();
               }}
-            >Try again</button>
+            >
+              Try again
+            </button>
           </p>
         )}
         {isTxSuccessful && (
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <strong>Success!</strong> <br />
-              <a href={proposeBySigsState.transaction && `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`} target="_blank" rel="noreferrer">
+              <a
+                href={
+                  proposeBySigsState.transaction &&
+                  `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
                 Your candidate is now a proposal
-                {proposeBySigsState.transaction && (
-                  <img src={link} width={16} alt="link symbol" />
-                )}
+                {proposeBySigsState.transaction && <img src={link} width={16} alt="link symbol" />}
               </a>
               <br />
               {props.candidate.matchingProposalIds[0] && (
-                <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>View the proposal</Link>
+                <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>
+                  View the proposal
+                </Link>
               )}
             </p>
           </>
         )}
       </div>
-    </div >
-  )
+    </div>
+  );
 
   return (
     <>
@@ -252,5 +270,5 @@ export default function SelectSponsorsToPropose(props: Props) {
         content={modalContent}
       />
     </>
-  )
+  );
 }

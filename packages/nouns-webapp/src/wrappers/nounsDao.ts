@@ -1,4 +1,10 @@
-import { NounsDAOExecutorV2ABI, NounsDAOV3ABI, NounsDaoLogicV3Factory, NounsDaoExecutorV2Factory } from '@nouns/sdk';
+import {
+  NounsDAOExecutorV2ABI,
+  NounsDAOV2ABI,
+  NounsDAOV3ABI,
+  NounsDaoLogicV3Factory,
+  NounsDaoExecutorV2Factory,
+} from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -158,7 +164,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-  PartialProposalSubgraphEntity {
+    PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -177,10 +183,10 @@ interface PartialProposalData {
 export interface ProposalProposerAndSigners {
   proposer: {
     id: string;
-  }
+  };
   signers: {
     id: string;
-  }[]
+  }[];
 }
 
 export interface ProposalTransaction {
@@ -211,7 +217,7 @@ export interface EscrowWithdrawal {
 }
 
 export interface ForkCycleEvent {
-  eventType: 'ForkStarted' | "ForkExecuted" | 'ForkingEnded';
+  eventType: 'ForkStarted' | 'ForkExecuted' | 'ForkingEnded';
   id: string;
   createdAt: string | null;
 }
@@ -246,19 +252,23 @@ export interface ForkSubgraphEntity {
   escrowedNouns: {
     noun: {
       id: string;
-    }
+    };
   }[];
   joinedNouns: {
     noun: {
       id: string;
-    }
+    };
   }[];
 }
 
 const abi = new utils.Interface(NounsDAOV3ABI);
+const abiV2 = new utils.Interface(NounsDAOV2ABI);
 const executorAbi = new utils.Interface(NounsDAOExecutorV2ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
-const nounsDaoExecutorContract = NounsDaoExecutorV2Factory.connect(config.addresses.nounsDaoExecutor, undefined!);
+const nounsDaoExecutorContract = NounsDaoExecutorV2Factory.connect(
+  config.addresses.nounsDaoExecutor,
+  undefined!,
+);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -328,7 +338,7 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
   const replacement = '$1?raw=1';
 
   return descriptionText?.replace(regex, replacement);
-}
+};
 
 export const useCurrentQuorum = (
   nounsDao: string,
@@ -528,7 +538,7 @@ const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
   proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
-  gracePeriod?: number
+  gracePeriod?: number,
 ) => {
   const status = ProposalState[proposal.status];
 
@@ -544,12 +554,19 @@ const getProposalState = (
       return ProposalState.PENDING;
     }
 
-    if (blockNumber > +proposal.endBlock && parseInt(proposal.objectionPeriodEndBlock) > 0 && blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+    if (
+      blockNumber > +proposal.endBlock &&
+      parseInt(proposal.objectionPeriodEndBlock) > 0 &&
+      blockNumber <= parseInt(proposal.objectionPeriodEndBlock)
+    ) {
       return ProposalState.OBJECTION_PERIOD;
     }
 
     // if past endblock, but onchain status hasn't been changed
-    if (blockNumber > parseInt(proposal.endBlock) && blockNumber > parseInt(proposal.objectionPeriodEndBlock)) {
+    if (
+      blockNumber > parseInt(proposal.endBlock) &&
+      blockNumber > parseInt(proposal.objectionPeriodEndBlock)
+    ) {
       const forVotes = new BigNumber(proposal.forVotes);
       if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
@@ -581,7 +598,7 @@ const parsePartialSubgraphProposal = (
   proposal: PartialProposalSubgraphEntity | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
-  gracePeriod?: number
+  gracePeriod?: number,
 ) => {
   if (!proposal) {
     return;
@@ -607,7 +624,7 @@ const parseSubgraphProposal = (
   blockNumber: number | undefined,
   timestamp: number | undefined,
   toUpdate?: boolean,
-  gracePeriod?: number
+  gracePeriod?: number,
 ) => {
   if (!proposal) {
     return;
@@ -624,7 +641,6 @@ const parseSubgraphProposal = (
     calldatas: proposal.calldatas,
     encodedProposalHash: proposal.encodedProposalHash,
   };
-
 
   let details;
   if (toUpdate) {
@@ -748,37 +764,40 @@ export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined =>
 };
 
 export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
-  const proposalVersions: ProposalVersion[] = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
+  const proposalVersions: ProposalVersion[] = useQuery(proposalVersionsQuery(id)).data
+    ?.proposalVersions;
   const sortedProposalVersions =
     proposalVersions &&
     [...proposalVersions].sort((a: ProposalVersion, b: ProposalVersion) =>
       a.createdAt > b.createdAt ? 1 : -1,
     );
-  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: ProposalVersion, i: number) => {
-    const details: ProposalTransactionDetails = {
-      targets: proposalVersion.targets,
-      values: proposalVersion.values,
-      signatures: proposalVersion.signatures,
-      calldatas: proposalVersion.calldatas,
-      encodedProposalHash: '',
-    }
-    return {
-      id: proposalVersion.id,
-      versionNumber: i + 1,
-      createdAt: proposalVersion.createdAt,
-      updateMessage: proposalVersion.updateMessage,
-      description: proposalVersion.description,
-      targets: proposalVersion.targets,
-      values: proposalVersion.values,
-      signatures: proposalVersion.signatures,
-      calldatas: proposalVersion.calldatas,
-      title: proposalVersion.title,
-      details: formatProposalTransactionDetails(details),
-      proposal: {
-        id: proposalVersion.proposal.id,
-      },
-    };
-  });
+  const sortedNumberedVersions = sortedProposalVersions?.map(
+    (proposalVersion: ProposalVersion, i: number) => {
+      const details: ProposalTransactionDetails = {
+        targets: proposalVersion.targets,
+        values: proposalVersion.values,
+        signatures: proposalVersion.signatures,
+        calldatas: proposalVersion.calldatas,
+        encodedProposalHash: '',
+      };
+      return {
+        id: proposalVersion.id,
+        versionNumber: i + 1,
+        createdAt: proposalVersion.createdAt,
+        updateMessage: proposalVersion.updateMessage,
+        description: proposalVersion.description,
+        targets: proposalVersion.targets,
+        values: proposalVersion.values,
+        signatures: proposalVersion.signatures,
+        calldatas: proposalVersion.calldatas,
+        title: proposalVersion.title,
+        details: formatProposalTransactionDetails(details),
+        proposal: {
+          id: proposalVersion.proposal.id,
+        },
+      };
+    },
+  );
 
   return sortedNumberedVersions;
 };
@@ -852,7 +871,10 @@ export const usePropose = () => {
 };
 
 export const useProposeOnTimelockV1 = () => {
-  const { send: proposeOnTimelockV1, state: proposeOnTimelockV1State } = useContractFunction(nounsDaoContract, 'proposeOnTimelockV1');
+  const { send: proposeOnTimelockV1, state: proposeOnTimelockV1State } = useContractFunction(
+    nounsDaoContract,
+    'proposeOnTimelockV1',
+  );
   return { proposeOnTimelockV1, proposeOnTimelockV1State };
 };
 
@@ -865,18 +887,14 @@ export const useUpdateProposal = () => {
 };
 
 export const useUpdateProposalTransactions = () => {
-  const { send: updateProposalTransactions, state: updateProposaTransactionsState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposalTransactions',
-  );
+  const { send: updateProposalTransactions, state: updateProposaTransactionsState } =
+    useContractFunction(nounsDaoContract, 'updateProposalTransactions');
   return { updateProposalTransactions, updateProposaTransactionsState };
 };
 
 export const useUpdateProposalDescription = () => {
-  const { send: updateProposalDescription, state: updateProposalDescriptionState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposalDescription',
-  );
+  const { send: updateProposalDescription, state: updateProposalDescriptionState } =
+    useContractFunction(nounsDaoContract, 'updateProposalDescription');
   return { updateProposalDescription, updateProposalDescriptionState };
 };
 
@@ -904,21 +922,19 @@ export const useExecuteProposal = () => {
   return { executeProposal, executeProposalState };
 };
 export const useExecuteProposalOnTimelockV1 = () => {
-  const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } = useContractFunction(
-    nounsDaoContract,
-    'executeOnTimelockV1',
-  );
+  const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } =
+    useContractFunction(nounsDaoContract, 'executeOnTimelockV1');
   return { executeProposalOnTimelockV1, executeProposalOnTimelockV1State };
 };
 
-// fork functions 
+// fork functions
 export const useEscrowToFork = () => {
   const { send: escrowToFork, state: escrowToForkState } = useContractFunction(
     nounsDaoContract,
     'escrowToFork',
   );
   return { escrowToFork, escrowToForkState };
-}
+};
 
 export const useWithdrawFromForkEscrow = () => {
   const { send: withdrawFromForkEscrow, state: withdrawFromForkEscrowState } = useContractFunction(
@@ -926,8 +942,7 @@ export const useWithdrawFromForkEscrow = () => {
     'withdrawFromForkEscrow',
   );
   return { withdrawFromForkEscrow, withdrawFromForkEscrowState };
-}
-
+};
 
 export const useJoinFork = () => {
   const { send: joinFork, state: joinForkState } = useContractFunction(
@@ -935,7 +950,7 @@ export const useJoinFork = () => {
     'joinFork',
   );
   return { joinFork, joinForkState };
-}
+};
 
 export const useIsForkPeriodActive = (): boolean => {
   const [isForkPeriodActive] =
@@ -946,17 +961,18 @@ export const useIsForkPeriodActive = (): boolean => {
       args: [],
     }) || [];
   return isForkPeriodActive ?? false;
-}
+};
 
 export const useForkThreshold = () => {
-  const [forkThreshold] = useContractCall<[EthersBN]>({
-    abi,
-    address: config.addresses.nounsDAOProxy,
-    method: 'forkThreshold',
-    args: [],
-  }) || [];
+  const [forkThreshold] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsDAOProxy,
+      method: 'forkThreshold',
+      args: [],
+    }) || [];
   return forkThreshold?.toNumber();
-}
+};
 
 export const useNumTokensInForkEscrow = (): number | undefined => {
   const [numTokensInForkEscrow] =
@@ -967,15 +983,19 @@ export const useNumTokensInForkEscrow = (): number | undefined => {
       args: [],
     }) || [];
   return numTokensInForkEscrow?.toNumber();
-}
+};
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(
-    escrowDepositEventsQuery(forkId), {
+  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId), {
     pollInterval: pollInterval,
-  }) as { loading: boolean, data: { escrowDeposits: EscrowDeposit[] }, error: Error, refetch: () => void }
-  const escrowDeposits = data?.escrowDeposits?.map((escrowDeposit) => {
-    const proposalIDs = escrowDeposit.proposalIDs.map((id) => id);
+  }) as {
+    loading: boolean;
+    data: { escrowDeposits: EscrowDeposit[] };
+    error: Error;
+    refetch: () => void;
+  };
+  const escrowDeposits = data?.escrowDeposits?.map(escrowDeposit => {
+    const proposalIDs = escrowDeposit.proposalIDs.map(id => id);
     return {
       eventType: 'EscrowDeposit',
       id: escrowDeposit.id,
@@ -990,16 +1010,20 @@ export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => 
   return {
     loading,
     error,
-    data: escrowDeposits as EscrowDeposit[] ?? [],
-    refetch
+    data: (escrowDeposits as EscrowDeposit[]) ?? [],
+    refetch,
   };
-}
+};
 
 export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(
-    escrowWithdrawEventsQuery(forkId), {
+  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery(forkId), {
     pollInterval: pollInterval,
-  }) as { loading: boolean, data: { escrowWithdrawals: EscrowWithdrawal[] }, error: Error, refetch: () => void };
+  }) as {
+    loading: boolean;
+    data: { escrowWithdrawals: EscrowWithdrawal[] };
+    error: Error;
+    refetch: () => void;
+  };
   const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
     return {
       eventType: 'EscrowWithdrawal',
@@ -1008,20 +1032,23 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
       owner: { id: escrowWithdrawal.owner.id },
       tokenIDs: escrowWithdrawal.tokenIDs,
     };
-  },
-  );
+  });
 
   return {
     loading,
     error,
-    data: escrowWithdrawals as EscrowWithdrawal[] ?? [],
-    refetch
+    data: (escrowWithdrawals as EscrowWithdrawal[]) ?? [],
+    refetch,
   };
-}
+};
 
 // helper function to add fork cycle events to escrow events
-const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[], forkDetails: Fork) => {
-  const endTimestamp = forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
+const eventsWithforkCycleEvents = (
+  events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[],
+  forkDetails: Fork,
+) => {
+  const endTimestamp =
+    forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
   // const started: ForkCycleEvent = {
   //   eventType: 'ForkStarted',
   //   id: 'fork-started',
@@ -1043,20 +1070,29 @@ const eventsWithforkCycleEvents = (events: (EscrowDeposit | EscrowWithdrawal | F
     forkEnded,
   ];
 
-  const sortedEvents = [...events, ...forkEvents].sort((a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent, b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent) => {
-    return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
-  });
+  const sortedEvents = [...events, ...forkEvents].sort(
+    (
+      a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
+      b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
+    ) => {
+      return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
+    },
+  );
   return sortedEvents;
-}
+};
 
 export const useForkJoins = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(
-    forkJoinsQuery(forkId), {
+  const { loading, data, error, refetch } = useQuery(forkJoinsQuery(forkId), {
     pollInterval: pollInterval,
-  }) as { loading: boolean, data: { forkJoins: EscrowDeposit[] }, error: Error, refetch: () => void };
+  }) as {
+    loading: boolean;
+    data: { forkJoins: EscrowDeposit[] };
+    error: Error;
+    refetch: () => void;
+  };
 
-  const forkJoins = data?.forkJoins?.map((forkJoin) => {
-    const proposalIDs = forkJoin.proposalIDs.map((id) => id);
+  const forkJoins = data?.forkJoins?.map(forkJoin => {
+    const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
       eventType: 'ForkJoin',
       id: forkJoin.id,
@@ -1072,19 +1108,42 @@ export const useForkJoins = (pollInterval: number, forkId: string) => {
   return {
     loading,
     error,
-    data: forkJoins as EscrowDeposit[] ?? [],
-    refetch
+    data: (forkJoins as EscrowDeposit[]) ?? [],
+    refetch,
   };
-}
+};
 
 export const useEscrowEvents = (pollInterval: number, forkId: string) => {
-  const { loading: depositsLoading, data: depositEvents, error: depositsError, refetch: refetchEscrowDepositEvents } = useEscrowDepositEvents(pollInterval, forkId);
-  const { loading: withdrawalsLoading, data: withdrawalEvents, error: withdrawalsError, refetch: refetchEscrowWithdrawalEvents } = useEscrowWithdrawalEvents(pollInterval, forkId);
-  const { loading: forkDetailsLoading, data: forkDetails, error: forkDetailsError } = useForkDetails(pollInterval, forkId);
-  const { loading: forkJoinsLoading, data: forkJoins, error: forkJoinsError, refetch: refetchForkJoins } = useForkJoins(pollInterval, forkId);
+  const {
+    loading: depositsLoading,
+    data: depositEvents,
+    error: depositsError,
+    refetch: refetchEscrowDepositEvents,
+  } = useEscrowDepositEvents(pollInterval, forkId);
+  const {
+    loading: withdrawalsLoading,
+    data: withdrawalEvents,
+    error: withdrawalsError,
+    refetch: refetchEscrowWithdrawalEvents,
+  } = useEscrowWithdrawalEvents(pollInterval, forkId);
+  const {
+    loading: forkDetailsLoading,
+    data: forkDetails,
+    error: forkDetailsError,
+  } = useForkDetails(pollInterval, forkId);
+  const {
+    loading: forkJoinsLoading,
+    data: forkJoins,
+    error: forkJoinsError,
+    refetch: refetchForkJoins,
+  } = useForkJoins(pollInterval, forkId);
   const loading = depositsLoading || withdrawalsLoading || forkDetailsLoading || forkJoinsLoading;
   const error = depositsError || withdrawalsError || forkDetailsError || forkJoinsError;
-  const data: (EscrowDeposit | EscrowWithdrawal)[] = [...depositEvents, ...withdrawalEvents, ...forkJoins];
+  const data: (EscrowDeposit | EscrowWithdrawal)[] = [
+    ...depositEvents,
+    ...withdrawalEvents,
+    ...forkJoins,
+  ];
   // get fork details to pass to forkCycleEvents
   const events = eventsWithforkCycleEvents(data, forkDetails);
 
@@ -1096,17 +1155,21 @@ export const useEscrowEvents = (pollInterval: number, forkId: string) => {
       refetchEscrowDepositEvents();
       refetchEscrowWithdrawalEvents();
       refetchForkJoins();
-    }
-  }
-}
+    },
+  };
+};
 
 export const useForkDetails = (pollInterval: number, id: string) => {
-  const { loading, data: forkData, error, refetch } = useQuery(
-    forkDetailsQuery(id.toString()), {
+  const {
+    loading,
+    data: forkData,
+    error,
+    refetch,
+  } = useQuery(forkDetailsQuery(id.toString()), {
     pollInterval: pollInterval,
-  }) as { loading: boolean, data: { fork: ForkSubgraphEntity }, error: Error, refetch: () => void };
-  const joined = forkData?.fork?.joinedNouns?.map((item) => item.noun.id) ?? [];
-  const escrowed = forkData?.fork?.escrowedNouns?.map((item) => item.noun.id) ?? [];
+  }) as { loading: boolean; data: { fork: ForkSubgraphEntity }; error: Error; refetch: () => void };
+  const joined = forkData?.fork?.joinedNouns?.map(item => item.noun.id) ?? [];
+  const escrowed = forkData?.fork?.escrowedNouns?.map(item => item.noun.id) ?? [];
   const addedNouns = [...escrowed, ...joined];
   const data = {
     ...forkData?.fork,
@@ -1117,23 +1180,26 @@ export const useForkDetails = (pollInterval: number, id: string) => {
     data,
     error,
     refetch,
-  }
-}
+  };
+};
 
 export const useForks = (pollInterval?: number) => {
-  const { loading, data: forksData, error, refetch } = useQuery(
-    forksQuery(), {
+  const {
+    loading,
+    data: forksData,
+    error,
+    refetch,
+  } = useQuery(forksQuery(), {
     pollInterval: pollInterval || 0,
-  }) as { loading: boolean, data: { forks: Fork[] }, error: Error, refetch: () => void };
+  }) as { loading: boolean; data: { forks: Fork[] }; error: Error; refetch: () => void };
   const data = forksData?.forks;
   return {
     loading,
     data,
     error,
     refetch,
-  }
-}
-
+  };
+};
 
 export const useExecuteFork = () => {
   const { send: executeFork, state: executeForkState } = useContractFunction(
@@ -1141,7 +1207,7 @@ export const useExecuteFork = () => {
     'executeFork',
   );
   return { executeFork, executeForkState };
-}
+};
 
 export const useGracePeriod = () => {
   const [gracePeriod] =
@@ -1176,46 +1242,63 @@ export const useForkThresholdBPS = (): number | undefined => {
 };
 
 export const useActivePendingUpdatableProposers = (blockNumber: number) => {
-  const { loading, data: proposals, error } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as { loading: boolean, data: { proposals: ProposalProposerAndSigners[] }, error: Error };
+  const {
+    loading,
+    data: proposals,
+    error,
+  } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as {
+    loading: boolean;
+    data: { proposals: ProposalProposerAndSigners[] };
+    error: Error;
+  };
   let data: string[] = [];
-  proposals?.proposals.length > 0 && proposals.proposals.map((proposal) => {
-    data.push(proposal.proposer.id);
-    proposal.signers.map((signer: { id: string; }) => {
-      data.push(signer.id);
-      return signer.id;
+  proposals?.proposals.length > 0 &&
+    proposals.proposals.map(proposal => {
+      data.push(proposal.proposer.id);
+      proposal.signers.map((signer: { id: string }) => {
+        data.push(signer.id);
+        return signer.id;
+      });
+      return proposal.proposer.id;
     });
-    return proposal.proposer.id;
-  });
 
   return {
     loading,
     data,
     error,
-  }
-}
+  };
+};
 
 export const useHasActiveOrPendingProposalOrCandidate = (account: string, timestamp: number) => {
   const { data } = useQuery(activePendingUpdatableProposersQuery(1000, timestamp));
   // check to see if returned proposals have a proposer that matches the account
-  const hasActiveOrPendingProposalOrCandidate = data?.proposals?.some((proposal: ProposalSubgraphEntity) => {
-    if (proposal.proposer.id.toLowerCase() === account.toLowerCase()) {
-      return true;
-    }
-    if (proposal.signers.some((signer: { id: string }) => signer.id.toLowerCase() === account.toLowerCase())) {
-      return true;
-    }
-    return false;
-  });
+  const hasActiveOrPendingProposalOrCandidate = data?.proposals?.some(
+    (proposal: ProposalSubgraphEntity) => {
+      if (proposal.proposer.id.toLowerCase() === account.toLowerCase()) {
+        return true;
+      }
+      if (
+        proposal.signers.some(
+          (signer: { id: string }) => signer.id.toLowerCase() === account.toLowerCase(),
+        )
+      ) {
+        return true;
+      }
+      return false;
+    },
+  );
 
   return hasActiveOrPendingProposalOrCandidate;
-}
+};
 
 export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalStatus: ProposalState,
   latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (account && latestProposalProposer &&
+  if (
+    account &&
+    latestProposalProposer &&
     (latestProposalStatus === ProposalState.ACTIVE ||
       latestProposalStatus === ProposalState.PENDING ||
       latestProposalStatus === ProposalState.UPDATABLE) &&
@@ -1227,11 +1310,25 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
 };
 
 export const useIsDaoGteV3 = (): boolean => {
-  if (config.featureToggles.daoGteV3) {
+  const [implementation] =
+    useContractCall({
+      abiV2,
+      address: config.addresses.nounsDAOProxy,
+      method: 'implementation',
+    }) || [];
+
+  if (
+    implementation &&
+    config.addresses.nounsDAOLogicV2 &&
+    implementation.toLowerCase() !== config.addresses.nounsDAOLogicV2.toLowerCase()
+  ) {
     return true;
   }
-  return false
-}
+  if (!config.featureToggles.daoGteV3) {
+    return false;
+  }
+  return true;
+};
 
 export const useTimelockV1Contract = (): string | undefined => {
   const [timelockV1] =
@@ -1241,7 +1338,7 @@ export const useTimelockV1Contract = (): string | undefined => {
       method: 'timelockV1',
     }) || [];
   return timelockV1;
-}
+};
 
 export const useLastMinuteWindowInBlocks = (): number | undefined => {
   const [lastMinuteWindowInBlocks] =
@@ -1251,7 +1348,7 @@ export const useLastMinuteWindowInBlocks = (): number | undefined => {
       method: 'lastMinuteWindowInBlocks',
     }) || [];
   return lastMinuteWindowInBlocks?.toNumber();
-}
+};
 
 export const useVoteSnapshotBlockSwitchProposalId = (): number | undefined => {
   const [voteSnapshotBlockSwitchProposalId] =
@@ -1261,4 +1358,4 @@ export const useVoteSnapshotBlockSwitchProposalId = (): number | undefined => {
       method: 'voteSnapshotBlockSwitchProposalId',
     }) || [];
   return voteSnapshotBlockSwitchProposalId?.toNumber();
-}
+};

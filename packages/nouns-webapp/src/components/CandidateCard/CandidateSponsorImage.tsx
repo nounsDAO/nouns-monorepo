@@ -7,5 +7,9 @@ type Props = {
 };
 
 export default function CandidateSponsorImage({ nounId }: Props) {
-  return <div className={classes.sponsorAvatar}><StandaloneNounImage nounId={BigNumber.from(nounId)} /></div>;
+  return (
+    <div className={classes.sponsorAvatar}>
+      <StandaloneNounImage nounId={BigNumber.from(nounId)} />
+    </div>
+  );
 }

@@ -84,7 +84,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     } else {
       setCreatedTimestamp(props.proposal.createdTimestamp);
     }
-
   }, [currentBlock, hasManyVersions, props.proposalVersions, props.proposal]);
 
   const voteButton = (
@@ -124,15 +123,17 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   );
 
   const sponsorLink = (sponsor: string) => {
-    return <a
-      href={buildEtherscanAddressLink(sponsor)}
-      target="_blank"
-      rel="noreferrer"
-      className={classes.proposerLinkJp}
-    >
-      <ShortAddress address={sponsor} avatar={false} />
-    </a>
-  }
+    return (
+      <a
+        href={buildEtherscanAddressLink(sponsor)}
+        target="_blank"
+        rel="noreferrer"
+        className={classes.proposerLinkJp}
+      >
+        <ShortAddress address={sponsor} avatar={false} />
+      </a>
+    );
+  };
   const transactionLink = transactionIconLink(proposal.transactionHash);
 
   return (
@@ -194,35 +195,35 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 <Trans>
                   <span className={classes.proposedByJp}>Proposed by: </span>
                   <span className={classes.proposerJp}>{proposer}</span>
-                  <span className={classes.linkIcon}>
-                    {transactionLink}
-                  </span>
-
+                  <span className={classes.linkIcon}>{transactionLink}</span>
                 </Trans>
               </div>
             </HoverCard>
             {props.proposal.signers.length > 0 && (
               <div className={classes.proposalSponsors}>
                 <h3>
-                  <span className={classes.proposedByJp}><Trans>Sponsored by</Trans></span>
-                </h3>{" "}
+                  <span className={classes.proposedByJp}>
+                    <Trans>Sponsored by</Trans>
+                  </span>
+                </h3>{' '}
                 {props.proposal.signers.map((signer: { id: string }, i: number) => {
-                  return <>
-                    <HoverCard
-                      hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-                      tip={signer.id ? signer.id : ''}
-                      id="byLineHoverCard"
-                    >
-                      <h3>
-                        {sponsorLink(signer.id)}
-                      </h3>
-                    </HoverCard>
-                  </>
+                  return (
+                    <>
+                      <HoverCard
+                        hoverCardContent={(tip: string) => (
+                          <ByLineHoverCard proposerAddress={tip} />
+                        )}
+                        tip={signer.id ? signer.id : ''}
+                        id="byLineHoverCard"
+                      >
+                        <h3>{sponsorLink(signer.id)}</h3>
+                      </HoverCard>
+                    </>
+                  );
                 })}
               </div>
             )}
           </>
-
         ) : (
           <>
             <h3>Proposed by</h3>
@@ -232,32 +233,30 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 tip={proposal && proposal.proposer ? proposal.proposer : ''}
                 id="byLineHoverCard"
               >
-                <h3>
-                  {proposer}
-                </h3>
+                <h3>{proposer}</h3>
               </HoverCard>
             </div>
-            <span className={classes.linkIcon}>
-              {transactionLink}
-            </span>
+            <span className={classes.linkIcon}>{transactionLink}</span>
 
             {props.proposal.signers.length > 0 && (
               <div className={classes.proposalSponsors}>
                 <h3>
                   <span className={classes.proposedByJp}>Sponsored by</span>
-                </h3>{" "}
+                </h3>{' '}
                 {props.proposal.signers.map((signer: { id: string }, i: number) => {
-                  return <>
-                    <HoverCard
-                      hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-                      tip={signer.id ? signer.id : ''}
-                      id="byLineHoverCard"
-                    >
-                      <h3>
-                        {sponsorLink(signer.id)}
-                      </h3>
-                    </HoverCard>
-                  </>
+                  return (
+                    <>
+                      <HoverCard
+                        hoverCardContent={(tip: string) => (
+                          <ByLineHoverCard proposerAddress={tip} />
+                        )}
+                        tip={signer.id ? signer.id : ''}
+                        id="byLineHoverCard"
+                      >
+                        <h3>{sponsorLink(signer.id)}</h3>
+                      </HoverCard>
+                    </>
+                  );
                 })}
               </div>
             )}
@@ -268,22 +267,17 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         <p className={classes.versionHistory}>
           {hasManyVersions ? (
             <Link to={`/vote/${proposal.id}/history/`}>
-              <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
-              <span>updated{" "}
-                {updatedTimestamp && relativeTimestamp(updatedTimestamp)}
-              </span>
+              <strong>Version {hasManyVersions ? props.versionNumber : '1'}</strong>{' '}
+              <span>updated {updatedTimestamp && relativeTimestamp(updatedTimestamp)}</span>
             </Link>
           ) : (
             <>
-              <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
-              <span>created{" "}
-                {createdTimestamp && relativeTimestamp(createdTimestamp)}
-              </span>
+              <strong>Version {hasManyVersions ? props.versionNumber : '1'}</strong>{' '}
+              <span>created {createdTimestamp && relativeTimestamp(createdTimestamp)}</span>
             </>
           )}
         </p>
       )}
-
 
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>

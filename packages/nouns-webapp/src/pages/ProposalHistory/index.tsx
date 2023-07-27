@@ -5,7 +5,7 @@ import classes from './Vote.module.css';
 import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import { RouteComponentProps, } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -66,9 +66,7 @@ const ProposalHistory = ({
     );
   };
   const headerDiffs = (str: string) => {
-    return (
-      <h1 className={classes.titleDiffs}>{str}</h1>
-    );
+    return <h1 className={classes.titleDiffs}>{str}</h1>;
   };
 
   return (
@@ -78,7 +76,9 @@ const ProposalHistory = ({
           <>
             <div className={headerClasses.backButtonWrapper}>
               <Link to={`/vote/${id}`}>
-                <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+                <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
+                  ←
+                </button>
               </Link>
             </div>
             <div className={headerClasses.headerRow}>
@@ -124,13 +124,13 @@ const ProposalHistory = ({
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
-                <ProposalContent
-                  description={proposalVersions[activeVersion - 1].description}
-                  title={proposalVersions[activeVersion - 1].title}
-                  details={proposalVersions[activeVersion - 1].details}
-                  hasSidebar={true}
-                />
-              )}
+              <ProposalContent
+                description={proposalVersions[activeVersion - 1].description}
+                title={proposalVersions[activeVersion - 1].title}
+                details={proposalVersions[activeVersion - 1].details}
+                hasSidebar={true}
+              />
+            )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
                 <Col className={clsx(classes.section, 'm-0 p-0')}>
@@ -139,8 +139,14 @@ const ProposalHistory = ({
                   </h5>
                 </Col>
                 <ReactDiffViewer
-                  oldValue={processProposalDescriptionText(proposalVersions[activeVersion - 2].description, proposalVersions[activeVersion - 2].title)}
-                  newValue={processProposalDescriptionText(proposalVersions[activeVersion - 1].description, proposalVersions[activeVersion - 1].title)}
+                  oldValue={processProposalDescriptionText(
+                    proposalVersions[activeVersion - 2].description,
+                    proposalVersions[activeVersion - 2].title,
+                  )}
+                  newValue={processProposalDescriptionText(
+                    proposalVersions[activeVersion - 1].description,
+                    proposalVersions[activeVersion - 1].title,
+                  )}
                   splitView={false}
                   hideLineNumbers={true}
                   extraLinesSurroundingDiff={10000}
@@ -188,8 +194,9 @@ const ProposalHistory = ({
               </div>
               {activeVersion > 1 && (
                 <button
-                  className={clsx(classes.diffsLink,
-                    isDiffsVisible ? classes.diffsLinkActive : classes.diffsLinkInactive
+                  className={clsx(
+                    classes.diffsLink,
+                    isDiffsVisible ? classes.diffsLinkActive : classes.diffsLinkInactive,
                   )}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}
                 >

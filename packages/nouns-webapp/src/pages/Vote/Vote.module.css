@@ -139,7 +139,7 @@
   text-align: right;
 }
 .objectionPeriodActive {
-  border-top: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 1rem;
   margin-top: 1rem;
   color: var(--brand-gray-light-text);

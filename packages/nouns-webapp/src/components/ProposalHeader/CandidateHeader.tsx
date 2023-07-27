@@ -40,7 +40,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     lastUpdatedTimestamp,
     isActiveForVoting,
     isWalletConnected,
-    isUpdateToProposal
+    isUpdateToProposal,
   } = props;
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
@@ -90,9 +90,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
-                <div>
-                  {subHead}
-                </div>
+                <div>{subHead}</div>
               </div>
             </span>
             <div className={classes.proposalTitleWrapper}>
@@ -150,7 +148,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             <strong>Version {versionsCount}</strong>{' '}
             <span>
               {versionsCount === 1 ? 'created' : 'updated'}{' '}
-
               {relativeTimestamp(lastUpdatedTimestamp)}
             </span>
           </Link>
@@ -159,7 +156,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             <strong>Version {versionsCount}</strong>{' '}
             <span>
               {versionsCount === 1 ? 'created' : 'updated'}{' '}
-
               {relativeTimestamp(lastUpdatedTimestamp)}
             </span>
           </>

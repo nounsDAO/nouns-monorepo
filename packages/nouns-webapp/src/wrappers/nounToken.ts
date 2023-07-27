@@ -3,7 +3,13 @@ import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { Delegates, accountEscrowedNounsQuery, delegateNounsAtBlockQuery, ownedNounsQuery, seedsQuery } from './subgraph';
+import {
+  Delegates,
+  accountEscrowedNounsQuery,
+  delegateNounsAtBlockQuery,
+  ownedNounsQuery,
+  seedsQuery,
+} from './subgraph';
 import { useEffect } from 'react';
 
 interface NounToken {
@@ -211,11 +217,11 @@ export const useUserOwnedNounIds = (pollInterval: number) => {
     ownedNounsQuery(account?.toLowerCase() ?? ''),
     {
       pollInterval: pollInterval,
-    }
+    },
   );
   const userOwnedNouns: number[] = data?.nouns?.map((noun: NounId) => Number(noun.id));
   return { loading, data: userOwnedNouns, error, refetch };
-}
+};
 
 export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { account } = useEthers();
@@ -223,53 +229,54 @@ export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => 
     accountEscrowedNounsQuery(account?.toLowerCase() ?? '', forkId),
     {
       pollInterval: pollInterval,
-    }
+    },
   );
   // filter escrowed nouns to just this fork
-  const userEscrowedNounIds: number[] = data?.escrowedNouns.reduce((acc: number[], escrowedNoun: EscrowedNoun) => {
-    if (escrowedNoun.fork.id === forkId) {
-      acc.push(+escrowedNoun.noun.id);
-    }
-    return acc;
-  }, []);
+  const userEscrowedNounIds: number[] = data?.escrowedNouns.reduce(
+    (acc: number[], escrowedNoun: EscrowedNoun) => {
+      if (escrowedNoun.fork.id === forkId) {
+        acc.push(+escrowedNoun.noun.id);
+      }
+      return acc;
+    },
+    [],
+  );
   return { loading, data: userEscrowedNounIds, error, refetch };
-}
+};
 
 export const useSetApprovalForAll = () => {
   let isApprovedForAll = false;
-  const { send: setApproval, state: setApprovalState } = useContractFunction(nounsTokenContract, 'setApprovalForAll');
+  const { send: setApproval, state: setApprovalState } = useContractFunction(
+    nounsTokenContract,
+    'setApprovalForAll',
+  );
   if (setApprovalState.status === 'Success') {
     isApprovedForAll = true;
   }
 
   return { setApproval, setApprovalState, isApprovedForAll };
-}
+};
 
 export const useIsApprovedForAll = () => {
   const { account } = useEthers();
-  const [isApprovedForAll] = useContractCall<[EthersBN]>({
-    abi,
-    address: config.addresses.nounsToken,
-    method: 'isApprovedForAll',
-    args: [
-      account,
-      config.addresses.nounsDAOProxy
-    ],
-  }) || [];
+  const [isApprovedForAll] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsToken,
+      method: 'isApprovedForAll',
+      args: [account, config.addresses.nounsDAOProxy],
+    }) || [];
   return isApprovedForAll || false;
-
-}
+};
 export const useSetApprovalForTokenId = () => {
   const { send: approveTokenId, state: approveTokenIdState } = useContractFunction(
     nounsTokenContract,
     'approve',
   );
   return { approveTokenId, approveTokenIdState };
-}
+};
 
 export const useDelegateNounsAtBlockQuery = (signers: string[], block: number) => {
-  const { loading, data, error } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signers, block),
-  );
+  const { loading, data, error } = useQuery<Delegates>(delegateNounsAtBlockQuery(signers, block));
   return { loading, data, error };
 };

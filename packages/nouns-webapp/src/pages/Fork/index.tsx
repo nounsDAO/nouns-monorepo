@@ -6,7 +6,15 @@ import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
-import { useEscrowEvents, useForkDetails, useForkThreshold, useForks, useNumTokensInForkEscrow, useAdjustedTotalSupply, useForkThresholdBPS } from '../../wrappers/nounsDao';
+import {
+  useEscrowEvents,
+  useForkDetails,
+  useForkThreshold,
+  useForks,
+  useNumTokensInForkEscrow,
+  useAdjustedTotalSupply,
+  useForkThresholdBPS,
+} from '../../wrappers/nounsDao';
 import { useEthers } from '@usedapp/core';
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
 import ForkEvent from './ForkEvent';
@@ -60,7 +68,7 @@ const ForkPage = ({
     escrowEvents.refetch();
     forkDetails.refetch();
     forks.refetch();
-  }
+  };
 
   const handlePercentageToThreshold = () => {
     if (forkThreshold !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
@@ -72,7 +80,7 @@ const ForkPage = ({
         setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
       }
     }
-  }
+  };
 
   useEffect(() => {
     // trigger data updates on modal close
@@ -81,16 +89,25 @@ const ForkPage = ({
   }, [isModalOpen, isWithdrawModalOpen, isDeployModalOpen, isForkPeriodActive]);
 
   useEffect(() => {
-    if (forkDetails?.data?.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000) {
+    if (
+      forkDetails?.data?.forkingPeriodEndTimestamp &&
+      +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000
+    ) {
       // 'forking'
       setForkStatusLabel('Forking');
       setAddNounsButtonLabel('Join fork');
       setIsForkPeriodActive(true);
-    } else if (forkDetails?.data?.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000) {
+    } else if (
+      forkDetails?.data?.forkingPeriodEndTimestamp &&
+      +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+    ) {
       // 'forked' === executed and forking period ended
       setIsForked(true);
       setForkStatusLabel('Forked');
-    } else if (!forkDetails?.data?.forkingPeriodEndTimestamp && forkDetails?.data?.tokensInEscrowCount) {
+    } else if (
+      !forkDetails?.data?.forkingPeriodEndTimestamp &&
+      forkDetails?.data?.tokensInEscrowCount
+    ) {
       // 'escrow'
       setForkStatusLabel('Escrow');
       setAddNounsButtonLabel('Add Nouns to escrow');
@@ -100,7 +117,11 @@ const ForkPage = ({
       setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
     }
     // threshold
-    if ((numTokensInForkEscrow && forkThreshold !== undefined) && numTokensInForkEscrow > forkThreshold) {
+    if (
+      numTokensInForkEscrow &&
+      forkThreshold !== undefined &&
+      numTokensInForkEscrow > forkThreshold
+    ) {
       setIsThresholdMet(true);
     } else {
       setIsThresholdMet(false);
@@ -111,13 +132,25 @@ const ForkPage = ({
       handlePercentageToThreshold();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen, isForkPeriodActive, numTokensInForkEscrow, forkDetails, forkThreshold, adjustedTotalSupply, forks.data, id]);
+  }, [
+    isModalOpen,
+    isForkPeriodActive,
+    numTokensInForkEscrow,
+    forkDetails,
+    forkThreshold,
+    adjustedTotalSupply,
+    forks.data,
+    id,
+  ]);
 
   useEffect(() => {
     // set page layout based on data
     if (forks.data && forkDetails.data) {
       // match id to upcoming fork id
-      if (forks?.data.length === 0 || (forks?.data.length > 0 && +id === +forks.data[forks.data.length - 1].id + 1)) {
+      if (
+        forks?.data.length === 0 ||
+        (forks?.data.length > 0 && +id === +forks.data[forks.data.length - 1].id + 1)
+      ) {
         setIsNewForkPage(true);
       } else {
         setIsNewForkPage(false);
@@ -125,7 +158,6 @@ const ForkPage = ({
       setIsPageDataLoaded(true);
     }
   }, [forks.data, forkDetails.data, id]);
-
 
   if (!isPageDataLoaded) {
     return (
@@ -142,26 +174,30 @@ const ForkPage = ({
 
   return (
     <>
-      <Section fullWidth={false} className='h-100'>
+      <Section fullWidth={false} className="h-100">
         <Row>
           {isNewForkPage ? (
-            <div className={clsx(
-              classes.pageHeader,
-              classes.emptyState,
-            )}>
+            <div className={clsx(classes.pageHeader, classes.emptyState)}>
               <Col lg={12}>
                 <header>
-                  <div className={(classes.status)}>
-                    <Link className={classes.backButton} to="/fork">←</Link>
-                    <span className={clsx(classes.forkStatus)}>
-                      {forkStatusLabel}
-                    </span>
+                  <div className={classes.status}>
+                    <Link className={classes.backButton} to="/fork">
+                      ←
+                    </Link>
+                    <span className={clsx(classes.forkStatus)}>{forkStatusLabel}</span>
                     <div className={classes.spacer} />
                   </div>
-                  <h1><Trans>Fork Nouns DAO</Trans></h1>
-                  <p className='mb-4'>
+                  <h1>
+                    <Trans>Fork Nouns DAO</Trans>
+                  </h1>
+                  <p className="mb-4">
                     <Trans>
-                      Any token holder can signal to fork (exit) in response to a governance proposal. If a {thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '}quorum of tokens signal to exit, the fork will succeed.
+                      Any token holder can signal to fork (exit) in response to a governance
+                      proposal. If a{' '}
+                      {thresholdPercentage && thresholdPercentage > 0
+                        ? `${thresholdPercentage}% `
+                        : ' '}
+                      quorum of tokens signal to exit, the fork will succeed.
                     </Trans>
                   </p>
                 </header>
@@ -172,45 +208,52 @@ const ForkPage = ({
                 >
                   {addNounsButtonLabel}
                 </button>
-
               </Col>
             </div>
           ) : (
-            <div className={clsx(
-              classes.pageHeader,
-              (!escrowEvents.data || isNewForkPage) && classes.emptyState,
-              isForked && classes.isForked
-            )}>
+            <div
+              className={clsx(
+                classes.pageHeader,
+                (!escrowEvents.data || isNewForkPage) && classes.emptyState,
+                isForked && classes.isForked,
+              )}
+            >
               <Col lg={6}>
                 <div className={classes.status}>
-                  <Link className={classes.backButton} to="/fork">←</Link>
-                  <span className={clsx(classes.forkStatus)}>
-                    {forkStatusLabel}
-                  </span>
+                  <Link className={classes.backButton} to="/fork">
+                    ←
+                  </Link>
+                  <span className={clsx(classes.forkStatus)}>{forkStatusLabel}</span>
                   <div className={classes.spacer} />
                 </div>
-                <h1><Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans></h1>
+                <h1>
+                  <Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans>
+                </h1>
                 {!isForked && !isForkPeriodActive && (
                   <p className={classes.note}>
                     <Trans>
-                      More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns {(`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`)} are required to pass the threshold
+                      More than {forkThreshold === undefined ? '...' : forkThreshold} Nouns{' '}
+                      {`(${forkThresholdBPS && forkThresholdBPS / 100}% of the DAO)`} are required
+                      to pass the threshold
                     </Trans>
                   </p>
                 )}
               </Col>
               {!isForked && (
-                <Col lg={6} className={clsx(
-                  classes.buttons,
-                  !escrowEvents.data && classes.emptyState
-                )}>
-                  {(!isForkPeriodActive && userEscrowedNounIds && userEscrowedNounIds.data?.length > 0) && (
-                    <WithdrawNounsButton
-                      tokenIds={userEscrowedNounIds.data}
-                      isWithdrawModalOpen={isWithdrawModalOpen}
-                      setIsWithdrawModalOpen={setIsWithdrawModalOpen}
-                      setDataFetchPollInterval={setDataFetchPollInterval}
-                    />
-                  )}
+                <Col
+                  lg={6}
+                  className={clsx(classes.buttons, !escrowEvents.data && classes.emptyState)}
+                >
+                  {!isForkPeriodActive &&
+                    userEscrowedNounIds &&
+                    userEscrowedNounIds.data?.length > 0 && (
+                      <WithdrawNounsButton
+                        tokenIds={userEscrowedNounIds.data}
+                        isWithdrawModalOpen={isWithdrawModalOpen}
+                        setIsWithdrawModalOpen={setIsWithdrawModalOpen}
+                        setDataFetchPollInterval={setDataFetchPollInterval}
+                      />
+                    )}
                   <button
                     onClick={() => {
                       if (isForkPeriodActive) {
@@ -234,49 +277,61 @@ const ForkPage = ({
         <Section fullWidth={false}>
           <Col>
             <div className={classes.callout}>
-              {forkDetails.data.forkingPeriodEndTimestamp && +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
-                <div className={clsx(classes.countdown)}>
-                  <ForkingPeriodTimer
-                    endTime={+forkDetails.data.forkingPeriodEndTimestamp}
-                    isPeriodEnded={forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000 ? true : false}
-                  />
-                  <p>
-                    time left to return Nouns and join this fork
-                  </p>
-                </div>
-              )}
+              {forkDetails.data.forkingPeriodEndTimestamp &&
+                +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
+                  <div className={clsx(classes.countdown)}>
+                    <ForkingPeriodTimer
+                      endTime={+forkDetails.data.forkingPeriodEndTimestamp}
+                      isPeriodEnded={
+                        forkDetails?.data?.executed &&
+                        +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+                          ? true
+                          : false
+                      }
+                    />
+                    <p>time left to return Nouns and join this fork</p>
+                  </div>
+                )}
               <div className={clsx(classes.isForked)}>
                 {forkDetails.data.forkingPeriodEndTimestamp && (
                   <p>
-                    <strong>This fork was executed on {dayjs.unix(+forkDetails.data.forkingPeriodEndTimestamp).format('MMM D, YYYY')}</strong>
+                    <strong>
+                      This fork was executed on{' '}
+                      {dayjs
+                        .unix(+forkDetails.data.forkingPeriodEndTimestamp)
+                        .format('MMM D, YYYY')}
+                    </strong>
                   </p>
                 )}
-                <p>Fork contracts:{" "}
+                <p>
+                  Fork contracts:{' '}
                   {forkDetails.data.forkTreasury && (
                     <>
                       <a
                         href={buildEtherscanAddressLink(forkDetails.data.forkTreasury)}
-                        target='_blank'
-                        rel='noreferrer'
+                        target="_blank"
+                        rel="noreferrer"
                       >
                         Treasury
-                      </a>,{" "}
+                      </a>
+                      ,{' '}
                     </>
                   )}
                   {forkDetails.data.forkToken && (
                     <>
                       <a
                         href={buildEtherscanAddressLink(forkDetails.data.forkToken)}
-                        target='_blank'
-                        rel='noreferrer'
+                        target="_blank"
+                        rel="noreferrer"
                       >
                         Token
                       </a>
                     </>
                   )}
                 </p>
-                <p>Fork treasury balance:
-                  Ξ{Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
+                <p>
+                  Fork treasury balance: Ξ
+                  {Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -285,31 +340,44 @@ const ForkPage = ({
       )}
 
       {!isNewForkPage && escrowEvents.data && (
-        <div className={clsx(classes.forkTimelineWrapper, isForkPeriodActive && classes.isForkingPeriod, isForked && classes.isForked)}>
+        <div
+          className={clsx(
+            classes.forkTimelineWrapper,
+            isForkPeriodActive && classes.isForkingPeriod,
+            isForked && classes.isForked,
+          )}
+        >
           <Container>
             <Row className={classes.forkTimeline}>
               <Col lg={3} className={classes.sidebar}>
                 <div className={classes.summary}>
-                  <span>
-                    {(isForkPeriodActive || isForked) ? 'in fork' : 'in escrow'}
-                  </span>
+                  <span>{isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}</span>
                   <strong>
-                    {(isForkPeriodActive || isForked) ? <>
-                      {forkDetails.data?.tokensForkingCount !== undefined ? forkDetails.data?.tokensForkingCount : '...'}
-                    </> : <>
-                      {numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}
-                    </>}
-                    {" "}Noun{(isForkPeriodActive || isForked) ?
-                      forkDetails.data?.tokensForkingCount === 1 ? '' : 's'
-                      : numTokensInForkEscrow === 1 ? '' : 's'}
+                    {isForkPeriodActive || isForked ? (
+                      <>
+                        {forkDetails.data?.tokensForkingCount !== undefined
+                          ? forkDetails.data?.tokensForkingCount
+                          : '...'}
+                      </>
+                    ) : (
+                      <>{numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}</>
+                    )}{' '}
+                    Noun
+                    {isForkPeriodActive || isForked
+                      ? forkDetails.data?.tokensForkingCount === 1
+                        ? ''
+                        : 's'
+                      : numTokensInForkEscrow === 1
+                      ? ''
+                      : 's'}
                   </strong>
-                  {(isForkPeriodActive || isForked) ? null : (
+                  {isForkPeriodActive || isForked ? null : (
                     <span className={classes.thresholdCount}>
-                      {currentEscrowPercentage >= 100 ? `threshold met` : `${currentEscrowPercentage}% of threshold`}
+                      {currentEscrowPercentage >= 100
+                        ? `threshold met`
+                        : `${currentEscrowPercentage}% of threshold`}
                     </span>
                   )}
-
-
                 </div>
 
                 <DeployForkButton
@@ -324,10 +392,16 @@ const ForkPage = ({
                 {(isForkPeriodActive || isForked) && (
                   <div className={classes.nounsInFork}>
                     {forkDetails.data.addedNouns.map((nounId, i) => (
-                      <a href={`/noun/${nounId}`} target='_blank' rel='noreferrer' key={i}><img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} /></a>
+                      <a href={`/noun/${nounId}`} target="_blank" rel="noreferrer" key={i}>
+                        <img
+                          src={`https://noun.pics/${nounId}`}
+                          alt="noun"
+                          className={classes.nounImage}
+                        />
+                      </a>
                     ))}
                     {/* add phantom elements to align boxes */}
-                    {phantomListItems.map((i) => (
+                    {phantomListItems.map(i => (
                       <div className={clsx(classes.nounImage, classes.phantom)} key={i} />
                     ))}
                   </div>
@@ -337,46 +411,60 @@ const ForkPage = ({
                 {!isForked && userEscrowedNounIds.data && userEscrowedNounIds.data.length > 0 && (
                   <div className={clsx(classes.userNouns, classes.callout)}>
                     <p>
-                      Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow: <strong>{userEscrowedNounIds.data.map((nounId) => `Noun ${nounId}`).join(', ')}</strong>
+                      Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow:{' '}
+                      <strong>
+                        {userEscrowedNounIds.data.map(nounId => `Noun ${nounId}`).join(', ')}
+                      </strong>
                     </p>
                   </div>
                 )}
-                {escrowEvents.data && escrowEvents.data.map((event, i) => {
-                  if (event?.eventType === 'ForkingEnded') {
-                    if ((event.createdAt && forkDetails.data.forkingPeriodEndTimestamp) && now.getTime() / 1000 < +forkDetails.data.forkingPeriodEndTimestamp) {
-                      return null
+                {escrowEvents.data &&
+                  escrowEvents.data.map((event, i) => {
+                    if (event?.eventType === 'ForkingEnded') {
+                      if (
+                        event.createdAt &&
+                        forkDetails.data.forkingPeriodEndTimestamp &&
+                        now.getTime() / 1000 < +forkDetails.data.forkingPeriodEndTimestamp
+                      ) {
+                        return null;
+                      }
                     }
-                  }
-                  return <ForkEvent event={event} isOnlyEvent={escrowEvents.data.length > 1 ? false : true} />
-                })}
+                    return (
+                      <ForkEvent
+                        event={event}
+                        isOnlyEvent={escrowEvents.data.length > 1 ? false : true}
+                      />
+                    );
+                  })}
               </Col>
             </Row>
           </Container>
-        </div >
-      )
-      }
-      {
-        account && (
-          <>
-            <AddNounsToForkModal
-              setIsModalOpen={setIsModalOpen}
-              isModalOpen={isModalOpen}
-              isConfirmModalOpen={isConfirmModalOpen}
-              isForkingPeriod={isForkPeriodActive}
-              title={'Add Nouns to escrow'}
-              description={"Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."}
-              selectLabel={'Select Nouns to escrow'}
-              selectDescription={'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'}
-              account={account}
-              ownedNouns={userOwnedNounIds.data}
-              userEscrowedNouns={userEscrowedNounIds.data}
-              refetchData={refetchForkData}
-              setDataFetchPollInterval={setDataFetchPollInterval}
-              setIsConfirmModalOpen={setIsConfirmModalOpen}
-            />
-          </>
-        )
-      }
+        </div>
+      )}
+      {account && (
+        <>
+          <AddNounsToForkModal
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            isConfirmModalOpen={isConfirmModalOpen}
+            isForkingPeriod={isForkPeriodActive}
+            title={'Add Nouns to escrow'}
+            description={
+              "Nouners can withdraw their tokens from escrow as long as the forking period hasn't started. Nouns in escrow are not eligible to vote or submit proposals."
+            }
+            selectLabel={'Select Nouns to escrow'}
+            selectDescription={
+              'Add as many or as few of your Nouns as you’d like.  Additional Nouns can be added during the escrow period.'
+            }
+            account={account}
+            ownedNouns={userOwnedNounIds.data}
+            userEscrowedNouns={userEscrowedNounIds.data}
+            refetchData={refetchForkData}
+            setDataFetchPollInterval={setDataFetchPollInterval}
+            setIsConfirmModalOpen={setIsConfirmModalOpen}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -474,7 +474,8 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
     }
   }
 }
-`};
+`;
+};
 
 export const currentlyDelegatedNouns = (delegate: string) => gql`
 {
@@ -541,7 +542,6 @@ export const candidateFeedbacksQuery = (candidateId: string) => gql`
     }
   }
 `;
-
 
 export const ownedNounsQuery = (owner: string) => gql`
   {
@@ -614,7 +614,8 @@ export const proposalTitlesQuery = (ids: number[]) => {
       title
     }
   }
-`};
+`;
+};
 
 export const forkDetailsQuery = (id: string) => gql`
   {
@@ -639,7 +640,7 @@ export const forkDetailsQuery = (id: string) => gql`
         }
       }
     }
-  }`
+  }`;
 
 export const forksQuery = () => gql`
   {

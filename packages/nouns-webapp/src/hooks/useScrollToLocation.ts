@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const useScrollToLocation = () => {
   const scrolledRef = React.useRef(false);
@@ -22,7 +22,7 @@ export const useScrollToLocation = () => {
           const offsetPosition = elementPosition + window.pageYOffset - elementOffset;
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth"
+            behavior: 'smooth',
           });
           scrolledRef.current = true;
         }

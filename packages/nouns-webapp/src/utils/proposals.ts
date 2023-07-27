@@ -1,8 +1,13 @@
 import { Proposal, ProposalState } from '../wrappers/nounsDao';
 
-export const isProposalUpdatable = (proposalState: ProposalState, proposalUpdatePeriodEndBlock: number, currentBlock: number) => {
+export const isProposalUpdatable = (
+  proposalState: ProposalState,
+  proposalUpdatePeriodEndBlock: number,
+  currentBlock: number,
+) => {
   return (
-    (proposalState === ProposalState.UPDATABLE || proposalState === ProposalState.PENDING) && currentBlock <= proposalUpdatePeriodEndBlock
+    (proposalState === ProposalState.UPDATABLE || proposalState === ProposalState.PENDING) &&
+    currentBlock <= proposalUpdatePeriodEndBlock
   );
 };
 
@@ -39,7 +44,9 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (account && latestProposalProposer &&
+  if (
+    account &&
+    latestProposalProposer &&
     (latestProposalStatus === ProposalState.ACTIVE ||
       latestProposalStatus === ProposalState.PENDING ||
       latestProposalStatus === ProposalState.UPDATABLE) &&

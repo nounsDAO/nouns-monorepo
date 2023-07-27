@@ -1,4 +1,9 @@
-import { PartialProposal, ProposalState, useIsDaoGteV3, useProposalThreshold } from '../../wrappers/nounsDao';
+import {
+  PartialProposal,
+  ProposalState,
+  useIsDaoGteV3,
+  useProposalThreshold,
+} from '../../wrappers/nounsDao';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -37,17 +42,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -116,11 +121,11 @@ const Proposals = ({
   }, [hash]);
   useEffect(() => {
     if (activeTab === 1) {
-      history.push('/vote#candidates')
+      history.push('/vote#candidates');
     } else {
-      history.push('/vote')
+      history.push('/vote');
     }
-  }, [activeTab, history])
+  }, [activeTab, history]);
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -180,12 +185,13 @@ const Proposals = ({
             ) : (
               <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
                 {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-                {!isMobile && <div className={classes.nullBtnWrapper}>
-                  <Button className={classes.generateBtnDisabled}>
-                    <Trans>Submit Proposal</Trans>
-                  </Button>
-                </div>
-                }
+                {!isMobile && (
+                  <div className={classes.nullBtnWrapper}>
+                    <Button className={classes.generateBtnDisabled}>
+                      <Trans>Submit Proposal</Trans>
+                    </Button>
+                  </div>
+                )}
                 {!isMobile && hasNounBalance && (
                   <div className={classes.delegateBtnWrapper}>
                     <Button
@@ -204,7 +210,7 @@ const Proposals = ({
 
       {isMobile && hasNounBalance && (
         <Container>
-          <div className='w-100'>
+          <div className="w-100">
             <Row>
               <Col>
                 <div className={classes.nullStateCopy}>{nullStateCopy()}</div>
@@ -323,13 +329,26 @@ const Proposals = ({
                     .reverse()
                     .map((c, i) => {
                       if (+c.latestVersion.content.proposalIdToUpdate > 0) {
-                        const prop = proposals.find((p) => p.id === c.latestVersion.content.proposalIdToUpdate);
-                        let isOriginalPropUpdatable = prop && blockNumber && isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber) ? true : false;
+                        const prop = proposals.find(
+                          p => p.id === c.latestVersion.content.proposalIdToUpdate,
+                        );
+                        let isOriginalPropUpdatable =
+                          prop &&
+                          blockNumber &&
+                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
+                            ? true
+                            : false;
                         if (!isOriginalPropUpdatable) return null;
                       }
                       return (
                         <div key={i}>
-                          <CandidateCard latestProposal={proposals[proposals.length - 1]} candidate={c} key={c.id} nounsRequired={nounsRequired} currentBlock={blockNumber ? blockNumber - 1 : 0} />
+                          <CandidateCard
+                            latestProposal={proposals[proposals.length - 1]}
+                            candidate={c}
+                            key={c.id}
+                            nounsRequired={nounsRequired}
+                            currentBlock={blockNumber ? blockNumber - 1 : 0}
+                          />
                         </div>
                       );
                     })
@@ -352,7 +371,8 @@ const Proposals = ({
                 </h4>
                 <p>
                   <Trans>
-                    Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal.
+                    Proposal candidates can be created by anyone. If a candidate receives enough
+                    signatures by Nouns voters, it can be promoted to a proposal.
                   </Trans>
                 </p>
                 <Link to="/create-candidate" className={clsx(classes.button)}>
@@ -363,7 +383,7 @@ const Proposals = ({
           </Col>
         )}
       </Section>
-    </div >
+    </div>
   );
 };
 export default Proposals;

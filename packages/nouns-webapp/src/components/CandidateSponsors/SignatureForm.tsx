@@ -115,16 +115,17 @@ function SignatureForm(props: Props) {
         description: props.candidate.version.content.description,
         expiry: expirationDate,
       };
-      signature = await signer!._signTypedData(domain, updateProposalTypes, value).then(
-        (sig: any) => {
+      signature = await signer!
+        ._signTypedData(domain, updateProposalTypes, value)
+        .then((sig: any) => {
           setIsGetSignatureWaiting(false);
           setIsGetSignatureTxSuccessful(true);
           return sig;
-        },
-      ).catch((err: any) => {
-        setGetSignatureErrorMessage(err.message);
-        setIsGetSignatureWaiting(false);
-      });
+        })
+        .catch((err: any) => {
+          setGetSignatureErrorMessage(err.message);
+          setIsGetSignatureWaiting(false);
+        });
     } else {
       if (!props.candidate) return;
       const value = {
@@ -136,19 +137,20 @@ function SignatureForm(props: Props) {
         description: props.candidate.version.content.description,
         expiry: expirationDate,
       };
-      signature = await signer!._signTypedData(domain, createProposalTypes, value).then(
-        (sig: any) => {
+      signature = await signer!
+        ._signTypedData(domain, createProposalTypes, value)
+        .then((sig: any) => {
           setIsGetSignatureWaiting(false);
           setIsGetSignatureTxSuccessful(true);
           return sig;
-        },
-      ).catch((err: any) => {
-        setGetSignatureErrorMessage(err.message);
-        setIsGetSignatureWaiting(false);
-      });
+        })
+        .catch((err: any) => {
+          setGetSignatureErrorMessage(err.message);
+          setIsGetSignatureWaiting(false);
+        });
     }
     return signature;
-  }
+  };
 
   async function sign() {
     const signature = await getSignature();
@@ -164,7 +166,10 @@ function SignatureForm(props: Props) {
         props.candidate.version.content.description,
       );
 
-      const encodedPropUpdate = ethers.utils.solidityPack(['uint256', 'bytes'], [props.proposalIdToUpdate, encodedProp])
+      const encodedPropUpdate = ethers.utils.solidityPack(
+        ['uint256', 'bytes'],
+        [props.proposalIdToUpdate, encodedProp],
+      );
       // signature set, submit signature
       await addSignature(
         signature,
@@ -190,7 +195,7 @@ function SignatureForm(props: Props) {
     setIsGetSignatureTxSuccessful(false);
     setIsOverlayVisible(false);
     props.setDataFetchPollInterval(0);
-  }
+  };
 
   const handleAddSignatureState = useCallback((state: TransactionStatus) => {
     switch (state.status) {
@@ -232,10 +237,28 @@ function SignatureForm(props: Props) {
   }, [addSignatureState, handleAddSignatureState]);
 
   useEffect(() => {
-    if (isWaiting || isLoading || isTxSuccessful || errorMessage || isGetSignatureWaiting || isGetSignaturePending || isGetSignatureTxSuccessful || getSignatureErrorMessage) {
+    if (
+      isWaiting ||
+      isLoading ||
+      isTxSuccessful ||
+      errorMessage ||
+      isGetSignatureWaiting ||
+      isGetSignaturePending ||
+      isGetSignatureTxSuccessful ||
+      getSignatureErrorMessage
+    ) {
       setIsOverlayVisible(true);
     }
-  }, [isWaiting, isLoading, isTxSuccessful, errorMessage, isGetSignatureWaiting, isGetSignaturePending, isGetSignatureTxSuccessful, getSignatureErrorMessage]);
+  }, [
+    isWaiting,
+    isLoading,
+    isTxSuccessful,
+    errorMessage,
+    isGetSignatureWaiting,
+    isGetSignaturePending,
+    isGetSignatureTxSuccessful,
+    getSignatureErrorMessage,
+  ]);
 
   const [dateErrorMessage, setDateErrorMessage] = useState<string>('');
   // const handleDateChange = (e: any) => {
@@ -263,10 +286,7 @@ function SignatureForm(props: Props) {
   return (
     <div className={classes.formWrapper}>
       <>
-        <div className={clsx(
-          classes.fields,
-          (isWaiting || isLoading) && classes.disabled
-        )}>
+        <div className={clsx(classes.fields, (isWaiting || isLoading) && classes.disabled)}>
           <h4 className={classes.formLabel}>Sponsor this proposal candidate</h4>
           <textarea
             placeholder="Optional reason"
@@ -286,7 +306,7 @@ function SignatureForm(props: Props) {
           {dateErrorMessage && <p className={classes.dateErrorMessage}>{dateErrorMessage}</p>}
         </div>
         <div className="text-center">
-          {(isWaiting || isLoading) ? (
+          {isWaiting || isLoading ? (
             <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
           ) : (
             <button
@@ -294,9 +314,12 @@ function SignatureForm(props: Props) {
               onClick={() => {
                 sign();
               }}
-              disabled={props.transactionState === 'Mining' || expirationDate === undefined || dateErrorMessage !== ''}
+              disabled={
+                props.transactionState === 'Mining' ||
+                expirationDate === undefined ||
+                dateErrorMessage !== ''
+              }
             >
-
               {props.proposalIdToUpdate ? 'Re-sign' : 'Sponsor'}
             </button>
           )}
@@ -304,10 +327,21 @@ function SignatureForm(props: Props) {
 
         {isOverlayVisible && (
           <div className={classes.submitSignatureStatusOverlay}>
-            <span className={clsx((isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && classes.loadingButton)}>
-              {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
-              {(isGetSignatureWaiting) && 'Awaiting signature'}
-              {(isWaiting) && 'Awaiting confirmation'}
+            <span
+              className={clsx(
+                (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
+                  classes.loadingButton,
+              )}
+            >
+              {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
+                <img
+                  src="/loading-noggles.svg"
+                  alt="loading"
+                  className={classes.transactionModalSpinner}
+                />
+              )}
+              {isGetSignatureWaiting && 'Awaiting signature'}
+              {isWaiting && 'Awaiting confirmation'}
               {isGetSignaturePending && 'Confirming'}
               {isLoading && 'Submitting signature'}
             </span>
@@ -326,7 +360,14 @@ function SignatureForm(props: Props) {
             {isTxSuccessful && (
               <>
                 <p className={clsx(classes.statusMessage, classes.successMessage)}>
-                  <a href={addSignatureState.transaction && `${buildEtherscanTxLink(addSignatureState.transaction.hash)}`} target="_blank" rel="noreferrer">
+                  <a
+                    href={
+                      addSignatureState.transaction &&
+                      `${buildEtherscanTxLink(addSignatureState.transaction.hash)}`
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Signature added successfully
                     {addSignatureState.transaction && (
                       <img src={link} width={16} alt="link symbol" />
@@ -339,18 +380,40 @@ function SignatureForm(props: Props) {
               <ul className={classes.steps}>
                 <li>
                   <strong>
-                    {(isGetSignatureWaiting || isGetSignaturePending) && <span className={classes.spinner}><Spinner animation="border" /></span>}
-                    {isGetSignatureTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
-                    {getSignatureErrorMessage && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
+                    {(isGetSignatureWaiting || isGetSignaturePending) && (
+                      <span className={classes.spinner}>
+                        <Spinner animation="border" />
+                      </span>
+                    )}
+                    {isGetSignatureTxSuccessful && (
+                      <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
+                    )}
+                    {getSignatureErrorMessage && (
+                      <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
+                    )}
                   </strong>
                   <Trans>Signature request</Trans>
                 </li>
                 <li>
                   <strong>
-                    {(isWaiting || isLoading) && <span className={classes.spinner}><Spinner animation="border" /></span>}
-                    {isTxSuccessful && <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />}
-                    {(getSignatureErrorMessage || errorMessage) && <FontAwesomeIcon icon={faXmark} height={20} width={20} color='red' />}
-                    {(!(isWaiting || isLoading || isTxSuccessful || errorMessage || getSignatureErrorMessage)) && <span className={classes.placeholder}></span>}
+                    {(isWaiting || isLoading) && (
+                      <span className={classes.spinner}>
+                        <Spinner animation="border" />
+                      </span>
+                    )}
+                    {isTxSuccessful && (
+                      <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
+                    )}
+                    {(getSignatureErrorMessage || errorMessage) && (
+                      <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
+                    )}
+                    {!(
+                      isWaiting ||
+                      isLoading ||
+                      isTxSuccessful ||
+                      errorMessage ||
+                      getSignatureErrorMessage
+                    ) && <span className={classes.placeholder}></span>}
                   </strong>
                   <Trans>Submit signature</Trans>
                 </li>
@@ -359,10 +422,13 @@ function SignatureForm(props: Props) {
 
             {/* close overlay */}
             {isTxSuccessful && (
-              <button className={classes.closeButton} onClick={() => {
-                props.setIsFormDisplayed(false);
-                clearTransactionState();
-              }}>
+              <button
+                className={classes.closeButton}
+                onClick={() => {
+                  props.setIsFormDisplayed(false);
+                  clearTransactionState();
+                }}
+              >
                 &times;
               </button>
             )}

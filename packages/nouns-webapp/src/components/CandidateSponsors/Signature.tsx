@@ -81,20 +81,24 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelSigState, setCancelStatusOverlay]);
   return (
-    <li className={clsx(classes.sponsor,
-      cancelStatusOverlay?.show && classes.cancelOverlay,
-      props.signerHasActiveOrPendingProposal && classes.sponsorInvalid,
-    )}>
+    <li
+      className={clsx(
+        classes.sponsor,
+        cancelStatusOverlay?.show && classes.cancelOverlay,
+        props.signerHasActiveOrPendingProposal && classes.sponsorInvalid,
+      )}
+    >
       {props.signerHasActiveOrPendingProposal && (
         <div className={classes.sponsorInvalidLabel}>
-          <Trans>
-            Signature invalid while signer has an active or pending proposal
-          </Trans>
+          <Trans>Signature invalid while signer has an active or pending proposal</Trans>
         </div>
       )}
-      <div className={clsx(classes.sponsorInteriorWrapper,
-        cancelSigState.status === "Success" && classes.hidden
-      )}>
+      <div
+        className={clsx(
+          classes.sponsorInteriorWrapper,
+          cancelSigState.status === 'Success' && classes.hidden,
+        )}
+      >
         <div className={classes.details}>
           <div className={classes.sponsorInfo}>
             <p className={classes.sponsorName}>
@@ -102,7 +106,13 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 <ShortAddress address={props.signer} />
               </a>
             </p>
-            <p className={classes.expiration}>{(props.isUpdateToProposal && !props.isParentProposalUpdatable) || (props.expirationTimestamp < timestampNow) ? 'Expired' : 'Expires'} {expiration}</p>
+            <p className={classes.expiration}>
+              {(props.isUpdateToProposal && !props.isParentProposalUpdatable) ||
+              props.expirationTimestamp < timestampNow
+                ? 'Expired'
+                : 'Expires'}{' '}
+              {expiration}
+            </p>
           </div>
           <p className={classes.voteCount}>
             {props.voteCount} vote{props.voteCount !== 1 && 's'}
@@ -119,7 +129,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => { }}>
+              <button className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}
@@ -144,19 +154,26 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         )}
         {props.isUpdateToProposal && !props.isAccountSigner && (
           <p className={classes.sigStatus}>
-            <span><FontAwesomeIcon icon={faCircleCheck} /></span>
+            <span>
+              <FontAwesomeIcon icon={faCircleCheck} />
+            </span>
             <Trans>Re-signed</Trans>
           </p>
         )}
       </div>
 
       {cancelStatusOverlay?.show && (
-        <div className={clsx(
-          classes.cancelStatusOverlay,
-          (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') && classes.errorMessage,
-          cancelSigState.status === 'Success' && classes.successMessage
-        )}>
-          {(cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail' || cancelSigState.status === 'Success') && (
+        <div
+          className={clsx(
+            classes.cancelStatusOverlay,
+            (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
+              classes.errorMessage,
+            cancelSigState.status === 'Success' && classes.successMessage,
+          )}
+        >
+          {(cancelSigState.status === 'Exception' ||
+            cancelSigState.status === 'Fail' ||
+            cancelSigState.status === 'Success') && (
             <button
               className={classes.closeButton}
               onClick={() => {
@@ -169,15 +186,10 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               &times;
             </button>
           )}
-          <div className={classes.cancelStatusOverlayTitle}>
-            {cancelStatusOverlay.title}
-          </div>
-          <div className={classes.cancelStatusOverlayMessage}>
-            {cancelStatusOverlay.message}
-          </div>
+          <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
+          <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
         </div>
       )}
-
     </li>
   );
 };

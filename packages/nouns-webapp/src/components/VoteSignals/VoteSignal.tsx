@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './VoteSignals.module.css';
 import ShortAddress from '../ShortAddress';
 import Avatar from '@davatar/react';
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported'
+import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 
 type Props = {
   support: number;

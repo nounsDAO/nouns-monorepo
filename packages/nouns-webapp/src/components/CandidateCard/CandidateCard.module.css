@@ -74,7 +74,8 @@
   padding: 0;
 }
 
-.proposer a, .proposerAddress {
+.proposer a,
+.proposerAddress {
   font-weight: bold;
   text-decoration: none;
   color: var(--brand-color-red);
@@ -92,13 +93,25 @@
     height: 100%;
     padding: 10px 40px;
     margin-left: -25px;
-    background: linear-gradient(90deg, rgba(244,244,248,0) 0%, rgba(244,244,248,0.9) 15%, rgba(244,244,248,1) 25%, rgba(244,244,248,1) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(244, 244, 248, 0) 0%,
+      rgba(244, 244, 248, 0.9) 15%,
+      rgba(244, 244, 248, 1) 25%,
+      rgba(244, 244, 248, 1) 100%
+    );
   }
 }
 
 .candidateLink:hover .sponsorCount.sponsorCountOverflow {
   @media screen and (min-width: 992px) {
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.9) 15%,
+      rgba(255, 255, 255, 1) 25%,
+      rgba(255, 255, 255, 1) 100%
+    );
   }
 }
 .naVotesLabel {
@@ -109,5 +122,5 @@
   font-style: normal;
   padding: 4px;
   border-radius: 4px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }

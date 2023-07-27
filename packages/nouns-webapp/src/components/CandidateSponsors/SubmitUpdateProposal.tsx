@@ -1,14 +1,18 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react'
-import classes from './SelectSponsorsToPropose.module.css'
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal'
-import clsx from 'clsx'
-import { Trans } from '@lingui/macro'
-import { TransactionStatus } from '@usedapp/core'
-import { buildEtherscanTxLink } from '../../utils/etherscan'
+import { ReactNode, useCallback, useEffect, useState } from 'react';
+import classes from './SelectSponsorsToPropose.module.css';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import clsx from 'clsx';
+import { Trans } from '@lingui/macro';
+import { TransactionStatus } from '@usedapp/core';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
-import { CandidateSignature, ProposalCandidate, useUpdateProposalBySigs } from '../../wrappers/nounsData'
-import { Link } from 'react-router-dom'
-import { FormControl } from 'react-bootstrap'
+import {
+  CandidateSignature,
+  ProposalCandidate,
+  useUpdateProposalBySigs,
+} from '../../wrappers/nounsData';
+import { Link } from 'react-router-dom';
+import { FormControl } from 'react-bootstrap';
 
 type Props = {
   isModalOpen: boolean;
@@ -19,7 +23,7 @@ type Props = {
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
   proposalIdToUpdate: string;
-}
+};
 
 export default function SubmitUpdateProposal(props: Props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,15 +39,15 @@ export default function SubmitUpdateProposal(props: Props) {
     setIsLoading(false);
     setIsTxSuccessful(false);
     setErrorMessage('');
-  }
+  };
   const clearState = () => {
     props.setIsModalOpen(false);
     clearTransactionState();
     setReason('');
-  }
+  };
   const handleSubmitUpdateToProposal = async () => {
     clearTransactionState();
-    const proposalSigs = props.signatures?.map((s) => [s.sig, s.signer.id, s.expirationTimestamp]);
+    const proposalSigs = props.signatures?.map(s => [s.sig, s.signer.id, s.expirationTimestamp]);
     // sort sigs by address to ensure order matches original candidate sigs
     const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
     await updateProposalBySigs(
@@ -56,8 +60,7 @@ export default function SubmitUpdateProposal(props: Props) {
       props.candidate.version.content.description,
       reason,
     );
-  }
-
+  };
 
   const handleUpdateProposalStateChange = useCallback((state: TransactionStatus) => {
     switch (state.status) {
@@ -94,14 +97,10 @@ export default function SubmitUpdateProposal(props: Props) {
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>
-        <Trans>
-          Update proposal
-        </Trans>
+        <Trans>Update proposal</Trans>
       </h2>
       <p className={classes.modalDescription}>
-        <Trans>
-          Add an optional message for the changes to the proposal
-        </Trans>
+        <Trans>Add an optional message for the changes to the proposal</Trans>
       </p>
       <FormControl
         as="textarea"
@@ -113,43 +112,58 @@ export default function SubmitUpdateProposal(props: Props) {
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
-            className={clsx(classes.button, classes.primaryButton, (isWaiting || isLoading) && classes.loadingButton)}
-            disabled={
-              isWaiting || isLoading
-            }
+            className={clsx(
+              classes.button,
+              classes.primaryButton,
+              (isWaiting || isLoading) && classes.loadingButton,
+            )}
+            disabled={isWaiting || isLoading}
             onClick={() => {
               handleSubmitUpdateToProposal();
             }}
           >
-            {!isWaiting && !isLoading && (
-              <>
-                Submit update
-              </>
-            )}
+            {!isWaiting && !isLoading && <>Submit update</>}
             <span>
-              {(isWaiting || isLoading) && <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />}
-              {(isWaiting) && 'Awaiting confirmation'}
+              {(isWaiting || isLoading) && (
+                <img
+                  src="/loading-noggles.svg"
+                  alt="loading"
+                  className={classes.transactionModalSpinner}
+                />
+              )}
+              {isWaiting && 'Awaiting confirmation'}
               {isLoading && `Submitting proposal`}
             </span>
           </button>
         )}
 
-        {(errorMessage) && (
+        {errorMessage && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
               onClick={() => {
                 clearTransactionState();
               }}
-            >Try again</button>
+            >
+              Try again
+            </button>
           </p>
         )}
         {isTxSuccessful && (
           <>
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <strong>Success!</strong> <br />
-              <a href={updateProposalBySigsState.transaction && `${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`} target="_blank" rel="noreferrer">
-                <Link to={`/vote/${props.proposalIdToUpdate}`}>Proposal {props.proposalIdToUpdate} has been updated</Link>
+              <a
+                href={
+                  updateProposalBySigsState.transaction &&
+                  `${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Link to={`/vote/${props.proposalIdToUpdate}`}>
+                  Proposal {props.proposalIdToUpdate} has been updated
+                </Link>
                 {updateProposalBySigsState.transaction && (
                   <img src={link} width={16} alt="link symbol" />
                 )}
@@ -158,9 +172,8 @@ export default function SubmitUpdateProposal(props: Props) {
           </>
         )}
       </div>
-
-    </div >
-  )
+    </div>
+  );
 
   return (
     <>
@@ -173,5 +186,5 @@ export default function SubmitUpdateProposal(props: Props) {
         content={modalContent}
       />
     </>
-  )
+  );
 }
