@@ -752,6 +752,7 @@ const VotePage = ({
                     <h1>Snapshot</h1>
                   </div>
                   <div className={classes.snapshotBlock}>
+                    <span>Taken at block</span>
                     <h3>
                       {proposal?.voteSnapshotBlock}
                     </h3>
