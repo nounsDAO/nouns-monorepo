@@ -1157,7 +1157,6 @@ msgstr ""
 msgid "Proposal"
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx
 #: src/pages/CandidateHistoryPage/index.tsx
 msgid "Proposal Candidate"
 msgstr ""

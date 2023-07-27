@@ -1137,7 +1137,6 @@ msgstr "Prop House"
 msgid "Proposal"
 msgstr "Proposal"
 
-#: src/components/ProposalHeader/index.tsx
 #: src/pages/CandidateHistoryPage/index.tsx
 msgid "Proposal Candidate"
 msgstr "Proposal Candidate"
