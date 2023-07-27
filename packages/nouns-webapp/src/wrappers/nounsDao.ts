@@ -540,15 +540,14 @@ const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
   proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
-  gracePeriod?: number,
+  isDaoGteV3?: boolean,
 ) => {
   const status = ProposalState[proposal.status];
-
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
-    if (proposal.updatePeriodEndBlock && blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
+    if (isDaoGteV3 && proposal.updatePeriodEndBlock && blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
       return ProposalState.UPDATABLE;
     }
 
@@ -557,6 +556,7 @@ const getProposalState = (
     }
 
     if (
+      isDaoGteV3 &&
       blockNumber > +proposal.endBlock &&
       parseInt(proposal.objectionPeriodEndBlock) > 0 &&
       blockNumber <= parseInt(proposal.objectionPeriodEndBlock)
@@ -600,7 +600,7 @@ const parsePartialSubgraphProposal = (
   proposal: PartialProposalSubgraphEntity | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
-  gracePeriod?: number,
+  isDaoGteV3?: boolean,
 ) => {
   if (!proposal) {
     return;
@@ -609,7 +609,7 @@ const parsePartialSubgraphProposal = (
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, gracePeriod),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
@@ -626,7 +626,7 @@ const parseSubgraphProposal = (
   blockNumber: number | undefined,
   timestamp: number | undefined,
   toUpdate?: boolean,
-  gracePeriod?: number,
+  isDaoGteV3?: boolean,
 ) => {
   if (!proposal) {
     return;
@@ -655,7 +655,7 @@ const parseSubgraphProposal = (
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, gracePeriod),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3),
     proposalThreshold: parseInt(proposal.proposalThreshold),
     quorumVotes: parseInt(proposal.quorumVotes),
     forCount: parseInt(proposal.forVotes),
@@ -678,10 +678,11 @@ const parseSubgraphProposal = (
 
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
   const { loading, data, error } = useQuery(partialProposalsQuery());
+  const isDaoGteV3 = useIsDaoGteV3();
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
-    parsePartialSubgraphProposal(proposal, blockNumber, timestamp),
+    parsePartialSubgraphProposal(proposal, blockNumber, timestamp, isDaoGteV3),
   );
 
   return {
@@ -752,12 +753,14 @@ export const useAllProposals = (): PartialProposalData => {
 export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
+  const isDaoGteV3 = useIsDaoGteV3();
 
   return parseSubgraphProposal(
     useQuery(proposalQuery(id)).data?.proposal,
     blockNumber,
     timestamp,
     toUpdate,
+    isDaoGteV3
   );
 };
 
