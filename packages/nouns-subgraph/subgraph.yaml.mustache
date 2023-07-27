@@ -126,6 +126,8 @@ dataSources:
           handler: handleExecuteFork
         - event: JoinFork(indexed uint32,indexed address,uint256[],uint256[],string)
           handler: handleJoinFork
+        - event: VoteSnapshotBlockSwitchProposalIdSet(uint256,uint256)
+          handler: handleVoteSnapshotBlockSwitchProposalIdSet
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}

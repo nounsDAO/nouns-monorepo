@@ -20,6 +20,7 @@ import {
   ExecuteFork,
   JoinFork,
   ProposalCreatedOnTimelockV1,
+  VoteSnapshotBlockSwitchProposalIdSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -128,6 +129,15 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
+
+  if (
+    governance.voteSnapshotBlockSwitchProposalId.equals(BIGINT_ZERO) ||
+    BigInt.fromString(proposal.id).lt(governance.voteSnapshotBlockSwitchProposalId)
+  ) {
+    proposal.voteSnapshotBlock = proposal.createdBlock;
+  } else {
+    proposal.voteSnapshotBlock = proposal.startBlock;
+  }
 
   const dynamicQuorum = getOrCreateDynamicQuorumParams();
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
@@ -475,6 +485,14 @@ export function handleJoinFork(event: JoinFork): void {
   }
 
   fork.save();
+}
+
+export function handleVoteSnapshotBlockSwitchProposalIdSet(
+  event: VoteSnapshotBlockSwitchProposalIdSet,
+): void {
+  const governance = getGovernanceEntity();
+  governance.voteSnapshotBlockSwitchProposalId = event.params.newVoteSnapshotBlockSwitchProposalId;
+  governance.save();
 }
 
 function genericUniqueId(event: ethereum.Event): string {

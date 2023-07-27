@@ -277,6 +277,9 @@ type Proposal @entity {
 
   "True if the proposal was created via proposeOnTimelockV1"
   onTimelockV1: Boolean
+
+  "The block at which voting balance snapshots are taken for this proposal"
+  voteSnapshotBlock: BigInt!
 }
 
 type ProposalVersion @entity(immutable: true) {
@@ -369,6 +372,9 @@ type Governance @entity {
 
   "Number of proposals currently queued for execution"
   proposalsQueued: BigInt!
+
+  "The proposal ID from which vote snapshots are taken at vote start instead of proposal creation"
+  voteSnapshotBlockSwitchProposalId: BigInt!
 }
 
 type DynamicQuorumParams @entity {
