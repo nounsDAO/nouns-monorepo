@@ -437,7 +437,7 @@ const VotePage = ({
 
   useEffect(() => {
     if (
-      proposal &&
+      isDaoGteV3 && proposal &&
       currentBlock &&
       proposal?.objectionPeriodEndBlock > 0 &&
       currentBlock > proposal?.endBlock &&
