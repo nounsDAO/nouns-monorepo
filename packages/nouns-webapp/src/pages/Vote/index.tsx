@@ -447,7 +447,7 @@ const VotePage = ({
     } else {
       setIsObjectionPeriod(false);
     }
-  }, [currentBlock, proposal?.status, proposal]);
+  }, [currentBlock, proposal?.status, proposal, isDaoGteV3]);
 
   if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (

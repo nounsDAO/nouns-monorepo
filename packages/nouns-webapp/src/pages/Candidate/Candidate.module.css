@@ -290,6 +290,7 @@ a.primaryButton:hover {
   padding: 0;
   margin: 0;
   display: block;
+  font-weight: bold;
 }
 
 .sponsorsLoading {
@@ -310,4 +311,9 @@ a.primaryButton:hover {
   @media (min-width: 993px) {
     margin-top: 1.5rem;
   }
+}
+
+.destructiveTransitionStateButton > div {
+  width: 1rem;
+  height: 1rem;
 }

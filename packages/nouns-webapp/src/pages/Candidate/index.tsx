@@ -211,7 +211,7 @@ const CandidatePage = ({
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             isUpdateToProposal={isUpdateToProposal}
-            submitButtonClickHandler={() => {}}
+            submitButtonClickHandler={() => { }}
           />
         )}
       </Col>
@@ -245,7 +245,7 @@ const CandidatePage = ({
                   to={`/candidates/${id}/edit`}
                   className={clsx(classes.primaryButton, classes.button)}
                 >
-                  {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
+                  <Trans>Edit</Trans>
                 </Link>
               </div>
             </div>
@@ -260,9 +260,9 @@ const CandidatePage = ({
           </Col>
           <Col lg={4} className={classes.sidebar}>
             {currentBlock &&
-            threshold !== undefined &&
-            userVotes !== undefined &&
-            !candidate.data.isProposal ? (
+              threshold !== undefined &&
+              userVotes !== undefined &&
+              !candidate.data.isProposal ? (
               <CandidateSponsors
                 candidate={candidate.data}
                 slug={candidate.data.slug ?? ''}
