@@ -1258,3 +1258,13 @@ export const useLastMinuteWindowInBlocks = (): number | undefined => {
     }) || [];
   return lastMinuteWindowInBlocks?.toNumber();
 }
+
+export const useVoteSnapshotBlockSwitchProposalId = (): number | undefined => {
+  const [voteSnapshotBlockSwitchProposalId] =
+    useContractCall({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'voteSnapshotBlockSwitchProposalId',
+    }) || [];
+  return voteSnapshotBlockSwitchProposalId?.toNumber();
+}
