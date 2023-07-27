@@ -160,6 +160,7 @@ export interface PartialProposalSubgraphEntity {
   quorumVotes: string;
   objectionPeriodEndBlock: string;
   updatePeriodEndBlock: string;
+  onTimelockV1: boolean | null;
   signers: { id: string }[];
 }
 
@@ -541,6 +542,7 @@ const getProposalState = (
   blockTimestamp: Date | undefined,
   proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
   isDaoGteV3?: boolean,
+  onTimelockV1?: boolean,
 ) => {
   const status = ProposalState[proposal.status];
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
@@ -585,8 +587,8 @@ const getProposalState = (
     if (!blockTimestamp || !proposal.executionETA) {
       return ProposalState.UNDETERMINED;
     }
-    // TODO: pull from contract to account for change during fork period
-    const GRACE_PERIOD = 14 * 60 * 60 * 24;
+    // if v3+ and not on timelock v1, grace period is 21 days, otherwise 14 days
+    const GRACE_PERIOD = (isDaoGteV3 && !onTimelockV1) ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
     if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
       return ProposalState.EXPIRED;
     }
@@ -605,11 +607,11 @@ const parsePartialSubgraphProposal = (
   if (!proposal) {
     return;
   }
-
+  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3, onTimelockV1),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
@@ -650,12 +652,13 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
+  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true
   return {
     id: proposal.id,
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3),
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3, onTimelockV1),
     proposalThreshold: parseInt(proposal.proposalThreshold),
     quorumVotes: parseInt(proposal.quorumVotes),
     forCount: parseInt(proposal.forVotes),
@@ -671,7 +674,7 @@ const parseSubgraphProposal = (
     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
     signers: proposal.signers,
-    onTimelockV1: proposal.onTimelockV1 === null ? false : true,
+    onTimelockV1: onTimelockV1,
     voteSnapshotBlock: parseInt(proposal.voteSnapshotBlock),
   };
 };
@@ -727,10 +730,9 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           id: proposal?.id.toString(),
           title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
-
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
-          objectionPeriodEndBlock: 0, // TODO: this should read from the contract
+          objectionPeriodEndBlock: parseInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
