@@ -154,6 +154,16 @@
 
 .snapshotBlock {
   text-align: right;
+  margin-top: 0.5rem;
+}
+.snapshotBlock h3 {
+  padding: 6px 0 10px;
+}
+
+@media (max-width: 992px) {
+  .snapshotBlock h3 {
+    padding-top: 12px;
+  }
 }
 
 .thresholdInfo {

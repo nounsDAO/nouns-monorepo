@@ -78,6 +78,7 @@ export const proposalQuery = (id: string | number) => gql`
     signatures
     calldatas
     onTimelockV1
+    voteSnapshotBlock
     proposer {
       id
     }

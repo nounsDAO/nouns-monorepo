@@ -119,6 +119,7 @@ export interface Proposal extends PartialProposal {
   transactionHash: string;
   signers: { id: string }[];
   onTimelockV1: boolean;
+  voteSnapshotBlock: number;
 }
 
 export interface ProposalVersion {
@@ -172,6 +173,7 @@ export interface ProposalSubgraphEntity
   proposer: { id: string };
   proposalThreshold: string;
   onTimelockV1: boolean;
+  voteSnapshotBlock: string;
 }
 
 interface PartialProposalData {
@@ -670,6 +672,7 @@ const parseSubgraphProposal = (
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
     signers: proposal.signers,
     onTimelockV1: proposal.onTimelockV1 === null ? false : true,
+    voteSnapshotBlock: parseInt(proposal.voteSnapshotBlock),
   };
 };
 
@@ -1347,14 +1350,4 @@ export const useLastMinuteWindowInBlocks = (): number | undefined => {
       method: 'lastMinuteWindowInBlocks',
     }) || [];
   return lastMinuteWindowInBlocks?.toNumber();
-};
-
-export const useVoteSnapshotBlockSwitchProposalId = (): number | undefined => {
-  const [voteSnapshotBlockSwitchProposalId] =
-    useContractCall({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'voteSnapshotBlockSwitchProposalId',
-    }) || [];
-  return voteSnapshotBlockSwitchProposalId?.toNumber();
 };
