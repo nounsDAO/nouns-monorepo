@@ -35,7 +35,6 @@ interface ProposalHeaderProps {
   versionNumber?: number;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
-  isCandidate?: boolean;
   isObjectionPeriod?: boolean;
   submitButtonClickHandler: () => void;
 }
@@ -64,7 +63,6 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
-
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<number | null>(null);
   const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
@@ -148,25 +146,15 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
-                {props.isCandidate ? (
-                  <>
-                    <div>
-                      <Trans>Proposal Candidate</Trans>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
-                    </div>
-                    <div>
-                      <ProposalStatus
-                        status={proposal?.status}
-                        className={classes.proposalStatus}
-                      />
-                    </div>
-                  </>
-                )}
+                <div>
+                  <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                </div>
+                <div>
+                  <ProposalStatus
+                    status={proposal?.status}
+                    className={classes.proposalStatus}
+                  />
+                </div>
               </div>
             </span>
             <div className={classes.proposalTitleWrapper}>
