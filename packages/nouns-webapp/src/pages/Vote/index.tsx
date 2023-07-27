@@ -13,6 +13,7 @@ import {
   useProposal,
   useProposalVersions,
   useQueueProposal,
+  useVoteSnapshotBlockSwitchProposalId,
 } from '../../wrappers/nounsDao';
 import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
@@ -126,6 +127,7 @@ const VotePage = ({
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
   const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const voteSnapshotBlockSwitchProposalId = useVoteSnapshotBlockSwitchProposalId();
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
@@ -739,9 +741,9 @@ const VotePage = ({
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>
-                      {isDaoGteV3 ? <Trans>Taken on start block</Trans> : <Trans>Taken on created block</Trans>}
+                      {(voteSnapshotBlockSwitchProposalId !== undefined && +id >= voteSnapshotBlockSwitchProposalId) ? <Trans>Taken on start block</Trans> : <Trans>Taken on created block</Trans>}
                     </span>
-                    <h3>{isDaoGteV3 ? proposal.startBlock : proposal.createdBlock}</h3>
+                    <h3>{(voteSnapshotBlockSwitchProposalId !== undefined && +id >= voteSnapshotBlockSwitchProposalId) ? proposal.startBlock : proposal.createdBlock}</h3>
                   </div>
                 </div>
               </Card.Body>
