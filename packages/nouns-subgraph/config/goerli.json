@@ -5,7 +5,7 @@
     "startBlock": 9367720
   },
   "nounsAuctionHouse": {
-    "address": "0xd329a604EFEE29799E821A3980620fbD1c1bBA40",
+    "address": "0x32bBBf3721a1b05390daf4Dec2f5Fe4b935f25A1",
     "startBlock": 9367720
   },
   "nounsDAO": {
@@ -13,7 +13,7 @@
     "startBlock": 9367720
   },
   "nounsDAOData": {
-    "address": "0x18eF0f58f7d656428d4EC63952aD7Ce2A6fb81Dd",
+    "address": "0xc0217355376E414a1c33Dc3558A75625c5444006",
     "startBlock": 9367720
   }
 }

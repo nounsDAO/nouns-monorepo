@@ -10,6 +10,7 @@ import {
   Proposal,
   ProposalVersion,
   useHasVotedOnProposal,
+  useIsDaoGteV3,
   useProposalVote,
 } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
@@ -75,6 +76,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const activeLocale = useActiveLocale();
   const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
+  const isDaoGteV3 = useIsDaoGteV3();
   useEffect(() => {
     if (hasManyVersions) {
       const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
@@ -259,33 +261,28 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 })}
               </div>
             )}
-
-
-
-
           </>
         )}
       </div>
-
-
-      <p className={classes.versionHistory}>
-        {hasManyVersions ? (
-          <Link to={`/vote/${proposal.id}/history/`}>
-            <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
-            <span>updated{" "}
-              {updatedTimestamp && relativeTimestamp(updatedTimestamp)}
-            </span>
-          </Link>
-        ) : (
-          <>
-            <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
-            <span>created{" "}
-              {createdTimestamp && relativeTimestamp(createdTimestamp)}
-            </span>
-          </>
-        )}
-      </p>
-
+      {isDaoGteV3 && (
+        <p className={classes.versionHistory}>
+          {hasManyVersions ? (
+            <Link to={`/vote/${proposal.id}/history/`}>
+              <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
+              <span>updated{" "}
+                {updatedTimestamp && relativeTimestamp(updatedTimestamp)}
+              </span>
+            </Link>
+          ) : (
+            <>
+              <strong>Version {hasManyVersions ? props.versionNumber : "1"}</strong>{' '}
+              <span>created{" "}
+                {createdTimestamp && relativeTimestamp(createdTimestamp)}
+              </span>
+            </>
+          )}
+        </p>
+      )}
 
 
       {isMobile && (

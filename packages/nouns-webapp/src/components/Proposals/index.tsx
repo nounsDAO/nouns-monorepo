@@ -1,4 +1,4 @@
-import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
+import { PartialProposal, ProposalState, useIsDaoGteV3, useProposalThreshold } from '../../wrappers/nounsDao';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -98,7 +98,8 @@ const Proposals = ({
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
-  const tabs = ['Proposals', config.featureToggles.candidates && 'Candidates'];
+  const isDaoGteV3 = useIsDaoGteV3();
+  const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
   const { hash } = useLocation();
 
   useEffect(() => {
