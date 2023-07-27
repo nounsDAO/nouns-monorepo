@@ -154,10 +154,12 @@ contract NounsArtTest is Test, DescriptorHelpers {
         vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit PaletteSet(0);
+
         art.setPalette(0, palette0);
 
         vm.expectEmit(true, true, true, true);
         emit PaletteSet(1);
+
         art.setPalette(1, palette1);
         vm.stopPrank();
 
@@ -169,16 +171,17 @@ contract NounsArtTest is Test, DescriptorHelpers {
     }
 
     function testSetPalettePointerWorks() public {
-        address pointer0 = SSTORE2.write(hex'ffffffc5b9a1');
-        address pointer1 = SSTORE2.write(hex'cfc2ab63a0f9');
-
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit PaletteSet(0);
+
+        address pointer0 = SSTORE2.write(hex'ffffffc5b9a1');
+        address pointer1 = SSTORE2.write(hex'cfc2ab63a0f9');
+        vm.startPrank(descriptor);
         art.setPalettePointer(0, pointer0);
 
         vm.expectEmit(true, true, true, true);
         emit PaletteSet(1);
+
         art.setPalettePointer(1, pointer1);
         vm.stopPrank();
 
@@ -301,13 +304,15 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testAddBodiesWorksWithMultiplePages() public {
         assertEq(art.getBodiesTrait().storedImagesCount, 0);
 
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit BodiesAdded(2);
+
+        vm.startPrank(descriptor);
         art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
 
         vm.expectEmit(true, true, true, true);
         emit BodiesAdded(2);
+
         art.addBodies(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
@@ -330,17 +335,19 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     function testAddBodiesFromPointerWorksWithMultiplePages() public {
         assertEq(art.getBodiesTrait().storedImagesCount, 0);
-
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit BodiesAdded(2);
+
+        vm.startPrank(descriptor);
         art.addBodiesFromPointer(
             SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
+
         vm.expectEmit(true, true, true, true);
         emit BodiesAdded(2);
+
         art.addBodiesFromPointer(SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
@@ -382,13 +389,15 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testAddAccessoriesWorksWithMultiplePages() public {
         assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
 
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit AccessoriesAdded(2);
+
+        vm.startPrank(descriptor);
         art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
 
         vm.expectEmit(true, true, true, true);
         emit AccessoriesAdded(2);
+
         art.addAccessories(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
@@ -411,17 +420,19 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     function testAddAccessoriesFromPointerWorksWithMultiplePages() public {
         assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
-
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit AccessoriesAdded(2);
+
+        vm.startPrank(descriptor);
         art.addAccessoriesFromPointer(
             SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
+
         vm.expectEmit(true, true, true, true);
         emit AccessoriesAdded(2);
+
         art.addAccessoriesFromPointer(
             SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED),
             NEXT_TWO_IMAGES_DEFLATED_LENGTH,
@@ -467,13 +478,15 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testAddHeadsWorksWithMultiplePages() public {
         assertEq(art.getHeadsTrait().storedImagesCount, 0);
 
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit HeadsAdded(2);
+
+        vm.startPrank(descriptor);
         art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
 
         vm.expectEmit(true, true, true, true);
         emit HeadsAdded(2);
+
         art.addHeads(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
@@ -496,17 +509,19 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     function testAddHeadsFromPointerWorksWithMultiplePages() public {
         assertEq(art.getHeadsTrait().storedImagesCount, 0);
-
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit HeadsAdded(2);
+
+        vm.startPrank(descriptor);
         art.addHeadsFromPointer(
             SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
+
         vm.expectEmit(true, true, true, true);
         emit HeadsAdded(2);
+
         art.addHeadsFromPointer(SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
@@ -548,13 +563,15 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testAddGlassesWorksWithMultiplePages() public {
         assertEq(art.getGlassesTrait().storedImagesCount, 0);
 
-        vm.startPrank(descriptor);
         vm.expectEmit(true, true, true, true);
         emit GlassesAdded(2);
+
+        vm.startPrank(descriptor);
         art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
 
         vm.expectEmit(true, true, true, true);
         emit GlassesAdded(2);
+
         art.addGlasses(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 

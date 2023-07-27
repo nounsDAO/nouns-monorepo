@@ -14,17 +14,17 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
-    address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
-    address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
     address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
+    address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
     address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
         address timelockV2 = vm.envAddress('TIMELOCK_V2');
+        address erc20Transferer = vm.envAddress('ERC20_TRANSFERER');
         string memory description = vm.readFile(vm.envString('PROPOSAL_DESCRIPTION_FILE'));
 
         vm.startBroadcast(proposerKey);
@@ -33,8 +33,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
             NOUNS_DAO_PROXY_MAINNET,
             NOUNS_TIMELOCK_V1_MAINNET,
             timelockV2,
-            NOUNS_TOKEN_MAINNET,
-            AUCTION_HOUSE_PROXY_ADMIN_MAINNET,
+            erc20Transferer,
             LILNOUNS_MAINNET,
             description
         );
@@ -47,8 +46,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         NounsDAOLogicV3 daoProxy,
         address timelockV1,
         address timelockV2,
-        address nounsToken,
-        address auctionHouseProxyAdmin,
+        address erc20Transferer,
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
@@ -58,15 +56,8 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         string[] memory signatures = new string[](numTxs);
         bytes[] memory calldatas = new bytes[](numTxs);
 
-        // Change auction house proxy admin owner
-        uint256 i = 0;
-        targets[i] = auctionHouseProxyAdmin;
-        values[i] = 0;
-        signatures[i] = 'transferOwnership(address)';
-        calldatas[i] = abi.encode(timelockV2);
-
         // Move leftover ETH
-        i++;
+        uint256 i = 0;
         targets[i] = timelockV2;
         values[i] = timelockV1.balance;
         signatures[i] = '';
@@ -78,13 +69,6 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'setApprovalForAll(address,bool)';
         calldatas[i] = abi.encode(timelockV2, true);
-
-        // Transfer DAO-owned Nouns to timelockV2
-        i++;
-        targets[i] = nounsToken;
-        values[i] = 0;
-        signatures[i] = 'transferFrom(address,address,uint256)';
-        calldatas[i] = abi.encode(timelockV1, timelockV2, 687);
 
         // Transfer ownership of TokenBuyer
         i++;
@@ -99,6 +83,21 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
         calldatas[i] = abi.encode(timelockV2);
+
+        // Transfer remaining stETH to timelockV2
+        // 1/2 approve erc20Transferer
+        i++;
+        targets[i] = STETH_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'approve(address,uint256)';
+        calldatas[i] = abi.encode(erc20Transferer, type(uint256).max);
+
+        // 2/2 use erc20Transferer to transfer the remaining balance
+        i++;
+        targets[i] = erc20Transferer;
+        values[i] = 0;
+        signatures[i] = 'transferEntireBalance(address,address)';
+        calldatas[i] = abi.encode(STETH_MAINNET, timelockV2);
 
         // Transfer wstETH to timelockV2
         i++;

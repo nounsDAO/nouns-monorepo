@@ -5,13 +5,15 @@ import 'forge-std/Script.sol';
 import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract ProposeDAOV3UpgradeMainnet is Script {
     NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_MAINNET =
         NounsDAOLogicV1(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
-    uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 10000 ether;
+    uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 2500 ether;
+    uint256 public constant STETH_BUFFER = 1000 ether;
     uint256 public constant FORK_PERIOD = 7 days;
     uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
@@ -20,6 +22,7 @@ contract ProposeDAOV3UpgradeMainnet is Script {
     address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
+    address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
     address public constant NOUNS_TOKEN_MAINNET = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
     address public constant DESCRIPTOR_MAINNET = 0x6229c811D04501523C6058bfAAc29c91bb586268;
 
@@ -29,7 +32,6 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         address timelockV2 = vm.envAddress('TIMELOCK_V2');
         address forkEscrow = vm.envAddress('FORK_ESCROW');
         address forkDeployer = vm.envAddress('FORK_DEPLOYER');
-        address erc20Transferer = vm.envAddress('ERC20_TRANSFERER');
 
         string memory description = vm.readFile(vm.envString('PROPOSAL_DESCRIPTION_FILE'));
 
@@ -45,7 +47,6 @@ contract ProposeDAOV3UpgradeMainnet is Script {
             daoV3Implementation,
             timelockV2,
             ETH_TO_SEND_TO_NEW_TIMELOCK,
-            erc20Transferer,
             forkEscrow,
             forkDeployer,
             erc20TokensToIncludeInFork,
@@ -61,7 +62,6 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         address daoV3Implementation,
         address timelockV2,
         uint256 ethToSendToNewTimelock,
-        address erc20Transferer,
         address forkEscrow,
         address forkDeployer,
         address[] memory erc20TokensToIncludeInFork,
@@ -114,17 +114,14 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         signatures[i] = 'transferOwnership(address)';
         calldatas[i] = abi.encode(timelockV2);
 
+        // Keeping a buffer of stETH in timelockV1 for proposals that might need to spend stETH after the migration
+        uint256 stETHToSend = IERC20(STETH_MAINNET).balanceOf(NOUNS_TIMELOCK_V1_MAINNET) - STETH_BUFFER;
+
         i++;
         targets[i] = STETH_MAINNET;
         values[i] = 0;
-        signatures[i] = 'approve(address,uint256)';
-        calldatas[i] = abi.encode(erc20Transferer, type(uint256).max);
-
-        i++;
-        targets[i] = erc20Transferer;
-        values[i] = 0;
-        signatures[i] = 'transferEntireBalance(address,address)';
-        calldatas[i] = abi.encode(STETH_MAINNET, timelockV2);
+        signatures[i] = 'transfer(address,uint256)';
+        calldatas[i] = abi.encode(timelockV2, stETHToSend);
 
         // Change nouns token owner
         i++;
@@ -136,6 +133,13 @@ contract ProposeDAOV3UpgradeMainnet is Script {
         // Change descriptor owner
         i++;
         targets[i] = DESCRIPTOR_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transferOwnership(address)';
+        calldatas[i] = abi.encode(timelockV2);
+
+        // Change auction house proxy admin owner
+        i++;
+        targets[i] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
         values[i] = 0;
         signatures[i] = 'transferOwnership(address)';
         calldatas[i] = abi.encode(timelockV2);
