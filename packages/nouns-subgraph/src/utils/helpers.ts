@@ -137,6 +137,7 @@ export function getGovernanceEntity(): Governance {
     governance.delegatedVotesRaw = BIGINT_ZERO;
     governance.delegatedVotes = BIGINT_ZERO;
     governance.proposalsQueued = BIGINT_ZERO;
+    governance.voteSnapshotBlockSwitchProposalId = BIGINT_ZERO;
   }
 
   return governance as Governance;
