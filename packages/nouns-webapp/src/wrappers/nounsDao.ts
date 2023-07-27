@@ -164,7 +164,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
+  PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -1312,11 +1312,10 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
 export const useIsDaoGteV3 = (): boolean => {
   const [implementation] =
     useContractCall({
-      abiV2,
+      abi: abiV2,
       address: config.addresses.nounsDAOProxy,
       method: 'implementation',
     }) || [];
-
   if (
     implementation &&
     config.addresses.nounsDAOLogicV2 &&
