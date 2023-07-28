@@ -8,9 +8,9 @@ import { ContractName } from './types';
 
 type LocalContractName =
   | Exclude<
-      ContractName,
-      'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
-    >
+    ContractName,
+    'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
+  >
   | 'NounsDAOLogicV3'
   | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
@@ -54,9 +54,9 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
   .addOptionalParam(
     'proposalUpdatablePeriodInBlocks',
     'The updatable period in blocks',
-    100,
+    10,
     types.int,
-  ) // Default: 1 block
+  ) // Default: 10 blocks
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
   .addOptionalParam(
     'minQuorumVotesBPS',
