@@ -12,6 +12,7 @@ type Props = {
   isDeployModalOpen: boolean;
   isForkPeriodActive: boolean;
   isThresholdMet: boolean;
+  isUserConnected: boolean;
   setDataFetchPollInterval: Function;
   refetchData: Function;
   setIsDeployModalOpen: Function;
@@ -143,7 +144,7 @@ function DeployForkButton(props: Props) {
             props.setIsDeployModalOpen(true);
             executeFork();
           }}
-          disabled={isLoading || isWaiting}
+          disabled={!props.isUserConnected || isLoading || isWaiting}
         >
           {isLoading || isWaiting ? (
             <div className={classes.spinner}>

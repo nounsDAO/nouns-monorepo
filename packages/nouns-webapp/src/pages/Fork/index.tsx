@@ -284,7 +284,7 @@ const ForkPage = ({
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={
                         forkDetails?.data?.executed &&
-                        +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+                          +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
                           ? true
                           : false
                       }
@@ -368,8 +368,8 @@ const ForkPage = ({
                         ? ''
                         : 's'
                       : numTokensInForkEscrow === 1
-                      ? ''
-                      : 's'}
+                        ? ''
+                        : 's'}
                   </strong>
                   {isForkPeriodActive || isForked ? null : (
                     <span className={classes.thresholdCount}>
@@ -387,6 +387,7 @@ const ForkPage = ({
                   setIsDeployModalOpen={setIsDeployModalOpen}
                   isForkPeriodActive={isForkPeriodActive}
                   isThresholdMet={isThresholdMet}
+                  isUserConnected={account ? true : false}
                 />
 
                 {(isForkPeriodActive || isForked) && (
