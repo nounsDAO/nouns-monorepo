@@ -20,6 +20,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
     address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
+    address public constant USDC_MAINNET = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
 
     function run() public returns (uint256 proposalId) {
         uint256 proposerKey = vm.envUint('PROPOSER_KEY');
@@ -50,7 +51,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         address lilNouns,
         string memory description
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 8;
+        uint8 numTxs = 9;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -112,6 +113,13 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
         values[i] = 0;
         signatures[i] = 'transfer(address,uint256)';
         calldatas[i] = abi.encode(timelockV2, IERC20(RETH_MAINNET).balanceOf(timelockV1));
+
+        // Transfer USDC to timelockV2
+        i++;
+        targets[i] = USDC_MAINNET;
+        values[i] = 0;
+        signatures[i] = 'transfer(address,uint256)';
+        calldatas[i] = abi.encode(timelockV2, IERC20(USDC_MAINNET).balanceOf(timelockV1));
 
         proposalId = daoProxy.proposeOnTimelockV1(targets, values, signatures, calldatas, description);
     }

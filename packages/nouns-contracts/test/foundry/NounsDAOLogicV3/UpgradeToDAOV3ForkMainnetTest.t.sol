@@ -51,9 +51,11 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     address public constant STETH_MAINNET = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address public constant WSTETH_MAINNET = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0;
     address public constant RETH_MAINNET = 0xae78736Cd615f374D3085123A210448E74Fc6393;
+    address public constant USDC_MAINNET = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
     address public constant PAYER_MAINNET = 0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D;
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
+    uint256 public constant USDC_BALANCE = 300_000 * 1e6;
 
     uint256 initialETHInTreasury;
     uint256 expectedTreasuryV2ETHBalanceAfterFirstProposal;
@@ -71,6 +73,8 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     function setUp() public {
         // at block 17766661 a recent proposal to convert another 10K ETH into stETH was executed
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 17766662);
+
+        deal(USDC_MAINNET, address(NOUNS_TIMELOCK_V1_MAINNET), USDC_BALANCE);
 
         ProposeDAOV3UpgradeMainnet upgradePropScript = new ProposeDAOV3UpgradeMainnet();
         stETHBalance = IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET));
@@ -163,10 +167,11 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
 
     function test_forkParams() public {
         address[] memory erc20TokensToIncludeInFork = daoV3.erc20TokensToIncludeInFork();
-        assertEq(erc20TokensToIncludeInFork.length, 3);
+        assertEq(erc20TokensToIncludeInFork.length, 4);
         assertEq(erc20TokensToIncludeInFork[0], STETH_MAINNET);
         assertEq(erc20TokensToIncludeInFork[1], WSTETH_MAINNET);
         assertEq(erc20TokensToIncludeInFork[2], RETH_MAINNET);
+        assertEq(erc20TokensToIncludeInFork[3], USDC_MAINNET);
 
         assertEq(daoV3.forkPeriod(), 7 days);
         assertEq(daoV3.forkThresholdBPS(), 2000);
@@ -264,6 +269,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         uint256 expectedV2Balance = address(timelockV2).balance + address(NOUNS_TIMELOCK_V1_MAINNET).balance;
         uint256 rETHExpectedBalance = IERC20(RETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET));
         uint256 wstETHExpectedBalance = IERC20(WSTETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET));
+        uint256 usdcExpectedBalance = IERC20(USDC_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET));
 
         proposalId = new ProposeTimelockMigrationCleanupMainnet().run();
         voteAndExecuteProposal();
@@ -278,6 +284,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), stETHBalance - 1);
         assertEq(IERC20(WSTETH_MAINNET).balanceOf(address(timelockV2)), wstETHExpectedBalance);
         assertEq(IERC20(RETH_MAINNET).balanceOf(address(timelockV2)), rETHExpectedBalance);
+        assertEq(IERC20(USDC_MAINNET).balanceOf(address(timelockV2)), usdcExpectedBalance);
     }
 
     function test_ensChange_nounsDotETHResolvesBothWaysWithTimelockV2() public {
