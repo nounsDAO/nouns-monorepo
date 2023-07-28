@@ -266,12 +266,7 @@ export interface ForkSubgraphEntity {
 
 const abi = new utils.Interface(NounsDAOV3ABI);
 const abiV2 = new utils.Interface(NounsDAOV2ABI);
-const executorAbi = new utils.Interface(NounsDAOExecutorV2ABI);
 const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
-const nounsDaoExecutorContract = NounsDaoExecutorV2Factory.connect(
-  config.addresses.nounsDaoExecutor,
-  undefined!,
-);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -1215,18 +1210,6 @@ export const useExecuteFork = () => {
     'executeFork',
   );
   return { executeFork, executeForkState };
-};
-
-export const useGracePeriod = () => {
-  const [gracePeriod] =
-    useContractCall<[any]>({
-      executorAbi,
-      address: nounsDaoExecutorContract.address,
-      method: 'GRACE_PERIOD',
-      args: [],
-    }) || [];
-
-  return gracePeriod?.toNumber();
 };
 
 export const useAdjustedTotalSupply = (): number | undefined => {
