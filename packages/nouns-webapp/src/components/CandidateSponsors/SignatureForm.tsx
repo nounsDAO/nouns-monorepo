@@ -261,18 +261,6 @@ function SignatureForm(props: Props) {
   ]);
 
   const [dateErrorMessage, setDateErrorMessage] = useState<string>('');
-  // const handleDateChange = (e: any) => {
-  //   // don't allow past dates
-  //   const today = new Date();
-  //   const date = +dayjs(e.target.value);
-  //   if (+dayjs(e.target.value) > +dayjs(today)) {
-  //     // e.target.value = today.toISOString().split('T')[0];
-  //     // setExpirationDate(+dayjs(e.target.value));
-  //     setDateErrorMessage('');
-  //   } else {
-  //     setDateErrorMessage('Date must be in the future');
-  //   }
-  // };
 
   useEffect(() => {
     if (expirationDate === undefined) return;
@@ -330,7 +318,7 @@ function SignatureForm(props: Props) {
             <span
               className={clsx(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                  classes.loadingButton,
+                classes.loadingButton,
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
