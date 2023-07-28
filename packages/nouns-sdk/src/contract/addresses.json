@@ -34,7 +34,7 @@
     "nounsAuctionHouseProxyAdmin": "0x5dAdD045E2aC09f55f49Bb84886Ea7724c675a0d",
     "nounsDaoExecutor": "0xc15008dE43D93D115BD64ED4D95817fFdBfb6DEA",
     "nounsDAOProxy": "0x22F7658f64be277e6b3968ecE7b773b092a39864",
-    "nounsDAOLogicV2": "",
+    "nounsDAOLogicV2": "0x3c793c2D7Cfd48046c75c63E43d36a2cB42fC649",
     "nounsDAOData": "0xc0217355376E414a1c33Dc3558A75625c5444006"
   },
   "31337": {
