@@ -1,9 +1,7 @@
 import {
-  NounsDAOExecutorV2ABI,
   NounsDAOV2ABI,
   NounsDAOV3ABI,
   NounsDaoLogicV3Factory,
-  NounsDaoExecutorV2Factory,
 } from '@nouns/sdk';
 import {
   ChainId,
