@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classes from './CandidateSponsors.module.css';
 import { CandidateSignature } from '../../wrappers/nounsData';
 import CandidateSponsorImage from './CandidateSponsorImage';
@@ -49,12 +49,12 @@ function CandidateSponsors({
         <div className={classes.sponsors}>
           {nounIds.map((nounId, i) => {
             if (i >= maxVisibleSpots) return null;
-            return <CandidateSponsorImage nounId={+nounId} key={i} />;
+            return <CandidateSponsorImage nounId={+nounId} key={i * +nounId} />;
           })}
         </div>
       )}
-      {placeholderArray.map(_ => (
-        <div className={classes.emptySponsorSpot} />
+      {placeholderArray.map((_, i) => (
+        <div className={classes.emptySponsorSpot} key={i} />
       ))}
     </div>
   );

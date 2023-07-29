@@ -386,3 +386,18 @@
   outline: none;
   box-shadow: none;
 }
+
+.dataStatus {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

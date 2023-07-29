@@ -82,7 +82,7 @@ export const useCandidateProposals = () => {
   const proposerDelegates =
     useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
   const threshold = useProposalThreshold() || 0;
-  const candidatesData = unmatchedCandidates?.map(
+  const candidatesData = proposerDelegates.data && unmatchedCandidates?.map(
     (candidate: PartialProposalCandidate, i: number) => {
       const proposerVotes =
         (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) ||
@@ -119,7 +119,7 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
     useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
   const proposerNounVotes =
     (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
-  const parsedData = parseSubgraphCandidate(
+  const parsedData = proposerDelegates.data && parseSubgraphCandidate(
     data?.proposalCandidate,
     proposerNounVotes,
     threshold,

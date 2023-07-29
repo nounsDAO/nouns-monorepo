@@ -4,7 +4,7 @@ import {
   useIsDaoGteV3,
   useProposalThreshold,
 } from '../../wrappers/nounsDao';
-import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -42,17 +42,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -334,8 +334,8 @@ const Proposals = ({
                         );
                         let isOriginalPropUpdatable =
                           prop &&
-                          blockNumber &&
-                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
+                            blockNumber &&
+                            isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
                             ? true
                             : false;
                         if (!isOriginalPropUpdatable) return null;
@@ -353,14 +353,24 @@ const Proposals = ({
                       );
                     })
                 ) : (
-                  <Alert variant="secondary" className={classes.alert}>
-                    <Alert.Heading>
-                      <Trans>No candidates found</Trans>
-                    </Alert.Heading>
-                    <p>
-                      <Trans>Candidates submitted by community members will appear here.</Trans>
-                    </p>
-                  </Alert>
+                  <>
+                    {!candidates && (
+                      <Alert variant="secondary" className={classes.dataStatus}>
+                        <Spinner animation="border" className={classes.spinner} />
+                        Loading candidates...
+                      </Alert>
+                    )}
+                    {candidates?.length === 0 && (
+                      <Alert variant="secondary" className={classes.alert}>
+                        <Alert.Heading>
+                          <Trans>No candidates found</Trans>
+                        </Alert.Heading>
+                        <p>
+                          <Trans>Candidates submitted by community members will appear here.</Trans>
+                        </p>
+                      </Alert>
+                    )}
+                  </>
                 )}
               </Col>
               <Col lg={3} className={classes.candidatesSidebar}>

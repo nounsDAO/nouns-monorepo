@@ -22,8 +22,8 @@
   }
 }
 .sponsorAvatar {
-  max-width: 32px;
-  width: 100%;
+  width: 32px;
+  height: 32px;
 }
 .sponsorAvatar img {
   width: 100%;
