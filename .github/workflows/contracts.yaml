@@ -1,6 +1,7 @@
 name: Contracts CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -49,4 +50,4 @@ jobs:
       - name: Run Forge tests
         run: |
           cd packages/nouns-contracts
-          forge test -vvv --ffi
+          forge test -vvv --ffi --nmc 'ForkMainnetTest'
