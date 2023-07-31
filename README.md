@@ -14,11 +14,11 @@ The [punks api](packages/punks-api) is an HTTP webserver that hosts token metada
 
 ### punks-assets
 
-The [punks assets](packages/punks-assets) package holds the Punks PNG and run-length encoded image data.
+The [punks assets](packages/punks-assets) package holds the DAO Punks PNG and run-length encoded image data.
 
 ### punks-bots
 
-The [punks bots](packages/punks-bots) package contains a bot that monitors for changes in Punks auction state and notifies everyone via Twitter and Discord.
+The [punks bots](packages/punks-bots) package contains a bot that monitors for changes in DAO Punks auction state and notifies everyone via Twitter and Discord.
 
 ### punks-contracts
 
