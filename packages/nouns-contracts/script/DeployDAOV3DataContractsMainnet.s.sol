@@ -6,7 +6,7 @@ import { DeployDAOV3DataContractsBase } from './DeployDAOV3DataContractsBase.s.s
 
 contract DeployDAOV3DataContractsMainnet is DeployDAOV3DataContractsBase {
     address public constant NOUNS_DAO_PROXY_MAINNET = 0x6f3E6272A167e8AcCb32072d08E0957F9c79223d;
-    address public constant NOUNS_TIMELOCK_V2_PROXY_MAINNET = address(0); // TODO: update when deployed
+    address public constant NOUNS_TIMELOCK_V2_PROXY_MAINNET = 0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71;
 
     constructor() DeployDAOV3DataContractsBase(NOUNS_DAO_PROXY_MAINNET, NOUNS_TIMELOCK_V2_PROXY_MAINNET) {}
 }
