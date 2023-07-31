@@ -22,7 +22,7 @@ The [punks bots](packages/punks-bots) package contains a bot that monitors for c
 
 ### punks-contracts
 
-The [punks contracts](packages/punks-contracts) is the suite of Solidity contracts powering Punks DAO.
+The [punks contracts](packages/punks-contracts) is the suite of Solidity contracts powering Punkers DAO.
 
 ### punks-sdk
 
