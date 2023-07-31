@@ -145,18 +145,20 @@ const NoundersPage = () => {
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
-            founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun
-            for the first 5 years of the project will be sent to our multisig (5/10), where it will
-            be vested and distributed to individual Nounders.
+            All Noun auction proceeds are sent to the Punkers DAO. For this reason, we, the project's
+            founders (‘Punkers’) have chosen to compensate ourselves with DAO Punks. Every 10th DAO Punk
+            for the first 5 years of the project will be sent to our multisig (2/3), where it will
+            be vested and distributed to individual Punkers.
           </Trans>
         </p>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            The Nounders reward is intended as compensation for our pre and post-launch
+            The Punkers reward is intended as compensation for our pre and post-launch
             contributions to the project, and to help us participate meaningfully in governance as
-            the project matures. Since there are 10 Nounders, after 5 years each Nounder could
-            receive up to 1% of the Noun supply.
+            the project matures. Since the Punkers reward last for 5 years and its votes are 
+            weighed in combination with CryptoPunk holders, the max voting power the Punkers 
+            will accumulate is approximately 0.15% of the total votes. After 5 years this number 
+            will only continue to decrease.
           </Trans>
         </p>
       </Col>
