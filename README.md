@@ -1,10 +1,10 @@
 # punks-monorepo
 
-Punks DAO is a generative avatar art collective run by a group of crypto misfits.
+DAO Punks is a generative avatar art collective run by a group of crypto misfits.
 
 ## Contributing
 
-If you're interested in contributing to Punks DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
+If you're interested in contributing to DAO Punks repos we're excited to have you. Please discuss any changes in `#developers` in [https://discord.gg/keNWmpdQD7](https://discord.gg/keNWmpdQD7) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
 
 ## Packages
 
@@ -26,7 +26,7 @@ The [punks contracts](packages/punks-contracts) is the suite of Solidity contrac
 
 ### punks-sdk
 
-The [punks sdk](packages/punks-sdk) exposes the Punks contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [punks sdk](packages/punks-sdk) exposes the DAO Punks contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
 
 ### punks-subgraph
 
@@ -34,7 +34,7 @@ In order to make retrieving more complex data from the auction history, [punks s
 
 ### punks-webapp
 
-The [punks webapp](packages/punks-webapp) is the frontend for interacting with Punks auctions as hosted at [nouns.wtf](https://nouns.wtf).
+The [punks webapp](packages/punks-webapp) is the frontend for interacting with DAO Punks auctions as hosted at [punks.auction](https://punks.auction).
 
 ## Quickstart
 
