@@ -1318,16 +1318,6 @@ export const useIsDaoGteV3 = (): boolean => {
   return true;
 };
 
-export const useTimelockV1Contract = (): string | undefined => {
-  const [timelockV1] =
-    useContractCall({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'timelockV1',
-    }) || [];
-  return timelockV1;
-};
-
 export const useLastMinuteWindowInBlocks = (): number | undefined => {
   const [lastMinuteWindowInBlocks] =
     useContractCall({

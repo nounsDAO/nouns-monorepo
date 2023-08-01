@@ -15,6 +15,8 @@ export interface ContractAddresses {
   nounsAuctionHouseProxy: string;
   nounsAuctionHouseProxyAdmin: string;
   nounsDaoExecutor: string;
+  nounsDaoExecutorV2?: string;
+  nounsDaoExecutorProxy?: string;
   nounsDAOProxy: string;
   nounsDAOLogicV1?: string;
   nounsDAOLogicV2?: string;
