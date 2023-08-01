@@ -26,8 +26,8 @@
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn graph build && goldsky subgraph deploy nouns-v3-goerli/0.1.6",
-    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
     "deploy:sepolia": "yarn clean && yarn prepare:sepolia && yarn codegen && yarn graph build && goldsky subgraph deploy nouns-sepolia/0.1.6",
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn graph build && goldsky subgraph deploy nouns/0.2.0",
     "mustache": "mustache"
   },
   "devDependencies": {

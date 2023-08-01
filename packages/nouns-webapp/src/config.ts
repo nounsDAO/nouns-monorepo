@@ -85,7 +85,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.2.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
@@ -151,7 +151,7 @@ const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
   featureToggles: {
-    daoGteV3: true,
+    daoGteV3: false,
     proposeOnV1: true,
     candidates: true,
     fork: true,
