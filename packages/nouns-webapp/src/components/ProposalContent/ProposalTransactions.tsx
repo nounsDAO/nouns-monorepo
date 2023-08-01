@@ -40,7 +40,7 @@ export default function ProposalTransactions({ details }: Props) {
             ) : (
               d.callData
             )}
-            {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
+            {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && d.functionSig === 'transfer' && (
               <div className={classes.txnInfoText}>
                 <div className={classes.txnInfoIconWrapper}>
                   <InformationCircleIcon className={classes.txnInfoIcon} />
@@ -53,7 +53,7 @@ export default function ProposalTransactions({ details }: Props) {
                 </div>
               </div>
             )}
-            {d.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && (
+            {d.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && d.functionSig === 'sendOrRegisterDebt' && (
               <div className={classes.txnInfoText}>
                 <div className={classes.txnInfoIconWrapper}>
                   <InformationCircleIcon className={classes.txnInfoIcon} />
