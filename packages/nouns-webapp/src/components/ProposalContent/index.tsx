@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail, useTimelockV1Contract } from '../../wrappers/nounsDao';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
 import {
   buildEtherscanAddressLink,
@@ -16,6 +16,7 @@ import EnsOrLongAddress from '../EnsOrLongAddress';
 import clsx from 'clsx';
 import ProposalTransactions from './ProposalTransactions';
 import linkIcon from '../../assets/icons/Link.svg';
+import config from '../../config';
 
 interface ProposalContentProps {
   description: string;
@@ -53,8 +54,9 @@ export const transactionIconLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { description, title, details } = props;
-  const timelockV1Contract = useTimelockV1Contract();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(timelockV1Contract ?? '');
+  const daoEtherscanLink = buildEtherscanHoldingsLink(
+    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
+  );
 
   return (
     <>

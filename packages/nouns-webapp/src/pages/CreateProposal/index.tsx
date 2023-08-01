@@ -9,7 +9,6 @@ import {
   useProposalThreshold,
   usePropose,
   useProposeOnTimelockV1,
-  useTimelockV1Contract,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
@@ -55,8 +54,9 @@ const CreateProposalPage = () => {
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
   const isDaoGteV3 = useIsDaoGteV3();
-  const timelockV1Contract = useTimelockV1Contract();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(timelockV1Contract ?? '');
+  const daoEtherscanLink = buildEtherscanHoldingsLink(
+    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
+  );
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
