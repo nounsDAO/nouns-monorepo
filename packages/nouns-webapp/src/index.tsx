@@ -150,7 +150,17 @@ const ChainSubscriber: React.FC = () => {
       const timestamp = (await event.getBlock()).timestamp;
       const { transactionHash, transactionIndex } = event;
       dispatch(
-        appendBid(reduxSafeBid({ nounId, sender, value, extended, transactionHash, transactionIndex, timestamp })),
+        appendBid(
+          reduxSafeBid({
+            nounId,
+            sender,
+            value,
+            extended,
+            transactionHash,
+            transactionIndex,
+            timestamp,
+          }),
+        ),
       );
     };
     const processAuctionCreated = (

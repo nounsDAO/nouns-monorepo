@@ -4,7 +4,9 @@ export { default as NounsDescriptorABI } from '../abi/contracts/NounsDescriptor.
 export { default as NounsSeederABI } from '../abi/contracts/NounsSeeder.sol/NounsSeeder.json';
 export { default as NounsDAOABI } from '../abi/contracts/governance/NounsDAOLogicV1.sol/NounsDAOLogicV1.json';
 export { default as NounsDAOV2ABI } from '../abi/contracts/governance/NounsDAOLogicV2.sol/NounsDAOLogicV2.json';
+export { default as NounsDAOV3ABI } from '../abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json';
 export { default as NounsDAODataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
+export { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
 export { NounsToken__factory as NounsTokenFactory } from '../typechain/factories/contracts/NounsToken__factory';
 export { NounsAuctionHouse__factory as NounsAuctionHouseFactory } from '../typechain/factories/contracts/NounsAuctionHouse__factory';
 export { NounsDescriptor__factory as NounsDescriptorFactory } from '../typechain/factories/contracts/NounsDescriptor__factory';
@@ -13,3 +15,4 @@ export { NounsDAOLogicV1__factory as NounsDaoLogicV1Factory } from '../typechain
 export { NounsDAOLogicV2__factory as NounsDaoLogicV2Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV2__factory';
 export { NounsDAOLogicV3__factory as NounsDaoLogicV3Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV3__factory';
 export { NounsDAOData__factory as NounsDaoDataFactory } from '../typechain/factories/contracts/governance/data/NounsDAOData__factory';
+export { NounsDAOExecutorV2__factory as NounsDaoExecutorV2Factory } from '../typechain/factories/contracts/governance/NounsDAOExecutorV2__factory';

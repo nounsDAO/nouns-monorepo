@@ -8,9 +8,9 @@ import { ContractName } from './types';
 
 type LocalContractName =
   | Exclude<
-      ContractName,
-      'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
-    >
+    ContractName,
+    'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
+  >
   | 'NounsDAOLogicV3'
   | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
@@ -50,7 +50,13 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
   .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 2, types.int) // Default: 2 minutes
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 * 60 * 24 * 2, types.int) // Default: 2 days
   .addOptionalParam('votingPeriod', 'The voting period (blocks)', 4 * 60 * 24 * 3, types.int) // Default: 3 days
-  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int) // Default: 1 block
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 100, types.int) // Default: 1 block
+  .addOptionalParam(
+    'proposalUpdatablePeriodInBlocks',
+    'The updatable period in blocks',
+    10,
+    types.int,
+  ) // Default: 10 blocks
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
   .addOptionalParam(
     'minQuorumVotesBPS',

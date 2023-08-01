@@ -70,21 +70,22 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/davidbrai/nouns-goerli',
+    subgraphApiUri:
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId_Sepolia]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia/0.1.2/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-elad/0.1.1/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.2.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
@@ -101,9 +102,9 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     usdcToken: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
     weth: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     steth: '0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F',
-    payerContract: '0xD4A3bf1dF54699E63A2ef7F490E8E22b27B945f0',
-    tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
-    chainlinkEthUsdc: undefined,
+    payerContract: '0x63F8445C4549d17DB181f9ADe1a126EfF8Ee72D6',
+    tokenBuyer: '0x7Ee1fE5973c2F6e42D2D40c93f0FDed078c85770',
+    chainlinkEthUsdc: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
     nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
   },
   [ChainId_Sepolia]: {
@@ -142,13 +143,19 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch {}
+  } catch { }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
 const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
+  featureToggles: {
+    daoGteV3: false,
+    proposeOnV1: true,
+    candidates: true,
+    fork: true,
+  },
 };
 
 export default config;

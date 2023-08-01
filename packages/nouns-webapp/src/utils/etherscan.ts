@@ -5,6 +5,8 @@ const getBaseURL = (network: ChainId) => {
   switch (network) {
     case ChainId.Goerli:
       return 'https://goerli.etherscan.io/';
+    case ChainId.Sepolia:
+      return 'https://sepolia.etherscan.io/';
     default:
       return 'https://etherscan.io/';
   }

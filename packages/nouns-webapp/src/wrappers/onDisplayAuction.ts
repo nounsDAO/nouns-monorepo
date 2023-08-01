@@ -28,9 +28,7 @@ const deserializeBid = (reduxSafeBid: BidEvent): Bid => {
   };
 };
 const deserializeBids = (reduxSafeBids: BidEvent[]): Bid[] => {
-  return reduxSafeBids
-    .map(bid => deserializeBid(bid))
-    .sort((a: Bid, b: Bid) => compareBids(a, b));
+  return reduxSafeBids.map(bid => deserializeBid(bid)).sort((a: Bid, b: Bid) => compareBids(a, b));
 };
 
 const useOnDisplayAuction = (): Auction | undefined => {

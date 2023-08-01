@@ -30,8 +30,6 @@
 
 .section {
   word-wrap: break-word;
-  padding-top: 2rem;
-  margin-top: 2rem;
 }
 
 .section h5 {
@@ -53,13 +51,27 @@
   margin-right: auto;
 }
 
-.transitionStateButton {
-  height: 50px;
+.button {
   border-radius: 8px;
   font-family: 'PT Root UI';
   font-weight: bold;
-  font-size: 24px;
   transition: all 0.125s ease-in-out;
+  background-color: #faf4f8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+}
+
+.transitionStateButton {
+  /* height: 50px; */
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  padding: 10px 16px;
+  background-color: #000;
+  color: hsl(0, 0%, 100%);
 }
 
 .transitionStateButton:hover {
@@ -72,36 +84,25 @@
 }
 
 .destructiveTransitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  border-color: var(--brand-color-red);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  color: var(--brand-gray-dark-text);
 }
 
 .destructiveTransitionStateButton:hover {
   background-color: var(--brand-color-red);
-  opacity: 0.5;
   cursor: pointer;
+  color: #fff;
 }
 
-.destructiveTransitionStateButtonSection {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+.destructiveTransitionStateButton > div {
+  width: 1rem;
+  height: 1rem;
 }
 
 .spinner {
   margin-left: auto;
   margin-right: auto;
   color: var(--brand-gray-light-text);
+  max-width: 30px;
 }
 
 /* Info section stuff */
@@ -142,6 +143,19 @@
 .voteMetadataTime {
   min-width: fit-content;
   text-align: right;
+}
+.objectionPeriodActive {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  color: var(--brand-gray-light-text);
+}
+.objectionPeriodActive p {
+  margin: 0 0 0.25rem;
+  padding: 0;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.1;
 }
 
 .snapshotBlock {
@@ -198,4 +212,76 @@
   font-weight: 500;
   color: var(--brand-gray-light-text);
   margin-bottom: 0.5rem;
+}
+
+.sidebar > div {
+  @media (min-width: 993px) {
+    height: 100%;
+  }
+}
+
+.proposerOptionsWrapper,
+.objectionWrapper {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 5px 15px;
+  @media (max-width: 992px) {
+    text-align: center;
+    padding: 10px 10px;
+  }
+}
+
+.proposerOptions,
+.objection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}
+
+.objection strong {
+  color: #000;
+}
+
+.proposerOptions p,
+.objection p {
+  @media (max-width: 992px) {
+    padding-top: 0;
+    margin: 0 0 5px;
+  }
+}
+
+.proposerOptionsHeader,
+.objectionHeader {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  display: block;
+  font-weight: bold;
+}
+
+a.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.primaryButton:hover {
+  opacity: 0.75;
+}
+
+.v3ProposalWrapper {
+  margin-top: 2rem;
+}
+
+.voteAgainst {
+  background-color: var(--brand-color-red);
+  color: #fff;
+}
+
+.voteAgainst:hover {
+  opacity: 0.7;
 }

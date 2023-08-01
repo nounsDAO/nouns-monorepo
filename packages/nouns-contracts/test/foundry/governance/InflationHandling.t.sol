@@ -21,7 +21,11 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         return 2;
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return

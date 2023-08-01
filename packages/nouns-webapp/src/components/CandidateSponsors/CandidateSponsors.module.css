@@ -1,0 +1,584 @@
+.wrapper {
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  text-align: left;
+  transition: height 0.125s ease-in-out;
+}
+
+.interiorWrapper {
+  padding: 1rem;
+}
+
+.interiorWrapper.formOverlayVisible {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 4px;
+  font-size: 20px;
+}
+
+.subhead {
+  margin: 0 0 10px;
+  padding-top: 0;
+  font-size: 14px;
+  line-height: 1.1;
+  color: var(--brand-gray-light-text);
+}
+.sponsorInteriorWrapper.hidden {
+  opacity: 0;
+}
+.sponsorsList {
+  text-align: left;
+  padding: 0;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.sponsorsList li {
+  /* placeholder styles */
+  border: 1px solid #e6e6e6;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background-color: #f3f3f3;
+  list-style-type: none;
+  margin: 0;
+}
+
+.sponsorsList p {
+  margin: 0;
+  padding: 0;
+}
+
+.sponsorsList li.sponsor {
+  background-color: #fbfbfc;
+  border-width: 1px;
+  position: relative;
+}
+
+.sponsorsList li.sponsor.cancelOverlay {
+  min-height: 75px;
+}
+
+.sponsorsList li.placeholder {
+  border-style: dashed;
+  border-width: 2px;
+  min-height: 40px;
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.sponsorsList li.sponsor.sponsorInvalid .reason,
+.sponsorsList li.sponsor.sponsorInvalid .details {
+  opacity: 0.5;
+}
+
+.details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reason {
+  font-size: 13px;
+  color: #646465;
+  border-top: 1px solid #e6e6e6;
+  margin-top: 8px;
+  padding-top: 10px;
+  line-height: 1.2;
+}
+
+.reasonWrapper {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reasonWrapper.reasonShown {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.sponsorName a {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000 !important;
+  text-decoration: none;
+}
+
+.sponsorName a:hover {
+  text-decoration: underline;
+}
+
+.expiration {
+  font-size: 13px;
+  color: #646465;
+}
+
+.sponsorInfo p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.1;
+}
+
+.voteCount {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  font-size: 13px;
+  color: #646465;
+}
+
+.button {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #000;
+  border: 1px solid #e6e6e6;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.125s ease-in-out;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.button:disabled {
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+  pointer-events: none;
+}
+
+.removeSignature {
+  border: none;
+  text-align: center;
+  border-top: 1px solid #e6e6e6;
+  margin-top: 8px;
+  padding-top: 10px;
+  line-height: 1.1;
+}
+
+.removeSignature button {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #e40536;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.readMore {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000 !important;
+  background: rgb(251, 251, 252);
+  background: linear-gradient(0deg, rgba(251, 251, 252, 1) 33%, rgba(251, 251, 252, 0) 100%);
+  padding: 20px 3px 4px;
+  position: relative;
+  z-index: 2;
+  margin-top: -20px;
+  border: none;
+}
+
+.withoutVotesMsg {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--brand-gray-light-text);
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.thresholdMet {
+  color: var(--brand-color-green);
+  font-weight: bold;
+  font-size: 14px;
+  margin: -4px 0 0;
+  padding: 0.7rem 1rem 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.thresholdMet img {
+  position: relative;
+  top: 1px;
+}
+
+.formOverlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.cancelStatusOverlay {
+  z-index: 3;
+}
+
+.formOverlay .closeButton,
+.cancelStatusOverlay .closeButton {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 20px;
+  color: #000;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  z-index: 99;
+}
+.formOverlay .closeButton {
+  top: 3px;
+}
+
+.formWrapper {
+  text-align: left;
+  width: 100%;
+  padding: 1rem;
+}
+.formWrapper input,
+.formWrapper textarea {
+  width: 100%;
+}
+.formWrapper button {
+  display: block;
+  margin: 0 auto;
+}
+
+.formLabel {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.formWrapper input,
+.formWrapper textarea {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #aaa !important;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.formWrapper .note {
+  font-size: 12px;
+  color: #646465;
+  line-height: 1.2;
+  margin: 0;
+  text-align: center;
+}
+
+.aboutText {
+  font-size: 14px;
+  color: var(--brand-gray-light-text);
+  line-height: 1.2;
+  margin-top: 15px;
+}
+
+.aboutText p {
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+.transactionStatus {
+  font-size: 14px;
+  color: #646465;
+  line-height: 1.2;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.cancelStatusOverlay,
+.submitSignatureStatusOverlay {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background-color: #fff;
+  text-align: center;
+  padding: 10px;
+  height: calc(100% - 6px);
+  width: calc(100% - 6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cancelStatusOverlay .cancelStatusOverlayTitle,
+.submitSignatureStatusOverlay {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+}
+.cancelStatusOverlayMessage {
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 4px;
+}
+.cancelStatusOverlay.errorMessage {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  background: #fbfbfc;
+}
+.cancelStatusOverlay.successMessage {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  background: #fbfbfc;
+}
+
+.loadingNoggles {
+  margin: 0 auto;
+  padding: 10px;
+  max-width: 60px;
+}
+
+.submitSignatureStatusOverlay {
+  padding: 10px;
+  z-index: 100;
+  background-color: #fff;
+}
+
+.submitSignatureStatusOverlay p {
+  text-align: center;
+  font-weight: normal;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+.submitSignatureStatusOverlay strong {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+button.closeLink {
+  text-decoration: underline;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  margin: 0 auto;
+  font-size: 14px;
+  text-align: center;
+}
+.closeLink:hover {
+  text-decoration: none;
+}
+
+.fields.disabled {
+  opacity: 0.5;
+}
+
+/* submission status */
+.transactionModalSpinner {
+  display: block;
+  margin: 0 auto 0.5rem;
+  max-width: 45px;
+}
+.loadingButton {
+  border-radius: 8px;
+  color: #14161b;
+  font-size: 15px;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid #e6e6e6;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+p.statusMessage {
+  color: #14161b;
+  font-size: 14px;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: normal;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  transition: all 0.125s ease-in-out;
+}
+.statusMessage.errorMessage {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  background-color: var(--brand-color-red-translucent);
+}
+.statusMessage.successMessage {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  background-color: var(--brand-color-green-translucent);
+}
+.statusMessage button {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin: 8px auto 0;
+  color: #14161b;
+  display: block;
+  width: auto;
+  font-size: 14px;
+}
+.statusMessage button:hover {
+  text-decoration: none;
+}
+.statusMessage.successMessage a {
+  color: var(--brand-color-green);
+  text-decoration: none;
+}
+.statusMessage.successMessage a:hover img {
+  opacity: 0.75;
+}
+.statusMessage.successMessage a img {
+  position: relative;
+  top: -1px;
+  margin-left: 2px;
+  transition: all 0.125s ease-in-out;
+}
+
+/* 2 step process */
+.steps {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps li {
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.steps:last-child {
+  margin-bottom: 0;
+}
+
+.steps strong {
+  position: relative;
+  top: 2px;
+}
+
+.steps strong,
+.steps .spinner-border {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+.steps .spinner > div {
+  width: 18px !important;
+  height: 18px;
+  height: 100%;
+  opacity: 0.5;
+}
+.steps .placeholder {
+  width: 18px;
+  height: 18px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  display: inline-block;
+  animation: pulse 1.5s ease-out;
+  animation-iteration-count: infinite;
+  opacity: 0.5;
+  position: relative;
+  top: 3px;
+}
+
+.sponsorInvalidLabel {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+  line-height: 1;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+
+.dateErrorMessage {
+  color: var(--brand-color-red);
+  font-size: 13px;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+p.sigStatus {
+  border: none;
+  text-align: center;
+  border-top: 1px solid #e6e6e6;
+  font-size: 12px;
+  margin-top: 8px;
+  padding-top: 10px;
+  line-height: 1.1;
+  text-align: left;
+  color: #646465;
+}
+p.sigStatus span {
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: var(--brand-color-green);
+}
+
+p.inactiveCandidate {
+  padding: 1rem 0.5rem;
+  margin: 0;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  text-align: center;
+}
+p.proposerVotesLabel {
+  font-size: 14px;
+  margin: -4px 0 0.25rem;
+  padding: 0;
+  font-weight: bold;
+  color: var(--brand-gray-light-text);
+}
+.naVotesLabel {
+  font-size: 1rem;
+  font-family: monospace;
+  font-weight: normal;
+  opacity: 0.36;
+  font-style: normal;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: relative;
+  top: -0.1em;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

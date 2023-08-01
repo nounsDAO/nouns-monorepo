@@ -598,7 +598,7 @@ library NounsDAOV3Admin {
 
     function checkForDuplicates(address[] calldata erc20tokens) internal pure {
         if (erc20tokens.length == 0) return;
-        
+
         for (uint256 i = 0; i < erc20tokens.length - 1; i++) {
             for (uint256 j = i + 1; j < erc20tokens.length; j++) {
                 if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
