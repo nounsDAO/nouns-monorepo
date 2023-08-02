@@ -13,7 +13,7 @@ contract ProposeDAOV3UpgradeMainnet is Script {
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
     uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 2500 ether;
-    uint256 public constant STETH_BUFFER = 1000 ether;
+    uint256 public constant STETH_BUFFER = 5000 ether;
     uint256 public constant FORK_PERIOD = 7 days;
     uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
