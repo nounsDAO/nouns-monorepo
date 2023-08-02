@@ -37,7 +37,7 @@ export default function ProposalTransaction({ transaction }: Props) {
       ) : (
         transaction.callData
       )}
-      {transaction.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
+      {transaction.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && transaction.functionSig === 'transfer' && (
         <div className={classes.txnInfoText}>
           <div className={classes.txnInfoIconWrapper}>
             <InformationCircleIcon className={classes.txnInfoIcon} />
@@ -50,7 +50,7 @@ export default function ProposalTransaction({ transaction }: Props) {
           </div>
         </div>
       )}
-      {transaction.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && (
+      {transaction.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && transaction.functionSig === 'sendOrRegisterDebt' && (
         <div className={classes.txnInfoText}>
           <div className={classes.txnInfoIconWrapper}>
             <InformationCircleIcon className={classes.txnInfoIcon} />
