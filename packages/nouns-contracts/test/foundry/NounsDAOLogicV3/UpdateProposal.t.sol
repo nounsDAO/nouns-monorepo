@@ -64,6 +64,7 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
 
         (address signer, uint256 signerPK) = makeAddrAndKey('signer');
         nounsToken.transferFrom(proposer, signer, 1);
+        vm.stopPrank();
         vm.roll(block.number + 1);
 
         uint256 expirationTimestamp = block.timestamp + 1234;
