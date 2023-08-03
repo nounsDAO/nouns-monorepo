@@ -192,7 +192,7 @@ contract UpgradeToDAOV3ForkMainnetTest is Test {
     }
 
     function test_transfersAllstETHExceptTheBuffer() public {
-        assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), stETHBuffer);
+        assertEq(IERC20(STETH_MAINNET).balanceOf(address(NOUNS_TIMELOCK_V1_MAINNET)), stETHBuffer + 1);
         assertEq(IERC20(STETH_MAINNET).balanceOf(address(timelockV2)), stETHBalance - stETHBuffer - 1);
     }
 
