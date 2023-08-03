@@ -1,8 +1,9 @@
-# nouns-monorepo
+# ATX DAO Membership Portal
 
-Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
+Live at: [https://members.atxdao.com/](https://members.atxdao.com/)
 
-## Packages
+ATX DAO fork of the Nouns DAO MonoRepo used to implement their generative avatar art collection
+and an NFT token-gated portal which grants access to important member-only information.
 
 ### nouns-api
 
