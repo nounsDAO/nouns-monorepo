@@ -1,0 +1,375 @@
+.modalContent {
+  font-weight: normal;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.inputs input,
+.inputs select {
+  padding: 10px 12px;
+}
+.inputs small,
+.sectionLabel p {
+  font-size: 16px;
+  color: #14161b;
+  font-weight: normal;
+}
+.inputs small strong {
+  font-weight: bold;
+}
+.reasonInput,
+.selectMenu {
+  width: 100% !important;
+  border-radius: 6px !important;
+}
+
+/* nouns */
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 20px 0;
+  @media (max-width: 991px) {
+    flex-direction: column;
+  }
+}
+.sectionHeader button {
+  height: fit-content;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.sectionHeader button:hover {
+  opacity: 0.75;
+  text-decoration: none;
+}
+.sectionHeader button:disabled {
+  text-decoration: none;
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+.sectionLabel {
+  width: 70%;
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+.sectionLabel p {
+  margin: 0;
+  padding: 0;
+}
+.nounsList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.nounButton {
+  position: relative;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  /* width: auto; */
+  width: calc(33% - 6px);
+  font-family: 'Londrina Solid', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+.nounButton > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nounButton:hover,
+.selectedNounButton:hover {
+  box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
+}
+
+.nounButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nounButton img {
+  max-width: 48px;
+  border-radius: 6px;
+}
+
+.selectedNounButton {
+  border: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.nounButton.escrowedNoun {
+  opacity: 1;
+  border-color: #e8e8e8;
+  overflow: hidden;
+}
+.escrowedNoun > div {
+  opacity: 0.65;
+}
+.escrowedNoun:hover {
+  border-color: #e8e8e8;
+  box-shadow: none;
+}
+
+.escrowedNounLabel {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'PT Root UI';
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 0;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* proposals */
+.selectedProposals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.selectedProposal {
+  background-color: white;
+  border: 2px solid #d3d3d3;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+.selectedProposal a {
+  color: #14161b;
+  text-decoration: none;
+}
+.selectedProposal a:hover {
+  text-decoration: underline;
+}
+.selectedProposal span {
+  font-family: 'Londrina Solid', sans-serif;
+}
+.removeButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  opacity: 0.2;
+  transition: all 0.2s ease-in-out;
+}
+.removeButton svg {
+  vertical-align: top;
+}
+.removeButton:hover {
+  opacity: 1;
+}
+
+/* confirm */
+.modalActions {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.modalActions p {
+  margin: 10px 0;
+  padding: 0;
+  opacity: 0.7;
+}
+
+.button {
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  background-color: #faf4f8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+  font-size: 22px;
+}
+
+.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.primaryButton:disabled {
+  background-color: #ccc;
+}
+.primaryButton:disabled:hover {
+  opacity: 1;
+}
+.primaryButton:hover {
+  opacity: 0.75;
+}
+.approvalNote button {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: #14161b;
+}
+.approvalNote button:hover {
+  text-decoration: none;
+}
+
+.transactionModalSpinner {
+  display: block;
+  margin: 0 auto 0.5rem;
+  max-width: 45px;
+}
+.loadingButton {
+  color: #14161b;
+  font-size: 15px;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  background-color: #fff !important;
+  border: 1px solid #e6e6e6;
+  width: 100%;
+}
+p.statusMessage {
+  color: #14161b;
+  font-size: 15px;
+  margin-bottom: 1rem;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  background-color: #fff !important;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  transition: all 0.125s ease-in-out;
+}
+.statusMessage.errorMessage {
+  color: var(--brand-color-red);
+  border-color: var(--brand-color-red-translucent);
+  background-color: var(--brand-color-red-translucent);
+}
+.statusMessage.successMessage {
+  color: var(--brand-color-green);
+  border-color: var(--brand-color-green);
+  background-color: var(--brand-color-green-translucent);
+}
+.statusMessage button {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 auto;
+  color: #14161b;
+  display: block;
+  width: auto;
+}
+.statusMessage button:hover {
+  text-decoration: none;
+}
+.statusMessage.successMessage a {
+  color: var(--brand-color-green);
+  text-decoration: none;
+}
+.statusMessage.successMessage a:hover img {
+  opacity: 0.75;
+}
+.statusMessage.successMessage a img {
+  position: relative;
+  top: -2px;
+  transition: all 0.125s ease-in-out;
+}
+.selectedNouns {
+  color: #14161b;
+  font-size: 15px;
+}
+
+/* 2 step process */
+.steps {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps li {
+  margin-bottom: 6px;
+  position: relative;
+  font-weight: bold;
+}
+
+.steps:last-child {
+  margin-bottom: 0;
+}
+
+.steps strong,
+.steps .spinner-border {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+.steps .spinner > div {
+  width: 18px !important;
+  height: 18px;
+  height: 100%;
+  opacity: 0.5;
+}
+.steps .placeholder {
+  width: 18px;
+  height: 18px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  display: inline-block;
+  animation: pulse 1.5s ease-out;
+  animation-iteration-count: infinite;
+  opacity: 0.5;
+  position: relative;
+  top: 3px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

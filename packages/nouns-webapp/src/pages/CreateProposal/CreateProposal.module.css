@@ -82,3 +82,44 @@
   display: flex;
   align-items: center;
 }
+
+.feeNotice {
+  text-align: center;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.commitMessage input {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #212529;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+}
+button.modalButtonLink {
+  font-weight: bold;
+  text-decoration: underline;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+button.modalButtonLink:hover {
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.note {
+  font-size: 14px;
+  color: var(--text-light-gray);
+  margin: 0;
+  padding: 0;
+}
+.note a {
+  color: var(--text-light-gray);
+}
+
+.timelockOption {
+  margin: 1rem 0;
+}

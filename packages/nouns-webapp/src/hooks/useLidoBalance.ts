@@ -9,7 +9,7 @@ const { addresses } = config;
 
 const erc20Interface = new utils.Interface(ERC20);
 
-function useLidoBalance(): BigNumber | undefined {
+function useLidoBalance(address: string | undefined): BigNumber | undefined {
   const { library } = useEthers();
 
   const [balance, setBalance] = useState(undefined);
@@ -20,9 +20,9 @@ function useLidoBalance(): BigNumber | undefined {
   }, [library]);
 
   useEffect(() => {
-    if (!lidoContract || !addresses.nounsDaoExecutor) return;
-    lidoContract.balanceOf(addresses.nounsDaoExecutor).then(setBalance);
-  }, [lidoContract]);
+    if (!lidoContract || !address) return;
+    lidoContract.balanceOf(address).then(setBalance);
+  }, [lidoContract, address]);
 
   return balance;
 }

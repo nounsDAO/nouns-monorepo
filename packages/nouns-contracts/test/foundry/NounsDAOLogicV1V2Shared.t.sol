@@ -4,11 +4,11 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV1 } from '../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
+import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOStorageV1, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
@@ -32,7 +32,13 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Pending);
+        uint256 state = uint256(NounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
+
+        if (daoVersion() < 3) {
+            assertEq(state, uint256(NounsDAOStorageV1.ProposalState.Pending));
+        } else {
+            assertEq(state, uint256(NounsDAOStorageV3.ProposalState.Updatable));
+        }
     }
 
     function testActiveGivenProposalPastVotingDelay() public {
@@ -174,20 +180,38 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
     }
 }
 
+contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicV1V2StateTest {
+    function daoVersion() internal pure override returns (uint256) {
+        return 1;
+    }
+
+    function deployDAOProxy(
+        address,
+        address,
+        address
+    ) internal override returns (NounsDAOLogicV1) {
+        return deployForkDAOProxy();
+    }
+}
+
 contract NounsDAOLogicV1StateTest is NounsDAOLogicV1V2StateTest {
     function daoVersion() internal pure override returns (uint256) {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxy(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -206,15 +230,19 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -229,6 +257,20 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
                     )
                 )
             );
+    }
+}
+
+contract NounsDAOLogicV3StateTest is NounsDAOLogicV1V2StateTest {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
+        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+    }
+
+    function daoVersion() internal pure override returns (uint256) {
+        return 3;
     }
 }
 
@@ -432,15 +474,19 @@ contract NounsDAOLogicV1VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxy(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -530,15 +576,19 @@ contract NounsDAOLogicV2VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),

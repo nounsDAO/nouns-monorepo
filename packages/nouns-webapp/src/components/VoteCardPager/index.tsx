@@ -29,7 +29,7 @@ const VoteCardPager: React.FC<VoteCardPagerProps> = props => {
       {/* Dots */}
       <div className={clsx(classes.pageDots, isOnePage ? classes.disabled : '')}>
         {Array.from(Array(numPages).keys()).map((n: number) => {
-          return <span className={n === currentPage ? '' : classes.disabledPageDot}>•</span>;
+          return <span className={n === currentPage ? '' : classes.disabledPageDot} key={n}>•</span>;
         })}
       </div>
       {/* Arrows */}

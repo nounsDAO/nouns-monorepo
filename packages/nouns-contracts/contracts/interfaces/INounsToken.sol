@@ -46,8 +46,6 @@ interface INounsToken is IERC721 {
 
     function dataURI(uint256 tokenId) external returns (string memory);
 
-    function setNoundersDAO(address noundersDAO) external;
-
     function setMinter(address minter) external;
 
     function lockMinter() external;

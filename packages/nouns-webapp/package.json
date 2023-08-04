@@ -5,9 +5,9 @@
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@davatar/react": "^1.10.3",
-    "@fortawesome/fontawesome-svg-core": "1.2.35",
-    "@fortawesome/free-solid-svg-icons": "5.15.3",
-    "@fortawesome/react-fontawesome": "0.1.14",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "0.2.0",
     "@heroicons/react": "^1.0.6",
     "@lingui/cli": "3.13.3",
     "@lingui/core": "3.13.3",
@@ -22,7 +22,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@usedapp/coingecko": "0.5.1",
-    "@usedapp/core": "0.9.1",
+    "@usedapp/core": "npm:usedapp-core-fork",
     "@walletconnect/ethereum-provider": "^2.8.4",
     "@walletconnect/modal": "^2.4.5",
     "@web3-react/core": "^6.1.9",
@@ -47,6 +47,7 @@
     "ramda": "^0.27.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0",
+    "react-diff-viewer": "^3.1.1",
     "react-dom": "^17.0.2",
     "react-markdown": "^7.0.0",
     "react-number-format": "^5.1.2",
@@ -70,8 +71,10 @@
     "@types/ramda": "^0.27.42",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-fontawesome": "^1.6.5",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-transition-group": "^4.4.5",
+    "@types/lodash.merge": "^4.6.7",
     "dotenv": "^10.0.0"
   },
   "scripts": {
@@ -94,5 +97,37 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "lingui": {
+    "catalogs": [
+      {
+        "path": "<rootDir>/src/locales/{locale}",
+        "include": [
+          "<rootDir>/src"
+        ]
+      }
+    ],
+    "compileNamespace": "cjs",
+    "fallbackLocales": {
+      "default": "en-US",
+      "pseudo": "en-US"
+    },
+    "format": "po",
+    "formatOptions": {
+      "lineNumbers": false
+    },
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "pseudo"
+    ],
+    "orderBy": "messageId",
+    "rootDir": ".",
+    "runtimeConfigModule": [
+      "@lingui/core",
+      "i18n"
+    ],
+    "sourceLocale": "en-US",
+    "pseudoLocale": "pseudo"
+  }
 }
