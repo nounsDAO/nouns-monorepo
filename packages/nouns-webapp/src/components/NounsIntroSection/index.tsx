@@ -53,7 +53,7 @@ const NounsIntroSection = () => {
           </div>
         </Col>
         <Col lg={6} style={{marginTop:'10px'}}>
-          <Row style={{textAlign:'center', marginBottom:'150px'}}>
+          <Row style={{textAlign:'center', marginBottom:'10%'}}>
             <Card
             className={classes.card}
             onClick={(e) => {
@@ -67,11 +67,11 @@ const NounsIntroSection = () => {
             <Tabs
               defaultActiveKey="featured"
             >
-              <Tab eventKey="featured" title="Featured Events"  className={classes.youtubeEmbedContainer}>
+              <Tab eventKey="featured" title="Featured"  className={classes.youtubeEmbedContainer}>
                 <iframe
                   src="https://lu.ma/embed/calendar/cal-yHgkMgwCAFEqbSO/events"
                   frameBorder="0"
-                  style={{ border: '1px solid #bfcbda88', borderRadius: '4px', marginTop:'-20px', marginLeft:'-3%', width:'105%'}}
+                  style={{ border: '1px solid #bfcbda88', borderRadius: '4px', marginTop:'-3%', marginLeft:'-3%', width:'105%'}}
                 ></iframe>
               </Tab>
               <Tab eventKey="full-calendar" title="Full Calendar" className={classes.youtubeEmbedContainer}>
@@ -79,7 +79,7 @@ const NounsIntroSection = () => {
                   src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23F4511E&ctz=America%2FChicago&mode=WEEK&showNav=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&showTitle=0&showDate=0&src=Y19rNGgyMWg1aGoxMjd1c3ZuZjRsZ3Zia3ZkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23D81B60"
                   title="Google Calendar"
                   frameBorder="0"
-                  style={{ border: '1px solid #bfcbda88', borderRadius: '4px', marginTop:'-20px', marginLeft:'-3%', width:'105%'}}
+                  style={{ border: '1px solid #bfcbda88', borderRadius: '4px', marginTop:'-3%', marginLeft:'-3%', width:'105%'}}
                 ></iframe>
               </Tab>
             </Tabs>

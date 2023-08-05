@@ -57,12 +57,12 @@
 }
 
 .embedContainer {
-  padding: 36% 0 0 0;
+  padding: 60% 0 0 0;
   position: relative;
 }
 
 .youtubeEmbedContainer {
-  padding: 32% 0 0 0;
+  padding: 60% 0 0 0;
   position: relative;
 }
 
@@ -78,7 +78,7 @@
   position: absolute;
   top: 20px;
   left: 0;
-  height: 320px;
+  height: 360px;
   width: 100%;
 }
 
@@ -151,15 +151,19 @@
 
   .textWrapper h1 {
     font-size: 3.75rem;
+    text-align: center;
+    margin-top: 10%;
   }
 
   .embedContainer {
-    padding: 56.25% 0 0 0 !important;
+    padding: 100% 0 0 0 !important;
+    margin-top: 10px;
     margin-bottom: 60px;
   }
 
   .youtubeEmbedContainer {
-    padding: 56.25% 0 0 0 !important;
+    padding: 100% 0 0 0 !important;
+    margin-top: 10px;
     margin-bottom: 60px;
   }
 
