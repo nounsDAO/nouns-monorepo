@@ -8,12 +8,12 @@ const CadentRepDistributorABI = [
       },
       {
         internalType: 'uint256',
-        name: 'amountDistributedPerDay',
+        name: 'amountDistributedPerCadence',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: 'numOfTotalSecondsToClaimFromLastClaim',
+        name: 'cadenceCycle',
         type: 'uint256',
       },
     ],
@@ -56,6 +56,32 @@ const CadentRepDistributorABI = [
     name: 'claim',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getAmountDistributedPerCadenceCycle',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getCadenceCycle',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

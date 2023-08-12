@@ -18,6 +18,7 @@ import { utils } from 'ethers'
 import { useContractCall, useContractFunction } from '@usedapp/core';
 import { useCadentCall } from '../../wrappers/atxDaoNFT';
 import { CadentRepDistributorABI } from './CadentRepDistributorABI';
+import NavBarButton, { NavBarButtonStyle } from '../../components/NavBarButton';
 
 declare var window: any;
 
@@ -160,16 +161,15 @@ const RepPage = () => {
   
   let canClaimConditional;
   if (canClaim) {
-    canClaimConditional = <><button onClick={Claim}>Claim!</button></>
+    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim!</button></>
   }else {
-    canClaimConditional = <><span>Please wait before claiming more tokens!</span><span>{remainingTime} seconds until you can claim again!</span><button disabled>Claim!</button></>
+    canClaimConditional = <><button style={{width:200}} disabled>Claim!</button><span> You can redeem more tokens in {remainingTime} seconds!</span></>
   }
 
   return (
     <Section fullWidth={false} className={classes.section}>
       <Row className={classes.headerRow}>
         
-        {canClaimConditional}
         <span>
           <Trans>Reputation</Trans>
         </span>
@@ -209,7 +209,11 @@ const RepPage = () => {
         </Row>
       </Col>
       <Col sm={12} md={6}>
+      
+        <Row>
+        </Row>
         <Card className={classes.card}>
+        {canClaimConditional}
           <Row>
             <h3 style={{marginBottom:'2rem', marginTop:'1rem'}}>Your REP Tokens</h3>
             <Col sm={12} md={6}>

@@ -8,23 +8,23 @@ contract CadentRepDistributor is ERC1155Holder {
     error CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
     IRepTokens s_rep;
 
-    uint256 s_amountDistributedPerDay;
-    uint256 s_numOfTotalSecondsToClaimFromLastClaim;
+    uint256 s_amountDistributedPerCadenceCycle;
+    uint256 s_cadenceCycle;
 
     mapping(address => uint256) addressToLastClaimDate;
 
     event DistributedRep(address indexed recipient);
 
-    constructor(address rep, uint256 amountDistributedPerDay, uint256 numOfTotalSecondsToClaimFromLastClaim) {
+    constructor(address rep, uint256 amountDistributedPerCadence, uint256 cadenceCycle) {
         s_rep = IRepTokens(rep);
-        s_amountDistributedPerDay = amountDistributedPerDay;
-        s_numOfTotalSecondsToClaimFromLastClaim = numOfTotalSecondsToClaimFromLastClaim;
+        s_amountDistributedPerCadenceCycle = amountDistributedPerCadence;
+        s_cadenceCycle = cadenceCycle;
     }
 
     function claim() external {
         if (!canClaim()) revert CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
 
-        s_rep.distribute(address(this), msg.sender, s_amountDistributedPerDay, '');
+        s_rep.distribute(address(this), msg.sender, s_amountDistributedPerCadenceCycle, '');
 
         addressToLastClaimDate[msg.sender] = block.timestamp;
         emit DistributedRep(msg.sender);
@@ -32,15 +32,19 @@ contract CadentRepDistributor is ERC1155Holder {
 
     function canClaim() public view returns (bool) {
         uint lastClaimTime = addressToLastClaimDate[msg.sender];
-        return
-            lastClaimTime != 0 ? (block.timestamp >= (lastClaimTime + s_numOfTotalSecondsToClaimFromLastClaim)) : true;
+        return lastClaimTime != 0 ? (block.timestamp >= (lastClaimTime + s_cadenceCycle)) : true;
     }
 
     function getRemainingTime() external view returns (int) {
         int lastClaimTime = int(addressToLastClaimDate[msg.sender]);
-        return
-            lastClaimTime != 0
-                ? (lastClaimTime + int(s_numOfTotalSecondsToClaimFromLastClaim) - int(block.timestamp))
-                : int(0);
+        return lastClaimTime != 0 ? (lastClaimTime + int(s_cadenceCycle) - int(block.timestamp)) : int(0);
+    }
+
+    function getAmountDistributedPerCadenceCycle() external view returns (uint256) {
+        return s_amountDistributedPerCadenceCycle;
+    }
+
+    function getCadenceCycle() external view returns (uint256) {
+        return s_cadenceCycle;
     }
 }
