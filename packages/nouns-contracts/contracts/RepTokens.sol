@@ -1,32 +1,24 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@opengsn/contracts/src/ERC2771Recipient.sol";
-import "operator-filter-registry/src/DefaultOperatorFilterer.sol";
+import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
+import '@openzeppelin/contracts/access/AccessControl.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/security/Pausable.sol';
+import '@opengsn/contracts/src/ERC2771Recipient.sol';
+import 'operator-filter-registry/src/DefaultOperatorFilterer.sol';
 
-import "./IRepTokens.sol";
+import './IRepTokens.sol';
 
-contract RepTokens is
-    IRepTokens,
-    AccessControl,
-    Ownable,
-    DefaultOperatorFilterer,
-    ERC1155,
-    Pausable,
-    ERC2771Recipient
-{
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant DISTRIBUTOR_ROLE = keccak256("DISTRIBUTOR_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
-    bytes32 public constant TOKEN_MIGRATOR_ROLE = keccak256("TOKEN_MIGRATOR_ROLE");
+contract RepTokens is IRepTokens, AccessControl, Ownable, DefaultOperatorFilterer, ERC1155, Pausable, ERC2771Recipient {
+    bytes32 public constant MINTER_ROLE = keccak256('MINTER_ROLE');
+    bytes32 public constant DISTRIBUTOR_ROLE = keccak256('DISTRIBUTOR_ROLE');
+    bytes32 public constant BURNER_ROLE = keccak256('BURNER_ROLE');
+    bytes32 public constant TOKEN_MIGRATOR_ROLE = keccak256('TOKEN_MIGRATOR_ROLE');
 
     uint256 public maxMintAmountPerTx;
     mapping(uint256 => address[]) ownersOfTokenTypes;
-    mapping (address=> address) public destinationWallets;
+    mapping(address => address) public destinationWallets;
 
     event Mint(address minter, address to, uint256 amount);
     event DestinationWalletSet(address coreAddress, address destination);
@@ -36,23 +28,16 @@ contract RepTokens is
 
     //id 0 = lifetime token
     //id 1 = transferable token
-    constructor(
-    )
-        ERC1155(
-            "ipfs://bafybeiaz55w6kf7ar2g5vzikfbft2qoexknstfouu524l7q3mliutns2u4/{id}"
-        )
-    {
+    constructor() ERC1155('ipfs://bafybeiaz55w6kf7ar2g5vzikfbft2qoexknstfouu524l7q3mliutns2u4/{id}') {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         maxMintAmountPerTx = 15;
     }
 
-    function uri(
-        uint256 _tokenid
-    ) public pure override returns (string memory) {
+    function uri(uint256 _tokenid) public pure override returns (string memory) {
         return
             string(
                 abi.encodePacked(
-                    "ipfs://bafybeiaz55w6kf7ar2g5vzikfbft2qoexknstfouu524l7q3mliutns2u4/",
+                    'ipfs://bafybeiaz55w6kf7ar2g5vzikfbft2qoexknstfouu524l7q3mliutns2u4/',
                     Strings.toString(_tokenid)
                 )
             );
@@ -62,20 +47,10 @@ contract RepTokens is
         _setTrustedForwarder(forwarder);
     }
 
-    function mint(
-        address to,
-        uint256 amount,
-        bytes memory data
-    ) public onlyRole(MINTER_ROLE) whenNotPaused {
-        require(
-            amount <= maxMintAmountPerTx,
-            "Cannot mint that many tokens in a single transaction!"
-        );
+    function mint(address to, uint256 amount, bytes memory data) public onlyRole(MINTER_ROLE) whenNotPaused {
+        require(amount <= maxMintAmountPerTx, 'Cannot mint that many tokens in a single transaction!');
 
-        require(
-            hasRole(DISTRIBUTOR_ROLE, to),
-            "Minter can only mint tokens to distributors!"
-        );
+        require(hasRole(DISTRIBUTOR_ROLE, to), 'Minter can only mint tokens to distributors!');
 
         //mints an amount of lifetime tokens to an address.
         super._mint(to, 0, amount, data);
@@ -90,14 +65,12 @@ contract RepTokens is
         uint256[] memory amount,
         bytes memory data
     ) public onlyRole(MINTER_ROLE) whenNotPaused {
-        for (uint256 i =0; i < to.length; i++) {
+        for (uint256 i = 0; i < to.length; i++) {
             mint(to[i], amount[i], data);
         }
     }
 
-    function setMaxMintAmount(
-        uint256 value
-    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMaxMintAmount(uint256 value) public onlyRole(DEFAULT_ADMIN_ROLE) {
         maxMintAmountPerTx = value;
     }
 
@@ -118,7 +91,6 @@ contract RepTokens is
         uint256 amount,
         bytes memory data
     ) public onlyRole(DISTRIBUTOR_ROLE) whenNotPaused {
-
         if (destinationWallets[to] == address(0)) {
             _setDestinationWallet(to, to);
         }
@@ -148,25 +120,16 @@ contract RepTokens is
         uint256 amount,
         bytes memory data
     ) public override(ERC1155, IERC1155) onlyAllowedOperator(from) {
-        require(
-            id == 1, 
-            "Can only send a redeemable token!"
-        );
+        require(id == 1, 'Can only send a redeemable token!');
 
         require(
             !hasRole(DISTRIBUTOR_ROLE, from),
-            "Distributors can only send tokens in pairs through the transferFromDistributor function!"
+            'Distributors can only send tokens in pairs through the transferFromDistributor function!'
         );
 
-        require(
-            !hasRole(BURNER_ROLE, from),
-            "Burners cannot send tokens!"
-        );
-        
-        require(
-            hasRole(BURNER_ROLE, to),
-            "Can only send Redeemable Tokens to burners!"
-        );
+        require(!hasRole(BURNER_ROLE, from), 'Burners cannot send tokens!');
+
+        require(hasRole(BURNER_ROLE, to), 'Can only send Redeemable Tokens to burners!');
 
         super.safeTransferFrom(from, to, id, amount, data);
         emit BurnedRedeemable(from, to, amount);
@@ -201,28 +164,21 @@ contract RepTokens is
         super._afterTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
-
     //this needs to be called beforehand by address that wants to transfer its lifetime tokens:
     //setApprovalForAll(TOKEN_MIGRATOR_ROLE, true)
-    function migrateOwnershipOfTokens(
-        address from,
-        address to
-    ) public onlyRole(TOKEN_MIGRATOR_ROLE) {
+    function migrateOwnershipOfTokens(address from, address to) public onlyRole(TOKEN_MIGRATOR_ROLE) {
         uint256 lifetimeBalance = balanceOf(from, 0);
         uint256 redeemableBalance = balanceOf(from, 1);
 
-        super.safeTransferFrom(from, to, 0, lifetimeBalance, "");
-        super.safeTransferFrom(from, to, 1, redeemableBalance, "");
+        super.safeTransferFrom(from, to, 0, lifetimeBalance, '');
+        super.safeTransferFrom(from, to, 1, redeemableBalance, '');
         emit OwnershipOfTokensMigrated(from, to, lifetimeBalance, redeemableBalance);
     }
 
     //@addrToCheck: Address to check during _afterTokenTransfer if it is already registered
     //as an owner of @tokenID.
     //@tokenID: the ID of the token selected.
-    function addAddressAsOwnerOfTokenIDIfNotAlreadyPresent(
-        address addrToCheck,
-        uint256 tokenID
-    ) internal {
+    function addAddressAsOwnerOfTokenIDIfNotAlreadyPresent(address addrToCheck, uint256 tokenID) internal {
         //get all owners of a given tokenID.
         address[] storage owners = ownersOfTokenTypes[tokenID];
 
@@ -247,10 +203,7 @@ contract RepTokens is
         }
     }
 
-    function removeAddressAsOwnerOfTokenID(
-        address addrToCheck,
-        uint256 id
-    ) internal {
+    function removeAddressAsOwnerOfTokenID(address addrToCheck, uint256 id) internal {
         address[] storage owners = ownersOfTokenTypes[id];
 
         uint256 index;
@@ -267,15 +220,11 @@ contract RepTokens is
         owners.pop();
     }
 
-    function getOwnersOfTokenID(
-        uint256 tokenID
-    ) public view returns (address[] memory) {
+    function getOwnersOfTokenID(uint256 tokenID) public view returns (address[] memory) {
         return ownersOfTokenTypes[tokenID];
     }
 
-    function getOwnersOfTokenIDLength(
-        uint256 tokenID
-    ) public view returns (uint256) {
+    function getOwnersOfTokenIDLength(uint256 tokenID) public view returns (uint256) {
         return ownersOfTokenTypes[tokenID].length;
     }
 
@@ -293,7 +242,7 @@ contract RepTokens is
     ) public override(ERC1155, IERC1155) onlyAllowedOperatorApproval(operator) {
         super.setApprovalForAll(operator, approved);
     }
-    
+
     function safeBatchTransferFrom(
         address from,
         address to,
@@ -311,10 +260,7 @@ contract RepTokens is
     }
 
     function renounceRole(bytes32 role, address account) public virtual override(IAccessControl, AccessControl) {
-        require(
-            !hasRole(BURNER_ROLE, account),
-            "Burners cannot renounce their own roles!"
-        );
+        require(!hasRole(BURNER_ROLE, account), 'Burners cannot renounce their own roles!');
 
         super.renounceRole(role, account);
     }

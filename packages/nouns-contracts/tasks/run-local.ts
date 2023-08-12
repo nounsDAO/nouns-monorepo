@@ -66,7 +66,7 @@ task(
   console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxyV2.instance.address}`);
   console.log(`ATX DAO NFT V2 address: ${contracts.ATXDAONFT_V2.instance.address}`);
   console.log(`Rep Tokens address: ${contracts.RepTokens.instance.address}`);
-
+  console.log(`Cadent Rep Distributor address: ${contracts.CadentRepDistributor.instance.address}`);
 
   // const parsedRoot = (
   //   JSON.parse(
@@ -84,10 +84,13 @@ task(
 
   const minterRole = await contracts.RepTokens.instance.MINTER_ROLE();
   const distributorRole = await contracts.RepTokens.instance.DISTRIBUTOR_ROLE();
-  const tx2 = await contracts.RepTokens.instance.grantRole(minterRole, accounts[`Account #0`].Address);
-  const tx3 = await contracts.RepTokens.instance.grantRole(distributorRole, accounts[`Account #0`].Address);
-  const tx4 = await contracts.RepTokens.instance.mint(`0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266`, 5, []);
-  
+  await contracts.RepTokens.instance.grantRole(minterRole, accounts[`Account #0`].Address);
+  await contracts.RepTokens.instance.grantRole(distributorRole, accounts[`Account #0`].Address);
+  await contracts.RepTokens.instance.mint(`0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266`, 5, []);
+
+  await contracts.RepTokens.instance.grantRole(distributorRole, contracts.CadentRepDistributor.instance.address);
+  await contracts.RepTokens.instance.mint(contracts.CadentRepDistributor.instance.address, 12, []);
+
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 
   await new Promise(() => {

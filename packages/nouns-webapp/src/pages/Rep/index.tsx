@@ -12,95 +12,164 @@ import { ethers } from 'ethers';
 import repTokensABI from "../../wrappers/repTokensAbi";
 import axios from 'axios';
 import config from '../../config';
+import cadentRepDistributorABI from "./CadentRepDistributorABI";
+import { Contract } from '@ethersproject/contracts'
+import { utils } from 'ethers'
+import { useContractCall, useContractFunction } from '@usedapp/core';
+import { useCadentCall } from '../../wrappers/atxDaoNFT';
+import { CadentRepDistributorABI } from './CadentRepDistributorABI';
+
+declare var window: any;
+
+export interface CadentRepDistributor {
+  canClaim: boolean;
+}
 
 const RepPage = () => {
 
+  
+
   const [balanceOf0, setBalanceOf0] = useState(-1);
   const [balanceOf1, setBalanceOf1] = useState(-1);
-  const [json0Name, setJson0Name] = useState('');
+  const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
   const [json0Description, setJson0Description] = useState('');
   const [json1Description, setJson1Description] = useState('');
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
+  const [canClaim, setCanClaim] = useState();
+  const [remainingTime, setRemainingTime] = useState();
+  
+  let provider;
+    let repContractAddress;
+    let cadentRepContractAddress;
+
+    if (CHAIN_ID === 1) {
+      let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
+      repContractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
+      cadentRepContractAddress = '';
+
+      provider = new ethers.providers.JsonRpcProvider(url);
+    } else {
+      provider = new ethers.providers.JsonRpcProvider();
+      repContractAddress = config.addresses.repTokensAddress;
+      cadentRepContractAddress = config.addresses.cadentDistributorAddress;
+    }
+
+    const readableRepContract = new ethers.Contract(
+      repContractAddress as string,
+      repTokensABI,
+      provider
+    );
+
+    const readableCadentRepContract = new ethers.Contract(
+      cadentRepContractAddress as string,
+      CadentRepDistributorABI,
+      provider
+    );
+
   useEffect(()=> {
-    async function callMe() {
-      let provider;
-      let contractAddress;
+    if (!activeAccount)
+        return;
 
-      if (CHAIN_ID === 1) {
-        let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
-        contractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
-        provider = new ethers.providers.JsonRpcProvider(url);
-      } else {
-        provider = new ethers.providers.JsonRpcProvider();
-        contractAddress = config.addresses.repTokensAddress;
-      }
+    if (canClaim === undefined)
+      getCanClaim(readableCadentRepContract);
 
-      const contract = new ethers.Contract(
-        contractAddress as string,
-        repTokensABI,
-        provider
-      );
+    if (remainingTime === undefined)
+      getRemainingTime(readableCadentRepContract);
 
-      if (activeAccount) {
-        if (balanceOf0 === -1) {
-          const result = await contract.balanceOf(activeAccount, 0);
-          setBalanceOf0(result);
-          const result2 = await contract.balanceOf(activeAccount, 1);
-          setBalanceOf1(result2);
-
-          const uri0 = await contract.uri(0);
-          const uri1 = await contract.uri(1);
-
-          let finalURL0 = uri0.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let finalJson0 = await axios.get(finalURL0);
-          console.log(finalJson0);
-          setJson0Name(finalJson0.data.name);
-          setJson0Description(finalJson0.data.description);
-          setJson0Image(finalJson0.data.image);
-
-          let finalURL1 = uri1.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let finalJson1 = await axios.get(finalURL1);
-          console.log(finalJson1);
-          setJson1Name(finalJson1.data.name);
-          setJson1Description(finalJson1.data.description);
-          setJson1Image(finalJson1.data.image);
-      }
+    if (balanceOf0 === -1) {
+      getBalances(readableRepContract);
     }
-    }
-    callMe();
+
+    if (json0Name === undefined)
+        getJson(readableRepContract);
   })
 
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
-  console.log(CHAIN_ID);
-  if (CHAIN_ID === 1) {
-    
+  async function getCanClaim(contract: Contract) {
+    console.log("Getting can claim!");
+    const result = await contract.canClaim();
+    setCanClaim(result);
+    console.log("Got can claim!");
 
-    // console.log(contract);
-
-  } else {
-    //load through usedapp
   }
 
-  // const testBalance = useCallJake('balanceOf', [activeAccount, 0]);
-  // const testBalance2 = useCallJake('balanceOf', [activeAccount, 1]);
-  // console.log(testBalance);
-  // console.log(testBalance2);
+  async function getRemainingTime(contract: Contract) {
+    console.log("Getting remaining time!");
+    const result = await contract.getRemainingTime();
+    setRemainingTime(result.toNumber());
+    console.log("Got remaining!");
+  }
 
-  // const soulboundBalance = useCallJake('balanceOf', [activeAccount, 0]);
-  // const transferableBalance = useCallJake('balanceOf', [activeAccount, 1]);
-  // console.log("trying call");
-  // const soulboundTokenURI = useCallJake('uri', [0]);
-  // const soulboundJson = useFetch(soulboundTokenURI);
+  async function getBalances(contract: Contract) {
+    console.log("Getting balances!");
 
-  // const redeemableTokenURI = useCallJake('uri', [1]);
-  // const redeemableJson = useFetch(redeemableTokenURI);
+        const result = await contract.balanceOf(activeAccount, 0);
+        setBalanceOf0(result);
+        const result2 = await contract.balanceOf(activeAccount, 1);
+        setBalanceOf1(result2);
+    console.log("Got balances! ");
+
+  }
+
+  async function getJson(contract: Contract) {
+        const uri0 = await contract.uri(0);
+        const uri1 = await contract.uri(1);
+
+        let finalURL0 = uri0.replace("ipfs://", "https://ipfs.io/ipfs/");
+        let finalJson0 = await axios.get(finalURL0);
+        setJson0Name(finalJson0.data.name);
+        setJson0Description(finalJson0.data.description);
+        setJson0Image(finalJson0.data.image);
+
+        let finalURL1 = uri1.replace("ipfs://", "https://ipfs.io/ipfs/");
+        let finalJson1 = await axios.get(finalURL1);
+        setJson1Name(finalJson1.data.name);
+        setJson1Description(finalJson1.data.description);
+        setJson1Image(finalJson1.data.image);
+  }
+
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+
+  const cadentInterface = new utils.Interface(CadentRepDistributorABI);
+
+  const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
+
+  const { state, send } = useContractFunction(contract, 'claim', { transactionName: 'Claim' })
+
+  const Claim = () => {
+    void send();
+    console.log("HERE STEP 1");
+    getCanClaim(readableCadentRepContract);
+
+    getBalances(readableRepContract);
+  }
+
+
+  // const result = useCadentCall("canClaim", []);
+
+  // const result = useContractCall<CadentRepDistributor>({
+  //   cadentInterface,
+  //   address: config.addresses.cadentDistributorAddress,
+  //   method: "canClaim",
+  //   args: ''
+  // });
+
+  // console.log(result);
+  
+  let canClaimConditional;
+  if (canClaim) {
+    canClaimConditional = <><button onClick={Claim}>Claim!</button></>
+  }else {
+    canClaimConditional = <><span>Please wait before claiming more tokens!</span><span>{remainingTime} seconds until you can claim again!</span><button disabled>Claim!</button></>
+  }
 
   return (
     <Section fullWidth={false} className={classes.section}>
       <Row className={classes.headerRow}>
+        
+        {canClaimConditional}
         <span>
           <Trans>Reputation</Trans>
         </span>
