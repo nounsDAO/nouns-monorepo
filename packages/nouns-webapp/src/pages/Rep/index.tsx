@@ -19,6 +19,7 @@ import { useContractCall, useContractFunction } from '@usedapp/core';
 import { useCadentCall } from '../../wrappers/atxDaoNFT';
 import { CadentRepDistributorABI } from './CadentRepDistributorABI';
 import NavBarButton, { NavBarButtonStyle } from '../../components/NavBarButton';
+import { read } from 'fs';
 
 declare var window: any;
 
@@ -28,7 +29,6 @@ export interface CadentRepDistributor {
 
 const RepPage = () => {
 
-  
 
   const [balanceOf0, setBalanceOf0] = useState(-1);
   const [balanceOf1, setBalanceOf1] = useState(-1);
@@ -41,6 +41,7 @@ const RepPage = () => {
 
   const [canClaim, setCanClaim] = useState();
   const [remainingTime, setRemainingTime] = useState();
+  const [amountPerCadence, setAmountPerCadence] = useState();
   
   let provider;
     let repContractAddress;
@@ -50,6 +51,7 @@ const RepPage = () => {
       let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
       repContractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
       cadentRepContractAddress = '';
+
 
       provider = new ethers.providers.JsonRpcProvider(url);
     } else {
@@ -64,11 +66,26 @@ const RepPage = () => {
       provider
     );
 
+    const prov = new ethers.providers.Web3Provider(window.ethereum)
+
     const readableCadentRepContract = new ethers.Contract(
       cadentRepContractAddress as string,
       CadentRepDistributorABI,
-      provider
+      prov
     );
+
+    // const prov = new ethers.providers.Web3Provider(window.ethereum)
+    const readableCadentRepContract2 = new ethers.Contract(
+      cadentRepContractAddress as string,
+      CadentRepDistributorABI,
+      prov
+    );
+
+  getRemainingTime(readableCadentRepContract2);
+
+  const cadentInterface = new utils.Interface(CadentRepDistributorABI);
+
+  const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
 
   useEffect(()=> {
     if (!activeAccount)
@@ -80,38 +97,46 @@ const RepPage = () => {
     if (remainingTime === undefined)
       getRemainingTime(readableCadentRepContract);
 
+      if (amountPerCadence === undefined)
+        getAmountDistributed(readableCadentRepContract);
+
     if (balanceOf0 === -1) {
       getBalances(readableRepContract);
     }
 
     if (json0Name === undefined)
         getJson(readableRepContract);
+
+    const interval = setInterval(() => 
+    {
+      getCanClaim(readableCadentRepContract);
+      getRemainingTime(readableCadentRepContract2) 
+    }, 12000);
+    return () => {
+      clearInterval(interval);
+    };
   })
 
   async function getCanClaim(contract: Contract) {
-    console.log("Getting can claim!");
     const result = await contract.canClaim();
     setCanClaim(result);
-    console.log("Got can claim!");
-
   }
 
   async function getRemainingTime(contract: Contract) {
-    console.log("Getting remaining time!");
     const result = await contract.getRemainingTime();
     setRemainingTime(result.toNumber());
-    console.log("Got remaining!");
+  }
+
+  async function getAmountDistributed(contract: Contract) {
+    const result = await contract.getAmountDistributedPerCadenceCycle();
+    setAmountPerCadence(result.toNumber());
   }
 
   async function getBalances(contract: Contract) {
-    console.log("Getting balances!");
-
         const result = await contract.balanceOf(activeAccount, 0);
         setBalanceOf0(result);
         const result2 = await contract.balanceOf(activeAccount, 1);
         setBalanceOf1(result2);
-    console.log("Got balances! ");
-
   }
 
   async function getJson(contract: Contract) {
@@ -133,37 +158,38 @@ const RepPage = () => {
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const cadentInterface = new utils.Interface(CadentRepDistributorABI);
-
-  const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
-
   const { state, send } = useContractFunction(contract, 'claim', { transactionName: 'Claim' })
 
-  const Claim = () => {
-    void send();
-    console.log("HERE STEP 1");
-    getCanClaim(readableCadentRepContract);
+  const Claim = async () => {
+    await send();
+    await getCanClaim(readableCadentRepContract);
 
-    getBalances(readableRepContract);
+    await getBalances(readableRepContract);
   }
 
 
+  // const cadentContract = new Contract(cadentRepContractAddress, cadentInterface);
+
+  // const timeLeft = useContractCall<CadentRepDistributor>(cadentContract);
+
+  // console.log(timeLeft);
+
   // const result = useCadentCall("canClaim", []);
 
-  // const result = useContractCall<CadentRepDistributor>({
-  //   cadentInterface,
-  //   address: config.addresses.cadentDistributorAddress,
-  //   method: "canClaim",
-  //   args: ''
-  // });
+  const result = useContractCall<CadentRepDistributor>({
+    abi: cadentInterface,
+    address: config.addresses.cadentDistributorAddress,
+    method: "getRemainingTime"
+  });
 
-  // console.log(result);
+  
+  console.log(result);
   
   let canClaimConditional;
   if (canClaim) {
-    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim!</button></>
+    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim { amountPerCadence } tokens!</button></>
   }else {
-    canClaimConditional = <><button style={{width:200}} disabled>Claim!</button><span> You can redeem more tokens in {remainingTime} seconds!</span></>
+    canClaimConditional = <><span> You can redeem more tokens in {remainingTime} second(s)!</span></>
   }
 
   return (
