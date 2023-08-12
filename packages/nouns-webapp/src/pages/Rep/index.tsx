@@ -8,6 +8,7 @@ import { RepTokens, useRepCall } from '../../wrappers/repTokens';
 import useFetch from './useFetch';
 import useCallJake from './useCallJake';
 import { CHAIN_ID } from '../../config';
+
 import { ethers } from 'ethers';
 import repTokensABI from "../../wrappers/repTokensAbi";
 import axios from 'axios';
@@ -15,8 +16,7 @@ import config from '../../config';
 import cadentRepDistributorABI from "./CadentRepDistributorABI";
 import { Contract } from '@ethersproject/contracts'
 import { utils } from 'ethers'
-import { useContractCall, useContractFunction } from '@usedapp/core';
-import { useCadentCall } from '../../wrappers/atxDaoNFT';
+import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { CadentRepDistributorABI } from './CadentRepDistributorABI';
 import NavBarButton, { NavBarButtonStyle } from '../../components/NavBarButton';
 import { read } from 'fs';
@@ -48,7 +48,7 @@ const RepPage = () => {
   let repContractAddress;
   let cadentRepContractAddress;
 
-  if (CHAIN_ID === 1) {
+  if (CHAIN_ID === 1 || CHAIN_ID === 137) {
     let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
     repContractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
     cadentRepContractAddress = '';
@@ -65,19 +65,43 @@ const RepPage = () => {
     rpcProvider
   );
 
-  const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
+  // keep in case we want to use user's provider
+  // const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
 
   const readableCadentRepContract = new ethers.Contract(
     cadentRepContractAddress as string,
     CadentRepDistributorABI,
-    walletProvider
+    rpcProvider
+    //walletProvider
   );
 
   const cadentInterface = new utils.Interface(CadentRepDistributorABI);
   const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
   const { state, send } = useContractFunction(contract, 'claim', { transactionName: 'Claim' })
 
+  // const provider = new ethers.providers.Web3Provider( window.ethereum, "any" );
+  // const network = await provider.getNetwork();
+  // const chainId = network.chainId;
+
   const Claim = async () => {
+
+    await window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: "0x89",
+          chainName: 'Polygon',
+          rpcUrls: ['https://polygon.llamarpc.com'] /* ... */,
+          nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 }
+        },
+      ],
+    });
+
+    // await window.ethereum.request({
+    //   method: 'wallet_switchEthereumChain',
+    //   params: [{ chainId: "0x" + CHAIN_ID }],
+    // });
+
     await send();
     await getCanClaim(readableCadentRepContract);
     await getBalances(readableRepContract);

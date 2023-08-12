@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ChainId, useEthers } from '@usedapp/core';
+import { ChainId, useEthers, useContractCall } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -25,8 +25,52 @@ import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
 import { AtxDaoNFT, useNFTCall } from './wrappers/atxDaoNFT';
+import atxDaoABI from './wrappers/atxDaoNFTAbi';
+import config from './config';
+import { utils } from 'ethers';
+import { ethers } from 'ethers';
+
+declare var window: any;
 
 function App() {
+  const abi = new utils.Interface(atxDaoABI);
+
+ 
+  async function getNetwork() {
+    const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
+    let network = await walletProvider.getNetwork();
+
+    if (CHAIN_ID === 31337) {
+      if (network.chainId !== CHAIN_ID) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: "0x7A69",
+                chainName: 'localhost',
+                rpcUrls: ['http://localhost:8545'] /* ... */,
+                nativeCurrency: { name: 'GO', symbol: 'GO', decimals: 18 }
+              },
+            ],
+          });
+        } catch (e) {
+          console.log(e);
+        }
+
+        
+      }
+    }
+  }
+
+
+//  const readableCadentRepContract = new ethers.Contract(
+//   config.addresses.atxDaoAddress as string,
+//   abi,
+//   walletProvider
+// );
+
+
   const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
@@ -34,11 +78,39 @@ function App() {
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
+
+    console.log(account);
+    if (account !== null && account !== undefined)
+    {
+      console.log("NOT NULL OR UNDEFINED");
+      getNetwork();
+    }
+    else console.log("NULL");
+    // if (account !== null)
+    //   getNetwork();
+
   }, [account, dispatch]);
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
   let balanceArr = useNFTCall('balanceOf', [account]);
+
+  if (account !== null && account !== undefined)
+  {
+    console.log("NOT NULL OR UNDEFINED");
+    getNetwork();
+  }
+  
+  const result = useContractCall({
+    abi,
+    address: config.addresses.atxDaoAddress,
+    method: 'balanceOf',
+    args: [account] 
+});
+
+console.log(`the balance of this ` + result);
+
+
   let balance = 0;
   if (balanceArr !== undefined) {
     balance = balanceArr[0].toNumber();
@@ -62,14 +134,14 @@ function App() {
 
   return (
     <div className={`${classes.wrapper}`}>
-      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {/* {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
           content={<p>{alertModal.message}</p>}
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
-      )}
+      )} */}
       <BrowserRouter>
         <AvatarProvider
           provider={(chainId === ChainId.Mainnet ? library : undefined)}
