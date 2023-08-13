@@ -35,35 +35,6 @@ declare var window: any;
 function App() {
   const abi = new utils.Interface(atxDaoABI);
 
- 
-  async function getNetwork() {
-    const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
-    let network = await walletProvider.getNetwork();
-
-    if (CHAIN_ID === 31337) {
-      if (network.chainId !== CHAIN_ID) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: "0x7A69",
-                chainName: 'localhost',
-                rpcUrls: ['http://localhost:8545'] /* ... */,
-                nativeCurrency: { name: 'GO', symbol: 'GO', decimals: 18 }
-              },
-            ],
-          });
-        } catch (e) {
-          console.log(e);
-        }
-
-        
-      }
-    }
-  }
-
-
 //  const readableCadentRepContract = new ethers.Contract(
 //   config.addresses.atxDaoAddress as string,
 //   abi,
@@ -71,7 +42,7 @@ function App() {
 // );
 
 
-  const { account, chainId, library } = useEthers();
+  const { account, chainId, library, switchNetwork } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
@@ -79,17 +50,24 @@ function App() {
     // Local account array updated
     dispatch(setActiveAccount(account));
 
-    console.log(account);
-    if (account !== null && account !== undefined)
-    {
-      console.log("NOT NULL OR UNDEFINED");
-      getNetwork();
-    }
-    else console.log("NULL");
+    // console.log(account);
+    // if (account !== null && account !== undefined)
+    // {
+    //   console.log("NOT NULL OR UNDEFINED");
+    //   getNetwork();
+    // }
+    // else console.log("NULL");
     // if (account !== null)
     //   getNetwork();
 
   }, [account, dispatch]);
+
+  async function getNetwork() {
+
+    if(chainId !== CHAIN_ID) {
+      await switchNetwork(CHAIN_ID)
+    }
+  }
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 

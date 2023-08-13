@@ -78,22 +78,22 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         return;
       }
 
-      lookupNNSOrENS(library, delegateInfo.delegate)
-        .then(name => {
-          // Store data as mapping of address_Expiration => address or ENS
-          if (name) {
-            localStorage.setItem(
-              ensCacheKey(delegateInfo.delegate),
-              JSON.stringify({
-                name,
-                expires: Date.now() / 1000 + 30 * 60,
-              }),
-            );
-          }
-        })
-        .catch(error => {
-          console.log(`error resolving reverse ens lookup: `, error);
-        });
+      // lookupNNSOrENS(library, delegateInfo.delegate)
+      //   .then(name => {
+      //     // Store data as mapping of address_Expiration => address or ENS
+      //     if (name) {
+      //       localStorage.setItem(
+      //         ensCacheKey(delegateInfo.delegate),
+      //         JSON.stringify({
+      //           name,
+      //           expires: Date.now() / 1000 + 30 * 60,
+      //         }),
+      //       );
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(`error resolving reverse ens lookup: `, error);
+      //   });
     });
     setEnsCached(true);
   }, [library, ensCached, delegateGroupedVoteData]);

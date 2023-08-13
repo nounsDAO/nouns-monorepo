@@ -74,7 +74,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.brave}
       />
-      <WalletButton
+      {/* <WalletButton
         onClick={() => {
           const trezor = new TrezorConnector({
             chainId: CHAIN_ID,
@@ -85,7 +85,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           activate(trezor);
         }}
         walletType={WALLET_TYPE.trezor}
-      />
+      /> */}
       <div
         className={clsx(classes.clickable, classes.walletConnectData)}
         onClick={() => localStorage.removeItem('walletconnect')}

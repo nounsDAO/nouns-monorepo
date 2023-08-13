@@ -28,23 +28,23 @@ export const useReverseENSLookUp = (address: string) => {
       // If address not in local storage, attempt to resolve via RPC call.
       // At this stage if the item is in local storage we know it isn't expired.
       if (!localStorage.getItem(ensCacheKey(address))) {
-        lookupNNSOrENS(library, address)
-          .then(name => {
-            if (!name) return;
-            if (mounted) {
-              localStorage.setItem(
-                ensCacheKey(address),
-                JSON.stringify({
-                  name,
-                  expires: Date.now() / 1000 + 30 * 60,
-                }),
-              );
-              setEns(name);
-            }
-          })
-          .catch(error => {
-            console.log(`error resolving reverse ens lookup: `, error);
-          });
+        // lookupNNSOrENS(library, address)
+        //   .then(name => {
+        //     if (!name) return;
+        //     if (mounted) {
+        //       localStorage.setItem(
+        //         ensCacheKey(address),
+        //         JSON.stringify({
+        //           name,
+        //           expires: Date.now() / 1000 + 30 * 60,
+        //         }),
+        //       );
+        //       setEns(name);
+        //     }
+        //   })
+        //   .catch(error => {
+        //     console.log(`error resolving reverse ens lookup: `, error);
+        //   });
       }
     }
 
