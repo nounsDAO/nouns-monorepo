@@ -51,6 +51,7 @@ const RepPage = () => {
   }
 
   const { state, send } = useCadentFunction('Claim', 'claim', []);
+
   const remainingTime = useCadentCall('getRemainingTime', [activeAccount]);
   const amountPerCadence = useCadentCall('getAmountDistributedPerCadenceCycle', []);
 
@@ -58,13 +59,11 @@ const RepPage = () => {
 
   if (remainingTime !== undefined) {
     if (remainingTime[0] <= 0) {
-    canClaimConditional = <><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></>
-
+    canClaimConditional = <><h6><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></h6></>
     }else {
-      canClaimConditional = <><span> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
+      canClaimConditional = <><span style={{textAlign: 'center'}}> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
     }
   }
-  
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -116,40 +115,62 @@ const RepPage = () => {
         {canClaimConditional}
           <Row>
             <h3 style={{marginBottom:'2rem', marginTop:'1rem'}}>Your REP Tokens</h3>
-            <Col sm={12} md={6}>
-              <div className={classes.container}>
-                {
+            {
+              balanceOf1 !== undefined && json1Name !== undefined && json1Description !== undefined &&
+              balanceOf0 !== undefined && json0Name !== undefined && json0Description !== undefined
+              ?
+              <>
+              <Col sm={12} md={6}>
+              { 
+                balanceOf1 !== undefined && json1Name !== undefined && json1Description !== undefined
+                ?
+                <div>
+                  <div className={classes.container}>
                   <img src={json1Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
-                <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>
-                  {Number(balanceOf1)}
+              
+                  <div className={classes.overlay}></div>
+                  <h3 className={classes.centered }>
+                    {Number(balanceOf1)}
                   </h3>
-              </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
-                {json1Name}
-              </h4>
-              <p style={{textAlign: 'center'}}>
-                {json1Description}
-                </p>
-            </Col>
-            <Col sm={12} md={6}>
-              <div className={classes.container}>
-                {
-                <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
-                <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>
-                  {Number(balanceOf0)}
-                </h3>
-              </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
-                {json0Name}
-                </h4>
-              <p  style={{textAlign: 'center'}}>
-                {json0Description}
-                </p>
-            </Col>
+                  </div>
+                  <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                    {json1Name}
+                  </h4>
+                  <p style={{textAlign: 'center'}}>
+                    {json1Description}
+                  </p>
+                </div>
+                :
+                <p>Loading...</p>
+              }
+              </Col>
+              <Col sm={12} md={6}>
+                { 
+                  balanceOf0 !== undefined && json0Name !== undefined && json0Description !== undefined
+                  ?
+                  <div>
+                    <div className={classes.container}>
+                    <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
+                    <div className={classes.overlay}></div>
+                    <h3 className={classes.centered }>
+                      {Number(balanceOf0)}
+                    </h3>
+                    </div>
+                    <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                      {json0Name}
+                      </h4>
+                    <p style={{textAlign: 'center'}}>
+                      {json0Description}
+                    </p>
+                  </div>
+                  :
+                  <p>Loading...</p>
+                  }
+              </Col>
+              </>
+              :
+              <h3>Requesting the hamsters to work harder...</h3>
+            }
           </Row>
         </Card>
       </Col>
