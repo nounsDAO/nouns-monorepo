@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import classes from './RepPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
-import { RepTokens, useRepCall } from '../../wrappers/repTokens';
-import useFetch from './useFetch';
-import useCallJake from './useCallJake';
-import { CHAIN_ID } from '../../config';
-
-import { ethers } from 'ethers';
-import repTokensABI from "../../wrappers/repTokensAbi";
 import axios from 'axios';
-import config from '../../config';
-import cadentRepDistributorABI from "./CadentRepDistributorABI";
-import { Contract } from '@ethersproject/contracts'
-import { utils } from 'ethers'
-import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
-import { CadentRepDistributorABI } from './CadentRepDistributorABI';
-import NavBarButton, { NavBarButtonStyle } from '../../components/NavBarButton';
-import { read } from 'fs';
+import { useEthers } from '@usedapp/core';
+import { useRepCall } from './RepCaller';
+import { useCadentCall, useCadentFunction } from './CadentCaller';
+import { switchNetworkToLocalhost } from './NetworkSwitcher';
 
 const RepPage = () => {
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const { chainId } = useEthers();
-
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
@@ -34,103 +22,37 @@ const RepPage = () => {
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
-  async function test() {
-    try {
-      await (window as any).ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x7A69' }],
-      });
-    } catch (switchError) {
-      // This error code indicates that the chain has not been added to MetaMask.
-      if ((switchError as any).code === 4902) {
-        try {
-          await (window as any).ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0x7A69',
-                chainName: 'localhost',
-                rpcUrls: ['http://localhost:8545'] /* ... */,
-              },
-            ],
-          });
-        } catch (addError) {
-          // handle "add" error
-        }
-      }
-      // handle other "switch" errors
+  if (chainId !== 31337) {
+    switchNetworkToLocalhost();
+  }
+
+  const balanceOf0 = useRepCall('balanceOf', [activeAccount, 0]);
+  const balanceOf1 = useRepCall('balanceOf', [activeAccount, 1]);
+  const uri0 = useRepCall('uri', [0]);
+  const uri1 = useRepCall('uri', [1]);
+
+  if (uri0 !== undefined && uri1 !== undefined) {
+    let finalURL0 = uri0![0].replace("ipfs://", "https://ipfs.io/ipfs/");
+    let finalURL1 = uri1![0].replace("ipfs://", "https://ipfs.io/ipfs/");
+
+    const getJsonData = async ()=> {
+      let finalJson0 = await axios.get(finalURL0);
+      setJson0Name(finalJson0.data.name);
+      setJson0Description(finalJson0.data.description);
+      setJson0Image(finalJson0.data.image);
+    
+      let finalJson1 = await axios.get(finalURL1);
+      setJson1Name(finalJson1.data.name);
+      setJson1Description(finalJson1.data.description);
+      setJson1Image(finalJson1.data.image);
     }
+
+    getJsonData();
   }
 
-  if (31337 !== chainId) {
-    test();
-  }
-
-  const cadentInterface = new utils.Interface(CadentRepDistributorABI);
-  const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
-  const { state, send } = useContractFunction(contract, 'claim', { transactionName: 'Claim' })
-
-  const repInterface = new utils.Interface(repTokensABI);
-  
-  const balanceOf0 = useContractCall({
-    abi: repInterface,
-    address: config.addresses.repTokensAddress,
-    method: 'balanceOf',
-    args: [activeAccount, 0]
-});
-
-const balanceOf1 = useContractCall({
-  abi: repInterface,
-  address: config.addresses.repTokensAddress,
-  method: 'balanceOf',
-  args: [activeAccount, 1]
-});
-
-const uri0 = useContractCall({
-  abi: repInterface,
-  address: config.addresses.repTokensAddress,
-  method: 'uri',
-  args: [0]
-});
-
-const uri1 = useContractCall({
-  abi: repInterface,
-  address: config.addresses.repTokensAddress,
-  method: 'uri',
-  args: [1]
-});
-
-if (uri0 !== undefined && uri1 !== undefined) {
-  let finalURL0 = uri0![0].replace("ipfs://", "https://ipfs.io/ipfs/");
-  let finalURL1 = uri1![0].replace("ipfs://", "https://ipfs.io/ipfs/");
-
-  const get = async ()=> {
-    let finalJson0 = await axios.get(finalURL0);
-    setJson0Name(finalJson0.data.name);
-    setJson0Description(finalJson0.data.description);
-    setJson0Image(finalJson0.data.image);
-  
-    let finalJson1 = await axios.get(finalURL1);
-    setJson1Name(finalJson1.data.name);
-    setJson1Description(finalJson1.data.description);
-    setJson1Image(finalJson1.data.image);
-  }
-
-  get();
-}
-
-  const remainingTime = useContractCall({
-    abi: cadentInterface,
-    address: config.addresses.cadentDistributorAddress,
-    method: 'getRemainingTime',
-    args: [activeAccount]
-  });
-
-  const amountPerCadence = useContractCall({
-    abi: cadentInterface,
-    address: config.addresses.cadentDistributorAddress,
-    method: 'getAmountDistributedPerCadenceCycle'
-  });
+  const { state, send } = useCadentFunction('Claim', 'claim', []);
+  const remainingTime = useCadentCall('getRemainingTime', [activeAccount]);
+  const amountPerCadence = useCadentCall('getAmountDistributedPerCadenceCycle', []);
 
   let canClaimConditional;
 

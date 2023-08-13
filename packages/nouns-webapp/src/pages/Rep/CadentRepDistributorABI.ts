@@ -189,4 +189,4 @@ const CadentRepDistributorABI = [
   },
 ];
 
-module.exports = { CadentRepDistributorABI };
+export default CadentRepDistributorABI;

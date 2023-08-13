@@ -3,7 +3,7 @@ import axios from 'axios';
 import config, { CHAIN_ID } from '../../config';
 import { ethers } from 'ethers';
 import repTokensABI from "../../wrappers/repTokensAbi";
-import { CadentRepDistributorABI } from './CadentRepDistributorABI';
+import CadentRepDistributorABI from "./CadentRepDistributorABI";
 
 let rpcProvider;
 let repContractAddress;
