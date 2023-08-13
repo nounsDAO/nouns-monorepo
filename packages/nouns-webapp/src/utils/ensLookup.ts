@@ -1,7 +1,7 @@
 import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
 import { cache, cacheKey, CHAIN_ID } from '../config';
-import { lookupNNSOrENS } from './lookupNNSOrENS';
+// import { lookupNNSOrENS } from './lookupNNSOrENS';
 
 export const ensCacheKey = (address: string) => {
   return cacheKey(cache.ens, CHAIN_ID, address);
@@ -12,7 +12,7 @@ export const useReverseENSLookUp = (address: string) => {
   const [ens, setEns] = useState<string>();
 
   useEffect(() => {
-    let mounted = true;
+    // let mounted = true;
     if (address && library) {
       // Look for resolved ENS in local storage (result of pre-fetching)
       const maybeCachedENSResultRaw = localStorage.getItem(ensCacheKey(address));
@@ -50,7 +50,7 @@ export const useReverseENSLookUp = (address: string) => {
 
     return () => {
       setEns('');
-      mounted = false;
+      // mounted = false;
     };
   }, [address, library]);
 

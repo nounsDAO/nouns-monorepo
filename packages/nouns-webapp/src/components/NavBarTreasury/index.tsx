@@ -2,7 +2,7 @@ import classes from './NavBarTreasury.module.css';
 import { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
+// import { i18n } from '@lingui/core';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;

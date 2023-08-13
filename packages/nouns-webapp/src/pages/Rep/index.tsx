@@ -51,8 +51,8 @@ const RepPage = () => {
     getJsonData();
   }
 
-  const { state, send } = useCadentFunction('Claim', 'claim', []);
-
+  const { send } = useCadentFunction('Claim', 'claim', []);
+  
   const remainingTime = useCadentCall('getRemainingTime', [activeAccount]);
   const amountPerCadence = useCadentCall('getAmountDistributedPerCadenceCycle', []);
 

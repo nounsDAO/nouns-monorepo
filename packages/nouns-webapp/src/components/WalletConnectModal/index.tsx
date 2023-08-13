@@ -3,7 +3,9 @@ import WalletButton from '../WalletButton';
 import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { InjectedConnector, NoEthereumProviderError } from '@web3-react/injected-connector';
+import { InjectedConnector,
+  //  NoEthereumProviderError
+   } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { WalletConnectV2Connector } from '../../utils/walletconnectV2Connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
@@ -74,7 +76,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.brave}
       />
-      {/* <WalletButton
+      <WalletButton
         onClick={() => {
           const trezor = new TrezorConnector({
             chainId: CHAIN_ID,
@@ -85,7 +87,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           activate(trezor);
         }}
         walletType={WALLET_TYPE.trezor}
-      /> */}
+      />
       <div
         className={clsx(classes.clickable, classes.walletConnectData)}
         onClick={() => localStorage.removeItem('walletconnect')}

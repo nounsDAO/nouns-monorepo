@@ -4,8 +4,8 @@ import useUSDCBalance from './useUSDCBalance';
 import useUSDTBalance from './useUSDTBalance';
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
-import config from '../config';
-import { formatEther } from '@ethersproject/units'
+// import config from '../config';
+// import { formatEther } from '@ethersproject/units'
 import { BigNumber, ethers } from 'ethers';
 
 /**

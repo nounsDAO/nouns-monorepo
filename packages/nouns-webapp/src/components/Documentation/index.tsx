@@ -2,7 +2,7 @@ import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
-import Link from '../Link';
+// import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
 interface DocumentationProps {
@@ -10,40 +10,40 @@ interface DocumentationProps {
 }
 
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
-  const cryptopunksLink = (
-    <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
-  );
-  const playgroundLink = (
-    <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
-  );
-  const publicDomainLink = (
-    <Link
-      text={<Trans>public domain</Trans>}
-      url="https://creativecommons.org/publicdomain/zero/1.0/"
-      leavesPage={true}
-    />
-  );
-  const compoundGovLink = (
-    <Link
-      text={<Trans>Compound Governance</Trans>}
-      url="https://compound.finance/governance"
-      leavesPage={true}
-    />
-  );
-  const blueprintLink = (
-    <Link
-      text={<Trans>ATX DAO Blueprint</Trans>}
-      url="https://snapshot.org/#/atxdao.eth/proposal/0x8cfd82908b44e88c5715f16124faa1040f64b8d55161524148e7d1cd5b9d5b58"
-      leavesPage={true}
-    />
-  );
-  const dao2Link = (
-    <Link
-      text={<Trans>ATX DAO 2.0</Trans>}
-      url="https://snapshot.org/#/atxdao.eth/proposal/0x42f1f945ddf51b5afb85bfa53f851769dd252c8c7b09121b9e0fb0dfbac85435"
-      leavesPage={true}
-    />
-  );
+  // const cryptopunksLink = (
+  //   <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
+  // );
+  // const playgroundLink = (
+  //   <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
+  // );
+  // const publicDomainLink = (
+  //   <Link
+  //     text={<Trans>public domain</Trans>}
+  //     url="https://creativecommons.org/publicdomain/zero/1.0/"
+  //     leavesPage={true}
+  //   />
+  // );
+  // const compoundGovLink = (
+  //   <Link
+  //     text={<Trans>Compound Governance</Trans>}
+  //     url="https://compound.finance/governance"
+  //     leavesPage={true}
+  //   />
+  // );
+  // const blueprintLink = (
+  //   <Link
+  //     text={<Trans>ATX DAO Blueprint</Trans>}
+  //     url="https://snapshot.org/#/atxdao.eth/proposal/0x8cfd82908b44e88c5715f16124faa1040f64b8d55161524148e7d1cd5b9d5b58"
+  //     leavesPage={true}
+  //   />
+  // );
+  // const dao2Link = (
+  //   <Link
+  //     text={<Trans>ATX DAO 2.0</Trans>}
+  //     url="https://snapshot.org/#/atxdao.eth/proposal/0x42f1f945ddf51b5afb85bfa53f851769dd252c8c7b09121b9e0fb0dfbac85435"
+  //     leavesPage={true}
+  //   />
+  // );
 
   return (
     <Section

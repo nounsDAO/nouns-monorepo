@@ -1,12 +1,12 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Col, Row, Nav, Card, Tab, Tabs } from 'react-bootstrap';
-import { Trans } from '@lingui/macro';
+import { Col, Row, Card, Tab, Tabs } from 'react-bootstrap';
+// import { Trans } from '@lingui/macro';
 import Link from '../../components/Link';
 import distributionImage from '../../assets/givingCircle.jpeg';
 import googleCalendarImage from '../../assets/googleCalendar.png';
 import guildsImage from '../../assets/gala.jpeg';
-import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
+// import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 
 const contributorSetupLink = (
   <Link
@@ -69,6 +69,7 @@ const NounsIntroSection = () => {
             >
               <Tab eventKey="featured" title="Featured"  className={classes.youtubeEmbedContainer}>
                 <iframe
+                  title="a unique property"
                   src="https://lu.ma/embed/calendar/cal-yHgkMgwCAFEqbSO/events"
                   frameBorder="0"
                   style={{ border: '1px solid #bfcbda88', borderRadius: '4px', marginTop:'-3%', marginLeft:'-3%', width:'105%'}}
@@ -89,7 +90,7 @@ const NounsIntroSection = () => {
       <Section fullWidth={false} className={classes.videoSection}>
         <Col lg={6}>
           <div className={classes.container}>
-            <img style ={{marginLeft:'-100px', width:'130%', border:'2px solid #555'}} src={guildsImage} alt="Giving Circle Photo" />
+            <img style ={{marginLeft:'-100px', width:'130%', border:'2px solid #555'}} src={guildsImage} alt="Giving Circle" />
             <div className={classes.overlay}></div>
           </div>
         </Col>
@@ -166,7 +167,7 @@ const NounsIntroSection = () => {
         </Col>
         <Col lg={6}>
           <div className={classes.container}>
-            <img style ={{width:'100%', border:'2px solid #555'}} src={distributionImage} alt="Giving Circle Photo" />
+            <img style ={{width:'100%', border:'2px solid #555'}} src={distributionImage} alt="Giving Circle" />
             <div className={classes.overlay}></div>
           </div>
         </Col>

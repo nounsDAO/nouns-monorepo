@@ -1,9 +1,9 @@
 import { Col, Row, Card } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Governance.module.css';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
+// import { i18n } from '@lingui/core';
 import Link from '../../components/Link';
 import snapshotImage from '../../assets/snapshot.jpeg';
 import { useNftCall } from '../../wrappers/atxDaoNft/atxDaoNft';
@@ -71,7 +71,7 @@ const GovernancePage = () => {
               <Col style={{padding: '10px', marginRight: '3rem'}}>
                 <img
                 style={{ width: '5rem', float: 'right'}}
-                src={snapshotImage}></img>
+                src={snapshotImage} alt="Snapshot"></img>
               </Col>
             </Row>
           </Card>

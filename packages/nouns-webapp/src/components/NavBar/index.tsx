@@ -3,10 +3,9 @@ import classes from './NavBar.module.css';
 import logo from '../../assets/logo.png';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Nav, Navbar, Container, Row, Col } from 'react-bootstrap';
-import testnetNoun from '../../assets/testnet-noun.png';
-import config, { CHAIN_ID } from '../../config';
-import { utils } from 'ethers';
+import { Nav, Navbar, Container } from 'react-bootstrap';
+// import testnetNoun from '../../assets/testnet-noun.png';
+import config from '../../config';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
@@ -15,21 +14,20 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+// import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
-import { useEffect, useState } from 'react';
-import NavLocaleSwitcher from '../NavLocaleSwitcher';
-import NavDropdown from '../NavDropdown';
-import { Dropdown } from 'react-bootstrap';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
+import { useState } from 'react';
+// import NavLocaleSwitcher from '../NavLocaleSwitcher';
+// import NavDropdown from '../NavDropdown';
+// import { Dropdown } from 'react-bootstrap';
+// import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+// import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+// import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+// import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
-import clsx from 'clsx';
-import { AtxDaoNFT, useNFTCall } from '../../wrappers/atxDaoNFT';
+// import clsx from 'clsx';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -40,11 +38,11 @@ const NavBar = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  let balance = 0;
-  let balanceArr = useNFTCall('balanceOf', [activeAccount]);
-  if (balanceArr !== undefined) {
-    balance = balanceArr[0].toNumber();
-  }
+  // let balance = 0;
+  // let balanceArr = useNFTCall('balanceOf', [activeAccount]);
+  // if (balanceArr !== undefined) {
+  //   balance = balanceArr[0].toNumber();
+  // }
 
   const useStateBg =
     history.location.pathname === '/' ||
