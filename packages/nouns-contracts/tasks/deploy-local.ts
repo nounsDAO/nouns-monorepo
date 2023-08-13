@@ -151,7 +151,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
       RepTokens: {},
       CadentRepDistributor: {
         args: [
-          ()=> contracts.RepTokens.instance?.address, 3, 30
+          ()=> contracts.RepTokens.instance?.address, 3, 60 * 5
         ]
       },
     };

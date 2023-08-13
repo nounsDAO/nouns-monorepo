@@ -42,7 +42,7 @@ function App() {
 // );
 
 
-  const { account, chainId, library, switchNetwork } = useEthers();
+  const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
@@ -61,13 +61,6 @@ function App() {
     //   getNetwork();
 
   }, [account, dispatch]);
-
-  async function getNetwork() {
-
-    if(chainId !== CHAIN_ID) {
-      await switchNetwork(CHAIN_ID)
-    }
-  }
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
@@ -97,7 +90,6 @@ console.log(`the balance of this ` + result);
   let output;
   if (account !== null) {
     //return to > 0 after testing
-    if (balance > 0) {
       output = <div>
       <Switch>
         <Route exact path="/" component={AuctionPage} />
@@ -107,7 +99,6 @@ console.log(`the balance of this ` + result);
       </Switch>
       <Footer />
       </div>
-    }
   }
 
   return (

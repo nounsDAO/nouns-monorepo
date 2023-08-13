@@ -22,7 +22,7 @@ contract CadentRepDistributor is ERC1155Holder {
     }
 
     function claim() external {
-        if (!canClaim()) revert CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
+        if (getRemainingTime(msg.sender) > 0) revert CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
 
         s_rep.distribute(address(this), msg.sender, s_amountDistributedPerCadenceCycle, '');
 
@@ -30,13 +30,8 @@ contract CadentRepDistributor is ERC1155Holder {
         emit DistributedRep(msg.sender);
     }
 
-    function canClaim() public view returns (bool) {
-        uint lastClaimTime = addressToLastClaimDate[msg.sender];
-        return lastClaimTime != 0 ? (block.timestamp >= (lastClaimTime + s_cadenceCycle)) : true;
-    }
-
-    function getRemainingTime() external view returns (int) {
-        int lastClaimTime = int(addressToLastClaimDate[msg.sender]);
+    function getRemainingTime(address addr) public view returns (int) {
+        int lastClaimTime = int(addressToLastClaimDate[addr]);
         return lastClaimTime != 0 ? (lastClaimTime + int(s_cadenceCycle) - int(block.timestamp)) : int(0);
     }
 

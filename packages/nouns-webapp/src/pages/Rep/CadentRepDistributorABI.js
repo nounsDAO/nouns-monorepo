@@ -40,19 +40,6 @@ const CadentRepDistributorABI = [
   },
   {
     inputs: [],
-    name: 'canClaim',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'claim',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -85,7 +72,13 @@ const CadentRepDistributorABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'addr',
+        type: 'address',
+      },
+    ],
     name: 'getRemainingTime',
     outputs: [
       {

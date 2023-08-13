@@ -29,12 +29,13 @@ export interface CadentRepDistributor {
 
 const RepPage = () => {
 
-  const { account, chainId, library, switchNetwork } = useEthers();
+  const { account, chainId, library } = useEthers();
+
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const [balanceOf0, setBalanceOf0] = useState(-1);
-  const [balanceOf1, setBalanceOf1] = useState(-1);
+  // const [balanceOf0, setBalanceOf0] = useState(-1);
+  // const [balanceOf1, setBalanceOf1] = useState(-1);
   const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
   const [json0Description, setJson0Description] = useState('');
@@ -42,10 +43,47 @@ const RepPage = () => {
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
-  const [canClaim, setCanClaim] = useState();
-  const [remainingTime, setRemainingTime] = useState();
-  const [amountPerCadence, setAmountPerCadence] = useState();
+  // const [canClaim, setCanClaim] = useState();
+  // const [remainingTime, setRemainingTime] = useState();
+  // const [amountPerCadence, setAmountPerCadence] = useState();
   
+
+  async function test() {
+
+    console.log("test");
+    try {
+      await (window as any).ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x7A69' }],
+      });
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if ((switchError as any).code === 4902) {
+        try {
+          await (window as any).ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x7A69',
+                chainName: 'localhost',
+                rpcUrls: ['http://localhost:8545'] /* ... */,
+              },
+            ],
+          });
+        } catch (addError) {
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
+  }
+
+  console.log(chainId);
+  if (31337 !== chainId) {
+    test();
+  }
+
+
   let rpcProvider;
   let repContractAddress;
   let cadentRepContractAddress;
@@ -81,6 +119,83 @@ const RepPage = () => {
   const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
   const { state, send } = useContractFunction(contract, 'claim', { transactionName: 'Claim' })
 
+  const repInterface = new utils.Interface(repTokensABI);
+  
+  const balanceOf0 = useContractCall({
+    abi: repInterface,
+    address: config.addresses.repTokensAddress,
+    method: 'balanceOf',
+    args: [activeAccount, 0]
+});
+
+console.log('balanceOf0 ');
+console.log(balanceOf0);
+
+const balanceOf1 = useContractCall({
+  abi: repInterface,
+  address: config.addresses.repTokensAddress,
+  method: 'balanceOf',
+  args: [activeAccount, 1]
+});
+
+const uri0 = useContractCall({
+  abi: repInterface,
+  address: config.addresses.repTokensAddress,
+  method: 'uri',
+  args: [0]
+});
+
+const uri1 = useContractCall({
+  abi: repInterface,
+  address: config.addresses.repTokensAddress,
+  method: 'uri',
+  args: [1]
+});
+
+if (uri0 !== undefined && uri1 !== undefined) {
+  let finalURL0 = uri0![0].replace("ipfs://", "https://ipfs.io/ipfs/");
+  let finalURL1 = uri1![0].replace("ipfs://", "https://ipfs.io/ipfs/");
+
+  const get = async ()=> {
+    let finalJson0 = await axios.get(finalURL0);
+    setJson0Name(finalJson0.data.name);
+    setJson0Description(finalJson0.data.description);
+    setJson0Image(finalJson0.data.image);
+  
+    let finalJson1 = await axios.get(finalURL1);
+    setJson1Name(finalJson1.data.name);
+    setJson1Description(finalJson1.data.description);
+    setJson1Image(finalJson1.data.image);
+  }
+
+  get();
+}
+
+
+  // const [canClaim, setCanClaim] = useState();
+  // const [remainingTime, setRemainingTime] = useState();
+  // const [amountPerCadence, setAmountPerCadence] = useState();
+
+  const remainingTime = useContractCall({
+    abi: cadentInterface,
+    address: config.addresses.cadentDistributorAddress,
+    method: 'getRemainingTime',
+    args: [activeAccount]
+  });
+
+
+  console.log('remaining time ');
+  console.log(remainingTime);
+
+  const amountPerCadence = useContractCall({
+    abi: cadentInterface,
+    address: config.addresses.cadentDistributorAddress,
+    method: 'getAmountDistributedPerCadenceCycle'
+  });
+
+  console.log('amount ');
+  console.log(amountPerCadence);
+
   // const provider = new ethers.providers.Web3Provider( window.ethereum, "any" );
   // const network = await provider.getNetwork();
   // const chainId = network.chainId;
@@ -89,92 +204,71 @@ const RepPage = () => {
 
     
     await send();
-    await getCanClaim(readableCadentRepContract);
-    await getBalances(readableRepContract);
+    // await getCanClaim(readableCadentRepContract);
+    // await getBalances(readableRepContract);
   }
+
+      
+
 
   useEffect(()=> {
     if (!activeAccount)
         return;
-
-    // if(chainId !== CHAIN_ID) {
-    //   switchNetwork(CHAIN_ID)
-    // }
-
-    if (false) {
       
-    if (canClaim === undefined)
-    getCanClaim(readableCadentRepContract);
+  //   if (canClaim === undefined)
+  //   getCanClaim(readableCadentRepContract);
 
-  if (remainingTime === undefined)
-    getRemainingTime(readableCadentRepContract);
+  // if (remainingTime === undefined)
+  //   getRemainingTime(readableCadentRepContract);
 
-    if (amountPerCadence === undefined)
-      getAmountDistributed(readableCadentRepContract);
+  //   if (amountPerCadence === undefined)
+  //     getAmountDistributed(readableCadentRepContract);
 
-  if (balanceOf0 === -1) {
-    getBalances(readableRepContract);
-  }
+  // if (balanceOf0 === -1) {
+  //   getBalances(readableRepContract);
+  // }
 
-  if (json0Name === undefined)
-      getJson(readableRepContract);
+  // if (json0Name === undefined)
+  //     getJson(readableRepContract);
 
   const interval = setInterval(() => 
   {
-    getCanClaim(readableCadentRepContract);
-    getRemainingTime(readableCadentRepContract) 
+    // getCanClaim(readableCadentRepContract);
+    // getRemainingTime(readableCadentRepContract) 
   }, 12000);
   return () => {
     clearInterval(interval);
   };
-    }
   })
 
-  async function getCanClaim(contract: Contract) {
-    const result = await contract.canClaim();
-    setCanClaim(result);
-  }
+  // async function getCanClaim(contract: Contract) {
+  //   const result = await contract.canClaim();
+  //   setCanClaim(result);
+  // }
 
-  async function getRemainingTime(contract: Contract) {
-    const result = await contract.getRemainingTime();
-    setRemainingTime(result.toNumber());
-  }
+  // async function getRemainingTime(contract: Contract) {
+  //   const result = await contract.getRemainingTime();
+  //   setRemainingTime(result.toNumber());
+  // }
 
-  async function getAmountDistributed(contract: Contract) {
-    const result = await contract.getAmountDistributedPerCadenceCycle();
-    setAmountPerCadence(result.toNumber());
-  }
+  // async function getAmountDistributed(contract: Contract) {
+  //   const result = await contract.getAmountDistributedPerCadenceCycle();
+  //   setAmountPerCadence(result.toNumber());
+  // }
 
-  async function getBalances(contract: Contract) {
-        const result = await contract.balanceOf(activeAccount, 0);
-        setBalanceOf0(result);
-        const result2 = await contract.balanceOf(activeAccount, 1);
-        setBalanceOf1(result2);
-  }
-
-  async function getJson(contract: Contract) {
-        const uri0 = await contract.uri(0);
-        const uri1 = await contract.uri(1);
-
-        let finalURL0 = uri0.replace("ipfs://", "https://ipfs.io/ipfs/");
-        let finalJson0 = await axios.get(finalURL0);
-        setJson0Name(finalJson0.data.name);
-        setJson0Description(finalJson0.data.description);
-        setJson0Image(finalJson0.data.image);
-
-        let finalURL1 = uri1.replace("ipfs://", "https://ipfs.io/ipfs/");
-        let finalJson1 = await axios.get(finalURL1);
-        setJson1Name(finalJson1.data.name);
-        setJson1Description(finalJson1.data.description);
-        setJson1Image(finalJson1.data.image);
-  }
+ 
 
   let canClaimConditional;
-  if (canClaim) {
-    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim { amountPerCadence } tokens!</button></>
-  }else {
-    canClaimConditional = <><span> You can redeem more tokens in less than {remainingTime} second(s)!</span></>
+
+  if (remainingTime !== undefined) {
+    if (remainingTime[0] < 0) {
+    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim { amountPerCadence?.toString() } tokens!</button></>
+
+    }else {
+      canClaimConditional = <><span> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
+    }
   }
+  
 
   return (
     <Section fullWidth={false} className={classes.section}>
