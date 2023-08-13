@@ -1,10 +1,10 @@
-import CadentRepDistributorABI from "./CadentRepDistributorABI";
+import cadentRepDistributorABI from "./abi";
 import { utils } from 'ethers';
 import config from '../../config';
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { Contract } from '@ethersproject/contracts'
 
-const abi = new utils.Interface(CadentRepDistributorABI);
+const abi = new utils.Interface(cadentRepDistributorABI);
 
 export const useCadentCall = (funcName: string, funcArgs: any[]) => {
     const result = useContractCall({

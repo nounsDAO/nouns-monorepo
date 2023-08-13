@@ -6,9 +6,9 @@ import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
 import axios from 'axios';
 import { useEthers } from '@usedapp/core';
-import { useRepCall } from './RepCaller';
-import { useCadentCall, useCadentFunction } from './CadentCaller';
-import { switchNetworkToLocalhost } from './NetworkSwitcher';
+import { useRepCall } from '../../wrappers/rep/rep';
+import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
+import { switchNetworkToLocalhost } from './utils/NetworkSwitcher';
 
 const RepPage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -57,7 +57,7 @@ const RepPage = () => {
   let canClaimConditional;
 
   if (remainingTime !== undefined) {
-    if (remainingTime[0] < 0) {
+    if (remainingTime[0] <= 0) {
     canClaimConditional = <><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></>
 
     }else {

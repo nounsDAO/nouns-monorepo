@@ -1,4 +1,4 @@
-const CadentRepDistributorABI = [
+const cadentRepDistributorABI = [
   {
     inputs: [
       {
@@ -189,4 +189,4 @@ const CadentRepDistributorABI = [
   },
 ];
 
-export default CadentRepDistributorABI;
+export default cadentRepDistributorABI;

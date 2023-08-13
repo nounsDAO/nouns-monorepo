@@ -1,9 +1,9 @@
 import { Contract } from '@ethersproject/contracts'
 import axios from 'axios';
-import config, { CHAIN_ID } from '../../config';
+import config, { CHAIN_ID } from '../../../config';
 import { ethers } from 'ethers';
-import repTokensABI from "../../wrappers/repTokensAbi";
-import CadentRepDistributorABI from "./CadentRepDistributorABI";
+import repTokensABI from "../../../wrappers/rep/abi";
+import cadentRepDistributorABI from "../../../wrappers/cadentRepDistributor/abi";
 
 let rpcProvider;
 let repContractAddress;
@@ -31,7 +31,7 @@ const readableRepContract = new ethers.Contract(
 
 const readableCadentRepContract = new ethers.Contract(
 cadentRepContractAddress as string,
-CadentRepDistributorABI,
+cadentRepDistributorABI,
 rpcProvider
 //walletProvider
 );
