@@ -64,7 +64,7 @@ const NavBar = () => {
 
   if (activeAccount !== undefined) {
     //return to > 0 after testing
-    if (balance >= 0) {
+    // if (balance >= 0) {
       output =
         <Navbar
           expand="xl"
@@ -147,42 +147,43 @@ const NavBar = () => {
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Container>
         </Navbar>
-    } else {
-      output =
-      <div>
-      <Container className={classes.centerScreen}>
-        <div>
-            <div style={{textAlign: 'center'}}>
-              <img
-                className={classes.centeredLogo}
-                src={logo}
-                alt="ATX DAO Logo"
-              ></img>
-            </div>
-            <h4 style={{ paddingTop: '20rem'}}>
-            Please connect a wallet that contains an ATX DAO Membership NFT!
-            </h4>
-            <div className={classes.center}>
-              <NavWallet address={activeAccount || '0'} />{' '}
-            </div>
-        </div>
-      </Container>
-      <div className={classes.loaderContainer}>
-          <img
-            className={classes.centeredLogo}
-            style={{ width: '10rem'}}
-            src={logo}
-            alt="ATX DAO Logo"
-          ></img>
-          <div className={classes.loader}>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-          </div>
-      </div>
-      </div>
-    }
+    // } 
+    // else {
+    //   output =
+    //   <div>
+    //   <Container className={classes.centerScreen}>
+    //     <div>
+    //         <div style={{textAlign: 'center'}}>
+    //           <img
+    //             className={classes.centeredLogo}
+    //             src={logo}
+    //             alt="ATX DAO Logo"
+    //           ></img>
+    //         </div>
+    //         <h4 style={{ paddingTop: '20rem'}}>
+    //         Please connect a wallet that contains an ATX DAO Membership NFT!
+    //         </h4>
+    //         <div className={classes.center}>
+    //           <NavWallet address={activeAccount || '0'} />{' '}
+    //         </div>
+    //     </div>
+    //   </Container>
+    //   <div className={classes.loaderContainer}>
+    //       <img
+    //         className={classes.centeredLogo}
+    //         style={{ width: '10rem'}}
+    //         src={logo}
+    //         alt="ATX DAO Logo"
+    //       ></img>
+    //       <div className={classes.loader}>
+    //           <span></span>
+    //           <span></span>
+    //           <span></span>
+    //           <span></span>
+    //       </div>
+    //   </div>
+    //   </div>
+    // }
   }
   else {
     output =
