@@ -29,6 +29,8 @@ export interface CadentRepDistributor {
 
 const RepPage = () => {
 
+  const { account, chainId, library, switchNetwork } = useEthers();
+
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const [balanceOf0, setBalanceOf0] = useState(-1);
@@ -85,23 +87,7 @@ const RepPage = () => {
 
   const Claim = async () => {
 
-    await window.ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: "0x89",
-          chainName: 'Polygon',
-          rpcUrls: ['https://polygon.llamarpc.com'] /* ... */,
-          nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 }
-        },
-      ],
-    });
-
-    // await window.ethereum.request({
-    //   method: 'wallet_switchEthereumChain',
-    //   params: [{ chainId: "0x" + CHAIN_ID }],
-    // });
-
+    
     await send();
     await getCanClaim(readableCadentRepContract);
     await getBalances(readableRepContract);
@@ -111,30 +97,37 @@ const RepPage = () => {
     if (!activeAccount)
         return;
 
-    if (canClaim === undefined)
-      getCanClaim(readableCadentRepContract);
-
-    if (remainingTime === undefined)
-      getRemainingTime(readableCadentRepContract);
-
-      if (amountPerCadence === undefined)
-        getAmountDistributed(readableCadentRepContract);
-
-    if (balanceOf0 === -1) {
-      getBalances(readableRepContract);
+    if(chainId !== CHAIN_ID) {
+      switchNetwork(CHAIN_ID)
     }
 
-    if (json0Name === undefined)
-        getJson(readableRepContract);
+    if (false) {
+      
+    if (canClaim === undefined)
+    getCanClaim(readableCadentRepContract);
 
-    const interval = setInterval(() => 
-    {
-      getCanClaim(readableCadentRepContract);
-      getRemainingTime(readableCadentRepContract) 
-    }, 12000);
-    return () => {
-      clearInterval(interval);
-    };
+  if (remainingTime === undefined)
+    getRemainingTime(readableCadentRepContract);
+
+    if (amountPerCadence === undefined)
+      getAmountDistributed(readableCadentRepContract);
+
+  if (balanceOf0 === -1) {
+    getBalances(readableRepContract);
+  }
+
+  if (json0Name === undefined)
+      getJson(readableRepContract);
+
+  const interval = setInterval(() => 
+  {
+    getCanClaim(readableCadentRepContract);
+    getRemainingTime(readableCadentRepContract) 
+  }, 12000);
+  return () => {
+    clearInterval(interval);
+  };
+    }
   })
 
   async function getCanClaim(contract: Contract) {

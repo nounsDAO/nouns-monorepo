@@ -73,11 +73,11 @@ function App() {
 
   let balanceArr = useNFTCall('balanceOf', [account]);
 
-  if (account !== null && account !== undefined)
-  {
-    console.log("NOT NULL OR UNDEFINED");
-    getNetwork();
-  }
+  // if (account !== null && account !== undefined)
+  // {
+  //   console.log("NOT NULL OR UNDEFINED");
+  //   getNetwork();
+  // }
   
   const result = useContractCall({
     abi,

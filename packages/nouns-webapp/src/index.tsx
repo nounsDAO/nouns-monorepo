@@ -205,7 +205,7 @@ ReactDOM.render(
       <React.StrictMode>
         <Web3ReactProvider
           getLibrary={
-            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+            provider => new Web3Provider(provider, 'any') // this will vary according to whether you use e.g. ethers or web3.js
           }
         >
           <ApolloProvider client={client}>
