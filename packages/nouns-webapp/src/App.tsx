@@ -19,29 +19,12 @@ import RepPage from './pages/Rep';
 import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
-import { CHAIN_ID } from './config';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
-import { AtxDaoNFT, useNFTCall } from './wrappers/atxDaoNFT';
-import atxDaoABI from './wrappers/atxDaoNFTAbi';
-import config from './config';
-import { utils } from 'ethers';
-import { ethers } from 'ethers';
-
-declare var window: any;
 
 function App() {
-  const abi = new utils.Interface(atxDaoABI);
-
-//  const readableCadentRepContract = new ethers.Contract(
-//   config.addresses.atxDaoAddress as string,
-//   abi,
-//   walletProvider
-// );
-
-
   const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
@@ -49,57 +32,9 @@ function App() {
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
-
-    // console.log(account);
-    // if (account !== null && account !== undefined)
-    // {
-    //   console.log("NOT NULL OR UNDEFINED");
-    //   getNetwork();
-    // }
-    // else console.log("NULL");
-    // if (account !== null)
-    //   getNetwork();
-
   }, [account, dispatch]);
 
-  const alertModal = useAppSelector(state => state.application.alertModal);
-
-  let balanceArr = useNFTCall('balanceOf', [account]);
-
-  // if (account !== null && account !== undefined)
-  // {
-  //   console.log("NOT NULL OR UNDEFINED");
-  //   getNetwork();
-  // }
-  
-  const result = useContractCall({
-    abi,
-    address: config.addresses.atxDaoAddress,
-    method: 'balanceOf',
-    args: [account] 
-});
-
-console.log(`the balance of this ` + result);
-
-
-  let balance = 0;
-  if (balanceArr !== undefined) {
-    balance = balanceArr[0].toNumber();
-  }
-
-  let output;
-  if (account !== null) {
-    //return to > 0 after testing
-      output = <div>
-      <Switch>
-        <Route exact path="/" component={AuctionPage} />
-        <Route exact path="/rep" component={RepPage} />
-        <Route exact path="/vote" component={GovernancePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-      <Footer />
-      </div>
-  }
+  // const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
     <div className={`${classes.wrapper}`}>
@@ -116,8 +51,14 @@ console.log(`the balance of this ` + result);
           provider={(chainId === ChainId.Mainnet ? library : undefined)}
           batchLookups={true}
         >
-          <NavBar />
-          { output }
+        <NavBar />
+        <Switch>
+          <Route exact path="/" component={AuctionPage} />
+          <Route exact path="/rep" component={RepPage} />
+          <Route exact path="/vote" component={GovernancePage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+        <Footer />
         </AvatarProvider>
       </BrowserRouter>
     </div>

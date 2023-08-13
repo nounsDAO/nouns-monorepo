@@ -1,9 +1,9 @@
 import { Contract } from '@ethersproject/contracts'
 import axios from 'axios';
-import config, { CHAIN_ID } from '../../../config';
+import config, { CHAIN_ID } from '../../config';
 import { ethers } from 'ethers';
-import repTokensABI from "../../../wrappers/rep/abi";
-import cadentRepDistributorABI from "../../../wrappers/cadentRepDistributor/abi";
+import repTokensABI from "../../wrappers/rep/abi";
+import cadentRepDistributorABI from "../../wrappers/cadentRepDistributor/abi";
 
 let rpcProvider;
 let repContractAddress;

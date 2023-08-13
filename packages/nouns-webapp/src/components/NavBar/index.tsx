@@ -60,7 +60,7 @@ const NavBar = () => {
   const closeNav = () => setIsNavExpanded(false);
 
   let output;
-  console.log(balance);
+  // console.log(balance);
 
   if (activeAccount !== undefined) {
     //return to > 0 after testing

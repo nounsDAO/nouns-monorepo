@@ -5,15 +5,13 @@ import { Col, Row, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
 import axios from 'axios';
-import { useEthers } from '@usedapp/core';
 import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
-import { switchNetworkToLocalhost } from './utils/NetworkSwitcher';
+import { switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { IS_MAINNET } from '../../config';
 
 const RepPage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-
-  const { chainId } = useEthers();
 
   const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
@@ -22,8 +20,11 @@ const RepPage = () => {
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
-  if (chainId !== 31337) {
+  if (!IS_MAINNET) {
     switchNetworkToLocalhost();
+  }
+  else {
+    switchNetworkToPolygon();
   }
 
   const balanceOf0 = useRepCall('balanceOf', [activeAccount, 0]);
