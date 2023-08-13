@@ -97,9 +97,9 @@ const RepPage = () => {
     if (!activeAccount)
         return;
 
-    if(chainId !== CHAIN_ID) {
-      switchNetwork(CHAIN_ID)
-    }
+    // if(chainId !== CHAIN_ID) {
+    //   switchNetwork(CHAIN_ID)
+    // }
 
     if (false) {
       

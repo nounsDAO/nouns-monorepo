@@ -205,7 +205,18 @@ ReactDOM.render(
       <React.StrictMode>
         <Web3ReactProvider
           getLibrary={
-            provider => new Web3Provider(provider, 'any') // this will vary according to whether you use e.g. ethers or web3.js
+            provider => {
+              let prov = new Web3Provider(provider, 'any'); // this will vary according to whether you use e.g. ethers or web3.js
+              prov.on("network", (newNetwork, oldNetwork) => {
+                // When a Provider makes its initial connection, it emits a "network"
+                // event with a null oldNetwork along with the newNetwork. So, if the
+                // oldNetwork exists, it represents a changing network
+                if (oldNetwork) {
+                    window.location.reload();
+                }
+              });
+            return prov;
+            } 
           }
         >
           <ApolloProvider client={client}>
