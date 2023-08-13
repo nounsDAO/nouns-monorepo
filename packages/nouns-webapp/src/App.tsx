@@ -27,8 +27,10 @@ import DelegatePage from './pages/DelegatePage';
 import { AtxDaoNFT, useNFTCall } from './wrappers/atxDaoNFT';
 import { ethers } from 'ethers';
 
+declare var window: any;
+
 function App() {
-  const { account, chainId, library } = useEthers();
+  const { account, chainId, library, switchNetwork } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
@@ -37,33 +39,14 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-
   async function getNetwork() {
-    const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
-    let network = await walletProvider.getNetwork();
 
-    if (CHAIN_ID === 31337) {
-      if (network.chainId !== CHAIN_ID) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: "0x7A69",
-                chainName: 'localhost',
-                rpcUrls: ['http://localhost:8545'] /* ... */,
-                nativeCurrency: { name: 'GO', symbol: 'GO', decimals: 18 }
-              },
-            ],
-          });
-        } catch (e) {
-          console.log(e);
-        }
-
-        
-      }
+    if(chainId !== CHAIN_ID) {
+      await switchNetwork(CHAIN_ID)
     }
   }
+
+  getNetwork();
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
@@ -91,14 +74,14 @@ function App() {
 
   return (
     <div className={`${classes.wrapper}`}>
-      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {/* {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
           content={<p>{alertModal.message}</p>}
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
-      )}
+      )} */}
       <BrowserRouter>
         <AvatarProvider
           provider={(chainId === ChainId.Mainnet ? library : undefined)}
