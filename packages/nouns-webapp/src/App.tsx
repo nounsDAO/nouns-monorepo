@@ -25,6 +25,7 @@ import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
 import { AtxDaoNFT, useNFTCall } from './wrappers/atxDaoNFT';
+import { ethers } from 'ethers';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -35,6 +36,34 @@ function App() {
     // Local account array updated
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
+
+
+  async function getNetwork() {
+    const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
+    let network = await walletProvider.getNetwork();
+
+    if (CHAIN_ID === 31337) {
+      if (network.chainId !== CHAIN_ID) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: "0x7A69",
+                chainName: 'localhost',
+                rpcUrls: ['http://localhost:8545'] /* ... */,
+                nativeCurrency: { name: 'GO', symbol: 'GO', decimals: 18 }
+              },
+            ],
+          });
+        } catch (e) {
+          console.log(e);
+        }
+
+        
+      }
+    }
+  }
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
