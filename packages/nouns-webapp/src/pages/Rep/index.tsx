@@ -21,21 +21,12 @@ import { CadentRepDistributorABI } from './CadentRepDistributorABI';
 import NavBarButton, { NavBarButtonStyle } from '../../components/NavBarButton';
 import { read } from 'fs';
 
-declare var window: any;
-
-export interface CadentRepDistributor {
-  canClaim: boolean;
-}
-
 const RepPage = () => {
 
-  const { account, chainId, library } = useEthers();
-
+  const { chainId } = useEthers();
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  // const [balanceOf0, setBalanceOf0] = useState(-1);
-  // const [balanceOf1, setBalanceOf1] = useState(-1);
   const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
   const [json0Description, setJson0Description] = useState('');
@@ -43,14 +34,7 @@ const RepPage = () => {
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
-  // const [canClaim, setCanClaim] = useState();
-  // const [remainingTime, setRemainingTime] = useState();
-  // const [amountPerCadence, setAmountPerCadence] = useState();
-  
-
   async function test() {
-
-    console.log("test");
     try {
       await (window as any).ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -78,42 +62,9 @@ const RepPage = () => {
     }
   }
 
-  console.log(chainId);
   if (31337 !== chainId) {
     test();
   }
-
-
-  let rpcProvider;
-  let repContractAddress;
-  let cadentRepContractAddress;
-
-  if (CHAIN_ID === 1 || CHAIN_ID === 137) {
-    let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
-    repContractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
-    cadentRepContractAddress = '';
-    rpcProvider = new ethers.providers.JsonRpcProvider(url);
-  } else {
-    rpcProvider = new ethers.providers.JsonRpcProvider();
-    repContractAddress = config.addresses.repTokensAddress;
-    cadentRepContractAddress = config.addresses.cadentDistributorAddress;
-  }
-
-  const readableRepContract = new ethers.Contract(
-    repContractAddress as string,
-    repTokensABI,
-    rpcProvider
-  );
-
-  // keep in case we want to use user's provider
-  // const walletProvider = new ethers.providers.Web3Provider(window.ethereum)
-
-  const readableCadentRepContract = new ethers.Contract(
-    cadentRepContractAddress as string,
-    CadentRepDistributorABI,
-    rpcProvider
-    //walletProvider
-  );
 
   const cadentInterface = new utils.Interface(CadentRepDistributorABI);
   const contract = new Contract(config.addresses.cadentDistributorAddress, cadentInterface) as any;
@@ -127,9 +78,6 @@ const RepPage = () => {
     method: 'balanceOf',
     args: [activeAccount, 0]
 });
-
-console.log('balanceOf0 ');
-console.log(balanceOf0);
 
 const balanceOf1 = useContractCall({
   abi: repInterface,
@@ -171,11 +119,6 @@ if (uri0 !== undefined && uri1 !== undefined) {
   get();
 }
 
-
-  // const [canClaim, setCanClaim] = useState();
-  // const [remainingTime, setRemainingTime] = useState();
-  // const [amountPerCadence, setAmountPerCadence] = useState();
-
   const remainingTime = useContractCall({
     abi: cadentInterface,
     address: config.addresses.cadentDistributorAddress,
@@ -183,86 +126,17 @@ if (uri0 !== undefined && uri1 !== undefined) {
     args: [activeAccount]
   });
 
-
-  console.log('remaining time ');
-  console.log(remainingTime);
-
   const amountPerCadence = useContractCall({
     abi: cadentInterface,
     address: config.addresses.cadentDistributorAddress,
     method: 'getAmountDistributedPerCadenceCycle'
   });
 
-  console.log('amount ');
-  console.log(amountPerCadence);
-
-  // const provider = new ethers.providers.Web3Provider( window.ethereum, "any" );
-  // const network = await provider.getNetwork();
-  // const chainId = network.chainId;
-
-  const Claim = async () => {
-
-    
-    await send();
-    // await getCanClaim(readableCadentRepContract);
-    // await getBalances(readableRepContract);
-  }
-
-      
-
-
-  useEffect(()=> {
-    if (!activeAccount)
-        return;
-      
-  //   if (canClaim === undefined)
-  //   getCanClaim(readableCadentRepContract);
-
-  // if (remainingTime === undefined)
-  //   getRemainingTime(readableCadentRepContract);
-
-  //   if (amountPerCadence === undefined)
-  //     getAmountDistributed(readableCadentRepContract);
-
-  // if (balanceOf0 === -1) {
-  //   getBalances(readableRepContract);
-  // }
-
-  // if (json0Name === undefined)
-  //     getJson(readableRepContract);
-
-  const interval = setInterval(() => 
-  {
-    // getCanClaim(readableCadentRepContract);
-    // getRemainingTime(readableCadentRepContract) 
-  }, 12000);
-  return () => {
-    clearInterval(interval);
-  };
-  })
-
-  // async function getCanClaim(contract: Contract) {
-  //   const result = await contract.canClaim();
-  //   setCanClaim(result);
-  // }
-
-  // async function getRemainingTime(contract: Contract) {
-  //   const result = await contract.getRemainingTime();
-  //   setRemainingTime(result.toNumber());
-  // }
-
-  // async function getAmountDistributed(contract: Contract) {
-  //   const result = await contract.getAmountDistributedPerCadenceCycle();
-  //   setAmountPerCadence(result.toNumber());
-  // }
-
- 
-
   let canClaimConditional;
 
   if (remainingTime !== undefined) {
     if (remainingTime[0] < 0) {
-    canClaimConditional = <><button style={{width:200}} onClick={Claim}>Claim { amountPerCadence?.toString() } tokens!</button></>
+    canClaimConditional = <><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></>
 
     }else {
       canClaimConditional = <><span> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
