@@ -6,28 +6,28 @@ import { Trans } from '@lingui/macro';
 // import { i18n } from '@lingui/core';
 import Link from '../../components/Link';
 import snapshotImage from '../../assets/snapshot.jpeg';
-import { useNftCall } from '../../wrappers/atxDaoNft/atxDaoNft';
-import NumberGatedComponent from '../../components/NumberGatedComponent';
-import { IS_MAINNET } from '../../config';
-import { switchNetworkToLocalhost, switchNetworkToEthereum } from '../utils/NetworkSwitcher';
-import { useAppSelector } from '../../hooks';
+// import { useNftCall } from '../../wrappers/atxDaoNft/atxDaoNft';
+// import NumberGatedComponent from '../../components/NumberGatedComponent';
+// import { IS_MAINNET } from '../../config';
+// import { switchNetworkToLocalhost, switchNetworkToEthereum } from '../utils/NetworkSwitcher';
+// import { useAppSelector } from '../../hooks';
 
 
 const GovernancePage = () => {
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  // const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  if (!IS_MAINNET) {
-    switchNetworkToLocalhost();
-  }
-  else {
-    switchNetworkToEthereum();
-  }
+  // if (!IS_MAINNET) {
+  //   switchNetworkToLocalhost();
+  // }
+  // else {
+  //   switchNetworkToEthereum();
+  // }
 
-  let result = useNftCall('balanceOf', [activeAccount]);
-  if (result === undefined)
-    (result as any) = 0;
-  else
-    (result as any) = result[0].toNumber();
+  // let result = useNftCall('balanceOf', [activeAccount]);
+  // if (result === undefined)
+  //   (result as any) = 0;
+  // else
+  //   (result as any) = result[0].toNumber();
 
   const forumLink = (
     <Link
@@ -38,7 +38,8 @@ const GovernancePage = () => {
   );
 
   return (
-    <NumberGatedComponent number={result}>
+    <>
+     {/* <NumberGatedComponent number={result}> */}
       <Section fullWidth={false} className={classes.section}>
         <Col lg={10} className={classes.wrapper}>
           <Row className={classes.headerRow}>
@@ -77,7 +78,8 @@ const GovernancePage = () => {
           </Card>
         </Col>
       </Section>
-    </NumberGatedComponent>
+    {/* </NumberGatedComponent> */}
+    </>
 
   );
 };

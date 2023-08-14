@@ -76,7 +76,7 @@ const NavBar = () => {
                 <img src={logo} className={classes.navBarLogo} alt="ATX DAO Logo" />
               </Navbar.Brand>
               <Nav.Item>
-                {treasuryBalance && (
+                {(
                   <Nav.Link
                     href={daoEtherscanLink}
                     className={classes.nounsNavLink}

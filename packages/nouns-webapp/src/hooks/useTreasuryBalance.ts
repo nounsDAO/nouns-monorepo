@@ -22,12 +22,14 @@ export const useTreasuryBalance = () => {
   return ethBalance?.add(lidoBalanceAsETH ?? zero).add(tokenBuyerBalanceAsETH ?? zero) ?? zero;
 };
 
+
 /**
  * Computes treasury usd value of treasury assets (ETH + Lido) at current ETH-USD exchange rate
  *
  * @returns USD value of treasury assets (ETH + Lido + USDC) at current exchange rate
  */
 export const useTreasuryUSDValue = () => {
+
   const zero = BigNumber.from(0);
 
   const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));

@@ -8,10 +8,10 @@ import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 // import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 import NounsIntroSection from '../../components/NounsIntroSection';
-import { useNftCall } from '../../wrappers/atxDaoNft/atxDaoNft';
-import NumberGatedComponent from '../../components/NumberGatedComponent';
-import { IS_MAINNET } from '../../config';
-import { switchNetworkToLocalhost, switchNetworkToEthereum } from '../utils/NetworkSwitcher';
+// import { useNftCall } from '../../wrappers/atxDaoNft/atxDaoNft';
+// import NumberGatedComponent from '../../components/NumberGatedComponent';
+// import { IS_MAINNET } from '../../config';
+// import { switchNetworkToLocalhost, switchNetworkToEthereum } from '../utils/NetworkSwitcher';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -22,7 +22,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  // const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const dispatch = useAppDispatch();
 
@@ -53,22 +53,22 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     ? 'var(--brand-cool-background)'
     : 'var(--brand-warm-background)';
 
-  if (!IS_MAINNET) {
-    switchNetworkToLocalhost();
-  }
-  else {
-    switchNetworkToEthereum();
-  }
+  // if (!IS_MAINNET) {
+  //   switchNetworkToLocalhost();
+  // }
+  // else {
+  //   switchNetworkToEthereum();
+  // }
 
-  let result = useNftCall('balanceOf', [activeAccount]);
-  if (result === undefined)
-    (result as any) = 0;
-  else
-    (result as any) = result[0].toNumber();
+  // let result = useNftCall('balanceOf', [activeAccount]);
+  // if (result === undefined)
+  //   (result as any) = 0;
+  // else
+  //   (result as any) = result[0].toNumber();
 
   return (
     <>
-    <NumberGatedComponent number={result}>
+    {/* <NumberGatedComponent number={result}> */}
       <NounsIntroSection />
       <Documentation
         backgroundColor={
@@ -77,7 +77,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
             : undefined
         }
       />
-    </NumberGatedComponent>
+    {/* </NumberGatedComponent> */}
     {/* { output } */}
     </>
   );
