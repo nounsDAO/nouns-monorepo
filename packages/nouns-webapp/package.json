@@ -22,7 +22,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@usedapp/coingecko": "0.5.1",
-    "@usedapp/core": "^1.2.11",
+    "@usedapp/core": "0.9.1",
     "@walletconnect/ethereum-provider": "^2.8.4",
     "@walletconnect/modal": "^2.4.5",
     "@web3-react/core": "^6.1.9",
