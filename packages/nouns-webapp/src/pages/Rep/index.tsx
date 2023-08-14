@@ -9,6 +9,7 @@ import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
 import { switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
 import { IS_MAINNET } from '../../config';
+import { useEthers } from '@usedapp/core';
 
 const RepPage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -20,11 +21,35 @@ const RepPage = () => {
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
+  const { chainId } = useEthers();
+
+  let loadingOutput;
+
   if (!IS_MAINNET) {
     switchNetworkToLocalhost();
+
+    if (chainId !== 31337) {
+      loadingOutput = <div>
+        <h3>Please change to the proper network!</h3>
+      </div>;
+    } else {
+      loadingOutput = <div>
+        <h3>Please be patient, the hamsters are tired...</h3>
+      </div>;
+    }
   }
   else {
     switchNetworkToPolygon();
+
+    if (chainId !== 137) {
+      loadingOutput = <div>
+        <h3>Please change to the proper network!</h3>
+      </div>;
+    } else {
+      loadingOutput = <div>
+        <h3>Please be patient, the hamsters are tired...</h3>
+      </div>;
+    }
   }
 
   const balanceOf0 = useRepCall('balanceOf', [activeAccount, 0]);
@@ -170,7 +195,7 @@ const RepPage = () => {
               </Col>
               </>
               :
-              <h3>Requesting the hamsters to work harder...</h3>
+              <div>{ loadingOutput }</div>
             }
           </Row>
         </Card>

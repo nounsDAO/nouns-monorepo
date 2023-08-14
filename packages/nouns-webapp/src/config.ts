@@ -17,7 +17,7 @@ interface ExternalContractAddresses {
   weth: string | undefined;
   atxDaoAddress: string | undefined;
   repTokensAddress: string | undefined;
-  cadentDistributorAddress: string;
+  cadentDistributorAddress: string | undefined;
   atxDaoTreasury: string | undefined;
 
 }
@@ -113,7 +113,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
 
     atxDaoAddress: undefined,
     repTokensAddress: undefined,
-    cadentDistributorAddress: '',
+    cadentDistributorAddress: undefined,
     atxDaoTreasury: undefined,
   },
   [ChainId.Mainnet]: {
@@ -126,8 +126,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
     atxDaoAddress: '0x63f8F23ce0f3648097447622209E95A391c44b00',
-    repTokensAddress: undefined,
-    cadentDistributorAddress: '',
+    repTokensAddress: "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2", //address on polygon
+    cadentDistributorAddress: undefined,
     atxDaoTreasury: '0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23'
   },
   [ChainId.Polygon]: {
@@ -141,7 +141,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
     atxDaoAddress: undefined,
     repTokensAddress: "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2",
-    cadentDistributorAddress: '',
+    cadentDistributorAddress: undefined,
     atxDaoTreasury: undefined
 
   },

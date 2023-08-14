@@ -18,7 +18,15 @@ export const useCadentCall = (funcName: string, funcArgs: any[]) => {
 }
 
 export const useCadentFunction = (prettyName: string, funcName: string, funcArgs: any[]) => {
-    const contract = new Contract(config.addresses.cadentDistributorAddress, abi) as any;
+    
+    let addr;
+    if (config.addresses.cadentDistributorAddress !== undefined) {
+        addr = config.addresses.cadentDistributorAddress
+    } else {
+        addr = "0x0000000000000000000000000000000000000000";
+    }
+
+    const contract = new Contract(addr, abi) as any;
     const { state, send } = useContractFunction(contract, funcName, { transactionName: prettyName })
     return { state, send};
 }
