@@ -1,106 +1,120 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import classes from './RepPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Card } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
-import { RepTokens, useRepCall } from '../../wrappers/repTokens';
-import useFetch from './useFetch';
-import useCallJake from './useCallJake';
-import { CHAIN_ID } from '../../config';
-import { ethers } from 'ethers';
-import repTokensABI from "../../wrappers/repTokensAbi";
 import axios from 'axios';
-import config from '../../config';
+import { useRepCall } from '../../wrappers/rep/rep';
+import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
+import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { CHAIN_ID, IS_MAINNET } from '../../config';
+import { useEthers } from '@usedapp/core';
 
 const RepPage = () => {
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const [balanceOf0, setBalanceOf0] = useState(-1);
-  const [balanceOf1, setBalanceOf1] = useState(-1);
-  const [json0Name, setJson0Name] = useState('');
+  const [json0Name, setJson0Name] = useState();
   const [json1Name, setJson1Name] = useState('');
   const [json0Description, setJson0Description] = useState('');
   const [json1Description, setJson1Description] = useState('');
   const [json0Image, setJson0Image] = useState('');
   const [json1Image, setJson1Image] = useState('');
 
-  useEffect(()=> {
-    async function callMe() {
-      let provider;
-      let contractAddress;
+  const { chainId } = useEthers();
 
-      if (CHAIN_ID === 1) {
-        let url = "https://polygon-mainnet.g.alchemy.com/v2/QlAdcu2qrGohrGeg-D5Wk5jdsLwARS0H";
-        contractAddress = '0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2';
-        provider = new ethers.providers.JsonRpcProvider(url);
+  let loadingOutput;
+
+  if (!IS_MAINNET) {
+
+    if (CHAIN_ID === 31337) {
+      if (chainId !== 31337) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button onClick={()=> {
+            switchNetworkToLocalhost();
+          }}>Switch To Localhost</button></h6>
+        </div>;
       } else {
-        provider = new ethers.providers.JsonRpcProvider();
-        contractAddress = config.addresses.repTokensAddress;
-      }
-
-      const contract = new ethers.Contract(
-        contractAddress as string,
-        repTokensABI,
-        provider
-      );
-
-      if (activeAccount) {
-        if (balanceOf0 === -1) {
-          const result = await contract.balanceOf(activeAccount, 0);
-          setBalanceOf0(result);
-          const result2 = await contract.balanceOf(activeAccount, 1);
-          setBalanceOf1(result2);
-
-          const uri0 = await contract.uri(0);
-          const uri1 = await contract.uri(1);
-
-          let finalURL0 = uri0.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let finalJson0 = await axios.get(finalURL0);
-          console.log(finalJson0);
-          setJson0Name(finalJson0.data.name);
-          setJson0Description(finalJson0.data.description);
-          setJson0Image(finalJson0.data.image);
-
-          let finalURL1 = uri1.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let finalJson1 = await axios.get(finalURL1);
-          console.log(finalJson1);
-          setJson1Name(finalJson1.data.name);
-          setJson1Description(finalJson1.data.description);
-          setJson1Image(finalJson1.data.image);
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are tired...</h3>
+        </div>;
       }
     }
+    else if (CHAIN_ID === 5) {
+      if (chainId !== 5) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button style={{width:200}} onClick={()=> {
+            switchNetworkToGoerli();
+          }}>Switch To Goerli</button></h6>
+
+        </div>;
+      } else {
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are tired...</h3>
+        </div>;
+      }
     }
-    callMe();
-  })
-
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
-  console.log(CHAIN_ID);
-  if (CHAIN_ID === 1) {
-    
-
-    // console.log(contract);
-
-  } else {
-    //load through usedapp
+  }
+  else {
+    if (chainId !== 137) {
+      loadingOutput = <div>
+        <h3>Please change to the proper network!</h3>
+        <h6><button style={{width:200}} onClick={()=> {
+            switchNetworkToPolygon();
+          }}>Switch To Polygon</button></h6>
+      </div>;
+    } else {
+      loadingOutput = <div>
+        <h3>Please be patient, the hamsters are tired...</h3>
+      </div>;
+    }
   }
 
-  // const testBalance = useCallJake('balanceOf', [activeAccount, 0]);
-  // const testBalance2 = useCallJake('balanceOf', [activeAccount, 1]);
-  // console.log(testBalance);
-  // console.log(testBalance2);
+  const balanceOf0 = useRepCall('balanceOf', [activeAccount, 0]);
+  const balanceOf1 = useRepCall('balanceOf', [activeAccount, 1]);
+  const uri0 = useRepCall('uri', [0]);
+  const uri1 = useRepCall('uri', [1]);
 
-  // const soulboundBalance = useCallJake('balanceOf', [activeAccount, 0]);
-  // const transferableBalance = useCallJake('balanceOf', [activeAccount, 1]);
-  // console.log("trying call");
-  // const soulboundTokenURI = useCallJake('uri', [0]);
-  // const soulboundJson = useFetch(soulboundTokenURI);
+  if (uri0 !== undefined && uri1 !== undefined) {
+    let finalURL0 = uri0![0].replace("ipfs://", "https://ipfs.io/ipfs/");
+    let finalURL1 = uri1![0].replace("ipfs://", "https://ipfs.io/ipfs/");
 
-  // const redeemableTokenURI = useCallJake('uri', [1]);
-  // const redeemableJson = useFetch(redeemableTokenURI);
+    const getJsonData = async ()=> {
+      let finalJson0 = await axios.get(finalURL0);
+      setJson0Name(finalJson0.data.name);
+      setJson0Description(finalJson0.data.description);
+      setJson0Image(finalJson0.data.image);
+    
+      let finalJson1 = await axios.get(finalURL1);
+      setJson1Name(finalJson1.data.name);
+      setJson1Description(finalJson1.data.description);
+      setJson1Image(finalJson1.data.image);
+    }
+
+    getJsonData();
+  }
+
+  const { send } = useCadentFunction('Claim', 'claim', []);
+  
+  const remainingTime = useCadentCall('getRemainingTime', [activeAccount]);
+  const amountPerCadence = useCadentCall('getAmountToDistributePerCadence', []);
+
+  let canClaimConditional;
+
+  if (remainingTime !== undefined) {
+    if (remainingTime[0] <= 0) {
+    canClaimConditional = <><h6><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></h6></>
+    }else {
+      canClaimConditional = <><span style={{textAlign: 'center'}}> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
+    }
+  }
 
   return (
     <Section fullWidth={false} className={classes.section}>
       <Row className={classes.headerRow}>
+        
         <span>
           <Trans>Reputation</Trans>
         </span>
@@ -140,43 +154,69 @@ const RepPage = () => {
         </Row>
       </Col>
       <Col sm={12} md={6}>
+      
+        <Row>
+        </Row>
         <Card className={classes.card}>
+        {canClaimConditional}
           <Row>
             <h3 style={{marginBottom:'2rem', marginTop:'1rem'}}>Your REP Tokens</h3>
-            <Col sm={12} md={6}>
-              <div className={classes.container}>
-                {
+            {
+              balanceOf1 !== undefined && json1Name !== undefined && json1Description !== undefined &&
+              balanceOf0 !== undefined && json0Name !== undefined && json0Description !== undefined
+              ?
+              <>
+              <Col sm={12} md={6}>
+              { 
+                balanceOf1 !== undefined && json1Name !== undefined && json1Description !== undefined
+                ?
+                <div>
+                  <div className={classes.container}>
                   <img src={json1Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
-                <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>
-                  {Number(balanceOf1)}
+              
+                  <div className={classes.overlay}></div>
+                  <h3 className={classes.centered }>
+                    {Number(balanceOf1)}
                   </h3>
-              </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
-                {json1Name}
-              </h4>
-              <p style={{textAlign: 'center'}}>
-                {json1Description}
-                </p>
-            </Col>
-            <Col sm={12} md={6}>
-              <div className={classes.container}>
-                {
-                <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
-                }
-                <div className={classes.overlay}></div>
-                <h3 className={classes.centered }>
-                  {Number(balanceOf0)}
-                </h3>
-              </div>
-              <h4 className={classes.center} style={{paddingTop: '2rem'}}>
-                {json0Name}
-                </h4>
-              <p  style={{textAlign: 'center'}}>
-                {json0Description}
-                </p>
-            </Col>
+                  </div>
+                  <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                    {json1Name}
+                  </h4>
+                  <p style={{textAlign: 'center'}}>
+                    {json1Description}
+                  </p>
+                </div>
+                :
+                <p>Loading...</p>
+              }
+              </Col>
+              <Col sm={12} md={6}>
+                { 
+                  balanceOf0 !== undefined && json0Name !== undefined && json0Description !== undefined
+                  ?
+                  <div>
+                    <div className={classes.container}>
+                    <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
+                    <div className={classes.overlay}></div>
+                    <h3 className={classes.centered }>
+                      {Number(balanceOf0)}
+                    </h3>
+                    </div>
+                    <h4 className={classes.center} style={{paddingTop: '2rem'}}>
+                      {json0Name}
+                      </h4>
+                    <p style={{textAlign: 'center'}}>
+                      {json0Description}
+                    </p>
+                  </div>
+                  :
+                  <p>Loading...</p>
+                  }
+              </Col>
+              </>
+              :
+              <div>{ loadingOutput }</div>
+            }
           </Row>
         </Card>
       </Col>

@@ -78,6 +78,15 @@ h3 {
   font-family: 'Calistoga';
 }
 
+button {
+  text-align: center;
+}
+
+h6 {
+  text-align: center;
+  font-family: 'Calistoga';
+}
+
 @media (max-width: 992px) {
   .section {
     margin-left: 0.5rem;
@@ -151,4 +160,8 @@ h3 {
   .ethTreasuryAmt {
     border-right: 2px solid #e2e3e8;
   }
+}
+
+.navBarBtn {
+  width: 200px;
 }

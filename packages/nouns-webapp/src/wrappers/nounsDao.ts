@@ -1,7 +1,7 @@
 import { NounsDAOV2ABI, NounsDaoLogicV2Factory } from '@nouns/sdk';
 import {
   ChainId,
-  connectContractToSigner,
+  // connectContractToSigner,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -562,11 +562,11 @@ export const useCastRefundableVote = () => {
 
   return {
     castRefundableVote: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas.castRefundableVote(...args);
-      return castRefundableVote(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
+      // const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      // const gasLimit = await contract.estimateGas.castRefundableVote(...args);
+      // return castRefundableVote(...args, {
+      //   gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
+      // });
     },
     castRefundableVoteState,
   };
@@ -582,11 +582,11 @@ export const useCastRefundableVoteWithReason = () => {
 
   return {
     castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
-      return castRefundableVoteWithReason(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
+      // const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      // const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
+      // return castRefundableVoteWithReason(...args, {
+      //   gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
+      // });
     },
     castRefundableVoteWithReasonState,
   };

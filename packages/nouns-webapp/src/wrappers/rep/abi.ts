@@ -1,4 +1,4 @@
-const repTokensABI = [
+const repABI = [
     {
       "inputs": [
         {
@@ -1073,5 +1073,5 @@ const repTokensABI = [
       "type": "function"
     }
   ];
-
-export default repTokensABI;
+  
+  export default repABI;

@@ -3,7 +3,9 @@ import WalletButton from '../WalletButton';
 import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { InjectedConnector, NoEthereumProviderError } from '@web3-react/injected-connector';
+import { InjectedConnector,
+  //  NoEthereumProviderError
+   } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { WalletConnectV2Connector } from '../../utils/walletconnectV2Connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';

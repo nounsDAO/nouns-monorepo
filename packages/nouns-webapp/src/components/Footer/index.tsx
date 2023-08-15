@@ -1,8 +1,7 @@
 import classes from './Footer.module.css';
 import { Container } from 'react-bootstrap';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
+// import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { externalURL, ExternalURL } from '../../utils/externalURL';
-import config from '../../config';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
