@@ -5,7 +5,7 @@ import { Trans } from '@lingui/macro';
 // import { i18n } from '@lingui/core';
 import { CHAIN_ID, IS_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
-import { switchNetworkToGoerli, switchNetworkToLocalhost } from '../../pages/utils/NetworkSwitcher';
+import { switchNetworkToEthereum, switchNetworkToGoerli, switchNetworkToLocalhost } from '../../pages/utils/NetworkSwitcher';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;
@@ -71,7 +71,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
               )}
             >
               {/* <Trans>Connect To Ethereum To View Treasury</Trans> */}
-              <button>Connect To Ethereum</button>
+              <button style={{color: 'black'}} onClick={()=> { switchNetworkToEthereum() }}>Switch To Ethereum</button>
             </div>
           </div>
         </div>

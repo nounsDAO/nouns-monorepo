@@ -7,9 +7,10 @@ import { useAppSelector } from '../../hooks';
 import axios from 'axios';
 import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
-import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToOPMainnet } from '../utils/NetworkSwitcher';
 import { CHAIN_ID, IS_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
+import optimismImage from '../../assets/optimism.png';
 
 const RepPage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -37,7 +38,7 @@ const RepPage = () => {
         </div>;
       } else {
         loadingOutput = <div>
-          <h3>Please be patient, the hamsters are tired...</h3>
+          <h3>Please be patient, the hamsters are trying their best...</h3>
         </div>;
       }
     }
@@ -52,22 +53,22 @@ const RepPage = () => {
         </div>;
       } else {
         loadingOutput = <div>
-          <h3>Please be patient, the hamsters are tired...</h3>
+          <h3>Please be patient, the hamsters are trying their best..</h3>
         </div>;
       }
     }
   }
   else {
-    if (chainId !== 137) {
+    if (chainId !== 10) {
       loadingOutput = <div>
         <h3>Please change to the proper network!</h3>
         <h6><button style={{width:200}} onClick={()=> {
-            switchNetworkToPolygon();
-          }}>Switch To Polygon</button></h6>
+            switchNetworkToOPMainnet();
+          }}>Switch To Optimism</button></h6>
       </div>;
     } else {
       loadingOutput = <div>
-        <h3>Please be patient, the hamsters are tired...</h3>
+        <h3>Please be patient, the hamsters are trying their best..</h3>
       </div>;
     }
   }
@@ -105,7 +106,7 @@ const RepPage = () => {
 
   if (remainingTime !== undefined) {
     if (remainingTime[0] <= 0) {
-    canClaimConditional = <><h6><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } tokens!</button></h6></>
+    canClaimConditional = <><h6><button style={{width:200}} onClick={()=>{send()}}>Claim { amountPerCadence?.toString() } token(s)!</button></h6></>
     }else {
       canClaimConditional = <><span style={{textAlign: 'center'}}> You can redeem more tokens in less than {remainingTime?.toString() } second(s)!</span></>
     }
@@ -172,7 +173,7 @@ const RepPage = () => {
                 ?
                 <div>
                   <div className={classes.container}>
-                  <img src={json1Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
+                  <img src={json1Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="150px" alt="Lifetime"/>
               
                   <div className={classes.overlay}></div>
                   <h3 className={classes.centered }>
@@ -196,7 +197,7 @@ const RepPage = () => {
                   ?
                   <div>
                     <div className={classes.container}>
-                    <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="200px" alt="Lifetime"/>
+                    <img src={json0Image.replace("ipfs://", "https://ipfs.io/ipfs/")} width="150px" alt="Lifetime"/>
                     <div className={classes.overlay}></div>
                     <h3 className={classes.centered }>
                       {Number(balanceOf0)}
@@ -218,8 +219,13 @@ const RepPage = () => {
               <div>{ loadingOutput }</div>
             }
           </Row>
+            <span>Powered by <img src={optimismImage} style={{width: '5%', height: '5%'}} alt="Optimism"></img></span>
+            <a href="https://optimistic.etherscan.io/address/0x65ad2263e658e75762253076e2ebfc9211e05d2f" target="#">OptimismScan: Reputation Tokens</a>
+            <a href="https://optimistic.etherscan.io/address/0x9816093cfdfeb1ade0b88b04f89310e1d8380637" target="#">OptimismScan: Cadent Reputation Distributor</a>
+    
         </Card>
       </Col>
+
     </Section>
   );
 };

@@ -14,6 +14,10 @@ export async function switchNetworkToGoerli() {
   await switchNetworkToChain('0x5', 'Goerli', ['https://goerli.infura.io/v3/']);
 }
 
+export async function switchNetworkToOPMainnet() {
+  await switchNetworkToChain('0xa', 'Optimism', ['https://mainnet.optimism.io']);
+}
+
 export async function switchNetworkToChain(chainIdHex: string, chainName: string, chainRpcUrls: string[]) {
   try {
     await (window as any).ethereum.request({

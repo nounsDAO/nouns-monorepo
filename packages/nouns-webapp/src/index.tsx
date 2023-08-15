@@ -10,13 +10,13 @@ import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
 import auction, {
-  reduxSafeAuction,
+  // reduxSafeAuction,
   reduxSafeNewAuction,
   reduxSafeBid,
   setActiveAuction,
   setAuctionExtended,
   setAuctionSettled,
-  setFullAuction,
+  // setFullAuction,
 } from './state/slices/auction';
 import onDisplayAuction, {
   setLastAuctionNounId,
