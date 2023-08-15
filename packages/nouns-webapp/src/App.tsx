@@ -52,13 +52,19 @@ function App() {
           batchLookups={true}
         >
         <NavBar />
-        <Switch>
+
+        { account ?
+        <><Switch>
           <Route exact path="/" component={AuctionPage} />
           <Route exact path="/rep" component={RepPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route component={NotFoundPage} />
         </Switch>
         <Footer />
+        </>
+        :
+        <div></div>
+        }
         </AvatarProvider>
       </BrowserRouter>
     </div>
