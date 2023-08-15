@@ -157,9 +157,9 @@ const ChainSubscriber: React.FC = () => {
     };
 
     // Fetch the current auction
-    const currentAuction = await nounsAuctionHouseContract.auction();
-    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
+    // const currentAuction = await nounsAuctionHouseContract.auction();
+    // dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+    // dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
     // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);

@@ -112,8 +112,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
 
     atxDaoAddress: undefined,
-    repTokensAddress: undefined,
-    cadentDistributorAddress: undefined,
+    repTokensAddress: '0xF0535B9d8E98144BB4233fEdd252220d0152311E',
+    cadentDistributorAddress: '0x88F1Af751ca23BB2B4efF893d6f45D041230FFb3',
     atxDaoTreasury: undefined,
   },
   [ChainId.Mainnet]: {
@@ -127,7 +127,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
     atxDaoAddress: '0x63f8F23ce0f3648097447622209E95A391c44b00',
     repTokensAddress: "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2", //address on polygon
-    cadentDistributorAddress: undefined,
+    cadentDistributorAddress: "0x55985dfb23c13ccebc6f075e912f57000b25320e", //address on polygon
     atxDaoTreasury: '0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23'
   },
   [ChainId.Polygon]: {

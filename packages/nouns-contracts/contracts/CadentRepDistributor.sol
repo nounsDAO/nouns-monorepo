@@ -8,8 +8,8 @@ contract CadentRepDistributor is ERC1155Holder {
     error CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
     IRepTokens s_rep;
 
-    uint256 s_amountDistributedPerCadenceCycle;
-    uint256 s_cadenceCycle;
+    uint256 s_amountToDistributePerCadence;
+    uint256 s_cadence;
 
     mapping(address => uint256) addressToLastClaimDate;
 
@@ -17,14 +17,14 @@ contract CadentRepDistributor is ERC1155Holder {
 
     constructor(address rep, uint256 amountDistributedPerCadence, uint256 cadenceCycle) {
         s_rep = IRepTokens(rep);
-        s_amountDistributedPerCadenceCycle = amountDistributedPerCadence;
-        s_cadenceCycle = cadenceCycle;
+        s_amountToDistributePerCadence = amountDistributedPerCadence;
+        s_cadence = cadenceCycle;
     }
 
     function claim() external {
         if (getRemainingTime(msg.sender) > 0) revert CadentRepDistributor__NOT_ENOUGH_TIME_PASSED();
 
-        s_rep.distribute(address(this), msg.sender, s_amountDistributedPerCadenceCycle, '');
+        s_rep.distribute(address(this), msg.sender, s_amountToDistributePerCadence, '');
 
         addressToLastClaimDate[msg.sender] = block.timestamp;
         emit DistributedRep(msg.sender);
@@ -32,14 +32,14 @@ contract CadentRepDistributor is ERC1155Holder {
 
     function getRemainingTime(address addr) public view returns (int) {
         int lastClaimTime = int(addressToLastClaimDate[addr]);
-        return lastClaimTime != 0 ? (lastClaimTime + int(s_cadenceCycle) - int(block.timestamp)) : int(0);
+        return lastClaimTime != 0 ? (lastClaimTime + int(s_cadence) - int(block.timestamp)) : int(0);
     }
 
-    function getAmountDistributedPerCadenceCycle() external view returns (uint256) {
-        return s_amountDistributedPerCadenceCycle;
+    function getAmountToDistributePerCadence() external view returns (uint256) {
+        return s_amountToDistributePerCadence;
     }
 
-    function getCadenceCycle() external view returns (uint256) {
-        return s_cadenceCycle;
+    function getCadence() external view returns (uint256) {
+        return s_cadence;
     }
 }

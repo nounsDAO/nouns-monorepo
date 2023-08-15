@@ -7,8 +7,8 @@ import { useAppSelector } from '../../hooks';
 import axios from 'axios';
 import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
-import { switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
-import { IS_MAINNET } from '../../config';
+import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { CHAIN_ID, IS_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
 
 const RepPage = () => {
@@ -26,24 +26,44 @@ const RepPage = () => {
   let loadingOutput;
 
   if (!IS_MAINNET) {
-    switchNetworkToLocalhost();
 
-    if (chainId !== 31337) {
-      loadingOutput = <div>
-        <h3>Please change to the proper network!</h3>
-      </div>;
-    } else {
-      loadingOutput = <div>
-        <h3>Please be patient, the hamsters are tired...</h3>
-      </div>;
+    if (CHAIN_ID === 31337) {
+      if (chainId !== 31337) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button onClick={()=> {
+            switchNetworkToLocalhost();
+          }}>Switch To Localhost</button></h6>
+        </div>;
+      } else {
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are tired...</h3>
+        </div>;
+      }
+    }
+    else if (CHAIN_ID === 5) {
+      if (chainId !== 5) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button style={{width:200}} onClick={()=> {
+            switchNetworkToGoerli();
+          }}>Switch To Goerli</button></h6>
+
+        </div>;
+      } else {
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are tired...</h3>
+        </div>;
+      }
     }
   }
   else {
-    switchNetworkToPolygon();
-
     if (chainId !== 137) {
       loadingOutput = <div>
         <h3>Please change to the proper network!</h3>
+        <h6><button style={{width:200}} onClick={()=> {
+            switchNetworkToPolygon();
+          }}>Switch To Polygon</button></h6>
       </div>;
     } else {
       loadingOutput = <div>
@@ -79,7 +99,7 @@ const RepPage = () => {
   const { send } = useCadentFunction('Claim', 'claim', []);
   
   const remainingTime = useCadentCall('getRemainingTime', [activeAccount]);
-  const amountPerCadence = useCadentCall('getAmountDistributedPerCadenceCycle', []);
+  const amountPerCadence = useCadentCall('getAmountToDistributePerCadence', []);
 
   let canClaimConditional;
 

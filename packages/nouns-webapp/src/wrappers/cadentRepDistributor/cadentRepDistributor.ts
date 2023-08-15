@@ -26,6 +26,8 @@ export const useCadentFunction = (prettyName: string, funcName: string, funcArgs
         addr = "0x0000000000000000000000000000000000000000";
     }
 
+    console.log(config.addresses.cadentDistributorAddress);
+    
     const contract = new Contract(addr, abi) as any;
     const { state, send } = useContractFunction(contract, funcName, { transactionName: prettyName })
     return { state, send};

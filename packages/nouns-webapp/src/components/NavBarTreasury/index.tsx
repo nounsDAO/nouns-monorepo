@@ -3,8 +3,9 @@ import { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 // import { i18n } from '@lingui/core';
-import { IS_MAINNET } from '../../config';
+import { CHAIN_ID, IS_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
+import { switchNetworkToGoerli, switchNetworkToLocalhost } from '../../pages/utils/NetworkSwitcher';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;
@@ -69,14 +70,102 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
                 treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
               )}
             >
-              <Trans>Connect To Ethereum To View Treasury</Trans>
+              {/* <Trans>Connect To Ethereum To View Treasury</Trans> */}
+              <button>Connect To Ethereum</button>
             </div>
           </div>
         </div>
       </div>
     }
   } else {
-    console.log("IM ELSE");
+    if (CHAIN_ID === 5) {
+      if (chainId === 5) {
+        output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+          <div className={classes.button}>
+            <div
+              className="d-flex flex-row justify-content-around"
+              style={{
+                paddingTop: '1px',
+              }}
+            >
+              <div
+                className={clsx(
+                  classes.treasuryHeader,
+                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+                )}
+              >
+                <Trans>Treasury</Trans>
+              </div>
+              <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
+            </div>
+          </div>
+        </div>
+      } else {
+          output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+          <div className={classes.button}>
+            <div
+              className="d-flex flex-row justify-content-around"
+              style={{
+                paddingTop: '1px',
+              }}
+            >
+              <div
+                className={clsx(
+                  classes.treasuryHeader,
+                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+                )}
+              >
+                <button onClick={()=> { switchNetworkToGoerli() }}>Connect To Goerli</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    } else if (CHAIN_ID === 31337) {
+      if (chainId === 31337) {
+        output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+          <div className={classes.button}>
+            <div
+              className="d-flex flex-row justify-content-around"
+              style={{
+                paddingTop: '1px',
+              }}
+            >
+              <div
+                className={clsx(
+                  classes.treasuryHeader,
+                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+                )}
+              >
+                <Trans>Treasury</Trans>
+              </div>
+              <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
+            </div>
+          </div>
+        </div>
+      } else {
+          output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+          <div className={classes.button}>
+            <div
+              className="d-flex flex-row justify-content-around"
+              style={{
+                paddingTop: '1px',
+              }}
+            >
+              <div
+                className={clsx(
+                  classes.treasuryHeader,
+                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+                )}
+              >
+                <button onClick={()=> { switchNetworkToLocalhost() }}>Connect To Localhost</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+    
   }
 
   return (

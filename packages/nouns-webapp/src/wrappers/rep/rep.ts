@@ -6,6 +6,7 @@ import config from '../../config';
 const abi = new utils.Interface(repABI);
 
 export const useRepCall = (funcName: string, funcArgs: any[]) => {
+
     const result = useContractCall({
         abi: abi,
         address: config.addresses.repTokensAddress,
