@@ -56,26 +56,30 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
         </div>
       </div>
     } else {
-        output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-        <div className={classes.button}>
-          <div
-            className="d-flex flex-row justify-content-around"
-            style={{
-              paddingTop: '1px',
-            }}
-          >
-            <div
-              className={clsx(
-                classes.treasuryHeader,
-                treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-              )}
-            >
-              {/* <Trans>Connect To Ethereum To View Treasury</Trans> */}
-              <button style={{color: 'black'}} onClick={()=> { switchNetworkToEthereum() }}>Switch To Ethereum</button>
-            </div>
-          </div>
-        </div>
-      </div>
+        output = 
+        <>
+              <button style={{color: 'black'}} onClick={()=> { switchNetworkToEthereum() }}>View Treasury</button>
+        </>
+        
+      //   <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+      //   <div className={classes.button}>
+      //     <div
+      //       className="d-flex flex-row justify-content-around"
+      //       style={{
+      //         paddingTop: '1px',
+      //       }}
+      //     >
+      //       <div
+      //         className={clsx(
+      //           classes.treasuryHeader,
+      //           treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+      //         )}
+      //       >
+      //         {/* <Trans>Connect To Ethereum To View Treasury</Trans> */}
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
     }
   } else {
     if (CHAIN_ID === 5) {
@@ -101,25 +105,30 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
           </div>
         </div>
       } else {
-          output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-          <div className={classes.button}>
-            <div
-              className="d-flex flex-row justify-content-around"
-              style={{
-                paddingTop: '1px',
-              }}
-            >
-              <div
-                className={clsx(
-                  classes.treasuryHeader,
-                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-                )}
-              >
-                <button onClick={()=> { switchNetworkToGoerli() }}>Connect To Goerli</button>
-              </div>
-            </div>
-          </div>
-        </div>
+          output = 
+          <>
+              <button style={{color: 'black'}} onClick={()=> { switchNetworkToGoerli() }}>View Treasury</button>
+        </>
+          
+        //   <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+        //   <div className={classes.button}>
+        //     <div
+        //       className="d-flex flex-row justify-content-around"
+        //       style={{
+        //         paddingTop: '1px',
+        //       }}
+        //     >
+        //       <div
+        //         className={clsx(
+        //           classes.treasuryHeader,
+        //           treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+        //         )}
+        //       >
+        //         <button onClick={()=> { switchNetworkToGoerli() }}>Connect To Goerli</button>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
       }
     } else if (CHAIN_ID === 31337) {
       if (chainId === 31337) {
@@ -144,25 +153,29 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
           </div>
         </div>
       } else {
-          output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-          <div className={classes.button}>
-            <div
-              className="d-flex flex-row justify-content-around"
-              style={{
-                paddingTop: '1px',
-              }}
-            >
-              <div
-                className={clsx(
-                  classes.treasuryHeader,
-                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-                )}
-              >
-                <button onClick={()=> { switchNetworkToLocalhost() }}>Connect To Localhost</button>
-              </div>
-            </div>
-          </div>
-        </div>
+          output = 
+          <>
+              <button style={{color: 'black'}} onClick={()=> { switchNetworkToLocalhost() }}>View Treasury</button>
+        </>
+        //   <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+        //   <div className={classes.button}>
+        //     <div
+        //       className="d-flex flex-row justify-content-around"
+        //       style={{
+        //         paddingTop: '1px',
+        //       }}
+        //     >
+        //       <div
+        //         className={clsx(
+        //           classes.treasuryHeader,
+        //           treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+        //         )}
+        //       >
+        //         <button onClick={()=> { switchNetworkToLocalhost() }}>Connect To Localhost</button>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
       }
     }
     
