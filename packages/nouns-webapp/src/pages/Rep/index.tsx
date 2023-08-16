@@ -219,7 +219,7 @@ const RepPage = () => {
               <div>{ loadingOutput }</div>
             }
           </Row>
-            <span>Powered by <img src={optimismImage} style={{width: '5%', height: '5%'}} alt="Optimism"></img></span>
+            <span>Powered by <a href="https://www.optimism.io/" target="#"><img src={optimismImage} style={{width: '5%', height: '5%'}} alt="Optimism"></img></a></span>
             <a href="https://optimistic.etherscan.io/address/0x65ad2263e658e75762253076e2ebfc9211e05d2f" target="#">OptimismScan: Reputation Tokens</a>
             <a href="https://optimistic.etherscan.io/address/0x9816093cfdfeb1ade0b88b04f89310e1d8380637" target="#">OptimismScan: Cadent Reputation Distributor</a>
     
