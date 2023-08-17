@@ -3,6 +3,7 @@ import {
   getContractAddressesForChainOrThrow,
 } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
+import { ethers } from 'ethers';
 
 export const WALLET_CONNECT_V2_PROJECT_ID = '501e80c0ce3d8633938fc821b41fabfd';
 
@@ -128,7 +129,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
     atxDaoAddress: '0x63f8F23ce0f3648097447622209E95A391c44b00',
     repTokensAddress: IS_OPTIMISM_MAINNET ? "0x65aD2263e658E75762253076E2EBFc9211E05D2F" : "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2", 
-    cadentDistributorAddress: "0x9816093CfDFeB1ADe0b88B04F89310e1d8380637",
+    cadentDistributorAddress: IS_OPTIMISM_MAINNET ? "0x9816093CfDFeB1ADe0b88B04F89310e1d8380637" : ethers.constants.AddressZero,
     atxDaoTreasury: '0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23'
   },
   [ChainId.Polygon]: {

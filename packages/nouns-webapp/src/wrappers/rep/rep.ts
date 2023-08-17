@@ -5,11 +5,11 @@ import config from '../../config';
 
 const abi = new utils.Interface(repABI);
 
-export const useRepCall = (funcName: string, funcArgs: any[]) => {
+export const useRepCall = (funcName: string, funcArgs: any[], address: string = config.addresses.repTokensAddress! ) => {
 
     const result = useContractCall({
         abi: abi,
-        address: config.addresses.repTokensAddress,
+        address: address,
         method: funcName,
         args: funcArgs
     });
