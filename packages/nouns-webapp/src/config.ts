@@ -53,7 +53,8 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const IS_MAINNET: boolean = (process.env.REACT_APP_IS_MAINNET!.toLowerCase() === 'true' ?? false);
+export const IS_MAINNET: boolean = (process.env.REACT_APP_IS_MAINNET?.toLowerCase() === 'true' ?? false);
+export const IS_OPTIMISM_MAINNET: boolean = (process.env.REACT_APP_IS_OPTIMISM_MAINNET?.toLowerCase() === 'true' ?? false);
 
 export const CHAIN_ID: SupportedChains =  parseInt(process.env.REACT_APP_CHAIN_ID ?? '1');
 const INFURA_PROJECT_ID = '2dd05b4bb4b6476cb6bc714808ddb098';
@@ -126,8 +127,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
     atxDaoAddress: '0x63f8F23ce0f3648097447622209E95A391c44b00',
-    repTokensAddress: "0x65aD2263e658E75762253076E2EBFc9211E05D2F", //address on polygon
-    cadentDistributorAddress: "0x9816093CfDFeB1ADe0b88B04F89310e1d8380637", //address on polygon
+    repTokensAddress: IS_OPTIMISM_MAINNET ? "0x65aD2263e658E75762253076E2EBFc9211E05D2F" : "0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2", 
+    cadentDistributorAddress: "0x9816093CfDFeB1ADe0b88B04F89310e1d8380637",
     atxDaoTreasury: '0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23'
   },
   [ChainId.Polygon]: {

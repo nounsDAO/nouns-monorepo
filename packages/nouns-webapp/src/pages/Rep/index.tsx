@@ -7,10 +7,11 @@ import { useAppSelector } from '../../hooks';
 import axios from 'axios';
 import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
-import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToOPMainnet } from '../utils/NetworkSwitcher';
-import { CHAIN_ID, IS_MAINNET } from '../../config';
+import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToOPMainnet, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { CHAIN_ID, IS_MAINNET, IS_OPTIMISM_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
 import optimismImage from '../../assets/optimism.png';
+import polygonImage from '../../assets/polygon.png';
 
 const RepPage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -25,6 +26,9 @@ const RepPage = () => {
   const { chainId } = useEthers();
 
   let loadingOutput;
+
+  console.log(IS_OPTIMISM_MAINNET);
+
 
   if (!IS_MAINNET) {
 
@@ -59,17 +63,32 @@ const RepPage = () => {
     }
   }
   else {
-    if (chainId !== 10) {
-      loadingOutput = <div>
-        <h3>Please change to the proper network!</h3>
-        <h6><button style={{width:200}} onClick={()=> {
-            switchNetworkToOPMainnet();
-          }}>Switch To Optimism</button></h6>
-      </div>;
+    if (!IS_OPTIMISM_MAINNET) {
+      if (chainId !== 137) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button style={{width:200}} onClick={()=> {
+              switchNetworkToPolygon();
+            }}>Switch To Polygon</button></h6>
+        </div>;
+      } else {
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are trying their best..</h3>
+        </div>;
+      }      
     } else {
-      loadingOutput = <div>
-        <h3>Please be patient, the hamsters are trying their best..</h3>
-      </div>;
+      if (chainId !== 10) {
+        loadingOutput = <div>
+          <h3>Please change to the proper network!</h3>
+          <h6><button style={{width:200}} onClick={()=> {
+              switchNetworkToOPMainnet();
+            }}>Switch To Optimism</button></h6>
+        </div>;
+      } else {
+        loadingOutput = <div>
+          <h3>Please be patient, the hamsters are trying their best..</h3>
+        </div>;
+      }
     }
   }
 
@@ -219,10 +238,31 @@ const RepPage = () => {
               <div>{ loadingOutput }</div>
             }
           </Row>
-            <span>Powered by <a href="https://www.optimism.io/" target="#"><img src={optimismImage} style={{width: '5%', height: '5%'}} alt="Optimism"></img></a></span>
-            <a href="https://optimistic.etherscan.io/address/0x65ad2263e658e75762253076e2ebfc9211e05d2f" target="#">OptimismScan: Reputation Tokens</a>
-            <a href="https://optimistic.etherscan.io/address/0x9816093cfdfeb1ade0b88b04f89310e1d8380637" target="#">OptimismScan: Cadent Reputation Distributor</a>
-    
+            <span>Powered by 
+              <a 
+                href= { IS_OPTIMISM_MAINNET ? "https://www.optimism.io/" : "https://polygon.technology/" } 
+                target="#"
+              >
+                <img 
+                  src={ IS_OPTIMISM_MAINNET ? optimismImage : polygonImage } 
+                  style={{width: '5%', height: '5%'}}
+                  alt= { IS_OPTIMISM_MAINNET ? "Optimism" : "Polygon" } />
+              </a>
+            </span>
+
+            <a 
+              href= { IS_OPTIMISM_MAINNET ? "https://optimistic.etherscan.io/address/0x65ad2263e658e75762253076e2ebfc9211e05d2f" : "https://polygonscan.com/address/0x57AA5fd0914A46b8A426cC33DB842D1BB1aeADa2" }
+              target="#"
+            >
+              { IS_OPTIMISM_MAINNET ? "OptimismScan: Reputation Tokens" : "PolygonScan: Reputation Tokens" }
+            </a>
+            <a 
+              href= { IS_OPTIMISM_MAINNET ? "https://optimistic.etherscan.io/address/0x9816093cfdfeb1ade0b88b04f89310e1d8380637" : "??????????" }
+              target="#"
+            >
+              { IS_OPTIMISM_MAINNET ? "OptimismScan: Cadent Reputation Distributor" : "PolygonScan: Cadent Reputation Distributor" }
+            </a>
+
         </Card>
       </Col>
 
