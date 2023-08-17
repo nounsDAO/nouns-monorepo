@@ -6,10 +6,10 @@ import { Contract } from '@ethersproject/contracts'
 
 const abi = new utils.Interface(cadentRepDistributorABI);
 
-export const useCadentCall = (funcName: string, funcArgs: any[]) => {
+export const useCadentCall = (funcName: string, funcArgs: any[], address: string = config.addresses.cadentDistributorAddress!) => {
     const result = useContractCall({
         abi: abi,
-        address: config.addresses.cadentDistributorAddress,
+        address: address,
         method: funcName,
         args: funcArgs
     });
@@ -17,18 +17,13 @@ export const useCadentCall = (funcName: string, funcArgs: any[]) => {
     return result;
 }
 
-export const useCadentFunction = (prettyName: string, funcName: string, funcArgs: any[]) => {
+export const useCadentFunction = (prettyName: string, funcName: string, funcArgs: any[], address: string = config.addresses.cadentDistributorAddress!) => {
     
-    let addr;
-    if (config.addresses.cadentDistributorAddress !== undefined) {
-        addr = config.addresses.cadentDistributorAddress
-    } else {
-        addr = "0x0000000000000000000000000000000000000000";
+    if (address === undefined) {
+        address = "0x0000000000000000000000000000000000000000";
     }
 
-    console.log(config.addresses.cadentDistributorAddress);
-    
-    const contract = new Contract(addr, abi) as any;
+    const contract = new Contract(address, abi) as any;
     const { state, send } = useContractFunction(contract, funcName, { transactionName: prettyName })
     return { state, send};
 }

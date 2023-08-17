@@ -1,0 +1,167 @@
+.card{
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+      transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    padding: 1rem;
+}
+
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.overlay {
+   position: absolute;
+   top: 50%;
+   left: 0;
+   width: 100%;
+   height: 100%;
+
+   background: radial-gradient(circle at center, black 0%, transparent 20%);
+}
+
+.centered {
+  color: white !important;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.heading {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Inter';
+}
+
+.headerRow h1 {
+  color: #14161b;
+  font-size: 56px;
+  font-family: 'Calistoga';
+}
+
+.subheading {
+  color: var(--brand-dark-green);
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.boldText {
+  font-family: 'Calistoga';
+  font-weight: bold;
+}
+
+p {
+  padding-top: 1rem;
+}
+
+h3 {
+  text-align: center;
+  color: #14161b;
+  font-size: 32px;
+  font-family: 'Calistoga';
+}
+
+button {
+  text-align: center;
+}
+
+h6 {
+  text-align: center;
+  font-family: 'Calistoga';
+}
+
+@media (max-width: 992px) {
+  .section {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.treasuryInfoCard {
+  margin-bottom: 3rem;
+  border-radius: 20px;
+  border: 1px solid #e2e3e8;
+}
+
+.treasuryAmtWrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.usdTreasuryAmt {
+  padding-top: 0.2rem;
+}
+
+.ethTreasuryAmt {
+  display: flex;
+  height: 3rem;
+  min-width: 9rem;
+  padding-top: 0.2rem;
+}
+
+.ethTreasuryAmt h1 {
+  font-size: 36px;
+  font-family: 'Inter';
+}
+
+.usdBalance {
+  font-size: 36px;
+  font-family: 'Inter';
+}
+
+.ethSymbol {
+  font-family: 'Calistoga' !important;
+  margin-right: 0.5rem;
+}
+
+.usdBalance {
+  color: var(--brand-gray-light-text);
+  font-family: 'Inter';
+}
+
+.treasuryInfoText {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-family: 'Calistoga';
+  font-weight: 500;
+}
+
+@media (min-width: 992px) {
+  .treasuryAmtWrapper {
+    border-right: 2px solid #e2e3e8;
+  }
+
+  .ethTreasuryAmt {
+    border-right: 2px solid #e2e3e8;
+  }
+}
+
+.navBarBtn {
+  width: 200px;
+}

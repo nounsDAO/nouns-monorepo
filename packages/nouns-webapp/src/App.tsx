@@ -16,6 +16,7 @@ import GovernancePage from './pages/Governance';
 // import CreateProposalPage from './pages/CreateProposal';
 // import VotePage from './pages/Vote';
 import RepPage from './pages/Rep';
+import OptimismRepPage from './pages/OptimismRep';
 // import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 // import Playground from './pages/Playground';
@@ -58,6 +59,7 @@ function App() {
           <Route exact path="/" component={AuctionPage} />
           <Route exact path="/rep" component={RepPage} />
           <Route exact path="/vote" component={GovernancePage} />
+          <Route exact path="/optimismRep" component={OptimismRepPage} />
           <Route component={NotFoundPage} />
         </Switch>
         <Footer />
