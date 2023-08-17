@@ -18,7 +18,7 @@ import { EthereumProviderOptions } from '@walletconnect/ethereum-provider/dist/t
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
   const { activate } = useEthers();
-  const supportedChainIds = [CHAIN_ID, 10];
+  const supportedChainIds = [CHAIN_ID, 10, 137];
 
   const wallets = (
     <div className={classes.walletConnectModal}>
