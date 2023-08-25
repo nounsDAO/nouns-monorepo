@@ -113,7 +113,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     chainlinkEthUsdc: undefined,
     nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
 
-    atxDaoAddress: undefined,
+    atxDaoAddress: '0x373086C336B182b9D9e3874344E46FF0a9630D4E',
     repTokensAddress: '0xF0535B9d8E98144BB4233fEdd252220d0152311E',
     cadentDistributorAddress: '0x88F1Af751ca23BB2B4efF893d6f45D041230FFb3',
     atxDaoTreasury: undefined,

@@ -60,7 +60,10 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   //   switchNetworkToEthereum();
   // }
 
+  
+
   // let result = useNftCall('balanceOf', [activeAccount]);
+  // console.log(result);
   // if (result === undefined)
   //   (result as any) = 0;
   // else
