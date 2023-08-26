@@ -37,7 +37,9 @@ const NavBar = () => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
   const treasuryBalance = useTreasuryBalance();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
+  const daoEtherscanLink = buildEtherscanHoldingsLink(
+    config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
+  );
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =
