@@ -107,6 +107,7 @@ const CreateCandidatePage = () => {
     handleRemoveProposalAction,
     proposalTransactions,
     tokenBuyerTopUpEth,
+    totalUSDCPayment,
   ]);
 
   const handleTitleInput = useCallback(
