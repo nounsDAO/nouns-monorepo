@@ -503,7 +503,7 @@ const VotePage = ({
       <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
-            .filter(txn => txn?.functionSig.includes('createStream'))
+            .filter(txn => txn?.functionSig?.includes('createStream'))
             .map(txn => {
               const parsedCallData = parseStreamCreationCallData(txn.callData);
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
