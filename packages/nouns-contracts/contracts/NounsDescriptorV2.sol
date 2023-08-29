@@ -470,66 +470,66 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
 
     /**
      * @notice Replace current batch of accessories images with new ones.
-     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
     function updateAccessories(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        art.updateAccessories(newEncodedCompressed, decompressedLength, imageCount);
+        art.updateAccessories(encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
      * @notice Replace current batch of body images with new ones.
-     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
     function updateBodies(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        art.updateBodies(newEncodedCompressed, decompressedLength, imageCount);
+        art.updateBodies(encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
      * @notice Replace current batch of head images with new ones.
-     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
     function updateHeads(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        art.updateHeads(newEncodedCompressed, decompressedLength, imageCount);
+        art.updateHeads(encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
      * @notice Replace current batch of glasses images with new ones.
-     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
     function updateGlasses(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        art.updateGlasses(newEncodedCompressed, decompressedLength, imageCount);
+        art.updateGlasses(encodedCompressed, decompressedLength, imageCount);
     }
 
     /**

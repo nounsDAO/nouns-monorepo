@@ -159,25 +159,25 @@ interface INounsArt {
     function getGlassesTrait() external view returns (Trait memory);
 
     function updateBodies(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateAccessories(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateHeads(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateGlasses(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;

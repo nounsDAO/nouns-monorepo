@@ -140,25 +140,25 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
     function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 
     function updateAccessories(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateBodies(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateHeads(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
     function updateGlasses(
-        bytes calldata newEncodedCompressed,
+        bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
