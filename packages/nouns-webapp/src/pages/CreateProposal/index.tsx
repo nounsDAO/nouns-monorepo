@@ -38,6 +38,7 @@ const CreateProposalPage = () => {
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
   const [isProposeOnV1, setIsProposeOnV1] = useState(false);
+  const [isV1OptionVisible, setIsV1OptionVisible] = useState(false);
   const [previousProposalId, setPreviousProposalId] = useState<number | undefined>(undefined);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
@@ -310,7 +311,15 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        {isDaoGteV3 && config.featureToggles.proposeOnV1 && (
+        <p className='m-0 p-0'>Looking for treasury v1?</p>
+        <p className={classes.note}>
+          If you're not sure what this means, you probably don't need it. Otherwise, you can interact with the original treasury <button
+            className={classes.inlineButton}
+            onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
+          >here</button>.
+        </p>
+
+        {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
           <div className={classes.timelockOption}>
             <div className={classes.timelockSelect}>
               <Form.Check
@@ -324,7 +333,7 @@ const CreateProposalPage = () => {
               Used to interact with any assets owned by the{' '}
               <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
                 original treasury
-              </a>
+              </a>. Most proposers can ignore this.
             </p>
           </div>
         )}
