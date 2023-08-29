@@ -145,7 +145,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         if (props.candidate.proposerVotes >= props.requiredVotes) {
           setIsThresholdMet(true);
         } else {
-          setIsThresholdMet(voteCount >= props.candidate.requiredVotes ? true : false);
+          setIsThresholdMet(false);
         }
         if (voteCount !== signedVotesCount) {
           setSignedVotesCount(voteCount);
@@ -276,14 +276,14 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       ) : (
                         <>
                           {signedVotesCount === 0 &&
-                          props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                            props.candidate.proposerVotes > props.requiredVotes ? (
                             <>
                               <Trans>No sponsored votes needed</Trans>
                             </>
                           ) : (
                             <>
                               {signedVotesCount >= 0 ? signedVotesCount : '...'} of{' '}
-                              {props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                              {props.candidate.proposerVotes > props.requiredVotes ? (
                                 <em className={classes.naVotesLabel}>n/a</em>
                               ) : props.candidate.requiredVotes !== undefined ? (
                                 props.candidate.requiredVotes
@@ -347,7 +347,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             setDataFetchPollInterval={props.setDataFetchPollInterval}
                             signerHasActiveOrPendingProposal={
                               !props.isUpdateToProposal &&
-                              activePendingProposers.data.includes(signature.signer.id)
+                                activePendingProposers.data.includes(signature.signer.id)
                                 ? true
                                 : false
                             }
@@ -425,25 +425,25 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                               (props.isUpdateToProposal &&
                                 isOriginalSigner &&
                                 !isAccountSigner)) && (
-                              <>
-                                {!props.isProposer && connectedAccountNounVotes > 0 ? (
-                                  <button
-                                    className={classes.button}
-                                    onClick={() => setIsFormDisplayed(!isFormDisplayed)}
-                                  >
-                                    {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
-                                  </button>
-                                ) : (
-                                  <div className={classes.withoutVotesMsg}>
-                                    <p>
-                                      <Trans>
-                                        Sponsoring a proposal requires at least one Noun vote
-                                      </Trans>
-                                    </p>
-                                  </div>
-                                )}
-                              </>
-                            )}
+                                <>
+                                  {!props.isProposer && connectedAccountNounVotes > 0 ? (
+                                    <button
+                                      className={classes.button}
+                                      onClick={() => setIsFormDisplayed(!isFormDisplayed)}
+                                    >
+                                      {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
+                                    </button>
+                                  ) : (
+                                    <div className={classes.withoutVotesMsg}>
+                                      <p>
+                                        <Trans>
+                                          Sponsoring a proposal requires at least one Noun vote
+                                        </Trans>
+                                      </p>
+                                    </div>
+                                  )}
+                                </>
+                              )}
                           </>
                         )}
                       </>
