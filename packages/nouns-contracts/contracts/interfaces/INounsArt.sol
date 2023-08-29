@@ -53,6 +53,14 @@ interface INounsArt {
 
     event GlassesAdded(uint16 count);
 
+    event BodiesUpdated(uint16 count);
+
+    event AccessoriesUpdated(uint16 count);
+
+    event HeadsUpdated(uint16 count);
+
+    event GlassesUpdated(uint16 count);
+
     struct NounArtStoragePage {
         uint16 imageCount;
         uint80 decompressedLength;
@@ -149,4 +157,52 @@ interface INounsArt {
     function getHeadsTrait() external view returns (Trait memory);
 
     function getGlassesTrait() external view returns (Trait memory);
+
+    function updateBodies(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateAccessories(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeads(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlasses(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 }

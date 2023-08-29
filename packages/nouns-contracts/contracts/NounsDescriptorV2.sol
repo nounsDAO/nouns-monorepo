@@ -467,4 +467,136 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     function _getPalette(bytes memory part) private view returns (bytes memory) {
         return art.palettes(uint8(part[0]));
     }
+
+    /**
+     * @notice Replace current batch of accessories images with new ones.
+     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateAccessories(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateAccessories(newEncodedCompressed, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of body images with new ones.
+     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateBodies(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateBodies(newEncodedCompressed, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of head images with new ones.
+     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateHeads(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateHeads(newEncodedCompressed, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of glasses images with new ones.
+     * @param newEncodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateGlasses(
+        bytes calldata newEncodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateGlasses(newEncodedCompressed, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of accessories images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateAccessoriesFromPointer(pointer, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of body images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateBodiesFromPointer(pointer, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of head images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateHeadsFromPointer(pointer, decompressedLength, imageCount);
+    }
+
+    /**
+     * @notice Replace current batch of glasses images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function updateGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.updateGlassesFromPointer(pointer, decompressedLength, imageCount);
+    }
 }
