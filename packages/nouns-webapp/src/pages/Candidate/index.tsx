@@ -253,12 +253,17 @@ const CandidatePage = ({
         </Row>
       )}
 
+
+
       {candidate.data && (
         <Row>
+          <Col lg={12}>
+            <a className={classes.jump} href="#feedback">Jump to Sponsored Votes and Feedback</a>
+          </Col>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate.data} />
           </Col>
-          <Col lg={4} className={classes.sidebar}>
+          <Col id="feedback" lg={4} className={classes.sidebar}>
             {currentBlock &&
               threshold !== undefined &&
               userVotes !== undefined &&

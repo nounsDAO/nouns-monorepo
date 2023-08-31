@@ -346,7 +346,7 @@ const Proposals = ({
                             latestProposal={proposals[proposals.length - 1]}
                             candidate={c}
                             key={c.id}
-                            nounsRequired={nounsRequired}
+                            nounsRequired={threshold}
                             currentBlock={blockNumber ? blockNumber - 1 : 0}
                           />
                         </div>
