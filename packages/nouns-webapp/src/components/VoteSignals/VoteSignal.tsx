@@ -27,7 +27,7 @@ const VoteSignal = (props: Props) => {
               <ShortAddress address={props.address} size={10} />
             </strong>
             <span>
-              {props.voteCount} vote{props.voteCount > 1 ? 's' : ''}
+              {props.voteCount} vote{props.voteCount === 1 ? '' : 's'}
             </span>
           </div>
         </div>

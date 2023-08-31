@@ -128,12 +128,12 @@ function CandidateCard(props: Props) {
                 className={clsx(
                   classes.sponsorCount,
                   signers.length - props.candidate.requiredVotes > 0 &&
-                    classes.sponsorCountOverflow,
+                  classes.sponsorCountOverflow,
                 )}
               >
                 <strong>
                   {signedVotesCount >= 0 ? signedVotesCount : '...'} /{' '}
-                  {proposerVoteCount && proposerVoteCount > props.candidate.requiredVotes ? (
+                  {proposerVoteCount && proposerVoteCount > props.nounsRequired ? (
                     <em className={classes.naVotesLabel}>n/a</em>
                   ) : (
                     props.candidate.requiredVotes
