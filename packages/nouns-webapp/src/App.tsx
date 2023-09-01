@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ChainId, useEthers} from '@usedapp/core';
+import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -23,6 +23,7 @@ import NotFoundPage from './pages/NotFound';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
+import AuctionPageNew from './pages/AuctionNew';
 // import DelegatePage from './pages/DelegatePage';
 
 function App() {
@@ -49,24 +50,26 @@ function App() {
       )} */}
       <BrowserRouter>
         <AvatarProvider
-          provider={(chainId === ChainId.Mainnet ? library : undefined)}
+          provider={chainId === ChainId.Mainnet ? library : undefined}
           batchLookups={true}
         >
-        <NavBar />
+          <NavBar />
 
-        { account ?
-        <><Switch>
-          <Route exact path="/" component={AuctionPage} />
-          <Route exact path="/rep" component={RepPage} />
-          <Route exact path="/vote" component={GovernancePage} />
-          <Route exact path="/optimismRep" component={OptimismRepPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-        <Footer />
-        </>
-        :
-        <div></div>
-        }
+          {account ? (
+            <>
+              <Switch>
+                <Route exact path="/" component={AuctionPage} />
+                <Route exact path="/auction" component={AuctionPageNew} />
+                <Route exact path="/rep" component={RepPage} />
+                <Route exact path="/vote" component={GovernancePage} />
+                <Route exact path="/optimismRep" component={OptimismRepPage} />
+                <Route component={NotFoundPage} />
+              </Switch>
+              <Footer />
+            </>
+          ) : (
+            <div></div>
+          )}
         </AvatarProvider>
       </BrowserRouter>
     </div>
