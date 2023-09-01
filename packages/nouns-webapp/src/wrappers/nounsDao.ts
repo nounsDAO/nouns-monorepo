@@ -725,7 +725,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
-          objectionPeriodEndBlock: parseInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
+          objectionPeriodEndBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),

@@ -13,9 +13,11 @@ import { palette } from '../src/image-data.json';
 const encode = async (sourceFolder: string, destinationFilepath: string) => {
   const encoder = new PNGCollectionEncoder(palette);
 
+  const DESTINATION = path.join(__dirname, '../images/nouns/v2');
+
   const partfolders = ['1-bodies', '2-accessories', '3-heads', '4-glasses'];
   for (const folder of partfolders) {
-    const folderpath = path.join(sourceFolder, folder);
+    const folderpath = path.join(DESTINATION, folder);
     const files = await fs.readdir(folderpath);
     for (const file of files) {
       if (file === '.gitkeep') {
