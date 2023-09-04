@@ -12,11 +12,19 @@ import { BigNumber, ethers } from 'ethers';
  */
 export const useTreasuryBalance = () => {
   const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const lidoBalanceAsETH = useLidoBalance();
+  const ethBalanceTreasuryV2 = useEtherBalance(config.addresses.nounsDaoExecutorProxy);
+  const lidoBalanceAsETH = useLidoBalance(config.addresses.nounsDaoExecutor);
+  const lidoBalanceTreasuryV2AsETH = useLidoBalance(config.addresses.nounsDaoExecutorProxy);
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
   const zero = BigNumber.from(0);
-  return ethBalance?.add(lidoBalanceAsETH ?? zero).add(tokenBuyerBalanceAsETH ?? zero) ?? zero;
+  return (
+    ethBalance
+      ?.add(ethBalanceTreasuryV2 ?? zero)
+      .add(lidoBalanceAsETH ?? zero)
+      .add(lidoBalanceTreasuryV2AsETH ?? zero)
+      .add(tokenBuyerBalanceAsETH ?? zero) ?? zero
+  );
 };
 
 /**

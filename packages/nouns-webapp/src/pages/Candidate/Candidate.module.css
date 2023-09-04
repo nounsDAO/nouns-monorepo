@@ -1,0 +1,338 @@
+.votePage {
+  font-family: 'PT Root UI';
+}
+.votePage a {
+  color: var(--brand-dark-red);
+}
+
+.proposal {
+  margin-top: 1em;
+  background-color: white;
+}
+
+.backArrow {
+  height: 1rem;
+}
+
+.votingButton {
+  margin-top: 1rem;
+}
+
+.voteCountCard {
+  margin-top: 1rem;
+}
+
+.proposalId {
+  margin: 1rem 0;
+}
+
+.voteCountCard p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.section {
+  word-wrap: break-word;
+}
+
+.section h5 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-family: 'Londrina Solid';
+}
+
+.voterIneligibleAlert {
+  margin: 1rem 0 0 0;
+}
+
+.blockRestrictionAlert {
+  margin: 1rem 0 0 0;
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.transitionStateButton {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+}
+
+.transitionStateButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.transitionStateButtonSection {
+  border-top: 0px;
+}
+
+.destructiveTransitionStateButton {
+  height: 50px;
+  border-radius: 8px;
+  border-color: var(--brand-color-red);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+  background-color: var(--brand-color-red);
+}
+
+.destructiveTransitionStateButton:hover {
+  background-color: var(--brand-color-red);
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.destructiveTransitionStateButtonSection {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+  background-color: var(--brand-color-red);
+}
+
+.spinner {
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--brand-gray-light-text);
+}
+
+/* Info section stuff */
+.voteInfoCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.voteMetadataRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.voteMetadataRow h1 {
+  font-size: 20px;
+  color: var(--brand-gray-light-text);
+  font-family: 'Londrina Solid';
+}
+
+.voteMetadataRow span {
+  font-size: 14px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+}
+
+.voteMetadataRow h3 {
+  font-size: 18px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.voteMetadataRowTitle {
+  margin-top: 0.5rem;
+  width: max-content;
+}
+
+.voteMetadataTime {
+  min-width: fit-content;
+  text-align: right;
+}
+
+.snapshotBlock {
+  text-align: right;
+}
+
+.thresholdInfo {
+  text-align: right;
+}
+
+.toggleDelegateVoteView {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  opacity: 0.5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: ease-in-out 125ms;
+  width: fit-content;
+  margin-left: 0.1rem;
+}
+
+.toggleDelegateVoteView:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .toggleDelegateVoteView {
+    display: none;
+  }
+}
+
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
+.dqIcon {
+  opacity: 0.5;
+  margin-left: 0.25rem;
+  margin-bottom: 0.25rem;
+  height: 18px;
+  width: 18px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.boldedLabel {
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  margin-bottom: 0.5rem;
+}
+
+/* candidate page */
+.editCandidate {
+  border: 1px solid #e6e6e6;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  @media (max-width: 992px) {
+    text-align: center;
+    flex-direction: column;
+  }
+}
+
+.editCandidate .buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 30%;
+  @media (max-width: 992px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.editCandidate p {
+  margin: 0;
+  padding: 0;
+}
+
+.editCandidate button {
+  font-size: 16px;
+}
+
+.button {
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  background-color: #faf4f8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+}
+
+.editCandidate .editButton {
+  font-weight: bold;
+  background-color: #000;
+  color: white;
+  border-radius: 8px;
+  border-color: #000;
+  transition: all 0.125s ease-in-out;
+}
+
+.editCandidate .editButton:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+a.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.primaryButton:hover {
+  opacity: 0.75;
+}
+
+.proposerOptions p,
+.objection p {
+  @media (max-width: 992px) {
+    padding-top: 0;
+    margin: 0 0 5px;
+  }
+}
+
+.proposerOptionsHeader,
+.objectionHeader {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  display: block;
+  font-weight: bold;
+}
+
+.sponsorsLoading {
+  border: 1px solid #e6e6e6;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.sponsorsLoading img {
+  display: block;
+  margin: 0 auto;
+  max-width: 45px;
+}
+
+.sidebar {
+  margin-top: 1rem;
+  @media (min-width: 993px) {
+    margin-top: 1.5rem;
+  }
+}
+
+.destructiveTransitionStateButton > div {
+  width: 1rem;
+  height: 1rem;
+}
+
+.jump {
+  background: #fff;
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  padding: 0.5rem;
+  border-radius: 12px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Londrina Solid';
+  @media (min-width: 991px) {
+    display: none;
+  }
+}

@@ -10,3 +10,6 @@
 body {
   overflow-x: hidden;
 }
+#root {
+  width: 100%;
+}

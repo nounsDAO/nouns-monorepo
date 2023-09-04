@@ -4,3 +4,4 @@ subgraph.yaml
 data
 matchstick.yaml
 tests/.bin
+tests/.latest.json
