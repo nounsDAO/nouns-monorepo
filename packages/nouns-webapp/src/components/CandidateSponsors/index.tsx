@@ -146,7 +146,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         if (voteCount !== signedVotesCount) {
           setSignedVotesCount(voteCount);
         }
-        if (props.candidate.proposerVotes >= props.requiredVotes || voteCount >= props.requiredVotes) {
+        if (props.candidate.proposerVotes + voteCount >= props.requiredVotes) {
           setIsThresholdMet(true);
         } else {
           setIsThresholdMet(false);
