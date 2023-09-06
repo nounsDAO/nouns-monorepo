@@ -142,14 +142,15 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           setOriginalSigners(dedupedSigners);
         }
       } else {
-        if (props.candidate.proposerVotes >= props.requiredVotes) {
+        if (voteCount !== signedVotesCount) {
+          setSignedVotesCount(voteCount);
+        }
+        if (props.candidate.proposerVotes >= props.requiredVotes || voteCount >= props.requiredVotes) {
           setIsThresholdMet(true);
         } else {
           setIsThresholdMet(false);
         }
-        if (voteCount !== signedVotesCount) {
-          setSignedVotesCount(voteCount);
-        }
+
       }
     }
     const dedupedSigners = deDupeSigners(
