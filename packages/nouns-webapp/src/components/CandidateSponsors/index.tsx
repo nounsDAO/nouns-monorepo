@@ -76,6 +76,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     originalSigners ?? [],
     blockNumber ?? 0,
   );
+  const timestampNow = Date.now();
   const hasActiveOrPendingProposal = (latestProposal: Proposal, account: string) => {
     const status = checkHasActiveOrPendingProposalOrCandidate(
       latestProposal.status,
@@ -92,7 +93,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     signers: CandidateSignature[],
   ) => {
     const activeSigs = signers.filter(
-      sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000),
+      sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
     );
     let voteCount = 0;
     let sigs: CandidateSignature[] = [];
@@ -150,7 +151,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         } else {
           setIsThresholdMet(false);
         }
-
       }
     }
     const dedupedSigners = deDupeSigners(
@@ -159,7 +159,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     if (signers?.length !== dedupedSigners.length) {
       setSigners(dedupedSigners);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     props.candidate,
