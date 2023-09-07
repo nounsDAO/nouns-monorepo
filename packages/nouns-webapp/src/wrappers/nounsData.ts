@@ -83,10 +83,8 @@ export const useCandidateProposals = () => {
     useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
   const threshold = useProposalThreshold() || 0;
   const candidatesData = proposerDelegates.data && unmatchedCandidates?.map(
-    (candidate: PartialProposalCandidate, i: number) => {
-      const proposerVotes =
-        (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) ||
-        0;
+    (candidate: PartialProposalCandidate) => {
+      const proposerVotes = proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())?.nounsRepresented?.length || 0;
       const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
       return {
         ...candidate,
