@@ -37,13 +37,14 @@ function CandidateCard(props: Props) {
   const activePendingProposers = useActivePendingUpdatableProposers(props.currentBlock ?? 0);
   const proposerDelegates =
     useDelegateNounsAtBlockQuery([props.candidate.proposer], props.currentBlock ?? 0) || 0;
+  const timestampNow = Date.now();
   const filterSigners = (
     delegateSnapshot: Delegates,
     activePendingProposers: string[],
     signers: CandidateSignature[],
   ) => {
     const activeSigs = props.candidate.latestVersion.content.contentSignatures.filter(
-      sig => sig.canceled === false && sig.expirationTimestamp > Math.round(Date.now() / 1000),
+      sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
     );
     let voteCount = 0;
     let sigs: CandidateSignature[] = [];
