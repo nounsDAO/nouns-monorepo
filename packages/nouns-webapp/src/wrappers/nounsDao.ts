@@ -995,7 +995,10 @@ export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => 
     error: Error;
     refetch: () => void;
   };
-  const escrowDeposits = data?.escrowDeposits?.map(escrowDeposit => {
+  const filteredDeposits = data?.escrowDeposits?.filter(escrowDeposit => {
+    return escrowDeposit.tokenIDs.length > 0;
+  });
+  const escrowDeposits = filteredDeposits?.map(escrowDeposit => {
     const proposalIDs = escrowDeposit.proposalIDs.map(id => id);
     return {
       eventType: 'EscrowDeposit',
@@ -1025,7 +1028,10 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
     error: Error;
     refetch: () => void;
   };
-  const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
+  const filteredWithdrawals = data?.escrowWithdrawals?.filter(escrowWithdrawal => {
+    return escrowWithdrawal.tokenIDs.length > 0;
+  });
+  const escrowWithdrawals = filteredWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
     return {
       eventType: 'EscrowWithdrawal',
       id: escrowWithdrawal.id,
@@ -1050,11 +1056,6 @@ const eventsWithforkCycleEvents = (
 ) => {
   const endTimestamp =
     forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
-  // const started: ForkCycleEvent = {
-  //   eventType: 'ForkStarted',
-  //   id: 'fork-started',
-  //   createdAt: `${(events[0]?.createdAt && +events[0]?.createdAt - 1)}`,
-  // };
   const executed: ForkCycleEvent = {
     eventType: 'ForkExecuted',
     id: 'fork-executed',
@@ -1066,7 +1067,6 @@ const eventsWithforkCycleEvents = (
     createdAt: endTimestamp ? endTimestamp.toString() : null,
   };
   const forkEvents: ForkCycleEvent[] = [
-    // started,
     executed,
     forkEnded,
   ];
@@ -1091,8 +1091,10 @@ export const useForkJoins = (pollInterval: number, forkId: string) => {
     error: Error;
     refetch: () => void;
   };
-
-  const forkJoins = data?.forkJoins?.map(forkJoin => {
+  const filteredJoins = data?.forkJoins?.filter(forkJoin => {
+    return forkJoin.tokenIDs.length > 0;
+  });
+  const forkJoins = filteredJoins?.map(forkJoin => {
     const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
       eventType: 'ForkJoin',
