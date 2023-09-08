@@ -29,6 +29,7 @@ import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
 import { utils } from 'ethers/lib/ethers';
 
 const now = new Date();
+const nowSeconds = now.getTime() / 1000;
 
 const ForkPage = ({
   match: {
@@ -61,6 +62,8 @@ const ForkPage = ({
   const { account } = useEthers();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
   const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury || '');
+  const [isTimerToggled, setTimerToggled] = useState(true);
+
   useScrollToLocation();
   const refetchForkData = () => {
     userOwnedNounIds.refetch();
@@ -91,7 +94,7 @@ const ForkPage = ({
   useEffect(() => {
     if (
       forkDetails?.data?.forkingPeriodEndTimestamp &&
-      +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000
+      +forkDetails.data.forkingPeriodEndTimestamp > nowSeconds
     ) {
       // 'forking'
       setForkStatusLabel('Forking');
@@ -99,7 +102,7 @@ const ForkPage = ({
       setIsForkPeriodActive(true);
     } else if (
       forkDetails?.data?.forkingPeriodEndTimestamp &&
-      +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+      +forkDetails.data.forkingPeriodEndTimestamp < nowSeconds
     ) {
       // 'forked' === executed and forking period ended
       setIsForked(true);
@@ -278,27 +281,25 @@ const ForkPage = ({
           <Col>
             <div className={classes.callout}>
               {forkDetails.data.forkingPeriodEndTimestamp &&
-                +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
+                +forkDetails.data.forkingPeriodEndTimestamp > nowSeconds && (
                   <div className={clsx(classes.countdown)}>
                     <ForkingPeriodTimer
+                      onTimerToggled={isToggled => setTimerToggled(isToggled)}
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={
-                        forkDetails?.data?.executed &&
-                          +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
-                          ? true
-                          : false
+                        (forkDetails?.data?.executed && +forkDetails.data.forkingPeriodEndTimestamp < nowSeconds) ?? false
                       }
                     />
-                    <p>time left to return Nouns and join this fork</p>
+                    <p>{isTimerToggled ? 'time left' : 'deadline'} to return Nouns and join this fork</p>
                   </div>
                 )}
               <div className={clsx(classes.isForked)}>
-                {forkDetails.data.forkingPeriodEndTimestamp && (
+                {forkDetails.data.executedAt && (
                   <p>
                     <strong>
                       This fork was executed on{' '}
                       {dayjs
-                        .unix(+forkDetails.data.forkingPeriodEndTimestamp)
+                        .unix(+forkDetails.data.executedAt)
                         .format('MMM D, YYYY')}
                     </strong>
                   </p>

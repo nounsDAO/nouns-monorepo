@@ -12,6 +12,7 @@ dayjs.extend(duration);
 const ForkingPeriodTimer: React.FC<{
   endTime: number;
   isPeriodEnded: boolean;
+  onTimerToggled?: (isToggled: boolean) => void;
 }> = props => {
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
@@ -47,7 +48,12 @@ const ForkingPeriodTimer: React.FC<{
   if (props.isPeriodEnded) return null;
 
   return (
-    <div className="text-center" onClick={() => setTimerToggle(!timerToggle)}>
+    <div className="text-center" onClick={() => {
+      const isToggled = !timerToggle;
+
+      setTimerToggle(isToggled);
+      props.onTimerToggled?.(isToggled);
+    }}>
       {timerToggle ? (
         <h2
           className={clsx(classes.timerWrapper, classes.timeLeft)}
@@ -62,6 +68,7 @@ const ForkingPeriodTimer: React.FC<{
                 <span className={classes.small}>
                   {' '}
                   <Trans>days</Trans>
+                  {' '}
                 </span>
               </span>
             )}
@@ -100,7 +107,7 @@ const ForkingPeriodTimer: React.FC<{
           }}
         >
           <div className={clsx(classes.timerSection, classes.clockSection)}>
-            <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
+            <span>{i18n.date(new Date(endTimeUnix * 1000), { dateStyle: 'medium', timeStyle: 'medium' })}</span>
           </div>
         </h2>
       )}
