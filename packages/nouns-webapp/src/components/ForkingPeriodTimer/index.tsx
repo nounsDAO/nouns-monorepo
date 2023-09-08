@@ -41,6 +41,7 @@ const ForkingPeriodTimer: React.FC<{
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
+  const flooredHours = Math.floor(timerDuration.hours());
   const flooredDays = Math.floor(timerDuration.days());
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
@@ -49,60 +50,71 @@ const ForkingPeriodTimer: React.FC<{
   return (
     <div className="text-center" onClick={() => setTimerToggle(!timerToggle)}>
       {timerToggle ? (
-        <h2
-          className={clsx(classes.timerWrapper, classes.timeLeft)}
-          style={{
-            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-          }}
-        >
-          <div className={classes.timerSection}>
-            {flooredDays > 0 && (
+        <>
+          <h2
+            className={clsx(classes.timerWrapper, classes.timeLeft)}
+            style={{
+              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+            }}
+          >
+            <div className={classes.timerSection}>
+              {flooredDays > 0 && (
+                <span>
+                  {`${Math.floor(timerDuration.days())}`}
+                  <span className={classes.small}>
+                    {' '}
+                    <Trans>days</Trans>
+                  </span>
+                </span>
+              )}
+            </div>
+            <div className={classes.timerSection}>
               <span>
-                {`${Math.floor(timerDuration.days())}`}
+                {`${Math.floor(timerDuration.hours())}`}
                 <span className={classes.small}>
                   {' '}
-                  <Trans>days</Trans>
+                  <Trans>hours</Trans>
                 </span>
               </span>
+            </div>
+            <div className={classes.timerSection}>
+              <span>
+                {`${flooredMinutes}`}
+                <span className={classes.small}>
+                  {' '}
+                  <Trans>minutes</Trans>
+                </span>
+              </span>
+            </div>
+            {flooredDays === 0 && flooredHours < 1 && (
+              <div className={classes.timerSectionFinal}>
+                <span>
+                  {`${flooredSeconds}`}
+                  <span className={classes.small}>
+                    {' '}
+                    <Trans>seconds</Trans>
+                  </span>
+                </span>
+              </div>
             )}
-            <span>
-              {`${Math.floor(timerDuration.hours())}`}
-              <span className={classes.small}>
-                {' '}
-                <Trans>hours</Trans>
-              </span>
-            </span>
-          </div>
-          <div className={classes.timerSection}>
-            <span>
-              {`${flooredMinutes}`}
-              <span className={classes.small}>
-                {' '}
-                <Trans>minutes</Trans>
-              </span>
-            </span>
-          </div>
-          <div className={classes.timerSectionFinal}>
-            <span>
-              {`${flooredSeconds}`}
-              <span className={classes.small}>
-                {' '}
-                <Trans>seconds</Trans>
-              </span>
-            </span>
-          </div>
-        </h2>
+          </h2>
+          <p>time left to return Nouns and join this fork</p>
+        </>
       ) : (
-        <h2
-          className={classes.timerWrapper}
-          style={{
-            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-          }}
-        >
-          <div className={clsx(classes.timerSection, classes.clockSection)}>
-            <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
-          </div>
-        </h2>
+        <>
+          <h2
+            className={classes.timerWrapper}
+            style={{
+              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+            }}
+          >
+            <div className={clsx(classes.timerSection, classes.clockSection)}>
+              <span>{i18n.date(new Date(endTimeUnix * 1000))}</span> {" "}
+              <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
+            </div>
+          </h2>
+          <p>forking period ends</p>
+        </>
       )}
     </div>
   );

@@ -289,7 +289,7 @@ const ForkPage = ({
                           : false
                       }
                     />
-                    <p>time left to return Nouns and join this fork</p>
+
                   </div>
                 )}
               <div className={clsx(classes.isForked)}>
