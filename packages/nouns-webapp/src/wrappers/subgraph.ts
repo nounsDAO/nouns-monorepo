@@ -568,7 +568,7 @@ export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
 
 export const escrowDepositEventsQuery = (forkId: string) => gql`
   {
-    escrowDeposits (where: {fork: "${forkId}"}) {
+    escrowDeposits (where: {fork: "${forkId}", tokenIDs_not: []}) {
       id 
       createdAt
       owner {
@@ -582,7 +582,7 @@ export const escrowDepositEventsQuery = (forkId: string) => gql`
 `;
 export const forkJoinsQuery = (forkId: string) => gql`
   {
-    forkJoins (where: {fork: "${forkId}"}) {
+    forkJoins (where: {fork: "${forkId}", tokenIDs_not: []}) {
       id 
       createdAt
       owner {
@@ -597,7 +597,7 @@ export const forkJoinsQuery = (forkId: string) => gql`
 
 export const escrowWithdrawEventsQuery = (forkId: string) => gql`
   {
-    escrowWithdrawals (where: {fork: "${forkId}"}) {
+    escrowWithdrawals (where: {fork: "${forkId}", tokenIDs_not: []}) {
       id 
       createdAt
       owner {
