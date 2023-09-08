@@ -995,10 +995,7 @@ export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => 
     error: Error;
     refetch: () => void;
   };
-  const filteredDeposits = data?.escrowDeposits?.filter(escrowDeposit => {
-    return escrowDeposit.tokenIDs.length > 0;
-  });
-  const escrowDeposits = filteredDeposits?.map(escrowDeposit => {
+  const escrowDeposits = data?.escrowDeposits?.map(escrowDeposit => {
     const proposalIDs = escrowDeposit.proposalIDs.map(id => id);
     return {
       eventType: 'EscrowDeposit',
@@ -1028,10 +1025,7 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
     error: Error;
     refetch: () => void;
   };
-  const filteredWithdrawals = data?.escrowWithdrawals?.filter(escrowWithdrawal => {
-    return escrowWithdrawal.tokenIDs.length > 0;
-  });
-  const escrowWithdrawals = filteredWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
+  const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
     return {
       eventType: 'EscrowWithdrawal',
       id: escrowWithdrawal.id,
@@ -1091,10 +1085,7 @@ export const useForkJoins = (pollInterval: number, forkId: string) => {
     error: Error;
     refetch: () => void;
   };
-  const filteredJoins = data?.forkJoins?.filter(forkJoin => {
-    return forkJoin.tokenIDs.length > 0;
-  });
-  const forkJoins = filteredJoins?.map(forkJoin => {
+  const forkJoins = data?.forkJoins?.map(forkJoin => {
     const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
       eventType: 'ForkJoin',
