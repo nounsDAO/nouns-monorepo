@@ -659,3 +659,12 @@ export const forksQuery = () => gql`
     }
   }
 `;
+
+export const isForkActiveQuery = (currentTimestamp: number) => gql`
+{
+  forks(where: {executed:true, forkingPeriodEndTimestamp_gt:${currentTimestamp}}) {
+    forkID
+    forkingPeriodEndTimestamp
+  }
+}
+`;
