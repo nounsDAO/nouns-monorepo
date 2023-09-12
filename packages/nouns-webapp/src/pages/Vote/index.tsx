@@ -467,7 +467,7 @@ const VotePage = ({
     } else if (proposal?.status === ProposalState.QUEUED && !isForkActive) {
       setIsExecutable(true);
     }
-  }, [proposal?.status, isForkActive, forkActiveState]);
+  }, [proposal?.status, isForkActive, setForkPeriodMessage, setIsExecutable]);
 
   if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (
