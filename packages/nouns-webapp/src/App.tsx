@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 // import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import '../src/css/globals.css';

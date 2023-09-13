@@ -22,7 +22,7 @@ const AuctionPageNew: React.FC<AuctionPageProps> = props => {
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
-  // const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const dispatch = useAppDispatch();
 
