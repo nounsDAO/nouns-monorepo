@@ -30,6 +30,7 @@ import {
   forkDetailsQuery,
   activePendingUpdatableProposersQuery,
   forkJoinsQuery,
+  isForkActiveQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -1192,6 +1193,21 @@ export const useForks = (pollInterval?: number) => {
     data,
     error,
     refetch,
+  };
+};
+
+export const useIsForkActive = () => {
+  const timestamp = parseInt((new Date().getTime() / 1000).toFixed(0))
+  const {
+    loading,
+    data: forksData,
+    error,
+  } = useQuery(isForkActiveQuery(timestamp)) as { loading: boolean; data: { forks: Fork[] }; error: Error; };
+  const data = forksData?.forks.length > 0 ? true : false;
+  return {
+    loading,
+    data,
+    error,
   };
 };
 
