@@ -285,3 +285,17 @@ a.primaryButton:hover {
 .voteAgainst:hover {
   opacity: 0.7;
 }
+
+.awaitingStateChangeButton {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px;
+}
+.awaitingStateChangeButton p {
+  text-align: center;
+  font-size: 12px;
+  color: var(--brand-gray-light-text);
+  margin: 0;
+  padding: 0;
+}
