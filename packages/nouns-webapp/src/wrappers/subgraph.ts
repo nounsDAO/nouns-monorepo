@@ -631,12 +631,12 @@ export const forkDetailsQuery = (id: string) => gql`
       tokensForkingCount
       tokensInEscrowCount
       forkingPeriodEndTimestamp
-      escrowedNouns {
+      escrowedNouns(first: 1000) {
         noun {
           id
         }
       }
-      joinedNouns {
+      joinedNouns(first: 1000) {
         noun {
           id
         }
