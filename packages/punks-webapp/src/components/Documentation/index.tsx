@@ -26,7 +26,7 @@ const Documentation = () => {
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <p className={classes.aboutText}>
-            DAO Punks are an experimental attempt to improve the coordination and funding of the{' '}
+            DAOpunks are an experimental attempt to improve the coordination and funding of the{' '}
             {cryptopunksLink} community. CryptoPunks are one of the largest NFT projects by market
             cap, but the community is completely cash poor. There is no treasury to encourage Punk
             innovation or to sponsor Punk community events.
@@ -51,7 +51,7 @@ const Documentation = () => {
             <Accordion.Body>
               <ul>
                 <li>
-                  <Trans>One new DAO Punk is trustlessly auctioned every 24 hours, forever.</Trans>
+                  <Trans>One new DAOpunk is trustlessly auctioned every 24 hours, forever.</Trans>
                 </li>
                 <li>
                   <Trans>
@@ -60,7 +60,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    100% of DAO Punks auction proceeds are trustlessly sent to the treasury.
+                    100% of DAOpunks auction proceeds are trustlessly sent to the treasury.
                   </Trans>
                 </li>
                 <li>
@@ -68,20 +68,20 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    All original CryptoPunks and new DAO Punks are members of the Punkers DAO.
+                    All original CryptoPunks and new DAOpunks are members of the Punkers DAO.
                   </Trans>
                 </li>
                 <li>
                   <Trans>Punkers DAO uses a fork of Compound Governance.</Trans>
                 </li>
                 <li>
-                  <Trans>One CryptoPunk is equal to one vote. One DAO Punk is equal to one vote.</Trans>
+                  <Trans>One CryptoPunk is equal to one vote. One DAOpunk is equal to one vote.</Trans>
                 </li>
                 <li>
-                  <Trans>The treasury is controlled exclusively by CryptoPunks and DAO Punks via governance.</Trans>
+                  <Trans>The treasury is controlled exclusively by CryptoPunks and DAOpunks via governance.</Trans>
                 </li>
                 <li>
-                  <Trans>Artwork of DAO Punks is generative and stored directly on-chain (not IPFS).</Trans>
+                  <Trans>Artwork of DAOpunks is generative and stored directly on-chain (not IPFS).</Trans>
                 </li>
                 <li>
                   <Trans>
@@ -91,7 +91,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    Punkers (founders) receive rewards in the form of DAO Punks (10% of supply for the first 5
+                    Punkers (founders) receive rewards in the form of DAOpunks (10% of supply for the first 5
                     years).
                   </Trans>
                 </li>
@@ -106,23 +106,23 @@ const Documentation = () => {
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                  The DAO Punks Auction Contract will act as a self-sufficient DAO Punk generation and
-                  distribution mechanism, auctioning one new DAO Punk every 24 hours, forever. 100% of
+                  The DAOpunks Auction Contract will act as a self-sufficient DAOpunk generation and
+                  distribution mechanism, auctioning one new DAOpunk every 24 hours, forever. 100% of
                   auction proceeds (ETH) are automatically deposited in the Punkers DAO treasury,
-                  where they are governed by all CryptoPunk owners and DAO Punk owners, collectively.
+                  where they are governed by all CryptoPunk owners and DAOpunk owners, collectively.
                 </Trans>
               </p>
 
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  DAO Punk to be minted and a new 24 hour auction to begin.
+                  DApunk to be minted and a new 24 hour auction to begin.
                 </Trans>
               </p>
               <p>
                 <Trans>
                   While settlement is most heavily incentive for the winner bidder, it can be
-                  triggered by anyone, allowing the system to trustlessly auction DAO Punks as long as
+                  triggered by anyone, allowing the system to trustlessly auction DAOpunks as long as
                   Ethereum is operational and there are interested bidders.
                 </Trans>
               </p>
@@ -135,11 +135,11 @@ const Documentation = () => {
             <Accordion.Body>
               <Trans>
                 Punkers DAO utilizes a fork of Compound Governance and is the main governing body of
-                the DAO Punks ecosystem. The Punkers DAO treasury receives 100% of ETH proceeds from
+                the DAOpunks ecosystem. The Punkers DAO treasury receives 100% of ETH proceeds from
                 daily Punks auctions. Each CryptoPunk and DAO Punk is an irrevocable member of the
-                Punkers DAO and entitled to one vote in all governance matters. CryptoPunk and DAO Punk 
-                vote are non-transferable (if you sell your CryptoPunk or DAO Punk the vote goes with it) but delegatable,
-                which means you can assign your vote to someone else as long as you own your CryptoPunks or DAO Punk.
+                Punkers DAO and entitled to one vote in all governance matters. CryptoPunk and DAOpunk 
+                vote are non-transferable (if you sell your CryptoPunk or DAOpunk the vote goes with it) but delegatable,
+                which means you can assign your vote to someone else as long as you own your CryptoPunks or DAOpunk.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
@@ -151,13 +151,13 @@ const Documentation = () => {
               <p>
                 <Trans>
                   Punks govern Punkers DAO. Punks can vote on proposals or delegate their vote to a
-                  third party. A minimum of 2 votes (CryptoPunks and/or DAO Punks) is required to
-                  submit proposals. Each CryptoPunk and DAO Punk you hold represents one vote in all
+                  third party. A minimum of 2 votes (CryptoPunks and/or DAOpunks) is required to
+                  submit proposals. Each CryptoPunk and DAOpunk you hold represents one vote in all
                   governance related matters.
                 </Trans>
               </p>
               <p>
-                For more information on how to delegate your CryptoPunk or DAO Punk, refer to our documentation{' '}
+                For more information on how to delegate your CryptoPunk or DAOpunk, refer to our documentation{' '}
                 {docsLink}.
               </p>
             </Accordion.Body>
@@ -226,8 +226,8 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  DAO Punks are stored directly on Ethereum and do not utilize pointers to other
-                  networks such as IPFS. This is possible because DAO Punk parts are compressed and
+                  DAOpunks are stored directly on Ethereum and do not utilize pointers to other
+                  networks such as IPFS. This is possible because DAOpunk parts are compressed and
                   stored on-chain using a custom run-length encoding (RLE), which is a form of
                   lossless compression.
                 </Trans>
@@ -251,10 +251,10 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  The DAO Punk Seeder contract is used to determine DAO Punk traits during the minting
+                  The DAOpunk Seeder contract is used to determine DAOpunk traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
                   algorithm updates. Additionally, it can be locked by the Punkers DAO to prevent any
-                  future updates. Currently, DAO Punk traits are determined using a pseudo-random number
+                  future updates. Currently, DAOpunk traits are determined using a pseudo-random number
                   generation:
                 </Trans>
               </p>
@@ -265,7 +265,7 @@ const Documentation = () => {
               <br />
               <p>
                 <Trans>
-                  Trait generation is not truly random. Traits can be predicted when minting a DAO Punk
+                  Trait generation is not truly random. Traits can be predicted when minting a DAOpunk
                   on the pending block.
                 </Trans>
               </p>
@@ -297,14 +297,14 @@ const Documentation = () => {
               <p>
                 <Trans>
                   As compensation for standing up Punkers DAO, Punkers (founders) have elected to use the same
-                  model used by Nouns DAO's ’Nounders’ for compensating themselves. Every 10th DAO Punk
+                  model used by Nouns DAO's ’Nounders’ for compensating themselves. Every 10th DAOpunk
                   for the first five years of the project (#10,000, #10,010, etc) will be
                   automatically minted and sent to the Punkers's multisig wallet.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Punker distributions don't interfere with the cadence of 24hr auctions. DAO Punks are
+                  Punker distributions don't interfere with the cadence of 24hr auctions. DAOpunks are
                   sent directly to the Punkers's multisig and auctions resume without interruption.
                 </Trans>
               </p>
