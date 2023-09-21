@@ -129,7 +129,7 @@ export default function SelectSponsorsToPropose(props: Props) {
     } else {
       handleProposeStateChange(proposeBySigsState);
     }
-  }, [proposeBySigsState, proposeState, handleProposeStateChange]);
+  }, [proposeBySigsState, proposeState, handleProposeStateChange, selectedSignatures]);
 
   const modalContent = (
     <div className={classes.modalContent}>
