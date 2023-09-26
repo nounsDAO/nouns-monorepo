@@ -333,21 +333,18 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
 
         INounsAuctionHouse.Settlement[] memory prices = auction.prices(4, 0);
-        assertEq(prices.length, 4);
-        assertEq(prices[0].blockTimestamp, 0);
-        assertEq(prices[0].nounId, 4);
-        assertEq(prices[0].amount, 0);
-        assertEq(prices[0].winner, address(0));
-        assertEq(prices[1].blockTimestamp, uint32(lastBidTime));
-        assertEq(prices[1].nounId, 3);
-        assertEq(prices[1].amount, 3e10);
-        assertEq(prices[1].winner, makeAddr('3'));
-        assertEq(prices[2].nounId, 2);
-        assertEq(prices[2].amount, 2e10);
-        assertEq(prices[2].winner, makeAddr('2'));
-        assertEq(prices[3].nounId, 1);
-        assertEq(prices[3].amount, 1e10);
-        assertEq(prices[3].winner, makeAddr('1'));
+        // lastest ID 4 has no settlement data, so it's not included in the result
+        assertEq(prices.length, 3);
+        assertEq(prices[0].blockTimestamp, uint32(lastBidTime));
+        assertEq(prices[0].nounId, 3);
+        assertEq(prices[0].amount, 3e10);
+        assertEq(prices[0].winner, makeAddr('3'));
+        assertEq(prices[1].nounId, 2);
+        assertEq(prices[1].amount, 2e10);
+        assertEq(prices[1].winner, makeAddr('2'));
+        assertEq(prices[2].nounId, 1);
+        assertEq(prices[2].amount, 1e10);
+        assertEq(prices[2].winner, makeAddr('1'));
     }
 
     function test_prices_withRange_givenSmallerRangeThanAuctionsReturnsAuctions() public {
