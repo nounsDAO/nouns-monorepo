@@ -1,7 +1,7 @@
 .navBarBrand {
   position: relative;
   z-index: 2;
-  padding: 1rem 0rem;
+  padding: 0.5rem 0rem;
   transition: all 0.15s ease-in-out;
 }
 
@@ -10,8 +10,8 @@
 }
 
 .navBarLogo {
-  width: 75px;
-  height: 75px;
+  width: 80px;
+  height: 80px;
 }
 
 .navBarCustom {
@@ -20,8 +20,8 @@
 
 @media (max-width: 992px) {
   .navBarLogo {
-    width: 65px;
-    height: 65px;
+    width: 75px;
+    height: 75px;
   }
 
   .navBarCustom {

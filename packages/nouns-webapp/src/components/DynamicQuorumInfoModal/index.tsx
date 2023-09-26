@@ -88,14 +88,14 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             {window.innerWidth < 1200 ? (
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
-                function of the number of Against votes a proposal has recieved. It increases
+                function of the number of Against votes a proposal has received. It increases
                 linearly as a function of the % of Nouns voting against a prop, varying between Min
                 Threshold and Max Threshold.
               </Trans>
             ) : (
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
-                function of the number of Against votes a proposal has recieved. The number of For
+                function of the number of Against votes a proposal has received. The number of For
                 votes required to pass Proposal {proposal.id} is given by the following curve:
               </Trans>
             )}

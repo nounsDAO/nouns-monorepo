@@ -81,12 +81,17 @@ dataSources:
         - Proposal
         - Vote
         - Governance
+        - ProposalCandidateSignature
       abis:
         - name: NounsDAO
-          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV2.sol/NounsDAOLogicV2.json
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,uint256,string)
+          handler: handleProposalCreatedWithRequirementsV3
+        - event: ProposalCreatedOnTimelockV1(uint256)
+          handler: handleProposalCreatedOnTimelockV1
         - event: ProposalCanceled(uint256)
           handler: handleProposalCanceled
         - event: ProposalVetoed(uint256)
@@ -103,3 +108,57 @@ dataSources:
           handler: handleMaxQuorumVotesBPSSet        
         - event: QuorumCoefficientSet(uint32,uint32)
           handler: handleQuorumCoefficientSet
+        - event: ProposalUpdated(indexed uint256,indexed address,address[],uint256[],string[],bytes[],string,string)
+          handler: handleProposalUpdated
+        - event: ProposalDescriptionUpdated(indexed uint256,indexed address,string,string)
+          handler: handleProposalDescriptionUpdated
+        - event: ProposalTransactionsUpdated(indexed uint256,indexed address,address[],uint256[],string[],bytes[],string)
+          handler: handleProposalTransactionsUpdated
+        - event: ProposalObjectionPeriodSet(indexed uint256,uint256)
+          handler: handleProposalObjectionPeriodSet
+        - event: SignatureCancelled(indexed address,bytes)
+          handler: handleSignatureCanceled
+        - event: EscrowedToFork(indexed uint32,indexed address,uint256[],uint256[],string)
+          handler: handleEscrowedToFork
+        - event: WithdrawFromForkEscrow(indexed uint32,indexed address,uint256[])
+          handler: handleWithdrawFromForkEscrow
+        - event: ExecuteFork(indexed uint32,address,address,uint256,uint256)
+          handler: handleExecuteFork
+        - event: JoinFork(indexed uint32,indexed address,uint256[],uint256[],string)
+          handler: handleJoinFork
+        - event: VoteSnapshotBlockSwitchProposalIdSet(uint256,uint256)
+          handler: handleVoteSnapshotBlockSwitchProposalIdSet
+  - kind: ethereum/contract
+    name: NounsDAOData
+    network: {{network}}
+    source:
+      address: '{{nounsDAOData.address}}'
+      abi: NounsDAOData
+      startBlock: {{nounsDAOData.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/nouns-dao-data.ts
+      entities:
+        - Delegate
+        - ProposalCandidate
+        - ProposalCandidateVersion
+        - ProposalCandidateSignature
+        - ProposalFeedback
+      abis:
+        - name: NounsDAOData
+          file: ../nouns-contracts/abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json
+      eventHandlers:
+        - event: ProposalCandidateCreated(indexed address,address[],uint256[],string[],bytes[],string,string,uint256,bytes32)
+          handler: handleProposalCandidateCreated
+        - event: ProposalCandidateUpdated(indexed address,address[],uint256[],string[],bytes[],string,string,uint256,bytes32,string)
+          handler: handleProposalCandidateUpdated
+        - event: ProposalCandidateCanceled(indexed address,string)
+          handler: handleProposalCandidateCanceled
+        - event: SignatureAdded(indexed address,bytes,uint256,address,string,uint256,bytes32,bytes32,string)
+          handler: handleSignatureAdded
+        - event: FeedbackSent(indexed address,uint256,uint8,string)
+          handler: handleFeedbackSent
+        - event: CandidateFeedbackSent(indexed address,indexed address,string,uint8,string)
+          handler: handleCandidateFeedbackSent

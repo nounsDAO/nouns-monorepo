@@ -183,7 +183,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the nounders DAO.
      * @dev Only callable by the nounders DAO when not locked.
      */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
+    function setNoundersDAO(address _noundersDAO) external onlyNoundersDAO {
         noundersDAO = _noundersDAO;
 
         emit NoundersDAOUpdated(_noundersDAO);

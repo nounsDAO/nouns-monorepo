@@ -67,14 +67,22 @@ export const proposalQuery = (id: string | number) => gql`
     abstainVotes
     createdTransactionHash
     createdBlock
+    createdTimestamp
     startBlock
     endBlock
+    updatePeriodEndBlock
+    objectionPeriodEndBlock
     executionETA
     targets
     values
     signatures
     calldatas
+    onTimelockV1
+    voteSnapshotBlock
     proposer {
+      id
+    }
+    signers {
       id
     }
   }
@@ -94,8 +102,160 @@ export const partialProposalsQuery = (first = 1_000) => gql`
     executionETA
     startBlock
     endBlock
+    updatePeriodEndBlock
+    objectionPeriodEndBlock
+    onTimelockV1
+    signers {
+      id
+    }
   }
 }
+`;
+
+export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => gql`
+{
+  proposals(
+    where: {
+      or: [{status: PENDING, endBlock_gt: ${currentBlock}}, {status: ACTIVE, endBlock_gt: ${currentBlock}}], 
+    }
+    ) {
+    proposer {
+      id
+    }
+    signers {
+      id 
+    }
+  }
+}
+`;
+
+export const candidateProposalsQuery = (first = 1_000) => gql`
+  {
+    proposalCandidates {
+      id
+      slug
+      proposer
+      lastUpdatedTimestamp
+      canceled
+      createdTransactionHash
+      latestVersion {
+        content {
+          title
+          proposalIdToUpdate
+          contentSignatures {
+            signer {
+              id
+              proposals {
+                id
+              }
+            }
+            sig
+            expirationTimestamp
+            canceled
+            reason
+          }
+          matchingProposalIds {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const candidateProposalQuery = (id: string) => gql`
+{
+  proposalCandidate(id: "${id}") {
+    id
+    slug
+    proposer
+    lastUpdatedTimestamp
+    createdTransactionHash
+    canceled
+    versions {
+      content {
+        title
+      }
+    }
+    latestVersion {
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+        proposalIdToUpdate
+        contentSignatures {
+          id
+          signer {
+            id
+            proposals {
+              id
+            }
+          }
+          sig
+          expirationTimestamp
+          canceled
+          reason
+        }
+        matchingProposalIds {
+          id
+        }
+      }
+    }
+  }
+}
+`;
+
+export const candidateProposalVersionsQuery = (id: string) => gql`
+{
+  proposalCandidate(id: "${id}") {
+    id
+    slug
+    proposer
+    lastUpdatedTimestamp
+    canceled
+    createdTransactionHash
+    versions {
+      id
+      createdTimestamp
+      updateMessage
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+      }
+    }
+    latestVersion {
+      id
+    }
+  }
+}
+`;
+
+export const proposalVersionsQuery = (id: string | number) => gql`
+  {
+    proposalVersions(where: { proposal_: { id: "${id}" } }) {
+      id
+      createdAt
+      updateMessage
+      title
+      description
+      targets
+      values
+      signatures
+      calldatas
+      proposal {
+        id
+      }
+    }
+  }
 `;
 
 export const auctionQuery = (auctionId: number) => gql`
@@ -110,24 +270,24 @@ export const auctionQuery = (auctionId: number) => gql`
 	  startTime
 	  endTime
 	  noun {
-		id
-		seed {
-		  id
-		  background
-		  body
-		  accessory
-		  head
-		  glasses
-		}
-		owner {
-		  id
-		}
+      id
+      seed {
+        id
+        background
+        body
+        accessory
+        head
+        glasses
+      }
+      owner {
+        id
+      }
 	  }
 	  bids {
-		id
-		blockNumber
-		txIndex
-		amount
+      id
+      blockNumber
+      txIndex
+      amount
 	  }
 	}
 }
@@ -306,7 +466,8 @@ export const proposalVotesQuery = (proposalId: string) => gql`
   }
 `;
 
-export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
+export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => {
+  return gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
     id
@@ -316,6 +477,7 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
   }
 }
 `;
+};
 
 export const currentlyDelegatedNouns = (delegate: string) => gql`
 {
@@ -349,3 +511,160 @@ export const clientFactory = (uri: string) =>
     uri,
     cache: new InMemoryCache(),
   });
+
+export const proposalFeedbacksQuery = (proposalId: string) => gql`
+  {
+    proposalFeedbacks(where: {proposal_:{id: "${proposalId}"}}) {
+      supportDetailed
+      votes
+      reason
+      createdTimestamp
+      voter {
+        id
+      }
+      proposal {
+        id
+      }
+    }
+  }
+`;
+export const candidateFeedbacksQuery = (candidateId: string) => gql`
+  {
+    candidateFeedbacks(where: {candidate_:{id: "${candidateId}"}}) {
+      supportDetailed
+      votes
+      reason
+      createdTimestamp
+      voter {
+        id
+      }
+      candidate {
+        id
+      }
+    }
+  }
+`;
+
+export const ownedNounsQuery = (owner: string) => gql`
+  {
+    nouns(where: {owner_: {id: "${owner}"}}) {
+      id      
+    }
+  }
+`;
+
+export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
+  {
+    escrowedNouns(where: {owner_: {id: "${owner}"}}, first: 1000) {
+      noun {
+        id
+      }
+      fork {
+        id
+      }
+    }
+  }
+`;
+
+export const escrowDepositEventsQuery = (forkId: string) => gql`
+  {
+    escrowDeposits (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      reason
+      tokenIDs
+      proposalIDs
+    }
+  }
+`;
+export const forkJoinsQuery = (forkId: string) => gql`
+  {
+    forkJoins (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      reason
+      tokenIDs
+      proposalIDs
+    }
+  }
+`;
+
+export const escrowWithdrawEventsQuery = (forkId: string) => gql`
+  {
+    escrowWithdrawals (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
+      id 
+      createdAt
+      owner {
+        id
+      }
+      tokenIDs
+    }
+  }
+`;
+
+export const proposalTitlesQuery = (ids: number[]) => {
+  return gql`
+  {
+    proposals(where: {id_in: [${ids?.join(',')}]}) {
+      id
+      title
+    }
+  }
+`;
+};
+
+export const forkDetailsQuery = (id: string) => gql`
+  {
+    fork(id: ${id}) {
+      id
+      forkID
+      executed
+      executedAt
+      forkTreasury
+      forkToken
+      tokensForkingCount
+      tokensInEscrowCount
+      forkingPeriodEndTimestamp
+      escrowedNouns(first: 1000) {
+        noun {
+          id
+        }
+      }
+      joinedNouns(first: 1000) {
+        noun {
+          id
+        }
+      }
+    }
+  }`;
+
+export const forksQuery = () => gql`
+  {
+    forks {
+      id
+      forkID
+      executed
+      executedAt
+      forkTreasury
+      forkToken
+      tokensForkingCount
+      tokensInEscrowCount
+      forkingPeriodEndTimestamp
+    }
+  }
+`;
+
+export const isForkActiveQuery = (currentTimestamp: number) => gql`
+{
+  forks(where: {executed:true, forkingPeriodEndTimestamp_gt:${currentTimestamp}}) {
+    forkID
+    forkingPeriodEndTimestamp
+  }
+}
+`;

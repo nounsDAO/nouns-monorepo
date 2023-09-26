@@ -1,8 +1,12 @@
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 import classes from './VoteModal.module.css';
-import { useCastRefundableVote, useCastRefundableVoteWithReason, useCastVote, useCastVoteWithReason, Vote } from '../../wrappers/nounsDao';
+import {
+  useCastRefundableVote,
+  useCastRefundableVoteWithReason,
+  Vote,
+} from '../../wrappers/nounsDao';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { TransactionStatus } from '@usedapp/core';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
@@ -14,16 +18,21 @@ interface VoteModalProps {
   onHide: () => void;
   proposalId: string | undefined;
   availableVotes: number;
+  isObjectionPeriod?: boolean;
 }
 
-const POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
+const POST_SUCCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
 
-const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps) => {
-  const { library, account } = useEthers();
-  const { castVote, castVoteState } = useCastVote();
-  const { castVoteWithReason, castVoteWithReasonState } = useCastVoteWithReason();
+const VoteModal = ({
+  show,
+  onHide,
+  proposalId,
+  availableVotes,
+  isObjectionPeriod,
+}: VoteModalProps) => {
   const { castRefundableVote, castRefundableVoteState } = useCastRefundableVote();
-  const { castRefundableVoteWithReason, castRefundableVoteWithReasonState } = useCastRefundableVoteWithReason();
+  const { castRefundableVoteWithReason, castRefundableVoteWithReasonState } =
+    useCastRefundableVoteWithReason();
   const [vote, setVote] = useState<Vote>();
   const [voteReason, setVoteReason] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -68,24 +77,6 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     }
   }, []);
 
-  const signerIsContract = async () => {
-    if (!library || !account) {
-      return false;
-    }
-    const code = await library?.getCode(account);
-    return code !== '0x';
-  };
-
-  // Cast vote transaction state hook
-  useEffect(() => {
-    handleVoteStateChange(castVoteState);
-  }, [castVoteState, handleVoteStateChange]);
-
-  // Cast vote with reason transaction state hook
-  useEffect(() => {
-    handleVoteStateChange(castVoteWithReasonState);
-  }, [castVoteWithReasonState, handleVoteStateChange]);
-
   // Cast refundable vote transaction state hook
   useEffect(() => {
     handleVoteStateChange(castRefundableVoteState);
@@ -100,7 +91,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
   // Leave failed transaction up until user closes manually to allow for debugging
   useEffect(() => {
     if (isVoteSucessful) {
-      setTimeout(onHide, POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS);
+      setTimeout(onHide, POST_SUCCESSFUL_VOTE_MODAL_CLOSE_TIME_MS);
     }
   }, [isVoteSucessful, onHide]);
 
@@ -153,17 +144,25 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
       )}
       {!isVoteFailed && !isVoteSucessful && (
         <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
-          <div onClick={() => setVote(Vote.FOR)}>
-            <NavBarButton
-              buttonText={<Trans>For</Trans>}
-              buttonIcon={<></>}
-              buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
-              className={
-                vote === Vote.FOR ? '' : vote === undefined ? classes.inactive : classes.unselected
-              }
-            />
-          </div>
-          <br />
+          {!isObjectionPeriod && (
+            <>
+              <div onClick={() => setVote(Vote.FOR)}>
+                <NavBarButton
+                  buttonText={<Trans>For</Trans>}
+                  buttonIcon={<></>}
+                  buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
+                  className={
+                    vote === Vote.FOR
+                      ? ''
+                      : vote === undefined
+                      ? classes.inactive
+                      : classes.unselected
+                  }
+                />
+              </div>
+              <br />
+            </>
+          )}
           <div onClick={() => setVote(Vote.AGAINST)}>
             <NavBarButton
               buttonText={<Trans>Against</Trans>}
@@ -178,21 +177,25 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
               }
             />
           </div>
-          <br />
-          <div onClick={() => setVote(Vote.ABSTAIN)}>
-            <NavBarButton
-              buttonText={<Trans>Abstain</Trans>}
-              buttonIcon={<></>}
-              buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
-              className={
-                vote === Vote.ABSTAIN
-                  ? ''
-                  : vote === undefined
-                  ? classes.inactive
-                  : classes.unselected
-              }
-            />
-          </div>
+          {!isObjectionPeriod && (
+            <>
+              <br />
+              <div onClick={() => setVote(Vote.ABSTAIN)}>
+                <NavBarButton
+                  buttonText={<Trans>Abstain</Trans>}
+                  buttonIcon={<></>}
+                  buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
+                  className={
+                    vote === Vote.ABSTAIN
+                      ? ''
+                      : vote === undefined
+                      ? classes.inactive
+                      : classes.unselected
+                  }
+                />
+              </div>
+            </>
+          )}
           <br />
           <FloatingLabel controlId="reasonTextarea" label={<Trans>Reason (Optional)</Trans>}>
             <FormControl
@@ -212,20 +215,11 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
                 return;
               }
               setIsLoading(true);
-              const isContract = await signerIsContract();
               const isReasonEmpty = voteReason.trim() === '';
-              if (isContract) {
-                if (isReasonEmpty) {
-                  castVote(proposalId, vote);
-                } else {
-                  castVoteWithReason(proposalId, vote, voteReason);
-                }
+              if (isReasonEmpty) {
+                castRefundableVote(proposalId, vote);
               } else {
-                if (isReasonEmpty) {
-                  castRefundableVote(proposalId, vote);
-                } else {
-                  castRefundableVoteWithReason(proposalId, vote, voteReason);
-                }
+                castRefundableVoteWithReason(proposalId, vote, voteReason);
               }
             }}
             className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
@@ -233,15 +227,9 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             {isLoading ? <Spinner animation="border" /> : <Trans>Submit Vote</Trans>}
           </Button>
 
-          <div
-          className={classes.gasFreeVotingWrapper}
-          >
-            <span
-            className={classes.gasFreeVotingCopy}
-            >
-              <Trans>
-              Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported.
-              </Trans>
+          <div className={classes.gasFreeVotingWrapper}>
+            <span className={classes.gasFreeVotingCopy}>
+              <Trans>Gas spent on voting will be refunded to you.</Trans>
             </span>
           </div>
         </div>

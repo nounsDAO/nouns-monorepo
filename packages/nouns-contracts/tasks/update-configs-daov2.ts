@@ -27,7 +27,7 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
         nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,
         nounsDaoExecutor: contracts.NounsDAOExecutor.address,
         nounsDAOProxy: contracts.NounsDAOProxyV2.address,
-        nounsDAOLogicV1: contracts.NounsDAOLogicV2.address,
+        nounsDAOLogicV2: contracts.NounsDAOLogicV2.address,
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
       try {
