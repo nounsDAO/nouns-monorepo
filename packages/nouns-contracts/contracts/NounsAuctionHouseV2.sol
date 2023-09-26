@@ -293,13 +293,8 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Get past auction prices, up to `oracle.cardinality` observations.
-     * There are times when cardinality is increased and not yet fully used, when a user might request more
-     * observations than what's stored; in such cases users will get the maximum number of observations the
-     * oracle has to offer.
-     * For example, say cardinality was just increased from 3 to 10, a user can then ask for 10 observations.
-     * Since the oracle only has 3 prices stored, the user will get 3 observations.
-     * @dev Reverts with a `AuctionCountOutOfBounds` error if `auctionCount` is greater than `oracle.cardinality`.
+     * @notice Get past auction prices.
+     * @dev Returns prices in reverse order, meaning settlements[0] will be the most recent auction price.
      * @param auctionCount The number of price observations to get.
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
