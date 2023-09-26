@@ -39,19 +39,22 @@ const CreateCandidatePage = () => {
   const hasVotes = availableVotes && availableVotes > 0;
 
   const handleAddProposalAction = useCallback(
-    (transaction: ProposalTransaction) => {
-      if (!transaction.address.startsWith('0x')) {
-        transaction.address = `0x${transaction.address}`;
-      }
-      if (!transaction.calldata.startsWith('0x')) {
-        transaction.calldata = `0x${transaction.calldata}`;
-      }
+    (transactions: ProposalTransaction | ProposalTransaction[]) => {
+      const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
+      transactionsArray.forEach(transaction => {
+        if (!transaction.address.startsWith('0x')) {
+          transaction.address = `0x${transaction.address}`;
+        }
+        if (!transaction.calldata.startsWith('0x')) {
+          transaction.calldata = `0x${transaction.calldata}`;
+        }
 
-      if (transaction.usdcValue) {
-        setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
-      }
+        if (transaction.usdcValue) {
+          setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
+        }
+      });
+      setProposalTransactions([...proposalTransactions, ...transactionsArray]);
 
-      setProposalTransactions([...proposalTransactions, transaction]);
       setShowTransactionFormModal(false);
     },
     [proposalTransactions, totalUSDCPayment],
