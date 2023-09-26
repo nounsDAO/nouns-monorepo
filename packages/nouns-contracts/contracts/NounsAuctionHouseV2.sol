@@ -333,15 +333,21 @@ contract NounsAuctionHouseV2 is
         }
     }
 
-    function prices(uint256 latestId, uint256 oldestId) external view returns (Settlement[] memory settlements) {
-        settlements = new Settlement[](latestId - oldestId);
+    /**
+     * @notice Get a range of past auction prices.
+     * @dev Returns prices in chronological order, as opposed to `prices(count)` which returns prices in reverse order.
+     * @param startId the first Noun ID to get prices for.
+     * @param endId end Noun ID (up to, but not including).
+     */
+    function prices(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements) {
+        settlements = new Settlement[](endId - startId);
         uint256 actualCount = 0;
-        uint256 currentId = latestId;
-        while (currentId > oldestId) {
+        uint256 currentId = startId;
+        while (currentId < endId) {
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
             if (settlementHistory[currentId].blockTimestamp == 0) {
-                --currentId;
+                ++currentId;
                 continue;
             }
 
@@ -352,7 +358,7 @@ contract NounsAuctionHouseV2 is
                 nounId: currentId
             });
             ++actualCount;
-            --currentId;
+            ++currentId;
         }
 
         if (settlements.length > actualCount) {

@@ -332,19 +332,19 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             lastBidTime = bidAndWinCurrentAuction(bidder, i * 1e18);
         }
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(4, 0);
+        INounsAuctionHouse.Settlement[] memory prices = auction.prices(0, 5);
         // lastest ID 4 has no settlement data, so it's not included in the result
         assertEq(prices.length, 3);
-        assertEq(prices[0].blockTimestamp, uint32(lastBidTime));
-        assertEq(prices[0].nounId, 3);
-        assertEq(prices[0].amount, 3e10);
-        assertEq(prices[0].winner, makeAddr('3'));
+        assertEq(prices[0].nounId, 1);
+        assertEq(prices[0].amount, 1e10);
+        assertEq(prices[0].winner, makeAddr('1'));
         assertEq(prices[1].nounId, 2);
         assertEq(prices[1].amount, 2e10);
         assertEq(prices[1].winner, makeAddr('2'));
-        assertEq(prices[2].nounId, 1);
-        assertEq(prices[2].amount, 1e10);
-        assertEq(prices[2].winner, makeAddr('1'));
+        assertEq(prices[2].blockTimestamp, uint32(lastBidTime));
+        assertEq(prices[2].nounId, 3);
+        assertEq(prices[2].amount, 3e10);
+        assertEq(prices[2].winner, makeAddr('3'));
     }
 
     function test_prices_withRange_givenSmallerRangeThanAuctionsReturnsAuctions() public {
@@ -353,20 +353,20 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             bidAndWinCurrentAuction(bidder, i * 1e18);
         }
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(11, 6);
+        INounsAuctionHouse.Settlement[] memory prices = auction.prices(7, 12);
         assertEq(prices.length, 4);
-        assertEq(prices[0].nounId, 11);
-        assertEq(prices[0].amount, 10e10);
-        assertEq(prices[0].winner, makeAddr('10'));
-        assertEq(prices[1].nounId, 9);
-        assertEq(prices[1].amount, 9e10);
-        assertEq(prices[1].winner, makeAddr('9'));
-        assertEq(prices[2].nounId, 8);
-        assertEq(prices[2].amount, 8e10);
-        assertEq(prices[2].winner, makeAddr('8'));
-        assertEq(prices[3].nounId, 7);
-        assertEq(prices[3].amount, 7e10);
-        assertEq(prices[3].winner, makeAddr('7'));
+        assertEq(prices[0].nounId, 7);
+        assertEq(prices[0].amount, 7e10);
+        assertEq(prices[0].winner, makeAddr('7'));
+        assertEq(prices[1].nounId, 8);
+        assertEq(prices[1].amount, 8e10);
+        assertEq(prices[1].winner, makeAddr('8'));
+        assertEq(prices[2].nounId, 9);
+        assertEq(prices[2].amount, 9e10);
+        assertEq(prices[2].winner, makeAddr('9'));
+        assertEq(prices[3].nounId, 11);
+        assertEq(prices[3].amount, 10e10);
+        assertEq(prices[3].winner, makeAddr('10'));
     }
 
     function test_setPrices_revertsForNonOwner() public {
@@ -404,14 +404,13 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         vm.prank(auction.owner());
         auction.setPrices(observations);
 
-        INounsAuctionHouse.Settlement[] memory actualObservations = auction.prices(22, 0);
+        INounsAuctionHouse.Settlement[] memory actualObservations = auction.prices(0, 23);
         assertEq(actualObservations.length, 20);
         for (uint256 i = 0; i < 20; ++i) {
-            uint256 actualIndex = 19 - i;
-            assertEq(observations[i].blockTimestamp, actualObservations[actualIndex].blockTimestamp);
-            assertEq(observations[i].amount, actualObservations[actualIndex].amount);
-            assertEq(observations[i].winner, actualObservations[actualIndex].winner);
-            assertEq(observations[i].nounId, actualObservations[actualIndex].nounId);
+            assertEq(observations[i].blockTimestamp, actualObservations[i].blockTimestamp);
+            assertEq(observations[i].amount, actualObservations[i].amount);
+            assertEq(observations[i].winner, actualObservations[i].winner);
+            assertEq(observations[i].nounId, actualObservations[i].nounId);
         }
     }
 }
