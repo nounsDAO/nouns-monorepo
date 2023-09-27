@@ -295,6 +295,7 @@ contract NounsAuctionHouseV2 is
      * @notice Set historic prices; only callable by the owner, which in Nouns is the treasury (timelock) contract.
      * @dev This function lowers auction price accuracy from 18 decimals to 10 decimals, as part of the price history
      * bit packing, to save gas.
+     * @dev Can only be executed by owner or settlementHistoryAdmin.
      * @param settlements The list of historic prices to set.
      */
     function setPrices(Settlement[] memory settlements) external {
@@ -305,15 +306,21 @@ contract NounsAuctionHouseV2 is
             revert OnlyOwnerOrSettlementHistoryAdmin();
         }
 
+        uint256[] memory nounIds = new uint256[](settlements.length);
+        uint256[] memory prices_ = new uint256[](settlements.length);
+
         for (uint256 i = 0; i < settlements.length; ++i) {
             settlementHistory[settlements[i].nounId] = SettlementState({
                 blockTimestamp: settlements[i].blockTimestamp,
                 amount: ethPriceToUint64(settlements[i].amount),
                 winner: settlements[i].winner
             });
+
+            nounIds[i] = settlements[i].nounId;
+            prices_[i] = settlements[i].amount;
         }
 
-        // TODO emit event
+        emit HistoricPricesSet(nounIds, prices_);
     }
 
     function warmUpSettlementState(uint256[] memory nounIds) external {

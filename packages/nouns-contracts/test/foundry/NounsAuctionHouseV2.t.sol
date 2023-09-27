@@ -12,6 +12,8 @@ import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHou
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
+    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
+
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
@@ -434,6 +436,9 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
 
     function test_setPrices_worksForOwner() public {
         INounsAuctionHouse.Settlement[] memory observations = new INounsAuctionHouse.Settlement[](20);
+        uint256[] memory nounIds = new uint256[](20);
+        uint256[] memory prices = new uint256[](20);
+
         uint256 nounId = 0;
         for (uint256 i = 0; i < 20; ++i) {
             // skip Nouners
@@ -441,15 +446,23 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
                 nounId++;
             }
 
+            uint256 price = nounId * 1 ether;
+
             observations[i] = INounsAuctionHouse.Settlement({
                 blockTimestamp: uint32(nounId),
-                amount: nounId * 1 ether,
+                amount: price,
                 winner: makeAddr(vm.toString(nounId)),
                 nounId: nounId
             });
 
+            nounIds[i] = nounId;
+            prices[i] = price;
+
             nounId++;
         }
+
+        vm.expectEmit(true, true, true, true);
+        emit HistoricPricesSet(nounIds, prices);
 
         vm.prank(auction.owner());
         auction.setPrices(observations);
@@ -476,6 +489,14 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             winner: makeAddr('winner'),
             nounId: 3
         });
+
+        uint256[] memory nounIds = new uint256[](1);
+        uint256[] memory prices = new uint256[](1);
+        nounIds[0] = 3;
+        prices[0] = 42 ether;
+
+        vm.expectEmit(true, true, true, true);
+        emit HistoricPricesSet(nounIds, prices);
 
         vm.prank(admin);
         auction.setPrices(observations);

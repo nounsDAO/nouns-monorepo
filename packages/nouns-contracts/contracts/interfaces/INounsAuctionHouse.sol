@@ -85,6 +85,8 @@ interface INounsAuctionHouse {
 
     event SettlementHistoryAdminSet(address oldSettlementHistoryAdmin, address newSettlementHistoryAdmin);
 
+    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
+
     error NounNotUpForAuction();
 
     error AuctionExpired();
