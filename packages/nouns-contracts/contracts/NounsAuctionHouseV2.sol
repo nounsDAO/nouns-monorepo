@@ -41,31 +41,31 @@ contract NounsAuctionHouseV2 is
     /// @notice A hard-coded cap on time buffer to prevent accidental auction disabling if set with a very high value.
     uint256 public constant MAX_TIME_BUFFER = 1 days;
 
-    // The Nouns ERC721 token contract
+    /// @notice The Nouns ERC721 token contract
     INounsToken public nouns;
 
-    // The address of the WETH contract
+    /// @notice The address of the WETH contract
     address public weth;
 
-    // The minimum amount of time left in an auction after a new bid is created
+    /// @notice The minimum amount of time left in an auction after a new bid is created
     uint256 public timeBuffer;
 
-    // The minimum price accepted in an auction
+    /// @notice The minimum price accepted in an auction
     uint256 public reservePrice;
 
-    // The minimum percentage difference between the last bid amount and the current bid
+    /// @notice The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
-    // The duration of a single auction
+    /// @notice The duration of a single auction
     uint256 public duration;
 
-    // The active auction
+    /// @notice The active auction
     INounsAuctionHouse.AuctionV2 public auction;
 
-    // The Nouns price feed state
+    /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    // An additional address owner may set that can set historic prices, e.g. a helper smart contract
+    /// @notice An additional address owner may set that can set historic prices, e.g. a helper smart contract
     address public settlementHistoryAdmin;
 
     /**
@@ -323,6 +323,13 @@ contract NounsAuctionHouseV2 is
         emit HistoricPricesSet(nounIds, prices_);
     }
 
+    /**
+     * @notice Warm up the settlement state for a list of Noun IDs.
+     * @dev Helps lower the gas cost of auction settlement when storing settlement data
+     * thanks to the state slot being non-zero.
+     * @dev Only writes to slots where blockTimestamp is zero, meaning it will not overwrite existing data.
+     * @param nounIds The list of Noun IDs whose settlement slot to warm up.
+     */
     function warmUpSettlementState(uint256[] memory nounIds) external {
         for (uint256 i = 0; i < nounIds.length; ++i) {
             if (settlementHistory[nounIds[i]].blockTimestamp == 0) {
