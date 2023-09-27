@@ -98,6 +98,8 @@ interface INounsAuctionHouse {
     error MustSendAtLeastReservePrice();
 
     error BidDifferenceMustBeGreaterThanMinBidIncrement();
+    
+    error TimeBufferTooLarge();
 
     function settleAuction() external;
 

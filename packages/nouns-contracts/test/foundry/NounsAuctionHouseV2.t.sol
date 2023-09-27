@@ -466,3 +466,16 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
     }
 }
+
+contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
+    function test_setTimeBuffer_revertsForNonOwner() public {
+        vm.expectRevert("Ownable: caller is not the owner");
+        auction.setTimeBuffer(1 days);
+    }
+
+    function test_setTimeBuffer_revertsGivenValueAboveMax() public {
+        vm.prank(auction.owner());
+        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.TimeBufferTooLarge.selector));
+        auction.setTimeBuffer(1 days + 1);
+    }
+}

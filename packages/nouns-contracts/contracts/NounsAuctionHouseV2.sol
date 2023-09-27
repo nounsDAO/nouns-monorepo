@@ -38,6 +38,9 @@ contract NounsAuctionHouseV2 is
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
 {
+    /// @notice A hard-coded cap on time buffer to prevent accidental auction disabling if set with a very high value.
+    uint256 public constant MAX_TIME_BUFFER = 1 days;
+
     // The Nouns ERC721 token contract
     INounsToken public nouns;
 
@@ -167,6 +170,8 @@ contract NounsAuctionHouseV2 is
      * @dev Only callable by the owner.
      */
     function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
+        if (_timeBuffer > MAX_TIME_BUFFER) revert TimeBufferTooLarge();
+
         timeBuffer = _timeBuffer;
 
         emit AuctionTimeBufferUpdated(_timeBuffer);
