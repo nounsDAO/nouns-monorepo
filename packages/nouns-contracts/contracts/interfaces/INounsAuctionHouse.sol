@@ -83,8 +83,6 @@ interface INounsAuctionHouse {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
-    event PriceHistoryGrown(uint32 current, uint32 next);
-
     event SettlementHistoryAdminSet(address oldSettlementHistoryAdmin, address newSettlementHistoryAdmin);
 
     error NounNotUpForAuction();

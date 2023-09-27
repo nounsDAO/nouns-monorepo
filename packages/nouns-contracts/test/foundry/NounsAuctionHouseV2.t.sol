@@ -12,8 +12,6 @@ import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHou
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
-    event PriceHistoryGrown(uint32 current, uint32 next);
-
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
