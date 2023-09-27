@@ -65,6 +65,9 @@ contract NounsAuctionHouseV2 is
     // The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
+    // An additional address owner may set that can set historic prices, e.g. a helper smart contract
+    address public settlementHistoryAdmin;
+
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -198,6 +201,17 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
+     * @notice Set the settlement history admin address.
+     * @dev Only callable by the owner.
+     * @param newSettlementHistoryAdmin the new settlement history admin address.
+     */
+    function setSettlementHistoryAdmin(address newSettlementHistoryAdmin) external onlyOwner {
+        emit SettlementHistoryAdminSet(settlementHistoryAdmin, newSettlementHistoryAdmin);
+
+        settlementHistoryAdmin = newSettlementHistoryAdmin;
+    }
+
+    /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      * If the mint reverts, the minter was updated without pausing this contract first. To remedy this,
@@ -283,7 +297,14 @@ contract NounsAuctionHouseV2 is
      * bit packing, to save gas.
      * @param settlements The list of historic prices to set.
      */
-    function setPrices(Settlement[] memory settlements) external onlyOwner {
+    function setPrices(Settlement[] memory settlements) external {
+        address settlementHistoryAdmin_ = settlementHistoryAdmin;
+        if (!
+            (msg.sender == owner() ||
+            (msg.sender == settlementHistoryAdmin_ && settlementHistoryAdmin_ != address(0)))) {
+            revert OnlyOwnerOrSettlementHistoryAdmin();
+        }
+
         for (uint256 i = 0; i < settlements.length; ++i) {
             settlementHistory[settlements[i].nounId] = SettlementState({
                 blockTimestamp: settlements[i].blockTimestamp,

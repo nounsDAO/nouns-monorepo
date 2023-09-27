@@ -85,6 +85,8 @@ interface INounsAuctionHouse {
 
     event PriceHistoryGrown(uint32 current, uint32 next);
 
+    event SettlementHistoryAdminSet(address oldSettlementHistoryAdmin, address newSettlementHistoryAdmin);
+
     error NounNotUpForAuction();
 
     error AuctionExpired();
@@ -100,6 +102,8 @@ interface INounsAuctionHouse {
     error BidDifferenceMustBeGreaterThanMinBidIncrement();
     
     error TimeBufferTooLarge();
+
+    error OnlyOwnerOrSettlementHistoryAdmin();
 
     function settleAuction() external;
 

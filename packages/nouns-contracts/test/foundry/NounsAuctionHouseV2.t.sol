@@ -430,7 +430,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             nounId: 3
         });
 
-        vm.expectRevert('Ownable: caller is not the owner');
+        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.OnlyOwnerOrSettlementHistoryAdmin.selector));
         auction.setPrices(observations);
     }
 
@@ -465,6 +465,23 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             assertEq(observations[i].nounId, actualObservations[i].nounId);
         }
     }
+
+    function test_setPrices_worksForSettlementAdmin() public {
+        address admin = makeAddr('settlement admin');
+        vm.prank(auction.owner());
+        auction.setSettlementHistoryAdmin(admin);
+
+        INounsAuctionHouse.Settlement[] memory observations = new INounsAuctionHouse.Settlement[](1);
+        observations[0] = INounsAuctionHouse.Settlement({
+            blockTimestamp: uint32(block.timestamp),
+            amount: 42 ether,
+            winner: makeAddr('winner'),
+            nounId: 3
+        });
+
+        vm.prank(admin);
+        auction.setPrices(observations);
+    }
 }
 
 contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
@@ -477,5 +494,19 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
         vm.prank(auction.owner());
         vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.TimeBufferTooLarge.selector));
         auction.setTimeBuffer(1 days + 1);
+    }
+
+    function test_setSettlementHistoryAdmin_revertsForNonOwner() public {
+        vm.expectRevert("Ownable: caller is not the owner");
+        auction.setSettlementHistoryAdmin(makeAddr("some admin"));
+    }
+
+    function test_setSettlementHistoryAdmin_worksForOwner() public {
+        address admin = makeAddr('settlement admin');
+        
+        vm.prank(auction.owner());
+        auction.setSettlementHistoryAdmin(admin);
+
+        assertEq(auction.settlementHistoryAdmin(), admin);
     }
 }
