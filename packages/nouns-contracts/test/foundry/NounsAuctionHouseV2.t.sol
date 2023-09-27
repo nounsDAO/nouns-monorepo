@@ -325,6 +325,32 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         assertEq(prices[1].winner, makeAddr('bidder'));
     }
 
+    function test_prices_givenMissingAuctionData_skipsMissingNounIDs() public {
+        address bidder = makeAddr("some bidder");
+        bidAndWinCurrentAuction(bidder, 1 ether);
+
+        vm.startPrank(address(auction));
+        for (uint256 i = 0; i < 3; ++i) {
+            auction.nouns().mint();
+        }
+        vm.stopPrank();
+
+        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 3 ether);
+
+        INounsAuctionHouse.Settlement[] memory prices = auction.prices(3);
+        assertEq(prices.length, 3);
+        assertEq(prices[0].nounId, 6);
+        assertEq(prices[0].amount, 3e10);
+        assertEq(prices[0].winner, bidder);
+        assertEq(prices[1].nounId, 2);
+        assertEq(prices[1].amount, 2e10);
+        assertEq(prices[1].winner, bidder);
+        assertEq(prices[2].nounId, 1);
+        assertEq(prices[2].amount, 1e10);
+        assertEq(prices[2].winner, bidder);
+    }
+
     function test_prices_withRange_givenBiggerRangeThanAuctionsReturnsAuctionsAndZeroObservations() public {
         uint256 lastBidTime;
         for (uint256 i = 1; i <= 3; ++i) {
@@ -367,6 +393,32 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         assertEq(prices[3].nounId, 11);
         assertEq(prices[3].amount, 10e10);
         assertEq(prices[3].winner, makeAddr('10'));
+    }
+
+    function test_prices_withRange_givenMissingAuctionData_skipsMissingNounIDs() public {
+        address bidder = makeAddr("some bidder");
+        bidAndWinCurrentAuction(bidder, 1 ether);
+
+        vm.startPrank(address(auction));
+        for (uint256 i = 0; i < 3; ++i) {
+            auction.nouns().mint();
+        }
+        vm.stopPrank();
+
+        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 3 ether);
+
+        INounsAuctionHouse.Settlement[] memory prices = auction.prices(1, 7);
+        assertEq(prices.length, 3);
+        assertEq(prices[0].nounId, 1);
+        assertEq(prices[0].amount, 1e10);
+        assertEq(prices[0].winner, bidder);
+        assertEq(prices[1].nounId, 2);
+        assertEq(prices[1].amount, 2e10);
+        assertEq(prices[1].winner, bidder);
+        assertEq(prices[2].nounId, 6);
+        assertEq(prices[2].amount, 3e10);
+        assertEq(prices[2].winner, bidder);
     }
 
     function test_setPrices_revertsForNonOwner() public {
