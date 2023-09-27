@@ -61,8 +61,8 @@ interface INounsAuctionHouse {
     struct Settlement {
         // The block.timestamp when the auction was settled.
         uint32 blockTimestamp;
-        // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
-        uint64 amount;
+        // The winning bid amount, converted from 10 decimal places to 18, for better client UX.
+        uint256 amount;
         // The address of the auction winner.
         address winner;
         // ID for the Noun (ERC721 token ID).

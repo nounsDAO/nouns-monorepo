@@ -272,12 +272,18 @@ contract NounsAuctionHouseV2 is
         return success;
     }
 
-    function setPrices(Settlement[] memory observations_) external onlyOwner {
-        for (uint256 i = 0; i < observations_.length; ++i) {
-            settlementHistory[observations_[i].nounId] = SettlementState({
-                blockTimestamp: observations_[i].blockTimestamp,
-                amount: observations_[i].amount,
-                winner: observations_[i].winner
+    /**
+     * @notice Set historic prices; only callable by the owner, which in Nouns is the treasury (timelock) contract.
+     * @dev This function lowers auction price accuracy from 18 decimals to 10 decimals, as part of the price history
+     * bit packing, to save gas.
+     * @param settlements The list of historic prices to set.
+     */
+    function setPrices(Settlement[] memory settlements) external onlyOwner {
+        for (uint256 i = 0; i < settlements.length; ++i) {
+            settlementHistory[settlements[i].nounId] = SettlementState({
+                blockTimestamp: settlements[i].blockTimestamp,
+                amount: ethPriceToUint64(settlements[i].amount),
+                winner: settlements[i].winner
             });
         }
 
@@ -317,7 +323,7 @@ contract NounsAuctionHouseV2 is
 
             settlements[actualCount] = Settlement({
                 blockTimestamp: settlementHistory[latestNounId].blockTimestamp,
-                amount: settlementHistory[latestNounId].amount,
+                amount: uint64PriceToUint256(settlementHistory[latestNounId].amount),
                 winner: settlementHistory[latestNounId].winner,
                 nounId: latestNounId
             });
@@ -353,7 +359,7 @@ contract NounsAuctionHouseV2 is
 
             settlements[actualCount] = Settlement({
                 blockTimestamp: settlementHistory[currentId].blockTimestamp,
-                amount: settlementHistory[currentId].amount,
+                amount: uint64PriceToUint256(settlementHistory[currentId].amount),
                 winner: settlementHistory[currentId].winner,
                 nounId: currentId
             });
@@ -376,5 +382,12 @@ contract NounsAuctionHouseV2 is
      */
     function ethPriceToUint64(uint256 ethPrice) internal pure returns (uint64) {
         return uint64(ethPrice / 1e8);
+    }
+
+    /**
+     * @dev Convert a 64 bit 10 decimal price to a 256 bit 18 decimal price.
+     */
+    function uint64PriceToUint256(uint64 price) internal pure returns (uint256) {
+        return uint256(price) * 1e8;
     }
 }
