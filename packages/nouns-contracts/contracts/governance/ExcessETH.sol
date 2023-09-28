@@ -69,6 +69,7 @@ contract ExcessETH is IExcessETH, Ownable {
     IERC20 public immutable wETH;
     IERC20 public immutable stETH;
     IERC20 public immutable rETH;
+    uint256 public immutable waitingPeriodEnd;
     uint16 public numberOfPastAuctionsForMeanPrice;
 
     constructor(
@@ -78,6 +79,7 @@ contract ExcessETH is IExcessETH, Ownable {
         IERC20 wETH_,
         IERC20 stETH_,
         IERC20 rETH_,
+        uint256 waitingPeriodEnd_,
         uint16 numberOfPastAuctionsForMeanPrice_
     ) {
         _transferOwnership(owner_);
@@ -87,6 +89,7 @@ contract ExcessETH is IExcessETH, Ownable {
         wETH = wETH_;
         stETH = stETH_;
         rETH = rETH_;
+        waitingPeriodEnd = waitingPeriodEnd_;
         numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
     }
 
@@ -97,6 +100,8 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     function excessETH() public view returns (uint256) {
+        if (block.timestamp < waitingPeriodEnd) return 0;
+
         uint256 expectedTreasuryValue = meanAuctionPrice() * dao.adjustedTotalSupply();
         return min(treasuryValueInETH() - expectedTreasuryValue, owner().balance);
     }
