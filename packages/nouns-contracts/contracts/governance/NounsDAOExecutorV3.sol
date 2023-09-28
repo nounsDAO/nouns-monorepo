@@ -49,7 +49,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 import {INounsAuctionHouse} from "../interfaces/INounsAuctionHouse.sol";
 
 interface RocketETH {
-    function getExchangeRate() external view returns (uint256);
+    function getEthValue(uint256 _rethAmount) external view returns (uint256);
 }
 
 interface INounsDAOV3 {
@@ -297,10 +297,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     }
 
     function rETHBalanceInETH() public view returns (uint256) {
-        uint256 rETHConversionRate = RocketETH(address(rETH)).getExchangeRate();
-        if (rETHConversionRate < 1 ether) revert RocketETHConversionRateTooLow();        
-
-        return rETH.balanceOf(address(this)) * rETHConversionRate;
+        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(address(this)));        
     }
 
     /**
