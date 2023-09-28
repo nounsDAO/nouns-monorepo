@@ -298,7 +298,7 @@ contract NounsAuctionHouseV2 is
      * @dev Can only be executed by owner or settlementHistoryAdmin.
      * @param settlements The list of historic prices to set.
      */
-    function setPrices(Settlement[] memory settlements) external {
+    function setPrices(Settlement[] calldata settlements) external {
         address settlementHistoryAdmin_ = settlementHistoryAdmin;
         if (
             !(msg.sender == owner() || (msg.sender == settlementHistoryAdmin_ && settlementHistoryAdmin_ != address(0)))
@@ -330,7 +330,7 @@ contract NounsAuctionHouseV2 is
      * @dev Only writes to slots where blockTimestamp is zero, meaning it will not overwrite existing data.
      * @param nounIds The list of Noun IDs whose settlement slot to warm up.
      */
-    function warmUpSettlementState(uint256[] memory nounIds) external {
+    function warmUpSettlementState(uint256[] calldata nounIds) external {
         for (uint256 i = 0; i < nounIds.length; ++i) {
             if (settlementHistory[nounIds[i]].blockTimestamp == 0) {
                 settlementHistory[nounIds[i]] = SettlementState({ blockTimestamp: 1, amount: 0, winner: address(0) });
