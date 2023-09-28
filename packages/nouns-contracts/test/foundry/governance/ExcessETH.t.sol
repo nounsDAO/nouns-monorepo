@@ -93,6 +93,15 @@ contract ExcessETHTest is DeployUtilsExcessETH {
         assertEq(excessETH.excessETH(), 99 ether);
     }
 
+    function test_excessETH_expectedValueGreaterThanTreasury_returnsZero() public {
+        vm.deal(address(treasury), 10 ether);
+        dao.setAdjustedTotalSupply(100);
+        setMeanPrice(1 ether);
+        vm.warp(waitingPeriodEnd + 1);
+
+        assertEq(excessETH.excessETH(), 0);
+    }
+
     function setMeanPrice(uint256 meanPrice) internal {
         uint256[] memory prices = new uint256[](pastAuctionCount);
         for (uint256 i = 0; i < pastAuctionCount; i++) {

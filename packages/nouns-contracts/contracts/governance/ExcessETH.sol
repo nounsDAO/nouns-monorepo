@@ -103,7 +103,11 @@ contract ExcessETH is IExcessETH, Ownable {
         if (block.timestamp < waitingPeriodEnd) return 0;
 
         uint256 expectedTreasuryValue = meanAuctionPrice() * dao.adjustedTotalSupply();
-        return min(treasuryValueInETH() - expectedTreasuryValue, owner().balance);
+        uint256 treasuryValue = treasuryValueInETH();
+
+        if (expectedTreasuryValue >= treasuryValue) return 0;
+
+        return min(treasuryValue - expectedTreasuryValue, owner().balance);
     }
 
     function meanAuctionPrice() public view returns (uint256) {
