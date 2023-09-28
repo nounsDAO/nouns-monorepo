@@ -1,4 +1,4 @@
-// import Auction from '../../components/Auction';
+import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
@@ -17,12 +17,12 @@ interface AuctionPageProps {
   initialAuctionId?: number;
 }
 
-const AuctionPage: React.FC<AuctionPageProps> = props => {
+const AuctionPageNew: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
-  // const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const dispatch = useAppDispatch();
 
@@ -53,36 +53,10 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     ? 'var(--brand-cool-background)'
     : 'var(--brand-warm-background)';
 
-  // if (!IS_MAINNET) {
-  //   switchNetworkToLocalhost();
-  // }
-  // else {
-  //   switchNetworkToEthereum();
-  // }
-
-  
-
-  // let result = useNftCall('balanceOf', [activeAccount]);
-  // console.log(result);
-  // if (result === undefined)
-  //   (result as any) = 0;
-  // else
-  //   (result as any) = result[0].toNumber();
-
   return (
     <>
-      {/* <NumberGatedComponent number={result}> */}
-      <NounsIntroSection />
-      <Documentation
-        backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
-            ? backgroundColor
-            : undefined
-        }
-      />
-      {/* </NumberGatedComponent> */}
-      {/* { output } */}
+      <Auction auction={onDisplayAuction} />
     </>
   );
 };
-export default AuctionPage;
+export default AuctionPageNew;

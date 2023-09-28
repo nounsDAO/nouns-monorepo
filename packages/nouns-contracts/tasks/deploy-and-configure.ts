@@ -42,6 +42,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
+    console.log('executorAddress:', executorAddress);
     await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);

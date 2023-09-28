@@ -16,6 +16,8 @@ import auction, {
   setActiveAuction,
   setAuctionExtended,
   setAuctionSettled,
+  setFullAuction,
+  reduxSafeAuction,
   // setFullAuction,
 } from './state/slices/auction';
 import onDisplayAuction, {
@@ -83,7 +85,7 @@ const supportedChainURLs = {
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
   [ChainId.Hardhat]: 'http://localhost:8545',
-  [ChainId.Polygon]: createNetworkHttpUrl('polygon')
+  [ChainId.Polygon]: createNetworkHttpUrl('polygon'),
 };
 
 // prettier-ignore
@@ -157,9 +159,9 @@ const ChainSubscriber: React.FC = () => {
     };
 
     // Fetch the current auction
-    // const currentAuction = await nounsAuctionHouseContract.auction();
-    // dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    // dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
+    const currentAuction = await nounsAuctionHouseContract.auction();
+    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
     // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
@@ -204,12 +206,10 @@ ReactDOM.render(
       <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
-          getLibrary={
-            provider => {
-              let prov = new Web3Provider(provider, 'any'); // this will vary according to whether you use e.g. ethers or web3.js
+          getLibrary={provider => {
+            let prov = new Web3Provider(provider, 'any'); // this will vary according to whether you use e.g. ethers or web3.js
             return prov;
-            } 
-          }
+          }}
         >
           <ApolloProvider client={client}>
             <PastAuctions />
