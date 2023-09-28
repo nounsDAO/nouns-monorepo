@@ -2,8 +2,6 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
@@ -14,9 +12,10 @@ import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegist
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 import { INounsTokenForkLike } from '../../../contracts/governance/fork/newdao/governance/INounsTokenForkLike.sol';
 import { Utils } from './Utils.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
-    NounsDAOLogicV1 daoProxy;
+    INounsDAOLogic daoProxy;
     NounsToken nounsToken;
     NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
@@ -47,7 +46,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal virtual returns (NounsDAOLogicV1);
+    ) internal virtual returns (INounsDAOLogic);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -108,17 +107,13 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         daoProxy.castVote(proposalId, support);
     }
 
-    function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
-        return NounsDAOLogicV2(payable(address(daoProxy)));
-    }
-
-    function deployForkDAOProxy() internal returns (NounsDAOLogicV1) {
+    function deployForkDAOProxy() internal returns (INounsDAOLogic) {
         (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
         timelock = NounsDAOExecutor(payable(treasuryAddress));
         nounsToken = NounsToken(tokenAddress);
         minter = nounsToken.minter();
 
-        NounsDAOLogicV1 dao = NounsDAOLogicV1(daoAddress);
+        INounsDAOLogic dao = INounsDAOLogic(daoAddress);
 
         vm.startPrank(address(dao.timelock()));
         dao._setVotingPeriod(votingPeriod);
@@ -129,6 +124,6 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
 
         vm.warp(INounsTokenForkLike(tokenAddress).forkingPeriodEndTimestamp());
 
-        return NounsDAOLogicV1(daoAddress);
+        return dao;
     }
 }

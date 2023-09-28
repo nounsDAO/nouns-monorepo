@@ -7,10 +7,7 @@ import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
@@ -38,12 +35,6 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%
     uint256 public constant FORK_DAO_QUORUM_VOTES_BPS = 1000; // 10%
 
-    function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
-        NounsDescriptor descriptor = new NounsDescriptor();
-        _populateDescriptor(descriptor);
-        return descriptor;
-    }
-
     function _deployAndPopulateV2() internal returns (NounsDescriptorV2) {
         NounsDescriptorV2 descriptorV2 = _deployDescriptorV2();
         _populateDescriptorV2(descriptorV2);
@@ -57,99 +48,6 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsArt art = new NounsArt(address(descriptorV2), inflator);
         descriptorV2.setArt(art);
         return descriptorV2;
-    }
-
-    function _deployTokenAndDAOAndPopulateDescriptor(
-        address noundersDAO,
-        address vetoer,
-        address minter
-    ) internal returns (address, address) {
-        IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
-
-        NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
-        NounsDescriptor descriptor = new NounsDescriptor();
-        NounsToken nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
-        NounsDAOProxy proxy = new NounsDAOProxy(
-            address(timelock),
-            address(nounsToken),
-            vetoer,
-            address(timelock),
-            address(new NounsDAOLogicV1()),
-            VOTING_PERIOD,
-            VOTING_DELAY,
-            PROPOSAL_THRESHOLD,
-            QUORUM_VOTES_BPS
-        );
-
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(proxy));
-        vm.prank(address(proxy));
-        timelock.acceptAdmin();
-
-        nounsToken.transferOwnership(address(timelock));
-
-        _populateDescriptor(descriptor);
-
-        return (address(nounsToken), address(proxy));
-    }
-
-    function _createDAOV2Proxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal returns (NounsDAOLogicV1) {
-        return
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxyV2(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        timelock,
-                        address(new NounsDAOLogicV2()),
-                        VOTING_PERIOD,
-                        VOTING_DELAY,
-                        PROPOSAL_THRESHOLD,
-                        NounsDAOStorageV2.DynamicQuorumParams({
-                            minQuorumVotesBPS: 200,
-                            maxQuorumVotesBPS: 2000,
-                            quorumCoefficient: 10000
-                        })
-                    )
-                )
-            );
-    }
-
-    function deployDAOV2() internal returns (NounsDAOLogicV1) {
-        NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
-
-        NounsAuctionHouse auctionLogic = new NounsAuctionHouse();
-        NounsAuctionHouseProxyAdmin auctionAdmin = new NounsAuctionHouseProxyAdmin();
-        NounsAuctionHouseProxy auctionProxy = new NounsAuctionHouseProxy(
-            address(auctionLogic),
-            address(auctionAdmin),
-            ''
-        );
-        auctionAdmin.transferOwnership(address(timelock));
-
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
-        NounsToken nounsToken = new NounsToken(
-            makeAddr('noundersDAO'),
-            address(auctionProxy),
-            descriptor,
-            new NounsSeeder(),
-            IProxyRegistry(address(0))
-        );
-        NounsDAOLogicV1 daoProxy = _createDAOV2Proxy(address(timelock), address(nounsToken), makeAddr('vetoer'));
-
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(daoProxy));
-        vm.prank(address(daoProxy));
-        timelock.acceptAdmin();
-
-        nounsToken.transferOwnership(address(timelock));
-
-        return daoProxy;
     }
 
     function get1967Implementation(address proxy) internal returns (address) {
