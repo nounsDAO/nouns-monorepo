@@ -6,6 +6,7 @@ import { DeployUtilsExcessETH } from '../helpers/DeployUtilsExcessETH.sol';
 import { NounsDAOExecutorV3 } from '../../../contracts/governance/NounsDAOExecutorV3.sol';
 import { INounsAuctionHouse } from '../../../contracts/interfaces/INounsAuctionHouse.sol';
 import { ExcessETH, INounsAuctionHouseV2, INounsDAOV3 } from '../../../contracts/governance/ExcessETH.sol';
+import { ERC20Mock, RocketETHMock } from '../helpers/ERC20Mock.sol';
 
 contract DAOMock {
     uint256 adjustedSupply;
@@ -23,19 +24,10 @@ contract AuctionMock is INounsAuctionHouseV2 {
     uint256[] pricesHistory;
 
     function setPrices(uint256[] memory pricesHistory_) external {
-        // priceHistory.length = priceHistory_.length;
-        // for (uint256 i = 0; i < priceHistory_.length; i++) {
-        //     priceHistory[i] = priceHistory_[i];
-        // }
         pricesHistory = pricesHistory_;
     }
 
-    function prices(uint256 auctionCount)
-        external
-        view
-        override
-        returns (INounsAuctionHouse.Settlement[] memory priceHistory_)
-    {
+    function prices(uint256) external view override returns (INounsAuctionHouse.Settlement[] memory priceHistory_) {
         priceHistory_ = new INounsAuctionHouse.Settlement[](pricesHistory.length);
         for (uint256 i; i < pricesHistory.length; ++i) {
             priceHistory_[i].amount = pricesHistory[i];
@@ -100,6 +92,16 @@ contract ExcessETHTest is DeployUtilsExcessETH {
         vm.warp(waitingPeriodEnd + 1);
 
         assertEq(excessETH.excessETH(), 0);
+    }
+
+    function test_excessETH_excessGreaterThanBalance_returnsBalance() public {
+        vm.deal(address(treasury), 1 ether);
+        dao.setAdjustedTotalSupply(1);
+        setMeanPrice(1 ether);
+        vm.warp(waitingPeriodEnd + 1);
+        ERC20Mock(address(excessETH.stETH())).mint(address(treasury), 100 ether);
+
+        assertEq(excessETH.excessETH(), 1 ether);
     }
 
     function setMeanPrice(uint256 meanPrice) internal {
