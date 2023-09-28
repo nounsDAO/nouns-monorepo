@@ -2,8 +2,7 @@
 
 /// @title The Nouns DAO executor and treasury, supporting DAO fork
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,8 +13,7 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 // LICENSE
 // NounsDAOExecutor2.sol is a modified version of Compound Lab's Timelock.sol:
@@ -46,27 +44,14 @@ import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 import { Initializable } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { Address } from '@openzeppelin/contracts/utils/Address.sol';
-import { INounsAuctionHouse } from '../interfaces/INounsAuctionHouse.sol';
-
-interface RocketETH {
-    function getEthValue(uint256 _rethAmount) external view returns (uint256);
-}
-
-interface INounsDAOV3 {
-    function adjustedTotalSupply() external view returns (uint256);
-}
-
-interface INounsAuctionHouseV2 is INounsAuctionHouse {
-    function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
-}
+import { IExcessETH } from '../interfaces/IExcessETH.sol';
+import { Burn } from '../libs/Burn.sol';
 
 contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     using SafeERC20 for IERC20;
     using Address for address payable;
 
-    error NotEnoughAuctionHistory();
-    error RocketETHConversionRateTooLow();
-    error OnlyNounsDAOExecutor();
+    error ExcessETHHelperNotSet();
 
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
@@ -97,11 +82,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     );
     event ETHSent(address indexed to, uint256 amount);
     event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount);
-    event AuctionSet(address oldAuction, address newAuction);
-    event NumberOfPastAuctionsForMeanPriceSet(
-        uint16 oldNumberOfPastAuctionsForMeanPrice,
-        uint16 newNumberOfPastAuctionsForMeanPrice
-    );
+    event ETHBurned(uint256 amount);
 
     string public constant NAME = 'NounsDAOExecutorV3';
 
@@ -113,13 +94,11 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     address public admin;
     address public pendingAdmin;
     uint256 public delay;
-    INounsAuctionHouseV2 public auction;
-    IERC20 public stETH;
-    IERC20 public wETH;
-    IERC20 public rETH;
-    uint16 public numberOfPastAuctionsForMeanPrice;
 
     mapping(bytes32 => bool) public queuedTransactions;
+
+    IExcessETH public excessETHHelper;
+    uint256 public totalETHBurned;
 
     constructor() initializer {}
 
@@ -140,56 +119,6 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         emit NewDelay(delay_);
     }
 
-    function setAuction(INounsAuctionHouseV2 newAuction) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        emit AuctionSet(address(auction), address(newAuction));
-
-        auction = newAuction;
-    }
-
-    function setSTETH(IERC20 newSTETH) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        stETH = newSTETH;
-    }
-
-    function setWETH(IERC20 newWETH) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        wETH = newWETH;
-    }
-
-    function setRETH(IERC20 newRETH) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        rETH = newRETH;
-    }
-
-    function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        emit NumberOfPastAuctionsForMeanPriceSet(numberOfPastAuctionsForMeanPrice, newNumberOfPastAuctionsForMeanPrice);
-
-        numberOfPastAuctionsForMeanPrice = newNumberOfPastAuctionsForMeanPrice;
-    }
-
-    function setBurnParams(
-        INounsAuctionHouseV2 newAuction,
-        IERC20 newSTETH,
-        IERC20 newWETH,
-        IERC20 newRETH,
-        uint16 newNumberOfPastAuctionsForMeanPrice
-    ) public {
-        if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
-
-        setAuction(newAuction);
-        setSTETH(newSTETH);
-        setWETH(newWETH);
-        setRETH(newRETH);
-        setNumberOfPastAuctionsForMeanPrice(newNumberOfPastAuctionsForMeanPrice);
-    }
-
     function acceptAdmin() public {
         require(msg.sender == pendingAdmin, 'NounsDAOExecutor::acceptAdmin: Call must come from pendingAdmin.');
         admin = msg.sender;
@@ -206,6 +135,14 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         pendingAdmin = pendingAdmin_;
 
         emit NewPendingAdmin(pendingAdmin_);
+    }
+
+    function setExcessETHHelper(IExcessETH excessETHHelper_) public {
+        require(
+            msg.sender == address(this),
+            'NounsDAOExecutor::setExcessETHHelper: Call must come from NounsDAOExecutor.'
+        );
+        excessETHHelper = excessETHHelper_;
     }
 
     function queueTransaction(
@@ -311,36 +248,23 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         emit ERC20Sent(recipient, erc20Token, tokensToSend);
     }
 
-    function burnExcessETH() public {
-        payable(address(0)).sendValue(min(excessETH(), address(this).balance));
-    }
+    /**
+     * @notice Burn excess ETH in the treasury.
+     * Anyone can call this function to burn excess ETH in the treasury.
+     * Excess ETH is defined as the difference between the total value of the treasury in ETH, and the expected value
+     * which is the mean auction price in the last N auctions multiplied by adjusted total supply (see DAO logic for
+     * more info on `adjustedTotalSupply`).
+     * @dev Will revert if `excessETHHelper` is not set.
+     * @return The amount of ETH burned.
+     */
+    function burnExcessETH() public returns (uint256 amount) {
+        if (address(excessETHHelper) == address(0)) revert ExcessETHHelperNotSet();
 
-    function excessETH() public view returns (uint256) {
-        uint256 expectedTreasuryValue = meanAuctionPrice() * INounsDAOV3(admin).adjustedTotalSupply();
-        return treasuryValueInETH() - expectedTreasuryValue;
-    }
+        amount = excessETHHelper.excessETH();
+        Burn.eth(excessETHHelper.excessETH());
 
-    function meanAuctionPrice() public view returns (uint256) {
-        uint16 numberOfPastAuctionsForMeanPrice_ = numberOfPastAuctionsForMeanPrice;
-        INounsAuctionHouseV2.Settlement[] memory settlements = auction.prices(numberOfPastAuctionsForMeanPrice_);
-
-        if (settlements.length < numberOfPastAuctionsForMeanPrice_) revert NotEnoughAuctionHistory();
-
-        uint256 sum = 0;
-        for (uint16 i = 0; i < numberOfPastAuctionsForMeanPrice_; i++) {
-            sum += settlements[i].amount;
-        }
-
-        return sum / numberOfPastAuctionsForMeanPrice_;
-    }
-
-    function treasuryValueInETH() public view returns (uint256) {
-        address me = address(this);
-        return me.balance + stETH.balanceOf(me) + wETH.balanceOf(me) + rETHBalanceInETH();
-    }
-
-    function rETHBalanceInETH() public view returns (uint256) {
-        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(address(this)));
+        totalETHBurned += amount;
+        emit ETHBurned(amount);
     }
 
     /**
@@ -358,9 +282,5 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
             msg.sender == address(this),
             'NounsDAOExecutor::_authorizeUpgrade: Call must come from NounsDAOExecutor.'
         );
-    }
-
-    function min(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a < b ? a : b;
     }
 }
