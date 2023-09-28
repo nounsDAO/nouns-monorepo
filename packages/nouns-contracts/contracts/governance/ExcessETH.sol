@@ -20,8 +20,7 @@
 pragma solidity ^0.8.19;
 
 import { IExcessETH } from '../interfaces/IExcessETH.sol';
-import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
-import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouse } from '../interfaces/INounsAuctionHouse.sol';
 
@@ -37,7 +36,7 @@ interface INounsAuctionHouseV2 is INounsAuctionHouse {
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
 }
 
-contract ExcessETH is IExcessETH, OwnableUpgradeable, UUPSUpgradeable {
+contract ExcessETH is IExcessETH, Ownable {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -65,30 +64,30 @@ contract ExcessETH is IExcessETH, OwnableUpgradeable, UUPSUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    INounsDAOV3 public dao;
-    INounsAuctionHouseV2 public auction;
+    INounsDAOV3 public immutable dao;
+    INounsAuctionHouseV2 public immutable auction;
+    IERC20 public immutable wETH;
+    IERC20 public immutable stETH;
+    IERC20 public immutable rETH;
     uint16 public numberOfPastAuctionsForMeanPrice;
-    IERC20 public wETH;
-    IERC20 public stETH;
-    IERC20 public rETH;
 
-    function initialize(
+    constructor(
         address owner_,
         INounsDAOV3 dao_,
         INounsAuctionHouseV2 auction_,
-        uint16 numberOfPastAuctionsForMeanPrice_,
         IERC20 wETH_,
         IERC20 stETH_,
-        IERC20 rETH_
-    ) external initializer {
+        IERC20 rETH_,
+        uint16 numberOfPastAuctionsForMeanPrice_
+    ) {
         _transferOwnership(owner_);
 
         dao = dao_;
         auction = auction_;
-        numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
         wETH = wETH_;
         stETH = stETH_;
         rETH = rETH_;
+        numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
     }
 
     /**
@@ -131,28 +130,10 @@ contract ExcessETH is IExcessETH, OwnableUpgradeable, UUPSUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    function setAuction(INounsAuctionHouseV2 newAuction) public onlyOwner {
-        emit AuctionSet(address(auction), address(newAuction));
-
-        auction = newAuction;
-    }
-
     function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) public onlyOwner {
         emit NumberOfPastAuctionsForMeanPriceSet(numberOfPastAuctionsForMeanPrice, newNumberOfPastAuctionsForMeanPrice);
 
         numberOfPastAuctionsForMeanPrice = newNumberOfPastAuctionsForMeanPrice;
-    }
-
-    function setWETH(IERC20 newWETH) public onlyOwner {
-        wETH = newWETH;
-    }
-
-    function setSTETH(IERC20 newSTETH) public onlyOwner {
-        stETH = newSTETH;
-    }
-
-    function setRETH(IERC20 newRETH) public onlyOwner {
-        rETH = newRETH;
     }
 
     /**
@@ -160,12 +141,6 @@ contract ExcessETH is IExcessETH, OwnableUpgradeable, UUPSUpgradeable {
      *   INTERNAL FUNCTIONS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
-
-    /**
-     * @dev Reverts when `msg.sender` is not the owner of this contract; in the case of Noun DAOs it should be the
-     * DAO's treasury contract.
-     */
-    function _authorizeUpgrade(address) internal view override onlyOwner {}
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
         return a < b ? a : b;
