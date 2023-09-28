@@ -255,7 +255,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
      * which is the mean auction price in the last N auctions multiplied by adjusted total supply (see DAO logic for
      * more info on `adjustedTotalSupply`).
      * @dev Will revert if `excessETHHelper` is not set.
-     * @return The amount of ETH burned.
+     * @return amount The amount of ETH burned.
      */
     function burnExcessETH() public returns (uint256 amount) {
         if (address(excessETHHelper) == address(0)) revert ExcessETHHelperNotSet();
