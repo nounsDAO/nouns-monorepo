@@ -41,12 +41,12 @@
 
 pragma solidity ^0.8.19;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {Address} from "@openzeppelin/contracts/utils/Address.sol";
-import {INounsAuctionHouse} from "../interfaces/INounsAuctionHouse.sol";
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import { Initializable } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
+import { Address } from '@openzeppelin/contracts/utils/Address.sol';
+import { INounsAuctionHouse } from '../interfaces/INounsAuctionHouse.sol';
 
 interface RocketETH {
     function getEthValue(uint256 _rethAmount) external view returns (uint256);
@@ -72,20 +72,38 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
     event CancelTransaction(
-        bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
     );
     event ExecuteTransaction(
-        bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
     );
     event QueueTransaction(
-        bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
     );
     event ETHSent(address indexed to, uint256 amount);
     event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount);
     event AuctionSet(address oldAuction, address newAuction);
-    event NumberOfPastAuctionsForMeanPriceSet(uint16 oldNumberOfPastAuctionsForMeanPrice, uint16 newNumberOfPastAuctionsForMeanPrice);
+    event NumberOfPastAuctionsForMeanPriceSet(
+        uint16 oldNumberOfPastAuctionsForMeanPrice,
+        uint16 newNumberOfPastAuctionsForMeanPrice
+    );
 
-    string public constant NAME = "NounsDAOExecutorV3";
+    string public constant NAME = 'NounsDAOExecutorV3';
 
     /// @dev increased grace period from 14 days to 21 days to allow more time in case of a forking period
     uint256 public constant GRACE_PERIOD = 21 days;
@@ -106,17 +124,17 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     constructor() initializer {}
 
     function initialize(address admin_, uint256 delay_) public virtual initializer {
-        require(delay_ >= MINIMUM_DELAY, "NounsDAOExecutor::constructor: Delay must exceed minimum delay.");
-        require(delay_ <= MAXIMUM_DELAY, "NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.");
+        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::constructor: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
 
         admin = admin_;
         delay = delay_;
     }
 
     function setDelay(uint256 delay_) public {
-        require(msg.sender == address(this), "NounsDAOExecutor::setDelay: Call must come from NounsDAOExecutor.");
-        require(delay_ >= MINIMUM_DELAY, "NounsDAOExecutor::setDelay: Delay must exceed minimum delay.");
-        require(delay_ <= MAXIMUM_DELAY, "NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.");
+        require(msg.sender == address(this), 'NounsDAOExecutor::setDelay: Call must come from NounsDAOExecutor.');
+        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
         delay = delay_;
 
         emit NewDelay(delay_);
@@ -156,7 +174,13 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         numberOfPastAuctionsForMeanPrice = newNumberOfPastAuctionsForMeanPrice;
     }
 
-    function setBurnParams(INounsAuctionHouseV2 newAuction, IERC20 newSTETH, IERC20 newWETH, IERC20 newRETH, uint16 newNumberOfPastAuctionsForMeanPrice) public {
+    function setBurnParams(
+        INounsAuctionHouseV2 newAuction,
+        IERC20 newSTETH,
+        IERC20 newWETH,
+        IERC20 newRETH,
+        uint16 newNumberOfPastAuctionsForMeanPrice
+    ) public {
         if (msg.sender != address(this)) revert OnlyNounsDAOExecutor();
 
         setAuction(newAuction);
@@ -167,7 +191,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     }
 
     function acceptAdmin() public {
-        require(msg.sender == pendingAdmin, "NounsDAOExecutor::acceptAdmin: Call must come from pendingAdmin.");
+        require(msg.sender == pendingAdmin, 'NounsDAOExecutor::acceptAdmin: Call must come from pendingAdmin.');
         admin = msg.sender;
         pendingAdmin = address(0);
 
@@ -175,20 +199,26 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
-        require(msg.sender == address(this), "NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.");
+        require(
+            msg.sender == address(this),
+            'NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.'
+        );
         pendingAdmin = pendingAdmin_;
 
         emit NewPendingAdmin(pendingAdmin_);
     }
 
-    function queueTransaction(address target, uint256 value, string memory signature, bytes memory data, uint256 eta)
-        public
-        returns (bytes32)
-    {
-        require(msg.sender == admin, "NounsDAOExecutor::queueTransaction: Call must come from admin.");
+    function queueTransaction(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        uint256 eta
+    ) public returns (bytes32) {
+        require(msg.sender == admin, 'NounsDAOExecutor::queueTransaction: Call must come from admin.');
         require(
             eta >= getBlockTimestamp() + delay,
-            "NounsDAOExecutor::queueTransaction: Estimated execution block must satisfy delay."
+            'NounsDAOExecutor::queueTransaction: Estimated execution block must satisfy delay.'
         );
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
@@ -198,10 +228,14 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         return txHash;
     }
 
-    function cancelTransaction(address target, uint256 value, string memory signature, bytes memory data, uint256 eta)
-        public
-    {
-        require(msg.sender == admin, "NounsDAOExecutor::cancelTransaction: Call must come from admin.");
+    function cancelTransaction(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        uint256 eta
+    ) public {
+        require(msg.sender == admin, 'NounsDAOExecutor::cancelTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = false;
@@ -209,19 +243,24 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         emit CancelTransaction(txHash, target, value, signature, data, eta);
     }
 
-    function executeTransaction(address target, uint256 value, string memory signature, bytes memory data, uint256 eta)
-        public
-        returns (bytes memory)
-    {
-        require(msg.sender == admin, "NounsDAOExecutor::executeTransaction: Call must come from admin.");
+    function executeTransaction(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        uint256 eta
+    ) public returns (bytes memory) {
+        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         require(queuedTransactions[txHash], "NounsDAOExecutor::executeTransaction: Transaction hasn't been queued.");
         require(
-            getBlockTimestamp() >= eta, "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock."
+            getBlockTimestamp() >= eta,
+            "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock."
         );
         require(
-            getBlockTimestamp() <= eta + GRACE_PERIOD, "NounsDAOExecutor::executeTransaction: Transaction is stale."
+            getBlockTimestamp() <= eta + GRACE_PERIOD,
+            'NounsDAOExecutor::executeTransaction: Transaction is stale.'
         );
 
         queuedTransactions[txHash] = false;
@@ -235,8 +274,8 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         }
 
         // solium-disable-next-line security/no-call-value
-        (bool success, bytes memory returnData) = target.call{value: value}(callData);
-        require(success, "NounsDAOExecutor::executeTransaction: Transaction execution reverted.");
+        (bool success, bytes memory returnData) = target.call{ value: value }(callData);
+        require(success, 'NounsDAOExecutor::executeTransaction: Transaction execution reverted.');
 
         emit ExecuteTransaction(txHash, target, value, signature, data, eta);
 
@@ -253,15 +292,19 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     fallback() external payable {}
 
     function sendETH(address payable recipient, uint256 ethToSend) external {
-        require(msg.sender == admin, "NounsDAOExecutor::sendETH: Call must come from admin.");
+        require(msg.sender == admin, 'NounsDAOExecutor::sendETH: Call must come from admin.');
 
         recipient.sendValue(ethToSend);
 
         emit ETHSent(recipient, ethToSend);
     }
 
-    function sendERC20(address recipient, address erc20Token, uint256 tokensToSend) external {
-        require(msg.sender == admin, "NounsDAOExecutor::sendERC20: Call must come from admin.");
+    function sendERC20(
+        address recipient,
+        address erc20Token,
+        uint256 tokensToSend
+    ) external {
+        require(msg.sender == admin, 'NounsDAOExecutor::sendERC20: Call must come from admin.');
 
         IERC20(erc20Token).safeTransfer(recipient, tokensToSend);
 
@@ -297,7 +340,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     }
 
     function rETHBalanceInETH() public view returns (uint256) {
-        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(address(this)));        
+        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(address(this)));
     }
 
     /**
@@ -312,7 +355,8 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
      */
     function _authorizeUpgrade(address) internal view override {
         require(
-            msg.sender == address(this), "NounsDAOExecutor::_authorizeUpgrade: Call must come from NounsDAOExecutor."
+            msg.sender == address(this),
+            'NounsDAOExecutor::_authorizeUpgrade: Call must come from NounsDAOExecutor.'
         );
     }
 
