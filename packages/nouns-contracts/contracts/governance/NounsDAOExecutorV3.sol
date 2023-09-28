@@ -52,6 +52,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     using Address for address payable;
 
     error ExcessETHHelperNotSet();
+    error NoExcessToBurn();
 
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
@@ -261,9 +262,11 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         if (address(excessETHHelper) == address(0)) revert ExcessETHHelperNotSet();
 
         amount = excessETHHelper.excessETH();
-        Burn.eth(excessETHHelper.excessETH());
+        if (amount == 0) revert NoExcessToBurn();
 
+        Burn.eth(amount);
         totalETHBurned += amount;
+
         emit ETHBurned(amount);
     }
 
