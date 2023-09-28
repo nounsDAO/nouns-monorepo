@@ -326,7 +326,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     }
 
     function test_prices_givenMissingAuctionData_skipsMissingNounIDs() public {
-        address bidder = makeAddr("some bidder");
+        address bidder = makeAddr('some bidder');
         bidAndWinCurrentAuction(bidder, 1 ether);
 
         vm.startPrank(address(auction));
@@ -335,7 +335,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
         vm.stopPrank();
 
-        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
         INounsAuctionHouse.Settlement[] memory prices = auction.prices(3);
@@ -396,7 +396,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     }
 
     function test_prices_withRange_givenMissingAuctionData_skipsMissingNounIDs() public {
-        address bidder = makeAddr("some bidder");
+        address bidder = makeAddr('some bidder');
         bidAndWinCurrentAuction(bidder, 1 ether);
 
         vm.startPrank(address(auction));
@@ -405,7 +405,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
         vm.stopPrank();
 
-        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
         INounsAuctionHouse.Settlement[] memory prices = auction.prices(1, 7);
@@ -505,7 +505,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
 
 contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
     function test_setTimeBuffer_revertsForNonOwner() public {
-        vm.expectRevert("Ownable: caller is not the owner");
+        vm.expectRevert('Ownable: caller is not the owner');
         auction.setTimeBuffer(1 days);
     }
 
@@ -516,13 +516,13 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
     }
 
     function test_setSettlementHistoryAdmin_revertsForNonOwner() public {
-        vm.expectRevert("Ownable: caller is not the owner");
-        auction.setSettlementHistoryAdmin(makeAddr("some admin"));
+        vm.expectRevert('Ownable: caller is not the owner');
+        auction.setSettlementHistoryAdmin(makeAddr('some admin'));
     }
 
     function test_setSettlementHistoryAdmin_worksForOwner() public {
         address admin = makeAddr('settlement admin');
-        
+
         vm.prank(auction.owner());
         auction.setSettlementHistoryAdmin(admin);
 

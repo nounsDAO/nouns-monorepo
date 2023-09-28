@@ -300,9 +300,9 @@ contract NounsAuctionHouseV2 is
      */
     function setPrices(Settlement[] memory settlements) external {
         address settlementHistoryAdmin_ = settlementHistoryAdmin;
-        if (!
-            (msg.sender == owner() ||
-            (msg.sender == settlementHistoryAdmin_ && settlementHistoryAdmin_ != address(0)))) {
+        if (
+            !(msg.sender == owner() || (msg.sender == settlementHistoryAdmin_ && settlementHistoryAdmin_ != address(0)))
+        ) {
             revert OnlyOwnerOrSettlementHistoryAdmin();
         }
 
