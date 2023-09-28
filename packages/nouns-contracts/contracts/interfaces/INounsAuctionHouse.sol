@@ -83,10 +83,6 @@ interface INounsAuctionHouse {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
-    event SettlementHistoryAdminSet(address oldSettlementHistoryAdmin, address newSettlementHistoryAdmin);
-
-    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
-
     error NounNotUpForAuction();
 
     error AuctionExpired();
@@ -100,10 +96,8 @@ interface INounsAuctionHouse {
     error MustSendAtLeastReservePrice();
 
     error BidDifferenceMustBeGreaterThanMinBidIncrement();
-    
-    error TimeBufferTooLarge();
 
-    error OnlyOwnerOrSettlementHistoryAdmin();
+    error TimeBufferTooLarge();
 
     function settleAuction() external;
 

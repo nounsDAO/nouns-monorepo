@@ -65,9 +65,6 @@ contract NounsAuctionHouseV2 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    /// @notice An additional address owner may set that can set historic prices, e.g. a helper smart contract
-    address public settlementHistoryAdmin;
-
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -201,17 +198,6 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Set the settlement history admin address.
-     * @dev Only callable by the owner.
-     * @param newSettlementHistoryAdmin the new settlement history admin address.
-     */
-    function setSettlementHistoryAdmin(address newSettlementHistoryAdmin) external onlyOwner {
-        emit SettlementHistoryAdminSet(settlementHistoryAdmin, newSettlementHistoryAdmin);
-
-        settlementHistoryAdmin = newSettlementHistoryAdmin;
-    }
-
-    /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      * If the mint reverts, the minter was updated without pausing this contract first. To remedy this,
@@ -292,45 +278,13 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Set historic prices; only callable by the owner, which in Nouns is the treasury (timelock) contract.
-     * @dev This function lowers auction price accuracy from 18 decimals to 10 decimals, as part of the price history
-     * bit packing, to save gas.
-     * @dev Can only be executed by owner or settlementHistoryAdmin.
-     * @param settlements The list of historic prices to set.
-     */
-    function setPrices(Settlement[] memory settlements) external {
-        address settlementHistoryAdmin_ = settlementHistoryAdmin;
-        if (!
-            (msg.sender == owner() ||
-            (msg.sender == settlementHistoryAdmin_ && settlementHistoryAdmin_ != address(0)))) {
-            revert OnlyOwnerOrSettlementHistoryAdmin();
-        }
-
-        uint256[] memory nounIds = new uint256[](settlements.length);
-        uint256[] memory prices_ = new uint256[](settlements.length);
-
-        for (uint256 i = 0; i < settlements.length; ++i) {
-            settlementHistory[settlements[i].nounId] = SettlementState({
-                blockTimestamp: settlements[i].blockTimestamp,
-                amount: ethPriceToUint64(settlements[i].amount),
-                winner: settlements[i].winner
-            });
-
-            nounIds[i] = settlements[i].nounId;
-            prices_[i] = settlements[i].amount;
-        }
-
-        emit HistoricPricesSet(nounIds, prices_);
-    }
-
-    /**
      * @notice Warm up the settlement state for a list of Noun IDs.
      * @dev Helps lower the gas cost of auction settlement when storing settlement data
      * thanks to the state slot being non-zero.
      * @dev Only writes to slots where blockTimestamp is zero, meaning it will not overwrite existing data.
      * @param nounIds The list of Noun IDs whose settlement slot to warm up.
      */
-    function warmUpSettlementState(uint256[] memory nounIds) external {
+    function warmUpSettlementState(uint256[] calldata nounIds) external {
         for (uint256 i = 0; i < nounIds.length; ++i) {
             if (settlementHistory[nounIds[i]].blockTimestamp == 0) {
                 settlementHistory[nounIds[i]] = SettlementState({ blockTimestamp: 1, amount: 0, winner: address(0) });

@@ -326,7 +326,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     }
 
     function test_prices_givenMissingAuctionData_skipsMissingNounIDs() public {
-        address bidder = makeAddr("some bidder");
+        address bidder = makeAddr('some bidder');
         bidAndWinCurrentAuction(bidder, 1 ether);
 
         vm.startPrank(address(auction));
@@ -335,7 +335,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
         vm.stopPrank();
 
-        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
         INounsAuctionHouse.Settlement[] memory prices = auction.prices(3);
@@ -396,7 +396,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     }
 
     function test_prices_withRange_givenMissingAuctionData_skipsMissingNounIDs() public {
-        address bidder = makeAddr("some bidder");
+        address bidder = makeAddr('some bidder');
         bidAndWinCurrentAuction(bidder, 1 ether);
 
         vm.startPrank(address(auction));
@@ -405,7 +405,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         }
         vm.stopPrank();
 
-        bidAndWinCurrentAuction(bidder, 2 ether);        
+        bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
         INounsAuctionHouse.Settlement[] memory prices = auction.prices(1, 7);
@@ -420,92 +420,11 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         assertEq(prices[2].amount, 3 ether);
         assertEq(prices[2].winner, bidder);
     }
-
-    function test_setPrices_revertsForNonOwner() public {
-        INounsAuctionHouse.Settlement[] memory observations = new INounsAuctionHouse.Settlement[](1);
-        observations[0] = INounsAuctionHouse.Settlement({
-            blockTimestamp: uint32(block.timestamp),
-            amount: 42 ether,
-            winner: makeAddr('winner'),
-            nounId: 3
-        });
-
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.OnlyOwnerOrSettlementHistoryAdmin.selector));
-        auction.setPrices(observations);
-    }
-
-    function test_setPrices_worksForOwner() public {
-        INounsAuctionHouse.Settlement[] memory observations = new INounsAuctionHouse.Settlement[](20);
-        uint256[] memory nounIds = new uint256[](20);
-        uint256[] memory prices = new uint256[](20);
-
-        uint256 nounId = 0;
-        for (uint256 i = 0; i < 20; ++i) {
-            // skip Nouners
-            if (nounId <= 1820 && nounId % 10 == 0) {
-                nounId++;
-            }
-
-            uint256 price = nounId * 1 ether;
-
-            observations[i] = INounsAuctionHouse.Settlement({
-                blockTimestamp: uint32(nounId),
-                amount: price,
-                winner: makeAddr(vm.toString(nounId)),
-                nounId: nounId
-            });
-
-            nounIds[i] = nounId;
-            prices[i] = price;
-
-            nounId++;
-        }
-
-        vm.expectEmit(true, true, true, true);
-        emit HistoricPricesSet(nounIds, prices);
-
-        vm.prank(auction.owner());
-        auction.setPrices(observations);
-
-        INounsAuctionHouse.Settlement[] memory actualObservations = auction.prices(0, 23);
-        assertEq(actualObservations.length, 20);
-        for (uint256 i = 0; i < 20; ++i) {
-            assertEq(observations[i].blockTimestamp, actualObservations[i].blockTimestamp);
-            assertEq(observations[i].amount, actualObservations[i].amount);
-            assertEq(observations[i].winner, actualObservations[i].winner);
-            assertEq(observations[i].nounId, actualObservations[i].nounId);
-        }
-    }
-
-    function test_setPrices_worksForSettlementAdmin() public {
-        address admin = makeAddr('settlement admin');
-        vm.prank(auction.owner());
-        auction.setSettlementHistoryAdmin(admin);
-
-        INounsAuctionHouse.Settlement[] memory observations = new INounsAuctionHouse.Settlement[](1);
-        observations[0] = INounsAuctionHouse.Settlement({
-            blockTimestamp: uint32(block.timestamp),
-            amount: 42 ether,
-            winner: makeAddr('winner'),
-            nounId: 3
-        });
-
-        uint256[] memory nounIds = new uint256[](1);
-        uint256[] memory prices = new uint256[](1);
-        nounIds[0] = 3;
-        prices[0] = 42 ether;
-
-        vm.expectEmit(true, true, true, true);
-        emit HistoricPricesSet(nounIds, prices);
-
-        vm.prank(admin);
-        auction.setPrices(observations);
-    }
 }
 
 contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
     function test_setTimeBuffer_revertsForNonOwner() public {
-        vm.expectRevert("Ownable: caller is not the owner");
+        vm.expectRevert('Ownable: caller is not the owner');
         auction.setTimeBuffer(1 days);
     }
 
@@ -515,17 +434,12 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
         auction.setTimeBuffer(1 days + 1);
     }
 
-    function test_setSettlementHistoryAdmin_revertsForNonOwner() public {
-        vm.expectRevert("Ownable: caller is not the owner");
-        auction.setSettlementHistoryAdmin(makeAddr("some admin"));
-    }
+    function test_setTimeBuffer_worksForOwner() public {
+        assertEq(auction.timeBuffer(), 5 minutes);
 
-    function test_setSettlementHistoryAdmin_worksForOwner() public {
-        address admin = makeAddr('settlement admin');
-        
         vm.prank(auction.owner());
-        auction.setSettlementHistoryAdmin(admin);
+        auction.setTimeBuffer(1 days);
 
-        assertEq(auction.settlementHistoryAdmin(), admin);
+        assertEq(auction.timeBuffer(), 1 days);
     }
 }
