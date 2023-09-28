@@ -44,3 +44,19 @@ contract ERC20Mock is ERC20 {
         wasTransferCalled = wasTransferCalled_;
     }
 }
+
+contract RocketETHMock is ERC20Mock {
+    uint256 rate;
+
+    constructor() ERC20Mock() {
+        rate = 1;
+    }
+
+    function setRate(uint256 rate_) public {
+        rate = rate_;
+    }
+
+    function getEthValue(uint256 _rethAmount) external view returns (uint256) {
+        return _rethAmount * rate;
+    }
+}
