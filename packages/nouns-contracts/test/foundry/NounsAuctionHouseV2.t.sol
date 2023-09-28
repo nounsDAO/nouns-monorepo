@@ -515,6 +515,15 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
         auction.setTimeBuffer(1 days + 1);
     }
 
+    function test_setTimeBuffer_worksForOwner() public {
+        assertEq(auction.timeBuffer(), 5 minutes);
+
+        vm.prank(auction.owner());
+        auction.setTimeBuffer(1 days);
+
+        assertEq(auction.timeBuffer(), 1 days);
+    }
+
     function test_setSettlementHistoryAdmin_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setSettlementHistoryAdmin(makeAddr('some admin'));
