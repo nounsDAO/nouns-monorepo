@@ -343,6 +343,9 @@ type Vote @entity {
 
   "Block number of vote"
   blockNumber: BigInt!
+
+  "The timestamp of the block the vote is in"
+  blockTimestamp: BigInt!
 }
 
 type Governance @entity {
