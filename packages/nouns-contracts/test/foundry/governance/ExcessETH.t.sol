@@ -173,6 +173,12 @@ contract ExcessETHTest is DeployUtilsExcessETH {
         assertEq(excessETH.numberOfPastAuctionsForMeanPrice(), 142);
     }
 
+    function test_setNumberOfPastAuctionsForMeanPrice_revertsIfValueIsTooLow() public {
+        vm.prank(address(treasury));
+        vm.expectRevert(abi.encodeWithSelector(ExcessETH.PastAuctionCountTooLow.selector));
+        excessETH.setNumberOfPastAuctionsForMeanPrice(1);
+    }
+
     function setMeanPrice(uint256 meanPrice) internal {
         setPriceHistory(meanPrice, pastAuctionCount);
     }

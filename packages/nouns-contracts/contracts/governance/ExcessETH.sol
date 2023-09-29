@@ -47,6 +47,7 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     error NotEnoughAuctionHistory();
+    error PastAuctionCountTooLow();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -65,6 +66,8 @@ contract ExcessETH is IExcessETH, Ownable {
      *   STATE
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    uint256 public constant MIN_PAST_AUCTIONS = 2;
 
     INounsDAOV3 public immutable dao;
     INounsAuctionHouseV2 public immutable auction;
@@ -146,6 +149,8 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) external onlyOwner {
+        if (newNumberOfPastAuctionsForMeanPrice < MIN_PAST_AUCTIONS) revert PastAuctionCountTooLow();
+
         emit NumberOfPastAuctionsForMeanPriceSet(numberOfPastAuctionsForMeanPrice, newNumberOfPastAuctionsForMeanPrice);
 
         numberOfPastAuctionsForMeanPrice = newNumberOfPastAuctionsForMeanPrice;
