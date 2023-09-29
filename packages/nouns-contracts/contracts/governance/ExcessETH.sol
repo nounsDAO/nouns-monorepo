@@ -47,7 +47,6 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     error NotEnoughAuctionHistory();
-    error RocketETHConversionRateTooLow();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
