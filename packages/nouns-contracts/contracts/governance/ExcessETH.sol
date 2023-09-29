@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title A helpder contract for calculating Nouns excess ETH
-
 /**
  *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -36,6 +34,11 @@ interface INounsAuctionHouseV2 is INounsAuctionHouse {
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
 }
 
+/**
+ * @title ExcessETH Helper
+ * @notice A helpder contract for calculating Nouns excess ETH, used by NounsDAOExecutorV3 to burn excess ETH.
+ * @dev Owner is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
+ */
 contract ExcessETH is IExcessETH, Ownable {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -44,8 +47,8 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     error NotEnoughAuctionHistory();
-
     error RocketETHConversionRateTooLow();
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   EVENTS
@@ -102,12 +105,21 @@ contract ExcessETH is IExcessETH, Ownable {
     function excessETH() public view returns (uint256) {
         if (block.timestamp < waitingPeriodEnd) return 0;
 
-        uint256 expectedTreasuryValue = meanAuctionPrice() * dao.adjustedTotalSupply();
+        uint256 expectedTreasuryValue = expectedTreasuryValueInETH();
         uint256 treasuryValue = treasuryValueInETH();
 
         if (expectedTreasuryValue >= treasuryValue) return 0;
 
         return min(treasuryValue - expectedTreasuryValue, owner().balance);
+    }
+
+    function expectedTreasuryValueInETH() public view returns (uint256) {
+        return meanAuctionPrice() * dao.adjustedTotalSupply();
+    }
+
+    function treasuryValueInETH() public view returns (uint256) {
+        address owner_ = owner();
+        return owner_.balance + stETH.balanceOf(owner_) + wETH.balanceOf(owner_) + rETHBalanceInETH();
     }
 
     function meanAuctionPrice() public view returns (uint256) {
@@ -124,11 +136,6 @@ contract ExcessETH is IExcessETH, Ownable {
         return sum / numberOfPastAuctionsForMeanPrice_;
     }
 
-    function treasuryValueInETH() public view returns (uint256) {
-        address owner_ = owner();
-        return owner_.balance + stETH.balanceOf(owner_) + wETH.balanceOf(owner_) + rETHBalanceInETH();
-    }
-
     function rETHBalanceInETH() public view returns (uint256) {
         return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(owner()));
     }
@@ -139,7 +146,7 @@ contract ExcessETH is IExcessETH, Ownable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) public onlyOwner {
+    function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) external onlyOwner {
         emit NumberOfPastAuctionsForMeanPriceSet(numberOfPastAuctionsForMeanPrice, newNumberOfPastAuctionsForMeanPrice);
 
         numberOfPastAuctionsForMeanPrice = newNumberOfPastAuctionsForMeanPrice;
