@@ -149,6 +149,16 @@ contract ExcessETHTest is DeployUtilsExcessETH {
         assertEq(excessETH.excessETH(), 2 ether);
     }
 
+    function test_excessETH_givenInsufficientAuctionHistory_reverts() public {
+        vm.warp(waitingPeriodEnd + 1);
+        vm.deal(address(treasury), 100 ether);
+        dao.setAdjustedTotalSupply(1);
+        setPriceHistory(1 ether, pastAuctionCount - 1);
+
+        vm.expectRevert(abi.encodeWithSelector(ExcessETH.NotEnoughAuctionHistory.selector));
+        excessETH.excessETH();
+    }
+
     function test_setNumberOfPastAuctionsForMeanPrice_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         excessETH.setNumberOfPastAuctionsForMeanPrice(1);
@@ -164,8 +174,12 @@ contract ExcessETHTest is DeployUtilsExcessETH {
     }
 
     function setMeanPrice(uint256 meanPrice) internal {
-        uint256[] memory prices = new uint256[](pastAuctionCount);
-        for (uint256 i = 0; i < pastAuctionCount; i++) {
+        setPriceHistory(meanPrice, pastAuctionCount);
+    }
+
+    function setPriceHistory(uint256 meanPrice, uint256 count) internal {
+        uint256[] memory prices = new uint256[](count);
+        for (uint256 i = 0; i < count; i++) {
             prices[i] = meanPrice;
         }
         auction.setPrices(prices);
