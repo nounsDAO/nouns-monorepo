@@ -104,6 +104,15 @@ contract ExcessETH is IExcessETH, Ownable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /**
+     * @notice Get the amount of excess ETH in the Nouns treasury.
+     * Excess ETH is defined as the difference between the current treasury value denominated in ETH,
+     * and the expected treasury value denominated in ETH, which is defined as mean auction price * adjusted total supply.
+     * It returns zero during the waiting period, and when expected treasury value is greater than current value.
+     * If treasury balance in native ETH is less than the excess ETH calculation, it returns the treasury ETH balance.
+     * @dev This version does not support burning excess other than in native ETH, e.g. stETH, rETH, etc.
+     * @dev Reverts if there is not enough auction history to calculate the mean auction price.
+     */
     function excessETH() public view returns (uint256) {
         if (block.timestamp < waitingPeriodEnd) return 0;
 
@@ -115,15 +124,28 @@ contract ExcessETH is IExcessETH, Ownable {
         return min(treasuryValue - expectedTreasuryValue, owner().balance);
     }
 
+    /**
+     * @notice Get the expected treasury value denomiated in ETH.
+     * Expected value is defined as mean auction price * adjusted total supply.
+     */
     function expectedTreasuryValueInETH() public view returns (uint256) {
         return meanAuctionPrice() * dao.adjustedTotalSupply();
     }
 
+    /**
+     * @notice Get the current treasury value denomiated in ETH.
+     * In addition to native ETH, it also includes stETH, wETH, and rETH balances.
+     * @dev for rETH, it uses the getEthValue() function to convert rETH to ETH.
+     */
     function treasuryValueInETH() public view returns (uint256) {
         address owner_ = owner();
         return owner_.balance + stETH.balanceOf(owner_) + wETH.balanceOf(owner_) + rETHBalanceInETH();
     }
 
+    /**
+     * @notice Get the mean auction price of the last `numberOfPastAuctionsForMeanPrice` auctions.
+     * @dev Reverts if there is not enough auction history to calculate the mean auction price.
+     */
     function meanAuctionPrice() public view returns (uint256) {
         uint16 numberOfPastAuctionsForMeanPrice_ = numberOfPastAuctionsForMeanPrice;
         INounsAuctionHouseV2.Settlement[] memory settlements = auction.prices(numberOfPastAuctionsForMeanPrice_);
@@ -138,6 +160,9 @@ contract ExcessETH is IExcessETH, Ownable {
         return sum / numberOfPastAuctionsForMeanPrice_;
     }
 
+    /**
+     * @notice Get the rETH balance of the treasury, denominated in ETH.
+     */
     function rETHBalanceInETH() public view returns (uint256) {
         return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(owner()));
     }
@@ -148,6 +173,11 @@ contract ExcessETH is IExcessETH, Ownable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /**
+     * @notice Set the number of past auctions to use for calculating the mean auction price.
+     * Can only be called by owner, which is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
+     * @param newNumberOfPastAuctionsForMeanPrice The new number of past auctions to use for calculating the mean auction price.
+     */
     function setNumberOfPastAuctionsForMeanPrice(uint16 newNumberOfPastAuctionsForMeanPrice) external onlyOwner {
         if (newNumberOfPastAuctionsForMeanPrice < MIN_PAST_AUCTIONS) revert PastAuctionCountTooLow();
 
@@ -162,6 +192,9 @@ contract ExcessETH is IExcessETH, Ownable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /**
+     * @dev A helper function to return the minimum of two numbers.
+     */
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
         return a < b ? a : b;
     }
