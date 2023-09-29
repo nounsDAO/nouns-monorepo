@@ -93,6 +93,8 @@ contract NounsDAOExecutorV3Test is DeployUtilsExcessETH {
 }
 
 contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
+    event ETHBurned(uint256 amount);
+
     NounsDAOLogicV3 dao;
     address payable treasury;
     NounsAuctionHouseV2 auction;
@@ -108,19 +110,19 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
         vm.prank(auction.owner());
         auction.unpause();
 
-        NounsTokenLike nouns = dao.nouns();
+        vm.deal(nouner, 1 ether);
 
-        vm.startPrank(nouns.minter());
-        for (uint256 i = 0; i < 2; i++) {
-            uint256 tokenId = nouns.mint();
-            nouns.transferFrom(nouns.minter(), nouner, tokenId);
-        }
-        vm.stopPrank();
+        // After this auction total supply is 3:
+        // ID 0 went to nounders
+        // 1 going to nouner now
+        // 2 born after this auction is settled, in this same tx
+        bidAndWinCurrentAuction(nouner, 1 ether);
         vm.roll(block.number + 1);
     }
 
-    function test_upgardeViaProposal() public {
-        generateAuctionHistory(90);
+    function test_upgardeViaProposal_andBurnHappyFlow() public {
+        uint256 meanPrice = 0.1 ether;
+        generateAuctionHistory(90, meanPrice);
 
         NounsDAOExecutorV3 newImpl = new NounsDAOExecutorV3();
 
@@ -147,9 +149,16 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
         vm.warp(block.timestamp + 91 days);
         vm.deal(address(treasury), 100 ether);
 
-        NounsDAOExecutorV3(treasury).burnExcessETH();
+        // adjustedSupply: 103
+        // meanPrice: 0.1 ether
+        // expected value: 103 * 0.1 = 10.3 ETH
+        // treasury size: 100 ETH
+        // excess: 100 - 10.3 = 89.7 ETH
+        vm.expectEmit(true, true, true, true);
+        emit ETHBurned(89.7 ether);
 
-        // TODO assert the right amount was burned
+        uint256 burnedETH = NounsDAOExecutorV3(treasury).burnExcessETH();
+        assertEq(burnedETH, 89.7 ether);
     }
 
     function getProposalToExecution(uint256 proposalId) internal {
@@ -190,12 +199,11 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
         );
     }
 
-    function generateAuctionHistory(uint256 count) internal {
+    function generateAuctionHistory(uint256 count, uint256 meanPrice) internal {
         NounsAuctionHouseV2 auction = NounsAuctionHouseV2(payable(dao.nouns().minter()));
-
-        vm.deal(nouner, count * 0.1 ether);
+        vm.deal(nouner, count * meanPrice);
         for (uint256 i = 0; i < count; ++i) {
-            bidAndWinCurrentAuction(nouner, 0.1 ether);
+            bidAndWinCurrentAuction(nouner, meanPrice);
         }
     }
 
