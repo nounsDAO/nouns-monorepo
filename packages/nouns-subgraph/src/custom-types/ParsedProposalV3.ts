@@ -1,5 +1,6 @@
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
+  NounsDAO,
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
 } from '../types/NounsDAO/NounsDAO';
@@ -26,6 +27,7 @@ export class ParsedProposalV3 {
   title: string = '';
   status: string = '';
   signers: string[] = [];
+  adjustedTotalSupply: BigInt = BIGINT_ZERO;
 
   static fromV1Event(event: ProposalCreatedWithRequirements1): ParsedProposalV3 {
     const proposal = new ParsedProposalV3();
@@ -54,6 +56,7 @@ export class ParsedProposalV3 {
 
   static fromV3Event(event: ProposalCreatedWithRequirements): ParsedProposalV3 {
     const proposal = new ParsedProposalV3();
+    const nounsDAO = NounsDAO.bind(event.address);
 
     proposal.id = event.params.id.toString();
     proposal.proposer = event.params.proposer.toHexString();
@@ -79,6 +82,7 @@ export class ParsedProposalV3 {
     }
 
     proposal.updatePeriodEndBlock = event.params.updatePeriodEndBlock;
+    proposal.adjustedTotalSupply = nounsDAO.adjustedTotalSupply();
 
     return proposal;
   }

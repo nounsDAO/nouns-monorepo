@@ -9,7 +9,7 @@ import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
 import ShortAddress from '../ShortAddress';
 import { Delegates } from '../../wrappers/subgraph';
-import { useActivePendingUpdatableProposers } from '../../wrappers/nounsDao';
+import { useActivePendingUpdatableProposers, usePropose } from '../../wrappers/nounsDao';
 import { Link } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 
@@ -32,6 +32,7 @@ export default function SelectSponsorsToPropose(props: Props) {
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
+  const { propose, proposeState } = usePropose();
   const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
   const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber);
   useEffect(() => {
@@ -68,14 +69,24 @@ export default function SelectSponsorsToPropose(props: Props) {
     ]);
     // sort sigs by address to ensure order matches update proposal sigs
     const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
-    await proposeBySigs(
-      sortedSigs,
-      props.candidate.version.content.targets,
-      props.candidate.version.content.values,
-      props.candidate.version.content.signatures,
-      props.candidate.version.content.calldatas,
-      props.candidate.version.content.description,
-    );
+    if (selectedSignatures.length === 0) {
+      await propose(
+        props.candidate.version.content.targets,
+        props.candidate.version.content.values,
+        props.candidate.version.content.signatures,
+        props.candidate.version.content.calldatas,
+        props.candidate.version.content.description,
+      );
+    } else {
+      await proposeBySigs(
+        sortedSigs,
+        props.candidate.version.content.targets,
+        props.candidate.version.content.values,
+        props.candidate.version.content.signatures,
+        props.candidate.version.content.calldatas,
+        props.candidate.version.content.description,
+      );
+    }
   };
 
   const handleProposeStateChange = useCallback((state: TransactionStatus) => {
@@ -113,8 +124,12 @@ export default function SelectSponsorsToPropose(props: Props) {
   }, []);
 
   useEffect(() => {
-    handleProposeStateChange(proposeBySigsState);
-  }, [proposeBySigsState, handleProposeStateChange]);
+    if (selectedSignatures.length === 0) {
+      handleProposeStateChange(proposeState);
+    } else {
+      handleProposeStateChange(proposeBySigsState);
+    }
+  }, [proposeBySigsState, proposeState, handleProposeStateChange, selectedSignatures]);
 
   const modalContent = (
     <div className={classes.modalContent}>
@@ -134,14 +149,16 @@ export default function SelectSponsorsToPropose(props: Props) {
         </Trans>
       </Alert>
       <div className={classes.sectionHeader}>
-        <div className={classes.sectionLabel}>
-          <p>
-            <strong>
-              <Trans>Select signatures</Trans>
-            </strong>
-          </p>
-        </div>
-        {props.signatures && !isTxSuccessful && (
+        {selectedSignatures.length > 0 && (
+          <div className={classes.sectionLabel}>
+            <p>
+              <strong>
+                <Trans>Select signatures</Trans>
+              </strong>
+            </p>
+          </div>
+        )}
+        {props.signatures && !isTxSuccessful && selectedSignatures.length > 0 && (
           <button
             onClick={() => {
               props.signatures && selectedSignatures.length === props.signatures.length
@@ -166,8 +183,8 @@ export default function SelectSponsorsToPropose(props: Props) {
                 onClick={() => {
                   selectedSignatures.includes(signature)
                     ? setSelectedSignatures(
-                        selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                      )
+                      selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                    )
                     : setSelectedSignatures([...selectedSignatures, signature]);
                 }}
                 disabled={
@@ -204,7 +221,8 @@ export default function SelectSponsorsToPropose(props: Props) {
               handleSubmission(selectedSignatures);
             }}
           >
-            {!isWaiting && !isLoading && <>Submit {selectedVoteCount} votes</>}
+
+            {!isWaiting && !isLoading && <>{selectedSignatures.length === 0 ? <>Submit with no sponsors</> : <>Submit {selectedVoteCount} vote{selectedVoteCount > 1 && "s"}</>}</>}
             <span>
               {(isWaiting || isLoading) && (
                 <img

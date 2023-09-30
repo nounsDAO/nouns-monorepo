@@ -257,6 +257,9 @@ type Proposal @entity {
   "Total supply when this proposal was created"
   totalSupply: BigInt!
 
+  "Adjusted total supply when this proposal was created"
+  adjustedTotalSupply: BigInt!
+
   "Dynamic quorum param snapshot: min quorum basis points"
   minQuorumVotesBPS: Int!
 

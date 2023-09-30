@@ -7,6 +7,8 @@ import {
   afterAll,
   beforeEach,
   afterEach,
+  createMockedFunction,
+  newMockEvent,
 } from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
@@ -88,6 +90,8 @@ describe('nouns-dao', () => {
         delegate.delegatedVotes = BIGINT_ONE;
         delegate.delegatedVotesRaw = BIGINT_ONE;
         delegate.save();
+
+        createMockedFunction(newMockEvent().address, 'adjustedTotalSupply', 'adjustedTotalSupply():(uint256)').returns([ethereum.Value.fromI32(0)])
       });
 
       afterAll(() => {

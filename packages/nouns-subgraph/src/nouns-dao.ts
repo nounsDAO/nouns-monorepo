@@ -129,6 +129,11 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
+  if (parsedProposal.adjustedTotalSupply.equals(BIGINT_ZERO)) {
+    proposal.adjustedTotalSupply = proposal.totalSupply;
+  } else {
+    proposal.adjustedTotalSupply = parsedProposal.adjustedTotalSupply;
+  }
 
   if (
     governance.voteSnapshotBlockSwitchProposalId.equals(BIGINT_ZERO) ||
@@ -299,7 +304,7 @@ export function handleVoteCast(event: VoteCast): void {
   if (usingDynamicQuorum) {
     proposal.quorumVotes = dynamicQuorumVotes(
       proposal.againstVotes,
-      proposal.totalSupply,
+      proposal.adjustedTotalSupply,
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
       proposal.quorumCoefficient,
