@@ -490,10 +490,10 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
 }
 `;
 
-export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
+export const adjustedNounSupplyAtPropSnapshot = (proposalId: string) => gql`
 {
   proposals(where: {id: ${proposalId}}) {
-    totalSupply
+    adjustedTotalSupply
   }
 }
 `;
