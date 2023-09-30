@@ -25,7 +25,14 @@
         "internalType": "bool",
         "name": "extended",
         "type": "bool"
-			},
+			}
+    ],
+    "name": "AuctionBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
 			{
 				"indexed": false,
 				"internalType": "string",
@@ -33,7 +40,7 @@
 				"type": "string"
       }
     ],
-    "name": "AuctionBid",
+    "name": "AuctionBidComment",
     "type": "event"
   },
   {

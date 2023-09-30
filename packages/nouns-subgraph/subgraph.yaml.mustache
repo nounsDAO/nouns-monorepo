@@ -27,41 +27,14 @@ dataSources:
       eventHandlers:
         - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
-        - event: AuctionBid(indexed uint256,address,uint256,bool,string)
+        - event: AuctionBid(indexed uint256,address,uint256,bool)
           handler: handleAuctionBid
+        - event: AuctionBidComment(string)
+          handler: handleAuctionBidComment
         - event: AuctionExtended(indexed uint256,uint256)
           handler: handleAuctionExtended
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
-  - kind: ethereum/contract
-    name: NounsAuctionHouseV1
-    network: {{network}}
-    source:
-      address: '{{nounsAuctionHouseV1.address}}'
-      abi: NounsAuctionHouse
-      startBlock: {{nounsAuctionHouseV1.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/nouns-auction-house.ts
-      entities:
-        - Account
-        - Auction
-        - Bid
-        - Noun
-      abis:
-        - name: NounsAuctionHouse
-          file: ../nouns-contracts/abi/contracts/NounsAuctionHouseV1.sol/NounsAuctionHouse.json
-      eventHandlers:
-        - event: AuctionCreated(indexed uint256,uint256,uint256)
-          handler: handleAuctionCreatedV1
-        - event: AuctionBid(indexed uint256,address,uint256,bool)
-          handler: handleAuctionBidV1
-        - event: AuctionExtended(indexed uint256,uint256)
-          handler: handleAuctionExtendedV1
-        - event: AuctionSettled(indexed uint256,address,uint256)
-          handler: handleAuctionSettledV1
   - kind: ethereum/contract
     name: NounsToken
     network: {{network}}

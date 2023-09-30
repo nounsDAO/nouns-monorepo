@@ -35,7 +35,9 @@ interface INounsAuctionHouse {
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, string comment);
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+
+    event AuctionBidComment(string comment);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
