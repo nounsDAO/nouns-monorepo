@@ -139,7 +139,7 @@ contract ExcessETH is IExcessETH, Ownable {
      */
     function treasuryValueInETH() public view returns (uint256) {
         address owner_ = owner();
-        return owner_.balance + stETH.balanceOf(owner_) + wETH.balanceOf(owner_) + rETHBalanceInETH();
+        return owner_.balance + stETH.balanceOf(owner_) + wETH.balanceOf(owner_) + rETHBalanceInETH(owner_);
     }
 
     /**
@@ -161,10 +161,11 @@ contract ExcessETH is IExcessETH, Ownable {
     }
 
     /**
-     * @notice Get the rETH balance of the treasury, denominated in ETH.
+     * @notice Get an account's rETH balance, denominated in ETH.
+     * @param account the account to get the rETH balance of.
      */
-    function rETHBalanceInETH() public view returns (uint256) {
-        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(owner()));
+    function rETHBalanceInETH(address account) public view returns (uint256) {
+        return RocketETH(address(rETH)).getEthValue(rETH.balanceOf(account));
     }
 
     /**

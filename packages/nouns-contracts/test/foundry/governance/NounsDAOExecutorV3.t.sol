@@ -61,14 +61,14 @@ contract NounsDAOExecutorV3Test is DeployUtilsExcessETH {
         vm.prank(address(treasury));
         treasury.setExcessETHHelper(IExcessETH(address(0)));
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOExecutorV3.ExcessETHHelperNotSet.selector));
+        vm.expectRevert(NounsDAOExecutorV3.ExcessETHHelperNotSet.selector);
         treasury.burnExcessETH();
     }
 
     function test_burnExcessETH_givenExcessIsZero_reverts() public {
         excessETH.setExcess(0);
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOExecutorV3.NoExcessToBurn.selector));
+        vm.expectRevert(NounsDAOExecutorV3.NoExcessToBurn.selector);
         treasury.burnExcessETH();
     }
 
@@ -143,7 +143,7 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
         getProposalToExecution(proposalId);
         vm.stopPrank();
 
-        vm.expectRevert(abi.encodeWithSelector(NounsDAOExecutorV3.NoExcessToBurn.selector));
+        vm.expectRevert(NounsDAOExecutorV3.NoExcessToBurn.selector);
         NounsDAOExecutorV3(treasury).burnExcessETH();
 
         vm.warp(block.timestamp + 91 days);

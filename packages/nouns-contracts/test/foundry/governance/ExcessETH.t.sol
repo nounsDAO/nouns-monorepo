@@ -155,7 +155,7 @@ contract ExcessETHTest is DeployUtilsExcessETH {
         dao.setAdjustedTotalSupply(1);
         setPriceHistory(1 ether, pastAuctionCount - 1);
 
-        vm.expectRevert(abi.encodeWithSelector(ExcessETH.NotEnoughAuctionHistory.selector));
+        vm.expectRevert(ExcessETH.NotEnoughAuctionHistory.selector);
         excessETH.excessETH();
     }
 
@@ -175,7 +175,7 @@ contract ExcessETHTest is DeployUtilsExcessETH {
 
     function test_setNumberOfPastAuctionsForMeanPrice_revertsIfValueIsTooLow() public {
         vm.prank(address(treasury));
-        vm.expectRevert(abi.encodeWithSelector(ExcessETH.PastAuctionCountTooLow.selector));
+        vm.expectRevert(ExcessETH.PastAuctionCountTooLow.selector);
         excessETH.setNumberOfPastAuctionsForMeanPrice(1);
     }
 
