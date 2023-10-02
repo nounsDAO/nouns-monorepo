@@ -2,97 +2,79 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { DeployUtilsExcessETH } from '../helpers/DeployUtilsExcessETH.sol';
+import { DeployUtilsExcessETHBurner } from '../helpers/DeployUtilsExcessETHBurner.sol';
 import { NounsDAOExecutorV3 } from '../../../contracts/governance/NounsDAOExecutorV3.sol';
-import { IExcessETH } from '../../../contracts/interfaces/IExcessETH.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsTokenLike } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { ExcessETH, INounsAuctionHouseV2 } from '../../../contracts/governance/ExcessETH.sol';
+import { ExcessETHBurner, INounsAuctionHouseV2 } from '../../../contracts/governance/ExcessETHBurner.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
 
-contract ExcessETHMock is IExcessETH {
-    uint256 excess;
-
-    function setExcess(uint256 excess_) public {
-        excess = excess_;
-    }
-
-    function excessETH() public view returns (uint256) {
-        return excess;
-    }
-}
-
-contract NounsDAOExecutorV3Test is DeployUtilsExcessETH {
+contract NounsDAOExecutorV3Test is DeployUtilsExcessETHBurner {
     event ETHBurned(uint256 amount);
 
     NounsDAOExecutorV3 treasury;
-    ExcessETHMock excessETH;
+    address burner = makeAddr('burner');
 
     address dao = makeAddr('dao');
 
     function setUp() public {
         treasury = _deployExecutorV3(dao);
-        excessETH = new ExcessETHMock();
 
         vm.prank(address(treasury));
-        treasury.setExcessETHHelper(excessETH);
+        treasury.setExcessETHBurner(burner);
     }
 
-    function test_setExcessETHHelper_revertsForNonTreasury() public {
-        vm.expectRevert('NounsDAOExecutor::setExcessETHHelper: Call must come from NounsDAOExecutor.');
-        treasury.setExcessETHHelper(excessETH);
+    function test_setExcessETHBurner_revertsForNonTreasury() public {
+        vm.expectRevert('NounsDAOExecutor::setExcessETHBurner: Call must come from NounsDAOExecutor.');
+        treasury.setExcessETHBurner(burner);
     }
 
-    function test_setExcessETHHelper_worksForTreasury() public {
-        ExcessETHMock newExcessETH = new ExcessETHMock();
+    function test_setExcessETHBurner_worksForTreasury() public {
+        address newBurner = makeAddr('newBurner');
 
-        assertTrue(address(treasury.excessETHHelper()) != address(newExcessETH));
+        assertTrue(treasury.excessETHBurner() != newBurner);
 
         vm.prank(address(treasury));
-        treasury.setExcessETHHelper(newExcessETH);
+        treasury.setExcessETHBurner(newBurner);
 
-        assertEq(address(treasury.excessETHHelper()), address(newExcessETH));
+        assertEq(treasury.excessETHBurner(), newBurner);
     }
 
-    function test_burnExcessETH_givenHelperNotSet_reverts() public {
-        vm.prank(address(treasury));
-        treasury.setExcessETHHelper(IExcessETH(address(0)));
-
-        vm.expectRevert(NounsDAOExecutorV3.ExcessETHHelperNotSet.selector);
-        treasury.burnExcessETH();
+    function test_burnExcessETH_revertsForNonBurner() public {
+        vm.expectRevert(NounsDAOExecutorV3.OnlyExcessETHBurner.selector);
+        treasury.burnExcessETH(1);
     }
 
-    function test_burnExcessETH_givenExcessIsZero_reverts() public {
-        excessETH.setExcess(0);
-
-        vm.expectRevert(NounsDAOExecutorV3.NoExcessToBurn.selector);
-        treasury.burnExcessETH();
-    }
-
-    function test_burnExcessETH_givenExcess_burnsAddsToTotalAndEmits() public {
+    function test_burnExcessETH_worksForBurner() public {
         vm.deal(address(treasury), 142 ether);
-        excessETH.setExcess(100 ether);
 
         vm.expectEmit(true, true, true, true);
-        emit ETHBurned(100 ether);
+        emit ETHBurned(142 ether);
 
-        treasury.burnExcessETH();
+        vm.prank(burner);
+        treasury.burnExcessETH(142 ether);
+
+        assertEq(treasury.totalETHBurned(), 142 ether);
+        assertEq(address(treasury).balance, 0);
+    }
+
+    function test_burnExcessETH_addsToTotalETHBurned() public {
+        vm.deal(address(treasury), 142 ether);
+
+        vm.prank(burner);
+        treasury.burnExcessETH(100 ether);
         assertEq(treasury.totalETHBurned(), 100 ether);
 
-        excessETH.setExcess(42 ether);
-
-        vm.expectEmit(true, true, true, true);
-        emit ETHBurned(42 ether);
-
-        treasury.burnExcessETH();
+        vm.prank(burner);
+        treasury.burnExcessETH(42 ether);
         assertEq(treasury.totalETHBurned(), 142 ether);
     }
 }
 
-contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
+contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
     event ETHBurned(uint256 amount);
 
     NounsDAOLogicV3 dao;
@@ -131,34 +113,42 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
         getProposalToExecution(proposalId);
         vm.stopPrank();
 
-        ExcessETH excessETH = _deployExcessETH(
+        (uint128 currentNounID, , , , , ) = auction.auction();
+
+        ExcessETHBurner burner = _deployExcessETHBurner(
             NounsDAOExecutorV3(treasury),
             INounsAuctionHouseV2(dao.nouns().minter()),
-            block.timestamp + 90 days,
+            currentNounID + 100,
+            100,
             90
         );
 
         vm.startPrank(nouner);
-        proposalId = propose(treasury, 0, 'setExcessETHHelper(address)', abi.encode(address(excessETH)));
+        proposalId = propose(treasury, 0, 'setExcessETHBurner(address)', abi.encode(address(burner)));
         getProposalToExecution(proposalId);
         vm.stopPrank();
 
-        vm.expectRevert(NounsDAOExecutorV3.NoExcessToBurn.selector);
-        NounsDAOExecutorV3(treasury).burnExcessETH();
+        vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
+        burner.burnExcessETH();
 
-        vm.warp(block.timestamp + 91 days);
+        auction.settleCurrentAndCreateNewAuction();
+        generateAuctionHistory(100, meanPrice);
+
+        vm.expectRevert(ExcessETHBurner.NoExcessToBurn.selector);
+        burner.burnExcessETH();
+
         vm.deal(address(treasury), 100 ether);
 
-        // adjustedSupply: 103
+        // adjustedSupply: 214
         // meanPrice: 0.1 ether
-        // expected value: 103 * 0.1 = 10.3 ETH
+        // expected value: 214 * 0.1 = 21.4 ETH
         // treasury size: 100 ETH
-        // excess: 100 - 10.3 = 89.7 ETH
+        // excess: 100 - 21.4 = 78.6 ETH
         vm.expectEmit(true, true, true, true);
-        emit ETHBurned(89.7 ether);
+        emit ETHBurned(78.6 ether);
 
-        uint256 burnedETH = NounsDAOExecutorV3(treasury).burnExcessETH();
-        assertEq(burnedETH, 89.7 ether);
+        uint256 burnedETH = burner.burnExcessETH();
+        assertEq(burnedETH, 78.6 ether);
     }
 
     function getProposalToExecution(uint256 proposalId) internal {
@@ -200,7 +190,6 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETH {
     }
 
     function generateAuctionHistory(uint256 count, uint256 meanPrice) internal {
-        NounsAuctionHouseV2 auction = NounsAuctionHouseV2(payable(dao.nouns().minter()));
         vm.deal(nouner, count * meanPrice);
         for (uint256 i = 0; i < count; ++i) {
             bidAndWinCurrentAuction(nouner, meanPrice);

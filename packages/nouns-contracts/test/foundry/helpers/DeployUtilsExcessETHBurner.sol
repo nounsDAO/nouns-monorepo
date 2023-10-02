@@ -4,13 +4,13 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './DeployUtilsV3.sol';
 import { NounsDAOExecutorV3 } from '../../../contracts/governance/NounsDAOExecutorV3.sol';
-import { ExcessETH, INounsAuctionHouseV2, INounsDAOV3 } from '../../../contracts/governance/ExcessETH.sol';
+import { ExcessETHBurner, INounsAuctionHouseV2, INounsDAOV3 } from '../../../contracts/governance/ExcessETHBurner.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
 import { ERC20Mock, RocketETHMock } from './ERC20Mock.sol';
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
-abstract contract DeployUtilsExcessETH is DeployUtilsV3 {
+abstract contract DeployUtilsExcessETHBurner is DeployUtilsV3 {
     function _deployExecutorV3(address dao) internal returns (NounsDAOExecutorV3) {
         NounsDAOExecutorV3 executor = NounsDAOExecutorV3(
             payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV3()), '')))
@@ -19,24 +19,26 @@ abstract contract DeployUtilsExcessETH is DeployUtilsV3 {
         return executor;
     }
 
-    function _deployExcessETH(
+    function _deployExcessETHBurner(
         NounsDAOExecutorV3 owner,
         INounsAuctionHouseV2 auction,
-        uint256 waitingPeriodEnd,
+        uint128 burnStartNounID,
+        uint128 minNewNounsBetweenBurns,
         uint16 pastAuctionCount
-    ) internal returns (ExcessETH excessETH) {
+    ) internal returns (ExcessETHBurner burner) {
         WETH weth = new WETH();
         ERC20Mock stETH = new ERC20Mock();
         RocketETHMock rETH = new RocketETHMock();
 
-        excessETH = new ExcessETH(
+        burner = new ExcessETHBurner(
             address(owner),
             INounsDAOV3(owner.admin()),
             auction,
             IERC20(address(weth)),
             stETH,
             rETH,
-            waitingPeriodEnd,
+            burnStartNounID,
+            minNewNounsBetweenBurns,
             pastAuctionCount
         );
     }

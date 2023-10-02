@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for ExcessETH, the helper contract for burning excess ETH
+/// @title Interface for ExcessETHBurner, the helper contract for burning excess ETH
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,6 +17,6 @@
 
 pragma solidity ^0.8.19;
 
-interface IExcessETH {
+interface IExcessETHBurner {
     function excessETH() external view returns (uint256);
 }

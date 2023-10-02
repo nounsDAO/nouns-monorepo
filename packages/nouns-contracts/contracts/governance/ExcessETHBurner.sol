@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.19;
 
-import { IExcessETH } from '../interfaces/IExcessETH.sol';
+import { IExcessETHBurner } from '../interfaces/IExcessETHBurner.sol';
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouse } from '../interfaces/INounsAuctionHouse.sol';
@@ -32,20 +32,28 @@ interface INounsDAOV3 {
 
 interface INounsAuctionHouseV2 is INounsAuctionHouse {
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
+
+    function auction() external view returns (INounsAuctionHouse.AuctionV2 memory);
+}
+
+interface IExecutorV3 {
+    function burnExcessETH(uint256 amount) external;
 }
 
 /**
- * @title ExcessETH Helper
- * @notice A helpder contract for calculating Nouns excess ETH, used by NounsDAOExecutorV3 to burn excess ETH.
+ * @title ExcessETH Burner
+ * @notice A helpder contract for burning Nouns excess ETH with NounsDAOExecutorV3.
  * @dev Owner is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
  */
-contract ExcessETH is IExcessETH, Ownable {
+contract ExcessETHBurner is IExcessETHBurner, Ownable {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    error NotTimeToBurnYet();
+    error NoExcessToBurn();
     error NotEnoughAuctionHistory();
     error PastAuctionCountTooLow();
 
@@ -56,6 +64,8 @@ contract ExcessETH is IExcessETH, Ownable {
      */
 
     event AuctionSet(address oldAuction, address newAuction);
+    event NextBurnNounIDSet(uint128 nextBurnNounID, uint128 newNextBurnNounID);
+    event MinNewNounsBetweenBurnsSet(uint128 minNewNounsBetweenBurns, uint128 newMinNewNounsBetweenBurns);
     event NumberOfPastAuctionsForMeanPriceSet(
         uint16 oldNumberOfPastAuctionsForMeanPrice,
         uint16 newNumberOfPastAuctionsForMeanPrice
@@ -74,7 +84,8 @@ contract ExcessETH is IExcessETH, Ownable {
     IERC20 public immutable wETH;
     IERC20 public immutable stETH;
     IERC20 public immutable rETH;
-    uint256 public immutable waitingPeriodEnd;
+    uint128 public nextBurnNounID;
+    uint128 public minNewNounsBetweenBurns;
     uint16 public numberOfPastAuctionsForMeanPrice;
 
     constructor(
@@ -84,7 +95,8 @@ contract ExcessETH is IExcessETH, Ownable {
         IERC20 wETH_,
         IERC20 stETH_,
         IERC20 rETH_,
-        uint256 waitingPeriodEnd_,
+        uint128 burnStartNounID_,
+        uint128 minNewNounsBetweenBurns_,
         uint16 numberOfPastAuctionsForMeanPrice_
     ) {
         _transferOwnership(owner_);
@@ -94,7 +106,8 @@ contract ExcessETH is IExcessETH, Ownable {
         wETH = wETH_;
         stETH = stETH_;
         rETH = rETH_;
-        waitingPeriodEnd = waitingPeriodEnd_;
+        nextBurnNounID = burnStartNounID_;
+        minNewNounsBetweenBurns = minNewNounsBetweenBurns_;
         numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
     }
 
@@ -103,6 +116,26 @@ contract ExcessETH is IExcessETH, Ownable {
      *   PUBLIC FUNCTIONS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    /**
+     * @notice Burn excess ETH in the Nouns treasury.
+     * Allows the burn to occur every `minNewNounsBetweenBurns` new Nouns minted.
+     * For example, if `minNewNounsBetweenBurns` is 100, and the first `nextBurnNounID` is 1000, then the following
+     * Nouns IDs are allowed to burn excess ETH: 1100, 1200, 1300, etc.
+     *
+     * See `excessETH()` for more information on how excess ETH is defined.
+     * @dev Reverts when auction house has not yet minted the next Noun ID at which the burn is allowed.
+     */
+    function burnExcessETH() public returns (uint256 amount) {
+        if (auction.auction().nounId < nextBurnNounID) revert NotTimeToBurnYet();
+
+        amount = excessETH();
+        if (amount == 0) revert NoExcessToBurn();
+
+        IExecutorV3(owner()).burnExcessETH(amount);
+
+        nextBurnNounID += minNewNounsBetweenBurns;
+    }
 
     /**
      * @notice Get the amount of excess ETH in the Nouns treasury.
@@ -114,8 +147,6 @@ contract ExcessETH is IExcessETH, Ownable {
      * @dev Reverts if there is not enough auction history to calculate the mean auction price.
      */
     function excessETH() public view returns (uint256) {
-        if (block.timestamp < waitingPeriodEnd) return 0;
-
         uint256 expectedTreasuryValue = expectedTreasuryValueInETH();
         uint256 treasuryValue = treasuryValueInETH();
 
@@ -173,6 +204,26 @@ contract ExcessETH is IExcessETH, Ownable {
      *   OWNER FUNCTIONS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    /**
+     * @notice Set the next Noun ID at which the burn is allowed.
+     * @param newNextBurnNounID The new next Noun ID at which the burn is allowed.
+     */
+    function setNextBurnNounID(uint128 newNextBurnNounID) external onlyOwner {
+        emit NextBurnNounIDSet(nextBurnNounID, newNextBurnNounID);
+
+        nextBurnNounID = newNextBurnNounID;
+    }
+
+    /**
+     * @notice Set the minimum number of new Nouns between burns.
+     * @param newMinNewNounsBetweenBurns The new minimum number of new Nouns between burns.
+     */
+    function setMinNewNounsBetweenBurns(uint128 newMinNewNounsBetweenBurns) external onlyOwner {
+        emit MinNewNounsBetweenBurnsSet(minNewNounsBetweenBurns, newMinNewNounsBetweenBurns);
+
+        minNewNounsBetweenBurns = newMinNewNounsBetweenBurns;
+    }
 
     /**
      * @notice Set the number of past auctions to use for calculating the mean auction price.

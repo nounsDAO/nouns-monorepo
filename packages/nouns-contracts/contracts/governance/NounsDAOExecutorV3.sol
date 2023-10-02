@@ -44,15 +44,13 @@ import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 import { Initializable } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { Address } from '@openzeppelin/contracts/utils/Address.sol';
-import { IExcessETH } from '../interfaces/IExcessETH.sol';
 import { Burn } from '../libs/Burn.sol';
 
 contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     using SafeERC20 for IERC20;
     using Address for address payable;
 
-    error ExcessETHHelperNotSet();
-    error NoExcessToBurn();
+    error OnlyExcessETHBurner();
 
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
@@ -83,6 +81,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
     );
     event ETHSent(address indexed to, uint256 amount);
     event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount);
+    event ExcessETHBurnerSet(address oldBurner, address newBurner);
     event ETHBurned(uint256 amount);
 
     string public constant NAME = 'NounsDAOExecutorV3';
@@ -98,7 +97,7 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
 
     mapping(bytes32 => bool) public queuedTransactions;
 
-    IExcessETH public excessETHHelper;
+    address public excessETHBurner;
     uint256 public totalETHBurned;
 
     constructor() initializer {}
@@ -138,12 +137,15 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
         emit NewPendingAdmin(pendingAdmin_);
     }
 
-    function setExcessETHHelper(IExcessETH excessETHHelper_) public {
+    function setExcessETHBurner(address newExcessETHBurner) public {
         require(
             msg.sender == address(this),
-            'NounsDAOExecutor::setExcessETHHelper: Call must come from NounsDAOExecutor.'
+            'NounsDAOExecutor::setExcessETHBurner: Call must come from NounsDAOExecutor.'
         );
-        excessETHHelper = excessETHHelper_;
+
+        emit ExcessETHBurnerSet(excessETHBurner, newExcessETHBurner);
+
+        excessETHBurner = newExcessETHBurner;
     }
 
     function queueTransaction(
@@ -251,18 +253,13 @@ contract NounsDAOExecutorV3 is UUPSUpgradeable, Initializable {
 
     /**
      * @notice Burn excess ETH in the treasury.
-     * Anyone can call this function to burn excess ETH in the treasury.
+     * Can only be called by `excessETHBurner`. Anyone can call the burner's `burnExcessETH` function.
      * Excess ETH is defined as the difference between the total value of the treasury in ETH, and the expected value
      * which is the mean auction price in the last N auctions multiplied by adjusted total supply (see DAO logic for
      * more info on `adjustedTotalSupply`).
-     * @dev Will revert if `excessETHHelper` is not set.
-     * @return amount The amount of ETH burned.
      */
-    function burnExcessETH() public returns (uint256 amount) {
-        if (address(excessETHHelper) == address(0)) revert ExcessETHHelperNotSet();
-
-        amount = excessETHHelper.excessETH();
-        if (amount == 0) revert NoExcessToBurn();
+    function burnExcessETH(uint256 amount) public {
+        if (msg.sender != excessETHBurner) revert OnlyExcessETHBurner();
 
         Burn.eth(amount);
         totalETHBurned += amount;
