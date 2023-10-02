@@ -281,6 +281,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.supportDetailed = event.params.support;
   vote.nouns = voter.nounsRepresented;
   vote.blockNumber = event.block.number;
+  vote.blockTimestamp = event.block.timestamp;
 
   if (event.params.reason != '') {
     vote.reason = event.params.reason;
