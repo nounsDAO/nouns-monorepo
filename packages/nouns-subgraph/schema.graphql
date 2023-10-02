@@ -280,6 +280,30 @@ type Proposal @entity {
 
   "The block at which voting balance snapshots are taken for this proposal"
   voteSnapshotBlock: BigInt!
+
+  "The block number at which this proposal was canceled"
+  canceledBlock: BigInt
+
+  "The timestamp when this proposal was canceled"
+  canceledTimestamp: BigInt
+
+  "The block number at which this proposal was executed"
+  executedBlock: BigInt
+
+  "The timestamp when this proposal was executed"
+  executedTimestamp: BigInt
+
+  "The block number at which this proposal was vetoed"
+  vetoedBlock: BigInt
+
+  "The timestamp when this proposal was vetoed"
+  vetoedTimestamp: BigInt
+
+  "The block number at which this proposal was queued"
+  queuedBlock: BigInt
+
+  "The timestamp when this proposal was queued"
+  queuedTimestamp: BigInt
 }
 
 type ProposalVersion @entity(immutable: true) {
