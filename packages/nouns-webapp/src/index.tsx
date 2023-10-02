@@ -118,7 +118,8 @@ const ChainSubscriber: React.FC = () => {
       wsProvider,
     );
 
-    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null, null);
+    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
+    const bidCommentFilter = nounsAuctionHouseContract.filters.AuctionBidComment(null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
     const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
     const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);
@@ -133,7 +134,18 @@ const ChainSubscriber: React.FC = () => {
       const timestamp = (await event.getBlock()).timestamp;
       const { transactionHash, transactionIndex } = event;
       dispatch(
-        appendBid(reduxSafeBid({ nounId, sender, value, extended, comment, transactionHash, transactionIndex, timestamp })),
+        appendBid(
+          reduxSafeBid({
+            nounId,
+            sender,
+            value,
+            extended,
+            comment,
+            transactionHash,
+            transactionIndex,
+            timestamp,
+          }),
+        ),
       );
     };
     const processAuctionCreated = (
@@ -165,15 +177,35 @@ const ChainSubscriber: React.FC = () => {
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
       if (event.args === undefined) return;
+      const transactionHash = event.transactionHash;
+      
+      const auctionBidCommentEvents = await nounsAuctionHouseContract.queryFilter(
+        bidCommentFilter,
+        0 - BLOCKS_PER_DAY
+      );
+
+      const auctionBidCommentEvent = auctionBidCommentEvents.filter(event => event.transactionHash === transactionHash);
+      const comment = auctionBidCommentEvent.length > 0 ? auctionBidCommentEvent[0].args[0] : '';
+
       processBidFilter(
-        ...(event.args.slice(0, 5) as [BigNumber, string, BigNumber, boolean, string]),
+        ...(event.args.slice(0, 4) as [BigNumber, string, BigNumber, boolean]),
+        comment,
         event,
       );
     }
 
-    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, comment, event) =>
-      processBidFilter(nounId, sender, value, extended, comment, event),
-    );
+    nounsAuctionHouseContract.on(bidFilter, async (nounId, sender, value, extended, event) => {
+      const transactionHash = event.transactionHash;
+      const auctionBidCommentEvents = await nounsAuctionHouseContract.queryFilter(
+        bidCommentFilter,
+        0 - BLOCKS_PER_DAY
+      );
+
+      const auctionBidCommentEvent = auctionBidCommentEvents.filter(event => event.transactionHash === transactionHash);
+      const comment = auctionBidCommentEvent.length > 0 ? auctionBidCommentEvent[0].args[0] : '';
+
+      processBidFilter(nounId, sender, value, extended, comment, event);
+    });
     nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
       processAuctionCreated(nounId, startTime, endTime),
     );
