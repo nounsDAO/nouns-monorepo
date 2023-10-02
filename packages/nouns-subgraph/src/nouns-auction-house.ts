@@ -58,6 +58,7 @@ export function handleAuctionBid(event: AuctionBid): void {
   bid.blockNumber = event.block.number;
   bid.blockTimestamp = event.block.timestamp;
   bid.auction = auction.id;
+  bid.comment = '';
   
   bid.save();
 }
