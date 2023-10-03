@@ -130,7 +130,15 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
-    function backgroundsCount() external view returns (uint256);
+    function backgroundCount() external view returns (uint256);
+
+    function bodyCount() external view returns (uint256);
+
+    function accessoryCount() external view returns (uint256);
+
+    function headCount() external view returns (uint256);
+
+    function glassesCount() external view returns (uint256);
 
     function backgrounds(uint256 index) external view returns (string memory);
 

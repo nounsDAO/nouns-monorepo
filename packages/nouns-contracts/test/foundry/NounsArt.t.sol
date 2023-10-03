@@ -98,7 +98,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
         art.addBackground('ffffff');
 
-        assertEq(art.backgroundsCount(), 1);
+        assertEq(art.backgroundCount(), 1);
         assertEq(art.backgrounds(0), 'ffffff');
     }
 
@@ -122,7 +122,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
         vm.prank(descriptor);
         art.addManyBackgrounds(bgs);
 
-        assertEq(art.backgroundsCount(), 2);
+        assertEq(art.backgroundCount(), 2);
         assertEq(art.backgrounds(0), 'ffffff');
         assertEq(art.backgrounds(1), '000000');
     }
