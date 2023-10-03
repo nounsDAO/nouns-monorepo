@@ -67,6 +67,8 @@ interface INounsAuctionHouseV2 {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
+    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
+
     error NounNotUpForAuction();
 
     error AuctionExpired();

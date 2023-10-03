@@ -470,6 +470,62 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         assertEq(prices[2].amount, 3 ether);
         assertEq(prices[2].winner, bidder);
     }
+
+    function test_setPrices_revertsForNonOwner() public {
+        INounsAuctionHouseV2.Settlement[] memory settlements = new INounsAuctionHouseV2.Settlement[](1);
+        settlements[0] = INounsAuctionHouseV2.Settlement({
+            blockTimestamp: uint32(block.timestamp),
+            amount: 42 ether,
+            winner: makeAddr('winner'),
+            nounId: 3
+        });
+
+        vm.expectRevert('Ownable: caller is not the owner');
+        auction.setPrices(settlements);
+    }
+
+    function test_setPrices_worksForOwner() public {
+        INounsAuctionHouseV2.Settlement[] memory settlements = new INounsAuctionHouseV2.Settlement[](20);
+        uint256[] memory nounIds = new uint256[](20);
+        uint256[] memory prices = new uint256[](20);
+
+        uint256 nounId = 0;
+        for (uint256 i = 0; i < 20; ++i) {
+            // skip Nouners
+            if (nounId <= 1820 && nounId % 10 == 0) {
+                nounId++;
+            }
+
+            uint256 price = nounId * 1 ether;
+
+            settlements[i] = INounsAuctionHouseV2.Settlement({
+                blockTimestamp: uint32(nounId),
+                amount: price,
+                winner: makeAddr(vm.toString(nounId)),
+                nounId: nounId
+            });
+
+            nounIds[i] = nounId;
+            prices[i] = price;
+
+            nounId++;
+        }
+
+        vm.expectEmit(true, true, true, true);
+        emit HistoricPricesSet(nounIds, prices);
+
+        vm.prank(auction.owner());
+        auction.setPrices(settlements);
+
+        INounsAuctionHouseV2.Settlement[] memory actualSettlements = auction.prices(0, 23);
+        assertEq(actualSettlements.length, 20);
+        for (uint256 i = 0; i < 20; ++i) {
+            assertEq(settlements[i].blockTimestamp, actualSettlements[i].blockTimestamp);
+            assertEq(settlements[i].amount, actualSettlements[i].amount);
+            assertEq(settlements[i].winner, actualSettlements[i].winner);
+            assertEq(settlements[i].nounId, actualSettlements[i].nounId);
+        }
+    }
 }
 
 contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
