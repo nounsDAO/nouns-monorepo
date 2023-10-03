@@ -69,7 +69,13 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsAuctionHouseProxyAdmin proxyAdmin,
         NounsAuctionHouseProxy proxy
     ) internal {
-        NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2();
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(proxy));
+
+        NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2(
+            auctionV1.nouns(),
+            auctionV1.weth(),
+            auctionV1.duration()
+        );
         NounsAuctionHousePreV2Migration migratorLogic = new NounsAuctionHousePreV2Migration();
 
         vm.startPrank(owner);
@@ -84,6 +90,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
         vm.stopPrank();
     }
+
     uint32 constant LAST_MINUTE_BLOCKS = 10;
     uint32 constant OBJECTION_PERIOD_BLOCKS = 10;
     uint32 constant UPDATABLE_PERIOD_BLOCKS = 10;

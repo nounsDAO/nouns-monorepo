@@ -23,7 +23,6 @@ export * from './verify-etherscan-daov2';
 export * from './update-configs-daov2';
 export * from './deploy-short-times-daov1';
 export * from './deploy-and-configure-short-times-daov1';
-export * from './deploy-auctionhouse-v2-logic';
 export * from './deploy-local-dao-v3';
 export * from './run-local-dao-v3';
 export * from './deploy-short-times-dao-v3';

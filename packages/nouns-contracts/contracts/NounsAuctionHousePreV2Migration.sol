@@ -15,39 +15,73 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 
 contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
-    // See NounsAuctionHouse for docs on these state vars
-    address public nouns;
-    address public weth;
-    uint256 public timeBuffer;
-    uint256 public reservePrice;
-    uint8 public minBidIncrementPercentage;
-    uint256 public duration;
-    INounsAuctionHouse.Auction public auction;
+    struct OldLayout {
+        address nouns;
+        address weth;
+        uint256 timeBuffer;
+        uint256 reservePrice;
+        uint8 minBidIncrementPercentage;
+        uint256 duration;
+        INounsAuctionHouse.Auction auction;
+    }
+
+    struct NewLayout {
+        uint192 reservePrice;
+        uint56 timeBuffer;
+        uint8 minBidIncrementPercentage;
+        INounsAuctionHouseV2.AuctionV2 auction;
+        bool paused;
+    }
+
+    uint256 private startSlot;
 
     function migrate() public onlyOwner {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        OldLayout storage oldLayout = _oldLayout();
+        NewLayout storage newLayout = _newLayout();
+        OldLayout memory oldLayoutCache = oldLayout;
 
-        // nullifying previous storage slots to avoid the risk of leftovers
-        auction = INounsAuctionHouse.Auction(0, 0, 0, 0, payable(address(0)), false);
+        // Clear the old storage layout
+        oldLayout.nouns = address(0);
+        oldLayout.weth = address(0);
+        oldLayout.timeBuffer = 0;
+        oldLayout.reservePrice = 0;
+        oldLayout.minBidIncrementPercentage = 0;
+        oldLayout.duration = 0;
+        oldLayout.auction = INounsAuctionHouse.Auction(0, 0, 0, 0, payable(0), false);
 
-        INounsAuctionHouse.AuctionV2 storage auctionV2;
+        // Populate the new layout from the cache
+        newLayout.reservePrice = uint192(oldLayoutCache.reservePrice);
+        newLayout.timeBuffer = uint56(oldLayoutCache.timeBuffer);
+        newLayout.minBidIncrementPercentage = oldLayoutCache.minBidIncrementPercentage;
+        newLayout.auction = INounsAuctionHouseV2.AuctionV2({
+            nounId: uint128(oldLayoutCache.auction.nounId),
+            amount: uint128(oldLayoutCache.auction.amount),
+            startTime: uint40(oldLayoutCache.auction.startTime),
+            endTime: uint40(oldLayoutCache.auction.endTime),
+            bidder: oldLayoutCache.auction.bidder,
+            settled: oldLayoutCache.auction.settled
+        });
+        newLayout.paused = paused();
+    }
+
+    function _oldLayout() internal pure returns (OldLayout storage layout) {
         assembly {
-            auctionV2.slot := auction.slot
+            layout.slot := startSlot.slot
         }
+    }
 
-        auctionV2.nounId = uint128(_auction.nounId);
-        auctionV2.amount = uint128(_auction.amount);
-        auctionV2.startTime = uint40(_auction.startTime);
-        auctionV2.endTime = uint40(_auction.endTime);
-        auctionV2.bidder = _auction.bidder;
-        auctionV2.settled = _auction.settled;
+    function _newLayout() internal pure returns (NewLayout storage layout) {
+        assembly {
+            layout.slot := startSlot.slot
+        }
     }
 }

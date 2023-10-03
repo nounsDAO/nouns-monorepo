@@ -22,48 +22,62 @@
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
 // With modifications by Nounders DAO.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
 contract NounsAuctionHouseV2 is
-    INounsAuctionHouse,
+    INounsAuctionHouseV2,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
 {
     /// @notice A hard-coded cap on time buffer to prevent accidental auction disabling if set with a very high value.
-    uint256 public constant MAX_TIME_BUFFER = 1 days;
+    uint56 public constant MAX_TIME_BUFFER = 1 days;
 
     /// @notice The Nouns ERC721 token contract
-    INounsToken public nouns;
+    INounsToken public immutable nouns;
 
     /// @notice The address of the WETH contract
-    address public weth;
+    address public immutable weth;
 
-    /// @notice The minimum amount of time left in an auction after a new bid is created
-    uint256 public timeBuffer;
+    /// @notice The duration of a single auction
+    uint256 public immutable duration;
 
     /// @notice The minimum price accepted in an auction
-    uint256 public reservePrice;
+    uint192 public reservePrice;
+
+    /// @notice The minimum amount of time left in an auction after a new bid is created
+    uint56 public timeBuffer;
 
     /// @notice The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
-    /// @notice The duration of a single auction
-    uint256 public duration;
-
     /// @notice The active auction
-    INounsAuctionHouse.AuctionV2 public auction;
+    INounsAuctionHouseV2.AuctionV2 public auction;
+
+    /// @notice Whether this contract is paused or not
+    /// @dev Replaces the state variable from PausableUpgradeable, to bit pack this bool with `auction` and save gas
+    bool public __paused;
 
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
+
+    constructor(
+        INounsToken _nouns,
+        address _weth,
+        uint256 _duration
+    ) {
+        nouns = _nouns;
+        weth = _weth;
+        duration = _duration;
+    }
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -71,12 +85,9 @@ contract NounsAuctionHouseV2 is
      * @dev This function can only be called once.
      */
     function initialize(
-        INounsToken _nouns,
-        address _weth,
-        uint256 _timeBuffer,
-        uint256 _reservePrice,
-        uint8 _minBidIncrementPercentage,
-        uint256 _duration
+        uint192 _reservePrice,
+        uint56 _timeBuffer,
+        uint8 _minBidIncrementPercentage
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -84,12 +95,9 @@ contract NounsAuctionHouseV2 is
 
         _pause();
 
-        nouns = _nouns;
-        weth = _weth;
-        timeBuffer = _timeBuffer;
         reservePrice = _reservePrice;
+        timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
-        duration = _duration;
     }
 
     /**
@@ -113,7 +121,7 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId) external payable override {
-        INounsAuctionHouse.AuctionV2 memory _auction = auction;
+        INounsAuctionHouseV2.AuctionV2 memory _auction = auction;
 
         if (_auction.nounId != nounId) revert NounNotUpForAuction();
         if (block.timestamp >= _auction.endTime) revert AuctionExpired();
@@ -149,7 +157,8 @@ contract NounsAuctionHouseV2 is
      * anyone can settle an ongoing auction.
      */
     function pause() external override onlyOwner {
-        _pause();
+        __paused = true;
+        emit Paused(_msgSender());
     }
 
     /**
@@ -158,7 +167,8 @@ contract NounsAuctionHouseV2 is
      * contract is paused. If required, this function will start a new auction.
      */
     function unpause() external override onlyOwner {
-        _unpause();
+        __paused = false;
+        emit Unpaused(_msgSender());
 
         if (auction.startTime == 0 || auction.settled) {
             _createAuction();
@@ -166,10 +176,17 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
+     * @dev Get whether this contract is paused or not.
+     */
+    function paused() public view override returns (bool) {
+        return __paused;
+    }
+
+    /**
      * @notice Set the auction time buffer.
      * @dev Only callable by the owner.
      */
-    function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
+    function setTimeBuffer(uint56 _timeBuffer) external override onlyOwner {
         if (_timeBuffer > MAX_TIME_BUFFER) revert TimeBufferTooLarge();
 
         timeBuffer = _timeBuffer;
@@ -181,7 +198,7 @@ contract NounsAuctionHouseV2 is
      * @notice Set the auction reserve price.
      * @dev Only callable by the owner.
      */
-    function setReservePrice(uint256 _reservePrice) external override onlyOwner {
+    function setReservePrice(uint192 _reservePrice) external override onlyOwner {
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
@@ -228,7 +245,7 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.AuctionV2 memory _auction = auction;
+        INounsAuctionHouseV2.AuctionV2 memory _auction = auction;
 
         if (_auction.startTime == 0) revert AuctionHasntBegun();
         if (_auction.settled) revert AuctionAlreadySettled();
@@ -275,6 +292,30 @@ contract NounsAuctionHouseV2 is
             success := call(30000, to, value, 0, 0, 0, 0)
         }
         return success;
+    }
+
+    /**
+     * @notice Set historic prices; only callable by the owner, which in Nouns is the treasury (timelock) contract.
+     * @dev This function lowers auction price accuracy from 18 decimals to 10 decimals, as part of the price history
+     * bit packing, to save gas.
+     * @param settlements The list of historic prices to set.
+     */
+    function setPrices(Settlement[] memory settlements) external onlyOwner {
+        uint256[] memory nounIds = new uint256[](settlements.length);
+        uint256[] memory prices_ = new uint256[](settlements.length);
+
+        for (uint256 i = 0; i < settlements.length; ++i) {
+            settlementHistory[settlements[i].nounId] = SettlementState({
+                blockTimestamp: settlements[i].blockTimestamp,
+                amount: ethPriceToUint64(settlements[i].amount),
+                winner: settlements[i].winner
+            });
+
+            nounIds[i] = settlements[i].nounId;
+            prices_[i] = settlements[i].amount;
+        }
+
+        emit HistoricPricesSet(nounIds, prices_);
     }
 
     /**

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for Noun Auction Houses
+/// @title Interface for Noun Auction Houses V2
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -15,22 +15,42 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
-interface INounsAuctionHouse {
-    struct Auction {
+interface INounsAuctionHouseV2 {
+    struct AuctionV2 {
         // ID for the Noun (ERC721 token ID)
-        uint256 nounId;
+        uint128 nounId;
         // The current highest bid amount
-        uint256 amount;
+        uint128 amount;
         // The time that the auction started
-        uint256 startTime;
+        uint40 startTime;
         // The time that the auction is scheduled to end
-        uint256 endTime;
+        uint40 endTime;
         // The address of the current highest bid
         address payable bidder;
         // Whether or not the auction has been settled
         bool settled;
+    }
+
+    struct SettlementState {
+        // The block.timestamp when the auction was settled.
+        uint32 blockTimestamp;
+        // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
+        uint64 amount;
+        // The address of the auction winner.
+        address winner;
+    }
+
+    struct Settlement {
+        // The block.timestamp when the auction was settled.
+        uint32 blockTimestamp;
+        // The winning bid amount, converted from 10 decimal places to 18, for better client UX.
+        uint256 amount;
+        // The address of the auction winner.
+        address winner;
+        // ID for the Noun (ERC721 token ID).
+        uint256 nounId;
     }
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
@@ -47,6 +67,24 @@ interface INounsAuctionHouse {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
+    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
+
+    error NounNotUpForAuction();
+
+    error AuctionExpired();
+
+    error AuctionHasntBegun();
+
+    error AuctionAlreadySettled();
+
+    error AuctionNotDone();
+
+    error MustSendAtLeastReservePrice();
+
+    error BidDifferenceMustBeGreaterThanMinBidIncrement();
+
+    error TimeBufferTooLarge();
+
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
@@ -57,9 +95,9 @@ interface INounsAuctionHouse {
 
     function unpause() external;
 
-    function setTimeBuffer(uint256 timeBuffer) external;
+    function setTimeBuffer(uint56 timeBuffer) external;
 
-    function setReservePrice(uint256 reservePrice) external;
+    function setReservePrice(uint192 reservePrice) external;
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
 }
