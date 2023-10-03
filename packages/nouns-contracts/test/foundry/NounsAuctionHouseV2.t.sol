@@ -6,7 +6,7 @@ import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
-import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
@@ -60,10 +60,10 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     function test_createBid_revertsGivenWrongNounId() public {
         (uint128 nounId, , , , , ) = auction.auction();
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.NounNotUpForAuction.selector));
+        vm.expectRevert(INounsAuctionHouseV2.NounNotUpForAuction.selector);
         auction.createBid(nounId - 1);
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.NounNotUpForAuction.selector));
+        vm.expectRevert(INounsAuctionHouseV2.NounNotUpForAuction.selector);
         auction.createBid(nounId + 1);
     }
 
@@ -71,7 +71,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         (uint128 nounId, , , uint40 endTime, , ) = auction.auction();
         vm.warp(endTime + 1);
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.AuctionExpired.selector));
+        vm.expectRevert(INounsAuctionHouseV2.AuctionExpired.selector);
         auction.createBid(nounId);
     }
 
@@ -81,7 +81,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
         (uint128 nounId, , , , , ) = auction.auction();
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.MustSendAtLeastReservePrice.selector));
+        vm.expectRevert(INounsAuctionHouseV2.MustSendAtLeastReservePrice.selector);
         auction.createBid{ value: 0.9 ether }(nounId);
     }
 
@@ -92,7 +92,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         auction.createBid{ value: 1 ether }(nounId);
 
         vm.expectRevert(
-            abi.encodeWithSelector(INounsAuctionHouse.BidDifferenceMustBeGreaterThanMinBidIncrement.selector)
+            abi.encodeWithSelector(INounsAuctionHouseV2.BidDifferenceMustBeGreaterThanMinBidIncrement.selector)
         );
         auction.createBid{ value: 1.49 ether }(nounId);
     }
@@ -142,7 +142,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_settleAuction_revertsWhenAuctionInProgress() public {
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.AuctionNotDone.selector));
+        vm.expectRevert(INounsAuctionHouseV2.AuctionNotDone.selector);
         auction.settleCurrentAndCreateNewAuction();
     }
 
@@ -154,7 +154,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         auction.pause();
         auction.settleAuction();
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.AuctionAlreadySettled.selector));
+        vm.expectRevert(INounsAuctionHouseV2.AuctionAlreadySettled.selector);
         auction.settleAuction();
     }
 
@@ -167,8 +167,19 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
         auction = NounsAuctionHouseV2(address(auctionProxy));
 
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.AuctionHasntBegun.selector));
+        vm.expectRevert(INounsAuctionHouseV2.AuctionHasntBegun.selector);
         auction.settleAuction();
+    }
+
+    function test_settleCurrentAndCreateNewAuction_revertsWhenPaused() public {
+        (, , , uint40 endTime, , ) = auction.auction();
+        vm.warp(endTime + 1);
+
+        vm.prank(owner);
+        auction.pause();
+
+        vm.expectRevert('Pausable: paused');
+        auction.settleCurrentAndCreateNewAuction();
     }
 
     function test_V2Migration_works() public {
@@ -189,6 +200,9 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         vm.prank(bidder);
         auctionV1.createBid{ value: amount }(nounId);
 
+        address nounsBefore = address(auctionV1.nouns());
+        address wethBefore = address(auctionV1.weth());
+
         _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
 
         NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
@@ -207,6 +221,42 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         assertEq(endTimeV2, endTime);
         assertEq(bidderV2, bidder);
         assertEq(settledV2, false);
+
+        assertEq(address(auctionV2.nouns()), nounsBefore);
+        assertEq(address(auctionV2.weth()), wethBefore);
+        assertEq(auctionV2.timeBuffer(), AUCTION_TIME_BUFFER);
+        assertEq(auctionV2.reservePrice(), AUCTION_RESERVE_PRICE);
+        assertEq(auctionV2.minBidIncrementPercentage(), AUCTION_MIN_BID_INCREMENT_PRCT);
+        assertEq(auctionV2.duration(), AUCTION_DURATION);
+        assertEq(auctionV2.paused(), false);
+        assertEq(auctionV2.owner(), owner);
+    }
+
+    function test_V2Migration_copiesPausedWhenTrue() public {
+        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+            owner,
+            noundersDAO,
+            minter
+        );
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        vm.prank(owner);
+        auctionV1.unpause();
+        vm.roll(block.number + 1);
+        (uint256 nounId, , , , , ) = auctionV1.auction();
+
+        address payable bidder = payable(address(0x142));
+        uint256 amount = 142 ether;
+        vm.deal(bidder, amount);
+        vm.prank(bidder);
+        auctionV1.createBid{ value: amount }(nounId);
+
+        vm.prank(owner);
+        auctionV1.pause();
+
+        _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
+
+        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
+        assertEq(auctionV2.paused(), true);
     }
 
     function test_auctionGetter_compatibleWithV1() public {
@@ -249,7 +299,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         address bidder = address(0x4444);
         bidAndWinCurrentAuction(bidder, 1 ether);
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(2);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(2);
 
         assertEq(prices.length, 1);
         assertEq(prices[0].blockTimestamp, uint32(block.timestamp));
@@ -263,7 +313,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         // at 10 decimal points it's 1844674407.3709551615
         bidAndWinCurrentAuction(makeAddr('bidder'), 1844674407.3709551615999999 ether);
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(1);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(1);
 
         assertEq(prices.length, 1);
         assertEq(prices[0].nounId, 1);
@@ -274,7 +324,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     function test_prices_overflowsGracefullyOverUint64MaxValue() public {
         bidAndWinCurrentAuction(makeAddr('bidder'), 1844674407.3709551617 ether);
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(1);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(1);
 
         assertEq(prices.length, 1);
         assertEq(prices[0].nounId, 1);
@@ -288,7 +338,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             bidAndWinCurrentAuction(bidder, i * 1e18);
         }
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(20);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(20);
         assertEq(prices[0].nounId, 22);
         assertEq(prices[1].nounId, 21);
         assertEq(prices[2].nounId, 19);
@@ -312,7 +362,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         auction.pause();
         auction.settleAuction();
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(2);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(2);
 
         assertEq(prices.length, 2);
         assertEq(prices[0].blockTimestamp, uint32(bid2Timestamp));
@@ -338,7 +388,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(3);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(3);
         assertEq(prices.length, 3);
         assertEq(prices[0].nounId, 6);
         assertEq(prices[0].amount, 3 ether);
@@ -358,7 +408,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             lastBidTime = bidAndWinCurrentAuction(bidder, i * 1e18);
         }
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(0, 5);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(0, 5);
         // lastest ID 4 has no settlement data, so it's not included in the result
         assertEq(prices.length, 3);
         assertEq(prices[0].nounId, 1);
@@ -379,7 +429,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
             bidAndWinCurrentAuction(bidder, i * 1e18);
         }
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(7, 12);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(7, 12);
         assertEq(prices.length, 4);
         assertEq(prices[0].nounId, 7);
         assertEq(prices[0].amount, 7 ether);
@@ -408,7 +458,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         bidAndWinCurrentAuction(bidder, 2 ether);
         bidAndWinCurrentAuction(bidder, 3 ether);
 
-        INounsAuctionHouse.Settlement[] memory prices = auction.prices(1, 7);
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(1, 7);
         assertEq(prices.length, 3);
         assertEq(prices[0].nounId, 1);
         assertEq(prices[0].amount, 1 ether);
@@ -430,7 +480,7 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
 
     function test_setTimeBuffer_revertsGivenValueAboveMax() public {
         vm.prank(auction.owner());
-        vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.TimeBufferTooLarge.selector));
+        vm.expectRevert(INounsAuctionHouseV2.TimeBufferTooLarge.selector);
         auction.setTimeBuffer(1 days + 1);
     }
 
