@@ -6,7 +6,7 @@ import { NounsAuctionHouse } from '../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseV2 } from '../contracts/NounsAuctionHouseV2.sol';
 import { NounsAuctionHousePreV2Migration } from '../contracts/NounsAuctionHousePreV2Migration.sol';
 
-contract DeployAuctionHouseV2 is Script {
+abstract contract DeployAuctionHouseV2Base is Script {
     NounsAuctionHouse public immutable auctionV1;
 
     constructor(address _auctionHouseProxy) {
