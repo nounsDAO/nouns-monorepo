@@ -113,7 +113,7 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
         getProposalToExecution(proposalId);
         vm.stopPrank();
 
-        (uint128 currentNounID, , , , , ) = auction.auction();
+        uint128 currentNounID = auction.auction().nounId;
 
         ExcessETHBurner burner = _deployExcessETHBurner(
             NounsDAOExecutorV3(treasury),
@@ -197,11 +197,11 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
     }
 
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
-        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
+        INounsAuctionHouseV2.AuctionV2 memory auction_ = auction.auction();
         vm.deal(bidder, bid);
         vm.prank(bidder);
-        auction.createBid{ value: bid }(nounId);
-        vm.warp(endTime);
+        auction.createBid{ value: bid }(auction_.nounId);
+        vm.warp(auction_.endTime);
         auction.settleCurrentAndCreateNewAuction();
         return block.timestamp;
     }

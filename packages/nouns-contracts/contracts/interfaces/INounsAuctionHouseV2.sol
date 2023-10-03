@@ -100,4 +100,8 @@ interface INounsAuctionHouseV2 {
     function setReservePrice(uint192 reservePrice) external;
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
+
+    function auction() external view returns (AuctionV2 memory);
+
+    function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
 }

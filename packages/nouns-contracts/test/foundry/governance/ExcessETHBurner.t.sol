@@ -33,15 +33,15 @@ contract AuctionMock is INounsAuctionHouseV2 {
         pricesHistory = pricesHistory_;
     }
 
-    function prices(uint256) external view override returns (INounsAuctionHouse.Settlement[] memory priceHistory_) {
-        priceHistory_ = new INounsAuctionHouse.Settlement[](pricesHistory.length);
+    function prices(uint256) external view override returns (INounsAuctionHouseV2.Settlement[] memory priceHistory_) {
+        priceHistory_ = new INounsAuctionHouseV2.Settlement[](pricesHistory.length);
         for (uint256 i; i < pricesHistory.length; ++i) {
             priceHistory_[i].amount = pricesHistory[i];
         }
     }
 
-    function auction() external view returns (INounsAuctionHouse.AuctionV2 memory) {
-        return INounsAuctionHouse.AuctionV2(nounId, 0, 0, 0, payable(address(0)), false);
+    function auction() external view returns (INounsAuctionHouseV2.AuctionV2 memory) {
+        return INounsAuctionHouseV2.AuctionV2(nounId, 0, 0, 0, payable(address(0)), false);
     }
 
     function settleAuction() external {}
@@ -54,9 +54,9 @@ contract AuctionMock is INounsAuctionHouseV2 {
 
     function unpause() external {}
 
-    function setTimeBuffer(uint256 timeBuffer) external {}
+    function setTimeBuffer(uint56 timeBuffer) external {}
 
-    function setReservePrice(uint256 reservePrice) external {}
+    function setReservePrice(uint192 reservePrice) external {}
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external {}
 }

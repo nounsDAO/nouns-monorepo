@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
 import { IExcessETHBurner } from '../interfaces/IExcessETHBurner.sol';
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouse } from '../interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from '../interfaces/INounsAuctionHouseV2.sol';
 
 interface RocketETH {
     function getEthValue(uint256 _rethAmount) external view returns (uint256);
@@ -28,12 +28,6 @@ interface RocketETH {
 
 interface INounsDAOV3 {
     function adjustedTotalSupply() external view returns (uint256);
-}
-
-interface INounsAuctionHouseV2 is INounsAuctionHouse {
-    function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
-
-    function auction() external view returns (INounsAuctionHouse.AuctionV2 memory);
 }
 
 interface IExecutorV3 {

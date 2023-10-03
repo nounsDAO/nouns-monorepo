@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV2.AuctionV2 public auction;
+    INounsAuctionHouseV2.AuctionV2 public _auction;
 
     /// @notice Whether this contract is paused or not
     /// @dev Replaces the state variable from PausableUpgradeable, to bit pack this bool with `auction` and save gas
@@ -121,33 +121,40 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId) external payable override {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auction;
+        INounsAuctionHouseV2.AuctionV2 memory auction_ = _auction;
 
-        if (_auction.nounId != nounId) revert NounNotUpForAuction();
-        if (block.timestamp >= _auction.endTime) revert AuctionExpired();
+        if (auction_.nounId != nounId) revert NounNotUpForAuction();
+        if (block.timestamp >= auction_.endTime) revert AuctionExpired();
         if (msg.value < reservePrice) revert MustSendAtLeastReservePrice();
-        if (msg.value < _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100))
+        if (msg.value < auction_.amount + ((auction_.amount * minBidIncrementPercentage) / 100))
             revert BidDifferenceMustBeGreaterThanMinBidIncrement();
 
-        auction.amount = uint128(msg.value);
-        auction.bidder = payable(msg.sender);
+        _auction.amount = uint128(msg.value);
+        _auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        bool extended = auction_.endTime - block.timestamp < timeBuffer;
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(auction_.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
-            auction.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
-            emit AuctionExtended(_auction.nounId, _auction.endTime);
+            _auction.endTime = auction_.endTime = uint40(block.timestamp + timeBuffer);
+            emit AuctionExtended(auction_.nounId, auction_.endTime);
         }
 
-        address payable lastBidder = _auction.bidder;
+        address payable lastBidder = auction_.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+            _safeTransferETHWithFallback(lastBidder, auction_.amount);
         }
+    }
+
+    /**
+     * @notice Get the current auction.
+     */
+    function auction() external view returns (AuctionV2 memory) {
+        return _auction;
     }
 
     /**
@@ -170,7 +177,7 @@ contract NounsAuctionHouseV2 is
         __paused = false;
         emit Unpaused(_msgSender());
 
-        if (auction.startTime == 0 || auction.settled) {
+        if (_auction.startTime == 0 || _auction.settled) {
             _createAuction();
         }
     }
@@ -225,7 +232,7 @@ contract NounsAuctionHouseV2 is
             uint40 startTime = uint40(block.timestamp);
             uint40 endTime = startTime + uint40(duration);
 
-            auction = AuctionV2({
+            _auction = AuctionV2({
                 nounId: uint128(nounId),
                 amount: 0,
                 startTime: startTime,
@@ -245,31 +252,31 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auction;
+        INounsAuctionHouseV2.AuctionV2 memory auction_ = _auction;
 
-        if (_auction.startTime == 0) revert AuctionHasntBegun();
-        if (_auction.settled) revert AuctionAlreadySettled();
-        if (block.timestamp < _auction.endTime) revert AuctionNotDone();
+        if (auction_.startTime == 0) revert AuctionHasntBegun();
+        if (auction_.settled) revert AuctionAlreadySettled();
+        if (block.timestamp < auction_.endTime) revert AuctionNotDone();
 
-        auction.settled = true;
+        _auction.settled = true;
 
-        if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
+        if (auction_.bidder == address(0)) {
+            nouns.burn(auction_.nounId);
         } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+            nouns.transferFrom(address(this), auction_.bidder, auction_.nounId);
         }
 
-        if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+        if (auction_.amount > 0) {
+            _safeTransferETHWithFallback(owner(), auction_.amount);
         }
 
-        settlementHistory[_auction.nounId] = SettlementState({
+        settlementHistory[auction_.nounId] = SettlementState({
             blockTimestamp: uint32(block.timestamp),
-            amount: ethPriceToUint64(_auction.amount),
-            winner: _auction.bidder
+            amount: ethPriceToUint64(auction_.amount),
+            winner: auction_.bidder
         });
 
-        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
+        emit AuctionSettled(auction_.nounId, auction_.bidder, auction_.amount);
     }
 
     /**
@@ -341,8 +348,8 @@ contract NounsAuctionHouseV2 is
      * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
      */
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
-        uint256 latestNounId = auction.nounId;
-        if (!auction.settled && latestNounId > 0) {
+        uint256 latestNounId = _auction.nounId;
+        if (!_auction.settled && latestNounId > 0) {
             latestNounId -= 1;
         }
 
