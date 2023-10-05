@@ -69,22 +69,6 @@ interface INounsAuctionHouseV2 {
 
     event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
 
-    error NounNotUpForAuction();
-
-    error AuctionExpired();
-
-    error AuctionHasntBegun();
-
-    error AuctionAlreadySettled();
-
-    error AuctionNotDone();
-
-    error MustSendAtLeastReservePrice();
-
-    error BidDifferenceMustBeGreaterThanMinBidIncrement();
-
-    error TimeBufferTooLarge();
-
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
