@@ -16,6 +16,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
+    uint256[] nounIds;
 
     NounsAuctionHouseV2 auction;
 
@@ -341,6 +342,27 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
         assertEq(prices[10].amount, 10 ether);
         assertEq(prices[11].amount, 9 ether);
         assertEq(prices[19].amount, 1 ether);
+    }
+
+    function test_prices_skipsEmptySettlementsPostWarmUp() public {
+        nounIds = [0, 1, 2, 10, 11, 20, 21];
+        auction.warmUpSettlementState(nounIds);
+
+        for (uint256 i = 1; i <= 20; ++i) {
+            address bidder = makeAddr(vm.toString(i));
+            bidAndWinCurrentAuction(bidder, i * 1e18);
+        }
+
+        INounsAuctionHouseV2.Settlement[] memory prices = auction.prices(20);
+        assertEq(prices[0].nounId, 22);
+        assertEq(prices[1].nounId, 21);
+        assertEq(prices[2].nounId, 19);
+        assertEq(prices[10].nounId, 11);
+        assertEq(prices[11].nounId, 9);
+        assertEq(prices[19].nounId, 1);
+
+        prices = auction.prices(20, 21);
+        assertEq(prices.length, 0);
     }
 
     function test_prices_2AuctionsNoNewAuction_includesSettledNoun() public {

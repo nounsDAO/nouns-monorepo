@@ -358,7 +358,7 @@ contract NounsAuctionHouseV2 is
         while (actualCount < auctionCount && latestNounId > 0) {
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[latestNounId].blockTimestamp == 0) {
+            if (settlementHistory[latestNounId].winner == address(0)) {
                 --latestNounId;
                 continue;
             }
@@ -394,7 +394,7 @@ contract NounsAuctionHouseV2 is
         while (currentId < endId) {
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[currentId].blockTimestamp == 0) {
+            if (settlementHistory[currentId].winner == address(0)) {
                 ++currentId;
                 continue;
             }
