@@ -20,8 +20,6 @@ import { Inflator } from '../../../contracts/Inflator.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
-import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
-import { NounsAuctionHousePreV2Migration } from '../../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
@@ -62,33 +60,6 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         token.setMinter(address(proxy));
 
         return (proxy, admin);
-    }
-
-    function _upgradeAuctionHouse(
-        address owner,
-        NounsAuctionHouseProxyAdmin proxyAdmin,
-        NounsAuctionHouseProxy proxy
-    ) internal {
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(proxy));
-
-        NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2(
-            auctionV1.nouns(),
-            auctionV1.weth(),
-            auctionV1.duration()
-        );
-        NounsAuctionHousePreV2Migration migratorLogic = new NounsAuctionHousePreV2Migration();
-
-        vm.startPrank(owner);
-
-        // not using upgradeAndCall because the call must come from the auction house owner
-        // which is owner, not the proxy admin
-
-        proxyAdmin.upgrade(proxy, address(migratorLogic));
-        NounsAuctionHousePreV2Migration migrator = NounsAuctionHousePreV2Migration(address(proxy));
-        migrator.migrate();
-        proxyAdmin.upgrade(proxy, address(newLogic));
-
-        vm.stopPrank();
     }
 
     uint32 constant LAST_MINUTE_BLOCKS = 10;

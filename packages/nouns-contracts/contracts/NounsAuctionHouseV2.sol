@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV2.AuctionV2 public _auction;
+    INounsAuctionHouseV2.AuctionV2 public auctionStorage;
 
     /// @notice Whether this contract is paused or not
     /// @dev Replaces the state variable from PausableUpgradeable, to bit pack this bool with `auction` and save gas
@@ -121,32 +121,34 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId) external payable override {
-        INounsAuctionHouseV2.AuctionV2 memory auction_ = _auction;
+        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
 
-        if (auction_.nounId != nounId) revert NounNotUpForAuction();
-        if (block.timestamp >= auction_.endTime) revert AuctionExpired();
-        if (msg.value < reservePrice) revert MustSendAtLeastReservePrice();
-        if (msg.value < auction_.amount + ((auction_.amount * minBidIncrementPercentage) / 100))
-            revert BidDifferenceMustBeGreaterThanMinBidIncrement();
+        require(_auction.nounId == nounId, 'Noun not up for auction');
+        require(block.timestamp < _auction.endTime, 'Auction expired');
+        require(msg.value >= reservePrice, 'Must send at least reservePrice');
+        require(
+            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            'Must send more than last bid by minBidIncrementPercentage amount'
+        );
 
-        _auction.amount = uint128(msg.value);
-        _auction.bidder = payable(msg.sender);
+        auctionStorage.amount = uint128(msg.value);
+        auctionStorage.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = auction_.endTime - block.timestamp < timeBuffer;
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
 
-        emit AuctionBid(auction_.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
-            _auction.endTime = auction_.endTime = uint40(block.timestamp + timeBuffer);
-            emit AuctionExtended(auction_.nounId, auction_.endTime);
+            auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
+            emit AuctionExtended(_auction.nounId, _auction.endTime);
         }
 
-        address payable lastBidder = auction_.bidder;
+        address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, auction_.amount);
+            _safeTransferETHWithFallback(lastBidder, _auction.amount);
         }
     }
 
@@ -154,7 +156,7 @@ contract NounsAuctionHouseV2 is
      * @notice Get the current auction.
      */
     function auction() external view returns (AuctionV2 memory) {
-        return _auction;
+        return auctionStorage;
     }
 
     /**
@@ -177,7 +179,7 @@ contract NounsAuctionHouseV2 is
         __paused = false;
         emit Unpaused(_msgSender());
 
-        if (_auction.startTime == 0 || _auction.settled) {
+        if (auctionStorage.startTime == 0 || auctionStorage.settled) {
             _createAuction();
         }
     }
@@ -194,7 +196,7 @@ contract NounsAuctionHouseV2 is
      * @dev Only callable by the owner.
      */
     function setTimeBuffer(uint56 _timeBuffer) external override onlyOwner {
-        if (_timeBuffer > MAX_TIME_BUFFER) revert TimeBufferTooLarge();
+        require(_timeBuffer <= MAX_TIME_BUFFER, 'timeBuffer too large');
 
         timeBuffer = _timeBuffer;
 
@@ -232,7 +234,7 @@ contract NounsAuctionHouseV2 is
             uint40 startTime = uint40(block.timestamp);
             uint40 endTime = startTime + uint40(duration);
 
-            _auction = AuctionV2({
+            auctionStorage = AuctionV2({
                 nounId: uint128(nounId),
                 amount: 0,
                 startTime: startTime,
@@ -252,31 +254,31 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouseV2.AuctionV2 memory auction_ = _auction;
+        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
 
-        if (auction_.startTime == 0) revert AuctionHasntBegun();
-        if (auction_.settled) revert AuctionAlreadySettled();
-        if (block.timestamp < auction_.endTime) revert AuctionNotDone();
+        require(_auction.startTime != 0, "Auction hasn't begun");
+        require(!_auction.settled, 'Auction has already been settled');
+        require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
 
-        _auction.settled = true;
+        auctionStorage.settled = true;
 
-        if (auction_.bidder == address(0)) {
-            nouns.burn(auction_.nounId);
+        if (_auction.bidder == address(0)) {
+            nouns.burn(_auction.nounId);
         } else {
-            nouns.transferFrom(address(this), auction_.bidder, auction_.nounId);
+            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
 
-        if (auction_.amount > 0) {
-            _safeTransferETHWithFallback(owner(), auction_.amount);
+        if (_auction.amount > 0) {
+            _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        settlementHistory[auction_.nounId] = SettlementState({
+        settlementHistory[_auction.nounId] = SettlementState({
             blockTimestamp: uint32(block.timestamp),
-            amount: ethPriceToUint64(auction_.amount),
-            winner: auction_.bidder
+            amount: ethPriceToUint64(_auction.amount),
+            winner: _auction.bidder
         });
 
-        emit AuctionSettled(auction_.nounId, auction_.bidder, auction_.amount);
+        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
 
     /**
@@ -348,8 +350,8 @@ contract NounsAuctionHouseV2 is
      * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
      */
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
-        uint256 latestNounId = _auction.nounId;
-        if (!_auction.settled && latestNounId > 0) {
+        uint256 latestNounId = auctionStorage.nounId;
+        if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
         }
 
@@ -358,7 +360,7 @@ contract NounsAuctionHouseV2 is
         while (actualCount < auctionCount && latestNounId > 0) {
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[latestNounId].blockTimestamp == 0) {
+            if (settlementHistory[latestNounId].winner == address(0)) {
                 --latestNounId;
                 continue;
             }
@@ -394,7 +396,7 @@ contract NounsAuctionHouseV2 is
         while (currentId < endId) {
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[currentId].blockTimestamp == 0) {
+            if (settlementHistory[currentId].winner == address(0)) {
                 ++currentId;
                 continue;
             }

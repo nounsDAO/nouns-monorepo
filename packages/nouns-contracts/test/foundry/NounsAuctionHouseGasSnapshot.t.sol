@@ -5,6 +5,7 @@ import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHous
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from '../../contracts/interfaces/INounsToken.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
+import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
@@ -50,7 +51,7 @@ contract NounsAuctionHouse_GasSnapshot_createBid is DeployUtils {
 contract NounsAuctionHouseV2_GasSnapshot_createBid is NounsAuctionHouse_GasSnapshot_createBid {
     function setUp() public virtual override {
         super.setUp();
-        _upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
+        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
     }
 }
 
