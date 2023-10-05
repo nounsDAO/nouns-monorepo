@@ -3,10 +3,10 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtilsExcessETHBurner } from '../helpers/DeployUtilsExcessETHBurner.sol';
+import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsDAOExecutorV3 } from '../../../contracts/governance/NounsDAOExecutorV3.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { NounsTokenLike } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { ExcessETHBurner, INounsAuctionHouseV2 } from '../../../contracts/governance/ExcessETHBurner.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
@@ -182,7 +182,7 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
     function upgradeAuction() internal {
         bytes32 proxyAdminBytes = vm.load(address(dao.nouns().minter()), _ADMIN_SLOT);
         address proxyAdminAddress = address(uint160(uint256(proxyAdminBytes)));
-        _upgradeAuctionHouse(
+        AuctionHouseUpgrader.upgradeAuctionHouse(
             treasury,
             NounsAuctionHouseProxyAdmin(proxyAdminAddress),
             NounsAuctionHouseProxy(payable(dao.nouns().minter()))
