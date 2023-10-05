@@ -8,7 +8,6 @@ import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctio
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
-import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV2TestBase is Test, DeployUtils {

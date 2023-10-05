@@ -59,6 +59,8 @@ contract AuctionMock is INounsAuctionHouseV2 {
     function setReservePrice(uint192 reservePrice) external {}
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external {}
+
+    function warmUpSettlementState(uint256[] calldata nounIds) external {}
 }
 
 contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {

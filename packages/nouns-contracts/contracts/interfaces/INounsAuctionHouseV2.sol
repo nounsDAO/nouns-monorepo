@@ -104,4 +104,6 @@ interface INounsAuctionHouseV2 {
     function auction() external view returns (AuctionV2 memory);
 
     function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements);
+
+    function warmUpSettlementState(uint256[] calldata nounIds) external;
 }
