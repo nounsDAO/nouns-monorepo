@@ -121,32 +121,32 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId) external payable override {
-        INounsAuctionHouseV2.AuctionV2 memory auction_ = _auction;
+        INounsAuctionHouseV2.AuctionV2 memory auctionCache = _auction;
 
-        if (auction_.nounId != nounId) revert NounNotUpForAuction();
-        if (block.timestamp >= auction_.endTime) revert AuctionExpired();
+        if (auctionCache.nounId != nounId) revert NounNotUpForAuction();
+        if (block.timestamp >= auctionCache.endTime) revert AuctionExpired();
         if (msg.value < reservePrice) revert MustSendAtLeastReservePrice();
-        if (msg.value < auction_.amount + ((auction_.amount * minBidIncrementPercentage) / 100))
+        if (msg.value < auctionCache.amount + ((auctionCache.amount * minBidIncrementPercentage) / 100))
             revert BidDifferenceMustBeGreaterThanMinBidIncrement();
 
         _auction.amount = uint128(msg.value);
         _auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = auction_.endTime - block.timestamp < timeBuffer;
+        bool extended = auctionCache.endTime - block.timestamp < timeBuffer;
 
-        emit AuctionBid(auction_.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(auctionCache.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
-            _auction.endTime = auction_.endTime = uint40(block.timestamp + timeBuffer);
-            emit AuctionExtended(auction_.nounId, auction_.endTime);
+            _auction.endTime = auctionCache.endTime = uint40(block.timestamp + timeBuffer);
+            emit AuctionExtended(auctionCache.nounId, auctionCache.endTime);
         }
 
-        address payable lastBidder = auction_.bidder;
+        address payable lastBidder = auctionCache.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, auction_.amount);
+            _safeTransferETHWithFallback(lastBidder, auctionCache.amount);
         }
     }
 
