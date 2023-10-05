@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV2.AuctionV2 private _auction;
+    INounsAuctionHouseV2.AuctionV2 public _auction;
 
     /// @notice Whether this contract is paused or not
     /// @dev Replaces the state variable from PausableUpgradeable, to bit pack this bool with `auction` and save gas
