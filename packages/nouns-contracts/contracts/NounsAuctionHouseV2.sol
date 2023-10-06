@@ -368,17 +368,18 @@ contract NounsAuctionHouseV2 is
         settlements = new Settlement[](auctionCount);
         uint256 actualCount = 0;
         while (actualCount < auctionCount && latestNounId > 0) {
+            SettlementState memory settlementState = settlementHistory[latestNounId];
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[latestNounId].winner == address(0)) {
+            if (settlementState.winner == address(0)) {
                 --latestNounId;
                 continue;
             }
 
             settlements[actualCount] = Settlement({
-                blockTimestamp: settlementHistory[latestNounId].blockTimestamp,
-                amount: uint64PriceToUint256(settlementHistory[latestNounId].amount),
-                winner: settlementHistory[latestNounId].winner,
+                blockTimestamp: settlementState.blockTimestamp,
+                amount: uint64PriceToUint256(settlementState.amount),
+                winner: settlementState.winner,
                 nounId: latestNounId
             });
             ++actualCount;
@@ -404,17 +405,18 @@ contract NounsAuctionHouseV2 is
         uint256 actualCount = 0;
         uint256 currentId = startId;
         while (currentId < endId) {
+            SettlementState memory settlementState = settlementHistory[currentId];
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[currentId].winner == address(0)) {
+            if (settlementState.winner == address(0)) {
                 ++currentId;
                 continue;
             }
 
             settlements[actualCount] = Settlement({
-                blockTimestamp: settlementHistory[currentId].blockTimestamp,
-                amount: uint64PriceToUint256(settlementHistory[currentId].amount),
-                winner: settlementHistory[currentId].winner,
+                blockTimestamp: settlementState.blockTimestamp,
+                amount: uint64PriceToUint256(settlementState.amount),
+                winner: settlementState.winner,
                 nounId: currentId
             });
             ++actualCount;

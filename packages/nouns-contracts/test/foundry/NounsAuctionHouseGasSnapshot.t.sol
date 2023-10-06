@@ -9,7 +9,7 @@ import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
-contract NounsAuctionHouse_GasSnapshot is DeployUtils {
+abstract contract NounsAuctionHouseBaseTest is DeployUtils {
     INounsAuctionHouse auctionHouse;
     INounsToken nouns;
     address noundersDAO = makeAddr('noundersDAO');
@@ -31,7 +31,9 @@ contract NounsAuctionHouse_GasSnapshot is DeployUtils {
         vm.prank(owner);
         auctionHouse.unpause();
     }
+}
 
+contract NounsAuctionHouse_GasSnapshot is NounsAuctionHouseBaseTest {
     function test_createOneBid() public {
         auctionHouse.createBid{ value: 1 ether }(1);
     }
@@ -60,5 +62,41 @@ contract NounsAuctionHouseV2WarmedUp_GasSnapshot is NounsAuctionHouseV2_GasSnaps
         super.setUp();
         nounIds = [1, 2, 3];
         INounsAuctionHouseV2(address(auctionHouse)).warmUpSettlementState(nounIds);
+    }
+}
+
+contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBaseTest {
+    INounsAuctionHouseV2 auctionHouseV2;
+
+    function setUp() public virtual override {
+        super.setUp();
+        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
+        auctionHouseV2 = INounsAuctionHouseV2(address(auctionHouse));
+
+        for (uint256 i = 1; i <= 200; ++i) {
+            address bidder = makeAddr(vm.toString(i));
+            bidAndWinCurrentAuction(bidder, i * 1e18);
+        }
+    }
+
+    function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
+        uint128 nounId = auctionHouseV2.auction().nounId;
+        uint40 endTime = auctionHouseV2.auction().endTime;
+        vm.deal(bidder, bid);
+        vm.prank(bidder);
+        auctionHouseV2.createBid{ value: bid }(nounId);
+        vm.warp(endTime);
+        auctionHouseV2.settleCurrentAndCreateNewAuction();
+        return block.timestamp;
+    }
+
+    function test_prices_90() public {
+        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.prices(90);
+        assertEq(prices.length, 90);
+    }
+
+    function test_prices_range_90() public {
+        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.prices(1, 100);
+        assertEq(prices.length, 90);
     }
 }
