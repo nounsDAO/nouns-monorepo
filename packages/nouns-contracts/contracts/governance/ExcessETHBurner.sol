@@ -173,13 +173,13 @@ contract ExcessETHBurner is IExcessETHBurner, Ownable {
      */
     function meanAuctionPrice() public view returns (uint256) {
         uint16 numberOfPastAuctionsForMeanPrice_ = numberOfPastAuctionsForMeanPrice;
-        INounsAuctionHouseV2.Settlement[] memory settlements = auction.prices(numberOfPastAuctionsForMeanPrice_);
+        uint256[] memory prices = auction.getPrices(numberOfPastAuctionsForMeanPrice_);
 
-        if (settlements.length < numberOfPastAuctionsForMeanPrice_) revert NotEnoughAuctionHistory();
+        if (prices.length < numberOfPastAuctionsForMeanPrice_) revert NotEnoughAuctionHistory();
 
         uint256 sum = 0;
         for (uint16 i = 0; i < numberOfPastAuctionsForMeanPrice_; i++) {
-            sum += settlements[i].amount;
+            sum += prices[i];
         }
 
         return sum / numberOfPastAuctionsForMeanPrice_;

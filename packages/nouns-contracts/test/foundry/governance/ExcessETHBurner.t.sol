@@ -33,11 +33,8 @@ contract AuctionMock is INounsAuctionHouseV2 {
         pricesHistory = pricesHistory_;
     }
 
-    function prices(uint256) external view override returns (INounsAuctionHouseV2.Settlement[] memory priceHistory_) {
-        priceHistory_ = new INounsAuctionHouseV2.Settlement[](pricesHistory.length);
-        for (uint256 i; i < pricesHistory.length; ++i) {
-            priceHistory_[i].amount = pricesHistory[i];
-        }
+    function getPrices(uint256) external view override returns (uint256[] memory) {
+        return pricesHistory;
     }
 
     function auction() external view returns (INounsAuctionHouseV2.AuctionV2 memory) {
@@ -59,6 +56,12 @@ contract AuctionMock is INounsAuctionHouseV2 {
     function setReservePrice(uint192 reservePrice) external {}
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external {}
+
+    function getSettlements(uint256 auctionCount) external view returns (Settlement[] memory settlements) {}
+
+    function getSettlements(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements) {}
+
+    function getPrices(uint256 startId, uint256 endId) external view returns (uint256[] memory prices) {}
 
     function warmUpSettlementState(uint256[] calldata nounIds) external {}
 }
