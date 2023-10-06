@@ -32,6 +32,10 @@ import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
+/**
+ * @dev The contract inherits from PausableUpgradeable & ReentrancyGuardUpgradeable most of all the keep the same
+ * storage layout as the NounsAuctionHouse contract
+ */
 contract NounsAuctionHouseV2 is
     INounsAuctionHouseV2,
     PausableUpgradeable,
