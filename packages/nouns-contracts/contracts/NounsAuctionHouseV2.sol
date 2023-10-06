@@ -127,11 +127,17 @@ contract NounsAuctionHouseV2 is
     function createBid(uint256 nounId) external payable override {
         INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
 
+        (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
+            reservePrice,
+            timeBuffer,
+            minBidIncrementPercentage
+        );
+
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
+        require(msg.value >= _reservePrice, 'Must send at least reservePrice');
         require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            msg.value >= _auction.amount + ((_auction.amount * _minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
@@ -139,12 +145,12 @@ contract NounsAuctionHouseV2 is
         auctionStorage.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        bool extended = _auction.endTime - block.timestamp < _timeBuffer;
 
         emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
-            auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
+            auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + _timeBuffer);
             emit AuctionExtended(_auction.nounId, _auction.endTime);
         }
 
