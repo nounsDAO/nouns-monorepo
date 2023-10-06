@@ -9,7 +9,7 @@ import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
-contract NounsAuctionHouse_GasSnapshot_createBid is DeployUtils {
+contract NounsAuctionHouse_GasSnapshot is DeployUtils {
     INounsAuctionHouse auctionHouse;
     INounsToken nouns;
     address noundersDAO = makeAddr('noundersDAO');
@@ -48,14 +48,14 @@ contract NounsAuctionHouse_GasSnapshot_createBid is DeployUtils {
     }
 }
 
-contract NounsAuctionHouseV2_GasSnapshot_createBid is NounsAuctionHouse_GasSnapshot_createBid {
+contract NounsAuctionHouseV2_GasSnapshot is NounsAuctionHouse_GasSnapshot {
     function setUp() public virtual override {
         super.setUp();
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
     }
 }
 
-contract NounsAuctionHouseV2WarmedUp_GasSnapshot_createBid is NounsAuctionHouseV2_GasSnapshot_createBid {
+contract NounsAuctionHouseV2WarmedUp_GasSnapshot is NounsAuctionHouseV2_GasSnapshot {
     function setUp() public override {
         super.setUp();
         nounIds = [1, 2, 3];
