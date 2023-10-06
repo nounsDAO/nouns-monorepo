@@ -17,7 +17,6 @@
 
 pragma solidity ^0.8.19;
 
-import { IExcessETHBurner } from '../interfaces/IExcessETHBurner.sol';
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouseV2 } from '../interfaces/INounsAuctionHouseV2.sol';
@@ -39,7 +38,7 @@ interface IExecutorV3 {
  * @notice A helpder contract for burning Nouns excess ETH with NounsDAOExecutorV3.
  * @dev Owner is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
  */
-contract ExcessETHBurner is IExcessETHBurner, Ownable {
+contract ExcessETHBurner is Ownable {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
