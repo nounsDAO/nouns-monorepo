@@ -288,6 +288,9 @@ type ProposalVersion @entity(immutable: true) {
   "The proposal that was updated"
   proposal: Proposal!
 
+  "The block number of the update"
+  createdBlock: BigInt!
+
   "The block timestamp of the update"
   createdAt: BigInt!
 
