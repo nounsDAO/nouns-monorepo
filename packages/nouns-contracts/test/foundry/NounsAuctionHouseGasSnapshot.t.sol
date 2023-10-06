@@ -90,13 +90,23 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
         return block.timestamp;
     }
 
-    function test_prices_90() public {
-        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.prices(90);
+    function test_getSettlements_90() public {
+        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.getSettlements(90);
         assertEq(prices.length, 90);
     }
 
-    function test_prices_range_90() public {
-        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.prices(1, 100);
+    function test_getPrices_90() public {
+        uint256[] memory prices = auctionHouseV2.getPrices(90);
+        assertEq(prices.length, 90);
+    }
+
+    function test_getSettlements_range_90() public {
+        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.getSettlements(1, 100);
+        assertEq(prices.length, 90);
+    }
+
+    function test_getPrices_range_90() public {
+        uint256[] memory prices = auctionHouseV2.getPrices(1, 100);
         assertEq(prices.length, 90);
     }
 }
