@@ -32,6 +32,10 @@ import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
+/**
+ * @dev The contract inherits from PausableUpgradeable & ReentrancyGuardUpgradeable most of all the keep the same
+ * storage layout as the NounsAuctionHouse contract
+ */
 contract NounsAuctionHouseV2 is
     INounsAuctionHouseV2,
     PausableUpgradeable,
@@ -123,11 +127,17 @@ contract NounsAuctionHouseV2 is
     function createBid(uint256 nounId) external payable override {
         INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
 
+        (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
+            reservePrice,
+            timeBuffer,
+            minBidIncrementPercentage
+        );
+
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
+        require(msg.value >= _reservePrice, 'Must send at least reservePrice');
         require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            msg.value >= _auction.amount + ((_auction.amount * _minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
@@ -135,12 +145,12 @@ contract NounsAuctionHouseV2 is
         auctionStorage.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        bool extended = _auction.endTime - block.timestamp < _timeBuffer;
 
         emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
-            auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
+            auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + _timeBuffer);
             emit AuctionExtended(_auction.nounId, _auction.endTime);
         }
 
@@ -343,13 +353,13 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Get past auction prices.
-     * @dev Returns prices in reverse order, meaning settlements[0] will be the most recent auction price.
+     * @notice Get past auction settlements.
+     * @dev Returns settlements in reverse order, meaning settlements[0] will be the most recent auction price.
      * @param auctionCount The number of price observations to get.
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
-     * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
+     * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
+    function getSettlements(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
         uint256 latestNounId = auctionStorage.nounId;
         if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
@@ -358,17 +368,18 @@ contract NounsAuctionHouseV2 is
         settlements = new Settlement[](auctionCount);
         uint256 actualCount = 0;
         while (actualCount < auctionCount && latestNounId > 0) {
+            SettlementState memory settlementState = settlementHistory[latestNounId];
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[latestNounId].winner == address(0)) {
+            if (settlementState.winner == address(0)) {
                 --latestNounId;
                 continue;
             }
 
             settlements[actualCount] = Settlement({
-                blockTimestamp: settlementHistory[latestNounId].blockTimestamp,
-                amount: uint64PriceToUint256(settlementHistory[latestNounId].amount),
-                winner: settlementHistory[latestNounId].winner,
+                blockTimestamp: settlementState.blockTimestamp,
+                amount: uint64PriceToUint256(settlementState.amount),
+                winner: settlementState.winner,
                 nounId: latestNounId
             });
             ++actualCount;
@@ -384,27 +395,66 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Get a range of past auction prices.
-     * @dev Returns prices in chronological order, as opposed to `prices(count)` which returns prices in reverse order.
+     * @notice Get past auction prices.
+     * @dev Returns prices in reverse order, meaning prices[0] will be the most recent auction price.
+     * @param auctionCount The number of price observations to get.
+     * @return prices An array of uint256 prices.
+     */
+    function getPrices(uint256 auctionCount) external view returns (uint256[] memory prices) {
+        uint256 latestNounId = auctionStorage.nounId;
+        if (!auctionStorage.settled && latestNounId > 0) {
+            latestNounId -= 1;
+        }
+
+        prices = new uint256[](auctionCount);
+        uint256 actualCount = 0;
+        while (actualCount < auctionCount && latestNounId > 0) {
+            SettlementState memory settlementState = settlementHistory[latestNounId];
+            // Skip Nouner reward Nouns, they have no price
+            // Also skips IDs with no price data
+            if (settlementState.winner == address(0)) {
+                --latestNounId;
+                continue;
+            }
+
+            prices[actualCount] = uint64PriceToUint256(settlementState.amount);
+            ++actualCount;
+            --latestNounId;
+        }
+
+        if (auctionCount > actualCount) {
+            // this assembly trims the observations array, getting rid of unused cells
+            assembly {
+                mstore(prices, actualCount)
+            }
+        }
+    }
+
+    /**
+     * @notice Get a range of past auction settlements.
+     * @dev Returns prices in chronological order, as opposed to `getSettlements(count)` which returns prices in reverse order.
      * @param startId the first Noun ID to get prices for.
      * @param endId end Noun ID (up to, but not including).
+     * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
+     * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function prices(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements) {
+    function getSettlements(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements) {
         settlements = new Settlement[](endId - startId);
         uint256 actualCount = 0;
         uint256 currentId = startId;
         while (currentId < endId) {
+            SettlementState memory settlementState = settlementHistory[currentId];
             // Skip Nouner reward Nouns, they have no price
             // Also skips IDs with no price data
-            if (settlementHistory[currentId].winner == address(0)) {
+            if (settlementState.winner == address(0)) {
                 ++currentId;
                 continue;
             }
 
             settlements[actualCount] = Settlement({
-                blockTimestamp: settlementHistory[currentId].blockTimestamp,
-                amount: uint64PriceToUint256(settlementHistory[currentId].amount),
-                winner: settlementHistory[currentId].winner,
+                blockTimestamp: settlementState.blockTimestamp,
+                amount: uint64PriceToUint256(settlementState.amount),
+                winner: settlementState.winner,
                 nounId: currentId
             });
             ++actualCount;
@@ -415,6 +465,39 @@ contract NounsAuctionHouseV2 is
             // this assembly trims the observations array, getting rid of unused cells
             assembly {
                 mstore(settlements, actualCount)
+            }
+        }
+    }
+
+    /**
+     * @notice Get a range of past auction prices.
+     * @dev Returns prices in chronological order, as opposed to `getPrices(count)` which returns prices in reverse order.
+     * @param startId the first Noun ID to get prices for.
+     * @param endId end Noun ID (up to, but not including).
+     * @return prices An array of uint256 prices.
+     */
+    function getPrices(uint256 startId, uint256 endId) external view returns (uint256[] memory prices) {
+        prices = new uint256[](endId - startId);
+        uint256 actualCount = 0;
+        uint256 currentId = startId;
+        while (currentId < endId) {
+            SettlementState memory settlementState = settlementHistory[currentId];
+            // Skip Nouner reward Nouns, they have no price
+            // Also skips IDs with no price data
+            if (settlementState.winner == address(0)) {
+                ++currentId;
+                continue;
+            }
+
+            prices[actualCount] = uint64PriceToUint256(settlementState.amount);
+            ++actualCount;
+            ++currentId;
+        }
+
+        if (prices.length > actualCount) {
+            // this assembly trims the observations array, getting rid of unused cells
+            assembly {
+                mstore(prices, actualCount)
             }
         }
     }
