@@ -3,14 +3,18 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Script.sol';
 import { NounsDAOExecutorV3 } from '../../contracts/governance/NounsDAOExecutorV3.sol';
+import { NounsTokenLike } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { ExcessETHBurner, INounsDAOV3 } from '../../contracts/governance/ExcessETHBurner.sol';
-import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { IERC20 } from '@openzeppelin/contracts/interfaces/IERC20.sol';
 
+interface INounsDAOLogicV3 {
+    function nouns() external view returns (NounsTokenLike);
+}
+
 abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
     address public immutable executorProxy;
-    NounsDAOLogicV3 public immutable daoProxy;
+    INounsDAOLogicV3 public immutable daoProxy;
     INounsAuctionHouseV2 public immutable auction;
     IERC20 wETH;
     IERC20 stETH;
@@ -30,7 +34,7 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
     ) {
         executorProxy = executorProxy_;
 
-        daoProxy = NounsDAOLogicV3(payable(NounsDAOExecutorV3(executorProxy_).admin()));
+        daoProxy = INounsDAOLogicV3(payable(NounsDAOExecutorV3(executorProxy_).admin()));
         auction = INounsAuctionHouseV2(daoProxy.nouns().minter());
 
         wETH = IERC20(wETH_);

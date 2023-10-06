@@ -2,12 +2,21 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
-import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
+
+interface INounsDAOLogicV3 {
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
+}
 
 abstract contract ProposeExecutorV3UpgradeBase is Script {
     uint256 proposerKey;
     string description;
-    NounsDAOLogicV3 daoProxy;
+    address daoProxy;
     address executorProxy;
     address executorV3Impl;
 
@@ -27,7 +36,7 @@ abstract contract ProposeExecutorV3UpgradeBase is Script {
         signatures[i] = 'upgradeTo(address)';
         calldatas[i] = abi.encode(executorV3Impl);
 
-        proposalId = daoProxy.propose(targets, values, signatures, calldatas, description);
+        proposalId = INounsDAOLogicV3(daoProxy).propose(targets, values, signatures, calldatas, description);
         console.log('Proposed proposalId: %d', proposalId);
 
         vm.stopBroadcast();
