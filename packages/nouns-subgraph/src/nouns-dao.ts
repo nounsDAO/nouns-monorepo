@@ -219,6 +219,8 @@ export function handleProposalCanceled(event: ProposalCanceled): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_CANCELLED;
+  proposal.canceledBlock = event.block.number;
+  proposal.canceledTimestamp = event.block.timestamp;
   proposal.save();
 }
 
@@ -226,6 +228,8 @@ export function handleProposalVetoed(event: ProposalVetoed): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_VETOED;
+  proposal.vetoedBlock = event.block.number;
+  proposal.vetoedTimestamp = event.block.timestamp;
   proposal.save();
 }
 
@@ -235,6 +239,8 @@ export function handleProposalQueued(event: ProposalQueued): void {
 
   proposal.status = STATUS_QUEUED;
   proposal.executionETA = event.params.eta;
+  proposal.queuedBlock = event.block.number;
+  proposal.queuedTimestamp = event.block.timestamp;
   proposal.save();
 
   governance.proposalsQueued = governance.proposalsQueued.plus(BIGINT_ONE);
@@ -247,6 +253,8 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 
   proposal.status = STATUS_EXECUTED;
   proposal.executionETA = null;
+  proposal.executedBlock = event.block.number;
+  proposal.executedTimestamp = event.block.timestamp;
   proposal.save();
 
   governance.proposalsQueued = governance.proposalsQueued.minus(BIGINT_ONE);
