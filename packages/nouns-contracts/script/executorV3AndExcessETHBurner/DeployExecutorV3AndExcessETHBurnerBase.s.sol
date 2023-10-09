@@ -16,12 +16,12 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
     address public immutable executorProxy;
     INounsDAOLogicV3 public immutable daoProxy;
     INounsAuctionHouseV2 public immutable auction;
-    IERC20 wETH;
-    IERC20 stETH;
-    IERC20 rETH;
-    uint128 burnStartNounID;
-    uint128 minNewNounsBetweenBurns;
-    uint16 numberOfPastAuctionsForMeanPrice;
+    IERC20 public immutable wETH;
+    IERC20 public immutable stETH;
+    IERC20 public immutable rETH;
+    uint128 public immutable burnStartNounID;
+    uint128 public immutable minNewNounsBetweenBurns;
+    uint16 public immutable numberOfPastAuctionsForMeanPrice;
 
     constructor(
         address payable executorProxy_,

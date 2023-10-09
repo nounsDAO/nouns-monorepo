@@ -1,13 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import 'forge-std/Script.sol';
 import { DeployExecutorV3AndExcessETHBurnerBase } from './DeployExecutorV3AndExcessETHBurnerBase.s.sol';
-import { NounsDAOExecutorV3 } from '../../contracts/governance/NounsDAOExecutorV3.sol';
-import { ExcessETHBurner, INounsDAOV3 } from '../../contracts/governance/ExcessETHBurner.sol';
-import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
-import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { IERC20 } from '@openzeppelin/contracts/interfaces/IERC20.sol';
 
 contract DeployExecutorV3AndExcessETHBurnerSepolia is DeployExecutorV3AndExcessETHBurnerBase {
     address payable constant EXECUTOR_PROXY = payable(0x6c2dD53b8DbDD3af1209DeB9dA87D487EaE8E638);
