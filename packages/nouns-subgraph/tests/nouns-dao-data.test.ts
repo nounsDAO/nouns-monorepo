@@ -116,6 +116,8 @@ describe('nouns-dao-data', () => {
         encodedProposalHash,
         sigDigest,
         reason,
+        blockNumber,
+        blockTimestamp,
       );
 
       handleSignatureAdded(event);
@@ -140,6 +142,8 @@ describe('nouns-dao-data', () => {
       assert.bytesEquals(signature.sigDigest, sigDigest);
       assert.stringEquals(signature.reason, reason);
       assert.booleanEquals(signature.canceled, false);
+      assert.bigIntEquals(signature.createdBlock, blockNumber);
+      assert.bigIntEquals(signature.createdTimestamp, blockTimestamp);
     });
 
     test('skips signature if encodedProposalHash does not match latest version', () => {
@@ -158,6 +162,8 @@ describe('nouns-dao-data', () => {
         differentEncodedProposalHash,
         sigDigest,
         reason,
+        blockNumber,
+        blockTimestamp,
       );
 
       handleSignatureAdded(event);

@@ -553,6 +553,12 @@ type ProposalCandidateSignature @entity {
 
   "Whether this signature has been canceled"
   canceled: Boolean!
+
+  "The signature's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The signature's creation block"
+  createdBlock: BigInt!
 }
 
 type ProposalFeedback @entity(immutable: true) {

@@ -400,8 +400,12 @@ export function createSignatureAddedEvent(
   encodedPropHash: Bytes,
   sigDigest: Bytes,
   reason: string,
+  blockNumber: BigInt,
+  blockTimestamp: BigInt,
 ): SignatureAdded {
   let newEvent = changetype<SignatureAdded>(newMockEvent());
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
 
   newEvent.parameters.push(new ethereum.EventParam('signer', ethereum.Value.fromAddress(signer)));
   newEvent.parameters.push(new ethereum.EventParam('sig', ethereum.Value.fromBytes(sig)));
