@@ -371,6 +371,7 @@ function captureProposalVersion(
   const versionId = txHash.concat('-').concat(logIndex);
   const previousVersion = getOrCreateProposalVersion(versionId);
   previousVersion.proposal = proposal.id;
+  previousVersion.createdBlock = proposal.lastUpdatedBlock;
   previousVersion.createdAt = proposal.lastUpdatedTimestamp;
   previousVersion.targets = proposal.targets;
   previousVersion.values = proposal.values;
