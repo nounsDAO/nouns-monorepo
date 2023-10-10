@@ -108,6 +108,8 @@ library NounsDAOV3Admin {
     /// @notice Emitted when the main timelock, timelockV1 and admin are set
     event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
 
+    event NounAgeRequiredToForkSet(uint16 oldNounAgeRequiredToFork, uint16 newNounAgeRequiredToFork);
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -555,6 +557,15 @@ library NounsDAOV3Admin {
         emit ForkThresholdSet(ds.forkThresholdBPS, newForkThresholdBPS);
 
         ds.forkThresholdBPS = newForkThresholdBPS;
+    }
+
+    function _setNounAgeRequiredToFork(NounsDAOStorageV3.StorageV3 storage ds, uint16 newNounAgeRequiredToFork)
+        external
+        onlyAdmin(ds)
+    {
+        emit NounAgeRequiredToForkSet(ds.nounAgeRequiredToFork, newNounAgeRequiredToFork);
+
+        ds.nounAgeRequiredToFork = newNounAgeRequiredToFork;
     }
 
     /**

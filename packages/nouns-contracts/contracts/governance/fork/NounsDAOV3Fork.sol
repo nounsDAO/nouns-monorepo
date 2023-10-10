@@ -20,6 +20,7 @@ pragma solidity ^0.8.19;
 import { NounsDAOStorageV3, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../NounsDAOInterfaces.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
+import { INounsAuctionHouseV2 } from '../../interfaces/INounsAuctionHouseV2.sol';
 
 library NounsDAOV3Fork {
     error ForkThresholdNotMet();
@@ -27,6 +28,7 @@ library NounsDAOV3Fork {
     error ForkPeriodActive();
     error AdminOnly();
     error UseAlternativeWithdrawFunction();
+    error NounIdNotOldEnough();
 
     /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(
@@ -81,6 +83,7 @@ library NounsDAOV3Fork {
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
+            checkNounIdIsAllowedToFork(ds, tokenIds[i]);
             ds.nouns.safeTransferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
@@ -151,6 +154,7 @@ library NounsDAOV3Fork {
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
+            checkNounIdIsAllowedToFork(ds, tokenIds[i]);
             ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
         }
 
@@ -214,6 +218,11 @@ library NounsDAOV3Fork {
      */
     function numTokensInForkEscrow(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
         return ds.forkEscrow.numTokensInEscrow();
+    }
+
+    function checkNounIdIsAllowedToFork(NounsDAOStorageV3.StorageV3 storage ds, uint256 tokenId) internal view {
+        uint256 auctionedNounId = INounsAuctionHouseV2(ds.nouns.minter()).auction().nounId;
+        if (tokenId < auctionedNounId - ds.nounAgeRequiredToFork) revert NounIdNotOldEnough();
     }
 
     /**
