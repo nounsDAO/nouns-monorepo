@@ -355,6 +355,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get past auction settlements.
      * @dev Returns settlements in reverse order, meaning settlements[0] will be the most recent auction price.
+     * Skips auctions where there was no winner, i.e. no bids.
      * @param auctionCount The number of price observations to get.
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
@@ -397,6 +398,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get past auction prices.
      * @dev Returns prices in reverse order, meaning prices[0] will be the most recent auction price.
+     * Skips auctions where there was no winner, i.e. no bids.
      * @param auctionCount The number of price observations to get.
      * @return prices An array of uint256 prices.
      */
@@ -433,6 +435,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get a range of past auction settlements.
      * @dev Returns prices in chronological order, as opposed to `getSettlements(count)` which returns prices in reverse order.
+     * Skips auctions where there was no winner, i.e. no bids.
      * @param startId the first Noun ID to get prices for.
      * @param endId end Noun ID (up to, but not including).
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
@@ -472,6 +475,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get a range of past auction prices.
      * @dev Returns prices in chronological order, as opposed to `getPrices(count)` which returns prices in reverse order.
+     * Skips auctions where there was no winner, i.e. no bids.
      * @param startId the first Noun ID to get prices for.
      * @param endId end Noun ID (up to, but not including).
      * @return prices An array of uint256 prices.
