@@ -120,7 +120,12 @@ contract ExcessETHBurner is Ownable {
      * @dev Reverts when auction house has not yet minted the next Noun ID at which the burn is allowed.
      */
     function burnExcessETH() public returns (uint256 amount) {
-        if (auction.auction().nounId < nextBurnNounID) revert NotTimeToBurnYet();
+        uint256 currentNounId = auction.auction().nounId;
+
+        // Make sure this is a valid noun id. This will revert if this id doesn't exist
+        auction.nouns().ownerOf(currentNounId);
+
+        if (currentNounId < nextBurnNounID) revert NotTimeToBurnYet();
 
         amount = excessETH();
         if (amount == 0) revert NoExcessToBurn();

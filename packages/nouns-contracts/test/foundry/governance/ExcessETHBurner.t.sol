@@ -4,10 +4,13 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtilsExcessETHBurner } from '../helpers/DeployUtilsExcessETHBurner.sol';
 import { NounsDAOExecutorV3 } from '../../../contracts/governance/NounsDAOExecutorV3.sol';
-import { INounsAuctionHouse } from '../../../contracts/interfaces/INounsAuctionHouse.sol';
-import { ExcessETHBurner, INounsAuctionHouseV2, INounsDAOV3 } from '../../../contracts/governance/ExcessETHBurner.sol';
+import { INounsToken } from '../../../contracts/interfaces/INounsToken.sol';
+import { INounsDescriptorMinimal } from '../../../contracts/interfaces/INounsDescriptorMinimal.sol';
+import { INounsSeeder } from '../../../contracts/interfaces/INounsSeeder.sol';
+import { ExcessETHBurner, INounsAuctionHouseV2 } from '../../../contracts/governance/ExcessETHBurner.sol';
 import { ERC20Mock, RocketETHMock } from '../helpers/ERC20Mock.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
+import { ERC721Mock } from '../helpers/ERC721Mock.sol';
 
 contract DAOMock {
     uint256 adjustedSupply;
@@ -24,6 +27,11 @@ contract DAOMock {
 contract AuctionMock is INounsAuctionHouseV2 {
     uint256[] pricesHistory;
     uint128 nounId;
+    INounsToken nounsToken;
+
+    constructor(INounsToken nounsToken_) {
+        nounsToken = nounsToken_;
+    }
 
     function setNounId(uint128 nounId_) external {
         nounId = nounId_;
@@ -64,11 +72,36 @@ contract AuctionMock is INounsAuctionHouseV2 {
     function getPrices(uint256 startId, uint256 endId) external view returns (uint256[] memory prices) {}
 
     function warmUpSettlementState(uint256[] calldata nounIds) external {}
+
+    function nouns() external view returns (INounsToken) {
+        return nounsToken;
+    }
+}
+
+contract NounsTokenMock is INounsToken, ERC721Mock {
+    function burn(uint256 tokenId) external {}
+
+    function dataURI(uint256 tokenId) external returns (string memory) {}
+
+    function lockDescriptor() external {}
+
+    function lockMinter() external {}
+
+    function lockSeeder() external {}
+
+    function mint() external returns (uint256) {}
+
+    function setDescriptor(INounsDescriptorMinimal descriptor) external {}
+
+    function setMinter(address minter) external {}
+
+    function setSeeder(INounsSeeder seeder) external {}
 }
 
 contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
     DAOMock dao = new DAOMock();
-    AuctionMock auction = new AuctionMock();
+    NounsTokenMock nounsToken = new NounsTokenMock();
+    AuctionMock auction = new AuctionMock(nounsToken);
     NounsDAOExecutorV3 treasury;
     ExcessETHBurner burner;
 
@@ -88,6 +121,8 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         treasury.setExcessETHBurner(address(burner));
 
         auction.setNounId(burnStartNounId);
+        nounsToken.mint(address(1), 0);
+        nounsToken.mint(address(1), 1);
     }
 
     function test_burnExcessETH_beforeNextBurnNounID_reverts() public {
@@ -117,6 +152,13 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         assertEq(burner.nextBurnNounID(), burnStartNounId + minNewNounsBetweenBurns);
     }
 
+    function test_burnExcessETH_revertsIfAuctionReturnsInvalidNounId() public {
+        auction.setNounId(100000000);
+
+        vm.expectRevert('ERC721: owner query for nonexistent token');
+        burner.burnExcessETH();
+    }
+
     function test_burnExcessETH_givenABurn_allowsBurnOnlyAfterEnoughNounMints() public {
         setMeanPrice(1 ether);
         dao.setAdjustedTotalSupply(1);
@@ -131,6 +173,8 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         burner.burnExcessETH();
 
         auction.setNounId(burner.nextBurnNounID());
+        nounsToken.mint(address(1), burner.nextBurnNounID());
+
         uint128 expectedNextBurnID = burner.nextBurnNounID() + minNewNounsBetweenBurns;
         assertEq(burner.burnExcessETH(), 99 ether);
         assertEq(burner.nextBurnNounID(), expectedNextBurnID);
