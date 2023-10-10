@@ -221,7 +221,7 @@ contract BurnUpgradeForkMainnetTest is Test {
         assertEq(burner.expectedTreasuryValueInETH(), 10550 ether);
         assertEq(burner.treasuryValueInETH(), 13899.047817579079479237 ether);
 
-        // treasury has less ETH than 13899 - 25 * 422
+        // treasury has less ETH than 13899 - 25 * 422, therefore, only the available ETH in the treasury will be burned
         assertEq(address(NOUNS_TIMELOCK_V2_MAINNET).balance, 2813.062865210366418892 ether);
 
         burner.burnExcessETH();
