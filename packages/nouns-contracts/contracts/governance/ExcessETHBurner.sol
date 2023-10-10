@@ -63,6 +63,7 @@ contract ExcessETHBurner is Ownable {
         uint16 oldNumberOfPastAuctionsForMeanPrice,
         uint16 newNumberOfPastAuctionsForMeanPrice
     );
+    event Burn(uint256 amount, uint128 previousBurnNounId, uint128 nextBurnNounId);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -125,14 +126,16 @@ contract ExcessETHBurner is Ownable {
         // Make sure this is a valid noun id. This will revert if this id doesn't exist
         auction.nouns().ownerOf(currentNounId);
 
-        if (currentNounId < nextBurnNounID) revert NotTimeToBurnYet();
+        uint128 nextBurnNounID_ = nextBurnNounID;
+        if (currentNounId < nextBurnNounID_) revert NotTimeToBurnYet();
 
         amount = excessETH();
         if (amount == 0) revert NoExcessToBurn();
 
         IExecutorV3(owner()).burnExcessETH(amount);
 
-        nextBurnNounID += minNewNounsBetweenBurns;
+        nextBurnNounID = nextBurnNounID_ + minNewNounsBetweenBurns;
+        emit Burn(amount, nextBurnNounID_, nextBurnNounID);
     }
 
     /**

@@ -109,6 +109,8 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
     uint128 minNewNounsBetweenBurns;
     uint16 pastAuctionCount;
 
+    event Burn(uint256 amount, uint128 previousBurnNounId, uint128 nextBurnNounId);
+
     function setUp() public {
         burnStartNounId = 1;
         minNewNounsBetweenBurns = 100;
@@ -145,6 +147,8 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         dao.setAdjustedTotalSupply(1);
         vm.deal(address(treasury), 100 ether);
 
+        vm.expectEmit(true, true, true, true);
+        emit Burn(99 ether, 1, 101);
         uint256 burnedAmount = burner.burnExcessETH();
 
         assertEq(burnedAmount, 99 ether);
