@@ -250,8 +250,6 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         burner.burnExcessETH();
     }
 
-    // setMinNewNounsBetweenBurns
-
     function test_setNextBurnNounID_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         burner.setNextBurnNounID(1);
