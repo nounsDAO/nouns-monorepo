@@ -35,7 +35,7 @@ interface IExecutorV3 {
 
 /**
  * @title ExcessETH Burner
- * @notice A helpder contract for burning Nouns excess ETH with NounsDAOExecutorV3.
+ * @notice A helper contract for burning Nouns excess ETH with NounsDAOExecutorV3.
  * @dev Owner is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
  */
 contract ExcessETHBurner is Ownable {
@@ -82,6 +82,17 @@ contract ExcessETHBurner is Ownable {
     uint128 public minNewNounsBetweenBurns;
     uint16 public numberOfPastAuctionsForMeanPrice;
 
+    /**
+     * @param owner_ A NounsDAOExecutorV3 instance
+     * @param dao_ The DAO proxy contract
+     * @param auction_ The Auction House proxy contract
+     * @param wETH_ Address of WETH token
+     * @param stETH_ Address of Lido stETH token
+     * @param rETH_ Address of RocketPool RETH token
+     * @param burnStartNounID_ A burn will be possible only if the currently auctioned Noun has a greater or equal ID
+     * @param minNewNounsBetweenBurns_ Number of nouns that need to be minted between burns
+     * @param numberOfPastAuctionsForMeanPrice_ Number of past auctions to consider when calculating mean price
+     */
     constructor(
         address owner_,
         INounsDAOV3 dao_,
