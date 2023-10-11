@@ -66,10 +66,6 @@ contract NounsAuctionHouseV2 is
     /// @notice The active auction
     INounsAuctionHouseV2.AuctionV2 public auctionStorage;
 
-    /// @notice Whether this contract is paused or not
-    /// @dev Replaces the state variable from PausableUpgradeable, to bit pack this bool with `auction` and save gas
-    bool public __paused;
-
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
@@ -176,8 +172,7 @@ contract NounsAuctionHouseV2 is
      * anyone can settle an ongoing auction.
      */
     function pause() external override onlyOwner {
-        __paused = true;
-        emit Paused(_msgSender());
+        _pause();
     }
 
     /**
@@ -186,19 +181,11 @@ contract NounsAuctionHouseV2 is
      * contract is paused. If required, this function will start a new auction.
      */
     function unpause() external override onlyOwner {
-        __paused = false;
-        emit Unpaused(_msgSender());
+        _unpause();
 
         if (auctionStorage.startTime == 0 || auctionStorage.settled) {
             _createAuction();
         }
-    }
-
-    /**
-     * @dev Get whether this contract is paused or not.
-     */
-    function paused() public view override returns (bool) {
-        return __paused;
     }
 
     /**

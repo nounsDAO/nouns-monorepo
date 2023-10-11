@@ -39,7 +39,6 @@ contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuard
         uint56 timeBuffer;
         uint8 minBidIncrementPercentage;
         INounsAuctionHouseV2.AuctionV2 auction;
-        bool paused;
     }
 
     uint256 private startSlot;
@@ -70,7 +69,6 @@ contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuard
             bidder: oldLayoutCache.auction.bidder,
             settled: oldLayoutCache.auction.settled
         });
-        newLayout.paused = paused();
     }
 
     function _oldLayout() internal pure returns (OldLayout storage layout) {
