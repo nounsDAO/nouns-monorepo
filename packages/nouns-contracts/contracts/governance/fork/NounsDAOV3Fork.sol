@@ -221,6 +221,8 @@ library NounsDAOV3Fork {
     }
 
     function checkNounIdIsAllowedToFork(NounsDAOStorageV3.StorageV3 storage ds, uint256 tokenId) internal view {
+        if (ds.nounAgeRequiredToFork == 0) return;
+
         uint256 auctionedNounId = INounsAuctionHouseV2(ds.nouns.minter()).auction().nounId;
         if (tokenId < auctionedNounId - ds.nounAgeRequiredToFork) revert NounIdNotOldEnough();
     }
