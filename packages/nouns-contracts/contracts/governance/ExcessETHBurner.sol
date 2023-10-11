@@ -137,16 +137,17 @@ contract ExcessETHBurner is Ownable {
         // Make sure this is a valid noun id. This will revert if this id doesn't exist
         auction.nouns().ownerOf(currentNounId);
 
-        uint128 nextBurnNounID_ = nextBurnNounID;
-        if (currentNounId < nextBurnNounID_) revert NotTimeToBurnYet();
+        uint128 currentNextBurnNounID = nextBurnNounID;
+        if (currentNounId < currentNextBurnNounID) revert NotTimeToBurnYet();
 
         amount = excessETH();
         if (amount == 0) revert NoExcessToBurn();
 
         IExecutorV3(owner()).burnExcessETH(amount);
 
-        nextBurnNounID = nextBurnNounID_ + minNewNounsBetweenBurns;
-        emit Burn(amount, nextBurnNounID_, nextBurnNounID);
+        uint128 newNextBurnNounId = currentNextBurnNounID + minNewNounsBetweenBurns;
+        nextBurnNounID = newNextBurnNounId;
+        emit Burn(amount, currentNextBurnNounID, newNextBurnNounId);
     }
 
     /**
