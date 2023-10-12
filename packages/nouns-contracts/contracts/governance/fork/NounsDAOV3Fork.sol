@@ -82,8 +82,10 @@ library NounsDAOV3Fork {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
+        uint16 nounAgeRequiredToFork = ds.nounAgeRequiredToFork;
+        uint256 auctionedNounId = INounsAuctionHouseV2(ds.nouns.minter()).auction().nounId;
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            checkNounIdIsAllowedToFork(ds, tokenIds[i]);
+            checkNounIdIsAllowedToFork(auctionedNounId, nounAgeRequiredToFork, tokenIds[i]);
             ds.nouns.safeTransferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
@@ -153,8 +155,10 @@ library NounsDAOV3Fork {
         address timelock = address(ds.timelock);
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
+        uint16 nounAgeRequiredToFork = ds.nounAgeRequiredToFork;
+        uint256 auctionedNounId = INounsAuctionHouseV2(ds.nouns.minter()).auction().nounId;
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            checkNounIdIsAllowedToFork(ds, tokenIds[i]);
+            checkNounIdIsAllowedToFork(auctionedNounId, nounAgeRequiredToFork, tokenIds[i]);
             ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
         }
 
@@ -220,11 +224,13 @@ library NounsDAOV3Fork {
         return ds.forkEscrow.numTokensInEscrow();
     }
 
-    function checkNounIdIsAllowedToFork(NounsDAOStorageV3.StorageV3 storage ds, uint256 tokenId) internal view {
-        if (ds.nounAgeRequiredToFork == 0) return;
-
-        uint256 auctionedNounId = INounsAuctionHouseV2(ds.nouns.minter()).auction().nounId;
-        if (tokenId < auctionedNounId - ds.nounAgeRequiredToFork) revert NounIdNotOldEnough();
+    function checkNounIdIsAllowedToFork(
+        uint256 auctionedNounId,
+        uint16 nounAgeRequiredToFork,
+        uint256 tokenId
+    ) internal pure {
+        if (nounAgeRequiredToFork == 0) return;
+        if (tokenId < auctionedNounId - nounAgeRequiredToFork) revert NounIdNotOldEnough();
     }
 
     /**
