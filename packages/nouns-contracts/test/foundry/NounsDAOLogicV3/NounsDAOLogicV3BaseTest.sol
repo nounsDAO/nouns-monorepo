@@ -14,6 +14,11 @@ import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
+import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
+
+interface INounsAuctionHouseForTest is INounsAuctionHouseV2 {
+    function owner() external view returns (address);
+}
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     event ProposalUpdated(
@@ -93,11 +98,26 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     }
 
     function mintTo(address to) internal returns (uint256 tokenID) {
-        vm.startPrank(minter);
-        tokenID = nounsToken.mint();
-        nounsToken.transferFrom(minter, to, tokenID);
-        vm.stopPrank();
+        INounsAuctionHouseForTest ah = INounsAuctionHouseForTest(minter);
+
+        uint256 ownerBalanceBefore = ah.owner().balance;
+
+        if (block.timestamp >= ah.auction().endTime) {
+            ah.settleCurrentAndCreateNewAuction();
+        }
+
+        tokenID = ah.auction().nounId;
+
+        ah.createBid{ value: 1 ether }(tokenID);
+        vm.warp(block.timestamp + ah.auction().endTime + 1);
+        ah.settleCurrentAndCreateNewAuction();
+
+        nounsToken.transferFrom(address(this), to, tokenID);
         vm.roll(block.number + 1);
+
+        // Reverting treasury balance to prevent auction revenue from interfering with existing tests
+        // that previous used minting without auctions
+        vm.deal(ah.owner(), ownerBalanceBefore);
     }
 
     function propose(

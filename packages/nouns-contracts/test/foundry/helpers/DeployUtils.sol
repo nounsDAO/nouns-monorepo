@@ -37,7 +37,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address owner,
         address noundersDAO,
         address minter
-    ) internal returns (NounsAuctionHouseProxy, NounsAuctionHouseProxyAdmin) {
+    ) internal returns (address, NounsAuctionHouseProxyAdmin) {
         NounsAuctionHouse logic = new NounsAuctionHouse();
         NounsToken token = deployToken(noundersDAO, minter);
         WETH weth = new WETH();
@@ -59,7 +59,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         auction.transferOwnership(owner);
         token.setMinter(address(proxy));
 
-        return (proxy, admin);
+        return (address(proxy), admin);
     }
 
     uint32 constant LAST_MINUTE_BLOCKS = 10;

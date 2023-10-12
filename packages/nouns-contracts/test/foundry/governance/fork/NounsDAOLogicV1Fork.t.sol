@@ -19,6 +19,31 @@ import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.s
 import { NounsAuctionHouse } from '../../../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
 
+interface INounsAuctionHouseForTest {
+    struct Auction {
+        // ID for the Noun (ERC721 token ID)
+        uint256 nounId;
+        // The current highest bid amount
+        uint256 amount;
+        // The time that the auction started
+        uint256 startTime;
+        // The time that the auction is scheduled to end
+        uint256 endTime;
+        // The address of the current highest bid
+        address payable bidder;
+        // Whether or not the auction has been settled
+        bool settled;
+    }
+
+    function settleCurrentAndCreateNewAuction() external;
+
+    function createBid(uint256 nounId) external payable;
+
+    function auction() external returns (Auction memory);
+
+    function unpause() external;
+}
+
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
     address timelock;
@@ -35,11 +60,27 @@ abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
         // in the old way of calling getPriorVotes in vote casting.
         vm.roll(block.number + 1);
 
-        vm.startPrank(token.minter());
-        token.mint();
-        token.transferFrom(token.minter(), proposer, 0);
+        vm.startPrank(treasuryAddress);
+        INounsAuctionHouseForTest(token.minter()).unpause();
         vm.stopPrank();
 
+        assertEq(mintTo(proposer), 1);
+    }
+
+    function mintTo(address to) internal returns (uint256 tokenID) {
+        INounsAuctionHouseForTest ah = INounsAuctionHouseForTest(token.minter());
+
+        if (block.timestamp >= ah.auction().endTime) {
+            ah.settleCurrentAndCreateNewAuction();
+        }
+
+        tokenID = ah.auction().nounId;
+
+        ah.createBid{ value: 1 ether }(tokenID);
+        vm.warp(block.timestamp + ah.auction().endTime + 1);
+        ah.settleCurrentAndCreateNewAuction();
+
+        token.transferFrom(address(this), to, tokenID);
         vm.roll(block.number + 1);
     }
 
@@ -150,18 +191,17 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
     function setUp() public override {
         super.setUp();
 
-        vm.warp(token.forkingPeriodEndTimestamp());
+        assertEq(mintTo(proposer), 2);
+        while (token.totalSupply() < 10) {
+            mintTo(address(this));
+        }
+        assertEq(token.balanceOf(proposer), 2);
+        assertEq(token.totalSupply(), 10);
 
         vm.prank(timelock);
         dao._setProposalThresholdBPS(1_000);
 
-        vm.startPrank(token.minter());
-        for (uint256 i = 0; i < 9; ++i) {
-            token.mint();
-        }
-        token.transferFrom(token.minter(), proposer, 1);
-        vm.stopPrank();
-        vm.roll(block.number + 1);
+        vm.warp(token.forkingPeriodEndTimestamp());
 
         proposalId = propose();
     }
@@ -180,8 +220,8 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
 
     function test_cancel_nonProposerCanCancelWhenProposerBalanceIsLessThanThreshold() public {
         vm.startPrank(proposer);
-        token.transferFrom(proposer, address(1), 0);
         token.transferFrom(proposer, address(1), 1);
+        token.transferFrom(proposer, address(1), 2);
         vm.roll(block.number + 1);
         assertEq(token.getPriorVotes(proposer, block.number - 1), dao.proposalThreshold() - 1);
 
@@ -436,10 +476,10 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
         vm.prank(address(dao.timelock()));
         dao._setErc20TokensToIncludeInQuit(tokens);
 
-        // Send ETH to the DAO
-        vm.deal(address(dao.timelock()), ETH_BALANCE);
-
         mintNounsToQuitter();
+
+        // Set DAO's ETH balance
+        vm.deal(address(dao.timelock()), ETH_BALANCE);
 
         ethPerNoun = ETH_BALANCE / token.totalSupply();
 
@@ -579,22 +619,15 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
     }
 
     function mintNounsToQuitter() internal {
-        address minter = token.minter();
-        vm.startPrank(minter);
-        while (token.totalSupply() < 10) {
-            uint256 tokenId = token.mint();
-            address to = proposer;
-            if (tokenId > 7) {
-                to = quitter;
-                quitterTokens.push(tokenId);
-            }
-            token.transferFrom(token.minter(), to, tokenId);
+        while (token.balanceOf(proposer) < 7) {
+            mintTo(proposer);
         }
-        vm.stopPrank();
-
-        vm.roll(block.number + 1);
+        while (token.balanceOf(quitter) < 2) {
+            quitterTokens.push(mintTo(quitter));
+        }
 
         assertEq(token.totalSupply(), 10);
+        assertEq(dao.adjustedTotalSupply(), 10);
         assertEq(token.balanceOf(quitter), 2);
     }
 }

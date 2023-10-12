@@ -696,6 +696,8 @@ contract NounsDAOStorageV3 {
         INounsDAOForkEscrow forkEscrow;
         /// @notice address of the DAO's fork deployer contract
         IForkDAODeployer forkDAODeployer;
+        /// @notice the age of a noun, in noun ids, for a noun to be allowed to fork
+        uint16 nounAgeRequiredToFork;
         /// @notice ERC20 tokens to include when sending funds to a deployed fork
         address[] erc20TokensToIncludeInFork;
         /// @notice The treasury contract of the last deployed fork

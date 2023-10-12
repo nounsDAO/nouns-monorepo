@@ -803,6 +803,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setForkThresholdBPS(newForkThresholdBPS);
     }
 
+    function _setNounAgeRequiredToFork(uint16 newNounAgeRequiredToFork) external {
+        ds._setNounAgeRequiredToFork(newNounAgeRequiredToFork);
+    }
+
     /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
@@ -1006,6 +1010,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function forkDAODeployer() public view returns (IForkDAODeployer) {
         return ds.forkDAODeployer;
+    }
+
+    function nounAgeRequiredToFork() public view returns (uint16) {
+        return ds.nounAgeRequiredToFork;
     }
 
     function forkEndTimestamp() public view returns (uint256) {

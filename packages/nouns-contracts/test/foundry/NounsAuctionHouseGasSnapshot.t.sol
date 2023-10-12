@@ -14,19 +14,20 @@ abstract contract NounsAuctionHouseBaseTest is DeployUtils {
     INounsToken nouns;
     address noundersDAO = makeAddr('noundersDAO');
     address owner = makeAddr('owner');
-    NounsAuctionHouseProxy auctionHouseProxy;
+    address auctionHouseProxy;
     NounsAuctionHouseProxyAdmin proxyAdmin;
     uint256[] nounIds;
 
     function setUp() public virtual {
-        (
-            NounsAuctionHouseProxy auctionHouseProxy_,
-            NounsAuctionHouseProxyAdmin proxyAdmin_
-        ) = _deployAuctionHouseV1AndToken(owner, noundersDAO, address(0));
+        (address auctionHouseProxy_, NounsAuctionHouseProxyAdmin proxyAdmin_) = _deployAuctionHouseV1AndToken(
+            owner,
+            noundersDAO,
+            address(0)
+        );
         auctionHouseProxy = auctionHouseProxy_;
         proxyAdmin = proxyAdmin_;
 
-        auctionHouse = INounsAuctionHouse(address(auctionHouseProxy_));
+        auctionHouse = INounsAuctionHouse(auctionHouseProxy_);
 
         vm.prank(owner);
         auctionHouse.unpause();
