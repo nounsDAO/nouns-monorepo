@@ -1012,6 +1012,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.forkDAODeployer;
     }
 
+    function nounAgeRequiredToFork() public view returns (uint16) {
+        return ds.nounAgeRequiredToFork;
+    }
+
     function forkEndTimestamp() public view returns (uint256) {
         return ds.forkEndTimestamp;
     }
