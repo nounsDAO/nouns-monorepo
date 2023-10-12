@@ -34,12 +34,14 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
         erc20Mock.mint(address(timelock), 300e18);
 
         // Mint total of 20 tokens. 18 to token holder, 2 to nounders
-        vm.startPrank(minter);
         while (nounsToken.totalSupply() < 20) {
-            nounsToken.mint();
-            nounsToken.transferFrom(minter, tokenHolder, nounsToken.totalSupply() - 1);
+            mintTo(tokenHolder);
         }
-        vm.stopPrank();
+
+        address nounders = nounsToken.noundersDAO();
+        vm.prank(nounders);
+        nounsToken.transferFrom(nounders, tokenHolder, 10);
+
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
 
         escrow = dao.forkEscrow();

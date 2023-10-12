@@ -12,11 +12,7 @@ abstract contract ExecutableProposalState is NounsDAOLogicV3BaseTest {
     function setUp() public virtual override {
         super.setUp();
 
-        vm.startPrank(minter);
-        nounsToken.mint();
-        nounsToken.transferFrom(minter, user, 1);
-        vm.stopPrank();
-        vm.roll(block.number + 1);
+        mintTo(user);
 
         // prep an executable proposal
         proposalId = propose(user, makeAddr('target'), 0, '', '', '');

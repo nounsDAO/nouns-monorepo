@@ -12,6 +12,7 @@ import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newda
 import { NounsAuctionHouseFork } from '../../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from '../../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 
 contract ForkingHappyFlowTest is DeployUtilsFork {
     address minter;
@@ -101,32 +102,19 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
 
     function dealNouns() internal {
         address nounders = ogToken.noundersDAO();
-        vm.startPrank(minter);
-        for (uint256 i = 0; i < 10; i++) {
-            ogToken.mint();
-        }
-
-        changePrank(nounders);
+        vm.prank(nounders);
         ogToken.transferFrom(nounders, nounerInEscrow1, 0);
-
-        changePrank(minter);
-        ogToken.transferFrom(minter, nounerInEscrow1, 1);
-        ogToken.transferFrom(minter, nounerInEscrow2, 2);
-        ogToken.transferFrom(minter, nounerInEscrow2, 3);
-        ogToken.transferFrom(minter, nounerForkJoiner1, 4);
-        ogToken.transferFrom(minter, nounerForkJoiner1, 5);
-        ogToken.transferFrom(minter, nounerForkJoiner2, 6);
-        ogToken.transferFrom(minter, nounerForkJoiner2, 7);
-        ogToken.transferFrom(minter, nounerNoFork1, 8);
-        ogToken.transferFrom(minter, nounerNoFork1, 9);
-
-        changePrank(nounders);
+        assertEq(mintTo(nounerInEscrow1), 1);
+        assertEq(mintTo(nounerInEscrow2), 2);
+        assertEq(mintTo(nounerInEscrow2), 3);
+        assertEq(mintTo(nounerForkJoiner1), 4);
+        assertEq(mintTo(nounerForkJoiner1), 5);
+        assertEq(mintTo(nounerForkJoiner2), 6);
+        assertEq(mintTo(nounerForkJoiner2), 7);
+        assertEq(mintTo(nounerNoFork1), 8);
+        assertEq(mintTo(nounerNoFork1), 9);
+        vm.prank(nounders);
         ogToken.transferFrom(nounders, nounerNoFork2, 10);
-
-        changePrank(minter);
-        ogToken.transferFrom(minter, nounerNoFork2, 11);
-
-        vm.stopPrank();
     }
 
     function escrowToFork(address nouner) internal {
@@ -166,6 +154,23 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
         proposalId = forkDAO.propose(targets, values, signatures, calldatas, 'my proposal');
+    }
+
+    function mintTo(address to) internal returns (uint256 tokenID) {
+        INounsAuctionHouseV2 ah = INounsAuctionHouseV2(minter);
+
+        if (block.timestamp >= ah.auction().endTime) {
+            ah.settleCurrentAndCreateNewAuction();
+        }
+
+        tokenID = ah.auction().nounId;
+
+        ah.createBid{ value: 1 ether }(tokenID);
+        vm.warp(block.timestamp + ah.auction().endTime + 1);
+        ah.settleCurrentAndCreateNewAuction();
+
+        ogToken.transferFrom(address(this), to, tokenID);
+        vm.roll(block.number + 1);
     }
 }
 

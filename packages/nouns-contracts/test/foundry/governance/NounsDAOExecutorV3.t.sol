@@ -139,16 +139,16 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
 
         vm.deal(address(treasury), 100 ether);
 
-        // adjustedSupply: 214
+        // adjustedSupply: 215
         // meanPrice: 0.1 ether
-        // expected value: 214 * 0.1 = 21.4 ETH
+        // expected value: 215 * 0.1 = 21.5 ETH
         // treasury size: 100 ETH
-        // excess: 100 - 21.4 = 78.6 ETH
+        // excess: 100 - 21.5 = 78.5 ETH
         vm.expectEmit(true, true, true, true);
-        emit ETHBurned(78.6 ether);
+        emit ETHBurned(78.5 ether);
 
         uint256 burnedETH = burner.burnExcessETH();
-        assertEq(burnedETH, 78.6 ether);
+        assertEq(burnedETH, 78.5 ether);
     }
 
     function getProposalToExecution(uint256 proposalId) internal {
