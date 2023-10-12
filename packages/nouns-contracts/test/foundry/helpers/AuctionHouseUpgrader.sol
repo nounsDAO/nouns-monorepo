@@ -14,9 +14,9 @@ library AuctionHouseUpgrader {
     function upgradeAuctionHouse(
         address owner,
         NounsAuctionHouseProxyAdmin proxyAdmin,
-        NounsAuctionHouseProxy proxy
+        address proxy
     ) internal {
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(proxy));
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(proxy);
 
         NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2(
             auctionV1.nouns(),
@@ -30,10 +30,10 @@ library AuctionHouseUpgrader {
         // not using upgradeAndCall because the call must come from the auction house owner
         // which is owner, not the proxy admin
 
-        proxyAdmin.upgrade(proxy, address(migratorLogic));
-        NounsAuctionHousePreV2Migration migrator = NounsAuctionHousePreV2Migration(address(proxy));
+        proxyAdmin.upgrade(NounsAuctionHouseProxy(payable(proxy)), address(migratorLogic));
+        NounsAuctionHousePreV2Migration migrator = NounsAuctionHousePreV2Migration(proxy);
         migrator.migrate();
-        proxyAdmin.upgrade(proxy, address(newLogic));
+        proxyAdmin.upgrade(NounsAuctionHouseProxy(payable(proxy)), address(newLogic));
 
         vm.stopPrank();
     }

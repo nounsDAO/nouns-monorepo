@@ -22,7 +22,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     NounsAuctionHouseV2 auction;
 
     function setUp() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
@@ -30,7 +30,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
 
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = NounsAuctionHouseV2(auctionProxy);
 
         vm.prank(owner);
         auction.unpause();
@@ -161,13 +161,13 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_settleAuction_revertsWhenAuctionHasntBegunYet() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = NounsAuctionHouseV2(auctionProxy);
 
         vm.expectRevert("Auction hasn't begun");
         auction.settleAuction();
@@ -185,12 +185,12 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_V2Migration_works() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(auctionProxy);
         vm.prank(owner);
         auctionV1.unpause();
         vm.roll(block.number + 1);
@@ -207,7 +207,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
 
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
+        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(auctionProxy);
 
         INounsAuctionHouseV2.AuctionV2 memory auctionV2State = auctionV2.auction();
 
@@ -229,12 +229,12 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_V2Migration_copiesPausedWhenTrue() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(auctionProxy);
         vm.prank(owner);
         auctionV1.unpause();
         vm.roll(block.number + 1);
@@ -251,7 +251,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
 
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
+        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(auctionProxy);
         assertEq(auctionV2.paused(), true);
     }
 

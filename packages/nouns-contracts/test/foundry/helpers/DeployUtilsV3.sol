@@ -135,7 +135,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         NounsAuctionHouse(address(auctionProxy)).initialize(nounsToken, makeAddr('weth'), 2, 0, 1, 10 minutes);
 
         vm.prank(address(timelock));
-        AuctionHouseUpgrader.upgradeAuctionHouse(address(timelock), auctionAdmin, auctionProxy);
+        AuctionHouseUpgrader.upgradeAuctionHouse(address(timelock), auctionAdmin, address(auctionProxy));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));

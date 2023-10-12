@@ -185,7 +185,7 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
         AuctionHouseUpgrader.upgradeAuctionHouse(
             treasury,
             NounsAuctionHouseProxyAdmin(proxyAdminAddress),
-            NounsAuctionHouseProxy(payable(dao.nouns().minter()))
+            dao.nouns().minter()
         );
     }
 
