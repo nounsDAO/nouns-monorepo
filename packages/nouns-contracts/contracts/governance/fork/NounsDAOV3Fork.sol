@@ -229,8 +229,7 @@ library NounsDAOV3Fork {
         uint16 nounAgeRequiredToFork,
         uint256 tokenId
     ) internal pure {
-        if (nounAgeRequiredToFork == 0) return;
-        if (tokenId < auctionedNounId - nounAgeRequiredToFork) revert NounIdNotOldEnough();
+        if (tokenId >= auctionedNounId - nounAgeRequiredToFork) revert NounIdNotOldEnough();
     }
 
     /**
