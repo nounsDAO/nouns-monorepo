@@ -9,8 +9,9 @@ contract DeployExecutorV3AndExcessETHBurnerSepolia is DeployExecutorV3AndExcessE
     address constant STETH = 0x7f96dAEF4A54F6A52613d6272560C2BD25e913B8;
     address constant RETH = 0xf07dafCC49a9F5E1E73Df6bD6616d0a5bA19e502;
 
-    uint128 BURN_START_NOUN_ID = 10;
-    uint128 MIN_NOUNS_BETWEEN_BURNS = 10;
+    uint64 BURN_START_NOUN_ID = 10;
+    uint64 NOUNS_BETWEEN_BURNS = 10;
+    uint16 BURN_WINDOW_SIZE = 3;
     uint16 MEAN_AUCTION_COUNT = 10;
 
     constructor()
@@ -20,7 +21,8 @@ contract DeployExecutorV3AndExcessETHBurnerSepolia is DeployExecutorV3AndExcessE
             STETH,
             RETH,
             BURN_START_NOUN_ID,
-            MIN_NOUNS_BETWEEN_BURNS,
+            NOUNS_BETWEEN_BURNS,
+            BURN_WINDOW_SIZE,
             MEAN_AUCTION_COUNT
         )
     {}

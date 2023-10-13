@@ -9,8 +9,9 @@ contract DeployExecutorV3AndExcessETHBurnerMainnet is DeployExecutorV3AndExcessE
     address constant STETH = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
     address constant RETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
-    uint128 BURN_START_NOUN_ID = type(uint128).max;
-    uint128 MIN_NOUNS_BETWEEN_BURNS = 0;
+    uint64 BURN_START_NOUN_ID = type(uint64).max;
+    uint64 NOUNS_BETWEEN_BURNS = 0;
+    uint16 BURN_WINDOW_SIZE = 3;
     uint16 MEAN_AUCTION_COUNT = 1;
 
     constructor()
@@ -20,7 +21,8 @@ contract DeployExecutorV3AndExcessETHBurnerMainnet is DeployExecutorV3AndExcessE
             STETH,
             RETH,
             BURN_START_NOUN_ID,
-            MIN_NOUNS_BETWEEN_BURNS,
+            NOUNS_BETWEEN_BURNS,
+            BURN_WINDOW_SIZE,
             MEAN_AUCTION_COUNT
         )
     {}

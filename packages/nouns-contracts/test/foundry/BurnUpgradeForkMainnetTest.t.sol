@@ -183,18 +183,20 @@ contract BurnUpgradeForkMainnetTest is Test {
     }
 
     function test_burnerIsOffAtFirst() public {
-        assertGt(burner.nextBurnNounID(), 1000000);
+        // initial id is very high, i.e. noun minting won't reach it any time soon
+        assertGt(burner.initialBurnNounId(), 1000000);
 
         vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
         burner.burnExcessETH();
     }
 
     function test_burn() public {
-        uint256 proposalId = proposeToTurnOnBurn(880, 10, 20);
+        uint256 proposalId = proposeToTurnOnBurn(880, 10, 4, 20);
         voteAndExecuteProposal(proposalId);
 
-        assertEq(burner.nextBurnNounID(), 880);
-        assertEq(burner.minNewNounsBetweenBurns(), 10);
+        assertEq(burner.initialBurnNounId(), 880);
+        assertEq(burner.nounIdsBetweenBurns(), 10);
+        assertEq(burner.burnWindowSize(), 4);
         assertEq(burner.numberOfPastAuctionsForMeanPrice(), 20);
 
         NounsAuctionHouseV2 ah = NounsAuctionHouseV2(auctionHouseProxy);
@@ -230,11 +232,12 @@ contract BurnUpgradeForkMainnetTest is Test {
     }
 
     function proposeToTurnOnBurn(
-        uint128 nextBurnNoundId,
-        uint128 minNewNounsBetweenBurns,
+        uint64 initialBurnNounId,
+        uint64 nounIdsBetweenBurns,
+        uint16 burnWindowSize,
         uint16 numberOfPastAuctionsForMeanPrice
     ) internal returns (uint256 proposalId) {
-        uint8 numTxs = 3;
+        uint8 numTxs = 4;
         address[] memory targets = new address[](numTxs);
         uint256[] memory values = new uint256[](numTxs);
         string[] memory signatures = new string[](numTxs);
@@ -243,16 +246,22 @@ contract BurnUpgradeForkMainnetTest is Test {
         uint256 i = 0;
         targets[i] = address(burner);
         values[i] = 0;
-        signatures[i] = 'setNextBurnNounID(uint128)';
-        calldatas[i] = abi.encode(nextBurnNoundId);
+        signatures[i] = 'setInitialBurnNounId(uint64)';
+        calldatas[i] = abi.encode(initialBurnNounId);
 
         i = 1;
         targets[i] = address(burner);
         values[i] = 0;
-        signatures[i] = 'setMinNewNounsBetweenBurns(uint128)';
-        calldatas[i] = abi.encode(minNewNounsBetweenBurns);
+        signatures[i] = 'setNounIdsBetweenBurns(uint64)';
+        calldatas[i] = abi.encode(nounIdsBetweenBurns);
 
         i = 2;
+        targets[i] = address(burner);
+        values[i] = 0;
+        signatures[i] = 'setBurnWindowSize(uint16)';
+        calldatas[i] = abi.encode(burnWindowSize);
+
+        i = 3;
         targets[i] = address(burner);
         values[i] = 0;
         signatures[i] = 'setNumberOfPastAuctionsForMeanPrice(uint16)';

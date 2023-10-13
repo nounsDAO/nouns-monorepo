@@ -22,8 +22,9 @@ abstract contract DeployUtilsExcessETHBurner is DeployUtilsV3 {
     function _deployExcessETHBurner(
         NounsDAOExecutorV3 owner,
         INounsAuctionHouseV2 auction,
-        uint128 burnStartNounID,
-        uint128 minNewNounsBetweenBurns,
+        uint64 burnStartNounID,
+        uint64 nounsBetweenBurns,
+        uint16 burnWindowSize,
         uint16 pastAuctionCount
     ) internal returns (ExcessETHBurner burner) {
         WETH weth = new WETH();
@@ -38,7 +39,8 @@ abstract contract DeployUtilsExcessETHBurner is DeployUtilsV3 {
             stETH,
             rETH,
             burnStartNounID,
-            minNewNounsBetweenBurns,
+            nounsBetweenBurns,
+            burnWindowSize,
             pastAuctionCount
         );
     }

@@ -57,13 +57,14 @@ contract ExcessETHBurner is Ownable {
      */
 
     event AuctionSet(address oldAuction, address newAuction);
-    event NextBurnNounIDSet(uint128 nextBurnNounID, uint128 newNextBurnNounID);
-    event MinNewNounsBetweenBurnsSet(uint128 minNewNounsBetweenBurns, uint128 newMinNewNounsBetweenBurns);
+    event InitialBurnNounIdSet(uint128 initialBurnNounId, uint128 newInitialBurnNounId);
+    event NounIdsBetweenBurnsSet(uint128 nounIdsBetweenBurns, uint128 newNounIdsBetweenBurns);
+    event BurnWindowSizeSet(uint16 burnWindowSize, uint16 newBurnWindowSize);
     event NumberOfPastAuctionsForMeanPriceSet(
         uint16 oldNumberOfPastAuctionsForMeanPrice,
         uint16 newNumberOfPastAuctionsForMeanPrice
     );
-    event Burn(uint256 amount, uint128 previousBurnNounId, uint128 nextBurnNounId);
+    event Burn(uint256 amount, uint128 currentBurnWindowStart, uint128 currentNounId, uint128 newInitialBurnNounId);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -78,8 +79,9 @@ contract ExcessETHBurner is Ownable {
     IERC20 public immutable wETH;
     IERC20 public immutable stETH;
     IERC20 public immutable rETH;
-    uint128 public nextBurnNounID;
-    uint128 public minNewNounsBetweenBurns;
+    uint64 public initialBurnNounId;
+    uint64 public nounIdsBetweenBurns;
+    uint16 public burnWindowSize;
     uint16 public numberOfPastAuctionsForMeanPrice;
 
     /**
@@ -89,8 +91,9 @@ contract ExcessETHBurner is Ownable {
      * @param wETH_ Address of WETH token
      * @param stETH_ Address of Lido stETH token
      * @param rETH_ Address of RocketPool RETH token
-     * @param burnStartNounID_ A burn will be possible only if the currently auctioned Noun has a greater or equal ID
-     * @param minNewNounsBetweenBurns_ Number of nouns that need to be minted between burns
+     * @param initialBurnNounId_ The lowest noun id at which a burn can be triggered
+     * @param nounIdsBetweenBurns_ Number of nouns that need to be minted between burn windows
+     * @param burnWindowSize_ Number of nouns in a burn window
      * @param numberOfPastAuctionsForMeanPrice_ Number of past auctions to consider when calculating mean price
      */
     constructor(
@@ -100,8 +103,9 @@ contract ExcessETHBurner is Ownable {
         IERC20 wETH_,
         IERC20 stETH_,
         IERC20 rETH_,
-        uint128 burnStartNounID_,
-        uint128 minNewNounsBetweenBurns_,
+        uint64 initialBurnNounId_,
+        uint64 nounIdsBetweenBurns_,
+        uint16 burnWindowSize_,
         uint16 numberOfPastAuctionsForMeanPrice_
     ) {
         _transferOwnership(owner_);
@@ -111,8 +115,9 @@ contract ExcessETHBurner is Ownable {
         wETH = wETH_;
         stETH = stETH_;
         rETH = rETH_;
-        nextBurnNounID = burnStartNounID_;
-        minNewNounsBetweenBurns = minNewNounsBetweenBurns_;
+        initialBurnNounId = initialBurnNounId_;
+        nounIdsBetweenBurns = nounIdsBetweenBurns_;
+        burnWindowSize = burnWindowSize_;
         numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
     }
 
@@ -132,22 +137,68 @@ contract ExcessETHBurner is Ownable {
      * @dev Reverts when auction house has not yet minted the next Noun ID at which the burn is allowed.
      */
     function burnExcessETH() public returns (uint256 amount) {
-        uint256 currentNounId = auction.auction().nounId;
+        uint128 currentNounId = currentlyAuctionedNounId();
 
         // Make sure this is a valid noun id. This will revert if this id doesn't exist
         auction.nouns().ownerOf(currentNounId);
 
-        uint128 currentNextBurnNounID = nextBurnNounID;
-        if (currentNounId < currentNextBurnNounID) revert NotTimeToBurnYet();
+        uint64 nounIdsBetweenBurns_ = nounIdsBetweenBurns;
+        uint64 initialBurnNounId_ = initialBurnNounId;
+        if (!isInBurnWindow(currentNounId, initialBurnNounId_, nounIdsBetweenBurns_)) revert NotTimeToBurnYet();
+        uint64 newInitialBurnNounId = nextBurnWindowStart(
+            uint64(currentNounId),
+            initialBurnNounId_,
+            nounIdsBetweenBurns_
+        );
+        initialBurnNounId = newInitialBurnNounId;
 
         amount = excessETH();
         if (amount == 0) revert NoExcessToBurn();
 
         IExecutorV3(owner()).burnExcessETH(amount);
 
-        uint128 newNextBurnNounId = currentNextBurnNounID + minNewNounsBetweenBurns;
-        nextBurnNounID = newNextBurnNounId;
-        emit Burn(amount, currentNextBurnNounID, newNextBurnNounId);
+        emit Burn(amount, newInitialBurnNounId - nounIdsBetweenBurns_, currentNounId, newInitialBurnNounId);
+    }
+
+    /**
+     * @notice Returns the id of the noun currently being auctioned
+     */
+    function currentlyAuctionedNounId() public view returns (uint128) {
+        return auction.auction().nounId;
+    }
+
+    /**
+     * @notice Returns true if `nounId` is within a burn window.
+     * A burn window can start at `initialBurnNounId_` + N * `nounIdsBetweenBurns_` for any N >= 0.
+     * The window size is defined by `burnWindowSize`.
+     */
+    function isInBurnWindow(
+        uint256 nounId,
+        uint64 initialBurnNounId_,
+        uint64 nounIdsBetweenBurns_
+    ) public view returns (bool) {
+        if (nounId < initialBurnNounId_) return false;
+
+        uint256 distanceFromBurnWindowStart = (nounId - initialBurnNounId_) % nounIdsBetweenBurns_;
+
+        return distanceFromBurnWindowStart <= burnWindowSize;
+    }
+
+    /**
+     * @notice Returns the next burn window start id.
+     * For a given `currentNounId`, it returns the next id which can be represented by
+     * `initialBurnNounId_` + N * `nounIdsBetweenBurns_` for any N >= 0.
+     */
+    function nextBurnWindowStart(
+        uint64 currentNounId,
+        uint64 initialBurnNounId_,
+        uint64 nounIdsBetweenBurns_
+    ) public pure returns (uint64) {
+        // this could not happen during a burn. here as convenience.
+        if (currentNounId < initialBurnNounId_) return initialBurnNounId_;
+
+        uint64 distanceFromBurnWindowStart = (currentNounId - initialBurnNounId_) % nounIdsBetweenBurns_;
+        return currentNounId - distanceFromBurnWindowStart + nounIdsBetweenBurns_;
     }
 
     /**
@@ -219,23 +270,29 @@ contract ExcessETHBurner is Ownable {
      */
 
     /**
-     * @notice Set the next Noun ID at which the burn is allowed.
-     * @param newNextBurnNounID The new next Noun ID at which the burn is allowed.
+     * @notice Sets `initialBurnNounId`
+     * Can only be called by owner, which is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
      */
-    function setNextBurnNounID(uint128 newNextBurnNounID) external onlyOwner {
-        emit NextBurnNounIDSet(nextBurnNounID, newNextBurnNounID);
+    function setInitialBurnNounId(uint64 newInitialBurnNounId) external onlyOwner {
+        emit InitialBurnNounIdSet(initialBurnNounId, newInitialBurnNounId);
 
-        nextBurnNounID = newNextBurnNounID;
+        initialBurnNounId = newInitialBurnNounId;
     }
 
     /**
-     * @notice Set the minimum number of new Nouns between burns.
-     * @param newMinNewNounsBetweenBurns The new minimum number of new Nouns between burns.
+     * @notice Sets `nounIdsBetweenBurns`
+     * Can only be called by owner, which is assumed to be the NounsDAOExecutorV3 contract, i.e. the Nouns treasury.
      */
-    function setMinNewNounsBetweenBurns(uint128 newMinNewNounsBetweenBurns) external onlyOwner {
-        emit MinNewNounsBetweenBurnsSet(minNewNounsBetweenBurns, newMinNewNounsBetweenBurns);
+    function setNounIdsBetweenBurns(uint64 newNounIdsBetweenBurns) external onlyOwner {
+        emit NounIdsBetweenBurnsSet(nounIdsBetweenBurns, newNounIdsBetweenBurns);
 
-        minNewNounsBetweenBurns = newMinNewNounsBetweenBurns;
+        nounIdsBetweenBurns = newNounIdsBetweenBurns;
+    }
+
+    function setBurnWindowSize(uint16 newBurnWindowSize) external onlyOwner {
+        emit BurnWindowSizeSet(burnWindowSize, newBurnWindowSize);
+
+        burnWindowSize = newBurnWindowSize;
     }
 
     /**

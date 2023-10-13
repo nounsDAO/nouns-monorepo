@@ -105,26 +105,37 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
     NounsDAOExecutorV3 treasury;
     ExcessETHBurner burner;
 
-    uint128 burnStartNounId;
-    uint128 minNewNounsBetweenBurns;
+    uint64 burnStartNounId;
+    uint64 nounsBetweenBurns;
+    uint16 burnWindowSize;
     uint16 pastAuctionCount;
 
-    event Burn(uint256 amount, uint128 previousBurnNounId, uint128 nextBurnNounId);
+    event Burn(uint256 amount, uint128 currentBurnWindowStart, uint128 currentNounId, uint128 newInitialBurnNounId);
 
     function setUp() public {
         burnStartNounId = 1;
-        minNewNounsBetweenBurns = 100;
+        nounsBetweenBurns = 100;
         pastAuctionCount = 90;
+        burnWindowSize = 3;
 
         treasury = _deployExecutorV3(address(dao));
-        burner = _deployExcessETHBurner(treasury, auction, burnStartNounId, minNewNounsBetweenBurns, pastAuctionCount);
+        burner = _deployExcessETHBurner(
+            treasury,
+            auction,
+            burnStartNounId,
+            nounsBetweenBurns,
+            burnWindowSize,
+            pastAuctionCount
+        );
 
         vm.prank(address(treasury));
         treasury.setExcessETHBurner(address(burner));
 
         auction.setNounId(burnStartNounId);
-        nounsToken.mint(address(1), 0);
-        nounsToken.mint(address(1), 1);
+
+        for (uint256 i; i < 400; i++) {
+            nounsToken.mint(address(1), i);
+        }
     }
 
     function test_burnExcessETH_beforeNextBurnNounID_reverts() public {
@@ -148,12 +159,51 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         vm.deal(address(treasury), 100 ether);
 
         vm.expectEmit(true, true, true, true);
-        emit Burn(99 ether, 1, 101);
+        emit Burn(99 ether, 1, 1, 101);
         uint256 burnedAmount = burner.burnExcessETH();
 
         assertEq(burnedAmount, 99 ether);
         assertEq(address(treasury).balance, 1 ether);
-        assertEq(burner.nextBurnNounID(), burnStartNounId + minNewNounsBetweenBurns);
+        assertEq(burner.initialBurnNounId(), 101);
+    }
+
+    function test_burnExcessETH_allowedOnlyWithinWindow() public {
+        setMeanPrice(1 ether);
+        dao.setAdjustedTotalSupply(1);
+        vm.deal(address(treasury), 100 ether);
+
+        // window allows for noun id between 1 and 4
+        auction.setNounId(5);
+        vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
+        burner.burnExcessETH();
+
+        auction.setNounId(4);
+        burner.burnExcessETH();
+
+        // now window allows for noun id between 101 and 104
+        vm.deal(address(treasury), 100 ether);
+
+        auction.setNounId(100);
+        vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
+        burner.burnExcessETH();
+
+        auction.setNounId(105);
+        vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
+        burner.burnExcessETH();
+
+        auction.setNounId(102);
+        burner.burnExcessETH();
+    }
+
+    function test_burnExcessETH_canSkipBurnWindows() public {
+        setMeanPrice(1 ether);
+        dao.setAdjustedTotalSupply(1);
+        vm.deal(address(treasury), 100 ether);
+
+        auction.setNounId(303);
+        vm.expectEmit(true, true, true, true);
+        emit Burn(99 ether, 301, 303, 401);
+        burner.burnExcessETH();
     }
 
     function test_burnExcessETH_revertsIfAuctionReturnsInvalidNounId() public {
@@ -170,18 +220,19 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
 
         assertEq(burner.burnExcessETH(), 99 ether);
         assertEq(address(treasury).balance, 1 ether);
-        assertEq(burner.nextBurnNounID(), burnStartNounId + minNewNounsBetweenBurns);
+        assertEq(burner.initialBurnNounId(), 101);
 
         vm.deal(address(treasury), 100 ether);
         vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
         burner.burnExcessETH();
 
-        auction.setNounId(burner.nextBurnNounID());
-        nounsToken.mint(address(1), burner.nextBurnNounID());
+        auction.setNounId(2);
+        vm.expectRevert(ExcessETHBurner.NotTimeToBurnYet.selector);
+        burner.burnExcessETH();
 
-        uint128 expectedNextBurnID = burner.nextBurnNounID() + minNewNounsBetweenBurns;
+        auction.setNounId(101);
         assertEq(burner.burnExcessETH(), 99 ether);
-        assertEq(burner.nextBurnNounID(), expectedNextBurnID);
+        assertEq(burner.initialBurnNounId(), 201);
     }
 
     function test_burnExcessETH_givenExpectedValueGreaterThanTreasury_reverts() public {
@@ -254,32 +305,32 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         burner.burnExcessETH();
     }
 
-    function test_setNextBurnNounID_revertsForNonOwner() public {
+    function test_setInitialBurnNounId_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
-        burner.setNextBurnNounID(1);
+        burner.setInitialBurnNounId(1);
     }
 
-    function test_setNextBurnNounID_worksForOwner() public {
-        assertTrue(burner.nextBurnNounID() != 142);
+    function test_setInitialBurnNounId_worksForOwner() public {
+        assertTrue(burner.initialBurnNounId() != 142);
 
         vm.prank(address(treasury));
-        burner.setNextBurnNounID(142);
+        burner.setInitialBurnNounId(142);
 
-        assertEq(burner.nextBurnNounID(), 142);
+        assertEq(burner.initialBurnNounId(), 142);
     }
 
-    function test_setMinNewNounsBetweenBurns_revertsForNonOwner() public {
+    function test_setNounIdsBetweenBurns_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
-        burner.setMinNewNounsBetweenBurns(1);
+        burner.setNounIdsBetweenBurns(1);
     }
 
-    function test_setMinNewNounsBetweenBurns_worksForOwner() public {
-        assertTrue(burner.minNewNounsBetweenBurns() != 142);
+    function test_setNounIdsBetweenBurns_worksForOwner() public {
+        assertTrue(burner.nounIdsBetweenBurns() != 142);
 
         vm.prank(address(treasury));
-        burner.setMinNewNounsBetweenBurns(142);
+        burner.setNounIdsBetweenBurns(142);
 
-        assertEq(burner.minNewNounsBetweenBurns(), 142);
+        assertEq(burner.nounIdsBetweenBurns(), 142);
     }
 
     function test_setNumberOfPastAuctionsForMeanPrice_revertsForNonOwner() public {
@@ -300,6 +351,20 @@ contract ExcessETHBurnerTest is DeployUtilsExcessETHBurner {
         vm.prank(address(treasury));
         vm.expectRevert(ExcessETHBurner.PastAuctionCountTooLow.selector);
         burner.setNumberOfPastAuctionsForMeanPrice(1);
+    }
+
+    function test_setBurnWindowSize_revertsForNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        burner.setBurnWindowSize(5);
+    }
+
+    function test_setBurnWindowSize_worksForOwner() public {
+        assertTrue(burner.burnWindowSize() != 5);
+
+        vm.prank(address(treasury));
+        burner.setBurnWindowSize(5);
+
+        assertEq(burner.burnWindowSize(), 5);
     }
 
     function setMeanPrice(uint256 meanPrice) internal {

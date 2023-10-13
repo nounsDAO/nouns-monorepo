@@ -19,8 +19,9 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
     IERC20 public immutable wETH;
     IERC20 public immutable stETH;
     IERC20 public immutable rETH;
-    uint128 public immutable burnStartNounID;
-    uint128 public immutable minNewNounsBetweenBurns;
+    uint64 public immutable initialBurnNounId;
+    uint64 public immutable nounIdsBetweenBurns;
+    uint16 public immutable burnWindowSize;
     uint16 public immutable numberOfPastAuctionsForMeanPrice;
 
     constructor(
@@ -28,8 +29,9 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
         address wETH_,
         address stETH_,
         address rETH_,
-        uint128 burnStartNounID_,
-        uint128 minNewNounsBetweenBurns_,
+        uint64 initialBurnNounId_,
+        uint64 nounIdsBetweenBurns_,
+        uint16 burnWindowSize_,
         uint16 numberOfPastAuctionsForMeanPrice_
     ) {
         executorProxy = executorProxy_;
@@ -41,8 +43,9 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
         stETH = IERC20(stETH_);
         rETH = IERC20(rETH_);
 
-        burnStartNounID = burnStartNounID_;
-        minNewNounsBetweenBurns = minNewNounsBetweenBurns_;
+        initialBurnNounId = initialBurnNounId_;
+        nounIdsBetweenBurns = nounIdsBetweenBurns_;
+        burnWindowSize = burnWindowSize_;
         numberOfPastAuctionsForMeanPrice = numberOfPastAuctionsForMeanPrice_;
     }
 
@@ -59,8 +62,9 @@ abstract contract DeployExecutorV3AndExcessETHBurnerBase is Script {
             wETH,
             stETH,
             rETH,
-            burnStartNounID,
-            minNewNounsBetweenBurns,
+            initialBurnNounId,
+            nounIdsBetweenBurns,
+            burnWindowSize,
             numberOfPastAuctionsForMeanPrice
         );
 

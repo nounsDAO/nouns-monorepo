@@ -102,7 +102,7 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
         vm.roll(block.number + 1);
     }
 
-    function test_upgardeViaProposal_andBurnHappyFlow() public {
+    function test_upgradeViaProposal_andBurnHappyFlow() public {
         uint256 meanPrice = 0.1 ether;
         generateAuctionHistory(90, meanPrice);
 
@@ -113,14 +113,15 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
         getProposalToExecution(proposalId);
         vm.stopPrank();
 
-        uint128 currentNounID = auction.auction().nounId;
+        assertEq(auction.auction().nounId, 102);
 
         ExcessETHBurner burner = _deployExcessETHBurner(
             NounsDAOExecutorV3(treasury),
             INounsAuctionHouseV2(dao.nouns().minter()),
-            currentNounID + 100,
-            100,
-            90
+            202, // burnStartNounID
+            100, // nounsBetweenBurns
+            3, // burnWindowSize
+            90 // pastAuctionCount
         );
 
         vm.startPrank(nouner);
@@ -132,23 +133,23 @@ contract NounsDAOExecutorV3_UpgradeTest is DeployUtilsExcessETHBurner {
         burner.burnExcessETH();
 
         auction.settleCurrentAndCreateNewAuction();
-        generateAuctionHistory(100, meanPrice);
+        generateAuctionHistory(89, meanPrice);
+        assertEq(auction.auction().nounId, 202);
 
         vm.expectRevert(ExcessETHBurner.NoExcessToBurn.selector);
         burner.burnExcessETH();
 
         vm.deal(address(treasury), 100 ether);
 
-        // adjustedSupply: 214
+        // adjustedSupply: 202
         // meanPrice: 0.1 ether
-        // expected value: 214 * 0.1 = 21.4 ETH
+        // expected value: 202 * 0.1 = 20.2 ETH
         // treasury size: 100 ETH
-        // excess: 100 - 21.4 = 78.6 ETH
+        // excess: 100 - 20.2 = 79.8 ETH
         vm.expectEmit(true, true, true, true);
-        emit ETHBurned(78.6 ether);
-
+        emit ETHBurned(79.8 ether);
         uint256 burnedETH = burner.burnExcessETH();
-        assertEq(burnedETH, 78.6 ether);
+        assertEq(burnedETH, 79.8 ether);
     }
 
     function getProposalToExecution(uint256 proposalId) internal {
