@@ -103,35 +103,35 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Get the number of available Noun `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {
-        return art.backgroundsCount();
+        return art.backgroundCount();
     }
 
     /**
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
-        return art.getBodiesTrait().storedImagesCount;
+        return art.bodyCount();
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
-        return art.getAccessoriesTrait().storedImagesCount;
+        return art.accessoryCount();
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
-        return art.getHeadsTrait().storedImagesCount;
+        return art.headCount();
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
-        return art.getGlassesTrait().storedImagesCount;
+        return art.glassesCount();
     }
 
     /**
