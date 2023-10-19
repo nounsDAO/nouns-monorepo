@@ -109,4 +109,12 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
         uint256[] memory prices = auctionHouseV2.getPrices(1, 100);
         assertEq(prices.length, 90);
     }
+
+    function test_warmUp() public {
+        uint256[] memory nounIds = new uint256[](1000);
+        for (uint256 i; i < 1000; ++i) {
+            nounIds[i] = i;
+        }
+        auctionHouseV2.warmUpSettlementState(nounIds);
+    }
 }
