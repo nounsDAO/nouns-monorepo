@@ -332,9 +332,15 @@ contract NounsAuctionHouseV2 is
      * @param nounIds The list of Noun IDs whose settlement slot to warm up.
      */
     function warmUpSettlementState(uint256[] calldata nounIds) external {
-        for (uint256 i = 0; i < nounIds.length; ++i) {
-            if (settlementHistory[nounIds[i]].blockTimestamp == 0) {
-                settlementHistory[nounIds[i]] = SettlementState({ blockTimestamp: 1, amount: 0, winner: address(0) });
+        uint256 nounIdCount = nounIds.length;
+        SettlementState storage settlementState;
+        for (uint256 i; i < nounIdCount; ) {
+            settlementState = settlementHistory[nounIds[i]];
+            if (settlementState.blockTimestamp == 0) {
+                settlementState.blockTimestamp = 1;
+            }
+            unchecked {
+                ++i;
             }
         }
     }
