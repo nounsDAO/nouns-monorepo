@@ -103,7 +103,11 @@ describe('nouns-dao', () => {
         delegate.delegatedVotesRaw = BIGINT_ONE;
         delegate.save();
 
-        createMockedFunction(newMockEvent().address, 'adjustedTotalSupply', 'adjustedTotalSupply():(uint256)').returns([ethereum.Value.fromI32(0)])
+        createMockedFunction(
+          newMockEvent().address,
+          'adjustedTotalSupply',
+          'adjustedTotalSupply():(uint256)',
+        ).returns([ethereum.Value.fromI32(0)]);
       });
 
       afterAll(() => {
@@ -742,7 +746,7 @@ describe('forking', () => {
 
       const fork = getOrCreateFork(forkId);
       assert.i32Equals(fork.tokensInEscrowCount, 2);
-      assert.i32Equals(fork.escrowedNouns.length, 2);
+      assert.i32Equals(fork.escrowedNouns.load().length, 2);
 
       let escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
       let escrowDespositId = txHash.toHexString().concat('-0');

@@ -127,14 +127,13 @@ describe('nouns-dao-data', () => {
       )!;
 
       const version = ProposalCandidateVersion.load(candidate.latestVersion);
-      const content = ProposalCandidateContent.load(version!.content);
-      assert.i32Equals(content!.contentSignatures.length, 1);
+      const content = ProposalCandidateContent.load(version!.content)!;
+      assert.i32Equals(content.contentSignatures.load().length, 1);
       assert.stringEquals(
-        content!.contentSignatures[0],
+        content.contentSignatures.load()[0].id,
         signerWithDelegate.toHexString().concat('-').concat(sig.toHexString()),
       );
-
-      const signature = ProposalCandidateSignature.load(content!.contentSignatures[0])!;
+      const signature = ProposalCandidateSignature.load(content.contentSignatures.load()[0].id)!;
       assert.stringEquals(signature.signer, signerWithDelegate.toHexString());
       assert.bytesEquals(signature.sig, sig);
       assert.bigIntEquals(signature.expirationTimestamp, expiry);
