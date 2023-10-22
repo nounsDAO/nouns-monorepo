@@ -57,3 +57,24 @@ yarn lint
 ```sh
 yarn format
 ```
+
+## Quickstart - Webapp
+
+Using these commands you can get your own version of Nouns deployed to your localhost, and run a webapp locally which accesses them.
+See `packages/nouns-webapp/README.md` for more details.
+
+In the first shell:
+
+```sh
+# Start local simnet
+yarn task:run-local
+```
+
+In the second shell:
+
+```sh
+# Copy local example environment file
+yarn copy-env
+# Start local development
+yarn start
+```
