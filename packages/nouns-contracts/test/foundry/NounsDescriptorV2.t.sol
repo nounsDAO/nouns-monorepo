@@ -133,49 +133,33 @@ contract NounsDescriptorV2Test is Test {
     }
 
     function testBackgroundCountUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundsCount.selector), abi.encode(42));
+        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundCount.selector), abi.encode(42));
         assertEq(descriptor.backgroundCount(), 42);
         vm.clearMockedCalls();
     }
 
     function testBodyCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getBodiesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addBodiesFromPointer(address(0), 1, 42);
         assertEq(descriptor.bodyCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testAccessoryCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getAccessoriesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addAccessoriesFromPointer(address(0), 1, 42);
         assertEq(descriptor.accessoryCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testHeadCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getHeadsTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addHeadsFromPointer(address(0), 1, 42);
         assertEq(descriptor.headCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testGlassesCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getGlassesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addGlassesFromPointer(address(0), 1, 42);
         assertEq(descriptor.glassesCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testAddManyBackgroundsUsesArt() public {
@@ -477,7 +461,7 @@ contract NounsDescriptorV2Test is Test {
     }
 
     function _makeArtGettersNotRevert() internal {
-        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundsCount.selector), abi.encode(123));
+        vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgroundCount.selector), abi.encode(123));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgrounds.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.bodies.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.accessories.selector), abi.encode('return value'));

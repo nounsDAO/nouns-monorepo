@@ -12,6 +12,10 @@ import {
   ProposalTransactionsUpdated,
   EscrowedToFork,
   WithdrawFromForkEscrow,
+  ProposalCanceled,
+  ProposalVetoed,
+  ProposalExecuted,
+  ProposalQueued,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -396,8 +400,12 @@ export function createSignatureAddedEvent(
   encodedPropHash: Bytes,
   sigDigest: Bytes,
   reason: string,
+  blockNumber: BigInt,
+  blockTimestamp: BigInt,
 ): SignatureAdded {
   let newEvent = changetype<SignatureAdded>(newMockEvent());
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
 
   newEvent.parameters.push(new ethereum.EventParam('signer', ethereum.Value.fromAddress(signer)));
   newEvent.parameters.push(new ethereum.EventParam('sig', ethereum.Value.fromBytes(sig)));
@@ -559,6 +567,97 @@ export function createWithdrawFromForkEscrowEvent(
   newEvent.parameters.push(
     new ethereum.EventParam('tokenIds', ethereum.Value.fromUnsignedBigIntArray(tokenIds)),
   );
+
+  return newEvent;
+}
+
+export function createProposalCanceledEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+): ProposalCanceled {
+  let newEvent = changetype<ProposalCanceled>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalVetoedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+): ProposalVetoed {
+  let newEvent = changetype<ProposalVetoed>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalExecutedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+): ProposalExecuted {
+  let newEvent = changetype<ProposalExecuted>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalQueuedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+  eta: BigInt,
+): ProposalQueued {
+  let newEvent = changetype<ProposalQueued>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+
+  newEvent.parameters.push(new ethereum.EventParam('eta', ethereum.Value.fromUnsignedBigInt(eta)));
 
   return newEvent;
 }
