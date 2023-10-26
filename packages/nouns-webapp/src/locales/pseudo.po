@@ -290,7 +290,7 @@ msgid "Available to withdraw"
 msgstr ""
 
 #: src/components/StreamWithdrawModal/index.tsx
-#~ msgid "Avilable to withdraw"
+#~ msgid "Available to withdraw"
 #~ msgstr ""
 
 #: src/components/CandidateSponsors/OriginalSignature.tsx
@@ -1067,7 +1067,7 @@ msgid "Only Nouns you owned or were delegated to you before {0} are eligible to 
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Only visable to you"
+#~ msgid "Only visible to you"
 #~ msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -1773,7 +1773,7 @@ msgid "Voted against"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
-#~ msgid "Voted aginst"
+#~ msgid "Voted against"
 #~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx

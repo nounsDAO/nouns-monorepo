@@ -87,7 +87,7 @@ const VoteModal = ({
     handleVoteStateChange(castRefundableVoteWithReasonState);
   }, [castRefundableVoteWithReasonState, handleVoteStateChange]);
 
-  // Auto close the modal after a transaction completes succesfully
+  // Auto close the modal after a transaction completes successfully
   // Leave failed transaction up until user closes manually to allow for debugging
   useEffect(() => {
     if (isVoteSucessful) {
