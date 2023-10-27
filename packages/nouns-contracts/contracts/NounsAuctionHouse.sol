@@ -46,7 +46,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     uint256 public reservePrice;
 
     // The target price set by governance for the next auction
-    uint256 public targetPrice;
+    uint256 public targetPrice = 1;
 
     // The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
@@ -192,6 +192,22 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
+    }
+
+    /**
+     * @notice Set the auction target price.
+     * @dev Only callable by the owner.
+     */
+    function setTargetPrice(uint256 _targetPrice) external onlyOwner {
+        targetPrice = _targetPrice;
+    }
+
+    /**
+     * @notice Set the auction target price.
+     * @dev Only callable by the owner.
+     */
+    function setDuration(uint256 _duration) external onlyOwner {
+        duration = _duration;
     }
 
     /**
