@@ -45,11 +45,17 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The minimum price accepted in an auction
     uint256 public reservePrice;
 
+    // The target price set by governance for the next auction
+    uint256 public targetPrice;
+
     // The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
+    // TODO: update duration based on price of last auction(s) vs target price
     // The duration of a single auction
     uint256 public duration;
+
+    uint256[] public salePrices;
 
     // The active auction
     INounsAuctionHouse.Auction public auction;
@@ -86,6 +92,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
         _settleAuction();
+        _updateAuctionDuration();
         _createAuction();
     }
 
@@ -95,6 +102,15 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function settleAuction() external override whenPaused nonReentrant {
         _settleAuction();
+    }
+
+    /**
+     * @notice Set the duration for the next auction.
+     * @dev This function can only be called when the contract is paused.
+     */
+    function _updateAuctionDuration() internal whenPaused nonReentrant {
+        uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
+        duration = duration / (lastSalePrice / targetPrice);
     }
 
     /**
@@ -236,6 +252,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
+
+        salePrices.push(_auction.amount);
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
