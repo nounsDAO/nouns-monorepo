@@ -68,7 +68,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
   const currentOrSnapshotBlock = useMemo(() =>
-    Math.min(proposal?.voteSnapshotBlock, currentBlock ?? 0) || undefined,
+    Math.min(proposal?.voteSnapshotBlock, (currentBlock ? currentBlock - 1 : 0)) || undefined,
     [proposal, currentBlock]
   );
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;

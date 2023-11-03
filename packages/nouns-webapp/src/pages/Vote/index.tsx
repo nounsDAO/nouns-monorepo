@@ -162,7 +162,7 @@ const VotePage = ({
 
   // Use user votes as of the current or proposal snapshot block
   const currentOrSnapshotBlock = useMemo(() =>
-    Math.min(proposal?.voteSnapshotBlock ?? 0, currentBlock ?? 0) || undefined,
+    Math.min(proposal?.voteSnapshotBlock ?? 0, (currentBlock ? currentBlock - 1 : 0)) || undefined,
     [proposal, currentBlock]
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
