@@ -22,7 +22,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
     decodedCalldata: JSON.stringify(state.args ?? []),
     calldata: state.abi?._encodeParams(
       state.abi?.functions[state.function ?? '']?.inputs ?? [],
-      state.args ?? [],
+      state.args?.map(a => a === 'false' ? false : a) ?? [],
     ),
   });
 };
