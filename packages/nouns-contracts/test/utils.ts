@@ -25,6 +25,10 @@ import {
   NounsDAOExecutor,
   Inflator__factory,
   NounsDAOStorageV2,
+  NounsDAOLogicV3,
+  NounsDAOLogicV3__factory as NounsDaoLogicV3Factory,
+  NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
+  NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
@@ -526,3 +530,79 @@ function dataToDescriptorInput(data: string[]): {
     itemCount,
   };
 }
+
+export const deployGovernorV3WithV3Proxy = async (
+  deployer: SignerWithAddress,
+  tokenAddress: string,
+  timelockAddress?: string,
+  forkEscrowAddress?: string,
+  forkDAODeployerAddress?: string,
+  vetoerAddress?: string,
+  votingPeriod?: number,
+  votingDelay?: number,
+  proposalThresholdBPs?: number,
+  dynamicQuorumParams?: DynamicQuorumParams,
+): Promise<NounsDAOLogicV3> => {
+  const NounsDAOV3Proposals = await (
+    await ethers.getContractFactory('NounsDAOV3Proposals', deployer)
+  ).deploy();
+  const NounsDAOV3Admin = await (
+    await ethers.getContractFactory('NounsDAOV3Admin', deployer)
+  ).deploy();
+  const NounsDAOV3Fork = await (
+    await ethers.getContractFactory('NounsDAOV3Fork', deployer)
+  ).deploy();
+  const NounsDAOV3Votes = await (
+    await ethers.getContractFactory('NounsDAOV3Votes', deployer)
+  ).deploy();
+  const NounsDAOV3DynamicQuorum = await (
+    await ethers.getContractFactory('NounsDAOV3DynamicQuorum', deployer)
+  ).deploy();
+
+  const v3LogicContract = await new NounsDaoLogicV3Factory(
+    {
+      'contracts/governance/NounsDAOV3Proposals.sol:NounsDAOV3Proposals':
+        NounsDAOV3Proposals.address,
+      'contracts/governance/NounsDAOV3Admin.sol:NounsDAOV3Admin': NounsDAOV3Admin.address,
+      'contracts/governance/fork/NounsDAOV3Fork.sol:NounsDAOV3Fork': NounsDAOV3Fork.address,
+      'contracts/governance/NounsDAOV3Votes.sol:NounsDAOV3Votes': NounsDAOV3Votes.address,
+      'contracts/governance/NounsDAOV3DynamicQuorum.sol:NounsDAOV3DynamicQuorum':
+        NounsDAOV3DynamicQuorum.address,
+    },
+    deployer,
+  ).deploy();
+
+  const predictedProxyAddress = ethers.utils.getContractAddress({
+    from: deployer.address,
+    nonce: (await deployer.getTransactionCount()) + 1,
+  });
+
+  const escrowAddress = (
+    await new NounsDAOForkEscrowFactory(deployer).deploy(predictedProxyAddress, tokenAddress)
+  ).address;
+
+  const proxy = await new NounsDaoProxyV3Factory(deployer).deploy(
+    timelockAddress || deployer.address,
+    tokenAddress,
+    escrowAddress,
+    forkDAODeployerAddress || deployer.address,
+    vetoerAddress || deployer.address,
+    deployer.address,
+    v3LogicContract.address,
+    {
+      votingPeriod: votingPeriod || 7200,
+      votingDelay: votingDelay || 1,
+      proposalThresholdBPS: proposalThresholdBPs || 1,
+      lastMinuteWindowInBlocks: 0,
+      objectionPeriodDurationInBlocks: 0,
+      proposalUpdatablePeriodInBlocks: 0,
+    },
+    dynamicQuorumParams || {
+      minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
+      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+      quorumCoefficient: 0,
+    },
+  );
+
+  return NounsDaoLogicV3Factory.connect(proxy.address, deployer);
+};
