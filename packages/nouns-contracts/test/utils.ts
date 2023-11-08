@@ -566,7 +566,6 @@ export const deployGovernorV3WithV3Proxy = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
   timelockAddress?: string,
-  forkEscrowAddress?: string,
   forkDAODeployerAddress?: string,
   vetoerAddress?: string,
   votingPeriod?: number,
