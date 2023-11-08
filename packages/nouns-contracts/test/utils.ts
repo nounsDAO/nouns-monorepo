@@ -562,6 +562,18 @@ export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<Nou
   ).deploy();
 };
 
+export const deployGovernorV3AndSetImpl = async (
+  deployer: SignerWithAddress,
+  proxyAddress: string,
+): Promise<NounsDAOLogicV3> => {
+  const v3LogicContract = await deployGovernorV3(deployer);
+
+  const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
+  await proxy._setImplementation(v3LogicContract.address);
+
+  return NounsDaoLogicV3Factory.connect(proxyAddress, deployer);
+};
+
 export const deployGovernorV3WithV3Proxy = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
