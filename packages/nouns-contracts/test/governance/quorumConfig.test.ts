@@ -11,15 +11,15 @@ import {
   advanceBlocks,
   populateDescriptorV2,
   deployGovernorV3AndSetImpl,
-} from '../../../utils';
+} from '../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV3,
-} from '../../../../typechain';
+} from '../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
-import { DynamicQuorumParams } from '../../../types';
+import { DynamicQuorumParams } from '../types';
 
 chai.use(solidity);
 const { expect } = chai;

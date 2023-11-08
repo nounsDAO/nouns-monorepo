@@ -8,15 +8,15 @@ import {
   blockNumber,
   populateDescriptorV2,
   deployGovernorV3WithV3Proxy,
-} from '../../../utils';
+} from '../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV3,
-} from '../../../../typechain';
-import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
+} from '../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../constants';
 
 chai.use(solidity);
 const { expect } = chai;

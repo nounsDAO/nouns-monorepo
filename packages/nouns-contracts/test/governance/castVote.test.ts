@@ -14,15 +14,15 @@ import {
   propose,
   deployGovernorV3WithV3Proxy,
   populateDescriptorV2,
-} from '../../../utils';
+} from '../utils';
 
-import { mineBlock } from '../../../utils';
+import { mineBlock } from '../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV3,
-} from '../../../../typechain';
+} from '../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;

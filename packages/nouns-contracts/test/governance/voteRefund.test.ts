@@ -9,8 +9,8 @@ import {
   NounsDescriptorV2__factory,
   NounsToken,
   Voter__factory,
-} from '../../../../typechain';
-import { MaliciousVoter__factory } from '../../../../typechain/factories/contracts/test/MaliciousVoter__factory';
+} from '../../typechain';
+import { MaliciousVoter__factory } from '../../typechain/factories/contracts/test/MaliciousVoter__factory';
 import {
   address,
   advanceBlocks,
@@ -21,7 +21,7 @@ import {
   populateDescriptorV2,
   setNextBlockBaseFee,
   TestSigners,
-} from '../../../utils';
+} from '../utils';
 
 chai.use(solidity);
 const { expect } = chai;

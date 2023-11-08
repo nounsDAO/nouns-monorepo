@@ -2,8 +2,8 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { parseUnits } from 'ethers/lib/utils';
-import { NounsDAOLogicV3 } from '../../../../typechain';
-import { deployGovernorV3, getSigners, TestSigners } from '../../../utils';
+import { NounsDAOLogicV3 } from '../../typechain';
+import { deployGovernorV3, getSigners, TestSigners } from '../utils';
 
 chai.use(solidity);
 const { expect } = chai;
