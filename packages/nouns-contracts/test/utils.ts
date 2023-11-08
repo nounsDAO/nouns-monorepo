@@ -531,18 +531,7 @@ function dataToDescriptorInput(data: string[]): {
   };
 }
 
-export const deployGovernorV3WithV3Proxy = async (
-  deployer: SignerWithAddress,
-  tokenAddress: string,
-  timelockAddress?: string,
-  forkEscrowAddress?: string,
-  forkDAODeployerAddress?: string,
-  vetoerAddress?: string,
-  votingPeriod?: number,
-  votingDelay?: number,
-  proposalThresholdBPs?: number,
-  dynamicQuorumParams?: DynamicQuorumParams,
-): Promise<NounsDAOLogicV3> => {
+export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV3> => {
   const NounsDAOV3Proposals = await (
     await ethers.getContractFactory('NounsDAOV3Proposals', deployer)
   ).deploy();
@@ -559,7 +548,7 @@ export const deployGovernorV3WithV3Proxy = async (
     await ethers.getContractFactory('NounsDAOV3DynamicQuorum', deployer)
   ).deploy();
 
-  const v3LogicContract = await new NounsDaoLogicV3Factory(
+  return await new NounsDaoLogicV3Factory(
     {
       'contracts/governance/NounsDAOV3Proposals.sol:NounsDAOV3Proposals':
         NounsDAOV3Proposals.address,
@@ -571,7 +560,21 @@ export const deployGovernorV3WithV3Proxy = async (
     },
     deployer,
   ).deploy();
+};
 
+export const deployGovernorV3WithV3Proxy = async (
+  deployer: SignerWithAddress,
+  tokenAddress: string,
+  timelockAddress?: string,
+  forkEscrowAddress?: string,
+  forkDAODeployerAddress?: string,
+  vetoerAddress?: string,
+  votingPeriod?: number,
+  votingDelay?: number,
+  proposalThresholdBPs?: number,
+  dynamicQuorumParams?: DynamicQuorumParams,
+): Promise<NounsDAOLogicV3> => {
+  const v3LogicContract = await deployGovernorV3(deployer);
   const predictedProxyAddress = ethers.utils.getContractAddress({
     from: deployer.address,
     nonce: (await deployer.getTransactionCount()) + 1,
