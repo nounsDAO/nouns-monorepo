@@ -12,7 +12,7 @@ import {
   TestSigners,
   setTotalSupply,
   propose,
-  deployGovernorV2WithV2Proxy,
+  deployGovernorV3WithV3Proxy,
   populateDescriptorV2,
 } from '../../../utils';
 
@@ -21,7 +21,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
+  NounsDAOLogicV3,
 } from '../../../../typechain';
 
 chai.use(solidity);
@@ -36,7 +36,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV2;
+let gov: NounsDAOLogicV3;
 let proposalId: EthersBN;
 
 async function reset() {
@@ -53,7 +53,7 @@ async function reset() {
 
   await setTotalSupply(token, 10);
 
-  gov = await deployGovernorV2WithV2Proxy(deployer, token.address);
+  gov = await deployGovernorV3WithV3Proxy(deployer, token.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
@@ -90,7 +90,7 @@ describe('NounsDAOV2#castVote/2', () => {
       await gov.connect(account1).castVoteWithReason(proposalId, 1, '');
 
       await expect(gov.connect(account0).castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voter already voted',
+        'NounsDAO::castVoteDuringVotingPeriodInternal: voter already voted',
       );
     });
   });

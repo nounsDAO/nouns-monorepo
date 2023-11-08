@@ -498,7 +498,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
 };
 
 export const propose = async (
-  gov: NounsDAOLogicV1 | NounsDAOLogicV2,
+  gov: NounsDAOLogicV1 | NounsDAOLogicV2 | NounsDAOLogicV3,
   proposer: SignerWithAddress,
   stubPropUserAddress: string = address(0),
 ) => {
