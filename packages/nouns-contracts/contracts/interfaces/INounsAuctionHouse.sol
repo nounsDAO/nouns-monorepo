@@ -61,5 +61,7 @@ interface INounsAuctionHouse {
 
     function setReservePrice(uint256 reservePrice) external;
 
+    function setTargetPrice(uint256 targetPrice) external;
+
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
 }
