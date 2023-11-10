@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './DeployUtils.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
+import { INounsDAOShared } from './INounsDAOShared.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
@@ -26,11 +26,11 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (NounsDAOLogicV1 dao) {
+    ) internal returns (INounsDAOShared dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
-        dao = NounsDAOLogicV1(
-            payable(
+        dao = INounsDAOShared(
+            address(
                 new NounsDAOProxyV3(
                     timelock,
                     nounsToken,

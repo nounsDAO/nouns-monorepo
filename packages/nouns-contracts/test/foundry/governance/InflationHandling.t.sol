@@ -2,8 +2,8 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
+import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
@@ -25,12 +25,12 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (NounsDAOLogicV1) {
+    ) internal override returns (INounsDAOShared) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
-            NounsDAOLogicV1(
-                payable(
+            INounsDAOShared(
+                address(
                     new NounsDAOProxyV2(
                         timelock,
                         nounsToken,
