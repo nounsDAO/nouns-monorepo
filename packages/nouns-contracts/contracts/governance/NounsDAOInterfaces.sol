@@ -767,6 +767,8 @@ contract NounsDAOStorageV3 {
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
+        // TODO bitpack and natspec
+        uint16 client;
     }
 
     /// @notice Ballot receipt record for a voter

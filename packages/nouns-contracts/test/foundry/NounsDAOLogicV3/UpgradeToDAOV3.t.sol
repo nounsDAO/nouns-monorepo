@@ -97,30 +97,6 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(proposer2.balance, 100 ether);
     }
 
-    function test_proposalQueuedBeforeUpgrade_executeRevertsButExecuteOnV1Works() public {
-        uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
-
-        uint256 proposalId2 = proposeToSendETH(proposer2, proposer2, 100 ether);
-
-        rollAndCastVote(proposer, proposalId, 1);
-
-        vm.prank(proposer2);
-        daoProxy.castVote(proposalId2, 1);
-
-        vm.roll(block.number + daoProxy.votingPeriod() + 1);
-        daoProxy.queue(proposalId);
-        daoProxy.queue(proposalId2);
-
-        vm.warp(block.timestamp + daoProxy.timelock().delay());
-        daoProxy.execute(proposalId);
-
-        vm.expectRevert("NounsDAOExecutor::executeTransaction: Transaction hasn't been queued.");
-        daoProxy.execute(proposalId2);
-
-        NounsDAOLogicV3(payable(address(daoProxy))).executeOnTimelockV1(proposalId2);
-        assertEq(proposer2.balance, 100 ether);
-    }
-
     function test_proposalWasQueuedAfterUpgrade() public {
         uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
 

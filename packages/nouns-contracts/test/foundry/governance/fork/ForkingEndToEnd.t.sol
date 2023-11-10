@@ -12,10 +12,11 @@ import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newda
 import { NounsAuctionHouseFork } from '../../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
+import { INounsDAOLogicV3 } from '../../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 contract ForkingHappyFlowTest is DeployUtilsFork {
     address minter;
-    NounsDAOLogicV3 daoV3;
+    INounsDAOLogicV3 daoV3;
     NounsToken ogToken;
     NounsTokenFork forkToken;
     NounsDAOExecutorV2 forkTreasury;
@@ -170,7 +171,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
 }
 
 abstract contract ForkDAOBase is DeployUtilsFork {
-    NounsDAOLogicV3 originalDAO;
+    INounsDAOLogicV3 originalDAO;
     NounsTokenLike originalToken;
     NounsDAOLogicV1Fork forkDAO;
     NounsDAOExecutorV2 forkTreasury;

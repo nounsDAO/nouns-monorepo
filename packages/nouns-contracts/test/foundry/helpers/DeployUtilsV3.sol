@@ -20,6 +20,7 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     function _createDAOV3Proxy(
@@ -58,7 +59,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
     }
 
-    function _deployDAOV3() internal returns (NounsDAOLogicV3) {
+    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
         address noundersDAO = makeAddr('noundersDAO');
         address vetoer = makeAddr('vetoer');
 
@@ -101,7 +102,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             FORK_DAO_QUORUM_VOTES_BPS
         );
 
-        NounsDAOLogicV3 dao = NounsDAOLogicV3(
+        INounsDAOLogicV3 dao = INounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
                     address(timelock),

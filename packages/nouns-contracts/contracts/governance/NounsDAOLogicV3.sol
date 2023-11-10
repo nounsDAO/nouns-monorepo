@@ -61,6 +61,7 @@ import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
+import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
@@ -152,23 +153,23 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        ds._setVotingPeriod(daoParams_.votingPeriod);
-        ds._setVotingDelay(daoParams_.votingDelay);
-        ds._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
+        NounsDAOV3Admin._setVotingPeriod(daoParams_.votingPeriod);
+        NounsDAOV3Admin._setVotingDelay(daoParams_.votingDelay);
+        NounsDAOV3Admin._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
         ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
         ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
         ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
-        _setDynamicQuorumParams(
+        NounsDAOV3Admin._setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        ds._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
-        ds._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
-        ds._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
+        NounsDAOV3Admin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        NounsDAOV3Admin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        NounsDAOV3Admin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 
     /**
@@ -192,8 +193,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description
+    ) external returns (uint256) {
+        return propose(targets, values, signatures, calldatas, description, 0);
+    }
+
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description,
+        uint16 clientId
     ) public returns (uint256) {
-        return ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description);
+        return
+            ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description, clientId);
     }
 
     /**
@@ -217,7 +230,26 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return
             ds.proposeOnTimelockV1(
                 NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
-                description
+                description,
+                0
+            );
+    }
+
+    function proposeBySigs(
+        ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description,
+        uint16 clientId
+    ) public returns (uint256) {
+        return
+            ds.proposeBySigs(
+                proposerSignatures,
+                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                description,
+                clientId
             );
     }
 
@@ -241,12 +273,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory description
     ) external returns (uint256) {
-        return
-            ds.proposeBySigs(
-                proposerSignatures,
-                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
-                description
-            );
+        return proposeBySigs(proposerSignatures, targets, values, signatures, calldatas, description, 0);
     }
 
     /**
@@ -371,15 +398,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Executes a queued proposal on timelockV1 if eta has passed
-     * This is only required for proposal that were queued on timelockV1, but before the upgrade to DAO V3.
-     * These proposals will not have the `executeOnTimelockV1` bool turned on.
-     */
-    function executeOnTimelockV1(uint256 proposalId) external {
-        ds.executeOnTimelockV1(proposalId);
-    }
-
-    /**
      * @notice Cancels a proposal only if sender is the proposer or a signer, or proposer & signers voting power
      * dropped below proposal threshold
      * @param proposalId The id of the proposal to cancel
@@ -454,7 +472,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return ds.proposalThreshold(ds.adjustedTotalSupply());
+        return ds.proposalThreshold(adjustedTotalSupply());
     }
 
     /**
@@ -536,7 +554,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * escrow after it has closed.
      * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
      */
-    function adjustedTotalSupply() external view returns (uint256) {
+    function adjustedTotalSupply() public view returns (uint256) {
         return ds.adjustedTotalSupply();
     }
 
@@ -606,7 +624,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256 proposalId,
         uint8 support,
         string calldata reason
-    ) external {
+    ) public {
         ds.castRefundableVoteWithReason(proposalId, support, reason);
     }
 
@@ -644,230 +662,226 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    /**
-     * @notice Admin function for setting the voting delay. Best to set voting delay to at least a few days, to give
-     * voters time to make sense of proposals, e.g. 21,600 blocks which should be at least 3 days.
-     * @param newVotingDelay new voting delay, in blocks
-     */
-    function _setVotingDelay(uint256 newVotingDelay) external {
-        ds._setVotingDelay(newVotingDelay);
+    // /**
+    //  * @notice Admin function for setting the voting delay. Best to set voting delay to at least a few days, to give
+    //  * voters time to make sense of proposals, e.g. 21,600 blocks which should be at least 3 days.
+    //  * @param newVotingDelay new voting delay, in blocks
+    //  */
+    // function _setVotingDelay(uint256 newVotingDelay) external {
+    //     ds._setVotingDelay(newVotingDelay);
+    // }
+
+    // /**
+    //  * @notice Admin function for setting the voting period
+    //  * @param newVotingPeriod new voting period, in blocks
+    //  */
+    // function _setVotingPeriod(uint256 newVotingPeriod) external {
+    //     ds._setVotingPeriod(newVotingPeriod);
+    // }
+
+    // /**
+    //  * @notice Admin function for setting the proposal threshold basis points
+    //  * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
+    //  * @param newProposalThresholdBPS new proposal threshold
+    //  */
+    // function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
+    //     ds._setProposalThresholdBPS(newProposalThresholdBPS);
+    // }
+
+    fallback() external payable {
+        Address.functionDelegateCall(address(NounsDAOV3Admin), msg.data);
     }
 
-    /**
-     * @notice Admin function for setting the voting period
-     * @param newVotingPeriod new voting period, in blocks
-     */
-    function _setVotingPeriod(uint256 newVotingPeriod) external {
-        ds._setVotingPeriod(newVotingPeriod);
-    }
+    // /**
+    //  * @notice Admin function for setting the objection period last minute window
+    //  * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
+    //  */
+    // function _setLastMinuteWindowInBlocks(uint32 newLastMinuteWindowInBlocks) external {
+    //     ds._setLastMinuteWindowInBlocks(newLastMinuteWindowInBlocks);
+    // }
 
-    /**
-     * @notice Admin function for setting the proposal threshold basis points
-     * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
-     * @param newProposalThresholdBPS new proposal threshold
-     */
-    function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
-        ds._setProposalThresholdBPS(newProposalThresholdBPS);
-    }
+    // /**
+    //  * @notice Admin function for setting the proposal updatable period
+    //  * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
+    //  */
+    // function _setProposalUpdatablePeriodInBlocks(uint32 newProposalUpdatablePeriodInBlocks) external {
+    //     ds._setProposalUpdatablePeriodInBlocks(newProposalUpdatablePeriodInBlocks);
+    // }
 
-    /**
-     * @notice Admin function for setting the objection period duration
-     * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
-     */
-    function _setObjectionPeriodDurationInBlocks(uint32 newObjectionPeriodDurationInBlocks) external {
-        ds._setObjectionPeriodDurationInBlocks(newObjectionPeriodDurationInBlocks);
-    }
+    // /**
+    //  * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
+    //  * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
+    //  * @param newPendingAdmin New pending admin.
+    //  */
+    // function _setPendingAdmin(address newPendingAdmin) external {
+    //     ds._setPendingAdmin(newPendingAdmin);
+    // }
 
-    /**
-     * @notice Admin function for setting the objection period last minute window
-     * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
-     */
-    function _setLastMinuteWindowInBlocks(uint32 newLastMinuteWindowInBlocks) external {
-        ds._setLastMinuteWindowInBlocks(newLastMinuteWindowInBlocks);
-    }
+    // /**
+    //  * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
+    //  * @dev Admin function for pending admin to accept role and update admin
+    //  */
+    // function _acceptAdmin() external {
+    //     ds._acceptAdmin();
+    // }
 
-    /**
-     * @notice Admin function for setting the proposal updatable period
-     * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
-     */
-    function _setProposalUpdatablePeriodInBlocks(uint32 newProposalUpdatablePeriodInBlocks) external {
-        ds._setProposalUpdatablePeriodInBlocks(newProposalUpdatablePeriodInBlocks);
-    }
+    // /**
+    //  * @notice Begins transition of vetoer. The newPendingVetoer must call _acceptVetoer to finalize the transfer.
+    //  * @param newPendingVetoer New Pending Vetoer
+    //  */
+    // function _setPendingVetoer(address newPendingVetoer) public {
+    //     ds._setPendingVetoer(newPendingVetoer);
+    // }
 
-    /**
-     * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @param newPendingAdmin New pending admin.
-     */
-    function _setPendingAdmin(address newPendingAdmin) external {
-        ds._setPendingAdmin(newPendingAdmin);
-    }
+    // /**
+    //  * @notice Called by the pendingVetoer to accept role and update vetoer
+    //  */
+    // function _acceptVetoer() external {
+    //     ds._acceptVetoer();
+    // }
 
-    /**
-     * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
-     * @dev Admin function for pending admin to accept role and update admin
-     */
-    function _acceptAdmin() external {
-        ds._acceptAdmin();
-    }
+    // /**
+    //  * @notice Burns veto priviledges
+    //  * @dev Vetoer function destroying veto power forever
+    //  */
+    // function _burnVetoPower() public {
+    //     ds._burnVetoPower();
+    // }
 
-    /**
-     * @notice Begins transition of vetoer. The newPendingVetoer must call _acceptVetoer to finalize the transfer.
-     * @param newPendingVetoer New Pending Vetoer
-     */
-    function _setPendingVetoer(address newPendingVetoer) public {
-        ds._setPendingVetoer(newPendingVetoer);
-    }
+    // /**
+    //  * @notice Admin function for setting the minimum quorum votes bps
+    //  * @param newMinQuorumVotesBPS minimum quorum votes bps
+    //  *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
+    //  *     Must be lower than or equal to maxQuorumVotesBPS
+    //  */
+    // function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
+    //     ds._setMinQuorumVotesBPS(newMinQuorumVotesBPS);
+    // }
 
-    /**
-     * @notice Called by the pendingVetoer to accept role and update vetoer
-     */
-    function _acceptVetoer() external {
-        ds._acceptVetoer();
-    }
+    // /**
+    //  * @notice Admin function for setting the maximum quorum votes bps
+    //  * @param newMaxQuorumVotesBPS maximum quorum votes bps
+    //  *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
+    //  *     Must be higher than or equal to minQuorumVotesBPS
+    //  */
+    // function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
+    //     ds._setMaxQuorumVotesBPS(newMaxQuorumVotesBPS);
+    // }
 
-    /**
-     * @notice Burns veto priviledges
-     * @dev Vetoer function destroying veto power forever
-     */
-    function _burnVetoPower() public {
-        ds._burnVetoPower();
-    }
+    // /**
+    //  * @notice Admin function for setting the dynamic quorum coefficient
+    //  * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
+    //  */
+    // function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
+    //     ds._setQuorumCoefficient(newQuorumCoefficient);
+    // }
 
-    /**
-     * @notice Admin function for setting the minimum quorum votes bps
-     * @param newMinQuorumVotesBPS minimum quorum votes bps
-     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be lower than or equal to maxQuorumVotesBPS
-     */
-    function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
-        ds._setMinQuorumVotesBPS(newMinQuorumVotesBPS);
-    }
+    // /**
+    //  * @notice Admin function for setting all the dynamic quorum parameters
+    //  * @param newMinQuorumVotesBPS minimum quorum votes bps
+    //  *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
+    //  *     Must be lower than or equal to maxQuorumVotesBPS
+    //  * @param newMaxQuorumVotesBPS maximum quorum votes bps
+    //  *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
+    //  *     Must be higher than or equal to minQuorumVotesBPS
+    //  * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
+    //  */
+    // function _setDynamicQuorumParams(
+    //     uint16 newMinQuorumVotesBPS,
+    //     uint16 newMaxQuorumVotesBPS,
+    //     uint32 newQuorumCoefficient
+    // ) public {
+    //     ds._setDynamicQuorumParams(newMinQuorumVotesBPS, newMaxQuorumVotesBPS, newQuorumCoefficient);
+    // }
 
-    /**
-     * @notice Admin function for setting the maximum quorum votes bps
-     * @param newMaxQuorumVotesBPS maximum quorum votes bps
-     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be higher than or equal to minQuorumVotesBPS
-     */
-    function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
-        ds._setMaxQuorumVotesBPS(newMaxQuorumVotesBPS);
-    }
+    // /**
+    //  * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
+    //  */
+    // function _withdraw() external returns (uint256, bool) {
+    //     return ds._withdraw();
+    // }
 
-    /**
-     * @notice Admin function for setting the dynamic quorum coefficient
-     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
-        ds._setQuorumCoefficient(newQuorumCoefficient);
-    }
+    // /**
+    //  * @notice Admin function for setting the fork period
+    //  * @param newForkPeriod the new fork proposal period, in seconds
+    //  */
+    // function _setForkPeriod(uint256 newForkPeriod) external {
+    //     ds._setForkPeriod(newForkPeriod);
+    // }
 
-    /**
-     * @notice Admin function for setting all the dynamic quorum parameters
-     * @param newMinQuorumVotesBPS minimum quorum votes bps
-     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be lower than or equal to maxQuorumVotesBPS
-     * @param newMaxQuorumVotesBPS maximum quorum votes bps
-     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be higher than or equal to minQuorumVotesBPS
-     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setDynamicQuorumParams(
-        uint16 newMinQuorumVotesBPS,
-        uint16 newMaxQuorumVotesBPS,
-        uint32 newQuorumCoefficient
-    ) public {
-        ds._setDynamicQuorumParams(newMinQuorumVotesBPS, newMaxQuorumVotesBPS, newQuorumCoefficient);
-    }
+    // /**
+    //  * @notice Admin function for setting the fork threshold
+    //  * @param newForkThresholdBPS the new fork proposal threshold, in basis points
+    //  */
+    // function _setForkThresholdBPS(uint256 newForkThresholdBPS) external {
+    //     ds._setForkThresholdBPS(newForkThresholdBPS);
+    // }
 
-    /**
-     * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
-     */
-    function _withdraw() external returns (uint256, bool) {
-        return ds._withdraw();
-    }
+    // /**
+    //  * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
+    //  * instead of the proposal creation block.
+    //  * Sets it to the next proposal id.
+    //  */
+    // function _setVoteSnapshotBlockSwitchProposalId() external {
+    //     ds._setVoteSnapshotBlockSwitchProposalId();
+    // }
 
-    /**
-     * @notice Admin function for setting the fork period
-     * @param newForkPeriod the new fork proposal period, in seconds
-     */
-    function _setForkPeriod(uint256 newForkPeriod) external {
-        ds._setForkPeriod(newForkPeriod);
-    }
+    // /**
+    //  * @notice Admin function for setting the fork DAO deployer contract
+    //  */
+    // function _setForkDAODeployer(address newForkDAODeployer) external {
+    //     ds._setForkDAODeployer(newForkDAODeployer);
+    // }
 
-    /**
-     * @notice Admin function for setting the fork threshold
-     * @param newForkThresholdBPS the new fork proposal threshold, in basis points
-     */
-    function _setForkThresholdBPS(uint256 newForkThresholdBPS) external {
-        ds._setForkThresholdBPS(newForkThresholdBPS);
-    }
+    // /**
+    //  * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
+    //  */
+    // function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) external {
+    //     ds._setErc20TokensToIncludeInFork(erc20tokens);
+    // }
 
-    /**
-     * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
-     * instead of the proposal creation block.
-     * Sets it to the next proposal id.
-     */
-    function _setVoteSnapshotBlockSwitchProposalId() external {
-        ds._setVoteSnapshotBlockSwitchProposalId();
-    }
+    // /**
+    //  * @notice Admin function for setting the fork escrow contract
+    //  */
+    // function _setForkEscrow(address newForkEscrow) external {
+    //     ds._setForkEscrow(newForkEscrow);
+    // }
 
-    /**
-     * @notice Admin function for setting the fork DAO deployer contract
-     */
-    function _setForkDAODeployer(address newForkDAODeployer) external {
-        ds._setForkDAODeployer(newForkDAODeployer);
-    }
+    // /**
+    //  * @notice Admin function for setting the fork related parameters
+    //  * @param forkEscrow_ the fork escrow contract
+    //  * @param forkDAODeployer_ the fork dao deployer contract
+    //  * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
+    //  * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
+    //  * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork
+    //  */
+    // function _setForkParams(
+    //     address forkEscrow_,
+    //     address forkDAODeployer_,
+    //     address[] calldata erc20TokensToIncludeInFork_,
+    //     uint256 forkPeriod_,
+    //     uint256 forkThresholdBPS_
+    // ) external {
+    //     ds._setForkEscrow(forkEscrow_);
+    //     ds._setForkDAODeployer(forkDAODeployer_);
+    //     ds._setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
+    //     ds._setForkPeriod(forkPeriod_);
+    //     ds._setForkThresholdBPS(forkThresholdBPS_);
+    // }
 
-    /**
-     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
-     */
-    function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) external {
-        ds._setErc20TokensToIncludeInFork(erc20tokens);
-    }
-
-    /**
-     * @notice Admin function for setting the fork escrow contract
-     */
-    function _setForkEscrow(address newForkEscrow) external {
-        ds._setForkEscrow(newForkEscrow);
-    }
-
-    /**
-     * @notice Admin function for setting the fork related parameters
-     * @param forkEscrow_ the fork escrow contract
-     * @param forkDAODeployer_ the fork dao deployer contract
-     * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
-     * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
-     * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork
-     */
-    function _setForkParams(
-        address forkEscrow_,
-        address forkDAODeployer_,
-        address[] calldata erc20TokensToIncludeInFork_,
-        uint256 forkPeriod_,
-        uint256 forkThresholdBPS_
-    ) external {
-        ds._setForkEscrow(forkEscrow_);
-        ds._setForkDAODeployer(forkDAODeployer_);
-        ds._setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
-        ds._setForkPeriod(forkPeriod_);
-        ds._setForkThresholdBPS(forkThresholdBPS_);
-    }
-
-    /**
-     * @notice Admin function for setting the timelocks and admin
-     * @param newTimelock the new timelock contract
-     * @param newTimelockV1 the new timelockV1 contract
-     * @param newAdmin the new admin address
-     */
-    function _setTimelocksAndAdmin(
-        address newTimelock,
-        address newTimelockV1,
-        address newAdmin
-    ) external {
-        ds._setTimelocksAndAdmin(newTimelock, newTimelockV1, newAdmin);
-    }
+    // /**
+    //  * @notice Admin function for setting the timelocks and admin
+    //  * @param newTimelock the new timelock contract
+    //  * @param newTimelockV1 the new timelockV1 contract
+    //  * @param newAdmin the new admin address
+    //  */
+    // function _setTimelocksAndAdmin(
+    //     address newTimelock,
+    //     address newTimelockV1,
+    //     address newAdmin
+    // ) external {
+    //     ds._setTimelocksAndAdmin(newTimelock, newTimelockV1, newAdmin);
+    // }
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

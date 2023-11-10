@@ -34,13 +34,13 @@ contract NounsDAOLogicV3Harness is NounsDAOLogicV3 {
         ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
         ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
-        _setDynamicQuorumParams(
+        NounsDAOV3Admin._setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
-        ds._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
-        ds._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
-        ds._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
+        NounsDAOV3Admin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        NounsDAOV3Admin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        NounsDAOV3Admin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 }

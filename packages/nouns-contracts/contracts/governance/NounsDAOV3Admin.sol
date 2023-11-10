@@ -147,8 +147,8 @@ library NounsDAOV3Admin {
     /// @notice Upper bound for proposal updatable period duration in blocks.
     uint256 public constant MAX_UPDATABLE_PERIOD_BLOCKS = 7 days / 12;
 
-    modifier onlyAdmin(NounsDAOStorageV3.StorageV3 storage ds) {
-        if (msg.sender != ds.admin) {
+    modifier onlyAdmin() {
+        if (msg.sender != ds().admin) {
             revert AdminOnly();
         }
         _;
@@ -159,13 +159,13 @@ library NounsDAOV3Admin {
      * voters time to make sense of proposals, e.g. 21,600 blocks which should be at least 3 days.
      * @param newVotingDelay new voting delay, in blocks
      */
-    function _setVotingDelay(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingDelay) external onlyAdmin(ds) {
+    function _setVotingDelay(uint256 newVotingDelay) external onlyAdmin {
         require(
             newVotingDelay >= MIN_VOTING_DELAY_BLOCKS && newVotingDelay <= MAX_VOTING_DELAY_BLOCKS,
             'NounsDAO::_setVotingDelay: invalid voting delay'
         );
-        uint256 oldVotingDelay = ds.votingDelay;
-        ds.votingDelay = newVotingDelay;
+        uint256 oldVotingDelay = ds().votingDelay;
+        ds().votingDelay = newVotingDelay;
 
         emit VotingDelaySet(oldVotingDelay, newVotingDelay);
     }
@@ -174,13 +174,13 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the voting period
      * @param newVotingPeriod new voting period, in blocks
      */
-    function _setVotingPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newVotingPeriod) external onlyAdmin(ds) {
+    function _setVotingPeriod(uint256 newVotingPeriod) external onlyAdmin {
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD_BLOCKS && newVotingPeriod <= MAX_VOTING_PERIOD_BLOCKS,
             'NounsDAO::_setVotingPeriod: invalid voting period'
         );
-        uint256 oldVotingPeriod = ds.votingPeriod;
-        ds.votingPeriod = newVotingPeriod;
+        uint256 oldVotingPeriod = ds().votingPeriod;
+        ds().votingPeriod = newVotingPeriod;
 
         emit VotingPeriodSet(oldVotingPeriod, newVotingPeriod);
     }
@@ -190,17 +190,14 @@ library NounsDAOV3Admin {
      * @dev newProposalThresholdBPS must be in [`MIN_PROPOSAL_THRESHOLD_BPS`,`MAX_PROPOSAL_THRESHOLD_BPS`]
      * @param newProposalThresholdBPS new proposal threshold
      */
-    function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)
-        external
-        onlyAdmin(ds)
-    {
+    function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external onlyAdmin {
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
             'NounsDAO::_setProposalThreshold: invalid proposal threshold bps'
         );
-        uint256 oldProposalThresholdBPS = ds.proposalThresholdBPS;
-        ds.proposalThresholdBPS = newProposalThresholdBPS;
+        uint256 oldProposalThresholdBPS = ds().proposalThresholdBPS;
+        ds().proposalThresholdBPS = newProposalThresholdBPS;
 
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
     }
@@ -209,29 +206,29 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the objection period duration
      * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
      */
-    function _setObjectionPeriodDurationInBlocks(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint32 newObjectionPeriodDurationInBlocks
-    ) external onlyAdmin(ds) {
+    function _setObjectionPeriodDurationInBlocks(uint32 newObjectionPeriodDurationInBlocks) external onlyAdmin {
         if (newObjectionPeriodDurationInBlocks > MAX_OBJECTION_PERIOD_BLOCKS)
             revert InvalidObjectionPeriodDurationInBlocks();
 
-        uint32 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
-        ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
+        uint32 oldObjectionPeriodDurationInBlocks = ds().objectionPeriodDurationInBlocks;
+        ds().objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
 
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
+    }
+
+    function ds() internal pure returns (NounsDAOStorageV3.StorageV3 storage ds_) {
+        assembly {
+            ds_.slot := 0
+        }
     }
 
     /**
      * @notice Admin function for setting the objection period last minute window
      * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
      */
-    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
-        external
-        onlyAdmin(ds)
-    {
-        uint32 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
-        ds.lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
+    function _setLastMinuteWindowInBlocks(uint32 newLastMinuteWindowInBlocks) external onlyAdmin {
+        uint32 oldLastMinuteWindowInBlocks = ds().lastMinuteWindowInBlocks;
+        ds().lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
 
         emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
     }
@@ -240,15 +237,12 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the proposal updatable period
      * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
      */
-    function _setProposalUpdatablePeriodInBlocks(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint32 newProposalUpdatablePeriodInBlocks
-    ) external onlyAdmin(ds) {
+    function _setProposalUpdatablePeriodInBlocks(uint32 newProposalUpdatablePeriodInBlocks) external onlyAdmin {
         if (newProposalUpdatablePeriodInBlocks > MAX_UPDATABLE_PERIOD_BLOCKS)
             revert InvalidProposalUpdatablePeriodInBlocks();
 
-        uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
-        ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
+        uint32 oldProposalUpdatablePeriodInBlocks = ds().proposalUpdatablePeriodInBlocks;
+        ds().proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
 
         emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlocks, newProposalUpdatablePeriodInBlocks);
     }
@@ -258,12 +252,12 @@ library NounsDAOV3Admin {
      * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
      * @param newPendingAdmin New pending admin.
      */
-    function _setPendingAdmin(NounsDAOStorageV3.StorageV3 storage ds, address newPendingAdmin) external onlyAdmin(ds) {
+    function _setPendingAdmin(address newPendingAdmin) external onlyAdmin {
         // Save current value, if any, for inclusion in log
-        address oldPendingAdmin = ds.pendingAdmin;
+        address oldPendingAdmin = ds().pendingAdmin;
 
         // Store pendingAdmin with value newPendingAdmin
-        ds.pendingAdmin = newPendingAdmin;
+        ds().pendingAdmin = newPendingAdmin;
 
         // Emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin)
         emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
@@ -273,24 +267,24 @@ library NounsDAOV3Admin {
      * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
      * @dev Admin function for pending admin to accept role and update admin
      */
-    function _acceptAdmin(NounsDAOStorageV3.StorageV3 storage ds) external {
+    function _acceptAdmin() external {
         // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
         require(
-            msg.sender == ds.pendingAdmin && msg.sender != address(0),
+            msg.sender == ds().pendingAdmin && msg.sender != address(0),
             'NounsDAO::_acceptAdmin: pending admin only'
         );
 
         // Save current values for inclusion in log
-        address oldAdmin = ds.admin;
-        address oldPendingAdmin = ds.pendingAdmin;
+        address oldAdmin = ds().admin;
+        address oldPendingAdmin = ds().pendingAdmin;
 
         // Store admin with value pendingAdmin
-        ds.admin = ds.pendingAdmin;
+        ds().admin = ds().pendingAdmin;
 
         // Clear the pending value
-        ds.pendingAdmin = address(0);
+        ds().pendingAdmin = address(0);
 
-        emit NewAdmin(oldAdmin, ds.admin);
+        emit NewAdmin(oldAdmin, ds().admin);
         emit NewPendingAdmin(oldPendingAdmin, address(0));
     }
 
@@ -298,48 +292,48 @@ library NounsDAOV3Admin {
      * @notice Begins transition of vetoer. The newPendingVetoer must call _acceptVetoer to finalize the transfer.
      * @param newPendingVetoer New Pending Vetoer
      */
-    function _setPendingVetoer(NounsDAOStorageV3.StorageV3 storage ds, address newPendingVetoer) public {
-        if (msg.sender != ds.vetoer) {
+    function _setPendingVetoer(address newPendingVetoer) public {
+        if (msg.sender != ds().vetoer) {
             revert VetoerOnly();
         }
 
-        emit NewPendingVetoer(ds.pendingVetoer, newPendingVetoer);
+        emit NewPendingVetoer(ds().pendingVetoer, newPendingVetoer);
 
-        ds.pendingVetoer = newPendingVetoer;
+        ds().pendingVetoer = newPendingVetoer;
     }
 
     /**
      * @notice Called by the pendingVetoer to accept role and update vetoer
      */
-    function _acceptVetoer(NounsDAOStorageV3.StorageV3 storage ds) external {
-        if (msg.sender != ds.pendingVetoer) {
+    function _acceptVetoer() external {
+        if (msg.sender != ds().pendingVetoer) {
             revert PendingVetoerOnly();
         }
 
         // Update vetoer
-        emit NewVetoer(ds.vetoer, ds.pendingVetoer);
-        ds.vetoer = ds.pendingVetoer;
+        emit NewVetoer(ds().vetoer, ds().pendingVetoer);
+        ds().vetoer = ds().pendingVetoer;
 
         // Clear the pending value
-        emit NewPendingVetoer(ds.pendingVetoer, address(0));
-        ds.pendingVetoer = address(0);
+        emit NewPendingVetoer(ds().pendingVetoer, address(0));
+        ds().pendingVetoer = address(0);
     }
 
     /**
      * @notice Burns veto priviledges
      * @dev Vetoer function destroying veto power forever
      */
-    function _burnVetoPower(NounsDAOStorageV3.StorageV3 storage ds) public {
+    function _burnVetoPower() public {
         // Check caller is vetoer
-        require(msg.sender == ds.vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
+        require(msg.sender == ds().vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
 
         // Update vetoer to 0x0
-        emit NewVetoer(ds.vetoer, address(0));
-        ds.vetoer = address(0);
+        emit NewVetoer(ds().vetoer, address(0));
+        ds().vetoer = address(0);
 
         // Clear the pending value
-        emit NewPendingVetoer(ds.pendingVetoer, address(0));
-        ds.pendingVetoer = address(0);
+        emit NewPendingVetoer(ds().pendingVetoer, address(0));
+        ds().pendingVetoer = address(0);
     }
 
     /**
@@ -348,11 +342,8 @@ library NounsDAOV3Admin {
      *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
-    function _setMinQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMinQuorumVotesBPS)
-        external
-        onlyAdmin(ds)
-    {
-        NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
+    function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external onlyAdmin {
+        NounsDAOStorageV3.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         require(
             newMinQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
@@ -367,7 +358,7 @@ library NounsDAOV3Admin {
         uint16 oldMinQuorumVotesBPS = params.minQuorumVotesBPS;
         params.minQuorumVotesBPS = newMinQuorumVotesBPS;
 
-        _writeQuorumParamsCheckpoint(ds, params);
+        _writeQuorumParamsCheckpoint(params);
 
         emit MinQuorumVotesBPSSet(oldMinQuorumVotesBPS, newMinQuorumVotesBPS);
     }
@@ -378,11 +369,8 @@ library NounsDAOV3Admin {
      *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be higher than or equal to minQuorumVotesBPS
      */
-    function _setMaxQuorumVotesBPS(NounsDAOStorageV3.StorageV3 storage ds, uint16 newMaxQuorumVotesBPS)
-        external
-        onlyAdmin(ds)
-    {
-        NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
+    function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external onlyAdmin {
+        NounsDAOStorageV3.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         require(
             newMaxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
@@ -396,7 +384,7 @@ library NounsDAOV3Admin {
         uint16 oldMaxQuorumVotesBPS = params.maxQuorumVotesBPS;
         params.maxQuorumVotesBPS = newMaxQuorumVotesBPS;
 
-        _writeQuorumParamsCheckpoint(ds, params);
+        _writeQuorumParamsCheckpoint(params);
 
         emit MaxQuorumVotesBPSSet(oldMaxQuorumVotesBPS, newMaxQuorumVotesBPS);
     }
@@ -405,16 +393,13 @@ library NounsDAOV3Admin {
      * @notice Admin function for setting the dynamic quorum coefficient
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
-    function _setQuorumCoefficient(NounsDAOStorageV3.StorageV3 storage ds, uint32 newQuorumCoefficient)
-        external
-        onlyAdmin(ds)
-    {
-        NounsDAOStorageV3.DynamicQuorumParams memory params = ds.getDynamicQuorumParamsAt(block.number);
+    function _setQuorumCoefficient(uint32 newQuorumCoefficient) external onlyAdmin {
+        NounsDAOStorageV3.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         uint32 oldQuorumCoefficient = params.quorumCoefficient;
         params.quorumCoefficient = newQuorumCoefficient;
 
-        _writeQuorumParamsCheckpoint(ds, params);
+        _writeQuorumParamsCheckpoint(params);
 
         emit QuorumCoefficientSet(oldQuorumCoefficient, newQuorumCoefficient);
     }
@@ -430,11 +415,10 @@ library NounsDAOV3Admin {
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
     function _setDynamicQuorumParams(
-        NounsDAOStorageV3.StorageV3 storage ds,
         uint16 newMinQuorumVotesBPS,
         uint16 newMaxQuorumVotesBPS,
         uint32 newQuorumCoefficient
-    ) public onlyAdmin(ds) {
+    ) public onlyAdmin {
         if (
             newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
             newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
@@ -448,14 +432,14 @@ library NounsDAOV3Admin {
             revert MinQuorumBPSGreaterThanMaxQuorumBPS();
         }
 
-        NounsDAOStorageV3.DynamicQuorumParams memory oldParams = ds.getDynamicQuorumParamsAt(block.number);
+        NounsDAOStorageV3.DynamicQuorumParams memory oldParams = ds().getDynamicQuorumParamsAt(block.number);
 
         NounsDAOStorageV3.DynamicQuorumParams memory params = NounsDAOStorageV3.DynamicQuorumParams({
             minQuorumVotesBPS: newMinQuorumVotesBPS,
             maxQuorumVotesBPS: newMaxQuorumVotesBPS,
             quorumCoefficient: newQuorumCoefficient
         });
-        _writeQuorumParamsCheckpoint(ds, params);
+        _writeQuorumParamsCheckpoint(params);
 
         emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);
         emit MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, params.maxQuorumVotesBPS);
@@ -465,7 +449,7 @@ library NounsDAOV3Admin {
     /**
      * @notice Withdraws all the ETH in the contract. This is callable only by the admin (timelock).
      */
-    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) returns (uint256, bool) {
+    function _withdraw() external onlyAdmin returns (uint256, bool) {
         uint256 amount = address(this).balance;
         (bool sent, ) = msg.sender.call{ value: amount }('');
 
@@ -479,14 +463,14 @@ library NounsDAOV3Admin {
      * instead of the proposal creation block.
      * Sets it to the next proposal id.
      */
-    function _setVoteSnapshotBlockSwitchProposalId(NounsDAOStorageV3.StorageV3 storage ds) external onlyAdmin(ds) {
-        uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+    function _setVoteSnapshotBlockSwitchProposalId() external onlyAdmin {
+        uint256 oldVoteSnapshotBlockSwitchProposalId = ds().voteSnapshotBlockSwitchProposalId;
         if (oldVoteSnapshotBlockSwitchProposalId > 0) {
             revert VoteSnapshotSwitchAlreadySet();
         }
 
-        uint256 newVoteSnapshotBlockSwitchProposalId = ds.proposalCount + 1;
-        ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
+        uint256 newVoteSnapshotBlockSwitchProposalId = ds().proposalCount + 1;
+        ds().voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
 
         emit VoteSnapshotBlockSwitchProposalIdSet(
             oldVoteSnapshotBlockSwitchProposalId,
@@ -497,12 +481,9 @@ library NounsDAOV3Admin {
     /**
      * @notice Admin function for setting the fork DAO deployer contract
      */
-    function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer)
-        external
-        onlyAdmin(ds)
-    {
-        address oldForkDAODeployer = address(ds.forkDAODeployer);
-        ds.forkDAODeployer = IForkDAODeployer(newForkDAODeployer);
+    function _setForkDAODeployer(address newForkDAODeployer) public onlyAdmin {
+        address oldForkDAODeployer = address(ds().forkDAODeployer);
+        ds().forkDAODeployer = IForkDAODeployer(newForkDAODeployer);
 
         emit ForkDAODeployerSet(oldForkDAODeployer, newForkDAODeployer);
     }
@@ -510,27 +491,24 @@ library NounsDAOV3Admin {
     /**
      * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
      */
-    function _setErc20TokensToIncludeInFork(NounsDAOStorageV3.StorageV3 storage ds, address[] calldata erc20tokens)
-        external
-        onlyAdmin(ds)
-    {
+    function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) public onlyAdmin {
         checkForDuplicates(erc20tokens);
 
-        emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
+        emit ERC20TokensToIncludeInForkSet(ds().erc20TokensToIncludeInFork, erc20tokens);
 
-        ds.erc20TokensToIncludeInFork = erc20tokens;
+        ds().erc20TokensToIncludeInFork = erc20tokens;
     }
 
     /**
      * @notice Admin function for setting the fork escrow contract
      */
-    function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
-        emit ForkEscrowSet(address(ds.forkEscrow), newForkEscrow);
+    function _setForkEscrow(address newForkEscrow) public onlyAdmin {
+        emit ForkEscrowSet(address(ds().forkEscrow), newForkEscrow);
 
-        ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
+        ds().forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
 
-    function _setForkPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkPeriod) external onlyAdmin(ds) {
+    function _setForkPeriod(uint256 newForkPeriod) public onlyAdmin {
         if (newForkPeriod > MAX_FORK_PERIOD) {
             revert ForkPeriodTooLong();
         }
@@ -539,22 +517,41 @@ library NounsDAOV3Admin {
             revert ForkPeriodTooShort();
         }
 
-        emit ForkPeriodSet(ds.forkPeriod, newForkPeriod);
+        emit ForkPeriodSet(ds().forkPeriod, newForkPeriod);
 
-        ds.forkPeriod = newForkPeriod;
+        ds().forkPeriod = newForkPeriod;
     }
 
     /**
      * @notice Admin function for setting the fork threshold
      * @param newForkThresholdBPS the new fork proposal threshold, in basis points
      */
-    function _setForkThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkThresholdBPS)
-        external
-        onlyAdmin(ds)
-    {
-        emit ForkThresholdSet(ds.forkThresholdBPS, newForkThresholdBPS);
+    function _setForkThresholdBPS(uint256 newForkThresholdBPS) public onlyAdmin {
+        emit ForkThresholdSet(ds().forkThresholdBPS, newForkThresholdBPS);
 
-        ds.forkThresholdBPS = newForkThresholdBPS;
+        ds().forkThresholdBPS = newForkThresholdBPS;
+    }
+
+    /**
+     * @notice Admin function for setting the fork related parameters
+     * @param forkEscrow_ the fork escrow contract
+     * @param forkDAODeployer_ the fork dao deployer contract
+     * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
+     * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
+     * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork
+     */
+    function _setForkParams(
+        address forkEscrow_,
+        address forkDAODeployer_,
+        address[] calldata erc20TokensToIncludeInFork_,
+        uint256 forkPeriod_,
+        uint256 forkThresholdBPS_
+    ) external {
+        _setForkEscrow(forkEscrow_);
+        _setForkDAODeployer(forkDAODeployer_);
+        _setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
+        _setForkPeriod(forkPeriod_);
+        _setForkThresholdBPS(forkThresholdBPS_);
     }
 
     /**
@@ -564,28 +561,24 @@ library NounsDAOV3Admin {
      * @param admin the new admin address
      */
     function _setTimelocksAndAdmin(
-        NounsDAOStorageV3.StorageV3 storage ds,
         address timelock,
         address timelockV1,
         address admin
-    ) external onlyAdmin(ds) {
-        ds.timelock = INounsDAOExecutorV2(timelock);
-        ds.timelockV1 = INounsDAOExecutor(timelockV1);
-        ds.admin = admin;
+    ) external onlyAdmin {
+        ds().timelock = INounsDAOExecutorV2(timelock);
+        ds().timelockV1 = INounsDAOExecutor(timelockV1);
+        ds().admin = admin;
 
         emit TimelocksAndAdminSet(timelock, timelockV1, admin);
     }
 
-    function _writeQuorumParamsCheckpoint(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        NounsDAOStorageV3.DynamicQuorumParams memory params
-    ) internal {
+    function _writeQuorumParamsCheckpoint(NounsDAOStorageV3.DynamicQuorumParams memory params) internal {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        uint256 pos = ds.quorumParamsCheckpoints.length;
-        if (pos > 0 && ds.quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
-            ds.quorumParamsCheckpoints[pos - 1].params = params;
+        uint256 pos = ds().quorumParamsCheckpoints.length;
+        if (pos > 0 && ds().quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
+            ds().quorumParamsCheckpoints[pos - 1].params = params;
         } else {
-            ds.quorumParamsCheckpoints.push(
+            ds().quorumParamsCheckpoints.push(
                 NounsDAOStorageV3.DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params })
             );
         }

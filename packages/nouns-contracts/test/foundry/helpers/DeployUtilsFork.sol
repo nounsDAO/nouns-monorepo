@@ -10,6 +10,7 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 abstract contract DeployUtilsFork is DeployUtilsV3 {
     function _deployForkDAO(INounsDAOForkEscrow escrow)
@@ -44,7 +45,7 @@ abstract contract DeployUtilsFork is DeployUtilsV3 {
             address dao
         )
     {
-        NounsDAOLogicV3 originalDAO = _deployDAOV3();
+        INounsDAOLogicV3 originalDAO = _deployDAOV3();
         return _deployForkDAO(originalDAO.forkEscrow());
     }
 }

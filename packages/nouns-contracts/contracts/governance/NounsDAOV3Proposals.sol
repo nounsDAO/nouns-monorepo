@@ -160,7 +160,8 @@ library NounsDAOV3Proposals {
     function propose(
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        uint16 client
     ) internal returns (uint256) {
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 proposalThreshold_ = checkPropThreshold(
@@ -177,7 +178,8 @@ library NounsDAOV3Proposals {
             proposalId,
             proposalThreshold_,
             adjustedTotalSupply,
-            txs
+            txs,
+            client
         );
         ds.latestProposalIds[msg.sender] = proposalId;
 
@@ -197,9 +199,10 @@ library NounsDAOV3Proposals {
     function proposeOnTimelockV1(
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        uint16 client
     ) internal returns (uint256) {
-        uint256 newProposalId = propose(ds, txs, description);
+        uint256 newProposalId = propose(ds, txs, description, client);
 
         NounsDAOStorageV3.Proposal storage newProposal = ds._proposals[newProposalId];
         newProposal.executeOnTimelockV1 = true;
@@ -207,6 +210,12 @@ library NounsDAOV3Proposals {
         emit ProposalCreatedOnTimelockV1(newProposalId);
 
         return newProposalId;
+    }
+
+    struct ProposalTemp {
+        uint256 proposalId;
+        uint256 adjustedTotalSupply;
+        uint256 propThreshold;
     }
 
     /**
@@ -221,22 +230,24 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        uint16 client
     ) external returns (uint256) {
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposalTxs(txs);
-        uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
-        uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
-
-        uint256 propThreshold = proposalThreshold(ds, adjustedTotalSupply);
+        ProposalTemp memory temp;
+        temp.proposalId = ds.proposalCount = ds.proposalCount + 1;
+        temp.adjustedTotalSupply = ds.adjustedTotalSupply();
+        temp.propThreshold = proposalThreshold(ds, temp.adjustedTotalSupply);
 
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
-            proposalId,
-            propThreshold,
-            adjustedTotalSupply,
-            txs
+            temp.proposalId,
+            temp.propThreshold,
+            temp.adjustedTotalSupply,
+            txs,
+            client
         );
 
         // important that the proposal is created before the verification call in order to ensure
@@ -246,16 +257,16 @@ library NounsDAOV3Proposals {
             proposerSignatures,
             txs,
             description,
-            proposalId
+            temp.proposalId
         );
         if (signers.length == 0) revert MustProvideSignatures();
-        if (votes <= propThreshold) revert VotesBelowProposalThreshold();
+        if (votes <= temp.propThreshold) revert VotesBelowProposalThreshold();
 
         newProposal.signers = signers;
 
-        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(adjustedTotalSupply), txs, description);
+        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(temp.adjustedTotalSupply), txs, description);
 
-        return proposalId;
+        return temp.proposalId;
     }
 
     /**
@@ -480,16 +491,6 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
         executeInternal(ds, proposal, timelock);
-    }
-
-    /**
-     * @notice Executes a queued proposal on timelockV1 if eta has passed
-     * This is only required for proposal that were queued on timelockV1, but before the upgrade to DAO V3.
-     * These proposals will not have the `executeOnTimelockV1` bool turned on.
-     */
-    function executeOnTimelockV1(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        executeInternal(ds, proposal, ds.timelockV1);
     }
 
     function executeInternal(
@@ -893,7 +894,8 @@ library NounsDAOV3Proposals {
         uint256 proposalId,
         uint256 proposalThreshold_,
         uint256 adjustedTotalSupply,
-        ProposalTxs memory txs
+        ProposalTxs memory txs,
+        uint16 client
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
         uint64 updatePeriodEndBlock = SafeCast.toUint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
@@ -912,6 +914,7 @@ library NounsDAOV3Proposals {
         newProposal.totalSupply = adjustedTotalSupply;
         newProposal.creationBlock = SafeCast.toUint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
+        newProposal.client = client;
     }
 
     function emitNewPropEvents(
