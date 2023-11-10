@@ -208,7 +208,10 @@ contract NounsDAOLogicV3StateTest is NounsDAOLogicStateBaseTest {
     }
 }
 
-abstract contract NounsDAOLogicVetoingBaseTest is NounsDAOLogicSharedBaseTest {
+contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
+    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
+    event NewVetoer(address oldVetoer, address newVetoer);
+
     function setUp() public override {
         super.setUp();
 
@@ -387,11 +390,6 @@ abstract contract NounsDAOLogicVetoingBaseTest is NounsDAOLogicSharedBaseTest {
 
         assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Vetoed);
     }
-}
-
-contract NounsDAOLogicV3VetoingTest is NounsDAOLogicVetoingBaseTest {
-    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
-    event NewVetoer(address oldVetoer, address newVetoer);
 
     function test_veto_worksForPropStateUpdatable() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');

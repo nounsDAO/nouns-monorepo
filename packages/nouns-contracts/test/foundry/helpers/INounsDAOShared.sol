@@ -51,4 +51,10 @@ interface INounsDAOShared {
     function _setQuorumVotesBPS(uint256 quorumVotesBPS_) external;
 
     function _burnVetoPower() external;
+
+    function _setPendingVetoer(address pendingVetoer_) external;
+
+    function pendingVetoer() external view returns (address);
+
+    function _acceptVetoer() external;
 }
