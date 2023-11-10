@@ -15,7 +15,7 @@ import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.
 import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
 import { NounsDAOLogicSharedBaseTest } from './helpers/NounsDAOLogicSharedBase.t.sol';
 
-abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
+abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
     function setUp() public override {
         super.setUp();
 
@@ -180,7 +180,7 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
     }
 }
 
-contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicV1V2StateTest {
+contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicStateBaseTest {
     function daoVersion() internal pure override returns (uint256) {
         return 1;
     }
@@ -194,73 +194,7 @@ contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicV1V2StateTest {
     }
 }
 
-contract NounsDAOLogicV1StateTest is NounsDAOLogicV1V2StateTest {
-    function daoVersion() internal pure override returns (uint256) {
-        return 1;
-    }
-
-    function deployDAOProxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal override returns (NounsDAOLogicV1) {
-        NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
-
-        return
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxy(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        admin,
-                        address(daoLogic),
-                        votingPeriod,
-                        votingDelay,
-                        proposalThresholdBPS,
-                        1000
-                    )
-                )
-            );
-    }
-}
-
-contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
-    function daoVersion() internal pure override returns (uint256) {
-        return 2;
-    }
-
-    function deployDAOProxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal override returns (NounsDAOLogicV1) {
-        NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
-
-        return
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxyV2(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        admin,
-                        address(daoLogic),
-                        votingPeriod,
-                        votingDelay,
-                        proposalThresholdBPS,
-                        NounsDAOStorageV2.DynamicQuorumParams({
-                            minQuorumVotesBPS: 200,
-                            maxQuorumVotesBPS: 2000,
-                            quorumCoefficient: 10000
-                        })
-                    )
-                )
-            );
-    }
-}
-
-contract NounsDAOLogicV3StateTest is NounsDAOLogicV1V2StateTest {
+contract NounsDAOLogicV3StateTest is NounsDAOLogicStateBaseTest {
     function deployDAOProxy(
         address timelock,
         address nounsToken,
@@ -274,7 +208,7 @@ contract NounsDAOLogicV3StateTest is NounsDAOLogicV1V2StateTest {
     }
 }
 
-abstract contract NounsDAOLogicV1V2VetoingTest is NounsDAOLogicSharedBaseTest {
+abstract contract NounsDAOLogicVetoingBaseTest is NounsDAOLogicSharedBaseTest {
     function setUp() public override {
         super.setUp();
 
@@ -329,6 +263,8 @@ abstract contract NounsDAOLogicV1V2VetoingTest is NounsDAOLogicSharedBaseTest {
 
     function test_veto_worksForPropStatePending() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
+        // Need to roll one block because in V3 on the proposal creation block the state is Updatable
+        vm.roll(block.number + 1);
         assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Pending);
 
         vm.prank(vetoer);
@@ -453,56 +389,21 @@ abstract contract NounsDAOLogicV1V2VetoingTest is NounsDAOLogicSharedBaseTest {
     }
 }
 
-contract NounsDAOLogicV1VetoingTest is NounsDAOLogicV1V2VetoingTest {
-    function test_setVetoer_revertsForNonVetoer() public {
-        address newVetoer = utils.getNextUserAddress();
-
-        vm.expectRevert('NounsDAO::_setVetoer: vetoer only');
-        daoProxy._setVetoer(newVetoer);
-    }
-
-    function test_setVetoer_worksForVetoer() public {
-        address newVetoer = utils.getNextUserAddress();
-
-        vm.prank(vetoer);
-        daoProxy._setVetoer(newVetoer);
-
-        assertEq(daoProxy.vetoer(), newVetoer);
-    }
-
-    function daoVersion() internal pure override returns (uint256) {
-        return 1;
-    }
-
-    function deployDAOProxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal override returns (NounsDAOLogicV1) {
-        NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
-
-        return
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxy(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        admin,
-                        address(daoLogic),
-                        votingPeriod,
-                        votingDelay,
-                        proposalThresholdBPS,
-                        1000
-                    )
-                )
-            );
-    }
-}
-
-contract NounsDAOLogicV2VetoingTest is NounsDAOLogicV1V2VetoingTest {
+contract NounsDAOLogicV3VetoingTest is NounsDAOLogicVetoingBaseTest {
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
     event NewVetoer(address oldVetoer, address newVetoer);
+
+    function test_veto_worksForPropStateUpdatable() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        NounsDAOLogicV3 daoAsV3 = NounsDAOLogicV3(payable(address(daoProxy)));
+
+        assertTrue(daoAsV3.state(proposalId) == NounsDAOStorageV3.ProposalState.Updatable);
+
+        vm.prank(vetoer);
+        daoAsV3.veto(proposalId);
+
+        assertTrue(daoAsV3.state(proposalId) == NounsDAOStorageV3.ProposalState.Vetoed);
+    }
 
     function test_setPendingVetoer_failsIfNotCurrentVetoer() public {
         vm.expectRevert(NounsDAOLogicV2.VetoerOnly.selector);
@@ -572,36 +473,48 @@ contract NounsDAOLogicV2VetoingTest is NounsDAOLogicV1V2VetoingTest {
         assertEq(daoProxyAsV2().pendingVetoer(), address(0));
     }
 
-    function daoVersion() internal pure override returns (uint256) {
-        return 2;
-    }
-
     function deployDAOProxy(
         address timelock,
         address nounsToken,
         address vetoer
     ) internal override returns (NounsDAOLogicV1) {
-        NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
-
-        return
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxyV2(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        admin,
-                        address(daoLogic),
-                        votingPeriod,
-                        votingDelay,
-                        proposalThresholdBPS,
-                        NounsDAOStorageV2.DynamicQuorumParams({
-                            minQuorumVotesBPS: 200,
-                            maxQuorumVotesBPS: 2000,
-                            quorumCoefficient: 10000
-                        })
-                    )
-                )
-            );
+        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
+
+    function daoVersion() internal pure override returns (uint256) {
+        return 3;
+    }
+
+    // function daoVersion() internal pure override returns (uint256) {
+    //     return 2;
+    // }
+
+    // function deployDAOProxy(
+    //     address timelock,
+    //     address nounsToken,
+    //     address vetoer
+    // ) internal override returns (NounsDAOLogicV1) {
+    //     NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
+
+    //     return
+    //         NounsDAOLogicV1(
+    //             payable(
+    //                 new NounsDAOProxyV2(
+    //                     timelock,
+    //                     nounsToken,
+    //                     vetoer,
+    //                     admin,
+    //                     address(daoLogic),
+    //                     votingPeriod,
+    //                     votingDelay,
+    //                     proposalThresholdBPS,
+    //                     NounsDAOStorageV2.DynamicQuorumParams({
+    //                         minQuorumVotesBPS: 200,
+    //                         maxQuorumVotesBPS: 2000,
+    //                         quorumCoefficient: 10000
+    //                     })
+    //                 )
+    //             )
+    //         );
+    // }
 }
