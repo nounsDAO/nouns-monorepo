@@ -82,8 +82,6 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
     function testSetsParametersCorrectly() public {
         assertEq(daoProxy.proposalThresholdBPS(), proposalThresholdBPS_);
-        // assertEq(daoProxyAsV2().minQuorumVotesBPS(), minQuorumVotesBPS);
-
         assertEq(daoProxyAsV2().getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, minQuorumVotesBPS);
     }
 
