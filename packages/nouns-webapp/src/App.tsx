@@ -60,6 +60,12 @@ function App() {
               <Switch>
                 <Route exact path="/" component={AuctionPage} />
                 <Route exact path="/auction" component={AuctionPageNew} />
+                <Redirect from="/auction/:id" to="/noun/:id" />
+                <Route
+                  exact
+                  path="/noun/:id"
+                  render={props => <AuctionPageNew initialAuctionId={Number(props.match.params.id)} />}
+                />
                 <Route exact path="/rep" component={RepPage} />
                 <Route exact path="/vote" component={GovernancePage} />
                 <Route exact path="/optimismRep" component={OptimismRepPage} />
