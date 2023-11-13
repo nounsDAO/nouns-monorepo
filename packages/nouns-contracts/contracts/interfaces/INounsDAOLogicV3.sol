@@ -259,6 +259,13 @@ interface INounsDAOLogicV3 {
      */
     function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
 
+    function proposalClientId(uint256 proposalId) external view returns (uint16);
+
+    function proposalVoteClientData(uint256 proposalId, uint16 clientId)
+        external
+        view
+        returns (NounsDAOStorageV3.ClientVoteData memory);
+
     /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
@@ -606,6 +613,12 @@ interface INounsDAOLogicV3 {
      */
     function castVote(uint256 proposalId, uint8 support) external;
 
+    function castRefundableVote(
+        uint256 proposalId,
+        uint8 support,
+        uint16 clientId
+    ) external;
+
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
      * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
@@ -617,6 +630,13 @@ interface INounsDAOLogicV3 {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(uint256 proposalId, uint8 support) external;
+
+    function castRefundableVoteWithReason(
+        uint256 proposalId,
+        uint8 support,
+        string calldata reason,
+        uint16 clientId
+    ) external;
 
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.

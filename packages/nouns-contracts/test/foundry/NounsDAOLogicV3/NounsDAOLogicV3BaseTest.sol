@@ -107,6 +107,27 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         uint256 value,
         string memory signature,
         bytes memory data,
+        string memory description,
+        uint16 clientId
+    ) internal returns (uint256 proposalId) {
+        vm.prank(proposer);
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        proposalId = dao.propose(targets, values, signatures, calldatas, description, clientId);
+    }
+
+    function propose(
+        address proposer,
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
         string memory description
     ) internal returns (uint256 proposalId) {
         vm.prank(proposer);

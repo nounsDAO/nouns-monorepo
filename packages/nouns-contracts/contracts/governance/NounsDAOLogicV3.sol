@@ -467,6 +467,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.proposalsV3(proposalId);
     }
 
+    function proposalClientId(uint256 proposalId) external view returns (uint16) {
+        return ds._proposals[proposalId].clientId;
+    }
+
+    function proposalVoteClientData(uint256 proposalId, uint16 clientId) external view returns (ClientVoteData memory) {
+        return ds._proposals[proposalId].voteClients[clientId];
+    }
+
     /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
@@ -595,6 +603,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.castVote(proposalId, support);
     }
 
+    function castRefundableVote(
+        uint256 proposalId,
+        uint8 support,
+        uint16 clientId
+    ) external {
+        ds.castRefundableVote(proposalId, support, clientId);
+    }
+
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
      * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
@@ -606,7 +622,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(uint256 proposalId, uint8 support) external {
-        ds.castRefundableVote(proposalId, support);
+        ds.castRefundableVote(proposalId, support, 0);
+    }
+
+    function castRefundableVoteWithReason(
+        uint256 proposalId,
+        uint8 support,
+        string calldata reason,
+        uint16 clientId
+    ) public {
+        ds.castRefundableVoteWithReason(proposalId, support, reason, clientId);
     }
 
     /**
@@ -625,7 +650,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint8 support,
         string calldata reason
     ) public {
-        ds.castRefundableVoteWithReason(proposalId, support, reason);
+        ds.castRefundableVoteWithReason(proposalId, support, reason, 0);
     }
 
     /**

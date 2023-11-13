@@ -72,7 +72,7 @@ library NounsDAOV3Votes {
         uint256 proposalId,
         uint8 support
     ) external {
-        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support), '');
+        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support, 0), '');
     }
 
     /**
@@ -88,9 +88,10 @@ library NounsDAOV3Votes {
     function castRefundableVote(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
-        uint8 support
+        uint8 support,
+        uint16 clientId
     ) external {
-        castRefundableVoteInternal(ds, proposalId, support, '');
+        castRefundableVoteInternal(ds, proposalId, support, '', clientId);
     }
 
     /**
@@ -108,9 +109,10 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
-        string calldata reason
+        string calldata reason,
+        uint16 clientId
     ) external {
-        castRefundableVoteInternal(ds, proposalId, support, reason);
+        castRefundableVoteInternal(ds, proposalId, support, reason, clientId);
     }
 
     /**
@@ -124,10 +126,11 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
-        string memory reason
+        string memory reason,
+        uint16 clientId
     ) internal {
         uint256 startGas = gasleft();
-        uint96 votes = castVoteInternal(ds, msg.sender, proposalId, support);
+        uint96 votes = castVoteInternal(ds, msg.sender, proposalId, support, clientId);
         emit VoteCast(msg.sender, proposalId, support, votes, reason);
         if (votes > 0) {
             _refundGas(startGas);
@@ -146,7 +149,13 @@ library NounsDAOV3Votes {
         uint8 support,
         string calldata reason
     ) external {
-        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support), reason);
+        emit VoteCast(
+            msg.sender,
+            proposalId,
+            support,
+            castVoteInternal(ds, msg.sender, proposalId, support, 0),
+            reason
+        );
     }
 
     /**
@@ -168,7 +177,7 @@ library NounsDAOV3Votes {
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
         address signatory = ecrecover(digest, v, r, s);
         require(signatory != address(0), 'NounsDAO::castVoteBySig: invalid signature');
-        emit VoteCast(signatory, proposalId, support, castVoteInternal(ds, signatory, proposalId, support), '');
+        emit VoteCast(signatory, proposalId, support, castVoteInternal(ds, signatory, proposalId, support, 0), '');
     }
 
     /**
@@ -179,24 +188,31 @@ library NounsDAOV3Votes {
      * @param voter The voter that is casting their vote
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
-     * @return The number of votes cast
+     * @return votes The number of votes cast
      */
     function castVoteInternal(
         NounsDAOStorageV3.StorageV3 storage ds,
         address voter,
         uint256 proposalId,
-        uint8 support
-    ) internal returns (uint96) {
+        uint8 support,
+        uint16 clientId
+    ) internal returns (uint96 votes) {
         NounsDAOStorageV3.ProposalState proposalState = ds.stateInternal(proposalId);
 
         if (proposalState == NounsDAOStorageV3.ProposalState.Active) {
-            return castVoteDuringVotingPeriodInternal(ds, proposalId, voter, support);
+            votes = castVoteDuringVotingPeriodInternal(ds, proposalId, voter, support);
         } else if (proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod) {
             if (support != 0) revert CanOnlyVoteAgainstDuringObjectionPeriod();
-            return castObjectionInternal(ds, proposalId, voter);
+            votes = castObjectionInternal(ds, proposalId, voter);
+        } else {
+            revert('NounsDAO::castVoteInternal: voting is closed');
         }
 
-        revert('NounsDAO::castVoteInternal: voting is closed');
+        NounsDAOStorageV3.ClientVoteData memory voteData = ds._proposals[proposalId].voteClients[clientId];
+        ds._proposals[proposalId].voteClients[clientId] = NounsDAOStorageV3.ClientVoteData({
+            votes: uint32(voteData.votes + votes),
+            txs: voteData.txs + 1
+        });
     }
 
     /**

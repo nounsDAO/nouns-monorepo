@@ -768,7 +768,13 @@ contract NounsDAOStorageV3 {
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
         // TODO bitpack and natspec
-        uint16 client;
+        uint16 clientId;
+        mapping(uint16 clientId => ClientVoteData) voteClients;
+    }
+
+    struct ClientVoteData {
+        uint32 votes;
+        uint32 txs;
     }
 
     /// @notice Ballot receipt record for a voter

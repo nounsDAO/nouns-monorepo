@@ -161,7 +161,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
         string memory description,
-        uint16 client
+        uint16 clientId
     ) internal returns (uint256) {
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 proposalThreshold_ = checkPropThreshold(
@@ -179,7 +179,7 @@ library NounsDAOV3Proposals {
             proposalThreshold_,
             adjustedTotalSupply,
             txs,
-            client
+            clientId
         );
         ds.latestProposalIds[msg.sender] = proposalId;
 
@@ -895,7 +895,7 @@ library NounsDAOV3Proposals {
         uint256 proposalThreshold_,
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs,
-        uint16 client
+        uint16 clientId
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
         uint64 updatePeriodEndBlock = SafeCast.toUint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
@@ -914,7 +914,7 @@ library NounsDAOV3Proposals {
         newProposal.totalSupply = adjustedTotalSupply;
         newProposal.creationBlock = SafeCast.toUint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
-        newProposal.client = client;
+        newProposal.clientId = clientId;
     }
 
     function emitNewPropEvents(
