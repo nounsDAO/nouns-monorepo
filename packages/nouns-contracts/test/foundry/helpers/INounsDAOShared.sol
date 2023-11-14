@@ -57,4 +57,8 @@ interface INounsDAOShared {
     function pendingVetoer() external view returns (address);
 
     function _acceptVetoer() external;
+
+    function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
+
+    function implementation() external view returns (address);
 }
