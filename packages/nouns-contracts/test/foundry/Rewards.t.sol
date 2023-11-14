@@ -10,12 +10,17 @@ contract RewardsTest is NounsDAOLogicV3BaseTest {
     INounsAuctionHouseRewards auctionHouse;
 
     address clientWallet = makeAddr('clientWallet');
+    address clientWallet2 = makeAddr('clientWallet2');
     address voter = makeAddr('voter');
     address voter2 = makeAddr('voter2');
+    address voter3 = makeAddr('voter3');
     address bidder1 = makeAddr('bidder1');
     address bidder2 = makeAddr('bidder2');
 
     uint16 constant CLIENT_ID = 42;
+    uint16 constant CLIENT_ID2 = 43;
+
+    uint16[] clientIds;
 
     function setUp() public override {
         super.setUp();
@@ -35,7 +40,12 @@ contract RewardsTest is NounsDAOLogicV3BaseTest {
             mintTo(voter2);
         }
 
+        for (uint i; i < 5; i++) {
+            mintTo(voter3);
+        }
+
         rewards.registerClient(CLIENT_ID, clientWallet);
+        rewards.registerClient(CLIENT_ID2, clientWallet2);
     }
 
     function test_rewardsProposalCreation() public {
@@ -89,5 +99,27 @@ contract RewardsTest is NounsDAOLogicV3BaseTest {
         rewards.rewardForVoting(proposalId, CLIENT_ID);
 
         assertEq(clientWallet.balance, rewards.REWARD_FOR_PROPOSAL_VOTING() / 2);
+    }
+
+    function test_rewardForVotingWithBonus() public {
+        uint256 proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
+        vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
+
+        vm.prank(voter);
+        dao.castRefundableVoteWithReason(proposalId, 1, 'i support', CLIENT_ID);
+
+        vm.prank(voter2);
+        dao.castRefundableVoteWithReason(proposalId, 1, 'i support');
+
+        vm.prank(voter3);
+        dao.castRefundableVoteWithReason(proposalId, 1, 'i dont support', CLIENT_ID2);
+
+        vm.roll(block.number + dao.votingPeriod() + 1);
+        dao.queue(proposalId);
+        vm.warp(dao.proposalsV3(proposalId).eta);
+        dao.execute(proposalId);
+
+        clientIds = [CLIENT_ID, 0, CLIENT_ID2];
+        rewards.rewardForVotingWithBonus(proposalId, clientIds);
     }
 }
