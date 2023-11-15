@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect } from 'react';
 import { useBlockNumber } from '@usedapp/core';
 import { Alert, Button } from 'react-bootstrap';
@@ -66,13 +66,17 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<number | null>(null);
   const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
-  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
+  const currentBlock = useBlockNumber();
+  const currentOrSnapshotBlock = useMemo(() =>
+    Math.min(proposal?.voteSnapshotBlock, (currentBlock ? currentBlock - 1 : 0)) || undefined,
+    [proposal, currentBlock]
+  );
+  const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
-  const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
   const isDaoGteV3 = useIsDaoGteV3();
   useEffect(() => {
