@@ -9,7 +9,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-contract UpgradeToDAOV3p1MainnetForkTest is Test {
+abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
     address public constant WHALE = 0x83fCFe8Ba2FEce9578F0BbaFeD4Ebf5E915045B9;
     NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
@@ -18,42 +18,20 @@ contract UpgradeToDAOV3p1MainnetForkTest is Test {
     address public constant CURRENT_DAO_IMPL = 0xdD1492570beb290a2f309541e1fDdcaAA3f00B61;
 
     address proposerAddr = vm.addr(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
+    address origin = makeAddr('origin');
     address newLogic;
 
-    function setUp() public {
+    function setUp() public virtual {
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 18571818);
-
-        // Deploy the latest DAO logic
-        vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        newLogic = address(new DeployDAOV3LogicMainnet().run());
 
         // Get votes
         vm.prank(NOUNDERS);
         nouns.delegate(proposerAddr);
         vm.roll(block.number + 1);
 
-        // Propose the upgrade
-        vm.setEnv('PROPOSER_KEY', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
-        vm.setEnv('DAO_V3_IMPL', Strings.toHexString(uint160(newLogic), 20));
-        vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/DAOUpgradeTo3p1/proposal-description.txt');
-        uint256 proposalId = new ProposeDAOV3p1UpgradeMainnet().run();
-
-        // Execute the upgrade
-        voteAndExecuteProposal(proposalId);
-    }
-
-    function test_daoUpgradeWorked() public {
-        assertTrue(CURRENT_DAO_IMPL != NOUNS_DAO_PROXY_MAINNET.implementation());
-        assertEq(newLogic, NOUNS_DAO_PROXY_MAINNET.implementation());
-    }
-
-    function test_proposalExecutesAfterTheUpgrade() public {
-        uint256 balanceBefore = WHALE.balance;
-
-        uint256 proposalId = propose(WHALE, 1 ether, '', '');
-        voteAndExecuteProposal(proposalId);
-
-        assertEq(balanceBefore + 1 ether, WHALE.balance);
+        vm.deal(address(NOUNS_DAO_PROXY_MAINNET), 100 ether);
+        vm.fee(50 gwei);
+        vm.txGasPrice(50 gwei);
     }
 
     function propose(
@@ -78,10 +56,10 @@ contract UpgradeToDAOV3p1MainnetForkTest is Test {
         NounsDAOStorageV3.ProposalCondensed memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
 
         vm.roll(propInfo.startBlock + 1);
-        vm.prank(proposerAddr);
-        NOUNS_DAO_PROXY_MAINNET.castVote(proposalId, 1);
-        vm.prank(WHALE);
-        NOUNS_DAO_PROXY_MAINNET.castVote(proposalId, 1);
+        vm.prank(proposerAddr, origin);
+        NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1);
+        vm.prank(WHALE, origin);
+        NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1);
 
         vm.roll(propInfo.endBlock + 1);
         NOUNS_DAO_PROXY_MAINNET.queue(proposalId);
@@ -89,5 +67,51 @@ contract UpgradeToDAOV3p1MainnetForkTest is Test {
         propInfo = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
         vm.warp(propInfo.eta + 1);
         NOUNS_DAO_PROXY_MAINNET.execute(proposalId);
+    }
+}
+
+contract RefundBeforeTheUpgradeTo3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest {
+    function test_refundBeforeUpgrade_doesNotRefundOrigin() public {
+        uint256 originBalanceBefore = origin.balance;
+
+        uint256 proposalId = propose(WHALE, 1 ether, '', '');
+        voteAndExecuteProposal(proposalId);
+
+        assertEq(originBalanceBefore, origin.balance);
+    }
+}
+
+contract UpgradeToDAOV3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest {
+    function setUp() public override {
+        super.setUp();
+
+        // Deploy the latest DAO logic
+        vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        newLogic = address(new DeployDAOV3LogicMainnet().run());
+
+        // Propose the upgrade
+        vm.setEnv('PROPOSER_KEY', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+        vm.setEnv('DAO_V3_IMPL', Strings.toHexString(uint160(newLogic), 20));
+        vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/DAOUpgradeTo3p1/proposal-description.txt');
+        uint256 proposalId = new ProposeDAOV3p1UpgradeMainnet().run();
+
+        // Execute the upgrade
+        voteAndExecuteProposal(proposalId);
+    }
+
+    function test_daoUpgradeWorked() public {
+        assertTrue(CURRENT_DAO_IMPL != NOUNS_DAO_PROXY_MAINNET.implementation());
+        assertEq(newLogic, NOUNS_DAO_PROXY_MAINNET.implementation());
+    }
+
+    function test_proposalExecutesAfterTheUpgrade_andRefundGoesToOrigin() public {
+        uint256 recipientBalanceBefore = WHALE.balance;
+        uint256 originBalanceBefore = origin.balance;
+
+        uint256 proposalId = propose(WHALE, 1 ether, '', '');
+        voteAndExecuteProposal(proposalId);
+
+        assertEq(recipientBalanceBefore + 1 ether, WHALE.balance);
+        assertGt(origin.balance, originBalanceBefore);
     }
 }

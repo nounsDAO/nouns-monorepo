@@ -20,6 +20,8 @@ interface INounsDAOShared {
 
     function castVote(uint256 proposalId, uint8 support) external;
 
+    function castRefundableVote(uint256 proposalId, uint8 support) external;
+
     function castVoteWithReason(
         uint256 proposalId,
         uint8 support,
