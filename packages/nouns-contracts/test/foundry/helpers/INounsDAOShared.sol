@@ -65,4 +65,13 @@ interface INounsDAOShared {
     function implementation() external view returns (address);
 
     function nouns() external view returns (NounsTokenLike);
+
+    function proposeBySigs(
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
 }

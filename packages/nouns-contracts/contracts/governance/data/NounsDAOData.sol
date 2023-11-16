@@ -19,10 +19,16 @@ pragma solidity ^0.8.19;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
-import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
+import { NounsTokenLike, NounsDAOStorageV3 } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '../../external/openzeppelin/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
+
+interface INounsDAO {
+    function state(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalState);
+
+    function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
+}
 
 contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
     /**
@@ -38,6 +44,9 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error FailedWithdrawingETH(bytes data);
     error InvalidSignature();
     error InvalidSupportValue();
+    error ProposalToUpdateMustBeUpdatable();
+    error OnlyProposerCanCreateUpdateCandidate();
+    error UpdateProposalCandidatesOnlyWorkWithProposalsBySigs();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -99,6 +108,12 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
 
     /**
      * @notice Create a new proposal candidate by emitting an event. Nouners can post for free, while non-Nouners must pay `createCandidateCost` in ETH.
+     * When used to update a proposal created by signatures, `proposalIdToUpdate` should be the ID of the proposal to update,
+     * and no fee is required.
+     * Also in this case, the following conditions must be met:
+     * 1. The proposal must be in the Updatable state.
+     * 2. `msg.sender` must be the same as the proposer of the proposal to update.
+     * 3. The proposal must have at least one signer.
      * @dev Reverts if the proposer (msg.sender) has already created a candidate with the same slug.
      * @param targets the candidate proposal targets.
      * @param values the candidate proposal values.
@@ -117,7 +132,18 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         string memory slug,
         uint256 proposalIdToUpdate
     ) external payable {
-        if (!isNouner(msg.sender) && msg.value < createCandidateCost) revert MustBeNounerOrPaySufficientFee();
+        if (proposalIdToUpdate > 0) {
+            INounsDAO dao = INounsDAO(nounsDao);
+            if (dao.state(proposalIdToUpdate) != NounsDAOStorageV3.ProposalState.Updatable)
+                revert ProposalToUpdateMustBeUpdatable();
+
+            NounsDAOStorageV3.ProposalCondensed memory propInfo = dao.proposalsV3(proposalIdToUpdate);
+            if (propInfo.proposer != msg.sender) revert OnlyProposerCanCreateUpdateCandidate();
+            if (propInfo.signers.length == 0) revert UpdateProposalCandidatesOnlyWorkWithProposalsBySigs();
+        } else {
+            if (!isNouner(msg.sender) && msg.value < createCandidateCost) revert MustBeNounerOrPaySufficientFee();
+        }
+
         if (propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugAlreadyUsed();
 
         propCandidates[msg.sender][keccak256(bytes(slug))] = true;

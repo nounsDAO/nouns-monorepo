@@ -5,7 +5,7 @@ import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
 import { INounsDAOShared } from './helpers/INounsDAOShared.sol';
-import { NounsTokenLike } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsTokenLike, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
 import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAODataEvents.sol';
@@ -21,7 +21,7 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
     INounsAuctionHouse auction;
     address feeRecipient = makeAddr('fee recipient');
     address otherProposer = makeAddr('other proposer');
-    address notNounder = makeAddr('not nouner');
+    address notNouner = makeAddr('not nouner');
 
     function setUp() public virtual {
         nounsDao = INounsDAOShared(address(_deployDAOV3()));
@@ -72,7 +72,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
-        vm.prank(notNounder);
+        vm.prank(notNouner);
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, 'description', 'slug', 0);
     }
 
@@ -266,7 +266,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
-        vm.prank(notNounder);
+        vm.prank(notNouner);
         data.updateProposalCandidate(
             txs.targets,
             txs.values,
@@ -751,5 +751,170 @@ contract NounsDAOData_AdminFunctionsTest is NounsDAODataBaseTest {
         data.withdrawETH(recipient, 1.42 ether);
 
         assertEq(recipient.balance, 1.42 ether);
+    }
+}
+
+contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTest {
+    address signer;
+    uint256 signerPK;
+    uint256 proposalId;
+    NounsDAOV3Proposals.ProposalTxs updateTxs;
+    string updateDescription = 'some description';
+
+    function setUp() public override {
+        super.setUp();
+        (signer, signerPK) = makeAddrAndKey('signerWithVote1');
+        bidAndSettleAuction(auction, signer);
+
+        proposalId = proposeBySigs(
+            notNouner,
+            signer,
+            signerPK,
+            createTxs(makeAddr('target'), 0.142 ether, '', ''),
+            'description',
+            block.timestamp + 7 days
+        );
+
+        updateTxs = createTxs(makeAddr('target'), 4.2 ether, '', '');
+    }
+
+    function test_givenProposalInUpdatableStateAndSenderIsProposerAndSenderNotNounder_worksWithNoFee() public {
+        bytes32 encodedProp = keccak256(
+            abi.encodePacked(
+                proposalId,
+                NounsDAOV3Proposals.calcProposalEncodeData(notNouner, updateTxs, updateDescription)
+            )
+        );
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCandidateCreated(
+            notNouner,
+            updateTxs.targets,
+            updateTxs.values,
+            updateTxs.signatures,
+            updateTxs.calldatas,
+            updateDescription,
+            'some slug',
+            proposalId,
+            encodedProp
+        );
+
+        vm.prank(notNouner);
+        data.createProposalCandidate(
+            updateTxs.targets,
+            updateTxs.values,
+            updateTxs.signatures,
+            updateTxs.calldatas,
+            updateDescription,
+            'some slug',
+            proposalId
+        );
+    }
+
+    function test_givenProposalNotUpdatable_reverts() public {
+        vm.roll(nounsDao.proposalsV3(proposalId).updatePeriodEndBlock + 1);
+
+        vm.expectRevert(NounsDAOData.ProposalToUpdateMustBeUpdatable.selector);
+        vm.prank(notNouner);
+        data.createProposalCandidate(
+            updateTxs.targets,
+            updateTxs.values,
+            updateTxs.signatures,
+            updateTxs.calldatas,
+            updateDescription,
+            'some slug',
+            proposalId
+        );
+    }
+
+    function test_givenSenderIsntProposer_reverts() public {
+        vm.expectRevert(NounsDAOData.OnlyProposerCanCreateUpdateCandidate.selector);
+        vm.prank(makeAddr('not proposer'));
+        data.createProposalCandidate(
+            updateTxs.targets,
+            updateTxs.values,
+            updateTxs.signatures,
+            updateTxs.calldatas,
+            updateDescription,
+            'some slug',
+            proposalId
+        );
+    }
+
+    function test_givenProposalNotBySigs_reverts() public {
+        address nouner = makeAddr('nouner');
+        bidAndSettleAuction(auction, nouner);
+        proposalId = propose(nouner, makeAddr('target'), 0.142 ether, '', '', 'description');
+
+        vm.expectRevert(NounsDAOData.UpdateProposalCandidatesOnlyWorkWithProposalsBySigs.selector);
+        vm.prank(nouner);
+        data.createProposalCandidate(
+            updateTxs.targets,
+            updateTxs.values,
+            updateTxs.signatures,
+            updateTxs.calldatas,
+            updateDescription,
+            'some slug',
+            proposalId
+        );
+    }
+
+    function propose(
+        address proposer,
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        string memory description
+    ) internal returns (uint256 proposalId) {
+        vm.prank(proposer);
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        proposalId = nounsDao.propose(targets, values, signatures, calldatas, description);
+    }
+
+    function proposeBySigs(
+        address proposer,
+        address signer,
+        uint256 signerPK,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description,
+        uint256 expirationTimestamp
+    ) internal returns (uint256 proposalId) {
+        address[] memory signers = new address[](1);
+        signers[0] = signer;
+        uint256[] memory signerPKs = new uint256[](1);
+        signerPKs[0] = signerPK;
+        uint256[] memory expirationTimestamps = new uint256[](1);
+        expirationTimestamps[0] = expirationTimestamp;
+
+        return proposeBySigs(proposer, signers, signerPKs, expirationTimestamps, txs, description);
+    }
+
+    function proposeBySigs(
+        address proposer,
+        address[] memory signers,
+        uint256[] memory signerPKs,
+        uint256[] memory expirationTimestamps,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description
+    ) internal returns (uint256 proposalId) {
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+        for (uint256 i = 0; i < signers.length; ++i) {
+            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+                signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(nounsDao)),
+                signers[i],
+                expirationTimestamps[i]
+            );
+        }
+
+        vm.prank(proposer);
+        proposalId = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
     }
 }
