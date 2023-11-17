@@ -25,8 +25,6 @@ import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgrade
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
 
 interface INounsDAO {
-    function state(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalState);
-
     function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
 }
 
@@ -134,10 +132,9 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     ) external payable {
         if (proposalIdToUpdate > 0) {
             INounsDAO dao = INounsDAO(nounsDao);
-            if (dao.state(proposalIdToUpdate) != NounsDAOStorageV3.ProposalState.Updatable)
-                revert ProposalToUpdateMustBeUpdatable();
-
             NounsDAOStorageV3.ProposalCondensed memory propInfo = dao.proposalsV3(proposalIdToUpdate);
+
+            if (block.number > propInfo.updatePeriodEndBlock) revert ProposalToUpdateMustBeUpdatable();
             if (propInfo.proposer != msg.sender) revert OnlyProposerCanCreateUpdateCandidate();
             if (propInfo.signers.length == 0) revert UpdateProposalCandidatesOnlyWorkWithProposalsBySigs();
         } else {
