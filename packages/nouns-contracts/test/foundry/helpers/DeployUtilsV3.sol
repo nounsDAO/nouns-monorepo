@@ -3,7 +3,6 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './DeployUtils.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
@@ -20,16 +19,17 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     function _createDAOV3Proxy(
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (NounsDAOLogicV1 dao) {
+    ) internal returns (INounsDAOLogic dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
-        dao = NounsDAOLogicV1(
+        dao = INounsDAOLogic(
             payable(
                 new NounsDAOProxyV3(
                     timelock,
