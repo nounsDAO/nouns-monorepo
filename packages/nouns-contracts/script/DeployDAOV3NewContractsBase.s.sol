@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import 'forge-std/Script.sol';
 import { NounsDAOExecutorV2 } from '../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOExecutorV2Test } from '../contracts/test/NounsDAOExecutorHarness.sol';
-import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOExecutorProxy } from '../contracts/governance/NounsDAOExecutorProxy.sol';
 import { INounsDAOExecutor } from '../contracts/governance/NounsDAOInterfaces.sol';
@@ -15,6 +14,10 @@ import { NounsDAOLogicV1Fork } from '../contracts/governance/fork/newdao/governa
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
 import { ERC20Transferer } from '../contracts/utils/ERC20Transferer.sol';
 
+interface NounsDAO {
+    function nouns() external view returns (address);
+}
+
 contract DeployDAOV3NewContractsBase is Script {
     uint256 public constant DELAYED_GOV_DURATION = 30 days;
     uint256 public immutable forkDAOVotingPeriod;
@@ -22,7 +25,7 @@ contract DeployDAOV3NewContractsBase is Script {
     uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%
     uint256 public constant FORK_DAO_QUORUM_VOTES_BPS = 1000; // 10%
 
-    NounsDAOLogicV1 public immutable daoProxy;
+    NounsDAO public immutable daoProxy;
     INounsDAOExecutor public immutable timelockV1;
     bool public immutable deployTimelockV2Harness; // should be true only for testnets
 
@@ -33,7 +36,7 @@ contract DeployDAOV3NewContractsBase is Script {
         uint256 _forkDAOVotingPeriod,
         uint256 _forkDAOVotingDelay
     ) {
-        daoProxy = NounsDAOLogicV1(payable(_daoProxy));
+        daoProxy = NounsDAO(_daoProxy);
         timelockV1 = INounsDAOExecutor(_timelockV1);
         deployTimelockV2Harness = _deployTimelockV2Harness;
         forkDAOVotingPeriod = _forkDAOVotingPeriod;
