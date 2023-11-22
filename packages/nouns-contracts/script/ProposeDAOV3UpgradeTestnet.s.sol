@@ -2,22 +2,31 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
-import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
+
+interface NounsDAO {
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
+}
 
 abstract contract ProposeDAOV3UpgradeTestnet is Script {
     uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 0.001 ether;
     uint256 public constant FORK_PERIOD = 1 hours;
     uint256 public constant FORK_THRESHOLD_BPS = 2000;
 
-    NounsDAOLogicV1 public immutable daoProxyContract;
+    NounsDAO public immutable daoProxyContract;
     address public immutable timelockV1;
     address public immutable auctionHouseProxy;
     address public immutable stETH;
 
     constructor(
-        NounsDAOLogicV1 daoProxy_,
+        NounsDAO daoProxy_,
         address timelockV1_,
         address auctionHouseProxy_,
         address stETH_
@@ -60,7 +69,7 @@ abstract contract ProposeDAOV3UpgradeTestnet is Script {
     }
 
     function propose(
-        NounsDAOLogicV1 daoProxy,
+        NounsDAO daoProxy,
         address daoV3Implementation,
         address timelockV2,
         uint256 ethToSendToNewTimelock,
@@ -139,8 +148,7 @@ abstract contract ProposeDAOV3UpgradeTestnet is Script {
 }
 
 contract ProposeDAOV3UpgradeGoerli is ProposeDAOV3UpgradeTestnet {
-    NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_GOERLI =
-        NounsDAOLogicV1(0x9e6D4B42b8Dc567AC4aeCAB369Eb9a3156dF095C);
+    NounsDAO public constant NOUNS_DAO_PROXY_GOERLI = NounsDAO(0x9e6D4B42b8Dc567AC4aeCAB369Eb9a3156dF095C);
     address public constant NOUNS_TIMELOCK_V1_GOERLI = 0xADa0F1A73D1df49477fa41C7F8476F9eA5aB115f;
     address public constant AUCTION_HOUSE_PROXY_GOERLI = 0x17e8512851Db9F04164Aa54A6e62f368acCF9D0c;
     address public constant STETH_GOERLI = 0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F;
@@ -156,8 +164,7 @@ contract ProposeDAOV3UpgradeGoerli is ProposeDAOV3UpgradeTestnet {
 }
 
 contract ProposeDAOV3UpgradeSepolia is ProposeDAOV3UpgradeTestnet {
-    NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_SEPOLIA =
-        NounsDAOLogicV1(0x35d2670d7C8931AACdd37C89Ddcb0638c3c44A57);
+    NounsDAO public constant NOUNS_DAO_PROXY_SEPOLIA = NounsDAO(0x35d2670d7C8931AACdd37C89Ddcb0638c3c44A57);
     address public constant NOUNS_TIMELOCK_V1_SEPOLIA = 0x332db58b51393f3a6b28d4DD8964234967e1aD33;
     address public constant AUCTION_HOUSE_PROXY_SEPOLIA = 0x488609b7113FCf3B761A05956300d605E8f6BcAf;
     address public constant STETH_SEPOLIA = 0xf16e3ab44cC450fCbe5E890322Ee715f3f7eAC29; // ERC20Mock
