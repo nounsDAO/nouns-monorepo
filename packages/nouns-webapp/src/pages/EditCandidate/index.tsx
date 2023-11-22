@@ -245,7 +245,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       candidate.data?.slug, // Slug
-      0, // proposalIdToUpdate
+      candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
       commitMessage,
       { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
     );
