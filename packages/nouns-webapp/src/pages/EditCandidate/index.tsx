@@ -4,7 +4,7 @@ import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsD
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
+import { useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
@@ -41,9 +41,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
+  const [currentBlock, setCurrentBlock] = useState<number>();
   const { account } = useEthers();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const candidate = useCandidateProposal(props.match.params.id, 0, true); // get updatable transaction details
+  const candidate = useCandidateProposal(props.match.params.id, 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -54,6 +55,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
+  const blockNumber = useBlockNumber();
+
+  useEffect(() => {
+    // prevent live-updating the block resulting in undefined block number
+    if (blockNumber && !currentBlock) {
+      setCurrentBlock(blockNumber);
+    }
+  }, [blockNumber, currentBlock]);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -87,6 +96,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [proposalTransactions, totalUSDCPayment],
   );
+
+  console.log('candidate', candidate);
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
