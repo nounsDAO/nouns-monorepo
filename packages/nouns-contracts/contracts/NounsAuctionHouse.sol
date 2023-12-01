@@ -51,7 +51,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
-    // TODO: update duration based on price of last auction(s) vs target price
     // The duration of a single auction
     uint256 public duration;
 
@@ -110,7 +109,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function _updateAuctionDuration() internal whenPaused nonReentrant {
         uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
-        duration = duration / (lastSalePrice / targetPrice);
+        // duration = duration / (lastSalePrice / targetPrice);
+        duration = 60 * 5;
     }
 
     /**
