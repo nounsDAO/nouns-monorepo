@@ -107,7 +107,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the duration for the next auction.
      * @dev This function can only be called when the contract is paused.
      */
-    function _updateAuctionDuration() internal whenPaused nonReentrant {
+    function _updateAuctionDuration() internal nonReentrant {
         uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
         // duration = duration / (lastSalePrice / targetPrice);
         duration = 60 * 10;
