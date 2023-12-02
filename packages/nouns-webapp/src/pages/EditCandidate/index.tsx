@@ -97,8 +97,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     [proposalTransactions, totalUSDCPayment],
   );
 
-  console.log('candidate', candidate);
-
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
     return description.replace(titleRegex, '');
