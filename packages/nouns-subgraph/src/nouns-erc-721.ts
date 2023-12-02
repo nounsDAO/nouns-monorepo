@@ -143,8 +143,6 @@ export function handleTransfer(event: Transfer): void {
     if (fromHolder.tokenBalanceRaw == BIGINT_ZERO && fromHolderPreviousBalance > BIGINT_ZERO) {
       governance.currentTokenHolders = governance.currentTokenHolders.minus(BIGINT_ONE);
       governance.save();
-
-      fromHolder.delegate = null;
     } else if (
       fromHolder.tokenBalanceRaw > BIGINT_ZERO &&
       fromHolderPreviousBalance == BIGINT_ZERO
@@ -198,7 +196,9 @@ export function handleTransfer(event: Transfer): void {
     governance.currentTokenHolders = governance.currentTokenHolders.plus(BIGINT_ONE);
     governance.save();
 
-    toHolder.delegate = toHolder.id;
+    if (!toHolder.delegate) {
+      toHolder.delegate = toHolder.id;
+    }
   }
 
   let noun = Noun.load(transferredNounId);
