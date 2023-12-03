@@ -23,7 +23,8 @@ import {
 } from '../src/nouns-erc-721';
 
 const someAddress = Address.fromString('0x0000000000000000000000000000000000000001');
-const popularDelegate = Address.fromString('0x0000000000000000000000000000000000000002');
+const freshHolderAddress = Address.fromString('0x0000000000000000000000000000000000000002');
+const popularDelegate = Address.fromString('0x0000000000000000000000000000000000000003');
 const BLACKHOLE_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
 const txHash = Bytes.fromI32(11);
@@ -136,7 +137,7 @@ describe('nouns-erc-721', () => {
       assert.fieldEquals('Delegate', popularDelegate.toHexString(), 'delegatedVotes', '0');
     });
 
-    test('transfer events ignore delegate changes', () => {
+    test('transfer events from account with delegation ignore delegate changes', () => {
       const delegateChangeEvent = createDelegateChangedEvent(
         txHash,
         logIndex,
@@ -192,6 +193,32 @@ describe('nouns-erc-721', () => {
         someAddress.toHexString(),
         'delegate',
         popularDelegate.toHexString(),
+      );
+    });
+
+    test('fresh new token holder self-delegates by default', () => {
+      const account = getOrCreateAccount(freshHolderAddress.toHexString());
+      account.save();
+
+      const buyNounEvent = createTransferEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        BLACKHOLE_ADDRESS,
+        freshHolderAddress,
+        BIGINT_ONE,
+      );
+
+      handleTransfer(buyNounEvent);
+
+      assert.fieldEquals('Account', freshHolderAddress.toHexString(), 'tokenBalance', '1');
+
+      assert.fieldEquals(
+        'Account',
+        freshHolderAddress.toHexString(),
+        'delegate',
+        freshHolderAddress.toHexString(),
       );
     });
   });
