@@ -121,6 +121,8 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   candidateSig.encodedProposalHash = event.params.encodedPropHash;
   candidateSig.sigDigest = event.params.sigDigest;
   candidateSig.reason = event.params.reason;
+  candidateSig.createdBlock = event.block.number;
+  candidateSig.createdTimestamp = event.block.timestamp;
 
   candidateSig.save();
 }

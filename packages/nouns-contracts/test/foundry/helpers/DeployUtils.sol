@@ -2,12 +2,12 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
+import { INounsDAOShared } from './INounsDAOShared.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
@@ -109,7 +109,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             address(nounsToken),
             vetoer,
             address(timelock),
-            address(new NounsDAOLogicV1()),
+            address(new NounsDAOLogicV2()),
             VOTING_PERIOD,
             VOTING_DELAY,
             PROPOSAL_THRESHOLD,
@@ -139,10 +139,10 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (NounsDAOLogicV1) {
+    ) internal returns (INounsDAOShared) {
         return
-            NounsDAOLogicV1(
-                payable(
+            INounsDAOShared(
+                address(
                     new NounsDAOProxyV2(
                         timelock,
                         nounsToken,
@@ -162,7 +162,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             );
     }
 
-    function deployDAOV2() internal returns (NounsDAOLogicV1) {
+    function deployDAOV2() internal returns (NounsDAOLogicV2) {
         NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
 
         NounsAuctionHouse auctionLogic = new NounsAuctionHouse();
@@ -182,7 +182,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             new NounsSeeder(),
             IProxyRegistry(address(0))
         );
-        NounsDAOLogicV1 daoProxy = _createDAOV2Proxy(address(timelock), address(nounsToken), makeAddr('vetoer'));
+        INounsDAOShared daoProxy = _createDAOV2Proxy(address(timelock), address(nounsToken), makeAddr('vetoer'));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(daoProxy));
@@ -191,7 +191,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
         nounsToken.transferOwnership(address(timelock));
 
-        return daoProxy;
+        return NounsDAOLogicV2(payable(address(daoProxy)));
     }
 
     function get1967Implementation(address proxy) internal returns (address) {

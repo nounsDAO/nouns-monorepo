@@ -26,7 +26,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -160,8 +160,12 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Use user votes as of proposal snapshot block pulled from subgraph
-  const userVotes = useUserVotesAsOfBlock(proposal?.voteSnapshotBlock);
+  // Use user votes as of the current or proposal snapshot block
+  const currentOrSnapshotBlock = useMemo(() =>
+    Math.min(proposal?.voteSnapshotBlock ?? 0, (currentBlock ? currentBlock - 1 : 0)) || undefined,
+    [proposal, currentBlock]
+  );
+  const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;

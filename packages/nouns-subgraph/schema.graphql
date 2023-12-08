@@ -257,6 +257,9 @@ type Proposal @entity {
   "Total supply when this proposal was created"
   totalSupply: BigInt!
 
+  "Adjusted total supply when this proposal was created"
+  adjustedTotalSupply: BigInt!
+
   "Dynamic quorum param snapshot: min quorum basis points"
   minQuorumVotesBPS: Int!
 
@@ -280,6 +283,30 @@ type Proposal @entity {
 
   "The block at which voting balance snapshots are taken for this proposal"
   voteSnapshotBlock: BigInt!
+
+  "The block number at which this proposal was canceled"
+  canceledBlock: BigInt
+
+  "The timestamp when this proposal was canceled"
+  canceledTimestamp: BigInt
+
+  "The block number at which this proposal was executed"
+  executedBlock: BigInt
+
+  "The timestamp when this proposal was executed"
+  executedTimestamp: BigInt
+
+  "The block number at which this proposal was vetoed"
+  vetoedBlock: BigInt
+
+  "The timestamp when this proposal was vetoed"
+  vetoedTimestamp: BigInt
+
+  "The block number at which this proposal was queued"
+  queuedBlock: BigInt
+
+  "The timestamp when this proposal was queued"
+  queuedTimestamp: BigInt
 }
 
 type ProposalVersion @entity(immutable: true) {
@@ -287,6 +314,9 @@ type ProposalVersion @entity(immutable: true) {
 
   "The proposal that was updated"
   proposal: Proposal!
+
+  "The block number of the update"
+  createdBlock: BigInt!
 
   "The block timestamp of the update"
   createdAt: BigInt!
@@ -343,6 +373,9 @@ type Vote @entity {
 
   "Block number of vote"
   blockNumber: BigInt!
+
+  "The timestamp of the block the vote is in"
+  blockTimestamp: BigInt!
 }
 
 type Governance @entity {
@@ -520,6 +553,12 @@ type ProposalCandidateSignature @entity {
 
   "Whether this signature has been canceled"
   canceled: Boolean!
+
+  "The signature's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The signature's creation block"
+  createdBlock: BigInt!
 }
 
 type ProposalFeedback @entity(immutable: true) {
