@@ -578,17 +578,9 @@ interface NounsTokenLike {
 
     function totalSupply() external view returns (uint256);
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) external;
+    function transferFrom(address from, address to, uint256 tokenId) external;
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) external;
+    function safeTransferFrom(address from, address to, uint256 tokenId) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -602,9 +594,10 @@ interface NounsTokenLike {
 }
 
 interface IForkDAODeployer {
-    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
-        external
-        returns (address treasury, address token);
+    function deployForkDAO(
+        uint256 forkingPeriodEndTimestamp,
+        INounsDAOForkEscrow forkEscrowAddress
+    ) external returns (address treasury, address token);
 
     function tokenImpl() external view returns (address);
 
@@ -618,11 +611,7 @@ interface IForkDAODeployer {
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendETH(address recipient, uint256 ethToSend) external;
 
-    function sendERC20(
-        address recipient,
-        address erc20Token,
-        uint256 tokensToSend
-    ) external;
+    function sendERC20(address recipient, address erc20Token, uint256 tokensToSend) external;
 }
 
 interface INounsDAOForkEscrow {
@@ -718,7 +707,11 @@ contract NounsDAOStorageV3 {
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal
-        uint256 id;
+        uint32 id;
+        /// @notice client id for rewards
+        uint32 clientId;
+        /// @notice currently unused
+        uint192 _gap;
         /// @notice Creator of the proposal
         address proposer;
         /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
@@ -767,8 +760,6 @@ contract NounsDAOStorageV3 {
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
-        // TODO bitpack and natspec
-        uint16 clientId;
         mapping(uint16 clientId => ClientVoteData) voteClients;
     }
 

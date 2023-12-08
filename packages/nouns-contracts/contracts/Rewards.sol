@@ -22,6 +22,7 @@ import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
 contract Rewards {
     uint256 internal constant PROPOSAL_STATE_EXECUTED = 7;
     uint256 public constant REWARD_FOR_PROPOSAL_CREATION = 0.5 ether;
+    uint256 public constant REWARD_FOR_PROPOSAL_BY_SIGS_CREATION = 0.6 ether;
     uint256 public constant REWARD_FOR_AUCTION_BIDDING = 0.4 ether;
     uint256 public constant REWARD_FOR_PROPOSAL_VOTING = 0.3 ether;
     uint256 public constant REWARD_FOR_VOTING_FIRST_PLACE = 0.1 ether;
@@ -38,7 +39,7 @@ contract Rewards {
         address payoutWallet;
     }
 
-    mapping(uint16 clientId => ClientData data) clients;
+    mapping(uint32 clientId => ClientData data) clients;
 
     constructor(address nounsDAO_, address auctionHouse_) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
@@ -46,13 +47,19 @@ contract Rewards {
     }
 
     function rewardForProposalCreation(uint256 proposalId) public {
-        require(uint256(nounsDAO.state(proposalId)) == PROPOSAL_STATE_EXECUTED, 'Proposal must have executed');
+        NounsDAOStorageV3.ProposalCondensed memory proposal = nounsDAO.proposalsV3(proposalId);
+        requireProposalEligibleForRewards(proposal);
 
         require(!proposalsPaid[proposalId], 'Already paid');
         proposalsPaid[proposalId] = true;
 
         uint16 clientId = nounsDAO.proposalClientId(proposalId);
-        payClient(clientId, REWARD_FOR_PROPOSAL_CREATION);
+
+        if (proposal.signers.length > 0) {
+            payClient(clientId, REWARD_FOR_PROPOSAL_BY_SIGS_CREATION);
+        } else {
+            payClient(clientId, REWARD_FOR_PROPOSAL_CREATION);
+        }
     }
 
     function rewardForAuctionBidding(uint256 nounId) public {
@@ -65,12 +72,12 @@ contract Rewards {
     }
 
     function rewardForVoting(uint256 proposalId, uint16 clientId) public {
-        require(uint256(nounsDAO.state(proposalId)) == PROPOSAL_STATE_EXECUTED, 'Proposal must have executed');
+        NounsDAOStorageV3.ProposalCondensed memory proposal = nounsDAO.proposalsV3(proposalId);
+        requireProposalEligibleForRewards(proposal);
 
         require(!votingPaid[proposalId][clientId], 'Already paid');
         votingPaid[proposalId][clientId] = true;
 
-        NounsDAOStorageV3.ProposalCondensed memory proposal = nounsDAO.proposalsV3(proposalId);
         uint256 totalVotes = proposal.forVotes + proposal.againstVotes + proposal.abstainVotes;
         NounsDAOStorageV3.ClientVoteData memory voteData = nounsDAO.proposalVoteClientData(proposalId, clientId);
 
@@ -108,9 +115,7 @@ contract Rewards {
         payClient(clientIds[0], REWARD_FOR_VOTING_FIRST_PLACE);
     }
 
-    // TODO: register client
-    // attack vector, someone could register all the client IDs, or front run this function
-    function registerClient(uint16 clientId, address payoutWallet) public {
+    function registerClient(uint32 clientId, address payoutWallet) public {
         require(clients[clientId].payoutWallet == address(0));
 
         clients[clientId].payoutWallet = payoutWallet;
@@ -120,5 +125,13 @@ contract Rewards {
         address to = clients[clientId].payoutWallet;
         (bool sent, ) = to.call{ value: amount }('');
         require(sent, 'Failed sending ether');
+    }
+
+    function requireProposalEligibleForRewards(NounsDAOStorageV3.ProposalCondensed memory proposal) internal view {
+        require(proposal.forVotes >= proposal.quorumVotes, 'must reach quorum');
+
+        // voting has ended
+        require(block.number > proposal.endBlock, 'voting must end');
+        require(block.number > proposal.updatePeriodEndBlock, 'voting must end');
     }
 }

@@ -172,7 +172,8 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
         checkNoActiveProp(ds, msg.sender);
 
-        uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
+        ds.proposalCount = ds.proposalCount + 1;
+        uint32 proposalId = SafeCast.toUint32(ds.proposalCount);
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             proposalId,
@@ -213,7 +214,7 @@ library NounsDAOV3Proposals {
     }
 
     struct ProposalTemp {
-        uint256 proposalId;
+        uint32 proposalId;
         uint256 adjustedTotalSupply;
         uint256 propThreshold;
     }
@@ -237,7 +238,8 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
 
         ProposalTemp memory temp;
-        temp.proposalId = ds.proposalCount = ds.proposalCount + 1;
+        ds.proposalCount = ds.proposalCount + 1;
+        temp.proposalId = SafeCast.toUint32(ds.proposalCount);
         temp.adjustedTotalSupply = ds.adjustedTotalSupply();
         temp.propThreshold = proposalThreshold(ds, temp.adjustedTotalSupply);
 
@@ -518,11 +520,10 @@ library NounsDAOV3Proposals {
         emit ProposalExecuted(proposal.id);
     }
 
-    function getProposalTimelock(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
-        internal
-        view
-        returns (INounsDAOExecutor)
-    {
+    function getProposalTimelock(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.Proposal storage proposal
+    ) internal view returns (INounsDAOExecutor) {
         if (proposal.executeOnTimelockV1) {
             return ds.timelockV1;
         } else {
@@ -619,11 +620,10 @@ library NounsDAOV3Proposals {
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
-    function state(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
-        public
-        view
-        returns (NounsDAOStorageV3.ProposalState)
-    {
+    function state(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    ) public view returns (NounsDAOStorageV3.ProposalState) {
         return stateInternal(ds, proposalId);
     }
 
@@ -634,11 +634,10 @@ library NounsDAOV3Proposals {
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
-    function stateInternal(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
-        internal
-        view
-        returns (NounsDAOStorageV3.ProposalState)
-    {
+    function stateInternal(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    ) internal view returns (NounsDAOStorageV3.ProposalState) {
         require(ds.proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
 
@@ -675,7 +674,10 @@ library NounsDAOV3Proposals {
      * @return signatures
      * @return calldatas
      */
-    function getActions(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
+    function getActions(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    )
         internal
         view
         returns (
@@ -709,11 +711,10 @@ library NounsDAOV3Proposals {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data
      */
-    function proposals(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
-        external
-        view
-        returns (NounsDAOStorageV2.ProposalCondensed memory)
-    {
+    function proposals(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    ) external view returns (NounsDAOStorageV2.ProposalCondensed memory) {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         return
             NounsDAOStorageV2.ProposalCondensed({
@@ -741,11 +742,10 @@ library NounsDAOV3Proposals {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data
      */
-    function proposalsV3(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
-        external
-        view
-        returns (NounsDAOStorageV3.ProposalCondensed memory)
-    {
+    function proposalsV3(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    ) external view returns (NounsDAOStorageV3.ProposalCondensed memory) {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         return
             NounsDAOStorageV3.ProposalCondensed({
@@ -775,19 +775,17 @@ library NounsDAOV3Proposals {
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function proposalThreshold(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
-        internal
-        view
-        returns (uint256)
-    {
+    function proposalThreshold(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 adjustedTotalSupply
+    ) internal view returns (uint256) {
         return bps2Uint(ds.proposalThresholdBPS, adjustedTotalSupply);
     }
 
-    function isDefeated(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
-        internal
-        view
-        returns (bool)
-    {
+    function isDefeated(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.Proposal storage proposal
+    ) internal view returns (bool) {
         uint256 forVotes = proposal.forVotes;
         return forVotes <= proposal.againstVotes || forVotes < ds.quorumVotes(proposal.id);
     }
@@ -891,7 +889,7 @@ library NounsDAOV3Proposals {
 
     function createNewProposal(
         NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 proposalId,
+        uint32 proposalId,
         uint256 proposalThreshold_,
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs,
@@ -903,6 +901,7 @@ library NounsDAOV3Proposals {
 
         newProposal = ds._proposals[proposalId];
         newProposal.id = proposalId;
+        newProposal.clientId = clientId;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = proposalThreshold_;
         newProposal.targets = txs.targets;
@@ -914,7 +913,6 @@ library NounsDAOV3Proposals {
         newProposal.totalSupply = adjustedTotalSupply;
         newProposal.creationBlock = SafeCast.toUint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
-        newProposal.clientId = clientId;
     }
 
     function emitNewPropEvents(
