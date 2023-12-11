@@ -87,13 +87,18 @@ interface INounsAuctionHouseV2 {
 
     function auction() external view returns (AuctionV2 memory);
 
-    function getSettlements(uint256 auctionCount) external view returns (Settlement[] memory settlements);
+    function getSettlements(
+        uint256 auctionCount,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements);
 
     function getPrices(uint256 auctionCount) external view returns (uint256[] memory prices);
 
-    function getSettlements(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements);
-
-    function getPrices(uint256 startId, uint256 endId) external view returns (uint256[] memory prices);
+    function getSettlements(
+        uint256 startId,
+        uint256 endId,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements);
 
     function warmUpSettlementState(uint256[] calldata nounIds) external;
 }

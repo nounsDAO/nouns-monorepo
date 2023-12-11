@@ -91,7 +91,7 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
     }
 
     function test_getSettlements_90() public {
-        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.getSettlements(90);
+        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.getSettlements(90, false);
         assertEq(prices.length, 90);
     }
 
@@ -100,14 +100,9 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
         assertEq(prices.length, 90);
     }
 
-    function test_getSettlements_range_90() public {
-        INounsAuctionHouseV2.Settlement[] memory prices = auctionHouseV2.getSettlements(1, 100);
-        assertEq(prices.length, 90);
-    }
-
-    function test_getPrices_range_90() public {
-        uint256[] memory prices = auctionHouseV2.getPrices(1, 100);
-        assertEq(prices.length, 90);
+    function test_getSettlements_range_100() public {
+        INounsAuctionHouseV2.Settlement[] memory settlements = auctionHouseV2.getSettlements(0, 100, false);
+        assertEq(settlements.length, 100);
     }
 
     function test_warmUp() public {

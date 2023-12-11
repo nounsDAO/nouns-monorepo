@@ -69,11 +69,7 @@ contract NounsAuctionHouseV2 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    constructor(
-        INounsToken _nouns,
-        address _weth,
-        uint256 _duration
-    ) {
+    constructor(INounsToken _nouns, address _weth, uint256 _duration) {
         nouns = _nouns;
         weth = _weth;
         duration = _duration;
@@ -347,13 +343,17 @@ contract NounsAuctionHouseV2 is
 
     /**
      * @notice Get past auction settlements.
-     * @dev Returns settlements in reverse order, meaning settlements[0] will be the most recent auction price.
-     * Skips auctions where there was no winner, i.e. no bids.
+     * @dev Returns up to `auctionCount` settlements in reverse order, meaning settlements[0] will be the most recent auction price.
+     * Includes auction with no bids (blockTimestamp will be > 1)
      * @param auctionCount The number of price observations to get.
+     * @param skipEmptyValues if true, skips nounder reward ids and ids with missing data
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function getSettlements(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
+    function getSettlements(
+        uint256 auctionCount,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements) {
         uint256 latestNounId = auctionStorage.nounId;
         if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
@@ -361,12 +361,13 @@ contract NounsAuctionHouseV2 is
 
         settlements = new Settlement[](auctionCount);
         uint256 actualCount = 0;
-        while (actualCount < auctionCount && latestNounId > 0) {
-            SettlementState memory settlementState = settlementHistory[latestNounId];
-            // Skip Nouner reward Nouns, they have no price
-            // Also skips IDs with no price data
-            if (settlementState.winner == address(0)) {
-                --latestNounId;
+
+        SettlementState memory settlementState;
+        for (uint256 id = latestNounId; actualCount < auctionCount; --id) {
+            settlementState = settlementHistory[id];
+
+            if (skipEmptyValues && settlementState.blockTimestamp <= 1) {
+                if (id == 0) break;
                 continue;
             }
 
@@ -374,10 +375,11 @@ contract NounsAuctionHouseV2 is
                 blockTimestamp: settlementState.blockTimestamp,
                 amount: uint64PriceToUint256(settlementState.amount),
                 winner: settlementState.winner,
-                nounId: latestNounId
+                nounId: id
             });
             ++actualCount;
-            --latestNounId;
+
+            if (id == 0) break;
         }
 
         if (auctionCount > actualCount) {
@@ -392,6 +394,9 @@ contract NounsAuctionHouseV2 is
      * @notice Get past auction prices.
      * @dev Returns prices in reverse order, meaning prices[0] will be the most recent auction price.
      * Skips auctions where there was no winner, i.e. no bids.
+     * Skips nounder rewards noun ids.
+     * Reverts if getting a empty data for an auction that happened, e.g. historic data not filled
+     * Reverts if there's not enough auction data, i.e. reached noun id 0
      * @param auctionCount The number of price observations to get.
      * @return prices An array of uint256 prices.
      */
@@ -403,26 +408,20 @@ contract NounsAuctionHouseV2 is
 
         prices = new uint256[](auctionCount);
         uint256 actualCount = 0;
-        while (actualCount < auctionCount && latestNounId > 0) {
-            SettlementState memory settlementState = settlementHistory[latestNounId];
-            // Skip Nouner reward Nouns, they have no price
-            // Also skips IDs with no price data
-            if (settlementState.winner == address(0)) {
-                --latestNounId;
-                continue;
-            }
+
+        SettlementState memory settlementState;
+        for (uint256 id = latestNounId; id > 0 && actualCount < auctionCount; --id) {
+            if (id <= 1820 && id % 10 == 0) continue; // Skip Nounder reward nouns
+
+            settlementState = settlementHistory[id];
+            require(settlementState.blockTimestamp > 1, 'Missing data');
+            if (settlementState.winner == address(0)) continue; // Skip auctions with no bids
 
             prices[actualCount] = uint64PriceToUint256(settlementState.amount);
             ++actualCount;
-            --latestNounId;
         }
 
-        if (auctionCount > actualCount) {
-            // this assembly trims the observations array, getting rid of unused cells
-            assembly {
-                mstore(prices, actualCount)
-            }
-        }
+        require(auctionCount == actualCount, 'Not enough history');
     }
 
     /**
@@ -431,70 +430,37 @@ contract NounsAuctionHouseV2 is
      * Skips auctions where there was no winner, i.e. no bids.
      * @param startId the first Noun ID to get prices for.
      * @param endId end Noun ID (up to, but not including).
+     * @param skipEmptyValues if true, skips nounder reward ids and ids with missing data
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function getSettlements(uint256 startId, uint256 endId) external view returns (Settlement[] memory settlements) {
+    function getSettlements(
+        uint256 startId,
+        uint256 endId,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements) {
         settlements = new Settlement[](endId - startId);
         uint256 actualCount = 0;
-        uint256 currentId = startId;
-        while (currentId < endId) {
-            SettlementState memory settlementState = settlementHistory[currentId];
-            // Skip Nouner reward Nouns, they have no price
-            // Also skips IDs with no price data
-            if (settlementState.winner == address(0)) {
-                ++currentId;
-                continue;
-            }
+
+        SettlementState memory settlementState;
+        for (uint256 id = startId; id < endId; ++id) {
+            settlementState = settlementHistory[id];
+
+            if (skipEmptyValues && settlementState.blockTimestamp <= 1) continue;
 
             settlements[actualCount] = Settlement({
                 blockTimestamp: settlementState.blockTimestamp,
                 amount: uint64PriceToUint256(settlementState.amount),
                 winner: settlementState.winner,
-                nounId: currentId
+                nounId: id
             });
             ++actualCount;
-            ++currentId;
         }
 
         if (settlements.length > actualCount) {
             // this assembly trims the observations array, getting rid of unused cells
             assembly {
                 mstore(settlements, actualCount)
-            }
-        }
-    }
-
-    /**
-     * @notice Get a range of past auction prices.
-     * @dev Returns prices in chronological order, as opposed to `getPrices(count)` which returns prices in reverse order.
-     * Skips auctions where there was no winner, i.e. no bids.
-     * @param startId the first Noun ID to get prices for.
-     * @param endId end Noun ID (up to, but not including).
-     * @return prices An array of uint256 prices.
-     */
-    function getPrices(uint256 startId, uint256 endId) external view returns (uint256[] memory prices) {
-        prices = new uint256[](endId - startId);
-        uint256 actualCount = 0;
-        uint256 currentId = startId;
-        while (currentId < endId) {
-            SettlementState memory settlementState = settlementHistory[currentId];
-            // Skip Nouner reward Nouns, they have no price
-            // Also skips IDs with no price data
-            if (settlementState.winner == address(0)) {
-                ++currentId;
-                continue;
-            }
-
-            prices[actualCount] = uint64PriceToUint256(settlementState.amount);
-            ++actualCount;
-            ++currentId;
-        }
-
-        if (prices.length > actualCount) {
-            // this assembly trims the observations array, getting rid of unused cells
-            assembly {
-                mstore(prices, actualCount)
             }
         }
     }
