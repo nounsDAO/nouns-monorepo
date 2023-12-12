@@ -11,6 +11,7 @@ import {
 import { ProposalCandidateContent, ProposalCandidateVersion } from './types/schema';
 import {
   candidateID,
+  getCandidateIndex,
   getOrCreateCandidateFeedback,
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
@@ -33,6 +34,7 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
   candidate.lastUpdatedTimestamp = event.block.timestamp;
   candidate.lastUpdatedBlock = event.block.number;
   candidate.canceled = false;
+  candidate.number = getCandidateIndex();
 
   const version = captureProposalCandidateVersion(
     event.transaction.hash.toHexString(),

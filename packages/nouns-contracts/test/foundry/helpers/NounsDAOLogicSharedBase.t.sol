@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
+import { INounsDAOShared } from './INounsDAOShared.sol';
 import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
@@ -16,7 +16,7 @@ import { INounsTokenForkLike } from '../../../contracts/governance/fork/newdao/g
 import { Utils } from './Utils.sol';
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
-    NounsDAOLogicV1 daoProxy;
+    INounsDAOShared daoProxy;
     NounsToken nounsToken;
     NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
@@ -47,7 +47,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal virtual returns (NounsDAOLogicV1);
+    ) internal virtual returns (INounsDAOShared);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -112,15 +112,15 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         return NounsDAOLogicV2(payable(address(daoProxy)));
     }
 
-    function deployForkDAOProxy() internal returns (NounsDAOLogicV1) {
+    function deployForkDAOProxy() internal returns (INounsDAOShared) {
         (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
         timelock = NounsDAOExecutor(payable(treasuryAddress));
         nounsToken = NounsToken(tokenAddress);
         minter = nounsToken.minter();
 
-        NounsDAOLogicV1 dao = NounsDAOLogicV1(daoAddress);
+        INounsDAOShared dao = INounsDAOShared(daoAddress);
 
-        vm.startPrank(address(dao.timelock()));
+        vm.startPrank(dao.timelock());
         dao._setVotingPeriod(votingPeriod);
         dao._setVotingDelay(votingDelay);
         dao._setProposalThresholdBPS(proposalThresholdBPS);
@@ -129,6 +129,6 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
 
         vm.warp(INounsTokenForkLike(tokenAddress).forkingPeriodEndTimestamp());
 
-        return NounsDAOLogicV1(daoAddress);
+        return INounsDAOShared(daoAddress);
     }
 }

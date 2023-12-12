@@ -2,28 +2,21 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { parseUnits } from 'ethers/lib/utils';
-import {
-  NounsDAOLogicV2,
-  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
-} from '../../../../typechain';
-import { getSigners, TestSigners } from '../../../utils';
+import { NounsDAOLogicV3 } from '../../typechain';
+import { deployGovernorV3, getSigners, TestSigners } from '../utils';
 
 chai.use(solidity);
 const { expect } = chai;
 
 let deployer: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDAOLogicV2;
-
-async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDAOLogicV2> {
-  return await new NounsDaoLogicV2Factory(deployer).deploy();
-}
+let gov: NounsDAOLogicV3;
 
 describe('Dynamic Quorum', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
-    gov = await deployGovernorV2(deployer);
+    gov = await deployGovernorV3(deployer);
   });
 
   it('coefficient set to zero', async () => {
