@@ -344,7 +344,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get past auction settlements.
      * @dev Returns up to `auctionCount` settlements in reverse order, meaning settlements[0] will be the most recent auction price.
-     * Includes auction with no bids (blockTimestamp will be > 1)
+     * Includes auctions with no bids (blockTimestamp will be > 1)
      * @param auctionCount The number of price observations to get.
      * @param skipEmptyValues if true, skips nounder reward ids and ids with missing data
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
@@ -427,7 +427,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get a range of past auction settlements.
      * @dev Returns prices in chronological order, as opposed to `getSettlements(count)` which returns prices in reverse order.
-     * Skips auctions where there was no winner, i.e. no bids.
+     * Includes auctions with no bids (blockTimestamp will be > 1)
      * @param startId the first Noun ID to get prices for.
      * @param endId end Noun ID (up to, but not including).
      * @param skipEmptyValues if true, skips nounder reward ids and ids with missing data
