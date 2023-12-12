@@ -760,7 +760,7 @@ contract NounsDAOStorageV3 {
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
-        mapping(uint16 clientId => ClientVoteData) voteClients;
+        mapping(uint32 clientId => ClientVoteData) voteClients;
     }
 
     struct ClientVoteData {

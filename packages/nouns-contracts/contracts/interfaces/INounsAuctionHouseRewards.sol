@@ -17,12 +17,10 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsAuctionHouse } from './INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from './INounsAuctionHouseV2.sol';
 
-interface INounsAuctionHouseRewards is INounsAuctionHouse {
+interface INounsAuctionHouseRewards is INounsAuctionHouseV2 {
     function createBid(uint256 nounId, uint16 clientId) external payable;
-
-    function auction() external returns (Auction memory);
 
     function biddingClient(uint256 nounId) external returns (uint16 clientId);
 }

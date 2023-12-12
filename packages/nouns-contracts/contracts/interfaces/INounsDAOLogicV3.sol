@@ -224,7 +224,9 @@ interface INounsDAOLogicV3 {
      * @return signatures
      * @return calldatas
      */
-    function getActions(uint256 proposalId)
+    function getActions(
+        uint256 proposalId
+    )
         external
         view
         returns (
@@ -261,10 +263,10 @@ interface INounsDAOLogicV3 {
 
     function proposalClientId(uint256 proposalId) external view returns (uint16);
 
-    function proposalVoteClientData(uint256 proposalId, uint16 clientId)
-        external
-        view
-        returns (NounsDAOStorageV3.ClientVoteData memory);
+    function proposalVoteClientData(
+        uint256 proposalId,
+        uint32 clientId
+    ) external view returns (NounsDAOStorageV3.ClientVoteData memory);
 
     /**
      * @notice Current proposal threshold using Noun Total Supply
@@ -445,11 +447,7 @@ interface INounsDAOLogicV3 {
      * @param newTimelockV1 the new timelockV1 contract
      * @param newAdmin the new admin address
      */
-    function _setTimelocksAndAdmin(
-        address newTimelock,
-        address newTimelockV1,
-        address newAdmin
-    ) external;
+    function _setTimelocksAndAdmin(address newTimelock, address newTimelockV1, address newAdmin) external;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -487,10 +485,9 @@ interface INounsDAOLogicV3 {
      * @param blockNumber_ the block number to get the params at
      * @return The dynamic quorum parameters that were set at the given block number
      */
-    function getDynamicQuorumParamsAt(uint256 blockNumber_)
-        external
-        view
-        returns (NounsDAOStorageV3.DynamicQuorumParams memory);
+    function getDynamicQuorumParamsAt(
+        uint256 blockNumber_
+    ) external view returns (NounsDAOStorageV3.DynamicQuorumParams memory);
 
     /**
      * @notice Current min quorum votes using Nouns adjusted total supply
@@ -510,10 +507,9 @@ interface INounsDAOLogicV3 {
     /**
      * @notice Get a quorum params checkpoint by its index
      */
-    function quorumParamsCheckpoints(uint256 index)
-        external
-        view
-        returns (NounsDAOStorageV3.DynamicQuorumParamsCheckpoint memory);
+    function quorumParamsCheckpoints(
+        uint256 index
+    ) external view returns (NounsDAOStorageV3.DynamicQuorumParamsCheckpoint memory);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -528,11 +524,7 @@ interface INounsDAOLogicV3 {
      * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
      * @param reason the reason for want to fork. This will only be used to emit event.
      */
-    function escrowToFork(
-        uint256[] calldata tokenIds,
-        uint256[] calldata proposalIds,
-        string calldata reason
-    ) external;
+    function escrowToFork(uint256[] calldata tokenIds, uint256[] calldata proposalIds, string calldata reason) external;
 
     /**
      * @notice Withdraw Nouns from the fork escrow. Only possible if the fork has not been executed.
@@ -556,11 +548,7 @@ interface INounsDAOLogicV3 {
      * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
      * @param reason the reason for want to fork. This will only be used to emit event.
      */
-    function joinFork(
-        uint256[] calldata tokenIds,
-        uint256[] calldata proposalIds,
-        string calldata reason
-    ) external;
+    function joinFork(uint256[] calldata tokenIds, uint256[] calldata proposalIds, string calldata reason) external;
 
     /**
      * @notice Withdraws nouns from the fork escrow to the treasury after the fork has been executed
@@ -613,11 +601,7 @@ interface INounsDAOLogicV3 {
      */
     function castVote(uint256 proposalId, uint8 support) external;
 
-    function castRefundableVote(
-        uint256 proposalId,
-        uint8 support,
-        uint16 clientId
-    ) external;
+    function castRefundableVote(uint256 proposalId, uint8 support, uint16 clientId) external;
 
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
@@ -649,11 +633,7 @@ interface INounsDAOLogicV3 {
      * @param reason The reason given for the vote by the voter
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
-    function castRefundableVoteWithReason(
-        uint256 proposalId,
-        uint8 support,
-        string calldata reason
-    ) external;
+    function castRefundableVoteWithReason(uint256 proposalId, uint8 support, string calldata reason) external;
 
     /**
      * @notice Cast a vote for a proposal with a reason
@@ -661,23 +641,13 @@ interface INounsDAOLogicV3 {
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      * @param reason The reason given for the vote by the voter
      */
-    function castVoteWithReason(
-        uint256 proposalId,
-        uint8 support,
-        string calldata reason
-    ) external;
+    function castVoteWithReason(uint256 proposalId, uint8 support, string calldata reason) external;
 
     /**
      * @notice Cast a vote for a proposal by signature
      * @dev External function that accepts EIP-712 signatures for voting on proposals.
      */
-    function castVoteBySig(
-        uint256 proposalId,
-        uint8 support,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external;
+    function castVoteBySig(uint256 proposalId, uint8 support, uint8 v, bytes32 r, bytes32 s) external;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
