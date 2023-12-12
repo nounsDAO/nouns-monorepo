@@ -664,8 +664,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /**
      * All other calls are called via NounsDAOV3Admin
      */
-    fallback() external payable {
-        Address.functionDelegateCall(address(NounsDAOV3Admin), msg.data);
+    fallback(bytes calldata) external payable returns (bytes memory) {
+        return Address.functionDelegateCall(address(NounsDAOV3Admin), msg.data);
     }
 
     /**
