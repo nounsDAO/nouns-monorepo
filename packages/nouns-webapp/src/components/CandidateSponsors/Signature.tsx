@@ -23,7 +23,6 @@ type CandidateSignatureProps = {
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
   setIsAccountSigner: Function;
-  setIsCancelOverlayVisible: Function;
   handleSignatureRemoved: Function;
 };
 
@@ -36,12 +35,12 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     show: boolean;
   }>();
   dayjs.extend(relativeTime);
-  const expiration = dayjs(dayjs.unix(props.expirationTimestamp / 1000)).fromNow();
+  const expiration = dayjs(dayjs.unix(props.expirationTimestamp)).fromNow();
   const { cancelSig, cancelSigState } = useCancelSignature();
   async function cancel() {
     await cancelSig(props.sig);
   }
-  const timestampNow = Date.now();
+  const timestampNow = Math.floor(Date.now() / 1000); // in seconds
 
   useEffect(() => {
     switch (cancelSigState.status) {
@@ -108,7 +107,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             </p>
             <p className={classes.expiration}>
               {(props.isUpdateToProposal && !props.isParentProposalUpdatable) ||
-              props.expirationTimestamp < timestampNow
+                props.expirationTimestamp < timestampNow
                 ? 'Expired'
                 : 'Expires'}{' '}
               {expiration}
@@ -129,7 +128,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => {}}>
+              <button className={classes.readMore} onClick={() => { }}>
                 more
               </button>
             )}
@@ -144,7 +143,6 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 onClick={() => {
                   cancel();
                   setIsCancelSignaturePending(true);
-                  props.setIsCancelOverlayVisible(true);
                 }}
               >
                 <Trans>Remove sponsorship</Trans>
@@ -161,31 +159,29 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           </p>
         )}
       </div>
-
       {cancelStatusOverlay?.show && (
         <div
           className={clsx(
             classes.cancelStatusOverlay,
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
-              classes.errorMessage,
+            classes.errorMessage,
             cancelSigState.status === 'Success' && classes.successMessage,
           )}
         >
           {(cancelSigState.status === 'Exception' ||
             cancelSigState.status === 'Fail' ||
             cancelSigState.status === 'Success') && (
-            <button
-              className={classes.closeButton}
-              onClick={() => {
-                props.handleRefetchCandidateData();
-                setCancelStatusOverlay(undefined);
-                props.setIsCancelOverlayVisible(false);
-                cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
-              }}
-            >
-              &times;
-            </button>
-          )}
+              <button
+                className={classes.closeButton}
+                onClick={() => {
+                  props.handleRefetchCandidateData();
+                  setCancelStatusOverlay(undefined);
+                  cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
+                }}
+              >
+                &times;
+              </button>
+            )}
           <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
           <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
         </div>

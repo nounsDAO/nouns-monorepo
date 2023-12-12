@@ -408,6 +408,9 @@ type Governance @entity {
 
   "The proposal ID from which vote snapshots are taken at vote start instead of proposal creation"
   voteSnapshotBlockSwitchProposalId: BigInt!
+
+  "Number of candidates created"
+  candidates: BigInt!
 }
 
 type DynamicQuorumParams @entity {
@@ -466,6 +469,9 @@ type ProposalCandidate @entity {
 
   "This candidate's versions"
   versions: [ProposalCandidateVersion!]! @derivedFrom(field: "proposal")
+
+  "This candidate's number"
+  number: BigInt!
 }
 
 type ProposalCandidateVersion @entity(immutable: true) {

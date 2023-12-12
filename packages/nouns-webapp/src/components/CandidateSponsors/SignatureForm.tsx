@@ -265,12 +265,13 @@ function SignatureForm(props: Props) {
   useEffect(() => {
     if (expirationDate === undefined) return;
     const today = new Date();
-    if (+dayjs(expirationDate) > +dayjs(today)) {
+    if (+dayjs(expirationDate) > +dayjs(today) / 1000) {
       setDateErrorMessage('');
     } else {
       setDateErrorMessage('Date must be in the future');
     }
   }, [expirationDate]);
+
   return (
     <div className={classes.formWrapper}>
       <>
@@ -287,8 +288,7 @@ function SignatureForm(props: Props) {
           <input
             type="date"
             min={new Date().toISOString().split('T')[0]} // only future dates
-            onChange={e => setExpirationDate(+dayjs(e.target.value))}
-            // onChange={e => handleDateChange(e)}
+            onChange={e => setExpirationDate(+dayjs(e.target.value).unix())}
             disabled={isWaiting || isLoading}
           />
           {dateErrorMessage && <p className={classes.dateErrorMessage}>{dateErrorMessage}</p>}
