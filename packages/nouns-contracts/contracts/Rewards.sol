@@ -130,7 +130,7 @@ contract Rewards {
                     pid,
                     votingClientIds[i]
                 );
-                clientBalances[clientId] += voteData.votes * t.rewardPerVote;
+                clientBalances[votingClientIds[i]] += voteData.votes * t.rewardPerVote;
                 votesInProposal += voteData.votes;
             }
             require(votesInProposal == proposal.forVotes + proposal.againstVotes + proposal.abstainVotes);
