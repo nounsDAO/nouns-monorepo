@@ -147,7 +147,7 @@ const getAddresses = (): ContractAddresses => {
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.APP_ENV === 'production'
 
 const config = {
   app: app[CHAIN_ID],
