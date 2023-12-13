@@ -147,9 +147,12 @@ const getAddresses = (): ContractAddresses => {
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
+  isProduction,
   featureToggles: {
     daoGteV3: false,
     proposeOnV1: true,

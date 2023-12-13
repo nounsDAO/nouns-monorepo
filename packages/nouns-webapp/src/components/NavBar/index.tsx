@@ -95,11 +95,13 @@ const NavBar = () => {
     </NavDropdown>
   );
 
+  const backgroundColor = config.isProduction ? `${useStateBg ? stateBgColor : 'white'}` : 'orange'
+
   return (
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+        style={{ backgroundColor }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >
