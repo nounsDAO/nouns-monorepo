@@ -81,6 +81,12 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
   const isProposedBySigners = proposal?.signers && proposal?.signers?.length > 0 ? true : false;
 
+  const candidateUpdateSlug = (slug: string) => {
+    // add random string to slug to make it unique
+    const randomString = Math.random().toString(36).substring(7);
+    return `${slug}-update-${randomString}`;
+  }
+
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
@@ -158,19 +164,24 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
-      setSlug(
-        title
-          .toLowerCase()
-          .replace(/ /g, '-')
-          .replace(/[^\w-]+/g, ''),
-      );
+      if (isProposedBySigners && title === proposal?.title) {
+        // if title is edited, then reset to original, make sure the unique update slug gets passed
+        setSlug(candidateUpdateSlug(title));
+      } else {
+        setSlug(
+          title
+            .toLowerCase()
+            .replace(/ /g, '-')
+            .replace(/[^\w-]+/g, ''),
+        );
+      }
       if (title === proposal?.title) {
         setIsTitleEdited(false);
       } else {
         setIsTitleEdited(true);
       }
     },
-    [setTitleValue, setSlug, proposal?.title],
+    [setTitleValue, setSlug, proposal?.title, isProposedBySigners],
   );
 
   const handleBodyInput = useCallback(
@@ -358,6 +369,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
+
+
   // set initial values on page load
   useEffect(() => {
     if (
@@ -377,13 +390,14 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           signature: txn.functionSig ?? '',
         };
       });
+      const slugValue = proposal.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
       setTitleValue(proposal.title);
-      setSlug(
-        proposal.title
-          .toLowerCase()
-          .replace(/ /g, '-')
-          .replace(/[^\w-]+/g, ''),
-      );
+      if (isProposedBySigners) {
+        // new candidate will need to be created, which needs a unique slug, so add a random string to the slug here
+        setSlug(candidateUpdateSlug(slugValue));
+      } else {
+        setSlug(slugValue);
+      }
       setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
@@ -391,9 +405,15 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       setOriginalProposalTransactions(proposal.details);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [proposal]);
 
   const handleCreateNewCandidate = async () => {
+    if (!proposalTransactions?.length ||
+      !titleValue ||
+      !bodyValue ||
+      !slug ||
+      !props.match.params.id
+    ) return;
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
       proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -401,7 +421,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
-      props.match.params.id, // proposalIdToUpdate - use 0 for new proposals
+      props.match.params.id, // use 0 for new proposals
       { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
@@ -449,6 +469,18 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProposalCandidateState, setModal]);
 
+  const isFormInvalid = () => {
+    if (
+      !(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ||
+      !proposalTransactions.length ||
+      titleValue === '' ||
+      bodyValue === '' ||
+      slug === ''
+    ) {
+      return true;
+    }
+    return false;
+  }
   if (!isProposer()) {
     return null;
   }
@@ -535,7 +567,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={isProposer() ? true : hasEnoughVote}
           isFormInvalid={
-            isProposalEdited || isTransactionsEdited() || isDescriptionEdited() ? false : true
+            isFormInvalid()
           }
           handleCreateProposal={
             isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal

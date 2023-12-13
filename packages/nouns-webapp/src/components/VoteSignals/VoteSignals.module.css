@@ -100,13 +100,14 @@
 .voter strong {
   font-size: 16px;
   font-weight: bold;
-  padding-top: 6px;
+  line-height: 1.1;
 }
 
 .voter span {
   font-size: 13px;
   color: var(--brand-gray-light-text);
   font-weight: bold;
+  line-height: 1.1;
 }
 
 .avatar {

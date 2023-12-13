@@ -9,17 +9,17 @@ import {
   deployGovernorV1,
   blockNumber,
   advanceBlocks,
-  deployGovernorV2,
   populateDescriptorV2,
-} from '../../../utils';
+  deployGovernorV3AndSetImpl,
+} from '../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
-} from '../../../../typechain';
+  NounsDAOLogicV3,
+} from '../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
-import { DynamicQuorumParams } from '../../../types';
+import { DynamicQuorumParams } from '../types';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -29,12 +29,12 @@ let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDAOLogicV2;
+let gov: NounsDAOLogicV3;
 let snapshotId: number;
 
 const V1_QUORUM_BPS = 201;
 
-async function setupWithV2() {
+async function setup() {
   token = await deployNounsToken(signers.deployer);
 
   await populateDescriptorV2(
@@ -48,16 +48,17 @@ async function setupWithV2() {
     token.address,
     V1_QUORUM_BPS,
   );
-  gov = await deployGovernorV2(deployer, govProxyAddress);
+
+  gov = await deployGovernorV3AndSetImpl(deployer, govProxyAddress);
 }
 
-describe('NounsDAOV2#_setDynamicQuorumParams', () => {
+describe('NounsDAO#_setDynamicQuorumParams', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
     account0 = signers.account0;
 
-    await setupWithV2();
+    await setup();
   });
 
   beforeEach(async () => {

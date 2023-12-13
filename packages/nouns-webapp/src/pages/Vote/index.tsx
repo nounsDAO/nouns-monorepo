@@ -13,6 +13,7 @@ import {
   useProposal,
   useProposalVersions,
   useQueueProposal,
+  useIsForkActive
 } from '../../wrappers/nounsDao';
 import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
@@ -25,7 +26,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -107,7 +108,8 @@ const VotePage = ({
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
-  // const [willHaveObjectionPeriod, setWillHaveObjectionPeriod] = useState<boolean>(false);
+  const [forkPeriodMessage, setForkPeriodMessage] = useState<ReactNode>(<></>);
+  const [isExecutable, setIsExecutable] = useState<boolean>(false);
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
   const activeLocale = useActiveLocale();
@@ -127,6 +129,8 @@ const VotePage = ({
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
   const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const forkActiveState = useIsForkActive();
+  const [isForkActive, setIsForkActive] = useState<boolean>(false);
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
@@ -156,8 +160,12 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Use user votes as of proposal snapshot block pulled from subgraph
-  const userVotes = useUserVotesAsOfBlock(proposal?.voteSnapshotBlock);
+  // Use user votes as of the current or proposal snapshot block
+  const currentOrSnapshotBlock = useMemo(() =>
+    Math.min(proposal?.voteSnapshotBlock ?? 0, (currentBlock ? currentBlock - 1 : 0)) || undefined,
+    [proposal, currentBlock]
+  );
+  const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
@@ -392,6 +400,12 @@ const VotePage = ({
     [cancelProposalState, onTransactionStateChange, setModal],
   );
 
+  useEffect(() => {
+    if (forkActiveState.data) {
+      setIsForkActive(forkActiveState.data);
+    }
+  }, [forkActiveState.data, setIsForkActive]);
+
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const {
     loading,
@@ -449,6 +463,16 @@ const VotePage = ({
     }
   }, [currentBlock, proposal?.status, proposal, isDaoGteV3]);
 
+
+  useEffect(() => {
+    if (proposal?.status === ProposalState.QUEUED && isForkActive) {
+      setForkPeriodMessage(<p><Trans>Proposals cannot be executed during a forking period</Trans></p>);
+      setIsExecutable(false);
+    } else if (proposal?.status === ProposalState.QUEUED && !isForkActive) {
+      setIsExecutable(true);
+    }
+  }, [proposal?.status, isForkActive, setForkPeriodMessage, setIsExecutable]);
+
   if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (
       <div className={classes.spinner}>
@@ -503,7 +527,7 @@ const VotePage = ({
       <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
-            .filter(txn => txn?.functionSig.includes('createStream'))
+            .filter(txn => txn?.functionSig?.includes('createStream'))
             .map(txn => {
               const parsedCallData = parseStreamCreationCallData(txn.callData);
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
@@ -584,18 +608,21 @@ const VotePage = ({
                   <div className="d-flex gap-3">
                     <>
                       {isAwaitingStateChange() && (
-                        <Button
-                          onClick={moveStateAction}
-                          disabled={isQueuePending || isExecutePending}
-                          variant="dark"
-                          className={clsx(classes.transitionStateButton, classes.button)}
-                        >
-                          {isQueuePending || isExecutePending ? (
-                            <Spinner animation="border" />
-                          ) : (
-                            <>{moveStateButtonAction} Proposal ⌐◧-◧</>
-                          )}
-                        </Button>
+                        <div className={clsx(classes.awaitingStateChangeButton)}>
+                          <Button
+                            onClick={moveStateAction}
+                            disabled={isQueuePending || isExecutePending || !isExecutable}
+                            variant="dark"
+                            className={clsx(classes.transitionStateButton, classes.button)}
+                          >
+                            {isQueuePending || isExecutePending ? (
+                              <Spinner animation="border" />
+                            ) : (
+                              <>{moveStateButtonAction} Proposal ⌐◧-◧</>
+                            )}
+                          </Button>
+                          {forkPeriodMessage}
+                        </div>
                       )}
 
                       {isAwaitingDestructiveStateChange() && (

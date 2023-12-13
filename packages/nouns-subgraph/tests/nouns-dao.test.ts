@@ -7,6 +7,8 @@ import {
   afterAll,
   beforeEach,
   afterEach,
+  createMockedFunction,
+  newMockEvent,
 } from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
@@ -23,6 +25,10 @@ import {
   handleProposalTransactionsUpdated,
   handleEscrowedToFork,
   handleWithdrawFromForkEscrow,
+  handleProposalCanceled,
+  handleProposalVetoed,
+  handleProposalExecuted,
+  handleProposalQueued,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -39,13 +45,21 @@ import {
   createProposalTransactionsUpdatedEvent,
   createEscrowedToForkEvent,
   createWithdrawFromForkEscrowEvent,
+  createProposalCanceledEvent,
+  createProposalVetoedEvent,
+  createProposalExecutedEvent,
+  createProposalQueuedEvent,
 } from './utils';
 import {
   BIGINT_10K,
   BIGINT_ONE,
   BIGINT_ZERO,
   STATUS_ACTIVE,
+  STATUS_CANCELLED,
+  STATUS_EXECUTED,
   STATUS_PENDING,
+  STATUS_QUEUED,
+  STATUS_VETOED,
 } from '../src/utils/constants';
 import {
   getOrCreateDynamicQuorumParams,
@@ -88,6 +102,12 @@ describe('nouns-dao', () => {
         delegate.delegatedVotes = BIGINT_ONE;
         delegate.delegatedVotesRaw = BIGINT_ONE;
         delegate.save();
+
+        createMockedFunction(
+          newMockEvent().address,
+          'adjustedTotalSupply',
+          'adjustedTotalSupply():(uint256)',
+        ).returns([ethereum.Value.fromI32(0)]);
       });
 
       afterAll(() => {
@@ -726,7 +746,7 @@ describe('forking', () => {
 
       const fork = getOrCreateFork(forkId);
       assert.i32Equals(fork.tokensInEscrowCount, 2);
-      assert.i32Equals(fork.escrowedNouns.length, 2);
+      assert.i32Equals(fork.escrowedNouns.load().length, 2);
 
       let escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
       let escrowDespositId = txHash.toHexString().concat('-0');
@@ -746,5 +766,96 @@ describe('forking', () => {
       assert.bigIntEquals(escrowDeposit.proposalIDs[0], BigInt.fromI32(1234));
       assert.stringEquals(escrowDeposit.reason!, 'some reason');
     });
+  });
+});
+
+describe('Proposal status changes', () => {
+  beforeEach(() => {
+    const proposalEvent = new ParsedProposalV3();
+    proposalEvent.id = proposalId.toString();
+    proposalEvent.proposer = proposerWithDelegate.toHexString();
+    proposalEvent.targets = changetype<Bytes[]>([Address.fromString(SOME_ADDRESS)]);
+    proposalEvent.values = [BigInt.fromI32(123)];
+    proposalEvent.signatures = ['some signature'];
+    proposalEvent.signers = [proposerWithDelegate.toHexString()];
+    proposalEvent.calldatas = [Bytes.fromI32(312)];
+    proposalEvent.createdTimestamp = updateBlockTimestamp.minus(BIGINT_ONE);
+    proposalEvent.createdBlock = updateBlockNumber.minus(BIGINT_ONE);
+    proposalEvent.createdTransactionHash = Bytes.fromI32(11);
+    proposalEvent.description = 'some description';
+    proposalEvent.title = 'some title';
+
+    handleProposalCreated(proposalEvent);
+  });
+
+  test('handleProposalCanceled', () => {
+    handleProposalCanceled(
+      createProposalCanceledEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_CANCELLED, proposal.status);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.canceledTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.canceledBlock!);
+  });
+
+  test('handleProposalVetoed', () => {
+    handleProposalVetoed(
+      createProposalVetoedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_VETOED, proposal.status);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.vetoedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.vetoedBlock!);
+  });
+
+  test('handleProposalQueued', () => {
+    const eta = updateBlockTimestamp.plus(BigInt.fromI32(100));
+    handleProposalQueued(
+      createProposalQueuedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+        eta,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_QUEUED, proposal.status);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.queuedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.queuedBlock!);
+    assert.bigIntEquals(eta, proposal.executionETA!);
+  });
+
+  test('handleProposalExecuted', () => {
+    handleProposalExecuted(
+      createProposalExecutedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_EXECUTED, proposal.status);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.executedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.executedBlock!);
   });
 });

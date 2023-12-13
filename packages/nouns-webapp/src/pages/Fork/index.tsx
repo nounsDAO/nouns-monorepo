@@ -289,16 +289,16 @@ const ForkPage = ({
                           : false
                       }
                     />
-                    <p>time left to return Nouns and join this fork</p>
+
                   </div>
                 )}
               <div className={clsx(classes.isForked)}>
-                {forkDetails.data.forkingPeriodEndTimestamp && (
+                {forkDetails.data.executedAt && (
                   <p>
                     <strong>
                       This fork was executed on{' '}
                       {dayjs
-                        .unix(+forkDetails.data.forkingPeriodEndTimestamp)
+                        .unix(+forkDetails.data.executedAt)
                         .format('MMM D, YYYY')}
                     </strong>
                   </p>

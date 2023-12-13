@@ -138,6 +138,7 @@ export function getGovernanceEntity(): Governance {
     governance.delegatedVotes = BIGINT_ZERO;
     governance.proposalsQueued = BIGINT_ZERO;
     governance.voteSnapshotBlockSwitchProposalId = BIGINT_ZERO;
+    governance.candidates = BIGINT_ZERO;
   }
 
   return governance as Governance;
@@ -177,7 +178,12 @@ export function getOrCreateProposalCandidate(id: string): ProposalCandidate {
   let candidate = ProposalCandidate.load(id);
   if (candidate == null) {
     candidate = new ProposalCandidate(id);
+
+    const governance = getGovernanceEntity();
+    governance.candidates = governance.candidates.plus(BIGINT_ONE);
+    governance.save();
   }
+
   return candidate;
 }
 
@@ -231,6 +237,11 @@ export function getOrCreateFork(id: BigInt): Fork {
     fork.tokensForkingCount = 0;
   }
   return fork;
+}
+
+export function getCandidateIndex(): BigInt {
+  const governance = getGovernanceEntity();
+  return governance.candidates;
 }
 
 export function candidateID(proposer: Address, slug: string): string {

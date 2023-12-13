@@ -4,7 +4,7 @@ import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsD
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
+import { useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
@@ -41,9 +41,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
+  const [currentBlock, setCurrentBlock] = useState<number>();
   const { account } = useEthers();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const candidate = useCandidateProposal(props.match.params.id, 0, true); // get updatable transaction details
+  const candidate = useCandidateProposal(props.match.params.id, 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -54,6 +55,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   );
   const proposal = candidate.data?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
+  const blockNumber = useBlockNumber();
+
+  useEffect(() => {
+    // prevent live-updating the block resulting in undefined block number
+    if (blockNumber && !currentBlock) {
+      setCurrentBlock(blockNumber);
+    }
+  }, [blockNumber, currentBlock]);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -245,7 +254,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       candidate.data?.slug, // Slug
-      0, // proposalIdToUpdate
+      candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
       commitMessage,
       { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
     );

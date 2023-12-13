@@ -2,14 +2,22 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
-import { NounsDAOLogicV1 } from '../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../contracts/governance/fork/ForkDAODeployer.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
+interface NounsDAO {
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
+}
+
 contract ProposeDAOV3UpgradeMainnet is Script {
-    NounsDAOLogicV1 public constant NOUNS_DAO_PROXY_MAINNET =
-        NounsDAOLogicV1(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
+    NounsDAO public constant NOUNS_DAO_PROXY_MAINNET = NounsDAO(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
     uint256 public constant ETH_TO_SEND_TO_NEW_TIMELOCK = 2500 ether;
@@ -60,7 +68,7 @@ contract ProposeDAOV3UpgradeMainnet is Script {
     }
 
     function propose(
-        NounsDAOLogicV1 daoProxy,
+        NounsDAO daoProxy,
         address daoV3Implementation,
         address timelockV2,
         uint256 ethToSendToNewTimelock,
