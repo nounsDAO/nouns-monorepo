@@ -22,6 +22,7 @@ interface AppConfig {
   wsRpcUri: string;
   subgraphApiUri: string;
   enableHistory: boolean;
+  exploreUri?: string;
 }
 
 export const ChainId_Sepolia = 11155111;
@@ -80,6 +81,7 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri:
       'https://api.studio.thegraph.com/query/60256/ubuyama-sepolia/version/latest',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+    exploreUri: 'https://testnets.opensea.io/collection/nouns-190',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
