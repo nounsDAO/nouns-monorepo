@@ -41,6 +41,7 @@ const NavBar = () => {
     config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
   );
   const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const exploreUri = config.app.exploreUri;
 
   const useStateBg =
     history.location.pathname === '/' ||
@@ -232,8 +233,8 @@ const NavBar = () => {
                 />
               </Nav.Link>
               <Nav.Link
-                as={Link}
-                to="/explore"
+                href={exploreUri}
+                target="_blank"
                 className={clsx(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
@@ -259,7 +260,8 @@ const NavBar = () => {
                       history,
                     ),
                   )}
-                  href="/explore"
+                  href={exploreUri}
+                  target="_blank"
                 >
                   Nouns &amp; Traits
                 </Dropdown.Item>
