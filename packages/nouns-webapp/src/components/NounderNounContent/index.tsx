@@ -113,18 +113,6 @@ const NounderNounContent: React.FC<{
               </Trans>
             </li>
           </ul>
-          <div
-            className={
-              isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
-            }
-          >
-            <Link
-              to="/nounders"
-              className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
-            >
-              <Trans>Learn more</Trans> →
-            </Link>
-          </div>
         </Col>
       </Row>
     </AuctionActivityWrapper>
