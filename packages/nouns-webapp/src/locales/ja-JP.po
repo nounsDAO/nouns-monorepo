@@ -436,7 +436,7 @@ msgstr "WalletConnect データを消去"
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
-msgstr "近い"
+msgstr "閉じる"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
