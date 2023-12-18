@@ -140,7 +140,7 @@ msgstr "付属品"
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
-msgstr "実行されました"
+msgstr "投票受付中"
 
 #: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
