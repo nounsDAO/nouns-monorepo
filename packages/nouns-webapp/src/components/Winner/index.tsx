@@ -70,7 +70,7 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const nounderNounContent = (
     <a
-      href={buildEtherscanAddressLink('nounders.eth')}
+      href={buildEtherscanAddressLink('0x1AeB1E02E734a4797F3e2D1f96b645259E20D684')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -82,7 +82,7 @@ const Winner: React.FC<WinnerProps> = props => {
         }}
         id="holder-etherscan-tooltip"
       >
-        nounders.eth
+        <ShortAddress address='0x1AeB1E02E734a4797F3e2D1f96b645259E20D684' />
       </Tooltip>
     </a>
   );
