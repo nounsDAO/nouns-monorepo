@@ -47,6 +47,10 @@ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0/><1>Guidelines</1><2/>• At this time only \"Transfer Funds\" is supported.<3/><4>Supported Action Types</4><5/><6>• Transfer Funds: </6>ETH."
+msgstr "<0/><1>ガイドライン</1><2/>• 現在、\"Transfer Funds\" のみ利用できます<3/><4>サポートアクションタイプ</4><5/><6>• Transfer Funds: </6>ETH"
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
 #~ msgstr ""
 
@@ -153,24 +157,24 @@ msgstr "アクティビティ"
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/EditProposal/index.tsx
 msgid "Add Action"
-msgstr ""
+msgstr "アクション追加"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Action Details"
-msgstr ""
+msgstr "詳細設定へ"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
 msgid "Add Arguments"
-msgstr ""
+msgstr "詳細設定へ"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
 msgid "Add Function Call Arguments"
-msgstr ""
+msgstr "ファンクション詳細"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
-msgstr ""
+msgstr "提案するアクション"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Add Stream Date Details"
@@ -180,12 +184,12 @@ msgstr ""
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Add Streaming Payment Action"
-msgstr ""
+msgstr "ストリーミング支払い詳細"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Add Transfer Funds Action"
-msgstr ""
+msgstr "設定追加"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 #~ msgid "Add a Proposal Transaction"
@@ -1262,12 +1266,12 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Review Transfer Funds Action"
-msgstr ""
+msgstr "ファンド送信確認"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 msgid "Review and Add"
-msgstr ""
+msgstr "確認画面へ"
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"

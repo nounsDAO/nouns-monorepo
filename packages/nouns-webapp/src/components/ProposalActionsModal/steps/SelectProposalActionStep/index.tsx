@@ -37,17 +37,11 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <Trans>
           <hr />
           <b>Guidelines</b>
-          <hr />• Do <b>NOT</b> request ETH to trade into USDC. Instead, request USDC directly.
-          <br />• Do <b>NOT</b> transfer funds externally to create an ETH or USDC stream. Instead,
-          use the "Stream Funds" action.
+          <hr />• Currently, only "Transfer Funds" is available.
           <hr />
           <b>Supported Action Types</b>
           <hr />
-          <b>• Transfer Funds: </b>Send USDC, ETH, or stETH.
-          <br />
-          <b>• Stream Funds: </b>Stream USDC or WETH over time.
-          <br />
-          <b>• Function Call: </b>Call a contract function.
+          <b>• Transfer Funds: </b>ETH.
         </Trans>
       </ModalSubTitle>
 
@@ -67,8 +61,8 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         }}
       >
         <option value={'Transfer Funds'}>Transfer Funds</option>
-        <option value={'Stream Funds'}>Stream Funds</option>
-        <option value={'Function Call'}>Function Call</option>
+        <option value={'Stream Funds'} disabled>Stream Funds</option>
+        <option value={'Function Call'} disabled>Function Call</option>
       </BrandDropdown>
 
       <ModalBottomButtonRow

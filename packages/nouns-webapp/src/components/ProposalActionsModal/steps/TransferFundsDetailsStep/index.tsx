@@ -20,7 +20,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
 
   const [currency, setCurrency] = useState<SupportedCurrency>(
-    state.TransferFundsCurrency ?? SupportedCurrency.USDC,
+    state.TransferFundsCurrency ?? SupportedCurrency.ETH,
   );
   const [amount, setAmount] = useState<string>(state.amount ?? '');
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
@@ -45,9 +45,9 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         onChange={e => setCurrency(SupportedCurrency[e.target.value as SupportedCurrency])}
         chevronTop={38}
       >
-        <option value="USDC">USDC</option>
         <option value="ETH">ETH</option>
-        <option value="STETH">Lido Staked ETH</option>
+        <option value="USDC" disabled>USDC</option>
+        <option value="STETH" disabled>Lido Staked ETH</option>
       </BrandDropdown>
 
       <BrandNumericEntry
