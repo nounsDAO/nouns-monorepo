@@ -31,6 +31,7 @@ import {
   activePendingUpdatableProposersQuery,
   forkJoinsQuery,
   isForkActiveQuery,
+  updatableProposalsQuery,
 } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
@@ -183,6 +184,7 @@ interface PartialProposalData {
 }
 
 export interface ProposalProposerAndSigners {
+  id: string;
   proposer: {
     id: string;
   };
@@ -750,7 +752,6 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
-
   return parseSubgraphProposal(
     useQuery(proposalQuery(id)).data?.proposal,
     blockNumber,
@@ -1267,28 +1268,6 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
   };
 };
 
-export const useHasActiveOrPendingProposalOrCandidate = (account: string, timestamp: number) => {
-  const { data } = useQuery(activePendingUpdatableProposersQuery(1000, timestamp));
-  // check to see if returned proposals have a proposer that matches the account
-  const hasActiveOrPendingProposalOrCandidate = data?.proposals?.some(
-    (proposal: ProposalSubgraphEntity) => {
-      if (proposal.proposer.id.toLowerCase() === account.toLowerCase()) {
-        return true;
-      }
-      if (
-        proposal.signers.some(
-          (signer: { id: string }) => signer.id.toLowerCase() === account.toLowerCase(),
-        )
-      ) {
-        return true;
-      }
-      return false;
-    },
-  );
-
-  return hasActiveOrPendingProposalOrCandidate;
-};
-
 export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalStatus: ProposalState,
   latestProposalProposer: string | undefined,
@@ -1336,3 +1315,24 @@ export const useLastMinuteWindowInBlocks = (): number | undefined => {
     }) || [];
   return lastMinuteWindowInBlocks?.toNumber();
 };
+
+
+export const useUpdatableProposalIds = (blockNumber: number) => {
+  const {
+    loading,
+    data: proposals,
+    error,
+  } = useQuery(updatableProposalsQuery(1000, blockNumber)) as {
+    loading: boolean;
+    data: { proposals: ProposalProposerAndSigners[] };
+    error: Error;
+  };
+
+  const data = proposals?.proposals.map(proposal => +proposal.id);
+
+  return {
+    loading,
+    data,
+    error,
+  };
+}

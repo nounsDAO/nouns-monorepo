@@ -18,7 +18,6 @@ type Props = {
   isModalOpen: boolean;
   signatures: CandidateSignature[];
   candidate: ProposalCandidate;
-  blockNumber: number;
   setIsModalOpen: Function;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
@@ -93,7 +92,6 @@ export default function SubmitUpdateProposal(props: Props) {
   useEffect(() => {
     handleUpdateProposalStateChange(updateProposalBySigsState);
   }, [updateProposalBySigsState, handleUpdateProposalStateChange]);
-
   const modalContent = (
     <div className={classes.modalContent}>
       <h2 className={classes.modalTitle}>

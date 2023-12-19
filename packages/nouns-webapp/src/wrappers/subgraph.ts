@@ -129,36 +129,60 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
 }
 `;
 
+export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => gql`
+{
+  proposals(
+    where: {
+    	status: PENDING, endBlock_gt: ${currentBlock}, updatePeriodEndBlock_gt: ${currentBlock},      
+    }
+    ) {
+      id
+  }
+}
+`;
+
 export const candidateProposalsQuery = (first = 1_000) => gql`
   {
-    proposalCandidates {
+    proposalCandidates(first: ${first}) {
       id
-      slug
-      proposer
-      lastUpdatedTimestamp
-      canceled
-      createdTransactionHash
-      latestVersion {
-        content {
-          title
-          proposalIdToUpdate
-          contentSignatures {
-            signer {
-              id
-              proposals {
-                id
-              }
-            }
-            sig
-            expirationTimestamp
-            canceled
-            reason
-          }
-          matchingProposalIds {
+    slug
+    proposer
+    lastUpdatedTimestamp
+    createdTransactionHash
+    canceled
+    versions {
+      content {
+        title
+      }
+    }
+    latestVersion {
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+        proposalIdToUpdate
+        contentSignatures {
+          id
+          signer {
             id
+            proposals {
+              id
+            }
           }
+          sig
+          expirationTimestamp
+          canceled
+          reason
+        }
+        matchingProposalIds {
+          id
         }
       }
+    }
     }
   }
 `;

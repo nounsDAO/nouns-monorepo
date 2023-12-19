@@ -8,18 +8,16 @@ import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
 import ShortAddress from '../ShortAddress';
-import { Delegates } from '../../wrappers/subgraph';
-import { useActivePendingUpdatableProposers, usePropose } from '../../wrappers/nounsDao';
+import { usePropose } from '../../wrappers/nounsDao';
 import { Link } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 
 type Props = {
   isModalOpen: boolean;
   signatures: CandidateSignature[];
-  delegateSnapshot: Delegates;
   requiredVotes: number;
   candidate: ProposalCandidate;
-  blockNumber: number;
+  blockNumber?: number;
   setIsModalOpen: Function;
   handleRefetchCandidateData: Function;
   setDataFetchPollInterval: Function;
@@ -34,18 +32,14 @@ export default function SelectSponsorsToPropose(props: Props) {
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
   const { propose, proposeState } = usePropose();
   const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
-  const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber);
   useEffect(() => {
-    if (props.delegateSnapshot.delegates) {
-      const voteCount = selectedSignatures.reduce((acc, sig) => {
-        const votes =
-          props.delegateSnapshot.delegates.find(delegate => delegate.id === sig.signer.id)
-            ?.nounsRepresented.length || 0;
-        return acc + votes;
-      }, 0);
-      setSelectedVoteCount(voteCount);
-    }
-  }, [selectedSignatures, props.delegateSnapshot.delegates]);
+    const voteCount = selectedSignatures.reduce((acc, sig) => {
+      const votes = sig.signer.voteCount || 0;
+      return acc + votes;
+    }, 0);
+    setSelectedVoteCount(voteCount);
+
+  }, [selectedSignatures]);
 
   const clearTransactionState = () => {
     // clear all transaction states
@@ -174,9 +168,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       <div className={classes.list}>
         {props.signatures &&
           props.signatures.map((signature: CandidateSignature) => {
-            const voteCount = props.delegateSnapshot.delegates?.find(
-              delegate => delegate.id === signature.signer.id,
-            )?.nounsRepresented.length;
             return (
               <button
                 key={signature.sig}
@@ -191,7 +182,7 @@ export default function SelectSponsorsToPropose(props: Props) {
                   isWaiting ||
                   isLoading ||
                   isTxSuccessful ||
-                  activePendingProposers.data.includes(signature.signer.id)
+                  signature.signer.activeOrPendingProposal === true
                 }
                 className={clsx(
                   classes.selectButton,
@@ -201,7 +192,7 @@ export default function SelectSponsorsToPropose(props: Props) {
                 <div>
                   <ShortAddress address={signature.signer.id} />
                   <p className={classes.voteCount}>
-                    {voteCount} vote{voteCount !== 1 && 's'}
+                    {signature.signer.voteCount} vote{signature.signer.voteCount !== 1 && 's'}
                   </p>
                 </div>
               </button>

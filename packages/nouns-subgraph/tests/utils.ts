@@ -25,6 +25,11 @@ import {
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
 import { ProposalCandidateCreated, SignatureAdded } from '../src/types/NounsDAOData/NounsDAOData';
+import {
+  DelegateChanged,
+  DelegateVotesChanged,
+  Transfer,
+} from '../src/types/NounsToken/NounsToken';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -658,6 +663,92 @@ export function createProposalQueuedEvent(
   );
 
   newEvent.parameters.push(new ethereum.EventParam('eta', ethereum.Value.fromUnsignedBigInt(eta)));
+
+  return newEvent;
+}
+
+export function createTransferEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  from: Address,
+  to: Address,
+  tokenId: BigInt,
+): Transfer {
+  let newEvent = changetype<Transfer>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(new ethereum.EventParam('from', ethereum.Value.fromAddress(from)));
+  newEvent.parameters.push(new ethereum.EventParam('to', ethereum.Value.fromAddress(to)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('tokenId', ethereum.Value.fromUnsignedBigInt(tokenId)),
+  );
+
+  return newEvent;
+}
+
+export function createDelegateChangedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  delegator: Address,
+  previousDelegate: Address,
+  newDelegate: Address,
+): DelegateChanged {
+  let newEvent = changetype<DelegateChanged>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('delegator', ethereum.Value.fromAddress(delegator)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('previousDelegate', ethereum.Value.fromAddress(previousDelegate)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('newDelegate', ethereum.Value.fromAddress(newDelegate)),
+  );
+
+  return newEvent;
+}
+
+export function createDelegateVotesChangedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  delegate: Address,
+  previousBalance: BigInt,
+  newBalance: BigInt,
+): DelegateVotesChanged {
+  let newEvent = changetype<DelegateVotesChanged>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('delegate', ethereum.Value.fromAddress(delegate)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('previousBalance', ethereum.Value.fromUnsignedBigInt(previousBalance)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('newBalance', ethereum.Value.fromUnsignedBigInt(newBalance)),
+  );
 
   return newEvent;
 }
