@@ -37,7 +37,7 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <Trans>
           <hr />
           <b>Guidelines</b>
-          <hr />• Currently, only "Transfer Funds" is available.
+          <hr />• At this time only "Transfer Funds" is supported.
           <hr />
           <b>Supported Action Types</b>
           <hr />
