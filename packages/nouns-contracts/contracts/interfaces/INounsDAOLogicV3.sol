@@ -48,7 +48,7 @@ interface INounsDAOLogicV3 {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) external returns (uint256);
 
     /**
@@ -77,7 +77,7 @@ interface INounsDAOLogicV3 {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) external returns (uint256);
 
     /**
@@ -601,7 +601,7 @@ interface INounsDAOLogicV3 {
      */
     function castVote(uint256 proposalId, uint8 support) external;
 
-    function castRefundableVote(uint256 proposalId, uint8 support, uint16 clientId) external;
+    function castRefundableVote(uint256 proposalId, uint8 support, uint32 clientId) external;
 
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
@@ -619,7 +619,7 @@ interface INounsDAOLogicV3 {
         uint256 proposalId,
         uint8 support,
         string calldata reason,
-        uint16 clientId
+        uint32 clientId
     ) external;
 
     /**

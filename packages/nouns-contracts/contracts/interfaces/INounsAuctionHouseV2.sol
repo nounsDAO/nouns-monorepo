@@ -101,4 +101,6 @@ interface INounsAuctionHouseV2 {
     ) external view returns (Settlement[] memory settlements);
 
     function warmUpSettlementState(uint256[] calldata nounIds) external;
+
+    function duration() external view returns (uint256);
 }

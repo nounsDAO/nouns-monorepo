@@ -23,6 +23,8 @@ import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfa
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
+    NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
+
     function _createDAOV3Proxy(
         address timelock,
         address nounsToken,
@@ -59,32 +61,32 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
     }
 
-    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
-        address noundersDAO = makeAddr('noundersDAO');
-        address vetoer = makeAddr('vetoer');
+    struct Temp {
+        NounsDAOExecutorV2 timelock;
+        NounsToken nounsToken;
+    }
 
-        NounsDAOExecutorV2 timelock = NounsDAOExecutorV2(
-            payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), '')))
-        );
-        timelock.initialize(address(1), TIMELOCK_DELAY);
+    function _deployDAOV3WithParams(uint256 auctionDuration) internal returns (INounsDAOLogicV3) {
+        Temp memory t;
+        t.timelock = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), ''))));
+        t.timelock.initialize(address(1), TIMELOCK_DELAY);
 
-        NounsAuctionHouse auctionLogic = new NounsAuctionHouse();
-        NounsAuctionHouseProxyAdmin auctionAdmin = new NounsAuctionHouseProxyAdmin();
+        auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
         NounsAuctionHouseProxy auctionProxy = new NounsAuctionHouseProxy(
-            address(auctionLogic),
-            address(auctionAdmin),
+            address(new NounsAuctionHouse()),
+            address(auctionHouseProxyAdmin),
             ''
         );
-        auctionAdmin.transferOwnership(address(timelock));
+        auctionHouseProxyAdmin.transferOwnership(address(t.timelock));
 
-        NounsToken nounsToken = new NounsToken(
-            noundersDAO,
+        t.nounsToken = new NounsToken(
+            makeAddr('noundersDAO'),
             address(auctionProxy),
             _deployAndPopulateV2(),
             new NounsSeeder(),
             new ProxyRegistryMock()
         );
-        nounsToken.transferOwnership(address(timelock));
+        t.nounsToken.transferOwnership(address(t.timelock));
         address daoLogicImplementation = address(new NounsDAOLogicV3());
 
         uint256 nonce = vm.getNonce(address(this));
@@ -105,12 +107,12 @@ abstract contract DeployUtilsV3 is DeployUtils {
         INounsDAOLogicV3 dao = INounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
-                    address(timelock),
-                    address(nounsToken),
+                    address(t.timelock),
+                    address(t.nounsToken),
                     predictedForkEscrowAddress,
                     address(forkDeployer),
-                    vetoer,
-                    address(timelock),
+                    makeAddr('vetoer'),
+                    address(t.timelock),
                     daoLogicImplementation,
                     NounsDAOStorageV3.NounsDAOParams({
                         votingPeriod: VOTING_PERIOD,
@@ -129,21 +131,25 @@ abstract contract DeployUtilsV3 is DeployUtils {
             )
         );
 
-        address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
+        address(new NounsDAOForkEscrow(address(dao), address(t.nounsToken)));
 
-        vm.prank(address(timelock));
-        NounsAuctionHouse(address(auctionProxy)).initialize(nounsToken, makeAddr('weth'), 2, 0, 1, 10 minutes);
+        vm.prank(address(t.timelock));
+        NounsAuctionHouse(address(auctionProxy)).initialize(t.nounsToken, makeAddr('weth'), 2, 0, 1, auctionDuration);
 
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(dao));
+        vm.prank(address(t.timelock));
+        t.timelock.setPendingAdmin(address(dao));
         vm.prank(address(dao));
-        timelock.acceptAdmin();
+        t.timelock.acceptAdmin();
 
-        vm.startPrank(address(timelock));
+        vm.startPrank(address(t.timelock));
         dao._setForkPeriod(FORK_PERIOD);
         dao._setForkThresholdBPS(FORK_THRESHOLD_BPS);
         vm.stopPrank();
 
         return dao;
+    }
+
+    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
+        return _deployDAOV3WithParams(10 minutes);
     }
 }

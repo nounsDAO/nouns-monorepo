@@ -161,7 +161,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) internal returns (uint256) {
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 proposalThreshold_ = checkPropThreshold(
@@ -201,7 +201,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         ProposalTxs memory txs,
         string memory description,
-        uint16 client
+        uint32 client
     ) internal returns (uint256) {
         uint256 newProposalId = propose(ds, txs, description, client);
 
@@ -232,7 +232,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description,
-        uint16 client
+        uint32 client
     ) external returns (uint256) {
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposalTxs(txs);
@@ -764,6 +764,7 @@ library NounsDAOV3Proposals {
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
                 creationBlock: proposal.creationBlock,
+                creationTimestamp: proposal.creationTimestamp,
                 signers: proposal.signers,
                 updatePeriodEndBlock: proposal.updatePeriodEndBlock,
                 objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
@@ -893,7 +894,7 @@ library NounsDAOV3Proposals {
         uint256 proposalThreshold_,
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs,
-        uint16 clientId
+        uint32 clientId
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
         uint64 updatePeriodEndBlock = SafeCast.toUint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
@@ -911,7 +912,8 @@ library NounsDAOV3Proposals {
         newProposal.startBlock = startBlock;
         newProposal.endBlock = endBlock;
         newProposal.totalSupply = adjustedTotalSupply;
-        newProposal.creationBlock = SafeCast.toUint64(block.number);
+        newProposal.creationBlock = SafeCast.toUint32(block.number);
+        newProposal.creationTimestamp = uint32(block.timestamp);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 

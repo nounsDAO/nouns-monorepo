@@ -749,7 +749,8 @@ contract NounsDAOStorageV3 {
         /// @notice The total supply at the time of proposal creation
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
-        uint64 creationBlock;
+        uint32 creationBlock;
+        uint32 creationTimestamp;
         /// @notice The last block which allows updating a proposal's description and transactions
         uint64 updatePeriodEndBlock;
         /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
@@ -818,6 +819,7 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        uint256 creationTimestamp;
         /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
         /// @notice The last block which allows updating a proposal's description and transactions

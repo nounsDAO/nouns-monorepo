@@ -108,7 +108,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         string memory signature,
         bytes memory data,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) internal returns (uint256 proposalId) {
         vm.prank(proposer);
         address[] memory targets = new address[](1);

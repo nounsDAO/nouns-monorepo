@@ -203,7 +203,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) public returns (uint256) {
         return
             ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description, clientId);
@@ -242,7 +242,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        uint16 clientId
+        uint32 clientId
     ) public returns (uint256) {
         return
             ds.proposeBySigs(
@@ -473,7 +473,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds._proposals[proposalId].clientId;
     }
 
-    function proposalVoteClientData(uint256 proposalId, uint16 clientId) external view returns (ClientVoteData memory) {
+    function proposalVoteClientData(uint256 proposalId, uint32 clientId) external view returns (ClientVoteData memory) {
         return ds._proposals[proposalId].voteClients[clientId];
     }
 
@@ -601,7 +601,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.castVote(proposalId, support);
     }
 
-    function castRefundableVote(uint256 proposalId, uint8 support, uint16 clientId) external {
+    function castRefundableVote(uint256 proposalId, uint8 support, uint32 clientId) external {
         ds.castRefundableVote(proposalId, support, clientId);
     }
 
@@ -623,7 +623,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256 proposalId,
         uint8 support,
         string calldata reason,
-        uint16 clientId
+        uint32 clientId
     ) public {
         ds.castRefundableVoteWithReason(proposalId, support, reason, clientId);
     }

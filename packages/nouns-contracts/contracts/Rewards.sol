@@ -33,12 +33,12 @@ contract Rewards {
 
     mapping(uint256 proposalId => bool paid) proposalsPaid;
     mapping(uint256 nounId => bool paid) auctionsPaid;
-    mapping(uint256 proposalId => mapping(uint16 clientId => bool paid)) votingPaid;
+    mapping(uint256 proposalId => mapping(uint32 clientId => bool paid)) votingPaid;
     mapping(uint256 proposalId => bool paid) votingWithBonusPaid;
     uint256 public annualProposalReward = 100 ether; // TODO: read auction history
     uint32 public nextProposalIdToReward = 400; // TODO: set from constructor
-    uint256 public nextProposalRewardStartBlock = block.number;
-    uint256 public minimumRewardPeriodInBlocks = 2 weeks / 12;
+    uint256 public nextProposalRewardTimestamp = block.timestamp;
+    uint256 public minimumRewardPeriod = 2 weeks;
     uint256 public numProposalsEnoughForReward = 30; // TODO: set based on gas usage
     uint16 public proposalRewardBPS = 100; // TODO make configurable
     uint16 public votingRewardBPS = 50; // TODO make configurable
@@ -50,9 +50,15 @@ contract Rewards {
 
     mapping(uint32 clientId => ClientData data) clients;
 
-    constructor(address nounsDAO_, address auctionHouse_) {
+    constructor(address nounsDAO_, address auctionHouse_, uint32 nextProposalIdToReward_) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseRewards(auctionHouse_);
+        nextProposalIdToReward = nextProposalIdToReward_;
+    }
+
+    // TODO: only admin?
+    function setNextProposalRewardTimestamp(uint256 ts) public {
+        nextProposalRewardTimestamp = ts;
     }
 
     struct Temp {
@@ -66,52 +72,55 @@ contract Rewards {
 
     /**
      *
-     * @param lastProposalId the last proposal to consider for reward. all proposals up to this proposal must be after the voting period
-     * @param lastProposalBlock the block.number of the voting start of `lastProposalId`
      * @param expectedNumEligibleProposals should match the number of eligible proposals. TODO: a view function for this
      */
     function bountyRewardForProposals(
-        uint32 lastProposalId,
-        uint256 lastProposalBlock,
+        uint32 lastTimestamp,
         uint256 expectedNumEligibleProposals,
         uint256 expectedNumEligibileVotes,
         uint256 firstNounId,
         uint256 lastNounId,
         uint32[] calldata votingClientIds
     ) public {
+        // TODO should we support a case where minimumRewardPeriodInBlocks is e.g. 1 week, and a week has passed
+        //  but the last proposal was before a week has passed?
+
         require(expectedNumEligibleProposals > 0, 'at least one eligible proposal');
+        require(lastTimestamp < block.timestamp, 'last block must be in the past');
 
         if (expectedNumEligibleProposals < numProposalsEnoughForReward) {
-            require(
-                lastProposalBlock > nextProposalRewardStartBlock + minimumRewardPeriodInBlocks,
-                'not enough time passed'
-            );
+            require(lastTimestamp > nextProposalRewardTimestamp + minimumRewardPeriod, 'not enough time passed');
+        } else {
+            require(lastTimestamp > nextProposalRewardTimestamp);
         }
 
         Temp memory t;
 
         uint256 auctionRevenue = getAuctionRevenueForPeriod({
-            startBlock: nextProposalRewardStartBlock,
-            endBlock: lastProposalBlock,
+            startTimestamp: nextProposalRewardTimestamp,
+            endTimestamp: lastTimestamp,
             firstNounId: firstNounId,
             lastNounId: lastNounId
         });
         t.proposalRewardForPeriod = (auctionRevenue * proposalRewardBPS) / 10000;
         t.votingRewardForPeriod = (auctionRevenue * votingRewardBPS) / 10000;
 
-        nextProposalRewardStartBlock = lastProposalBlock + 1;
+        nextProposalRewardTimestamp = lastTimestamp + 1;
 
         t.rewardPerProposal = t.proposalRewardForPeriod / expectedNumEligibleProposals;
         t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibileVotes;
 
         NounsDAOStorageV3.ProposalCondensed memory proposal;
-        uint32 pid;
-        for (pid = nextProposalIdToReward; pid <= lastProposalId; pid++) {
+        uint256 maxProposalId = nounsDAO.proposalCount();
+        uint32 pid = nextProposalIdToReward;
+        for (pid = nextProposalIdToReward; pid <= maxProposalId; pid++) {
             proposal = nounsDAO.proposalsV3(pid);
+
+            if (proposal.creationTimestamp > lastTimestamp) break;
 
             // make sure proposal finished voting
             uint endBlock = max(proposal.endBlock, proposal.objectionPeriodEndBlock);
-            require(endBlock > block.number, 'all proposals must be done with voting');
+            require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals
             if (proposal.forVotes < proposal.quorumVotes) continue;
@@ -133,31 +142,30 @@ contract Rewards {
                 clientBalances[votingClientIds[i]] += voteData.votes * t.rewardPerVote;
                 votesInProposal += voteData.votes;
             }
-            require(votesInProposal == proposal.forVotes + proposal.againstVotes + proposal.abstainVotes);
+            require(
+                votesInProposal == proposal.forVotes + proposal.againstVotes + proposal.abstainVotes,
+                'not all votes accounted'
+            );
             t.actualNumEligibleVotes += votesInProposal;
         }
 
-        nextProposalIdToReward = pid + 1;
+        nextProposalIdToReward = pid;
 
-        require(proposal.startBlock == lastProposalBlock);
-        require(t.actualNumEligibleProposals == expectedNumEligibleProposals);
-        require(t.actualNumEligibleVotes == expectedNumEligibileVotes);
+        require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');
+        require(t.actualNumEligibleVotes == expectedNumEligibileVotes, 'wrong expectedNumEligibileVotes');
     }
 
     function getAuctionRevenueForPeriod(
-        uint256 startBlock,
-        uint256 endBlock,
+        uint256 startTimestamp,
+        uint256 endTimestamp,
         uint256 firstNounId,
         uint256 lastNounId
-    ) internal returns (uint256) {
-        uint256 startTimestamp = block.timestamp - (block.number - startBlock) * 12;
-        uint256 endTimestamp = block.timestamp - (block.number - endBlock) * 12;
-
+    ) internal view returns (uint256) {
         INounsAuctionHouseRewards.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
-        require(s[0].blockTimestamp <= startTimestamp);
-        require(s[1].blockTimestamp >= startTimestamp);
-        require(s[s.length - 2].blockTimestamp <= endTimestamp);
-        require(s[s.length - 1].blockTimestamp >= endTimestamp);
+        require(s[0].blockTimestamp <= startTimestamp, 'first auction must be before start ts');
+        require(s[1].blockTimestamp >= startTimestamp, 'second auction must be after start ts');
+        require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
+        require(s[s.length - 1].blockTimestamp >= endTimestamp, 'last auction must be after end ts');
 
         return sumAuctions(s);
     }
@@ -176,7 +184,7 @@ contract Rewards {
         require(!proposalsPaid[proposalId], 'Already paid');
         proposalsPaid[proposalId] = true;
 
-        uint16 clientId = nounsDAO.proposalClientId(proposalId);
+        uint32 clientId = nounsDAO.proposalClientId(proposalId);
 
         if (proposal.signers.length > 0) {
             payClient(clientId, REWARD_FOR_PROPOSAL_BY_SIGS_CREATION);
@@ -190,11 +198,11 @@ contract Rewards {
         require(!auctionsPaid[nounId], 'Already paid');
         auctionsPaid[nounId] = true;
 
-        uint16 clientId = auctionHouse.biddingClient(nounId);
+        uint32 clientId = auctionHouse.biddingClient(nounId);
         payClient(clientId, REWARD_FOR_AUCTION_BIDDING);
     }
 
-    function rewardForVoting(uint256 proposalId, uint16 clientId) public {
+    function rewardForVoting(uint256 proposalId, uint32 clientId) public {
         NounsDAOStorageV3.ProposalCondensed memory proposal = nounsDAO.proposalsV3(proposalId);
         requireProposalEligibleForRewards(proposal);
 
@@ -207,13 +215,13 @@ contract Rewards {
         payClient(clientId, (REWARD_FOR_PROPOSAL_VOTING * voteData.votes) / totalVotes);
     }
 
-    function rewardForVotingWithBonus(uint256 proposalId, uint16[] calldata clientIds) public {
+    function rewardForVotingWithBonus(uint256 proposalId, uint32[] calldata clientIds) public {
         require(uint256(nounsDAO.state(proposalId)) == PROPOSAL_STATE_EXECUTED, 'Proposal must have executed');
 
         require(!votingWithBonusPaid[proposalId], 'Already paid');
         votingWithBonusPaid[proposalId] = true;
 
-        uint16 clientId = clientIds[0];
+        uint32 clientId = clientIds[0];
         NounsDAOStorageV3.ClientVoteData memory voteData = nounsDAO.proposalVoteClientData(proposalId, clientId);
         NounsDAOStorageV3.ClientVoteData memory nextVoteData;
 
@@ -244,7 +252,7 @@ contract Rewards {
         clients[clientId].payoutWallet = payoutWallet;
     }
 
-    function payClient(uint16 clientId, uint256 amount) internal {
+    function payClient(uint32 clientId, uint256 amount) internal {
         address to = clients[clientId].payoutWallet;
         (bool sent, ) = to.call{ value: amount }('');
         require(sent, 'Failed sending ether');

@@ -3,9 +3,12 @@ pragma solidity ^0.8.19;
 
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
 import { Rewards } from '../../contracts/Rewards.sol';
+import { NounsToken } from '../../contracts/NounsToken.sol';
 import { INounsAuctionHouseRewards } from '../../contracts/interfaces/INounsAuctionHouseRewards.sol';
+import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
+import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 
-contract RewardsTest is NounsDAOLogicV3BaseTest {
+abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
     INounsAuctionHouseRewards auctionHouse;
 
@@ -17,37 +20,56 @@ contract RewardsTest is NounsDAOLogicV3BaseTest {
     address bidder1 = makeAddr('bidder1');
     address bidder2 = makeAddr('bidder2');
 
-    uint16 constant CLIENT_ID = 42;
-    uint16 constant CLIENT_ID2 = 43;
+    uint32 constant CLIENT_ID = 42;
+    uint32 constant CLIENT_ID2 = 43;
 
-    uint16[] clientIds;
+    uint256 constant SECONDS_IN_BLOCK = 12;
 
-    function setUp() public override {
-        super.setUp();
+    uint32[] clientIds;
+
+    function setUp() public virtual override {
+        dao = _deployDAOV3WithParams(24 hours);
+        nounsToken = NounsToken(address(dao.nouns()));
+        minter = nounsToken.minter();
 
         auctionHouse = INounsAuctionHouseRewards(minter);
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards(address(dao), minter);
+        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1);
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
-        vm.deal(bidder1, 10 ether);
+        vm.deal(bidder1, 1000 ether);
         vm.deal(bidder2, 10 ether);
 
         for (uint256 i; i < 10; i++) {
-            mintTo(voter);
-            mintTo(voter2);
+            _mintTo(voter);
+            _mintTo(voter2);
         }
 
         for (uint i; i < 5; i++) {
-            mintTo(voter3);
+            _mintTo(voter3);
         }
+
+        AuctionHouseUpgrader.upgradeAuctionHouse(
+            address(dao.timelock()),
+            auctionHouseProxyAdmin,
+            NounsAuctionHouseProxy(payable(address(auctionHouse)))
+        );
 
         rewards.registerClient(CLIENT_ID, clientWallet);
         rewards.registerClient(CLIENT_ID2, clientWallet2);
     }
 
+    function _mintTo(address to) internal returns (uint256 tokenID) {
+        vm.startPrank(minter);
+        tokenID = nounsToken.mint();
+        nounsToken.transferFrom(minter, to, tokenID);
+        vm.stopPrank();
+    }
+}
+
+contract RewardsTest is RewardsBaseTest {
     function test_rewardsProposalCreation() public {
         uint256 proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
         vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
@@ -121,5 +143,106 @@ contract RewardsTest is NounsDAOLogicV3BaseTest {
 
         clientIds = [CLIENT_ID, 0, CLIENT_ID2];
         rewards.rewardForVotingWithBonus(proposalId, clientIds);
+    }
+}
+
+contract AuctionRevenueBasedRewards is RewardsBaseTest {
+    uint256 proposalId;
+    uint256 settledNounIdBeforeProposal;
+    uint256 settledNounIdAfterProposal;
+
+    function setUp() public override {
+        super.setUp();
+
+        vm.startPrank(address(dao.timelock()));
+        dao._setProposalUpdatablePeriodInBlocks(18000); // 2.5 days
+        dao._setVotingDelay(3600); // 0.5 days
+        dao._setVotingPeriod(28800); // 4 days
+        vm.stopPrank();
+
+        // settle 3 auctions at 1 ether
+        bidAndSettleMultipleAuctions({ numAuctions: 2, bidAmount: 1 ether });
+        settledNounIdBeforeProposal = bidAndSettleAuction(1 ether);
+
+        rewards.setNextProposalRewardTimestamp(block.timestamp);
+
+        // create proposal 1 by client A
+        proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
+
+        // go forward 3 days until voting starts
+        bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
+
+        // vote on proposal with client A, B & zero
+        vote(voter, proposalId, 1, 'i support', CLIENT_ID);
+        vote(voter2, proposalId, 1, 'i support');
+        vote(voter3, proposalId, 1, 'i dont support', CLIENT_ID2);
+
+        // go forward 4 days until voting ends
+        bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
+
+        dao.queue(proposalId);
+
+        // create proposal 2 by client B
+        proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID2);
+
+        // go forward 3 days until voting starts
+        bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
+
+        // vote on proposal with client A
+        vote(voter, proposalId, 1, 'i support', CLIENT_ID);
+
+        // go forward 4 days until voting ends
+        bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
+
+        dao.queue(proposalId);
+
+        settledNounIdAfterProposal = bidAndSettleAuction(3 ether);
+    }
+
+    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
+        vm.prank(voter_);
+        dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
+    }
+
+    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason) internal {
+        vm.prank(voter_);
+        dao.castRefundableVoteWithReason(proposalId_, support, reason);
+    }
+
+    function bidAndSettleMultipleAuctions(uint256 numAuctions, uint256 bidAmount) internal {
+        for (uint256 i; i < numAuctions; i++) {
+            bidAndSettleAuction(bidAmount);
+        }
+    }
+
+    function rollWarpForward(uint256 numBlocks) internal {
+        vm.roll(block.number + numBlocks);
+        vm.warp(block.timestamp + numBlocks * SECONDS_IN_BLOCK);
+    }
+
+    function test_auctionRevenueBounty_happyFlow() public {
+        clientIds = [0, CLIENT_ID, CLIENT_ID2];
+
+        rewards.bountyRewardForProposals({
+            lastTimestamp: uint32(block.timestamp - 1),
+            expectedNumEligibleProposals: 2,
+            expectedNumEligibileVotes: 35,
+            firstNounId: settledNounIdBeforeProposal,
+            lastNounId: settledNounIdAfterProposal + 1, // TODO: why do we not include the lastNounId ?
+            votingClientIds: clientIds
+        });
+    }
+
+    function bidAndSettleAuction(uint256 bidAmount) internal returns (uint256) {
+        uint256 nounId = auctionHouse.auction().nounId;
+
+        vm.prank(bidder1);
+        auctionHouse.createBid{ value: bidAmount }(nounId);
+
+        uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
+        rollWarpForward(blocksToEnd);
+        auctionHouse.settleCurrentAndCreateNewAuction();
+
+        return nounId;
     }
 }

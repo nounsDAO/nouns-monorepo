@@ -54,7 +54,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
-    mapping(uint256 nounId => uint16 clientId) public biddingClient;
+    mapping(uint256 nounId => uint32 clientId) public biddingClient;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -99,7 +99,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         _settleAuction();
     }
 
-    function createBid(uint256 nounId, uint16 clientId) public payable {
+    function createBid(uint256 nounId, uint32 clientId) public payable {
         createBid(nounId);
 
         biddingClient[nounId] = clientId;

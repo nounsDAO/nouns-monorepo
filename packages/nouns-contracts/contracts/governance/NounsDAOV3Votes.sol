@@ -67,11 +67,7 @@ library NounsDAOV3Votes {
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      */
-    function castVote(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 proposalId,
-        uint8 support
-    ) external {
+    function castVote(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId, uint8 support) external {
         emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support, 0), '');
     }
 
@@ -89,7 +85,7 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
-        uint16 clientId
+        uint32 clientId
     ) external {
         castRefundableVoteInternal(ds, proposalId, support, '', clientId);
     }
@@ -110,7 +106,7 @@ library NounsDAOV3Votes {
         uint256 proposalId,
         uint8 support,
         string calldata reason,
-        uint16 clientId
+        uint32 clientId
     ) external {
         castRefundableVoteInternal(ds, proposalId, support, reason, clientId);
     }
@@ -127,7 +123,7 @@ library NounsDAOV3Votes {
         uint256 proposalId,
         uint8 support,
         string memory reason,
-        uint16 clientId
+        uint32 clientId
     ) internal {
         uint256 startGas = gasleft();
         uint96 votes = castVoteInternal(ds, msg.sender, proposalId, support, clientId);
@@ -195,7 +191,7 @@ library NounsDAOV3Votes {
         address voter,
         uint256 proposalId,
         uint8 support,
-        uint16 clientId
+        uint32 clientId
     ) internal returns (uint96 votes) {
         NounsDAOStorageV3.ProposalState proposalState = ds.stateInternal(proposalId);
 
