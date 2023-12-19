@@ -54,15 +54,26 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
         string memory signature,
         bytes memory callData
     ) internal pure returns (NounsDAOV3Proposals.ProposalTxs memory) {
-        address[] memory targets = new address[](1);
-        targets[0] = target;
-        uint256[] memory values = new uint256[](1);
-        values[0] = value;
-        string[] memory signatures = new string[](1);
-        signatures[0] = signature;
-        bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = callData;
+        return createTxs(1, target, value, signature, callData);
+    }
 
+    function createTxs(
+        uint256 count,
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory callData
+    ) internal pure returns (NounsDAOV3Proposals.ProposalTxs memory) {
+        address[] memory targets = new address[](count);
+        uint256[] memory values = new uint256[](count);
+        string[] memory signatures = new string[](count);
+        bytes[] memory calldatas = new bytes[](count);
+        for (uint256 i = 0; i < count; i++) {
+            targets[i] = target;
+            values[i] = value;
+            signatures[i] = signature;
+            calldatas[i] = callData;
+        }
         return NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
     }
 }
@@ -278,6 +289,43 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
             'reason'
         );
     }
+
+    function test_createProposalCandidate_givenMoreThan10Txs_reverts() public {
+        vm.prank(dataAdmin);
+        data.setCreateCandidateCost(0);
+
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(11, address(0), 0, 'some signature', 'some data');
+
+        vm.expectRevert(NounsDAOV3Proposals.TooManyActions.selector);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
+    }
+
+    function test_createProposalCandidate_givenZeroTxs_reverts() public {
+        vm.prank(dataAdmin);
+        data.setCreateCandidateCost(0);
+
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(0, address(0), 0, 'some signature', 'some data');
+
+        vm.expectRevert(NounsDAOV3Proposals.MustProvideActions.selector);
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
+    }
+
+    function test_createProposalCandidate_givenArityMismatch_reverts() public {
+        vm.prank(dataAdmin);
+        data.setCreateCandidateCost(0);
+
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(1, address(0), 0, 'some signature', 'some data');
+        uint256[] memory values = new uint256[](2);
+
+        vm.expectRevert(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector);
+        data.createProposalCandidate(txs.targets, values, txs.signatures, txs.calldatas, description, slug, 0);
+    }
 }
 
 contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
@@ -460,6 +508,72 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
             txs.signatures,
             txs.calldatas,
             updateDescription,
+            slug,
+            0,
+            'reason'
+        );
+    }
+
+    function test_updateProposalCandidate_givenMoreThan10Txs_reverts() public {
+        vm.prank(dataAdmin);
+        data.setUpdateCandidateCost(0);
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
+        txs = createTxs(11, address(0), 0, 'some signature', 'some data');
+
+        vm.expectRevert(NounsDAOV3Proposals.TooManyActions.selector);
+        data.updateProposalCandidate(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0,
+            'reason'
+        );
+    }
+
+    function test_updateProposalCandidate_givenZeroTxs_reverts() public {
+        vm.prank(dataAdmin);
+        data.setUpdateCandidateCost(0);
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
+        txs = createTxs(0, address(0), 0, 'some signature', 'some data');
+
+        vm.expectRevert(NounsDAOV3Proposals.MustProvideActions.selector);
+        data.updateProposalCandidate(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            0,
+            'reason'
+        );
+    }
+
+    function test_updateProposalCandidate_givenArityMismatch_reverts() public {
+        vm.prank(dataAdmin);
+        data.setUpdateCandidateCost(0);
+        string memory description = 'some description';
+        string memory slug = 'some slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
+        uint256[] memory values = new uint256[](2);
+
+        vm.expectRevert(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector);
+        data.updateProposalCandidate(
+            txs.targets,
+            values,
+            txs.signatures,
+            txs.calldatas,
+            description,
             slug,
             0,
             'reason'

@@ -142,6 +142,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         }
 
         if (propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugAlreadyUsed();
+        NounsDAOV3Proposals.checkProposalTxs(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas));
 
         propCandidates[msg.sender][keccak256(bytes(slug))] = true;
 
@@ -193,6 +194,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     ) external payable {
         if (!isNouner(msg.sender) && msg.value < updateCandidateCost) revert MustBeNounerOrPaySufficientFee();
         if (!propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugDoesNotExist();
+        NounsDAOV3Proposals.checkProposalTxs(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas));
 
         bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(
             msg.sender,
