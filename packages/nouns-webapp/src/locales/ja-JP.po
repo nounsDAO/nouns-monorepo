@@ -517,8 +517,6 @@ msgstr "却下"
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
 
@@ -775,11 +773,6 @@ msgstr ""
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
-
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "Get Involved"
-msgstr ""
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
@@ -1740,10 +1733,6 @@ msgstr "すべての入札を表示"
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
-
-#: src/components/Bid/index.tsx
-msgid "Vote for the next Noun"
-msgstr "次のNounに投票する"
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Vote history"
