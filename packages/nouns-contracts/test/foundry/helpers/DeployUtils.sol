@@ -152,7 +152,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return NounsDAOLogicV2(payable(address(daoProxy)));
     }
 
-    function get1967Implementation(address proxy) internal returns (address) {
+    function get1967Implementation(address proxy) internal view returns (address) {
         bytes32 slot = bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1);
         return address(uint160(uint256(vm.load(proxy, slot))));
     }
