@@ -193,7 +193,7 @@ const NavBar = () => {
               )}
             </div>
             <Nav.Link
-              href={externalURL(ExternalURL.nounsCenter)}
+              href={externalURL(ExternalURL.document)}
               className={classes.nounsNavLink}
               target="_blank"
               rel="noreferrer"
