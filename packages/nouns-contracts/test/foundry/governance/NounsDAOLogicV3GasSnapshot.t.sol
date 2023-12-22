@@ -178,6 +178,10 @@ contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSn
     ) internal override returns (INounsDAOShared) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
+
+    function test_proposalsV3() public {
+        daoProxy.proposalsV3(1);
+    }
 }
 
 contract NounsDAOLogic_GasSnapshot_V2_vote is DeployUtilsV3, NounsDAOLogic_GasSnapshot_castVote {

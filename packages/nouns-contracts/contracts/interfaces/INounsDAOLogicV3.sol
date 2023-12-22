@@ -261,7 +261,16 @@ interface INounsDAOLogicV3 {
      */
     function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
 
+    function proposalDataForRewards(
+        uint256 proposalId
+    ) external view returns (NounsDAOStorageV3.ProposalForRewards memory);
+
     function proposalClientId(uint256 proposalId) external view returns (uint16);
+
+    function proposalVoteClientsData(
+        uint256 proposalId,
+        uint32[] calldata clientIds
+    ) external view returns (NounsDAOStorageV3.ClientVoteData[] memory);
 
     function proposalVoteClientData(
         uint256 proposalId,

@@ -7,6 +7,7 @@ import { NounsToken } from '../../contracts/NounsToken.sol';
 import { INounsAuctionHouseRewards } from '../../contracts/interfaces/INounsAuctionHouseRewards.sol';
 import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -166,21 +167,23 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
 
         rewards.setNextProposalRewardTimestamp(block.timestamp);
 
-        // create proposal 1 by client A
-        proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
+        for (uint256 i; i < 10; i++) {
+            // create proposal 1 by client A
+            proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
 
-        // go forward 3 days until voting starts
-        bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
+            // go forward 3 days until voting starts
+            bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
 
-        // vote on proposal with client A, B & zero
-        vote(voter, proposalId, 1, 'i support', CLIENT_ID);
-        vote(voter2, proposalId, 1, 'i support');
-        vote(voter3, proposalId, 1, 'i dont support', CLIENT_ID2);
+            // vote on proposal with client A, B & zero
+            vote(voter, proposalId, 1, 'i support', CLIENT_ID);
+            vote(voter2, proposalId, 1, 'i support');
+            vote(voter3, proposalId, 0, 'i dont support', CLIENT_ID2);
 
-        // go forward 4 days until voting ends
-        bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
+            // go forward 4 days until voting ends
+            bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
 
-        dao.queue(proposalId);
+            dao.queue(proposalId);
+        }
 
         // create proposal 2 by client B
         proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID2);
@@ -190,6 +193,7 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
 
         // vote on proposal with client A
         vote(voter, proposalId, 1, 'i support', CLIENT_ID);
+        vote(voter2, proposalId, 1, 'i support');
 
         // go forward 4 days until voting ends
         bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
@@ -225,8 +229,8 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
 
         rewards.bountyRewardForProposals({
             lastTimestamp: uint32(block.timestamp - 1),
-            expectedNumEligibleProposals: 2,
-            expectedNumEligibileVotes: 35,
+            expectedNumEligibleProposals: 11,
+            expectedNumEligibileVotes: 270,
             firstNounId: settledNounIdBeforeProposal,
             lastNounId: settledNounIdAfterProposal + 1, // TODO: why do we not include the lastNounId ?
             votingClientIds: clientIds

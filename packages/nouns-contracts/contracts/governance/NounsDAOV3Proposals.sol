@@ -772,6 +772,25 @@ library NounsDAOV3Proposals {
             });
     }
 
+    function proposalDataForRewards(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId
+    ) internal view returns (NounsDAOStorageV3.ProposalForRewards memory) {
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        return
+            NounsDAOStorageV3.ProposalForRewards({
+                endBlock: proposal.endBlock,
+                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
+                forVotes: proposal.forVotes,
+                againstVotes: proposal.againstVotes,
+                abstainVotes: proposal.abstainVotes,
+                totalSupply: proposal.totalSupply,
+                creationTimestamp: proposal.creationTimestamp,
+                numSigners: proposal.signers.length,
+                clientId: proposal.clientId
+            });
+    }
+
     /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount

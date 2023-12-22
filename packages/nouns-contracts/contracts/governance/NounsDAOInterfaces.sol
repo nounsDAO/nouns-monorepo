@@ -788,6 +788,18 @@ contract NounsDAOStorageV3 {
         uint256 expirationTimestamp;
     }
 
+    struct ProposalForRewards {
+        uint256 endBlock;
+        uint256 objectionPeriodEndBlock;
+        uint256 forVotes;
+        uint256 againstVotes;
+        uint256 abstainVotes;
+        uint256 totalSupply;
+        uint256 creationTimestamp;
+        uint256 numSigners;
+        uint32 clientId;
+    }
+
     struct ProposalCondensed {
         /// @notice Unique id for looking up a proposal
         uint256 id;
