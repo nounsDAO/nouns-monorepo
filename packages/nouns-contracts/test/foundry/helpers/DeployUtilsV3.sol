@@ -20,6 +20,7 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { AuctionHouseUpgrader } from './AuctionHouseUpgrader.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     function _createDAOV3Proxy(
@@ -132,6 +133,9 @@ abstract contract DeployUtilsV3 is DeployUtils {
 
         vm.prank(address(timelock));
         NounsAuctionHouse(address(auctionProxy)).initialize(nounsToken, makeAddr('weth'), 2, 0, 1, 10 minutes);
+
+        vm.prank(address(timelock));
+        AuctionHouseUpgrader.upgradeAuctionHouse(address(timelock), auctionAdmin, auctionProxy);
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));
