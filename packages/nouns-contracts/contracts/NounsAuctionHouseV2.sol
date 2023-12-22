@@ -52,7 +52,7 @@ contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, Reent
     uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction public auction;
+    INounsAuctionHouseV2.Auction public auction;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -163,7 +163,7 @@ contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, Reent
      * @dev This contract only accepts payment in ETH.
      */
     function _handleBid(uint256 nounId, string memory comment) internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouseV2.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
@@ -231,7 +231,7 @@ contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, Reent
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouseV2.Auction memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
