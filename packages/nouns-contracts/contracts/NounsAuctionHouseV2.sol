@@ -28,11 +28,11 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
+import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
-contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
+contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The Nouns ERC721 token contract
     INounsToken public nouns;
 
@@ -97,42 +97,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         _settleAuction();
     }
 
-    /**
-     * @notice Create a bid for a Noun, with a given amount.
-     * @dev This contract only accepts payment in ETH.
-     */
     function createBid(uint256 nounId) external payable override nonReentrant {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        _handleBid(nounId, '');
+    }
 
-        require(_auction.nounId == nounId, 'Noun not up for auction');
-        require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
-            'Must send more than last bid by minBidIncrementPercentage amount'
-        );
-
-        address payable lastBidder = _auction.bidder;
-
-        // Refund the last bidder, if applicable
-        if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
-        }
-
-        auction.amount = msg.value;
-        auction.bidder = payable(msg.sender);
-
-        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
-        if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
-        }
-
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
-
-        if (extended) {
-            emit AuctionExtended(_auction.nounId, _auction.endTime);
-        }
+    function createBidWithComment(uint256 nounId, string calldata comment) external payable override nonReentrant {
+        _handleBid(nounId, comment);
     }
 
     /**
@@ -186,6 +156,48 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
+    }
+
+    /**
+     * @notice Create a bid for a Noun, with a given amount.
+     * @dev This contract only accepts payment in ETH.
+     */
+    function _handleBid(uint256 nounId, string memory comment) internal {
+        INounsAuctionHouse.Auction memory _auction = auction;
+
+        require(_auction.nounId == nounId, 'Noun not up for auction');
+        require(block.timestamp < _auction.endTime, 'Auction expired');
+        require(msg.value >= reservePrice, 'Must send at least reservePrice');
+        require(
+            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+            'Must send more than last bid by minBidIncrementPercentage amount'
+        );
+
+        address payable lastBidder = _auction.bidder;
+
+        // Refund the last bidder, if applicable
+        if (lastBidder != address(0)) {
+            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+        }
+
+        auction.amount = msg.value;
+        auction.bidder = payable(msg.sender);
+
+        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        if (extended) {
+            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
+        }
+
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+
+        if (bytes(comment).length > 0) {
+            emit AuctionBidComment(comment);
+        }
+
+        if (extended) {
+            emit AuctionExtended(_auction.nounId, _auction.endTime);
+        }
     }
 
     /**

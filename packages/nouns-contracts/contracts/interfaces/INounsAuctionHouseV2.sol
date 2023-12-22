@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.6;
 
-interface INounsAuctionHouse {
+interface INounsAuctionHouseV2 {
     struct Auction {
         // ID for the Noun (ERC721 token ID)
         uint256 nounId;
@@ -37,6 +37,8 @@ interface INounsAuctionHouse {
 
     event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
 
+    event AuctionBidComment(string comment);
+
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
     event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
@@ -53,6 +55,8 @@ interface INounsAuctionHouse {
 
     function createBid(uint256 nounId) external payable;
 
+    function createBidWithComment(uint256 nounId, string calldata comment) external payable;
+    
     function pause() external;
 
     function unpause() external;
@@ -62,16 +66,4 @@ interface INounsAuctionHouse {
     function setReservePrice(uint256 reservePrice) external;
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
-
-    function auction()
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            address payable,
-            bool
-        );
 }
