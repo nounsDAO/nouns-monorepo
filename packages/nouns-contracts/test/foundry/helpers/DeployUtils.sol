@@ -14,6 +14,10 @@ import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
+import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
+import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
@@ -21,6 +25,12 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant VOTING_DELAY = 1;
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
+
+    // Auction House Config
+    uint256 constant TIME_BUFFER = 900; // 15 minutes in seconds
+    uint256 constant RESERVE_PRICE = 2; // Whole number
+    uint256 constant MIN_INCREMENT_BID_PERCENTAGE = 5; // Whole number
+    uint256 constant DURATION = 86400; // 24 hours in seconds
 
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
         NounsDescriptor descriptor = new NounsDescriptor();
@@ -41,6 +51,11 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsArt art = new NounsArt(address(descriptorV2), inflator);
         descriptorV2.setArt(art);
         return descriptorV2;
+    }
+
+    function _deployAuctionHouseV2() internal returns (address) {
+        NounsAuctionHouseV2 auctionHouseV2 = new NounsAuctionHouseV2();
+        return (address(auctionHouseV2));
     }
 
     function _deployTokenAndDAOAndPopulateDescriptor(
@@ -75,5 +90,61 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         _populateDescriptor(descriptor);
 
         return (address(nounsToken), address(proxy));
+    }
+
+    function _deployTokenAndDAOAndAndAuctionHouseAndPopulateDescriptor(
+        address noundersDAO,
+        address vetoer,
+        address minter,
+        address weth
+    ) internal returns (address, address, address) {
+        IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
+
+        NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+        NounsDescriptor descriptor = new NounsDescriptor();
+        NounsToken nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
+        NounsDAOProxy proxy = new NounsDAOProxy(
+            address(timelock),
+            address(nounsToken),
+            vetoer,
+            address(timelock),
+            address(new NounsDAOLogicV1()),
+            VOTING_PERIOD,
+            VOTING_DELAY,
+            PROPOSAL_THRESHOLD,
+            QUORUM_VOTES_BPS
+        );
+
+        vm.prank(address(timelock));
+        timelock.setPendingAdmin(address(proxy));
+        vm.prank(address(proxy));
+        timelock.acceptAdmin();
+
+        nounsToken.transferOwnership(address(timelock));
+
+        // logic, admin, data
+        NounsAuctionHouseProxy auctionHouseProxy = new NounsAuctionHouseProxy();
+        NounsAuctionHouse auctionHouse = new NounsAuctionHouse();
+          
+        NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
+
+        // initialize 
+        //  auctionHouse.Initialize( 
+        //     address(nounsToken),
+        //     weth,
+        //     TIME_BUFFER,
+        //     RESERVE_PRICE,
+        //     MIN_INCREMENT_BID_PERCENTAGE,
+        //     DURATION);
+
+        _populateDescriptor(descriptor);
+
+        return (
+            address(nounsToken),
+            address(proxy),
+            address(auctionHouseProxy),
+            address(auctionHouseProxyAdmin),
+            address(auctionHouse)
+        );
     }
 }
