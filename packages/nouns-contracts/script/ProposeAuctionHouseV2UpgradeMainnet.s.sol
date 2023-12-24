@@ -13,7 +13,7 @@ interface NounsDAO {
     ) external returns (uint256);
 }
 
-contract ProposeDAOV3UpgradeMainnet is Script {
+contract ProposeAuctionHouseV3UpgradeMainnet is Script {
     NounsDAO public constant NOUNS_DAO_PROXY_MAINNET = NounsDAO(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
     address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
