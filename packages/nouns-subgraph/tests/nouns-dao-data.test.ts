@@ -84,6 +84,7 @@ describe('nouns-dao-data', () => {
       assert.bytesEquals(txHash, candidate.createdTransactionHash);
       assert.bigIntEquals(blockTimestamp, candidate.createdTimestamp);
       assert.bigIntEquals(blockNumber, candidate.createdBlock);
+      assert.bigIntEquals(BigInt.fromI32(1), candidate.number);
 
       const version = ProposalCandidateVersion.load(candidate.latestVersion)!;
       assert.stringEquals(candidate.id, version.proposal);
@@ -116,6 +117,8 @@ describe('nouns-dao-data', () => {
         encodedProposalHash,
         sigDigest,
         reason,
+        blockNumber,
+        blockTimestamp,
       );
 
       handleSignatureAdded(event);
@@ -125,14 +128,13 @@ describe('nouns-dao-data', () => {
       )!;
 
       const version = ProposalCandidateVersion.load(candidate.latestVersion);
-      const content = ProposalCandidateContent.load(version!.content);
-      assert.i32Equals(content!.contentSignatures.length, 1);
+      const content = ProposalCandidateContent.load(version!.content)!;
+      assert.i32Equals(content.contentSignatures.load().length, 1);
       assert.stringEquals(
-        content!.contentSignatures[0],
+        content.contentSignatures.load()[0].id,
         signerWithDelegate.toHexString().concat('-').concat(sig.toHexString()),
       );
-
-      const signature = ProposalCandidateSignature.load(content!.contentSignatures[0])!;
+      const signature = ProposalCandidateSignature.load(content.contentSignatures.load()[0].id)!;
       assert.stringEquals(signature.signer, signerWithDelegate.toHexString());
       assert.bytesEquals(signature.sig, sig);
       assert.bigIntEquals(signature.expirationTimestamp, expiry);
@@ -140,6 +142,8 @@ describe('nouns-dao-data', () => {
       assert.bytesEquals(signature.sigDigest, sigDigest);
       assert.stringEquals(signature.reason, reason);
       assert.booleanEquals(signature.canceled, false);
+      assert.bigIntEquals(signature.createdBlock, blockNumber);
+      assert.bigIntEquals(signature.createdTimestamp, blockTimestamp);
     });
 
     test('skips signature if encodedProposalHash does not match latest version', () => {
@@ -158,6 +162,8 @@ describe('nouns-dao-data', () => {
         differentEncodedProposalHash,
         sigDigest,
         reason,
+        blockNumber,
+        blockTimestamp,
       );
 
       handleSignatureAdded(event);
@@ -171,6 +177,44 @@ describe('nouns-dao-data', () => {
         event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString()),
       );
       assert.assertNull(signature);
+    });
+
+    test('save a proposal candidade includes candidate index', () => {
+      const candidate = ProposalCandidate.load(
+        candidateProposer.toHexString().concat('-').concat(slug),
+      )!;
+      assert.stringEquals(candidateProposer.toHexString(), candidate.proposer.toHexString());
+      assert.stringEquals(slug, candidate.slug);
+      assert.bytesEquals(txHash, candidate.createdTransactionHash);
+      assert.bigIntEquals(blockTimestamp, candidate.createdTimestamp);
+      assert.bigIntEquals(blockNumber, candidate.createdBlock);
+      assert.bigIntEquals(BigInt.fromI32(1), candidate.number);
+
+      const newSlug = 'new slug';
+
+      // save new one
+      const event = createProposalCandidateCreatedEvent(
+        txHash,
+        logIndex,
+        blockTimestamp,
+        blockNumber,
+        candidateProposer,
+        targets,
+        values,
+        signatures,
+        calldatas,
+        description,
+        newSlug,
+        encodedProposalHash,
+      );
+
+      handleProposalCandidateCreated(event);
+
+      const candidate2 = ProposalCandidate.load(
+        candidateProposer.toHexString().concat('-').concat(newSlug),
+      )!;
+
+      assert.bigIntEquals(BigInt.fromI32(2), candidate2.number);
     });
   });
 });

@@ -461,7 +461,7 @@ contract NounsDescriptorV2Test is Test {
     }
 
     function _makeArtGettersNotRevert() internal {
-        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundCount.selector), abi.encode(123));
+        vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgroundCount.selector), abi.encode(123));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgrounds.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.bodies.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.accessories.selector), abi.encode('return value'));

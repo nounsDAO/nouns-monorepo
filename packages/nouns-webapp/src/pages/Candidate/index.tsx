@@ -47,11 +47,11 @@ const CandidatePage = ({
   const [isSignerWithActiveOrPendingProposal, setIsSignerWithActiveOrPendingProposal] = useState<
     boolean | undefined
   >(undefined);
-  const candidate = useCandidateProposal(id, dataFetchPollInterval);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = !(activeAccount === undefined);
   const blockNumber = useBlockNumber();
+  const candidate = useCandidateProposal(id, dataFetchPollInterval, false, currentBlock);
   const { account } = useEthers();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -255,36 +255,34 @@ const CandidatePage = ({
 
       {candidate.data && (
         <Row>
+          <Col lg={12}>
+            <a className={classes.jump} href="#feedback">Jump to Sponsored Votes and Feedback</a>
+          </Col>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate.data} />
           </Col>
-          <Col lg={4} className={classes.sidebar}>
+          <Col id="feedback" lg={4} className={classes.sidebar}>
             {currentBlock &&
               threshold !== undefined &&
               userVotes !== undefined &&
-              !candidate.data.isProposal ? (
-              <CandidateSponsors
-                candidate={candidate.data}
-                slug={candidate.data.slug ?? ''}
-                id={candidate.data.id}
-                isProposer={isProposer}
-                handleRefetchCandidateData={handleRefetchCandidateData}
-                setDataFetchPollInterval={setDataFetchPollInterval}
-                currentBlock={currentBlock - 1}
-                requiredVotes={threshold + 1}
-                userVotes={userVotes}
-                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                latestProposal={latestProposal}
-                isUpdateToProposal={isUpdateToProposal}
-                originalProposal={originalProposal}
-              />
-            ) : (
-              <>
-                {/* <div className={classes.sponsorsLoading}>
-                    <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
-                  </div> */}
-              </>
-            )}
+              !candidate.data.isProposal && (
+                <CandidateSponsors
+                  candidate={candidate.data}
+                  slug={candidate.data.slug ?? ''}
+                  id={candidate.data.id}
+                  isProposer={isProposer}
+                  handleRefetchCandidateData={handleRefetchCandidateData}
+                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  currentBlock={currentBlock - 1}
+                  requiredVotes={threshold + 1}
+                  userVotes={userVotes}
+                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                  latestProposal={latestProposal}
+                  isUpdateToProposal={isUpdateToProposal}
+                  originalProposal={originalProposal}
+                  blockNumber={blockNumber}
+                />
+              )}
             <VoteSignals
               proposalId={candidate.data.id}
               proposer={candidate.data.proposer}

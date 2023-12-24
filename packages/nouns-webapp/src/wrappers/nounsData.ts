@@ -1,8 +1,9 @@
 import { utils } from 'ethers';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@nouns/contracts';
-import { useBlockNumber, useContractCall, useContractFunction } from '@usedapp/core';
+import { useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
+  Delegates,
   candidateFeedbacksQuery,
   candidateProposalQuery,
   candidateProposalVersionsQuery,
@@ -17,12 +18,12 @@ import {
   formatProposalTransactionDetails,
   formatProposalTransactionDetailsToUpdate,
   removeMarkdownStyle,
+  useActivePendingUpdatableProposers,
   useProposalThreshold,
+  useUpdatableProposalIds,
 } from './nounsDao';
 import * as R from 'ramda';
-import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
-import { useEffect, useState } from 'react';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
@@ -61,71 +62,135 @@ export const useAddSignature = () => {
   return { addSignature, addSignatureState };
 };
 
-export const useCandidateProposals = () => {
-  const [blockNumber, setBlockNumber] = useState<number>(0);
-  const currentBlock = useBlockNumber();
-  useEffect(() => {
-    // prevent blockNumber from being reset to 0 on new blocks
-    if (blockNumber === 0) {
-      setBlockNumber(currentBlock || blockNumber);
+
+const deDupeSigners = (signers: string[]) => {
+  const uniqueSigners: string[] = [];
+  signers.forEach(signer => {
+    if (!uniqueSigners.includes(signer)) {
+      uniqueSigners.push(signer);
     }
-  }, [currentBlock, blockNumber]);
+  });
+  return uniqueSigners;
+};
+
+const filterSigners = (
+  timestampNow: number,
+  delegateSnapshot: Delegates | undefined,
+  activePendingProposers: string[],
+  signers?: CandidateSignature[],
+  proposalIdToUpdate?: number,
+  updatableProposalIds?: number[]
+) => {
+  const sigsFiltered = signers?.filter(
+    sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
+  );
+  let voteCount = 0;
+  let activeSigs: CandidateSignature[] = [];
+
+  sigsFiltered?.forEach(signature => {
+    const delegateVoteCount =
+      delegateSnapshot?.delegates?.find(delegate => delegate.id === signature.signer.id)
+        ?.nounsRepresented.length || 0;
+    // don't count votes from signers who have active or pending proposals
+    // but include them in the list of signers to display with a note that they have an active proposal
+    const parentProposalIsUpdatable = proposalIdToUpdate && updatableProposalIds?.includes(proposalIdToUpdate ?? 0);
+    const activeOrPendingProposal = !parentProposalIsUpdatable && activePendingProposers.includes(signature.signer.id);
+    if (!activeOrPendingProposal) {
+      voteCount += delegateVoteCount;
+    }
+    const sigWithVotes = {
+      ...signature,
+      signer: {
+        ...signature.signer,
+        voteCount: delegateVoteCount,
+        activeOrPendingProposal: activeOrPendingProposal
+      },
+    };
+    activeSigs.push(sigWithVotes);
+  });
+
+  const filteredSignatures = activeSigs.filter(
+    (signature: CandidateSignature) => {
+      return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
+    },
+  );
+  const sortedSignatures = [...filteredSignatures].sort((a, b) => {
+    return a.expirationTimestamp - b.expirationTimestamp;
+  });
+
+  return { activeSigs: sortedSignatures, voteCount };
+};
+
+export const useCandidateProposals = (blockNumber?: number) => {
+  const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: PartialProposalCandidate[] = candidates?.proposalCandidates?.filter(
-    (candidate: PartialProposalCandidate) =>
+  const unmatchedCandidates: ProposalCandidateSubgraphEntity[] = candidates?.proposalCandidates?.filter(
+    (candidate: ProposalCandidateSubgraphEntity) =>
       candidate.latestVersion.content.matchingProposalIds.length === 0 &&
       candidate.canceled === false,
   );
   const activeCandidateProposers = unmatchedCandidates?.map(
-    (candidate: PartialProposalCandidate) => candidate.proposer,
+    (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
   );
   const proposerDelegates =
-    useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber) || 0;
+    useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
+  const allSigners = unmatchedCandidates?.map(
+    (candidate: ProposalCandidateSubgraphEntity) =>
+      candidate.latestVersion.content.contentSignatures?.map(
+        (sig: CandidateSignature) => sig.signer.id,
+      ),
+  ).flat();
+  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(allSigners ? deDupeSigners(allSigners) : [], blockNumber ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
   const candidatesData = proposerDelegates.data && unmatchedCandidates?.map(
-    (candidate: PartialProposalCandidate, i: number) => {
-      const proposerVotes =
-        (proposerDelegates.data && proposerDelegates.data.delegates[i]?.nounsRepresented?.length) ||
-        0;
-      const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
-      return {
-        ...candidate,
-        requiredVotes: requiredVotes,
-        proposerVotes: proposerVotes,
-      };
+    (candidate: ProposalCandidateSubgraphEntity) => {
+      const proposerVotes = proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())?.nounsRepresented?.length || 0;
+      const parsedData = parseSubgraphCandidate(
+        candidate,
+        proposerVotes,
+        threshold,
+        timestampNow,
+        activePendingProposers.data,
+        false,
+        signersDelegateSnapshot.data,
+        updatableProposalIds.data
+      );
+      return parsedData;
     },
   );
-  candidatesData?.sort((a, b) => {
+
+  candidatesData && candidatesData?.sort((a, b) => {
     return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
   });
   return { loading, data: candidatesData, error };
 };
 
-export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean) => {
-  const [blockNumber, setBlockNumber] = useState<number>(0);
-  const currentBlock = useBlockNumber();
-  useEffect(() => {
-    // prevent blockNumber from triggering a re-render when it's already set
-    if (blockNumber === 0) {
-      setBlockNumber(currentBlock || blockNumber);
-    }
-  }, [currentBlock, blockNumber]);
+export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean, blockNumber?: number) => {
+  const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
     pollInterval: pollInterval || 0,
   });
-  const timestamp = useBlockTimestamp(blockNumber);
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
+  const versionSignatures = data?.proposalCandidate.latestVersion.content.contentSignatures;
+  const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
   const proposerDelegates =
-    useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber) || 0;
+    useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber || 0);
   const proposerNounVotes =
     (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
-  const parsedData = proposerDelegates.data && parseSubgraphCandidate(
-    data?.proposalCandidate,
+  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(allSigners ? deDupeSigners(allSigners) : [], blockNumber ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
+  const parsedData = proposerDelegates.data && data?.proposalCandidate && parseSubgraphCandidate(
+    data.proposalCandidate,
     proposerNounVotes,
     threshold,
+    timestampNow,
+    activePendingProposers.data,
     toUpdate,
-    blockNumber,
-    timestamp,
+    signersDelegateSnapshot.data,
+    updatableProposalIds.data
   );
   return { loading, data: parsedData, error, refetch };
 };
@@ -228,16 +293,15 @@ export const useUpdateProposalBySigs = () => {
 };
 
 const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity | undefined,
+  candidate: ProposalCandidateSubgraphEntity,
   proposerVotes: number,
   threshold: number,
+  timestamp: number,
+  activePendingProposers: string[],
   toUpdate?: boolean,
-  blockNumber?: number,
-  timestamp?: number,
+  delegateSnapshot?: Delegates,
+  updatableProposalIds?: number[]
 ) => {
-  if (!candidate) {
-    return;
-  }
   const description = candidate.latestVersion.content.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^['"]|['"]$)/g, '');
@@ -254,16 +318,16 @@ const parseSubgraphCandidate = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const filteredSignatures = candidate.latestVersion.content.contentSignatures.filter(
-    (signature: CandidateSignature) => {
-      return signature.canceled === false && signature.expirationTimestamp > timestamp! / 1000;
-    },
-  );
-  const sortedSignatures = [...filteredSignatures].sort((a, b) => {
-    return a.expirationTimestamp - b.expirationTimestamp;
-  });
-  const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
 
+  const { activeSigs, voteCount } = filterSigners(
+    timestamp,
+    delegateSnapshot,
+    activePendingProposers,
+    candidate.latestVersion.content.contentSignatures,
+    candidate.latestVersion.content.proposalIdToUpdate ? parseInt(candidate.latestVersion.content.proposalIdToUpdate) : undefined,
+    updatableProposalIds
+  );
+  const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
   return {
     id: candidate.id,
     slug: candidate.slug,
@@ -276,18 +340,21 @@ const parseSubgraphCandidate = (
     proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
     matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
     requiredVotes: requiredVotes,
+    neededVotes: requiredVotes,
     proposerVotes: proposerVotes,
+    voteCount: voteCount,
     version: {
       content: {
         title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
         transactionHash: details.encodedProposalHash,
-        contentSignatures: sortedSignatures,
+        contentSignatures: activeSigs,
         targets: candidate.latestVersion.content.targets,
         values: candidate.latestVersion.content.values,
         signatures: candidate.latestVersion.content.signatures,
         calldatas: candidate.latestVersion.content.calldatas,
+        proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
       },
     },
   };
@@ -421,6 +488,8 @@ export interface CandidateSignature {
     proposals: {
       id: string;
     }[];
+    voteCount?: number;
+    activeOrPendingProposal?: boolean;
   };
 }
 
@@ -435,6 +504,7 @@ export interface ProposalCandidateInfo {
   isProposal: boolean;
   requiredVotes: number;
   proposerVotes: number;
+  voteCount: number;
   matchingProposalIds: {
     id: string;
   }[];
@@ -458,18 +528,7 @@ export interface ProposalCandidateVersion {
     values: string[];
     signatures: string[];
     calldatas: string[];
-    contentSignatures: {
-      reason: string;
-      expirationTimestamp: number;
-      sig: string;
-      canceled: boolean;
-      signer: {
-        id: string;
-        proposals: {
-          id: string;
-        }[];
-      };
-    }[];
+    contentSignatures: CandidateSignature[];
   };
 }
 

@@ -97,11 +97,11 @@ const Proposals = ({
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [blockNumber, setBlockNumber] = useState<number>(0);
+  const currentBlock = useBlockNumber();
   const { account } = useEthers();
   const history = useHistory();
-  const { data: candidates } = useCandidateProposals();
+  const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
   const connectedAccountNounVotes = useUserVotes() || 0;
-  const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
@@ -361,9 +361,9 @@ const Proposals = ({
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
-                      if (+c.latestVersion.content.proposalIdToUpdate > 0) {
+                      if (+c.version.content.proposalIdToUpdate > 0) {
                         const prop = proposals.find(
-                          p => p.id === c.latestVersion.content.proposalIdToUpdate,
+                          p => p.id === c.version.content.proposalIdToUpdate,
                         );
                         let isOriginalPropUpdatable =
                           prop &&
@@ -379,7 +379,7 @@ const Proposals = ({
                             latestProposal={proposals[proposals.length - 1]}
                             candidate={c}
                             key={c.id}
-                            nounsRequired={nounsRequired}
+                            nounsRequired={threshold}
                             currentBlock={blockNumber ? blockNumber - 1 : 0}
                           />
                         </div>

@@ -21,8 +21,8 @@
     "test:configgen": "echo libsFolder: $(dirname `cd ../..; pwd`)/nouns-monorepo/node_modules > matchstick.yaml",
     "test": "graph test",
     "create:localnode": "graph create --node http://localhost:8020/",
-    "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:localnode": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy:localnode": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn graph build && goldsky subgraph deploy nouns-v3-goerli/0.1.6",
@@ -31,8 +31,8 @@
     "mustache": "mustache"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "0.34.0",
-    "@graphprotocol/graph-ts": "0.28.0",
+    "@graphprotocol/graph-cli": "0.51.0",
+    "@graphprotocol/graph-ts": "0.31.0",
     "mustache": "4.2.0",
     "matchstick-as": "0.5.0"
   }

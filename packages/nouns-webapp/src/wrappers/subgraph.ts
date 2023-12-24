@@ -129,36 +129,60 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
 }
 `;
 
+export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => gql`
+{
+  proposals(
+    where: {
+    	status: PENDING, endBlock_gt: ${currentBlock}, updatePeriodEndBlock_gt: ${currentBlock},      
+    }
+    ) {
+      id
+  }
+}
+`;
+
 export const candidateProposalsQuery = (first = 1_000) => gql`
   {
     proposalCandidates {
       id
-      slug
-      proposer
-      lastUpdatedTimestamp
-      canceled
-      createdTransactionHash
-      latestVersion {
-        content {
-          title
-          proposalIdToUpdate
-          contentSignatures {
-            signer {
-              id
-              proposals {
-                id
-              }
-            }
-            sig
-            expirationTimestamp
-            canceled
-            reason
-          }
-          matchingProposalIds {
+    slug
+    proposer
+    lastUpdatedTimestamp
+    createdTransactionHash
+    canceled
+    versions {
+      content {
+        title
+      }
+    }
+    latestVersion {
+      content {
+        title
+        description
+        targets
+        values
+        signatures
+        calldatas
+        encodedProposalHash
+        proposalIdToUpdate
+        contentSignatures {
+          id
+          signer {
             id
+            proposals {
+              id
+            }
           }
+          sig
+          expirationTimestamp
+          canceled
+          reason
+        }
+        matchingProposalIds {
+          id
         }
       }
+    }
     }
   }
 `;
@@ -490,10 +514,10 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
 }
 `;
 
-export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
+export const adjustedNounSupplyAtPropSnapshot = (proposalId: string) => gql`
 {
   proposals(where: {id: ${proposalId}}) {
-    totalSupply
+    adjustedTotalSupply
   }
 }
 `;
@@ -555,7 +579,7 @@ export const ownedNounsQuery = (owner: string) => gql`
 
 export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
   {
-    escrowedNouns(where: {owner_: {id: "${owner}"}}) {
+    escrowedNouns(where: {owner_: {id: "${owner}"}}, first: 1000) {
       noun {
         id
       }
@@ -568,7 +592,7 @@ export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
 
 export const escrowDepositEventsQuery = (forkId: string) => gql`
   {
-    escrowDeposits (where: {fork: "${forkId}"}) {
+    escrowDeposits (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
       id 
       createdAt
       owner {
@@ -582,7 +606,7 @@ export const escrowDepositEventsQuery = (forkId: string) => gql`
 `;
 export const forkJoinsQuery = (forkId: string) => gql`
   {
-    forkJoins (where: {fork: "${forkId}"}) {
+    forkJoins (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
       id 
       createdAt
       owner {
@@ -597,7 +621,7 @@ export const forkJoinsQuery = (forkId: string) => gql`
 
 export const escrowWithdrawEventsQuery = (forkId: string) => gql`
   {
-    escrowWithdrawals (where: {fork: "${forkId}"}) {
+    escrowWithdrawals (where: {fork: "${forkId}", tokenIDs_not: []}, first: 1000) {
       id 
       createdAt
       owner {
@@ -631,12 +655,12 @@ export const forkDetailsQuery = (id: string) => gql`
       tokensForkingCount
       tokensInEscrowCount
       forkingPeriodEndTimestamp
-      escrowedNouns {
+      escrowedNouns(first: 1000) {
         noun {
           id
         }
       }
-      joinedNouns {
+      joinedNouns(first: 1000) {
         noun {
           id
         }
@@ -658,4 +682,13 @@ export const forksQuery = () => gql`
       forkingPeriodEndTimestamp
     }
   }
+`;
+
+export const isForkActiveQuery = (currentTimestamp: number) => gql`
+{
+  forks(where: {executed:true, forkingPeriodEndTimestamp_gt:${currentTimestamp}}) {
+    forkID
+    forkingPeriodEndTimestamp
+  }
+}
 `;

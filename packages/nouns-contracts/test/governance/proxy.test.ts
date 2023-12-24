@@ -6,17 +6,17 @@ import {
   TestSigners,
   setTotalSupply,
   blockNumber,
-  deployGovernorV2WithV2Proxy,
   populateDescriptorV2,
-} from '../../../utils';
+  deployGovernorV3WithV3Proxy,
+} from '../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
-} from '../../../../typechain';
-import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
+  NounsDAOLogicV3,
+} from '../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../constants';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -24,8 +24,7 @@ const { expect } = chai;
 let token: NounsToken;
 let deployer: SignerWithAddress;
 let signers: TestSigners;
-
-let govV2: NounsDAOLogicV2;
+let gov: NounsDAOLogicV3;
 
 async function setup() {
   token = await deployNounsToken(signers.deployer);
@@ -37,7 +36,7 @@ async function setup() {
   await setTotalSupply(token, 100);
 }
 
-describe('NounsDAOProxyV2', () => {
+describe('NounsDAOProxyV3', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -46,12 +45,13 @@ describe('NounsDAOProxyV2', () => {
   });
 
   it('Deploys successfully', async () => {
-    govV2 = await deployGovernorV2WithV2Proxy(
+    gov = await deployGovernorV3WithV3Proxy(
       deployer,
       token.address,
       deployer.address,
       deployer.address,
-      5760,
+      deployer.address,
+      7200,
       1,
       1,
       {
@@ -63,12 +63,12 @@ describe('NounsDAOProxyV2', () => {
   });
 
   it('Sets some basic parameters as expected', async () => {
-    expect(await govV2.votingPeriod()).to.equal(5760);
-    expect(await govV2.timelock()).to.equal(deployer.address);
+    expect(await gov.votingPeriod()).to.equal(7200);
+    expect(await gov.timelock()).to.equal(deployer.address);
   });
 
   it('Sets quorum params as expected', async () => {
-    const params = await govV2.getDynamicQuorumParamsAt(await blockNumber());
+    const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
     expect(params.quorumCoefficient).to.equal(3);
   });
 });

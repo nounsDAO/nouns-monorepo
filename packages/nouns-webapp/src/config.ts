@@ -78,14 +78,14 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-elad/0.1.1/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.2.0/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {

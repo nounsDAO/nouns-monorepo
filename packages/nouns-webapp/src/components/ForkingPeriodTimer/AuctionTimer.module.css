@@ -40,11 +40,14 @@
 
 .timerSection {
   margin-right: 0.5rem;
+  line-height: 0.7;
   text-align: center;
 }
 
 .timerSectionFinal {
   margin-right: 0rem;
+  line-height: 0.7;
+  text-align: center;
 }
 
 .timerSectionFinal span {
@@ -85,11 +88,11 @@
   }
 
   .timerSection span {
-    font-size: 23px;
+    font-size: 18px;
   }
 
   .timerSectionFinal span {
-    font-size: 23px;
+    font-size: 18px;
   }
 
   .title {
