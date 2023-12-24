@@ -6,15 +6,15 @@ import { solidity } from 'ethereum-waffle';
 import {
   WETH,
   NounsToken,
-  NounsAuctionHouse,
-  NounsAuctionHouse__factory as NounsAuctionHouseFactory,
+  NounsAuctionHouseV2,
+  NounsAuctionHouseV2__factory as NounsAuctionHouseV2Factory,
   NounsDescriptorV2,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOProxy__factory as NounsDaoProxyFactory,
   NounsDAOLogicV1,
   NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
   NounsDAOExecutor,
-  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory
 } from '../typechain';
 
 import {
@@ -34,7 +34,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 let nounsToken: NounsToken;
-let nounsAuctionHouse: NounsAuctionHouse;
+let nounsAuctionHouse: NounsAuctionHouseV2;
 let descriptor: NounsDescriptorV2;
 let weth: WETH;
 let gov: NounsDAOLogicV1;
@@ -103,7 +103,7 @@ async function deploy() {
   ]);
 
   // 2b. CAST proxy as AuctionHouse
-  nounsAuctionHouse = NounsAuctionHouseFactory.connect(nounsAuctionHouseProxy.address, deployer);
+  nounsAuctionHouse = NounsAuctionHouseV2Factory.connect(nounsAuctionHouseProxy.address, deployer);
 
   // 3. SET MINTER
   await nounsToken.setMinter(nounsAuctionHouse.address);
@@ -189,6 +189,15 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     await nounsAuctionHouse.settleCurrentAndCreateNewAuction();
 
     expect(await nounsToken.ownerOf(1)).to.equal(bidderA.address);
+    expect(await ethers.provider.getBalance(timelock.address)).to.equal(RESERVE_PRICE);
+  });
+
+  it('allows bidding with comment, settling, and transferring ETH correctly', async () => {
+    await nounsAuctionHouse.connect(bidderA).createBidWithComment(2, "Test comment", { value: RESERVE_PRICE });
+    await setNextBlockTimestamp(Number(await blockTimestamp('latest')) + DURATION);
+    await nounsAuctionHouse.settleCurrentAndCreateNewAuction();
+
+    expect(await nounsToken.ownerOf(2)).to.equal(bidderA.address);
     expect(await ethers.provider.getBalance(timelock.address)).to.equal(RESERVE_PRICE);
   });
 
