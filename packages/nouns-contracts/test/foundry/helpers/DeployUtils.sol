@@ -126,35 +126,19 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsAuctionHouse auctionHouse = new NounsAuctionHouse();
         NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
 
-        NounsAuctionHouseProxy auctionHouseProxy = NounsAuctionHouseV2(
-            payable(
-                new NounsAuctionHouseProxy(
-                    address(nounsToken),
-                    address(auctionHouseProxyAdmin),
-                    abi.encodeWithSignature(
-                        "initialize(address,address,uint256,uint256,uint8,uint256)",
-                        address(nounsToken),
-                        weth,
-                        TIME_BUFFER,
-                        RESERVE_PRICE,
-                        MIN_INCREMENT_BID_PERCENTAGE,
-                        DURATION
-                    )
-                )
+        NounsAuctionHouseProxy auctionHouseProxy = new NounsAuctionHouseProxy(
+            address(nounsToken),
+            address(auctionHouseProxyAdmin),
+            abi.encodeWithSignature(
+                'initialize(address,address,uint256,uint256,uint8,uint256)',
+                address(nounsToken),
+                weth,
+                TIME_BUFFER,
+                RESERVE_PRICE,
+                MIN_INCREMENT_BID_PERCENTAGE,
+                DURATION
             )
         );
-          
-        
-        
-
-        // initialize 
-        //  auctionHouse.Initialize( 
-        //     address(nounsToken),
-        //     weth,
-        //     TIME_BUFFER,
-        //     RESERVE_PRICE,
-        //     MIN_INCREMENT_BID_PERCENTAGE,
-        //     DURATION);
 
         _populateDescriptor(descriptor);
 

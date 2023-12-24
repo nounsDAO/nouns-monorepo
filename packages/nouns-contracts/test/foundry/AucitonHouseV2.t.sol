@@ -48,6 +48,9 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
                 )
             )
         );
+
+        auctionHouseProxy.unpause();
+
     }
 
     function testCreateBid() public {
@@ -57,7 +60,7 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         vm.prank(bidder);
         vm.deal(bidder, bidAmount);
 
-        auctionHouseProxy.createBid{ value: bidAmount }(nounId);
+        auctionHouse.createBid{ value: bidAmount }(nounId);
 
         assertEq(auctionHouseProxy.auction().amount, bidAmount);
         assertEq(auctionHouseProxy.auction().bidder, bidder);
