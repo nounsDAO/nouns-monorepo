@@ -71,6 +71,7 @@ export function handleDelegateChanged(event: DelegateChanged): void {
     delegateChangedEvent.previousDelegate = previousDelegate.id
       ? previousDelegate.id
       : tokenHolder.id;
+    delegateChangedEvent.delegator = tokenHolder.id.toString();
     delegateChangedEvent.newDelegate = newDelegate.id ? newDelegate.id : tokenHolder.id;
     delegateChangedEvent.save();
   }
@@ -172,6 +173,7 @@ export function handleTransfer(event: Transfer): void {
   delegateChangedEvent.newDelegate = toHolder.delegate
     ? toHolder.delegate!.toString()
     : toHolder.id.toString();
+  delegateChangedEvent.delegator = fromHolder.id.toString();
   delegateChangedEvent.save();
 
   let toHolderDelegate = getOrCreateDelegate(toHolder.delegate ? toHolder.delegate! : toHolder.id);
