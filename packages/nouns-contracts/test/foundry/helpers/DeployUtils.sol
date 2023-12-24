@@ -97,7 +97,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address vetoer,
         address minter,
         address weth
-    ) internal returns (address, address, address) {
+    ) internal returns (address, address, address, address, address) {
         IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
 
         NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
@@ -123,10 +123,29 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         nounsToken.transferOwnership(address(timelock));
 
         // logic, admin, data
-        NounsAuctionHouseProxy auctionHouseProxy = new NounsAuctionHouseProxy();
         NounsAuctionHouse auctionHouse = new NounsAuctionHouse();
-          
         NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
+
+        NounsAuctionHouseProxy auctionHouseProxy = NounsAuctionHouseV2(
+            payable(
+                new NounsAuctionHouseProxy(
+                    address(nounsToken),
+                    address(auctionHouseProxyAdmin),
+                    abi.encodeWithSignature(
+                        "initialize(address,address,uint256,uint256,uint8,uint256)",
+                        address(nounsToken),
+                        weth,
+                        TIME_BUFFER,
+                        RESERVE_PRICE,
+                        MIN_INCREMENT_BID_PERCENTAGE,
+                        DURATION
+                    )
+                )
+            )
+        );
+          
+        
+        
 
         // initialize 
         //  auctionHouse.Initialize( 
