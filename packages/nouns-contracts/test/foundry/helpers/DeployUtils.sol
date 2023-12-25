@@ -5,6 +5,7 @@ import 'forge-std/Test.sol';
 import { INounsDAOShared } from './INounsDAOShared.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../../contracts/NounsDescriptorV3.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';

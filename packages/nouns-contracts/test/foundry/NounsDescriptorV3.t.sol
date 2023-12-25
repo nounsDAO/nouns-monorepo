@@ -188,17 +188,6 @@ contract NounsDescriptorV3Test is Test {
         descriptor.addBackground('');
     }
 
-    function testUpdateBackgroundUsesArt() public {
-        vm.expectCall(address(art), abi.encodeCall(art.updateBackground, ('fff000')));
-        descriptor.updateBackground('fff000');
-    }
-
-    function testCannotUpdateBackgroundWhenPartsLocked() public {
-        descriptor.lockParts();
-        vm.expectRevert(bytes('Parts are locked'));
-        descriptor.updateBackground('fff000');
-    }
-
     function testSetPaletteUsesArt() public {
         vm.expectCall(address(art), abi.encodeCall(art.setPalette, (0, '123456')));
         descriptor.setPalette(0, '123456');
