@@ -59,6 +59,21 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return descriptorV2;
     }
 
+    function _deployAndPopulateV3() internal returns (NounsDescriptorV3) {
+        NounsDescriptorV3 descriptorV3 = _deployDescriptorV3();
+        _populateDescriptorV3(descriptorV3);
+        return descriptorV3;
+    }
+
+    function _deployDescriptorV3() internal returns (NounsDescriptorV3) {
+        SVGRenderer renderer = new SVGRenderer();
+        Inflator inflator = new Inflator();
+        NounsDescriptorV3 descriptorV3 = new NounsDescriptorV3(NounsArt(address(0)), renderer);
+        NounsArt art = new NounsArt(address(descriptorV3), inflator);
+        descriptorV3.setArt(art);
+        return descriptorV3;
+    }
+
     function _deployTokenAndDAOAndPopulateDescriptor(
         address noundersDAO,
         address vetoer,

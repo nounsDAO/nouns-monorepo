@@ -2,11 +2,11 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
-import { NounsDescriptorV2 } from '../contracts/NounsDescriptorV2.sol';
-import { ISVGRenderer } from '../contracts/interfaces/ISVGRenderer.sol';
-import { IInflator } from '../contracts/interfaces/IInflator.sol';
-import { INounsArt } from '../contracts/interfaces/INounsArt.sol';
-import { NounsArt } from '../contracts/NounsArt.sol';
+import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
+import { ISVGRenderer } from '../../contracts/interfaces/ISVGRenderer.sol';
+import { IInflator } from '../../contracts/interfaces/IInflator.sol';
+import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
+import { NounsArt } from '../../contracts/NounsArt.sol';
 
 contract UpgradeDescriptorV2PopulateArtFromExisting is Script {
     NounsDescriptorV2 public constant EXISTING_DESCRIPTOR = NounsDescriptorV2(0x6229c811D04501523C6058bfAAc29c91bb586268);
