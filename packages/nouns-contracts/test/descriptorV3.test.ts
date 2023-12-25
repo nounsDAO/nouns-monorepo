@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptorV2 } from '../typechain';
+import { NounsDescriptorV3 } from '../typechain';
 import ImageData from '../files/image-data-v2.json';
 import { LongestPart } from './types';
 import { deployNounsDescriptorV2, populateDescriptorV2 } from './utils';
@@ -20,8 +20,8 @@ const eyesred =
 const hiprose =
   '0x000b1710070300062101000621030001210202022401210100012102020224052102020224032102020224052102020224032102020224022102000121020202240121010001210202022401210300062101000621';
 
-describe('NounsDescriptorV2', () => {
-  let nounsDescriptor: NounsDescriptorV2;
+describe('NounsDescriptorV3', () => {
+  let nounsDescriptor: NounsDescriptorV3;
   let snapshotId: number;
 
   const glassesTraitIndex = 1;

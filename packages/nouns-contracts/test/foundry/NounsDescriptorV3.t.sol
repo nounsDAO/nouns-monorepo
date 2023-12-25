@@ -405,6 +405,166 @@ contract NounsDescriptorV3Test is Test {
         descriptor.addGlassesFromPointer(address(1337), 1, 1);
     }
 
+    function testUpdateBodies() public {
+        bytes memory someBytes = 'some bytes';
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateBodies, (someBytes, decompressedLen, imageCount)));
+        descriptor.updateBodies(someBytes, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateBodiesWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateBodiesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateBodiesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateBodiesFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateHeads() public {
+        bytes memory someBytes = 'some bytes';
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateHeads, (someBytes, decompressedLen, imageCount)));
+        descriptor.updateHeads(someBytes, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateHeadsWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateHeadsFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateHeadsIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateHeadsFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateAccessories() public {
+        bytes memory someBytes = 'some bytes';
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateAccessories, (someBytes, decompressedLen, imageCount)));
+        descriptor.updateAccessories(someBytes, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateAccessoriesWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateAccessoriesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateGlasses() public {
+        bytes memory someBytes = 'some bytes';
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateGlasses, (someBytes, decompressedLen, imageCount)));
+        descriptor.updateGlasses(someBytes, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateGlassesWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateGlassesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateGlassesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateGlassesFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateBodiesFromPointer() public {
+        address somePointer = address(1337);
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateBodiesFromPointer, (somePointer, decompressedLen, imageCount)));
+        descriptor.updateBodiesFromPointer(somePointer, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateBodiesFromPointerWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateBodiesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateBodiesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateBodiesFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateHeadsFromPointer() public {
+        address somePointer = address(1337);
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateHeadsFromPointer, (somePointer, decompressedLen, imageCount)));
+        descriptor.updateHeadsFromPointer(somePointer, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateHeadsFromPointerWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateHeadsFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateHeadsFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateHeadsFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateAccessoriesFromPointer() public {
+        address somePointer = address(1337);
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateAccessoriesFromPointer, (somePointer, decompressedLen, imageCount)));
+        descriptor.updateAccessoriesFromPointer(somePointer, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateAccessoriesFromPointerWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateAccessoriesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
+    }
+
+    function testUpdateGlassesFromPointer() public {
+        address somePointer = address(1337);
+        uint80 decompressedLen = 123;
+        uint16 imageCount = 456;
+        vm.expectCall(address(art), abi.encodeCall(art.updateGlassesFromPointer, (somePointer, decompressedLen, imageCount)));
+        descriptor.updateGlassesFromPointer(somePointer, decompressedLen, imageCount);
+    }
+
+    function testCannotUpdateGlassesFromPointerWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.updateGlassesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotUpdateGlassesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.updateGlassesFromPointer(address(1337), 1, 1);
+    }
+
     function testBackgroundsUsesArt() public {
         vm.mockCall(
             address(art),
