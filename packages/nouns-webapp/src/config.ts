@@ -23,6 +23,7 @@ interface AppConfig {
   subgraphApiUri: string;
   enableHistory: boolean;
   exploreUri?: string;
+  nounder_address: string;
 }
 
 export const ChainId_Sepolia = 11155111;
@@ -74,6 +75,7 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri:
       'https://api.studio.thegraph.com/query/60256/ubuyamadaotest2/version/latest',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+    nounder_address: 'nounders.eth',
   },
   [ChainId_Sepolia]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
@@ -82,6 +84,7 @@ const app: Record<SupportedChains, AppConfig> = {
       'https://api.studio.thegraph.com/query/60256/ubuyama-sepolia/version/latest',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
     exploreUri: 'https://testnets.opensea.io/collection/nouns-190',
+    nounder_address: '0x1AeB1E02E734a4797F3e2D1f96b645259E20D684',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
@@ -89,12 +92,14 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri:
       'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+    nounder_address: 'nounders.eth',
   },
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+    nounder_address: 'nounders.eth',
   },
 };
 

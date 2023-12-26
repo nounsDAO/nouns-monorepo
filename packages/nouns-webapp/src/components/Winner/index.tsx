@@ -8,6 +8,7 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import React from 'react';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import Tooltip from '../Tooltip';
+import config from '../../config';
 
 interface WinnerProps {
   winner: string;
@@ -24,6 +25,8 @@ const Winner: React.FC<WinnerProps> = props => {
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 
   const activeLocale = useActiveLocale();
+
+  const nounder_address = config.app.nounder_address;
 
   const nonNounderNounContent = isWinnerYou ? (
     <Row className={classes.youSection}>
@@ -44,7 +47,7 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const nounderNounContent = (
     <a
-      href={buildEtherscanAddressLink('0x1AeB1E02E734a4797F3e2D1f96b645259E20D684')}
+      href={buildEtherscanAddressLink(nounder_address)}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -56,7 +59,7 @@ const Winner: React.FC<WinnerProps> = props => {
         }}
         id="holder-etherscan-tooltip"
       >
-        <ShortAddress address='0x1AeB1E02E734a4797F3e2D1f96b645259E20D684' />
+        <ShortAddress address={nounder_address} />
       </Tooltip>
     </a>
   );
