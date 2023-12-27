@@ -62,7 +62,7 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
       >
         <option value={'Transfer Funds'}>Transfer Funds</option>
         <option value={'Stream Funds'} disabled>Stream Funds</option>
-        <option value={'Function Call'} disabled>Function Call</option>
+        <option value={'Function Call'}>Function Call</option>
       </BrandDropdown>
 
       <ModalBottomButtonRow
