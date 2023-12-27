@@ -5,6 +5,9 @@ type DelegationEvent @entity {
   "The Noun being delegated"
   noun: Noun!
 
+  "Current delegator address"
+  delegator: Account!
+
   "Previous delegate address"
   previousDelegate: Delegate!
 

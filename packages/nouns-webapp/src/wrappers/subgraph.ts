@@ -143,7 +143,7 @@ export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) =>
 
 export const candidateProposalsQuery = (first = 1_000) => gql`
   {
-    proposalCandidates {
+    proposalCandidates(first: ${first}) {
       id
     slug
     proposer
