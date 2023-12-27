@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOStorageV3, NounsTokenLike } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 interface INounsDAOShared {
     function propose(
@@ -63,4 +63,15 @@ interface INounsDAOShared {
     function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
 
     function implementation() external view returns (address);
+
+    function nouns() external view returns (NounsTokenLike);
+
+    function proposeBySigs(
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
 }

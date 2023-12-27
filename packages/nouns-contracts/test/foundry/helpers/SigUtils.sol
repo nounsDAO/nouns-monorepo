@@ -133,7 +133,7 @@ contract SigUtils is Test {
         address verifyingContract,
         string memory domainName,
         bytes32 structTypeHash
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         bytes32 structHash = keccak256(abi.encodePacked(structTypeHash, proposalEncodeData, expirationTimestamp));
 
         bytes32 domainSeparator = keccak256(
