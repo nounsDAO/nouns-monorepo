@@ -802,10 +802,6 @@ msgstr "頭"
 msgid "Held by"
 msgstr "主催者"
 
-#: src/components/AuctionActivity/index.tsx
-msgid "Help mint the next Noun"
-msgstr "次にミントされるNounの投票をしてください"
-
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "Holder changed from <0><1/></0> to <2><3/></2>"
 msgstr ""
