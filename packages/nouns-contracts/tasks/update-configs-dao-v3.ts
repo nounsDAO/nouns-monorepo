@@ -47,19 +47,23 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
         network,
         nounsToken: {
           address: contracts.NounsToken.address,
-          startBlock: contracts.NounsToken.instance.deployTransaction.blockNumber,
+          startBlock: -1,
+          // startBlock: contracts.NounsToken.instance.deployTransaction.blockNumber,
         },
         nounsAuctionHouse: {
           address: contracts.NounsAuctionHouseProxy.address,
-          startBlock: contracts.NounsAuctionHouseProxy.instance.deployTransaction.blockNumber,
+          startBlock: -1,
+          // startBlock: contracts.NounsAuctionHouseProxy.instance.deployTransaction.blockNumber,
         },
         nounsDAO: {
           address: contracts.NounsDAOProxyV3.address,
-          startBlock: contracts.NounsDAOProxyV3.instance.deployTransaction.blockNumber,
+          startBlock: -1,
+          // startBlock: contracts.NounsDAOProxyV3.instance.deployTransaction.blockNumber,
         },
         nounsDAOData: {
           addresses: contracts.NounsDAODataProxy.address,
-          startBlock: contracts.NounsDAODataProxy.instance.deployTransaction.blockNumber,
+          startBlock: -1,
+          // startBlock: contracts.NounsDAODataProxy.instance.deployTransaction.blockNumber,
         },
       };
       writeFileSync(subgraphConfigPath, JSON.stringify(subgraphConfig, null, 2));

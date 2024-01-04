@@ -45,12 +45,28 @@ const config: HardhatUserConfig = {
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
+    holesky: {
+      url: `https://rpc.holesky.ethpandaops.io`,
+      accounts: process.env.MNEMONIC
+        ? { mnemonic: process.env.MNEMONIC }
+        : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
+    },
     hardhat: {
       initialBaseFeePerGas: 0,
     },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+    customChains: [
+      {
+        network: "holesky",
+        chainId: 17000,
+        urls: {
+          apiURL: "https://api-holesky.etherscan.io/api",
+          browserURL: "https://holesky.etherscan.io"
+        }
+      }
+    ]
   },
   abiExporter: {
     path: './abi',

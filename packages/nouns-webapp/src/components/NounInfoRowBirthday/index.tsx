@@ -20,7 +20,7 @@ export const getNounBirthday = (nounId: number, pastAuctions: AuctionState[]) =>
     pastAuctions.find((auction: AuctionState, i: number) => {
       const maybeNounId = auction.activeAuction?.nounId;
       return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounId)) : false;
-    })?.activeAuction?.startTime || 0,
+    })?.activeAuction?.startTime || pastAuctions?.[0].activeAuction?.startTime || 0,
   );
 };
 

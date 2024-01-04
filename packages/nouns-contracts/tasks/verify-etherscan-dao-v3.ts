@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { ContractName, ContractNamesDAOV3, DeployedContract } from './types';
+import { ContractNamesDAOV3, DeployedContract } from './types';
 
 // prettier-ignore
 // These contracts require a fully qualified name to be passed because
@@ -18,6 +18,10 @@ task('verify-etherscan-dao-v3', 'Verify the Solidity contracts on Etherscan')
       for (const [, contract] of Object.entries(contracts)) {
         console.log(`verifying ${contract.name}...`);
         try {
+          if (['NounsDAOExecutorProxy', 'NounsDAOProxyV3', 'NounsDAODataProxy'].includes(contract.name)) {
+            console.log(`Proxy contract ${contract.name} is skipped.`)
+            continue;
+          }
           const code = await contract.instance?.provider.getCode(contract.address);
           if (code === '0x') {
             console.log(

@@ -81,7 +81,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.studio.thegraph.com/query/60256/ubuyama-sepolia/version/latest',
+      'https://api.studio.thegraph.com/query/60256/sepoliadaotest/version/latest',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
     exploreUri: 'https://testnets.opensea.io/collection/nouns-190',
     nounder_address: '0x1AeB1E02E734a4797F3e2D1f96b645259E20D684',

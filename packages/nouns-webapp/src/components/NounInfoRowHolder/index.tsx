@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import _LinkIcon from '../../assets/icons/Link.svg';
-import { auctionQuery } from '../../wrappers/subgraph';
+import {auctionQuery, nounQuery} from '../../wrappers/subgraph';
 import _HeartIcon from '../../assets/icons/Heart.svg';
 import classes from './NounInfoRowHolder.module.css';
 
@@ -22,10 +22,11 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const { loading, error, data } = useQuery(auctionQuery(nounId));
+  const nounQueryResult = useQuery(nounQuery(nounId?.toString()));
 
-  const winner = data && data.auction.bidder?.id;
+  const winner = (data && data.auction?.bidder?.id) || (nounQueryResult?.data?.noun?.owner?.id);
 
-  if (loading || !winner) {
+  if ((loading && nounQueryResult.loading) || !winner) {
     return (
       <div className={classes.nounHolderInfoContainer}>
         <span className={classes.nounHolderLoading}>

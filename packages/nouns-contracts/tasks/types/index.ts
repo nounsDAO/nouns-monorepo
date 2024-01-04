@@ -7,6 +7,7 @@ export enum ChainId {
   Goerli = 5,
   Kovan = 42,
   Sepolia = 11155111,
+  Holesky = 17000,
 }
 
 // prettier-ignore
@@ -39,11 +40,23 @@ export type ContractNamesDAOV3 =
   | 'NounsDAOData'
   | 'NounsDAODataProxy';
 
+export interface ContractNameAddress {
+  name: ContractNamesDAOV3,
+  address?: string,
+  index?: number
+}
+
 export interface ContractDeployment {
   args?: (string | number | (() => string))[];
   libraries?: () => Record<string, string>;
   waitForConfirmation?: boolean;
   validateDeployment?: () => void;
+  address?: string;
+}
+
+export interface ContractDeploymentWithName extends ContractDeployment {
+  name: ContractNamesDAOV3;
+  index?: number;
 }
 
 export interface DeployedContract {
