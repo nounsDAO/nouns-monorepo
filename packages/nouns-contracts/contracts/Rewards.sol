@@ -69,6 +69,7 @@ contract Rewards {
         uint256 actualNumEligibleVotes;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
+        NounsDAOStorageV3.ProposalForRewards proposal;
     }
 
     /**
@@ -76,7 +77,7 @@ contract Rewards {
      * @param expectedNumEligibleProposals should match the number of eligible proposals. TODO: a view function for this
      */
     function bountyRewardForProposals(
-        uint32 lastTimestamp,
+        uint32 lastProposalId,
         uint256 expectedNumEligibleProposals,
         uint256 expectedNumEligibileVotes,
         uint256 firstNounId,
@@ -85,26 +86,30 @@ contract Rewards {
     ) public {
         uint256 gas = gasleft();
         uint256 gas0 = gasleft();
-        // TODO should we support a case where minimumRewardPeriodInBlocks is e.g. 1 week, and a week has passed
-        //  but the last proposal was before a week has passed?
 
         require(expectedNumEligibleProposals > 0, 'at least one eligible proposal');
-        require(lastTimestamp < block.timestamp, 'last block must be in the past');
 
-        if (expectedNumEligibleProposals < numProposalsEnoughForReward) {
-            require(lastTimestamp > nextProposalRewardTimestamp + minimumRewardPeriod, 'not enough time passed');
-        } else {
-            require(lastTimestamp > nextProposalRewardTimestamp);
-        }
+        uint256 maxProposalId = nounsDAO.proposalCount();
+        require(lastProposalId <= maxProposalId, 'bad lastProposalId');
+        require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
 
         Temp memory t;
 
         console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
         gas = gasleft();
 
+        t.proposal = nounsDAO.proposalDataForRewards(lastProposalId);
+
+        if (expectedNumEligibleProposals < numProposalsEnoughForReward) {
+            require(
+                t.proposal.creationTimestamp > nextProposalRewardTimestamp + minimumRewardPeriod,
+                'not enough time passed'
+            );
+        }
+
         uint256 auctionRevenue = getAuctionRevenueForPeriod({
             startTimestamp: nextProposalRewardTimestamp,
-            endTimestamp: lastTimestamp,
+            endTimestamp: t.proposal.creationTimestamp,
             firstNounId: firstNounId,
             lastNounId: lastNounId
         });
@@ -118,7 +123,7 @@ contract Rewards {
         console.log('>>>>>>>> gas used for periods', gas - gasleft(), gas0 - gasleft());
         gas = gasleft();
 
-        nextProposalRewardTimestamp = lastTimestamp + 1;
+        nextProposalRewardTimestamp = t.proposal.creationTimestamp + 1;
 
         console.log('>>>>>>>> gas used for setting nextProposalRewardTimestamp', gas - gasleft(), gas0 - gasleft());
         gas = gasleft();
@@ -126,17 +131,11 @@ contract Rewards {
         t.rewardPerProposal = t.proposalRewardForPeriod / expectedNumEligibleProposals;
         t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibileVotes;
 
-        NounsDAOStorageV3.ProposalForRewards memory proposal;
-
         console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
         gas = gasleft();
 
-        uint256 maxProposalId = nounsDAO.proposalCount();
-
-        console.log('>>>>>>>> gas used for proposalCount()', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
-
-        uint32 pid = nextProposalIdToReward;
+        uint32 lowestProposalIdToReward = nextProposalIdToReward;
+        nextProposalIdToReward = lastProposalId + 1;
 
         console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
         gas = gasleft();
@@ -149,25 +148,25 @@ contract Rewards {
         gas = gasleft();
         // END TODO
 
-        for (; pid <= maxProposalId; pid++) {
-            proposal = nounsDAO.proposalDataForRewards(pid);
+        for (uint32 pid = lastProposalId; pid >= lowestProposalIdToReward; pid--) {
+            if (pid != lastProposalId) {
+                t.proposal = nounsDAO.proposalDataForRewards(pid);
+            }
             console.log('>>>>>>>> gas used reading proposalsV3()', gas - gasleft(), pid, gas0 - gasleft());
             gas = gasleft();
 
-            if (proposal.creationTimestamp > lastTimestamp) break;
-
             // make sure proposal finished voting
-            uint endBlock = max(proposal.endBlock, proposal.objectionPeriodEndBlock);
+            uint endBlock = max(t.proposal.endBlock, t.proposal.objectionPeriodEndBlock);
             require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals TODO: parameterize quorum
             // console.log('>>>>> proposal.pseudo quorum', proposal.totalSupply, (proposal.totalSupply * 1000) / 10000);
-            if (proposal.forVotes < (proposal.totalSupply * 1000) / 10000) continue;
+            if (t.proposal.forVotes < (t.proposal.totalSupply * 1000) / 10000) continue;
 
             // proposal is eligible for reward
             ++t.actualNumEligibleProposals;
 
-            uint32 clientId = proposal.clientId;
+            uint32 clientId = t.proposal.clientId;
             if (clientId != 0) {
                 clientBalances[clientId] += t.rewardPerProposal;
             }
@@ -190,7 +189,7 @@ contract Rewards {
                 votesInProposal += votes;
             }
             require(
-                votesInProposal == proposal.forVotes + proposal.againstVotes + proposal.abstainVotes,
+                votesInProposal == t.proposal.forVotes + t.proposal.againstVotes + t.proposal.abstainVotes,
                 'not all votes accounted'
             );
             t.actualNumEligibleVotes += votesInProposal;
@@ -198,11 +197,6 @@ contract Rewards {
             console.log('>>>>>>>> gas used for votes', gas - gasleft(), gas0 - gasleft());
             gas = gasleft();
         }
-
-        // console.log('>>>>>>>> gas used', gas - gasleft());
-        // gas = gasleft();
-
-        nextProposalIdToReward = pid;
 
         console.log('>>>>>>>>>. t.actualNumEligibleProposals', t.actualNumEligibleProposals);
         require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');

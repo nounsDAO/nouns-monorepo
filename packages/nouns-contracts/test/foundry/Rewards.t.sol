@@ -150,7 +150,7 @@ contract RewardsTest is RewardsBaseTest {
 contract AuctionRevenueBasedRewards is RewardsBaseTest {
     uint256 proposalId;
     uint256 settledNounIdBeforeProposal;
-    uint256 settledNounIdAfterProposal;
+    uint256 nounOnAuctionWhenLastProposalWasCreated;
 
     function setUp() public override {
         super.setUp();
@@ -187,6 +187,7 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
 
         // create proposal 2 by client B
         proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID2);
+        nounOnAuctionWhenLastProposalWasCreated = auctionHouse.auction().nounId;
 
         // go forward 3 days until voting starts
         bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
@@ -200,7 +201,7 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
 
         dao.queue(proposalId);
 
-        settledNounIdAfterProposal = bidAndSettleAuction(3 ether);
+        bidAndSettleAuction(3 ether);
     }
 
     function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
@@ -228,11 +229,11 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
         clientIds = [0, CLIENT_ID, CLIENT_ID2];
 
         rewards.bountyRewardForProposals({
-            lastTimestamp: uint32(block.timestamp - 1),
+            lastProposalId: uint32(proposalId),
             expectedNumEligibleProposals: 11,
             expectedNumEligibileVotes: 270,
             firstNounId: settledNounIdBeforeProposal,
-            lastNounId: settledNounIdAfterProposal + 1, // TODO: why do we not include the lastNounId ?
+            lastNounId: nounOnAuctionWhenLastProposalWasCreated + 1, // TODO: why do we not include the lastNounId ?
             votingClientIds: clientIds
         });
     }
