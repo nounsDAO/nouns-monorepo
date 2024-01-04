@@ -216,12 +216,6 @@ library NounsDAOV3Admin {
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
-    function ds() internal pure returns (NounsDAOStorageV3.StorageV3 storage ds_) {
-        assembly {
-            ds_.slot := 0
-        }
-    }
-
     /**
      * @notice Admin function for setting the objection period last minute window
      * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
@@ -596,6 +590,18 @@ library NounsDAOV3Admin {
             for (uint256 j = i + 1; j < erc20tokens.length; j++) {
                 if (erc20tokens[i] == erc20tokens[j]) revert DuplicateTokenAddress();
             }
+        }
+    }
+
+    /***
+     * @dev Used to access the DAO's storage struct without receiving it as a function argument.
+     * Created as part of the DAO logic refactor where this admin library is called in the DAO's fallback function,
+     * since the DAO no longer makes explicit calls to this library.
+     * This function assumes the storage struct starts at slot 0.
+     */
+    function ds() internal pure returns (NounsDAOStorageV3.StorageV3 storage ds_) {
+        assembly {
+            ds_.slot := 0
         }
     }
 }
