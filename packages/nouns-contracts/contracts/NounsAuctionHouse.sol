@@ -54,8 +54,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
-    mapping(uint256 nounId => uint32 clientId) public biddingClient;
-
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -99,17 +97,11 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         _settleAuction();
     }
 
-    function createBid(uint256 nounId, uint32 clientId) public payable {
-        createBid(nounId);
-
-        biddingClient[nounId] = clientId;
-    }
-
     /**
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) public payable override nonReentrant {
+    function createBid(uint256 nounId) external payable override nonReentrant {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
