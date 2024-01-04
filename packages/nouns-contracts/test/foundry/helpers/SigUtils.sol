@@ -54,7 +54,7 @@ contract SigUtils is Test {
         UpdateProposalParams memory proposalParams,
         address verifyingContract,
         string memory domainName
-    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
+    ) internal view returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
         sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
             sigs[i] = NounsDAOStorageV3.ProposerSignature(
@@ -83,7 +83,7 @@ contract SigUtils is Test {
         uint256 expirationTimestamp,
         address verifyingContract,
         string memory domainName
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return
             sign(
                 abi.encodePacked(proposalId, calcProposalEncodeData(proposer, txs, description)),
@@ -114,7 +114,7 @@ contract SigUtils is Test {
         uint256 expirationTimestamp,
         address verifyingContract,
         string memory domainName
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return
             sign(
                 calcProposalEncodeData(proposer, txs, description),
