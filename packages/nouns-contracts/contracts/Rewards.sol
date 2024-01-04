@@ -18,7 +18,7 @@ pragma solidity ^0.8.19;
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseRewards } from './interfaces/INounsAuctionHouseRewards.sol';
 import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
-import { console } from 'forge-std/console.sol';
+import { console } from 'hardhat/console.sol';
 
 contract Rewards {
     uint256 internal constant PROPOSAL_STATE_EXECUTED = 7;
