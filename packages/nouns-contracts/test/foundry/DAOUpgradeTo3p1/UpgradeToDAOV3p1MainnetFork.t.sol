@@ -7,7 +7,7 @@ import { DeployDAOV3LogicMainnet } from '../../../script/DAOV3p1/DeployDAOV3Logi
 import { ProposeDAOV3p1UpgradeMainnet } from '../../../script/DAOV3p1/ProposeDAOV3p1UpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOStorageV3, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -53,7 +53,7 @@ abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     }
 
     function voteAndExecuteProposal(uint256 proposalId) internal {
-        NounsDAOStorageV3.ProposalCondensed memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
+        NounsDAOStorageV2.ProposalCondensed memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
 
         vm.roll(propInfo.startBlock + 1);
         vm.prank(proposerAddr, origin);
@@ -64,7 +64,7 @@ abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
         vm.roll(propInfo.endBlock + 1);
         NOUNS_DAO_PROXY_MAINNET.queue(proposalId);
 
-        propInfo = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
+        propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
         vm.warp(propInfo.eta + 1);
         NOUNS_DAO_PROXY_MAINNET.execute(proposalId);
     }
