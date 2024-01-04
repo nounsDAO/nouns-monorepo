@@ -16,7 +16,7 @@
 pragma solidity ^0.8.19;
 
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
-import { INounsAuctionHouseRewards } from './interfaces/INounsAuctionHouseRewards.sol';
+import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
 import { console } from 'hardhat/console.sol';
 
@@ -30,7 +30,7 @@ contract Rewards {
     uint256 public constant BLOCKS_PER_YEAR = 365 days / 12;
 
     INounsDAOLogicV3 public immutable nounsDAO;
-    INounsAuctionHouseRewards public immutable auctionHouse;
+    INounsAuctionHouseV2 public immutable auctionHouse;
 
     mapping(uint256 proposalId => bool paid) proposalsPaid;
     mapping(uint256 nounId => bool paid) auctionsPaid;
@@ -53,7 +53,7 @@ contract Rewards {
 
     constructor(address nounsDAO_, address auctionHouse_, uint32 nextProposalIdToReward_) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
-        auctionHouse = INounsAuctionHouseRewards(auctionHouse_);
+        auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         nextProposalIdToReward = nextProposalIdToReward_;
     }
 
@@ -211,7 +211,7 @@ contract Rewards {
         uint256 firstNounId,
         uint256 lastNounId
     ) internal view returns (uint256) {
-        INounsAuctionHouseRewards.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
+        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
         require(s[0].blockTimestamp <= startTimestamp, 'first auction must be before start ts');
         require(s[1].blockTimestamp >= startTimestamp, 'second auction must be after start ts');
         require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
@@ -220,7 +220,7 @@ contract Rewards {
         return sumAuctions(s);
     }
 
-    function sumAuctions(INounsAuctionHouseRewards.Settlement[] memory s) internal pure returns (uint256 sum) {
+    function sumAuctions(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
         for (uint256 i = 0; i < s.length; ++i) {
             if (s[i].amount == 0) continue; // skip auctions with no bids
             sum += s[i].amount;

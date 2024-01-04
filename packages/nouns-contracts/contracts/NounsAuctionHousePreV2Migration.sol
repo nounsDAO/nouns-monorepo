@@ -62,7 +62,8 @@ contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuard
         newLayout.timeBuffer = uint56(oldLayoutCache.timeBuffer);
         newLayout.minBidIncrementPercentage = oldLayoutCache.minBidIncrementPercentage;
         newLayout.auction = INounsAuctionHouseV2.AuctionV2({
-            nounId: uint128(oldLayoutCache.auction.nounId),
+            nounId: uint96(oldLayoutCache.auction.nounId),
+            clientId: 0,
             amount: uint128(oldLayoutCache.auction.amount),
             startTime: uint40(oldLayoutCache.auction.startTime),
             endTime: uint40(oldLayoutCache.auction.endTime),

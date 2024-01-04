@@ -4,14 +4,14 @@ pragma solidity ^0.8.19;
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
 import { Rewards } from '../../contracts/Rewards.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
-import { INounsAuctionHouseRewards } from '../../contracts/interfaces/INounsAuctionHouseRewards.sol';
+import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
-    INounsAuctionHouseRewards auctionHouse;
+    INounsAuctionHouseV2 auctionHouse;
 
     address clientWallet = makeAddr('clientWallet');
     address clientWallet2 = makeAddr('clientWallet2');
@@ -33,7 +33,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         nounsToken = NounsToken(address(dao.nouns()));
         minter = nounsToken.minter();
 
-        auctionHouse = INounsAuctionHouseRewards(minter);
+        auctionHouse = INounsAuctionHouseV2(minter);
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
@@ -48,7 +48,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
             _mintTo(voter2);
         }
 
-        for (uint i; i < 5; i++) {
+        for (uint256 i; i < 5; i++) {
             _mintTo(voter3);
         }
 
@@ -67,6 +67,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         tokenID = nounsToken.mint();
         nounsToken.transferFrom(minter, to, tokenID);
         vm.stopPrank();
+        vm.roll(block.number + 1);
     }
 }
 
@@ -204,12 +205,23 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
         bidAndSettleAuction(3 ether);
     }
 
-    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
+    function vote(
+        address voter_,
+        uint256 proposalId_,
+        uint8 support,
+        string memory reason,
+        uint32 clientId
+    ) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
     }
 
-    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason) internal {
+    function vote(
+        address voter_,
+        uint256 proposalId_,
+        uint8 support,
+        string memory reason
+    ) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason);
     }

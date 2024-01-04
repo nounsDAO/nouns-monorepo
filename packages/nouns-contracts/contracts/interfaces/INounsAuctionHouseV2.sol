@@ -20,7 +20,25 @@ pragma solidity ^0.8.19;
 interface INounsAuctionHouseV2 {
     struct AuctionV2 {
         // ID for the Noun (ERC721 token ID)
-        uint128 nounId;
+        uint96 nounId;
+        // ID of the client that facilitated the latest bid, used for client rewards
+        uint32 clientId;
+        // The current highest bid amount
+        uint128 amount;
+        // The time that the auction started
+        uint40 startTime;
+        // The time that the auction is scheduled to end
+        uint40 endTime;
+        // The address of the current highest bid
+        address payable bidder;
+        // Whether or not the auction has been settled
+        bool settled;
+    }
+
+    /// @dev We use this struct as the return value of the `auction` function, to maintain backwards compatibility.
+    struct AuctionV2View {
+        // ID for the Noun (ERC721 token ID)
+        uint96 nounId;
         // The current highest bid amount
         uint128 amount;
         // The time that the auction started
@@ -40,6 +58,8 @@ interface INounsAuctionHouseV2 {
         uint64 amount;
         // The address of the auction winner.
         address winner;
+        // ID of the client that facilitated the winning bid, used for client rewards
+        uint32 clientId;
     }
 
     struct Settlement {
@@ -51,6 +71,8 @@ interface INounsAuctionHouseV2 {
         address winner;
         // ID for the Noun (ERC721 token ID).
         uint256 nounId;
+        // ID of the client that facilitated the winning bid, used for client rewards
+        uint32 clientId;
     }
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
@@ -75,6 +97,8 @@ interface INounsAuctionHouseV2 {
 
     function createBid(uint256 nounId) external payable;
 
+    function createBid(uint256 nounId, uint32 clientId) external payable;
+
     function pause() external;
 
     function unpause() external;
@@ -85,12 +109,12 @@ interface INounsAuctionHouseV2 {
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
 
-    function auction() external view returns (AuctionV2 memory);
+    function auction() external view returns (AuctionV2View memory);
 
-    function getSettlements(
-        uint256 auctionCount,
-        bool skipEmptyValues
-    ) external view returns (Settlement[] memory settlements);
+    function getSettlements(uint256 auctionCount, bool skipEmptyValues)
+        external
+        view
+        returns (Settlement[] memory settlements);
 
     function getPrices(uint256 auctionCount) external view returns (uint256[] memory prices);
 
@@ -103,4 +127,6 @@ interface INounsAuctionHouseV2 {
     function warmUpSettlementState(uint256[] calldata nounIds) external;
 
     function duration() external view returns (uint256);
+
+    function biddingClient(uint256 nounId) external view returns (uint32 clientId);
 }

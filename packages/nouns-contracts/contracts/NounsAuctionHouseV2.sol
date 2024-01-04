@@ -69,7 +69,11 @@ contract NounsAuctionHouseV2 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    constructor(INounsToken _nouns, address _weth, uint256 _duration) {
+    constructor(
+        INounsToken _nouns,
+        address _weth,
+        uint256 _duration
+    ) {
         nouns = _nouns;
         weth = _weth;
         duration = _duration;
@@ -112,11 +116,15 @@ contract NounsAuctionHouseV2 is
         _settleAuction();
     }
 
+    function createBid(uint256 nounId) external payable override {
+        createBid(nounId, 0);
+    }
+
     /**
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override {
+    function createBid(uint256 nounId, uint32 clientId) public payable override {
         INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
 
         (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
@@ -133,6 +141,7 @@ contract NounsAuctionHouseV2 is
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
+        auctionStorage.clientId = clientId;
         auctionStorage.amount = uint128(msg.value);
         auctionStorage.bidder = payable(msg.sender);
 
@@ -157,8 +166,16 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Get the current auction.
      */
-    function auction() external view returns (AuctionV2 memory) {
-        return auctionStorage;
+    function auction() external view returns (AuctionV2View memory) {
+        return
+            AuctionV2View({
+                nounId: auctionStorage.nounId,
+                amount: auctionStorage.amount,
+                startTime: auctionStorage.startTime,
+                endTime: auctionStorage.endTime,
+                bidder: auctionStorage.bidder,
+                settled: auctionStorage.settled
+            });
     }
 
     /**
@@ -228,7 +245,8 @@ contract NounsAuctionHouseV2 is
             uint40 endTime = startTime + uint40(duration);
 
             auctionStorage = AuctionV2({
-                nounId: uint128(nounId),
+                nounId: uint96(nounId),
+                clientId: 0,
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -268,7 +286,8 @@ contract NounsAuctionHouseV2 is
         settlementHistory[_auction.nounId] = SettlementState({
             blockTimestamp: uint32(block.timestamp),
             amount: ethPriceToUint64(_auction.amount),
-            winner: _auction.bidder
+            winner: _auction.bidder,
+            clientId: _auction.clientId
         });
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
@@ -310,7 +329,8 @@ contract NounsAuctionHouseV2 is
             settlementHistory[settlements[i].nounId] = SettlementState({
                 blockTimestamp: settlements[i].blockTimestamp,
                 amount: ethPriceToUint64(settlements[i].amount),
-                winner: settlements[i].winner
+                winner: settlements[i].winner,
+                clientId: settlements[i].clientId
             });
 
             nounIds[i] = settlements[i].nounId;
@@ -350,10 +370,11 @@ contract NounsAuctionHouseV2 is
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function getSettlements(
-        uint256 auctionCount,
-        bool skipEmptyValues
-    ) external view returns (Settlement[] memory settlements) {
+    function getSettlements(uint256 auctionCount, bool skipEmptyValues)
+        external
+        view
+        returns (Settlement[] memory settlements)
+    {
         uint256 latestNounId = auctionStorage.nounId;
         if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
@@ -375,7 +396,8 @@ contract NounsAuctionHouseV2 is
                 blockTimestamp: settlementState.blockTimestamp,
                 amount: uint64PriceToUint256(settlementState.amount),
                 winner: settlementState.winner,
-                nounId: id
+                nounId: id,
+                clientId: settlementState.clientId
             });
             ++actualCount;
 
@@ -452,7 +474,8 @@ contract NounsAuctionHouseV2 is
                 blockTimestamp: settlementState.blockTimestamp,
                 amount: uint64PriceToUint256(settlementState.amount),
                 winner: settlementState.winner,
-                nounId: id
+                nounId: id,
+                clientId: settlementState.clientId
             });
             ++actualCount;
         }
@@ -463,6 +486,14 @@ contract NounsAuctionHouseV2 is
                 mstore(settlements, actualCount)
             }
         }
+    }
+
+    /***
+     * @notice Get the client ID that facilitated the winning bid for a Noun. Returns 0 if there is no settlement data
+     * for the Noun in question, or if the winning bid was not facilitated by a registered client.
+     */
+    function biddingClient(uint256 nounId) external view returns (uint32) {
+        return settlementHistory[nounId].clientId;
     }
 
     /**
