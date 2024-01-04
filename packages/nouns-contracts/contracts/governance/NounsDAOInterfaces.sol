@@ -578,9 +578,17 @@ interface NounsTokenLike {
 
     function totalSupply() external view returns (uint256);
 
-    function transferFrom(address from, address to, uint256 tokenId) external;
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
-    function safeTransferFrom(address from, address to, uint256 tokenId) external;
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -594,10 +602,9 @@ interface NounsTokenLike {
 }
 
 interface IForkDAODeployer {
-    function deployForkDAO(
-        uint256 forkingPeriodEndTimestamp,
-        INounsDAOForkEscrow forkEscrowAddress
-    ) external returns (address treasury, address token);
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
+        external
+        returns (address treasury, address token);
 
     function tokenImpl() external view returns (address);
 
@@ -611,7 +618,11 @@ interface IForkDAODeployer {
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendETH(address recipient, uint256 ethToSend) external;
 
-    function sendERC20(address recipient, address erc20Token, uint256 tokensToSend) external;
+    function sendERC20(
+        address recipient,
+        address erc20Token,
+        uint256 tokensToSend
+    ) external;
 }
 
 interface INounsDAOForkEscrow {
@@ -750,6 +761,7 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint32 creationBlock;
+        /// @notice The timestamp of the block at which this proposal was created
         uint32 creationTimestamp;
         /// @notice The last block which allows updating a proposal's description and transactions
         uint64 updatePeriodEndBlock;
@@ -761,7 +773,8 @@ contract NounsDAOStorageV3 {
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
-        mapping(uint32 clientId => ClientVoteData) voteClients;
+        /// @notice How many votes and vote transactions each clientId contributed to this proposal
+        mapping(uint32 => ClientVoteData) voteClients;
     }
 
     struct ClientVoteData {
@@ -788,15 +801,25 @@ contract NounsDAOStorageV3 {
         uint256 expirationTimestamp;
     }
 
+    /// @notice A subset of Proposal data, used for client rewards calculation
     struct ProposalForRewards {
+        /// @notice The proposal's voting period end block
         uint256 endBlock;
+        /// @notice The proposal's objection period end block
         uint256 objectionPeriodEndBlock;
+        /// @notice The proposal's For votes count
         uint256 forVotes;
+        /// @notice The proposal's Against votes count
         uint256 againstVotes;
+        /// @notice The proposal's Abstain votes count
         uint256 abstainVotes;
+        /// @notice The proposal's snapshot of total supply
         uint256 totalSupply;
+        /// @notice The timestamp of the block at which the proposal was created
         uint256 creationTimestamp;
+        /// @notice The number of signers that sponsored the proposal, or zero if it was proposed without signatures
         uint256 numSigners;
+        /// @notice The ID for the client that facilitated the proposal
         uint32 clientId;
     }
 
@@ -831,6 +854,7 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        /// @notice The timestamp of the block at which this proposal was created
         uint256 creationTimestamp;
         /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
