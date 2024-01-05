@@ -92,83 +92,6 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     }
 }
 
-contract RewardsTest is RewardsBaseTest {
-    function test_rewardsProposalCreation() public {
-        uint256 proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
-        vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
-
-        vm.prank(voter);
-        dao.castRefundableVote(proposalId, 1);
-
-        vm.roll(block.number + dao.votingPeriod() + 1);
-        dao.queue(proposalId);
-        vm.warp(dao.proposalsV3(proposalId).eta);
-        dao.execute(proposalId);
-
-        rewards.rewardForProposalCreation(proposalId);
-
-        assertEq(clientWallet.balance, rewards.REWARD_FOR_PROPOSAL_CREATION());
-    }
-
-    function test_rewardsAuctionBidding() public {
-        uint256 nounId = auctionHouse.auction().nounId;
-        vm.prank(bidder1);
-        auctionHouse.createBid{ value: 0.01 ether }(nounId);
-
-        vm.prank(bidder2);
-        auctionHouse.createBid{ value: 0.02 ether }(nounId, CLIENT_ID);
-
-        vm.warp(auctionHouse.auction().endTime + 1);
-        auctionHouse.settleCurrentAndCreateNewAuction();
-
-        rewards.rewardForAuctionBidding(1);
-
-        assertEq(clientWallet.balance, rewards.REWARD_FOR_AUCTION_BIDDING());
-    }
-
-    function test_rewardsProposalVoting() public {
-        uint256 proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
-        vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
-
-        vm.prank(voter);
-        dao.castRefundableVoteWithReason(proposalId, 1, 'i support', CLIENT_ID);
-
-        vm.prank(voter2);
-        dao.castRefundableVoteWithReason(proposalId, 1, 'i support');
-
-        vm.roll(block.number + dao.votingPeriod() + 1);
-        dao.queue(proposalId);
-        vm.warp(dao.proposalsV3(proposalId).eta);
-        dao.execute(proposalId);
-
-        rewards.rewardForVoting(proposalId, CLIENT_ID);
-
-        assertEq(clientWallet.balance, rewards.REWARD_FOR_PROPOSAL_VOTING() / 2);
-    }
-
-    function test_rewardForVotingWithBonus() public {
-        uint256 proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
-        vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
-
-        vm.prank(voter);
-        dao.castRefundableVoteWithReason(proposalId, 1, 'i support', CLIENT_ID);
-
-        vm.prank(voter2);
-        dao.castRefundableVoteWithReason(proposalId, 1, 'i support');
-
-        vm.prank(voter3);
-        dao.castRefundableVoteWithReason(proposalId, 1, 'i dont support', CLIENT_ID2);
-
-        vm.roll(block.number + dao.votingPeriod() + 1);
-        dao.queue(proposalId);
-        vm.warp(dao.proposalsV3(proposalId).eta);
-        dao.execute(proposalId);
-
-        clientIds = [CLIENT_ID, 0, CLIENT_ID2];
-        rewards.rewardForVotingWithBonus(proposalId, clientIds);
-    }
-}
-
 contract AuctionRewards is RewardsBaseTest {
     function testRewardsForAuctions() public {
         bidAndSettleAuction(1 ether, CLIENT_ID);
@@ -181,7 +104,7 @@ contract AuctionRewards is RewardsBaseTest {
     }
 }
 
-contract AuctionRevenueBasedRewards is RewardsBaseTest {
+contract ProposalRewards is RewardsBaseTest {
     uint256 proposalId;
     uint256 settledNounIdBeforeProposal;
     uint256 nounOnAuctionWhenLastProposalWasCreated;
