@@ -7,7 +7,6 @@ import { NounsToken } from '../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
-import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -37,7 +36,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1);
+        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1, 0);
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
         vm.deal(bidder1, 1000 ether);
@@ -68,6 +67,28 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         nounsToken.transferFrom(minter, to, tokenID);
         vm.stopPrank();
         vm.roll(block.number + 1);
+    }
+
+    function bidAndSettleAuction(uint256 bidAmount) internal returns (uint256) {
+        return bidAndSettleAuction(bidAmount, 0);
+    }
+
+    function bidAndSettleAuction(uint256 bidAmount, uint32 clientId) internal returns (uint256) {
+        uint256 nounId = auctionHouse.auction().nounId;
+
+        vm.prank(bidder1);
+        auctionHouse.createBid{ value: bidAmount }(nounId, clientId);
+
+        uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
+        rollWarpForward(blocksToEnd);
+        auctionHouse.settleCurrentAndCreateNewAuction();
+
+        return nounId;
+    }
+
+    function rollWarpForward(uint256 numBlocks) internal {
+        vm.roll(block.number + numBlocks);
+        vm.warp(block.timestamp + numBlocks * SECONDS_IN_BLOCK);
     }
 }
 
@@ -148,6 +169,18 @@ contract RewardsTest is RewardsBaseTest {
     }
 }
 
+contract AuctionRewards is RewardsBaseTest {
+    function testRewardsForAuctions() public {
+        bidAndSettleAuction(1 ether, CLIENT_ID);
+        uint256 nounId = bidAndSettleAuction(2 ether, CLIENT_ID2);
+
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(rewards.clientBalances(CLIENT_ID), 0.01 ether);
+        assertEq(rewards.clientBalances(CLIENT_ID2), 0.02 ether);
+    }
+}
+
 contract AuctionRevenueBasedRewards is RewardsBaseTest {
     uint256 proposalId;
     uint256 settledNounIdBeforeProposal;
@@ -205,23 +238,12 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
         bidAndSettleAuction(3 ether);
     }
 
-    function vote(
-        address voter_,
-        uint256 proposalId_,
-        uint8 support,
-        string memory reason,
-        uint32 clientId
-    ) internal {
+    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
     }
 
-    function vote(
-        address voter_,
-        uint256 proposalId_,
-        uint8 support,
-        string memory reason
-    ) internal {
+    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason);
     }
@@ -230,11 +252,6 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
         for (uint256 i; i < numAuctions; i++) {
             bidAndSettleAuction(bidAmount);
         }
-    }
-
-    function rollWarpForward(uint256 numBlocks) internal {
-        vm.roll(block.number + numBlocks);
-        vm.warp(block.timestamp + numBlocks * SECONDS_IN_BLOCK);
     }
 
     function test_auctionRevenueBounty_happyFlow() public {
@@ -248,18 +265,5 @@ contract AuctionRevenueBasedRewards is RewardsBaseTest {
             lastNounId: nounOnAuctionWhenLastProposalWasCreated + 1, // TODO: why do we not include the lastNounId ?
             votingClientIds: clientIds
         });
-    }
-
-    function bidAndSettleAuction(uint256 bidAmount) internal returns (uint256) {
-        uint256 nounId = auctionHouse.auction().nounId;
-
-        vm.prank(bidder1);
-        auctionHouse.createBid{ value: bidAmount }(nounId);
-
-        uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
-        rollWarpForward(blocksToEnd);
-        auctionHouse.settleCurrentAndCreateNewAuction();
-
-        return nounId;
     }
 }

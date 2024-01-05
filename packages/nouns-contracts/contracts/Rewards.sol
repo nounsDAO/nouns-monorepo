@@ -27,7 +27,6 @@ contract Rewards {
     uint256 public constant REWARD_FOR_AUCTION_BIDDING = 0.4 ether;
     uint256 public constant REWARD_FOR_PROPOSAL_VOTING = 0.3 ether;
     uint256 public constant REWARD_FOR_VOTING_FIRST_PLACE = 0.1 ether;
-    uint256 public constant BLOCKS_PER_YEAR = 365 days / 12;
 
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
@@ -43,6 +42,8 @@ contract Rewards {
     uint256 public numProposalsEnoughForReward = 30; // TODO: set based on gas usage
     uint16 public proposalRewardBPS = 100; // TODO make configurable
     uint16 public votingRewardBPS = 50; // TODO make configurable
+    uint256 public lastProcessedAuctionId;
+    uint32 public auctionRewardBps = 100; // TODO make configurable
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
     struct ClientData {
@@ -51,10 +52,16 @@ contract Rewards {
 
     mapping(uint32 clientId => ClientData data) clients;
 
-    constructor(address nounsDAO_, address auctionHouse_, uint32 nextProposalIdToReward_) {
+    constructor(
+        address nounsDAO_,
+        address auctionHouse_,
+        uint32 nextProposalIdToReward_,
+        uint256 lastProcessedAuctionId_
+    ) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         nextProposalIdToReward = nextProposalIdToReward_;
+        lastProcessedAuctionId = lastProcessedAuctionId_;
     }
 
     // TODO: only admin?
@@ -70,6 +77,24 @@ contract Rewards {
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
         NounsDAOStorageV3.ProposalForRewards proposal;
+    }
+
+    function updateRewardsForAuctions(uint256 lastNounId) public {
+        uint256 currentlyAuctionedNounId = auctionHouse.auction().nounId;
+        require(lastNounId < currentlyAuctionedNounId, 'lastNounId must be settled');
+
+        uint256 lastProcessedAuctionId_ = lastProcessedAuctionId;
+        require(lastNounId > lastProcessedAuctionId_, 'lastNounId must be higher');
+        lastProcessedAuctionId = lastNounId;
+
+        INounsAuctionHouseV2.Settlement memory settlement;
+        for (uint256 nounId = lastProcessedAuctionId_ + 1; nounId <= lastNounId; nounId++) {
+            // TODO maybe can be optimized to one call with large range
+            settlement = auctionHouse.getSettlements(nounId, nounId + 1, false)[0];
+            if (settlement.clientId > 0) {
+                clientBalances[settlement.clientId] += (settlement.amount * auctionRewardBps) / 10_000;
+            }
+        }
     }
 
     /**
@@ -213,6 +238,8 @@ contract Rewards {
     ) internal view returns (uint256) {
         INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
         require(s[0].blockTimestamp <= startTimestamp, 'first auction must be before start ts');
+
+        console.log('>>>> ', s[1].blockTimestamp, startTimestamp);
         require(s[1].blockTimestamp >= startTimestamp, 'second auction must be after start ts');
         require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
         require(s[s.length - 1].blockTimestamp >= endTimestamp, 'last auction must be after end ts');
