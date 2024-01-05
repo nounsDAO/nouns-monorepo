@@ -18,7 +18,6 @@ pragma solidity ^0.8.19;
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
-import { console } from 'hardhat/console.sol';
 
 contract Rewards {
     uint256 internal constant PROPOSAL_STATE_EXECUTED = 7;
@@ -109,9 +108,6 @@ contract Rewards {
         uint256 lastNounId,
         uint32[] calldata votingClientIds
     ) public {
-        uint256 gas = gasleft();
-        uint256 gas0 = gasleft();
-
         require(expectedNumEligibleProposals > 0, 'at least one eligible proposal');
 
         uint256 maxProposalId = nounsDAO.proposalCount();
@@ -119,9 +115,6 @@ contract Rewards {
         require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
 
         Temp memory t;
-
-        console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
 
         t.proposal = nounsDAO.proposalDataForRewards(lastProposalId);
 
@@ -139,53 +132,33 @@ contract Rewards {
             lastNounId: lastNounId
         });
 
-        console.log('>>>>>>>> gas used for getAuctionRevenueForPeriod', gas - gasleft(), lastNounId - firstNounId);
-        gas = gasleft();
-
         t.proposalRewardForPeriod = (auctionRevenue * proposalRewardBPS) / 10000;
         t.votingRewardForPeriod = (auctionRevenue * votingRewardBPS) / 10000;
 
-        console.log('>>>>>>>> gas used for periods', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
-
         nextProposalRewardTimestamp = t.proposal.creationTimestamp + 1;
-
-        console.log('>>>>>>>> gas used for setting nextProposalRewardTimestamp', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
 
         t.rewardPerProposal = t.proposalRewardForPeriod / expectedNumEligibleProposals;
         t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibileVotes;
 
-        console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
-
         uint32 lowestProposalIdToReward = nextProposalIdToReward;
         nextProposalIdToReward = lastProposalId + 1;
-
-        console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
 
         // TODO: remove this, just for gas measuring purposes
         for (uint256 i; i < votingClientIds.length; ++i) {
             clientBalances[votingClientIds[i]] += 1;
         }
-        console.log('>>>>>>>> gas used setting storage', gas - gasleft(), gas0 - gasleft());
-        gas = gasleft();
         // END TODO
 
         for (uint32 pid = lastProposalId; pid >= lowestProposalIdToReward; pid--) {
             if (pid != lastProposalId) {
                 t.proposal = nounsDAO.proposalDataForRewards(pid);
             }
-            console.log('>>>>>>>> gas used reading proposalsV3()', gas - gasleft(), pid, gas0 - gasleft());
-            gas = gasleft();
 
             // make sure proposal finished voting
             uint endBlock = max(t.proposal.endBlock, t.proposal.objectionPeriodEndBlock);
             require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals TODO: parameterize quorum
-            // console.log('>>>>> proposal.pseudo quorum', proposal.totalSupply, (proposal.totalSupply * 1000) / 10000);
             if (t.proposal.forVotes < (t.proposal.totalSupply * 1000) / 10000) continue;
 
             // proposal is eligible for reward
@@ -196,13 +169,9 @@ contract Rewards {
                 clientBalances[clientId] += t.rewardPerProposal;
             }
 
-            // console.log('>>>>>>>> gas used up to votes', gas - gasleft());
-            // gas = gasleft();
             uint256 votesInProposal;
 
             NounsDAOStorageV3.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, votingClientIds);
-            // console.log('>>>>>>>> gas used for reading vote data', gas - gasleft());
-            // gas = gasleft();
 
             uint256 votes;
             for (uint256 i; i < votingClientIds.length; ++i) {
@@ -218,16 +187,10 @@ contract Rewards {
                 'not all votes accounted'
             );
             t.actualNumEligibleVotes += votesInProposal;
-
-            console.log('>>>>>>>> gas used for votes', gas - gasleft(), gas0 - gasleft());
-            gas = gasleft();
         }
 
-        console.log('>>>>>>>>>. t.actualNumEligibleProposals', t.actualNumEligibleProposals);
         require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');
         require(t.actualNumEligibleVotes == expectedNumEligibileVotes, 'wrong expectedNumEligibileVotes');
-
-        console.log('>>>>>>>> gas used', gas - gasleft(), gas0 - gasleft());
     }
 
     function getAuctionRevenueForPeriod(
@@ -238,8 +201,6 @@ contract Rewards {
     ) internal view returns (uint256) {
         INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
         require(s[0].blockTimestamp <= startTimestamp, 'first auction must be before start ts');
-
-        console.log('>>>> ', s[1].blockTimestamp, startTimestamp);
         require(s[1].blockTimestamp >= startTimestamp, 'second auction must be after start ts');
         require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
         require(s[s.length - 1].blockTimestamp >= endTimestamp, 'last auction must be after end ts');
