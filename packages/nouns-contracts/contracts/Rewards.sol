@@ -187,17 +187,15 @@ contract Rewards {
         uint256 lastNounId;
     }
 
-    function getParamsForUpdatingProposalRewards(
-        uint32 lastProposalId
-    ) public view returns (ProposalRewardsParams memory p) {
+    function getParamsForUpdatingProposalRewards() public view returns (ProposalRewardsParams memory p) {
         NounsDAOStorageV3.ProposalForRewards memory proposal;
-
-        for (uint32 pid = nextProposalIdToReward; pid <= lastProposalId; pid++) {
+        uint256 maxProposalId = nounsDAO.proposalCount();
+        uint32 lastProposalId;
+        for (uint32 pid = nextProposalIdToReward; pid <= maxProposalId; pid++) {
             proposal = nounsDAO.proposalDataForRewards(pid);
 
-            // make sure proposal finished voting
             uint endBlock = max(proposal.endBlock, proposal.objectionPeriodEndBlock);
-            require(block.number > endBlock, 'all proposals must be done with voting');
+            if (block.number <= endBlock) break; // reached a proposal still in voting
 
             // skip non eligible proposals TODO: parameterize quorum
             if (proposal.forVotes < (proposal.totalSupply * 1000) / 10000) continue;
@@ -207,11 +205,13 @@ contract Rewards {
 
             uint256 proposalTotalVotes = proposal.forVotes + proposal.againstVotes + proposal.abstainVotes;
             p.expectedNumEligibleVotes += proposalTotalVotes;
+
+            p.lastProposalId = pid;
         }
 
         (p.firstNounId, p.lastNounId) = findAuctionsBeforeAndAfter(
             nextProposalRewardTimestamp,
-            nounsDAO.proposalDataForRewards(lastProposalId).creationTimestamp
+            nounsDAO.proposalDataForRewards(p.lastProposalId).creationTimestamp
         );
     }
 

@@ -196,7 +196,8 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
     }
 
     function testGetHintParams() public {
-        Rewards.ProposalRewardsParams memory params = rewards.getParamsForUpdatingProposalRewards(uint32(proposalId));
+        Rewards.ProposalRewardsParams memory params = rewards.getParamsForUpdatingProposalRewards();
+        assertEq(params.lastProposalId, uint32(proposalId));
         assertEq(params.expectedNumEligibleProposals, 11);
         assertEq(params.expectedNumEligibleVotes, 270);
         assertEq(params.firstNounId, settledNounIdBeforeProposal);
