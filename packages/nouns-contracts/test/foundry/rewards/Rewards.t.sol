@@ -80,13 +80,13 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         auctionHouse.createBid{ value: bidAmount }(nounId, clientId);
 
         uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
-        rollWarpForward(blocksToEnd);
+        mineBlocks(blocksToEnd);
         auctionHouse.settleCurrentAndCreateNewAuction();
 
         return nounId;
     }
 
-    function rollWarpForward(uint256 numBlocks) internal {
+    function mineBlocks(uint256 numBlocks) internal {
         vm.roll(block.number + numBlocks);
         vm.warp(block.timestamp + numBlocks * SECONDS_IN_BLOCK);
     }
@@ -125,6 +125,7 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
         // settle 3 auctions at 1 ether
         bidAndSettleMultipleAuctions({ numAuctions: 2, bidAmount: 1 ether });
         settledNounIdBeforeProposal = bidAndSettleAuction(1 ether);
+        mineBlocks(1);
 
         rewards.setNextProposalRewardTimestamp(block.timestamp);
 
@@ -189,7 +190,7 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
             expectedNumEligibleProposals: 11,
             expectedNumEligibleVotes: 270,
             firstNounId: settledNounIdBeforeProposal,
-            lastNounId: nounOnAuctionWhenLastProposalWasCreated + 1, // TODO: why do we not include the lastNounId ?
+            lastNounId: nounOnAuctionWhenLastProposalWasCreated,
             votingClientIds: clientIds
         });
     }
@@ -199,6 +200,6 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
         assertEq(params.expectedNumEligibleProposals, 11);
         assertEq(params.expectedNumEligibleVotes, 270);
         assertEq(params.firstNounId, settledNounIdBeforeProposal);
-        assertEq(params.lastNounId, nounOnAuctionWhenLastProposalWasCreated + 1);
+        assertEq(params.lastNounId, nounOnAuctionWhenLastProposalWasCreated);
     }
 }

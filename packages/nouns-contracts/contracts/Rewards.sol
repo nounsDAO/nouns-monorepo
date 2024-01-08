@@ -209,21 +209,40 @@ contract Rewards {
             p.expectedNumEligibleVotes += proposalTotalVotes;
         }
 
-        p.firstNounId = findAuctionBefore(nextProposalRewardTimestamp);
-        p.lastNounId = findAuctionBefore(nounsDAO.proposalDataForRewards(lastProposalId).creationTimestamp) + 2; // TODO why + 2?
+        (p.firstNounId, p.lastNounId) = findAuctionsBeforeAndAfter(
+            nextProposalRewardTimestamp,
+            nounsDAO.proposalDataForRewards(lastProposalId).creationTimestamp
+        );
     }
 
-    function findAuctionBefore(uint256 timestamp) internal view returns (uint256) {
+    function findAuctionsBeforeAndAfter(
+        uint256 startTimestamp,
+        uint256 endTimestamp
+    ) internal view returns (uint256 firstNounId, uint256 lastNounId) {
+        require(endTimestamp > startTimestamp, 'endTimestamp > startTimestamp');
         uint256 maxAuctionId = auctionHouse.auction().nounId - 1;
 
         INounsAuctionHouseV2.Settlement[] memory s;
 
+        uint256 prevAuctionId;
         for (uint256 nounId = maxAuctionId; nounId > 0; nounId--) {
             s = auctionHouse.getSettlements(nounId, nounId + 1, true);
 
             if (s.length == 0) continue; // nounder reward or missing data
 
-            if (s[0].blockTimestamp <= timestamp) return nounId;
+            if (lastNounId == 0) {
+                // haven't yet found the last auction id
+                // if this auction id is the first to be <= endTimestamp, mark the previous auction as the lastNounID
+                if (s[0].blockTimestamp <= endTimestamp)
+                    lastNounId = prevAuctionId;
+                    // otherwise, just update the previousAuctionId
+                else prevAuctionId = nounId;
+            }
+
+            if (s[0].blockTimestamp <= startTimestamp) {
+                firstNounId = nounId;
+                break;
+            }
         }
     }
 
@@ -233,17 +252,19 @@ contract Rewards {
         uint256 firstNounId,
         uint256 lastNounId
     ) internal view returns (uint256) {
-        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId, true);
-        require(s[0].blockTimestamp <= startTimestamp, 'first auction must be before start ts');
+        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(firstNounId, lastNounId + 1, true);
+        require(s[0].blockTimestamp < startTimestamp, 'first auction must be before start ts');
         require(s[1].blockTimestamp >= startTimestamp, 'second auction must be after start ts');
         require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
-        require(s[s.length - 1].blockTimestamp >= endTimestamp, 'last auction must be after end ts');
+        require(s[s.length - 1].blockTimestamp > endTimestamp, 'last auction must be after end ts');
 
-        return sumAuctions(s);
+        return sumAuctionsExcludingFirstAndLast(s);
     }
 
-    function sumAuctions(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
-        for (uint256 i = 0; i < s.length; ++i) {
+    function sumAuctionsExcludingFirstAndLast(
+        INounsAuctionHouseV2.Settlement[] memory s
+    ) internal pure returns (uint256 sum) {
+        for (uint256 i = 1; i < s.length - 1; ++i) {
             sum += s[i].amount;
         }
     }
