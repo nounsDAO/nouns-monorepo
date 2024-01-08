@@ -32,6 +32,7 @@ contract Rewards {
     uint16 public proposalRewardBps = 100; // TODO make configurable
     uint16 public votingRewardBps = 50; // TODO make configurable
     uint16 public auctionRewardBps = 100; // TODO make configurable
+
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
     struct ClientData {
@@ -89,10 +90,10 @@ contract Rewards {
      *
      * @param expectedNumEligibleProposals should match the number of eligible proposals. TODO: a view function for this
      */
-    function bountyRewardForProposals(
+    function updateRewardsForProposalWritingAndVoting(
         uint32 lastProposalId,
         uint256 expectedNumEligibleProposals,
-        uint256 expectedNumEligibileVotes,
+        uint256 expectedNumEligibleVotes,
         uint256 firstNounId,
         uint256 lastNounId,
         uint32[] calldata votingClientIds
@@ -121,22 +122,18 @@ contract Rewards {
             lastNounId: lastNounId
         });
 
+        require(auctionRevenue > 0, 'auctionRevenue must be > 0');
+
         t.proposalRewardForPeriod = (auctionRevenue * proposalRewardBps) / 10000;
         t.votingRewardForPeriod = (auctionRevenue * votingRewardBps) / 10000;
 
         nextProposalRewardTimestamp = t.proposal.creationTimestamp + 1;
 
         t.rewardPerProposal = t.proposalRewardForPeriod / expectedNumEligibleProposals;
-        t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibileVotes;
+        t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibleVotes;
 
         uint32 lowestProposalIdToReward = nextProposalIdToReward;
         nextProposalIdToReward = lastProposalId + 1;
-
-        // TODO: remove this, just for gas measuring purposes
-        for (uint256 i; i < votingClientIds.length; ++i) {
-            clientBalances[votingClientIds[i]] += 1;
-        }
-        // END TODO
 
         for (uint32 pid = lastProposalId; pid >= lowestProposalIdToReward; pid--) {
             if (pid != lastProposalId) {
@@ -179,7 +176,55 @@ contract Rewards {
         }
 
         require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');
-        require(t.actualNumEligibleVotes == expectedNumEligibileVotes, 'wrong expectedNumEligibileVotes');
+        require(t.actualNumEligibleVotes == expectedNumEligibleVotes, 'wrong expectedNumEligibleVotes');
+    }
+
+    struct ProposalRewardsParams {
+        uint32 lastProposalId;
+        uint256 expectedNumEligibleProposals;
+        uint256 expectedNumEligibleVotes;
+        uint256 firstNounId;
+        uint256 lastNounId;
+    }
+
+    function getParamsForUpdatingProposalRewards(
+        uint32 lastProposalId
+    ) public view returns (ProposalRewardsParams memory p) {
+        NounsDAOStorageV3.ProposalForRewards memory proposal;
+
+        for (uint32 pid = nextProposalIdToReward; pid <= lastProposalId; pid++) {
+            proposal = nounsDAO.proposalDataForRewards(pid);
+
+            // make sure proposal finished voting
+            uint endBlock = max(proposal.endBlock, proposal.objectionPeriodEndBlock);
+            require(block.number > endBlock, 'all proposals must be done with voting');
+
+            // skip non eligible proposals TODO: parameterize quorum
+            if (proposal.forVotes < (proposal.totalSupply * 1000) / 10000) continue;
+
+            // proposal is eligible for reward
+            ++p.expectedNumEligibleProposals;
+
+            uint256 proposalTotalVotes = proposal.forVotes + proposal.againstVotes + proposal.abstainVotes;
+            p.expectedNumEligibleVotes += proposalTotalVotes;
+        }
+
+        p.firstNounId = findAuctionBefore(nextProposalRewardTimestamp);
+        p.lastNounId = findAuctionBefore(nounsDAO.proposalDataForRewards(lastProposalId).creationTimestamp) + 2; // TODO why + 2?
+    }
+
+    function findAuctionBefore(uint256 timestamp) internal view returns (uint256) {
+        uint256 maxAuctionId = auctionHouse.auction().nounId - 1;
+
+        INounsAuctionHouseV2.Settlement[] memory s;
+
+        for (uint256 nounId = maxAuctionId; nounId > 0; nounId--) {
+            s = auctionHouse.getSettlements(nounId, nounId + 1, true);
+
+            if (s.length == 0) continue; // nounder reward or missing data
+
+            if (s[0].blockTimestamp <= timestamp) return nounId;
+        }
     }
 
     function getAuctionRevenueForPeriod(

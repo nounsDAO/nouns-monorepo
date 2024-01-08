@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
-import { Rewards } from '../../contracts/Rewards.sol';
-import { NounsToken } from '../../contracts/NounsToken.sol';
-import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { NounsDAOLogicV3BaseTest } from '../NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
+import { Rewards } from '../../../contracts/Rewards.sol';
+import { NounsToken } from '../../../contracts/NounsToken.sol';
+import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
+import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
+import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -105,6 +105,10 @@ contract AuctionRewards is RewardsBaseTest {
 }
 
 contract ProposalRewards is RewardsBaseTest {
+    // function test
+}
+
+contract ProposalRewardsHappyFlow is RewardsBaseTest {
     uint256 proposalId;
     uint256 settledNounIdBeforeProposal;
     uint256 nounOnAuctionWhenLastProposalWasCreated;
@@ -177,16 +181,24 @@ contract ProposalRewards is RewardsBaseTest {
         }
     }
 
-    function test_auctionRevenueBounty_happyFlow() public {
+    function testHappyFlow() public {
         clientIds = [0, CLIENT_ID, CLIENT_ID2];
 
-        rewards.bountyRewardForProposals({
+        rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: uint32(proposalId),
             expectedNumEligibleProposals: 11,
-            expectedNumEligibileVotes: 270,
+            expectedNumEligibleVotes: 270,
             firstNounId: settledNounIdBeforeProposal,
             lastNounId: nounOnAuctionWhenLastProposalWasCreated + 1, // TODO: why do we not include the lastNounId ?
             votingClientIds: clientIds
         });
+    }
+
+    function testGetHintParams() public {
+        Rewards.ProposalRewardsParams memory params = rewards.getParamsForUpdatingProposalRewards(uint32(proposalId));
+        assertEq(params.expectedNumEligibleProposals, 11);
+        assertEq(params.expectedNumEligibleVotes, 270);
+        assertEq(params.firstNounId, settledNounIdBeforeProposal);
+        assertEq(params.lastNounId, nounOnAuctionWhenLastProposalWasCreated + 1);
     }
 }
