@@ -81,7 +81,7 @@ interface INounsAuctionHouseV2 {
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
-    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
+    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount, uint32 indexed clientId);
 
     event AuctionTimeBufferUpdated(uint256 timeBuffer);
 
@@ -111,10 +111,10 @@ interface INounsAuctionHouseV2 {
 
     function auction() external view returns (AuctionV2View memory);
 
-    function getSettlements(uint256 auctionCount, bool skipEmptyValues)
-        external
-        view
-        returns (Settlement[] memory settlements);
+    function getSettlements(
+        uint256 auctionCount,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements);
 
     function getPrices(uint256 auctionCount) external view returns (uint256[] memory prices);
 

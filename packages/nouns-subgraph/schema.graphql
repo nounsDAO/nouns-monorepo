@@ -123,6 +123,8 @@ type Auction @entity {
   "Whether or not the auction has been settled"
   settled: Boolean!
 
+  clientId: Int!
+
   "The auction bids"
   bids: [Bid!]! @derivedFrom(field: "auction")
 }

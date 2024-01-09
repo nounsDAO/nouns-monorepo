@@ -26,6 +26,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.startTime = event.params.startTime;
   auction.endTime = event.params.endTime;
   auction.settled = false;
+  auction.clientId = 0;
   auction.save();
 }
 
@@ -89,5 +90,6 @@ export function handleAuctionSettled(event: AuctionSettled): void {
   }
 
   auction.settled = true;
+  auction.clientId = event.params.clientId.toI32();
   auction.save();
 }

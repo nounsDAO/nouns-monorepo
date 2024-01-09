@@ -31,7 +31,7 @@ dataSources:
           handler: handleAuctionBid
         - event: AuctionExtended(indexed uint256,uint256)
           handler: handleAuctionExtended
-        - event: AuctionSettled(indexed uint256,address,uint256)
+        - event: AuctionSettled(indexed uint256,address,uint256,indexed uint32)
           handler: handleAuctionSettled
   - kind: ethereum/contract
     name: NounsToken
