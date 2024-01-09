@@ -258,6 +258,11 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
     event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
+
+    /// @notice An event emitted when a vote has been cast with a non-zero client Id.
+    /// @dev Assumes the `VoteCast` event is emitted, and that indexers can use the voter address and propose ID to
+    /// find the relevant vote and set its client ID.
+    event VoteCastWithClientId(address indexed voter, uint256 indexed proposalId, uint32 indexed clientId);
 }
 
 contract NounsDAOProxyStorage {

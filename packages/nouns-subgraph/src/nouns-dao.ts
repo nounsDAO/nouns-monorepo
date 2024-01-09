@@ -1,4 +1,4 @@
-import { Bytes, log, ethereum, store, BigInt } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store, BigInt, Address } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -21,6 +21,7 @@ import {
   JoinFork,
   ProposalCreatedOnTimelockV1,
   VoteSnapshotBlockSwitchProposalIdSet,
+  VoteCastWithClientId,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -57,13 +58,13 @@ import {
 } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
-  event: ProposalCreatedWithRequirements1,
+  event: ProposalCreatedWithRequirements,
 ): void {
   handleProposalCreated(ParsedProposalV3.fromV1Event(event));
 }
 
 export function handleProposalCreatedWithRequirementsV3(
-  event: ProposalCreatedWithRequirements,
+  event: ProposalCreatedWithRequirements1,
 ): void {
   handleProposalCreated(ParsedProposalV3.fromV3Event(event));
 }
@@ -263,10 +264,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 
 export function handleVoteCast(event: VoteCast): void {
   let proposal = getOrCreateProposal(event.params.proposalId.toString());
-  let voteId = event.params.voter
-    .toHexString()
-    .concat('-')
-    .concat(event.params.proposalId.toString());
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
   let vote = getOrCreateVote(voteId);
   let voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
 
@@ -324,6 +322,13 @@ export function handleVoteCast(event: VoteCast): void {
     proposal.status = STATUS_ACTIVE;
   }
   proposal.save();
+}
+
+export function handleVoteCastWithClientId(event: VoteCastWithClientId): void {
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  let vote = getOrCreateVote(voteId);
+  vote.clientId = event.params.clientId.toI32();
+  vote.save();
 }
 
 export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {
@@ -512,4 +517,8 @@ export function handleVoteSnapshotBlockSwitchProposalIdSet(
 
 function genericUniqueId(event: ethereum.Event): string {
   return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+}
+
+function generateVoteId(voter: Address, proposalId: BigInt): string {
+  return voter.toHexString().concat('-').concat(proposalId.toString());
 }

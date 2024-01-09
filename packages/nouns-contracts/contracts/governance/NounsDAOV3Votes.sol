@@ -128,6 +128,7 @@ library NounsDAOV3Votes {
         uint256 startGas = gasleft();
         uint96 votes = castVoteInternal(ds, msg.sender, proposalId, support, clientId);
         emit VoteCast(msg.sender, proposalId, support, votes, reason);
+        if (clientId > 0) emit NounsDAOEventsV3.VoteCastWithClientId(msg.sender, proposalId, clientId);
         if (votes > 0) {
             _refundGas(startGas);
         }

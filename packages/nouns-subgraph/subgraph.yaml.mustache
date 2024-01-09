@@ -128,6 +128,8 @@ dataSources:
           handler: handleJoinFork
         - event: VoteSnapshotBlockSwitchProposalIdSet(uint256,uint256)
           handler: handleVoteSnapshotBlockSwitchProposalIdSet
+        - event: VoteCastWithClientId(indexed address,indexed uint256,indexed uint32)
+          handler: handleVoteCastWithClientId
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}

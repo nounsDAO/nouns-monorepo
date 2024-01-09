@@ -381,6 +381,9 @@ type Vote @entity {
 
   "The timestamp of the block the vote is in"
   blockTimestamp: BigInt!
+
+  "The ID of the client that facilitated this vote"
+  clientId: Int!
 }
 
 type Governance @entity {
