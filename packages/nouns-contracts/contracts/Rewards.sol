@@ -190,7 +190,7 @@ contract Rewards {
     function getParamsForUpdatingProposalRewards() public view returns (ProposalRewardsParams memory p) {
         NounsDAOStorageV3.ProposalForRewards memory proposal;
         uint256 maxProposalId = nounsDAO.proposalCount();
-        uint32 lastProposalId;
+
         for (uint32 pid = nextProposalIdToReward; pid <= maxProposalId; pid++) {
             proposal = nounsDAO.proposalDataForRewards(pid);
 
