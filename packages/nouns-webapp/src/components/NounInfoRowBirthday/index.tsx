@@ -27,10 +27,14 @@ export const getNounBirthday = (nounId: number, pastAuctions: AuctionState[]) =>
 const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
   const { nounId } = props;
 
+  // If the noun is the air dropped noun, use the noun that minted at the first auction to get the mint date.
   // If the noun is a nounder noun, use the next noun to get the mint date.
   // We do this because we use the auction start time to get the mint date and
-  // nounder nouns do not have an auction start time.
-  const nounIdForQuery = isNounderNoun(BigNumber.from(nounId)) ? nounId + 1 : nounId;
+  // nounder nouns and air dropped nouns do not have an auction start time.
+  const firstAuctionNounId = useAppSelector(state => state.onDisplayAuction.firstAuctionNounId);
+  const nounIdForQuery = nounId < firstAuctionNounId
+      ? firstAuctionNounId
+      : (isNounderNoun(BigNumber.from(nounId)) ? nounId + 1 : nounId);
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
   if (!pastAuctions || !pastAuctions.length) {

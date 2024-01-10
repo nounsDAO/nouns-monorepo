@@ -371,6 +371,37 @@ export const latestAuctionsQuery = () => gql`
   }
 `;
 
+export const firstAuctionsQuery = () => gql`
+  {
+    auctions(orderBy: startTime, orderDirection: asc, first: 1) {
+      id
+      amount
+      settled
+      bidder {
+        id
+      }
+      startTime
+      endTime
+      noun {
+        id
+        owner {
+          id
+        }
+      }
+      bids {
+        id
+        amount
+        blockNumber
+        blockTimestamp
+        txIndex
+        bidder {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const latestBidsQuery = (first: number = 10) => gql`
 {
 	bids(

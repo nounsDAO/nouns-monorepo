@@ -800,7 +800,7 @@ msgstr "頭"
 #: src/components/Holder/index.tsx
 #: src/components/NounHoverCard/index.tsx
 msgid "Held by"
-msgstr "主催者"
+msgstr "保有者"
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "Holder changed from <0><1/></0> to <2><3/></2>"

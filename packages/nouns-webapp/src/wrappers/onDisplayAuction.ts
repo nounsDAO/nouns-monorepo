@@ -38,7 +38,7 @@ const useOnDisplayAuction = (): Auction | undefined => {
   );
   const currentAuction = useAppSelector(state => state.auction.activeAuction);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
-  const firstAuctionNounId = BigNumber.from(pastAuctions?.[0]?.activeAuction?.nounId || 0).toNumber();
+  const firstAuctionNounId = useAppSelector(state => state.onDisplayAuction.firstAuctionNounId);
 
   if (
     onDisplayAuctionNounId === undefined ||

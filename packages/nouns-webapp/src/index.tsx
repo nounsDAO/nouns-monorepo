@@ -19,11 +19,12 @@ import auction, {
   setFullAuction,
 } from './state/slices/auction';
 import onDisplayAuction, {
+  setFirstAuctionNounId,
   setLastAuctionNounId,
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
-import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
+import {auctionQuery, clientFactory, firstAuctionsQuery, latestAuctionsQuery} from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
@@ -216,7 +217,14 @@ const ChainSubscriber: React.FC = () => {
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const { data } = useQuery(latestAuctionsQuery());
+  // Fetch the first auction for handling air dropped nouns
+  const { data: firstAuctions } = useQuery(firstAuctionsQuery());
+  const firstAuction = firstAuctions?.auctions?.[0];
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    firstAuction && dispatch(setFirstAuctionNounId(firstAuction.noun?.id))
+  }, [dispatch, firstAuction])
 
   useEffect(() => {
     data && dispatch(addPastAuctions({ data }));

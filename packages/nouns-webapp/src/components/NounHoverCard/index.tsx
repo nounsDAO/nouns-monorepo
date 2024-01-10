@@ -25,6 +25,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
     skip: nounId === null,
   });
 
+  const firstAuctionNounId = useAppSelector(state => state.onDisplayAuction.firstAuctionNounId);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
   if (!pastAuctions || !pastAuctions.length) {
     return <></>;
@@ -40,7 +41,10 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
     );
   }
   const numericNounId = parseInt(nounId);
-  const nounIdForQuery = isNounderNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId;
+  const nounIdForQuery = numericNounId < firstAuctionNounId
+      ? firstAuctionNounId
+      : (isNounderNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId);
+
   const startTime = getNounBirthday(nounIdForQuery, pastAuctions);
 
   if (error || !startTime) {
