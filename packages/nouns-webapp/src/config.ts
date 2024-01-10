@@ -83,7 +83,7 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri:
       'https://api.studio.thegraph.com/query/60256/sepoliadaotest/version/latest',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
-    exploreUri: 'https://testnets.opensea.io/collection/nouns-190',
+    exploreUri: 'https://testnets.opensea.io/collection/nouns-214',
     nounder_address: '0x1AeB1E02E734a4797F3e2D1f96b645259E20D684',
   },
   [ChainId.Mainnet]: {
