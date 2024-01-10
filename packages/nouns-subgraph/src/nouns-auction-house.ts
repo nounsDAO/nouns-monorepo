@@ -5,6 +5,7 @@ import {
   AuctionExtended,
   AuctionSettled,
 } from './types/NounsAuctionHouse/NounsAuctionHouse';
+import { AuctionSettled as AuctionSettledV2 } from './types/NounsAuctionHouseV2/NounsAuctionHouseV2';
 import { Auction, Noun, Bid } from './types/schema';
 import { getOrCreateAccount } from './utils/helpers';
 
@@ -79,7 +80,21 @@ export function handleAuctionExtended(event: AuctionExtended): void {
 
 export function handleAuctionSettled(event: AuctionSettled): void {
   let nounId = event.params.nounId.toString();
+  let auction = Auction.load(nounId);
+  if (auction == null) {
+    log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
+      nounId,
+      event.transaction.hash.toHex(),
+    ]);
+    return;
+  }
 
+  auction.settled = true;
+  auction.save();
+}
+
+export function handleAuctionSettledWithClientId(event: AuctionSettledV2): void {
+  let nounId = event.params.nounId.toString();
   let auction = Auction.load(nounId);
   if (auction == null) {
     log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
