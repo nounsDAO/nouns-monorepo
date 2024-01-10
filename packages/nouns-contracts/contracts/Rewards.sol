@@ -35,6 +35,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     uint16 public proposalRewardBps = 100; // TODO make configurable
     uint16 public votingRewardBps = 50; // TODO make configurable
     uint16 public auctionRewardBps = 100; // TODO make configurable
+    uint16 public proposalEligibilityQuorumBps = 1000; // TODO make configurable
 
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
@@ -146,7 +147,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals TODO: parameterize quorum
-            if (t.proposal.forVotes < (t.proposal.totalSupply * 1000) / 10000) continue;
+            if (t.proposal.forVotes < (t.proposal.totalSupply * proposalEligibilityQuorumBps) / 10000) continue;
 
             // proposal is eligible for reward
             ++t.actualNumEligibleProposals;
@@ -186,11 +187,17 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 expectedNumEligibleVotes;
         uint256 firstNounId;
         uint256 lastNounId;
+        uint32[] votingClientIds;
     }
 
     function getParamsForUpdatingProposalRewards() public view returns (ProposalRewardsParams memory p) {
         NounsDAOStorageV3.ProposalForRewards memory proposal;
         uint256 maxProposalId = nounsDAO.proposalCount();
+
+        uint32[] memory allClientIds = new uint32[](nextTokenId);
+        uint32[] memory votingClientIds = new uint32[](nextTokenId);
+        for (uint32 i; i < nextTokenId; i++) allClientIds[i] = i;
+        uint256 numVotingClients;
 
         for (uint32 pid = nextProposalIdToReward; pid <= maxProposalId; pid++) {
             proposal = nounsDAO.proposalDataForRewards(pid);
@@ -199,7 +206,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             if (block.number <= endBlock) break; // reached a proposal still in voting
 
             // skip non eligible proposals TODO: parameterize quorum
-            if (proposal.forVotes < (proposal.totalSupply * 1000) / 10000) continue;
+            if (proposal.forVotes < (proposal.totalSupply * proposalEligibilityQuorumBps) / 10000) continue;
 
             // proposal is eligible for reward
             ++p.expectedNumEligibleProposals;
@@ -208,6 +215,22 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             p.expectedNumEligibleVotes += proposalTotalVotes;
 
             p.lastProposalId = pid;
+
+            NounsDAOStorageV3.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, allClientIds);
+            for (uint256 i; i < nextTokenId; i++) {
+                if (voteData[i].votes > 0) {
+                    if (votingClientIds[i] == 0) {
+                        votingClientIds[i] = 1;
+                        numVotingClients++;
+                    }
+                }
+            }
+        }
+
+        p.votingClientIds = new uint32[](numVotingClients);
+        uint32 j;
+        for (uint32 i; i < votingClientIds.length; i++) {
+            if (votingClientIds[i] == 1) p.votingClientIds[j++] = i;
         }
 
         (p.firstNounId, p.lastNounId) = findAuctionsBeforeAndAfter(
