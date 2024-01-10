@@ -47,86 +47,6 @@ library NounsDAOV3Proposals {
     error CantVetoExecutedProposal();
     error VotesBelowProposalThreshold();
 
-    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
-    event ProposalVetoed(uint256 id);
-
-    /// @notice An event emitted when a new proposal is created
-    event ProposalCreated(
-        uint256 id,
-        address proposer,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
-        string description
-    );
-
-    /// @notice An event emitted when a new proposal is created, which includes additional information
-    /// @dev V3 adds `signers`, `updatePeriodEndBlock` compared to the V1/V2 event.
-    event ProposalCreatedWithRequirements(
-        uint256 id,
-        address proposer,
-        address[] signers,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
-        uint256 updatePeriodEndBlock,
-        uint256 proposalThreshold,
-        uint256 quorumVotes,
-        string description
-    );
-
-    /// @notice Emitted when a proposal is created to be executed on timelockV1
-    event ProposalCreatedOnTimelockV1(uint256 id);
-
-    /// @notice Emitted when a proposal is updated
-    event ProposalUpdated(
-        uint256 indexed id,
-        address indexed proposer,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description,
-        string updateMessage
-    );
-
-    /// @notice Emitted when a proposal's transactions are updated
-    event ProposalTransactionsUpdated(
-        uint256 indexed id,
-        address indexed proposer,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string updateMessage
-    );
-
-    /// @notice Emitted when a proposal's description is updated
-    event ProposalDescriptionUpdated(
-        uint256 indexed id,
-        address indexed proposer,
-        string description,
-        string updateMessage
-    );
-
-    /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
-    event ProposalQueued(uint256 id, uint256 eta);
-
-    /// @notice An event emitted when a proposal has been executed in the NounsDAOExecutor
-    event ProposalExecuted(uint256 id);
-
-    /// @notice An event emitted when a proposal has been canceled
-    event ProposalCanceled(uint256 id);
-
-    /// @notice Emitted when someone cancels a signature
-    event SignatureCancelled(address indexed signer, bytes sig);
-
     // Created to solve stack-too-deep errors
     struct ProposalTxs {
         address[] targets;
@@ -208,7 +128,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage newProposal = ds._proposals[newProposalId];
         newProposal.executeOnTimelockV1 = true;
 
-        emit ProposalCreatedOnTimelockV1(newProposalId);
+        emit NounsDAOEventsV3.ProposalCreatedOnTimelockV1(newProposalId);
 
         return newProposalId;
     }
@@ -284,7 +204,7 @@ library NounsDAOV3Proposals {
         bytes32 sigHash = keccak256(sig);
         ds.cancelledSigs[msg.sender][sigHash] = true;
 
-        emit SignatureCancelled(msg.sender, sig);
+        emit NounsDAOEventsV3.SignatureCancelled(msg.sender, sig);
     }
 
     /**
@@ -310,7 +230,7 @@ library NounsDAOV3Proposals {
     ) external {
         updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
 
-        emit ProposalUpdated(
+        emit NounsDAOEventsV3.ProposalUpdated(
             proposalId,
             msg.sender,
             targets,
@@ -342,7 +262,15 @@ library NounsDAOV3Proposals {
     ) external {
         updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
 
-        emit ProposalTransactionsUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, updateMessage);
+        emit NounsDAOEventsV3.ProposalTransactionsUpdated(
+            proposalId,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            updateMessage
+        );
     }
 
     function updateProposalTransactionsInternal(
@@ -379,7 +307,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         checkProposalUpdatable(ds, proposalId, proposal);
 
-        emit ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
+        emit NounsDAOEventsV3.ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
     }
 
     /**
@@ -432,7 +360,7 @@ library NounsDAOV3Proposals {
         proposal.signatures = txs.signatures;
         proposal.calldatas = txs.calldatas;
 
-        emit ProposalUpdated(
+        emit NounsDAOEventsV3.ProposalUpdated(
             proposalId,
             msg.sender,
             txs.targets,
@@ -467,7 +395,7 @@ library NounsDAOV3Proposals {
             );
         }
         proposal.eta = eta;
-        emit ProposalQueued(proposalId, eta);
+        emit NounsDAOEvents.ProposalQueued(proposalId, eta);
     }
 
     function queueOrRevertInternal(
@@ -517,7 +445,7 @@ library NounsDAOV3Proposals {
                 proposal.eta
             );
         }
-        emit ProposalExecuted(proposal.id);
+        emit NounsDAOEvents.ProposalExecuted(proposal.id);
     }
 
     function getProposalTimelock(
@@ -562,7 +490,7 @@ library NounsDAOV3Proposals {
             );
         }
 
-        emit ProposalVetoed(proposalId);
+        emit NounsDAOEvents.ProposalVetoed(proposalId);
     }
 
     /**
@@ -611,7 +539,7 @@ library NounsDAOV3Proposals {
             );
         }
 
-        emit ProposalCanceled(proposalId);
+        emit NounsDAOEvents.ProposalCanceled(proposalId);
     }
 
     /**
@@ -944,7 +872,7 @@ library NounsDAOV3Proposals {
         string memory description
     ) internal {
         /// @notice Maintains backwards compatibility with GovernorBravo events
-        emit ProposalCreated(
+        emit NounsDAOEvents.ProposalCreated(
             newProposal.id,
             msg.sender,
             txs.targets,
@@ -959,7 +887,7 @@ library NounsDAOV3Proposals {
         /// @notice V1: Updated event with `proposalThreshold` and `quorumVotes` `minQuorumVotes`
         /// @notice V2: `quorumVotes` changed to `minQuorumVotes`
         /// @notice V3: Added signers and updatePeriodEndBlock
-        emit ProposalCreatedWithRequirements(
+        emit NounsDAOEventsV3.ProposalCreatedWithRequirements(
             newProposal.id,
             msg.sender,
             signers,
