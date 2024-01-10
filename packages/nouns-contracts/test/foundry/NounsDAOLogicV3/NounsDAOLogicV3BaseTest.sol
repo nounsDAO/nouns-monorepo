@@ -58,19 +58,12 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     );
 
     event ProposalCreatedWithRequirements(
-        uint256 id,
-        address proposer,
-        address[] signers,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
+        uint256 id,        
+        address[] signers,        
         uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
-        string description
+        uint32 indexed clientId
     );
 
     NounsToken nounsToken;
@@ -310,19 +303,12 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCreatedWithRequirements(
-            expectedPropId,
-            expectedProposer,
-            expectedSigners,
-            txs.targets,
-            txs.values,
-            txs.signatures,
-            txs.calldatas,
-            expectedStartBlock,
-            expectedEndBlock,
+            expectedPropId,        
+            expectedSigners,            
             block.number + proposalUpdatablePeriodInBlocks,
             expectedPropThreshold,
             expectedMinQuorumVotes,
-            'description'
+            0 // clientId
         );
     }
 }

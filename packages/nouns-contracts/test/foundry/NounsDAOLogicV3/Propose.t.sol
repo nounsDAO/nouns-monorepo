@@ -18,7 +18,7 @@ contract ProposeTest is NounsDAOLogicV3BaseTest {
         }
     }
 
-    function testEmits_ProposalCreatedWithRequirements() public {
+    function testEmits_ProposalCreated_and_ProposalCreatedWithRequirements() public {
         address[] memory targets = new address[](1);
         targets[0] = makeAddr('target');
         uint256[] memory values = new uint256[](1);
@@ -33,21 +33,26 @@ contract ProposeTest is NounsDAOLogicV3BaseTest {
         uint256 endBlock = startBlock + dao.votingPeriod();
 
         vm.expectEmit(true, true, true, true);
-
-        emit ProposalCreatedWithRequirements(
+        emit ProposalCreated(
             1,
             proposer,
-            new address[](0),
             targets,
             values,
             signatures,
             calldatas,
             startBlock,
             endBlock,
+            'some description'
+        );
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCreatedWithRequirements(
+            1,
+            new address[](0),            
             updatablePeriodEndBlock,
             1, // prop threshold
             dao.minQuorumVotes(),
-            'some description'
+            0 // clientId
         );
 
         vm.prank(proposer);

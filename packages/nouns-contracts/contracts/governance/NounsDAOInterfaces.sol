@@ -131,20 +131,14 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     /// @notice An event emitted when a new proposal is created, which includes additional information
     /// @dev V3 adds `signers`, `updatePeriodEndBlock` compared to the V1/V2 event.
+    /// @dev V4: Removed data that's already emitted in `ProposalCreated`, added clientId
     event ProposalCreatedWithRequirements(
-        uint256 id,
-        address proposer,
-        address[] signers,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
+        uint256 id,        
+        address[] signers,        
         uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
-        string description
+        uint32 indexed clientId
     );
 
     /// @notice Emitted when a proposal is created to be executed on timelockV1

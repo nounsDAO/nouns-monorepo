@@ -104,7 +104,7 @@ library NounsDAOV3Proposals {
         );
         ds.latestProposalIds[msg.sender] = proposalId;
 
-        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(adjustedTotalSupply), txs, description);
+        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(adjustedTotalSupply), txs, description, clientId);
 
         return proposalId;
     }
@@ -152,7 +152,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description,
-        uint32 client
+        uint32 clientId
     ) external returns (uint256) {
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposalTxs(txs);
@@ -169,7 +169,7 @@ library NounsDAOV3Proposals {
             temp.propThreshold,
             temp.adjustedTotalSupply,
             txs,
-            client
+            clientId
         );
 
         // important that the proposal is created before the verification call in order to ensure
@@ -186,7 +186,7 @@ library NounsDAOV3Proposals {
 
         newProposal.signers = signers;
 
-        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(temp.adjustedTotalSupply), txs, description);
+        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(temp.adjustedTotalSupply), txs, description, clientId);
 
         return temp.proposalId;
     }
@@ -869,7 +869,8 @@ library NounsDAOV3Proposals {
         address[] memory signers,
         uint256 minQuorumVotes,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        uint32 clientId
     ) internal {
         /// @notice Maintains backwards compatibility with GovernorBravo events
         emit NounsDAOEvents.ProposalCreated(
@@ -887,20 +888,14 @@ library NounsDAOV3Proposals {
         /// @notice V1: Updated event with `proposalThreshold` and `quorumVotes` `minQuorumVotes`
         /// @notice V2: `quorumVotes` changed to `minQuorumVotes`
         /// @notice V3: Added signers and updatePeriodEndBlock
+        /// @notice V4: Removed data that's already emitted in `ProposalCreated`, added clientId
         emit NounsDAOEventsV3.ProposalCreatedWithRequirements(
             newProposal.id,
-            msg.sender,
-            signers,
-            txs.targets,
-            txs.values,
-            txs.signatures,
-            txs.calldatas,
-            newProposal.startBlock,
-            newProposal.endBlock,
+            signers,            
             newProposal.updatePeriodEndBlock,
             newProposal.proposalThreshold,
             minQuorumVotes,
-            description
+            clientId
         );
     }
 
