@@ -21,8 +21,8 @@ import {
   JoinFork,
   ProposalCreatedOnTimelockV1,
   VoteSnapshotBlockSwitchProposalIdSet,
-  VoteCastWithClientId,
 } from './types/NounsDAO/NounsDAO';
+import { VoteCastWithClientId } from './types/NounsDAOV4/NounsDAOV4';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,
@@ -58,13 +58,13 @@ import {
 } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
-  event: ProposalCreatedWithRequirements,
+  event: ProposalCreatedWithRequirements1,
 ): void {
   handleProposalCreated(ParsedProposalV3.fromV1Event(event));
 }
 
 export function handleProposalCreatedWithRequirementsV3(
-  event: ProposalCreatedWithRequirements1,
+  event: ProposalCreatedWithRequirements,
 ): void {
   handleProposalCreated(ParsedProposalV3.fromV3Event(event));
 }

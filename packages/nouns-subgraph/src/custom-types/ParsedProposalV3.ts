@@ -29,7 +29,7 @@ export class ParsedProposalV3 {
   signers: string[] = [];
   adjustedTotalSupply: BigInt = BIGINT_ZERO;
 
-  static fromV1Event(event: ProposalCreatedWithRequirements): ParsedProposalV3 {
+  static fromV1Event(event: ProposalCreatedWithRequirements1): ParsedProposalV3 {
     const proposal = new ParsedProposalV3();
 
     proposal.id = event.params.id.toString();
@@ -54,7 +54,7 @@ export class ParsedProposalV3 {
     return proposal;
   }
 
-  static fromV3Event(event: ProposalCreatedWithRequirements1): ParsedProposalV3 {
+  static fromV3Event(event: ProposalCreatedWithRequirements): ParsedProposalV3 {
     const proposal = new ParsedProposalV3();
     const nounsDAO = NounsDAO.bind(event.address);
 

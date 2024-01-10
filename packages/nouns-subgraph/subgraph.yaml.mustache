@@ -151,6 +151,29 @@ dataSources:
           handler: handleJoinFork
         - event: VoteSnapshotBlockSwitchProposalIdSet(uint256,uint256)
           handler: handleVoteSnapshotBlockSwitchProposalIdSet
+  - kind: ethereum/contract
+    name: NounsDAOV4
+    network: {{network}}
+    source:
+      address: '{{nounsDAO.address}}'
+      abi: NounsDAOV4
+      startBlock: {{nounsDAO.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/nouns-dao.ts
+      entities:
+        - Account
+        - Delegate
+        - Proposal
+        - Vote
+        - Governance
+        - ProposalCandidateSignature
+      abis:
+        - name: NounsDAOV4
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV4.json
+      eventHandlers:
         - event: VoteCastWithClientId(indexed address,indexed uint256,indexed uint32)
           handler: handleVoteCastWithClientId
   - kind: ethereum/contract
