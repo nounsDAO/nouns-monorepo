@@ -18,10 +18,13 @@ pragma solidity ^0.8.19;
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
+import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
 
-contract Rewards {
+contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
+
+    uint32 public nextTokenId = 1;
 
     uint256 public lastProcessedAuctionId;
     uint32 public nextProposalIdToReward = 400; // TODO: set from constructor
@@ -38,8 +41,6 @@ contract Rewards {
     struct ClientData {
         address payoutWallet;
     }
-
-    mapping(uint32 clientId => ClientData data) clients;
 
     constructor(
         address nounsDAO_,
@@ -269,10 +270,10 @@ contract Rewards {
         }
     }
 
-    function registerClient(uint32 clientId, address payoutWallet) public {
-        require(clients[clientId].payoutWallet == address(0));
-
-        clients[clientId].payoutWallet = payoutWallet;
+    function registerClient() public returns (uint32) {
+        uint32 tokenId = nextTokenId++;
+        _mint(msg.sender, tokenId);
+        return tokenId;
     }
 
     function requireProposalEligibleForRewards(NounsDAOStorageV3.ProposalCondensed memory proposal) internal view {

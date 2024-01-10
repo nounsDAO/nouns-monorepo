@@ -20,8 +20,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     address bidder1 = makeAddr('bidder1');
     address bidder2 = makeAddr('bidder2');
 
-    uint32 constant CLIENT_ID = 42;
-    uint32 constant CLIENT_ID2 = 43;
+    uint32 CLIENT_ID;
+    uint32 CLIENT_ID2;
 
     uint256 constant SECONDS_IN_BLOCK = 12;
 
@@ -57,8 +57,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
             NounsAuctionHouseProxy(payable(address(auctionHouse)))
         );
 
-        rewards.registerClient(CLIENT_ID, clientWallet);
-        rewards.registerClient(CLIENT_ID2, clientWallet2);
+        CLIENT_ID = rewards.registerClient();
+        CLIENT_ID2 = rewards.registerClient();
     }
 
     function _mintTo(address to) internal returns (uint256 tokenID) {
