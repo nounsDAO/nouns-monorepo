@@ -33,8 +33,8 @@ import {
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
-): ProposalCreatedWithRequirements {
-  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
+): ProposalCreatedWithRequirements1 {
+  let newEvent = changetype<ProposalCreatedWithRequirements1>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
@@ -108,8 +108,8 @@ export class ProposalCreatedWithRequirementsEvent {
 
 export function createProposalCreatedWithRequirementsEventV1(
   input: ProposalCreatedWithRequirementsEvent,
-): ProposalCreatedWithRequirements1 {
-  let newEvent = changetype<ProposalCreatedWithRequirements1>(newMockEvent());
+): ProposalCreatedWithRequirements {
+  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
