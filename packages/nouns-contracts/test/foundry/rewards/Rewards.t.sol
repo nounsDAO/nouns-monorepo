@@ -7,6 +7,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -19,6 +20,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     address voter3 = makeAddr('voter3');
     address bidder1 = makeAddr('bidder1');
     address bidder2 = makeAddr('bidder2');
+
+    ERC20Mock erc20Mock = new ERC20Mock();
 
     uint32 CLIENT_ID;
     uint32 CLIENT_ID2;
@@ -36,7 +39,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1, 0);
+        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1, 0, address(erc20Mock));
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
         vm.deal(bidder1, 1000 ether);

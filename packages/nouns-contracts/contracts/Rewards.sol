@@ -19,6 +19,7 @@ import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
 import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
+import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
 
 contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     INounsDAOLogicV3 public immutable nounsDAO;
@@ -37,6 +38,8 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     uint16 public auctionRewardBps = 100; // TODO make configurable
     uint16 public proposalEligibilityQuorumBps = 1000; // TODO make configurable
 
+    IERC20 public erc20Token; // TODO make configurable
+
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
     struct ClientData {
@@ -47,12 +50,14 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         address nounsDAO_,
         address auctionHouse_,
         uint32 nextProposalIdToReward_,
-        uint256 lastProcessedAuctionId_
+        uint256 lastProcessedAuctionId_,
+        address erc20Token_
     ) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         nextProposalIdToReward = nextProposalIdToReward_;
         lastProcessedAuctionId = lastProcessedAuctionId_;
+        erc20Token = IERC20(erc20Token_);
     }
 
     // TODO: only admin?
@@ -179,6 +184,14 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
         require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');
         require(t.actualNumEligibleVotes == expectedNumEligibleVotes, 'wrong expectedNumEligibleVotes');
+    }
+
+    function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public {
+        require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
+
+        clientBalances[clientId] -= amount;
+
+        erc20Token.transfer(to, amount);
     }
 
     struct ProposalRewardsParams {
