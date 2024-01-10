@@ -17,9 +17,14 @@ import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV3,
+  INounsDAOLogicV3,
+  NounsDAOLogicV3,
+  NounsDAOLogicV3,
+  NounsDAOLogicV3__factory,
 } from '../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
 import { DynamicQuorumParams } from '../types';
+import { NounsDaoLogicV3Factory } from '../../src';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -29,7 +34,7 @@ let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDAOLogicV3;
+let gov: INounsDAOLogicV3;
 let snapshotId: number;
 
 const V1_QUORUM_BPS = 201;
@@ -123,10 +128,13 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     expect(actualParams.maxQuorumVotesBPS).to.equal(2222);
     expect(actualParams.quorumCoefficient).to.equal(quorumCoefficient);
 
-    await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(200, 222);
-    await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(2000, 2222);
+    let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+
+    await expect(tx).to.emit(govWithEvents, 'MinQuorumVotesBPSSet').withArgs(200, 222);
+    await expect(tx).to.emit(govWithEvents, 'MaxQuorumVotesBPSSet').withArgs(2000, 2222);
+
     await expect(tx)
-      .to.emit(gov, 'QuorumCoefficientSet')
+      .to.emit(govWithEvents, 'QuorumCoefficientSet')
       .withArgs(parseUnits('1', 6), quorumCoefficient);
   });
 
@@ -139,9 +147,11 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     expect(actualParams.maxQuorumVotesBPS).to.equal(4000);
     expect(actualParams.quorumCoefficient).to.equal(quorumCoefficient);
 
-    await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(V1_QUORUM_BPS, 200);
-    await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(V1_QUORUM_BPS, 4000);
-    await expect(tx).to.emit(gov, 'QuorumCoefficientSet').withArgs(0, quorumCoefficient);
+    let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+
+    await expect(tx).to.emit(govWithEvents, 'MinQuorumVotesBPSSet').withArgs(V1_QUORUM_BPS, 200);
+    await expect(tx).to.emit(govWithEvents, 'MaxQuorumVotesBPSSet').withArgs(V1_QUORUM_BPS, 4000);
+    await expect(tx).to.emit(govWithEvents, 'QuorumCoefficientSet').withArgs(0, quorumCoefficient);
   });
 
   describe('quorum params checkpointing', () => {
@@ -238,7 +248,8 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.minQuorumVotesBPS).to.equal(222);
-        await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(200, 222);
+        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        await expect(tx).to.emit(govWithEvents, 'MinQuorumVotesBPSSet').withArgs(200, 222);
       });
 
       it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
@@ -274,7 +285,8 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.maxQuorumVotesBPS).to.equal(3333);
-        await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(3000, 3333);
+        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        await expect(tx).to.emit(govWithEvents, 'MaxQuorumVotesBPSSet').withArgs(3000, 3333);
       });
 
       it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
@@ -302,7 +314,8 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.quorumCoefficient).to.equal(111);
-        await expect(tx).to.emit(gov, 'QuorumCoefficientSet').withArgs(1, 111);
+        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        await expect(tx).to.emit(govWithEvents, 'QuorumCoefficientSet').withArgs(1, 111);
       });
 
       it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {

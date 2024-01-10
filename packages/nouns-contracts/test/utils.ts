@@ -29,6 +29,8 @@ import {
   NounsDAOLogicV3__factory as NounsDaoLogicV3Factory,
   NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
   NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
+  INounsDAOLogicV3__factory,
+  INounsDAOLogicV3,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
@@ -498,7 +500,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
 };
 
 export const propose = async (
-  gov: NounsDAOLogicV1 | NounsDAOLogicV2 | NounsDAOLogicV3,
+  gov: INounsDAOLogicV3,
   proposer: SignerWithAddress,
   stubPropUserAddress: string = address(0),
 ) => {
@@ -507,7 +509,15 @@ export const propose = async (
   const signatures = ['getBalanceOf(address)'];
   const callDatas = [encodeParameters(['address'], [stubPropUserAddress])];
 
-  await gov.connect(proposer).propose(targets, values, signatures, callDatas, 'do nothing');
+  await gov
+    .connect(proposer)
+    ['propose(address[],uint256[],string[],bytes[],string)'](
+      targets,
+      values,
+      signatures,
+      callDatas,
+      'do nothing',
+    );
   return await gov.latestProposalIds(proposer.address);
 };
 
@@ -565,13 +575,13 @@ export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<Nou
 export const deployGovernorV3AndSetImpl = async (
   deployer: SignerWithAddress,
   proxyAddress: string,
-): Promise<NounsDAOLogicV3> => {
+): Promise<INounsDAOLogicV3> => {
   const v3LogicContract = await deployGovernorV3(deployer);
 
   const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
   await proxy._setImplementation(v3LogicContract.address);
 
-  return NounsDaoLogicV3Factory.connect(proxyAddress, deployer);
+  return INounsDAOLogicV3__factory.connect(proxyAddress, deployer);
 };
 
 export const deployGovernorV3WithV3Proxy = async (
@@ -584,7 +594,7 @@ export const deployGovernorV3WithV3Proxy = async (
   votingDelay?: number,
   proposalThresholdBPs?: number,
   dynamicQuorumParams?: DynamicQuorumParams,
-): Promise<NounsDAOLogicV3> => {
+): Promise<INounsDAOLogicV3> => {
   const v3LogicContract = await deployGovernorV3(deployer);
   const predictedProxyAddress = ethers.utils.getContractAddress({
     from: deployer.address,
@@ -618,5 +628,5 @@ export const deployGovernorV3WithV3Proxy = async (
     },
   );
 
-  return NounsDaoLogicV3Factory.connect(proxy.address, deployer);
+  return INounsDAOLogicV3__factory.connect(proxy.address, deployer);
 };

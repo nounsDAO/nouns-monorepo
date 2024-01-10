@@ -36,7 +36,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV3;
+let gov: INounsDAOLogicV3;
 let proposalId: EthersBN;
 
 async function reset() {
