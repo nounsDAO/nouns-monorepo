@@ -92,6 +92,7 @@ export function getOrCreateVote(
 
   if (vote == null && createIfNotFound) {
     vote = new Vote(id);
+    vote.clientId = 0;
 
     if (save) {
       vote.save();
