@@ -30,6 +30,9 @@ const AuctionPageNew: React.FC<AuctionPageProps> = props => {
     if (!lastAuctionNounId) return;
 
     if (initialAuctionId !== undefined) {
+
+      console.log(initialAuctionId);
+
       // handle out of bounds noun path ids
       if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));

@@ -26,27 +26,27 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (!lastAuctionNounId) return;
+  // useEffect(() => {
+  //   if (!lastAuctionNounId) return;
 
-    if (initialAuctionId !== undefined) {
-      // handle out of bounds noun path ids
-      if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-        dispatch(push(nounPath(lastAuctionNounId)));
-      } else {
-        if (onDisplayAuction === undefined) {
-          // handle regular noun path ids on first load
-          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
-        }
-      }
-    } else {
-      // no noun path id set
-      if (lastAuctionNounId) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-      }
-    }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
+  //   if (initialAuctionId !== undefined) {
+  //     // handle out of bounds noun path ids
+  //     if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
+  //       dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+  //       dispatch(push(nounPath(lastAuctionNounId)));
+  //     } else {
+  //       if (onDisplayAuction === undefined) {
+  //         // handle regular noun path ids on first load
+  //         dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+  //       }
+  //     }
+  //   } else {
+  //     // no noun path id set
+  //     if (lastAuctionNounId) {
+  //       dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+  //     }
+  //   }
+  // }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
   const backgroundColor = isCoolBackground
@@ -60,7 +60,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   //   switchNetworkToEthereum();
   // }
 
-  
+
 
   // let result = useNftCall('balanceOf', [activeAccount]);
   // console.log(result);
