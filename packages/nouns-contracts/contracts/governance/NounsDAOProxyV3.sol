@@ -38,9 +38,21 @@
 
 pragma solidity ^0.8.19;
 
-import './NounsDAOInterfaces.sol';
+import { NounsDAOV3Types, NounsDAOV3Types } from './NounsDAOInterfaces.sol';
 
-contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
+contract NounsDAOProxyV3 {
+    /// @notice Administrator for this contract
+    address public admin;
+
+    /// @notice Pending administrator for this contract
+    address public pendingAdmin;
+
+    /// @notice Active brains of Governor
+    address public implementation;
+
+    /// @notice Emitted when implementation is changed
+    event NewImplementation(address oldImplementation, address newImplementation);
+
     constructor(
         address timelock_,
         address nouns_,
@@ -49,8 +61,8 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
         address vetoer_,
         address admin_,
         address implementation_,
-        NounsDAOStorageV3.NounsDAOParams memory daoParams_,
-        NounsDAOStorageV3.DynamicQuorumParams memory dynamicQuorumParams_
+        NounsDAOV3Types.NounsDAOParams memory daoParams_,
+        NounsDAOV3Types.DynamicQuorumParams memory dynamicQuorumParams_
     ) {
         // Admin set to msg.sender for initialization
         admin = msg.sender;

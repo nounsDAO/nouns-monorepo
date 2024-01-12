@@ -22,7 +22,7 @@ import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Votes {
-    using NounsDAOV3Proposals for NounsDAOStorageV3.StorageV3;
+    using NounsDAOV3Proposals for NounsDAOV3Types.StorageV3;
 
     error CanOnlyVoteAgainstDuringObjectionPeriod();
 
@@ -67,7 +67,7 @@ library NounsDAOV3Votes {
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      */
-    function castVote(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId, uint8 support) external {
+    function castVote(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId, uint8 support) external {
         emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support, 0), '');
     }
 
@@ -82,7 +82,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
         uint32 clientId
@@ -102,7 +102,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteWithReason(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
         string calldata reason,
@@ -119,7 +119,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteInternal(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
         string memory reason,
@@ -141,7 +141,7 @@ library NounsDAOV3Votes {
      * @param reason The reason given for the vote by the voter
      */
     function castVoteWithReason(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
         string calldata reason
@@ -160,7 +160,7 @@ library NounsDAOV3Votes {
      * @dev External function that accepts EIP-712 signatures for voting on proposals.
      */
     function castVoteBySig(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         uint8 support,
         uint8 v,
@@ -188,25 +188,25 @@ library NounsDAOV3Votes {
      * @return votes The number of votes cast
      */
     function castVoteInternal(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         address voter,
         uint256 proposalId,
         uint8 support,
         uint32 clientId
     ) internal returns (uint96 votes) {
-        NounsDAOStorageV3.ProposalState proposalState = ds.stateInternal(proposalId);
+        NounsDAOV3Types.ProposalState proposalState = ds.stateInternal(proposalId);
 
-        if (proposalState == NounsDAOStorageV3.ProposalState.Active) {
+        if (proposalState == NounsDAOV3Types.ProposalState.Active) {
             votes = castVoteDuringVotingPeriodInternal(ds, proposalId, voter, support);
-        } else if (proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod) {
+        } else if (proposalState == NounsDAOV3Types.ProposalState.ObjectionPeriod) {
             if (support != 0) revert CanOnlyVoteAgainstDuringObjectionPeriod();
             votes = castObjectionInternal(ds, proposalId, voter);
         } else {
             revert('NounsDAO::castVoteInternal: voting is closed');
         }
 
-        NounsDAOStorageV3.ClientVoteData memory voteData = ds._proposals[proposalId].voteClients[clientId];
-        ds._proposals[proposalId].voteClients[clientId] = NounsDAOStorageV3.ClientVoteData({
+        NounsDAOV3Types.ClientVoteData memory voteData = ds._proposals[proposalId].voteClients[clientId];
+        ds._proposals[proposalId].voteClients[clientId] = NounsDAOV3Types.ClientVoteData({
             votes: uint32(voteData.votes + votes),
             txs: voteData.txs + 1
         });
@@ -221,14 +221,14 @@ library NounsDAOV3Votes {
      * @return The number of votes cast
      */
     function castVoteDuringVotingPeriodInternal(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         address voter,
         uint8 support
     ) internal returns (uint96) {
         require(support <= 2, 'NounsDAO::castVoteDuringVotingPeriodInternal: invalid vote type');
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
+        NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
+        NounsDAOV3Types.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteDuringVotingPeriodInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
@@ -286,12 +286,12 @@ library NounsDAOV3Votes {
      * @return The number of votes cast
      */
     function castObjectionInternal(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         address voter
     ) internal returns (uint96) {
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
+        NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
+        NounsDAOV3Types.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         uint96 votes = receipt.votes = ds.nouns.getPriorVotes(
@@ -328,9 +328,9 @@ library NounsDAOV3Votes {
      * @param proposal The proposal storage reference, used to read `creationBlock` and `startBlock`
      */
     function proposalVoteSnapshotBlock(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
-        NounsDAOStorageV3.Proposal storage proposal
+        NounsDAOV3Types.Proposal storage proposal
     ) internal view returns (uint256) {
         // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
         // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.

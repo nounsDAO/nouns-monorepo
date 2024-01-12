@@ -4,31 +4,9 @@ import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/No
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
-import { ContractName } from './types';
+import { ContractNamesDAOV3 } from './types';
 
-type LocalContractName =
-  | Exclude<
-    ContractName,
-    'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
-  >
-  | 'NounsDAOLogicV3'
-  | 'NounsDAOProxyV3'
-  | 'NounsDAOV3Admin'
-  | 'NounsDAOV3DynamicQuorum'
-  | 'NounsDAOV3Proposals'
-  | 'NounsDAOV3Votes'
-  | 'NounsDAOV3Fork'
-  | 'NounsDAOForkEscrow'
-  | 'ForkDAODeployer'
-  | 'NounsTokenFork'
-  | 'NounsAuctionHouseFork'
-  | 'NounsDAOLogicV1Fork'
-  | 'NounsDAOExecutorV2'
-  | 'NounsDAOExecutorProxy'
-  | 'WETH'
-  | 'Multicall2'
-  | 'NounsDAOData'
-  | 'NounsDAODataProxy';
+type LocalContractName = ContractNamesDAOV3 | 'WETH' | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];

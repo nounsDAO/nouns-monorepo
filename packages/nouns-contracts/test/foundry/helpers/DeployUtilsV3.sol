@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './DeployUtils.sol';
-import { INounsDAOShared } from './INounsDAOShared.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
@@ -19,7 +19,7 @@ import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeplo
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
@@ -29,10 +29,10 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (INounsDAOShared dao) {
+    ) internal returns (INounsDAOLogicV3 dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
-        dao = INounsDAOShared(
+        dao = INounsDAOLogicV3(
             address(
                 new NounsDAOProxyV3(
                     timelock,
@@ -42,7 +42,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                     vetoer,
                     timelock,
                     address(new NounsDAOLogicV3()),
-                    NounsDAOStorageV3.NounsDAOParams({
+                    NounsDAOV3Types.NounsDAOParams({
                         votingPeriod: VOTING_PERIOD,
                         votingDelay: VOTING_DELAY,
                         proposalThresholdBPS: PROPOSAL_THRESHOLD,
@@ -50,7 +50,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                         objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                         proposalUpdatablePeriodInBlocks: 0
                     }),
-                    NounsDAOStorageV3.DynamicQuorumParams({
+                    NounsDAOV3Types.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000
@@ -114,7 +114,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                     makeAddr('vetoer'),
                     address(t.timelock),
                     daoLogicImplementation,
-                    NounsDAOStorageV3.NounsDAOParams({
+                    NounsDAOV3Types.NounsDAOParams({
                         votingPeriod: VOTING_PERIOD,
                         votingDelay: VOTING_DELAY,
                         proposalThresholdBPS: PROPOSAL_THRESHOLD,
@@ -122,7 +122,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                         objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                         proposalUpdatablePeriodInBlocks: UPDATABLE_PERIOD_BLOCKS
                     }),
-                    NounsDAOStorageV3.DynamicQuorumParams({
+                    NounsDAOV3Types.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000

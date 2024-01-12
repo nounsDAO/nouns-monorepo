@@ -2,12 +2,8 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { INounsDAOShared } from './helpers/INounsDAOShared.sol';
-import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
-import { NounsDAOProxy } from '../../contracts/governance/NounsDAOProxy.sol';
-import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
@@ -32,19 +28,19 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        uint256 state = uint256(NounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
+        uint256 state = uint256(INounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
 
         if (daoVersion() < 3) {
-            assertEq(state, uint256(NounsDAOStorageV3.ProposalState.Pending));
+            assertEq(state, uint256(NounsDAOV3Types.ProposalState.Pending));
         } else {
-            assertEq(state, uint256(NounsDAOStorageV3.ProposalState.Updatable));
+            assertEq(state, uint256(NounsDAOV3Types.ProposalState.Updatable));
         }
     }
 
     function testActiveGivenProposalPastVotingDelay() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + 1);
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Active);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
     }
 
     function testCanceledGivenCanceledProposal() public {
@@ -52,14 +48,14 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Canceled);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Canceled);
     }
 
     function testDefeatedByRunningOutOfTime() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
     }
 
     function testDefeatedByVotingAgainst() public {
@@ -74,7 +70,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vote(againstVoter, proposalId, 0);
         endVotingPeriod();
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
     }
 
     function testSucceeded() public {
@@ -89,14 +85,14 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vote(againstVoter, proposalId, 0);
         endVotingPeriod();
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
     }
 
     function testQueueRevertsGivenDefeatedProposal() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
 
         vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
         daoProxy.queue(proposalId);
@@ -107,7 +103,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Canceled);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Canceled);
 
         vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
         daoProxy.queue(proposalId);
@@ -128,7 +124,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         // anyone can queue
         daoProxy.queue(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Queued);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Queued);
     }
 
     function testExpired() public {
@@ -145,7 +141,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         daoProxy.queue(proposalId);
         vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Expired);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Expired);
     }
 
     function testExecutedOnlyAfterQueued() public {
@@ -173,10 +169,10 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.deal(address(timelock), 100);
         daoProxy.execute(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Executed);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
 
         vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV3.ProposalState.Executed);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
     }
 }
 
@@ -185,12 +181,8 @@ contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicStateBaseTest {
         return 1;
     }
 
-    function deployDAOProxy(
-        address,
-        address,
-        address
-    ) internal override returns (INounsDAOShared) {
-        return INounsDAOShared(address(deployForkDAOProxy()));
+    function deployDAOProxy(address, address, address) internal override returns (INounsDAOLogicV3) {
+        return INounsDAOLogicV3(address(deployForkDAOProxy()));
     }
 }
 
@@ -199,7 +191,7 @@ contract NounsDAOLogicV3StateTest is NounsDAOLogicStateBaseTest {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOShared) {
+    ) internal override returns (INounsDAOLogicV3) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 

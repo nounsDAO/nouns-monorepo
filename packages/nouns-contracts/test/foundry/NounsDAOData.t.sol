@@ -4,8 +4,8 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
-import { INounsDAOShared } from './helpers/INounsDAOShared.sol';
-import { NounsTokenLike, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { NounsTokenLike, NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
 import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAODataEvents.sol';
@@ -17,16 +17,16 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
-    INounsDAOShared nounsDao;
+    INounsDAOLogicV3 nounsDao;
     INounsAuctionHouse auction;
     address feeRecipient = makeAddr('fee recipient');
     address otherProposer = makeAddr('other proposer');
     address notNouner = makeAddr('not nouner');
 
     function setUp() public virtual {
-        nounsDao = INounsDAOShared(address(_deployDAOV3()));
+        nounsDao = INounsDAOLogicV3(address(_deployDAOV3()));
         auction = INounsAuctionHouse(nounsDao.nouns().minter());
-        vm.prank(nounsDao.timelock());
+        vm.prank(address(nounsDao.timelock()));
         auction.unpause();
 
         NounsDAOData logic = new NounsDAOData(address(nounsDao.nouns()), address(nounsDao));
@@ -1019,9 +1019,9 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256 proposalId) {
-        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+        NounsDAOV3Types.ProposerSignature[] memory sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+            sigs[i] = NounsDAOV3Types.ProposerSignature(
                 signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(nounsDao)),
                 signers[i],
                 expirationTimestamps[i]

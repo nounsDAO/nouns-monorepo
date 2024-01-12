@@ -19,13 +19,13 @@ pragma solidity ^0.8.19;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
-import { NounsTokenLike, NounsDAOStorageV3 } from '../NounsDAOInterfaces.sol';
+import { NounsTokenLike, NounsDAOV3Types } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '../../external/openzeppelin/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
 
 interface INounsDAO {
-    function proposalsV3(uint256 proposalId) external view returns (NounsDAOStorageV3.ProposalCondensed memory);
+    function proposalsV3(uint256 proposalId) external view returns (NounsDAOV3Types.ProposalCondensed memory);
 }
 
 contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
@@ -132,7 +132,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     ) external payable {
         if (proposalIdToUpdate > 0) {
             INounsDAO dao = INounsDAO(nounsDao);
-            NounsDAOStorageV3.ProposalCondensed memory propInfo = dao.proposalsV3(proposalIdToUpdate);
+            NounsDAOV3Types.ProposalCondensed memory propInfo = dao.proposalsV3(proposalIdToUpdate);
 
             if (block.number > propInfo.updatePeriodEndBlock) revert ProposalToUpdateMustBeUpdatable();
             if (propInfo.proposer != msg.sender) revert OnlyProposerCanCreateUpdateCandidate();
@@ -283,11 +283,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
      * @param reason their free text feedback.
      */
-    function sendFeedback(
-        uint256 proposalId,
-        uint8 support,
-        string memory reason
-    ) external {
+    function sendFeedback(uint256 proposalId, uint8 support, string memory reason) external {
         if (support > 2) revert InvalidSupportValue();
 
         emit FeedbackSent(msg.sender, proposalId, support, reason);
@@ -301,12 +297,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
      * @param reason their free text feedback.
      */
-    function sendCandidateFeedback(
-        address proposer,
-        string memory slug,
-        uint8 support,
-        string memory reason
-    ) external {
+    function sendCandidateFeedback(address proposer, string memory slug, uint8 support, string memory reason) external {
         if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
         if (support > 2) revert InvalidSupportValue();
 

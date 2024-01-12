@@ -6,15 +6,15 @@ import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { DeployDAOV3LogicMainnet } from '../../../script/DAOV3p1/DeployDAOV3LogicMainnet.s.sol';
 import { ProposeDAOV3p1UpgradeMainnet } from '../../../script/DAOV3p1/ProposeDAOV3p1UpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
-import { NounsDAOStorageV3, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
     address public constant WHALE = 0x83fCFe8Ba2FEce9578F0BbaFeD4Ebf5E915045B9;
     NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
-    INounsDAOShared public constant NOUNS_DAO_PROXY_MAINNET =
-        INounsDAOShared(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
+    INounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
+        INounsDAOLogicV3(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant CURRENT_DAO_IMPL = 0xdD1492570beb290a2f309541e1fDdcaAA3f00B61;
 
     address proposerAddr = vm.addr(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
@@ -53,7 +53,7 @@ abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     }
 
     function voteAndExecuteProposal(uint256 proposalId) internal {
-        NounsDAOStorageV2.ProposalCondensed memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
+        NounsDAOV3Types.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
 
         vm.roll(propInfo.startBlock + 1);
         vm.prank(proposerAddr, origin);

@@ -454,7 +454,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data, backwards compatible with V1 and V2
      */
-    function proposals(uint256 proposalId) external view returns (NounsDAOStorageV2.ProposalCondensed memory) {
+    function proposals(uint256 proposalId) external view returns (NounsDAOV3Types.ProposalCondensedV2 memory) {
         return ds.proposals(proposalId);
     }
 

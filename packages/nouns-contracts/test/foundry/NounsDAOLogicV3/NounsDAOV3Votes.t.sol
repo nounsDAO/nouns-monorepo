@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOV3Votes } from '../../../contracts/governance/NounsDAOV3Votes.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
     address proposer = makeAddr('proposer');
@@ -39,7 +39,7 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
 
         // go into objection period
         vm.roll(block.number + dao.lastMinuteWindowInBlocks());
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.ObjectionPeriod);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.ObjectionPeriod);
 
         vm.expectRevert(NounsDAOV3Votes.CanOnlyVoteAgainstDuringObjectionPeriod.selector);
         vm.prank(voter);
@@ -48,7 +48,7 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
 
     function test_givenStateUpdatable_reverts() public {
         vm.startPrank(voter);
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Updatable);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Updatable);
 
         vm.expectRevert('NounsDAO::castVoteInternal: voting is closed');
         dao.castVote(proposalId, 1);
@@ -58,7 +58,7 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
         vm.startPrank(voter);
 
         vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + 1);
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Pending);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Pending);
 
         vm.expectRevert('NounsDAO::castVoteInternal: voting is closed');
         dao.castVote(proposalId, 1);
@@ -68,7 +68,7 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
         vm.startPrank(voter);
 
         vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + dao.votingPeriod() + 1);
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Defeated);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
 
         vm.expectRevert('NounsDAO::castVoteInternal: voting is closed');
         dao.castVote(proposalId, 1);
@@ -78,12 +78,12 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
         vm.startPrank(voter);
 
         vm.roll(block.number + dao.proposalUpdatablePeriodInBlocks() + dao.votingDelay() + 1);
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Active);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
 
         dao.castVote(proposalId, 1);
 
         vm.roll(block.number + dao.votingPeriod());
-        assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Succeeded);
+        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
 
         vm.expectRevert('NounsDAO::castVoteInternal: voting is closed');
         dao.castVote(proposalId, 1);

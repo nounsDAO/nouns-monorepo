@@ -9,14 +9,14 @@ task('create-proposal', 'Create a governance proposal')
     types.string,
   )
   .setAction(async ({ nounsDaoProxy }, { ethers }) => {
-    const nounsDaoFactory = await ethers.getContractFactory('NounsDAOLogicV1');
+    const nounsDaoFactory = await ethers.getContractFactory('NounsDAOLogicV3');
     const nounsDao = nounsDaoFactory.attach(nounsDaoProxy);
 
     const [deployer] = await ethers.getSigners();
     const oneETH = utils.parseEther('1');
 
     const receipt = await (
-      await nounsDao.propose(
+      await nounsDao['propose(address[],uint256[],string[],bytes[],string)'](
         [deployer.address],
         [oneETH],
         [''],

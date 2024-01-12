@@ -17,7 +17,7 @@ pragma solidity ^0.8.19;
 
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
-import { NounsDAOStorageV3 } from './governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
 import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
 
@@ -72,7 +72,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 actualNumEligibleVotes;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
-        NounsDAOStorageV3.ProposalForRewards proposal;
+        NounsDAOV3Types.ProposalForRewards proposal;
     }
 
     function updateRewardsForAuctions(uint256 lastNounId) public {
@@ -164,7 +164,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
             uint256 votesInProposal;
 
-            NounsDAOStorageV3.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, votingClientIds);
+            NounsDAOV3Types.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, votingClientIds);
 
             uint256 votes;
             for (uint256 i; i < votingClientIds.length; ++i) {
@@ -204,7 +204,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     }
 
     function getParamsForUpdatingProposalRewards() public view returns (ProposalRewardsParams memory p) {
-        NounsDAOStorageV3.ProposalForRewards memory proposal;
+        NounsDAOV3Types.ProposalForRewards memory proposal;
         uint256 maxProposalId = nounsDAO.proposalCount();
 
         uint32[] memory allClientIds = new uint32[](nextTokenId);
@@ -229,7 +229,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
             p.lastProposalId = pid;
 
-            NounsDAOStorageV3.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, allClientIds);
+            NounsDAOV3Types.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, allClientIds);
             for (uint256 i; i < nextTokenId; i++) {
                 if (voteData[i].votes > 0) {
                     if (votingClientIds[i] == 0) {
@@ -312,7 +312,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         return tokenId;
     }
 
-    function requireProposalEligibleForRewards(NounsDAOStorageV3.ProposalCondensed memory proposal) internal view {
+    function requireProposalEligibleForRewards(NounsDAOV3Types.ProposalCondensed memory proposal) internal view {
         require(proposal.forVotes >= proposal.quorumVotes, 'must reach quorum');
 
         // voting has ended

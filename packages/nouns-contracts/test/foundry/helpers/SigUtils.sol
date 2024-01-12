@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 
 contract SigUtils is Test {
@@ -35,7 +35,7 @@ contract SigUtils is Test {
         uint256[] memory expirationTimestamps,
         UpdateProposalParams memory proposalParams,
         address verifyingContract
-    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
+    ) internal returns (NounsDAOV3Types.ProposerSignature[] memory sigs) {
         return
             makeUpdateProposalSigs(
                 signers,
@@ -54,10 +54,10 @@ contract SigUtils is Test {
         UpdateProposalParams memory proposalParams,
         address verifyingContract,
         string memory domainName
-    ) internal view returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
-        sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+    ) internal view returns (NounsDAOV3Types.ProposerSignature[] memory sigs) {
+        sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+            sigs[i] = NounsDAOV3Types.ProposerSignature(
                 signProposalUpdate(
                     proposalParams.proposalId,
                     proposalParams.proposer,

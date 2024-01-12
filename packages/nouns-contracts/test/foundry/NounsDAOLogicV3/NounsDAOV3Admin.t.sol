@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.sol';
-import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
+import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
@@ -132,7 +132,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
 
         assertEq(address(dao.timelock()), address(1));
         assertEq(address(dao.timelockV1()), address(2));
-        assertEq(NounsDAOProxy(payable(address(dao))).admin(), address(3));
+        assertEq(NounsDAOProxyV3(payable(address(dao))).admin(), address(3));
     }
 
     function test_setVoteSnapshotBlockSwitchProposalId_onlyAdmin() public {

@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 
 abstract contract ZeroState is NounsDAOLogicV3BaseTest {
@@ -21,7 +21,7 @@ abstract contract ZeroState is NounsDAOLogicV3BaseTest {
         emit ProposalCanceled(proposalId);
         vm.prank(proposer);
         dao.cancel(proposalId);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Canceled));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Canceled));
     }
 
     function verifyRandoCantCancel() internal {
@@ -54,7 +54,7 @@ abstract contract ProposalUpdatableState is ZeroState {
         proposalId = propose(proposer, target, 0, '', '', '');
         vm.roll(block.number + 1);
 
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Updatable));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Updatable));
     }
 }
 
@@ -91,7 +91,7 @@ abstract contract ProposalPendingState is ProposalUpdatableState {
         super.setUp();
 
         vm.roll(dao.proposalsV3(proposalId).updatePeriodEndBlock + 1);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Pending));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Pending));
     }
 }
 
@@ -106,7 +106,7 @@ abstract contract ProposalActiveState is ProposalPendingState {
         super.setUp();
 
         vm.roll(dao.proposalsV3(proposalId).startBlock + 1);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Active));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Active));
     }
 }
 
@@ -125,7 +125,7 @@ abstract contract ProposalObjectionPeriodState is ProposalActiveState {
         dao.castVote(proposalId, 1);
 
         vm.roll(dao.proposalsV3(proposalId).endBlock + 1);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.ObjectionPeriod));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.ObjectionPeriod));
     }
 }
 
@@ -143,7 +143,7 @@ abstract contract ProposalSucceededState is ProposalActiveState {
         dao.castVote(proposalId, 1);
 
         vm.roll(dao.proposalsV3(proposalId).endBlock + 1);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Succeeded));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Succeeded));
     }
 }
 
@@ -158,7 +158,7 @@ abstract contract ProposalQueuedState is ProposalSucceededState {
         super.setUp();
 
         dao.queue(proposalId);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Queued));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Queued));
     }
 }
 
@@ -174,7 +174,7 @@ abstract contract ProposalExecutedState is ProposalQueuedState {
 
         vm.warp(dao.proposalsV3(proposalId).eta + 1);
         dao.execute(proposalId);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Executed));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Executed));
     }
 }
 
@@ -189,7 +189,7 @@ abstract contract ProposalDefeatedState is ProposalActiveState {
         super.setUp();
 
         vm.roll(dao.proposalsV3(proposalId).endBlock + 1);
-        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOStorageV3.ProposalState.Defeated));
+        assertEq(uint256(dao.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Defeated));
     }
 }
 
