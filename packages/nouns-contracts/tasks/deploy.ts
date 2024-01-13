@@ -233,7 +233,6 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
         libraries: contract?.libraries?.(),
       });
 
-      console.log('gasPrice', gasPrice);
       const deploymentGas = await factory.signer.estimateGas(
         factory.getDeployTransaction(
           ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
