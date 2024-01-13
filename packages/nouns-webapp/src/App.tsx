@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { ChainId, useEthers } from '@usedapp/core';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-// import { setAlertModal } from './state/slices/application';
+import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import '../src/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import AlertModal from './components/Modal';
+import AlertModal from './components/Modal';
 import NavBar from './components/NavBar';
-// import NetworkAlert from './components/NetworkAlert';
+import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
 import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
@@ -25,6 +25,7 @@ import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import AuctionPageNew from './pages/AuctionNew';
 // import DelegatePage from './pages/DelegatePage';
+import { CHAIN_ID } from './config';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -36,18 +37,18 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  // const alertModal = useAppSelector(state => state.application.alertModal);
+  const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
     <div className={`${classes.wrapper}`}>
-      {/* {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
           content={<p>{alertModal.message}</p>}
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
-      )} */}
+      )}
       <BrowserRouter>
         <AvatarProvider
           provider={chainId === ChainId.Mainnet ? library : undefined}
