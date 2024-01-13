@@ -647,7 +647,7 @@ msgstr "終了日時"
 #: src/components/Proposals/index.tsx
 #: src/hooks/useGetCountDownCopy.tsx
 msgid "Ends {0}"
-msgstr "残り{0} で終了します"
+msgstr "{0} に終了します"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
@@ -702,7 +702,7 @@ msgstr "期限切れです"
 #: src/components/Proposals/index.tsx
 #: src/hooks/useGetCountDownCopy.tsx
 msgid "Expires {0}"
-msgstr "残り {0} で期限切れになります"
+msgstr "{0} に期限が切れます"
 
 #: src/components/ExploreGrid/ExploreNav/index.tsx
 #: src/pages/Playground/index.tsx
@@ -1348,7 +1348,7 @@ msgstr "開始"
 #: src/components/Proposals/index.tsx
 #: src/hooks/useGetCountDownCopy.tsx
 msgid "Starts {0}"
-msgstr "あと{0}で始まります"
+msgstr "まもなく始まります"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
