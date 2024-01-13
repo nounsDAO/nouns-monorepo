@@ -42,7 +42,7 @@ const Winner: React.FC<WinnerProps> = props => {
       {!isMobile && (
         <Col>
           <a
-            href="https://nouns.center/groups"
+            href="https://members.atxdao.com"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
@@ -51,8 +51,10 @@ const Winner: React.FC<WinnerProps> = props => {
               <Trans>Get Involved</Trans>
             </Button>
           </a>
+          <p style={{color: 'red', margin: '-5px'}}></p>
+
           <a
-            href="https://www.nounsagora.com/"
+            href="https://snapshot.org/#/atxdao.eth/settings"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
