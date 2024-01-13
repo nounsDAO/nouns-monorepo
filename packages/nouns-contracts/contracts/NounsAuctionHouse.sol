@@ -52,7 +52,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     uint8 public minBidIncrementPercentage;
 
     // The duration of a single auction
-    uint256 public duration;
+    uint256 public duration = 60 * 4;
 
     uint256[] public salePrices;
 
@@ -110,7 +110,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     function _updateAuctionDuration() internal {
         uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
         duration = duration / (lastSalePrice / targetPrice);
-        // duration = 60 * 10;
     }
 
     /**

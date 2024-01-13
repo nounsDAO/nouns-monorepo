@@ -11,7 +11,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    12 * 60 /* 12 minutes */,
+    1 * 60 /* 1 minutes */,
     types.int,
   )
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
@@ -19,7 +19,12 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)')
+  .addOptionalParam(
+    'auctionDuration',
+    'The auction duration (seconds)',
+    60 * 3 /* 3 minutes */,
+    types.int,
+  )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
   .addOptionalParam('votingPeriod', 'The voting period (blocks)')
   .addOptionalParam('votingDelay', 'The voting delay (blocks)')
