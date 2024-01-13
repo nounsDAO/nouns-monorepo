@@ -24,7 +24,7 @@ import onDisplayAuction, {
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
-import {auctionQuery, clientFactory, firstAuctionsQuery, latestAuctionsQuery} from './wrappers/subgraph';
+import {clientFactory, firstAuctionsQuery, latestAuctionsQuery} from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
