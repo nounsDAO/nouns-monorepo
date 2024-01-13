@@ -21,6 +21,28 @@
   cursor: pointer;
 }
 
+.verifyButtonAuction {
+  height: 3rem;
+  color: white;
+  border: transparent;
+  background-color: var(--brand-black);
+  font-family: 'Calistoga';
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-bottom:5px;
+}
+
+.verifyButtonAuction:hover,
+.verifyButtonAuction:active,
+.verifyButtonAuction:focus,
+.verifyButtonAuction:disabled {
+  background-color: gray !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
 .verifyButton {
   height: 3rem;
   color: white;
@@ -103,6 +125,11 @@
     border-radius: 10px;
     font-weight: bold;
     font-size: 18px;
+  }
+
+  .margined {
+    margin: 5px;
+    background-color: red;
   }
 
   .verifyLink {
