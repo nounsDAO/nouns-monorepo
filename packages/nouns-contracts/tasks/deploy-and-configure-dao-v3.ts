@@ -132,18 +132,18 @@ task(
         console.log(`Minted a token id #${tokenId}, then transfer owner to ${nounderAddress}`);
         await contracts.NounsToken.instance.transferFrom(deployerAddress, nounderAddress, tokenId, options);
       }
-      if (args.changeOwner) {
-        console.log(`Setting a minter to ${contracts.NounsAuctionHouseProxy.instance.address}`);
-        const gasLimit = contracts.NounsToken.instance.estimateGas.mint();
-        let gasPrice = await ethers.provider.getGasPrice();
-        // ガス不足(Base gasだけで不足する)になるので、20%足す
-        const addGasPrice = gasPrice.div(ethers.BigNumber.from(5));
-        gasPrice = gasPrice.add(addGasPrice);
-        const options = {gasLimit, gasPrice};
-        await contracts.NounsToken.instance.setMinter(contracts.NounsAuctionHouseProxy.instance.address, options);
-      }
     }
 
+    if (args.changeOwner) {
+      console.log(`Setting a minter to ${contracts.NounsAuctionHouseProxy.instance.address}`);
+      const gasLimit = contracts.NounsToken.instance.estimateGas.mint();
+      let gasPrice = await ethers.provider.getGasPrice();
+      // ガス不足(Base gasだけで不足する)になるので、20%足す
+      const addGasPrice = gasPrice.div(ethers.BigNumber.from(5));
+      gasPrice = gasPrice.add(addGasPrice);
+      const options = {gasLimit, gasPrice};
+      await contracts.NounsToken.instance.setMinter(contracts.NounsAuctionHouseProxy.instance.address, options);
+    }
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.

@@ -81,7 +81,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_clrblkohp8nlx01q7evjz0x5h/subgraphs/ubuyama-sepolia/v0.0.1/gn',
+      'https://api.goldsky.com/api/public/project_clrblkohp8nlx01q7evjz0x5h/subgraphs/ubuyama-sepolia/v0.0.2/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
     exploreUri: 'https://testnets.opensea.io/collection/nouns-214',
     nounder_address: '0x1AeB1E02E734a4797F3e2D1f96b645259E20D684',
