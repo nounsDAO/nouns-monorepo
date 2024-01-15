@@ -28,7 +28,9 @@ abstract contract DeployUtilsV3 is DeployUtils {
     function _createDAOV3Proxy(
         address timelock,
         address nounsToken,
-        address vetoer
+        address vetoer,
+        NounsDAOV3Types.NounsDAOParams memory daoParams,
+        NounsDAOV3Types.DynamicQuorumParams memory dqParams
     ) internal returns (INounsDAOLogicV3 dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
@@ -42,23 +44,37 @@ abstract contract DeployUtilsV3 is DeployUtils {
                     vetoer,
                     timelock,
                     address(new NounsDAOLogicV3()),
-                    NounsDAOV3Types.NounsDAOParams({
-                        votingPeriod: VOTING_PERIOD,
-                        votingDelay: VOTING_DELAY,
-                        proposalThresholdBPS: PROPOSAL_THRESHOLD,
-                        lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
-                        objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
-                        proposalUpdatablePeriodInBlocks: 0
-                    }),
-                    NounsDAOV3Types.DynamicQuorumParams({
-                        minQuorumVotesBPS: 200,
-                        maxQuorumVotesBPS: 2000,
-                        quorumCoefficient: 10000
-                    })
+                    daoParams,
+                    dqParams
                 )
             )
         );
         address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
+    }
+
+    function _createDAOV3Proxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal returns (INounsDAOLogicV3 dao) {
+        _createDAOV3Proxy(
+            timelock,
+            nounsToken,
+            vetoer,
+            NounsDAOV3Types.NounsDAOParams({
+                votingPeriod: VOTING_PERIOD,
+                votingDelay: VOTING_DELAY,
+                proposalThresholdBPS: PROPOSAL_THRESHOLD,
+                lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
+                objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
+                proposalUpdatablePeriodInBlocks: 0
+            }),
+            NounsDAOV3Types.DynamicQuorumParams({
+                minQuorumVotesBPS: 200,
+                maxQuorumVotesBPS: 2000,
+                quorumCoefficient: 10000
+            })
+        );
     }
 
     struct Temp {

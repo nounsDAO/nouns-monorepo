@@ -27,7 +27,25 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return
+            _createDAOV3Proxy(
+                timelock,
+                nounsToken,
+                vetoer,
+                NounsDAOV3Types.NounsDAOParams({
+                    votingPeriod: votingPeriod,
+                    votingDelay: votingDelay,
+                    proposalThresholdBPS: proposalThresholdBPS_,
+                    lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
+                    objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
+                    proposalUpdatablePeriodInBlocks: 0
+                }),
+                NounsDAOV3Types.DynamicQuorumParams({
+                    minQuorumVotesBPS: minQuorumVotesBPS,
+                    maxQuorumVotesBPS: 2000,
+                    quorumCoefficient: 10000
+                })
+            );
     }
 
     function setUp() public virtual override {
