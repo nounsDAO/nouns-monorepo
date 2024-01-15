@@ -57,7 +57,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address nounsToken,
         address vetoer
     ) internal returns (INounsDAOLogicV3 dao) {
-        _createDAOV3Proxy(
+        dao = _createDAOV3Proxy(
             timelock,
             nounsToken,
             vetoer,

@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
@@ -10,7 +11,7 @@ import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterface
 import { Utils } from '../helpers/Utils.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 
-abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
+abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
     uint256 constant proposalThresholdBPS_ = 678; // 6.78%
     uint16 constant minQuorumVotesBPS = 1100; // 11%
     address tokenHolder;
@@ -70,7 +71,7 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
     }
 }
 
-contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2InflationHandlingTest {
+contract NounsDAOLogic3InflationHandling40TotalSupplyTest is NounsDAOLogicV3InflationHandlingTest {
     function setUp() public virtual override {
         super.setUp();
 
@@ -104,7 +105,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
         assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 2);
 
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 
@@ -124,7 +125,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
     }
 }
 
-abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV2InflationHandlingTest {
+abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV3InflationHandlingTest {
     uint256 proposalId;
 
     function setUp() public virtual override {
@@ -183,7 +184,7 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
     }
 
     function testRejectsProposalsPreviouslyAboveThresholdButNowBelowBecauseSupplyIncreased() public {
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 
