@@ -995,16 +995,16 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
 
     function proposeBySigs(
         address proposer,
-        address signer,
-        uint256 signerPK,
+        address signer_,
+        uint256 signerPK_,
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp
-    ) internal returns (uint256 proposalId) {
+    ) internal returns (uint256 proposalId_) {
         address[] memory signers = new address[](1);
-        signers[0] = signer;
+        signers[0] = signer_;
         uint256[] memory signerPKs = new uint256[](1);
-        signerPKs[0] = signerPK;
+        signerPKs[0] = signerPK_;
         uint256[] memory expirationTimestamps = new uint256[](1);
         expirationTimestamps[0] = expirationTimestamp;
 
@@ -1018,7 +1018,7 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         uint256[] memory expirationTimestamps,
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description
-    ) internal returns (uint256 proposalId) {
+    ) internal returns (uint256 proposalId_) {
         NounsDAOV3Types.ProposerSignature[] memory sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
             sigs[i] = NounsDAOV3Types.ProposerSignature(
@@ -1029,6 +1029,6 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         }
 
         vm.prank(proposer);
-        proposalId = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+        proposalId_ = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
     }
 }

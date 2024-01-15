@@ -35,7 +35,7 @@ contract SigUtils is Test {
         uint256[] memory expirationTimestamps,
         UpdateProposalParams memory proposalParams,
         address verifyingContract
-    ) internal returns (NounsDAOV3Types.ProposerSignature[] memory sigs) {
+    ) internal view returns (NounsDAOV3Types.ProposerSignature[] memory sigs) {
         return
             makeUpdateProposalSigs(
                 signers,
@@ -102,7 +102,7 @@ contract SigUtils is Test {
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return signProposal(proposer, signerPK, txs, description, expirationTimestamp, verifyingContract, 'Nouns DAO');
     }
 

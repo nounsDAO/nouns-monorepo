@@ -49,7 +49,7 @@ abstract contract NounsDAOLogic_GasSnapshot_propose is NounsDAOLogicSharedBaseTe
         daoProxy.propose(targets, values, signatures, calldatas, getLongDescription());
     }
 
-    function getLongDescription() internal returns (string memory) {
+    function getLongDescription() internal view returns (string memory) {
         return vm.readFile('./test/foundry/files/longProposalDescription.txt');
     }
 }
@@ -167,7 +167,7 @@ contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSn
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
-    function test_proposalsV3() public {
+    function test_proposalsV3() public view {
         daoProxy.proposalsV3(1);
     }
 }
