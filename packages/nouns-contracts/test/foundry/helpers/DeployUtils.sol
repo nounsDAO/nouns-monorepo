@@ -19,15 +19,15 @@ import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
-    uint256 constant TIMELOCK_DELAY = 2 days;
-    uint256 constant VOTING_PERIOD = 7_200; // 24 hours
-    uint256 constant VOTING_DELAY = 1;
-    uint256 constant PROPOSAL_THRESHOLD = 1;
-    uint256 constant QUORUM_VOTES_BPS = 2000;
-    uint256 constant AUCTION_TIME_BUFFER = 5 minutes;
-    uint256 constant AUCTION_RESERVE_PRICE = 1;
-    uint8 constant AUCTION_MIN_BID_INCREMENT_PRCT = 2;
-    uint256 constant AUCTION_DURATION = 24 hours;
+    uint256 public constant TIMELOCK_DELAY = 2 days;
+    uint256 public constant VOTING_PERIOD = 7_200; // 24 hours
+    uint256 public constant VOTING_DELAY = 1;
+    uint256 public constant PROPOSAL_THRESHOLD = 1;
+    uint256 public constant QUORUM_VOTES_BPS = 2000;
+    uint256 public constant AUCTION_TIME_BUFFER = 5 minutes;
+    uint256 public constant AUCTION_RESERVE_PRICE = 1;
+    uint8 public constant AUCTION_MIN_BID_INCREMENT_PRCT = 2;
+    uint256 public constant AUCTION_DURATION = 24 hours;
 
     function _deployAuctionHouseV1AndToken(
         address owner,
@@ -58,12 +58,12 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return (proxy, admin);
     }
 
-    uint32 constant LAST_MINUTE_BLOCKS = 10;
-    uint32 constant OBJECTION_PERIOD_BLOCKS = 10;
-    uint32 constant UPDATABLE_PERIOD_BLOCKS = 10;
-    uint256 constant DELAYED_GOV_DURATION = 30 days;
-    uint256 constant FORK_PERIOD = 7 days;
-    uint256 constant FORK_THRESHOLD_BPS = 2_000; // 20%
+    uint32 public constant LAST_MINUTE_BLOCKS = 10;
+    uint32 public constant OBJECTION_PERIOD_BLOCKS = 10;
+    uint32 public constant UPDATABLE_PERIOD_BLOCKS = 10;
+    uint256 public constant DELAYED_GOV_DURATION = 30 days;
+    uint256 public constant FORK_PERIOD = 7 days;
+    uint256 public constant FORK_THRESHOLD_BPS = 2_000; // 20%
     uint256 public constant FORK_DAO_VOTING_PERIOD = 36000; // 5 days
     uint256 public constant FORK_DAO_VOTING_DELAY = 36000; // 5 days
     uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%

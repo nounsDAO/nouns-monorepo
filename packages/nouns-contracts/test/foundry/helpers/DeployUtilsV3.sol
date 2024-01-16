@@ -23,7 +23,7 @@ import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterface
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 contract DeployUtilsV3 is DeployUtils {
-    NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
+    NounsAuctionHouseProxyAdmin public auctionHouseProxyAdmin;
 
     function _createDAOV3Proxy(
         address timelock,
@@ -82,7 +82,7 @@ contract DeployUtilsV3 is DeployUtils {
         NounsToken nounsToken;
     }
 
-    function _deployDAOV3WithParams(uint256 auctionDuration) internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3WithParams(uint256 auctionDuration) public returns (INounsDAOLogicV3) {
         Temp memory t;
         t.timelock = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), ''))));
         t.timelock.initialize(address(1), TIMELOCK_DELAY);

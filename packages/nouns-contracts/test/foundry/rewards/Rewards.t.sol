@@ -33,6 +33,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     uint32[] clientIds;
 
     function setUp() public virtual override {
+        deployUtils = createDeployUtils();
         dao = INounsDAOLogicV3(deployUtils._deployDAOV3WithParams(24 hours));
         nounsToken = NounsToken(address(dao.nouns()));
         minter = nounsToken.minter();
