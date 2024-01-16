@@ -7,6 +7,18 @@ import { StdCheats } from 'forge-std/StdCheats.sol';
 
 interface IDeployUtilsV3 {
     function _deployDAOV3() external returns (address);
+
+    function _deployDAOV3WithParams(uint256 auctionDuration) external returns (address);
+
+    function VOTING_DELAY() external returns (uint256);
+
+    function VOTING_PERIOD() external returns (uint256);
+
+    function FORK_PERIOD() external returns (uint256);
+
+    function TIMELOCK_DELAY() external returns (uint256);
+
+    function auctionHouseProxyAdmin() external returns (address);
 }
 
 contract DeployUtilsPrecompiled is StdCheats {

@@ -103,7 +103,7 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
         dao.updateProposalDescription(proposalId, '', '');
 
         // Active
-        vm.roll(block.number + VOTING_DELAY);
+        vm.roll(block.number + deployUtils.VOTING_DELAY());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         updateProposal(proposer, proposalId, makeAddr('target'), 0, '', '', '');
@@ -118,7 +118,7 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
         // Succeeded
         vm.prank(proposer);
         dao.castVote(proposalId, 1);
-        vm.roll(block.number + VOTING_PERIOD);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         updateProposal(proposer, proposalId, makeAddr('target'), 0, '', '', '');
@@ -144,7 +144,7 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
         dao.updateProposalDescription(proposalId, '', '');
 
         // Executed
-        vm.warp(block.timestamp + TIMELOCK_DELAY);
+        vm.warp(block.timestamp + deployUtils.TIMELOCK_DELAY());
         dao.execute(proposalId);
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -175,10 +175,10 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
     }
 
     function test_givenStateDefeated_reverts() public {
-        vm.roll(block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY);
+        vm.roll(block.number + proposalUpdatablePeriodInBlocks + deployUtils.VOTING_DELAY());
         vm.prank(proposer);
         dao.castVote(proposalId, 0);
-        vm.roll(block.number + VOTING_PERIOD);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -193,12 +193,12 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
     }
 
     function test_givenStateExpired_reverts() public {
-        vm.roll(block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY);
+        vm.roll(block.number + proposalUpdatablePeriodInBlocks + deployUtils.VOTING_DELAY());
         vm.prank(proposer);
         dao.castVote(proposalId, 1);
-        vm.roll(block.number + VOTING_PERIOD);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD());
         dao.queue(proposalId);
-        vm.warp(block.timestamp + TIMELOCK_DELAY + timelock.GRACE_PERIOD());
+        vm.warp(block.timestamp + deployUtils.TIMELOCK_DELAY() + timelock.GRACE_PERIOD());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Expired);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -230,7 +230,11 @@ contract UpdateProposalPermissionsTest is UpdateProposalBaseTest {
 
     function test_givenStateObjectionPeriod_reverts() public {
         vm.roll(
-            block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY + VOTING_PERIOD - lastMinuteWindowInBlocks
+            block.number +
+                proposalUpdatablePeriodInBlocks +
+                deployUtils.VOTING_DELAY() +
+                deployUtils.VOTING_PERIOD() -
+                lastMinuteWindowInBlocks
         );
         vm.prank(proposer);
         dao.castVote(proposalId, 1);

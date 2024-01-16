@@ -45,11 +45,7 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
         escrow = dao.forkEscrow();
     }
 
-    function assertOwnerOfTokens(
-        address token,
-        uint256[] memory tokenIds_,
-        address owner
-    ) internal {
+    function assertOwnerOfTokens(address token, uint256[] memory tokenIds_, address owner) internal {
         for (uint256 i = 0; i < tokenIds_.length; i++) {
             assertEq(IERC721(token).ownerOf(tokenIds_[i]), owner);
         }
@@ -408,7 +404,7 @@ abstract contract DAOForkExecutedActivePeriodOverState is DAOForkExecutedState {
     function setUp() public virtual override {
         super.setUp();
 
-        skip(FORK_PERIOD);
+        skip(deployUtils.FORK_PERIOD());
     }
 }
 

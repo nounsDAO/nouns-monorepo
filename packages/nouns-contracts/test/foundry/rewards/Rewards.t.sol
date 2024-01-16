@@ -5,8 +5,10 @@ import { NounsDAOLogicV3BaseTest } from '../NounsDAOLogicV3/NounsDAOLogicV3BaseT
 import { Rewards } from '../../../contracts/Rewards.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
@@ -31,7 +33,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     uint32[] clientIds;
 
     function setUp() public virtual override {
-        dao = _deployDAOV3WithParams(24 hours);
+        dao = INounsDAOLogicV3(deployUtils._deployDAOV3WithParams(24 hours));
         nounsToken = NounsToken(address(dao.nouns()));
         minter = nounsToken.minter();
 
@@ -56,7 +58,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(
             address(dao.timelock()),
-            auctionHouseProxyAdmin,
+            NounsAuctionHouseProxyAdmin(deployUtils.auctionHouseProxyAdmin()),
             NounsAuctionHouseProxy(payable(address(auctionHouse)))
         );
 

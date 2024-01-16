@@ -593,7 +593,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Active
-        vm.roll(block.number + VOTING_DELAY);
+        vm.roll(block.number + deployUtils.VOTING_DELAY());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -603,7 +603,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         dao.castVote(proposalId, 1);
         vm.prank(_signers[0]);
         dao.castVote(proposalId, 1);
-        vm.roll(block.number + VOTING_PERIOD);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -615,7 +615,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Executed
-        vm.warp(block.timestamp + TIMELOCK_DELAY);
+        vm.warp(block.timestamp + deployUtils.TIMELOCK_DELAY());
         dao.execute(proposalId);
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -660,7 +660,9 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             address(dao)
         );
 
-        vm.roll(block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY + VOTING_PERIOD);
+        vm.roll(
+            block.number + proposalUpdatablePeriodInBlocks + deployUtils.VOTING_DELAY() + deployUtils.VOTING_PERIOD()
+        );
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -682,14 +684,14 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             address(dao)
         );
 
-        vm.roll(block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY);
+        vm.roll(block.number + proposalUpdatablePeriodInBlocks + deployUtils.VOTING_DELAY());
         vm.prank(proposer);
         dao.castVote(proposalId, 1);
         vm.prank(_signers[0]);
         dao.castVote(proposalId, 1);
-        vm.roll(block.number + VOTING_PERIOD);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD());
         dao.queue(proposalId);
-        vm.warp(block.timestamp + TIMELOCK_DELAY + timelock.GRACE_PERIOD());
+        vm.warp(block.timestamp + deployUtils.TIMELOCK_DELAY() + timelock.GRACE_PERIOD());
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Expired);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
@@ -735,7 +737,11 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.roll(
-            block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY + VOTING_PERIOD - lastMinuteWindowInBlocks
+            block.number +
+                proposalUpdatablePeriodInBlocks +
+                deployUtils.VOTING_DELAY() +
+                deployUtils.VOTING_PERIOD() -
+                lastMinuteWindowInBlocks
         );
         vm.prank(proposer);
         dao.castVote(proposalId, 1);
