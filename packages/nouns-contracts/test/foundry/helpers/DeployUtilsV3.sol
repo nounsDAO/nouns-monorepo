@@ -22,7 +22,7 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
-abstract contract DeployUtilsV3 is DeployUtils {
+contract DeployUtilsV3 is DeployUtils {
     NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
 
     function _createDAOV3Proxy(
@@ -165,7 +165,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         return dao;
     }
 
-    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3() public returns (INounsDAOLogicV3) {
         return _deployDAOV3WithParams(10 minutes);
     }
 }

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
 import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsTokenLike, NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
@@ -12,8 +11,9 @@ import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAOData
 import { NounsDAODataProxy } from '../../contracts/governance/data/NounsDAODataProxy.sol';
 import { NounsDAOV3Proposals } from '../../contracts/governance/NounsDAOV3Proposals.sol';
 import { SigUtils } from './helpers/SigUtils.sol';
+import { IDeployUtilsV3, DeployUtilsPrecompiled } from './helpers/DeployUtilsPrecompiled.sol';
 
-abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataEvents, AuctionHelpers {
+abstract contract NounsDAODataBaseTest is DeployUtilsPrecompiled, SigUtils, NounsDAODataEvents, AuctionHelpers {
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
@@ -24,7 +24,9 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
     address notNouner = makeAddr('not nouner');
 
     function setUp() public virtual {
-        nounsDao = INounsDAOLogicV3(address(_deployDAOV3()));
+        IDeployUtilsV3 d = createDeployUtils();
+        nounsDao = INounsDAOLogicV3(address(d._deployDAOV3()));
+
         auction = INounsAuctionHouse(nounsDao.nouns().minter());
         vm.prank(address(nounsDao.timelock()));
         auction.unpause();
@@ -81,7 +83,6 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
 contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_revertsForNonNounerAndNoPayment() public {
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
-
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
         vm.prank(notNouner);
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, 'description', 'slug', 0);
