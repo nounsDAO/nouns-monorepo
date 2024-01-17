@@ -7,8 +7,6 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
-import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
