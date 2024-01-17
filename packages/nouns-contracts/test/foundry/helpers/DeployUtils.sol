@@ -33,7 +33,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address owner,
         address noundersDAO,
         address minter
-    ) internal returns (NounsAuctionHouseProxy, NounsAuctionHouseProxyAdmin) {
+    ) public returns (NounsAuctionHouseProxy, NounsAuctionHouseProxyAdmin) {
         NounsAuctionHouse logic = new NounsAuctionHouse();
         NounsToken token = deployToken(noundersDAO, minter);
         WETH weth = new WETH();

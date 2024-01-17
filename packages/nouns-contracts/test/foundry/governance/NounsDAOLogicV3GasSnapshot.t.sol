@@ -5,10 +5,7 @@ import 'forge-std/Test.sol';
 
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
-import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { DeployUtilsPrecompiled } from '../helpers/DeployUtilsPrecompiled.sol';
 
 abstract contract NounsDAOLogic_GasSnapshot_propose is NounsDAOLogicSharedBaseTest {
     address immutable target = makeAddr('target');
@@ -148,23 +145,23 @@ abstract contract NounsDAOLogic_GasSnapshot_castVoteDuringObjectionPeriod is Nou
     }
 }
 
-contract NounsDAOLogic_GasSnapshot_V3_propose is DeployUtilsV3, NounsDAOLogic_GasSnapshot_propose {
+contract NounsDAOLogic_GasSnapshot_V3_propose is DeployUtilsPrecompiled, NounsDAOLogic_GasSnapshot_propose {
     function deployDAOProxy(
         address timelock,
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return createDeployUtils()._createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 }
 
-contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSnapshot_castVote {
+contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsPrecompiled, NounsDAOLogic_GasSnapshot_castVote {
     function deployDAOProxy(
         address timelock,
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return createDeployUtils()._createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
     function test_proposalsV3() public view {
@@ -173,7 +170,7 @@ contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSn
 }
 
 contract NounsDAOLogic_GasSnapshot_V3_voteDuringObjectionPeriod is
-    DeployUtilsV3,
+    DeployUtilsPrecompiled,
     NounsDAOLogic_GasSnapshot_castVoteDuringObjectionPeriod
 {
     function deployDAOProxy(
@@ -181,6 +178,6 @@ contract NounsDAOLogic_GasSnapshot_V3_voteDuringObjectionPeriod is
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return createDeployUtils()._createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 }

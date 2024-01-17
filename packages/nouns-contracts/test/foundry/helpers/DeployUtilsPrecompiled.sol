@@ -28,6 +28,12 @@ interface IDeployUtilsV3 {
 
     function _deployDAOV3WithParams(uint256 auctionDuration) external returns (address);
 
+    function _deployAuctionHouseV1AndToken(
+        address owner,
+        address noundersDAO,
+        address minter
+    ) external returns (address, address);
+
     function VOTING_DELAY() external returns (uint256);
 
     function VOTING_PERIOD() external returns (uint256);
@@ -53,6 +59,14 @@ interface IDeployUtilsV3 {
     function FORK_DAO_QUORUM_VOTES_BPS() external returns (uint256);
 
     function auctionHouseProxyAdmin() external returns (address);
+
+    function AUCTION_TIME_BUFFER() external returns (uint256);
+
+    function AUCTION_RESERVE_PRICE() external returns (uint256);
+
+    function AUCTION_MIN_BID_INCREMENT_PRCT() external returns (uint8);
+
+    function AUCTION_DURATION() external returns (uint256);
 }
 
 contract DeployUtilsPrecompiled is StdCheats {

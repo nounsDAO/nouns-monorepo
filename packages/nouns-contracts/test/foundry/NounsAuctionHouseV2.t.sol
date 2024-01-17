@@ -2,16 +2,14 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { DeployUtils } from './helpers/DeployUtils.sol';
+import { IDeployUtilsV3, DeployUtilsPrecompiled } from './helpers/DeployUtilsPrecompiled.sol';
 import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
-import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouseV2 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
-contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
+contract NounsAuctionHouseV2TestBase is Test, DeployUtilsPrecompiled {
     event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
 
     address owner = address(0x1111);
@@ -19,12 +17,14 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     address minter = address(0x3333);
     uint256[] nounIds;
     uint32 timestamp = 1702289583;
+    IDeployUtilsV3 deployUtils;
 
     NounsAuctionHouseV2 auction;
 
     function setUp() public virtual {
+        deployUtils = createDeployUtils();
         vm.warp(timestamp);
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, address proxyAdmin) = deployUtils._deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
@@ -167,13 +167,13 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_settleAuction_revertsWhenAuctionHasntBegunYet() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, address proxyAdmin) = deployUtils._deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
         AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = NounsAuctionHouseV2(auctionProxy);
 
         vm.expectRevert("Auction hasn't begun");
         auction.settleAuction();
@@ -191,12 +191,12 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_V2Migration_works() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, address proxyAdmin) = deployUtils._deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(auctionProxy);
         vm.prank(owner);
         auctionV1.unpause();
         vm.roll(block.number + 1);
@@ -226,21 +226,21 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
         assertEq(address(auctionV2.nouns()), nounsBefore);
         assertEq(address(auctionV2.weth()), wethBefore);
-        assertEq(auctionV2.timeBuffer(), AUCTION_TIME_BUFFER);
-        assertEq(auctionV2.reservePrice(), AUCTION_RESERVE_PRICE);
-        assertEq(auctionV2.minBidIncrementPercentage(), AUCTION_MIN_BID_INCREMENT_PRCT);
-        assertEq(auctionV2.duration(), AUCTION_DURATION);
+        assertEq(auctionV2.timeBuffer(), deployUtils.AUCTION_TIME_BUFFER());
+        assertEq(auctionV2.reservePrice(), deployUtils.AUCTION_RESERVE_PRICE());
+        assertEq(auctionV2.minBidIncrementPercentage(), deployUtils.AUCTION_MIN_BID_INCREMENT_PRCT());
+        assertEq(auctionV2.duration(), deployUtils.AUCTION_DURATION());
         assertEq(auctionV2.paused(), false);
         assertEq(auctionV2.owner(), owner);
     }
 
     function test_V2Migration_copiesPausedWhenTrue() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+        (address auctionProxy, address proxyAdmin) = deployUtils._deployAuctionHouseV1AndToken(
             owner,
             noundersDAO,
             minter
         );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(auctionProxy);
         vm.prank(owner);
         auctionV1.unpause();
         vm.roll(block.number + 1);

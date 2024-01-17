@@ -59,8 +59,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(
             address(dao.timelock()),
-            NounsAuctionHouseProxyAdmin(deployUtils.auctionHouseProxyAdmin()),
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
+            deployUtils.auctionHouseProxyAdmin(),
+            address(auctionHouse)
         );
 
         rewards.registerClient();
