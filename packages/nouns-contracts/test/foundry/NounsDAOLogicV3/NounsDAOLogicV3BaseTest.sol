@@ -2,13 +2,22 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
+import { SigUtils } from '../helpers/SigUtils.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
+import { INounsDAOExecutorV2, NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsToken } from '../../../contracts/interfaces/INounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { IDeployUtilsV3, DeployUtilsPrecompiled } from '../helpers/DeployUtilsPrecompiled.sol';
+
+interface INounsTokenExtra is INounsToken {
+    function minter() external view returns (address);
+
+    function delegate(address delegatee) external;
+
+    function totalSupply() external view returns (uint256);
+
+    function getCurrentVotes(address account) external view returns (uint96);
+}
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsPrecompiled, SigUtils {
     IDeployUtilsV3 deployUtils;
@@ -62,9 +71,9 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsPrecompiled, SigUt
         uint32 indexed clientId
     );
 
-    NounsToken nounsToken;
+    INounsTokenExtra nounsToken;
     INounsDAOLogicV3 dao;
-    NounsDAOExecutorV2 timelock;
+    INounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
     address minter;
@@ -77,9 +86,9 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsPrecompiled, SigUt
     function setUp() public virtual {
         deployUtils = createDeployUtils();
         dao = INounsDAOLogicV3(address(deployUtils._deployDAOV3()));
-        nounsToken = NounsToken(address(dao.nouns()));
+        nounsToken = INounsTokenExtra(address(dao.nouns()));
         minter = nounsToken.minter();
-        timelock = NounsDAOExecutorV2(payable(address(dao.timelock())));
+        timelock = INounsDAOExecutorV2(payable(address(dao.timelock())));
         forkEscrow = address(dao.forkEscrow());
     }
 
