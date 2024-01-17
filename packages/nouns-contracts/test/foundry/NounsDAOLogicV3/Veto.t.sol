@@ -267,7 +267,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return deployUtils._createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
     function daoVersion() internal pure override returns (uint256) {

@@ -75,7 +75,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return descriptor;
     }
 
-    function _deployAndPopulateV2() internal returns (NounsDescriptorV2) {
+    function _deployAndPopulateV2() public returns (NounsDescriptorV2) {
         NounsDescriptorV2 descriptorV2 = _deployDescriptorV2();
         _populateDescriptorV2(descriptorV2);
         return descriptorV2;
@@ -97,7 +97,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
     }
 
-    function get1967Implementation(address proxy) internal view returns (address) {
+    function get1967Implementation(address proxy) public view returns (address) {
         bytes32 slot = bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1);
         return address(uint160(uint256(vm.load(proxy, slot))));
     }

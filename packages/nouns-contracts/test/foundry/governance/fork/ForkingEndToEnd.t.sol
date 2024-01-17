@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
-import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
@@ -14,7 +13,7 @@ import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfa
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
 import { INounsDAOLogicV3 } from '../../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
-contract ForkingHappyFlowTest is DeployUtilsFork {
+contract ForkingHappyFlowTest is DeployUtilsFork, Test {
     address minter;
     INounsDAOLogicV3 daoV3;
     NounsToken ogToken;
@@ -30,7 +29,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
     address nounerNoFork2 = makeAddr('nouner no fork 2');
 
     function test_forkHappyFlow() public {
-        daoV3 = _deployDAOV3();
+        daoV3 = deployUtils._deployDAOV3();
         ogToken = NounsToken(address(daoV3.nouns()));
         minter = ogToken.minter();
         dealNouns();
@@ -170,7 +169,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
     }
 }
 
-abstract contract ForkDAOBase is DeployUtilsFork {
+abstract contract ForkDAOBase is DeployUtilsFork, Test {
     INounsDAOLogicV3 originalDAO;
     NounsTokenLike originalToken;
     NounsDAOLogicV1Fork forkDAO;
@@ -184,7 +183,7 @@ abstract contract ForkDAOBase is DeployUtilsFork {
     address joiningNouner = makeAddr('joining nouner');
 
     function setUp() public virtual {
-        originalDAO = _deployDAOV3();
+        originalDAO = deployUtils._deployDAOV3();
         originalToken = originalDAO.nouns();
         address originalMinter = originalToken.minter();
         vm.startPrank(address(originalDAO.timelock()));

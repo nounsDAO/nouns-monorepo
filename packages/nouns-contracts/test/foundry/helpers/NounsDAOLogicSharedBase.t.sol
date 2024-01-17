@@ -19,7 +19,7 @@ interface DAOLogicFork {
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
     INounsDAOLogicV3 daoProxy;
     NounsToken nounsToken;
-    NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+    NounsDAOExecutor timelock;
     address vetoer = address(0x3);
     address admin = address(0x4);
     address noundersDAO = address(0x5);
@@ -31,7 +31,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
     Utils utils;
 
     function setUp() public virtual {
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        timelock = new NounsDAOExecutor(address(1), deployUtils.TIMELOCK_DELAY());
+        NounsDescriptorV2 descriptor = NounsDescriptorV2(deployUtils._deployAndPopulateV2());
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
 
         daoProxy = deployDAOProxy(address(timelock), address(nounsToken), vetoer);

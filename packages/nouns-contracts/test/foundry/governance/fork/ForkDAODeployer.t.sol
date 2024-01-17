@@ -10,7 +10,7 @@ import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newda
 import { NounsAuctionHouseFork } from '../../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 
-contract ForkDAODeployerTest is DeployUtilsFork {
+contract ForkDAODeployerTest is DeployUtilsFork, Test {
     NounsDAOLogicV1Fork dao;
     NounsDAOExecutorV2 treasury;
     NounsTokenFork token;
@@ -38,7 +38,7 @@ contract ForkDAODeployerTest is DeployUtilsFork {
         vm.prank(address(treasury));
         token.upgradeTo(address(newLogic));
 
-        assertEq(get1967Implementation(address(token)), address(newLogic));
+        assertEq(deployUtils.get1967Implementation(address(token)), address(newLogic));
     }
 
     function test_auction_nonTreasuryCannotUpgrade() public {
@@ -54,7 +54,7 @@ contract ForkDAODeployerTest is DeployUtilsFork {
         vm.prank(address(treasury));
         auction.upgradeTo(address(newLogic));
 
-        assertEq(get1967Implementation(address(auction)), address(newLogic));
+        assertEq(deployUtils.get1967Implementation(address(auction)), address(newLogic));
     }
 
     function test_dao_nonTreasuryCannotUpgrade() public {
@@ -70,7 +70,7 @@ contract ForkDAODeployerTest is DeployUtilsFork {
         vm.prank(address(treasury));
         dao.upgradeTo(address(newLogic));
 
-        assertEq(get1967Implementation(address(dao)), address(newLogic));
+        assertEq(deployUtils.get1967Implementation(address(dao)), address(newLogic));
     }
 
     function test_treasury_nonTreasuryCannotUpgrade() public {
@@ -86,13 +86,13 @@ contract ForkDAODeployerTest is DeployUtilsFork {
         vm.prank(address(treasury));
         treasury.upgradeTo(address(newLogic));
 
-        assertEq(get1967Implementation(address(treasury)), address(newLogic));
+        assertEq(deployUtils.get1967Implementation(address(treasury)), address(newLogic));
     }
 
     function test_govContractParams() public {
-        assertEq(dao.votingPeriod(), FORK_DAO_VOTING_PERIOD);
-        assertEq(dao.votingDelay(), FORK_DAO_VOTING_DELAY);
-        assertEq(dao.proposalThresholdBPS(), FORK_DAO_PROPOSAL_THRESHOLD_BPS);
-        assertEq(dao.quorumVotesBPS(), FORK_DAO_QUORUM_VOTES_BPS);
+        assertEq(dao.votingPeriod(), deployUtils.FORK_DAO_VOTING_PERIOD());
+        assertEq(dao.votingDelay(), deployUtils.FORK_DAO_VOTING_DELAY());
+        assertEq(dao.proposalThresholdBPS(), deployUtils.FORK_DAO_PROPOSAL_THRESHOLD_BPS());
+        assertEq(dao.quorumVotesBPS(), deployUtils.FORK_DAO_QUORUM_VOTES_BPS());
     }
 }

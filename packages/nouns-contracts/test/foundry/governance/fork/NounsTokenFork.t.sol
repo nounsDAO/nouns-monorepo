@@ -14,7 +14,7 @@ import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfa
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 
-abstract contract NounsTokenForkBase is DeployUtilsFork {
+abstract contract NounsTokenForkBase is DeployUtilsFork, Test {
     NounsTokenFork token;
     NounsTokenFork tokenImpl;
     NounsToken originalToken;
@@ -33,7 +33,7 @@ abstract contract NounsTokenForkBase is DeployUtilsFork {
 
     function setUp() public virtual {
         (nouner, nounerPK) = makeAddrAndKey('nouner');
-        descriptor = _deployAndPopulateV2();
+        descriptor = NounsDescriptorV2(deployUtils._deployAndPopulateV2());
         seeder = new NounsSeeder();
 
         originalToken = new NounsToken(makeAddr('noundersDAO'), minter, descriptor, seeder, IProxyRegistry(address(1)));
@@ -53,7 +53,7 @@ abstract contract NounsTokenForkBase is DeployUtilsFork {
 
         tokenImpl = new NounsTokenFork();
         token = NounsTokenFork(address(new ERC1967Proxy(address(tokenImpl), '')));
-        token.initialize(treasury, minter, escrow, forkId, 0, 3, block.timestamp + FORK_PERIOD);
+        token.initialize(treasury, minter, escrow, forkId, 0, 3, block.timestamp + deployUtils.FORK_PERIOD());
         vm.startPrank(token.owner());
         token.setSeeder(seeder);
         token.setDescriptor(descriptor);

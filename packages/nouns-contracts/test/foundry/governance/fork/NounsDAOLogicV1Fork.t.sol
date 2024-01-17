@@ -20,7 +20,7 @@ import { NounsAuctionHouse } from '../../../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
 import { INounsDAOLogicV3 } from '../../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
-abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
+abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork, Test {
     NounsDAOLogicV1Fork dao;
     address timelock;
     NounsTokenFork token;
@@ -209,7 +209,7 @@ abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
     address owner1 = makeAddr('owner1');
 
     function setUp() public virtual override {
-        originalDAO = _deployDAOV3();
+        originalDAO = deployUtils._deployDAOV3();
         originalToken = originalDAO.nouns();
         NounsAuctionHouse originalMinter = NounsAuctionHouse(originalToken.minter());
 

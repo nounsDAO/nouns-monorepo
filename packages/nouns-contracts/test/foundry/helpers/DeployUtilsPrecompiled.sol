@@ -4,9 +4,27 @@ pragma solidity ^0.8.19;
 import { Vm } from 'forge-std/Vm.sol';
 import { LibString } from '../lib/LibString.sol';
 import { StdCheats } from 'forge-std/StdCheats.sol';
+import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 interface IDeployUtilsV3 {
-    function _deployDAOV3() external returns (address);
+    function _deployDAOV3() external returns (INounsDAOLogicV3);
+
+    function _deployAndPopulateV2() external returns (address);
+
+    function _createDAOV3Proxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) external returns (INounsDAOLogicV3);
+
+    function _createDAOV3Proxy(
+        address timelock,
+        address nounsToken,
+        address vetoer,
+        NounsDAOV3Types.NounsDAOParams memory daoParams,
+        NounsDAOV3Types.DynamicQuorumParams memory dqParams
+    ) external returns (INounsDAOLogicV3);
 
     function _deployDAOV3WithParams(uint256 auctionDuration) external returns (address);
 
@@ -17,6 +35,22 @@ interface IDeployUtilsV3 {
     function FORK_PERIOD() external returns (uint256);
 
     function TIMELOCK_DELAY() external returns (uint256);
+
+    function LAST_MINUTE_BLOCKS() external returns (uint32);
+
+    function OBJECTION_PERIOD_BLOCKS() external returns (uint32);
+
+    function get1967Implementation(address proxy) external view returns (address);
+
+    function DELAYED_GOV_DURATION() external returns (uint256);
+
+    function FORK_DAO_VOTING_PERIOD() external returns (uint256);
+
+    function FORK_DAO_VOTING_DELAY() external returns (uint256);
+
+    function FORK_DAO_PROPOSAL_THRESHOLD_BPS() external returns (uint256);
+
+    function FORK_DAO_QUORUM_VOTES_BPS() external returns (uint256);
 
     function auctionHouseProxyAdmin() external returns (address);
 }

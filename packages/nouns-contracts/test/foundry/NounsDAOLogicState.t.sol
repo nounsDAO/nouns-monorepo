@@ -4,10 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
-import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
 import { NounsDAOLogicSharedBaseTest } from './helpers/NounsDAOLogicSharedBase.t.sol';
 
@@ -192,7 +189,7 @@ contract NounsDAOLogicV3StateTest is NounsDAOLogicStateBaseTest {
         address nounsToken,
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
-        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+        return deployUtils._createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
     function daoVersion() internal pure override returns (uint256) {

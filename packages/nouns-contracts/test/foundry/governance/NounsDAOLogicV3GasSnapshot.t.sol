@@ -97,7 +97,7 @@ abstract contract NounsDAOLogic_GasSnapshot_castVote is NounsDAOLogicSharedBaseT
     }
 
     function test_castVote_lastMinuteFor() public {
-        vm.roll(block.number + VOTING_PERIOD - LAST_MINUTE_BLOCKS);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD() - deployUtils.LAST_MINUTE_BLOCKS());
         vm.prank(nouner);
         daoProxy.castVote(1, 1);
     }
@@ -122,11 +122,11 @@ abstract contract NounsDAOLogic_GasSnapshot_castVoteDuringObjectionPeriod is Nou
         vm.roll(block.number + daoProxy.votingDelay() + 1);
 
         // activate objection period
-        vm.roll(block.number + VOTING_PERIOD - LAST_MINUTE_BLOCKS);
+        vm.roll(block.number + deployUtils.VOTING_PERIOD() - deployUtils.LAST_MINUTE_BLOCKS());
         vm.prank(proposer);
         daoProxy.castVote(1, 1);
         // enter objection period
-        vm.roll(block.number + LAST_MINUTE_BLOCKS + 1);
+        vm.roll(block.number + deployUtils.LAST_MINUTE_BLOCKS() + 1);
     }
 
     function givenProposal() internal {

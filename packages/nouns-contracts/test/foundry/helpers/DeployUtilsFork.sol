@@ -2,8 +2,7 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { DeployUtilsV3 } from './DeployUtilsV3.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
+import { IDeployUtilsV3, DeployUtilsPrecompiled } from './DeployUtilsPrecompiled.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
@@ -12,40 +11,28 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
-abstract contract DeployUtilsFork is DeployUtilsV3 {
-    function _deployForkDAO(INounsDAOForkEscrow escrow)
-        public
-        returns (
-            address treasury,
-            address token,
-            address dao
-        )
-    {
+abstract contract DeployUtilsFork is DeployUtilsPrecompiled {
+    IDeployUtilsV3 deployUtils = createDeployUtils();
+
+    function _deployForkDAO(INounsDAOForkEscrow escrow) public returns (address treasury, address token, address dao) {
         ForkDAODeployer deployer = new ForkDAODeployer(
             address(new NounsTokenFork()),
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
             address(new NounsDAOExecutorV2()),
-            DELAYED_GOV_DURATION,
-            FORK_DAO_VOTING_PERIOD,
-            FORK_DAO_VOTING_DELAY,
-            FORK_DAO_PROPOSAL_THRESHOLD_BPS,
-            FORK_DAO_QUORUM_VOTES_BPS
+            deployUtils.DELAYED_GOV_DURATION(),
+            deployUtils.FORK_DAO_VOTING_PERIOD(),
+            deployUtils.FORK_DAO_VOTING_DELAY(),
+            deployUtils.FORK_DAO_PROPOSAL_THRESHOLD_BPS(),
+            deployUtils.FORK_DAO_QUORUM_VOTES_BPS()
         );
 
-        (treasury, token) = deployer.deployForkDAO(block.timestamp + FORK_PERIOD, escrow);
+        (treasury, token) = deployer.deployForkDAO(block.timestamp + deployUtils.FORK_PERIOD(), escrow);
         dao = NounsDAOExecutorV2(payable(treasury)).admin();
     }
 
-    function _deployForkDAO()
-        public
-        returns (
-            address treasury,
-            address token,
-            address dao
-        )
-    {
-        INounsDAOLogicV3 originalDAO = _deployDAOV3();
+    function _deployForkDAO() public returns (address treasury, address token, address dao) {
+        INounsDAOLogicV3 originalDAO = INounsDAOLogicV3(deployUtils._deployDAOV3());
         return _deployForkDAO(originalDAO.forkEscrow());
     }
 }

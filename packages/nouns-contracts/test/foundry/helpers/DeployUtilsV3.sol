@@ -31,7 +31,7 @@ contract DeployUtilsV3 is DeployUtils {
         address vetoer,
         NounsDAOV3Types.NounsDAOParams memory daoParams,
         NounsDAOV3Types.DynamicQuorumParams memory dqParams
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) public returns (INounsDAOLogicV3 dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
         dao = INounsDAOLogicV3(
@@ -56,7 +56,7 @@ contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) public returns (INounsDAOLogicV3 dao) {
         dao = _createDAOV3Proxy(
             timelock,
             nounsToken,
