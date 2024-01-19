@@ -97,12 +97,20 @@ contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, Reent
         _settleAuction();
     }
 
+    /**
+     * @notice Create a bid for a Noun, with a given amount.
+     * @dev This contract only accepts payment in ETH.
+     */
     function createBid(uint256 nounId) external payable override nonReentrant {
-        _handleBid(nounId, '');
+        _createBid(nounId, '');
     }
 
+    /**
+     * @notice Create a bid for a Noun, with a given amount and comment.
+     * @dev This contract only accepts payment in ETH.
+     */
     function createBidWithComment(uint256 nounId, string calldata comment) external payable override nonReentrant {
-        _handleBid(nounId, comment);
+        _createBid(nounId, comment);
     }
 
     /**
@@ -159,10 +167,10 @@ contract NounsAuctionHouseV2 is INounsAuctionHouseV2, PausableUpgradeable, Reent
     }
 
     /**
-     * @notice Create a bid for a Noun, with a given amount.
+     * @notice Create a bid for a Noun, with a given amount and optional comment.
      * @dev This contract only accepts payment in ETH.
      */
-    function _handleBid(uint256 nounId, string memory comment) internal {
+    function _createBid(uint256 nounId, string memory comment) internal {
         INounsAuctionHouseV2.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');

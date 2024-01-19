@@ -1,0 +1,39 @@
+.sponsorsWrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+}
+.sponsorsWrapOverflow {
+  @media screen and (min-width: 992px) {
+    max-width: 200px;
+    overflow: visible;
+  }
+}
+.sponsors {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 5px;
+  @media screen and (min-width: 992px) {
+    justify-content: flex-start;
+  }
+}
+.sponsorAvatar {
+  width: 32px;
+  height: 32px;
+}
+.sponsorAvatar img {
+  width: 100%;
+  border-radius: 100%;
+  display: block;
+}
+.emptySponsorSpot {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  background: #e8e8ec;
+  border: 1px dashed #a7a7aa;
+}
