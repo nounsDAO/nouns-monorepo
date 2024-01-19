@@ -1,5 +1,4 @@
 import classes from './DelegationCandidateVoteCountInfo.module.css';
-import { Trans } from '@lingui/macro';
 import React from 'react';
 import BrandSpinner from '../BrandSpinner';
 
@@ -22,7 +21,7 @@ const DelegationCandidateVoteCountInfo: React.FC<DelegationCandidateVoteCountInf
       <div className={classes.voteInfoWrapper}>
         <div>{text}</div>
         <div className={classes.voteCount}>
-          {voteCount === 1 ? <Trans>{voteCount} Vote</Trans> : <Trans>{voteCount} Votes</Trans>}
+          {voteCount === 1 ? <>{voteCount} Vote</> : <>{voteCount} Votes</>}
         </div>
       </div>
     </div>

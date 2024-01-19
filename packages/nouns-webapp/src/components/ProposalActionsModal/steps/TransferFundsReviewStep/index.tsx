@@ -19,7 +19,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
       calldata: '0x',
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
-    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()]; 
+    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()];
     onActionAdd({
       address: config.addresses.steth,
       value: '0',

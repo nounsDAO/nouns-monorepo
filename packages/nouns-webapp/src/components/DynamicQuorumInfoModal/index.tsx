@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import config from '../../config';
 import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
-import { totalNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
+import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
 import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
@@ -291,7 +291,7 @@ const DynamicQuorumInfoModal: React.FC<{
   const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
   const { data, loading, error } = useQuery(
-    totalNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
+    adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
   );
 
   const dynamicQuorumProps = useDynamicQuorumProps(
@@ -318,7 +318,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesBps={Math.floor(
-            (againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000,
+            (againstVotesAbsolute / data.proposals[0].adjustedTotalSupply) * 10_000,
           )}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
@@ -330,7 +330,7 @@ const DynamicQuorumInfoModal: React.FC<{
           }
           onDismiss={onDismiss}
           proposal={proposal}
-          totalNounSupply={data.proposals[0].totalSupply}
+          totalNounSupply={data.proposals[0].adjustedTotalSupply}
           currentQuorum={currentQuorum}
         />,
         document.getElementById('overlay-root')!,

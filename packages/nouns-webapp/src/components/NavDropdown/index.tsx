@@ -5,13 +5,13 @@ import { Dropdown } from 'react-bootstrap';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import { Trans } from '@lingui/macro';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
   buttonIcon?: React.ReactNode;
+  buttonText: string;
 }
 
 type Props = {
@@ -51,7 +51,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
         }}
       >
         <NavBarButton
-          buttonText={<Trans>Explore</Trans>}
+          buttonText={props.buttonText}
           buttonIcon={props.buttonIcon}
           buttonStyle={buttonStyle}
           isDropdown={true}

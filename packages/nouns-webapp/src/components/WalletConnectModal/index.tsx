@@ -47,7 +47,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
             rpcMap: {
               [CHAIN_ID]: config.app.jsonRpcUri,
             },
-            optionalChains: [CHAIN_ID]
+            optionalChains: [CHAIN_ID],
           });
           activate(walletConnectV2);
         }}

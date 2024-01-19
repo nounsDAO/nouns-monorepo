@@ -2,7 +2,7 @@ import classes from './ProposalEditor.module.css';
 import { InputGroup, FormControl, FormText } from 'react-bootstrap';
 import remarkBreaks from 'remark-breaks';
 import ReactMarkdown from 'react-markdown';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trans } from '@lingui/macro';
 
 const ProposalEditor = ({
@@ -10,11 +10,13 @@ const ProposalEditor = ({
   body,
   onTitleInput,
   onBodyInput,
+  isCandidate = false,
 }: {
   title: string;
   body: string;
   onTitleInput: (title: string) => void;
   onBodyInput: (body: string) => void;
+  isCandidate?: boolean;
 }) => {
   const bodyPlaceholder = `## Summary\n\nInsert your summary here\n\n## Methodology\n\nInsert your methodology here\n\n## Conclusion\n\nInsert your conclusion here`;
   const [proposalText, setProposalText] = useState('');
@@ -24,17 +26,19 @@ const ProposalEditor = ({
     onBodyInput(body);
   };
 
+  useEffect(() => {
+    setProposalText(body);
+  }, [body]);
+
   return (
     <div>
       <InputGroup className={`${classes.proposalEditor} d-flex flex-column`}>
-        <FormText>
-          <Trans>Proposal</Trans>
-        </FormText>
+        <FormText>{isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}</FormText>
         <FormControl
           className={classes.titleInput}
           value={title}
           onChange={e => onTitleInput(e.target.value)}
-          placeholder="Proposal Title"
+          placeholder={isCandidate ? 'Proposal candidate title' : 'Proposal title'}
         />
         <hr className={classes.divider} />
         <FormControl

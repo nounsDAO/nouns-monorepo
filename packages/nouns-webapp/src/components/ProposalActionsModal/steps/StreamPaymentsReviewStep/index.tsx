@@ -21,8 +21,8 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
   const predictedAddress = usePredictStreamAddress({
-    msgSender: config.addresses.nounsDaoExecutor,
-    payer: config.addresses.nounsDaoExecutor,
+    msgSender: config.addresses.nounsDaoExecutorProxy,
+    payer: config.addresses.nounsDaoExecutorProxy,
     recipient: state.address,
     tokenAmount: formatTokenAmount(state.amount, state.TransferFundsCurrency),
     tokenAddress: getTokenAddressForCurrency(state.TransferFundsCurrency),

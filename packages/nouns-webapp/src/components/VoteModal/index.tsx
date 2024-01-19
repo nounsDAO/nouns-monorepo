@@ -18,11 +18,18 @@ interface VoteModalProps {
   onHide: () => void;
   proposalId: string | undefined;
   availableVotes: number;
+  isObjectionPeriod?: boolean;
 }
 
 const POST_SUCCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
 
-const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps) => {
+const VoteModal = ({
+  show,
+  onHide,
+  proposalId,
+  availableVotes,
+  isObjectionPeriod,
+}: VoteModalProps) => {
   const { castRefundableVote, castRefundableVoteState } = useCastRefundableVote();
   const { castRefundableVoteWithReason, castRefundableVoteWithReasonState } =
     useCastRefundableVoteWithReason();
@@ -137,17 +144,25 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
       )}
       {!isVoteFailed && !isVoteSucessful && (
         <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
-          <div onClick={() => setVote(Vote.FOR)}>
-            <NavBarButton
-              buttonText={<Trans>For</Trans>}
-              buttonIcon={<></>}
-              buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
-              className={
-                vote === Vote.FOR ? '' : vote === undefined ? classes.inactive : classes.unselected
-              }
-            />
-          </div>
-          <br />
+          {!isObjectionPeriod && (
+            <>
+              <div onClick={() => setVote(Vote.FOR)}>
+                <NavBarButton
+                  buttonText={<Trans>For</Trans>}
+                  buttonIcon={<></>}
+                  buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
+                  className={
+                    vote === Vote.FOR
+                      ? ''
+                      : vote === undefined
+                      ? classes.inactive
+                      : classes.unselected
+                  }
+                />
+              </div>
+              <br />
+            </>
+          )}
           <div onClick={() => setVote(Vote.AGAINST)}>
             <NavBarButton
               buttonText={<Trans>Against</Trans>}
@@ -162,21 +177,25 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
               }
             />
           </div>
-          <br />
-          <div onClick={() => setVote(Vote.ABSTAIN)}>
-            <NavBarButton
-              buttonText={<Trans>Abstain</Trans>}
-              buttonIcon={<></>}
-              buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
-              className={
-                vote === Vote.ABSTAIN
-                  ? ''
-                  : vote === undefined
-                  ? classes.inactive
-                  : classes.unselected
-              }
-            />
-          </div>
+          {!isObjectionPeriod && (
+            <>
+              <br />
+              <div onClick={() => setVote(Vote.ABSTAIN)}>
+                <NavBarButton
+                  buttonText={<Trans>Abstain</Trans>}
+                  buttonIcon={<></>}
+                  buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
+                  className={
+                    vote === Vote.ABSTAIN
+                      ? ''
+                      : vote === undefined
+                      ? classes.inactive
+                      : classes.unselected
+                  }
+                />
+              </div>
+            </>
+          )}
           <br />
           <FloatingLabel controlId="reasonTextarea" label={<Trans>Reason (Optional)</Trans>}>
             <FormControl

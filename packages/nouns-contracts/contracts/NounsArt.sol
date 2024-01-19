@@ -330,8 +330,36 @@ contract NounsArt is INounsArt {
     /**
      * @notice Get the number of available Noun `backgrounds`.
      */
-    function backgroundsCount() public view override returns (uint256) {
+    function backgroundCount() external view returns (uint256) {
         return backgrounds.length;
+    }
+
+    /**
+     * @notice Get the number of available Noun `bodies`.
+     */
+    function bodyCount() external view returns (uint256) {
+        return bodiesTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `accessories`.
+     */
+    function accessoryCount() external view returns (uint256) {
+        return accessoriesTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `heads`.
+     */
+    function headCount() external view returns (uint256) {
+        return headsTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `glasses`.
+     */
+    function glassesCount() external view returns (uint256) {
+        return glassesTrait.storedImagesCount;
     }
 
     /**

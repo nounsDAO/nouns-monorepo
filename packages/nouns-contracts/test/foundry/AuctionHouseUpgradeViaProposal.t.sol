@@ -2,73 +2,55 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { DeployUtils } from './helpers/DeployUtils.sol';
-import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { NounsDAOLogicV1 } from '../../contracts/governance/NounsDAOLogicV1.sol';
+import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
-import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
-import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
-
-contract AuctionHouseUpgradeViaProposalTest is Test, DeployUtils {
-    NounsDAOLogicV1 dao;
-    NounsAuctionHouse nounsAuctionHouse;
+contract AuctionHouseUpgradeViaProposalTest is Test, DeployUtilsV3 {
+    NounsDAOV3Deployment deployment;
     NounsAuctionHouseV2 nounsAuctionHouseV2;
-    NounsAuctionHouseProxy nounsAuctionHouseProxy;
-    NounsAuctionHouseProxyAdmin nounsAuctionHouseProxyAdmin;
-    address minter = address(2);
-    address tokenHolder = address(1337);
-    address weth = address(1234);
 
     function setUp() public {
-        address noundersDAO = address(42);
-        (address tokenAddress, address daoAddress, address auctionHouseProxy, address auctionHouseProxyAdmin, address auctionHouseAddress) = _deployTokenAndDAOAndAndAuctionHouseAndPopulateDescriptor(
-            noundersDAO,
-            noundersDAO,
-            minter,
-            weth
-        );
+        deployment = _deployDAOV3ReturnAll();
+        nounsAuctionHouseV2 = NounsAuctionHouseV2(_deployAuctionHouseV2());
 
-        (address nounsAuctionHouseV2Address) = _deployAuctionHouseV2();
-
-        dao = NounsDAOLogicV1(daoAddress);
-        nounsAuctionHouseProxy = NounsAuctionHouseProxy(auctionHouseProxy);
-        nounsAuctionHouseProxyAdmin = NounsAuctionHouseProxyAdmin(auctionHouseProxyAdmin);
-        nounsAuctionHouseV2 = NounsAuctionHouseV2(nounsAuctionHouseV2Address);
-
-        vm.stopPrank();
+        vm.prank(address(deployment.timelock));
+        NounsAuctionHouse(address(deployment.auctionHouseProxy)).unpause();
     }
 
     function testUpgradeToV2ViaProposal() public {
-
         address[] memory targets = new address[](1);
-        targets[0] = address(nounsAuctionHouseProxyAdmin);
+        targets[0] = address(deployment.auctionHouseProxyAdmin);
+
         uint256[] memory values = new uint256[](1);
         values[0] = 0;
+
         string[] memory signatures = new string[](1);
         signatures[0] = 'upgrade(address,address)';
+
         bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = abi.encode(address(nounsAuctionHouseProxy), address(nounsAuctionHouseV2));
+        calldatas[0] = abi.encode(address(deployment.auctionHouseProxy), address(nounsAuctionHouseV2));
 
         uint256 blockNumber = block.number + 1;
         vm.roll(blockNumber);
+        vm.prank(deployment.noundersDAO);
 
-        vm.startPrank(tokenHolder);
-        dao.propose(targets, values, signatures, calldatas, 'upgrade auctionHouse to V2');
-        blockNumber += VOTING_DELAY + 1;
+        deployment.dao.propose(targets, values, signatures, calldatas, 'upgrade auctionHouse to V2');
+        blockNumber += UPDATABLE_PERIOD_BLOCKS + VOTING_DELAY + 1;
+
         vm.roll(blockNumber);
-        dao.castVote(1, 1);
-        vm.stopPrank();
+        vm.prank(deployment.noundersDAO);
+
+        deployment.dao.castVote(1, 1);
 
         blockNumber += VOTING_PERIOD + 1;
         vm.roll(blockNumber);
-        dao.queue(1);
+        deployment.dao.queue(1);
 
         vm.warp(block.timestamp + TIMELOCK_DELAY + 1);
-        dao.execute(1);
+        deployment.dao.execute(1);
 
-        assertEq(address(nounsAuctionHouseProxy.implementation()), address(nounsAuctionHouseV2));
+        vm.prank(address(deployment.auctionHouseProxyAdmin));
+        assertEq(address(deployment.auctionHouseProxy.implementation()), address(nounsAuctionHouseV2));
     }
 }
