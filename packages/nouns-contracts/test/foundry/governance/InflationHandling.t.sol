@@ -2,8 +2,8 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
+import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
@@ -21,15 +21,19 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (INounsDAOShared) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
-            NounsDAOLogicV1(
-                payable(
+            INounsDAOShared(
+                address(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -78,8 +82,6 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
     function testSetsParametersCorrectly() public {
         assertEq(daoProxy.proposalThresholdBPS(), proposalThresholdBPS_);
-        // assertEq(daoProxyAsV2().minQuorumVotesBPS(), minQuorumVotesBPS);
-
         assertEq(daoProxyAsV2().getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, minQuorumVotesBPS);
     }
 
