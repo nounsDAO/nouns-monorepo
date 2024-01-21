@@ -35,7 +35,7 @@ import config, {
 } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish, Event } from 'ethers';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsAuctionHouseV2Factory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
@@ -131,7 +131,7 @@ const ChainSubscriber: React.FC = () => {
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
+    const nounsAuctionHouseContract = NounsAuctionHouseV2Factory.connect(
       config.addresses.nounsAuctionHouseProxy,
       wsProvider,
     );
