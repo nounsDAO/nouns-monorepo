@@ -12,6 +12,7 @@ export {
   NounsDAOExecutorV2ABI,
   NounsTokenFactory,
   NounsAuctionHouseFactory,
+  NounsAuctionHouseV2Factory,
   NounsDescriptorFactory,
   NounsSeederFactory,
   NounsDaoLogicV1Factory,
