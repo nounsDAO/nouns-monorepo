@@ -1348,7 +1348,7 @@ msgstr "開始"
 #: src/components/Proposals/index.tsx
 #: src/hooks/useGetCountDownCopy.tsx
 msgid "Starts {0}"
-msgstr "まもなく始まります"
+msgstr "{0} に始まります"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
