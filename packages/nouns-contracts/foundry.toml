@@ -5,3 +5,6 @@ cache_path = 'foundry-cache'
 out = 'foundry-out'
 solc_version = '0.8.23'
 fs_permissions = [{ access = "read", path = "./"}]
+
+[profile.lite]
+optimizer = false
