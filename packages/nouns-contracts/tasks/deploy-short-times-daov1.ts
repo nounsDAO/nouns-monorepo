@@ -36,7 +36,7 @@ task('deploy-short-times-daov1', 'Deploy all Nouns contracts with short gov time
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    5120000000000000 /* 1 wei */,
     types.int,
   )
   .addOptionalParam(
