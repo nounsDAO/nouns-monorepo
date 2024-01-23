@@ -268,7 +268,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        salePrices.push(_auction.amount);
+        salePrices.push(_auction.amount > 0 ? _auction.amount : targetPrice);
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
