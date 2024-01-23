@@ -98,7 +98,7 @@ const Bid: React.FC<{
     const input = event.target.value;
 
     // disable more than 2 digits after decimal point
-    if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
+    if (input.includes('.') && event.target.value.split('.')[1].length > 5) {
       return;
     }
 
@@ -275,7 +275,6 @@ const Bid: React.FC<{
             <FormControl
               className={classes.bidInput}
               type="number"
-              min="0"
               onChange={bidInputHandler}
               ref={bidInputRef}
               value={bidInput}
