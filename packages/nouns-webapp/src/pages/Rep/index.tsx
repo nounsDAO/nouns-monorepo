@@ -7,7 +7,7 @@ import { useAppSelector } from '../../hooks';
 import axios from 'axios';
 import { useRepCall } from '../../wrappers/rep/rep';
 import { useCadentCall, useCadentFunction } from '../../wrappers/cadentRepDistributor/cadentRepDistributor';
-import { switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToOPMainnet, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
+import { switchNetworkToEthereum, switchNetworkToGoerli, switchNetworkToLocalhost, switchNetworkToOPMainnet, switchNetworkToPolygon } from '../utils/NetworkSwitcher';
 import { CHAIN_ID, IS_MAINNET, IS_OPTIMISM_MAINNET } from '../../config';
 import { useEthers } from '@usedapp/core';
 import optimismImage from '../../assets/optimism.png';
@@ -27,69 +27,63 @@ const RepPage = () => {
 
   let loadingOutput;
 
-  console.log(IS_OPTIMISM_MAINNET);
+  // console.log(IS_OPTIMISM_MAINNET);
 
+  console.log(activeAccount);
 
-  if (!IS_MAINNET) {
+  let desiredNetworkName;
+  let desiredNetworkSwitchAction: ()=> Promise<void>;
 
-    if (CHAIN_ID === 31337) {
-      if (chainId !== 31337) {
-        loadingOutput = <div>
-          <h3>Please change to the proper network!</h3>
-          <h6><button onClick={()=> {
-            switchNetworkToLocalhost();
-          }}>Switch To Localhost</button></h6>
-        </div>;
-      } else {
-        loadingOutput = <div>
-          <h3>Please be patient, the hamsters are trying their best...</h3>
-        </div>;
+  if (activeAccount) {
+    if (IS_MAINNET) {
+      if (IS_OPTIMISM_MAINNET) {
+        if (chainId !== CHAIN_ID) {
+          desiredNetworkName = "OP Mainnet";
+          desiredNetworkSwitchAction = switchNetworkToOPMainnet.bind(switchNetworkToOPMainnet);
+        }
       }
-    }
-    else if (CHAIN_ID === 5) {
-      if (chainId !== 5) {
-        loadingOutput = <div>
-          <h3>Please change to the proper network!</h3>
-          <h6><button style={{width:200}} onClick={()=> {
-            switchNetworkToGoerli();
-          }}>Switch To Goerli</button></h6>
-
-        </div>;
-      } else {
-        loadingOutput = <div>
-          <h3>Please be patient, the hamsters are trying their best..</h3>
-        </div>;
+      else {
+        if (chainId !== CHAIN_ID) {
+          if (CHAIN_ID === 137) {
+            desiredNetworkName = "Polygon";
+            desiredNetworkSwitchAction = switchNetworkToPolygon.bind(switchNetworkToPolygon);
+          }
+          else if (CHAIN_ID === 1) {
+            desiredNetworkName = "Ethereum";
+            desiredNetworkSwitchAction = switchNetworkToEthereum.bind(switchNetworkToEthereum);
+          }
+        }
       }
-    }
-  }
-  else {
-    if (!IS_OPTIMISM_MAINNET) {
-      if (chainId !== 137) {
-        loadingOutput = <div>
-          <h3>Please change to the proper network!</h3>
-          <h6><button style={{width:200}} onClick={()=> {
-              switchNetworkToPolygon();
-            }}>Switch To Polygon</button></h6>
-        </div>;
-      } else {
-        loadingOutput = <div>
-          <h3>Please be patient, the hamsters are trying their best..</h3>
-        </div>;
-      }      
     } else {
-      if (chainId !== 10) {
-        loadingOutput = <div>
-          <h3>Please change to the proper network!</h3>
-          <h6><button style={{width:200}} onClick={()=> {
-              switchNetworkToOPMainnet();
-            }}>Switch To Optimism</button></h6>
+      if (chainId !== CHAIN_ID) {
+        if (CHAIN_ID === 5) {
+          desiredNetworkName = "Goerli";
+          desiredNetworkSwitchAction = switchNetworkToGoerli.bind(switchNetworkToGoerli);
+        }
+        else if (CHAIN_ID === 31337) {
+          desiredNetworkName = "Localhost";
+          desiredNetworkSwitchAction = switchNetworkToLocalhost.bind(switchNetworkToLocalhost);
+        }
+      } 
+    }
+  } else {
+    loadingOutput = <div>
+          <h3>Please login to see your balance!</h3>
         </div>;
-      } else {
-        loadingOutput = <div>
+  }
+
+
+  if (desiredNetworkName !== undefined) {
+    loadingOutput = 
+      <div>
+        <h3>Please change your network to {desiredNetworkName}!</h3>
+        <h6><button style={{width:200}} onClick={()=> { desiredNetworkSwitchAction();}}>Switch</button></h6>
+      </div>
+  } else {
+      loadingOutput = 
+        <div>
           <h3>Please be patient, the hamsters are trying their best..</h3>
         </div>;
-      }
-    }
   }
 
   const balanceOf0 = useRepCall('balanceOf', [activeAccount, 0]);

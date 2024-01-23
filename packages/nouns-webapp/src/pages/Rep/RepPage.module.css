@@ -22,6 +22,10 @@
    background: radial-gradient(circle at center, black 0%, transparent 20%);
 }
 
+.centeredBtn {
+  text-align: center;
+}
+ 
 .centered {
   color: white !important;
   position: absolute;

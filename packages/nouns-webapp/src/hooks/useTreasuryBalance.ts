@@ -4,9 +4,10 @@ import useUSDCBalance from './useUSDCBalance';
 import useUSDTBalance from './useUSDTBalance';
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
-// import config from '../config';
+import config from '../config';
 // import { formatEther } from '@ethersproject/units'
 import { BigNumber, ethers } from 'ethers';
+import { CHAIN_ID } from '../config';
 
 /**
  * Computes treasury balance (ETH + Lido)
@@ -33,8 +34,9 @@ export const useTreasuryUSDValue = () => {
   const zero = BigNumber.from(0);
 
   const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));
+
   const treasuryBalanceETH = Number(
-    ethers.utils.formatEther(useEtherBalance('0x407Cf0e5Dd3C2c4bCE5a32B92109c2c6f7f1ce23')?.toString() || '0'),
+    ethers.utils.formatEther(useEtherBalance(config.addresses.atxDaoTreasury)?.toString() || "1337"),
   );
   const ethValue = Number(etherPrice * treasuryBalanceETH);
 
