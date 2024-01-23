@@ -24,7 +24,7 @@ interface Contract {
 task('deploy-local', 'Deploy contracts to hardhat')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
-  .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
+  .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 5120000000000000, types.int) // Default: 1 wei
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)', // Default: 5%
