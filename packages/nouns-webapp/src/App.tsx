@@ -41,23 +41,21 @@ function App() {
 
   return (
     <div className={`${classes.wrapper}`}>
-      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {/* {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
           content={<p>{alertModal.message}</p>}
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
-      )}
+      )} */}
       <BrowserRouter>
         <AvatarProvider
           provider={chainId === ChainId.Mainnet ? library : undefined}
           batchLookups={true}
         >
           <NavBar />
-
-          {account ? (
-            <>
+          <>
               <Switch>
                 <Route exact path="/" component={AuctionPage} />
                 <Route exact path="/auction" component={AuctionPageNew} />
@@ -74,9 +72,6 @@ function App() {
               </Switch>
               <Footer />
             </>
-          ) : (
-            <div></div>
-          )}
         </AvatarProvider>
       </BrowserRouter>
     </div>

@@ -116,7 +116,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     atxDaoAddress: '0x373086C336B182b9D9e3874344E46FF0a9630D4E',
     repTokensAddress: '0xF0535B9d8E98144BB4233fEdd252220d0152311E',
     cadentDistributorAddress: '0x88F1Af751ca23BB2B4efF893d6f45D041230FFb3',
-    atxDaoTreasury: undefined,
+    atxDaoTreasury: "0x3bEc6a181d6Ef7239F699DAf2fAa5FE3A5f01Edf",
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
@@ -159,7 +159,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     atxDaoAddress: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
     repTokensAddress: '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1',
     cadentDistributorAddress: '0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE',
-    atxDaoTreasury: undefined
+    atxDaoTreasury: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   },
 };
 

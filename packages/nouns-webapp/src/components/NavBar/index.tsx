@@ -28,8 +28,6 @@ import { useState } from 'react';
 // import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 // import clsx from 'clsx';
-import { IS_MAINNET, CHAIN_ID } from '../../config';
-import { useEthers } from '@usedapp/core';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -37,8 +35,7 @@ const NavBar = () => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
   const treasuryBalance = useTreasuryUSDValue();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
-  const { chainId } = useEthers();
+  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.atxDaoTreasury || "");
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -61,83 +58,20 @@ const NavBar = () => {
 
   const closeNav = () => setIsNavExpanded(false);
 
-  let treasuryOutput;
-
-  if (IS_MAINNET) {
-    if (chainId === 1) {
-      console.log("Numba 1");
-        treasuryOutput = <Nav.Link
-          href={daoEtherscanLink}
-          className={classes.nounsNavLink}
-          target="_blank"
-          rel="noreferrer"
-        > 
-        <NavBarTreasury
-          treasuryBalance={treasuryBalance.toFixed(0)}
-          treasuryStyle={nonWalletButtonStyle}
-        />
-        </Nav.Link>
-    } else {
-      console.log("Numba 2");
-
-        treasuryOutput = <NavBarTreasury
-          treasuryBalance={treasuryBalance.toFixed(0)}
-          treasuryStyle={nonWalletButtonStyle}
-        />;
-    }
-  } else {
-    if (CHAIN_ID === 5) {
-      if (chainId === 5) {
-          treasuryOutput = <Nav.Link
-            href={daoEtherscanLink}
-            className={classes.nounsNavLink}
-            target="_blank"
-            rel="noreferrer"
-          > 
-          <NavBarTreasury
-            treasuryBalance={treasuryBalance.toFixed(0)}
-            treasuryStyle={nonWalletButtonStyle}
-          />
-          </Nav.Link>
-      } else {
-        treasuryOutput = <NavBarTreasury
+  let treasuryOutput = 
+    <Nav.Link
+      href={daoEtherscanLink}
+      className={classes.nounsNavLink}
+      target="_blank"
+      rel="noreferrer"
+    > 
+      <NavBarTreasury
         treasuryBalance={treasuryBalance.toFixed(0)}
         treasuryStyle={nonWalletButtonStyle}
-      />;
-      }
-    } else if (CHAIN_ID === 31337) {
-      if (chainId === 31337) {
-        treasuryOutput = <Nav.Link
-        href={daoEtherscanLink}
-        className={classes.nounsNavLink}
-        target="_blank"
-        rel="noreferrer"
-        > 
-        <NavBarTreasury
-          treasuryBalance={treasuryBalance.toFixed(0)}
-          treasuryStyle={nonWalletButtonStyle}
-        />
-        </Nav.Link>
-      } else {
-        treasuryOutput = <NavBarTreasury
-        treasuryBalance={treasuryBalance.toFixed(0)}
-        treasuryStyle={nonWalletButtonStyle}
-      />;
-      }
-    }
-  }
+      />
+    </Nav.Link>;
 
-
-
-
-
-  let output;
-  // console.log(balance);
-
-  if (activeAccount !== undefined) {
-    //return to > 0 after testing
-    // if (balance >= 0) {
-      output =
+  let output =
         <Navbar
           expand="xl"
           style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
@@ -151,19 +85,6 @@ const NavBar = () => {
               </Navbar.Brand>
               <Nav.Item>
                 { treasuryOutput }
-                {/* {(
-                  <Nav.Link
-                    href={daoEtherscanLink}
-                    className={classes.nounsNavLink}
-                    target="_blank"
-                    rel="noreferrer"
-                  > */}
-                    {/* <NavBarTreasury
-                      treasuryBalance={treasuryBalance.toFixed(0)}
-                      treasuryStyle={nonWalletButtonStyle}
-                    /> */}
-                  {/* </Nav.Link> */}
-                {/* )} */}
               </Nav.Item>
             </div>
             <Navbar.Toggle
@@ -220,61 +141,7 @@ const NavBar = () => {
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Container>
         </Navbar>
-    // } 
-    // else {
-    //   output =
-    //   <div>
-    //   <Container className={classes.centerScreen}>
-    //     <div>
-    //         <div style={{textAlign: 'center'}}>
-    //           <img
-    //             className={classes.centeredLogo}
-    //             src={logo}
-    //             alt="ATX DAO Logo"
-    //           ></img>
-    //         </div>
-    //         <h4 style={{ paddingTop: '20rem'}}>
-    //         Please connect a wallet that contains an ATX DAO Membership NFT!
-    //         </h4>
-    //         <div className={classes.center}>
-    //           <NavWallet address={activeAccount || '0'} />{' '}
-    //         </div>
-    //     </div>
-    //   </Container>
-    //   <div className={classes.loaderContainer}>
-    //       <img
-    //         className={classes.centeredLogo}
-    //         style={{ width: '10rem'}}
-    //         src={logo}
-    //         alt="ATX DAO Logo"
-    //       ></img>
-    //       <div className={classes.loader}>
-    //           <span></span>
-    //           <span></span>
-    //           <span></span>
-    //           <span></span>
-    //       </div>
-    //   </div>
-    //   </div>
-    // }
-  }
-  else {
-    output =
-    <Container className={classes.centerScreen}>
-      <div>
-          <img
-            style={{ width: '10rem', paddingBottom: '3rem'}}
-            src={logo}
-            alt="ATX DAO Logo"
-          ></img>
-          <h3>Member Portal</h3>
-          <p>
-          Please verify your membership
-          </p>
-          <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
-      </div>
-    </Container>
-  }
+
   return (
     <>
       {output}
