@@ -28,8 +28,6 @@ import { useState } from 'react';
 // import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 // import clsx from 'clsx';
-import { IS_MAINNET, CHAIN_ID } from '../../config';
-import { useEthers } from '@usedapp/core';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -38,7 +36,6 @@ const NavBar = () => {
   const history = useHistory();
   const treasuryBalance = useTreasuryUSDValue();
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.atxDaoTreasury || "");
-  const { chainId } = useEthers();
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -61,90 +58,20 @@ const NavBar = () => {
 
   const closeNav = () => setIsNavExpanded(false);
 
-  let treasuryOutput = <Nav.Link
-  href={daoEtherscanLink}
-  className={classes.nounsNavLink}
-  target="_blank"
-  rel="noreferrer"
-> 
-<NavBarTreasury
-  treasuryBalance={treasuryBalance.toFixed(0)}
-  treasuryStyle={nonWalletButtonStyle}
-/>
-</Nav.Link>;
+  let treasuryOutput = 
+    <Nav.Link
+      href={daoEtherscanLink}
+      className={classes.nounsNavLink}
+      target="_blank"
+      rel="noreferrer"
+    > 
+      <NavBarTreasury
+        treasuryBalance={treasuryBalance.toFixed(0)}
+        treasuryStyle={nonWalletButtonStyle}
+      />
+    </Nav.Link>;
 
-
-  // if (IS_MAINNET) {
-  //   if (chainId === 1) {
-  //     console.log("Numba 1");
-  //       treasuryOutput = <Nav.Link
-  //         href={daoEtherscanLink}
-  //         className={classes.nounsNavLink}
-  //         target="_blank"
-  //         rel="noreferrer"
-  //       > 
-  //       <NavBarTreasury
-  //         treasuryBalance={treasuryBalance.toFixed(0)}
-  //         treasuryStyle={nonWalletButtonStyle}
-  //       />
-  //       </Nav.Link>
-  //   } else {
-  //     console.log("Numba 2");
-
-  //       treasuryOutput = <NavBarTreasury
-  //         treasuryBalance={treasuryBalance.toFixed(0)}
-  //         treasuryStyle={nonWalletButtonStyle}
-  //       />;
-  //   }
-  // } else {
-  //   if (CHAIN_ID === 5) {
-  //     if (chainId === 5) {
-  //         treasuryOutput = <Nav.Link
-  //           href={daoEtherscanLink}
-  //           className={classes.nounsNavLink}
-  //           target="_blank"
-  //           rel="noreferrer"
-  //         > 
-  //         <NavBarTreasury
-  //           treasuryBalance={treasuryBalance.toFixed(0)}
-  //           treasuryStyle={nonWalletButtonStyle}
-  //         />
-  //         </Nav.Link>
-  //     } else {
-  //       treasuryOutput = <NavBarTreasury
-  //       treasuryBalance={treasuryBalance.toFixed(0)}
-  //       treasuryStyle={nonWalletButtonStyle}
-  //     />;
-  //     }
-  //   } else if (CHAIN_ID === 31337) {
-  //     if (chainId === 31337) {
-  //       treasuryOutput = <Nav.Link
-  //       href={daoEtherscanLink}
-  //       className={classes.nounsNavLink}
-  //       target="_blank"
-  //       rel="noreferrer"
-  //       > 
-  //       <NavBarTreasury
-  //         treasuryBalance={treasuryBalance.toFixed(0)}
-  //         treasuryStyle={nonWalletButtonStyle}
-  //       />
-  //       </Nav.Link>
-  //     } else {
-  //       treasuryOutput = <NavBarTreasury
-  //       treasuryBalance={treasuryBalance.toFixed(0)}
-  //       treasuryStyle={nonWalletButtonStyle}
-  //     />;
-  //     }
-  //   }
-  // }
-
-
-
-
-
-  let output;
-
-  output =
+  let output =
         <Navbar
           expand="xl"
           style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}

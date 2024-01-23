@@ -30,115 +30,115 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
       break;
   }
 
-  let output;
+  // let output;
 
-  if (IS_MAINNET) {
-    if (chainId === 1) {
-      output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-        <div className={classes.button}>
-          <div
-            className="d-flex flex-row justify-content-around"
-            style={{
-              paddingTop: '1px',
-            }}
-          >
-            <div
-              className={clsx(
-                classes.treasuryHeader,
-                treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-              )}
-            >
-              <Trans>Treasury</Trans>
-            </div>
-            <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
-          </div>
-        </div>
-      </div>
-    } else {
-        output = 
-        <>
-              <button style={{color: 'black'}} onClick={()=> { switchNetworkToEthereum() }}>View Treasury</button>
-        </>
-    }
-  } else {
-    if (CHAIN_ID === 5) {
-      if (chainId === 5) {
-        output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-          <div className={classes.button}>
-            <div
-              className="d-flex flex-row justify-content-around"
-              style={{
-                paddingTop: '1px',
-              }}
-            >
-              <div
-                className={clsx(
-                  classes.treasuryHeader,
-                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-                )}
-              >
-                <Trans>Treasury</Trans>
-              </div>
-              <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
-            </div>
-          </div>
-        </div>
-      } else {
-          output = 
-          <>
-              <button style={{color: 'black'}} onClick={()=> { switchNetworkToGoerli() }}>View Treasury</button>
-        </>
-      }
-    } else if (CHAIN_ID === 31337) {
-      if (chainId === 31337) {
-        output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-          <div className={classes.button}>
-            <div
-              className="d-flex flex-row justify-content-around"
-              style={{
-                paddingTop: '1px',
-              }}
-            >
-              <div
-                className={clsx(
-                  classes.treasuryHeader,
-                  treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-                )}
-              >
-                <Trans>Treasury</Trans>
-              </div>
-              <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
-            </div>
-          </div>
-        </div>
-      } else {
-          output = 
-          <>
-              <button style={{color: 'black'}} onClick={()=> { switchNetworkToLocalhost() }}>View Treasury</button>
-        </>
-        //   <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
-        //   <div className={classes.button}>
-        //     <div
-        //       className="d-flex flex-row justify-content-around"
-        //       style={{
-        //         paddingTop: '1px',
-        //       }}
-        //     >
-        //       <div
-        //         className={clsx(
-        //           classes.treasuryHeader,
-        //           treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
-        //         )}
-        //       >
-        //         <button onClick={()=> { switchNetworkToLocalhost() }}>Connect To Localhost</button>
-        //       </div>
-        //     </div>
-        //   </div>
-        // </div>
-      }
-    }
+  // if (IS_MAINNET) {
+  //   if (chainId === 1) {
+  //     output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+  //       <div className={classes.button}>
+  //         <div
+  //           className="d-flex flex-row justify-content-around"
+  //           style={{
+  //             paddingTop: '1px',
+  //           }}
+  //         >
+  //           <div
+  //             className={clsx(
+  //               classes.treasuryHeader,
+  //               treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+  //             )}
+  //           >
+  //             <Trans>Treasury</Trans>
+  //           </div>
+  //           <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   } else {
+  //       output = 
+  //       <>
+  //             <button style={{color: 'black'}} onClick={()=> { switchNetworkToEthereum() }}>View Treasury</button>
+  //       </>
+  //   }
+  // } else {
+  //   if (CHAIN_ID === 5) {
+  //     if (chainId === 5) {
+  //       output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+  //         <div className={classes.button}>
+  //           <div
+  //             className="d-flex flex-row justify-content-around"
+  //             style={{
+  //               paddingTop: '1px',
+  //             }}
+  //           >
+  //             <div
+  //               className={clsx(
+  //                 classes.treasuryHeader,
+  //                 treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+  //               )}
+  //             >
+  //               <Trans>Treasury</Trans>
+  //             </div>
+  //             <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     } else {
+  //         output = 
+  //         <>
+  //             <button style={{color: 'black'}} onClick={()=> { switchNetworkToGoerli() }}>View Treasury</button>
+  //       </>
+  //     }
+  //   } else if (CHAIN_ID === 31337) {
+  //     if (chainId === 31337) {
+  //       output = <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+  //         <div className={classes.button}>
+  //           <div
+  //             className="d-flex flex-row justify-content-around"
+  //             style={{
+  //               paddingTop: '1px',
+  //             }}
+  //           >
+  //             <div
+  //               className={clsx(
+  //                 classes.treasuryHeader,
+  //                 treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+  //               )}
+  //             >
+  //               <Trans>Treasury</Trans>
+  //             </div>
+  //             <div className={classes.treasuryBalance}>$ {treasuryBalance}</div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     } else {
+  //         output = 
+  //         <>
+  //             <button style={{color: 'black'}} onClick={()=> { switchNetworkToLocalhost() }}>View Treasury</button>
+  //       </>
+  //       //   <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
+  //       //   <div className={classes.button}>
+  //       //     <div
+  //       //       className="d-flex flex-row justify-content-around"
+  //       //       style={{
+  //       //         paddingTop: '1px',
+  //       //       }}
+  //       //     >
+  //       //       <div
+  //       //         className={clsx(
+  //       //           classes.treasuryHeader,
+  //       //           treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+  //       //         )}
+  //       //       >
+  //       //         <button onClick={()=> { switchNetworkToLocalhost() }}>Connect To Localhost</button>
+  //       //       </div>
+  //       //     </div>
+  //       //   </div>
+  //       // </div>
+  //     }
+  //   }
     
-  }
+  // }
 
   return (
     <>
