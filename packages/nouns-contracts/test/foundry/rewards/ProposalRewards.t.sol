@@ -38,7 +38,7 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
             nextProposalIdToReward_: 1,
             lastProcessedAuctionId_: 1,
             ethToken_: address(erc20Mock),
-            nextProposalRewardTimestamp_: block.timestamp,
+            nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
             rewardParams: Rewards.RewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 30,
@@ -87,10 +87,9 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: uint32(proposalId),
+            lastAuctionedNounId: lastNounId,
             expectedNumEligibleProposals: 1,
             expectedNumEligibleVotes: 3,
-            firstNounId: firstNounId,
-            lastNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
