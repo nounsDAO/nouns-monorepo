@@ -51,7 +51,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
                 numProposalsEnoughForReward: 30,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
-                auctionRewardBps: 150,
+                auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000
             })
         });
