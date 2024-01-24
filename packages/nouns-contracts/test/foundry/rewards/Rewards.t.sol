@@ -39,7 +39,23 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards(address(dao), minter, uint32(dao.proposalCount()) + 1, 0, address(erc20Mock));
+        rewards = new Rewards({
+            nounsDAO_: address(dao),
+            auctionHouse_: minter,
+            nextProposalIdToReward_: uint32(dao.proposalCount()) + 1,
+            lastProcessedAuctionId_: 0,
+            ethToken_: address(erc20Mock),
+            nextProposalRewardTimestamp_: block.timestamp,
+            rewardParams: Rewards.RewardParams({
+                minimumRewardPeriod: 2 weeks,
+                numProposalsEnoughForReward: 30,
+                proposalRewardBps: 100,
+                votingRewardBps: 50,
+                auctionRewardBps: 150,
+                proposalEligibilityQuorumBps: 1000
+            })
+        });
+
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
         vm.deal(bidder1, 1000 ether);

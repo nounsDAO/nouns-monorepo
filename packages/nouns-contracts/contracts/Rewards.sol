@@ -29,16 +29,13 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
     uint256 public lastProcessedAuctionId;
     uint32 public nextProposalIdToReward = 400; // TODO: set from constructor
-    uint256 public nextProposalRewardTimestamp = block.timestamp;
-    uint256 public minimumRewardPeriod = 2 weeks;
-    uint256 public numProposalsEnoughForReward = 30; // TODO: set based on gas usage
+    uint256 public nextProposalRewardTimestamp;
+    uint256 public minimumRewardPeriod;
+    uint8 public numProposalsEnoughForReward; // TODO: set based on gas usage
 
-    uint16 public proposalRewardBps = 100; // TODO make configurable
-    uint16 public votingRewardBps = 50; // TODO make configurable
-    uint16 public auctionRewardBps = 100; // TODO make configurable
-    uint16 public proposalEligibilityQuorumBps = 1000; // TODO make configurable
+    RewardParams public params; // TODO make configurable
 
-    IERC20 public erc20Token; // TODO make configurable
+    IERC20 public ethToken; // TODO make configurable
 
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
@@ -46,18 +43,31 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         address payoutWallet;
     }
 
+    struct RewardParams {
+        uint32 minimumRewardPeriod;
+        uint8 numProposalsEnoughForReward;
+        uint16 proposalRewardBps;
+        uint16 votingRewardBps;
+        uint16 auctionRewardBps;
+        uint16 proposalEligibilityQuorumBps;
+    }
+
     constructor(
         address nounsDAO_,
         address auctionHouse_,
+        address ethToken_,
         uint32 nextProposalIdToReward_,
         uint256 lastProcessedAuctionId_,
-        address erc20Token_
+        uint256 nextProposalRewardTimestamp_,
+        RewardParams memory rewardParams
     ) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
+        ethToken = IERC20(ethToken_);
         nextProposalIdToReward = nextProposalIdToReward_;
         lastProcessedAuctionId = lastProcessedAuctionId_;
-        erc20Token = IERC20(erc20Token_);
+        nextProposalRewardTimestamp = nextProposalRewardTimestamp_;
+        params = rewardParams;
     }
 
     // TODO: only admin?
@@ -88,7 +98,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             // TODO maybe can be optimized to one call with large range
             settlement = auctionHouse.getSettlements(nounId, nounId + 1, false)[0];
             if (settlement.clientId > 0) {
-                clientBalances[settlement.clientId] += (settlement.amount * auctionRewardBps) / 10_000;
+                clientBalances[settlement.clientId] += (settlement.amount * params.auctionRewardBps) / 10_000;
             }
         }
     }
@@ -131,8 +141,8 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
-        t.proposalRewardForPeriod = (auctionRevenue * proposalRewardBps) / 10000;
-        t.votingRewardForPeriod = (auctionRevenue * votingRewardBps) / 10000;
+        t.proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10000;
+        t.votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10000;
 
         nextProposalRewardTimestamp = t.proposal.creationTimestamp + 1;
 
@@ -152,7 +162,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals TODO: parameterize quorum
-            if (t.proposal.forVotes < (t.proposal.totalSupply * proposalEligibilityQuorumBps) / 10000) continue;
+            if (t.proposal.forVotes < (t.proposal.totalSupply * params.proposalEligibilityQuorumBps) / 10000) continue;
 
             // proposal is eligible for reward
             ++t.actualNumEligibleProposals;
@@ -191,7 +201,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
 
         clientBalances[clientId] -= amount;
 
-        erc20Token.transfer(to, amount);
+        ethToken.transfer(to, amount);
     }
 
     struct ProposalRewardsParams {
@@ -219,7 +229,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             if (block.number <= endBlock) break; // reached a proposal still in voting
 
             // skip non eligible proposals TODO: parameterize quorum
-            if (proposal.forVotes < (proposal.totalSupply * proposalEligibilityQuorumBps) / 10000) continue;
+            if (proposal.forVotes < (proposal.totalSupply * params.proposalEligibilityQuorumBps) / 10000) continue;
 
             // proposal is eligible for reward
             ++p.expectedNumEligibleProposals;
