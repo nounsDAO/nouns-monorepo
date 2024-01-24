@@ -9,6 +9,9 @@ const nameToFullyQualifiedName: Record<string, string> = {
   NounsAuctionHouseProxyAdmin: 'contracts/proxies/NounsAuctionHouseProxyAdmin.sol:NounsAuctionHouseProxyAdmin',
   NounsDAOLogicV3Harness: 'contracts/test/NounsDAOLogicV3Harness.sol:NounsDAOLogicV3Harness',
   NounsDAOExecutorV2Test: 'contracts/test/NounsDAOExecutorHarness.sol:NounsDAOExecutorV2Test',
+  NounsDAOExecutorProxy: 'contracts/governance/NounsDAOExecutorProxy.sol:NounsDAOExecutorProxy',
+  NounsDAOProxyV3: 'contracts/governance/NounsDAOProxyV3.sol:NounsDAOProxyV3',
+  NounsDAODataProxy: 'contracts/governance/data/NounsDAODataProxy.sol:NounsDAODataProxy'
 };
 
 task('verify-etherscan-dao-v3', 'Verify the Solidity contracts on Etherscan')
@@ -18,10 +21,6 @@ task('verify-etherscan-dao-v3', 'Verify the Solidity contracts on Etherscan')
       for (const [, contract] of Object.entries(contracts)) {
         console.log(`verifying ${contract.name}...`);
         try {
-          if (['NounsDAOExecutorProxy', 'NounsDAOProxyV3', 'NounsDAODataProxy'].includes(contract.name)) {
-            console.log(`Proxy contract ${contract.name} is skipped.`)
-            continue;
-          }
           const code = await contract.instance?.provider.getCode(contract.address);
           if (code === '0x') {
             console.log(
