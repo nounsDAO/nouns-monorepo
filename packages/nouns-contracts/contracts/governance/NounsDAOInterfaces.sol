@@ -521,6 +521,7 @@ interface NounsDAOV3Types {
         uint256 numSigners;
         /// @notice The ID for the client that facilitated the proposal
         uint32 clientId;
+        ClientVoteData[] voteData;
     }
 
     struct ProposalCondensed {

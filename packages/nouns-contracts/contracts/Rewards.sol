@@ -72,13 +72,9 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     }
 
     struct Temp {
-        uint256 proposalRewardForPeriod;
-        uint256 votingRewardForPeriod;
-        uint256 actualNumEligibleProposals;
-        uint256 actualNumEligibleVotes;
+        uint256 numEligibleVotes;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
-        NounsDAOV3Types.ProposalForRewards proposal;
     }
 
     function updateRewardsForAuctions(uint256 lastNounId) public {
@@ -100,97 +96,100 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     }
 
     /**
-     *
-     * @param expectedNumEligibleProposals should match the number of eligible proposals. TODO: a view function for this
      * @param lastAuctionedNounId the noun id that was auctioned when proposal with id `lastProposalId` was created.
      * The auction revenue up to this noun id are included in the bounty.
      */
     function updateRewardsForProposalWritingAndVoting(
         uint32 lastProposalId,
         uint256 lastAuctionedNounId,
-        uint256 expectedNumEligibleProposals,
-        uint256 expectedNumEligibleVotes,
         uint32[] calldata votingClientIds
     ) public {
-        require(expectedNumEligibleProposals > 0, 'at least one eligible proposal');
-
-        uint256 maxProposalId = nounsDAO.proposalCount();
-        require(lastProposalId <= maxProposalId, 'bad lastProposalId');
+        require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
         require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
 
         Temp memory t;
 
-        t.proposal = nounsDAO.proposalDataForRewards(lastProposalId);
+        NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
+            nextProposalIdToReward,
+            lastProposalId,
+            votingClientIds
+        );
+        nextProposalIdToReward = lastProposalId + 1;
 
-        if (expectedNumEligibleProposals < numProposalsEnoughForReward) {
-            require(
-                t.proposal.creationTimestamp > lastProposalRewardsUpdate + minimumRewardPeriod,
-                'not enough time passed'
-            );
-        }
+        NounsDAOV3Types.ProposalForRewards memory lastProposal = proposals[proposals.length - 1];
 
         uint256 auctionRevenue = getAuctionRevenueBetweenNouns({
             firstNounId: nextProposalRewardFirstAuctionId,
             oneAfterLastNounId: lastAuctionedNounId,
-            endTimestamp: t.proposal.creationTimestamp
+            endTimestamp: lastProposal.creationTimestamp
         });
         nextProposalRewardFirstAuctionId = lastAuctionedNounId;
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
-        t.proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10000;
-        t.votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10000;
+        uint256 proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10000;
+        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10000;
 
-        lastProposalRewardsUpdate = t.proposal.creationTimestamp + 1;
+        uint16 proposalEligibilityQuorumBps_ = params.proposalEligibilityQuorumBps;
 
-        t.rewardPerProposal = t.proposalRewardForPeriod / expectedNumEligibleProposals;
-        t.rewardPerVote = t.votingRewardForPeriod / expectedNumEligibleVotes;
-
-        uint32 lowestProposalIdToReward = nextProposalIdToReward;
-        nextProposalIdToReward = lastProposalId + 1;
-
-        for (uint32 pid = lastProposalId; pid >= lowestProposalIdToReward; pid--) {
-            if (pid != lastProposalId) {
-                t.proposal = nounsDAO.proposalDataForRewards(pid);
-            }
-
+        uint256 numEligibleProposals;
+        for (uint256 i; i < proposals.length; ++i) {
             // make sure proposal finished voting
-            uint endBlock = max(t.proposal.endBlock, t.proposal.objectionPeriodEndBlock);
+            uint endBlock = max(proposals[i].endBlock, proposals[i].objectionPeriodEndBlock);
             require(block.number > endBlock, 'all proposals must be done with voting');
 
-            // skip non eligible proposals TODO: parameterize quorum
-            if (t.proposal.forVotes < (t.proposal.totalSupply * params.proposalEligibilityQuorumBps) / 10000) continue;
+            // skip non eligible proposals
+            if (proposals[i].forVotes < (proposals[i].totalSupply * proposalEligibilityQuorumBps_) / 10000) {
+                delete proposals[i];
+                continue;
+            }
 
             // proposal is eligible for reward
-            ++t.actualNumEligibleProposals;
+            ++numEligibleProposals;
 
-            uint32 clientId = t.proposal.clientId;
+            uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
+            t.numEligibleVotes += votesInProposal;
+        }
+
+        require(numEligibleProposals > 0, 'at least one eligible proposal');
+        if (numEligibleProposals < numProposalsEnoughForReward) {
+            require(
+                lastProposal.creationTimestamp > lastProposalRewardsUpdate + minimumRewardPeriod,
+                'not enough time passed'
+            );
+        }
+        lastProposalRewardsUpdate = lastProposal.creationTimestamp + 1;
+
+        t.rewardPerProposal = proposalRewardForPeriod / numEligibleProposals;
+        t.rewardPerVote = votingRewardForPeriod / t.numEligibleVotes;
+
+        for (uint256 i; i < proposals.length; ++i) {
+            // skip non eligible deleted proposals
+            if (proposals[i].endBlock == 0) continue;
+
+            uint32 clientId = proposals[i].clientId;
             if (clientId != 0) {
                 clientBalances[clientId] += t.rewardPerProposal;
             }
 
             uint256 votesInProposal;
 
-            NounsDAOV3Types.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, votingClientIds);
+            NounsDAOV3Types.ClientVoteData[] memory voteData = proposals[i].voteData;
 
             uint256 votes;
-            for (uint256 i; i < votingClientIds.length; ++i) {
-                clientId = votingClientIds[i];
-                votes = voteData[i].votes;
+            for (uint256 j; j < votingClientIds.length; ++j) {
+                clientId = votingClientIds[j];
+                votes = voteData[j].votes;
                 if (clientId != 0) {
                     clientBalances[clientId] += votes * t.rewardPerVote;
                 }
                 votesInProposal += votes;
             }
             require(
-                votesInProposal == t.proposal.forVotes + t.proposal.againstVotes + t.proposal.abstainVotes,
+                votesInProposal == proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes,
                 'not all votes accounted'
             );
-            t.actualNumEligibleVotes += votesInProposal;
         }
-
-        require(t.actualNumEligibleProposals == expectedNumEligibleProposals, 'wrong expectedNumEligibleProposals');
-        require(t.actualNumEligibleVotes == expectedNumEligibleVotes, 'wrong expectedNumEligibleVotes');
     }
 
     function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public {
@@ -208,87 +207,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 firstNounId;
         uint256 lastNounId;
         uint32[] votingClientIds;
-    }
-
-    function getParamsForUpdatingProposalRewards() public view returns (ProposalRewardsParams memory p) {
-        NounsDAOV3Types.ProposalForRewards memory proposal;
-        uint256 maxProposalId = nounsDAO.proposalCount();
-
-        uint32[] memory allClientIds = new uint32[](nextTokenId);
-        uint32[] memory votingClientIds = new uint32[](nextTokenId);
-        for (uint32 i; i < nextTokenId; i++) allClientIds[i] = i;
-        uint256 numVotingClients;
-
-        for (uint32 pid = nextProposalIdToReward; pid <= maxProposalId; pid++) {
-            proposal = nounsDAO.proposalDataForRewards(pid);
-
-            uint endBlock = max(proposal.endBlock, proposal.objectionPeriodEndBlock);
-            if (block.number <= endBlock) break; // reached a proposal still in voting
-
-            // skip non eligible proposals TODO: parameterize quorum
-            if (proposal.forVotes < (proposal.totalSupply * params.proposalEligibilityQuorumBps) / 10000) continue;
-
-            // proposal is eligible for reward
-            ++p.expectedNumEligibleProposals;
-
-            uint256 proposalTotalVotes = proposal.forVotes + proposal.againstVotes + proposal.abstainVotes;
-            p.expectedNumEligibleVotes += proposalTotalVotes;
-
-            p.lastProposalId = pid;
-
-            NounsDAOV3Types.ClientVoteData[] memory voteData = nounsDAO.proposalVoteClientsData(pid, allClientIds);
-            for (uint256 i; i < nextTokenId; i++) {
-                if (voteData[i].votes > 0) {
-                    if (votingClientIds[i] == 0) {
-                        votingClientIds[i] = 1;
-                        numVotingClients++;
-                    }
-                }
-            }
-        }
-
-        p.votingClientIds = new uint32[](numVotingClients);
-        uint32 j;
-        for (uint32 i; i < votingClientIds.length; i++) {
-            if (votingClientIds[i] == 1) p.votingClientIds[j++] = i;
-        }
-
-        // TODO: fix
-        // (p.firstNounId, p.lastNounId) = findAuctionsBeforeAndAfter(
-        //     nextProposalRewardTimestamp,
-        //     nounsDAO.proposalDataForRewards(p.lastProposalId).creationTimestamp
-        // );
-    }
-
-    function findAuctionsBeforeAndAfter(
-        uint256 startTimestamp,
-        uint256 endTimestamp
-    ) internal view returns (uint256 firstNounId, uint256 lastNounId) {
-        require(endTimestamp > startTimestamp, 'endTimestamp > startTimestamp');
-        uint256 maxAuctionId = auctionHouse.auction().nounId - 1;
-
-        INounsAuctionHouseV2.Settlement[] memory s;
-
-        uint256 prevAuctionId;
-        for (uint256 nounId = maxAuctionId; nounId > 0; nounId--) {
-            s = auctionHouse.getSettlements(nounId, nounId + 1, true);
-
-            if (s.length == 0) continue; // nounder reward or missing data
-
-            if (lastNounId == 0) {
-                // haven't yet found the last auction id
-                // if this auction id is the first to be <= endTimestamp, mark the previous auction as the lastNounID
-                if (s[0].blockTimestamp <= endTimestamp)
-                    lastNounId = prevAuctionId;
-                    // otherwise, just update the previousAuctionId
-                else prevAuctionId = nounId;
-            }
-
-            if (s[0].blockTimestamp <= startTimestamp) {
-                firstNounId = nounId;
-                break;
-            }
-        }
     }
 
     function getAuctionRevenueBetweenNouns(

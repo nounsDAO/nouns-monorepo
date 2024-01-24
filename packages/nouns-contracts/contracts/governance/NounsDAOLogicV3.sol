@@ -469,8 +469,12 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.proposalsV3(proposalId);
     }
 
-    function proposalDataForRewards(uint256 proposalId) external view returns (ProposalForRewards memory) {
-        return ds.proposalDataForRewards(proposalId);
+    function proposalDataForRewards(
+        uint256 firstProposalId,
+        uint256 lastProposalId,
+        uint32[] calldata votingClientIds
+    ) external view returns (ProposalForRewards[] memory) {
+        return ds.proposalDataForRewards(firstProposalId, lastProposalId, votingClientIds);
     }
 
     function proposalClientId(uint256 proposalId) external view returns (uint32) {

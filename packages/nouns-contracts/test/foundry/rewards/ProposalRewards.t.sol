@@ -88,8 +88,6 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: uint32(proposalId),
             lastAuctionedNounId: lastNounId,
-            expectedNumEligibleProposals: 1,
-            expectedNumEligibleVotes: 3,
             votingClientIds: votingClientIds
         });
 

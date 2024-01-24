@@ -203,26 +203,7 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: uint32(proposalId),
             lastAuctionedNounId: nounOnAuctionWhenLastProposalWasCreated,
-            expectedNumEligibleProposals: 11,
-            expectedNumEligibleVotes: 270,
             votingClientIds: clientIds
         });
     }
-
-    // TODO:
-    // function testGetHintParams() public {
-    //     clientIds = [0, CLIENT_ID, CLIENT_ID2];
-
-    //     Rewards.ProposalRewardsParams memory params = rewards.getParamsForUpdatingProposalRewards();
-    //     assertEq(params.lastProposalId, uint32(proposalId));
-    //     assertEq(params.expectedNumEligibleProposals, 11);
-    //     assertEq(params.expectedNumEligibleVotes, 270);
-    //     assertEq(params.firstNounId, settledNounIdBeforeProposal);
-    //     assertEq(params.lastNounId, nounOnAuctionWhenLastProposalWasCreated);
-
-    //     assertEq(params.votingClientIds.length, clientIds.length);
-    //     for (uint256 i; i < params.votingClientIds.length; i++) {
-    //         assertEq(params.votingClientIds[i], clientIds[i]);
-    //     }
-    // }
 }

@@ -716,11 +716,25 @@ library NounsDAOV3Proposals {
 
     function proposalDataForRewards(
         NounsDAOV3Types.StorageV3 storage ds,
-        uint256 proposalId
-    ) internal view returns (NounsDAOV3Types.ProposalForRewards memory) {
-        NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
-        return
-            NounsDAOV3Types.ProposalForRewards({
+        uint256 firstProposalId,
+        uint256 lastProposalId,
+        uint32[] calldata votingClientIds
+    ) internal view returns (NounsDAOV3Types.ProposalForRewards[] memory) {
+        require(lastProposalId >= firstProposalId, 'lastProposalId >= firstProposalId');
+        uint256 numProposals = lastProposalId - firstProposalId + 1;
+        NounsDAOV3Types.ProposalForRewards[] memory data = new NounsDAOV3Types.ProposalForRewards[](numProposals);
+
+        NounsDAOV3Types.Proposal storage proposal;
+        uint256 i;
+        for (uint256 pid = firstProposalId; pid <= lastProposalId; ++pid) {
+            proposal = ds._proposals[pid];
+
+            NounsDAOV3Types.ClientVoteData[] memory c = new NounsDAOV3Types.ClientVoteData[](votingClientIds.length);
+            for (uint256 j; j < votingClientIds.length; ++j) {
+                c[j] = proposal.voteClients[votingClientIds[j]];
+            }
+
+            data[i++] = NounsDAOV3Types.ProposalForRewards({
                 endBlock: proposal.endBlock,
                 objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
                 forVotes: proposal.forVotes,
@@ -729,8 +743,12 @@ library NounsDAOV3Proposals {
                 totalSupply: proposal.totalSupply,
                 creationTimestamp: proposal.creationTimestamp,
                 numSigners: proposal.signers.length,
-                clientId: proposal.clientId
+                clientId: proposal.clientId,
+                voteData: c
             });
+        }
+
+        return data;
     }
 
     /**
