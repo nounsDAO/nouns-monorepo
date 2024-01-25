@@ -174,7 +174,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
                 'not enough time passed'
             );
         }
-        lastProposalRewardsUpdate = lastProposal.creationTimestamp + 1;
+        lastProposalRewardsUpdate = lastProposal.creationTimestamp;
 
         // Calculate the reward per proposal and per vote
         t.rewardPerProposal = proposalRewardForPeriod / numEligibleProposals;
