@@ -8,7 +8,6 @@ import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctio
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { console } from 'hardhat/console.sol';
 
 contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -70,6 +69,39 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         );
     }
 
+    function test_revertsIfNoAuctionRevenue() public {
+        fastforwardAndSettleAuction();
+        fastforwardAndSettleAuction();
+
+        vm.warp(block.timestamp + 2 weeks + 1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
+
+        uint256 lastNounId = settleAuction();
+        votingClientIds = [0];
+        vm.expectRevert('auctionRevenue must be > 0');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            lastAuctionedNounId: lastNounId,
+            votingClientIds: votingClientIds
+        });
+    }
+
+    function test_revertsIfProposalsNotDoneWithVoting() public {
+        bidAndSettleAuction({ bidAmount: 5 ether });
+
+        vm.warp(block.timestamp + 2 weeks + 1);
+        uint32 proposalId = proposeAndVote(clientId1);
+
+        uint256 lastNounId = settleAuction();
+        votingClientIds = [0];
+        vm.expectRevert('all proposals must be done with voting');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            lastAuctionedNounId: lastNounId,
+            votingClientIds: votingClientIds
+        });
+    }
+
     function test_rewardsAfterMinimumRewardPeriod() public {
         uint256 startTimestamp = block.timestamp;
 
@@ -77,10 +109,9 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         bidAndSettleAuction({ bidAmount: 10 ether });
 
         vm.warp(startTimestamp + 2 weeks + 1);
-        uint32 proposalId = proposeAndVote(clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
         uint256 lastNounId = settleAuction();
-
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
@@ -99,7 +130,7 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
 
         vm.warp(startTimestamp + 2 weeks - 10);
 
-        uint32 proposalId = proposeAndVote(clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
         uint256 lastNounId = settleAuction();
 
@@ -133,7 +164,7 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
 
         vm.warp(startTimestamp + 2 weeks - 10);
 
-        uint32 proposalId = proposeAndVote(clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
         uint256 lastNounId = settleAuction();
 
@@ -150,11 +181,16 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
     // internal functions
     //////////////////////
 
+    function proposeVoteAndEndVotingPeriod(uint32 clientId) internal returns (uint32) {
+        uint32 proposalId = proposeAndVote(clientId);
+        mineBlocks(VOTING_PERIOD);
+        return proposalId;
+    }
+
     function proposeAndVote(uint32 clientId) internal returns (uint32) {
         uint256 proposalId = propose(bidder1, address(1), 1 ether, '', '', 'my proposal', clientId);
         mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + 1);
         vote(bidder1, proposalId, 1, 'i support');
-        mineBlocks(VOTING_PERIOD);
         return uint32(proposalId);
     }
 
@@ -163,6 +199,12 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(bidder1);
         auctionHouse.createBid{ value: bidAmount }(nounId);
+
+        return fastforwardAndSettleAuction();
+    }
+
+    function fastforwardAndSettleAuction() internal returns (uint256) {
+        uint256 nounId = auctionHouse.auction().nounId;
 
         uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
         mineBlocks(blocksToEnd);
