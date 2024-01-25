@@ -29,11 +29,11 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
     uint32 public nextTokenId = 1;
 
     uint256 public lastProcessedAuctionId;
-    uint32 public nextProposalIdToReward = 400; // TODO: set from constructor
+    uint32 public nextProposalIdToReward;
     uint256 public nextProposalRewardFirstAuctionId;
     uint256 lastProposalRewardsUpdate = block.timestamp;
 
-    RewardParams public params; // TODO make configurable
+    RewardParams public params;
 
     IERC20 public ethToken; // TODO make configurable
 
