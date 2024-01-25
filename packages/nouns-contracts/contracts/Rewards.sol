@@ -81,6 +81,10 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         params = newParams;
     }
 
+    function getParams() public view returns (RewardParams memory) {
+        return params;
+    }
+
     function updateRewardsForAuctions(uint256 lastNounId) public {
         uint256 currentlyAuctionedNounId = auctionHouse.auction().nounId;
         require(lastNounId < currentlyAuctionedNounId, 'lastNounId must be settled');
@@ -133,8 +137,8 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
-        uint256 proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10000;
-        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10000;
+        uint256 proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10_000;
+        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
 
         Temp memory t;
 
@@ -153,7 +157,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
             require(block.number > endBlock, 'all proposals must be done with voting');
 
             // skip non eligible proposals
-            if (proposals[i].forVotes < (proposals[i].totalSupply * proposalEligibilityQuorumBps_) / 10000) {
+            if (proposals[i].forVotes < (proposals[i].totalSupply * proposalEligibilityQuorumBps_) / 10_000) {
                 delete proposals[i];
                 continue;
             }
