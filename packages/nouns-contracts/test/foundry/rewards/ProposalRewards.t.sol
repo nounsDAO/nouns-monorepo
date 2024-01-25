@@ -15,10 +15,11 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
     INounsAuctionHouseV2 auctionHouse;
 
     address bidder1 = makeAddr('bidder1');
+    address bidder2 = makeAddr('bidder2');
     address client1Wallet = makeAddr('client1Wallet');
     uint32 clientId1;
+    uint32 clientId2;
     uint32[] votingClientIds;
-    uint256 firstNounId;
 
     uint256 constant SECONDS_IN_BLOCK = 12;
 
@@ -28,8 +29,16 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         vm.deal(bidder1, 100 ether);
 
         // need at least one settled auction
-        firstNounId = bidAndSettleAuction({ bidAmount: 1 ether });
+        bidAndSettleAuction({ bidAmount: 1 ether });
+        uint256 nounId = bidAndSettleAuction({ bidAmount: 1 ether });
+        vm.prank(bidder1);
+        nounsToken.transferFrom(bidder1, bidder2, nounId);
         mineBlocks(1);
+
+        // increase total supply to > 10
+        while (nounsToken.totalSupply() < 10) {
+            bidAndSettleAuction({ bidAmount: 1 ether });
+        }
 
         rewards = new Rewards({
             owner: address(dao.timelock()),
@@ -51,6 +60,7 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient();
+        clientId2 = rewards.registerClient();
     }
 
     function _setUpDAO() internal {
@@ -120,6 +130,50 @@ contract ProposalRewardsTest is NounsDAOLogicV3BaseTest {
         });
 
         assertEq(rewards.clientBalances(clientId1), 0.15 ether); // 15 eth * 1%
+    }
+
+    function test_doesntRewardIneligibleProposals() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        propose(bidder2, address(1), 1 ether, '', '', 'my proposal', clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId2);
+
+        uint256 lastNounId = settleAuction();
+        votingClientIds = [0];
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            lastAuctionedNounId: lastNounId,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalances(clientId1), 0 ether);
+        assertEq(rewards.clientBalances(clientId2), 0.15 ether); // 15 eth * 1%
+    }
+
+    function test_splitsRewardsBetweenEligibleProposals() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        proposeVoteAndEndVotingPeriod(clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId2);
+
+        uint256 lastNounId = settleAuction();
+        votingClientIds = [0];
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            lastAuctionedNounId: lastNounId,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalances(clientId1), 0.075 ether); // 15 eth * 1% / 2
+        assertEq(rewards.clientBalances(clientId2), 0.075 ether); // 15 eth * 1% / 2
     }
 
     function test_doesntRewardIfMinimumPeriodHasntPassed() public {
