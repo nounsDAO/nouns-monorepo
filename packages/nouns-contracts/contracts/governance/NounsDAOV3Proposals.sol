@@ -742,7 +742,6 @@ library NounsDAOV3Proposals {
                 abstainVotes: proposal.abstainVotes,
                 totalSupply: proposal.totalSupply,
                 creationTimestamp: proposal.creationTimestamp,
-                numSigners: proposal.signers.length,
                 clientId: proposal.clientId,
                 voteData: c
             });

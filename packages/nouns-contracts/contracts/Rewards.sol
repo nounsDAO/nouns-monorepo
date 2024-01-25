@@ -96,8 +96,12 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     }
 
     /**
+     * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
+     * including this id must have ended voting.
      * @param lastAuctionedNounId the noun id that was auctioned when proposal with id `lastProposalId` was created.
      * The auction revenue up to this noun id are included in the bounty.
+     * @param votingClientIds array of client ids that were used to vote on of all eligible the eligible proposals in
+     * this rewards distribution
      */
     function updateRewardsForProposalWritingAndVoting(
         uint32 lastProposalId,
@@ -106,8 +110,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     ) public {
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
         require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
-
-        Temp memory t;
 
         NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             nextProposalIdToReward,
@@ -130,7 +132,15 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10000;
         uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10000;
 
+        Temp memory t;
+
         uint16 proposalEligibilityQuorumBps_ = params.proposalEligibilityQuorumBps;
+
+        //// First loop over the proposals:
+        //// 1. Make sure all proposals have finished voting.
+        //// 2. Delete (zero out) proposals that are non elgibile (i.e. not enough For votes).
+        //// 3. Count the number of eligible proposals.
+        //// 4. Count the number of votes in eligible proposals.
 
         uint256 numEligibleProposals;
         for (uint256 i; i < proposals.length; ++i) {
@@ -151,6 +161,12 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             t.numEligibleVotes += votesInProposal;
         }
 
+        //// Check that distribution is allowed:
+        //// 1. At least one eligible proposal.
+        //// 2. One of the two conditions must be true:
+        //// 2.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
+        //// 2.b. At least `minimumRewardPeriod` seconds have passed since the last update.
+
         require(numEligibleProposals > 0, 'at least one eligible proposal');
         if (numEligibleProposals < numProposalsEnoughForReward) {
             require(
@@ -160,8 +176,15 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         }
         lastProposalRewardsUpdate = lastProposal.creationTimestamp + 1;
 
+        // Calculate the reward per proposal and per vote
         t.rewardPerProposal = proposalRewardForPeriod / numEligibleProposals;
         t.rewardPerVote = votingRewardForPeriod / t.numEligibleVotes;
+
+        //// Second loop over the proposals:
+        //// 1. Skip proposals that were deleted for non eligibility.
+        //// 2. Reward proposal's clientId.
+        //// 3. Reward the clientIds that faciliated voting.
+        //// 4. Make sure all voting clientIds were included.
 
         for (uint256 i; i < proposals.length; ++i) {
             // skip non eligible deleted proposals
@@ -173,9 +196,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
             }
 
             uint256 votesInProposal;
-
             NounsDAOV3Types.ClientVoteData[] memory voteData = proposals[i].voteData;
-
             uint256 votes;
             for (uint256 j; j < votingClientIds.length; ++j) {
                 clientId = votingClientIds[j];

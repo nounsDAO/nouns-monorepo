@@ -517,8 +517,6 @@ interface NounsDAOV3Types {
         uint256 totalSupply;
         /// @notice The timestamp of the block at which the proposal was created
         uint256 creationTimestamp;
-        /// @notice The number of signers that sponsored the proposal, or zero if it was proposed without signatures
-        uint256 numSigners;
         /// @notice The ID for the client that facilitated the proposal
         uint32 clientId;
         ClientVoteData[] voteData;
