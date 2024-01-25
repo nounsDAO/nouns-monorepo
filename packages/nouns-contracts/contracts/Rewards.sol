@@ -20,8 +20,9 @@ import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
 import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
+import { Ownable } from '@openzeppelin/contracts-v5/access/Ownable.sol';
 
-contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
+contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ownable {
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
 
@@ -31,8 +32,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     uint32 public nextProposalIdToReward = 400; // TODO: set from constructor
     uint256 public nextProposalRewardFirstAuctionId;
     uint256 lastProposalRewardsUpdate = block.timestamp;
-    uint256 public minimumRewardPeriod;
-    uint8 public numProposalsEnoughForReward; // TODO: set based on gas usage
 
     RewardParams public params; // TODO make configurable
 
@@ -54,6 +53,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
     }
 
     constructor(
+        address owner,
         address nounsDAO_,
         address auctionHouse_,
         address ethToken_,
@@ -61,7 +61,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 lastProcessedAuctionId_,
         uint256 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams
-    ) {
+    ) Ownable(owner) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         ethToken = IERC20(ethToken_);
@@ -75,6 +75,10 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         uint256 numEligibleVotes;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
+    }
+
+    function setParams(RewardParams calldata newParams) public onlyOwner {
+        params = newParams;
     }
 
     function updateRewardsForAuctions(uint256 lastNounId) public {
@@ -168,9 +172,9 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives') {
         //// 2.b. At least `minimumRewardPeriod` seconds have passed since the last update.
 
         require(numEligibleProposals > 0, 'at least one eligible proposal');
-        if (numEligibleProposals < numProposalsEnoughForReward) {
+        if (numEligibleProposals < params.numProposalsEnoughForReward) {
             require(
-                lastProposal.creationTimestamp > lastProposalRewardsUpdate + minimumRewardPeriod,
+                lastProposal.creationTimestamp > lastProposalRewardsUpdate + params.minimumRewardPeriod,
                 'not enough time passed'
             );
         }

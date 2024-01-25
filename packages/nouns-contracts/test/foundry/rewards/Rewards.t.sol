@@ -40,6 +40,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         auctionHouse.unpause();
 
         rewards = new Rewards({
+            owner: address(dao.timelock()),
             nounsDAO_: address(dao),
             auctionHouse_: minter,
             nextProposalIdToReward_: uint32(dao.proposalCount()) + 1,
