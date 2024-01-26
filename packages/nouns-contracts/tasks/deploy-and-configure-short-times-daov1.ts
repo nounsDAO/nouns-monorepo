@@ -1,3 +1,4 @@
+import { parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
@@ -19,7 +20,7 @@ task(
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    parseUnits('0.01', 'ether').toNumber() /* 0.01 ether */,
     types.int,
   )
   .addOptionalParam(
