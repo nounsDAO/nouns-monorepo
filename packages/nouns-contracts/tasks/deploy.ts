@@ -36,7 +36,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    5120000000000000 /* 1 wei */,
     types.int,
   )
   .addOptionalParam(

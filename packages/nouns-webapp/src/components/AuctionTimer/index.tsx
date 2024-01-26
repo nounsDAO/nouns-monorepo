@@ -115,7 +115,7 @@ const AuctionTimer: React.FC<{
               <span>
                 {`${flooredSeconds}`}
                 <span className={classes.small}>
-                  <Trans>s</Trans>
+                  <Trans>Winning Bid</Trans>
                 </span>
               </span>
             </div>
