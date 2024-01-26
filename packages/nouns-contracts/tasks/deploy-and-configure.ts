@@ -1,5 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
+import { ethers } from 'ethers';
 
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
@@ -10,7 +11,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    5 * 60 /* 5 minutes */,
+    1 * 60 /* 1 minutes */,
     types.int,
   )
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
@@ -18,7 +19,12 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)')
+  .addOptionalParam(
+    'auctionDuration',
+    'The auction duration (seconds)',
+    60 * 3 /* 3 minutes */,
+    types.int,
+  )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
   .addOptionalParam('votingPeriod', 'The voting period (blocks)')
   .addOptionalParam('votingDelay', 'The voting delay (blocks)')
@@ -59,7 +65,10 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       await auctionHouse.unpause({
         gasLimit: 1_000_000,
       });
-      await auctionHouse.transferOwnership(executorAddress);
+      // await auctionHouse.transferOwnership(executorAddress);
+      // await auctionHouse.transferOwnership('0xee0eC63f5a1f0bf161051BCdcb82CD9764131c0E');
+      await auctionHouse.transferOwnership('0xee0eC63f5a1f0bf161051BCdcb82CD9764131c0E');
+      await auctionHouse.setTargetPrice(ethers.utils.parseUnits('0.1', 'ether'));
       console.log(
         'Started the first auction and transferred ownership of the auction house to the executor.',
       );

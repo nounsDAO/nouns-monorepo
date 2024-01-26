@@ -45,11 +45,22 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The minimum price accepted in an auction
     uint256 public reservePrice;
 
+    // The target price set by governance for the next auction
+    uint256 public targetPrice;
+    // uint256 public targetPrice = 10000000000000000;
+
     // The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
-    // The duration of a single auction
+    // The duration of a single auction (s)
     uint256 public duration;
+    // uint256 public duration = 60 * 4;
+
+    uint256 public maxDuration = 60 * 1;
+
+    uint256 public minDuration = 60 * 60 * 24 * 30;
+
+    uint256[] public salePrices;
 
     // The active auction
     INounsAuctionHouse.Auction public auction;
@@ -86,6 +97,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
         _settleAuction();
+        _updateAuctionDuration();
         _createAuction();
     }
 
@@ -95,6 +107,23 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function settleAuction() external override whenPaused nonReentrant {
         _settleAuction();
+    }
+
+    /**
+     * @notice Set the duration for the next auction.
+     * @dev This function can only be called when the contract is paused.
+     */
+    function _updateAuctionDuration() internal {
+        uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
+        if (lastSalePrice != 0) {
+            duration = (duration * targetPrice) / lastSalePrice;
+        }
+        if (duration > maxDuration) {
+            duration = maxDuration;
+        }
+        if (duration < minDuration) {
+            duration = minDuration;
+        }
     }
 
     /**
@@ -179,6 +208,22 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     }
 
     /**
+     * @notice Set the auction target price.
+     * @dev Only callable by the owner.
+     */
+    function setTargetPrice(uint256 _targetPrice) external onlyOwner {
+        targetPrice = _targetPrice;
+    }
+
+    /**
+     * @notice Set the auction target price.
+     * @dev Only callable by the owner.
+     */
+    function setDuration(uint256 _duration) external onlyOwner {
+        duration = _duration;
+    }
+
+    /**
      * @notice Set the auction minimum bid increment percentage.
      * @dev Only callable by the owner.
      */
@@ -236,6 +281,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
+
+        uint256 lastSalePrice = _auction.amount > 0 ? _auction.amount : targetPrice;
+        salePrices.push(lastSalePrice);
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
