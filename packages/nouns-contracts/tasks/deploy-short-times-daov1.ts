@@ -1,6 +1,6 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
 import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
-import { Interface, parseUnits } from 'ethers/lib/utils';
+import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import { constants } from 'ethers';
 import promptjs from 'prompt';
@@ -25,18 +25,13 @@ const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
 task('deploy-short-times-daov1', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
+  .addParam('auctionReservePrice', 'The auction reserve price (wei)', undefined, types.int, false)
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
     30 /* 30 seconds */,
-    types.int,
-  )
-  .addOptionalParam(
-    'auctionReservePrice',
-    'The auction reserve price (wei)',
-    parseUnits('0.01', 'ether').toNumber() /* 0.01 ether */,
     types.int,
   )
   .addOptionalParam(
