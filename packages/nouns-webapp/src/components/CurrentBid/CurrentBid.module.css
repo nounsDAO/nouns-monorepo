@@ -13,7 +13,7 @@
 .section h2 {
   font-family: 'Calistoga';
   font-weight: bold;
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 0px !important;
   margin-top: 3px;
 }
@@ -40,6 +40,7 @@
 
   .currentBid {
     margin-right: 0.5rem;
+    font-size: 12px;
   }
 
   .wrapper {
