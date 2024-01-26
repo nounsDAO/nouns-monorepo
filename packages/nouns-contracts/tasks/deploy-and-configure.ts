@@ -68,7 +68,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       // await auctionHouse.transferOwnership(executorAddress);
       // await auctionHouse.transferOwnership('0xee0eC63f5a1f0bf161051BCdcb82CD9764131c0E');
       await auctionHouse.transferOwnership('0xee0eC63f5a1f0bf161051BCdcb82CD9764131c0E');
-      await auctionHouse.setTargetPrice(ethers.utils.parseUnits('1', 'ether'));
+      await auctionHouse.setTargetPrice(ethers.utils.parseUnits('0.1', 'ether'));
       console.log(
         'Started the first auction and transferred ownership of the auction house to the executor.',
       );

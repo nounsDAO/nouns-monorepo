@@ -46,15 +46,15 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     uint256 public reservePrice;
 
     // The target price set by governance for the next auction
-    uint256 public targetPrice = 10000000000000000;
-    // uint256 public targetPrice;
+    uint256 public targetPrice;
+    // uint256 public targetPrice = 10000000000000000;
 
     // The minimum percentage difference between the last bid amount and the current bid
     uint8 public minBidIncrementPercentage;
 
-    // The duration of a single auction
-    uint256 public duration = 60 * 4;
-    // uint256 public duration;
+    // The duration of a single auction (s)
+    uint256 public duration;
+    // uint256 public duration = 60 * 4;
 
     uint256[] public salePrices;
 
