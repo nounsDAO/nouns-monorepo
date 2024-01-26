@@ -2,7 +2,7 @@ import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHo
 import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { ChainId, ContractDeployment, ContractNamesDAOV3, DeployedContract } from './types';
-import { Interface, parseUnits } from 'ethers/lib/utils';
+import { Interface, parseUnits, parseEther } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import { constants } from 'ethers';
 import promptjs from 'prompt';
@@ -41,7 +41,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    Number(parseEther('68')) /* 68 ether */,
     types.int,
   )
   .addOptionalParam(
