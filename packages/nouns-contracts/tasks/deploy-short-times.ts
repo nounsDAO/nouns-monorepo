@@ -39,7 +39,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    parseUnits('0.01', 'ether').toNumber() /* 0.01 ether */,
     types.int,
   )
   .addOptionalParam(
