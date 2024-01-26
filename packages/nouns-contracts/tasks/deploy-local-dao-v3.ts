@@ -2,7 +2,7 @@ import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHo
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
 import { task, types } from 'hardhat/config';
-import { Interface, parseUnits } from 'ethers/lib/utils';
+import { Interface, parseUnits, parseEther } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
@@ -40,11 +40,16 @@ interface Contract {
 task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
-  .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
+  .addOptionalParam(
+    'auctionReservePrice',
+    'The auction reserve price (wei)',
+    Number(parseEther('68')), // Default: 68 Ether
+    types.int
+    )
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
-    'The auction min increment bid percentage (out of 100)', // Default: 5%
-    5,
+    'The auction min increment bid percentage (out of 100)',
+    5, // Default: 5%
     types.int,
   )
   .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 2, types.int) // Default: 2 minutes
