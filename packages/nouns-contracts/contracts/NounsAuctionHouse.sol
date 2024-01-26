@@ -56,6 +56,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     uint256 public duration;
     // uint256 public duration = 60 * 4;
 
+    uint256 public maxDuration = 60 * 1;
+
+    uint256 public minDuration = 60 * 60 * 24 * 30;
+
     uint256[] public salePrices;
 
     // The active auction
@@ -113,6 +117,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         uint256 lastSalePrice = salePrices.length > 0 ? salePrices[salePrices.length - 1] : targetPrice;
         if (lastSalePrice != 0) {
             duration = (duration * targetPrice) / lastSalePrice;
+        }
+        if (duration > maxDuration) {
+            duration = maxDuration;
+        }
+        if (duration < minDuration) {
+            duration = minDuration;
         }
     }
 
