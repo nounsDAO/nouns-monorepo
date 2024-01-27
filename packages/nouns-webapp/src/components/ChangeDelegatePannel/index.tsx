@@ -194,6 +194,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
   );
 
+  const vote = <Trans>vote</Trans>
+  const votes = <Trans>votes</Trans>
+
   return (
     <>
       <div className={currentDelegatePannelClasses.wrapper}>
@@ -210,7 +213,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           <div className={classes.changeDelegateWarning}>
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
-              {proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'} after
+              {proposalThreshold === 0 || proposalThreshold === undefined ? vote : votes} after
               this delegation. Unexecuted props you've created will now be cancelable by anyone.
             </Trans>
           </div>

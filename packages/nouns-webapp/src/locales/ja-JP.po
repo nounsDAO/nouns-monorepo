@@ -35,20 +35,20 @@ msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
 
 #: src/pages/Nounders/index.tsx
-msgid "3.5 artists, 6.5 technologists"
-msgstr "3.5アーティスト、6.5技術者"
+#~ msgid "3.5 artists, 6.5 technologists"
+#~ msgstr "3.5アーティスト、6.5技術者"
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
-msgstr ""
-
-#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "<0/><1>Guidelines</1><2/>• At this time only \"Transfer Funds\" is supported.<3/><4>Supported Action Types</4><5/><6>• Transfer Funds: </6>ETH."
 msgstr "<0/><1>ガイドライン</1><2/>• 現在、\"Transfer Funds\" のみ利用できます<3/><4>サポートアクションタイプ</4><5/><6>• Transfer Funds: </6>ETH"
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+#~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
+#~ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
@@ -254,8 +254,8 @@ msgid "All Noun auction proceeds are sent to the"
 msgstr "すべてのNounオークションの収益は、"
 
 #: src/pages/Nounders/index.tsx
-msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Nounオークションの収益は全て Nouns DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+#~ msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+#~ msgstr "Nounオークションの収益は全て Nouns DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のNoundersに与えられ、配布されます。"
 
 #: src/components/Documentation/index.tsx
 msgid "All Nouns are members of Nouns DAO."
@@ -330,8 +330,8 @@ msgid "Because this proposal contains a USDC fund transfer action we've added an
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
-msgstr ""
+#~ msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
+#~ msgstr ""
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -369,8 +369,8 @@ msgid "Born"
 msgstr "誕生"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Build With Nouns. Get Funded."
-msgstr ""
+#~ msgid "Build With Nouns. Get Funded."
+#~ msgstr ""
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Cancel"
@@ -425,7 +425,7 @@ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
-msgstr "代理人を変更する"
+msgstr "委任先を変更する"
 
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "Choose sponsors"
@@ -486,7 +486,7 @@ msgstr "クリプトパンクス"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
-msgstr "現在の代表者"
+msgstr "現在の委任先"
 
 #: src/pages/Vote/index.tsx
 #~ msgid "Current Quorum"
@@ -522,11 +522,11 @@ msgstr "投票を委任する"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate Update Failed"
-msgstr "委任された更新に失敗しました"
+msgstr "委任先の更新に失敗しました"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate Updated!"
-msgstr "デリゲートが更新されました"
+msgstr "委任先が更新されました"
 
 #: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
 msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
@@ -542,7 +542,7 @@ msgstr "{availableVotes}票を委任する"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Delegation"
-msgstr "デリゲーション"
+msgstr "委任"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploy Fork"
@@ -580,16 +580,16 @@ msgstr "切断する"
 #~ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
-msgid "Discourse"
-msgstr "Discourse"
+#~ msgid "Discourse"
+#~ msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr "ドキュメント"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Download the Free iOS App"
-msgstr ""
+#~ msgid "Download the Free iOS App"
+#~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
@@ -679,8 +679,8 @@ msgid "Etherscan"
 msgstr "Etherscan"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-msgstr ""
+#~ msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -734,7 +734,7 @@ msgstr "賛成"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のNoundersに与えられ、配布されます。"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
@@ -831,8 +831,8 @@ msgid "Language"
 msgstr "言語"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "Learn more"
-msgstr "詳細はこちら"
+#~ msgid "Learn more"
+#~ msgstr "詳細はこちら"
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
@@ -911,7 +911,7 @@ msgstr "Nounsの特徴"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr "Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
+msgstr "Noun投票権は譲渡できませんが、委任することができます。Nounを所有している限り、委任先を変更することが可能です。"
 
 #: src/components/AuctionActivityNounTitle/index.tsx
 msgid "Noun {0}"
@@ -930,8 +930,8 @@ msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
 #: src/pages/Nounders/index.tsx
-msgid "Nounders' Reward"
-msgstr "Nounderへの報酬"
+#~ msgid "Nounders' Reward"
+#~ msgstr "Nounderへの報酬"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
@@ -985,7 +985,7 @@ msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
-msgstr ""
+msgstr "Nounsは<0>Nouns DAO</0>を管理・運営します。Nounsは、提案に対し自ら投票、もしくは投票権を委任することができます。提案を行うには少なくとも<1>{0}</1>を所有している必要があります。"
 
 #: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -998,7 +998,7 @@ msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
-msgstr "今持っています"
+msgstr "現在の所有数"
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
@@ -1037,8 +1037,8 @@ msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "Nounsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "One Noun, Every Day, Forever."
-msgstr ""
+#~ msgid "One Noun, Every Day, Forever."
+#~ msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1128,8 +1128,8 @@ msgstr ""
 #~ msgstr "プレビュー："
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Prop House"
-msgstr ""
+#~ msgid "Prop House"
+#~ msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -1191,6 +1191,10 @@ msgstr "提案 {0}"
 #: src/components/NavBar/index.tsx
 msgid "Proposals"
 msgstr "提案"
+
+#: src/pages/Vote/index.tsx
+msgid "Proposals cannot be executed during a forking period"
+msgstr ""
 
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
@@ -1437,12 +1441,12 @@ msgstr "ウォレットを切り替える"
 #~ msgstr "ブロックで撮影"
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on created block"
-msgstr ""
+#~ msgid "Taken on created block"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on start block"
-msgstr ""
+#~ msgid "Taken on start block"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
@@ -1453,12 +1457,12 @@ msgid "The Noun Seeder contract is used to determine Noun traits during the mint
 msgstr "Nounシーダー契約は、ミントのプロセスでNounsの特徴を決定するために使用されます。シーダー契約は、今後の特徴生成アルゴリズムのアップグレードを可能にするために変更することができ、さらに、今後のアップデートを防ぐためにNouns DAOによってロックすることも可能です。現在、Nounsの特徴は擬似乱数生成を用い決められています。"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders"
-msgstr "Nounders"
+#~ msgid "The Nounders"
+#~ msgstr "Nounders"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
-msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各ナウンダーは最大でNounの供給量の1%を受け取ることができます。"
+#~ msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
+#~ msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各Nounderは最大でNounの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
@@ -1521,8 +1525,8 @@ msgid "There was an error withdrawing to your wallet."
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-msgstr ""
+#~ msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
+#~ msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
 #~ msgid "There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
@@ -1643,7 +1647,7 @@ msgstr ""
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Update Delegate"
-msgstr "デリゲートを更新"
+msgstr "委任先を指定"
 
 #: src/components/EditProposalButton/index.tsx
 msgid "Update Proposal"
@@ -1781,7 +1785,7 @@ msgstr "決済は落札者に最も大きなインセンティブが与えられ
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
-msgstr "票になります"
+msgstr "更新後所有数"
 
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
@@ -1847,12 +1851,12 @@ msgstr "提案を提出するのに十分な投票がありません"
 
 #: src/components/Proposals/index.tsx
 msgid "You have no Votes."
-msgstr "投票がありません。"
+msgstr "投票権がありません。"
 
 #: src/components/ProposalHeader/CandidateHeader.tsx
 #: src/components/ProposalHeader/index.tsx
 msgid "You have no votes."
-msgstr "投票がありません。"
+msgstr "投票権がありません。"
 
 #: src/components/CreateProposalButton/index.tsx
 #: src/components/EditProposalButton/index.tsx
@@ -1877,7 +1881,7 @@ msgstr "あなたはすでにこのアドレスに委任しています"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
-msgstr "{0} 年分のナウンを生成しました"
+msgstr "{0} 年分のNounを生成しました"
 
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
@@ -1897,7 +1901,19 @@ msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委�
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr ""
+msgstr "委任すると、あなたのアカウントの投票権は {0} {1} 未満になります。また、作成した未実行の提案は誰でもキャンセルできるようになります。"
+
+msgid "vote"
+msgstr "票"
+
+msgid "votes"
+msgstr "票"
+
+msgid "Vote"
+msgstr "票"
+
+msgid "Votes"
+msgstr "票"
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
