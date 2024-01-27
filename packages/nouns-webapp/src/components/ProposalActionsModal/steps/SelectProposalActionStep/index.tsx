@@ -37,11 +37,13 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <Trans>
           <hr />
           <b>Guidelines</b>
-          <hr />• At this time only "Transfer Funds" is supported.
+          <hr />• At this time "Transfer Funds" and "Function Call" are supported.
           <hr />
           <b>Supported Action Types</b>
           <hr />
           <b>• Transfer Funds: </b>ETH.
+          <br />
+          <b>• Function Call: </b>Call a contract function.
         </Trans>
       </ModalSubTitle>
 

@@ -43,8 +43,12 @@ msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0/><1>Guidelines</1><2/>• At this time only \"Transfer Funds\" is supported.<3/><4>Supported Action Types</4><5/><6>• Transfer Funds: </6>ETH."
-msgstr "<0/><1>ガイドライン</1><2/>• 現在、\"Transfer Funds\" のみ利用できます<3/><4>サポートアクションタイプ</4><5/><6>• Transfer Funds: </6>ETH"
+msgid "<0/><1>Guidelines</1><2/>• At this time \"Transfer Funds\" and \"Function Call\" are supported.<3/><4>Supported Action Types</4><5/><6>• Transfer Funds: </6>ETH.<7/><8>• Function Call: </8>Call a contract function."
+msgstr "<0/><1>ガイドライン</1><2/>• 現在、\"Transfer Funds\"と\"Function Call\" が利用できます<3/><4>サポートアクションタイプ</4><5/><6>• Transfer Funds: </6>ETH.<7/><8>• Function Call: </8>コントラクト関数実行"
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+#~ msgid "<0/><1>Guidelines</1><2/>• At this time only \"Transfer Funds\" is supported.<3/><4>Supported Action Types</4><5/><6>• Transfer Funds: </6>ETH.<7>• Function Call: </7>Call a contract function."
+#~ msgstr "<0/><1>ガイドライン</1><2/>• 現在、\"Transfer Funds\"と\"Function Call\" が利用できます<3/><4>サポートアクションタイプ</4><5/><6>• Transfer Funds: </6>ETH.<7>• Function Call: </7>コントラクト関数実行"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
@@ -1734,6 +1738,10 @@ msgstr "すべての入札を表示"
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
 
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "Vote"
+msgstr "票"
+
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Vote history"
 msgstr ""
@@ -1757,6 +1765,10 @@ msgstr "<0>{numVotesForProp}</0>のNounで投票"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "Votes"
+msgstr "票"
 
 #: src/components/VoteModal/index.tsx
 msgid "Voting with <0>{0}</0> Noun"
@@ -1903,18 +1915,6 @@ msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委�
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 msgstr "委任すると、あなたのアカウントの投票権は {0} {1} 未満になります。また、作成した未実行の提案は誰でもキャンセルできるようになります。"
 
-msgid "vote"
-msgstr "票"
-
-msgid "votes"
-msgstr "票"
-
-msgid "Vote"
-msgstr "票"
-
-msgid "Votes"
-msgstr "票"
-
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
 msgstr "付属品(140)"
@@ -1998,6 +1998,14 @@ msgstr ""
 #: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
 msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "vote"
+msgstr "票"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "votes"
+msgstr "票"
 
 #: src/components/NavBar/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
