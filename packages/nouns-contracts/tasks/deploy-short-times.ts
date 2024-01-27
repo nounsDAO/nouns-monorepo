@@ -28,18 +28,13 @@ const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
 task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
+  .addParam('auctionReservePrice', 'The auction reserve price (wei)', undefined, types.int, false)
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
     30 /* 30 seconds */,
-    types.int,
-  )
-  .addOptionalParam(
-    'auctionReservePrice',
-    'The auction reserve price (wei)',
-    1 /* 1 wei */,
     types.int,
   )
   .addOptionalParam(

@@ -8,18 +8,13 @@ task(
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
+  .addParam('auctionReservePrice', 'The auction reserve price (wei)', undefined, types.int, false)
   .addOptionalParam('weth', 'The WETH contract address')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
     30 /* 30 seconds */,
-    types.int,
-  )
-  .addOptionalParam(
-    'auctionReservePrice',
-    'The auction reserve price (wei)',
-    1 /* 1 wei */,
     types.int,
   )
   .addOptionalParam(

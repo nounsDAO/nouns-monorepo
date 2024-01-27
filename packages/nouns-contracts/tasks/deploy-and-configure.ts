@@ -5,6 +5,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
+  .addParam('auctionReservePrice', 'The auction reserve price (wei)', undefined, types.int, false)
   .addOptionalParam('weth', 'The WETH contract address')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
   .addOptionalParam(
@@ -13,7 +14,6 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     5 * 60 /* 5 minutes */,
     types.int,
   )
-  .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
