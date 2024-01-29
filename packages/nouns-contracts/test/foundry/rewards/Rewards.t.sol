@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import { NounsDAOLogicV3BaseTest } from '../NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicV3BaseTest, INounsTokenExtra } from '../NounsDAOLogicV3/NounsDAOLogicV3BaseTest.sol';
 import { Rewards } from '../../../contracts/Rewards.sol';
-import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
+import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
@@ -31,8 +30,9 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     uint32[] clientIds;
 
     function setUp() public virtual override {
-        dao = _deployDAOV3WithParams(24 hours);
-        nounsToken = NounsToken(address(dao.nouns()));
+        deployUtils = createDeployUtils();
+        dao = INounsDAOLogicV3(deployUtils._deployDAOV3WithParams(24 hours));
+        nounsToken = INounsTokenExtra(address(dao.nouns()));
         minter = nounsToken.minter();
 
         auctionHouse = INounsAuctionHouseV2(minter);
@@ -73,8 +73,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 
         AuctionHouseUpgrader.upgradeAuctionHouse(
             address(dao.timelock()),
-            auctionHouseProxyAdmin,
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
+            deployUtils.auctionHouseProxyAdmin(),
+            address(auctionHouse)
         );
 
         rewards.registerClient();

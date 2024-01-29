@@ -2,21 +2,26 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
-import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
-import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
+import { SigUtils } from '../helpers/SigUtils.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
-import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
-import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
+import { INounsDAOExecutorV2, NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsToken } from '../../../contracts/interfaces/INounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { IDeployUtilsV3, DeployUtilsPrecompiled } from '../helpers/DeployUtilsPrecompiled.sol';
 
-abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
+interface INounsTokenExtra is INounsToken {
+    function minter() external view returns (address);
+
+    function delegate(address delegatee) external;
+
+    function totalSupply() external view returns (uint256);
+
+    function getCurrentVotes(address account) external view returns (uint96);
+}
+
+abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsPrecompiled, SigUtils {
+    IDeployUtilsV3 deployUtils;
+
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -66,9 +71,9 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         uint32 indexed clientId
     );
 
-    NounsToken nounsToken;
+    INounsTokenExtra nounsToken;
     INounsDAOLogicV3 dao;
-    NounsDAOExecutorV2 timelock;
+    INounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
     address minter;
@@ -79,10 +84,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     address forkEscrow;
 
     function setUp() public virtual {
-        dao = _deployDAOV3();
-        nounsToken = NounsToken(address(dao.nouns()));
+        deployUtils = createDeployUtils();
+        dao = INounsDAOLogicV3(address(deployUtils._deployDAOV3()));
+        nounsToken = INounsTokenExtra(address(dao.nouns()));
         minter = nounsToken.minter();
-        timelock = NounsDAOExecutorV2(payable(address(dao.timelock())));
+        timelock = INounsDAOExecutorV2(payable(address(dao.timelock())));
         forkEscrow = address(dao.forkEscrow());
     }
 
@@ -285,8 +291,8 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         uint256 expectedMinQuorumVotes,
         address[] memory expectedSigners
     ) internal {
-        uint256 expectedStartBlock = block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY;
-        uint256 expectedEndBlock = expectedStartBlock + VOTING_PERIOD;
+        uint256 expectedStartBlock = block.number + proposalUpdatablePeriodInBlocks + deployUtils.VOTING_DELAY();
+        uint256 expectedEndBlock = expectedStartBlock + deployUtils.VOTING_PERIOD();
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCreated(

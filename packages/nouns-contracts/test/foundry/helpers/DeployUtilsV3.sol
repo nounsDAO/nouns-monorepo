@@ -22,8 +22,8 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
-abstract contract DeployUtilsV3 is DeployUtils {
-    NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
+contract DeployUtilsV3 is DeployUtils {
+    NounsAuctionHouseProxyAdmin public auctionHouseProxyAdmin;
 
     function _createDAOV3Proxy(
         address timelock,
@@ -31,7 +31,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address vetoer,
         NounsDAOV3Types.NounsDAOParams memory daoParams,
         NounsDAOV3Types.DynamicQuorumParams memory dqParams
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) public returns (INounsDAOLogicV3 dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
         dao = INounsDAOLogicV3(
@@ -56,7 +56,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) public returns (INounsDAOLogicV3 dao) {
         dao = _createDAOV3Proxy(
             timelock,
             nounsToken,
@@ -82,7 +82,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         NounsToken nounsToken;
     }
 
-    function _deployDAOV3WithParams(uint256 auctionDuration) internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3WithParams(uint256 auctionDuration) public returns (INounsDAOLogicV3) {
         Temp memory t;
         t.timelock = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), ''))));
         t.timelock.initialize(address(1), TIMELOCK_DELAY);
@@ -165,7 +165,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         return dao;
     }
 
-    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3() public returns (INounsDAOLogicV3) {
         return _deployDAOV3WithParams(10 minutes);
     }
 }

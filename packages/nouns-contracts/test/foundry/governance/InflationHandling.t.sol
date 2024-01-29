@@ -1,15 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.15;
 
-import 'forge-std/Test.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
-import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { Utils } from '../helpers/Utils.sol';
-import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 
 abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
     uint256 constant proposalThresholdBPS_ = 678; // 6.78%
@@ -29,7 +25,7 @@ abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBas
         address vetoer
     ) internal override returns (INounsDAOLogicV3) {
         return
-            _createDAOV3Proxy(
+            deployUtils._createDAOV3Proxy(
                 timelock,
                 nounsToken,
                 vetoer,
@@ -37,8 +33,8 @@ abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBas
                     votingPeriod: votingPeriod,
                     votingDelay: votingDelay,
                     proposalThresholdBPS: proposalThresholdBPS_,
-                    lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
-                    objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
+                    lastMinuteWindowInBlocks: deployUtils.LAST_MINUTE_BLOCKS(),
+                    objectionPeriodDurationInBlocks: deployUtils.OBJECTION_PERIOD_BLOCKS(),
                     proposalUpdatablePeriodInBlocks: 0
                 }),
                 NounsDAOV3Types.DynamicQuorumParams({

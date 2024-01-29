@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.15;
 
+import { Test } from 'forge-std/Test.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from '../../contracts/interfaces/INounsToken.sol';
-import { DeployUtils } from './helpers/DeployUtils.sol';
+import { IDeployUtilsV3, DeployUtilsPrecompiled } from './helpers/DeployUtilsPrecompiled.sol';
 import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
-abstract contract NounsAuctionHouseBaseTest is DeployUtils {
+abstract contract NounsAuctionHouseBaseTest is DeployUtilsPrecompiled, Test {
     INounsAuctionHouse auctionHouse;
     INounsToken nouns;
     address noundersDAO = makeAddr('noundersDAO');
@@ -17,14 +18,17 @@ abstract contract NounsAuctionHouseBaseTest is DeployUtils {
     NounsAuctionHouseProxy auctionHouseProxy;
     NounsAuctionHouseProxyAdmin proxyAdmin;
     uint256[] nounIds;
+    IDeployUtilsV3 deployUtils;
 
     function setUp() public virtual {
-        (
-            NounsAuctionHouseProxy auctionHouseProxy_,
-            NounsAuctionHouseProxyAdmin proxyAdmin_
-        ) = _deployAuctionHouseV1AndToken(owner, noundersDAO, address(0));
-        auctionHouseProxy = auctionHouseProxy_;
-        proxyAdmin = proxyAdmin_;
+        deployUtils = createDeployUtils();
+        (address auctionHouseProxy_, address proxyAdmin_) = deployUtils._deployAuctionHouseV1AndToken(
+            owner,
+            noundersDAO,
+            address(0)
+        );
+        auctionHouseProxy = NounsAuctionHouseProxy(payable(auctionHouseProxy_));
+        proxyAdmin = NounsAuctionHouseProxyAdmin(proxyAdmin_);
 
         auctionHouse = INounsAuctionHouse(address(auctionHouseProxy_));
 
@@ -53,7 +57,7 @@ contract NounsAuctionHouse_GasSnapshot is NounsAuctionHouseBaseTest {
 contract NounsAuctionHouseV2_GasSnapshot is NounsAuctionHouse_GasSnapshot {
     function setUp() public virtual override {
         super.setUp();
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
+        AuctionHouseUpgrader.upgradeAuctionHouse(owner, address(proxyAdmin), address(auctionHouseProxy));
     }
 }
 
@@ -70,7 +74,7 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
 
     function setUp() public virtual override {
         super.setUp();
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionHouseProxy);
+        AuctionHouseUpgrader.upgradeAuctionHouse(owner, address(proxyAdmin), address(auctionHouseProxy));
         auctionHouseV2 = INounsAuctionHouseV2(address(auctionHouse));
 
         for (uint256 i = 1; i <= 200; ++i) {
