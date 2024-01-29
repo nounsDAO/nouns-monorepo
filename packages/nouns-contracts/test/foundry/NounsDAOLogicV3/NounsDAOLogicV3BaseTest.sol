@@ -25,7 +25,8 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         string[] signatures,
         bytes[] calldatas,
         string description,
-        string updateMessage
+        string updateMessage,
+        uint32 indexed clientId
     );
 
     event ProposalTransactionsUpdated(
@@ -35,14 +36,16 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string updateMessage
+        string updateMessage,
+        uint32 indexed clientId
     );
 
     event ProposalDescriptionUpdated(
         uint256 indexed id,
         address indexed proposer,
         string description,
-        string updateMessage
+        string updateMessage,
+        uint32 indexed clientId
     );
 
     event ProposalCreated(

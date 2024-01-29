@@ -821,7 +821,8 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             txs.signatures,
             txs.calldatas,
             'descriptionAfter',
-            'some update message'
+            'some update message',
+            0
         );
 
         vm.prank(proposer);

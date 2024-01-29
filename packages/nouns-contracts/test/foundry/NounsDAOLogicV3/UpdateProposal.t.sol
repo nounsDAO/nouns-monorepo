@@ -334,7 +334,8 @@ contract UpdateProposalTransactionsTest is UpdateProposalBaseTest {
             txsAfter.signatures,
             txsAfter.calldatas,
             'descriptionAfter',
-            'some update message'
+            'some update message',
+            0
         );
         updateProposal(
             proposer,
@@ -386,7 +387,8 @@ contract UpdateProposalTransactionsTest is UpdateProposalBaseTest {
             txsAfter.values,
             txsAfter.signatures,
             txsAfter.calldatas,
-            'some update message'
+            'some update message',
+            0
         );
         updateProposalTransactions(
             proposer,
@@ -416,7 +418,7 @@ contract UpdateProposalDescriptionTest is UpdateProposalBaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Updatable);
 
         vm.expectEmit(true, true, true, true);
-        emit ProposalDescriptionUpdated(proposalId, proposer, 'new description', 'update message');
+        emit ProposalDescriptionUpdated(proposalId, proposer, 'new description', 'update message', 0);
         vm.prank(proposer);
         dao.updateProposalDescription(proposalId, 'new description', 'update message');
     }

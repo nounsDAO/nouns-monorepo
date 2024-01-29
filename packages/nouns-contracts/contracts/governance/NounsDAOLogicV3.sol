@@ -311,7 +311,32 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string memory description,
         string memory updateMessage
     ) external {
-        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
+        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage, 0);
+    }
+
+    /**
+     * @notice Update a proposal transactions and description.
+     * Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     * @param clientId The client id for client rewards
+     */
+    function updateProposal(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description,
+        string memory updateMessage,
+        uint32 clientId
+    ) external {
+        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage, clientId);
     }
 
     /**
@@ -325,7 +350,23 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string calldata description,
         string calldata updateMessage
     ) external {
-        ds.updateProposalDescription(proposalId, description, updateMessage);
+        ds.updateProposalDescription(proposalId, description, updateMessage, 0);
+    }
+
+    /**
+     * @notice Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     * @param clientId The client id for client rewards
+     */
+    function updateProposalDescription(
+        uint256 proposalId,
+        string calldata description,
+        string calldata updateMessage,
+        uint32 clientId
+    ) external {
+        ds.updateProposalDescription(proposalId, description, updateMessage, clientId);
     }
 
     /**
@@ -345,7 +386,29 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory updateMessage
     ) external {
-        ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
+        ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage, 0);
+    }
+
+    /**
+     * @notice Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId Proposal's id
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param updateMessage Short message to explain the update
+     * @param clientId The client id for client rewards
+     */
+    function updateProposalTransactions(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory updateMessage,
+        uint32 clientId
+    ) external {
+        ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage, clientId);
     }
 
     /**
@@ -377,7 +440,44 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             proposerSignatures,
             NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
             description,
-            updateMessage
+            updateMessage,
+            0
+        );
+    }
+
+    /**
+     * @notice Update a proposal's transactions and description that was created with proposeBySigs.
+     * Only the proposer can update it, during the updateable period.
+     * Requires the original signers to sign the update.
+     * @param proposalId Proposal's id
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @param targets Updated target addresses for proposal calls
+     * @param values Updated eth values for proposal calls
+     * @param signatures Updated function signatures for proposal calls
+     * @param calldatas Updated calldatas for proposal calls
+     * @param description Updated description of the proposal
+     * @param updateMessage Short message to explain the update
+     * @param clientId The client id for client rewards
+     */
+    function updateProposalBySigs(
+        uint256 proposalId,
+        ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description,
+        string memory updateMessage,
+        uint32 clientId
+    ) external {
+        ds.updateProposalBySigs(
+            proposalId,
+            proposerSignatures,
+            NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+            description,
+            updateMessage,
+            clientId
         );
     }
 

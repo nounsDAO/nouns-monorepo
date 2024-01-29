@@ -356,25 +356,6 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "oldImplementation",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
-      }
-    ],
-    "name": "NewImplementation",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
         "name": "oldPendingAdmin",
         "type": "address"
       },
@@ -674,6 +655,12 @@
         "internalType": "string",
         "name": "updateMessage",
         "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
       }
     ],
     "name": "ProposalDescriptionUpdated",
@@ -793,6 +780,12 @@
         "internalType": "string",
         "name": "updateMessage",
         "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
       }
     ],
     "name": "ProposalTransactionsUpdated",
@@ -867,6 +860,12 @@
         "internalType": "string",
         "name": "updateMessage",
         "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
       }
     ],
     "name": "ProposalUpdated",
@@ -1472,7 +1471,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
+        "internalType": "struct NounsDAOV3Types.DynamicQuorumParams",
         "name": "params",
         "type": "tuple"
       }
@@ -1695,7 +1694,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
+        "internalType": "struct NounsDAOV3Types.DynamicQuorumParams",
         "name": "",
         "type": "tuple"
       }
@@ -1736,7 +1735,7 @@
             "type": "uint96"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.Receipt",
+        "internalType": "struct NounsDAOV3Types.Receipt",
         "name": "",
         "type": "tuple"
       }
@@ -1804,7 +1803,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.NounsDAOParams",
+        "internalType": "struct NounsDAOV3Types.NounsDAOParams",
         "name": "daoParams_",
         "type": "tuple"
       },
@@ -1826,7 +1825,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
+        "internalType": "struct NounsDAOV3Types.DynamicQuorumParams",
         "name": "dynamicQuorumParams_",
         "type": "tuple"
       }
@@ -2005,8 +2004,18 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "proposalId",
+        "name": "firstProposalId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastProposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32[]",
+        "name": "votingClientIds",
+        "type": "uint32[]"
       }
     ],
     "name": "proposalDataForRewards",
@@ -2049,19 +2058,31 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint256",
-            "name": "numSigners",
-            "type": "uint256"
-          },
-          {
             "internalType": "uint32",
             "name": "clientId",
             "type": "uint32"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint32",
+                "name": "votes",
+                "type": "uint32"
+              },
+              {
+                "internalType": "uint32",
+                "name": "txs",
+                "type": "uint32"
+              }
+            ],
+            "internalType": "struct NounsDAOV3Types.ClientVoteData[]",
+            "name": "voteData",
+            "type": "tuple[]"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ProposalForRewards",
+        "internalType": "struct NounsDAOV3Types.ProposalForRewards[]",
         "name": "",
-        "type": "tuple"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -2147,7 +2168,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ClientVoteData",
+        "internalType": "struct NounsDAOV3Types.ClientVoteData",
         "name": "",
         "type": "tuple"
       }
@@ -2183,7 +2204,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ClientVoteData[]",
+        "internalType": "struct NounsDAOV3Types.ClientVoteData[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -2279,7 +2300,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.ProposalCondensed",
+        "internalType": "struct NounsDAOV3Types.ProposalCondensedV2",
         "name": "",
         "type": "tuple"
       }
@@ -2400,7 +2421,7 @@
             "type": "bool"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ProposalCondensed",
+        "internalType": "struct NounsDAOV3Types.ProposalCondensed",
         "name": "",
         "type": "tuple"
       }
@@ -2511,7 +2532,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ProposerSignature[]",
+        "internalType": "struct NounsDAOV3Types.ProposerSignature[]",
         "name": "proposerSignatures",
         "type": "tuple[]"
       },
@@ -2572,7 +2593,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ProposerSignature[]",
+        "internalType": "struct NounsDAOV3Types.ProposerSignature[]",
         "name": "proposerSignatures",
         "type": "tuple[]"
       },
@@ -2699,12 +2720,12 @@
                 "type": "uint32"
               }
             ],
-            "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
+            "internalType": "struct NounsDAOV3Types.DynamicQuorumParams",
             "name": "params",
             "type": "tuple"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.DynamicQuorumParamsCheckpoint[]",
+        "internalType": "struct NounsDAOV3Types.DynamicQuorumParamsCheckpoint[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -2747,12 +2768,12 @@
                 "type": "uint32"
               }
             ],
-            "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
+            "internalType": "struct NounsDAOV3Types.DynamicQuorumParams",
             "name": "params",
             "type": "tuple"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.DynamicQuorumParamsCheckpoint",
+        "internalType": "struct NounsDAOV3Types.DynamicQuorumParamsCheckpoint",
         "name": "",
         "type": "tuple"
       }
@@ -2803,7 +2824,7 @@
     "name": "state",
     "outputs": [
       {
-        "internalType": "enum NounsDAOStorageV3.ProposalState",
+        "internalType": "enum NounsDAOV3Types.ProposalState",
         "name": "",
         "type": "uint8"
       }
@@ -2835,6 +2856,54 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
+      }
+    ],
+    "name": "updateProposal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -2905,7 +2974,77 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct NounsDAOStorageV3.ProposerSignature[]",
+        "internalType": "struct NounsDAOV3Types.ProposerSignature[]",
+        "name": "proposerSignatures",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
+      }
+    ],
+    "name": "updateProposalBySigs",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "sig",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "signer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expirationTimestamp",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct NounsDAOV3Types.ProposerSignature[]",
         "name": "proposerSignatures",
         "type": "tuple[]"
       },
@@ -2941,6 +3080,34 @@
       }
     ],
     "name": "updateProposalBySigs",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
+      }
+    ],
+    "name": "updateProposalDescription",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -2999,6 +3166,49 @@
         "internalType": "string",
         "name": "updateMessage",
         "type": "string"
+      }
+    ],
+    "name": "updateProposalTransactions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
       }
     ],
     "name": "updateProposalTransactions",
