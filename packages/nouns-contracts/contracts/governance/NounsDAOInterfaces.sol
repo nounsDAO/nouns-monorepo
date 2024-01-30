@@ -146,8 +146,7 @@ interface NounsDAOEventsV3 {
         string[] signatures,
         bytes[] calldatas,
         string description,
-        string updateMessage,
-        uint32 indexed clientId
+        string updateMessage
     );
 
     /// @notice Emitted when a proposal's transactions are updated
@@ -158,8 +157,7 @@ interface NounsDAOEventsV3 {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string updateMessage,
-        uint32 indexed clientId
+        string updateMessage
     );
 
     /// @notice Emitted when a proposal's description is updated
@@ -167,8 +165,7 @@ interface NounsDAOEventsV3 {
         uint256 indexed id,
         address indexed proposer,
         string description,
-        string updateMessage,
-        uint32 indexed clientId
+        string updateMessage
     );
 
     /// @notice Emitted when a proposal is set to have an objection period
@@ -422,12 +419,10 @@ interface NounsDAOV3Types {
     struct Proposal {
         /// @notice Unique id for looking up a proposal
         uint32 id;
-        /// @notice client id for proposal creation rewards
+        /// @notice client id for rewards
         uint32 clientId;
-        /// @notice client id for proposal update rewards
-        uint32 updateClientId;
         /// @notice currently unused
-        uint160 _gap;
+        uint192 _gap;
         /// @notice Creator of the proposal
         address proposer;
         /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo

@@ -231,7 +231,6 @@ library NounsDAOV3Proposals {
      * @param calldatas Updated calldatas for proposal calls
      * @param description Updated description of the proposal
      * @param updateMessage Short message to explain the update
-     * @param clientId The client id for client rewards
      */
     function updateProposal(
         NounsDAOV3Types.StorageV3 storage ds,
@@ -241,11 +240,9 @@ library NounsDAOV3Proposals {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        string memory updateMessage,
-        uint32 clientId
+        string memory updateMessage
     ) external {
         updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
-        ds._proposals[proposalId].updateClientId = clientId;
 
         emit NounsDAOEventsV3.ProposalUpdated(
             proposalId,
@@ -255,8 +252,7 @@ library NounsDAOV3Proposals {
             signatures,
             calldatas,
             description,
-            updateMessage,
-            clientId
+            updateMessage
         );
     }
 
@@ -268,7 +264,6 @@ library NounsDAOV3Proposals {
      * @param signatures Updated function signatures for proposal calls
      * @param calldatas Updated calldatas for proposal calls
      * @param updateMessage Short message to explain the update
-     * @param clientId The client id for client rewards
      */
     function updateProposalTransactions(
         NounsDAOV3Types.StorageV3 storage ds,
@@ -277,11 +272,9 @@ library NounsDAOV3Proposals {
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
-        string memory updateMessage,
-        uint32 clientId
+        string memory updateMessage
     ) external {
         updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
-        ds._proposals[proposalId].updateClientId = clientId;
 
         emit NounsDAOEventsV3.ProposalTransactionsUpdated(
             proposalId,
@@ -290,8 +283,7 @@ library NounsDAOV3Proposals {
             values,
             signatures,
             calldatas,
-            updateMessage,
-            clientId
+            updateMessage
         );
     }
 
@@ -319,20 +311,17 @@ library NounsDAOV3Proposals {
      * @param proposalId Proposal's id
      * @param description Updated description of the proposal
      * @param updateMessage Short message to explain the update
-     * @param clientId The client id for client rewards
      */
     function updateProposalDescription(
         NounsDAOV3Types.StorageV3 storage ds,
         uint256 proposalId,
         string calldata description,
-        string calldata updateMessage,
-        uint32 clientId
+        string calldata updateMessage
     ) external {
         NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
         checkProposalUpdatable(ds, proposalId, proposal);
-        ds._proposals[proposalId].updateClientId = clientId;
 
-        emit NounsDAOEventsV3.ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage, clientId);
+        emit NounsDAOEventsV3.ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
     }
 
     /**
@@ -352,8 +341,7 @@ library NounsDAOV3Proposals {
         NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description,
-        string memory updateMessage,
-        uint32 clientId
+        string memory updateMessage
     ) external {
         checkProposalTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
@@ -385,7 +373,6 @@ library NounsDAOV3Proposals {
         proposal.values = txs.values;
         proposal.signatures = txs.signatures;
         proposal.calldatas = txs.calldatas;
-        proposal.updateClientId = clientId;
 
         emit NounsDAOEventsV3.ProposalUpdated(
             proposalId,
@@ -395,8 +382,7 @@ library NounsDAOV3Proposals {
             txs.signatures,
             txs.calldatas,
             description,
-            updateMessage,
-            clientId
+            updateMessage
         );
     }
 
