@@ -7,7 +7,7 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAuctionMinBidIncPercentage, useAuctionReservePrice } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
@@ -28,15 +28,6 @@ const computeMinimumNextBid = (
   return currentBid
     .times(minBidIncPercentage.div(100).plus(1))
     .decimalPlaces(0, BigNumber.ROUND_UP);
-};
-
-const minBidEth = (minBid: BigNumber): string => {
-  if (minBid.isZero()) {
-    return '0.01';
-  }
-
-  const eth = utils.formatEther(EthersBN.from(minBid.toString()));
-  return new BigNumber(eth).toFixed(2, BigNumber.ROUND_CEIL);
 };
 
 const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
@@ -77,6 +68,16 @@ const Bid: React.FC<{
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  const reservePrice = useAuctionReservePrice();
+  const minBidEth = (minBid: BigNumber): string => {
+    if (minBid.isZero()) {
+      return reservePrice ? utils.formatEther(reservePrice.toNumber()).toString() : '0.00'
+    }
+
+    const eth = utils.formatEther(EthersBN.from(minBid.toString()));
+    return new BigNumber(eth).toFixed(2, BigNumber.ROUND_CEIL);
+  };
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
