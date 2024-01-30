@@ -77,7 +77,7 @@ interface INounsAuctionHouseV2 {
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, uint32 indexed clientId);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 

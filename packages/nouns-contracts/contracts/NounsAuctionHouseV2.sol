@@ -144,7 +144,7 @@ contract NounsAuctionHouseV2 is
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < _timeBuffer;
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended, clientId);
 
         if (extended) {
             auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + _timeBuffer);

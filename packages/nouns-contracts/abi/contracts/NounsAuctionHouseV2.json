@@ -46,6 +46,12 @@
         "internalType": "bool",
         "name": "extended",
         "type": "bool"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "clientId",
+        "type": "uint32"
       }
     ],
     "name": "AuctionBid",
@@ -482,6 +488,62 @@
       }
     ],
     "name": "getSettlements",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint32",
+            "name": "blockTimestamp",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "winner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nounId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint32",
+            "name": "clientId",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct INounsAuctionHouseV2.Settlement[]",
+        "name": "settlements",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "skipEmptyValues",
+        "type": "bool"
+      }
+    ],
+    "name": "getSettlementsFromIdtoTimestamp",
     "outputs": [
       {
         "components": [

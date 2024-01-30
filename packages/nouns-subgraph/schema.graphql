@@ -99,6 +99,9 @@ type Bid @entity {
 
   "The timestamp of the block the bid is in"
   blockTimestamp: BigInt!
+
+  "The ID of the client that facilitated this bid"
+  clientId: Int!
 }
 
 type Auction @entity {
