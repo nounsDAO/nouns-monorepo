@@ -262,14 +262,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         return tokenId;
     }
 
-    function requireProposalEligibleForRewards(NounsDAOV3Types.ProposalCondensed memory proposal) internal view {
-        require(proposal.forVotes >= proposal.quorumVotes, 'must reach quorum');
-
-        // voting has ended
-        require(block.number > proposal.endBlock, 'voting must end');
-        require(block.number > proposal.updatePeriodEndBlock, 'voting must end');
-    }
-
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
         return a > b ? a : b;
     }
