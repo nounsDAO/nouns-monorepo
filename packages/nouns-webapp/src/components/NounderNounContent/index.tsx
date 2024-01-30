@@ -100,13 +100,16 @@ const NounderNounContent: React.FC<{
                 ` ${nounContentClasses.bidRow}`
               }
             >
-              <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
+              <Trans>Every 10th ATX Noun is transferred to the </Trans>{' '}
               <Link to="/vote" className={nounContentClasses.link}>
-                <Trans>Nouns DAO</Trans>
+                <Trans>ATX DAO Treasury</Trans>
               </Link>
               .{' '}
               <Trans>
-                This is where you would change the text! Remove me and add whatever you want! 
+                This means that the future of these ATX Nouns is up to the community to decide. 
+                A few examples include scholarships, competitions, giveaways, treasury swaps,
+                contributor rewards, or even selling on a secondary marketplace. These are just
+                example ideas to get your gears spinning. If you have another idea, propose it!
               </Trans>
             </li>
           </ul>
