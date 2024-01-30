@@ -441,6 +441,40 @@ contract NounsAuctionHouseV2 is
         require(auctionCount == actualCount, 'Not enough history');
     }
 
+    function getSettlementsFromIdtoTimestamp(
+        uint256 startId,
+        uint256 endTimestamp,
+        bool skipEmptyValues
+    ) public view returns (Settlement[] memory settlements) {
+        uint256 maxId = auctionStorage.nounId;
+        settlements = new Settlement[](maxId - startId + 1);
+        uint256 actualCount = 0;
+        SettlementState memory settlementState;
+        for (uint256 id = startId; id <= maxId; ++id) {
+            settlementState = settlementHistory[id];
+
+            if (skipEmptyValues && settlementState.blockTimestamp <= 1) continue;
+
+            if (settlementState.blockTimestamp > endTimestamp) break;
+
+            settlements[actualCount] = Settlement({
+                blockTimestamp: settlementState.blockTimestamp,
+                amount: uint64PriceToUint256(settlementState.amount),
+                winner: settlementState.winner,
+                nounId: id,
+                clientId: settlementState.clientId
+            });
+            ++actualCount;
+        }
+
+        if (settlements.length > actualCount) {
+            // this assembly trims the settlements array, getting rid of unused cells
+            assembly {
+                mstore(settlements, actualCount)
+            }
+        }
+    }
+
     /**
      * @notice Get a range of past auction settlements.
      * @dev Returns prices in chronological order, as opposed to `getSettlements(count)` which returns prices in reverse order.
@@ -476,7 +510,7 @@ contract NounsAuctionHouseV2 is
         }
 
         if (settlements.length > actualCount) {
-            // this assembly trims the observations array, getting rid of unused cells
+            // this assembly trims the settlements array, getting rid of unused cells
             assembly {
                 mstore(settlements, actualCount)
             }

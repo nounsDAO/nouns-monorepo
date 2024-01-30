@@ -203,7 +203,6 @@ contract ProposalRewardsHappyFlow is RewardsBaseTest {
 
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: uint32(proposalId),
-            lastAuctionedNounId: nounOnAuctionWhenLastProposalWasCreated,
             votingClientIds: clientIds
         });
     }

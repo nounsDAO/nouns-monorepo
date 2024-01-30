@@ -149,12 +149,11 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         vm.warp(block.timestamp + 2 weeks + 1);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         vm.expectRevert('auctionRevenue must be > 0');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -165,12 +164,11 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         vm.warp(block.timestamp + 2 weeks + 1);
         uint32 proposalId = proposeAndVote(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         vm.expectRevert('all proposals must be done with voting');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -184,11 +182,10 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         vm.warp(startTimestamp + 2 weeks + 1);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -205,11 +202,10 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         propose(bidder2, address(1), 1 ether, '', '', 'my proposal', clientId1);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId2);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -227,11 +223,10 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         proposeVoteAndEndVotingPeriod(clientId1);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId2);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -249,13 +244,12 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
 
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
 
         votingClientIds = [0];
         vm.expectRevert('not enough time passed');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -283,12 +277,11 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
 
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
 
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
         assertEq(rewards.clientBalances(clientId1), 0.15 ether); // 15 eth * 1%
@@ -325,7 +318,6 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
         vm.expectRevert('at least one eligible proposal');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -337,7 +329,6 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
 
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -357,11 +348,10 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         lastProposalCreationTimestamp = block.timestamp;
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [0];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -374,11 +364,10 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         vm.warp(lastProposalCreationTimestamp + 2 weeks - 10);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         vm.expectRevert('not enough time passed');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
     }
@@ -389,10 +378,9 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         vm.warp(lastProposalCreationTimestamp + 2 weeks + 10);
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -418,11 +406,10 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
         vote(bidder1, proposalId, 1, 'i support', clientId1);
         mineBlocks(VOTING_PERIOD);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [clientId1];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 
@@ -440,11 +427,10 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
 
         mineBlocks(VOTING_PERIOD);
 
-        uint256 lastNounId = settleAuction();
+        settleAuction();
         votingClientIds = [clientId1, clientId2];
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
-            lastAuctionedNounId: lastNounId,
             votingClientIds: votingClientIds
         });
 

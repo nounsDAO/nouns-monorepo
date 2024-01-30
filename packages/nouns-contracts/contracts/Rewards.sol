@@ -67,12 +67,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         params = rewardParams;
     }
 
-    struct Temp {
-        uint256 numEligibleVotes;
-        uint256 rewardPerProposal;
-        uint256 rewardPerVote;
-    }
-
     function setParams(RewardParams calldata newParams) public onlyOwner {
         params = newParams;
     }
@@ -99,19 +93,20 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         }
     }
 
+    struct Temp {
+        uint256 numEligibleVotes;
+        uint256 rewardPerProposal;
+        uint256 rewardPerVote;
+        uint256 proposalRewardForPeriod;
+    }
+
     /**
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
-     * @param lastAuctionedNounId the noun id that was auctioned when proposal with id `lastProposalId` was created.
-     * The auction revenue up to this noun id are included in the bounty.
      * @param votingClientIds array of client ids that were used to vote on of all eligible the eligible proposals in
      * this rewards distribution
      */
-    function updateRewardsForProposalWritingAndVoting(
-        uint32 lastProposalId,
-        uint256 lastAuctionedNounId,
-        uint32[] calldata votingClientIds
-    ) public {
+    function updateRewardsForProposalWritingAndVoting(uint32 lastProposalId, uint32[] calldata votingClientIds) public {
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
         require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
 
@@ -124,19 +119,18 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
         NounsDAOV3Types.ProposalForRewards memory lastProposal = proposals[proposals.length - 1];
 
-        uint256 auctionRevenue = getAuctionRevenueBetweenNouns({
+        (uint256 auctionRevenue, uint256 lastAuctionId) = getAuctionRevenue({
             firstNounId: nextProposalRewardFirstAuctionId,
-            oneAfterLastNounId: lastAuctionedNounId,
             endTimestamp: lastProposal.creationTimestamp
         });
-        nextProposalRewardFirstAuctionId = lastAuctionedNounId;
+        nextProposalRewardFirstAuctionId = lastAuctionId + 1;
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
-        uint256 proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10_000;
-        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
-
         Temp memory t;
+
+        t.proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10_000;
+        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
 
         uint16 proposalEligibilityQuorumBps_ = params.proposalEligibilityQuorumBps;
 
@@ -181,7 +175,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         lastProposalRewardsUpdate = lastProposal.creationTimestamp;
 
         // Calculate the reward per proposal and per vote
-        t.rewardPerProposal = proposalRewardForPeriod / numEligibleProposals;
+        t.rewardPerProposal = t.proposalRewardForPeriod / numEligibleProposals;
         t.rewardPerVote = votingRewardForPeriod / t.numEligibleVotes;
 
         //// Second loop over the proposals:
@@ -234,24 +228,21 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         uint32[] votingClientIds;
     }
 
-    function getAuctionRevenueBetweenNouns(
+    function getAuctionRevenue(
         uint256 firstNounId,
-        uint256 oneAfterLastNounId,
         uint256 endTimestamp
-    ) internal view returns (uint256) {
-        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlements(
+    ) internal view returns (uint256 sumRevenue, uint256 lastAuctionId) {
+        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlementsFromIdtoTimestamp(
             firstNounId,
-            oneAfterLastNounId + 1,
+            endTimestamp,
             true
         );
-        require(s[s.length - 2].blockTimestamp <= endTimestamp, 'second to last auction must be before end ts');
-        require(s[s.length - 1].blockTimestamp > endTimestamp, 'last auction must be after end ts');
-
-        return sumAuctionsExcludingLast(s);
+        sumRevenue = sumAuctions(s);
+        lastAuctionId = s[s.length - 1].nounId;
     }
 
-    function sumAuctionsExcludingLast(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
-        for (uint256 i = 0; i < s.length - 1; ++i) {
+    function sumAuctions(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
+        for (uint256 i = 0; i < s.length; ++i) {
             sum += s[i].amount;
         }
     }

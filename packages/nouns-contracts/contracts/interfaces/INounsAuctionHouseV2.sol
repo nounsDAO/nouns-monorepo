@@ -124,6 +124,12 @@ interface INounsAuctionHouseV2 {
         bool skipEmptyValues
     ) external view returns (Settlement[] memory settlements);
 
+    function getSettlementsFromIdtoTimestamp(
+        uint256 startId,
+        uint256 endTimestamp,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements);
+
     function warmUpSettlementState(uint256[] calldata nounIds) external;
 
     function duration() external view returns (uint256);
