@@ -39,10 +39,6 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
     mapping(uint32 clientId => uint256 balance) public clientBalances;
 
-    struct ClientData {
-        address payoutWallet;
-    }
-
     struct RewardParams {
         uint32 minimumRewardPeriod;
         uint8 numProposalsEnoughForReward;
