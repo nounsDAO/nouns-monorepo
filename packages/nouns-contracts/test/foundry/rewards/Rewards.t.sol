@@ -121,8 +121,8 @@ contract AuctionRewards is RewardsBaseTest {
 
         rewards.updateRewardsForAuctions(nounId);
 
-        assertEq(rewards.clientBalances(CLIENT_ID), 0.01 ether);
-        assertEq(rewards.clientBalances(CLIENT_ID2), 0.02 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.01 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
     }
 }
 

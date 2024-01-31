@@ -66,6 +66,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient();
         clientId2 = rewards.registerClient();
+
+        erc20Mock.mint(address(rewards), 100 ether);
     }
 
     function _setUpDAO() internal {
@@ -189,7 +191,7 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.15 ether); // 15 eth * 1%
+        assertEq(rewards.clientBalance(clientId1), 0.15 ether); // 15 eth * 1%
     }
 
     function test_doesntRewardIneligibleProposals() public {
@@ -209,8 +211,8 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0 ether);
-        assertEq(rewards.clientBalances(clientId2), 0.15 ether); // 15 eth * 1%
+        assertEq(rewards.clientBalance(clientId1), 0 ether);
+        assertEq(rewards.clientBalance(clientId2), 0.15 ether); // 15 eth * 1%
     }
 
     function test_splitsRewardsBetweenEligibleProposals() public {
@@ -230,8 +232,8 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.075 ether); // 15 eth * 1% / 2
-        assertEq(rewards.clientBalances(clientId2), 0.075 ether); // 15 eth * 1% / 2
+        assertEq(rewards.clientBalance(clientId1), 0.075 ether); // 15 eth * 1% / 2
+        assertEq(rewards.clientBalance(clientId2), 0.075 ether); // 15 eth * 1% / 2
     }
 
     function test_doesntRewardIfMinimumPeriodHasntPassed() public {
@@ -284,7 +286,7 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
             lastProposalId: proposalId,
             votingClientIds: votingClientIds
         });
-        assertEq(rewards.clientBalances(clientId1), 0.15 ether); // 15 eth * 1%
+        assertEq(rewards.clientBalance(clientId1), 0.15 ether); // 15 eth * 1%
     }
 }
 
@@ -355,7 +357,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.1 ether); // 10 eth * 1%
+        assertEq(rewards.clientBalance(clientId1), 0.1 ether); // 10 eth * 1%
     }
 
     function test_revertsIfMinimumPeriodHasntPassedAgain() public {
@@ -384,7 +386,47 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.15 ether);
+        assertEq(rewards.clientBalance(clientId1), 0.15 ether);
+    }
+
+    function test_clientCanWithdrawBalance() public {
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(clientId1, 0.05 ether, client1Wallet);
+
+        assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
+    }
+
+    function test_withdrawingEntireBalanceLeaves1Wei() public {
+        uint256 balance = rewards.clientBalance(clientId1);
+
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(clientId1, balance, client1Wallet);
+
+        assertEq(rewards.clientBalance(clientId1), 0);
+        assertEq(rewards._clientBalances(clientId1), 1);
+    }
+
+    function test_withdrawingMoreThanBalanceReverts() public {
+        uint256 balance = rewards.clientBalance(clientId1);
+        vm.prank(client1Wallet);
+        vm.expectRevert('amount too large');
+        rewards.withdrawClientBalance(clientId1, balance + 1, client1Wallet);
+    }
+
+    function test_withdrawingUpdatesBalance() public {
+        uint256 balance = rewards.clientBalance(clientId1);
+
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(clientId1, balance, client1Wallet);
+
+        vm.prank(client1Wallet);
+        vm.expectRevert('amount too large');
+        rewards.withdrawClientBalance(clientId1, 1, client1Wallet);
+    }
+
+    function test_withdraw_revertsIfNotClientIdOwner() public {
+        vm.expectRevert('must be client NFT owner');
+        rewards.withdrawClientBalance(clientId1, 1, client1Wallet);
     }
 }
 
@@ -413,7 +455,7 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.075 ether); // 15 eth * 0.5%
+        assertEq(rewards.clientBalance(clientId1), 0.075 ether); // 15 eth * 0.5%
     }
 
     function test_rewardSplitBetweenTwoClients() public {
@@ -434,8 +476,8 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
             votingClientIds: votingClientIds
         });
 
-        assertEq(rewards.clientBalances(clientId1), 0.06 ether); // 15 eth * 0.5% * (8/10)
-        assertEq(rewards.clientBalances(clientId2), 0.015 ether); // 15 eth * 0.5% * (2/10)
+        assertEq(rewards.clientBalance(clientId1), 0.06 ether); // 15 eth * 0.5% * (8/10)
+        assertEq(rewards.clientBalance(clientId2), 0.015 ether); // 15 eth * 0.5% * (2/10)
     }
 
     function test_revertsIfNotAllVotesAreAccounted() public {

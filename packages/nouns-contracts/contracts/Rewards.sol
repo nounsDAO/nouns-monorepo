@@ -37,7 +37,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
     IERC20 public ethToken; // TODO make configurable
 
-    mapping(uint32 clientId => uint256 balance) public clientBalances;
+    mapping(uint32 clientId => uint256 balance) public _clientBalances;
 
     struct RewardParams {
         uint32 minimumRewardPeriod;
@@ -88,7 +88,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
             // TODO maybe can be optimized to one call with large range
             settlement = auctionHouse.getSettlements(nounId, nounId + 1, false)[0];
             if (settlement.clientId > 0) {
-                clientBalances[settlement.clientId] += (settlement.amount * params.auctionRewardBps) / 10_000;
+                _clientBalances[settlement.clientId] += (settlement.amount * params.auctionRewardBps) / 10_000;
             }
         }
     }
@@ -190,7 +190,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
             uint32 clientId = proposals[i].clientId;
             if (clientId != 0) {
-                clientBalances[clientId] += t.rewardPerProposal;
+                _clientBalances[clientId] += t.rewardPerProposal;
             }
 
             uint256 votesInProposal;
@@ -200,7 +200,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
                 clientId = votingClientIds[j];
                 votes = voteData[j].votes;
                 if (clientId != 0) {
-                    clientBalances[clientId] += votes * t.rewardPerVote;
+                    _clientBalances[clientId] += votes * t.rewardPerVote;
                 }
                 votesInProposal += votes;
             }
@@ -211,10 +211,20 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         }
     }
 
+    /**
+     * @notice Withdraws the balance of a client
+     * @dev The caller must be the owner of the NFT with id `clientId`
+     * @dev The maximum value of `amount` is one less than in `_clientBalances[clientId]`.
+     * This in order to leave 1 wei in storage and avoid expensive gas writes in future balance increases.
+     * @param clientId Which client balance to withdraw
+     * @param amount amount of withdraw
+     * @param to the address to withdraw to
+     */
     function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public {
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
+        require(amount < _clientBalances[clientId], 'amount too large');
 
-        clientBalances[clientId] -= amount;
+        _clientBalances[clientId] -= amount;
 
         ethToken.transfer(to, amount);
     }
@@ -247,10 +257,30 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         }
     }
 
+    /**
+     * @notice Register a client, mints an NFT and assigns a clientId
+     * @return uint32 the newly assigned clientId
+     */
     function registerClient() public returns (uint32) {
         uint32 tokenId = nextTokenId++;
         _mint(msg.sender, tokenId);
+
+        // Increase the balance by one wei so that the slot is non zero when increased in the future
+        _clientBalances[tokenId] += 1;
+
         return tokenId;
+    }
+
+    /**
+     * @notice Returns the withdrawable balance of client with id `clientId`
+     */
+    function clientBalance(uint32 clientId) public view returns (uint256) {
+        uint256 balance = _clientBalances[clientId];
+        if (balance > 0) {
+            // accounting for the extra 1 wei added to the balance for gas optimizations
+            balance--;
+        }
+        return balance;
     }
 
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
