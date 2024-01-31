@@ -326,23 +326,20 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
-     * @notice Warm up the settlement state for a list of Noun IDs.
+     * @notice Warm up the settlement state for a range of Noun IDs.
      * @dev Helps lower the gas cost of auction settlement when storing settlement data
      * thanks to the state slot being non-zero.
      * @dev Only writes to slots where blockTimestamp is zero, meaning it will not overwrite existing data.
-     * @param nounIds The list of Noun IDs whose settlement slot to warm up.
+     * @dev Skips Nounder reward nouns.
+     * @param startId the first Noun ID to warm up.
+     * @param endId end Noun ID (up to, but not including).
      */
-    function warmUpSettlementState(uint256[] calldata nounIds) external {
-        uint256 nounIdCount = nounIds.length;
-        SettlementState storage settlementState;
-        for (uint256 i; i < nounIdCount; ) {
-            settlementState = settlementHistory[nounIds[i]];
+    function warmUpSettlementState(uint256 startId, uint256 endId) external {
+        for (uint256 i = startId; i < endId; ++i) {
+            SettlementState storage settlementState = settlementHistory[i];
             if (settlementState.blockTimestamp == 0) {
                 settlementState.blockTimestamp = 1;
                 settlementState.slotWarmedUp = true;
-            }
-            unchecked {
-                ++i;
             }
         }
     }

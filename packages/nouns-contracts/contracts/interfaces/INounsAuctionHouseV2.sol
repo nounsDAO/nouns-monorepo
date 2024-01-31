@@ -142,7 +142,7 @@ interface INounsAuctionHouseV2 {
         bool skipEmptyValues
     ) external view returns (Settlement[] memory settlements);
 
-    function warmUpSettlementState(uint256[] calldata nounIds) external;
+    function warmUpSettlementState(uint256 startId, uint256 endId) external;
 
     function duration() external view returns (uint256);
 

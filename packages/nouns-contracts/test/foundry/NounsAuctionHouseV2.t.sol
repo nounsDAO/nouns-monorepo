@@ -644,8 +644,7 @@ contract NoracleTest_GapInHistoricPrices_AfterWarmUp_Test is NoracleBaseTest {
     function setUp() public override {
         super.setUp();
 
-        nounIds = [0, 1, 2, 3, 4, 5, 6];
-        auction.warmUpSettlementState(nounIds);
+        auction.warmUpSettlementState(0, 7);
 
         bidAndWinCurrentAuction(bidder, 1 ether); // settle noun 1
 

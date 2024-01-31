@@ -60,8 +60,7 @@ contract NounsAuctionHouseV2_GasSnapshot is NounsAuctionHouse_GasSnapshot {
 contract NounsAuctionHouseV2WarmedUp_GasSnapshot is NounsAuctionHouseV2_GasSnapshot {
     function setUp() public override {
         super.setUp();
-        nounIds = [1, 2, 3];
-        INounsAuctionHouseV2(address(auctionHouse)).warmUpSettlementState(nounIds);
+        INounsAuctionHouseV2(address(auctionHouse)).warmUpSettlementState(1, 4);
     }
 }
 
@@ -106,10 +105,6 @@ contract NounsAuctionHouseV2_HistoricPrices_GasSnapshot is NounsAuctionHouseBase
     }
 
     function test_warmUp() public {
-        uint256[] memory nounIds = new uint256[](1000);
-        for (uint256 i; i < 1000; ++i) {
-            nounIds[i] = i;
-        }
-        auctionHouseV2.warmUpSettlementState(nounIds);
+        auctionHouseV2.warmUpSettlementState(0, 1000);
     }
 }
