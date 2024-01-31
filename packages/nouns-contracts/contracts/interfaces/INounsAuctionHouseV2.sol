@@ -58,8 +58,10 @@ interface INounsAuctionHouseV2 {
         uint64 amount;
         // The address of the auction winner.
         address winner;
-        // ID of the client that facilitated the winning bid, used for client rewards
+        // ID of the client that facilitated the winning bid, used for client rewards.
         uint32 clientId;
+        // Used only to warm up the storage slot for clientId without setting the clientId value.
+        bool slotWarmedUp;
     }
 
     struct Settlement {

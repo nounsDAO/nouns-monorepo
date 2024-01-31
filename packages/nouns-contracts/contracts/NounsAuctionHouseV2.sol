@@ -283,7 +283,8 @@ contract NounsAuctionHouseV2 is
             blockTimestamp: uint32(block.timestamp),
             amount: ethPriceToUint64(_auction.amount),
             winner: _auction.bidder,
-            clientId: _auction.clientId
+            clientId: _auction.clientId,
+            slotWarmedUp: false
         });
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount, _auction.clientId);
@@ -326,7 +327,8 @@ contract NounsAuctionHouseV2 is
                 blockTimestamp: settlements[i].blockTimestamp,
                 amount: ethPriceToUint64(settlements[i].amount),
                 winner: settlements[i].winner,
-                clientId: settlements[i].clientId
+                clientId: settlements[i].clientId,
+                slotWarmedUp: false
             });
 
             nounIds[i] = settlements[i].nounId;
@@ -350,6 +352,7 @@ contract NounsAuctionHouseV2 is
             settlementState = settlementHistory[nounIds[i]];
             if (settlementState.blockTimestamp == 0) {
                 settlementState.blockTimestamp = 1;
+                settlementState.slotWarmedUp = true;
             }
             unchecked {
                 ++i;
