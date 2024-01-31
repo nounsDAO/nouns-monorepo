@@ -273,6 +273,7 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
 
     /**
      * @notice Returns the withdrawable balance of client with id `clientId`
+     * @dev accounts for the extra wei used for gas optimization
      */
     function clientBalance(uint32 clientId) public view returns (uint256) {
         uint256 balance = _clientBalances[clientId];
