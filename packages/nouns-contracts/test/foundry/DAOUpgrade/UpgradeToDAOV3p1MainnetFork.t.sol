@@ -3,26 +3,26 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
-import { DeployDAOV3LogicMainnet } from '../../../script/DAOV3p1/DeployDAOV3LogicMainnet.s.sol';
-import { ProposeDAOV3p1UpgradeMainnet } from '../../../script/DAOV3p1/ProposeDAOV3p1UpgradeMainnet.s.sol';
+import { DeployDAOV3LogicMainnet } from '../../../script/DAOUpgrade/DeployDAOV3LogicMainnet.s.sol';
+import { ProposeDAOUpgradeMainnet } from '../../../script/DAOUpgrade/ProposeDAOUpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
+abstract contract UpgradeDAOMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
     address public constant WHALE = 0x83fCFe8Ba2FEce9578F0BbaFeD4Ebf5E915045B9;
     NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
     INounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
         INounsDAOLogicV3(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
-    address public constant CURRENT_DAO_IMPL = 0xdD1492570beb290a2f309541e1fDdcaAA3f00B61;
+    address public constant CURRENT_DAO_IMPL = 0xe3caa436461DBa00CFBE1749148C9fa7FA1F5344;
 
     address proposerAddr = vm.addr(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
     address origin = makeAddr('origin');
     address newLogic;
 
     function setUp() public virtual {
-        vm.createSelectFork(vm.envString('RPC_MAINNET'), 18571818);
+        vm.createSelectFork(vm.envString('RPC_MAINNET'), 19127187);
 
         // Get votes
         vm.prank(NOUNDERS);
@@ -70,18 +70,7 @@ abstract contract UpgradeToDAOV3p1MainnetForkBaseTest is Test {
     }
 }
 
-contract RefundBeforeTheUpgradeTo3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest {
-    function test_refundBeforeUpgrade_doesNotRefundOrigin() public {
-        uint256 originBalanceBefore = origin.balance;
-
-        uint256 proposalId = propose(WHALE, 1 ether, '', '');
-        voteAndExecuteProposal(proposalId);
-
-        assertEq(originBalanceBefore, origin.balance);
-    }
-}
-
-contract UpgradeToDAOV3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest {
+contract UpgradeDAOMainnetForkTest is UpgradeDAOMainnetForkBaseTest {
     function setUp() public override {
         super.setUp();
 
@@ -92,8 +81,8 @@ contract UpgradeToDAOV3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest 
         // Propose the upgrade
         vm.setEnv('PROPOSER_KEY', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
         vm.setEnv('DAO_V3_IMPL', Strings.toHexString(uint160(newLogic), 20));
-        vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/DAOUpgradeTo3p1/proposal-description.txt');
-        uint256 proposalId = new ProposeDAOV3p1UpgradeMainnet().run();
+        vm.setEnv('PROPOSAL_DESCRIPTION_FILE', 'test/foundry/DAOUpgrade/proposal-description.txt');
+        uint256 proposalId = new ProposeDAOUpgradeMainnet().run();
 
         // Execute the upgrade
         voteAndExecuteProposal(proposalId);
@@ -104,14 +93,17 @@ contract UpgradeToDAOV3p1MainnetForkTest is UpgradeToDAOV3p1MainnetForkBaseTest 
         assertEq(newLogic, NOUNS_DAO_PROXY_MAINNET.implementation());
     }
 
-    function test_proposalExecutesAfterTheUpgrade_andRefundGoesToOrigin() public {
-        uint256 recipientBalanceBefore = WHALE.balance;
-        uint256 originBalanceBefore = origin.balance;
+    function test_givenRecentBitPacking_creationBlockAndProposalIdValuesAreLegit() public {
+        NounsDAOV3Types.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(493);
 
-        uint256 proposalId = propose(WHALE, 1 ether, '', '');
-        voteAndExecuteProposal(proposalId);
+        assertEq(prop.id, 493);
+        assertEq(prop.creationBlock, 19093670);
+        assertEq(prop.creationTimestamp, 0);
 
-        assertEq(recipientBalanceBefore + 1 ether, WHALE.balance);
-        assertGt(origin.balance, originBalanceBefore);
+        prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(474);
+
+        assertEq(prop.id, 474);
+        assertEq(prop.creationBlock, 18836862);
+        assertEq(prop.creationTimestamp, 0);
     }
 }

@@ -13,7 +13,7 @@ interface NounsDAO {
     ) external returns (uint256);
 }
 
-contract ProposeDAOV3p1UpgradeMainnet is Script {
+contract ProposeDAOUpgradeMainnet is Script {
     NounsDAO public constant NOUNS_DAO_PROXY_MAINNET = NounsDAO(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
 
     function run() public returns (uint256 proposalId) {
