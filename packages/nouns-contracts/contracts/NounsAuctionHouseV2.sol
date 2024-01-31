@@ -441,12 +441,21 @@ contract NounsAuctionHouseV2 is
         require(auctionCount == actualCount, 'Not enough history');
     }
 
+    /**
+     * @notice Get all past auction settlements starting at `startId` and settled before or at `endTimestamp`.
+     * @param startId the first Noun ID to get prices for.
+     * @param endTimestamp the latest timestamp for auctions
+     * @param skipEmptyValues if true, skips nounder reward ids and ids with missing data
+     * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
+     * the Noun ID of that auction, the winning bid amount, and the winner's address.
+     */
     function getSettlementsFromIdtoTimestamp(
         uint256 startId,
         uint256 endTimestamp,
         bool skipEmptyValues
     ) public view returns (Settlement[] memory settlements) {
         uint256 maxId = auctionStorage.nounId;
+        require(startId <= maxId, 'startId too large');
         settlements = new Settlement[](maxId - startId + 1);
         uint256 actualCount = 0;
         SettlementState memory settlementState;
@@ -454,6 +463,9 @@ contract NounsAuctionHouseV2 is
             settlementState = settlementHistory[id];
 
             if (skipEmptyValues && settlementState.blockTimestamp <= 1) continue;
+
+            // don't include the currently auctioned noun if it hasn't settled
+            if ((id == maxId) && (settlementState.blockTimestamp <= 1)) continue;
 
             if (settlementState.blockTimestamp > endTimestamp) break;
 
