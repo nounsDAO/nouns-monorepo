@@ -54,7 +54,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
                 votingRewardBps: 50,
                 auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000
-            })
+            }),
+            descriptor: address(0)
         });
 
         vm.deal(address(rewards), 100 ether);

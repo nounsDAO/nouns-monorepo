@@ -60,7 +60,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
             lastProcessedAuctionId_: 1,
             ethToken_: address(erc20Mock),
             nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
-            rewardParams: params
+            rewardParams: params,
+            descriptor: address(0)
         });
 
         vm.prank(client1Wallet);

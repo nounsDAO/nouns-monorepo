@@ -18,11 +18,10 @@ pragma solidity ^0.8.19;
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
-import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
+import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
-import { Ownable } from '@openzeppelin/contracts-v5/access/Ownable.sol';
 
-contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ownable {
+contract Rewards is NounsClientToken {
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
 
@@ -56,8 +55,9 @@ contract Rewards is ERC721('NounsClientIncentives', 'NounsClientIncentives'), Ow
         uint32 nextProposalIdToReward_,
         uint256 lastProcessedAuctionId_,
         uint256 nextProposalRewardFirstAuctionId_,
-        RewardParams memory rewardParams
-    ) Ownable(owner) {
+        RewardParams memory rewardParams,
+        address descriptor
+    ) NounsClientToken(owner, descriptor) {
         nounsDAO = INounsDAOLogicV3(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         ethToken = IERC20(ethToken_);
