@@ -6,6 +6,7 @@ export * from './deploy-local';
 export * from './deploy-and-configure';
 export * from './mint-noun';
 export * from './populate-descriptor';
+export * from './populate-descriptor-add-new-images';
 export * from './run-local';
 export * from './verify-etherscan';
 export * from './update-configs';
