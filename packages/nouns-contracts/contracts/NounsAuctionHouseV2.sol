@@ -283,7 +283,7 @@ contract NounsAuctionHouseV2 is
         settlementState.blockTimestamp = uint32(block.timestamp);
         settlementState.amount = ethPriceToUint64(_auction.amount);
         settlementState.winner = _auction.bidder;
-        settlementState.clientId = _auction.clientId;
+        if (_auction.clientId > 0) settlementState.clientId = _auction.clientId;
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount, _auction.clientId);
     }
@@ -316,22 +316,13 @@ contract NounsAuctionHouseV2 is
      * bit packing, to save gas.
      * @param settlements The list of historic prices to set.
      */
-    function setPrices(Settlement[] memory settlements) external onlyOwner {
-        uint256[] memory nounIds = new uint256[](settlements.length);
-        uint256[] memory prices_ = new uint256[](settlements.length);
-
+    function setPrices(SettlementNoClientId[] memory settlements) external onlyOwner {
         for (uint256 i = 0; i < settlements.length; ++i) {
             SettlementState storage settlementState = settlementHistory[settlements[i].nounId];
             settlementState.blockTimestamp = settlements[i].blockTimestamp;
             settlementState.amount = ethPriceToUint64(settlements[i].amount);
             settlementState.winner = settlements[i].winner;
-            settlementState.clientId = settlements[i].clientId;
-
-            nounIds[i] = settlements[i].nounId;
-            prices_[i] = settlements[i].amount;
         }
-
-        emit HistoricPricesSet(nounIds, prices_);
     }
 
     /**

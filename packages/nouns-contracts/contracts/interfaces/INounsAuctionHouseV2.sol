@@ -77,6 +77,18 @@ interface INounsAuctionHouseV2 {
         uint32 clientId;
     }
 
+    /// @dev Using this struct when setting historic prices, and excluding clientId to save gas.
+    struct SettlementNoClientId {
+        // The block.timestamp when the auction was settled.
+        uint32 blockTimestamp;
+        // The winning bid amount, converted from 10 decimal places to 18, for better client UX.
+        uint256 amount;
+        // The address of the auction winner.
+        address winner;
+        // ID for the Noun (ERC721 token ID).
+        uint256 nounId;
+    }
+
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
     event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, uint32 indexed clientId);
@@ -90,8 +102,6 @@ interface INounsAuctionHouseV2 {
     event AuctionReservePriceUpdated(uint256 reservePrice);
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
-
-    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
 
     function settleAuction() external;
 

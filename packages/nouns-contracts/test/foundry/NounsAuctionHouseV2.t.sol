@@ -12,8 +12,6 @@ import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
-    event HistoricPricesSet(uint256[] nounIds, uint256[] prices);
-
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
@@ -890,13 +888,12 @@ contract NoracleTest_NoActiveAuction is NoracleBaseTest {
 
 contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
     function test_setPrices_revertsForNonOwner() public {
-        IAH.Settlement[] memory settlements = new IAH.Settlement[](1);
-        settlements[0] = IAH.Settlement({
+        IAH.SettlementNoClientId[] memory settlements = new IAH.SettlementNoClientId[](1);
+        settlements[0] = IAH.SettlementNoClientId({
             blockTimestamp: uint32(block.timestamp),
             amount: 42 ether,
             winner: makeAddr('winner'),
-            nounId: 3,
-            clientId: 0
+            nounId: 3
         });
 
         vm.expectRevert('Ownable: caller is not the owner');
@@ -904,9 +901,7 @@ contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
     }
 
     function test_setPrices_worksForOwner() public {
-        IAH.Settlement[] memory settlements = new IAH.Settlement[](20);
-        uint256[] memory nounIds = new uint256[](20);
-        uint256[] memory prices = new uint256[](20);
+        IAH.SettlementNoClientId[] memory settlements = new IAH.SettlementNoClientId[](20);
 
         uint256 nounId = 0;
         for (uint256 i = 0; i < 20; ++i) {
@@ -917,22 +912,15 @@ contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
 
             uint256 price = nounId * 1 ether;
 
-            settlements[i] = IAH.Settlement({
+            settlements[i] = IAH.SettlementNoClientId({
                 blockTimestamp: 100000000 + uint32(nounId),
                 amount: price,
                 winner: makeAddr(vm.toString(nounId)),
-                nounId: nounId,
-                clientId: 0
+                nounId: nounId
             });
-
-            nounIds[i] = nounId;
-            prices[i] = price;
 
             nounId++;
         }
-
-        vm.expectEmit(true, true, true, true);
-        emit HistoricPricesSet(nounIds, prices);
 
         vm.prank(auction.owner());
         auction.setPrices(settlements);
