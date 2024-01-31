@@ -336,6 +336,9 @@ contract NounsAuctionHouseV2 is
      */
     function warmUpSettlementState(uint256 startId, uint256 endId) external {
         for (uint256 i = startId; i < endId; ++i) {
+            // Skipping Nounder rewards, no need to warm up those slots since they are never used.
+            if (i <= 1820 && i % 10 == 0) continue;
+
             SettlementState storage settlementState = settlementHistory[i];
             if (settlementState.blockTimestamp == 0) {
                 settlementState.blockTimestamp = 1;

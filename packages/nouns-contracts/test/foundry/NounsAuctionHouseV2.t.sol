@@ -735,8 +735,10 @@ contract NoracleTest_GapInHistoricPrices_AfterWarmUp_Test is NoracleBaseTest {
                 clientId: 0
             })
         );
+
+        // timestamp remains 0 here because it's a Nounder reward ID that does not get warmed up.
         expectedSettlements.push(
-            IAH.Settlement({ blockTimestamp: 1, amount: 0, winner: address(0), nounId: 0, clientId: 0 })
+            IAH.Settlement({ blockTimestamp: 0, amount: 0, winner: address(0), nounId: 0, clientId: 0 })
         );
         assertEq(settlements, expectedSettlements);
 
