@@ -279,13 +279,11 @@ contract NounsAuctionHouseV2 is
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        settlementHistory[_auction.nounId] = SettlementState({
-            blockTimestamp: uint32(block.timestamp),
-            amount: ethPriceToUint64(_auction.amount),
-            winner: _auction.bidder,
-            clientId: _auction.clientId,
-            slotWarmedUp: false
-        });
+        SettlementState storage settlementState = settlementHistory[_auction.nounId];
+        settlementState.blockTimestamp = uint32(block.timestamp);
+        settlementState.amount = ethPriceToUint64(_auction.amount);
+        settlementState.winner = _auction.bidder;
+        settlementState.clientId = _auction.clientId;
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount, _auction.clientId);
     }
@@ -323,13 +321,11 @@ contract NounsAuctionHouseV2 is
         uint256[] memory prices_ = new uint256[](settlements.length);
 
         for (uint256 i = 0; i < settlements.length; ++i) {
-            settlementHistory[settlements[i].nounId] = SettlementState({
-                blockTimestamp: settlements[i].blockTimestamp,
-                amount: ethPriceToUint64(settlements[i].amount),
-                winner: settlements[i].winner,
-                clientId: settlements[i].clientId,
-                slotWarmedUp: false
-            });
+            SettlementState storage settlementState = settlementHistory[settlements[i].nounId];
+            settlementState.blockTimestamp = settlements[i].blockTimestamp;
+            settlementState.amount = ethPriceToUint64(settlements[i].amount);
+            settlementState.winner = settlements[i].winner;
+            settlementState.clientId = settlements[i].clientId;
 
             nounIds[i] = settlements[i].nounId;
             prices_[i] = settlements[i].amount;
