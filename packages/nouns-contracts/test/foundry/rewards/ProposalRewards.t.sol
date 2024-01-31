@@ -438,5 +438,32 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
         assertEq(rewards.clientBalances(clientId2), 0.015 ether); // 15 eth * 0.5% * (2/10)
     }
 
-    // TODO test all votes are accounted for
+    function test_revertsIfNotAllVotesAreAccounted() public {
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
+        vote(bidder2, proposalId, 1, 'i support', clientId2);
+        // vote with no clientId means clientId == 0
+        vote(makeAddr('noundersDAO'), proposalId, 0, 'against');
+
+        mineBlocks(VOTING_PERIOD);
+
+        votingClientIds = [clientId1, clientId2];
+        vm.expectRevert('not all votes accounted');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+
+        votingClientIds = [0, clientId2];
+        vm.expectRevert('not all votes accounted');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+
+        votingClientIds = [0, clientId1, clientId2];
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
 }
