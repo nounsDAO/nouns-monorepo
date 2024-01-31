@@ -676,6 +676,9 @@ contract NoracleTest_GapInHistoricPrices_AfterWarmUp_Test is NoracleBaseTest {
 
         IAH.Settlement[] memory settlements2 = auction.getSettlements(0, 20, true);
         assertEq(settlements2, reverse(expectedSettlements));
+
+        IAH.Settlement[] memory settlements3 = auction.getSettlementsFromIdtoTimestamp(0, block.timestamp, true);
+        assertEq(settlements3, reverse(expectedSettlements));
     }
 
     function test_getSettlements_skipFalse() public {
@@ -719,6 +722,9 @@ contract NoracleTest_GapInHistoricPrices_AfterWarmUp_Test is NoracleBaseTest {
 
         IAH.Settlement[] memory settlements2 = auction.getSettlements(0, 7, false);
         assertEq(settlements2, reverse(expectedSettlements));
+
+        IAH.Settlement[] memory settlements3 = auction.getSettlementsFromIdtoTimestamp(0, block.timestamp, false);
+        assertEq(settlements3, reverse(expectedSettlements));
     }
 }
 
@@ -769,6 +775,9 @@ contract NoracleTest_AuctionWithNoBids is NoracleBaseTest {
 
         IAH.Settlement[] memory settlements2 = auction.getSettlements(0, 4, false);
         assertEq(settlements2, reverse(expectedSettlements));
+
+        IAH.Settlement[] memory settlements3 = auction.getSettlementsFromIdtoTimestamp(0, block.timestamp, false);
+        assertEq(settlements3, reverse(expectedSettlements));
     }
 
     function test_getSettlements_skipTrue_includesAuctionsWithNoBids() public {
@@ -800,6 +809,9 @@ contract NoracleTest_AuctionWithNoBids is NoracleBaseTest {
 
         IAH.Settlement[] memory settlements2 = auction.getSettlements(0, 20, true);
         assertEq(settlements2, reverse(expectedSettlements));
+
+        IAH.Settlement[] memory settlements3 = auction.getSettlementsFromIdtoTimestamp(0, block.timestamp, true);
+        assertEq(settlements3, reverse(expectedSettlements));
     }
 }
 
@@ -847,6 +859,9 @@ contract NoracleTest_NoActiveAuction is NoracleBaseTest {
 
         IAH.Settlement[] memory settlements2 = auction.getSettlements(0, 20, true);
         assertEq(settlements2, reverse(expectedSettlements));
+
+        IAH.Settlement[] memory settlements3 = auction.getSettlementsFromIdtoTimestamp(0, block.timestamp, true);
+        assertEq(settlements3, reverse(expectedSettlements));
     }
 }
 
