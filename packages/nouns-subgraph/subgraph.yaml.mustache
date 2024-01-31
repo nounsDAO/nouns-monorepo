@@ -111,6 +111,8 @@ dataSources:
         - name: NounsDAO
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
       eventHandlers:
+        - event: ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)
+          handler: handleProposalCreated
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
         - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,uint256,string)
@@ -176,6 +178,8 @@ dataSources:
         - name: NounsDAOV4
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV4.json
       eventHandlers:
+        - event: ProposalCreatedWithRequirements(uint256,address[],uint256,uint256,uint256,indexed uint32)
+          handler: handleProposalCreatedWithRequirementsV4
         - event: VoteCastWithClientId(indexed address,indexed uint256,indexed uint32)
           handler: handleVoteCastWithClientId
   - kind: ethereum/contract
