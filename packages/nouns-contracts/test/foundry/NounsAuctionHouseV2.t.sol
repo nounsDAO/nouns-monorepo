@@ -511,6 +511,29 @@ contract NoracleTestManyAuctionsSettledStateTest is NoracleBaseTest {
                           10e18, 9e18, 8e18, 7e18, 6e18, 5e18, 4e18, 3e18, 2e18, 1e18];
         assertEq(prices, expectedPrices);
     }
+
+    function test_getSettlementRange_limitsToRange() public {
+        IAH.Settlement[] memory settlements = auction.getSettlements(3, 8, true);
+        assertEq(settlements.length, 5);
+        assertEq(settlements[0].nounId, 3);
+        assertEq(settlements[1].nounId, 4);
+        assertEq(settlements[2].nounId, 5);
+        assertEq(settlements[3].nounId, 6);
+        assertEq(settlements[4].nounId, 7);
+    }
+
+    function test_getSettlementFromIdToTimestamp_limitsToTimestamp() public {
+        // get the timestamp of id 7
+        uint256 endTimestamp = auction.getSettlements(7, 8, true)[0].blockTimestamp;
+
+        IAH.Settlement[] memory settlements = auction.getSettlementsFromIdtoTimestamp(3, endTimestamp, true);
+        assertEq(settlements.length, 5);
+        assertEq(settlements[0].nounId, 3);
+        assertEq(settlements[1].nounId, 4);
+        assertEq(settlements[2].nounId, 5);
+        assertEq(settlements[3].nounId, 6);
+        assertEq(settlements[4].nounId, 7);
+    }
 }
 
 contract NoracleTest_GapInHistoricPricesTest is NoracleBaseTest {
