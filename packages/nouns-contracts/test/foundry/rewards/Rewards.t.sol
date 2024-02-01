@@ -44,7 +44,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
             nounsDAO_: address(dao),
             auctionHouse_: minter,
             nextProposalIdToReward_: uint32(dao.proposalCount()) + 1,
-            lastProcessedAuctionId_: 0,
+            nextAuctionIdToReward_: 1,
             ethToken_: address(erc20Mock),
             nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
             rewardParams: Rewards.RewardParams({
@@ -116,95 +116,58 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 }
 
 contract AuctionRewards is RewardsBaseTest {
-    function testRewardsForAuctions() public {
+    uint256 nounId;
+
+    function setUp() public virtual override {
+        super.setUp();
+
         bidAndSettleAuction(1 ether, CLIENT_ID);
-        uint256 nounId = bidAndSettleAuction(2 ether, CLIENT_ID2);
+        bidAndSettleAuction(2 ether, CLIENT_ID2);
+        bidAndSettleAuction(3 ether, 0);
+        nounId = bidAndSettleAuction(4 ether, CLIENT_ID);
+    }
+
+    function test_rewardsForAuctions() public {
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
+    }
+
+    function test_revertsIfAlreadyProcessedNounId() public {
+        rewards.updateRewardsForAuctions(nounId);
+
+        vm.expectRevert('lastNounId must be higher');
+        rewards.updateRewardsForAuctions(nounId);
+    }
+
+    function test_followupCallWorksCorrectly() public {
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
+
+        bidAndSettleAuction(10 ether, CLIENT_ID);
+        nounId = bidAndSettleAuction(20 ether, CLIENT_ID2);
 
         rewards.updateRewardsForAuctions(nounId);
 
-        assertEq(rewards.clientBalance(CLIENT_ID), 0.01 ether);
-        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
-    }
-}
-
-contract ProposalRewardsHappyFlow is RewardsBaseTest {
-    uint256 proposalId;
-    uint256 settledNounIdBeforeProposal;
-    uint256 nounOnAuctionWhenLastProposalWasCreated;
-
-    function setUp() public override {
-        super.setUp();
-
-        vm.startPrank(address(dao.timelock()));
-        dao._setProposalUpdatablePeriodInBlocks(18000); // 2.5 days
-        dao._setVotingDelay(3600); // 0.5 days
-        dao._setVotingPeriod(28800); // 4 days
-        vm.stopPrank();
-
-        // settle 3 auctions at 1 ether
-        bidAndSettleMultipleAuctions({ numAuctions: 2, bidAmount: 1 ether });
-        settledNounIdBeforeProposal = bidAndSettleAuction(1 ether);
-        mineBlocks(1);
-
-        for (uint256 i; i < 10; i++) {
-            // create proposal 1 by client A
-            proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID);
-
-            // go forward 3 days until voting starts
-            bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
-
-            // vote on proposal with client A, B & zero
-            vote(voter, proposalId, 1, 'i support', CLIENT_ID);
-            vote(voter2, proposalId, 1, 'i support');
-            vote(voter3, proposalId, 0, 'i dont support', CLIENT_ID2);
-
-            // go forward 4 days until voting ends
-            bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
-
-            dao.queue(proposalId);
-        }
-
-        // create proposal 2 by client B
-        proposalId = propose(voter, address(1), 1 ether, '', '', 'my proposal', CLIENT_ID2);
-        nounOnAuctionWhenLastProposalWasCreated = auctionHouse.auction().nounId;
-
-        // go forward 3 days until voting starts
-        bidAndSettleMultipleAuctions({ numAuctions: 3, bidAmount: 2 ether });
-
-        // vote on proposal with client A
-        vote(voter, proposalId, 1, 'i support', CLIENT_ID);
-        vote(voter2, proposalId, 1, 'i support');
-
-        // go forward 4 days until voting ends
-        bidAndSettleMultipleAuctions({ numAuctions: 4, bidAmount: 3 ether });
-
-        dao.queue(proposalId);
-
-        bidAndSettleAuction(3 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.15 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.22 ether);
     }
 
-    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
-        vm.prank(voter_);
-        dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
+    function test_canProcessLastNounOnAuctionIfAuctionPausedAndSettled() public {
+        uint256 blocksToEnd = (auctionHouse.auction().endTime - block.timestamp) / SECONDS_IN_BLOCK + 1;
+        mineBlocks(blocksToEnd);
+        vm.prank(address(dao.timelock()));
+        auctionHouse.pause();
+        auctionHouse.settleAuction();
+
+        rewards.updateRewardsForAuctions(nounId + 1);
     }
 
-    function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason) internal {
-        vm.prank(voter_);
-        dao.castRefundableVoteWithReason(proposalId_, support, reason);
-    }
-
-    function bidAndSettleMultipleAuctions(uint256 numAuctions, uint256 bidAmount) internal {
-        for (uint256 i; i < numAuctions; i++) {
-            bidAndSettleAuction(bidAmount);
-        }
-    }
-
-    function testHappyFlow() public {
-        clientIds = [0, CLIENT_ID, CLIENT_ID2];
-
-        rewards.updateRewardsForProposalWritingAndVoting({
-            lastProposalId: uint32(proposalId),
-            votingClientIds: clientIds
-        });
+    function test_nounIdMustBeSettled() public {
+        vm.expectRevert('lastNounId must be settled');
+        rewards.updateRewardsForAuctions(nounId + 1);
     }
 }
