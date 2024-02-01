@@ -25,9 +25,9 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token'
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 private constant _STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
-    constructor(address owner, address descriptor) Ownable(owner) {
+    constructor(address owner, address descriptor_) Ownable(owner) {
         _getState().nextTokenId = 1;
-        _getState().descriptor = descriptor;
+        _getState().descriptor = descriptor_;
     }
 
     function registerClient(string calldata name, string calldata description) public returns (uint32) {
@@ -44,6 +44,14 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token'
         _getState().clientMetadata[tokenId] = ClientMetadata(name, description);
     }
 
+    function setDescriptor(address descriptor_) public onlyOwner {
+        _getState().descriptor = descriptor_;
+    }
+
+    function clientMetadata(uint32 tokenId) public view returns (ClientMetadata memory) {
+        return _getState().clientMetadata[tokenId];
+    }
+
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         return
             INounsClientTokenDescriptor(_getState().descriptor).tokenURI(
@@ -52,8 +60,8 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token'
             );
     }
 
-    function setDescriptor(address descriptor) public onlyOwner {
-        _getState().descriptor = descriptor;
+    function descriptor() public view returns (address) {
+        return _getState().descriptor;
     }
 
     function STORAGE_LOCATION() external pure returns (bytes32) {
