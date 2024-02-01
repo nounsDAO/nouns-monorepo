@@ -17,12 +17,14 @@ export const redis = new Redis(config.redisPort, config.redisHost, {
 /**
  * Twitter Client
  */
-export const twitter = new TwitterApi({
-  appKey: config.twitterAppKey,
-  appSecret: config.twitterAppSecret,
-  accessToken: config.twitterAccessToken,
-  accessSecret: config.twitterAccessSecret,
-});
+export const twitter = () => {
+  return new TwitterApi({
+    appKey: config.twitterAppKey,
+    appSecret: config.twitterAppSecret,
+    accessToken: config.twitterAccessToken,
+    accessSecret: config.twitterAccessSecret,
+  })
+};
 
 /**
  * Ethers JSON RPC Provider
@@ -61,5 +63,7 @@ export const publicDiscordWebhook = new Discord.WebhookClient(
  * @param counterName counter name to increment
  * @returns
  */
-export const incrementCounter = (counterName: string) =>
-  axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
+export const incrementCounter = (counterName: string) => new Promise((resolve) => {
+  resolve(counterName)
+})
+  // axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
