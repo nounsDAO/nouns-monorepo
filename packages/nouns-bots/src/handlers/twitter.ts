@@ -1,14 +1,20 @@
 import { getAuctionReplyTweetId, updateAuctionReplyTweetId } from '../cache';
 import { IAuctionLifecycleHandler, Bid } from '../types';
-import { twitter } from '../clients';
+import { twitter as twitterFunc } from '../clients';
 import {
   getAuctionEndingSoonTweetText,
   formatAuctionStartedTweetText,
   formatBidMessageText,
   getNounPngBuffer,
 } from '../utils';
+import TwitterApi from "twitter-api-v2";
+
+let twitter: TwitterApi;
 
 export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler {
+  constructor() {
+    twitter = twitterFunc()
+  }
   /**
    * Tweet an image of the current noun alerting users
    * to the new auction and update the tweet reply id cache
