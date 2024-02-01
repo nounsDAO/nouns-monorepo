@@ -27,7 +27,7 @@ contract Rewards is NounsClientToken {
 
     uint32 public nextTokenId = 1;
 
-    uint256 public lastProcessedAuctionId;
+    uint256 public nextAuctionIdToReward;
     uint32 public nextProposalIdToReward;
     uint256 public nextProposalRewardFirstAuctionId;
     uint256 lastProposalRewardsUpdate = block.timestamp;
@@ -53,7 +53,7 @@ contract Rewards is NounsClientToken {
         address auctionHouse_,
         address ethToken_,
         uint32 nextProposalIdToReward_,
-        uint256 lastProcessedAuctionId_,
+        uint256 nextAuctionIdToReward_,
         uint256 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams,
         address descriptor
@@ -62,7 +62,7 @@ contract Rewards is NounsClientToken {
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
         ethToken = IERC20(ethToken_);
         nextProposalIdToReward = nextProposalIdToReward_;
-        lastProcessedAuctionId = lastProcessedAuctionId_;
+        nextAuctionIdToReward = nextAuctionIdToReward_;
         nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         params = rewardParams;
     }
@@ -76,19 +76,23 @@ contract Rewards is NounsClientToken {
     }
 
     function updateRewardsForAuctions(uint256 lastNounId) public {
-        uint256 currentlyAuctionedNounId = auctionHouse.auction().nounId;
-        require(lastNounId < currentlyAuctionedNounId, 'lastNounId must be settled');
+        uint256 nextAuctionIdToReward_ = nextAuctionIdToReward;
+        require(lastNounId >= nextAuctionIdToReward_, 'lastNounId must be higher');
+        nextAuctionIdToReward = lastNounId + 1;
 
-        uint256 lastProcessedAuctionId_ = lastProcessedAuctionId;
-        require(lastNounId > lastProcessedAuctionId_, 'lastNounId must be higher');
-        lastProcessedAuctionId = lastNounId;
+        INounsAuctionHouseV2.Settlement[] memory settlements = auctionHouse.getSettlements(
+            nextAuctionIdToReward_,
+            lastNounId + 1,
+            true
+        );
+        INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
+        require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
-        INounsAuctionHouseV2.Settlement memory settlement;
-        for (uint256 nounId = lastProcessedAuctionId_ + 1; nounId <= lastNounId; nounId++) {
-            // TODO maybe can be optimized to one call with large range
-            settlement = auctionHouse.getSettlements(nounId, nounId + 1, false)[0];
+        uint16 auctionRewardBps = params.auctionRewardBps;
+        for (uint256 i; i < settlements.length; ++i) {
+            INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
             if (settlement.clientId > 0) {
-                _clientBalances[settlement.clientId] += (settlement.amount * params.auctionRewardBps) / 10_000;
+                _clientBalances[settlement.clientId] += (settlement.amount * auctionRewardBps) / 10_000;
             }
         }
     }

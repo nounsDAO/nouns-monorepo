@@ -57,7 +57,7 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
             nounsDAO_: address(dao),
             auctionHouse_: minter,
             nextProposalIdToReward_: 1,
-            lastProcessedAuctionId_: 1,
+            nextAuctionIdToReward_: 2,
             ethToken_: address(erc20Mock),
             nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
             rewardParams: params,
