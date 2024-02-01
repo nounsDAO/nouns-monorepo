@@ -1,2 +1,3 @@
 ds-test/=lib/forge-std/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
+../../node_modules/@openzeppelin/contracts-upgradeable-v5:@openzeppelin/contracts=../../node_modules/@openzeppelin/contracts-v5

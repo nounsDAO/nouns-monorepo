@@ -25,6 +25,10 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 private constant _STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
+    constructor() {
+        _disableInitializers();
+    }
+
     function initialize(address owner, address descriptor_) public initializer {
         __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
         __Ownable_init(owner);
@@ -32,11 +36,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
         _getState().descriptor = descriptor_;
     }
 
-    constructor() {
-        _disableInitializers();
-    }
-
-    function registerClient(string calldata name, string calldata description) public returns (uint32) {
+    function registerClient(string calldata name, string calldata description) public virtual returns (uint32) {
         TokenState storage s = _getState();
         uint32 tokenId = s.nextTokenId;
         s.nextTokenId++;

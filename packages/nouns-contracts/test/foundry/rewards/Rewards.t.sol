@@ -8,6 +8,7 @@ import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctio
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
+import { RewardsProxy } from '../../../contracts/client-incentives/RewardsProxy.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -39,24 +40,22 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards({
-            owner: address(dao.timelock()),
-            nounsDAO_: address(dao),
-            auctionHouse_: minter,
-            nextProposalIdToReward_: uint32(dao.proposalCount()) + 1,
-            nextAuctionIdToReward_: 1,
-            ethToken_: address(erc20Mock),
-            nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
-            rewardParams: Rewards.RewardParams({
+        rewards = _deployRewards(
+            dao,
+            minter,
+            address(erc20Mock),
+            uint32(dao.proposalCount()) + 1,
+            1,
+            auctionHouse.auction().nounId,
+            Rewards.RewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 30,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
                 auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000
-            }),
-            descriptor: address(0)
-        });
+            })
+        );
 
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
@@ -78,10 +77,10 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
             NounsAuctionHouseProxy(payable(address(auctionHouse)))
         );
 
-        rewards.registerClient();
-        CLIENT_ID = rewards.registerClient();
-        rewards.registerClient();
-        CLIENT_ID2 = rewards.registerClient();
+        rewards.registerClient('client', 'description');
+        CLIENT_ID = rewards.registerClient('client1', 'description1');
+        rewards.registerClient('client3', 'description3');
+        CLIENT_ID2 = rewards.registerClient('client2', 'description2');
     }
 
     function _mintTo(address to) internal returns (uint256 tokenID) {

@@ -20,17 +20,16 @@ import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
+import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable-v5/proxy/utils/UUPSUpgradeable.sol';
 
-contract Rewards is NounsClientToken {
+contract Rewards is NounsClientToken, UUPSUpgradeable {
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
 
-    uint32 public nextTokenId = 1;
-
-    uint256 public nextAuctionIdToReward;
     uint32 public nextProposalIdToReward;
+    uint256 public nextAuctionIdToReward;
     uint256 public nextProposalRewardFirstAuctionId;
-    uint256 lastProposalRewardsUpdate = block.timestamp;
+    uint256 lastProposalRewardsUpdate;
 
     RewardParams public params;
 
@@ -47,24 +46,28 @@ contract Rewards is NounsClientToken {
         uint16 proposalEligibilityQuorumBps;
     }
 
-    constructor(
+    constructor(address nounsDAO_, address auctionHouse_) {
+        nounsDAO = INounsDAOLogicV3(nounsDAO_);
+        auctionHouse = INounsAuctionHouseV2(auctionHouse_);
+        _disableInitializers();
+    }
+
+    function initialize(
         address owner,
-        address nounsDAO_,
-        address auctionHouse_,
         address ethToken_,
         uint32 nextProposalIdToReward_,
         uint256 nextAuctionIdToReward_,
         uint256 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams,
         address descriptor
-    ) NounsClientToken(owner, descriptor) {
-        nounsDAO = INounsDAOLogicV3(nounsDAO_);
-        auctionHouse = INounsAuctionHouseV2(auctionHouse_);
+    ) public initializer {
+        super.initialize(owner, descriptor);
         ethToken = IERC20(ethToken_);
         nextProposalIdToReward = nextProposalIdToReward_;
         nextAuctionIdToReward = nextAuctionIdToReward_;
         nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         params = rewardParams;
+        lastProposalRewardsUpdate = block.timestamp;
     }
 
     function setParams(RewardParams calldata newParams) public onlyOwner {
@@ -261,17 +264,9 @@ contract Rewards is NounsClientToken {
         }
     }
 
-    /**
-     * @notice Register a client, mints an NFT and assigns a clientId
-     * @return uint32 the newly assigned clientId
-     */
-    function registerClient() public returns (uint32) {
-        uint32 tokenId = nextTokenId++;
-        _mint(msg.sender, tokenId);
-
-        // Increase the balance by one wei so that the slot is non zero when increased in the future
+    function registerClient(string calldata name, string calldata description) public override returns (uint32) {
+        uint32 tokenId = super.registerClient(name, description);
         _clientBalances[tokenId] += 1;
-
         return tokenId;
     }
 
@@ -291,4 +286,6 @@ contract Rewards is NounsClientToken {
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
         return a > b ? a : b;
     }
+
+    function _authorizeUpgrade(address) internal view override onlyOwner {}
 }
