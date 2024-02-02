@@ -43,26 +43,22 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
         vm.prank(makeAddr('noundersDAO'));
         nounsToken.transferFrom(makeAddr('noundersDAO'), bidder2, 0);
 
-        params = Rewards.RewardParams({
-            minimumRewardPeriod: 2 weeks,
-            numProposalsEnoughForReward: 30,
-            proposalRewardBps: 100,
-            votingRewardBps: 50,
-            auctionRewardBps: 150,
-            proposalEligibilityQuorumBps: 1000
-        });
-
-        rewards = new Rewards({
-            owner: address(dao.timelock()),
-            nounsDAO_: address(dao),
-            auctionHouse_: minter,
-            nextProposalIdToReward_: 1,
-            nextAuctionIdToReward_: 2,
-            ethToken_: address(erc20Mock),
-            nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
-            rewardParams: params,
-            descriptor: address(0)
-        });
+        rewards = _deployRewards(
+            dao,
+            minter,
+            address(erc20Mock),
+            1,
+            2,
+            auctionHouse.auction().nounId,
+            Rewards.RewardParams({
+                minimumRewardPeriod: 2 weeks,
+                numProposalsEnoughForReward: 30,
+                proposalRewardBps: 100,
+                votingRewardBps: 50,
+                auctionRewardBps: 150,
+                proposalEligibilityQuorumBps: 1000
+            })
+        );
 
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient('client1', 'client1 description');

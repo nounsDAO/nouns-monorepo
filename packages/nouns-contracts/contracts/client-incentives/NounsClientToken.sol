@@ -15,17 +15,20 @@
 
 pragma solidity ^0.8.19;
 
-import { ERC721 } from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
-import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { ERC721Upgradeable } from '@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol';
+import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { INounsClientTokenTypes } from './INounsClientTokenTypes.sol';
 import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 
-contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token', 'NOUNSCLIENT'), Ownable {
+contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableUpgradeable {
     /// @dev This is a ERC-7201 storage location, calculated using:
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 private constant _STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
-    constructor(address owner, address descriptor_) {
+    constructor() initializer {}
+
+    function initialize(address owner, address descriptor_) public initializer {
+        __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
         _transferOwnership(owner);
         _getState().nextTokenId = 1;
         _getState().descriptor = descriptor_;

@@ -4,12 +4,15 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { NounsClientToken } from '../../contracts/client-incentives/NounsClientToken.sol';
 import { INounsClientTokenTypes } from '../../contracts/client-incentives/INounsClientTokenTypes.sol';
+import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 
 contract NounsClientTokenTest is Test {
     NounsClientToken token;
 
     function setUp() public {
-        token = new NounsClientToken(address(this), address(0));
+        NounsClientToken logic = new NounsClientToken();
+        bytes memory initData = abi.encodeWithSignature('initialize(address,address)', address(this), address(0));
+        token = NounsClientToken(address(new ERC1967Proxy(address(logic), initData)));
     }
 
     function test_storageLocation() public {

@@ -20,8 +20,9 @@ import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 
-contract Rewards is NounsClientToken {
+contract Rewards is NounsClientToken, UUPSUpgradeable {
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
 
@@ -40,7 +41,7 @@ contract Rewards is NounsClientToken {
     uint256 public nextAuctionIdToReward;
     uint32 public nextProposalIdToReward;
     uint256 public nextProposalRewardFirstAuctionId;
-    uint256 lastProposalRewardsUpdate = block.timestamp;
+    uint256 lastProposalRewardsUpdate;
 
     RewardParams public params;
 
@@ -57,24 +58,31 @@ contract Rewards is NounsClientToken {
         uint16 proposalEligibilityQuorumBps;
     }
 
-    constructor(
+    /**
+     * @dev This constructor does not have the `initializer` modifier, since it inherits from `NounsClientToken` which
+     * has the `initializer` modifier on its constructor.
+     */
+    constructor(address nounsDAO_, address auctionHouse_) {
+        nounsDAO = INounsDAOLogicV3(nounsDAO_);
+        auctionHouse = INounsAuctionHouseV2(auctionHouse_);
+    }
+
+    function initialize(
         address owner,
-        address nounsDAO_,
-        address auctionHouse_,
         address ethToken_,
         uint32 nextProposalIdToReward_,
         uint256 nextAuctionIdToReward_,
         uint256 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams,
         address descriptor
-    ) NounsClientToken(owner, descriptor) {
-        nounsDAO = INounsDAOLogicV3(nounsDAO_);
-        auctionHouse = INounsAuctionHouseV2(auctionHouse_);
+    ) public initializer {
+        super.initialize(owner, descriptor);
         ethToken = IERC20(ethToken_);
         nextProposalIdToReward = nextProposalIdToReward_;
         nextAuctionIdToReward = nextAuctionIdToReward_;
         nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         params = rewardParams;
+        lastProposalRewardsUpdate = block.timestamp;
     }
 
     function setParams(RewardParams calldata newParams) public onlyOwner {
@@ -323,4 +331,6 @@ contract Rewards is NounsClientToken {
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
         return a < b ? a : b;
     }
+
+    function _authorizeUpgrade(address) internal view override onlyOwner {}
 }

@@ -40,24 +40,22 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = new Rewards({
-            owner: address(dao.timelock()),
-            nounsDAO_: address(dao),
-            auctionHouse_: minter,
-            nextProposalIdToReward_: uint32(dao.proposalCount()) + 1,
-            nextAuctionIdToReward_: 1,
-            ethToken_: address(erc20Mock),
-            nextProposalRewardFirstAuctionId_: auctionHouse.auction().nounId,
-            rewardParams: Rewards.RewardParams({
+        rewards = _deployRewards(
+            dao,
+            minter,
+            address(erc20Mock),
+            uint32(dao.proposalCount()) + 1,
+            1,
+            auctionHouse.auction().nounId,
+            Rewards.RewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 30,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
                 auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000
-            }),
-            descriptor: address(0)
-        });
+            })
+        );
 
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
@@ -195,5 +193,24 @@ contract AuctionRewards is RewardsBaseTest {
         uint256 approxEthRefunded = (gasUsed + 36000) * 100 gwei;
 
         assertApproxEqAbs(erc20Mock.balanceOf(makeAddr('caller tx.origin')), approxEthRefunded, 0.01 ether);
+    }
+}
+
+contract RewardsUpgradeTest is RewardsBaseTest {
+    function test_upgrade_worksForOwner() public {
+        Rewards newLogic = new Rewards(address(dao), minter);
+
+        vm.prank(rewards.owner());
+        rewards.upgradeTo(address(newLogic));
+
+        assertEq(get1967Implementation(address(rewards)), address(newLogic));
+    }
+
+    function test_upgrade_revertsForNonOwner() public {
+        Rewards newLogic = new Rewards(address(dao), minter);
+
+        vm.prank(makeAddr('nonOwner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.upgradeTo(address(newLogic));
     }
 }
