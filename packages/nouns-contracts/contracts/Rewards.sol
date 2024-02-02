@@ -100,6 +100,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
     function updateRewardsForAuctions(uint256 lastNounId) public {
         uint256 startGas = gasleft();
 
+        bool sawNonZeroClientId = false;
         uint256 nextAuctionIdToReward_ = nextAuctionIdToReward;
         require(
             lastNounId >= nextAuctionIdToReward_ + params.minimumAuctionsBetweenUpdates,
@@ -119,11 +120,15 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
             if (settlement.clientId > 0) {
+                sawNonZeroClientId = true;
                 _clientBalances[settlement.clientId] += (settlement.amount * auctionRewardBps) / 10_000;
             }
         }
 
-        _refundGas(startGas);
+        if (sawNonZeroClientId) {
+            // refund gas only if we're actually rewarding a client, not just moving the pointer
+            _refundGas(startGas);
+        }
     }
 
     struct Temp {

@@ -218,6 +218,22 @@ contract AuctionRewards is RewardsBaseTest {
         assertApproxEqAbs(erc20Mock.balanceOf(makeAddr('caller tx.origin')), approxEthRefunded, 0.01 ether);
     }
 
+    function test_doesntRefundGasIfOnlyZeroClientIds() public {
+        // reset state
+        rewards.updateRewardsForAuctions(nounId);
+
+        for (uint256 i; i < 100; ++i) {
+            nounId = bidAndSettleAuction(1 ether, 0);
+        }
+
+        vm.fee(100 gwei);
+        vm.txGasPrice(100 gwei);
+        vm.prank(makeAddr('caller'), makeAddr('caller tx.origin'));
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(erc20Mock.balanceOf(makeAddr('caller tx.origin')), 0);
+    }
+
     function test_refundsGas_givenFailedTokenTransfer_reverts() public {
         for (uint256 i; i < 100; ++i) {
             nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
