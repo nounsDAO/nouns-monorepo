@@ -194,6 +194,27 @@ contract AuctionRewards is RewardsBaseTest {
 
         assertApproxEqAbs(erc20Mock.balanceOf(makeAddr('caller tx.origin')), approxEthRefunded, 0.01 ether);
     }
+
+    function test_refundsGas_givenFailedTokenTransfer_reverts() public {
+        for (uint256 i; i < 100; ++i) {
+            nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
+        }
+
+        erc20Mock.setFailNextTransfer(true);
+
+        vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
+        rewards.updateRewardsForAuctions(nounId);
+    }
+
+    function test_withdrawClientBalance_givenFailedTokenTransfer_reverts() public {
+        rewards.updateRewardsForAuctions(nounId);
+
+        erc20Mock.setFailNextTransfer(true);
+
+        vm.prank(client1Wallet);
+        vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
+        rewards.withdrawClientBalance(CLIENT_ID, 0.05 ether, client1Wallet);
+    }
 }
 
 contract RewardsUpgradeTest is RewardsBaseTest {

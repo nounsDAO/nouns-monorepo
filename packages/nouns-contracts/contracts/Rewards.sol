@@ -21,8 +21,11 @@ import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 contract Rewards is NounsClientToken, UUPSUpgradeable {
+    using SafeERC20 for IERC20;
+
     INounsDAOLogicV3 public immutable nounsDAO;
     INounsAuctionHouseV2 public immutable auctionHouse;
 
@@ -259,7 +262,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
         _clientBalances[clientId] -= amount;
 
-        ethToken.transfer(to, amount);
+        ethToken.safeTransfer(to, amount);
     }
 
     struct ProposalRewardsParams {
@@ -327,7 +330,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
             uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
             uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
             uint256 refundAmount = min(gasPrice * gasUsed, balance);
-            ethToken.transfer(tx.origin, refundAmount);
+            ethToken.safeTransfer(tx.origin, refundAmount);
         }
     }
 
