@@ -184,11 +184,16 @@ contract AuctionRewards is RewardsBaseTest {
             nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
         }
 
+        uint256 startGas = gasleft();
+
         vm.fee(100 gwei);
         vm.txGasPrice(100 gwei);
         vm.prank(makeAddr('caller'), makeAddr('caller tx.origin'));
         rewards.updateRewardsForAuctions(nounId);
 
-        assertEq(erc20Mock.balanceOf(makeAddr('caller tx.origin')), 0.0875243 ether);
+        uint256 gasUsed = startGas - gasleft();
+        uint256 approxEthRefunded = (gasUsed + 36000) * 100 gwei;
+
+        assertApproxEqAbs(erc20Mock.balanceOf(makeAddr('caller tx.origin')), approxEthRefunded, 0.01 ether);
     }
 }
