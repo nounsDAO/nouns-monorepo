@@ -37,8 +37,6 @@ contract Rewards is NounsClientToken {
     /// @notice The maximum basefee the DAO will refund
     uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
 
-    uint32 public nextTokenId = 1;
-
     uint256 public nextAuctionIdToReward;
     uint32 public nextProposalIdToReward;
     uint256 public nextProposalRewardFirstAuctionId;
@@ -296,9 +294,8 @@ contract Rewards is NounsClientToken {
      * @notice Register a client, mints an NFT and assigns a clientId
      * @return uint32 the newly assigned clientId
      */
-    function registerClient() public returns (uint32) {
-        uint32 tokenId = nextTokenId++;
-        _mint(msg.sender, tokenId);
+    function registerClient(string calldata name, string calldata description) public override returns (uint32) {
+        uint32 tokenId = super.registerClient(name, description);
 
         // Increase the balance by one wei so that the slot is non zero when increased in the future
         _clientBalances[tokenId] += 1;

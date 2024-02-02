@@ -30,7 +30,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token'
         _getState().descriptor = descriptor_;
     }
 
-    function registerClient(string calldata name, string calldata description) public returns (uint32) {
+    function registerClient(string calldata name, string calldata description) public virtual returns (uint32) {
         TokenState storage s = _getState();
         uint32 tokenId = s.nextTokenId;
         s.nextTokenId++;

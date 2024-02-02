@@ -65,8 +65,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
         });
 
         vm.prank(client1Wallet);
-        clientId1 = rewards.registerClient();
-        clientId2 = rewards.registerClient();
+        clientId1 = rewards.registerClient('client1', 'client1 description');
+        clientId2 = rewards.registerClient('client2', 'client2 description');
 
         erc20Mock.mint(address(rewards), 100 ether);
     }

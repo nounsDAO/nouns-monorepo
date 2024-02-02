@@ -79,11 +79,11 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
             NounsAuctionHouseProxy(payable(address(auctionHouse)))
         );
 
-        rewards.registerClient();
+        rewards.registerClient('some client', 'some client description');
         vm.prank(client1Wallet);
-        CLIENT_ID = rewards.registerClient();
-        rewards.registerClient();
-        CLIENT_ID2 = rewards.registerClient();
+        CLIENT_ID = rewards.registerClient('client1', 'client1 description');
+        rewards.registerClient('some client', 'some client description');
+        CLIENT_ID2 = rewards.registerClient('client2', 'client2 description');
 
         erc20Mock.mint(address(rewards), 100 ether);
     }
