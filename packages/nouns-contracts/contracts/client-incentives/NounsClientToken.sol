@@ -23,7 +23,7 @@ import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableUpgradeable {
     /// @dev This is a ERC-7201 storage location, calculated using:
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
-    bytes32 private constant _STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
+    bytes32 public constant STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
     constructor() initializer {}
 
@@ -68,13 +68,9 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
         return _getState().descriptor;
     }
 
-    function STORAGE_LOCATION() external pure returns (bytes32) {
-        return _STORAGE_LOCATION;
-    }
-
     function _getState() private pure returns (TokenState storage $) {
         assembly {
-            $.slot := _STORAGE_LOCATION
+            $.slot := STORAGE_LOCATION
         }
     }
 }
