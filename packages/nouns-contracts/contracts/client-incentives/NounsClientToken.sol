@@ -35,7 +35,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     }
 
     function registerClient(string calldata name, string calldata description) public virtual returns (uint32) {
-        TokenState storage s = _getState();
+        Storage storage s = _getState();
         uint32 tokenId = s.nextTokenId;
         s.nextTokenId++;
         _mint(msg.sender, tokenId);
@@ -68,7 +68,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
         return _getState().descriptor;
     }
 
-    function _getState() private pure returns (TokenState storage $) {
+    function _getState() private pure returns (Storage storage $) {
         assembly {
             $.slot := STORAGE_LOCATION
         }

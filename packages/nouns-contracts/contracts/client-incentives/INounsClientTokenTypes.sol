@@ -21,7 +21,7 @@ interface INounsClientTokenTypes {
         string description;
     }
 
-    struct TokenState {
+    struct Storage {
         uint32 nextTokenId;
         address descriptor;
         mapping(uint32 => ClientMetadata) clientMetadata;
