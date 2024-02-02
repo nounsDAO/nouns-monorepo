@@ -119,37 +119,26 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         _refundGas(startGas);
     }
 
-    /// @dev refunds gas using the `ethToken` instead of ETH
-    function _refundGas(uint256 startGas) internal {
-        unchecked {
-            uint256 balance = ethToken.balanceOf(address(this));
-            if (balance == 0) {
-                return;
-            }
-            uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
-            uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
-            uint256 refundAmount = min(gasPrice * gasUsed, balance);
-            ethToken.transfer(tx.origin, refundAmount);
-        }
-    }
-
     struct Temp {
         uint256 numEligibleVotes;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
         uint256 proposalRewardForPeriod;
+        uint256 votingRewardForPeriod;
     }
 
     /**
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
-     * @param votingClientIds array of client ids that were used to vote on of all eligible the eligible proposals in
-     * this rewards distribution
+     * @param votingClientIds array of sorted client ids that were used to vote on of all eligible the eligible proposals in
+     * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
      */
     function updateRewardsForProposalWritingAndVoting(uint32 lastProposalId, uint32[] calldata votingClientIds) public {
+        uint256 startGas = gasleft();
+
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
         require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
+        require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
         NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             nextProposalIdToReward,
@@ -171,7 +160,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         Temp memory t;
 
         t.proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10_000;
-        uint256 votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
+        t.votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
 
         uint16 proposalEligibilityQuorumBps_ = params.proposalEligibilityQuorumBps;
 
@@ -217,7 +206,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
         // Calculate the reward per proposal and per vote
         t.rewardPerProposal = t.proposalRewardForPeriod / numEligibleProposals;
-        t.rewardPerVote = votingRewardForPeriod / t.numEligibleVotes;
+        t.rewardPerVote = t.votingRewardForPeriod / t.numEligibleVotes;
 
         //// Second loop over the proposals:
         //// 1. Skip proposals that were deleted for non eligibility.
@@ -240,6 +229,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
             for (uint256 j; j < votingClientIds.length; ++j) {
                 clientId = votingClientIds[j];
                 votes = voteData[j].votes;
+                require(votes > 0, 'all clientId must have votes');
                 if (clientId != 0) {
                     _clientBalances[clientId] += votes * t.rewardPerVote;
                 }
@@ -250,6 +240,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
                 'not all votes accounted'
             );
         }
+
+        _refundGas(startGas);
     }
 
     /**
@@ -324,12 +316,41 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         return balance;
     }
 
+    /// @dev refunds gas using the `ethToken` instead of ETH
+    function _refundGas(uint256 startGas) internal {
+        unchecked {
+            uint256 balance = ethToken.balanceOf(address(this));
+            if (balance == 0) {
+                return;
+            }
+            uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
+            uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
+            uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
+            uint256 refundAmount = min(gasPrice * gasUsed, balance);
+            ethToken.transfer(tx.origin, refundAmount);
+        }
+    }
+
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
         return a > b ? a : b;
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
         return a < b ? a : b;
+    }
+
+    /**
+     * @dev returns true if ids is an array of increasing unique values, i.e. sorted ascending and no duplicates
+     */
+    function isSortedAndNoDuplicates(uint32[] memory ids) internal pure returns (bool) {
+        uint256 len = ids.length;
+        uint32 prevValue = ids[0];
+        for (uint256 i = 1; i < len; ++i) {
+            uint32 nextValue = ids[i];
+            if (nextValue <= prevValue) return false;
+            prevValue = nextValue;
+        }
+        return true;
     }
 
     function _authorizeUpgrade(address) internal view override onlyOwner {}

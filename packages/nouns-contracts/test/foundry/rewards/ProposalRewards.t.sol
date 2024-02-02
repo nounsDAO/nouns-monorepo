@@ -191,6 +191,79 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         assertEq(rewards.clientBalance(clientId1), 0.15 ether); // 15 eth * 1%
     }
 
+    function test_refundsGas() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
+
+        settleAuction();
+        votingClientIds = [0];
+
+        uint256 startGas = gasleft();
+        vm.fee(100 gwei);
+        vm.txGasPrice(100 gwei);
+        vm.prank(makeAddr('caller'), makeAddr('caller tx.origin'));
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+        uint256 gasUsed = startGas - gasleft();
+        uint256 approxEthRefunded = (gasUsed + 36000) * 100 gwei;
+
+        assertApproxEqAbs(erc20Mock.balanceOf(makeAddr('caller tx.origin')), approxEthRefunded, 0.01 ether);
+    }
+
+    function test_allVotingClientIdsMustHaveVotes() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
+
+        settleAuction();
+        votingClientIds = [0, 5];
+        vm.expectRevert('all clientId must have votes');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
+
+    function test_votingClientIdsMustBeSorted() public {
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
+
+        votingClientIds = [0, 5, 4];
+        vm.expectRevert('must be sorted & unique');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
+
+    function test_votingClientIdsMustBeUnique() public {
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
+
+        votingClientIds = [0, 0];
+        vm.expectRevert('must be sorted & unique');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+
+        votingClientIds = [0, 1, 0];
+        vm.expectRevert('must be sorted & unique');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
+
     function test_doesntRewardIneligibleProposals() public {
         uint256 startTimestamp = block.timestamp;
 
