@@ -12,6 +12,7 @@ import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
     INounsAuctionHouseV2 auctionHouse;
+    address client1Wallet = makeAddr('client1Wallet');
 
     address clientWallet = makeAddr('clientWallet');
     address clientWallet2 = makeAddr('clientWallet2');
@@ -79,9 +80,12 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         );
 
         rewards.registerClient();
+        vm.prank(client1Wallet);
         CLIENT_ID = rewards.registerClient();
         rewards.registerClient();
         CLIENT_ID2 = rewards.registerClient();
+
+        erc20Mock.mint(address(rewards), 100 ether);
     }
 
     function _mintTo(address to) internal returns (uint256 tokenID) {
@@ -132,6 +136,10 @@ contract AuctionRewards is RewardsBaseTest {
 
         assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
         assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
+
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(CLIENT_ID, 0.05 ether, client1Wallet);
+        assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
 
     function test_revertsIfAlreadyProcessedNounId() public {
@@ -169,5 +177,18 @@ contract AuctionRewards is RewardsBaseTest {
     function test_nounIdMustBeSettled() public {
         vm.expectRevert('lastNounId must be settled');
         rewards.updateRewardsForAuctions(nounId + 1);
+    }
+
+    function test_refundsGas() public {
+        for (uint256 i; i < 100; ++i) {
+            nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
+        }
+
+        vm.fee(100 gwei);
+        vm.txGasPrice(100 gwei);
+        vm.prank(makeAddr('caller'), makeAddr('caller tx.origin'));
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(erc20Mock.balanceOf(makeAddr('caller tx.origin')), 0.0875243 ether);
     }
 }
