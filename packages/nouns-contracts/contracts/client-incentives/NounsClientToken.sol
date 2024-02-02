@@ -15,8 +15,8 @@
 
 pragma solidity ^0.8.19;
 
-import { ERC721 } from '@openzeppelin/contracts-v5/token/ERC721/ERC721.sol';
-import { Ownable } from '@openzeppelin/contracts-v5/access/Ownable.sol';
+import { ERC721 } from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { INounsClientTokenTypes } from './INounsClientTokenTypes.sol';
 import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 
@@ -25,7 +25,8 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721('Nouns Client Token'
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 private constant _STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
-    constructor(address owner, address descriptor_) Ownable(owner) {
+    constructor(address owner, address descriptor_) {
+        _transferOwnership(owner);
         _getState().nextTokenId = 1;
         _getState().descriptor = descriptor_;
     }

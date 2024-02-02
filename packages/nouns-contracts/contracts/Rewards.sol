@@ -19,7 +19,7 @@ import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
-import { IERC20 } from '@openzeppelin/contracts-v5/token/ERC20/IERC20.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract Rewards is NounsClientToken {
     INounsDAOLogicV3 public immutable nounsDAO;

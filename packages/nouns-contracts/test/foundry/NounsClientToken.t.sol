@@ -6,8 +6,6 @@ import { NounsClientToken } from '../../contracts/client-incentives/NounsClientT
 import { INounsClientTokenTypes } from '../../contracts/client-incentives/INounsClientTokenTypes.sol';
 
 contract NounsClientTokenTest is Test {
-    error OwnableUnauthorizedAccount(address account);
-
     NounsClientToken token;
 
     function setUp() public {
@@ -61,7 +59,7 @@ contract NounsClientTokenTest is Test {
 
     function test_setDescriptor_revertsForNonOwner() public {
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert(abi.encodeWithSelector(OwnableUnauthorizedAccount.selector, nonOwner));
+        vm.expectRevert('Ownable: caller is not the owner');
         vm.prank(nonOwner);
         token.setDescriptor(address(0));
     }
