@@ -57,7 +57,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
                 auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000
+                proposalEligibilityQuorumBps: 1000,
+                minimumAuctionsBetweenUpdates: 3
             })
         );
 
@@ -337,7 +338,8 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
                 auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000
+                proposalEligibilityQuorumBps: 1000,
+                minimumAuctionsBetweenUpdates: 3
             })
         );
 

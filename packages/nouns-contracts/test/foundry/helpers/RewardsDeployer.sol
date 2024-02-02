@@ -17,7 +17,7 @@ library RewardsDeployer {
     ) internal returns (Rewards) {
         Rewards rewardsLogic = new Rewards(address(dao), minter);
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,address,uint32,uint256,uint256,(uint32,uint8,uint16,uint16,uint16,uint16),address)',
+            'initialize(address,address,uint32,uint256,uint256,(uint32,uint8,uint16,uint16,uint16,uint16,uint8),address)',
             address(dao.timelock()),
             erc20,
             nextProposalIdToReward,

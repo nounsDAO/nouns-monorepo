@@ -59,6 +59,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         uint16 votingRewardBps;
         uint16 auctionRewardBps;
         uint16 proposalEligibilityQuorumBps;
+        uint8 minimumAuctionsBetweenUpdates;
     }
 
     /**
@@ -100,7 +101,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         uint256 startGas = gasleft();
 
         uint256 nextAuctionIdToReward_ = nextAuctionIdToReward;
-        require(lastNounId >= nextAuctionIdToReward_, 'lastNounId must be higher');
+        require(
+            lastNounId >= nextAuctionIdToReward_ + params.minimumAuctionsBetweenUpdates,
+            'lastNounId must be higher'
+        );
         nextAuctionIdToReward = lastNounId + 1;
 
         INounsAuctionHouseV2.Settlement[] memory settlements = auctionHouse.getSettlements(

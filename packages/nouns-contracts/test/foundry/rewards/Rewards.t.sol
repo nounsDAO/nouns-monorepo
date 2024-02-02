@@ -54,7 +54,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
                 auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000
+                proposalEligibilityQuorumBps: 1000,
+                minimumAuctionsBetweenUpdates: 0
             })
         );
 
@@ -139,6 +140,27 @@ contract AuctionRewards is RewardsBaseTest {
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(CLIENT_ID, 0.05 ether, client1Wallet);
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
+    }
+
+    function test_requiresMinimumNumberOfAuctionsToPass() public {
+        rewards.updateRewardsForAuctions(nounId);
+
+        Rewards.RewardParams memory params = rewards.getParams();
+        params.minimumAuctionsBetweenUpdates = 5;
+        vm.prank(address(dao.timelock()));
+        rewards.setParams(params);
+
+        bidAndSettleAuction(1 ether, CLIENT_ID);
+        bidAndSettleAuction(1 ether, CLIENT_ID);
+        bidAndSettleAuction(1 ether, CLIENT_ID);
+        nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
+
+        vm.expectRevert('lastNounId must be higher');
+        rewards.updateRewardsForAuctions(nounId);
+
+        bidAndSettleAuction(1 ether, CLIENT_ID);
+        nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
+        rewards.updateRewardsForAuctions(nounId);
     }
 
     function test_revertsIfAlreadyProcessedNounId() public {
