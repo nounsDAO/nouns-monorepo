@@ -126,22 +126,22 @@ export function handleProposalCreated(event: ProposalCreated): void {
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
 ): void {
-  handleParsedProposal(ParsedProposalV3.fromV1Event(event));
+  saveProposalExtraDetails(ParsedProposalV3.fromV1Event(event));
 }
 
 export function handleProposalCreatedWithRequirementsV3(
   event: ProposalCreatedWithRequirements,
 ): void {
-  handleParsedProposal(ParsedProposalV3.fromV3Event(event));
+  saveProposalExtraDetails(ParsedProposalV3.fromV3Event(event));
 }
 
 export function handleProposalCreatedWithRequirementsV4(
   event: ProposalCreatedWithRequirementsV4,
 ): void {
-  handleParsedProposal(ParsedProposalV3.fromV4Event(event));
+  saveProposalExtraDetails(ParsedProposalV3.fromV4Event(event));
 }
 
-export function handleParsedProposal(parsedProposal: ParsedProposalV3): void {
+export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void {
   let proposal = getOrCreateProposal(parsedProposal.id);
 
   proposal.forVotes = BIGINT_ZERO;
