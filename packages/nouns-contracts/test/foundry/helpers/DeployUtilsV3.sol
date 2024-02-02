@@ -21,8 +21,6 @@ import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { Rewards } from '../../../contracts/Rewards.sol';
-import { RewardsProxy } from '../../../contracts/client-incentives/RewardsProxy.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
@@ -169,30 +167,5 @@ abstract contract DeployUtilsV3 is DeployUtils {
 
     function _deployDAOV3() internal returns (INounsDAOLogicV3) {
         return _deployDAOV3WithParams(10 minutes);
-    }
-
-    function _deployRewards(
-        INounsDAOLogicV3 dao,
-        address minter,
-        address erc20,
-        uint32 nextProposalIdToReward,
-        uint256 nextAuctionIdToReward,
-        uint96 nextProposalRewardFirstAuctionId,
-        Rewards.RewardParams memory rewardParams
-    ) internal returns (Rewards) {
-        Rewards rewardsLogic = new Rewards(address(dao), minter);
-        bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,address,uint32,uint256,uint256,(uint32,uint8,uint16,uint16,uint16,uint16),address)',
-            address(dao.timelock()),
-            erc20,
-            nextProposalIdToReward,
-            nextAuctionIdToReward,
-            nextProposalRewardFirstAuctionId,
-            rewardParams,
-            address(0) // descriptor
-        );
-
-        RewardsProxy proxy = new RewardsProxy(address(rewardsLogic), initCallData);
-        return Rewards(address(proxy));
     }
 }

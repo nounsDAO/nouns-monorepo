@@ -8,6 +8,7 @@ import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctio
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
+import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -40,7 +41,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = _deployRewards(
+        rewards = RewardsDeployer.deployRewards(
             dao,
             minter,
             address(erc20Mock),
