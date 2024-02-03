@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import noggles from '../../assets/noggles.svg';
+import brand from '../../assets/sonshou.svg';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
@@ -108,7 +108,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" />
+              <img src={brand} className={classes.navBarLogo} alt="Nouns DAO noggles" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
