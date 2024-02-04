@@ -69,8 +69,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                     )}
                     <br />
                     <div className={classes.bidComment}>
-                    {/* {bid.comment ? <TruncatedComment comment={bid.comment} /> : null} */}
-                    <TruncatedComment comment={"lorem ipsum dolor et"} />
+                    {bid.comment ? <TruncatedComment comment={bid.comment} /> : null}
                     </div>
                   </span>
                 </div>
