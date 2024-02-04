@@ -53,8 +53,8 @@ contract ProposeAuctionHouseV2UpgradeMainnet is Script {
         // upgrade: tells the AuctionHouse proxy contract to point to a new AuctionHouse.sol contract.
         targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
         values[0] = 0;
-        signatures[0] = 'upgrade(address)';
-        calldatas[0] = abi.encode(auctionHouseV2Implementation);
+        signatures[0] = 'upgrade(address,address)';
+        calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, auctionHouseV2Implementation);
 
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, description);
         console.log('Proposed Auction House V2 Upgrade proposalId: %d', proposalId);
