@@ -1,5 +1,5 @@
 import classes from './BidHistoryModalRow.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
@@ -16,6 +16,7 @@ import { containsBlockedText } from '../../utils/moderation/containsBlockedText'
 import { i18n } from '@lingui/core';
 import { shortENS, useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import { isMobileScreen } from '../../utils/isMobile';
+import TruncatedComment from '../TruncatedComment';
 
 interface BidHistoryModalRowProps {
   bid: Bid;
@@ -34,28 +35,11 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const shortAddress = useShortAddress(bid.sender);
 
   const isMobile = isMobileScreen();
-  const commentLength = isMobile ? 13 : 30
+  const commentLength = isMobile ? 13 : 35;
 
-  const [expanded, setExpanded] = useState(false); // new state here
-  const expandRowHandler = () => (bid.comment.length > commentLength ? setExpanded(!expanded) : null); // new handler to toggle expanded state
-  const [displayedComment, setDisplayedComment] = useState('');
-
-  useEffect(() => {
-    if (!bid.comment) return;
-
-    if (bid.comment.length > commentLength) {
-      let truncComment = bid.comment.substring(0, commentLength);
-
-      // check the next character, if it is not a space, go back to previous space
-      if (bid.comment.length > commentLength && bid.comment[commentLength] !== ' ') {
-        truncComment = truncComment.substring(0, truncComment.lastIndexOf(' '));
-      }
-      // add ellipsis
-      setDisplayedComment(truncComment + '...');
-    } else {
-      setDisplayedComment(bid.comment);
-    }
-  }, [bid.comment]);
+  const [expanded, setExpanded] = useState(false);
+  const expandRowHandler = () =>
+    bid.comment.length > commentLength ? setExpanded(!expanded) : null;
 
   return (
     <>
@@ -84,7 +68,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                     )}
                     <br />
                     <div className={classes.bidComment}>
-                      {bid.comment ? `"${displayedComment}"` : null}
+                    {bid.comment ? <TruncatedComment comment={bid.comment} /> : null}
                     </div>
                   </span>
                 </div>

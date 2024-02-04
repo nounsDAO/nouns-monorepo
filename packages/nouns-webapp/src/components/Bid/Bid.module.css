@@ -81,22 +81,31 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   width: auto;
-  height: 100px;
   color: black;
-  border-radius: 12px !important;
-  box-shadow: inset 0px 0px 0px 1px #fff;
-  background-color: white;
+  background-color: transparent !important;
   outline: none !important;
   box-shadow: none !important;
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 15px;
-  transition: all 0.2s ease-in-out;
   border: none;
+  border-radius: 0;
+  bottom: 0;
+  left: 0;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 3rem;
+  padding-top: 1.5rem;
+  line-height: 1.2em;
+  resize: none;
+  border-bottom: 1px solid #79809c49;
 }
 
 .commentInput:focus {
-  box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid black;
 }
 
 .customPlaceholder {
@@ -123,15 +132,21 @@
 .customPlaceholderBidComment {
   position: absolute;
   opacity: 0.3;
-  top: 15%;
-  left: 3%;
-  color: var(--brand-cool-light-text);
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 15px;
   z-index: 1;
   pointer-events: none;
   text-align: left;
+
+  bottom: 0;
+  left: 0;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  color: rgb(95, 95, 95);
+  opacity: 1;
 }
 
 .activityRow .form-floating {
@@ -189,22 +204,47 @@
     border: 1px solid #8c8d9275;
   }
 
-  .customPlaceholder {
-    left: 40%;
-  }
   .customPlaceholderBidAmt {
     left: 3.5%;
     top: 16%;
   }
-
+  
+  .customPlaceholderBidComment {
+    left: 0.1%;
+    top: 13%;
+    margin-left: 0.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--brand-cool-light-text);
+    font-family: 'PT Root UI';
+    font-weight: bold;
+    font-size: medium;
+  }
+  
   .commentInput {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: auto;
+    color: black;
+    border-radius: 12px !important;
+    box-shadow: inset 0px 0px 0px 1px #fff;
+    background-color: white;
+    outline: none !important;
+    box-shadow: none !important;
+    font-family: 'PT Root UI';
+    /* font-weight:normal; */
+    font-size: medium;
+    transition: all 0.2s ease-in-out;
     border: none;
     border: 1px solid #8c8d9275;
+    padding-top: 15px;
+    height: 100px;
+    left: 0.5%;
   }
-
-  .customPlaceholderBidComment {
-    left: 3.5%;
-    top: 16%;
+  
+  .commentInput:focus {
+    box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
+    border: none !important;
   }
 
   .emergencySettleWrapper {
@@ -228,5 +268,6 @@
 }
 
 .inputGroup {
+  position: relative;
   margin-bottom: 6px;
 }

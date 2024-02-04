@@ -10,13 +10,14 @@ import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsAuctionHouseV2Factory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { isMobileScreen } from '../../utils/isMobile';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -54,7 +55,7 @@ const Bid: React.FC<{
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
-  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
+  const nounsAuctionHouseContract = new NounsAuctionHouseV2Factory().attach(
     config.addresses.nounsAuctionHouseProxy,
   );
 
@@ -136,6 +137,7 @@ const Bid: React.FC<{
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });
+
     if (bidComment.trim() === '') {
       placeBid(auction.nounId, {
         value,
@@ -149,7 +151,7 @@ const Bid: React.FC<{
 
       placeBidWithComment(auction.nounId, bidComment, {
         value,
-        gasLimit: gasLimit.add(totalGas), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+        gasLimit: totalGas, // A 10,000 gas pad is used to avoid 'Out of gas' errors
       });
     }
   };
@@ -282,8 +284,14 @@ const Bid: React.FC<{
     window.open('https://fomonouns.wtf', '_blank')?.focus();
   };
 
-  const commentCopy = 'leave a comment with your bid (optional)';
+  const commentCopy = <Trans>Add a comment to your bid (optional)</Trans>
   const isWalletConnected = activeAccount !== undefined;
+
+  const autoGrow = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const minHeight = isMobileScreen() ? '100px' : '3rem';
+    const isSingleLine = event.target.value.split('\n').length === 1;
+    event.target.style.height = isSingleLine ? minHeight : `${event.target.scrollHeight}px`;
+  };
 
   return (
     <>
@@ -315,7 +323,7 @@ const Bid: React.FC<{
               min="0"
               onChange={bidInputHandler}
               ref={bidInputRef}
-              value={bidInput}
+              value={bidInput.trimStart()}
             />
           </>
         )}
@@ -334,7 +342,6 @@ const Bid: React.FC<{
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
-            {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
               <Col lg={12}>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
@@ -346,15 +353,16 @@ const Bid: React.FC<{
 
       {!auctionEnded && (
         <>
-          <InputGroup>
+          <InputGroup className={classes.inputGroup}>
             <span className={classes.customPlaceholderBidComment}>
               {!auctionEnded && bidComment.trim() === '' ? commentCopy : ''}
             </span>
             <FormControl
               className={classes.commentInput}
               as="textarea"
-              onChange={e => setBidComment(e.target.value)}
-              value={bidComment}
+              onChange={e => setBidComment(e.target.value.trimStart())}
+              value={bidComment.trimStart()}
+              onInput={autoGrow}
             />
           </InputGroup>
         </>

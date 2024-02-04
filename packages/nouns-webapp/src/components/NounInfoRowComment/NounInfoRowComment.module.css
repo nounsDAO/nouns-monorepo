@@ -1,75 +1,75 @@
 .nounInfoRowComment {
-    font-family: 'PT Root UI';
-    font-weight: light;
-    margin-left: 5px;
-  }
-  
-  .commentInfoContainer {
-    display: inline;
-    width: 420px;
-    height: 25px;
-  }
-  
-  .commentIcon {
-    margin-bottom: 4px;
-    margin-right: 7px;
-  }
-  
-  .truncatedComment {
-    font-family: 'PT Root UI';
-    color: black;
-    font-weight: light;
-    margin-left: 5px;
-  }
-  
-  .truncatedComment:hover,
-  .truncatedComment:hover a {
-    color: rgb(0, 0, 255);
-    font-family: 'PT Root UI';
-    font-weight: light;
-    margin-left: 5px;
-  }
-  
-  .linkWarm {
-    font-family: 'PT Root UI';
-    font-weight: light;
-    margin-left: 5px;
-    text-decoration: none;
-  }
-  
-  .linkWarm:visited,
-  .linkWarm:active {
-    color: var(--brand-dark-green);
-    text-decoration: none;
-  }
-  
-  .linkWarm:hover {
-    color: var(--brand-color-red);
-  }
-  
-  .linkCool {
-    font-family: 'PT Root UI';
-    font-weight: light;
-    margin-left: 5px;
-    text-decoration: none;
-  }
-  
-  .linkCool:visited,
-  .linkCool:active {
-    color: var(--brand-dark-green);
-    text-decoration: none;
-  }
-  
-  .linkCool:hover {
-    color: var(--brand-color-blue);
-  }
-  
-  .nounHolderInfoContainer {
-    display: inline;
-    width: 350px;
-    height: 35px;
-  }
-  
-  .nounHolderLoading {
-    opacity: 0.5;
-  }
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  margin-left: 5px;
+  text-decoration: none;
+}
+
+.commentInfoContainer {
+  display: inline;
+  width: 420px;
+  height: 25px;
+}
+
+.commentIcon {
+  margin-bottom: 4px;
+  margin-right: 7px;
+}
+
+.nounInfoRowTruncatedComment {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  margin-left: 5px;
+  text-decoration: none;
+
+}
+
+.nounInfoRowTruncatedComment:hover {
+  opacity: 0.65;
+  cursor: pointer;
+}
+
+
+.linkWarm {
+  font-family: 'PT Root UI';
+  font-weight: light;
+  margin-left: 5px;
+  text-decoration: none;
+}
+
+.linkWarm:visited,
+.linkWarm:active {
+  color: var(--brand-dark-green);
+  text-decoration: none;
+}
+
+.linkWarm:hover {
+  color: var(--brand-color-red);
+}
+
+.linkCool {
+  font-family: 'PT Root UI';
+  font-weight: light;
+  margin-left: 5px;
+  text-decoration: none;
+}
+
+.linkCool:visited,
+.linkCool:active {
+  color: var(--brand-dark-green);
+  text-decoration: none;
+}
+
+.linkCool:hover {
+  color: var(--brand-color-blue);
+}
+
+.nounHolderInfoContainer {
+  display: inline;
+  width: 350px;
+  height: 35px;
+}
+
+.nounHolderLoading {
+  opacity: 0.5;
+}

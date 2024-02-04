@@ -24,6 +24,7 @@ import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
 import Holder from '../Holder';
+import BidHistoryToggle from '../BidHistoryToggle';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -53,13 +54,23 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
+  const [isBidsToggleActive, setIsBidsToggleActive] = useState(true);
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
-  const showBidModalHandler = () => {
+
+  const showBidHistoryModalHandler = () => {
     setShowBidHistoryModal(true);
   };
   const dismissBidModalHanlder = () => {
     setShowBidHistoryModal(false);
+  };
+
+  const toggleBidAmounts = () => {
+    setIsBidsToggleActive(true);
+  };
+
+  const toggleBidComments = () => {
+    setIsBidsToggleActive(false);
   };
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
@@ -155,12 +166,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             {!isLastAuction ? (
               <NounInfoCard
                 nounId={auction.nounId.toNumber()}
-                bidHistoryOnClickHandler={showBidModalHandler}
+                nounWinner={auction.bidder}
+                bidHistoryOnClickHandler={showBidHistoryModalHandler}
               />
             ) : (
               displayGraphDepComps && (
                 <BidHistory
                   auctionId={auction.nounId.toString()}
+                  showBids={isBidsToggleActive}
                   max={3}
                   classes={bidHistoryClasses}
                 />
@@ -171,7 +184,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             {isLastAuction &&
               !auction.amount.eq(0) &&
               (displayGraphDepComps ? (
-                <BidHistoryBtn onClick={showBidModalHandler} />
+                <div className={classes.container}>
+                  <BidHistoryToggle
+                    onBidsClick={toggleBidAmounts}
+                    onCommentsClick={toggleBidComments}
+                    isBidsToggleActive={isBidsToggleActive}
+                  />
+                  <BidHistoryBtn onClick={showBidHistoryModalHandler} />
+                </div>
               ) : (
                 <BidHistoryBtn onClick={openEtherscanBidHistory} />
               ))}

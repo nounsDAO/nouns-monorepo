@@ -338,9 +338,8 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
   }
  `;
 
-export const bidsByAuctionQueryForWinningBid = (auctionId: string) => gql`
-{
- bids(where:{auction: "${auctionId}", comment_not: null}, orderBy: amount, orderDirection: desc) {
+export const bidsByAuctionQueryForWinningBid = (auctionId: string, winner: string) => gql` {
+ bids(where:{auction: "${auctionId}", comment_not: null, bidder: "${winner}"}, orderBy: amount, orderDirection: desc) {
    id
    comment
    amount

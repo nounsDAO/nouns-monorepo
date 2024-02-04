@@ -6,7 +6,7 @@
   display: grid;
   text-align: start;
   list-style-type: none;
-  row-gap: 0.5rem;
+  row-gap: 0.25rem;
   padding: 0;
   margin-bottom: 8px;
   margin-top: 1rem;
@@ -111,7 +111,15 @@
 }
 
 .bidComment {
-  color: gray;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 2px;
+}
+
+.bidComment:hover { 
+  opacity: 0.65;
+  cursor: pointer;
 }
 
 .bidRowCool .bidAmount {

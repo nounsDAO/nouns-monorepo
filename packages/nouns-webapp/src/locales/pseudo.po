@@ -186,6 +186,10 @@ msgstr ""
 #~ msgid "Add a Proposal Transaction"
 #~ msgstr ""
 
+#: src/components/Bid/index.tsx
+msgid "Add a comment to your bid (optional)"
+msgstr ""
+
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 msgid "Add an optional message for the changes to the proposal"
 msgstr ""
@@ -345,6 +349,7 @@ msgstr ""
 msgid "Bid was placed successfully!"
 msgstr ""
 
+#: src/components/BidHistoryToggle/index.tsx
 #: src/components/NounInfoCard/index.tsx
 msgid "Bids"
 msgstr ""
@@ -443,6 +448,10 @@ msgstr ""
 
 #: src/components/NounInfoRowComment/index.tsx
 msgid "Comment"
+msgstr ""
+
+#: src/components/BidHistoryToggle/index.tsx
+msgid "Comments"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1222,6 +1231,10 @@ msgstr ""
 msgid "Proposals"
 msgstr ""
 
+#: src/pages/Vote/index.tsx
+msgid "Proposals cannot be executed during a forking period"
+msgstr ""
+
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
 msgstr ""
@@ -1467,12 +1480,12 @@ msgstr ""
 #~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on created block"
-msgstr ""
+#~ msgid "Taken on created block"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on start block"
-msgstr ""
+#~ msgid "Taken on start block"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
@@ -1746,8 +1759,8 @@ msgid "View Threshold Info"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
-msgid "View all bids"
-msgstr ""
+#~ msgid "View all"
+#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx
