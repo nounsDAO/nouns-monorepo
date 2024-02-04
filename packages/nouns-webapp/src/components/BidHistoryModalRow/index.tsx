@@ -36,6 +36,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
 
   const isMobile = isMobileScreen();
   const commentLength = isMobile ? 13 : 35;
+  const trophyDimensions = isMobile ? 12 : 16;
 
   const [expanded, setExpanded] = useState(false);
   const expandRowHandler = () =>
@@ -52,23 +53,24 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
         <div className={auctionActivityClasses.bidItem}>
           <div className={auctionActivityClasses.leftSectionWrapper}>
             <div className={auctionActivityClasses.bidder}>
-              <div className={classes.bidderInfoWrapper}>
+              <div className={classes.bidderCommentText}>
                 <Davatar size={40} address={bid.sender} provider={provider} />
                 <div className={classes.bidderInfoText}>
-                  <span>
+                  <span className={classes.bidHeader}>
                     {ens && !ensMatchesBlocklistRegex ? shortENS(ens) : shortAddress}
                     {index === 0 && (
                       <img
                         src={_trophy}
                         alt="Winning bidder"
                         className={classes.trophy}
-                        height={16}
-                        width={16}
+                        height={trophyDimensions}
+                        width={trophyDimensions}
                       />
                     )}
                     <br />
                     <div className={classes.bidComment}>
-                    {bid.comment ? <TruncatedComment comment={bid.comment} /> : null}
+                    {/* {bid.comment ? <TruncatedComment comment={bid.comment} /> : null} */}
+                    <TruncatedComment comment={"lorem ipsum dolor et"} />
                     </div>
                   </span>
                 </div>
@@ -77,27 +79,29 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
           </div>
 
           <div className={auctionActivityClasses.rightSectionWrapper}>
+          <div className={auctionActivityClasses.bidder}>
             <div className={classes.bidderInfoWrapper}>
-              <div className={classes.bidderCommentText}>
+              <div className={classes.bidderInfoWrapper}>
                 <div className={classes.flexContainer}>
-                  {bidAmount}
+                  <span className={classes.bidHeader}> {bidAmount}</span>
                   <div className={auctionActivityClasses.linkSymbol}>
                     <a href={txLink} target="_blank" rel="noreferrer">
                       <div className={classes.linkIcon}>
-                        <ExternalLinkIcon height={24} width={24} />
+                        <ExternalLinkIcon height={22} width={22} />
                       </div>
                     </a>
                   </div>
                 </div>
                 <div className={classes.bidDate}>
                   {i18n.date(new Date(bid.timestamp.toNumber() * 1000), {
-                    dateStyle: 'medium',
+                    dateStyle: 'short',
                     timeStyle: 'short',
                   })}
                 </div>
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         <div className={classes.expandedContent} style={{ display: expanded ? 'block' : 'none' }}>

@@ -18,7 +18,7 @@
   max-height: none;
 }
 
-.bidderInfoWrapper {
+.bidderCommentText {
   display: flex;
 }
 
@@ -29,7 +29,7 @@
   line-height: 23px;
 }
 
-.bidderCommentText {
+.bidderInfoWrapper {
   margin-right: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -80,6 +80,11 @@
   white-space: nowrap;
 }
 
+.bidHeader {
+  font-weight: bold;
+  font-family: 'PT Root UI';
+}
+
 .bidComment {
   color: rgba(140, 141, 146, 1);
   font-weight: 500;
@@ -92,4 +97,35 @@
   display: flex;
   align-items: center;
   gap: 0.1rem;
+}
+
+@media (max-width: 992px) {
+
+  .bidderInfoText {
+    width: max-content;
+    height: fit-content;
+  }
+
+  .bidderCommentText {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+  }
+
+  .bidderInfoWrapper {
+    width: max-content;
+    height: fit-content;
+    margin-right: 0;
+  }
+
+  .trophy {
+    margin-left: 0.1rem;
+  }
+
+  .bidHeader {
+    font-weight: bold;
+    font-family: 'PT Root UI';
+    font-size: 16px;
+  }
 }
