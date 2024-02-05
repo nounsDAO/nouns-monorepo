@@ -35,9 +35,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
     /// @notice The vote refund gas overhead, including 7K for token transfer and 29K for general transaction overhead
     uint256 public constant REFUND_BASE_GAS = 36000;
 
-    /// @notice The maximum gas units the DAO will refund
-    uint256 public constant MAX_REFUND_GAS_USED = 20_000_000; // TODO
-
     /// @notice The maximum basefee the DAO will refund
     uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
 
@@ -337,7 +334,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
             }
             uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
             uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
+            uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
             uint256 refundAmount = min(gasPrice * gasUsed, balance);
             ethToken.safeTransfer(tx.origin, refundAmount);
         }
