@@ -16,6 +16,7 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
     ERC20Mock erc20Mock = new ERC20Mock();
     INounsAuctionHouseV2 auctionHouse;
 
+    address admin = makeAddr('admin');
     address bidder1 = makeAddr('bidder1');
     address bidder2 = makeAddr('bidder2');
     address client1Wallet = makeAddr('client1Wallet');
@@ -47,6 +48,7 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
 
         rewards = RewardsDeployer.deployRewards(
             dao,
+            admin,
             minter,
             address(erc20Mock),
             1,

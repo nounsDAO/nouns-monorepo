@@ -22,8 +22,9 @@ import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 
-contract Rewards is NounsClientToken, UUPSUpgradeable {
+contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     using SafeERC20 for IERC20;
 
     /**
@@ -64,7 +65,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
     RewardParams public params;
 
-    IERC20 public ethToken; // TODO make configurable
+    IERC20 public ethToken;
+    address public admin;
 
     mapping(uint32 clientId => uint256 balance) public _clientBalances;
 
@@ -79,6 +81,14 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
     }
 
     /**
+     * @dev Throws if called by any account other than the owner or admin.
+     */
+    modifier onlyOwnerOrAdmin() {
+        require(owner() == _msgSender() || admin == _msgSender(), 'Caller must be owner or admin');
+        _;
+    }
+
+    /**
      * @dev This constructor does not have the `initializer` modifier, since it inherits from `NounsClientToken` which
      * has the `initializer` modifier on its constructor.
      */
@@ -89,6 +99,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
     function initialize(
         address owner,
+        address admin_,
         address ethToken_,
         uint32 nextProposalIdToReward_,
         uint256 nextAuctionIdToReward_,
@@ -97,6 +108,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         address descriptor
     ) public initializer {
         super.initialize(owner, descriptor);
+        __Pausable_init_unchained();
+        admin = admin_;
         ethToken = IERC20(ethToken_);
         nextProposalIdToReward = nextProposalIdToReward_;
         nextAuctionIdToReward = nextAuctionIdToReward_;
@@ -115,7 +128,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
      * @notice Register a client, mints an NFT and assigns a clientId
      * @return uint32 the newly assigned clientId
      */
-    function registerClient(string calldata name, string calldata description) public override returns (uint32) {
+    function registerClient(
+        string calldata name,
+        string calldata description
+    ) public override whenNotPaused returns (uint32) {
         uint32 tokenId = super.registerClient(name, description);
 
         // Increase the balance by one wei so that the slot is non zero when increased in the future
@@ -124,7 +140,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         return tokenId;
     }
 
-    function updateRewardsForAuctions(uint256 lastNounId) public {
+    function updateRewardsForAuctions(uint256 lastNounId) public whenNotPaused {
         uint256 startGas = gasleft();
 
         bool sawNonZeroClientId = false;
@@ -172,7 +188,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
      * @param votingClientIds array of sorted client ids that were used to vote on of all eligible the eligible proposals in
      * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
      */
-    function updateRewardsForProposalWritingAndVoting(uint32 lastProposalId, uint32[] calldata votingClientIds) public {
+    function updateRewardsForProposalWritingAndVoting(
+        uint32 lastProposalId,
+        uint32[] calldata votingClientIds
+    ) public whenNotPaused {
         uint256 startGas = gasleft();
 
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
@@ -292,7 +311,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
      * @param amount amount of withdraw
      * @param to the address to withdraw to
      */
-    function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public {
+    function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public whenNotPaused {
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
         require(amount < _clientBalances[clientId], 'amount too large');
 
@@ -381,6 +400,14 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
     function setParams(RewardParams calldata newParams) public onlyOwner {
         params = newParams;
+    }
+
+    function pause() public onlyOwnerOrAdmin {
+        _pause();
+    }
+
+    function unpause() public onlyOwnerOrAdmin {
+        _unpause();
     }
 
     /**

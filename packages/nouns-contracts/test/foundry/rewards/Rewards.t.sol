@@ -13,8 +13,9 @@ import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
 abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
     INounsAuctionHouseV2 auctionHouse;
-    address client1Wallet = makeAddr('client1Wallet');
 
+    address admin = makeAddr('admin');
+    address client1Wallet = makeAddr('client1Wallet');
     address clientWallet = makeAddr('clientWallet');
     address clientWallet2 = makeAddr('clientWallet2');
     address voter = makeAddr('voter');
@@ -43,6 +44,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 
         rewards = RewardsDeployer.deployRewards(
             dao,
+            admin,
             minter,
             address(erc20Mock),
             uint32(dao.proposalCount()) + 1,
@@ -272,5 +274,56 @@ contract RewardsUpgradeTest is RewardsBaseTest {
         vm.prank(makeAddr('nonOwner'));
         vm.expectRevert('Ownable: caller is not the owner');
         rewards.upgradeTo(address(newLogic));
+    }
+}
+
+contract PausingTest is RewardsBaseTest {
+    function test_pause_revertsForNonAdminNonOwner() public {
+        vm.prank(makeAddr('non admin non owner'));
+        vm.expectRevert('Caller must be owner or admin');
+        rewards.pause();
+    }
+
+    function test_pause_worksForAdmin() public {
+        vm.prank(admin);
+        rewards.pause();
+
+        assertTrue(rewards.paused());
+    }
+
+    function test_pause_worksForOwner() public {
+        vm.prank(rewards.owner());
+        rewards.pause();
+
+        assertTrue(rewards.paused());
+    }
+}
+
+contract PausedTest is RewardsBaseTest {
+    function setUp() public override {
+        super.setUp();
+
+        vm.prank(admin);
+        rewards.pause();
+    }
+
+    function test_registerClient_reverts() public {
+        vm.expectRevert('Pausable: paused');
+        rewards.registerClient('some client', 'some description');
+    }
+
+    function test_updateRewardsForAuctions_reverts() public {
+        vm.expectRevert('Pausable: paused');
+        rewards.updateRewardsForAuctions(1);
+    }
+
+    function test_updateRewardsForProposalWritingAndVoting_reverts() public {
+        vm.expectRevert('Pausable: paused');
+        rewards.updateRewardsForProposalWritingAndVoting(1, new uint32[](0));
+    }
+
+    function test_withdrawClientBalance_reverts() public {
+        vm.expectRevert('Pausable: paused');
+        rewards.withdrawClientBalance(1, 1, makeAddr('to'));
     }
 }

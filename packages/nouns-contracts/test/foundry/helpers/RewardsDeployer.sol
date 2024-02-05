@@ -8,6 +8,7 @@ import { RewardsProxy } from '../../../contracts/client-incentives/RewardsProxy.
 library RewardsDeployer {
     function deployRewards(
         INounsDAOLogicV3 dao,
+        address admin,
         address minter,
         address erc20,
         uint32 nextProposalIdToReward,
@@ -17,8 +18,9 @@ library RewardsDeployer {
     ) internal returns (Rewards) {
         Rewards rewardsLogic = new Rewards(address(dao), minter);
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,address,uint32,uint256,uint256,(uint32,uint8,uint16,uint16,uint16,uint16,uint8),address)',
+            'initialize(address,address,address,uint32,uint256,uint256,(uint32,uint8,uint16,uint16,uint16,uint16,uint8),address)',
             address(dao.timelock()),
+            admin,
             erc20,
             nextProposalIdToReward,
             nextAuctionIdToReward,
