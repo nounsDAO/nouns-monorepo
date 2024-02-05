@@ -22,9 +22,11 @@ import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import { InMemoryMapping } from './libs/InMemoryMapping.sol';
 
 contract Rewards is NounsClientToken, UUPSUpgradeable {
     using SafeERC20 for IERC20;
+    using InMemoryMapping for InMemoryMapping.InMemoryMapping;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -143,13 +145,23 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
         require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
+        uint32 numClientIds = nextTokenId();
+        InMemoryMapping.InMemoryMapping memory m = InMemoryMapping.initialize(numClientIds);
+
         uint16 auctionRewardBps = params.auctionRewardBps;
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
             if (settlement.clientId > 0) {
                 sawNonZeroClientId = true;
-                _clientBalances[settlement.clientId] += (settlement.amount * auctionRewardBps) / 10_000;
+                uint256 b = m.get(settlement.clientId);
+                b += (settlement.amount * auctionRewardBps) / 10_000;
+                m.set(settlement.clientId, b);
             }
+        }
+
+        for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
+            // Collect the entries also into an event
+            _clientBalances[m.values[i].clientId] += m.values[i].balance;
         }
 
         if (sawNonZeroClientId) {
