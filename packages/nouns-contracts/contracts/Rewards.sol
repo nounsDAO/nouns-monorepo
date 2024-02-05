@@ -320,6 +320,42 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         return balance;
     }
 
+    /**
+     * @notice Returns the clientIds that is needed to be passed as a parameter to updateRewardsForProposalWritingAndVoting
+     * @dev This is not meant to be called onchain because it may be very gas intensive.
+     */
+    function getVotingClientIds(uint32 lastProposalId) public view returns (uint32[] memory) {
+        uint256 numClientIds = nextTokenId();
+        uint32[] memory allClientIds = new uint32[](numClientIds);
+        for (uint32 i; i < numClientIds; ++i) {
+            allClientIds[i] = i;
+        }
+        NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
+            nextProposalIdToReward,
+            lastProposalId,
+            allClientIds
+        );
+
+        uint32[] memory sumVotes = new uint32[](numClientIds);
+        for (uint256 i; i < proposals.length; ++i) {
+            for (uint256 j; j < numClientIds; ++j) {
+                sumVotes[j] += proposals[i].voteData[j].votes;
+            }
+        }
+
+        uint256 idx;
+        uint32[] memory nonZeroClientIds = new uint32[](numClientIds);
+        for (uint32 i; i < numClientIds; ++i) {
+            if (sumVotes[i] > 0) nonZeroClientIds[idx++] = i;
+        }
+
+        assembly {
+            mstore(nonZeroClientIds, idx)
+        }
+
+        return nonZeroClientIds;
+    }
+
     function getParams() public view returns (RewardParams memory) {
         return params;
     }

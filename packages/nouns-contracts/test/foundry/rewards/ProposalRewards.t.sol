@@ -9,6 +9,7 @@ import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
+import 'forge-std/Test.sol';
 
 abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
     Rewards rewards;
@@ -505,6 +506,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
 
 contract VotesRewardsTest is BaseProposalRewardsTest {
     uint32 proposalId;
+    uint32[] expectedClientIds;
 
     function setUp() public virtual override {
         super.setUp();
@@ -580,5 +582,33 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
             lastProposalId: proposalId,
             votingClientIds: votingClientIds
         });
+    }
+
+    function test_getVotingClientIds() public {
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
+        expectedClientIds = [1];
+        assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+
+        vote(bidder2, proposalId, 1, 'i support', clientId2);
+        expectedClientIds = [1, 2];
+        assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+
+        vote(makeAddr('noundersDAO'), proposalId, 0, 'against');
+        expectedClientIds = [0, 1, 2];
+        assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+    }
+
+    function assertEq(uint32[] memory a, uint32[] memory b) internal {
+        if (keccak256(abi.encode(a)) != keccak256(abi.encode(b))) {
+            console.log('>>> a:');
+            for (uint i; i < a.length; i++) {
+                console.log(a[i]);
+            }
+            console.log('>>> b:');
+            for (uint i; i < b.length; i++) {
+                console.log(b[i]);
+            }
+            fail('Array no equal');
+        }
     }
 }

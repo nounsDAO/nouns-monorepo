@@ -68,6 +68,10 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
         return _getState().descriptor;
     }
 
+    function nextTokenId() public view returns (uint32) {
+        return _getState().nextTokenId;
+    }
+
     function _getState() private pure returns (Storage storage $) {
         assembly {
             $.slot := STORAGE_LOCATION
