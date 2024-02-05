@@ -26,8 +26,11 @@ import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 contract Rewards is NounsClientToken, UUPSUpgradeable {
     using SafeERC20 for IERC20;
 
-    INounsDAOLogicV3 public immutable nounsDAO;
-    INounsAuctionHouseV2 public immutable auctionHouse;
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   CONSTANTS
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
     /// @notice The maximum priority fee used to cap gas refunds
     uint256 public constant MAX_REFUND_PRIORITY_FEE = 2 gwei;
@@ -37,6 +40,22 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
     /// @notice The maximum basefee the DAO will refund
     uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   IMMUTABLES
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    INounsDAOLogicV3 public immutable nounsDAO;
+
+    INounsAuctionHouseV2 public immutable auctionHouse;
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   STORAGE VARIABLES
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
     uint256 public nextAuctionIdToReward;
     uint32 public nextProposalIdToReward;
@@ -86,12 +105,23 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         lastProposalRewardsUpdate = block.timestamp;
     }
 
-    function setParams(RewardParams calldata newParams) public onlyOwner {
-        params = newParams;
-    }
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   PUBLIC WRITE
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
 
-    function getParams() public view returns (RewardParams memory) {
-        return params;
+    /**
+     * @notice Register a client, mints an NFT and assigns a clientId
+     * @return uint32 the newly assigned clientId
+     */
+    function registerClient(string calldata name, string calldata description) public override returns (uint32) {
+        uint32 tokenId = super.registerClient(name, description);
+
+        // Increase the balance by one wei so that the slot is non zero when increased in the future
+        _clientBalances[tokenId] += 1;
+
+        return tokenId;
     }
 
     function updateRewardsForAuctions(uint256 lastNounId) public {
@@ -271,46 +301,11 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         ethToken.safeTransfer(to, amount);
     }
 
-    struct ProposalRewardsParams {
-        uint32 lastProposalId;
-        uint256 expectedNumEligibleProposals;
-        uint256 expectedNumEligibleVotes;
-        uint256 firstNounId;
-        uint256 lastNounId;
-        uint32[] votingClientIds;
-    }
-
-    function getAuctionRevenue(
-        uint256 firstNounId,
-        uint256 endTimestamp
-    ) internal view returns (uint256 sumRevenue, uint256 lastAuctionId) {
-        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlementsFromIdtoTimestamp(
-            firstNounId,
-            endTimestamp,
-            true
-        );
-        sumRevenue = sumAuctions(s);
-        lastAuctionId = s[s.length - 1].nounId;
-    }
-
-    function sumAuctions(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
-        for (uint256 i = 0; i < s.length; ++i) {
-            sum += s[i].amount;
-        }
-    }
-
     /**
-     * @notice Register a client, mints an NFT and assigns a clientId
-     * @return uint32 the newly assigned clientId
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   PUBLIC READ
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
-    function registerClient(string calldata name, string calldata description) public override returns (uint32) {
-        uint32 tokenId = super.registerClient(name, description);
-
-        // Increase the balance by one wei so that the slot is non zero when increased in the future
-        _clientBalances[tokenId] += 1;
-
-        return tokenId;
-    }
 
     /**
      * @notice Returns the withdrawable balance of client with id `clientId`
@@ -323,6 +318,45 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
             balance--;
         }
         return balance;
+    }
+
+    function getParams() public view returns (RewardParams memory) {
+        return params;
+    }
+
+    function getAuctionRevenue(
+        uint256 firstNounId,
+        uint256 endTimestamp
+    ) public view returns (uint256 sumRevenue, uint256 lastAuctionId) {
+        INounsAuctionHouseV2.Settlement[] memory s = auctionHouse.getSettlementsFromIdtoTimestamp(
+            firstNounId,
+            endTimestamp,
+            true
+        );
+        sumRevenue = sumAuctions(s);
+        lastAuctionId = s[s.length - 1].nounId;
+    }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   ADMIN
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    function setParams(RewardParams calldata newParams) public onlyOwner {
+        params = newParams;
+    }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   INTERNAL
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    function sumAuctions(INounsAuctionHouseV2.Settlement[] memory s) internal pure returns (uint256 sum) {
+        for (uint256 i = 0; i < s.length; ++i) {
+            sum += s[i].amount;
+        }
     }
 
     /// @dev refunds gas using the `ethToken` instead of ETH
