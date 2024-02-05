@@ -6,6 +6,7 @@ import {
   afterAll,
   beforeEach,
   afterEach,
+  createMockedFunction,
 } from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
@@ -26,6 +27,7 @@ import {
   handleProposalVetoed,
   handleProposalExecuted,
   handleProposalQueued,
+  saveProposalExtraDetails,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -91,170 +93,120 @@ describe('nouns-dao', () => {
     delegate.delegatedVotes = BIGINT_ONE;
     delegate.delegatedVotesRaw = BIGINT_ONE;
     delegate.save();
+
+    createMockedFunction(
+      Address.fromString(SOME_ADDRESS),
+      'adjustedTotalSupply',
+      'adjustedTotalSupply():(uint256)',
+    ).returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(600))]);
   });
 
-  // describe('handleProposalCreated', () => {
-  // describe('with signers', () => {
-  //   beforeAll(() => {
-  //     const delegate = getOrCreateDelegate(signerWithDelegate.toHexString());
-  //     delegate.tokenHoldersRepresentedAmount = 1;
-  //     delegate.delegatedVotes = BIGINT_ONE;
-  //     delegate.delegatedVotesRaw = BIGINT_ONE;
-  //     delegate.save();
-  //     createMockedFunction(
-  //       newMockEvent().address,
-  //       'adjustedTotalSupply',
-  //       'adjustedTotalSupply():(uint256)',
-  //     ).returns([ethereum.Value.fromI32(0)]);
-  //   });
-  //   afterAll(() => {
-  //     clearStore();
-  //   });
-  //   test('uses existing delegates when they exist, and creates new ones when they are missing', () => {
-  //     const proposalEvent = new ParsedProposalV3();
-  //     proposalEvent.id = '1';
-  //     proposalEvent.proposer = proposerWithDelegate.toHexString();
-  //     proposalEvent.signers = [
-  //       signerWithDelegate.toHexString(),
-  //       signerWithNoDelegate.toHexString(),
-  //     ];
-  //     // 2 delegates because one is the proposer and the second is the signer with a delegate
-  //     assert.entityCount('Delegate', 2);
-  //     handleProposalCreated(proposalEvent);
-  //     assert.entityCount('Proposal', 1);
-  //     assert.entityCount('Delegate', 3);
-  //     const proposal = Proposal.load('1')!;
-  //     assert.stringEquals(proposal.proposer, proposalEvent.proposer);
-  //     assert.stringEquals(proposal.signers![0], signerWithDelegate.toHexString());
-  //     assert.stringEquals(proposal.signers![1], signerWithNoDelegate.toHexString());
-  //     // The delegate that already existed has a votes balance
-  //     assert.fieldEquals('Delegate', proposal.signers![0], 'tokenHoldersRepresentedAmount', '1');
-  //     assert.fieldEquals('Delegate', proposal.signers![0], 'delegatedVotes', '1');
-  //     assert.fieldEquals('Delegate', proposal.signers![0], 'delegatedVotesRaw', '1');
-  //     // The delegate that was created on the fly has no votes
-  //     assert.fieldEquals('Delegate', proposal.signers![1], 'tokenHoldersRepresentedAmount', '0');
-  //     assert.fieldEquals('Delegate', proposal.signers![1], 'delegatedVotes', '0');
-  //     assert.fieldEquals('Delegate', proposal.signers![1], 'delegatedVotesRaw', '0');
-  //   });
-  // });
-  // describe('single proposer', () => {
-  //   test('uses an existing delegate when it is there', () => {
-  //     const proposalEvent = new ParsedProposalV3();
-  //     proposalEvent.id = '1';
-  //     proposalEvent.proposer = proposerWithDelegate.toHexString();
-  //     assert.entityCount('Delegate', 1);
-  //     handleProposalCreated(proposalEvent);
-  //     assert.entityCount('Proposal', 1);
-  //     assert.entityCount('Delegate', 1);
-  //     assert.fieldEquals('Proposal', '1', 'proposer', proposalEvent.proposer);
-  //     assert.fieldEquals(
-  //       'Delegate',
-  //       proposalEvent.proposer,
-  //       'tokenHoldersRepresentedAmount',
-  //       '1',
-  //     );
-  //     assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotes', '1');
-  //     assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotesRaw', '1');
-  //   });
-  //   test('creates a delegate if the proposer was never seen before', () => {
-  //     const proposalEvent = new ParsedProposalV3();
-  //     proposalEvent.id = '1';
-  //     proposalEvent.proposer = proposerWithNoDelegate.toHexString();
-  //     assert.entityCount('Delegate', 1);
-  //     handleProposalCreated(proposalEvent);
-  //     assert.entityCount('Proposal', 1);
-  //     assert.entityCount('Delegate', 2);
-  //     assert.fieldEquals('Proposal', '1', 'proposer', proposalEvent.proposer);
-  //     assert.fieldEquals(
-  //       'Delegate',
-  //       proposalEvent.proposer,
-  //       'tokenHoldersRepresentedAmount',
-  //       '0',
-  //     );
-  //     assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotes', '0');
-  //     assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotesRaw', '0');
-  //   });
-  // });
-  // describe('field setting', () => {
-  //   test('copies values from ParsedProposalV3 and saves a ProposalVersion', () => {
-  //     const createdBlock = BigInt.fromI32(15537394);
-  //     const propData = new ProposalCreatedData();
-  //     propData.id = BigInt.fromI32(42);
-  //     propData.proposer = proposerWithDelegate;
-  //     propData.targets = [Address.fromString(SOME_ADDRESS)];
-  //     propData.values = [BigInt.fromI32(123)];
-  //     propData.signatures = ['some signature'];
-  //     propData.calldatas = [Bytes.fromI32(312)];
-  //     propData.startBlock = createdBlock.plus(BigInt.fromI32(200));
-  //     propData.endBlock = createdBlock.plus(BigInt.fromI32(300));
-  //     propData.description = 'some description';
-  //     propData.eventBlockNumber = createdBlock;
-  //     propData.eventBlockTimestamp = BigInt.fromI32(946684800);
-  //     propData.txHash = Bytes.fromI32(11);
-  //     propData.logIndex = BigInt.fromI32(2);
-  //     propData.address = Address.fromString(SOME_ADDRESS);
-  //     handleProposalCreated(createProposalCreatedEvent(propData));
-  //     const proposal = Proposal.load('42')!;
-  //     assert.stringEquals(proposal.proposer!, propData.proposer.toHexString());
-  //     assert.bytesEquals(proposal.targets![0], propData.targets[0]);
-  //     assert.bigIntEquals(proposal.values![0], propData.values[0]);
-  //     assert.stringEquals(proposal.signatures![0], propData.signatures[0]);
-  //     assert.bytesEquals(proposal.calldatas![0], propData.calldatas[0]);
-  //     assert.bigIntEquals(proposal.createdTimestamp!, propData.eventBlockTimestamp);
-  //     assert.bigIntEquals(proposal.createdBlock!, propData.eventBlockNumber);
-  //     assert.bytesEquals(proposal.createdTransactionHash!, propData.txHash);
-  //     assert.bigIntEquals(proposal.startBlock!, propData.startBlock);
-  //     assert.bigIntEquals(proposal.endBlock!, propData.endBlock);
-  //     // assert.bigIntEquals(proposal.updatePeriodEndBlock, propData.updatePeriodEndBlock);
-  //     // assert.bigIntEquals(proposal.proposalThreshold, proposalEvent.proposalThreshold);
-  //     // assert.bigIntEquals(proposal.quorumVotes, proposalEvent.quorumVotes);
-  //     assert.stringEquals(proposal.description!, propData.description);
-  //     assert.stringEquals(proposal.title!, extractTitle(propData.description));
-  //     // assert.stringEquals(proposal.status, proposalEvent.status);
-  //     const versionId = propData.txHash
-  //       .toHexString()
-  //       .concat('-')
-  //       .concat(propData.logIndex.toString());
-  //     const propVersion = ProposalVersion.load(versionId)!;
-  //     assert.stringEquals('42', propVersion.proposal);
-  //     assert.bigIntEquals(propData.eventBlockTimestamp, propVersion.createdAt);
-  //     assert.bytesEquals(changetype<Bytes[]>(propData.targets)[0], propVersion.targets![0]);
-  //     assert.bigIntEquals(propData.values[0], propVersion.values![0]);
-  //     assert.stringEquals(propData.signatures[0], propVersion.signatures![0]);
-  //     assert.bytesEquals(propData.calldatas[0], propVersion.calldatas![0]);
-  //     assert.stringEquals(propData.description, propVersion.description);
-  //     assert.stringEquals(extractTitle(propData.description), propVersion.title);
-  //     assert.stringEquals('', propVersion.updateMessage);
-  //   });
-  // test('copies values from governance and dynamic quorum', () => {
-  //   const governance = getGovernanceEntity();
-  //   governance.totalTokenHolders = BigInt.fromI32(601);
-  //   governance.save();
-  //   const dq = getOrCreateDynamicQuorumParams();
-  //   dq.minQuorumVotesBPS = 100;
-  //   dq.maxQuorumVotesBPS = 150;
-  //   dq.quorumCoefficient = BIGINT_ONE;
-  //   dq.save();
-  //   const proposalEvent = new ParsedProposalV3();
-  //   proposalEvent.proposer = proposerWithDelegate.toHexString();
-  //   proposalEvent.id = '43';
-  //   handleProposalCreated(proposalEvent);
-  //   assert.fieldEquals('Proposal', '43', 'totalSupply', '601');
-  //   assert.fieldEquals('Proposal', '43', 'minQuorumVotesBPS', '100');
-  //   assert.fieldEquals('Proposal', '43', 'maxQuorumVotesBPS', '150');
-  //   assert.fieldEquals('Proposal', '43', 'quorumCoefficient', '1');
-  // });
-  // test('sets votes and objection period block to zero', () => {
-  //   const proposalEvent = new ParsedProposalV3();
-  //   proposalEvent.proposer = proposerWithDelegate.toHexString();
-  //   proposalEvent.id = '44';
-  //   handleProposalCreated(proposalEvent);
-  //   assert.fieldEquals('Proposal', '44', 'forVotes', '0');
-  //   assert.fieldEquals('Proposal', '44', 'againstVotes', '0');
-  //   assert.fieldEquals('Proposal', '44', 'abstainVotes', '0');
-  //   assert.fieldEquals('Proposal', '44', 'objectionPeriodEndBlock', '0');
-  // });
-  // });
+  describe('handleProposalCreated', () => {
+    describe('field setting', () => {
+      test('copies values from ParsedProposalV3 and saves a ProposalVersion', () => {
+        const createdBlock = BigInt.fromI32(100);
+        const propData = new ProposalCreatedData();
+        propData.id = BigInt.fromI32(42);
+        propData.proposer = proposerWithDelegate;
+        propData.targets = [Address.fromString(SOME_ADDRESS)];
+        propData.values = [BigInt.fromI32(123)];
+        propData.signatures = ['some signature'];
+        propData.calldatas = [Bytes.fromI32(312)];
+        propData.startBlock = createdBlock.plus(BigInt.fromI32(200));
+        propData.endBlock = createdBlock.plus(BigInt.fromI32(300));
+        propData.description = 'some description';
+        propData.eventBlockNumber = createdBlock;
+        propData.eventBlockTimestamp = BigInt.fromI32(946684800);
+        propData.txHash = Bytes.fromI32(11);
+        propData.logIndex = BigInt.fromI32(2);
+        propData.address = Address.fromString(SOME_ADDRESS);
+
+        const propExtraDetails = new ParsedProposalV3();
+        propExtraDetails.id = propData.id.toString();
+        propExtraDetails.updatePeriodEndBlock = BigInt.fromI32(150);
+        propExtraDetails.proposalThreshold = BigInt.fromI32(42);
+        propExtraDetails.quorumVotes = BigInt.fromI32(43);
+
+        handleProposalCreated(createProposalCreatedEvent(propData));
+        saveProposalExtraDetails(propExtraDetails);
+
+        const proposal = Proposal.load('42')!;
+        assert.stringEquals(proposal.proposer!, propData.proposer.toHexString());
+        assert.bytesEquals(proposal.targets![0], propData.targets[0]);
+        assert.bigIntEquals(proposal.values![0], propData.values[0]);
+        assert.stringEquals(proposal.signatures![0], propData.signatures[0]);
+        assert.bytesEquals(proposal.calldatas![0], propData.calldatas[0]);
+        assert.bigIntEquals(proposal.createdTimestamp!, propData.eventBlockTimestamp);
+        assert.bigIntEquals(proposal.createdBlock!, propData.eventBlockNumber);
+        assert.bytesEquals(proposal.createdTransactionHash!, propData.txHash);
+        assert.bigIntEquals(proposal.startBlock!, propData.startBlock);
+        assert.bigIntEquals(proposal.endBlock!, propData.endBlock);
+        assert.bigIntEquals(proposal.updatePeriodEndBlock!, propExtraDetails.updatePeriodEndBlock);
+        assert.bigIntEquals(proposal.proposalThreshold!, propExtraDetails.proposalThreshold);
+        assert.bigIntEquals(proposal.quorumVotes!, propExtraDetails.quorumVotes);
+        assert.stringEquals(proposal.description!, propData.description);
+        assert.stringEquals(proposal.title!, extractTitle(propData.description));
+        assert.stringEquals(proposal.status!, STATUS_PENDING);
+        const versionId = propData.txHash
+          .toHexString()
+          .concat('-')
+          .concat(propData.logIndex.toString());
+        const propVersion = ProposalVersion.load(versionId)!;
+        assert.stringEquals('42', propVersion.proposal);
+        assert.bigIntEquals(propData.eventBlockTimestamp, propVersion.createdAt);
+        assert.bytesEquals(changetype<Bytes[]>(propData.targets)[0], propVersion.targets![0]);
+        assert.bigIntEquals(propData.values[0], propVersion.values![0]);
+        assert.stringEquals(propData.signatures[0], propVersion.signatures![0]);
+        assert.bytesEquals(propData.calldatas[0], propVersion.calldatas![0]);
+        assert.stringEquals(propData.description, propVersion.description);
+        assert.stringEquals(extractTitle(propData.description), propVersion.title);
+        assert.stringEquals('', propVersion.updateMessage);
+      });
+      test('copies values from governance and dynamic quorum', () => {
+        const governance = getGovernanceEntity();
+        governance.totalTokenHolders = BigInt.fromI32(601);
+        governance.save();
+        const dq = getOrCreateDynamicQuorumParams();
+        dq.minQuorumVotesBPS = 100;
+        dq.maxQuorumVotesBPS = 150;
+        dq.quorumCoefficient = BIGINT_ONE;
+        dq.save();
+
+        const data = new ProposalCreatedData();
+        data.id = BigInt.fromI32(43);
+        data.proposer = proposerWithDelegate;
+        data.description = 'some description';
+        data.txHash = Bytes.fromI32(11);
+        data.logIndex = BigInt.fromI32(2);
+        data.address = Address.fromString(SOME_ADDRESS);
+        const proposalEvent = createProposalCreatedEvent(data);
+
+        handleProposalCreated(proposalEvent);
+
+        assert.fieldEquals('Proposal', '43', 'totalSupply', '601');
+        assert.fieldEquals('Proposal', '43', 'minQuorumVotesBPS', '100');
+        assert.fieldEquals('Proposal', '43', 'maxQuorumVotesBPS', '150');
+        assert.fieldEquals('Proposal', '43', 'quorumCoefficient', '1');
+      });
+      test('sets votes and objection period block to zero', () => {
+        const data = new ProposalCreatedData();
+        data.id = BigInt.fromI32(44);
+        data.proposer = proposerWithDelegate;
+        data.description = 'some description';
+        data.txHash = Bytes.fromI32(11);
+        data.logIndex = BigInt.fromI32(2);
+        data.address = Address.fromString(SOME_ADDRESS);
+        const proposalEvent = createProposalCreatedEvent(data);
+
+        handleProposalCreated(proposalEvent);
+
+        assert.fieldEquals('Proposal', '44', 'forVotes', '0');
+        assert.fieldEquals('Proposal', '44', 'againstVotes', '0');
+        assert.fieldEquals('Proposal', '44', 'abstainVotes', '0');
+        assert.fieldEquals('Proposal', '44', 'objectionPeriodEndBlock', '0');
+      });
+    });
+  });
 });
 
 // describe('handleVoteCast', () => {
