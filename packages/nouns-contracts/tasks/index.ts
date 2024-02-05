@@ -31,3 +31,5 @@ export * from './verify-etherscan-dao-v3';
 export * from './update-configs-dao-v3';
 export * from './deploy-local-dao-v3-short';
 export * from './run-local-dao-v3-short';
+export * from './deploy-descriptor-v3';
+export * from './populate-descriptor-v3';

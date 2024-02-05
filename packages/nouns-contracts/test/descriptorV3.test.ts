@@ -3,10 +3,10 @@ import { solidity } from 'ethereum-waffle';
 import { NounsDescriptorV3 } from '../typechain';
 import ImageData from '../files/image-data-v2.json';
 import { LongestPart } from './types';
-import { deployNounsDescriptorV2, populateDescriptorV2 } from './utils';
+import { deployNounsDescriptorV3, populateDescriptorV2 } from './utils';
 import { ethers } from 'hardhat';
 import ProposalImages from '../../nouns-assets/src/proposal-images-nouns-v2.json';
-import { appendFileSync } from 'fs';
+// import { appendFileSync } from 'fs';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -40,7 +40,7 @@ describe('NounsDescriptorV3', () => {
     await nounsDescriptor.updateGlasses(newEncodedCompressedTrait, decompressedLength, itemCount, {
       gasLimit: 30000000,
     });
-
+    
     const glassesCountAfter = await nounsDescriptor.glassesCount();
     const glassesAtIdex = await nounsDescriptor.glasses(glassesTraitIndex);
 
@@ -107,7 +107,7 @@ describe('NounsDescriptorV3', () => {
   };
 
   before(async () => {
-    nounsDescriptor = await deployNounsDescriptorV2();
+    nounsDescriptor = await deployNounsDescriptorV3();
 
     for (const [l, layer] of Object.entries(ImageData.images)) {
       for (const [i, item] of layer.entries()) {

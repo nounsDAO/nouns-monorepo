@@ -474,7 +474,7 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateGlassesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateBodiesFromPointer() public {
+    function testUpdateBodiesFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
         uint16 imageCount = 456;
@@ -494,7 +494,7 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateBodiesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateHeadsFromPointer() public {
+    function testUpdateHeadsFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
         uint16 imageCount = 456;
@@ -514,7 +514,7 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateHeadsFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateAccessoriesFromPointer() public {
+    function testUpdateAccessoriesFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
         uint16 imageCount = 456;
@@ -534,7 +534,7 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateGlassesFromPointer() public {
+    function testUpdateGlassesFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
         uint16 imageCount = 456;
