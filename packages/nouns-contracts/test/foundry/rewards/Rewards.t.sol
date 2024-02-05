@@ -327,3 +327,62 @@ contract PausedTest is RewardsBaseTest {
         rewards.withdrawClientBalance(1, 1, makeAddr('to'));
     }
 }
+
+contract OwnerFunctionsTest is RewardsBaseTest {
+    function test_setParams_revertsForNonOwner() public {
+        Rewards.RewardParams memory params = rewards.getParams();
+
+        vm.prank(makeAddr('non owner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.setParams(params);
+    }
+
+    function test_setAdmin_revertsForNonOwner() public {
+        vm.prank(makeAddr('non owner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.setAdmin(makeAddr('new admin'));
+    }
+
+    function test_setAdmin_worksForOwner() public {
+        address newAdmin = makeAddr('new admin');
+
+        vm.prank(rewards.owner());
+        rewards.setAdmin(newAdmin);
+
+        assertEq(rewards.admin(), newAdmin);
+    }
+
+    function test_setETHToken_revertsForNonOwner() public {
+        vm.prank(makeAddr('non owner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.setETHToken(makeAddr('new token'));
+    }
+
+    function test_setETHToken_worksForOwner() public {
+        address newToken = makeAddr('new token');
+
+        vm.prank(rewards.owner());
+        rewards.setETHToken(newToken);
+
+        assertEq(address(rewards.ethToken()), newToken);
+    }
+
+    function test_withdrawToken_revertsForNonOwner() public {
+        address recipient = makeAddr('recipient');
+        address token = address(rewards.ethToken());
+
+        vm.expectRevert('Ownable: caller is not the owner');
+        vm.prank(makeAddr('non owner'));
+        rewards.withdrawToken(token, recipient, 1);
+    }
+
+    function test_withdrawToken_worksForOwner() public {
+        address recipient = makeAddr('recipient');
+        address token = address(rewards.ethToken());
+
+        vm.prank(rewards.owner());
+        rewards.withdrawToken(token, recipient, 1);
+
+        assertEq(rewards.ethToken().balanceOf(recipient), 1);
+    }
+}

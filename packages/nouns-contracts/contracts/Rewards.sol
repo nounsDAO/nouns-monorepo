@@ -410,6 +410,18 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         _unpause();
     }
 
+    function setAdmin(address newAdmin) public onlyOwner {
+        admin = newAdmin;
+    }
+
+    function setETHToken(address newToken) public onlyOwner {
+        ethToken = IERC20(newToken);
+    }
+
+    function withdrawToken(address token, address to, uint256 amount) public onlyOwner {
+        IERC20(token).safeTransfer(to, amount);
+    }
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   INTERNAL
