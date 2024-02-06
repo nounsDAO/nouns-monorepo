@@ -52,6 +52,25 @@ abstract contract DAOUpgradeMainnetForkBaseTest is Test {
         proposalId = NOUNS_DAO_PROXY_MAINNET.propose(targets, values, signatures, calldatas, 'my proposal');
     }
 
+    function propose(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        uint32 clientId
+    ) internal returns (uint256 proposalId) {
+        vm.prank(proposerAddr);
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        proposalId = NOUNS_DAO_PROXY_MAINNET.propose(targets, values, signatures, calldatas, 'my proposal', clientId);
+    }
+
     function voteAndExecuteProposal(uint256 proposalId) internal {
         NounsDAOV3Types.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
 
@@ -105,5 +124,65 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         assertEq(prop.id, 474);
         assertEq(prop.creationBlock, 18836862);
         assertEq(prop.creationTimestamp, 0);
+    }
+
+    function test_adminFunctions_workUsingTheNewFallbackDesign() public {
+        uint256 currentForkPeriod = NOUNS_DAO_PROXY_MAINNET.forkPeriod();
+        uint256 expectedForkPeriod = currentForkPeriod + 1;
+
+        uint256 proposalId = propose(
+            address(NOUNS_DAO_PROXY_MAINNET),
+            0,
+            '_setForkPeriod(uint256)',
+            abi.encode(expectedForkPeriod)
+        );
+        voteAndExecuteProposal(proposalId);
+
+        assertEq(expectedForkPeriod, NOUNS_DAO_PROXY_MAINNET.forkPeriod());
+
+        uint256 currentVotingDelay = NOUNS_DAO_PROXY_MAINNET.votingDelay();
+        uint256 expectedVotingDelay = currentVotingDelay - 1;
+
+        proposalId = propose(
+            address(NOUNS_DAO_PROXY_MAINNET),
+            0,
+            '_setVotingDelay(uint256)',
+            abi.encode(expectedVotingDelay)
+        );
+        voteAndExecuteProposal(proposalId);
+
+        assertEq(expectedVotingDelay, NOUNS_DAO_PROXY_MAINNET.votingDelay());
+    }
+
+    function test_clientId_savedOnProposals() public {
+        uint32 expectedClientId = 42;
+        uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '', expectedClientId);
+
+        assertEq(expectedClientId, NOUNS_DAO_PROXY_MAINNET.proposalClientId(proposalId));
+    }
+
+    function test_clientId_savedOnVotes() public {
+        uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '');
+        NounsDAOV3Types.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
+        vm.roll(propInfo.startBlock + 1);
+
+        uint32 clientId1 = 42;
+        uint32 clientId2 = 142;
+
+        vm.prank(proposerAddr, origin);
+        NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1, clientId1);
+        vm.prank(WHALE, origin);
+        NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1, clientId2);
+
+        NounsDAOV3Types.ClientVoteData memory cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(
+            proposalId,
+            clientId1
+        );
+        assertEq(cv.txs, 1);
+        assertEq(cv.votes, nouns.getCurrentVotes(proposerAddr));
+
+        cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(proposalId, clientId2);
+        assertEq(cv.txs, 1);
+        assertEq(cv.votes, nouns.getCurrentVotes(WHALE));
     }
 }
