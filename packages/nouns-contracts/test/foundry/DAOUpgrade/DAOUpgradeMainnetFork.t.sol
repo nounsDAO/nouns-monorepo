@@ -3,13 +3,13 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
-import { DeployDAOV3LogicMainnet } from '../../../script/DAOUpgrade/DeployDAOV3LogicMainnet.s.sol';
+import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { ProposeDAOUpgradeMainnet } from '../../../script/DAOUpgrade/ProposeDAOUpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-abstract contract UpgradeDAOMainnetForkBaseTest is Test {
+abstract contract DAOUpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
     address public constant WHALE = 0x83fCFe8Ba2FEce9578F0BbaFeD4Ebf5E915045B9;
     NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
@@ -70,13 +70,13 @@ abstract contract UpgradeDAOMainnetForkBaseTest is Test {
     }
 }
 
-contract UpgradeDAOMainnetForkTest is UpgradeDAOMainnetForkBaseTest {
+contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
     function setUp() public override {
         super.setUp();
 
         // Deploy the latest DAO logic
         vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        newLogic = address(new DeployDAOV3LogicMainnet().run());
+        newLogic = address(new NounsDAOLogicV3());
 
         // Propose the upgrade
         vm.setEnv('PROPOSER_KEY', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
