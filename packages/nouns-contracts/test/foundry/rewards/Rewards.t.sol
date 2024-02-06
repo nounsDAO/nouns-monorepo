@@ -133,6 +133,11 @@ contract AuctionRewards is RewardsBaseTest {
         nounId = bidAndSettleAuction(4 ether, CLIENT_ID);
     }
 
+    function test_storageLocation() public {
+        bytes32 expected = keccak256(abi.encode(uint256(keccak256('nouns.rewards')) - 1)) & ~bytes32(uint256(0xff));
+        assertEq(rewards.RewardsStorageLocation(), expected);
+    }
+
     function test_rewardsForAuctions() public {
         rewards.updateRewardsForAuctions(nounId);
 

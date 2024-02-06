@@ -22,7 +22,7 @@ import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 
 contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableUpgradeable {
     /// @custom:storage-location erc7201:nouns.nounsclienttoken
-    struct Storage {
+    struct NounsClientTokenStorage {
         uint32 nextTokenId;
         address descriptor;
         mapping(uint32 => ClientMetadata) clientMetadata;
@@ -30,7 +30,8 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
 
     /// @dev This is a ERC-7201 storage location, calculated using:
     /// @dev keccak256(abi.encode(uint256(keccak256("nouns.nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
-    bytes32 public constant STORAGE_LOCATION = 0xb5ff9f2ad3ce9c5f981fca1b696d577b6a7f3491afe19108b82d4fbb7f611600;
+    bytes32 public constant NounsClientTokenStorageLocation =
+        0xb5ff9f2ad3ce9c5f981fca1b696d577b6a7f3491afe19108b82d4fbb7f611600;
 
     event ClientRegistered(uint32 indexed clientId, string name, string description);
     event ClientUpdated(uint32 indexed clientId, string name, string description);
@@ -38,7 +39,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     constructor() initializer {}
 
     function initialize(address owner, address descriptor_) public initializer {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
 
         __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
         _transferOwnership(owner);
@@ -47,7 +48,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     }
 
     function registerClient(string calldata name, string calldata description) public virtual returns (uint32) {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         uint32 tokenId = $.nextTokenId;
         $.nextTokenId++;
         _mint(msg.sender, tokenId);
@@ -59,7 +60,7 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     }
 
     function updateClientMetadata(uint32 tokenId, string calldata name, string calldata description) public {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
 
         require(ownerOf(tokenId) == msg.sender, 'NounsClientToken: not owner');
         $.clientMetadata[tokenId] = ClientMetadata(name, description);
@@ -68,33 +69,33 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     }
 
     function setDescriptor(address descriptor_) public onlyOwner {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         $.descriptor = descriptor_;
     }
 
     function clientMetadata(uint32 tokenId) public view returns (ClientMetadata memory) {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         return $.clientMetadata[tokenId];
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         return INounsClientTokenDescriptor($.descriptor).tokenURI(tokenId, $.clientMetadata[uint32(tokenId)]);
     }
 
     function descriptor() public view returns (address) {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         return $.descriptor;
     }
 
     function nextTokenId() public view returns (uint32) {
-        Storage storage $ = _getStorage();
+        NounsClientTokenStorage storage $ = _getNounsClientTokenStorage();
         return $.nextTokenId;
     }
 
-    function _getStorage() private pure returns (Storage storage $) {
+    function _getNounsClientTokenStorage() private pure returns (NounsClientTokenStorage storage $) {
         assembly {
-            $.slot := STORAGE_LOCATION
+            $.slot := NounsClientTokenStorageLocation
         }
     }
 }

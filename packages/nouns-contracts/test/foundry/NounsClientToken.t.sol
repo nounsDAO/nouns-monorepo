@@ -19,7 +19,7 @@ contract NounsClientTokenTest is Test {
         bytes32 expectedStorageLocation = keccak256(abi.encode(uint256(keccak256('nouns.nounsclienttoken')) - 1)) &
             ~bytes32(uint256(0xff));
 
-        assertEq(token.STORAGE_LOCATION(), expectedStorageLocation);
+        assertEq(token.NounsClientTokenStorageLocation(), expectedStorageLocation);
     }
 
     function test_registerClient_firstIdIsOne() public {
