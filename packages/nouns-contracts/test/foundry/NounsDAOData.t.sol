@@ -5,7 +5,7 @@ import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
 import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { NounsTokenLike, NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsTokenLike, NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
 import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAODataEvents.sol';
@@ -1019,9 +1019,9 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256 proposalId_) {
-        NounsDAOV3Types.ProposerSignature[] memory sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
+        NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOV3Types.ProposerSignature(
+            sigs[i] = NounsDAOTypes.ProposerSignature(
                 signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(nounsDao)),
                 signers[i],
                 expirationTimestamps[i]

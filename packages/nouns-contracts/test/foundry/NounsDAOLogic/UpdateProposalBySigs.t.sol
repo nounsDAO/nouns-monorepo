@@ -8,7 +8,7 @@ import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
@@ -80,7 +80,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -100,7 +100,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = fewerSignersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -120,7 +120,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = moreSignersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -145,7 +145,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         signerPKs[1] = _signerPKs[_signers.length - 1];
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -166,7 +166,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -192,7 +192,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         expirationTimestamps[1] = block.timestamp - 1;
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -213,7 +213,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -240,7 +240,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         address[] memory differentTargets = new address[](1);
         differentTargets[0] = makeAddr('different new target');
         txs.targets = differentTargets;
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -269,7 +269,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         uint256[] memory differentValues = new uint256[](1);
         differentValues[0] = updateValues[0] + 1234;
         txs.values = differentValues;
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -298,7 +298,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         string[] memory differentSignatures = new string[](1);
         differentSignatures[0] = 'different signature';
         txs.signatures = differentSignatures;
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -327,7 +327,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         bytes[] memory differentCalldatas = new bytes[](1);
         differentCalldatas[0] = 'different calldatas';
         txs.calldatas = differentCalldatas;
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -350,7 +350,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -373,7 +373,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -396,7 +396,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -418,7 +418,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -440,7 +440,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -464,7 +464,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         ) = signersPKsExpirations();
 
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -493,7 +493,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signatures,
             calldatas
         );
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -528,7 +528,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signatures,
             calldatas
         );
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -558,7 +558,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signatures,
             calldatas
         );
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -577,7 +577,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -587,13 +587,13 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         // Pending
         vm.roll(block.number + proposalUpdatablePeriodInBlocks);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Pending);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Pending);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Active
         vm.roll(block.number + VOTING_DELAY);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Active);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
@@ -603,20 +603,20 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         vm.prank(_signers[0]);
         dao.castVote(proposalId, 1);
         vm.roll(block.number + VOTING_PERIOD);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Succeeded);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Queued
         dao.queue(proposalId);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Queued);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Queued);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Executed
         vm.warp(block.timestamp + TIMELOCK_DELAY);
         dao.execute(proposalId);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Executed);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
@@ -628,7 +628,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -638,7 +638,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         dao.cancel(proposalId);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Canceled);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Canceled);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -651,7 +651,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -660,7 +660,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.roll(block.number + proposalUpdatablePeriodInBlocks + VOTING_DELAY + VOTING_PERIOD);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Defeated);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -673,7 +673,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -689,7 +689,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         vm.roll(block.number + VOTING_PERIOD);
         dao.queue(proposalId);
         vm.warp(block.timestamp + TIMELOCK_DELAY + timelock.GRACE_PERIOD());
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Expired);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Expired);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -702,7 +702,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -712,7 +712,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(vetoer);
         dao.veto(proposalId);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Vetoed);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Vetoed);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -725,7 +725,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -741,7 +741,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         vm.prank(_signers[0]);
         dao.castVote(proposalId, 1);
         vm.roll(block.number + lastMinuteWindowInBlocks);
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.ObjectionPeriod);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.ObjectionPeriod);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
@@ -754,7 +754,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             uint256[] memory expirationTimestamps
         ) = signersPKsExpirations();
         NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
@@ -792,14 +792,14 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             'new signature',
             'new calldata'
         );
-        NounsDAOV3Types.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+        NounsDAOTypes.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
             signers,
             signerPKs,
             expirationTimestamps,
             UpdateProposalParams(proposalId, proposer, txs, 'descriptionAfter'),
             address(dao)
         );
-        assertTrue(dao.state(proposalId) == NounsDAOV3Types.ProposalState.Updatable);
+        assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.Updatable);
         (
             address[] memory targetsBefore,
             uint256[] memory valuesBefore,

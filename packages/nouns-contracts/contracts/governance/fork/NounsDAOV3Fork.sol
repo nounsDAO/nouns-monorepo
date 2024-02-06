@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.19;
 
-import { NounsDAOV3Types, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../NounsDAOInterfaces.sol';
+import { NounsDAOTypes, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../NounsDAOInterfaces.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
@@ -72,7 +72,7 @@ library NounsDAOV3Fork {
      * @param reason the reason for want to fork. This will only be used to emit event.
      */
     function escrowToFork(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         uint256[] calldata tokenIds,
         uint256[] calldata proposalIds,
         string calldata reason
@@ -92,7 +92,7 @@ library NounsDAOV3Fork {
      * Only allowed to withdraw tokens that the sender has escrowed.
      * @param tokenIds the tokenIds to withdraw
      */
-    function withdrawFromForkEscrow(NounsDAOV3Types.Storage storage ds, uint256[] calldata tokenIds) external {
+    function withdrawFromForkEscrow(NounsDAOTypes.Storage storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
@@ -108,9 +108,7 @@ library NounsDAOV3Fork {
      * @return forkTreasury The address of the new DAO's treasury
      * @return forkToken The address of the new DAO's token
      */
-    function executeFork(
-        NounsDAOV3Types.Storage storage ds
-    ) external returns (address forkTreasury, address forkToken) {
+    function executeFork(NounsDAOTypes.Storage storage ds) external returns (address forkTreasury, address forkToken) {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
@@ -138,7 +136,7 @@ library NounsDAOV3Fork {
      * @param tokenIds the tokenIds to send to the DAO in exchange for joining the fork
      */
     function joinFork(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         uint256[] calldata tokenIds,
         uint256[] calldata proposalIds,
         string calldata reason
@@ -164,7 +162,7 @@ library NounsDAOV3Fork {
      * @param tokenIds the tokenIds to withdraw
      */
     function withdrawDAONounsFromEscrowToTreasury(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         uint256[] calldata tokenIds
     ) external {
         withdrawDAONounsFromEscrow(ds, tokenIds, address(ds.timelock));
@@ -177,7 +175,7 @@ library NounsDAOV3Fork {
      * @param to the address to send the nouns to
      */
     function withdrawDAONounsFromEscrowIncreasingTotalSupply(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         uint256[] calldata tokenIds,
         address to
     ) external {
@@ -189,7 +187,7 @@ library NounsDAOV3Fork {
     }
 
     function withdrawDAONounsFromEscrow(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         uint256[] calldata tokenIds,
         address to
     ) private {
@@ -205,14 +203,14 @@ library NounsDAOV3Fork {
     /**
      * @notice Returns the required number of tokens to escrow to trigger a fork
      */
-    function forkThreshold(NounsDAOV3Types.Storage storage ds) public view returns (uint256) {
+    function forkThreshold(NounsDAOTypes.Storage storage ds) public view returns (uint256) {
         return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
     }
 
     /**
      * @notice Returns the number of tokens currently in escrow, contributing to the fork threshold
      */
-    function numTokensInForkEscrow(NounsDAOV3Types.Storage storage ds) public view returns (uint256) {
+    function numTokensInForkEscrow(NounsDAOTypes.Storage storage ds) public view returns (uint256) {
         return ds.forkEscrow.numTokensInEscrow();
     }
 
@@ -221,14 +219,14 @@ library NounsDAOV3Fork {
      * escrow after it has closed.
      * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
      */
-    function adjustedTotalSupply(NounsDAOV3Types.Storage storage ds) internal view returns (uint256) {
+    function adjustedTotalSupply(NounsDAOTypes.Storage storage ds) internal view returns (uint256) {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
     }
 
     /**
      * @notice Returns true if noun holders can currently join a fork
      */
-    function isForkPeriodActive(NounsDAOV3Types.Storage storage ds) internal view returns (bool) {
+    function isForkPeriodActive(NounsDAOTypes.Storage storage ds) internal view returns (bool) {
         return ds.forkEndTimestamp > block.timestamp;
     }
 
@@ -238,7 +236,7 @@ library NounsDAOV3Fork {
      * Sends ETH and ERC20 tokens listed in `ds.erc20TokensToIncludeInFork`.
      */
     function sendProRataTreasury(
-        NounsDAOV3Types.Storage storage ds,
+        NounsDAOTypes.Storage storage ds,
         address newDAOTreasury,
         uint256 tokenCount,
         uint256 totalSupply

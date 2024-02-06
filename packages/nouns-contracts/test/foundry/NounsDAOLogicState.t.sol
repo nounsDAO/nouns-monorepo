@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { NounsDAOV3Types } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
@@ -31,16 +31,16 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         uint256 state = uint256(INounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
 
         if (daoVersion() < 3) {
-            assertEq(state, uint256(NounsDAOV3Types.ProposalState.Pending));
+            assertEq(state, uint256(NounsDAOTypes.ProposalState.Pending));
         } else {
-            assertEq(state, uint256(NounsDAOV3Types.ProposalState.Updatable));
+            assertEq(state, uint256(NounsDAOTypes.ProposalState.Updatable));
         }
     }
 
     function testActiveGivenProposalPastVotingDelay() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + 1);
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Active);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Active);
     }
 
     function testCanceledGivenCanceledProposal() public {
@@ -48,14 +48,14 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Canceled);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Canceled);
     }
 
     function testDefeatedByRunningOutOfTime() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Defeated);
     }
 
     function testDefeatedByVotingAgainst() public {
@@ -70,7 +70,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vote(againstVoter, proposalId, 0);
         endVotingPeriod();
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Defeated);
     }
 
     function testSucceeded() public {
@@ -85,14 +85,14 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vote(againstVoter, proposalId, 0);
         endVotingPeriod();
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Succeeded);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Succeeded);
     }
 
     function testQueueRevertsGivenDefeatedProposal() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
         vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Defeated);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Defeated);
 
         vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
         daoProxy.queue(proposalId);
@@ -103,7 +103,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Canceled);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Canceled);
 
         vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
         daoProxy.queue(proposalId);
@@ -124,7 +124,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         // anyone can queue
         daoProxy.queue(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Queued);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Queued);
     }
 
     function testExpired() public {
@@ -141,7 +141,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         daoProxy.queue(proposalId);
         vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Expired);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Expired);
     }
 
     function testExecutedOnlyAfterQueued() public {
@@ -169,10 +169,10 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
         vm.deal(address(timelock), 100);
         daoProxy.execute(proposalId);
 
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Executed);
 
         vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
-        assertTrue(daoProxy.state(proposalId) == NounsDAOV3Types.ProposalState.Executed);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Executed);
     }
 }
 

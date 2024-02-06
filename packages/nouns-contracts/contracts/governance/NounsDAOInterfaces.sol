@@ -349,7 +349,7 @@ interface INounsDAOForkEscrow {
     function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address);
 }
 
-interface NounsDAOV3Types {
+interface NounsDAOTypes {
     struct Storage {
         // ================ PROXY ================ //
         /// @notice Administrator for this contract
@@ -641,6 +641,6 @@ interface NounsDAOV3Types {
     }
 }
 
-contract NounsDAOStorage is NounsDAOV3Types {
+contract NounsDAOStorage is NounsDAOTypes {
     Storage ds;
 }

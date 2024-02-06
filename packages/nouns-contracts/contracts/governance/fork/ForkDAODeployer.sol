@@ -18,7 +18,7 @@
 pragma solidity ^0.8.19;
 
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
-import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOV3Types } from '../NounsDAOInterfaces.sol';
+import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOTypes } from '../NounsDAOInterfaces.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from './newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';

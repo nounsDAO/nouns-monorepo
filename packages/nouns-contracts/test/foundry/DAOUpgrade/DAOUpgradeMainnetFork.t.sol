@@ -7,7 +7,7 @@ import { NounsDAOLogicV4 } from '../../../contracts/governance/NounsDAOLogicV4.s
 import { ProposeDAOUpgradeMainnet } from '../../../script/DAOUpgrade/ProposeDAOUpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract DAOUpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -72,7 +72,7 @@ abstract contract DAOUpgradeMainnetForkBaseTest is Test {
     }
 
     function voteAndExecuteProposal(uint256 proposalId) internal {
-        NounsDAOV3Types.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
+        NounsDAOTypes.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
 
         vm.roll(propInfo.startBlock + 1);
         vm.prank(proposerAddr, origin);
@@ -113,7 +113,7 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
     }
 
     function test_givenRecentBitPacking_creationBlockAndProposalIdValuesAreLegit() public {
-        NounsDAOV3Types.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(493);
+        NounsDAOTypes.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(493);
 
         assertEq(prop.id, 493);
         assertEq(prop.creationBlock, 19093670);
@@ -163,7 +163,7 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
 
     function test_clientId_savedOnVotes() public {
         uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '');
-        NounsDAOV3Types.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
+        NounsDAOTypes.ProposalCondensedV2 memory propInfo = NOUNS_DAO_PROXY_MAINNET.proposals(proposalId);
         vm.roll(propInfo.startBlock + 1);
 
         uint32 clientId1 = 42;
@@ -174,10 +174,7 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         vm.prank(WHALE, origin);
         NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1, clientId2);
 
-        NounsDAOV3Types.ClientVoteData memory cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(
-            proposalId,
-            clientId1
-        );
+        NounsDAOTypes.ClientVoteData memory cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(proposalId, clientId1);
         assertEq(cv.txs, 1);
         assertEq(cv.votes, nouns.getCurrentVotes(proposerAddr));
 

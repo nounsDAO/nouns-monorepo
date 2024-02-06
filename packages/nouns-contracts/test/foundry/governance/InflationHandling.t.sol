@@ -6,7 +6,7 @@ import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { Utils } from '../helpers/Utils.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 
@@ -32,7 +32,7 @@ abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBas
                 timelock,
                 nounsToken,
                 vetoer,
-                NounsDAOV3Types.NounsDAOParams({
+                NounsDAOTypes.NounsDAOParams({
                     votingPeriod: votingPeriod,
                     votingDelay: votingDelay,
                     proposalThresholdBPS: proposalThresholdBPS_,
@@ -40,7 +40,7 @@ abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBas
                     objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                     proposalUpdatablePeriodInBlocks: 0
                 }),
-                NounsDAOV3Types.DynamicQuorumParams({
+                NounsDAOTypes.DynamicQuorumParams({
                     minQuorumVotesBPS: minQuorumVotesBPS,
                     maxQuorumVotesBPS: 2000,
                     quorumCoefficient: 10000
@@ -207,6 +207,6 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
 
         vm.roll(block.number + votingPeriod);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOV3Types.ProposalState.Succeeded));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOTypes.ProposalState.Succeeded));
     }
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.sol';
 
 contract WithdrawTest is NounsDAOLogicV3BaseTest {

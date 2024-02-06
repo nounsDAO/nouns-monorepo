@@ -19,7 +19,7 @@ import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeplo
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
@@ -29,8 +29,8 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer,
-        NounsDAOV3Types.NounsDAOParams memory daoParams,
-        NounsDAOV3Types.DynamicQuorumParams memory dqParams
+        NounsDAOTypes.NounsDAOParams memory daoParams,
+        NounsDAOTypes.DynamicQuorumParams memory dqParams
     ) internal returns (INounsDAOLogicV3 dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
@@ -61,7 +61,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             timelock,
             nounsToken,
             vetoer,
-            NounsDAOV3Types.NounsDAOParams({
+            NounsDAOTypes.NounsDAOParams({
                 votingPeriod: VOTING_PERIOD,
                 votingDelay: VOTING_DELAY,
                 proposalThresholdBPS: PROPOSAL_THRESHOLD,
@@ -69,7 +69,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                 objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                 proposalUpdatablePeriodInBlocks: 0
             }),
-            NounsDAOV3Types.DynamicQuorumParams({
+            NounsDAOTypes.DynamicQuorumParams({
                 minQuorumVotesBPS: 200,
                 maxQuorumVotesBPS: 2000,
                 quorumCoefficient: 10000
@@ -130,7 +130,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                     makeAddr('vetoer'),
                     address(t.timelock),
                     daoLogicImplementation,
-                    NounsDAOV3Types.NounsDAOParams({
+                    NounsDAOTypes.NounsDAOParams({
                         votingPeriod: VOTING_PERIOD,
                         votingDelay: VOTING_DELAY,
                         proposalThresholdBPS: PROPOSAL_THRESHOLD,
@@ -138,7 +138,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                         objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                         proposalUpdatablePeriodInBlocks: UPDATABLE_PERIOD_BLOCKS
                     }),
-                    NounsDAOV3Types.DynamicQuorumParams({
+                    NounsDAOTypes.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000

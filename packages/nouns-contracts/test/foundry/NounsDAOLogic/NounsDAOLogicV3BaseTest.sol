@@ -7,7 +7,7 @@ import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
@@ -215,9 +215,9 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256 proposalId) {
-        NounsDAOV3Types.ProposerSignature[] memory sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
+        NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOV3Types.ProposerSignature(
+            sigs[i] = NounsDAOTypes.ProposerSignature(
                 signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(dao)),
                 signers[i],
                 expirationTimestamps[i]
@@ -237,9 +237,9 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description
     ) internal {
-        NounsDAOV3Types.ProposerSignature[] memory sigs = new NounsDAOV3Types.ProposerSignature[](signers.length);
+        NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOV3Types.ProposerSignature(
+            sigs[i] = NounsDAOTypes.ProposerSignature(
                 signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(dao)),
                 signers[i],
                 expirationTimestamps[i]

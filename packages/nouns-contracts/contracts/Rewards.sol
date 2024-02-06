@@ -17,7 +17,7 @@ pragma solidity ^0.8.19;
 
 import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
-import { NounsDAOV3Types } from './governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
@@ -223,7 +223,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint256 proposalRewardForPeriod;
         uint256 votingRewardForPeriod;
         uint32 nextProposalIdToReward;
-        NounsDAOV3Types.ProposalForRewards lastProposal;
+        NounsDAOTypes.ProposalForRewards lastProposal;
     }
 
     /**
@@ -249,7 +249,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
         emit ProposalRewardsUpdated(t.nextProposalIdToReward, lastProposalId);
 
-        NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             t.nextProposalIdToReward,
             lastProposalId,
             votingClientIds
@@ -332,7 +332,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
             }
 
             uint256 votesInProposal;
-            NounsDAOV3Types.ClientVoteData[] memory voteData = proposals[i].voteData;
+            NounsDAOTypes.ClientVoteData[] memory voteData = proposals[i].voteData;
             uint256 votes;
             for (uint256 j; j < votingClientIds.length; ++j) {
                 clientId = votingClientIds[j];
@@ -415,7 +415,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         for (uint32 i; i < numClientIds; ++i) {
             allClientIds[i] = i;
         }
-        NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             $.nextProposalIdToReward,
             lastProposalId,
             allClientIds

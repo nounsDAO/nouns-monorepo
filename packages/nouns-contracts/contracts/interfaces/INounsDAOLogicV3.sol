@@ -71,7 +71,7 @@ interface INounsDAOLogicV3 {
     ) external returns (uint256);
 
     function proposeBySigs(
-        NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
+        NounsDAOTypes.ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -93,7 +93,7 @@ interface INounsDAOLogicV3 {
      * @return uint256 Proposal id of new proposal
      */
     function proposeBySigs(
-        NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
+        NounsDAOTypes.ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -181,7 +181,7 @@ interface INounsDAOLogicV3 {
      */
     function updateProposalBySigs(
         uint256 proposalId,
-        NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
+        NounsDAOTypes.ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -214,7 +214,7 @@ interface INounsDAOLogicV3 {
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
-    function state(uint256 proposalId) external view returns (NounsDAOV3Types.ProposalState);
+    function state(uint256 proposalId) external view returns (NounsDAOTypes.ProposalState);
 
     /**
      * @notice Gets actions of a proposal
@@ -242,7 +242,7 @@ interface INounsDAOLogicV3 {
      * @param voter The address of the voter
      * @return The voting receipt
      */
-    function getReceipt(uint256 proposalId, address voter) external view returns (NounsDAOV3Types.Receipt memory);
+    function getReceipt(uint256 proposalId, address voter) external view returns (NounsDAOTypes.Receipt memory);
 
     /**
      * @notice Returns the proposal details given a proposal id.
@@ -250,7 +250,7 @@ interface INounsDAOLogicV3 {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data, backwards compatible with V1 and V2
      */
-    function proposals(uint256 proposalId) external view returns (NounsDAOV3Types.ProposalCondensedV2 memory);
+    function proposals(uint256 proposalId) external view returns (NounsDAOTypes.ProposalCondensedV2 memory);
 
     /**
      * @notice Returns the proposal details given a proposal id.
@@ -259,25 +259,25 @@ interface INounsDAOLogicV3 {
      * @return A `ProposalCondensed` struct with the proposal data, not backwards compatible as it contains additional values
      * like `objectionPeriodEndBlock` and `signers`
      */
-    function proposalsV3(uint256 proposalId) external view returns (NounsDAOV3Types.ProposalCondensed memory);
+    function proposalsV3(uint256 proposalId) external view returns (NounsDAOTypes.ProposalCondensed memory);
 
     function proposalDataForRewards(
         uint256 firstProposalId,
         uint256 lastProposalId,
         uint32[] calldata votingClientIds
-    ) external view returns (NounsDAOV3Types.ProposalForRewards[] memory);
+    ) external view returns (NounsDAOTypes.ProposalForRewards[] memory);
 
     function proposalClientId(uint256 proposalId) external view returns (uint32);
 
     function proposalVoteClientsData(
         uint256 proposalId,
         uint32[] calldata clientIds
-    ) external view returns (NounsDAOV3Types.ClientVoteData[] memory);
+    ) external view returns (NounsDAOTypes.ClientVoteData[] memory);
 
     function proposalVoteClientData(
         uint256 proposalId,
         uint32 clientId
-    ) external view returns (NounsDAOV3Types.ClientVoteData memory);
+    ) external view returns (NounsDAOTypes.ClientVoteData memory);
 
     /**
      * @notice Current proposal threshold using Noun Total Supply
@@ -486,7 +486,7 @@ interface INounsDAOLogicV3 {
     function dynamicQuorumVotes(
         uint256 againstVotes,
         uint256 adjustedTotalSupply_,
-        NounsDAOV3Types.DynamicQuorumParams memory params
+        NounsDAOTypes.DynamicQuorumParams memory params
     ) external pure returns (uint256);
 
     /**
@@ -498,7 +498,7 @@ interface INounsDAOLogicV3 {
      */
     function getDynamicQuorumParamsAt(
         uint256 blockNumber_
-    ) external view returns (NounsDAOV3Types.DynamicQuorumParams memory);
+    ) external view returns (NounsDAOTypes.DynamicQuorumParams memory);
 
     /**
      * @notice Current min quorum votes using Nouns adjusted total supply
@@ -513,14 +513,14 @@ interface INounsDAOLogicV3 {
     /**
      * @notice Get all quorum params checkpoints
      */
-    function quorumParamsCheckpoints() external view returns (NounsDAOV3Types.DynamicQuorumParamsCheckpoint[] memory);
+    function quorumParamsCheckpoints() external view returns (NounsDAOTypes.DynamicQuorumParamsCheckpoint[] memory);
 
     /**
      * @notice Get a quorum params checkpoint by its index
      */
     function quorumParamsCheckpoints(
         uint256 index
-    ) external view returns (NounsDAOV3Types.DynamicQuorumParamsCheckpoint memory);
+    ) external view returns (NounsDAOTypes.DynamicQuorumParamsCheckpoint memory);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░

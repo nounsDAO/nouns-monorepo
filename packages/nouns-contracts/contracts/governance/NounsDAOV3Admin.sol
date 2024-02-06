@@ -21,7 +21,7 @@ import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 
 library NounsDAOV3Admin {
-    using NounsDAOV3DynamicQuorum for NounsDAOV3Types.Storage;
+    using NounsDAOV3DynamicQuorum for NounsDAOTypes.Storage;
 
     error AdminOnly();
     error VetoerOnly();
@@ -337,7 +337,7 @@ library NounsDAOV3Admin {
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
     function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external onlyAdmin {
-        NounsDAOV3Types.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
+        NounsDAOTypes.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         require(
             newMinQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
@@ -364,7 +364,7 @@ library NounsDAOV3Admin {
      *     Must be higher than or equal to minQuorumVotesBPS
      */
     function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external onlyAdmin {
-        NounsDAOV3Types.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
+        NounsDAOTypes.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         require(
             newMaxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
@@ -388,7 +388,7 @@ library NounsDAOV3Admin {
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
     function _setQuorumCoefficient(uint32 newQuorumCoefficient) external onlyAdmin {
-        NounsDAOV3Types.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
+        NounsDAOTypes.DynamicQuorumParams memory params = ds().getDynamicQuorumParamsAt(block.number);
 
         uint32 oldQuorumCoefficient = params.quorumCoefficient;
         params.quorumCoefficient = newQuorumCoefficient;
@@ -426,9 +426,9 @@ library NounsDAOV3Admin {
             revert MinQuorumBPSGreaterThanMaxQuorumBPS();
         }
 
-        NounsDAOV3Types.DynamicQuorumParams memory oldParams = ds().getDynamicQuorumParamsAt(block.number);
+        NounsDAOTypes.DynamicQuorumParams memory oldParams = ds().getDynamicQuorumParamsAt(block.number);
 
-        NounsDAOV3Types.DynamicQuorumParams memory params = NounsDAOV3Types.DynamicQuorumParams({
+        NounsDAOTypes.DynamicQuorumParams memory params = NounsDAOTypes.DynamicQuorumParams({
             minQuorumVotesBPS: newMinQuorumVotesBPS,
             maxQuorumVotesBPS: newMaxQuorumVotesBPS,
             quorumCoefficient: newQuorumCoefficient
@@ -562,14 +562,14 @@ library NounsDAOV3Admin {
         emit TimelocksAndAdminSet(timelock, timelockV1, admin);
     }
 
-    function _writeQuorumParamsCheckpoint(NounsDAOV3Types.DynamicQuorumParams memory params) internal {
+    function _writeQuorumParamsCheckpoint(NounsDAOTypes.DynamicQuorumParams memory params) internal {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
         uint256 pos = ds().quorumParamsCheckpoints.length;
         if (pos > 0 && ds().quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
             ds().quorumParamsCheckpoints[pos - 1].params = params;
         } else {
             ds().quorumParamsCheckpoints.push(
-                NounsDAOV3Types.DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params })
+                NounsDAOTypes.DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params })
             );
         }
     }
@@ -595,7 +595,7 @@ library NounsDAOV3Admin {
      * since the DAO no longer makes explicit calls to this library.
      * This function assumes the storage struct starts at slot 0.
      */
-    function ds() internal pure returns (NounsDAOV3Types.Storage storage ds_) {
+    function ds() internal pure returns (NounsDAOTypes.Storage storage ds_) {
         assembly {
             ds_.slot := 0
         }

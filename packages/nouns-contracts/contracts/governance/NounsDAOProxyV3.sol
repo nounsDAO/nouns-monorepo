@@ -38,7 +38,7 @@
 
 pragma solidity ^0.8.19;
 
-import { NounsDAOV3Types, NounsDAOV3Types } from './NounsDAOInterfaces.sol';
+import { NounsDAOTypes, NounsDAOTypes } from './NounsDAOInterfaces.sol';
 
 contract NounsDAOProxyV3 {
     /// @notice Administrator for this contract
@@ -61,8 +61,8 @@ contract NounsDAOProxyV3 {
         address vetoer_,
         address admin_,
         address implementation_,
-        NounsDAOV3Types.NounsDAOParams memory daoParams_,
-        NounsDAOV3Types.DynamicQuorumParams memory dynamicQuorumParams_
+        NounsDAOTypes.NounsDAOParams memory daoParams_,
+        NounsDAOTypes.DynamicQuorumParams memory dynamicQuorumParams_
     ) {
         // Admin set to msg.sender for initialization
         admin = msg.sender;
