@@ -542,31 +542,24 @@ function dataToDescriptorInput(data: string[]): {
 }
 
 export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV4> => {
-  const NounsDAOV3Proposals = await (
-    await ethers.getContractFactory('NounsDAOV3Proposals', deployer)
+  const NounsDAOProposals = await (
+    await ethers.getContractFactory('NounsDAOProposals', deployer)
   ).deploy();
-  const NounsDAOV3Admin = await (
-    await ethers.getContractFactory('NounsDAOV3Admin', deployer)
-  ).deploy();
-  const NounsDAOV3Fork = await (
-    await ethers.getContractFactory('NounsDAOV3Fork', deployer)
-  ).deploy();
-  const NounsDAOV3Votes = await (
-    await ethers.getContractFactory('NounsDAOV3Votes', deployer)
-  ).deploy();
-  const NounsDAOV3DynamicQuorum = await (
-    await ethers.getContractFactory('NounsDAOV3DynamicQuorum', deployer)
+  const NounsDAOAdmin = await (await ethers.getContractFactory('NounsDAOAdmin', deployer)).deploy();
+  const NounsDAOFork = await (await ethers.getContractFactory('NounsDAOFork', deployer)).deploy();
+  const NounsDAOVotes = await (await ethers.getContractFactory('NounsDAOVotes', deployer)).deploy();
+  const NounsDAODynamicQuorum = await (
+    await ethers.getContractFactory('NounsDAODynamicQuorum', deployer)
   ).deploy();
 
   return await new NounsDaoLogicFactory(
     {
-      'contracts/governance/NounsDAOV3Proposals.sol:NounsDAOV3Proposals':
-        NounsDAOV3Proposals.address,
-      'contracts/governance/NounsDAOV3Admin.sol:NounsDAOV3Admin': NounsDAOV3Admin.address,
-      'contracts/governance/fork/NounsDAOV3Fork.sol:NounsDAOV3Fork': NounsDAOV3Fork.address,
-      'contracts/governance/NounsDAOV3Votes.sol:NounsDAOV3Votes': NounsDAOV3Votes.address,
-      'contracts/governance/NounsDAOV3DynamicQuorum.sol:NounsDAOV3DynamicQuorum':
-        NounsDAOV3DynamicQuorum.address,
+      'contracts/governance/NounsDAOAdmin.sol:NounsDAOAdmin': NounsDAOAdmin.address,
+      'contracts/governance/NounsDAOProposals.sol:NounsDAOProposals': NounsDAOProposals.address,
+      'contracts/governance/fork/NounsDAOFork.sol:NounsDAOFork': NounsDAOFork.address,
+      'contracts/governance/NounsDAOVotes.sol:NounsDAOVotes': NounsDAOVotes.address,
+      'contracts/governance/NounsDAODynamicQuorum.sol:NounsDAODynamicQuorum':
+        NounsDAODynamicQuorum.address,
     },
     deployer,
   ).deploy();

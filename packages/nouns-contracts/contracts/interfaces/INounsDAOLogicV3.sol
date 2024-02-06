@@ -84,7 +84,7 @@ interface INounsDAOLogicV3 {
      * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
      * Signers are regarded as co-proposers, and therefore have the ability to cancel the proposal at any time.
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param targets Target addresses for proposal calls
      * @param values Eth values for proposal calls
      * @param signatures Function signatures for proposal calls
@@ -171,7 +171,7 @@ interface INounsDAOLogicV3 {
      * Requires the original signers to sign the update.
      * @param proposalId Proposal's id
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param targets Updated target addresses for proposal calls
      * @param values Updated eth values for proposal calls
      * @param signatures Updated function signatures for proposal calls

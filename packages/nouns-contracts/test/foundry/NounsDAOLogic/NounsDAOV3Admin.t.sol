@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.sol';
+import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
@@ -23,7 +23,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     address[] tokens;
 
     function test_setForkPeriod_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkPeriod(8 days);
     }
 
@@ -42,7 +42,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         // doesn't revert
         dao._setForkPeriod(14 days);
 
-        vm.expectRevert(NounsDAOV3Admin.ForkPeriodTooLong.selector);
+        vm.expectRevert(NounsDAOAdmin.ForkPeriodTooLong.selector);
         dao._setForkPeriod(14 days + 1);
     }
 
@@ -52,12 +52,12 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         // doesn't revert
         dao._setForkPeriod(2 days);
 
-        vm.expectRevert(NounsDAOV3Admin.ForkPeriodTooShort.selector);
+        vm.expectRevert(NounsDAOAdmin.ForkPeriodTooShort.selector);
         dao._setForkPeriod(2 days - 1);
     }
 
     function test_setForkThresholdBPS_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkThresholdBPS(2000);
     }
 
@@ -73,7 +73,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     function test_setErc20TokensToIncludeInFork_onlyAdmin() public {
         tokens = [address(1), address(2)];
 
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setErc20TokensToIncludeInFork(tokens);
     }
 
@@ -105,12 +105,12 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         tokens_[1] = address(42);
 
         vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOV3Admin.DuplicateTokenAddress.selector);
+        vm.expectRevert(NounsDAOAdmin.DuplicateTokenAddress.selector);
         dao._setErc20TokensToIncludeInFork(tokens_);
     }
 
     function test_setForkEscrow_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkEscrow(address(1));
     }
 
@@ -122,7 +122,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     }
 
     function test_setTimelocks_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setTimelocksAndAdmin(address(1), address(2), address(3));
     }
 
@@ -136,7 +136,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     }
 
     function test_setVoteSnapshotBlockSwitchProposalId_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setVoteSnapshotBlockSwitchProposalId();
     }
 
@@ -155,12 +155,12 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setVoteSnapshotBlockSwitchProposalId();
 
         vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOV3Admin.VoteSnapshotSwitchAlreadySet.selector);
+        vm.expectRevert(NounsDAOAdmin.VoteSnapshotSwitchAlreadySet.selector);
         dao._setVoteSnapshotBlockSwitchProposalId();
     }
 
     function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         INounsDAOLogicV3(address(dao))._setObjectionPeriodDurationInBlocks(3 days / 12);
     }
 
@@ -179,12 +179,12 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         uint32 blocks = 8 days / 12;
 
         vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOV3Admin.InvalidObjectionPeriodDurationInBlocks.selector);
+        vm.expectRevert(NounsDAOAdmin.InvalidObjectionPeriodDurationInBlocks.selector);
         INounsDAOLogicV3(address(dao))._setObjectionPeriodDurationInBlocks(blocks);
     }
 
     function test_setProposalUpdatablePeriodInBlocks_onlyAdmin() public {
-        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setProposalUpdatablePeriodInBlocks(3 days / 12);
     }
 
@@ -203,7 +203,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         uint32 blocks = 8 days / 12;
 
         vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOV3Admin.InvalidProposalUpdatablePeriodInBlocks.selector);
+        vm.expectRevert(NounsDAOAdmin.InvalidProposalUpdatablePeriodInBlocks.selector);
         dao._setProposalUpdatablePeriodInBlocks(blocks);
     }
 }

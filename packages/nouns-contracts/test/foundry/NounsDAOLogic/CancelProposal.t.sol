@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
 abstract contract ZeroState is NounsDAOLogicV3BaseTest {
     address proposer = makeAddr('proposer');
@@ -74,7 +74,7 @@ abstract contract IsCancellable is ZeroState {
 
 abstract contract IsNotCancellable is ZeroState {
     function test_proposerCantCancel() public {
-        vm.expectRevert(NounsDAOV3Proposals.CantCancelProposalAtFinalState.selector);
+        vm.expectRevert(NounsDAOProposals.CantCancelProposalAtFinalState.selector);
         vm.prank(proposer);
         dao.cancel(proposalId);
     }

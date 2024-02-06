@@ -3,14 +3,14 @@
 pragma solidity ^0.8.19;
 
 import '../governance/NounsDAOLogicV4.sol';
-import { NounsDAOV3Admin } from '../governance/NounsDAOV3Admin.sol';
+import { NounsDAOAdmin } from '../governance/NounsDAOAdmin.sol';
 
 /**
  * @dev A modified version of NounsDAOLogicV4 that exposes the `initialize` function for testing purposes.
  * The modification removes bounds checks on parameters, so we can dramatically shorten test scenarios setup.
  */
 contract NounsDAOLogicV3Harness is NounsDAOLogicV4 {
-    using NounsDAOV3Admin for Storage;
+    using NounsDAOAdmin for Storage;
 
     function initialize(
         address timelock_,
@@ -34,13 +34,13 @@ contract NounsDAOLogicV3Harness is NounsDAOLogicV4 {
         ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
         ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
-        NounsDAOV3Admin._setDynamicQuorumParams(
+        NounsDAOAdmin._setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
-        NounsDAOV3Admin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
-        NounsDAOV3Admin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
-        NounsDAOV3Admin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
+        NounsDAOAdmin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        NounsDAOAdmin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        NounsDAOAdmin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 }

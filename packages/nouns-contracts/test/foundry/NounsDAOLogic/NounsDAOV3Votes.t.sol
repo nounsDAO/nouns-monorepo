@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { NounsDAOV3Votes } from '../../../contracts/governance/NounsDAOV3Votes.sol';
+import { NounsDAOVotes } from '../../../contracts/governance/NounsDAOVotes.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
@@ -41,7 +41,7 @@ contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
         vm.roll(block.number + dao.lastMinuteWindowInBlocks());
         assertTrue(dao.state(proposalId) == NounsDAOTypes.ProposalState.ObjectionPeriod);
 
-        vm.expectRevert(NounsDAOV3Votes.CanOnlyVoteAgainstDuringObjectionPeriod.selector);
+        vm.expectRevert(NounsDAOVotes.CanOnlyVoteAgainstDuringObjectionPeriod.selector);
         vm.prank(voter);
         dao.castVote(proposalId, 1);
     }

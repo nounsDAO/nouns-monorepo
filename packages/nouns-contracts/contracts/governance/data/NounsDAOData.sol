@@ -18,7 +18,7 @@
 pragma solidity ^0.8.19;
 
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
-import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../NounsDAOProposals.sol';
 import { NounsTokenLike, NounsDAOTypes } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '../../external/openzeppelin/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
@@ -142,13 +142,13 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         }
 
         if (propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugAlreadyUsed();
-        NounsDAOV3Proposals.checkProposalTxs(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas));
+        NounsDAOProposals.checkProposalTxs(NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas));
 
         propCandidates[msg.sender][keccak256(bytes(slug))] = true;
 
-        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(
+        bytes memory encodedProp = NounsDAOProposals.calcProposalEncodeData(
             msg.sender,
-            NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+            NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
             description
         );
         if (proposalIdToUpdate > 0) {
@@ -194,11 +194,11 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     ) external payable {
         if (!isNouner(msg.sender) && msg.value < updateCandidateCost) revert MustBeNounerOrPaySufficientFee();
         if (!propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugDoesNotExist();
-        NounsDAOV3Proposals.checkProposalTxs(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas));
+        NounsDAOProposals.checkProposalTxs(NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas));
 
-        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(
+        bytes memory encodedProp = NounsDAOProposals.calcProposalEncodeData(
             msg.sender,
-            NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+            NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
             description
         );
         if (proposalIdToUpdate > 0) {
@@ -241,7 +241,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      * @param slug the slug of the proposal candidate signer signed on.
      * @param proposalIdToUpdate if this is an update to an existing proposal, the ID of the proposal to update, otherwise 0.
      * @param encodedProp the abi encoding of the candidate version signed; should be identical to the output of
-     * the `NounsDAOV3Proposals.calcProposalEncodeData` function.
+     * the `NounsDAOProposals.calcProposalEncodeData` function.
      * @param reason signer's reason free text.
      */
     function addSignature(
@@ -256,10 +256,10 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
 
         bytes32 typeHash = proposalIdToUpdate == 0
-            ? NounsDAOV3Proposals.PROPOSAL_TYPEHASH
-            : NounsDAOV3Proposals.UPDATE_PROPOSAL_TYPEHASH;
+            ? NounsDAOProposals.PROPOSAL_TYPEHASH
+            : NounsDAOProposals.UPDATE_PROPOSAL_TYPEHASH;
 
-        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(typeHash, encodedProp, expirationTimestamp, nounsDao);
+        bytes32 sigDigest = NounsDAOProposals.sigDigest(typeHash, encodedProp, expirationTimestamp, nounsDao);
 
         if (!SignatureChecker.isValidSignatureNow(msg.sender, sigDigest, sig)) revert InvalidSignature();
 

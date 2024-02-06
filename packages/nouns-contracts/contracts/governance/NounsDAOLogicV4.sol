@@ -56,19 +56,19 @@
 pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
-import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
-import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
-import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
-import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
+import { NounsDAOAdmin } from './NounsDAOAdmin.sol';
+import { NounsDAODynamicQuorum } from './NounsDAODynamicQuorum.sol';
+import { NounsDAOVotes } from './NounsDAOVotes.sol';
+import { NounsDAOProposals } from './NounsDAOProposals.sol';
+import { NounsDAOFork } from './fork/NounsDAOFork.sol';
 import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
 contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
-    using NounsDAOV3Admin for Storage;
-    using NounsDAOV3DynamicQuorum for Storage;
-    using NounsDAOV3Votes for Storage;
-    using NounsDAOV3Proposals for Storage;
-    using NounsDAOV3Fork for Storage;
+    using NounsDAOAdmin for Storage;
+    using NounsDAODynamicQuorum for Storage;
+    using NounsDAOVotes for Storage;
+    using NounsDAOProposals for Storage;
+    using NounsDAOFork for Storage;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -78,37 +78,37 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
 
     /// @notice The minimum setable proposal threshold
     function MIN_PROPOSAL_THRESHOLD_BPS() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_PROPOSAL_THRESHOLD_BPS;
+        return NounsDAOAdmin.MIN_PROPOSAL_THRESHOLD_BPS;
     }
 
     /// @notice The maximum setable proposal threshold
     function MAX_PROPOSAL_THRESHOLD_BPS() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_PROPOSAL_THRESHOLD_BPS;
+        return NounsDAOAdmin.MAX_PROPOSAL_THRESHOLD_BPS;
     }
 
     /// @notice The minimum setable voting period in blocks
     function MIN_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_PERIOD_BLOCKS;
+        return NounsDAOAdmin.MIN_VOTING_PERIOD_BLOCKS;
     }
 
     /// @notice The max setable voting period in blocks
     function MAX_VOTING_PERIOD() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_PERIOD_BLOCKS;
+        return NounsDAOAdmin.MAX_VOTING_PERIOD_BLOCKS;
     }
 
     /// @notice The min setable voting delay in blocks
     function MIN_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MIN_VOTING_DELAY_BLOCKS;
+        return NounsDAOAdmin.MIN_VOTING_DELAY_BLOCKS;
     }
 
     /// @notice The max setable voting delay in blocks
     function MAX_VOTING_DELAY() public pure returns (uint256) {
-        return NounsDAOV3Admin.MAX_VOTING_DELAY_BLOCKS;
+        return NounsDAOAdmin.MAX_VOTING_DELAY_BLOCKS;
     }
 
     /// @notice The maximum number of actions that can be included in a proposal
     function proposalMaxOperations() public pure returns (uint256) {
-        return NounsDAOV3Proposals.PROPOSAL_MAX_OPERATIONS;
+        return NounsDAOProposals.PROPOSAL_MAX_OPERATIONS;
     }
 
     /**
@@ -153,23 +153,23 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        NounsDAOV3Admin._setVotingPeriod(daoParams_.votingPeriod);
-        NounsDAOV3Admin._setVotingDelay(daoParams_.votingDelay);
-        NounsDAOV3Admin._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
+        NounsDAOAdmin._setVotingPeriod(daoParams_.votingPeriod);
+        NounsDAOAdmin._setVotingDelay(daoParams_.votingDelay);
+        NounsDAOAdmin._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
         ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
         ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
         ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
-        NounsDAOV3Admin._setDynamicQuorumParams(
+        NounsDAOAdmin._setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        NounsDAOV3Admin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
-        NounsDAOV3Admin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
-        NounsDAOV3Admin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
+        NounsDAOAdmin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        NounsDAOAdmin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        NounsDAOAdmin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 
     /**
@@ -205,8 +205,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         string memory description,
         uint32 clientId
     ) public returns (uint256) {
-        return
-            ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description, clientId);
+        return ds.propose(NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas), description, clientId);
     }
 
     /**
@@ -229,7 +228,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     ) public returns (uint256) {
         return
             ds.proposeOnTimelockV1(
-                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
                 description,
                 0
             );
@@ -247,7 +246,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return
             ds.proposeBySigs(
                 proposerSignatures,
-                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
                 description,
                 clientId
             );
@@ -257,7 +256,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
      * Signers are regarded as co-proposers, and therefore have the ability to cancel the proposal at any time.
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param targets Target addresses for proposal calls
      * @param values Eth values for proposal calls
      * @param signatures Function signatures for proposal calls
@@ -354,7 +353,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * Requires the original signers to sign the update.
      * @param proposalId Proposal's id
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param targets Updated target addresses for proposal calls
      * @param values Updated eth values for proposal calls
      * @param signatures Updated function signatures for proposal calls
@@ -375,7 +374,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         ds.updateProposalBySigs(
             proposalId,
             proposerSignatures,
-            NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+            NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
             description,
             updateMessage
         );
@@ -681,10 +680,10 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     }
 
     /**
-     * All other calls are called via NounsDAOV3Admin
+     * All other calls are called via NounsDAOAdmin
      */
     fallback(bytes calldata) external payable returns (bytes memory) {
-        return Address.functionDelegateCall(address(NounsDAOV3Admin), msg.data);
+        return Address.functionDelegateCall(address(NounsDAOAdmin), msg.data);
     }
 
     /**
@@ -718,7 +717,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         uint256 adjustedTotalSupply_,
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
-        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, adjustedTotalSupply_, params);
+        return NounsDAODynamicQuorum.dynamicQuorumVotes(againstVotes, adjustedTotalSupply_, params);
     }
 
     /**

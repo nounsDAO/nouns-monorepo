@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
 abstract contract ZeroState is NounsDAOLogicV3BaseTest {
     address proposer = makeAddr('proposer');
@@ -30,7 +30,7 @@ abstract contract ProposalUpdatableState is ZeroState {
         vm.roll(block.number + 1);
         vm.stopPrank();
 
-        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
+        NounsDAOProposals.ProposalTxs memory txs = makeTxs(makeAddr('target'), 0, '', '');
         uint256 expirationTimestamp = block.timestamp + 1234;
         NounsDAOTypes.ProposerSignature[] memory proposerSignatures = new NounsDAOTypes.ProposerSignature[](1);
         proposerSignatures[0] = NounsDAOTypes.ProposerSignature(
@@ -82,7 +82,7 @@ abstract contract IsCancellable is ZeroState {
 
 abstract contract IsNotCancellable is ZeroState {
     function test_proposerCantCancel() public {
-        vm.expectRevert(NounsDAOV3Proposals.CantCancelProposalAtFinalState.selector);
+        vm.expectRevert(NounsDAOProposals.CantCancelProposalAtFinalState.selector);
         vm.prank(proposer);
         dao.cancel(proposalId);
     }

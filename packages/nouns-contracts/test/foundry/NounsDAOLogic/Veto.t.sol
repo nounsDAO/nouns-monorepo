@@ -4,8 +4,8 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
-import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
+import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 
 contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
@@ -41,7 +41,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
     function test_veto_revertsForNonVetoer() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
 
-        vm.expectRevert(NounsDAOV3Proposals.VetoerOnly.selector);
+        vm.expectRevert(NounsDAOProposals.VetoerOnly.selector);
 
         daoProxy.veto(proposalId);
     }
@@ -51,7 +51,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         vm.startPrank(vetoer);
         daoProxy._burnVetoPower();
 
-        vm.expectRevert(NounsDAOV3Proposals.VetoerBurned.selector);
+        vm.expectRevert(NounsDAOProposals.VetoerBurned.selector);
 
         daoProxy.veto(proposalId);
 
@@ -164,7 +164,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         daoProxy.execute(proposalId);
         assertTrue(daoProxy.state(proposalId) == NounsDAOTypes.ProposalState.Executed);
 
-        vm.expectRevert(NounsDAOV3Proposals.CantVetoExecutedProposal.selector);
+        vm.expectRevert(NounsDAOProposals.CantVetoExecutedProposal.selector);
         vm.prank(vetoer);
         daoProxy.veto(proposalId);
     }
@@ -194,7 +194,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
     }
 
     function test_setPendingVetoer_failsIfNotCurrentVetoer() public {
-        vm.expectRevert(NounsDAOV3Proposals.VetoerOnly.selector);
+        vm.expectRevert(NounsDAOProposals.VetoerOnly.selector);
         daoProxy._setPendingVetoer(address(0x1234));
     }
 
@@ -217,7 +217,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         vm.prank(vetoer);
         daoProxy._setPendingVetoer(pendingVetoer);
 
-        vm.expectRevert(NounsDAOV3Admin.PendingVetoerOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.PendingVetoerOnly.selector);
         daoProxy._acceptVetoer();
 
         vm.prank(pendingVetoer);
@@ -255,7 +255,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         daoProxy._burnVetoPower();
 
         vm.prank(pendingVetoer);
-        vm.expectRevert(NounsDAOV3Admin.PendingVetoerOnly.selector);
+        vm.expectRevert(NounsDAOAdmin.PendingVetoerOnly.selector);
         daoProxy._acceptVetoer();
 
         assertEq(daoProxy.pendingVetoer(), address(0));

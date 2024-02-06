@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
@@ -104,7 +104,7 @@ contract NounsDAOLogic3InflationHandling40TotalSupplyTest is NounsDAOLogicV3Infl
 
         assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 2);
 
-        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
+        vm.expectRevert(NounsDAOProposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 
@@ -183,7 +183,7 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
     }
 
     function testRejectsProposalsPreviouslyAboveThresholdButNowBelowBecauseSupplyIncreased() public {
-        vm.expectRevert(NounsDAOV3Proposals.VotesBelowProposalThreshold.selector);
+        vm.expectRevert(NounsDAOProposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 

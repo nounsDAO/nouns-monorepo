@@ -5,7 +5,7 @@ import 'forge-std/Test.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
 contract SigUtils is Test {
     bytes32 public constant DOMAIN_TYPEHASH =
@@ -25,7 +25,7 @@ contract SigUtils is Test {
     struct UpdateProposalParams {
         uint256 proposalId;
         address proposer;
-        NounsDAOV3Proposals.ProposalTxs txs;
+        NounsDAOProposals.ProposalTxs txs;
         string description;
     }
 
@@ -78,7 +78,7 @@ contract SigUtils is Test {
         uint256 proposalId,
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract,
@@ -98,7 +98,7 @@ contract SigUtils is Test {
     function signProposal(
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract
@@ -109,7 +109,7 @@ contract SigUtils is Test {
     function signProposal(
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract,
@@ -148,7 +148,7 @@ contract SigUtils is Test {
 
     function calcProposalEncodeData(
         address proposer,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description
     ) internal pure returns (bytes memory) {
         bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);

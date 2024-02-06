@@ -21,7 +21,7 @@ import { NounsDAOTypes, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../Noun
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
-library NounsDAOV3Fork {
+library NounsDAOFork {
     error ForkThresholdNotMet();
     error ForkPeriodNotActive();
     error ForkPeriodActive();

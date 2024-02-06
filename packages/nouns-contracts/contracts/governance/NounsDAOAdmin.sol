@@ -18,10 +18,10 @@
 pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
+import { NounsDAODynamicQuorum } from './NounsDAODynamicQuorum.sol';
 
-library NounsDAOV3Admin {
-    using NounsDAOV3DynamicQuorum for NounsDAOTypes.Storage;
+library NounsDAOAdmin {
+    using NounsDAODynamicQuorum for NounsDAOTypes.Storage;
 
     error AdminOnly();
     error VetoerOnly();

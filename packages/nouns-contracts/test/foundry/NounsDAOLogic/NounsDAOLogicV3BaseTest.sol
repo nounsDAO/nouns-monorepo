@@ -5,7 +5,7 @@ import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
@@ -193,7 +193,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         address proposer,
         address signer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp
     ) internal returns (uint256 proposalId) {
@@ -212,7 +212,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         address[] memory signers,
         uint256[] memory signerPKs,
         uint256[] memory expirationTimestamps,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256 proposalId) {
         NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
@@ -234,7 +234,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         address[] memory signers,
         uint256[] memory signerPKs,
         uint256[] memory expirationTimestamps,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description
     ) internal {
         NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
@@ -264,7 +264,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         uint256 value,
         string memory signature,
         bytes memory data
-    ) internal pure returns (NounsDAOV3Proposals.ProposalTxs memory) {
+    ) internal pure returns (NounsDAOProposals.ProposalTxs memory) {
         address[] memory targets = new address[](1);
         targets[0] = target;
         uint256[] memory values = new uint256[](1);
@@ -273,11 +273,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
         signatures[0] = signature;
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
-        return NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
+        return NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas);
     }
 
     function expectNewPropEvents(
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         address expectedProposer,
         uint256 expectedPropId,
         uint256 expectedPropThreshold,

@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
 abstract contract ExecutableProposalState is NounsDAOLogicV3BaseTest {
     address user = makeAddr('user');
@@ -57,7 +57,7 @@ abstract contract ExecutableProposalWithActiveForkState is ExecutableProposalSta
 
 contract ExecutableProposalWithActiveForkStateTest is ExecutableProposalWithActiveForkState {
     function test_executionRevertsDuringFork() public {
-        vm.expectRevert(NounsDAOV3Proposals.CannotExecuteDuringForkingPeriod.selector);
+        vm.expectRevert(NounsDAOProposals.CannotExecuteDuringForkingPeriod.selector);
         dao.execute(proposalId);
     }
 

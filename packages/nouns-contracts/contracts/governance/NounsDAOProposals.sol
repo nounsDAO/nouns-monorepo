@@ -18,15 +18,15 @@
 pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
-import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
+import { NounsDAODynamicQuorum } from './NounsDAODynamicQuorum.sol';
+import { NounsDAOFork } from './fork/NounsDAOFork.sol';
 import { SignatureChecker } from '../external/openzeppelin/SignatureChecker.sol';
 import { ECDSA } from '../external/openzeppelin/ECDSA.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
-library NounsDAOV3Proposals {
-    using NounsDAOV3DynamicQuorum for NounsDAOTypes.Storage;
-    using NounsDAOV3Fork for NounsDAOTypes.Storage;
+library NounsDAOProposals {
+    using NounsDAODynamicQuorum for NounsDAOTypes.Storage;
+    using NounsDAOFork for NounsDAOTypes.Storage;
 
     error CantCancelProposalAtFinalState();
     error ProposalInfoArityMismatch();
@@ -149,7 +149,7 @@ library NounsDAOV3Proposals {
     /**
      * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
      * @param description String description of the proposal
      * @return uint256 Proposal id of new proposal
@@ -330,7 +330,7 @@ library NounsDAOV3Proposals {
      * Requires the original signers to sign the update.
      * @param proposalId Proposal's id
      * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
-     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOV3Proposals.sol
+     * @dev The signatures follow EIP-712. See `UPDATE_PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param txs Updated transactions for the proposal
      * @param description Updated description of the proposal
      * @param updateMessage Short message to explain the update

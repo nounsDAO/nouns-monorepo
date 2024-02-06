@@ -18,10 +18,10 @@
 pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
+import { NounsDAOFork } from './fork/NounsDAOFork.sol';
 
-library NounsDAOV3DynamicQuorum {
-    using NounsDAOV3Fork for NounsDAOTypes.Storage;
+library NounsDAODynamicQuorum {
+    using NounsDAOFork for NounsDAOTypes.Storage;
 
     error UnsafeUint16Cast();
 

@@ -18,11 +18,11 @@
 pragma solidity ^0.8.19;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from './NounsDAOProposals.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
-library NounsDAOV3Votes {
-    using NounsDAOV3Proposals for NounsDAOTypes.Storage;
+library NounsDAOVotes {
+    using NounsDAOProposals for NounsDAOTypes.Storage;
 
     error CanOnlyVoteAgainstDuringObjectionPeriod();
 
