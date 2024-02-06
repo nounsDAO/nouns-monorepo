@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Library for NounsDAOLogicV3 contract containing all the voting related code
+/// @title Library for Nouns DAO Logic containing all the voting related code
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *

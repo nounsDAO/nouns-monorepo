@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Library for NounsDAOLogicV3 contract containing functions related to quorum calculations
+/// @title Library for Nouns DAO Logic containing functions related to quorum calculations
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *

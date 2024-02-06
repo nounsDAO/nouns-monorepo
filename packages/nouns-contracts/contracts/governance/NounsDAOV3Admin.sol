@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Library for NounsDAOLogicV3 contract containing admin related functions
+/// @title Library for Nouns DAO Logic containing admin related functions
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
