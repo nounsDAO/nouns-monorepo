@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Script.sol';
-import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
+import { INounsDAOLogicV3 } from '../contracts/interfaces/INounsDAOLogicV3.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 /**
@@ -11,8 +11,8 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
  * proposal has hit that limit.
  */
 contract ProposeTimelockMigrationCleanupMainnet is Script {
-    NounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
-        NounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
+    INounsDAOLogicV3 public constant NOUNS_DAO_PROXY_MAINNET =
+        INounsDAOLogicV3(payable(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d));
     address public constant NOUNS_TIMELOCK_V1_MAINNET = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
     address public constant LILNOUNS_MAINNET = 0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B;
     address public constant TOKEN_BUYER_MAINNET = 0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5;
@@ -44,7 +44,7 @@ contract ProposeTimelockMigrationCleanupMainnet is Script {
     }
 
     function propose(
-        NounsDAOLogicV3 daoProxy,
+        INounsDAOLogicV3 daoProxy,
         address timelockV1,
         address timelockV2,
         address erc20Transferer,

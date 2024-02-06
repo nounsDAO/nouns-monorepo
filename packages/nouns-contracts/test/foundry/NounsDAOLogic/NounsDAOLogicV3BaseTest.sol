@@ -5,7 +5,6 @@ import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';

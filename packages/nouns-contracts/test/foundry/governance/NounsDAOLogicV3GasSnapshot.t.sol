@@ -6,7 +6,6 @@ import 'forge-std/Test.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 

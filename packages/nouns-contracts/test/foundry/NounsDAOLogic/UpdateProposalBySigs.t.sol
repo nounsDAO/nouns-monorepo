@@ -6,7 +6,6 @@ import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';

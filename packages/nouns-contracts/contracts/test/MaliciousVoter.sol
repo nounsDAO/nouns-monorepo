@@ -2,15 +2,15 @@
 
 pragma solidity ^0.8.19;
 
-import { NounsDAOLogicV3 } from '../governance/NounsDAOLogicV3.sol';
+import { INounsDAOLogicV3 } from '../interfaces/INounsDAOLogicV3.sol';
 
 contract MaliciousVoter {
-    NounsDAOLogicV3 public dao;
+    INounsDAOLogicV3 public dao;
     uint256 public proposalId;
     uint8 public support;
     bool useReason;
 
-    constructor(NounsDAOLogicV3 dao_, uint256 proposalId_, uint8 support_, bool useReason_) {
+    constructor(INounsDAOLogicV3 dao_, uint256 proposalId_, uint8 support_, bool useReason_) {
         dao = dao_;
         proposalId = proposalId_;
         support = support_;

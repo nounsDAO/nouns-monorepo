@@ -5,7 +5,6 @@ import 'forge-std/Test.sol';
 import 'forge-std/Base.sol';
 
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
-import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';

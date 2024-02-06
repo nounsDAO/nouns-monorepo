@@ -2,7 +2,6 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
 import { NounsDAOV3Types } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
@@ -184,7 +183,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
 
     function test_veto_worksForPropStateUpdatable() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        NounsDAOLogicV3 daoAsV3 = NounsDAOLogicV3(payable(address(daoProxy)));
+        INounsDAOLogicV3 daoAsV3 = INounsDAOLogicV3(payable(address(daoProxy)));
 
         assertTrue(daoAsV3.state(proposalId) == NounsDAOV3Types.ProposalState.Updatable);
 
