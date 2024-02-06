@@ -641,6 +641,6 @@ interface NounsDAOV3Types {
     }
 }
 
-contract NounsDAOStorageV3 is NounsDAOV3Types {
+contract NounsDAOStorage is NounsDAOV3Types {
     StorageV3 ds;
 }

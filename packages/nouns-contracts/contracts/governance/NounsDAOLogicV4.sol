@@ -63,7 +63,7 @@ import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
-contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
+contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
     using NounsDAOV3DynamicQuorum for StorageV3;
     using NounsDAOV3Votes for StorageV3;

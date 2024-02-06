@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
+import { NounsDAOLogicV4 } from '../../../contracts/governance/NounsDAOLogicV4.sol';
 import { ProposeDAOUpgradeMainnet } from '../../../script/DAOUpgrade/ProposeDAOUpgradeMainnet.s.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
@@ -95,7 +95,7 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
 
         // Deploy the latest DAO logic
         vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        newLogic = address(new NounsDAOLogicV3());
+        newLogic = address(new NounsDAOLogicV4());
 
         // Propose the upgrade
         vm.setEnv('PROPOSER_KEY', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');

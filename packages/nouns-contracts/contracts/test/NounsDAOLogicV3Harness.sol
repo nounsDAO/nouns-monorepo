@@ -2,14 +2,14 @@
 
 pragma solidity ^0.8.19;
 
-import '../governance/NounsDAOLogicV3.sol';
+import '../governance/NounsDAOLogicV4.sol';
 import { NounsDAOV3Admin } from '../governance/NounsDAOV3Admin.sol';
 
 /**
- * @dev A modified version of NounsDAOLogicV3 that exposes the `initialize` function for testing purposes.
+ * @dev A modified version of NounsDAOLogicV4 that exposes the `initialize` function for testing purposes.
  * The modification removes bounds checks on parameters, so we can dramatically shorten test scenarios setup.
  */
-contract NounsDAOLogicV3Harness is NounsDAOLogicV3 {
+contract NounsDAOLogicV3Harness is NounsDAOLogicV4 {
     using NounsDAOV3Admin for StorageV3;
 
     function initialize(

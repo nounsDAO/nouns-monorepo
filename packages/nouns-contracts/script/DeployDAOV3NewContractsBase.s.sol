@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Script.sol';
 import { NounsDAOExecutorV2 } from '../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOExecutorV2Test } from '../contracts/test/NounsDAOExecutorHarness.sol';
-import { NounsDAOLogicV3 } from '../contracts/governance/NounsDAOLogicV3.sol';
+import { NounsDAOLogicV4 } from '../contracts/governance/NounsDAOLogicV4.sol';
 import { NounsDAOExecutorProxy } from '../contracts/governance/NounsDAOExecutorProxy.sol';
 import { INounsDAOExecutor } from '../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOForkEscrow } from '../contracts/governance/fork/NounsDAOForkEscrow.sol';
@@ -48,7 +48,7 @@ contract DeployDAOV3NewContractsBase is Script {
         returns (
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
-            NounsDAOLogicV3 daoV3Impl,
+            NounsDAOLogicV4 daoV3Impl,
             NounsDAOExecutorV2 timelockV2,
             ERC20Transferer erc20Transferer
         )
@@ -67,7 +67,7 @@ contract DeployDAOV3NewContractsBase is Script {
         returns (
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
-            NounsDAOLogicV3 daoV3Impl,
+            NounsDAOLogicV4 daoV3Impl,
             NounsDAOExecutorV2 timelockV2,
             ERC20Transferer erc20Transferer
         )
@@ -91,7 +91,7 @@ contract DeployDAOV3NewContractsBase is Script {
             FORK_DAO_PROPOSAL_THRESHOLD_BPS,
             FORK_DAO_QUORUM_VOTES_BPS
         );
-        daoV3Impl = new NounsDAOLogicV3();
+        daoV3Impl = new NounsDAOLogicV4();
         timelockV2 = deployAndInitTimelockV2(address(timelockV2Impl));
         erc20Transferer = new ERC20Transferer();
     }

@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtils } from './DeployUtils.sol';
 import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
+import { NounsDAOLogicV4 } from '../../../contracts/governance/NounsDAOLogicV4.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
@@ -43,7 +43,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                     address(0),
                     vetoer,
                     timelock,
-                    address(new NounsDAOLogicV3()),
+                    address(new NounsDAOLogicV4()),
                     daoParams,
                     dqParams
                 )
@@ -103,7 +103,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             new ProxyRegistryMock()
         );
         t.nounsToken.transferOwnership(address(t.timelock));
-        address daoLogicImplementation = address(new NounsDAOLogicV3());
+        address daoLogicImplementation = address(new NounsDAOLogicV4());
 
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 6);
