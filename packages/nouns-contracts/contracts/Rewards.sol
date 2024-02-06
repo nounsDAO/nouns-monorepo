@@ -37,6 +37,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
     event ClientRewarded(uint32 indexed clientId, uint256 amount);
     event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
+    event AuctionRewardsUpdated(uint256 startAuctionId, uint256 endAuctionId);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -188,6 +189,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
             emit ClientRewarded(clientId, reward);
         }
+
+        emit AuctionRewardsUpdated(nextAuctionIdToReward_, lastNounId);
 
         if (sawNonZeroClientId) {
             // refund gas only if we're actually rewarding a client, not just moving the pointer

@@ -152,6 +152,12 @@ contract AuctionRewards is RewardsBaseTest {
         rewards.updateRewardsForAuctions(nounId);
     }
 
+    function test_emitsAuctionRewardsUpdatedEvent() public {
+        vm.expectEmit();
+        emit Rewards.AuctionRewardsUpdated(1, nounId);
+        rewards.updateRewardsForAuctions(nounId);
+    }
+
     function test_requiresMinimumNumberOfAuctionsToPass() public {
         rewards.updateRewardsForAuctions(nounId);
 
