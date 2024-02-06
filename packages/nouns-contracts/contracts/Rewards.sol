@@ -37,7 +37,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
     event ClientRewarded(uint32 indexed clientId, uint256 amount);
     event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
-    event AuctionRewardsUpdated(uint256 startAuctionId, uint256 endAuctionId);
+    event AuctionRewardsUpdated(uint256 firstAuctionId, uint256 lastAuctionId);
+    event ProposalRewardsUpdated(uint32 firstProposalId, uint32 lastProposalId);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -205,6 +206,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint256 rewardPerVote;
         uint256 proposalRewardForPeriod;
         uint256 votingRewardForPeriod;
+        uint32 nextProposalIdToReward;
     }
 
     /**
@@ -219,12 +221,18 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     ) public whenNotPaused {
         uint256 startGas = gasleft();
 
+        Temp memory t;
+
+        t.nextProposalIdToReward = nextProposalIdToReward;
+
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
-        require(lastProposalId >= nextProposalIdToReward, 'bad lastProposalId');
+        require(lastProposalId >= t.nextProposalIdToReward, 'bad lastProposalId');
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
+        emit ProposalRewardsUpdated(t.nextProposalIdToReward, lastProposalId);
+
         NounsDAOV3Types.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
-            nextProposalIdToReward,
+            t.nextProposalIdToReward,
             lastProposalId,
             votingClientIds
         );
@@ -239,8 +247,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         nextProposalRewardFirstAuctionId = lastAuctionId + 1;
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
-
-        Temp memory t;
 
         t.proposalRewardForPeriod = (auctionRevenue * params.proposalRewardBps) / 10_000;
         t.votingRewardForPeriod = (auctionRevenue * params.votingRewardBps) / 10_000;
