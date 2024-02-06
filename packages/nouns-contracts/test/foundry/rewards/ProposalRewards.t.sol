@@ -467,6 +467,8 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
 
     function test_clientCanWithdrawBalance() public {
         vm.prank(client1Wallet);
+        vm.expectEmit();
+        emit Rewards.ClientBalanceWithdrawal(clientId1, 0.05 ether, client1Wallet);
         rewards.withdrawClientBalance(clientId1, 0.05 ether, client1Wallet);
 
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
@@ -548,6 +550,10 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
 
         settleAuction();
         votingClientIds = [clientId1, clientId2];
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId1, 0.06 ether);
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId2, 0.015 ether);
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds

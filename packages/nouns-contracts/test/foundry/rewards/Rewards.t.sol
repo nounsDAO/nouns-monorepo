@@ -144,6 +144,14 @@ contract AuctionRewards is RewardsBaseTest {
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
 
+    function test_emitsClientRewardedEvent() public {
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(CLIENT_ID, 0.05 ether);
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(CLIENT_ID2, 0.02 ether);
+        rewards.updateRewardsForAuctions(nounId);
+    }
+
     function test_requiresMinimumNumberOfAuctionsToPass() public {
         rewards.updateRewardsForAuctions(nounId);
 
