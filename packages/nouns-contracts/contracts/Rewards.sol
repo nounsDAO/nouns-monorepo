@@ -34,7 +34,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    event ClientRewarded(uint32 clientId, uint256 reward);
+    event ClientRewarded(uint32 indexed clientId, uint256 amount);
+    event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -327,6 +328,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         require(amount < _clientBalances[clientId], 'amount too large');
 
         _clientBalances[clientId] -= amount;
+
+        emit ClientBalanceWithdrawal(clientId, amount, to);
 
         ethToken.safeTransfer(to, amount);
     }

@@ -465,6 +465,8 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
 
     function test_clientCanWithdrawBalance() public {
         vm.prank(client1Wallet);
+        vm.expectEmit();
+        emit Rewards.ClientBalanceWithdrawal(clientId1, 0.05 ether, client1Wallet);
         rewards.withdrawClientBalance(clientId1, 0.05 ether, client1Wallet);
 
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
