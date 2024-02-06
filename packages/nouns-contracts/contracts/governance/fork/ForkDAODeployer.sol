@@ -22,7 +22,7 @@ import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOV3Types } from '../Nouns
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from './newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
-import { NounsDAOLogicV3 } from '../NounsDAOLogicV3.sol';
+import { INounsDAOLogicV3 } from '../../interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsToken } from '../../NounsToken.sol';
 import { NounsAuctionHouse } from '../../NounsAuctionHouse.sol';
@@ -131,7 +131,7 @@ contract ForkDAODeployer is IForkDAODeployer {
      * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
      */
     function initDAO(address governor, address treasury, address token, NounsDAOExecutorV2 originalTimelock) internal {
-        NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
+        INounsDAOLogicV3 originalDAO = INounsDAOLogicV3(payable(originalTimelock.admin()));
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
