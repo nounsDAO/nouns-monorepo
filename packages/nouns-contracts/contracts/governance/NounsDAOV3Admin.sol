@@ -21,7 +21,7 @@ import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 
 library NounsDAOV3Admin {
-    using NounsDAOV3DynamicQuorum for NounsDAOV3Types.StorageV3;
+    using NounsDAOV3DynamicQuorum for NounsDAOV3Types.Storage;
 
     error AdminOnly();
     error VetoerOnly();
@@ -595,7 +595,7 @@ library NounsDAOV3Admin {
      * since the DAO no longer makes explicit calls to this library.
      * This function assumes the storage struct starts at slot 0.
      */
-    function ds() internal pure returns (NounsDAOV3Types.StorageV3 storage ds_) {
+    function ds() internal pure returns (NounsDAOV3Types.Storage storage ds_) {
         assembly {
             ds_.slot := 0
         }

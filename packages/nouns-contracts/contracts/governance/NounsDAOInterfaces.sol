@@ -350,7 +350,7 @@ interface INounsDAOForkEscrow {
 }
 
 interface NounsDAOV3Types {
-    struct StorageV3 {
+    struct Storage {
         // ================ PROXY ================ //
         /// @notice Administrator for this contract
         address admin;
@@ -642,5 +642,5 @@ interface NounsDAOV3Types {
 }
 
 contract NounsDAOStorage is NounsDAOV3Types {
-    StorageV3 ds;
+    Storage ds;
 }

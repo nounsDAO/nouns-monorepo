@@ -21,7 +21,7 @@ import './NounsDAOInterfaces.sol';
 import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 
 library NounsDAOV3DynamicQuorum {
-    using NounsDAOV3Fork for NounsDAOV3Types.StorageV3;
+    using NounsDAOV3Fork for NounsDAOV3Types.Storage;
 
     error UnsafeUint16Cast();
 
@@ -29,7 +29,7 @@ library NounsDAOV3DynamicQuorum {
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function quorumVotes(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId) internal view returns (uint256) {
+    function quorumVotes(NounsDAOV3Types.Storage storage ds, uint256 proposalId) internal view returns (uint256) {
         NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
         if (proposal.totalSupply == 0) {
             return proposal.quorumVotes;
@@ -75,7 +75,7 @@ library NounsDAOV3DynamicQuorum {
      * @return The dynamic quorum parameters that were set at the given block number
      */
     function getDynamicQuorumParamsAt(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 blockNumber_
     ) internal view returns (NounsDAOV3Types.DynamicQuorumParams memory) {
         uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
@@ -123,7 +123,7 @@ library NounsDAOV3DynamicQuorum {
      * @notice Current min quorum votes using Nouns adjusted total supply
      */
     function minQuorumVotes(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 adjustedTotalSupply
     ) internal view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, adjustedTotalSupply);
@@ -133,7 +133,7 @@ library NounsDAOV3DynamicQuorum {
      * @notice Current max quorum votes using Nouns adjusted total supply
      */
     function maxQuorumVotes(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 adjustedTotalSupply
     ) internal view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, adjustedTotalSupply);

@@ -22,7 +22,7 @@ import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Votes {
-    using NounsDAOV3Proposals for NounsDAOV3Types.StorageV3;
+    using NounsDAOV3Proposals for NounsDAOV3Types.Storage;
 
     error CanOnlyVoteAgainstDuringObjectionPeriod();
 
@@ -67,7 +67,7 @@ library NounsDAOV3Votes {
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      */
-    function castVote(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId, uint8 support) external {
+    function castVote(NounsDAOV3Types.Storage storage ds, uint256 proposalId, uint8 support) external {
         emit VoteCast(msg.sender, proposalId, support, castVoteInternal(ds, msg.sender, proposalId, support, 0), '');
     }
 
@@ -82,7 +82,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         uint8 support,
         uint32 clientId
@@ -102,7 +102,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteWithReason(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         uint8 support,
         string calldata reason,
@@ -119,7 +119,7 @@ library NounsDAOV3Votes {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         uint8 support,
         string memory reason,
@@ -141,7 +141,7 @@ library NounsDAOV3Votes {
      * @param reason The reason given for the vote by the voter
      */
     function castVoteWithReason(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         uint8 support,
         string calldata reason
@@ -160,7 +160,7 @@ library NounsDAOV3Votes {
      * @dev External function that accepts EIP-712 signatures for voting on proposals.
      */
     function castVoteBySig(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         uint8 support,
         uint8 v,
@@ -188,7 +188,7 @@ library NounsDAOV3Votes {
      * @return votes The number of votes cast
      */
     function castVoteInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         address voter,
         uint256 proposalId,
         uint8 support,
@@ -221,7 +221,7 @@ library NounsDAOV3Votes {
      * @return The number of votes cast
      */
     function castVoteDuringVotingPeriodInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address voter,
         uint8 support
@@ -286,7 +286,7 @@ library NounsDAOV3Votes {
      * @return The number of votes cast
      */
     function castObjectionInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address voter
     ) internal returns (uint96) {
@@ -328,7 +328,7 @@ library NounsDAOV3Votes {
      * @param proposal The proposal storage reference, used to read `creationBlock` and `startBlock`
      */
     function proposalVoteSnapshotBlock(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         NounsDAOV3Types.Proposal storage proposal
     ) internal view returns (uint256) {

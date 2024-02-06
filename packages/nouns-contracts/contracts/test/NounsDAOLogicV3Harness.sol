@@ -10,7 +10,7 @@ import { NounsDAOV3Admin } from '../governance/NounsDAOV3Admin.sol';
  * The modification removes bounds checks on parameters, so we can dramatically shorten test scenarios setup.
  */
 contract NounsDAOLogicV3Harness is NounsDAOLogicV4 {
-    using NounsDAOV3Admin for StorageV3;
+    using NounsDAOV3Admin for Storage;
 
     function initialize(
         address timelock_,

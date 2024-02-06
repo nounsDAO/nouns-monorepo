@@ -25,8 +25,8 @@ import { ECDSA } from '../external/openzeppelin/ECDSA.sol';
 import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 library NounsDAOV3Proposals {
-    using NounsDAOV3DynamicQuorum for NounsDAOV3Types.StorageV3;
-    using NounsDAOV3Fork for NounsDAOV3Types.StorageV3;
+    using NounsDAOV3DynamicQuorum for NounsDAOV3Types.Storage;
+    using NounsDAOV3Fork for NounsDAOV3Types.Storage;
 
     error CantCancelProposalAtFinalState();
     error ProposalInfoArityMismatch();
@@ -78,7 +78,7 @@ library NounsDAOV3Proposals {
      * @return Proposal id of new proposal
      */
     function propose(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         ProposalTxs memory txs,
         string memory description,
         uint32 clientId
@@ -125,7 +125,7 @@ library NounsDAOV3Proposals {
      * @return uint256 Proposal id of new proposal
      */
     function proposeOnTimelockV1(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         ProposalTxs memory txs,
         string memory description,
         uint32 client
@@ -155,7 +155,7 @@ library NounsDAOV3Proposals {
      * @return uint256 Proposal id of new proposal
      */
     function proposeBySigs(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description,
@@ -214,7 +214,7 @@ library NounsDAOV3Proposals {
      * not be invalidated.
      * @param sig The signature to cancel
      */
-    function cancelSig(NounsDAOV3Types.StorageV3 storage ds, bytes calldata sig) external {
+    function cancelSig(NounsDAOV3Types.Storage storage ds, bytes calldata sig) external {
         bytes32 sigHash = keccak256(sig);
         ds.cancelledSigs[msg.sender][sigHash] = true;
 
@@ -233,7 +233,7 @@ library NounsDAOV3Proposals {
      * @param updateMessage Short message to explain the update
      */
     function updateProposal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address[] memory targets,
         uint256[] memory values,
@@ -266,7 +266,7 @@ library NounsDAOV3Proposals {
      * @param updateMessage Short message to explain the update
      */
     function updateProposalTransactions(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address[] memory targets,
         uint256[] memory values,
@@ -288,7 +288,7 @@ library NounsDAOV3Proposals {
     }
 
     function updateProposalTransactionsInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address[] memory targets,
         uint256[] memory values,
@@ -313,7 +313,7 @@ library NounsDAOV3Proposals {
      * @param updateMessage Short message to explain the update
      */
     function updateProposalDescription(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         string calldata description,
         string calldata updateMessage
@@ -336,7 +336,7 @@ library NounsDAOV3Proposals {
      * @param updateMessage Short message to explain the update
      */
     function updateProposalBySigs(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
@@ -390,7 +390,7 @@ library NounsDAOV3Proposals {
      * @notice Queues a proposal of state succeeded
      * @param proposalId The id of the proposal to queue
      */
-    function queue(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId) external {
+    function queue(NounsDAOV3Types.Storage storage ds, uint256 proposalId) external {
         require(
             stateInternal(ds, proposalId) == NounsDAOV3Types.ProposalState.Succeeded,
             'NounsDAO::queue: proposal can only be queued if it is succeeded'
@@ -431,14 +431,14 @@ library NounsDAOV3Proposals {
      * @notice Executes a queued proposal if eta has passed
      * @param proposalId The id of the proposal to execute
      */
-    function execute(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId) external {
+    function execute(NounsDAOV3Types.Storage storage ds, uint256 proposalId) external {
         NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
         INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
         executeInternal(ds, proposal, timelock);
     }
 
     function executeInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         NounsDAOV3Types.Proposal storage proposal,
         INounsDAOExecutor timelock
     ) internal {
@@ -463,7 +463,7 @@ library NounsDAOV3Proposals {
     }
 
     function getProposalTimelock(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         NounsDAOV3Types.Proposal storage proposal
     ) internal view returns (INounsDAOExecutor) {
         if (proposal.executeOnTimelockV1) {
@@ -477,7 +477,7 @@ library NounsDAOV3Proposals {
      * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
      * @param proposalId The id of the proposal to veto
      */
-    function veto(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId) external {
+    function veto(NounsDAOV3Types.Storage storage ds, uint256 proposalId) external {
         if (ds.vetoer == address(0)) {
             revert VetoerBurned();
         }
@@ -512,7 +512,7 @@ library NounsDAOV3Proposals {
      * dropped below proposal threshold
      * @param proposalId The id of the proposal to cancel
      */
-    function cancel(NounsDAOV3Types.StorageV3 storage ds, uint256 proposalId) external {
+    function cancel(NounsDAOV3Types.Storage storage ds, uint256 proposalId) external {
         NounsDAOV3Types.ProposalState proposalState = stateInternal(ds, proposalId);
         if (
             proposalState == NounsDAOV3Types.ProposalState.Canceled ||
@@ -563,7 +563,7 @@ library NounsDAOV3Proposals {
      * @return Proposal state
      */
     function state(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId
     ) public view returns (NounsDAOV3Types.ProposalState) {
         return stateInternal(ds, proposalId);
@@ -577,7 +577,7 @@ library NounsDAOV3Proposals {
      * @return Proposal state
      */
     function stateInternal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId
     ) internal view returns (NounsDAOV3Types.ProposalState) {
         require(ds.proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
@@ -617,7 +617,7 @@ library NounsDAOV3Proposals {
      * @return calldatas
      */
     function getActions(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId
     )
         internal
@@ -640,7 +640,7 @@ library NounsDAOV3Proposals {
      * @return The voting receipt
      */
     function getReceipt(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         address voter
     ) internal view returns (NounsDAOV3Types.Receipt memory) {
@@ -654,7 +654,7 @@ library NounsDAOV3Proposals {
      * @return A `ProposalCondensed` struct with the proposal data
      */
     function proposals(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId
     ) external view returns (NounsDAOV3Types.ProposalCondensedV2 memory) {
         NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
@@ -685,7 +685,7 @@ library NounsDAOV3Proposals {
      * @return A `ProposalCondensed` struct with the proposal data
      */
     function proposalsV3(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId
     ) external view returns (NounsDAOV3Types.ProposalCondensed memory) {
         NounsDAOV3Types.Proposal storage proposal = ds._proposals[proposalId];
@@ -715,7 +715,7 @@ library NounsDAOV3Proposals {
     }
 
     function proposalDataForRewards(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 firstProposalId,
         uint256 lastProposalId,
         uint32[] calldata votingClientIds
@@ -755,14 +755,14 @@ library NounsDAOV3Proposals {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 adjustedTotalSupply
     ) internal view returns (uint256) {
         return bps2Uint(ds.proposalThresholdBPS, adjustedTotalSupply);
     }
 
     function isDefeated(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         NounsDAOV3Types.Proposal storage proposal
     ) internal view returns (bool) {
         uint256 forVotes = proposal.forVotes;
@@ -773,7 +773,7 @@ library NounsDAOV3Proposals {
      * @notice reverts if `proposer` is the proposer or signer of an active proposal.
      * This is a spam protection mechanism to limit the number of proposals each noun can back.
      */
-    function checkNoActiveProp(NounsDAOV3Types.StorageV3 storage ds, address proposer) internal view {
+    function checkNoActiveProp(NounsDAOV3Types.Storage storage ds, address proposer) internal view {
         uint256 latestProposalId = ds.latestProposalIds[proposer];
         if (latestProposalId != 0) {
             NounsDAOV3Types.ProposalState proposersLatestProposalState = stateInternal(ds, latestProposalId);
@@ -790,7 +790,7 @@ library NounsDAOV3Proposals {
      * @dev Extracted this function to fix the `Stack too deep` error `proposeBySigs` hit.
      */
     function verifySignersCanBackThisProposalAndCountTheirVotes(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         NounsDAOV3Types.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description,
@@ -856,7 +856,7 @@ library NounsDAOV3Proposals {
     }
 
     function checkProposalUpdatable(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 proposalId,
         NounsDAOV3Types.Proposal storage proposal
     ) internal view {
@@ -867,7 +867,7 @@ library NounsDAOV3Proposals {
     }
 
     function createNewProposal(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint32 proposalId,
         uint256 proposalThreshold_,
         uint256 adjustedTotalSupply,
@@ -931,7 +931,7 @@ library NounsDAOV3Proposals {
     }
 
     function checkPropThreshold(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         uint256 votes,
         uint256 adjustedTotalSupply
     ) internal view returns (uint256 propThreshold) {
@@ -950,7 +950,7 @@ library NounsDAOV3Proposals {
     }
 
     function verifyProposalSignature(
-        NounsDAOV3Types.StorageV3 storage ds,
+        NounsDAOV3Types.Storage storage ds,
         bytes memory proposalEncodeData,
         NounsDAOV3Types.ProposerSignature memory proposerSignature,
         bytes32 typehash
