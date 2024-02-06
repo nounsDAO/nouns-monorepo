@@ -41,6 +41,12 @@ contract NounsClientTokenTest is Test {
         assertEq(md.description, 'https://nounsagora.com');
     }
 
+    function test_registerClient_emitsEvent() public {
+        vm.expectEmit();
+        emit NounsClientToken.ClientRegistered(1, 'name', 'description');
+        token.registerClient('name', 'description');
+    }
+
     function test_updateClientMetadata_revertsForNonTokenOwner() public {
         uint32 tokenId = token.registerClient('name', 'description');
 
@@ -58,6 +64,14 @@ contract NounsClientTokenTest is Test {
 
         assertEq(md.name, 'newName');
         assertEq(md.description, 'newDescription');
+    }
+
+    function test_updateClientMetadata_emitsEvent() public {
+        uint32 tokenId = token.registerClient('name', 'description');
+
+        vm.expectEmit();
+        emit NounsClientToken.ClientUpdated(tokenId, 'newName', 'newDescription');
+        token.updateClientMetadata(tokenId, 'newName', 'newDescription');
     }
 
     function test_setDescriptor_revertsForNonOwner() public {

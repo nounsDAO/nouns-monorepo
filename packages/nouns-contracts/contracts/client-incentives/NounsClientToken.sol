@@ -25,6 +25,9 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 public constant STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
 
+    event ClientRegistered(uint32 indexed clientId, string name, string description);
+    event ClientUpdated(uint32 indexed clientId, string name, string description);
+
     constructor() initializer {}
 
     function initialize(address owner, address descriptor_) public initializer {
@@ -40,12 +43,17 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
         s.nextTokenId++;
         _mint(msg.sender, tokenId);
         s.clientMetadata[tokenId] = ClientMetadata(name, description);
+
+        emit ClientRegistered(tokenId, name, description);
+
         return tokenId;
     }
 
     function updateClientMetadata(uint32 tokenId, string calldata name, string calldata description) public {
         require(ownerOf(tokenId) == msg.sender, 'NounsClientToken: not owner');
         _getState().clientMetadata[tokenId] = ClientMetadata(name, description);
+
+        emit ClientUpdated(tokenId, name, description);
     }
 
     function setDescriptor(address descriptor_) public onlyOwner {
