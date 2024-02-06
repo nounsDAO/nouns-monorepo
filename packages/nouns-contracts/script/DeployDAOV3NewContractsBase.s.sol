@@ -48,7 +48,7 @@ contract DeployDAOV3NewContractsBase is Script {
         returns (
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
-            NounsDAOLogicV4 daoV3Impl,
+            NounsDAOLogicV4 daoImpl,
             NounsDAOExecutorV2 timelockV2,
             ERC20Transferer erc20Transferer
         )
@@ -57,7 +57,7 @@ contract DeployDAOV3NewContractsBase is Script {
 
         vm.startBroadcast(deployerKey);
 
-        (forkEscrow, forkDeployer, daoV3Impl, timelockV2, erc20Transferer) = deployNewContracts();
+        (forkEscrow, forkDeployer, daoImpl, timelockV2, erc20Transferer) = deployNewContracts();
 
         vm.stopBroadcast();
     }
@@ -67,7 +67,7 @@ contract DeployDAOV3NewContractsBase is Script {
         returns (
             NounsDAOForkEscrow forkEscrow,
             ForkDAODeployer forkDeployer,
-            NounsDAOLogicV4 daoV3Impl,
+            NounsDAOLogicV4 daoImpl,
             NounsDAOExecutorV2 timelockV2,
             ERC20Transferer erc20Transferer
         )
@@ -91,7 +91,7 @@ contract DeployDAOV3NewContractsBase is Script {
             FORK_DAO_PROPOSAL_THRESHOLD_BPS,
             FORK_DAO_QUORUM_VOTES_BPS
         );
-        daoV3Impl = new NounsDAOLogicV4();
+        daoImpl = new NounsDAOLogicV4();
         timelockV2 = deployAndInitTimelockV2(address(timelockV2Impl));
         erc20Transferer = new ERC20Transferer();
     }
