@@ -20,7 +20,7 @@ export interface ContractAddresses {
   nounsDAOProxy: string;
   nounsDAOLogicV1?: string;
   nounsDAOLogicV2?: string;
-  nounsDAOLogicV3?: string;
+  NounsDAOLogicV4?: string;
   nounsDAOData?: string;
 }
 

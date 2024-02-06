@@ -20,7 +20,7 @@ export type ContractNamesDAOV3 =
   | 'NounsAuctionHouse'
   | 'NounsAuctionHouseProxyAdmin'
   | 'NounsAuctionHouseProxy'
-  | 'NounsDAOLogicV3'
+  | 'NounsDAOLogicV4'
   | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
   | 'NounsDAOV3DynamicQuorum'

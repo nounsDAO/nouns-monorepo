@@ -5,7 +5,7 @@ import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
 import {
   NounsDAOLogicV3__factory,
-  NounsDAOLogicV3,
+  NounsDAOLogicV4,
   NounsDescriptorV2__factory,
   NounsToken,
   Voter__factory,

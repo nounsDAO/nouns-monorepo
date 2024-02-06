@@ -139,7 +139,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
       NounsDAOV3Fork: {},
-      NounsDAOLogicV3: {
+      NounsDAOLogicV4: {
         libraries: () => ({
           NounsDAOV3Admin: contracts.NounsDAOV3Admin.instance?.address as string,
           NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
@@ -190,7 +190,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
           () => contracts.ForkDAODeployer.instance?.address, // forkDAODeployer
           args.noundersdao || deployer.address, // vetoer
           () => contracts.NounsDAOExecutorProxy.instance?.address, // admin
-          () => contracts.NounsDAOLogicV3.instance?.address, // implementation
+          () => contracts.NounsDAOLogicV4.instance?.address, // implementation
           {
             votingPeriod: args.votingPeriod,
             votingDelay: args.votingDelay,

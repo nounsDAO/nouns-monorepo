@@ -25,7 +25,7 @@ import {
   NounsDAOExecutor,
   Inflator__factory,
   NounsDAOStorageV2,
-  NounsDAOLogicV3,
+  NounsDAOLogicV4,
   NounsDAOLogicV3__factory as NounsDaoLogicV3Factory,
   NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
   NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
@@ -541,7 +541,7 @@ function dataToDescriptorInput(data: string[]): {
   };
 }
 
-export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV3> => {
+export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV4> => {
   const NounsDAOV3Proposals = await (
     await ethers.getContractFactory('NounsDAOV3Proposals', deployer)
   ).deploy();

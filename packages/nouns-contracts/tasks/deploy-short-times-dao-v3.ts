@@ -192,7 +192,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
       NounsDAOV3Fork: {},
-      NounsDAOLogicV3: {
+      NounsDAOLogicV4: {
         libraries: () => ({
           NounsDAOV3Admin: deployment.NounsDAOV3Admin.address,
           NounsDAOV3DynamicQuorum: deployment.NounsDAOV3DynamicQuorum.address,
@@ -242,7 +242,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           () => deployment.ForkDAODeployer.address, // forkDAODeployer
           args.noundersdao || deployer.address, // vetoer
           () => deployment.NounsDAOExecutorProxy.address, // admin
-          () => deployment.NounsDAOLogicV3.address, // implementation
+          () => deployment.NounsDAOLogicV4.address, // implementation
           {
             votingPeriod: args.votingPeriod,
             votingDelay: args.votingDelay,
@@ -313,7 +313,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
         case 'NounsDAOExecutorV2':
           nameForFactory = 'NounsDAOExecutorV2Test';
           break;
-        case 'NounsDAOLogicV3':
+        case 'NounsDAOLogicV4':
           nameForFactory = 'NounsDAOLogicV3Harness';
           break;
         default:

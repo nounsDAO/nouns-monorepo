@@ -10,7 +10,7 @@ task('upgrade-descriptor-via-proposal', 'Upgrade NounsToken to use Descriptor V2
     const signatures = ['setDescriptor(address)'];
     const calldatas = [ethers.utils.defaultAbiCoder.encode(['address'], [descriptor])];
 
-    const gov = (await ethers.getContractFactory('NounsDAOLogicV3')).attach(dao);
+    const gov = (await ethers.getContractFactory('NounsDAOLogicV4')).attach(dao);
     const propTx = await gov['propose(address[],uint256[],string[],bytes[],string)'](
       targets,
       values,
