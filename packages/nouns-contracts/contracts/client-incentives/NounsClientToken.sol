@@ -21,9 +21,16 @@ import { INounsClientTokenTypes } from './INounsClientTokenTypes.sol';
 import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 
 contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableUpgradeable {
+    /// @custom:storage-location erc7201:nouns.nounsclienttoken
+    struct Storage {
+        uint32 nextTokenId;
+        address descriptor;
+        mapping(uint32 => ClientMetadata) clientMetadata;
+    }
+
     /// @dev This is a ERC-7201 storage location, calculated using:
-    /// @dev keccak256(abi.encode(uint256(keccak256("nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
-    bytes32 public constant STORAGE_LOCATION = 0x8cf5ce6e8ba000976223217bb8fd99e6473b9f0c4b7adc07d894a8f739887e00;
+    /// @dev keccak256(abi.encode(uint256(keccak256("nouns.nounsclienttoken")) - 1)) & ~bytes32(uint256(0xff));
+    bytes32 public constant STORAGE_LOCATION = 0xb5ff9f2ad3ce9c5f981fca1b696d577b6a7f3491afe19108b82d4fbb7f611600;
 
     event ClientRegistered(uint32 indexed clientId, string name, string description);
     event ClientUpdated(uint32 indexed clientId, string name, string description);
@@ -31,18 +38,20 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     constructor() initializer {}
 
     function initialize(address owner, address descriptor_) public initializer {
+        Storage storage $ = _getStorage();
+
         __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
         _transferOwnership(owner);
-        _getState().nextTokenId = 1;
-        _getState().descriptor = descriptor_;
+        $.nextTokenId = 1;
+        $.descriptor = descriptor_;
     }
 
     function registerClient(string calldata name, string calldata description) public virtual returns (uint32) {
-        Storage storage s = _getState();
-        uint32 tokenId = s.nextTokenId;
-        s.nextTokenId++;
+        Storage storage $ = _getStorage();
+        uint32 tokenId = $.nextTokenId;
+        $.nextTokenId++;
         _mint(msg.sender, tokenId);
-        s.clientMetadata[tokenId] = ClientMetadata(name, description);
+        $.clientMetadata[tokenId] = ClientMetadata(name, description);
 
         emit ClientRegistered(tokenId, name, description);
 
@@ -50,37 +59,40 @@ contract NounsClientToken is INounsClientTokenTypes, ERC721Upgradeable, OwnableU
     }
 
     function updateClientMetadata(uint32 tokenId, string calldata name, string calldata description) public {
+        Storage storage $ = _getStorage();
+
         require(ownerOf(tokenId) == msg.sender, 'NounsClientToken: not owner');
-        _getState().clientMetadata[tokenId] = ClientMetadata(name, description);
+        $.clientMetadata[tokenId] = ClientMetadata(name, description);
 
         emit ClientUpdated(tokenId, name, description);
     }
 
     function setDescriptor(address descriptor_) public onlyOwner {
-        _getState().descriptor = descriptor_;
+        Storage storage $ = _getStorage();
+        $.descriptor = descriptor_;
     }
 
     function clientMetadata(uint32 tokenId) public view returns (ClientMetadata memory) {
-        return _getState().clientMetadata[tokenId];
+        Storage storage $ = _getStorage();
+        return $.clientMetadata[tokenId];
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        return
-            INounsClientTokenDescriptor(_getState().descriptor).tokenURI(
-                tokenId,
-                _getState().clientMetadata[uint32(tokenId)]
-            );
+        Storage storage $ = _getStorage();
+        return INounsClientTokenDescriptor($.descriptor).tokenURI(tokenId, $.clientMetadata[uint32(tokenId)]);
     }
 
     function descriptor() public view returns (address) {
-        return _getState().descriptor;
+        Storage storage $ = _getStorage();
+        return $.descriptor;
     }
 
     function nextTokenId() public view returns (uint32) {
-        return _getState().nextTokenId;
+        Storage storage $ = _getStorage();
+        return $.nextTokenId;
     }
 
-    function _getState() private pure returns (Storage storage $) {
+    function _getStorage() private pure returns (Storage storage $) {
         assembly {
             $.slot := STORAGE_LOCATION
         }
