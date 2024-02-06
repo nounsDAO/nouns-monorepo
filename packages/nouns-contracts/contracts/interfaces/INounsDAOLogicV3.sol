@@ -267,7 +267,7 @@ interface INounsDAOLogicV3 {
         uint32[] calldata votingClientIds
     ) external view returns (NounsDAOV3Types.ProposalForRewards[] memory);
 
-    function proposalClientId(uint256 proposalId) external view returns (uint16);
+    function proposalClientId(uint256 proposalId) external view returns (uint32);
 
     function proposalVoteClientsData(
         uint256 proposalId,
