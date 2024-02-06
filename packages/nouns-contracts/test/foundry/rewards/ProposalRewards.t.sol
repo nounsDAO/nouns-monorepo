@@ -546,6 +546,10 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
 
         settleAuction();
         votingClientIds = [clientId1, clientId2];
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId1, 0.06 ether);
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId2, 0.015 ether);
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds

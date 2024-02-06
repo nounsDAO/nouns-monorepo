@@ -153,8 +153,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
         require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
-        uint32 nextTokenId = nextTokenId();
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId - 1 });
+        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId() - 1 });
 
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
@@ -166,7 +165,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
         uint16 auctionRewardBps = params.auctionRewardBps;
         for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
-            // Collect the entries also into an event
             uint256 reward = (m.values[i].balance * auctionRewardBps) / 10_000;
             uint32 clientId = m.values[i].clientId;
             _clientBalances[clientId] += reward;
@@ -182,6 +180,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
 
     struct Temp {
         uint256 numEligibleVotes;
+        uint256 numEligibleProposals;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
         uint256 proposalRewardForPeriod;
@@ -231,7 +230,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         //// 3. Count the number of eligible proposals.
         //// 4. Count the number of votes in eligible proposals.
 
-        uint256 numEligibleProposals;
         for (uint256 i; i < proposals.length; ++i) {
             // make sure proposal finished voting
             uint endBlock = max(proposals[i].endBlock, proposals[i].objectionPeriodEndBlock);
@@ -244,7 +242,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
             }
 
             // proposal is eligible for reward
-            ++numEligibleProposals;
+            ++t.numEligibleProposals;
 
             uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
             t.numEligibleVotes += votesInProposal;
@@ -256,8 +254,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         //// 2.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
         //// 2.b. At least `minimumRewardPeriod` seconds have passed since the last update.
 
-        require(numEligibleProposals > 0, 'at least one eligible proposal');
-        if (numEligibleProposals < params.numProposalsEnoughForReward) {
+        require(t.numEligibleProposals > 0, 'at least one eligible proposal');
+        if (t.numEligibleProposals < params.numProposalsEnoughForReward) {
             require(
                 lastProposal.creationTimestamp > lastProposalRewardsUpdate + params.minimumRewardPeriod,
                 'not enough time passed'
@@ -266,7 +264,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         lastProposalRewardsUpdate = lastProposal.creationTimestamp;
 
         // Calculate the reward per proposal and per vote
-        t.rewardPerProposal = t.proposalRewardForPeriod / numEligibleProposals;
+        t.rewardPerProposal = t.proposalRewardForPeriod / t.numEligibleProposals;
         t.rewardPerVote = t.votingRewardForPeriod / t.numEligibleVotes;
 
         //// Second loop over the proposals:
@@ -275,13 +273,15 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         //// 3. Reward the clientIds that faciliated voting.
         //// 4. Make sure all voting clientIds were included.
 
+        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId() - 1 });
+
         for (uint256 i; i < proposals.length; ++i) {
             // skip non eligible deleted proposals
             if (proposals[i].endBlock == 0) continue;
 
             uint32 clientId = proposals[i].clientId;
             if (clientId != 0) {
-                _clientBalances[clientId] += t.rewardPerProposal;
+                m.inc(clientId, t.rewardPerProposal);
             }
 
             uint256 votesInProposal;
@@ -292,7 +292,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
                 votes = voteData[j].votes;
                 require(votes > 0, 'all clientId must have votes');
                 if (clientId != 0) {
-                    _clientBalances[clientId] += votes * t.rewardPerVote;
+                    m.inc(clientId, votes * t.rewardPerVote);
                 }
                 votesInProposal += votes;
             }
@@ -300,6 +300,14 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
                 votesInProposal == proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes,
                 'not all votes accounted'
             );
+        }
+
+        for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
+            uint256 reward = m.values[i].balance;
+            uint32 clientId = m.values[i].clientId;
+            _clientBalances[clientId] += reward;
+
+            emit ClientRewarded(clientId, reward);
         }
 
         _refundGas(startGas);
