@@ -26,7 +26,15 @@ import { InMemoryMapping } from './libs/InMemoryMapping.sol';
 
 contract Rewards is NounsClientToken, UUPSUpgradeable {
     using SafeERC20 for IERC20;
-    using InMemoryMapping for InMemoryMapping.InMemoryMapping;
+    using InMemoryMapping for InMemoryMapping.Mapping;
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   EVENTS
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    event ClientRewarded(uint32 clientId, uint256 reward);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -145,23 +153,25 @@ contract Rewards is NounsClientToken, UUPSUpgradeable {
         INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
         require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
-        uint32 numClientIds = nextTokenId();
-        InMemoryMapping.InMemoryMapping memory m = InMemoryMapping.initialize(numClientIds);
+        uint32 nextTokenId = nextTokenId();
+        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId - 1 });
 
-        uint16 auctionRewardBps = params.auctionRewardBps;
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
             if (settlement.clientId > 0) {
                 sawNonZeroClientId = true;
-                uint256 b = m.get(settlement.clientId);
-                b += (settlement.amount * auctionRewardBps) / 10_000;
-                m.set(settlement.clientId, b);
+                m.inc(settlement.clientId, settlement.amount);
             }
         }
 
+        uint16 auctionRewardBps = params.auctionRewardBps;
         for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
             // Collect the entries also into an event
-            _clientBalances[m.values[i].clientId] += m.values[i].balance;
+            uint256 reward = (m.values[i].balance * auctionRewardBps) / 10_000;
+            uint32 clientId = m.values[i].clientId;
+            _clientBalances[clientId] += reward;
+
+            emit ClientRewarded(clientId, reward);
         }
 
         if (sawNonZeroClientId) {

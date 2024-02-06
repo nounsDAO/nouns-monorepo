@@ -15,10 +15,19 @@
 
 pragma solidity ^0.8.19;
 
+/**
+ * @notice A library for short lived in memory mappings.
+ * This only works when the keys, in this case clientId, are of limited size so that they we can create
+ * an array in memory for all the possible values
+ */
 library InMemoryMapping {
-    struct InMemoryMapping {
+    struct Mapping {
+        /// @dev indexes[clientId] returns the index in `values` array where the value for clientId is.
+        /// zero means it hasn't been initialized yet.
         uint32[] indexes;
+        /// @dev array of values. the first cell (index zero) is kept empty.
         ClientBalance[] values;
+        /// @dev index of the next cell in `values` array which we can allocate for a new clientId
         uint32 nextAvailableIndex;
     }
 
@@ -27,13 +36,21 @@ library InMemoryMapping {
         uint256 balance;
     }
 
-    function initialize(uint32 maxSize) internal pure returns (InMemoryMapping memory m) {
-        m.indexes = new uint32[](maxSize);
-        m.values = new ClientBalance[](maxSize + 1);
+    /**
+     * Returns a new in memory mapping.
+     * @param maxClientId maximum value for a clientId key
+     */
+    function createMapping(uint32 maxClientId) internal pure returns (Mapping memory m) {
+        m.indexes = new uint32[](maxClientId + 1);
+        /// @dev index zero is reserved so allocated one extra cell
+        m.values = new ClientBalance[](maxClientId + 2);
         m.nextAvailableIndex = 1; // 0 is reserved to mean unindexed
     }
 
-    function set(InMemoryMapping memory m, uint32 clientId, uint256 balance) internal pure {
+    /**
+     * Sets the value for client `clientId` to `balance`
+     */
+    function set(Mapping memory m, uint32 clientId, uint256 balance) internal pure {
         uint32 idx = m.indexes[clientId];
         if (idx == 0) {
             idx = m.nextAvailableIndex++;
@@ -43,7 +60,23 @@ library InMemoryMapping {
         m.values[idx].balance = balance;
     }
 
-    function get(InMemoryMapping memory m, uint32 clientId) internal pure returns (uint256 balance) {
+    /**
+     * Increases the value of client `clientId` by `balance`
+     */
+    function inc(Mapping memory m, uint32 clientId, uint256 balance) internal pure {
+        uint32 idx = m.indexes[clientId];
+        if (idx == 0) {
+            idx = m.nextAvailableIndex++;
+            m.indexes[clientId] = idx;
+            m.values[idx].clientId = clientId;
+        }
+        m.values[idx].balance += balance;
+    }
+
+    /**
+     * Returns the current value for client `clientId`
+     */
+    function get(Mapping memory m, uint32 clientId) internal pure returns (uint256 balance) {
         uint32 idx = m.indexes[clientId];
         if (idx == 0) return 0;
         return m.values[idx].balance;
