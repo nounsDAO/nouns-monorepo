@@ -4,7 +4,7 @@ import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
 import {
-  NounsDAOLogicV3__factory,
+  NounsDAOLogicV4__factory,
   NounsDAOLogicV4,
   NounsDescriptorV2__factory,
   NounsToken,
@@ -86,7 +86,7 @@ describe('V3 Vote Refund', () => {
       expect(r.gasUsed).to.be.gt(0);
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, '');
@@ -190,7 +190,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
@@ -253,7 +253,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(await expectedGasUsedCappedDiff(r), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, MAX_REFUND_GAS_USED.mul(await latestBasePlusMaxPriority()));
-      let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, LONG_REASON);
@@ -278,7 +278,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(await expectedBaseFeeCappedDiff(r), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, r.gasUsed.mul(MAX_REFUND_BASE_FEE.add(MAX_PRIORITY_FEE_CAP)));
-      let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
@@ -358,7 +358,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(voter.address, BigNumber.from(2), 1, 1, 'some reason');
@@ -401,7 +401,7 @@ describe('V3 Vote Refund', () => {
     // Not using expect emit because it doesn't support the `closeTo` matcher
     // Using longer event parsing because r.events doesn't work when using the Voter contract
     // to simulate multisig usage; events are returned undefined
-    const daoInterface = NounsDAOLogicV3__factory.createInterface();
+    const daoInterface = NounsDAOLogicV4__factory.createInterface();
     const eventId = ethers.utils.id('RefundableVote(address,uint256,bool)');
     const filtered = r.logs.filter(l => l.topics[0] === eventId);
     const parsed = filtered.map(e => {

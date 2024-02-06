@@ -9,6 +9,6 @@ export { NounsToken__factory as NounsTokenFactory } from '../typechain/factories
 export { NounsAuctionHouse__factory as NounsAuctionHouseFactory } from '../typechain/factories/contracts/NounsAuctionHouse__factory';
 export { NounsDescriptor__factory as NounsDescriptorFactory } from '../typechain/factories/contracts/NounsDescriptor__factory';
 export { NounsSeeder__factory as NounsSeederFactory } from '../typechain/factories/contracts/NounsSeeder__factory';
-export { NounsDAOLogicV3__factory as NounsDaoLogicV3Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV3__factory';
+export { NounsDAOLogicV4__factory as NounsDaoLogicFactory } from '../typechain/factories/contracts/governance/NounsDAOLogicV4__factory';
 export { NounsDAOData__factory as NounsDaoDataFactory } from '../typechain/factories/contracts/governance/data/NounsDAOData.sol/NounsDAOData__factory';
 export { NounsDAOExecutorV2__factory as NounsDaoExecutorV2Factory } from '../typechain/factories/contracts/governance/NounsDAOExecutorV2__factory';

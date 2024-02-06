@@ -26,7 +26,7 @@ import {
   Inflator__factory,
   NounsDAOStorageV2,
   NounsDAOLogicV4,
-  NounsDAOLogicV3__factory as NounsDaoLogicV3Factory,
+  NounsDAOLogicV4__factory as NounsDaoLogicFactory,
   NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
   NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
   INounsDAOLogicV3__factory,
@@ -558,7 +558,7 @@ export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<Nou
     await ethers.getContractFactory('NounsDAOV3DynamicQuorum', deployer)
   ).deploy();
 
-  return await new NounsDaoLogicV3Factory(
+  return await new NounsDaoLogicFactory(
     {
       'contracts/governance/NounsDAOV3Proposals.sol:NounsDAOV3Proposals':
         NounsDAOV3Proposals.address,

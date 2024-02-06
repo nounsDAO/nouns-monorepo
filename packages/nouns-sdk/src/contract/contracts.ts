@@ -3,7 +3,7 @@ import {
   NounsAuctionHouseFactory,
   NounsDescriptorFactory,
   NounsSeederFactory,
-  NounsDaoLogicV3Factory,
+  NounsDaoLogicFactory,
 } from '@nouns/contracts';
 import type { Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
@@ -40,7 +40,7 @@ export const getContractsForChainOrThrow = (
       addresses.nounsSeeder,
       signerOrProvider as Signer | Provider,
     ),
-    nounsDaoContract: NounsDaoLogicV3Factory.connect(
+    nounsDaoContract: NounsDaoLogicFactory.connect(
       addresses.nounsDAOProxy,
       signerOrProvider as Signer | Provider,
     ),

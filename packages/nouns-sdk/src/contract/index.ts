@@ -12,6 +12,6 @@ export {
   NounsAuctionHouseFactory,
   NounsDescriptorFactory,
   NounsSeederFactory,
-  NounsDaoLogicV3Factory,
+  NounsDaoLogicFactory,
   NounsDaoExecutorV2Factory,
 } from '@nouns/contracts';

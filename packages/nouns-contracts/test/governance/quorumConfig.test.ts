@@ -16,7 +16,7 @@ import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   INounsDAOLogicV3,
-  NounsDAOLogicV3__factory,
+  NounsDAOLogicV4__factory,
 } from '../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
 import { DynamicQuorumParams } from '../types';
@@ -107,7 +107,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     expect(actualParams.maxQuorumVotesBPS).to.equal(2222);
     expect(actualParams.quorumCoefficient).to.equal(quorumCoefficient);
 
-    let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+    let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
 
     await expect(tx).to.emit(govWithEvents, 'MinQuorumVotesBPSSet').withArgs(200, 222);
     await expect(tx).to.emit(govWithEvents, 'MaxQuorumVotesBPSSet').withArgs(2000, 2222);
@@ -201,7 +201,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.minQuorumVotesBPS).to.equal(222);
-        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
         await expect(tx).to.emit(govWithEvents, 'MinQuorumVotesBPSSet').withArgs(200, 222);
       });
 
@@ -238,7 +238,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.maxQuorumVotesBPS).to.equal(3333);
-        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
         await expect(tx).to.emit(govWithEvents, 'MaxQuorumVotesBPSSet').withArgs(3000, 3333);
       });
 
@@ -267,7 +267,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
         const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
         expect(params.quorumCoefficient).to.equal(111);
-        let govWithEvents = NounsDAOLogicV3__factory.connect(gov.address, gov.signer);
+        let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
         await expect(tx).to.emit(govWithEvents, 'QuorumCoefficientSet').withArgs(1, 111);
       });
 

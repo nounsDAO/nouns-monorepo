@@ -1,4 +1,4 @@
-import { NounsDAOV3ABI, NounsDaoLogicV3Factory } from '@nouns/sdk';
+import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -262,7 +262,7 @@ export interface ForkSubgraphEntity {
 }
 
 const abi = new utils.Interface(NounsDAOV3ABI);
-const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
+const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
