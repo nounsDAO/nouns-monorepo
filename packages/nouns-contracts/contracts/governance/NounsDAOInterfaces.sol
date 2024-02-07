@@ -478,7 +478,9 @@ interface NounsDAOTypes {
     }
 
     struct ClientVoteData {
+        /// @notice The number of votes the client facilitated on a proposal
         uint32 votes;
+        /// @notice The number of vote transactions the client facilitated on a proposal
         uint32 txs;
     }
 

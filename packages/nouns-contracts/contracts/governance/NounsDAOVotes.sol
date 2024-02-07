@@ -79,6 +79,7 @@ library NounsDAOVotes {
      * Voting takes place regardless of refund success.
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param clientId The ID of the client that faciliated posting the vote onchain
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(
@@ -116,6 +117,7 @@ library NounsDAOVotes {
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      * @param reason The reason given for the vote by the voter
+     * @param clientId The ID of the client that faciliated posting the vote onchain
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteInternal(
@@ -185,6 +187,7 @@ library NounsDAOVotes {
      * @param voter The voter that is casting their vote
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param clientId The ID of the client that faciliated posting the vote onchain
      * @return votes The number of votes cast
      */
     function castVoteInternal(

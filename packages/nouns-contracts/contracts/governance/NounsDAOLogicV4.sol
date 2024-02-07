@@ -197,6 +197,16 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return propose(targets, values, signatures, calldatas, description, 0);
     }
 
+    /**
+     * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
+     * @param targets Target addresses for proposal calls
+     * @param values Eth values for proposal calls
+     * @param signatures Function signatures for proposal calls
+     * @param calldatas Calldatas for proposal calls
+     * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @return uint256 Proposal id of new proposal
+     */
     function propose(
         address[] memory targets,
         uint256[] memory values,
@@ -234,8 +244,19 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
             );
     }
 
-    function proposeBySigs(
-        ProposerSignature[] memory proposerSignatures,
+    /**
+     * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold.
+     * This proposal would be executed via the timelockV1 contract. This is meant to be used in case timelockV1
+     * is still holding funds or has special permissions to execute on certain contracts.
+     * @param targets Target addresses for proposal calls
+     * @param values Eth values for proposal calls
+     * @param signatures Function signatures for proposal calls
+     * @param calldatas Calldatas for proposal calls
+     * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @return uint256 Proposal id of new proposal
+     */
+    function proposeOnTimelockV1(
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -244,8 +265,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         uint32 clientId
     ) public returns (uint256) {
         return
-            ds.proposeBySigs(
-                proposerSignatures,
+            ds.proposeOnTimelockV1(
                 NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
                 description,
                 clientId
@@ -273,6 +293,37 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         string memory description
     ) external returns (uint256) {
         return proposeBySigs(proposerSignatures, targets, values, signatures, calldatas, description, 0);
+    }
+
+    /**
+     * @notice Function used to propose a new proposal. Sender and signers must have delegates above the proposal threshold
+     * Signers are regarded as co-proposers, and therefore have the ability to cancel the proposal at any time.
+     * @param proposerSignatures Array of signers who have signed the proposal and their signatures.
+     * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
+     * @param targets Target addresses for proposal calls
+     * @param values Eth values for proposal calls
+     * @param signatures Function signatures for proposal calls
+     * @param calldatas Calldatas for proposal calls
+     * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @return uint256 Proposal id of new proposal
+     */
+    function proposeBySigs(
+        ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description,
+        uint32 clientId
+    ) public returns (uint256) {
+        return
+            ds.proposeBySigs(
+                proposerSignatures,
+                NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas),
+                description,
+                clientId
+            );
     }
 
     /**
@@ -468,6 +519,13 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return ds.proposalsV3(proposalId);
     }
 
+    /**
+     * @notice Get a range of proposals, in the format of a samller struct tailored to client incentives rewards.
+     * @param firstProposalId the id of the first proposal to get the data for
+     * @param lastProposalId the id of the last proposal to get the data for
+     * @param votingClientIds the ids of the clients that facilitated votes on the proposals
+     * @return An array of `ProposalForRewards` structs with the proposal data
+     */
     function proposalDataForRewards(
         uint256 firstProposalId,
         uint256 lastProposalId,
@@ -600,10 +658,6 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         ds.castVote(proposalId, support);
     }
 
-    function castRefundableVote(uint256 proposalId, uint8 support, uint32 clientId) external {
-        ds.castRefundableVote(proposalId, support, clientId);
-    }
-
     /**
      * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
      * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
@@ -618,13 +672,19 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         ds.castRefundableVote(proposalId, support, 0);
     }
 
-    function castRefundableVoteWithReason(
-        uint256 proposalId,
-        uint8 support,
-        string calldata reason,
-        uint32 clientId
-    ) public {
-        ds.castRefundableVoteWithReason(proposalId, support, reason, clientId);
+    /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param clientId The ID of the client that faciliated posting the vote onchain
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVote(uint256 proposalId, uint8 support, uint32 clientId) external {
+        ds.castRefundableVote(proposalId, support, clientId);
     }
 
     /**
@@ -640,6 +700,27 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      */
     function castRefundableVoteWithReason(uint256 proposalId, uint8 support, string calldata reason) public {
         ds.castRefundableVoteWithReason(proposalId, support, reason, 0);
+    }
+
+    /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param reason The reason given for the vote by the voter
+     * @param clientId The ID of the client that faciliated posting the vote onchain
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVoteWithReason(
+        uint256 proposalId,
+        uint8 support,
+        string calldata reason,
+        uint32 clientId
+    ) public {
+        ds.castRefundableVoteWithReason(proposalId, support, reason, clientId);
     }
 
     /**
@@ -661,7 +742,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     }
 
     /**
-     * All other calls are called via NounsDAOAdmin
+     * @dev All other calls are called via NounsDAOAdmin
      */
     fallback(bytes calldata) external payable returns (bytes memory) {
         return Address.functionDelegateCall(address(NounsDAOAdmin), msg.data);

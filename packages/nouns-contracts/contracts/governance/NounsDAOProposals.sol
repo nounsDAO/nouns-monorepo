@@ -75,6 +75,7 @@ library NounsDAOProposals {
      * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
      * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
      * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
      * @return Proposal id of new proposal
      */
     function propose(
@@ -122,15 +123,16 @@ library NounsDAOProposals {
      * is still holding funds or has special permissions to execute on certain contracts.
      * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
      * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
      * @return uint256 Proposal id of new proposal
      */
     function proposeOnTimelockV1(
         NounsDAOTypes.Storage storage ds,
         ProposalTxs memory txs,
         string memory description,
-        uint32 client
+        uint32 clientId
     ) internal returns (uint256) {
-        uint256 newProposalId = propose(ds, txs, description, client);
+        uint256 newProposalId = propose(ds, txs, description, clientId);
 
         NounsDAOTypes.Proposal storage newProposal = ds._proposals[newProposalId];
         newProposal.executeOnTimelockV1 = true;
@@ -152,6 +154,7 @@ library NounsDAOProposals {
      * @dev The signatures follow EIP-712. See `PROPOSAL_TYPEHASH` in NounsDAOProposals.sol
      * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
      * @param description String description of the proposal
+     * @param clientId The ID of the client that faciliated posting the proposal onchain
      * @return uint256 Proposal id of new proposal
      */
     function proposeBySigs(
