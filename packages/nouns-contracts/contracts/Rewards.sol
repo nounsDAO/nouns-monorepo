@@ -490,7 +490,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     }
 
     /**
-     * @notice Returns the raw value from _clientBalances mapping. Usually you want to use `clientBalance`
+     * @notice Returns the raw value from _clientBalances mapping. Usually you want to use `clientBalance`.
+     * @dev This includes the balance including the initial 1 wei added for gas optimization.
      */
     function _clientBalances(uint32 clientId) public view returns (uint256) {
         RewardsStorage storage $ = _getRewardsStorage();
