@@ -11,7 +11,6 @@ import {
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
 import {
-  handleProposalCreatedWithRequirements,
   handleVoteCast,
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,
@@ -55,7 +54,6 @@ import {
   BIGINT_10K,
   BIGINT_ONE,
   BIGINT_ZERO,
-  STATUS_ACTIVE,
   STATUS_CANCELLED,
   STATUS_EXECUTED,
   STATUS_PENDING,
@@ -72,7 +70,6 @@ import { extractTitle, ParsedProposalV3 } from '../src/custom-types/ParsedPropos
 
 const SOME_ADDRESS = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 const proposerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000001');
-const proposerWithNoDelegate = Address.fromString('0x0000000000000000000000000000000000000002');
 const signerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000003');
 const signerWithNoDelegate = Address.fromString('0x0000000000000000000000000000000000000004');
 
@@ -387,198 +384,209 @@ describe('dynamic quorum config handlers', () => {
   });
 });
 
-// describe('handleProposalObjectionPeriodSet', () => {
-//   test('sets the objectionPeriodEndBlock field', () => {
-//     const propData = new ProposalCreatedData();
-//     propData.id = BIGINT_ONE;
-//     propData.proposer = proposerWithDelegate;
-//     propData.targets = [Address.fromString(SOME_ADDRESS)];
-//     propData.values = [BigInt.fromI32(123)];
-//     propData.signatures = ['some signature'];
-//     propData.calldatas = [Bytes.fromI32(312)];
-//     propData.startBlock = BigInt.fromI32(203);
-//     propData.endBlock = BigInt.fromI32(303);
-//     propData.description = 'some description';
-//     propData.eventBlockNumber = BigInt.fromI32(103);
-//     propData.eventBlockTimestamp = BigInt.fromI32(42);
-//     propData.txHash = Bytes.fromI32(11);
-//     propData.logIndex = BigInt.fromI32(1);
-//     propData.address = Address.fromString(SOME_ADDRESS);
-//     handleProposalCreated(createProposalCreatedEvent(propData));
+describe('handleProposalObjectionPeriodSet', () => {
+  test('sets the objectionPeriodEndBlock field', () => {
+    const propData = new ProposalCreatedData();
+    propData.id = BIGINT_ONE;
+    propData.proposer = proposerWithDelegate;
+    propData.targets = [Address.fromString(SOME_ADDRESS)];
+    propData.values = [BigInt.fromI32(123)];
+    propData.signatures = ['some signature'];
+    propData.calldatas = [Bytes.fromI32(312)];
+    propData.startBlock = BigInt.fromI32(203);
+    propData.endBlock = BigInt.fromI32(303);
+    propData.description = 'some description';
+    propData.eventBlockNumber = BigInt.fromI32(103);
+    propData.eventBlockTimestamp = BigInt.fromI32(42);
+    propData.txHash = Bytes.fromI32(11);
+    propData.logIndex = BigInt.fromI32(1);
+    propData.address = Address.fromString(SOME_ADDRESS);
+    handleProposalCreated(createProposalCreatedEvent(propData));
 
-//     assert.fieldEquals('Proposal', '1', 'objectionPeriodEndBlock', '0');
+    const propExtraDetails = new ParsedProposalV3();
+    propExtraDetails.id = propData.id.toString();
+    propExtraDetails.updatePeriodEndBlock = BigInt.fromI32(150);
+    propExtraDetails.proposalThreshold = BIGINT_ONE;
+    propExtraDetails.quorumVotes = BIGINT_ONE;
+    saveProposalExtraDetails(propExtraDetails);
 
-//     handleProposalObjectionPeriodSet(
-//       createProposalObjectionPeriodSetEvent(BIGINT_ONE, BIGINT_10K),
-//     );
-//     assert.fieldEquals('Proposal', '1', 'objectionPeriodEndBlock', '10000');
-//   });
-// });
+    assert.fieldEquals('Proposal', '1', 'objectionPeriodEndBlock', '0');
 
-//   describe('Proposal Updated', () => {
-//     beforeEach(() => {
-//       const propData = new ProposalCreatedData();
-//       propData.id = proposalId;
-//       propData.proposer = proposerWithDelegate;
-//       propData.targets = [signerWithNoDelegate];
-//       propData.values = [BigInt.fromI32(987)];
-//       propData.signatures = ['first signature'];
-//       propData.calldatas = [Bytes.fromI32(888)];
-//       propData.startBlock = BigInt.fromI32(203);
-//       propData.endBlock = BigInt.fromI32(303);
-//       propData.description = '# Original Title\nOriginal body';
-//       propData.eventBlockNumber = updateBlockNumber.minus(BIGINT_ONE);
-//       propData.eventBlockTimestamp = updateBlockTimestamp.minus(BIGINT_ONE);
-//       propData.txHash = Bytes.fromI32(11);
-//       propData.logIndex = BigInt.fromI32(1);
-//       propData.address = Address.fromString(SOME_ADDRESS);
+    handleProposalObjectionPeriodSet(createProposalObjectionPeriodSetEvent(BIGINT_ONE, BIGINT_10K));
+    assert.fieldEquals('Proposal', '1', 'objectionPeriodEndBlock', '10000');
+  });
+});
 
-//       handleProposalCreated(createProposalCreatedEvent(propData));
-//     });
+describe('Proposal Updated', () => {
+  beforeEach(() => {
+    const propData = new ProposalCreatedData();
+    propData.id = proposalId;
+    propData.proposer = proposerWithDelegate;
+    propData.targets = [signerWithNoDelegate];
+    propData.values = [BigInt.fromI32(987)];
+    propData.signatures = ['first signature'];
+    propData.calldatas = [Bytes.fromI32(888)];
+    propData.startBlock = BigInt.fromI32(203);
+    propData.endBlock = BigInt.fromI32(303);
+    propData.description = '# Original Title\nOriginal body';
+    propData.eventBlockNumber = updateBlockNumber.minus(BIGINT_ONE);
+    propData.eventBlockTimestamp = updateBlockTimestamp.minus(BIGINT_ONE);
+    propData.txHash = Bytes.fromI32(11);
+    propData.logIndex = BigInt.fromI32(1);
+    propData.address = Address.fromString(SOME_ADDRESS);
 
-//     test('handleProposalDescriptionUpdated', () => {
-//       const updateDescription = '# Updated Title\nUpdated body';
-//       const updateMessage = 'some update message';
+    handleProposalCreated(createProposalCreatedEvent(propData));
 
-//       handleProposalDescriptionUpdated(
-//         createProposalDescriptionUpdatedEvent(
-//           txHash,
-//           logIndex,
-//           updateBlockTimestamp,
-//           updateBlockNumber,
-//           proposalId,
-//           proposerWithDelegate,
-//           updateDescription,
-//           updateMessage,
-//         ),
-//       );
+    const propExtraDetails = new ParsedProposalV3();
+    propExtraDetails.id = propData.id.toString();
+    propExtraDetails.updatePeriodEndBlock = BigInt.fromI32(150);
+    propExtraDetails.proposalThreshold = BIGINT_ONE;
+    propExtraDetails.quorumVotes = BIGINT_ONE;
+    saveProposalExtraDetails(propExtraDetails);
+  });
 
-//       const proposal = Proposal.load(proposalId.toString())!;
-//       assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
-//       assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
-//       assert.stringEquals(updateDescription, proposal.description!);
-//       assert.stringEquals(extractTitle(updateDescription), proposal.title!);
+  test('handleProposalDescriptionUpdated', () => {
+    const updateDescription = '# Updated Title\nUpdated body';
+    const updateMessage = 'some update message';
 
-//       // check that the original values remained as is
-//       assert.bytesEquals(signerWithNoDelegate, proposal.targets![0]);
-//       assert.bigIntEquals(BigInt.fromI32(987), proposal.values![0]);
-//       assert.stringEquals('first signature', proposal.signatures![0]);
-//       assert.bytesEquals(Bytes.fromI32(888), proposal.calldatas![0]);
+    handleProposalDescriptionUpdated(
+      createProposalDescriptionUpdatedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+        proposerWithDelegate,
+        updateDescription,
+        updateMessage,
+      ),
+    );
 
-//       const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
-//       const updatedVersion = ProposalVersion.load(updatedVersionId)!;
-//       assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
-//       assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
-//       assert.stringEquals(updateDescription, updatedVersion.description);
-//       assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
-//       assert.stringEquals(updateMessage, updatedVersion.updateMessage);
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
+    assert.stringEquals(updateDescription, proposal.description!);
+    assert.stringEquals(extractTitle(updateDescription), proposal.title!);
 
-//       // check that the original values are saved
-//       assert.bytesEquals(signerWithNoDelegate, updatedVersion.targets![0]);
-//       assert.bigIntEquals(BigInt.fromI32(987), updatedVersion.values![0]);
-//       assert.stringEquals('first signature', updatedVersion.signatures![0]);
-//       assert.bytesEquals(Bytes.fromI32(888), updatedVersion.calldatas![0]);
-//     });
+    // check that the original values remained as is
+    assert.bytesEquals(signerWithNoDelegate, proposal.targets![0]);
+    assert.bigIntEquals(BigInt.fromI32(987), proposal.values![0]);
+    assert.stringEquals('first signature', proposal.signatures![0]);
+    assert.bytesEquals(Bytes.fromI32(888), proposal.calldatas![0]);
 
-//     test('handleProposalTransactionsUpdated', () => {
-//       const updateTargets = [signerWithDelegate];
-//       const updateValues = [BigInt.fromI32(321)];
-//       const updateSignatures = ['update signature'];
-//       const updateCalldatas = [Bytes.fromI32(312)];
-//       const updateMessage = 'some update message';
+    const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+    const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+    assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+    assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+    assert.stringEquals(updateDescription, updatedVersion.description);
+    assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
+    assert.stringEquals(updateMessage, updatedVersion.updateMessage);
 
-//       handleProposalTransactionsUpdated(
-//         createProposalTransactionsUpdatedEvent(
-//           txHash,
-//           logIndex,
-//           updateBlockTimestamp,
-//           updateBlockNumber,
-//           proposalId,
-//           proposerWithDelegate,
-//           updateTargets,
-//           updateValues,
-//           updateSignatures,
-//           updateCalldatas,
-//           updateMessage,
-//         ),
-//       );
+    // check that the original values are saved
+    assert.bytesEquals(signerWithNoDelegate, updatedVersion.targets![0]);
+    assert.bigIntEquals(BigInt.fromI32(987), updatedVersion.values![0]);
+    assert.stringEquals('first signature', updatedVersion.signatures![0]);
+    assert.bytesEquals(Bytes.fromI32(888), updatedVersion.calldatas![0]);
+  });
 
-//       const proposal = Proposal.load(proposalId.toString())!;
-//       assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
-//       assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
-//       assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
-//       assert.bigIntEquals(updateValues[0], proposal.values![0]);
-//       assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
-//       assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
+  test('handleProposalTransactionsUpdated', () => {
+    const updateTargets = [signerWithDelegate];
+    const updateValues = [BigInt.fromI32(321)];
+    const updateSignatures = ['update signature'];
+    const updateCalldatas = [Bytes.fromI32(312)];
+    const updateMessage = 'some update message';
 
-//       // check that the original values remained as is
-//       assert.stringEquals('# Original Title\nOriginal body', proposal.description!);
-//       assert.stringEquals('Original Title', proposal.title!);
+    handleProposalTransactionsUpdated(
+      createProposalTransactionsUpdatedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+        proposerWithDelegate,
+        updateTargets,
+        updateValues,
+        updateSignatures,
+        updateCalldatas,
+        updateMessage,
+      ),
+    );
 
-//       const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
-//       const updatedVersion = ProposalVersion.load(updatedVersionId)!;
-//       assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
-//       assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
-//       assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
-//       assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
-//       assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
-//       assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
-//       assert.stringEquals(updateMessage, updatedVersion.updateMessage);
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
+    assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
+    assert.bigIntEquals(updateValues[0], proposal.values![0]);
+    assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
+    assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
 
-//       // check that the original values are saved
-//       assert.stringEquals('# Original Title\nOriginal body', updatedVersion.description);
-//       assert.stringEquals('Original Title', updatedVersion.title);
-//     });
+    // check that the original values remained as is
+    assert.stringEquals('# Original Title\nOriginal body', proposal.description!);
+    assert.stringEquals('Original Title', proposal.title!);
 
-//     test('handleProposalUpdated', () => {
-//       const updateTargets = [signerWithDelegate];
-//       const updateValues = [BigInt.fromI32(321)];
-//       const updateSignatures = ['update signature'];
-//       const updateCalldatas = [Bytes.fromI32(312)];
-//       const updateDescription = '# Updated Title\nUpdated body';
-//       const updateMessage = 'some update message';
+    const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+    const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+    assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+    assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+    assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
+    assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
+    assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
+    assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
+    assert.stringEquals(updateMessage, updatedVersion.updateMessage);
 
-//       handleProposalUpdated(
-//         createProposalUpdatedEvent(
-//           txHash,
-//           logIndex,
-//           updateBlockTimestamp,
-//           updateBlockNumber,
-//           proposalId,
-//           proposerWithDelegate,
-//           updateTargets,
-//           updateValues,
-//           updateSignatures,
-//           updateCalldatas,
-//           updateDescription,
-//           updateMessage,
-//         ),
-//       );
+    // check that the original values are saved
+    assert.stringEquals('# Original Title\nOriginal body', updatedVersion.description);
+    assert.stringEquals('Original Title', updatedVersion.title);
+  });
 
-//       const proposal = Proposal.load(proposalId.toString())!;
-//       assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
-//       assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
-//       assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
-//       assert.bigIntEquals(updateValues[0], proposal.values![0]);
-//       assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
-//       assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
-//       assert.stringEquals(updateDescription, proposal.description!);
-//       assert.stringEquals(extractTitle(updateDescription), proposal.title!);
+  test('handleProposalUpdated', () => {
+    const updateTargets = [signerWithDelegate];
+    const updateValues = [BigInt.fromI32(321)];
+    const updateSignatures = ['update signature'];
+    const updateCalldatas = [Bytes.fromI32(312)];
+    const updateDescription = '# Updated Title\nUpdated body';
+    const updateMessage = 'some update message';
 
-//       const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
-//       const updatedVersion = ProposalVersion.load(updatedVersionId)!;
-//       assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
-//       assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
-//       assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
-//       assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
-//       assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
-//       assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
-//       assert.stringEquals(updateDescription, updatedVersion.description);
-//       assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
-//       assert.stringEquals(updateMessage, updatedVersion.updateMessage);
-//     });
-//   });
-// });
+    handleProposalUpdated(
+      createProposalUpdatedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+        proposerWithDelegate,
+        updateTargets,
+        updateValues,
+        updateSignatures,
+        updateCalldatas,
+        updateDescription,
+        updateMessage,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock!);
+    assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
+    assert.bigIntEquals(updateValues[0], proposal.values![0]);
+    assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
+    assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
+    assert.stringEquals(updateDescription, proposal.description!);
+    assert.stringEquals(extractTitle(updateDescription), proposal.title!);
+
+    const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+    const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+    assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+    assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+    assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
+    assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
+    assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
+    assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
+    assert.stringEquals(updateDescription, updatedVersion.description);
+    assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
+    assert.stringEquals(updateMessage, updatedVersion.updateMessage);
+  });
+});
 
 describe('ParsedProposalV3', () => {
   describe('parses signers', () => {
