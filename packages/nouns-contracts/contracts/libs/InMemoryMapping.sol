@@ -81,4 +81,19 @@ library InMemoryMapping {
         if (idx == 0) return 0;
         return m.values[idx].balance;
     }
+
+    /**
+     * Returns the number of key/values stored
+     */
+    function numValues(Mapping memory m) internal pure returns (uint256) {
+        return m.nextAvailableIndex - 1;
+    }
+
+    /**
+     * Returns the idx-th value stored
+     */
+    function getValue(Mapping memory m, uint32 idx) internal pure returns (ClientBalance memory) {
+        // zero index is unused
+        return m.values[idx + 1];
+    }
 }

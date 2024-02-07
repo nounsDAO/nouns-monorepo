@@ -204,9 +204,11 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         }
 
         uint16 auctionRewardBps = $.params.auctionRewardBps;
-        for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
-            uint256 reward = (m.values[i].balance * auctionRewardBps) / 10_000;
-            uint32 clientId = m.values[i].clientId;
+        uint256 numValues = m.numValues();
+        for (uint32 i = 0; i < numValues; ++i) {
+            InMemoryMapping.ClientBalance memory cb = m.getValue(i);
+            uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
+            uint32 clientId = cb.clientId;
             $._clientBalances[clientId] += reward;
 
             emit ClientRewarded(clientId, reward);
@@ -353,9 +355,11 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
             );
         }
 
-        for (uint256 i = 1; i < m.nextAvailableIndex; ++i) {
-            uint256 reward = m.values[i].balance;
-            uint32 clientId = m.values[i].clientId;
+        uint256 numValues = m.numValues();
+        for (uint32 i = 0; i < numValues; ++i) {
+            InMemoryMapping.ClientBalance memory cb = m.getValue(i);
+            uint256 reward = cb.balance;
+            uint32 clientId = cb.clientId;
             $._clientBalances[clientId] += reward;
 
             emit ClientRewarded(clientId, reward);
