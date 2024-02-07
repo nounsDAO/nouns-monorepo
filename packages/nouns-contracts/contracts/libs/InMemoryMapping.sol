@@ -61,16 +61,16 @@ library InMemoryMapping {
     }
 
     /**
-     * Increases the value of client `clientId` by `balance`
+     * Increases the value of client `clientId` by `balanceDiff`
      */
-    function inc(Mapping memory m, uint32 clientId, uint256 balance) internal pure {
+    function inc(Mapping memory m, uint32 clientId, uint256 balanceDiff) internal pure {
         uint32 idx = m.indexes[clientId];
         if (idx == 0) {
             idx = m.nextAvailableIndex++;
             m.indexes[clientId] = idx;
             m.values[idx].clientId = clientId;
         }
-        m.values[idx].balance += balance;
+        m.values[idx].balance += balanceDiff;
     }
 
     /**
