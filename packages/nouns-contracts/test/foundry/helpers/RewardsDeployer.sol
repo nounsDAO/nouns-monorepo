@@ -9,14 +9,14 @@ library RewardsDeployer {
     function deployRewards(
         INounsDAOLogicV3 dao,
         address admin,
-        address minter,
+        address auctionHouse,
         address erc20,
         uint32 nextProposalIdToReward,
         uint256 nextAuctionIdToReward,
         uint96 nextProposalRewardFirstAuctionId,
         Rewards.RewardParams memory rewardParams
     ) internal returns (Rewards) {
-        Rewards rewardsLogic = new Rewards(address(dao), minter);
+        Rewards rewardsLogic = new Rewards(address(dao), auctionHouse);
         bytes memory initCallData = abi.encodeWithSignature(
             'initialize(address,address,address,uint32,uint32,uint32,(uint32,uint8,uint16,uint16,uint16,uint16,uint8),address)',
             address(dao.timelock()),

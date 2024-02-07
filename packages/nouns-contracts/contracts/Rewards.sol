@@ -58,29 +58,41 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      */
 
     struct RewardParams {
-        // @dev Used for proposal rewards
+        /// @dev Used for proposal rewards
+        /// @dev The minimum reward period for proposal updates if number of proposals is below `numProposalsEnoughForReward`
         uint32 minimumRewardPeriod;
+        /// @dev The number of proposals required for an update before `minimumRewardPeriod` has passed
         uint8 numProposalsEnoughForReward;
+        /// @dev How much bips out of the auction revenue during this period to use for rewarding proposal creation
         uint16 proposalRewardBps;
+        /// @dev How much bips out of the auction revenue during this period to use for rewarding proposal voting
         uint16 votingRewardBps;
+        /// @dev How many (in bips) FOR votes out of total votes are required for a proposal to be eligible for rewards
         uint16 proposalEligibilityQuorumBps;
-        // @dev Used for auction rewards
+        /// @dev Used for auction rewards
+        /// @dev How much bips out of auction revnue to use for rewarding auction bidding
         uint16 auctionRewardBps;
+        /// @dev Minimum number of auctions between updates. Zero means 1 auction is enough.
         uint8 minimumAuctionsBetweenUpdates;
     }
 
     /// @custom:storage-location erc7201:nouns.rewards
     struct RewardsStorage {
-        // @dev Used for auction rewards state
+        /// @dev Used for auction rewards state
         uint32 nextAuctionIdToReward;
-        // @dev Used for proposal rewards state
+        /// @dev Used for proposal rewards state
         uint32 nextProposalIdToReward;
+        /// @dev The first auction id to consider for revenue tracking on the next proposal rewards update
         uint32 nextProposalRewardFirstAuctionId;
+        /// @dev Last time the proposal rewards update was performed
         uint40 lastProposalRewardsUpdate;
-        // @dev Params for both auction & rewards
+        /// @dev Params for both auction & rewards
         RewardParams params;
+        /// @dev An ETH pegged ERC20 token to use for rewarding
         IERC20 ethToken;
+        /// @dev admin account able to pause/unpause the contract in case of a quick response is needed
         address admin;
+        /// @dev tracking rewards balances for clients
         mapping(uint32 clientId => uint256 balance) _clientBalances;
     }
 
@@ -159,6 +171,13 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         return tokenId;
     }
 
+    /**
+     * @notice Distribute rewards for auction bidding since the last update until auction with id `lastNounId`
+     * If an auction's winning bid was called with a clientId, that client will be reward with `params.auctionRewardBps`
+     * bips of the auction's settlement amount.
+     * At least `minimumAuctionsBetweenUpdates` must happen between updates.
+     * @dev Gas is refunded if at least one auction was rewarded
+     */
     function updateRewardsForAuctions(uint32 lastNounId) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
@@ -208,6 +227,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         }
     }
 
+    /// @dev struct used to avoid stack-too-deep errors
     struct Temp {
         uint256 numEligibleVotes;
         uint256 numEligibleProposals;
@@ -220,6 +240,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     }
 
     /**
+     * @notice Distribute rewards for proposal creation and voting from the last update until `lastProposalId`.
+     * A proposal is eligible for rewards if for-votes/total-votes >= params.proposalEligibilityQuorumBps.
+     * Rewards are calculated by the auctions revenue during the period between the creation time of last proposal in
+     * the previous update until the current last proposal with id `lastProposalId`.
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
      * @param votingClientIds array of sorted client ids that were used to vote on of all eligible the eligible proposals in
@@ -357,7 +381,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     /**
      * @notice Withdraws the balance of a client
      * @dev The caller must be the owner of the NFT with id `clientId`
-     * @dev The maximum value of `amount` is one less than in `_clientBalances[clientId]`.
+     * @dev The maximum value of `amount` is one wei less than in `_clientBalances[clientId]`.
      * This in order to leave 1 wei in storage and avoid expensive gas writes in future balance increases.
      * @param clientId Which client balance to withdraw
      * @param amount amount of withdraw
@@ -435,6 +459,9 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         return nonZeroClientIds;
     }
 
+    /**
+     * Returns the sum of revenue via auctions from auctioning noun with id `firstNounId` until timestamp of `endTimestamp
+     */
     function getAuctionRevenue(
         uint256 firstNounId,
         uint256 endTimestamp
@@ -504,31 +531,49 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function setParams(RewardParams calldata newParams) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.params = newParams;
     }
 
-    function pause() public onlyOwnerOrAdmin {
-        _pause();
-    }
-
-    function unpause() public onlyOwnerOrAdmin {
-        _unpause();
-    }
-
+    /**
+     * @dev Only `owner` can call this function
+     */
     function setAdmin(address newAdmin) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.admin = newAdmin;
     }
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function setETHToken(address newToken) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.ethToken = IERC20(newToken);
     }
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function withdrawToken(address token, address to, uint256 amount) public onlyOwner {
         IERC20(token).safeTransfer(to, amount);
+    }
+
+    /**
+     * @dev Only `owner` or `admin` can call this function
+     */
+    function pause() public onlyOwnerOrAdmin {
+        _pause();
+    }
+
+    /**
+     * @dev Only `owner` or `admin` can call this function
+     */
+    function unpause() public onlyOwnerOrAdmin {
+        _unpause();
     }
 
     /**
@@ -561,5 +606,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         return true;
     }
 
+    /**
+     * Only `owner` can perform an upgrade
+     */
     function _authorizeUpgrade(address) internal view override onlyOwner {}
 }
