@@ -24,6 +24,7 @@ import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { InMemoryMapping } from './libs/InMemoryMapping.sol';
+import { GasRefund } from './libs/GasRefund.sol';
 
 contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     using SafeERC20 for IERC20;
@@ -39,21 +40,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
     event AuctionRewardsUpdated(uint256 firstAuctionId, uint256 lastAuctionId);
     event ProposalRewardsUpdated(uint32 firstProposalId, uint32 lastProposalId);
-
-    /**
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     *   CONSTANTS
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     */
-
-    /// @notice The maximum priority fee used to cap gas refunds
-    uint256 public constant MAX_REFUND_PRIORITY_FEE = 2 gwei;
-
-    /// @notice The vote refund gas overhead, including 7K for token transfer and 29K for general transaction overhead
-    uint256 public constant REFUND_BASE_GAS = 36000;
-
-    /// @notice The maximum basefee the DAO will refund
-    uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -218,7 +204,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
         if (sawNonZeroClientId) {
             // refund gas only if we're actually rewarding a client, not just moving the pointer
-            _refundGas(startGas);
+            GasRefund.refundGas($.ethToken, startGas);
         }
     }
 
@@ -365,7 +351,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
             emit ClientRewarded(clientId, reward);
         }
 
-        _refundGas(startGas);
+        GasRefund.refundGas($.ethToken, startGas);
     }
 
     /**
@@ -556,29 +542,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         }
     }
 
-    /// @dev refunds gas using the `ethToken` instead of ETH
-    function _refundGas(uint256 startGas) internal {
-        RewardsStorage storage $ = _getRewardsStorage();
-        IERC20 ethToken_ = $.ethToken;
-        unchecked {
-            uint256 balance = ethToken_.balanceOf(address(this));
-            if (balance == 0) {
-                return;
-            }
-            uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
-            uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
-            uint256 refundAmount = min(gasPrice * gasUsed, balance);
-            ethToken_.safeTransfer(tx.origin, refundAmount);
-        }
-    }
-
     function max(uint256 a, uint256 b) internal pure returns (uint256) {
         return a > b ? a : b;
-    }
-
-    function min(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a < b ? a : b;
     }
 
     /**
