@@ -267,18 +267,6 @@ interface INounsDAOLogicV3 {
         uint32[] calldata votingClientIds
     ) external view returns (NounsDAOTypes.ProposalForRewards[] memory);
 
-    function proposalClientId(uint256 proposalId) external view returns (uint32);
-
-    function proposalVoteClientsData(
-        uint256 proposalId,
-        uint32[] calldata clientIds
-    ) external view returns (NounsDAOTypes.ClientVoteData[] memory);
-
-    function proposalVoteClientData(
-        uint256 proposalId,
-        uint32 clientId
-    ) external view returns (NounsDAOTypes.ClientVoteData memory);
-
     /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount

@@ -158,7 +158,12 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         uint32 expectedClientId = 42;
         uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '', expectedClientId);
 
-        assertEq(expectedClientId, NOUNS_DAO_PROXY_MAINNET.proposalClientId(proposalId));
+        NounsDAOTypes.ProposalForRewards[] memory propsData = NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(
+            proposalId,
+            proposalId,
+            new uint32[](0)
+        );
+        assertEq(expectedClientId, propsData[0].clientId);
     }
 
     function test_clientId_savedOnVotes() public {
@@ -174,12 +179,20 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         vm.prank(WHALE, origin);
         NOUNS_DAO_PROXY_MAINNET.castRefundableVote(proposalId, 1, clientId2);
 
-        NounsDAOTypes.ClientVoteData memory cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(proposalId, clientId1);
-        assertEq(cv.txs, 1);
-        assertEq(cv.votes, nouns.getCurrentVotes(proposerAddr));
+        uint32[] memory clientIds = new uint32[](2);
+        clientIds[0] = clientId1;
+        clientIds[1] = clientId2;
 
-        cv = NOUNS_DAO_PROXY_MAINNET.proposalVoteClientData(proposalId, clientId2);
-        assertEq(cv.txs, 1);
-        assertEq(cv.votes, nouns.getCurrentVotes(WHALE));
+        NounsDAOTypes.ProposalForRewards[] memory propsData = NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(
+            proposalId,
+            proposalId,
+            clientIds
+        );
+        NounsDAOTypes.ClientVoteData[] memory voteData = propsData[0].voteData;
+
+        assertEq(voteData[0].txs, 1);
+        assertEq(voteData[0].votes, nouns.getCurrentVotes(proposerAddr));
+        assertEq(voteData[1].txs, 1);
+        assertEq(voteData[1].votes, nouns.getCurrentVotes(WHALE));
     }
 }

@@ -476,25 +476,6 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return ds.proposalDataForRewards(firstProposalId, lastProposalId, votingClientIds);
     }
 
-    function proposalClientId(uint256 proposalId) external view returns (uint32) {
-        return ds._proposals[proposalId].clientId;
-    }
-
-    function proposalVoteClientsData(
-        uint256 proposalId,
-        uint32[] calldata clientIds
-    ) external view returns (ClientVoteData[] memory) {
-        ClientVoteData[] memory c = new ClientVoteData[](clientIds.length);
-        for (uint256 i; i < clientIds.length; ++i) {
-            c[i] = ds._proposals[proposalId].voteClients[clientIds[i]];
-        }
-        return c;
-    }
-
-    function proposalVoteClientData(uint256 proposalId, uint32 clientId) external view returns (ClientVoteData memory) {
-        return ds._proposals[proposalId].voteClients[clientId];
-    }
-
     /**
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
