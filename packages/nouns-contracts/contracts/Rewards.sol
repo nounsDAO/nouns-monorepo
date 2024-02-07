@@ -176,6 +176,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * If an auction's winning bid was called with a clientId, that client will be reward with `params.auctionRewardBps`
      * bips of the auction's settlement amount.
      * At least `minimumAuctionsBetweenUpdates` must happen between updates.
+     * @param lastNounId the last auction id to reward client for. must be already settled.
      * @dev Gas is refunded if at least one auction was rewarded
      */
     function updateRewardsForAuctions(uint32 lastNounId) public whenNotPaused {
