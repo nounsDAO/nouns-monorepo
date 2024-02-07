@@ -312,29 +312,42 @@ describe('handleVoteCast', () => {
   });
 
   test('uses quorum params from prop creation time, not newer params', () => {
-    // getOrCreateDelegate(SOME_ADDRESS);
-    // const totalSupply = BigInt.fromI32(200);
-    // // Set total supply
-    // const governance = getGovernanceEntity();
-    // governance.totalTokenHolders = totalSupply;
-    // governance.save();
-    // // Save dynamic quorum params
-    // handleAllQuorumParamEvents(1000, 4000, BigInt.fromI32(1_200_000));
-    // // Create prop with state we need for quorum inputs
-    // // providing a block number greater than zero means this prop will look like a V2 prop
-    // // since the DQ events above are simulated to be at block zero
-    // const propEventInput = stubProposalCreatedWithRequirementsEventInput(BIGINT_ONE);
-    // const newPropEvent = createProposalCreatedWithRequirementsEventV1(propEventInput);
-    // handleProposalCreatedWithRequirements(newPropEvent);
-    // handleAllQuorumParamEvents(500, 6000, BigInt.fromI32(3_000_000));
-    // const voter = Address.fromString(SOME_ADDRESS);
-    // const propId = BIGINT_ONE;
-    // const support = 0; // against
-    // const votes = BigInt.fromI32(25);
-    // const voteEvent = createVoteCastEvent(voter, propId, support, votes);
-    // handleVoteCast(voteEvent);
-    // const savedProp = Proposal.load(propId.toString());
-    // assert.bigIntEquals(BigInt.fromI32(50), savedProp!.quorumVotes!);
+    getOrCreateDelegate(SOME_ADDRESS);
+    const totalSupply = BigInt.fromI32(200);
+    // Set total supply
+    const governance = getGovernanceEntity();
+    governance.totalTokenHolders = totalSupply;
+    governance.save();
+    // Save dynamic quorum params
+    handleAllQuorumParamEvents(1000, 4000, BigInt.fromI32(1_200_000));
+    // Create prop with state we need for quorum inputs
+    // providing a block number greater than zero means this prop will look like a V2 prop
+    // since the DQ events above are simulated to be at block zero
+    const data = new ProposalCreatedData();
+    data.id = BIGINT_ONE;
+    data.proposer = proposerWithDelegate;
+    data.description = 'some description';
+    data.txHash = Bytes.fromI32(11);
+    data.logIndex = BigInt.fromI32(2);
+    data.address = Address.fromString(SOME_ADDRESS);
+    data.eventBlockNumber = BIGINT_ONE;
+    handleProposalCreated(createProposalCreatedEvent(data));
+    const propExtraDetails = new ParsedProposalV3();
+    propExtraDetails.id = data.id.toString();
+    propExtraDetails.updatePeriodEndBlock = BigInt.fromI32(150);
+    propExtraDetails.proposalThreshold = BIGINT_ONE;
+    propExtraDetails.quorumVotes = BIGINT_ONE;
+    saveProposalExtraDetails(propExtraDetails);
+
+    handleAllQuorumParamEvents(500, 6000, BigInt.fromI32(3_000_000));
+    const voter = Address.fromString(SOME_ADDRESS);
+    const propId = BIGINT_ONE;
+    const support = 0; // against
+    const votes = BigInt.fromI32(25);
+    const voteEvent = createVoteCastEvent(voter, propId, support, votes);
+    handleVoteCast(voteEvent);
+    const savedProp = Proposal.load(propId.toString());
+    assert.bigIntEquals(BigInt.fromI32(50), savedProp!.quorumVotes!);
   });
 });
 
@@ -656,95 +669,102 @@ describe('forking', () => {
   });
 });
 
-// describe('Proposal status changes', () => {
-//   beforeEach(() => {
-//     const propData = new ProposalCreatedData();
-//     propData.id = proposalId;
-//     propData.proposer = proposerWithDelegate;
-//     propData.targets = [Address.fromString(SOME_ADDRESS)];
-//     propData.values = [BigInt.fromI32(123)];
-//     propData.signatures = ['some signature'];
-//     propData.calldatas = [Bytes.fromI32(312)];
-//     propData.startBlock = BigInt.fromI32(203);
-//     propData.endBlock = BigInt.fromI32(303);
-//     propData.description = 'some description';
-//     propData.eventBlockNumber = BigInt.fromI32(103);
-//     propData.eventBlockTimestamp = BigInt.fromI32(42);
-//     propData.txHash = Bytes.fromI32(11);
-//     propData.logIndex = BigInt.fromI32(1);
-//     propData.address = Address.fromString(SOME_ADDRESS);
+describe('Proposal status changes', () => {
+  beforeEach(() => {
+    const propData = new ProposalCreatedData();
+    propData.id = proposalId;
+    propData.proposer = proposerWithDelegate;
+    propData.targets = [Address.fromString(SOME_ADDRESS)];
+    propData.values = [BigInt.fromI32(123)];
+    propData.signatures = ['some signature'];
+    propData.calldatas = [Bytes.fromI32(312)];
+    propData.startBlock = BigInt.fromI32(203);
+    propData.endBlock = BigInt.fromI32(303);
+    propData.description = 'some description';
+    propData.eventBlockNumber = BigInt.fromI32(103);
+    propData.eventBlockTimestamp = BigInt.fromI32(42);
+    propData.txHash = Bytes.fromI32(11);
+    propData.logIndex = BigInt.fromI32(1);
+    propData.address = Address.fromString(SOME_ADDRESS);
 
-//     handleProposalCreated(createProposalCreatedEvent(propData));
-//   });
+    handleProposalCreated(createProposalCreatedEvent(propData));
 
-//   test('handleProposalCanceled', () => {
-//     handleProposalCanceled(
-//       createProposalCanceledEvent(
-//         txHash,
-//         logIndex,
-//         updateBlockTimestamp,
-//         updateBlockNumber,
-//         proposalId,
-//       ),
-//     );
+    const propExtraDetails = new ParsedProposalV3();
+    propExtraDetails.id = propData.id.toString();
+    propExtraDetails.updatePeriodEndBlock = BigInt.fromI32(150);
+    propExtraDetails.proposalThreshold = BIGINT_ONE;
+    propExtraDetails.quorumVotes = BIGINT_ONE;
+    saveProposalExtraDetails(propExtraDetails);
+  });
 
-//     const proposal = Proposal.load(proposalId.toString())!;
-//     assert.stringEquals(STATUS_CANCELLED, proposal.status!);
-//     assert.bigIntEquals(updateBlockTimestamp, proposal.canceledTimestamp!);
-//     assert.bigIntEquals(updateBlockNumber, proposal.canceledBlock!);
-//   });
+  test('handleProposalCanceled', () => {
+    handleProposalCanceled(
+      createProposalCanceledEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
 
-//   test('handleProposalVetoed', () => {
-//     handleProposalVetoed(
-//       createProposalVetoedEvent(
-//         txHash,
-//         logIndex,
-//         updateBlockTimestamp,
-//         updateBlockNumber,
-//         proposalId,
-//       ),
-//     );
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_CANCELLED, proposal.status!);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.canceledTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.canceledBlock!);
+  });
 
-//     const proposal = Proposal.load(proposalId.toString())!;
-//     assert.stringEquals(STATUS_VETOED, proposal.status!);
-//     assert.bigIntEquals(updateBlockTimestamp, proposal.vetoedTimestamp!);
-//     assert.bigIntEquals(updateBlockNumber, proposal.vetoedBlock!);
-//   });
+  test('handleProposalVetoed', () => {
+    handleProposalVetoed(
+      createProposalVetoedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
 
-//   test('handleProposalQueued', () => {
-//     const eta = updateBlockTimestamp.plus(BigInt.fromI32(100));
-//     handleProposalQueued(
-//       createProposalQueuedEvent(
-//         txHash,
-//         logIndex,
-//         updateBlockTimestamp,
-//         updateBlockNumber,
-//         proposalId,
-//         eta,
-//       ),
-//     );
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_VETOED, proposal.status!);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.vetoedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.vetoedBlock!);
+  });
 
-//     const proposal = Proposal.load(proposalId.toString())!;
-//     assert.stringEquals(STATUS_QUEUED, proposal.status!);
-//     assert.bigIntEquals(updateBlockTimestamp, proposal.queuedTimestamp!);
-//     assert.bigIntEquals(updateBlockNumber, proposal.queuedBlock!);
-//     assert.bigIntEquals(eta, proposal.executionETA!);
-//   });
+  test('handleProposalQueued', () => {
+    const eta = updateBlockTimestamp.plus(BigInt.fromI32(100));
+    handleProposalQueued(
+      createProposalQueuedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+        eta,
+      ),
+    );
 
-//   test('handleProposalExecuted', () => {
-//     handleProposalExecuted(
-//       createProposalExecutedEvent(
-//         txHash,
-//         logIndex,
-//         updateBlockTimestamp,
-//         updateBlockNumber,
-//         proposalId,
-//       ),
-//     );
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_QUEUED, proposal.status!);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.queuedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.queuedBlock!);
+    assert.bigIntEquals(eta, proposal.executionETA!);
+  });
 
-//     const proposal = Proposal.load(proposalId.toString())!;
-//     assert.stringEquals(STATUS_EXECUTED, proposal.status!);
-//     assert.bigIntEquals(updateBlockTimestamp, proposal.executedTimestamp!);
-//     assert.bigIntEquals(updateBlockNumber, proposal.executedBlock!);
-//   });
-// });
+  test('handleProposalExecuted', () => {
+    handleProposalExecuted(
+      createProposalExecutedEvent(
+        txHash,
+        logIndex,
+        updateBlockTimestamp,
+        updateBlockNumber,
+        proposalId,
+      ),
+    );
+
+    const proposal = Proposal.load(proposalId.toString())!;
+    assert.stringEquals(STATUS_EXECUTED, proposal.status!);
+    assert.bigIntEquals(updateBlockTimestamp, proposal.executedTimestamp!);
+    assert.bigIntEquals(updateBlockNumber, proposal.executedBlock!);
+  });
+});
