@@ -42,7 +42,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     // Auction House Config
     uint256 constant TIME_BUFFER = 900; // 15 minutes in seconds
     uint256 constant RESERVE_PRICE = 2; // Whole number
-    uint256 constant MIN_INCREMENT_BID_PERCENTAGE = 5; // Whole number
+    uint8 constant MIN_INCREMENT_BID_PERCENTAGE = 5; // Whole number
     uint256 constant DURATION = 86400; // 24 hours in seconds
 
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
