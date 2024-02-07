@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
-import { Rewards } from '../../../contracts/Rewards.sol';
+import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { RewardsProxy } from '../../../contracts/client-incentives/RewardsProxy.sol';
 
 library RewardsDeployer {

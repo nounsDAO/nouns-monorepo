@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.sol';
-import { Rewards } from '../../../contracts/Rewards.sol';
+import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';

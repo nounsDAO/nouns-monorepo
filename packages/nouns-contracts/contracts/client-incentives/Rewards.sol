@@ -15,16 +15,16 @@
 
 pragma solidity ^0.8.19;
 
-import { INounsDAOLogic } from './interfaces/INounsDAOLogic.sol';
-import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
-import { NounsDAOTypes } from './governance/NounsDAOInterfaces.sol';
-import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
+import { INounsDAOLogic } from '../interfaces/INounsDAOLogic.sol';
+import { INounsAuctionHouseV2 } from '../interfaces/INounsAuctionHouseV2.sol';
+import { NounsDAOTypes } from '../governance/NounsDAOInterfaces.sol';
+import { NounsClientToken } from './NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
-import { InMemoryMapping } from './libs/InMemoryMapping.sol';
-import { GasRefund } from './libs/GasRefund.sol';
+import { InMemoryMapping } from '../libs/InMemoryMapping.sol';
+import { GasRefund } from '../libs/GasRefund.sol';
 
 contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     using SafeERC20 for IERC20;
