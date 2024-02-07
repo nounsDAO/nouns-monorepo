@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { ForkDAODeployerMock } from '../helpers/ForkDAODeployerMock.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { NounsDAOFork } from '../../../contracts/governance/fork/NounsDAOFork.sol';
@@ -10,7 +10,7 @@ import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOF
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
+abstract contract DAOForkZeroState is NounsDAOLogicBaseTest {
     address tokenHolder = makeAddr('tokenHolder');
     address tokenHolder2 = makeAddr('tokenHolder2');
     uint256[] tokenIds;

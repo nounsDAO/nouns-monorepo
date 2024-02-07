@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
@@ -13,7 +13,7 @@ import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 
-abstract contract UpdateProposalBaseTest is NounsDAOLogicV3BaseTest {
+abstract contract UpdateProposalBaseTest is NounsDAOLogicBaseTest {
     address proposer = makeAddr('proposer');
     uint256 proposalId;
 

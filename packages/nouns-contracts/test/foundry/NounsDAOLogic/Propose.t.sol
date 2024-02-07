@@ -2,9 +2,9 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 
-contract ProposeTest is NounsDAOLogicV3BaseTest {
+contract ProposeTest is NounsDAOLogicBaseTest {
     address proposer = makeAddr('proposer');
 
     function setUp() public override {
@@ -48,7 +48,7 @@ contract ProposeTest is NounsDAOLogicV3BaseTest {
         vm.expectEmit(true, true, true, true);
         emit ProposalCreatedWithRequirements(
             1,
-            new address[](0),            
+            new address[](0),
             updatablePeriodEndBlock,
             1, // prop threshold
             dao.minQuorumVotes(),

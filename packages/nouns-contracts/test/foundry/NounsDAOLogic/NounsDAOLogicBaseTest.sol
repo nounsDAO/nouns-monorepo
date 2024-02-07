@@ -15,7 +15,7 @@ import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecut
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
-abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
+abstract contract NounsDAOLogicBaseTest is Test, DeployUtilsV3, SigUtils {
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,

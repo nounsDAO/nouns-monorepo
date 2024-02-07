@@ -2,11 +2,11 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 
-contract WithdrawTest is NounsDAOLogicV3BaseTest {
+contract WithdrawTest is NounsDAOLogicBaseTest {
     event Withdraw(uint256 amount, bool sent);
 
     function test_withdraw_worksForAdmin() public {

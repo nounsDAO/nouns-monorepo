@@ -2,11 +2,11 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
-abstract contract ZeroState is NounsDAOLogicV3BaseTest {
+abstract contract ZeroState is NounsDAOLogicBaseTest {
     address proposer = makeAddr('proposer');
     address rando = makeAddr('rando');
     address otherUser = makeAddr('otherUser');
@@ -89,7 +89,7 @@ abstract contract IsNotCancellable is ZeroState {
 }
 
 contract ProposalUpdatableStateTest is ProposalUpdatableState, IsCancellable {
-    function setUp() public override(ProposalUpdatableState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalUpdatableState, NounsDAOLogicBaseTest) {
         ProposalUpdatableState.setUp();
     }
 }
@@ -104,7 +104,7 @@ abstract contract ProposalPendingState is ProposalUpdatableState {
 }
 
 contract ProposalPendingStateTest is ProposalPendingState, IsCancellable {
-    function setUp() public override(ProposalPendingState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalPendingState, NounsDAOLogicBaseTest) {
         ProposalPendingState.setUp();
     }
 }
@@ -119,7 +119,7 @@ abstract contract ProposalActiveState is ProposalPendingState {
 }
 
 contract ProposalActiveStateTest is ProposalActiveState, IsCancellable {
-    function setUp() public override(ProposalActiveState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalActiveState, NounsDAOLogicBaseTest) {
         ProposalActiveState.setUp();
     }
 }
@@ -138,7 +138,7 @@ abstract contract ProposalObjectionPeriodState is ProposalActiveState {
 }
 
 contract ProposalObjectionPeriodStateTest is ProposalObjectionPeriodState, IsCancellable {
-    function setUp() public override(ProposalObjectionPeriodState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalObjectionPeriodState, NounsDAOLogicBaseTest) {
         ProposalObjectionPeriodState.setUp();
     }
 }
@@ -156,7 +156,7 @@ abstract contract ProposalSucceededState is ProposalActiveState {
 }
 
 contract ProposalSucceededStateTest is ProposalSucceededState, IsCancellable {
-    function setUp() public override(ProposalSucceededState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalSucceededState, NounsDAOLogicBaseTest) {
         ProposalSucceededState.setUp();
     }
 }
@@ -171,7 +171,7 @@ abstract contract ProposalQueuedState is ProposalSucceededState {
 }
 
 contract ProposalQueuedStateTest is ProposalQueuedState, IsCancellable {
-    function setUp() public override(ProposalQueuedState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalQueuedState, NounsDAOLogicBaseTest) {
         ProposalQueuedState.setUp();
     }
 }
@@ -187,7 +187,7 @@ abstract contract ProposalExecutedState is ProposalQueuedState {
 }
 
 contract ProposalExecutedStateTest is ProposalExecutedState, IsNotCancellable {
-    function setUp() public override(ProposalExecutedState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalExecutedState, NounsDAOLogicBaseTest) {
         ProposalExecutedState.setUp();
     }
 }
@@ -202,7 +202,7 @@ abstract contract ProposalDefeatedState is ProposalActiveState {
 }
 
 contract ProposalDefeatedStateTest is ProposalDefeatedState, IsNotCancellable {
-    function setUp() public override(ProposalDefeatedState, NounsDAOLogicV3BaseTest) {
+    function setUp() public override(ProposalDefeatedState, NounsDAOLogicBaseTest) {
         ProposalDefeatedState.setUp();
     }
 }

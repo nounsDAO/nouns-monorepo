@@ -2,10 +2,10 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
-abstract contract ExecutableProposalState is NounsDAOLogicV3BaseTest {
+abstract contract ExecutableProposalState is NounsDAOLogicBaseTest {
     address user = makeAddr('user');
     uint256 proposalId;
 

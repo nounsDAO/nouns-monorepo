@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import { NounsDAOLogicV3BaseTest } from '../NounsDAOLogic/NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { Rewards } from '../../../contracts/Rewards.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
@@ -11,7 +11,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
 import 'forge-std/Test.sol';
 
-abstract contract BaseProposalRewardsTest is NounsDAOLogicV3BaseTest {
+abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     Rewards rewards;
     ERC20Mock erc20Mock = new ERC20Mock();
     INounsAuctionHouseV2 auctionHouse;

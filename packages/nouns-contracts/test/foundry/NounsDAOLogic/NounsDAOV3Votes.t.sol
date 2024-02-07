@@ -2,11 +2,11 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
+import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOVotes } from '../../../contracts/governance/NounsDAOVotes.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-contract NounsDAOLogicV3VotesTest is NounsDAOLogicV3BaseTest {
+contract NounsDAOLogicV3VotesTest is NounsDAOLogicBaseTest {
     address proposer = makeAddr('proposer');
     address voter = makeAddr('voter');
     uint256 proposalId;
