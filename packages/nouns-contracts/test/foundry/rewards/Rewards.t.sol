@@ -98,11 +98,11 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         vm.roll(block.number + 1);
     }
 
-    function bidAndSettleAuction(uint256 bidAmount) internal returns (uint256) {
+    function bidAndSettleAuction(uint256 bidAmount) internal returns (uint32) {
         return bidAndSettleAuction(bidAmount, 0);
     }
 
-    function bidAndSettleAuction(uint256 bidAmount, uint32 clientId) internal returns (uint256) {
+    function bidAndSettleAuction(uint256 bidAmount, uint32 clientId) internal returns (uint32) {
         uint256 nounId = auctionHouse.auction().nounId;
 
         vm.prank(bidder1);
@@ -112,7 +112,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
         mineBlocks(blocksToEnd);
         auctionHouse.settleCurrentAndCreateNewAuction();
 
-        return nounId;
+        return uint32(nounId);
     }
 
     function mineBlocks(uint256 numBlocks) internal {
@@ -122,7 +122,7 @@ abstract contract RewardsBaseTest is NounsDAOLogicV3BaseTest {
 }
 
 contract AuctionRewards is RewardsBaseTest {
-    uint256 nounId;
+    uint32 nounId;
 
     function setUp() public virtual override {
         super.setUp();

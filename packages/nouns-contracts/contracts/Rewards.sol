@@ -72,21 +72,26 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      */
 
     struct RewardParams {
+        // @dev Used for proposal rewards
         uint32 minimumRewardPeriod;
         uint8 numProposalsEnoughForReward;
         uint16 proposalRewardBps;
         uint16 votingRewardBps;
-        uint16 auctionRewardBps;
         uint16 proposalEligibilityQuorumBps;
+        // @dev Used for auction rewards
+        uint16 auctionRewardBps;
         uint8 minimumAuctionsBetweenUpdates;
     }
 
     /// @custom:storage-location erc7201:nouns.rewards
     struct RewardsStorage {
-        uint256 nextAuctionIdToReward;
+        // @dev Used for auction rewards state
+        uint32 nextAuctionIdToReward;
+        // @dev Used for proposal rewards state
         uint32 nextProposalIdToReward;
-        uint256 nextProposalRewardFirstAuctionId;
-        uint256 lastProposalRewardsUpdate;
+        uint32 nextProposalRewardFirstAuctionId;
+        uint40 lastProposalRewardsUpdate;
+        // @dev Params for both auction & rewards
         RewardParams params;
         IERC20 ethToken;
         address admin;
@@ -126,8 +131,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         address admin_,
         address ethToken_,
         uint32 nextProposalIdToReward_,
-        uint256 nextAuctionIdToReward_,
-        uint256 nextProposalRewardFirstAuctionId_,
+        uint32 nextAuctionIdToReward_,
+        uint32 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams,
         address descriptor
     ) public initializer {
@@ -141,7 +146,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         $.nextAuctionIdToReward = nextAuctionIdToReward_;
         $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         $.params = rewardParams;
-        $.lastProposalRewardsUpdate = block.timestamp;
+        $.lastProposalRewardsUpdate = uint40(block.timestamp);
     }
 
     /**
@@ -168,7 +173,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         return tokenId;
     }
 
-    function updateRewardsForAuctions(uint256 lastNounId) public whenNotPaused {
+    function updateRewardsForAuctions(uint32 lastNounId) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
 
@@ -262,7 +267,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
             firstNounId: $.nextProposalRewardFirstAuctionId,
             endTimestamp: t.lastProposal.creationTimestamp
         });
-        $.nextProposalRewardFirstAuctionId = lastAuctionId + 1;
+        $.nextProposalRewardFirstAuctionId = uint32(lastAuctionId) + 1;
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
@@ -308,7 +313,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
                 'not enough time passed'
             );
         }
-        $.lastProposalRewardsUpdate = t.lastProposal.creationTimestamp;
+        $.lastProposalRewardsUpdate = uint40(t.lastProposal.creationTimestamp);
 
         // Calculate the reward per proposal and per vote
         t.rewardPerProposal = t.proposalRewardForPeriod / t.numEligibleProposals;
@@ -333,10 +338,9 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
             uint256 votesInProposal;
             NounsDAOTypes.ClientVoteData[] memory voteData = proposals[i].voteData;
-            uint256 votes;
             for (uint256 j; j < votingClientIds.length; ++j) {
                 clientId = votingClientIds[j];
-                votes = voteData[j].votes;
+                uint256 votes = voteData[j].votes;
                 require(votes > 0, 'all clientId must have votes');
                 if (clientId != 0) {
                     m.inc(clientId, votes * t.rewardPerVote);
