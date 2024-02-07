@@ -329,6 +329,10 @@ msgstr "Behold, an infinite work of art! Nouns is a community-owned brand that m
 msgid "Bid"
 msgstr "Bid"
 
+#: src/components/CommentModal/index.tsx
+msgid "Bid for"
+msgstr "Bid for"
+
 #: src/components/NounInfoCard/index.tsx
 msgid "Bid history"
 msgstr "Bid history"
@@ -337,6 +341,7 @@ msgstr "Bid history"
 msgid "Bid was placed successfully!"
 msgstr "Bid was placed successfully!"
 
+#: src/components/BidHistoryToggle/index.tsx
 #: src/components/NounInfoCard/index.tsx
 msgid "Bids"
 msgstr "Bids"
@@ -432,6 +437,18 @@ msgstr "Clear WalletConnect Data"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
 msgstr "Close"
+
+#: src/components/NounInfoRowComment/index.tsx
+msgid "Comment"
+msgstr "Comment"
+
+#: src/components/NounInfoCard/BidHistoryToggle.tsx
+msgid "Comments"
+msgstr "Comments"
+
+#: src/components/NounInfoCard/Bid/index.tsx
+msgid "Add a comment to your bid (optional)"
+msgstr "Add a comment to your bid (optional)"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -1714,8 +1731,8 @@ msgid "View Threshold Info"
 msgstr "View Threshold Info"
 
 #: src/components/BidHistoryBtn/index.tsx
-msgid "View all bids"
-msgstr "View all bids"
+msgid "View all"
+msgstr "View all"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx

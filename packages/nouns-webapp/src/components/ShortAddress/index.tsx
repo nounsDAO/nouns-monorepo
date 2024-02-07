@@ -8,8 +8,8 @@ import React from 'react';
 import Identicon from '../Identicon';
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 
-const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
-  const { address, avatar, size = 24 } = props;
+const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number; largeText?: boolean }> = props => {
+  const { address, avatar, size = 24, largeText = false } = props;
   const { library: provider } = useEthers();
   const hasENS = useIsNetworkEnsSupported();
   const ens = useReverseENSLookUp(address) || resolveNounContractAddress(address);
@@ -18,7 +18,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
 
   if (avatar) {
     return (
-      <div className={classes.shortAddress}>
+      <div className={largeText ? classes.shortAddressLargeText: classes.shortAddress}>
         {hasENS && avatar && (
           <div key={address}>
             <Identicon size={size} address={address} provider={provider} />

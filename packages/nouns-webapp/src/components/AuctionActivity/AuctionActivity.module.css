@@ -4,6 +4,13 @@
   align-self: flex-start !important;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
 .informationRow {
   margin-bottom: 0.5rem;
 }

@@ -22,6 +22,15 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
+    struct NounsDAOV3Deployment {
+        address noundersDAO;
+        NounsDAOLogicV3 dao;
+        NounsToken nounsToken;
+        NounsDAOExecutorV2 timelock;
+        NounsAuctionHouseProxy auctionHouseProxy;
+        NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
+    }
+
     function _createDAOV3Proxy(
         address timelock,
         address nounsToken,
@@ -58,7 +67,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
     }
 
-    function _deployDAOV3() internal returns (NounsDAOLogicV3) {
+    function _deployDAOV3ReturnAll() internal returns (NounsDAOV3Deployment memory) {
         address noundersDAO = makeAddr('noundersDAO');
         address vetoer = makeAddr('vetoer');
 
@@ -143,6 +152,17 @@ abstract contract DeployUtilsV3 is DeployUtils {
         dao._setForkThresholdBPS(FORK_THRESHOLD_BPS);
         vm.stopPrank();
 
-        return dao;
+        return NounsDAOV3Deployment({
+            dao: dao,
+            timelock: timelock,
+            nounsToken: nounsToken,
+            noundersDAO: noundersDAO,
+            auctionHouseProxy: auctionProxy,
+            auctionHouseProxyAdmin: auctionAdmin
+        });
+    }
+
+    function _deployDAOV3() internal returns (NounsDAOLogicV3) {
+        return _deployDAOV3ReturnAll().dao;
     }
 }

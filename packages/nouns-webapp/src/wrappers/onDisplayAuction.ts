@@ -22,6 +22,7 @@ const deserializeBid = (reduxSafeBid: BidEvent): Bid => {
     sender: reduxSafeBid.sender,
     value: BigNumber.from(reduxSafeBid.value),
     extended: reduxSafeBid.extended,
+    comment: reduxSafeBid.comment ?? '',
     transactionHash: reduxSafeBid.transactionHash,
     transactionIndex: reduxSafeBid.transactionIndex,
     timestamp: BigNumber.from(reduxSafeBid.timestamp),

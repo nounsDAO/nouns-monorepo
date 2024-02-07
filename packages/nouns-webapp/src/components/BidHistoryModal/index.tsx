@@ -13,13 +13,14 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const BidHistoryModalOverlay: React.FC<{
+export const BidHistoryModalOverlay: React.FC<{
   auction: Auction;
   onDismiss: () => void;
 }> = props => {
   const { onDismiss, auction } = props;
 
   const bids = useAuctionBids(auction.nounId);
+
 
   return (
     <>

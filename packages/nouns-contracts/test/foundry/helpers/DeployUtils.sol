@@ -18,6 +18,7 @@ import { NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfa
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 
@@ -38,6 +39,12 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 public constant FORK_DAO_PROPOSAL_THRESHOLD_BPS = 25; // 0.25%
     uint256 public constant FORK_DAO_QUORUM_VOTES_BPS = 1000; // 10%
 
+    // Auction House Config
+    uint256 constant TIME_BUFFER = 900; // 15 minutes in seconds
+    uint256 constant RESERVE_PRICE = 2; // Whole number
+    uint8 constant MIN_INCREMENT_BID_PERCENTAGE = 5; // Whole number
+    uint256 constant DURATION = 86400; // 24 hours in seconds
+
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
         NounsDescriptor descriptor = new NounsDescriptor();
         _populateDescriptor(descriptor);
@@ -57,6 +64,10 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsArt art = new NounsArt(address(descriptorV2), inflator);
         descriptorV2.setArt(art);
         return descriptorV2;
+    }
+
+    function _deployAuctionHouseV2() internal returns (address) {
+        return address(new NounsAuctionHouseV2());
     }
 
     function _deployTokenAndDAOAndPopulateDescriptor(

@@ -1,5 +1,5 @@
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
-import { useEthers, useContractFunction } from '@usedapp/core';
+import { useEthers, useContractFunction, TransactionStatus } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
@@ -10,13 +10,14 @@ import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsAuctionHouseV2Factory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { isMobileScreen } from '../../utils/isMobile';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -54,7 +55,7 @@ const Bid: React.FC<{
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
-  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
+  const nounsAuctionHouseContract = new NounsAuctionHouseV2Factory().attach(
     config.addresses.nounsAuctionHouseProxy,
   );
 
@@ -63,6 +64,7 @@ const Bid: React.FC<{
   const bidInputRef = useRef<HTMLInputElement>(null);
 
   const [bidInput, setBidInput] = useState('');
+  const [bidComment, setBidComment] = useState('');
 
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -88,6 +90,12 @@ const Bid: React.FC<{
     nounsAuctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
+
+  const { send: placeBidWithComment, state: placeBidWithCommentState } = useContractFunction(
+    nounsAuctionHouseContract,
+    AuctionHouseContractFunction.createBidWithComment,
+  );
+
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
     nounsAuctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
@@ -129,10 +137,23 @@ const Bid: React.FC<{
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });
-    placeBid(auction.nounId, {
-      value,
-      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
-    });
+
+    if (bidComment.trim() === '') {
+      placeBid(auction.nounId, {
+        value,
+        gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    } else {
+      const COMMENT_GAS_COST_PER_BYTE = 8;
+      const additionalGasForComment = Buffer.byteLength(bidComment) * COMMENT_GAS_COST_PER_BYTE;
+
+      const totalGas = gasLimit.add(10_000).add(additionalGasForComment);
+
+      placeBidWithComment(auction.nounId, bidComment, {
+        value,
+        gasLimit: totalGas, // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    }
   };
 
   const settleAuctionHandler = () => {
@@ -145,16 +166,25 @@ const Bid: React.FC<{
     }
   };
 
+  const clearCommentInput = useCallback(() => {
+    if (bidComment.trim() !== '') {
+      setBidComment('');
+    }
+  }, [bidComment]);
+
   // successful bid using redux store state
   useEffect(() => {
     if (!account) return;
+
+    const state: TransactionStatus =
+      bidComment.trim() === '' ? placeBidState : placeBidWithCommentState;
 
     // tx state is mining
     const isMiningUserTx = placeBidState.status === 'Mining';
     // allows user to rebid against themselves so long as it is not the same tx
     const isCorrectTx = currentBid(bidInputRef).isEqualTo(new BigNumber(auction.amount.toString()));
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
-      placeBidState.status = 'Success';
+      state.status = 'Success';
       setModal({
         title: <Trans>Success</Trans>,
         message: <Trans>Bid was placed successfully!</Trans>,
@@ -162,8 +192,17 @@ const Bid: React.FC<{
       });
       setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });
       clearBidInput();
+      clearCommentInput();
     }
-  }, [auction, placeBidState, account, setModal]);
+  }, [
+    auction,
+    placeBidState,
+    placeBidWithCommentState,
+    account,
+    setModal,
+    bidComment,
+    clearCommentInput,
+  ]);
 
   // placing bid transaction state hook
   useEffect(() => {
@@ -245,14 +284,21 @@ const Bid: React.FC<{
     window.open('https://fomonouns.wtf', '_blank')?.focus();
   };
 
+  const commentCopy = <Trans>Add a comment to your bid (optional)</Trans>
   const isWalletConnected = activeAccount !== undefined;
+
+  const autoGrow = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const minHeight = isMobileScreen() ? '100px' : '3rem';
+    const isSingleLine = event.target.value.split('\n').length === 1;
+    event.target.style.height = isSingleLine ? minHeight : `${event.target.scrollHeight}px`;
+  };
 
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      <InputGroup>
+      <InputGroup className={classes.inputGroup}>
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
@@ -277,7 +323,7 @@ const Bid: React.FC<{
               min="0"
               onChange={bidInputHandler}
               ref={bidInputRef}
-              value={bidInput}
+              value={bidInput.trimStart()}
             />
           </>
         )}
@@ -296,7 +342,6 @@ const Bid: React.FC<{
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
-            {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
               <Col lg={12}>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
@@ -305,6 +350,23 @@ const Bid: React.FC<{
           </>
         )}
       </InputGroup>
+
+      {!auctionEnded && (
+        <>
+          <InputGroup className={classes.inputGroup}>
+            <span className={classes.customPlaceholderBidComment}>
+              {!auctionEnded && bidComment.trim() === '' ? commentCopy : ''}
+            </span>
+            <FormControl
+              className={classes.commentInput}
+              as="textarea"
+              onChange={e => setBidComment(e.target.value.trimStart())}
+              value={bidComment.trimStart()}
+              onInput={autoGrow}
+            />
+          </InputGroup>
+        </>
+      )}
     </>
   );
 };

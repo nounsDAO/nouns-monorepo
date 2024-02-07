@@ -5,7 +5,7 @@ import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
-  NounsAuctionHouse,
+  NounsAuctionHouseV2,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsToken,
   WETH,
@@ -16,7 +16,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsAuctionHouse', () => {
-  let nounsAuctionHouse: NounsAuctionHouse;
+  let nounsAuctionHouse: NounsAuctionHouseV2;
   let nounsToken: NounsToken;
   let weth: WETH;
   let deployer: SignerWithAddress;
@@ -30,6 +30,8 @@ describe('NounsAuctionHouse', () => {
   const MIN_INCREMENT_BID_PERCENTAGE = 5;
   const DURATION = 60 * 60 * 24;
 
+  const BID_COMMENT = "Test comment";
+
   async function deploy(deployer?: SignerWithAddress) {
     const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
     return upgrades.deployProxy(auctionHouseFactory, [
@@ -39,7 +41,7 @@ describe('NounsAuctionHouse', () => {
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
-    ]) as Promise<NounsAuctionHouse>;
+    ]) as Promise<NounsAuctionHouseV2>;
   }
 
   before(async () => {
@@ -188,6 +190,23 @@ describe('NounsAuctionHouse', () => {
     await expect(tx)
       .to.emit(nounsAuctionHouse, 'AuctionBid')
       .withArgs(nounId, bidderA.address, RESERVE_PRICE, false);
+  });
+
+  it('should emit an `AuctionBid` and `AuctionBidComment` event on a successful bid with comment', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+
+    const { nounId } = await nounsAuctionHouse.auction();
+    const tx = nounsAuctionHouse.connect(bidderA).createBidWithComment(nounId, BID_COMMENT, {
+      value: RESERVE_PRICE,
+    });
+
+    await expect(tx)
+      .to.emit(nounsAuctionHouse, 'AuctionBid')
+      .withArgs(nounId, bidderA.address, RESERVE_PRICE, false);
+
+    await expect(tx)
+      .to.emit(nounsAuctionHouse, 'AuctionBidComment')
+      .withArgs(BID_COMMENT);
   });
 
   it('should emit an `AuctionExtended` event if the auction end time is within the time buffer', async () => {

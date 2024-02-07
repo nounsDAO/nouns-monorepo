@@ -1,6 +1,7 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import {
   AuctionBid,
+  AuctionBidComment,
   AuctionCreated,
   AuctionExtended,
   AuctionSettled,
@@ -57,6 +58,31 @@ export function handleAuctionBid(event: AuctionBid): void {
   bid.blockNumber = event.block.number;
   bid.blockTimestamp = event.block.timestamp;
   bid.auction = auction.id;
+  bid.comment = '';
+  
+  bid.save();
+}
+
+export function handleAuctionBidComment(event: AuctionBidComment): void {
+  let transactionHash = event.transaction.hash.toHex();
+
+  let bid = Bid.load(transactionHash);
+  if (bid == null) {
+    log.error('[handleAuctionBidComment] Bid not found for transaction hash {}. Hash: {}', [
+      transactionHash,
+      event.transaction.hash.toHex(),
+    ]);
+    return;
+  }
+
+  bid.comment = event.params.comment;
+
+  if (event.params.comment != '') {
+    bid.comment = event.params.comment;
+  } else {
+    bid.comment = '';
+  }
+
   bid.save();
 }
 

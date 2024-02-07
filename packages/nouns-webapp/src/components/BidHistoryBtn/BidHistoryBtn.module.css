@@ -74,9 +74,94 @@
 }
 
 .bidHistoryWrapperCool:hover {
-  color: var(--brand-color-blue);
+  color: var(--brand-cool-dark-text);
+}
+
+.bidHistoryWrapperWarmActive {
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: var(--brand-color-warm);
+}
+
+.bidHistoryWrapperCoolActive {
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: var(--brand-cool-dark-text);
 }
 
 .bidHistoryWrapper:hover {
   background-color: var(--brand-gray-hover);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+}
+
+.currentBidCol {
+  border-right: 1px solid #79809c49;
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.auctionTimerCol {
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+.currentBidsCol {
+  border-right: 1px solid #79809c49;
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.auctionCommentsCol {
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+@media (max-width: 992px) {
+
+  .currentBidsCol {
+    border-right: 1px solid #79809c49;
+    color: var(--brand-color-cool);
+    font-family: 'PT Root UI';
+    font-weight: bold;
+    font-size: 1rem;
+    font-size: 16px;
+    padding-right: 9px;
+  }
+  
+  .auctionCommentsCol {
+    color: var(--brand-color-cool);
+    font-family: 'PT Root UI';
+    font-weight: bold;
+    font-size: 1rem;
+    font-size: 16px;
+    margin-left: 3px;
+  }
+  
 }
