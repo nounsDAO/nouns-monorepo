@@ -39,7 +39,13 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     event ClientRewarded(uint32 indexed clientId, uint256 amount);
     event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
     event AuctionRewardsUpdated(uint256 firstAuctionId, uint256 lastAuctionId);
-    event ProposalRewardsUpdated(uint32 firstProposalId, uint32 lastProposalId);
+    event ProposalRewardsUpdated(
+        uint32 firstProposalId,
+        uint32 lastProposalId,
+        uint256 auctionRevenue,
+        uint256 rewardPerProposal,
+        uint256 rewardPerVote
+    );
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -265,8 +271,6 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         require(lastProposalId >= t.nextProposalIdToReward, 'bad lastProposalId');
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
-        emit ProposalRewardsUpdated(t.nextProposalIdToReward, lastProposalId);
-
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             t.nextProposalIdToReward,
             lastProposalId,
@@ -331,6 +335,14 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         // Calculate the reward per proposal and per vote
         t.rewardPerProposal = t.proposalRewardForPeriod / t.numEligibleProposals;
         t.rewardPerVote = t.votingRewardForPeriod / t.numEligibleVotes;
+
+        emit ProposalRewardsUpdated(
+            t.nextProposalIdToReward,
+            lastProposalId,
+            auctionRevenue,
+            t.rewardPerProposal,
+            t.rewardPerVote
+        );
 
         //// Second loop over the proposals:
         //// 1. Skip proposals that were deleted for non eligibility.

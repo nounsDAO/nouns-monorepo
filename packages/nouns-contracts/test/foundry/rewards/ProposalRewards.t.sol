@@ -304,7 +304,7 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         votingClientIds = [0];
 
         vm.expectEmit();
-        emit Rewards.ProposalRewardsUpdated(1, 2);
+        emit Rewards.ProposalRewardsUpdated(1, 2, 15 ether, 0.075 ether, 4166666666666666);
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds
