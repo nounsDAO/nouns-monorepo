@@ -126,6 +126,17 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         assertEq(prop.creationTimestamp, 0);
     }
 
+    function test_creationTimestampAndBlock_setOnNewProposals() public {
+        assertTrue(block.timestamp > 0);
+        assertTrue(block.number > 0);
+        uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '');
+
+        NounsDAOTypes.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
+
+        assertEq(prop.creationTimestamp, block.timestamp);
+        assertEq(prop.creationBlock, block.number);
+    }
+
     function test_adminFunctions_workUsingTheNewFallbackDesign() public {
         uint256 currentForkPeriod = NOUNS_DAO_PROXY_MAINNET.forkPeriod();
         uint256 expectedForkPeriod = currentForkPeriod + 1;
