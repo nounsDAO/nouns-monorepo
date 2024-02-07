@@ -385,10 +385,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * @dev The maximum value of `amount` is one wei less than in `_clientBalances[clientId]`.
      * This in order to leave 1 wei in storage and avoid expensive gas writes in future balance increases.
      * @param clientId Which client balance to withdraw
-     * @param amount amount of withdraw
      * @param to the address to withdraw to
+     * @param amount amount of withdraw
      */
-    function withdrawClientBalance(uint32 clientId, uint256 amount, address to) public whenNotPaused {
+    function withdrawClientBalance(uint32 clientId, address to, uint256 amount) public whenNotPaused {
         RewardsStorage storage $ = _getRewardsStorage();
 
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');

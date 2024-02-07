@@ -472,7 +472,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         vm.prank(client1Wallet);
         vm.expectEmit();
         emit Rewards.ClientBalanceWithdrawal(clientId1, 0.05 ether, client1Wallet);
-        rewards.withdrawClientBalance(clientId1, 0.05 ether, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, 0.05 ether);
 
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
@@ -481,7 +481,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         uint256 balance = rewards.clientBalance(clientId1);
 
         vm.prank(client1Wallet);
-        rewards.withdrawClientBalance(clientId1, balance, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, balance);
 
         assertEq(rewards.clientBalance(clientId1), 0);
         assertEq(rewards._clientBalances(clientId1), 1);
@@ -491,23 +491,23 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         uint256 balance = rewards.clientBalance(clientId1);
         vm.prank(client1Wallet);
         vm.expectRevert('amount too large');
-        rewards.withdrawClientBalance(clientId1, balance + 1, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, balance + 1);
     }
 
     function test_withdrawingUpdatesBalance() public {
         uint256 balance = rewards.clientBalance(clientId1);
 
         vm.prank(client1Wallet);
-        rewards.withdrawClientBalance(clientId1, balance, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, balance);
 
         vm.prank(client1Wallet);
         vm.expectRevert('amount too large');
-        rewards.withdrawClientBalance(clientId1, 1, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, 1);
     }
 
     function test_withdraw_revertsIfNotClientIdOwner() public {
         vm.expectRevert('must be client NFT owner');
-        rewards.withdrawClientBalance(clientId1, 1, client1Wallet);
+        rewards.withdrawClientBalance(clientId1, client1Wallet, 1);
     }
 }
 

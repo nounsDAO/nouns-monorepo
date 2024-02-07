@@ -145,7 +145,7 @@ contract AuctionRewards is RewardsBaseTest {
         assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
 
         vm.prank(client1Wallet);
-        rewards.withdrawClientBalance(CLIENT_ID, 0.05 ether, client1Wallet);
+        rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
 
@@ -273,7 +273,7 @@ contract AuctionRewards is RewardsBaseTest {
 
         vm.prank(client1Wallet);
         vm.expectRevert('SafeERC20: ERC20 operation did not succeed');
-        rewards.withdrawClientBalance(CLIENT_ID, 0.05 ether, client1Wallet);
+        rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
     }
 }
 
@@ -343,7 +343,7 @@ contract PausedTest is RewardsBaseTest {
 
     function test_withdrawClientBalance_reverts() public {
         vm.expectRevert('Pausable: paused');
-        rewards.withdrawClientBalance(1, 1, makeAddr('to'));
+        rewards.withdrawClientBalance(1, makeAddr('to'), 1);
     }
 }
 
