@@ -9,7 +9,7 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract DeployUtilsFork is DeployUtilsV3 {
     function _deployForkDAO(INounsDAOForkEscrow escrow) public returns (address treasury, address token, address dao) {
@@ -30,7 +30,7 @@ abstract contract DeployUtilsFork is DeployUtilsV3 {
     }
 
     function _deployForkDAO() public returns (address treasury, address token, address dao) {
-        INounsDAOLogicV3 originalDAO = _deployDAOV3();
+        INounsDAOLogic originalDAO = _deployDAOV3();
         return _deployForkDAO(originalDAO.forkEscrow());
     }
 }

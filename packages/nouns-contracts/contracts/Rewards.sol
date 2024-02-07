@@ -15,7 +15,7 @@
 
 pragma solidity ^0.8.19;
 
-import { INounsDAOLogicV3 } from './interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from './interfaces/INounsDAOLogic.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOTypes } from './governance/NounsDAOInterfaces.sol';
 import { NounsClientToken } from './client-incentives/NounsClientToken.sol';
@@ -53,7 +53,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    INounsDAOLogicV3 public immutable nounsDAO;
+    INounsDAOLogic public immutable nounsDAO;
 
     INounsAuctionHouseV2 public immutable auctionHouse;
 
@@ -126,7 +126,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * has the `initializer` modifier on its constructor.
      */
     constructor(address nounsDAO_, address auctionHouse_) {
-        nounsDAO = INounsDAOLogicV3(nounsDAO_);
+        nounsDAO = INounsDAOLogic(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
     }
 

@@ -29,8 +29,8 @@ import {
   NounsDAOLogicV4__factory as NounsDaoLogicFactory,
   NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
   NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
-  INounsDAOLogicV3__factory,
-  INounsDAOLogicV3,
+  INounsDAOLogic__factory,
+  INounsDAOLogic,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
@@ -500,7 +500,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
 };
 
 export const propose = async (
-  gov: INounsDAOLogicV3,
+  gov: INounsDAOLogic,
   proposer: SignerWithAddress,
   stubPropUserAddress: string = address(0),
 ) => {
@@ -568,13 +568,13 @@ export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<Nou
 export const deployGovernorV3AndSetImpl = async (
   deployer: SignerWithAddress,
   proxyAddress: string,
-): Promise<INounsDAOLogicV3> => {
+): Promise<INounsDAOLogic> => {
   const v3LogicContract = await deployGovernorV3(deployer);
 
   const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
   await proxy._setImplementation(v3LogicContract.address);
 
-  return INounsDAOLogicV3__factory.connect(proxyAddress, deployer);
+  return INounsDAOLogic__factory.connect(proxyAddress, deployer);
 };
 
 export const deployGovernorV3WithV3Proxy = async (
@@ -587,7 +587,7 @@ export const deployGovernorV3WithV3Proxy = async (
   votingDelay?: number,
   proposalThresholdBPs?: number,
   dynamicQuorumParams?: DynamicQuorumParams,
-): Promise<INounsDAOLogicV3> => {
+): Promise<INounsDAOLogic> => {
   const v3LogicContract = await deployGovernorV3(deployer);
   const predictedProxyAddress = ethers.utils.getContractAddress({
     from: deployer.address,
@@ -621,5 +621,5 @@ export const deployGovernorV3WithV3Proxy = async (
     },
   );
 
-  return INounsDAOLogicV3__factory.connect(proxy.address, deployer);
+  return INounsDAOLogic__factory.connect(proxy.address, deployer);
 };

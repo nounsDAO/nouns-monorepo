@@ -5,7 +5,7 @@ import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
@@ -161,7 +161,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
 
     function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {
         vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
-        INounsDAOLogicV3(address(dao))._setObjectionPeriodDurationInBlocks(3 days / 12);
+        INounsDAOLogic(address(dao))._setObjectionPeriodDurationInBlocks(3 days / 12);
     }
 
     function test_setObjectionPeriodDurationInBlocks_worksForAdmin() public {
@@ -170,7 +170,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         emit ObjectionPeriodDurationSet(10, blocks);
 
         vm.prank(address(dao.timelock()));
-        INounsDAOLogicV3(address(dao))._setObjectionPeriodDurationInBlocks(blocks);
+        INounsDAOLogic(address(dao))._setObjectionPeriodDurationInBlocks(blocks);
 
         assertEq(dao.objectionPeriodDurationInBlocks(), blocks);
     }
@@ -180,7 +180,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(address(dao.timelock()));
         vm.expectRevert(NounsDAOAdmin.InvalidObjectionPeriodDurationInBlocks.selector);
-        INounsDAOLogicV3(address(dao))._setObjectionPeriodDurationInBlocks(blocks);
+        INounsDAOLogic(address(dao))._setObjectionPeriodDurationInBlocks(blocks);
     }
 
     function test_setProposalUpdatablePeriodInBlocks_onlyAdmin() public {

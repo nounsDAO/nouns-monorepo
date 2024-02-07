@@ -6,7 +6,7 @@ import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
@@ -183,7 +183,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
 
     function test_veto_worksForPropStateUpdatable() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        INounsDAOLogicV3 daoAsV3 = INounsDAOLogicV3(payable(address(daoProxy)));
+        INounsDAOLogic daoAsV3 = INounsDAOLogic(payable(address(daoProxy)));
 
         assertTrue(daoAsV3.state(proposalId) == NounsDAOTypes.ProposalState.Updatable);
 
@@ -265,7 +265,7 @@ contract NounsDAOLogicV3VetoTest is NounsDAOLogicSharedBaseTest {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOLogicV3) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 

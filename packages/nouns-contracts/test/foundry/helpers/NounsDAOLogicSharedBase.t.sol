@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { DeployUtilsFork } from './DeployUtilsFork.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
@@ -17,7 +17,7 @@ interface DAOLogicFork {
 }
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
-    INounsDAOLogicV3 daoProxy;
+    INounsDAOLogic daoProxy;
     NounsToken nounsToken;
     NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
@@ -48,7 +48,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal virtual returns (INounsDAOLogicV3);
+    ) internal virtual returns (INounsDAOLogic);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -105,13 +105,13 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         daoProxy.castVote(proposalId, support);
     }
 
-    function deployForkDAOProxy() internal returns (INounsDAOLogicV3) {
+    function deployForkDAOProxy() internal returns (INounsDAOLogic) {
         (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
         timelock = NounsDAOExecutor(payable(treasuryAddress));
         nounsToken = NounsToken(tokenAddress);
         minter = nounsToken.minter();
 
-        INounsDAOLogicV3 dao = INounsDAOLogicV3(daoAddress);
+        INounsDAOLogic dao = INounsDAOLogic(daoAddress);
 
         vm.startPrank(address(dao.timelock()));
         dao._setVotingPeriod(votingPeriod);
@@ -122,6 +122,6 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
 
         vm.warp(INounsTokenForkLike(tokenAddress).forkingPeriodEndTimestamp());
 
-        return INounsDAOLogicV3(daoAddress);
+        return INounsDAOLogic(daoAddress);
     }
 }

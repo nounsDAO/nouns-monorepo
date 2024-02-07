@@ -19,7 +19,7 @@ pragma solidity ^0.8.6;
 
 import '../governance/NounsDAOInterfaces.sol';
 
-interface INounsDAOLogicV3 {
+interface INounsDAOLogic {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   PROPOSALS

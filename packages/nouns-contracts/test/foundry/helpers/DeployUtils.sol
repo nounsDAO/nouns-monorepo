@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
@@ -28,7 +28,7 @@ abstract contract NounsDAOLogicStateBaseTest is NounsDAOLogicSharedBaseTest {
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        uint256 state = uint256(INounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
+        uint256 state = uint256(INounsDAOLogic(payable(address(daoProxy))).state(proposalId));
 
         if (daoVersion() < 3) {
             assertEq(state, uint256(NounsDAOTypes.ProposalState.Pending));
@@ -181,8 +181,8 @@ contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicStateBaseTest {
         return 1;
     }
 
-    function deployDAOProxy(address, address, address) internal override returns (INounsDAOLogicV3) {
-        return INounsDAOLogicV3(address(deployForkDAOProxy()));
+    function deployDAOProxy(address, address, address) internal override returns (INounsDAOLogic) {
+        return INounsDAOLogic(address(deployForkDAOProxy()));
     }
 }
 
@@ -191,7 +191,7 @@ contract NounsDAOLogicV3StateTest is NounsDAOLogicStateBaseTest {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOLogicV3) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 

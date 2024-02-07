@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
@@ -152,7 +152,7 @@ contract NounsDAOLogic_GasSnapshot_V3_propose is DeployUtilsV3, NounsDAOLogic_Ga
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOLogicV3) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 }
@@ -162,7 +162,7 @@ contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSn
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOLogicV3) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
@@ -179,7 +179,7 @@ contract NounsDAOLogic_GasSnapshot_V3_voteDuringObjectionPeriod is
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOLogicV3) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 }

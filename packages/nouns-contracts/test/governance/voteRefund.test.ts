@@ -9,7 +9,7 @@ import {
   NounsDescriptorV2__factory,
   NounsToken,
   Voter__factory,
-  INounsDAOLogicV3,
+  INounsDAOLogic,
 } from '../../typechain';
 import { MaliciousVoter__factory } from '../../typechain/factories/contracts/test/MaliciousVoter__factory';
 import {
@@ -40,7 +40,7 @@ let deployer: SignerWithAddress;
 let user: SignerWithAddress;
 let user2: SignerWithAddress;
 let signers: TestSigners;
-let gov: INounsDAOLogicV3;
+let gov: INounsDAOLogic;
 let token: NounsToken;
 let snapshotId: number;
 

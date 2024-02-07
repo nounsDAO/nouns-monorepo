@@ -17,7 +17,7 @@ import { ERC20Mock, IERC20Receiver } from '../../helpers/ERC20Mock.sol';
 import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.sol';
 import { NounsAuctionHouse } from '../../../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
-import { INounsDAOLogicV3 } from '../../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
@@ -203,7 +203,7 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
 abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
     NounsDAOForkEscrowMock escrow;
     NounsTokenLike originalToken;
-    INounsDAOLogicV3 originalDAO;
+    INounsDAOLogic originalDAO;
 
     address owner1 = makeAddr('owner1');
 

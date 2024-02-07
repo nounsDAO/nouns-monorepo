@@ -15,7 +15,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  INounsDAOLogicV3,
+  INounsDAOLogic,
   NounsDAOLogicV4__factory,
 } from '../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
@@ -29,7 +29,7 @@ let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let signers: TestSigners;
-let gov: INounsDAOLogicV3;
+let gov: INounsDAOLogic;
 let snapshotId: number;
 
 const V1_QUORUM_BPS = 201;

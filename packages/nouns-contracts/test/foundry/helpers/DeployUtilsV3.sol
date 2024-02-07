@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './DeployUtils.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOLogicV4 } from '../../../contracts/governance/NounsDAOLogicV4.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
@@ -20,7 +20,7 @@ import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
@@ -31,10 +31,10 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address vetoer,
         NounsDAOTypes.NounsDAOParams memory daoParams,
         NounsDAOTypes.DynamicQuorumParams memory dqParams
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) internal returns (INounsDAOLogic dao) {
         uint256 nonce = vm.getNonce(address(this));
         address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
-        dao = INounsDAOLogicV3(
+        dao = INounsDAOLogic(
             address(
                 new NounsDAOProxyV3(
                     timelock,
@@ -56,7 +56,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (INounsDAOLogicV3 dao) {
+    ) internal returns (INounsDAOLogic dao) {
         dao = _createDAOV3Proxy(
             timelock,
             nounsToken,
@@ -82,7 +82,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         NounsToken nounsToken;
     }
 
-    function _deployDAOV3WithParams(uint256 auctionDuration) internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3WithParams(uint256 auctionDuration) internal returns (INounsDAOLogic) {
         Temp memory t;
         t.timelock = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), ''))));
         t.timelock.initialize(address(1), TIMELOCK_DELAY);
@@ -120,7 +120,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             FORK_DAO_QUORUM_VOTES_BPS
         );
 
-        INounsDAOLogicV3 dao = INounsDAOLogicV3(
+        INounsDAOLogic dao = INounsDAOLogic(
             payable(
                 new NounsDAOProxyV3(
                     address(t.timelock),
@@ -165,7 +165,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
         return dao;
     }
 
-    function _deployDAOV3() internal returns (INounsDAOLogicV3) {
+    function _deployDAOV3() internal returns (INounsDAOLogic) {
         return _deployDAOV3WithParams(10 minutes);
     }
 }

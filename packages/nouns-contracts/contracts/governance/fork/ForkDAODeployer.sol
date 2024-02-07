@@ -22,10 +22,13 @@ import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOTypes } from '../NounsDA
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from './newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
-import { INounsDAOLogicV3 } from '../../interfaces/INounsDAOLogicV3.sol';
 import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsToken } from '../../NounsToken.sol';
 import { NounsAuctionHouse } from '../../NounsAuctionHouse.sol';
+
+interface INounsDAOForkTokens {
+    function erc20TokensToIncludeInFork() external view returns (address[] memory);
+}
 
 contract ForkDAODeployer is IForkDAODeployer {
     event DAODeployed(address token, address auction, address governor, address treasury);
@@ -131,7 +134,7 @@ contract ForkDAODeployer is IForkDAODeployer {
      * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
      */
     function initDAO(address governor, address treasury, address token, NounsDAOExecutorV2 originalTimelock) internal {
-        INounsDAOLogicV3 originalDAO = INounsDAOLogicV3(payable(originalTimelock.admin()));
+        INounsDAOForkTokens originalDAO = INounsDAOForkTokens(payable(originalTimelock.admin()));
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,

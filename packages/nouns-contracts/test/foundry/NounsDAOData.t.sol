@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
-import { INounsDAOLogicV3 } from '../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsTokenLike, NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
@@ -17,14 +17,14 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
-    INounsDAOLogicV3 nounsDao;
+    INounsDAOLogic nounsDao;
     INounsAuctionHouse auction;
     address feeRecipient = makeAddr('fee recipient');
     address otherProposer = makeAddr('other proposer');
     address notNouner = makeAddr('not nouner');
 
     function setUp() public virtual {
-        nounsDao = INounsDAOLogicV3(address(_deployDAOV3()));
+        nounsDao = INounsDAOLogic(address(_deployDAOV3()));
         auction = INounsAuctionHouse(nounsDao.nouns().minter());
         vm.prank(address(nounsDao.timelock()));
         auction.unpause();

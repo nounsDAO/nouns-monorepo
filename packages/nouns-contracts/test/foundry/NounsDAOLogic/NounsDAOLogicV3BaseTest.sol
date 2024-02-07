@@ -13,7 +13,7 @@ import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
-import { INounsDAOLogicV3 } from '../../../contracts/interfaces/INounsDAOLogicV3.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     event ProposalUpdated(
@@ -66,7 +66,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     );
 
     NounsToken nounsToken;
-    INounsDAOLogicV3 dao;
+    INounsDAOLogic dao;
     NounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
