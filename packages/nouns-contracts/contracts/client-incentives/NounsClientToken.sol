@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
+/// @title The client NFT Nouns clients use as their identity in the client incentives system
+
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
