@@ -220,10 +220,9 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
             uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
-            uint32 clientId = cb.clientId;
-            $._clientBalances[clientId] += reward;
+            $._clientBalances[cb.clientId] += reward;
 
-            emit ClientRewarded(clientId, reward);
+            emit ClientRewarded(cb.clientId, reward);
         }
 
         emit AuctionRewardsUpdated(nextAuctionIdToReward_, lastNounId);
@@ -381,11 +380,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
-            uint256 reward = cb.balance;
-            uint32 clientId = cb.clientId;
-            $._clientBalances[clientId] += reward;
-
-            emit ClientRewarded(clientId, reward);
+            $._clientBalances[cb.clientId] += cb.balance;
+            emit ClientRewarded(cb.clientId, cb.balance);
         }
 
         GasRefund.refundGas($.ethToken, startGas);
