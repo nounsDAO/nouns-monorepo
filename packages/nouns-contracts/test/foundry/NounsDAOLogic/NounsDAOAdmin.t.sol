@@ -7,7 +7,7 @@ import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
-contract NounsDAOLogicV3AdminTest is NounsDAOLogicBaseTest {
+contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);

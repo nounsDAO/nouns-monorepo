@@ -6,7 +6,7 @@ import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOVotes } from '../../../contracts/governance/NounsDAOVotes.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-contract NounsDAOLogicV3VotesTest is NounsDAOLogicBaseTest {
+contract NounsDAOLogicVotesTest is NounsDAOLogicBaseTest {
     address proposer = makeAddr('proposer');
     address voter = makeAddr('voter');
     uint256 proposalId;
