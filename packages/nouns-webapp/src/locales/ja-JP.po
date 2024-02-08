@@ -1913,7 +1913,7 @@ msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委�
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr "委任すると、あなたのアカウントの投票権は {0} {1} 未満になります。また、作成した未実行の提案は誰でもキャンセルできるようになります。"
+msgstr "委任すると、あなたのアカウントの投票権は {0} {1} 未満になります。また、作成した未実行の提案は、委任後もキャンセルできます。"
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
