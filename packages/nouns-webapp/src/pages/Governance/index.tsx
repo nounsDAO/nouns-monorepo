@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import { treasuryString } from "../../utils/numberUtils";
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -63,7 +64,7 @@ const GovernancePage = () => {
                   <h1 className={classes.ethSymbol}>Ξ</h1>
                   <h1>
                     {treasuryBalance &&
-                      i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)))}
+                        treasuryString(Number(utils.formatEther(treasuryBalance)))}
                   </h1>
                 </Col>
                 <Col className={classes.usdTreasuryAmt}>

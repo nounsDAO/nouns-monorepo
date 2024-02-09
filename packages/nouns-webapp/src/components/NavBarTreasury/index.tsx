@@ -3,9 +3,11 @@ import { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import { treasuryString } from "../../utils/numberUtils";
+import { BigNumberish, utils } from "ethers";
 
 interface NavBarTreasuryProps {
-  treasuryBalance: string;
+  treasuryBalance: BigNumberish;
   treasuryStyle: NavBarButtonStyle;
 }
 
@@ -43,7 +45,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
           >
             <Trans>Treasury</Trans>
           </div>
-          <div className={classes.treasuryBalance}>Ξ {i18n.number(Number(treasuryBalance))}</div>
+          <div className={classes.treasuryBalance}>Ξ {treasuryString(Number(utils.formatEther(treasuryBalance)))}</div>
         </div>
       </div>
     </div>
