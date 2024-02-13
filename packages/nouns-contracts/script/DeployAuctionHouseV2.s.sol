@@ -5,8 +5,9 @@ import 'forge-std/Script.sol';
 import { NounsAuctionHouse } from '../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseV2 } from '../contracts/NounsAuctionHouseV2.sol';
 import { NounsAuctionHousePreV2Migration } from '../contracts/NounsAuctionHousePreV2Migration.sol';
+import { OptimizedScript } from './OptimizedScript.s.sol';
 
-contract DeployAuctionHouseV2 is Script {
+contract DeployAuctionHouseV2 is OptimizedScript {
     NounsAuctionHouse public immutable auctionV1;
 
     constructor(address _auctionHouseProxy) {
@@ -14,6 +15,7 @@ contract DeployAuctionHouseV2 is Script {
     }
 
     function run() public returns (NounsAuctionHouseV2 newLogic, NounsAuctionHousePreV2Migration migratorLogic) {
+        requireDefaultProfile();
         uint256 deployerKey = vm.envUint('DEPLOYER_PRIVATE_KEY');
 
         vm.startBroadcast(deployerKey);
