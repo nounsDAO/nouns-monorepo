@@ -17,6 +17,8 @@ pragma solidity ^0.8.19;
 
 interface INounsClientTokenTypes {
     struct ClientMetadata {
+        bool approved;
+        uint256 balance;
         string name;
         string description;
     }

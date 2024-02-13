@@ -70,6 +70,9 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         clientId2 = rewards.registerClient('client2', 'client2 description');
 
         erc20Mock.mint(address(rewards), 100 ether);
+
+        vm.prank(rewards.owner());
+        rewards.setClientApproval(clientId1, true);
     }
 
     function _setUpDAO() internal {
