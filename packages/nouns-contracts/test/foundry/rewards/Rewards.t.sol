@@ -151,6 +151,7 @@ contract AuctionRewards is RewardsBaseTest {
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0);
     }
 
     function test_withdrawClientBalance_revertsIfClientNotApproved() public {

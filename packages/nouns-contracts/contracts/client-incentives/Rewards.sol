@@ -195,8 +195,6 @@ contract Rewards is
         ClientMetadata storage md = $._clientMetadata[tokenId];
         md.name = name;
         md.description = description;
-        // Increase the balance by one wei so that the slot is non zero when increased in the future
-        md.balance += 1;
 
         emit ClientRegistered(tokenId, name, description);
 
@@ -264,7 +262,7 @@ contract Rewards is
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
             uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
-            $._clientMetadata[cb.clientId].balance += reward;
+            $._clientMetadata[cb.clientId].rewarded += reward;
 
             emit ClientRewarded(cb.clientId, reward);
         }
@@ -424,7 +422,7 @@ contract Rewards is
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
-            $._clientMetadata[cb.clientId].balance += cb.balance;
+            $._clientMetadata[cb.clientId].rewarded += cb.balance;
             emit ClientRewarded(cb.clientId, cb.balance);
         }
 
@@ -434,11 +432,9 @@ contract Rewards is
     /**
      * @notice Withdraws the balance of a client
      * @dev The caller must be the owner of the NFT with id `clientId`
-     * @dev The maximum value of `amount` is one wei less than in `_clientBalances[clientId]`.
-     * This in order to leave 1 wei in storage and avoid expensive gas writes in future balance increases.
      * @param clientId Which client balance to withdraw
      * @param to the address to withdraw to
-     * @param amount amount of withdraw
+     * @param amount amount to withdraw
      */
     function withdrawClientBalance(uint32 clientId, address to, uint256 amount) public whenNotPaused {
         RewardsStorage storage $ = _getRewardsStorage();
@@ -447,10 +443,10 @@ contract Rewards is
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
         require(md.approved, 'client not approved');
 
-        uint256 balanceCached = md.balance;
-        require(amount < balanceCached, 'amount too large');
+        uint256 withdrawnCache = md.withdrawn;
+        require(amount <= md.rewarded - withdrawnCache, 'amount too large');
 
-        md.balance = balanceCached - amount;
+        md.withdrawn = withdrawnCache + amount;
 
         emit ClientBalanceWithdrawal(clientId, amount, to);
 
@@ -465,17 +461,11 @@ contract Rewards is
 
     /**
      * @notice Returns the withdrawable balance of client with id `clientId`
-     * @dev accounts for the extra wei used for gas optimization
      */
     function clientBalance(uint32 clientId) public view returns (uint256) {
         RewardsStorage storage $ = _getRewardsStorage();
-
-        uint256 balance = $._clientMetadata[clientId].balance;
-        if (balance > 0) {
-            // accounting for the extra 1 wei added to the balance for gas optimizations
-            balance--;
-        }
-        return balance;
+        ClientMetadata storage md = $._clientMetadata[clientId];
+        return md.rewarded - md.withdrawn;
     }
 
     /**
@@ -571,15 +561,6 @@ contract Rewards is
     function admin() public view returns (address) {
         RewardsStorage storage $ = _getRewardsStorage();
         return $.admin;
-    }
-
-    /**
-     * @notice Returns the raw value from _clientBalances mapping. Usually you want to use `clientBalance`.
-     * @dev This includes the balance including the initial 1 wei added for gas optimization.
-     */
-    function _clientBalances(uint32 clientId) public view returns (uint256) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $._clientMetadata[clientId].balance;
     }
 
     /**

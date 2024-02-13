@@ -480,16 +480,6 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
 
-    function test_withdrawingEntireBalanceLeaves1Wei() public {
-        uint256 balance = rewards.clientBalance(clientId1);
-
-        vm.prank(client1Wallet);
-        rewards.withdrawClientBalance(clientId1, client1Wallet, balance);
-
-        assertEq(rewards.clientBalance(clientId1), 0);
-        assertEq(rewards._clientBalances(clientId1), 1);
-    }
-
     function test_withdrawingMoreThanBalanceReverts() public {
         uint256 balance = rewards.clientBalance(clientId1);
         vm.prank(client1Wallet);
