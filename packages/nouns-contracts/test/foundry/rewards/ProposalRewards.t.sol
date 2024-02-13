@@ -481,14 +481,14 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
     }
 
     function test_withdrawingMoreThanBalanceReverts() public {
-        uint256 balance = rewards.clientBalance(clientId1);
+        uint104 balance = rewards.clientBalance(clientId1);
         vm.prank(client1Wallet);
         vm.expectRevert('amount too large');
         rewards.withdrawClientBalance(clientId1, client1Wallet, balance + 1);
     }
 
     function test_withdrawingUpdatesBalance() public {
-        uint256 balance = rewards.clientBalance(clientId1);
+        uint104 balance = rewards.clientBalance(clientId1);
 
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(clientId1, client1Wallet, balance);

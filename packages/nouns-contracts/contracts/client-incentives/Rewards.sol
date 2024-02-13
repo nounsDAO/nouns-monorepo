@@ -262,7 +262,7 @@ contract Rewards is
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
             uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
-            $._clientMetadata[cb.clientId].rewarded += reward;
+            $._clientMetadata[cb.clientId].rewarded += toUint104(reward);
 
             emit ClientRewarded(cb.clientId, reward);
         }
@@ -422,7 +422,7 @@ contract Rewards is
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
-            $._clientMetadata[cb.clientId].rewarded += cb.balance;
+            $._clientMetadata[cb.clientId].rewarded += toUint104(cb.balance);
             emit ClientRewarded(cb.clientId, cb.balance);
         }
 
@@ -436,14 +436,14 @@ contract Rewards is
      * @param to the address to withdraw to
      * @param amount amount to withdraw
      */
-    function withdrawClientBalance(uint32 clientId, address to, uint256 amount) public whenNotPaused {
+    function withdrawClientBalance(uint32 clientId, address to, uint104 amount) public whenNotPaused {
         RewardsStorage storage $ = _getRewardsStorage();
         ClientMetadata storage md = $._clientMetadata[clientId];
 
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
         require(md.approved, 'client not approved');
 
-        uint256 withdrawnCache = md.withdrawn;
+        uint104 withdrawnCache = md.withdrawn;
         require(amount <= md.rewarded - withdrawnCache, 'amount too large');
 
         md.withdrawn = withdrawnCache + amount;
@@ -462,7 +462,7 @@ contract Rewards is
     /**
      * @notice Returns the withdrawable balance of client with id `clientId`
      */
-    function clientBalance(uint32 clientId) public view returns (uint256) {
+    function clientBalance(uint32 clientId) public view returns (uint104) {
         RewardsStorage storage $ = _getRewardsStorage();
         ClientMetadata storage md = $._clientMetadata[clientId];
         return md.rewarded - md.withdrawn;
@@ -691,6 +691,11 @@ contract Rewards is
             prevValue = nextValue;
         }
         return true;
+    }
+
+    function toUint104(uint256 value) internal pure returns (uint104) {
+        require(value <= type(uint104).max, "value doesn't fit in 104 bits");
+        return uint104(value);
     }
 
     /**
