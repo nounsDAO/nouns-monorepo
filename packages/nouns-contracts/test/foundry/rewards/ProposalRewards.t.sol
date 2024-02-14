@@ -70,6 +70,9 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         clientId2 = rewards.registerClient('client2', 'client2 description');
 
         erc20Mock.mint(address(rewards), 100 ether);
+
+        vm.prank(rewards.owner());
+        rewards.setClientApproval(clientId1, true);
     }
 
     function _setUpDAO() internal {
@@ -477,25 +480,15 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
     }
 
-    function test_withdrawingEntireBalanceLeaves1Wei() public {
-        uint256 balance = rewards.clientBalance(clientId1);
-
-        vm.prank(client1Wallet);
-        rewards.withdrawClientBalance(clientId1, client1Wallet, balance);
-
-        assertEq(rewards.clientBalance(clientId1), 0);
-        assertEq(rewards._clientBalances(clientId1), 1);
-    }
-
     function test_withdrawingMoreThanBalanceReverts() public {
-        uint256 balance = rewards.clientBalance(clientId1);
+        uint96 balance = rewards.clientBalance(clientId1);
         vm.prank(client1Wallet);
         vm.expectRevert('amount too large');
         rewards.withdrawClientBalance(clientId1, client1Wallet, balance + 1);
     }
 
     function test_withdrawingUpdatesBalance() public {
-        uint256 balance = rewards.clientBalance(clientId1);
+        uint96 balance = rewards.clientBalance(clientId1);
 
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(clientId1, client1Wallet, balance);

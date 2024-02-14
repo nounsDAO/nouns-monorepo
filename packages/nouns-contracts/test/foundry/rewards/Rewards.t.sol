@@ -9,6 +9,7 @@ import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
+import { INounsClientTokenTypes } from '../../../contracts/client-incentives/INounsClientTokenTypes.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
     Rewards rewards;
@@ -88,6 +89,9 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
         CLIENT_ID2 = rewards.registerClient('client2', 'client2 description');
 
         erc20Mock.mint(address(rewards), 100 ether);
+
+        vm.prank(rewards.owner());
+        rewards.setClientApproval(CLIENT_ID, true);
     }
 
     function _mintTo(address to) internal returns (uint256 tokenID) {
@@ -147,6 +151,21 @@ contract AuctionRewards is RewardsBaseTest {
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
         assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0);
+    }
+
+    function test_withdrawClientBalance_revertsIfClientNotApproved() public {
+        vm.prank(rewards.owner());
+        rewards.setClientApproval(CLIENT_ID, false);
+
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
+
+        vm.expectRevert('client not approved');
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
     }
 
     function test_emitsClientRewardedEvent() public {
@@ -403,5 +422,122 @@ contract OwnerFunctionsTest is RewardsBaseTest {
         rewards.withdrawToken(token, recipient, 1);
 
         assertEq(rewards.ethToken().balanceOf(recipient), 1);
+    }
+
+    function test_setClientApproval_revertsForNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        vm.prank(makeAddr('non owner'));
+        rewards.setClientApproval(1, true);
+    }
+
+    function test_setClientApproval_worksForOwner() public {
+        assertTrue(rewards.clientMetadata(1).approved == false);
+
+        vm.expectEmit(true, true, true, true);
+        emit Rewards.ClientApprovalSet(1, true);
+
+        vm.prank(rewards.owner());
+        rewards.setClientApproval(1, true);
+
+        assertTrue(rewards.clientMetadata(1).approved);
+    }
+}
+
+contract NFTFunctionsTest is RewardsBaseTest {
+    function setUp() public override {
+        dao = _deployDAOV3WithParams(24 hours);
+        nounsToken = NounsToken(address(dao.nouns()));
+        minter = nounsToken.minter();
+
+        auctionHouse = INounsAuctionHouseV2(minter);
+        vm.prank(address(dao.timelock()));
+        auctionHouse.unpause();
+
+        rewards = RewardsDeployer.deployRewards(
+            dao,
+            admin,
+            minter,
+            address(erc20Mock),
+            uint32(dao.proposalCount()) + 1,
+            1,
+            auctionHouse.auction().nounId,
+            Rewards.RewardParams({
+                minimumRewardPeriod: 2 weeks,
+                numProposalsEnoughForReward: 30,
+                proposalRewardBps: 100,
+                votingRewardBps: 50,
+                auctionRewardBps: 100,
+                proposalEligibilityQuorumBps: 1000,
+                minimumAuctionsBetweenUpdates: 0
+            })
+        );
+    }
+
+    function test_registerClient_firstIdIsOne() public {
+        assertEq(rewards.registerClient('name', 'description'), 1);
+        assertEq(rewards.registerClient('name', 'description'), 2);
+    }
+
+    function test_registerClient_storesMetadata() public {
+        uint32 tokenId = rewards.registerClient('Camp', 'https://nouns.camp');
+        INounsClientTokenTypes.ClientMetadata memory md = rewards.clientMetadata(tokenId);
+
+        assertEq(md.name, 'Camp');
+        assertEq(md.description, 'https://nouns.camp');
+
+        tokenId = rewards.registerClient('Agora', 'https://nounsagora.com');
+        md = rewards.clientMetadata(tokenId);
+
+        assertEq(md.name, 'Agora');
+        assertEq(md.description, 'https://nounsagora.com');
+    }
+
+    function test_registerClient_emitsEvent() public {
+        vm.expectEmit();
+        emit Rewards.ClientRegistered(1, 'name', 'description');
+        rewards.registerClient('name', 'description');
+    }
+
+    function test_updateClientMetadata_revertsForNonTokenOwner() public {
+        uint32 tokenId = rewards.registerClient('name', 'description');
+
+        address nonOwner = makeAddr('nonOwner');
+        vm.expectRevert('NounsClientToken: not owner');
+        vm.prank(nonOwner);
+        rewards.updateClientMetadata(tokenId, 'newName', 'newDescription');
+    }
+
+    function test_updateClientMetadata_worksForTokenOwner() public {
+        uint32 tokenId = rewards.registerClient('name', 'description');
+
+        rewards.updateClientMetadata(tokenId, 'newName', 'newDescription');
+        INounsClientTokenTypes.ClientMetadata memory md = rewards.clientMetadata(tokenId);
+
+        assertEq(md.name, 'newName');
+        assertEq(md.description, 'newDescription');
+    }
+
+    function test_updateClientMetadata_emitsEvent() public {
+        uint32 tokenId = rewards.registerClient('name', 'description');
+
+        vm.expectEmit();
+        emit Rewards.ClientUpdated(tokenId, 'newName', 'newDescription');
+        rewards.updateClientMetadata(tokenId, 'newName', 'newDescription');
+    }
+
+    function test_setDescriptor_revertsForNonOwner() public {
+        address nonOwner = makeAddr('nonOwner');
+        vm.expectRevert('Ownable: caller is not the owner');
+        vm.prank(nonOwner);
+        rewards.setDescriptor(address(0));
+    }
+
+    function test_setDescriptor_worksForOwner() public {
+        address newDescriptor = makeAddr('newDescriptor');
+
+        vm.prank(rewards.owner());
+        rewards.setDescriptor(newDescriptor);
+
+        assertEq(rewards.descriptor(), newDescriptor);
     }
 }

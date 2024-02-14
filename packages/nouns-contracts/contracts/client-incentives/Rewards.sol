@@ -20,15 +20,25 @@ pragma solidity ^0.8.19;
 import { INounsDAOLogic } from '../interfaces/INounsDAOLogic.sol';
 import { INounsAuctionHouseV2 } from '../interfaces/INounsAuctionHouseV2.sol';
 import { NounsDAOTypes } from '../governance/NounsDAOInterfaces.sol';
-import { NounsClientToken } from './NounsClientToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { InMemoryMapping } from '../libs/InMemoryMapping.sol';
 import { GasRefund } from '../libs/GasRefund.sol';
+import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
+import { INounsClientTokenTypes } from './INounsClientTokenTypes.sol';
+import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
+import { ERC721Upgradeable } from '@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol';
+import { SafeCast } from '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
-contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
+contract Rewards is
+    UUPSUpgradeable,
+    PausableUpgradeable,
+    OwnableUpgradeable,
+    ERC721Upgradeable,
+    INounsClientTokenTypes
+{
     using SafeERC20 for IERC20;
     using InMemoryMapping for InMemoryMapping.Mapping;
 
@@ -38,6 +48,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    event ClientRegistered(uint32 indexed clientId, string name, string description);
+    event ClientUpdated(uint32 indexed clientId, string name, string description);
     event ClientRewarded(uint32 indexed clientId, uint256 amount);
     event ClientBalanceWithdrawal(uint32 indexed clientId, uint256 amount, address to);
     event AuctionRewardsUpdated(uint256 firstAuctionId, uint256 lastAuctionId);
@@ -48,6 +60,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint256 rewardPerProposal,
         uint256 rewardPerVote
     );
+    event ClientApprovalSet(uint32 indexed clientId, bool approved);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -86,6 +99,8 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
     /// @custom:storage-location erc7201:nouns.rewards
     struct RewardsStorage {
+        /// @dev The next client token id to be minted
+        uint32 nextTokenId;
         /// @dev Used for auction rewards state
         uint32 nextAuctionIdToReward;
         /// @dev Used for proposal rewards state
@@ -100,8 +115,10 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         IERC20 ethToken;
         /// @dev admin account able to pause/unpause the contract in case of a quick response is needed
         address admin;
-        /// @dev tracking rewards balances for clients
-        mapping(uint32 clientId => uint256 balance) _clientBalances;
+        /// @dev client metadata per clientId, including rewards balances, name, description
+        mapping(uint32 clientId => ClientMetadata) _clientMetadata;
+        /// @dev The client NFT descriptor
+        address descriptor;
     }
 
     /// @dev This is a ERC-7201 storage location, calculated using:
@@ -140,19 +157,23 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint32 nextAuctionIdToReward_,
         uint32 nextProposalRewardFirstAuctionId_,
         RewardParams memory rewardParams,
-        address descriptor
+        address descriptor_
     ) public initializer {
-        RewardsStorage storage $ = _getRewardsStorage();
-
-        super.initialize(owner, descriptor);
         __Pausable_init_unchained();
+        __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
+
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.nextTokenId = 1;
+        $.lastProposalRewardsUpdate = uint40(block.timestamp);
+
+        _transferOwnership(owner);
         $.admin = admin_;
         $.ethToken = IERC20(ethToken_);
         $.nextProposalIdToReward = nextProposalIdToReward_;
         $.nextAuctionIdToReward = nextAuctionIdToReward_;
         $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         $.params = rewardParams;
-        $.lastProposalRewardsUpdate = uint40(block.timestamp);
+        $.descriptor = descriptor_;
     }
 
     /**
@@ -165,18 +186,38 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      * @notice Register a client, mints an NFT and assigns a clientId
      * @return uint32 the newly assigned clientId
      */
-    function registerClient(
-        string calldata name,
-        string calldata description
-    ) public override whenNotPaused returns (uint32) {
+    function registerClient(string calldata name, string calldata description) external whenNotPaused returns (uint32) {
         RewardsStorage storage $ = _getRewardsStorage();
 
-        uint32 tokenId = super.registerClient(name, description);
+        uint32 tokenId = $.nextTokenId;
+        $.nextTokenId = tokenId + 1;
+        _mint(msg.sender, tokenId);
 
-        // Increase the balance by one wei so that the slot is non zero when increased in the future
-        $._clientBalances[tokenId] += 1;
+        ClientMetadata storage md = $._clientMetadata[tokenId];
+        md.name = name;
+        md.description = description;
+
+        emit ClientRegistered(tokenId, name, description);
 
         return tokenId;
+    }
+
+    /**
+     * @notice Update the metadata of a client
+     * @dev Only the owner of the client token can update the metadata.
+     * @param tokenId The token ID of the client
+     * @param name The new name of the client
+     * @param description The new description of the client
+     */
+    function updateClientMetadata(uint32 tokenId, string calldata name, string calldata description) external {
+        RewardsStorage storage $ = _getRewardsStorage();
+
+        require(ownerOf(tokenId) == msg.sender, 'NounsClientToken: not owner');
+        ClientMetadata storage md = $._clientMetadata[tokenId];
+        md.name = name;
+        md.description = description;
+
+        emit ClientUpdated(tokenId, name, description);
     }
 
     /**
@@ -222,7 +263,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
             uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
-            $._clientBalances[cb.clientId] += reward;
+            $._clientMetadata[cb.clientId].rewarded += SafeCast.toUint96(reward);
 
             emit ClientRewarded(cb.clientId, reward);
         }
@@ -382,7 +423,7 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
             InMemoryMapping.ClientBalance memory cb = m.getValue(i);
-            $._clientBalances[cb.clientId] += cb.balance;
+            $._clientMetadata[cb.clientId].rewarded += SafeCast.toUint96(cb.balance);
             emit ClientRewarded(cb.clientId, cb.balance);
         }
 
@@ -392,19 +433,21 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     /**
      * @notice Withdraws the balance of a client
      * @dev The caller must be the owner of the NFT with id `clientId`
-     * @dev The maximum value of `amount` is one wei less than in `_clientBalances[clientId]`.
-     * This in order to leave 1 wei in storage and avoid expensive gas writes in future balance increases.
      * @param clientId Which client balance to withdraw
      * @param to the address to withdraw to
-     * @param amount amount of withdraw
+     * @param amount amount to withdraw
      */
-    function withdrawClientBalance(uint32 clientId, address to, uint256 amount) public whenNotPaused {
+    function withdrawClientBalance(uint32 clientId, address to, uint96 amount) public whenNotPaused {
         RewardsStorage storage $ = _getRewardsStorage();
+        ClientMetadata storage md = $._clientMetadata[clientId];
 
         require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
-        require(amount < $._clientBalances[clientId], 'amount too large');
+        require(md.approved, 'client not approved');
 
-        $._clientBalances[clientId] -= amount;
+        uint96 withdrawnCache = md.withdrawn;
+        require(amount <= md.rewarded - withdrawnCache, 'amount too large');
+
+        md.withdrawn = withdrawnCache + amount;
 
         emit ClientBalanceWithdrawal(clientId, amount, to);
 
@@ -419,17 +462,11 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
 
     /**
      * @notice Returns the withdrawable balance of client with id `clientId`
-     * @dev accounts for the extra wei used for gas optimization
      */
-    function clientBalance(uint32 clientId) public view returns (uint256) {
+    function clientBalance(uint32 clientId) public view returns (uint96) {
         RewardsStorage storage $ = _getRewardsStorage();
-
-        uint256 balance = $._clientBalances[clientId];
-        if (balance > 0) {
-            // accounting for the extra 1 wei added to the balance for gas optimizations
-            balance--;
-        }
-        return balance;
+        ClientMetadata storage md = $._clientMetadata[clientId];
+        return md.rewarded - md.withdrawn;
     }
 
     /**
@@ -528,12 +565,35 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
     }
 
     /**
-     * @notice Returns the raw value from _clientBalances mapping. Usually you want to use `clientBalance`.
-     * @dev This includes the balance including the initial 1 wei added for gas optimization.
+     * @notice Get the metadata of a client
      */
-    function _clientBalances(uint32 clientId) public view returns (uint256) {
+    function clientMetadata(uint32 tokenId) public view returns (ClientMetadata memory) {
         RewardsStorage storage $ = _getRewardsStorage();
-        return $._clientBalances[clientId];
+        return $._clientMetadata[tokenId];
+    }
+
+    /**
+     * @notice Get the URI of a client token
+     */
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return INounsClientTokenDescriptor($.descriptor).tokenURI(tokenId, $._clientMetadata[uint32(tokenId)]);
+    }
+
+    /**
+     * @notice Get the descriptor for the client token
+     */
+    function descriptor() public view returns (address) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return $.descriptor;
+    }
+
+    /**
+     * @notice Get the next token ID
+     */
+    function nextTokenId() public view returns (uint32) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return $.nextTokenId;
     }
 
     /**
@@ -541,6 +601,18 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      *   ADMIN
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    /**
+     * @notice Set whether the client is approved to withdraw their reward balance.
+     * Anyone can mint a client NFT and start earning rewards, but only approved clients can withdraw.
+     * This way the DAO helps mitigate abuse.
+     * @dev Only `owner` can call this function
+     */
+    function setClientApproval(uint32 clientId, bool approved) public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $._clientMetadata[clientId].approved = approved;
+        emit ClientApprovalSet(clientId, approved);
+    }
 
     /**
      * @dev Only `owner` can call this function
@@ -585,6 +657,14 @@ contract Rewards is NounsClientToken, UUPSUpgradeable, PausableUpgradeable {
      */
     function unpause() public onlyOwnerOrAdmin {
         _unpause();
+    }
+
+    /**
+     * @notice Set the descriptor for the client token
+     */
+    function setDescriptor(address descriptor_) public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.descriptor = descriptor_;
     }
 
     /**
