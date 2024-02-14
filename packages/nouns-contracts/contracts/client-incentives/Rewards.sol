@@ -189,7 +189,7 @@ contract Rewards is
         RewardsStorage storage $ = _getRewardsStorage();
 
         uint32 tokenId = $.nextTokenId;
-        $.nextTokenId++;
+        $.nextTokenId = tokenId + 1;
         _mint(msg.sender, tokenId);
 
         ClientMetadata storage md = $._clientMetadata[tokenId];
