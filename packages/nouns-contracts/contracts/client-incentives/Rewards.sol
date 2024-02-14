@@ -602,6 +602,9 @@ contract Rewards is
      */
 
     /**
+     * @notice Set whether the client is approved to withdraw their reward balance.
+     * Anyone can mint a client NFT and start earning rewards, but only approved clients can withdraw.
+     * This way the DAO helps mitigate abuse.
      * @dev Only `owner` can call this function
      */
     function setClientApproval(uint32 clientId, bool approved) public onlyOwner {
