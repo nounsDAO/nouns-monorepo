@@ -2,12 +2,12 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Script.sol';
-import { NounsAuctionHouse } from '../contracts/NounsAuctionHouse.sol';
-import { NounsAuctionHouseV2 } from '../contracts/NounsAuctionHouseV2.sol';
-import { NounsAuctionHousePreV2Migration } from '../contracts/NounsAuctionHousePreV2Migration.sol';
-import { OptimizedScript } from './OptimizedScript.s.sol';
+import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
+import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHousePreV2Migration.sol';
+import { OptimizedScript } from '../OptimizedScript.s.sol';
 
-contract DeployAuctionHouseV2 is OptimizedScript {
+abstract contract DeployAuctionHouseV2Base is OptimizedScript {
     NounsAuctionHouse public immutable auctionV1;
 
     constructor(address _auctionHouseProxy) {
