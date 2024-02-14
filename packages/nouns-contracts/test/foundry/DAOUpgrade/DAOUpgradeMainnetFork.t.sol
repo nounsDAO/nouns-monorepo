@@ -8,6 +8,7 @@ import { ProposeDAOUpgradeMainnet } from '../../../script/DAOUpgrade/ProposeDAOU
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOData } from '../../../contracts/governance/data/NounsDAOData.sol';
 
 abstract contract DAOUpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -15,10 +16,16 @@ abstract contract DAOUpgradeMainnetForkBaseTest is Test {
     NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
     INounsDAOLogic public constant NOUNS_DAO_PROXY_MAINNET = INounsDAOLogic(0x6f3E6272A167e8AcCb32072d08E0957F9c79223d);
     address public constant CURRENT_DAO_IMPL = 0xe3caa436461DBa00CFBE1749148C9fa7FA1F5344;
+    address public constant NOUNS_DAO_DATA_PROXY = 0xf790A5f59678dd733fb3De93493A91f472ca1365;
 
     address proposerAddr = vm.addr(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
     address origin = makeAddr('origin');
     address newLogic;
+
+    address[] targets;
+    uint256[] values;
+    string[] signatures;
+    bytes[] calldatas;
 
     function setUp() public virtual {
         vm.createSelectFork(vm.envString('RPC_MAINNET'), 19127187);
@@ -112,17 +119,17 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
     }
 
     function test_givenRecentBitPacking_creationBlockAndProposalIdValuesAreLegit() public {
-        NounsDAOTypes.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(493);
+        NounsDAOTypes.ProposalCondensedV3 memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(493);
 
         assertEq(prop.id, 493);
         assertEq(prop.creationBlock, 19093670);
-        assertEq(prop.creationTimestamp, 0);
+        assertEq(getProposalDataForRewards(493).creationTimestamp, 0);
 
         prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(474);
 
         assertEq(prop.id, 474);
         assertEq(prop.creationBlock, 18836862);
-        assertEq(prop.creationTimestamp, 0);
+        assertEq(getProposalDataForRewards(474).creationTimestamp, 0);
     }
 
     function test_creationTimestampAndBlock_setOnNewProposals() public {
@@ -130,9 +137,9 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         assertTrue(block.number > 0);
         uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '');
 
-        NounsDAOTypes.ProposalCondensed memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
+        NounsDAOTypes.ProposalCondensedV3 memory prop = NOUNS_DAO_PROXY_MAINNET.proposalsV3(proposalId);
 
-        assertEq(prop.creationTimestamp, block.timestamp);
+        assertEq(getProposalDataForRewards(proposalId).creationTimestamp, block.timestamp);
         assertEq(prop.creationBlock, block.number);
     }
 
@@ -168,12 +175,12 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         uint32 expectedClientId = 42;
         uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '', expectedClientId);
 
-        NounsDAOTypes.ProposalForRewards[] memory propsData = NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(
-            proposalId,
-            proposalId,
-            new uint32[](0)
-        );
-        assertEq(expectedClientId, propsData[0].clientId);
+        NounsDAOTypes.ProposalForRewards memory propsData = getProposalDataForRewards(proposalId);
+        assertEq(expectedClientId, propsData.clientId);
+    }
+
+    function getProposalDataForRewards(uint256 proposalId) internal returns (NounsDAOTypes.ProposalForRewards memory) {
+        return NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(proposalId, proposalId, new uint32[](0))[0];
     }
 
     function test_clientId_savedOnVotes() public {
@@ -204,5 +211,19 @@ contract DAOUpgradeMainnetForkTest is DAOUpgradeMainnetForkBaseTest {
         assertEq(voteData[0].votes, nouns.getCurrentVotes(proposerAddr));
         assertEq(voteData[1].txs, 1);
         assertEq(voteData[1].votes, nouns.getCurrentVotes(WHALE));
+    }
+
+    function test_nounsCandidatesUsingProposalsV3GetterWorks() public {
+        NounsDAOData d = NounsDAOData(NOUNS_DAO_DATA_PROXY);
+        address[] memory targets = new address[](1);
+        targets[0] = address(0);
+        uint256[] memory values = new uint256[](1);
+        values[0] = 0;
+        string[] memory signatures = new string[](1);
+        signatures[0] = '';
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = bytes('');
+        vm.expectRevert(NounsDAOData.ProposalToUpdateMustBeUpdatable.selector);
+        d.createProposalCandidate{ value: 0.1 ether }(targets, values, signatures, calldatas, 'desc', 'slug', 400);
     }
 }

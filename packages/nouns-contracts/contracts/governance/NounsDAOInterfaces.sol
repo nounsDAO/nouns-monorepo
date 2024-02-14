@@ -524,7 +524,7 @@ interface NounsDAOTypes {
         ClientVoteData[] voteData;
     }
 
-    struct ProposalCondensed {
+    struct ProposalCondensedV3 {
         /// @notice Unique id for looking up a proposal
         uint256 id;
         /// @notice Creator of the proposal
@@ -555,8 +555,6 @@ interface NounsDAOTypes {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-        /// @notice The timestamp of the block at which this proposal was created
-        uint256 creationTimestamp;
         /// @notice The signers of a proposal, when using proposeBySigs
         address[] signers;
         /// @notice The last block which allows updating a proposal's description and transactions

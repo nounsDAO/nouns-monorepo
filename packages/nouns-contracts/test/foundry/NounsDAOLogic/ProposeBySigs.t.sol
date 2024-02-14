@@ -456,7 +456,7 @@ contract ProposeBySigsTest is NounsDAOLogicBaseTest {
             'description'
         );
 
-        NounsDAOTypes.ProposalCondensed memory proposal = dao.proposalsV3(proposalId);
+        NounsDAOTypes.ProposalCondensedV3 memory proposal = dao.proposalsV3(proposalId);
         assertEq(proposal.signers, expectedSigners);
     }
 
@@ -498,7 +498,7 @@ contract ProposeBySigsTest is NounsDAOLogicBaseTest {
             'description'
         );
 
-        NounsDAOTypes.ProposalCondensed memory proposal = dao.proposalsV3(proposalId);
+        NounsDAOTypes.ProposalCondensedV3 memory proposal = dao.proposalsV3(proposalId);
         assertEq(proposal.signers, expectedSigners);
     }
 

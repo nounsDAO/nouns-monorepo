@@ -259,7 +259,7 @@ interface INounsDAOLogic {
      * @return A `ProposalCondensed` struct with the proposal data, not backwards compatible as it contains additional values
      * like `objectionPeriodEndBlock` and `signers`
      */
-    function proposalsV3(uint256 proposalId) external view returns (NounsDAOTypes.ProposalCondensed memory);
+    function proposalsV3(uint256 proposalId) external view returns (NounsDAOTypes.ProposalCondensedV3 memory);
 
     function proposalDataForRewards(
         uint256 firstProposalId,

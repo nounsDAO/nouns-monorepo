@@ -690,10 +690,10 @@ library NounsDAOProposals {
     function proposalsV3(
         NounsDAOTypes.Storage storage ds,
         uint256 proposalId
-    ) external view returns (NounsDAOTypes.ProposalCondensed memory) {
+    ) external view returns (NounsDAOTypes.ProposalCondensedV3 memory) {
         NounsDAOTypes.Proposal storage proposal = ds._proposals[proposalId];
         return
-            NounsDAOTypes.ProposalCondensed({
+            NounsDAOTypes.ProposalCondensedV3({
                 id: proposal.id,
                 proposer: proposal.proposer,
                 proposalThreshold: proposal.proposalThreshold,
@@ -709,7 +709,6 @@ library NounsDAOProposals {
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
                 creationBlock: proposal.creationBlock,
-                creationTimestamp: proposal.creationTimestamp,
                 signers: proposal.signers,
                 updatePeriodEndBlock: proposal.updatePeriodEndBlock,
                 objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
