@@ -228,7 +228,7 @@ contract Rewards is
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
 
-        bool sawNonZeroClientId = false;
+        bool sawValidClientId = false;
         uint256 nextAuctionIdToReward_ = $.nextAuctionIdToReward;
         require(
             lastNounId >= nextAuctionIdToReward_ + $.params.minimumAuctionsBetweenUpdates,
@@ -244,12 +244,13 @@ contract Rewards is
         INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
         require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId() - 1 });
+        uint32 maxClientId = nextTokenId() - 1;
+        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: maxClientId });
 
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
-            if (settlement.clientId > 0) {
-                sawNonZeroClientId = true;
+            if (settlement.clientId != 0 && settlement.clientId <= maxClientId) {
+                sawValidClientId = true;
                 m.inc(settlement.clientId, settlement.amount);
             }
         }
@@ -266,7 +267,7 @@ contract Rewards is
 
         emit AuctionRewardsUpdated(nextAuctionIdToReward_, lastNounId);
 
-        if (sawNonZeroClientId) {
+        if (sawValidClientId) {
             // refund gas only if we're actually rewarding a client, not just moving the pointer
             GasRefund.refundGas($.ethToken, startGas);
         }
@@ -274,6 +275,7 @@ contract Rewards is
 
     /// @dev struct used to avoid stack-too-deep errors
     struct Temp {
+        uint32 maxClientId;
         uint256 numEligibleVotes;
         uint256 numEligibleProposals;
         uint256 rewardPerProposal;
@@ -303,6 +305,7 @@ contract Rewards is
 
         Temp memory t;
 
+        t.maxClientId = nextTokenId() - 1;
         t.nextProposalIdToReward = $.nextProposalIdToReward;
 
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
@@ -388,14 +391,15 @@ contract Rewards is
         //// 3. Reward the clientIds that faciliated voting.
         //// 4. Make sure all voting clientIds were included.
 
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: nextTokenId() - 1 });
+        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: t.maxClientId });
+        bool[] memory didClientIdHaveVotes = new bool[](votingClientIds.length);
 
         for (uint256 i; i < proposals.length; ++i) {
             // skip non eligible deleted proposals
             if (proposals[i].endBlock == 0) continue;
 
             uint32 clientId = proposals[i].clientId;
-            if (clientId != 0) {
+            if (clientId != 0 && clientId <= t.maxClientId) {
                 m.inc(clientId, t.rewardPerProposal);
             }
 
@@ -404,8 +408,8 @@ contract Rewards is
             for (uint256 j; j < votingClientIds.length; ++j) {
                 clientId = votingClientIds[j];
                 uint256 votes = voteData[j].votes;
-                require(votes > 0, 'all clientId must have votes');
-                if (clientId != 0) {
+                didClientIdHaveVotes[j] = didClientIdHaveVotes[j] || votes > 0;
+                if (clientId != 0 && clientId <= t.maxClientId) {
                     m.inc(clientId, votes * t.rewardPerVote);
                 }
                 votesInProposal += votes;
@@ -414,6 +418,10 @@ contract Rewards is
                 votesInProposal == proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes,
                 'not all votes accounted'
             );
+        }
+
+        for (uint256 i = 0; i < didClientIdHaveVotes.length; ++i) {
+            require(didClientIdHaveVotes[i], 'all clientId must have votes');
         }
 
         uint256 numValues = m.numValues();

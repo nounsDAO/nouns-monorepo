@@ -236,7 +236,7 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         uint32 proposalId = proposeVoteAndEndVotingPeriod(clientId1);
 
         settleAuction();
-        votingClientIds = [0, 5];
+        votingClientIds = [0, 2];
         vm.expectRevert('all clientId must have votes');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
@@ -316,6 +316,30 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
 
         assertEq(rewards.clientBalance(clientId1), 0.075 ether); // 15 eth * 1% / 2
         assertEq(rewards.clientBalance(clientId2), 0.075 ether); // 15 eth * 1% / 2
+    }
+
+    function test_givenClientIdAboveTotalSupply_skipsIt() public {
+        uint256 startTimestamp = block.timestamp;
+        uint32 badClientId = rewards.nextTokenId();
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        proposeVoteAndEndVotingPeriod(clientId1);
+        uint32 proposalId = proposeVoteAndEndVotingPeriod(badClientId);
+
+        settleAuction();
+        votingClientIds = [0];
+
+        vm.expectEmit();
+        emit Rewards.ProposalRewardsUpdated(1, 2, 15 ether, 0.075 ether, 4166666666666666);
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalance(clientId1), 0.075 ether); // 15 eth * 1% / 2
     }
 
     function test_doesntRewardIfMinimumPeriodHasntPassed() public {
@@ -558,6 +582,70 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
 
         assertEq(rewards.clientBalance(clientId1), 0.06 ether); // 15 eth * 0.5% * (8/10)
         assertEq(rewards.clientBalance(clientId2), 0.015 ether); // 15 eth * 0.5% * (2/10)
+    }
+
+    function test_givenAnInvalidClientId_skipsIt() public {
+        uint32 badClientId = rewards.nextTokenId();
+
+        // cast 8 votes
+        assertEq(nounsToken.getCurrentVotes(bidder1), 8);
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
+
+        // cast 1 votes
+        assertEq(nounsToken.getCurrentVotes(bidder2), 2);
+        vote(bidder2, proposalId, 1, 'i support', clientId2);
+
+        uint32 proposalId2 = uint32(propose(bidder2, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + 1);
+        vote(bidder1, proposalId2, 1, 'i support', badClientId);
+        vote(bidder2, proposalId2, 1, 'i support', badClientId);
+
+        mineBlocks(VOTING_PERIOD);
+
+        settleAuction();
+        votingClientIds = [clientId1, clientId2, badClientId];
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId1, 0.03 ether);
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId2, 0.0075 ether);
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId2,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalance(clientId1), 0.03 ether); // 15 eth * 0.5% * (8/20)
+        assertEq(rewards.clientBalance(clientId2), 0.0075 ether); // 15 eth * 0.5% * (2/20)
+    }
+
+    function test_givenAProposalWhereNotAllClientContributed_updateRewardsWorks() public {
+        // cast 8 votes
+        assertEq(nounsToken.getCurrentVotes(bidder1), 8);
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
+
+        // cast 1 votes
+        assertEq(nounsToken.getCurrentVotes(bidder2), 2);
+        vote(bidder2, proposalId, 1, 'i support', clientId2);
+
+        uint32 proposalId2 = uint32(propose(bidder2, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + 1);
+        vote(bidder1, proposalId2, 1, 'i support', clientId1);
+        vote(bidder2, proposalId2, 1, 'i support', clientId1);
+
+        mineBlocks(VOTING_PERIOD);
+
+        settleAuction();
+        votingClientIds = [clientId1, clientId2];
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId1, 0.0675 ether);
+        vm.expectEmit();
+        emit Rewards.ClientRewarded(clientId2, 0.0075 ether);
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId2,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalance(clientId1), 0.0675 ether); // 15 eth * 0.5% * (18/20)
+        assertEq(rewards.clientBalance(clientId2), 0.0075 ether); // 15 eth * 0.5% * (2/20)
     }
 
     function test_revertsIfNotAllVotesAreAccounted() public {

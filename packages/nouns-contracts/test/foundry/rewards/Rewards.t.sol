@@ -155,6 +155,22 @@ contract AuctionRewards is RewardsBaseTest {
         assertEq(rewards.clientBalance(CLIENT_ID), 0);
     }
 
+    function test_givenAnInvalidClientId_skipsIt() public {
+        uint32 badClientId = rewards.nextTokenId();
+        nounId = bidAndSettleAuction(1.42 ether, badClientId);
+
+        rewards.updateRewardsForAuctions(nounId);
+
+        assertEq(rewards.clientBalance(badClientId), 0);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
+
+        vm.prank(client1Wallet);
+        rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
+        assertEq(erc20Mock.balanceOf(client1Wallet), 0.05 ether);
+        assertEq(rewards.clientBalance(CLIENT_ID), 0);
+    }
+
     function test_withdrawClientBalance_revertsIfClientNotApproved() public {
         vm.prank(rewards.owner());
         rewards.setClientApproval(CLIENT_ID, false);
