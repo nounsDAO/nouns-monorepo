@@ -132,7 +132,7 @@ contract Rewards is
     }
 
     /**
-     * @dev Throws if called by any account other than the owner or admin.
+     * @dev Reverts if called by any account other than the owner or admin.
      */
     modifier onlyOwnerOrAdmin() {
         RewardsStorage storage $ = _getRewardsStorage();
@@ -140,11 +140,7 @@ contract Rewards is
         _;
     }
 
-    /**
-     * @dev This constructor does not have the `initializer` modifier, since it inherits from `NounsClientToken` which
-     * has the `initializer` modifier on its constructor.
-     */
-    constructor(address nounsDAO_, address auctionHouse_) {
+    constructor(address nounsDAO_, address auctionHouse_) initializer {
         nounsDAO = INounsDAOLogic(nounsDAO_);
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
     }

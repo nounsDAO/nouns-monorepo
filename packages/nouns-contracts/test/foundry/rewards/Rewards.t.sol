@@ -314,6 +314,30 @@ contract RewardsUpgradeTest is RewardsBaseTest {
         vm.expectRevert('Ownable: caller is not the owner');
         rewards.upgradeTo(address(newLogic));
     }
+
+    function test_cantInitializeImplementationContract() public {
+        Rewards implementation = Rewards(get1967Implementation(address(rewards)));
+
+        vm.expectRevert('Initializable: contract is already initialized');
+        implementation.initialize(
+            address(0),
+            address(0),
+            address(0),
+            1,
+            1,
+            1,
+            Rewards.RewardParams({
+                minimumRewardPeriod: 2 weeks,
+                numProposalsEnoughForReward: 30,
+                proposalRewardBps: 100,
+                votingRewardBps: 50,
+                auctionRewardBps: 100,
+                proposalEligibilityQuorumBps: 1000,
+                minimumAuctionsBetweenUpdates: 0
+            }),
+            address(0)
+        );
+    }
 }
 
 contract PausingTest is RewardsBaseTest {
