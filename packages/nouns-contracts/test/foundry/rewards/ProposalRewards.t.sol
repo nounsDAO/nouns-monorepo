@@ -8,7 +8,7 @@ import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctio
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
+import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import 'forge-std/Test.sol';
 
 abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
@@ -62,7 +62,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
                 auctionRewardBps: 150,
                 proposalEligibilityQuorumBps: 1000,
                 minimumAuctionsBetweenUpdates: 3
-            })
+            }),
+            address(0)
         );
 
         vm.prank(client1Wallet);

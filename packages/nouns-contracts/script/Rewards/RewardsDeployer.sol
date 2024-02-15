@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
-import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
-import { RewardsProxy } from '../../../contracts/client-incentives/RewardsProxy.sol';
+import { INounsDAOLogic } from '../../contracts/interfaces/INounsDAOLogic.sol';
+import { Rewards } from '../../contracts/client-incentives/Rewards.sol';
+import { RewardsProxy } from '../../contracts/client-incentives/RewardsProxy.sol';
 
 library RewardsDeployer {
     function deployRewards(
@@ -14,7 +14,8 @@ library RewardsDeployer {
         uint32 nextProposalIdToReward,
         uint256 nextAuctionIdToReward,
         uint96 nextProposalRewardFirstAuctionId,
-        Rewards.RewardParams memory rewardParams
+        Rewards.RewardParams memory rewardParams,
+        address descriptor
     ) internal returns (Rewards) {
         Rewards rewardsLogic = new Rewards(address(dao), auctionHouse);
         bytes memory initCallData = abi.encodeWithSignature(
@@ -26,7 +27,7 @@ library RewardsDeployer {
             nextAuctionIdToReward,
             nextProposalRewardFirstAuctionId,
             rewardParams,
-            address(0) // descriptor
+            descriptor
         );
 
         RewardsProxy proxy = new RewardsProxy(address(rewardsLogic), initCallData);

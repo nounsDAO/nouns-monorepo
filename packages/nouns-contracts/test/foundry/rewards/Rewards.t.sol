@@ -8,7 +8,7 @@ import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctio
 import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
-import { RewardsDeployer } from '../helpers/RewardsDeployer.sol';
+import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import { INounsClientTokenTypes } from '../../../contracts/client-incentives/INounsClientTokenTypes.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
@@ -59,7 +59,8 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
                 auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000,
                 minimumAuctionsBetweenUpdates: 0
-            })
+            }),
+            address(0)
         );
 
         vm.deal(address(rewards), 100 ether);
@@ -469,7 +470,8 @@ contract NFTFunctionsTest is RewardsBaseTest {
                 auctionRewardBps: 100,
                 proposalEligibilityQuorumBps: 1000,
                 minimumAuctionsBetweenUpdates: 0
-            })
+            }),
+            address(0)
         );
     }
 
