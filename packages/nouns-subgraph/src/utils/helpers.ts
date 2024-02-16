@@ -254,7 +254,7 @@ function keccak256Bytes(bytes: Bytes): Bytes {
 }
 
 /**
- * encodes the proposal content as done in `NounsDAOV3Proposals.calcProposalEncodeData`
+ * encodes the proposal content as done in `NounsDAOProposals.calcProposalEncodeData`
  * and hashes it with keccak256
  */
 export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): Bytes {
