@@ -46,6 +46,25 @@
         "internalType": "bool",
         "name": "extended",
         "type": "bool"
+      }
+    ],
+    "name": "AuctionBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "nounId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       },
       {
         "indexed": true,
@@ -54,7 +73,7 @@
         "type": "uint32"
       }
     ],
-    "name": "AuctionBid",
+    "name": "AuctionBidWithClientId",
     "type": "event"
   },
   {
@@ -147,6 +166,19 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      }
+    ],
+    "name": "AuctionSettled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "nounId",
+        "type": "uint256"
       },
       {
         "indexed": true,
@@ -155,7 +187,7 @@
         "type": "uint32"
       }
     ],
-    "name": "AuctionSettled",
+    "name": "AuctionSettledWithClientId",
     "type": "event"
   },
   {
@@ -169,25 +201,6 @@
       }
     ],
     "name": "AuctionTimeBufferUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "nounIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "prices",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "HistoricPricesSet",
     "type": "event"
   },
   {
@@ -719,14 +732,9 @@
             "internalType": "uint256",
             "name": "nounId",
             "type": "uint256"
-          },
-          {
-            "internalType": "uint32",
-            "name": "clientId",
-            "type": "uint32"
           }
         ],
-        "internalType": "struct INounsAuctionHouseV2.Settlement[]",
+        "internalType": "struct INounsAuctionHouseV2.SettlementNoClientId[]",
         "name": "settlements",
         "type": "tuple[]"
       }
@@ -812,9 +820,14 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[]",
-        "name": "nounIds",
-        "type": "uint256[]"
+        "internalType": "uint256",
+        "name": "startId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endId",
+        "type": "uint256"
       }
     ],
     "name": "warmUpSettlementState",

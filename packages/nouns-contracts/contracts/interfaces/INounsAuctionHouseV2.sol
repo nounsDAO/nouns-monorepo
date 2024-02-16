@@ -91,11 +91,15 @@ interface INounsAuctionHouseV2 {
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, uint32 indexed clientId);
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+
+    event AuctionBidWithClientId(uint256 indexed nounId, uint256 value, uint32 indexed clientId);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
-    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount, uint32 indexed clientId);
+    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
+
+    event AuctionSettledWithClientId(uint256 indexed nounId, uint32 indexed clientId);
 
     event AuctionTimeBufferUpdated(uint256 timeBuffer);
 

@@ -144,7 +144,8 @@ contract NounsAuctionHouseV2 is
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < _timeBuffer;
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended, clientId);
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        if (clientId > 0) emit AuctionBidWithClientId(_auction.nounId, msg.value, clientId);
 
         if (extended) {
             auctionStorage.endTime = _auction.endTime = uint40(block.timestamp + _timeBuffer);
@@ -285,7 +286,8 @@ contract NounsAuctionHouseV2 is
         settlementState.winner = _auction.bidder;
         if (_auction.clientId > 0) settlementState.clientId = _auction.clientId;
 
-        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount, _auction.clientId);
+        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
+        if (_auction.clientId > 0) emit AuctionSettledWithClientId(_auction.nounId, _auction.clientId);
     }
 
     /**

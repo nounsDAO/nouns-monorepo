@@ -54,9 +54,9 @@ dataSources:
         - name: NounsAuctionHouseV2
           file: ../nouns-contracts/abi/contracts/NounsAuctionHouseV2.json
       eventHandlers:
-        - event: AuctionBid(indexed uint256,address,uint256,bool,indexed uint32)
+        - event: AuctionBidWithClientId(indexed uint256,uint256,indexed uint32)
           handler: handleAuctionBidWithClientId
-        - event: AuctionSettled(indexed uint256,address,uint256,indexed uint32)
+        - event: AuctionSettledWithClientId(indexed uint256,indexed uint32)
           handler: handleAuctionSettledWithClientId
   - kind: ethereum/contract
     name: NounsToken
