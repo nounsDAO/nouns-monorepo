@@ -221,6 +221,7 @@ contract Rewards is
      * If an auction's winning bid was called with a clientId, that client will be reward with `params.auctionRewardBps`
      * bips of the auction's settlement amount.
      * At least `minimumAuctionsBetweenUpdates` must happen between updates.
+     * Gas spent is refunded in `ethToken`.
      * @param lastNounId the last auction id to reward client for. must be already settled.
      * @dev Gas is refunded if at least one auction was rewarded
      */
@@ -291,6 +292,7 @@ contract Rewards is
      * A proposal is eligible for rewards if for-votes/total-votes >= params.proposalEligibilityQuorumBps.
      * Rewards are calculated by the auctions revenue during the period between the creation time of last proposal in
      * the previous update until the current last proposal with id `lastProposalId`.
+     * Gas spent is refunded in `ethToken`.
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
      * @param votingClientIds array of sorted client ids that were used to vote on of all eligible the eligible proposals in
@@ -389,7 +391,8 @@ contract Rewards is
         //// 1. Skip proposals that were deleted for non eligibility.
         //// 2. Reward proposal's clientId.
         //// 3. Reward the clientIds that faciliated voting.
-        //// 4. Make sure all voting clientIds were included.
+        //// 4. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
+        ////    a large array of votingClientIds, spend a lot of gas, and have that gas refunded.
 
         InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: t.maxClientId });
         bool[] memory didClientIdHaveVotes = new bool[](votingClientIds.length);
