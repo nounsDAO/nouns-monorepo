@@ -225,6 +225,8 @@ contract NounsAuctionHouseV2 is
      * @dev Only callable by the owner.
      */
     function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyOwner {
+        require(_minBidIncrementPercentage > 0, 'must be greater than zero');
+        
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);

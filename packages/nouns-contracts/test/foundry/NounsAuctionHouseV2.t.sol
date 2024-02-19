@@ -285,6 +285,26 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         assertEq(auctionV2.bidder, bidderV1);
         assertEq(auctionV2.settled, settledV1);
     }
+
+    function test_setMinBidIncrementPercentage_givenNonOwnerSender_reverts() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        auction.setMinBidIncrementPercentage(42);
+    }
+
+    function test_setMinBidIncrementPercentage_givenZero_reverts() public {
+        vm.prank(auction.owner());
+        vm.expectRevert('must be greater than zero');
+        auction.setMinBidIncrementPercentage(0);
+    }
+
+    function test_setMinBidIncrementPercentage_givenNonZeroInput_works() public {
+        assertNotEq(auction.minBidIncrementPercentage(), 42);
+
+        vm.prank(auction.owner());
+        auction.setMinBidIncrementPercentage(42);
+
+        assertEq(auction.minBidIncrementPercentage(), 42);
+    }
 }
 
 abstract contract NoracleBaseTest is NounsAuctionHouseV2TestBase {
