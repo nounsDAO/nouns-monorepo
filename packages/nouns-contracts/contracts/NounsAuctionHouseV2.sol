@@ -69,7 +69,11 @@ contract NounsAuctionHouseV2 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    constructor(INounsToken _nouns, address _weth, uint256 _duration) {
+    constructor(
+        INounsToken _nouns,
+        address _weth,
+        uint256 _duration
+    ) initializer {
         nouns = _nouns;
         weth = _weth;
         duration = _duration;
@@ -226,7 +230,7 @@ contract NounsAuctionHouseV2 is
      */
     function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyOwner {
         require(_minBidIncrementPercentage > 0, 'must be greater than zero');
-        
+
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
@@ -360,10 +364,11 @@ contract NounsAuctionHouseV2 is
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function getSettlements(
-        uint256 auctionCount,
-        bool skipEmptyValues
-    ) external view returns (Settlement[] memory settlements) {
+    function getSettlements(uint256 auctionCount, bool skipEmptyValues)
+        external
+        view
+        returns (Settlement[] memory settlements)
+    {
         uint256 latestNounId = auctionStorage.nounId;
         if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
