@@ -43,6 +43,15 @@ contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuard
 
     uint256 private startSlot;
 
+    constructor() {
+        /// @dev Make sure startSlot points to the correct slot
+        uint256 startSlotLocation;
+        assembly {
+            startSlotLocation := startSlot.slot
+        }
+        require(startSlotLocation == 0xc9);
+    }
+
     function migrate() public onlyOwner {
         OldLayout storage oldLayout = _oldLayout();
         NewLayout storage newLayout = _newLayout();
