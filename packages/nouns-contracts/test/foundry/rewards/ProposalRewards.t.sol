@@ -295,10 +295,11 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
     }
 
     function test_splitsRewardsBetweenEligibleProposals() public {
+        uint256 firstAuctionId = rewards.nextProposalRewardFirstAuctionId();
         uint256 startTimestamp = block.timestamp;
 
         bidAndSettleAuction({ bidAmount: 5 ether });
-        bidAndSettleAuction({ bidAmount: 10 ether });
+        uint256 lastAuctionId = bidAndSettleAuction({ bidAmount: 10 ether });
 
         vm.warp(startTimestamp + 2 weeks + 1);
         proposeVoteAndEndVotingPeriod(clientId1);
@@ -308,7 +309,15 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         votingClientIds = [0];
 
         vm.expectEmit();
-        emit Rewards.ProposalRewardsUpdated(1, 2, 15 ether, 0.075 ether, 4166666666666666);
+        emit Rewards.ProposalRewardsUpdated(
+            1,
+            2,
+            firstAuctionId,
+            lastAuctionId,
+            15 ether,
+            0.075 ether,
+            4166666666666666
+        );
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds
@@ -319,11 +328,12 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
     }
 
     function test_givenClientIdAboveTotalSupply_skipsIt() public {
+        uint256 firstAuctionId = rewards.nextProposalRewardFirstAuctionId();
         uint256 startTimestamp = block.timestamp;
         uint32 badClientId = rewards.nextTokenId();
 
         bidAndSettleAuction({ bidAmount: 5 ether });
-        bidAndSettleAuction({ bidAmount: 10 ether });
+        uint256 lastAuctionId = bidAndSettleAuction({ bidAmount: 10 ether });
 
         vm.warp(startTimestamp + 2 weeks + 1);
         proposeVoteAndEndVotingPeriod(clientId1);
@@ -333,7 +343,15 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         votingClientIds = [0];
 
         vm.expectEmit();
-        emit Rewards.ProposalRewardsUpdated(1, 2, 15 ether, 0.075 ether, 4166666666666666);
+        emit Rewards.ProposalRewardsUpdated(
+            1,
+            2,
+            firstAuctionId,
+            lastAuctionId,
+            15 ether,
+            0.075 ether,
+            4166666666666666
+        );
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds

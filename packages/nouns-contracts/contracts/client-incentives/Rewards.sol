@@ -56,6 +56,8 @@ contract Rewards is
     event ProposalRewardsUpdated(
         uint32 firstProposalId,
         uint32 lastProposalId,
+        uint256 firstAuctionIdForRevenue,
+        uint256 lastAuctionIdForRevenue,
         uint256 auctionRevenue,
         uint256 rewardPerProposal,
         uint256 rewardPerVote
@@ -284,6 +286,7 @@ contract Rewards is
         uint256 proposalRewardForPeriod;
         uint256 votingRewardForPeriod;
         uint32 nextProposalIdToReward;
+        uint256 firstAuctionIdForRevenue;
         NounsDAOTypes.ProposalForRewards lastProposal;
     }
 
@@ -323,11 +326,12 @@ contract Rewards is
 
         t.lastProposal = proposals[proposals.length - 1];
 
-        (uint256 auctionRevenue, uint256 lastAuctionId) = getAuctionRevenue({
-            firstNounId: $.nextProposalRewardFirstAuctionId,
+        t.firstAuctionIdForRevenue = $.nextProposalRewardFirstAuctionId;
+        (uint256 auctionRevenue, uint256 lastAuctionIdForRevenue) = getAuctionRevenue({
+            firstNounId: t.firstAuctionIdForRevenue,
             endTimestamp: t.lastProposal.creationTimestamp
         });
-        $.nextProposalRewardFirstAuctionId = uint32(lastAuctionId) + 1;
+        $.nextProposalRewardFirstAuctionId = uint32(lastAuctionIdForRevenue) + 1;
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
@@ -382,6 +386,8 @@ contract Rewards is
         emit ProposalRewardsUpdated(
             t.nextProposalIdToReward,
             lastProposalId,
+            t.firstAuctionIdForRevenue,
+            lastAuctionIdForRevenue,
             auctionRevenue,
             t.rewardPerProposal,
             t.rewardPerVote
