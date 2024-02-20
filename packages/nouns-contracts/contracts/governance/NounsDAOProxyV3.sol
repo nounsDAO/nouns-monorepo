@@ -38,7 +38,7 @@
 
 pragma solidity ^0.8.19;
 
-import { NounsDAOTypes, NounsDAOTypes } from './NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from './NounsDAOInterfaces.sol';
 
 contract NounsDAOProxyV3 {
     /// @notice Administrator for this contract
