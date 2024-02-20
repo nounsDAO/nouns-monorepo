@@ -24,7 +24,7 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
-import { InMemoryMapping } from '../libs/InMemoryMapping.sol';
+import { ClientRewardsMemoryMapping } from '../libs/ClientRewardsMemoryMapping.sol';
 import { GasRefund } from '../libs/GasRefund.sol';
 import { INounsClientTokenDescriptor } from './INounsClientTokenDescriptor.sol';
 import { INounsClientTokenTypes } from './INounsClientTokenTypes.sol';
@@ -40,7 +40,7 @@ contract Rewards is
     INounsClientTokenTypes
 {
     using SafeERC20 for IERC20;
-    using InMemoryMapping for InMemoryMapping.Mapping;
+    using ClientRewardsMemoryMapping for ClientRewardsMemoryMapping.Mapping;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -248,7 +248,9 @@ contract Rewards is
         require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
 
         uint32 maxClientId = nextTokenId() - 1;
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: maxClientId });
+        ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
+            maxClientId: maxClientId
+        });
 
         for (uint256 i; i < settlements.length; ++i) {
             INounsAuctionHouseV2.Settlement memory settlement = settlements[i];
@@ -261,7 +263,7 @@ contract Rewards is
         uint16 auctionRewardBps = $.params.auctionRewardBps;
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
-            InMemoryMapping.ClientBalance memory cb = m.getValue(i);
+            ClientRewardsMemoryMapping.ClientBalance memory cb = m.getValue(i);
             uint256 reward = (cb.balance * auctionRewardBps) / 10_000;
             $._clientMetadata[cb.clientId].rewarded += SafeCast.toUint96(reward);
 
@@ -400,7 +402,9 @@ contract Rewards is
         //// 4. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
         ////    a large array of votingClientIds, spend a lot of gas, and have that gas refunded.
 
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: t.maxClientId });
+        ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
+            maxClientId: t.maxClientId
+        });
         bool[] memory didClientIdHaveVotes = new bool[](votingClientIds.length);
 
         for (uint256 i; i < proposals.length; ++i) {
@@ -435,7 +439,7 @@ contract Rewards is
 
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
-            InMemoryMapping.ClientBalance memory cb = m.getValue(i);
+            ClientRewardsMemoryMapping.ClientBalance memory cb = m.getValue(i);
             $._clientMetadata[cb.clientId].rewarded += SafeCast.toUint96(cb.balance);
             emit ClientRewarded(cb.clientId, cb.balance);
         }

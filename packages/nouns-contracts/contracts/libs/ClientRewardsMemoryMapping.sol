@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
  * This only works when the keys, in this case clientId, are of limited size so that they we can create
  * an array in memory for all the possible values
  */
-library InMemoryMapping {
+library ClientRewardsMemoryMapping {
     struct Mapping {
         /// @dev indexes[clientId] returns the index in `values` array where the value for clientId is.
         /// zero means it hasn't been initialized yet.

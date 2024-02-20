@@ -2,13 +2,13 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { InMemoryMapping } from '../../../contracts/libs/InMemoryMapping.sol';
+import { ClientRewardsMemoryMapping } from '../../../contracts/libs/ClientRewardsMemoryMapping.sol';
 
-contract InMemoryMappingTest is Test {
-    using InMemoryMapping for InMemoryMapping.Mapping;
+contract ClientRewardsMemoryMappingTest is Test {
+    using ClientRewardsMemoryMapping for ClientRewardsMemoryMapping.Mapping;
 
     function test_set_get() public {
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: 3 });
+        ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({ maxClientId: 3 });
 
         m.set(0, 100);
         m.set(3, 200);
@@ -17,7 +17,7 @@ contract InMemoryMappingTest is Test {
     }
 
     function test_inc() public {
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: 3 });
+        ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({ maxClientId: 3 });
 
         m.inc(0, 5);
         m.inc(0, 5);
@@ -29,7 +29,7 @@ contract InMemoryMappingTest is Test {
     }
 
     function test_id_too_high() public {
-        InMemoryMapping.Mapping memory m = InMemoryMapping.createMapping({ maxClientId: 3 });
+        ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({ maxClientId: 3 });
 
         // works
         m.set(3, 100);
