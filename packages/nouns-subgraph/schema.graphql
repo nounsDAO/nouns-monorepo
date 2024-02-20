@@ -101,7 +101,7 @@ type Bid @entity {
   blockTimestamp: BigInt!
 
   "The ID of the client that facilitated this bid"
-  clientId: Int!
+  clientId: Int
 }
 
 type Auction @entity {
@@ -194,7 +194,7 @@ type Proposal @entity {
   id: ID!
 
   "Delegate that proposed the change"
-  proposer: Delegate
+  proposer: Delegate!
 
   "Delegates that signed on this proposal to get it over the proposal threshold"
   signers: [Delegate!]
@@ -212,25 +212,25 @@ type Proposal @entity {
   calldatas: [Bytes!]
 
   "The proposal creation timestamp"
-  createdTimestamp: BigInt
+  createdTimestamp: BigInt!
 
   "The proposal creation block"
-  createdBlock: BigInt
+  createdBlock: BigInt!
 
   "The proposal's last update timestamp"
-  lastUpdatedTimestamp: BigInt
+  lastUpdatedTimestamp: BigInt!
 
   "The proposal's last update block"
-  lastUpdatedBlock: BigInt
+  lastUpdatedBlock: BigInt!
 
   "The proposal creation transaction hash"
-  createdTransactionHash: Bytes
+  createdTransactionHash: Bytes!
 
   "Block number from where the voting starts"
-  startBlock: BigInt
+  startBlock: BigInt!
 
   "Block number from where the voting ends"
-  endBlock: BigInt
+  endBlock: BigInt!
 
   "The proposal threshold at the time of proposal creation"
   proposalThreshold: BigInt
@@ -248,10 +248,10 @@ type Proposal @entity {
   abstainVotes: BigInt!
 
   "The proposal title, parsed from the description"
-  title: String
+  title: String!
 
   "The full proposal description, which includes the title"
-  description: String
+  description: String!
 
   "Status of the proposal"
   status: ProposalStatus
@@ -263,22 +263,22 @@ type Proposal @entity {
   votes: [Vote!]! @derivedFrom(field: "proposal")
 
   "Total supply when this proposal was created"
-  totalSupply: BigInt
+  totalSupply: BigInt!
 
   "Adjusted total supply when this proposal was created"
-  adjustedTotalSupply: BigInt
+  adjustedTotalSupply: BigInt!
 
   "Dynamic quorum param snapshot: min quorum basis points"
-  minQuorumVotesBPS: Int
+  minQuorumVotesBPS: Int!
 
   "Dynamic quorum param snapshot: max quorum basis points"
-  maxQuorumVotesBPS: Int
+  maxQuorumVotesBPS: Int!
 
   "Dynamic quorum param snapshot: the dynamic quorum coefficient"
-  quorumCoefficient: BigInt
+  quorumCoefficient: BigInt!
 
   "The objection period end block"
-  objectionPeriodEndBlock: BigInt
+  objectionPeriodEndBlock: BigInt!
 
   "The update period end block"
   updatePeriodEndBlock: BigInt
@@ -290,7 +290,7 @@ type Proposal @entity {
   onTimelockV1: Boolean
 
   "The block at which voting balance snapshots are taken for this proposal"
-  voteSnapshotBlock: BigInt
+  voteSnapshotBlock: BigInt!
 
   "The block number at which this proposal was canceled"
   canceledBlock: BigInt
