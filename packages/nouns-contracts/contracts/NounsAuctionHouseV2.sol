@@ -69,11 +69,7 @@ contract NounsAuctionHouseV2 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    constructor(
-        INounsToken _nouns,
-        address _weth,
-        uint256 _duration
-    ) initializer {
+    constructor(INounsToken _nouns, address _weth, uint256 _duration) initializer {
         nouns = _nouns;
         weth = _weth;
         duration = _duration;
@@ -116,12 +112,18 @@ contract NounsAuctionHouseV2 is
         _settleAuction();
     }
 
+    /**
+     * @notice Create a bid for a Noun, with a given amount.
+     * @dev This contract only accepts payment in ETH.
+     */
     function createBid(uint256 nounId) external payable override {
         createBid(nounId, 0);
     }
 
     /**
      * @notice Create a bid for a Noun, with a given amount.
+     * @param nounId id of the Noun to bid on
+     * @param clientId the client which facilitate this action
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId, uint32 clientId) public payable override {
@@ -364,11 +366,10 @@ contract NounsAuctionHouseV2 is
      * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's address.
      */
-    function getSettlements(uint256 auctionCount, bool skipEmptyValues)
-        external
-        view
-        returns (Settlement[] memory settlements)
-    {
+    function getSettlements(
+        uint256 auctionCount,
+        bool skipEmptyValues
+    ) external view returns (Settlement[] memory settlements) {
         uint256 latestNounId = auctionStorage.nounId;
         if (!auctionStorage.settled && latestNounId > 0) {
             latestNounId -= 1;
