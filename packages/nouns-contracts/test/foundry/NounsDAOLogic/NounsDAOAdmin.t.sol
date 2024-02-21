@@ -22,6 +22,121 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
 
     address[] tokens;
 
+    function test__setVotingDelay_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setVotingDelay(1);
+    }
+
+    function test__setVotingDelay_worksAndEmits() public {
+        uint256 expectedValue = dao.votingDelay() + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.VotingDelaySet(dao.votingDelay(), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setVotingDelay(expectedValue);
+
+        assertEq(dao.votingDelay(), expectedValue);
+    }
+
+    function test__setVotingPeriod_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setVotingPeriod(1);
+    }
+
+    function test__setVotingPeriod_worksAndEmits() public {
+        uint256 expectedValue = dao.votingPeriod() + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.VotingPeriodSet(dao.votingPeriod(), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setVotingPeriod(expectedValue);
+
+        assertEq(dao.votingPeriod(), expectedValue);
+    }
+
+    function test__setProposalThresholdBPS_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setProposalThresholdBPS(1);
+    }
+
+    function test__setProposalThresholdBPS_worksAndEmits() public {
+        uint256 expectedValue = dao.proposalThresholdBPS() + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.ProposalThresholdBPSSet(dao.proposalThresholdBPS(), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setProposalThresholdBPS(expectedValue);
+
+        assertEq(dao.proposalThresholdBPS(), expectedValue);
+    }
+
+    function test__setObjectionPeriodDurationInBlocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setObjectionPeriodDurationInBlocks(1);
+    }
+
+    function test__setObjectionPeriodDurationInBlocks_worksAndEmits() public {
+        uint32 expectedValue = uint32(dao.objectionPeriodDurationInBlocks()) + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit ObjectionPeriodDurationSet(uint32(dao.objectionPeriodDurationInBlocks()), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        INounsDAOLogic(address(dao))._setObjectionPeriodDurationInBlocks(expectedValue);
+
+        assertEq(uint32(dao.objectionPeriodDurationInBlocks()), expectedValue);
+    }
+
+    function test__setProposalUpdatablePeriodInBlocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setProposalUpdatablePeriodInBlocks(1);
+    }
+
+    function test__setProposalUpdatablePeriodInBlocks_worksAndEmits() public {
+        uint32 expectedValue = uint32(dao.proposalUpdatablePeriodInBlocks()) + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit ProposalUpdatablePeriodSet(uint32(dao.proposalUpdatablePeriodInBlocks()), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        INounsDAOLogic(address(dao))._setProposalUpdatablePeriodInBlocks(expectedValue);
+
+        assertEq(uint32(dao.proposalUpdatablePeriodInBlocks()), expectedValue);
+    }
+
+    function test__setLastMinuteWindowInBlocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setLastMinuteWindowInBlocks(1);
+    }
+
+    function test__setLastMinuteWindowInBlocks_worksAndEmits() public {
+        uint32 expectedValue = uint32(dao.lastMinuteWindowInBlocks()) + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.LastMinuteWindowSet(uint32(dao.lastMinuteWindowInBlocks()), expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        INounsDAOLogic(address(dao))._setLastMinuteWindowInBlocks(expectedValue);
+
+        assertEq(uint32(dao.lastMinuteWindowInBlocks()), expectedValue);
+    }
+
+    function test_changingAdmin_worksForAdmin() public {
+        address newAdmin = makeAddr('new admin');
+        assertNotEq(newAdmin, address(dao.admin()));
+
+        vm.prank(address(dao.admin()));
+        dao._setPendingAdmin(newAdmin);
+
+        vm.prank(newAdmin);
+        dao._acceptAdmin();
+
+        assertEq(address(dao.admin()), newAdmin);
+    }
+
     function test_setForkPeriod_onlyAdmin() public {
         vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkPeriod(8 days);

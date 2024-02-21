@@ -654,6 +654,8 @@ interface INounsDAOLogic {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    function admin() external view returns (address);
+
     function implementation() external view returns (address);
 
     function vetoer() external view returns (address);

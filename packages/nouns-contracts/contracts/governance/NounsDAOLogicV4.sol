@@ -827,6 +827,10 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    function admin() public view returns (address) {
+        return ds.admin;
+    }
+
     function vetoer() public view returns (address) {
         return ds.vetoer;
     }
