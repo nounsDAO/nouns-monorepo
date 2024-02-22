@@ -6,6 +6,7 @@ import { NounsDAOLogicBaseTest } from './NounsDAOLogicBaseTest.sol';
 import { NounsDAOAdmin } from '../../../contracts/governance/NounsDAOAdmin.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
@@ -144,6 +145,96 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         dao._acceptAdmin();
 
         assertEq(address(dao.admin()), newAdmin);
+    }
+
+    function test__setMinQuorumVotesBPS_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setMinQuorumVotesBPS(1);
+    }
+
+    function test__setMinQuorumVotesBPS_worksAndEmits() public {
+        NounsDAOTypes.DynamicQuorumParams memory oldParams = dao.getDynamicQuorumParamsAt(block.number);
+        uint16 expectedValue = oldParams.minQuorumVotesBPS + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setMinQuorumVotesBPS(expectedValue);
+
+        NounsDAOTypes.DynamicQuorumParams memory newParams = dao.getDynamicQuorumParamsAt(block.number);
+        assertEq(newParams.minQuorumVotesBPS, expectedValue);
+    }
+
+    function test__setMaxQuorumVotesBPS_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setMaxQuorumVotesBPS(1);
+    }
+
+    function test__setMaxQuorumVotesBPS_worksAndEmits() public {
+        NounsDAOTypes.DynamicQuorumParams memory oldParams = dao.getDynamicQuorumParamsAt(block.number);
+        uint16 expectedValue = oldParams.maxQuorumVotesBPS + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setMaxQuorumVotesBPS(expectedValue);
+
+        NounsDAOTypes.DynamicQuorumParams memory newParams = dao.getDynamicQuorumParamsAt(block.number);
+        assertEq(newParams.maxQuorumVotesBPS, expectedValue);
+    }
+
+    function test__setQuorumCoefficient_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setQuorumCoefficient(1);
+    }
+
+    function test__setQuorumCoefficient_worksAndEmits() public {
+        NounsDAOTypes.DynamicQuorumParams memory oldParams = dao.getDynamicQuorumParamsAt(block.number);
+        uint32 expectedValue = oldParams.quorumCoefficient + 1;
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.QuorumCoefficientSet(oldParams.quorumCoefficient, expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setQuorumCoefficient(expectedValue);
+
+        NounsDAOTypes.DynamicQuorumParams memory newParams = dao.getDynamicQuorumParamsAt(block.number);
+        assertEq(newParams.quorumCoefficient, expectedValue);
+    }
+
+    function test__setDynamicQuorumParams_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setDynamicQuorumParams(1, 1, 1);
+    }
+
+    function test__setDynamicQuorumParams_worksAndEmits() public {
+        NounsDAOTypes.DynamicQuorumParams memory oldParams = dao.getDynamicQuorumParamsAt(block.number);
+        NounsDAOTypes.DynamicQuorumParams memory expectedValue = NounsDAOTypes.DynamicQuorumParams({
+            minQuorumVotesBPS: oldParams.minQuorumVotesBPS + 1,
+            maxQuorumVotesBPS: oldParams.maxQuorumVotesBPS + 1,
+            quorumCoefficient: oldParams.quorumCoefficient + 1
+        });
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, expectedValue.minQuorumVotesBPS);
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, expectedValue.maxQuorumVotesBPS);
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.QuorumCoefficientSet(oldParams.quorumCoefficient, expectedValue.quorumCoefficient);
+
+        vm.prank(address(dao.timelock()));
+        dao._setDynamicQuorumParams(
+            expectedValue.minQuorumVotesBPS,
+            expectedValue.maxQuorumVotesBPS,
+            expectedValue.quorumCoefficient
+        );
+
+        NounsDAOTypes.DynamicQuorumParams memory newParams = dao.getDynamicQuorumParamsAt(block.number);
+        assertEq(newParams.minQuorumVotesBPS, expectedValue.minQuorumVotesBPS);
+        assertEq(newParams.maxQuorumVotesBPS, expectedValue.maxQuorumVotesBPS);
+        assertEq(newParams.quorumCoefficient, expectedValue.quorumCoefficient);
     }
 
     function test_setForkPeriod_onlyAdmin() public {
