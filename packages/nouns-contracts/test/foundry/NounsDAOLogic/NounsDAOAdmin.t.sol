@@ -126,10 +126,19 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
 
     function test_changingAdmin_worksForAdmin() public {
         address newAdmin = makeAddr('new admin');
+        address oldAdmin = address(dao.admin());
         assertNotEq(newAdmin, address(dao.admin()));
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.NewPendingAdmin(address(0), newAdmin);
 
         vm.prank(address(dao.admin()));
         dao._setPendingAdmin(newAdmin);
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.NewAdmin(oldAdmin, newAdmin);
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.NewPendingAdmin(newAdmin, address(0));
 
         vm.prank(newAdmin);
         dao._acceptAdmin();
