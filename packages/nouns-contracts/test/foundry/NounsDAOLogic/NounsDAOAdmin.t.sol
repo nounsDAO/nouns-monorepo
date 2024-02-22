@@ -350,30 +350,6 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         assertEq(NounsDAOProxyV3(payable(address(dao))).admin(), address(3));
     }
 
-    function test_setVoteSnapshotBlockSwitchProposalId_onlyAdmin() public {
-        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
-        dao._setVoteSnapshotBlockSwitchProposalId();
-    }
-
-    function test_setVoteSnapshotBlockSwitchProposalId_setsToNextProposalId() public {
-        // overwrite proposalCount
-        vm.store(address(dao), bytes32(uint256(8)), bytes32(uint256(100)));
-
-        vm.prank(address(dao.timelock()));
-        dao._setVoteSnapshotBlockSwitchProposalId();
-
-        assertEq(dao.voteSnapshotBlockSwitchProposalId(), 101);
-    }
-
-    function test_setVoteSnapshotBlockSwitchProposalId_revertsIfCalledTwice() public {
-        vm.prank(address(dao.timelock()));
-        dao._setVoteSnapshotBlockSwitchProposalId();
-
-        vm.prank(address(dao.timelock()));
-        vm.expectRevert(NounsDAOAdmin.VoteSnapshotSwitchAlreadySet.selector);
-        dao._setVoteSnapshotBlockSwitchProposalId();
-    }
-
     function test_setObjectionPeriodDurationInBlocks_onlyAdmin() public {
         vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         INounsDAOLogic(address(dao))._setObjectionPeriodDurationInBlocks(3 days / 12);

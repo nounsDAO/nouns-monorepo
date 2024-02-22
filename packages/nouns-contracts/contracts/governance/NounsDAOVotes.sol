@@ -234,8 +234,7 @@ library NounsDAOVotes {
         NounsDAOTypes.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteDuringVotingPeriodInternal: voter already voted');
 
-        /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposalId, proposal));
+        uint96 votes = ds.nouns.getPriorVotes(voter, proposal.startBlock);
 
         bool isForVoteInLastMinuteWindow = false;
         if (support == 1) {
@@ -297,10 +296,7 @@ library NounsDAOVotes {
         NounsDAOTypes.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
-        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(
-            voter,
-            proposalVoteSnapshotBlock(ds, proposalId, proposal)
-        );
+        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, proposal.startBlock);
         receipt.hasVoted = true;
         receipt.support = 0;
         proposal.againstVotes = proposal.againstVotes + votes;
@@ -321,28 +317,6 @@ library NounsDAOVotes {
             (bool refundSent, ) = tx.origin.call{ value: refundAmount }('');
             emit RefundableVote(tx.origin, refundAmount, refundSent);
         }
-    }
-
-    /**
-     * @notice Internal function that returns the snapshot block number to use given a proposalId. The choice is
-     * between the proposal's creation block and the proposal's voting start block, to allow a smooth migration from
-     * creation block to start block.
-     * @param proposalId The id of the proposal being voted on
-     * @param proposal The proposal storage reference, used to read `creationBlock` and `startBlock`
-     */
-    function proposalVoteSnapshotBlock(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId,
-        NounsDAOTypes.Proposal storage proposal
-    ) internal view returns (uint256) {
-        // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
-        // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.
-        // In that version upgrade we can also zero-out and remove this storage variable for max cleanup.
-        uint256 voteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
-        if (proposalId < voteSnapshotBlockSwitchProposalId || voteSnapshotBlockSwitchProposalId == 0) {
-            return proposal.creationBlock;
-        }
-        return proposal.startBlock;
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {

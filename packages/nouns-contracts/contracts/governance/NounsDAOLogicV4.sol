@@ -911,9 +911,5 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return address(ds.timelockV1);
     }
 
-    function voteSnapshotBlockSwitchProposalId() public view returns (uint256) {
-        return ds.voteSnapshotBlockSwitchProposalId;
-    }
-
     receive() external payable {}
 }

@@ -189,12 +189,6 @@ interface NounsDAOEventsV3 {
         uint32 newProposalUpdatablePeriodInBlocks
     );
 
-    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
-    event VoteSnapshotBlockSwitchProposalIdSet(
-        uint256 oldVoteSnapshotBlockSwitchProposalId,
-        uint256 newVoteSnapshotBlockSwitchProposalId
-    );
-
     /// @notice Emitted when the erc20 tokens to include in a fork are set
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
@@ -410,10 +404,6 @@ interface NounsDAOTypes {
         uint256 forkThresholdBPS;
         /// @notice Address of the original timelock
         INounsDAOExecutor timelockV1;
-        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
-        /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
-        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
-        uint256 voteSnapshotBlockSwitchProposalId;
     }
 
     struct Proposal {

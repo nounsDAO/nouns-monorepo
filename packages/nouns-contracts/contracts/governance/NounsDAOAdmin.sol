@@ -84,12 +84,6 @@ library NounsDAOAdmin {
     /// @notice Emitted when admin withdraws the DAO's balance.
     event Withdraw(uint256 amount, bool sent);
 
-    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
-    event VoteSnapshotBlockSwitchProposalIdSet(
-        uint256 oldVoteSnapshotBlockSwitchProposalId,
-        uint256 newVoteSnapshotBlockSwitchProposalId
-    );
-
     /// @notice Emitted when the fork DAO deployer is set
     event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
 
@@ -450,26 +444,6 @@ library NounsDAOAdmin {
         emit Withdraw(amount, sent);
 
         return (amount, sent);
-    }
-
-    /**
-     * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
-     * instead of the proposal creation block.
-     * Sets it to the next proposal id.
-     */
-    function _setVoteSnapshotBlockSwitchProposalId() external onlyAdmin {
-        uint256 oldVoteSnapshotBlockSwitchProposalId = ds().voteSnapshotBlockSwitchProposalId;
-        if (oldVoteSnapshotBlockSwitchProposalId > 0) {
-            revert VoteSnapshotSwitchAlreadySet();
-        }
-
-        uint256 newVoteSnapshotBlockSwitchProposalId = ds().proposalCount + 1;
-        ds().voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
-
-        emit VoteSnapshotBlockSwitchProposalIdSet(
-            oldVoteSnapshotBlockSwitchProposalId,
-            newVoteSnapshotBlockSwitchProposalId
-        );
     }
 
     /**

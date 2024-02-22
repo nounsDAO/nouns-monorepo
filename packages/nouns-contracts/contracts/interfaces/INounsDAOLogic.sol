@@ -403,13 +403,6 @@ interface INounsDAOLogic {
     function _setForkThresholdBPS(uint256 newForkThresholdBPS) external;
 
     /**
-     * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
-     * instead of the proposal creation block.
-     * Sets it to the next proposal id.
-     */
-    function _setVoteSnapshotBlockSwitchProposalId() external;
-
-    /**
      * @notice Admin function for setting the fork DAO deployer contract
      */
     function _setForkDAODeployer(address newForkDAODeployer) external;
@@ -697,6 +690,4 @@ interface INounsDAOLogic {
     function proposalUpdatablePeriodInBlocks() external view returns (uint256);
 
     function timelockV1() external view returns (address);
-
-    function voteSnapshotBlockSwitchProposalId() external view returns (uint256);
 }
