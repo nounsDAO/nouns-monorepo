@@ -237,6 +237,24 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         assertEq(newParams.quorumCoefficient, expectedValue.quorumCoefficient);
     }
 
+    function test__setForkDAODeployer_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setForkDAODeployer(address(1));
+    }
+
+    function test__setForkDAODeployer_worksAndEmits() public {
+        address expectedValue = makeAddr('new fork dao deployer');
+        address oldValue = address(dao.forkDAODeployer());
+
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOAdmin.ForkDAODeployerSet(oldValue, expectedValue);
+
+        vm.prank(address(dao.timelock()));
+        dao._setForkDAODeployer(expectedValue);
+
+        assertEq(address(dao.forkDAODeployer()), expectedValue);
+    }
+
     function test_setForkPeriod_onlyAdmin() public {
         vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkPeriod(8 days);
