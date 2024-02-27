@@ -118,7 +118,7 @@ library NounsDAOFork {
         uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
 
         (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp, forkEscrow);
-        sendProRataTreasury(ds, forkTreasury, tokensInEscrow, adjustedTotalSupply(ds));
+        sendProRataTreasury(ds, forkTreasury, tokensInEscrow, _adjustedTotalSupply(ds));
         uint32 forkId = forkEscrow.closeEscrow();
 
         ds.forkDAOTreasury = forkTreasury;
@@ -145,7 +145,7 @@ library NounsDAOFork {
 
         INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
         address timelock = address(ds.timelock);
-        sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
+        sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, _adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             ds.nouns.transferFrom(msg.sender, timelock, tokenIds[i]);
@@ -204,7 +204,7 @@ library NounsDAOFork {
      * @notice Returns the required number of tokens to escrow to trigger a fork
      */
     function forkThreshold(NounsDAOTypes.Storage storage ds) public view returns (uint256) {
-        return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
+        return (_adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
     }
 
     /**
@@ -214,12 +214,16 @@ library NounsDAOFork {
         return ds.forkEscrow.numTokensInEscrow();
     }
 
+    function adjustedTotalSupply(NounsDAOTypes.Storage storage ds) external view returns (uint256) {
+        return _adjustedTotalSupply(ds);
+    }
+
     /**
      * @notice Returns the number of nouns in supply minus nouns owned by the DAO, i.e. held in the treasury or in an
      * escrow after it has closed.
      * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
      */
-    function adjustedTotalSupply(NounsDAOTypes.Storage storage ds) internal view returns (uint256) {
+    function _adjustedTotalSupply(NounsDAOTypes.Storage storage ds) internal view returns (uint256) {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
     }
 

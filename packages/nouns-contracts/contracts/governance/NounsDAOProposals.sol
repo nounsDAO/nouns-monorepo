@@ -83,7 +83,7 @@ library NounsDAOProposals {
         ProposalTxs memory txs,
         string memory description,
         uint32 clientId
-    ) internal returns (uint256) {
+    ) public returns (uint256) {
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 proposalThreshold_ = checkPropThreshold(
             ds,
@@ -131,7 +131,7 @@ library NounsDAOProposals {
         ProposalTxs memory txs,
         string memory description,
         uint32 clientId
-    ) internal returns (uint256) {
+    ) external returns (uint256) {
         uint256 newProposalId = propose(ds, txs, description, clientId);
 
         NounsDAOTypes.Proposal storage newProposal = ds._proposals[newProposalId];
@@ -171,7 +171,7 @@ library NounsDAOProposals {
         ds.proposalCount = ds.proposalCount + 1;
         temp.proposalId = SafeCast.toUint32(ds.proposalCount);
         temp.adjustedTotalSupply = ds.adjustedTotalSupply();
-        temp.propThreshold = proposalThreshold(ds, temp.adjustedTotalSupply);
+        temp.propThreshold = _proposalThreshold(ds, temp.adjustedTotalSupply);
 
         NounsDAOTypes.Proposal storage newProposal = createNewProposal(
             ds,
@@ -224,6 +224,12 @@ library NounsDAOProposals {
         emit NounsDAOEventsV3.SignatureCancelled(msg.sender, sig);
     }
 
+    function _ds() internal pure returns (NounsDAOTypes.Storage storage ds_) {
+        assembly {
+            ds_.slot := 0
+        }
+    }
+
     /**
      * @notice Update a proposal transactions and description.
      * Only the proposer can update it, and only during the updateable period.
@@ -236,7 +242,7 @@ library NounsDAOProposals {
      * @param updateMessage Short message to explain the update
      */
     function updateProposal(
-        NounsDAOTypes.Storage storage ds,
+        // NounsDAOTypes.Storage storage ds,
         uint256 proposalId,
         address[] memory targets,
         uint256[] memory values,
@@ -245,7 +251,7 @@ library NounsDAOProposals {
         string memory description,
         string memory updateMessage
     ) external {
-        updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
+        updateProposalTransactionsInternal(_ds(), proposalId, targets, values, signatures, calldatas);
 
         emit NounsDAOEventsV3.ProposalUpdated(
             proposalId,
@@ -465,10 +471,11 @@ library NounsDAOProposals {
         emit NounsDAOEventsV3.ProposalExecuted(proposal.id);
     }
 
-    function getProposalTimelock(
-        NounsDAOTypes.Storage storage ds,
-        NounsDAOTypes.Proposal storage proposal
-    ) internal view returns (INounsDAOExecutor) {
+    function getProposalTimelock(NounsDAOTypes.Storage storage ds, NounsDAOTypes.Proposal storage proposal)
+        internal
+        view
+        returns (INounsDAOExecutor)
+    {
         if (proposal.executeOnTimelockV1) {
             return ds.timelockV1;
         } else {
@@ -565,10 +572,11 @@ library NounsDAOProposals {
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
-    function state(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId
-    ) public view returns (NounsDAOTypes.ProposalState) {
+    function state(NounsDAOTypes.Storage storage ds, uint256 proposalId)
+        public
+        view
+        returns (NounsDAOTypes.ProposalState)
+    {
         return stateInternal(ds, proposalId);
     }
 
@@ -579,10 +587,11 @@ library NounsDAOProposals {
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
-    function stateInternal(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId
-    ) internal view returns (NounsDAOTypes.ProposalState) {
+    function stateInternal(NounsDAOTypes.Storage storage ds, uint256 proposalId)
+        internal
+        view
+        returns (NounsDAOTypes.ProposalState)
+    {
         require(ds.proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         NounsDAOTypes.Proposal storage proposal = ds._proposals[proposalId];
 
@@ -619,11 +628,8 @@ library NounsDAOProposals {
      * @return signatures
      * @return calldatas
      */
-    function getActions(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId
-    )
-        internal
+    function getActions(NounsDAOTypes.Storage storage ds, uint256 proposalId)
+        external
         view
         returns (
             address[] memory targets,
@@ -656,10 +662,11 @@ library NounsDAOProposals {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data
      */
-    function proposals(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId
-    ) external view returns (NounsDAOTypes.ProposalCondensedV2 memory) {
+    function proposals(NounsDAOTypes.Storage storage ds, uint256 proposalId)
+        external
+        view
+        returns (NounsDAOTypes.ProposalCondensedV2 memory)
+    {
         NounsDAOTypes.Proposal storage proposal = ds._proposals[proposalId];
         return
             NounsDAOTypes.ProposalCondensedV2({
@@ -687,17 +694,18 @@ library NounsDAOProposals {
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data
      */
-    function proposalsV3(
-        NounsDAOTypes.Storage storage ds,
-        uint256 proposalId
-    ) external view returns (NounsDAOTypes.ProposalCondensedV3 memory) {
-        NounsDAOTypes.Proposal storage proposal = ds._proposals[proposalId];
+    function proposalsV3(uint256 proposalId)
+        external
+        view
+        returns (NounsDAOTypes.ProposalCondensedV3 memory)
+    {
+        NounsDAOTypes.Proposal storage proposal = _ds()._proposals[proposalId];
         return
             NounsDAOTypes.ProposalCondensedV3({
                 id: proposal.id,
                 proposer: proposal.proposer,
                 proposalThreshold: proposal.proposalThreshold,
-                quorumVotes: ds.quorumVotes(proposal.id),
+                quorumVotes: _ds().quorumVotes(proposal.id),
                 eta: proposal.eta,
                 startBlock: proposal.startBlock,
                 endBlock: proposal.endBlock,
@@ -721,7 +729,7 @@ library NounsDAOProposals {
         uint256 firstProposalId,
         uint256 lastProposalId,
         uint32[] calldata votingClientIds
-    ) internal view returns (NounsDAOTypes.ProposalForRewards[] memory) {
+    ) external view returns (NounsDAOTypes.ProposalForRewards[] memory) {
         require(lastProposalId >= firstProposalId, 'lastProposalId >= firstProposalId');
         uint256 numProposals = lastProposalId - firstProposalId + 1;
         NounsDAOTypes.ProposalForRewards[] memory data = new NounsDAOTypes.ProposalForRewards[](numProposals);
@@ -756,17 +764,23 @@ library NounsDAOProposals {
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function proposalThreshold(
-        NounsDAOTypes.Storage storage ds,
-        uint256 adjustedTotalSupply
-    ) internal view returns (uint256) {
+    function proposalThreshold(NounsDAOTypes.Storage storage ds, uint256 adjustedTotalSupply)
+        external
+        view
+        returns (uint256)
+    {
+        return _proposalThreshold(ds, adjustedTotalSupply);
+    }
+
+    function _proposalThreshold(NounsDAOTypes.Storage storage ds, uint256 adjustedTotalSupply) internal view returns (uint256) {
         return bps2Uint(ds.proposalThresholdBPS, adjustedTotalSupply);
     }
 
-    function isDefeated(
-        NounsDAOTypes.Storage storage ds,
-        NounsDAOTypes.Proposal storage proposal
-    ) internal view returns (bool) {
+    function isDefeated(NounsDAOTypes.Storage storage ds, NounsDAOTypes.Proposal storage proposal)
+        internal
+        view
+        returns (bool)
+    {
         uint256 forVotes = proposal.forVotes;
         return forVotes <= proposal.againstVotes || forVotes < ds.quorumVotes(proposal.id);
     }
@@ -937,7 +951,7 @@ library NounsDAOProposals {
         uint256 votes,
         uint256 adjustedTotalSupply
     ) internal view returns (uint256 propThreshold) {
-        propThreshold = proposalThreshold(ds, adjustedTotalSupply);
+        propThreshold = _proposalThreshold(ds, adjustedTotalSupply);
         if (votes <= propThreshold) revert VotesBelowProposalThreshold();
     }
 

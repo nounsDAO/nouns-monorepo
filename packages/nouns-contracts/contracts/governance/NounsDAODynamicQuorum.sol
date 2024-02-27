@@ -29,7 +29,7 @@ library NounsDAODynamicQuorum {
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function quorumVotes(NounsDAOTypes.Storage storage ds, uint256 proposalId) internal view returns (uint256) {
+    function quorumVotes(NounsDAOTypes.Storage storage ds, uint256 proposalId) external view returns (uint256) {
         NounsDAOTypes.Proposal storage proposal = ds._proposals[proposalId];
         if (proposal.totalSupply == 0) {
             return proposal.quorumVotes;
@@ -39,7 +39,7 @@ library NounsDAODynamicQuorum {
             dynamicQuorumVotes(
                 proposal.againstVotes,
                 proposal.totalSupply,
-                getDynamicQuorumParamsAt(ds, proposal.creationBlock)
+                _getDynamicQuorumParamsAt(ds, proposal.creationBlock)
             );
     }
 
@@ -67,6 +67,13 @@ library NounsDAODynamicQuorum {
         return bps2Uint(quorumBPS, totalSupply);
     }
 
+    function getDynamicQuorumParamsAt(
+        NounsDAOTypes.Storage storage ds,
+        uint256 blockNumber_
+    ) external view returns (NounsDAOTypes.DynamicQuorumParams memory) {
+        return _getDynamicQuorumParamsAt(ds, blockNumber_);
+    }
+
     /**
      * @notice returns the dynamic quorum parameters values at a certain block number
      * @dev The checkpoints array must not be empty, and the block number must be higher than or equal to
@@ -74,7 +81,7 @@ library NounsDAODynamicQuorum {
      * @param blockNumber_ the block number to get the params at
      * @return The dynamic quorum parameters that were set at the given block number
      */
-    function getDynamicQuorumParamsAt(
+    function _getDynamicQuorumParamsAt(
         NounsDAOTypes.Storage storage ds,
         uint256 blockNumber_
     ) internal view returns (NounsDAOTypes.DynamicQuorumParams memory) {
@@ -125,8 +132,8 @@ library NounsDAODynamicQuorum {
     function minQuorumVotes(
         NounsDAOTypes.Storage storage ds,
         uint256 adjustedTotalSupply
-    ) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, adjustedTotalSupply);
+    ) external view returns (uint256) {
+        return bps2Uint(_getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, adjustedTotalSupply);
     }
 
     /**
@@ -135,8 +142,8 @@ library NounsDAODynamicQuorum {
     function maxQuorumVotes(
         NounsDAOTypes.Storage storage ds,
         uint256 adjustedTotalSupply
-    ) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, adjustedTotalSupply);
+    ) external view returns (uint256) {
+        return bps2Uint(_getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, adjustedTotalSupply);
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {

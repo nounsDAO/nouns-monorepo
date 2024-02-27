@@ -128,49 +128,49 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    /**
-     * @notice Used to initialize the contract during delegator contructor
-     * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
-     * @param timelock_ The address of the NounsDAOExecutor
-     * @param nouns_ The address of the NOUN tokens
-     * @param forkEscrow_ The escrow contract used for creating forks
-     * @param forkDAODeployer_ The contract used to deploy new forked DAOs
-     * @param vetoer_ The address allowed to unilaterally veto proposals
-     * @param daoParams_ Initial DAO parameters
-     * @param dynamicQuorumParams_ The initial dynamic quorum parameters
-     */
-    function initialize(
-        address timelock_,
-        address nouns_,
-        address forkEscrow_,
-        address forkDAODeployer_,
-        address vetoer_,
-        NounsDAOParams calldata daoParams_,
-        DynamicQuorumParams calldata dynamicQuorumParams_
-    ) public virtual {
-        if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
-        if (msg.sender != ds.admin) revert AdminOnly();
-        if (timelock_ == address(0)) revert InvalidTimelockAddress();
-        if (nouns_ == address(0)) revert InvalidNounsAddress();
+    // /**
+    //  * @notice Used to initialize the contract during delegator contructor
+    //  * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
+    //  * @param timelock_ The address of the NounsDAOExecutor
+    //  * @param nouns_ The address of the NOUN tokens
+    //  * @param forkEscrow_ The escrow contract used for creating forks
+    //  * @param forkDAODeployer_ The contract used to deploy new forked DAOs
+    //  * @param vetoer_ The address allowed to unilaterally veto proposals
+    //  * @param daoParams_ Initial DAO parameters
+    //  * @param dynamicQuorumParams_ The initial dynamic quorum parameters
+    //  */
+    // function initialize(
+    //     address timelock_,
+    //     address nouns_,
+    //     address forkEscrow_,
+    //     address forkDAODeployer_,
+    //     address vetoer_,
+    //     NounsDAOParams calldata daoParams_,
+    //     DynamicQuorumParams calldata dynamicQuorumParams_
+    // ) public virtual {
+    //     if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
+    //     if (msg.sender != ds.admin) revert AdminOnly();
+    //     if (timelock_ == address(0)) revert InvalidTimelockAddress();
+    //     if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        NounsDAOAdmin._setVotingPeriod(daoParams_.votingPeriod);
-        NounsDAOAdmin._setVotingDelay(daoParams_.votingDelay);
-        NounsDAOAdmin._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
-        ds.timelock = INounsDAOExecutorV2(timelock_);
-        ds.nouns = NounsTokenLike(nouns_);
-        ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
-        ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
-        ds.vetoer = vetoer_;
-        NounsDAOAdmin._setDynamicQuorumParams(
-            dynamicQuorumParams_.minQuorumVotesBPS,
-            dynamicQuorumParams_.maxQuorumVotesBPS,
-            dynamicQuorumParams_.quorumCoefficient
-        );
+    //     NounsDAOAdmin._setVotingPeriod(daoParams_.votingPeriod);
+    //     NounsDAOAdmin._setVotingDelay(daoParams_.votingDelay);
+    //     NounsDAOAdmin._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
+    //     ds.timelock = INounsDAOExecutorV2(timelock_);
+    //     ds.nouns = NounsTokenLike(nouns_);
+    //     ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
+    //     ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
+    //     ds.vetoer = vetoer_;
+    //     NounsDAOAdmin._setDynamicQuorumParams(
+    //         dynamicQuorumParams_.minQuorumVotesBPS,
+    //         dynamicQuorumParams_.maxQuorumVotesBPS,
+    //         dynamicQuorumParams_.quorumCoefficient
+    //     );
 
-        NounsDAOAdmin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
-        NounsDAOAdmin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
-        NounsDAOAdmin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
-    }
+    //     NounsDAOAdmin._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+    //     NounsDAOAdmin._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+    //     NounsDAOAdmin._setProposalUpdatablePeriodInBlocks(daoParams_.proposalUpdatablePeriodInBlocks);
+    // }
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -360,8 +360,9 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory description,
         string memory updateMessage
-    ) external {
-        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
+    ) external returns (bytes memory) {
+        return Address.functionDelegateCall(address(NounsDAOProposals), msg.data);
+        // ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
     }
 
     /**
@@ -473,9 +474,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @return signatures
      * @return calldatas
      */
-    function getActions(
-        uint256 proposalId
-    )
+    function getActions(uint256 proposalId)
         external
         view
         returns (
@@ -515,8 +514,9 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @return A `ProposalCondensed` struct with the proposal data, not backwards compatible as it contains additional values
      * like `objectionPeriodEndBlock` and `signers`
      */
-    function proposalsV3(uint256 proposalId) external view returns (ProposalCondensedV3 memory) {
-        return ds.proposalsV3(proposalId);
+    function proposalsV3(uint256 proposalId) external returns (bytes memory) {//(ProposalCondensedV3 memory) {
+        return Address.functionDelegateCall(address(NounsDAOProposals), msg.data);
+        // return ds.proposalsV3(proposalId);
     }
 
     /**
@@ -758,7 +758,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function quorumVotes(uint256 proposalId) public view returns (uint256) {
+    function quorumVotes(uint256 proposalId) external view returns (uint256) {
         return ds.quorumVotes(proposalId);
     }
 
