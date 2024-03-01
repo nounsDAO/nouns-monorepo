@@ -125,6 +125,24 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         assertEq(uint32(dao.lastMinuteWindowInBlocks()), expectedValue);
     }
 
+    function test__setPendingAdmin_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setPendingAdmin(address(1));
+    }
+
+    function test__acceptAdmin_givenZeroPendingAdmin_reverts() public {
+        vm.expectRevert('NounsDAO::_acceptAdmin: pending admin only');
+        dao._acceptAdmin();
+    }
+
+    function test__acceptAdmin_givenSenderNotPendingAdmin_reverts() public {
+        vm.prank(address(dao.admin()));
+        dao._setPendingAdmin(makeAddr('new pending admin'));
+
+        vm.expectRevert('NounsDAO::_acceptAdmin: pending admin only');
+        dao._acceptAdmin();
+    }
+
     function test_changingAdmin_worksForAdmin() public {
         address newAdmin = makeAddr('new admin');
         address oldAdmin = address(dao.admin());
@@ -301,6 +319,34 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         dao._setForkThresholdBPS(1234);
 
         assertEq(dao.forkThresholdBPS(), 1234);
+    }
+
+    function test__setForkParams_onlyAdmin() public {
+        address[] memory erc20s = new address[](0);
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._setForkParams(makeAddr('fork escrow'), makeAddr('fork DAO deployer'), erc20s, 1, 1);
+    }
+
+    function test__setForkParams_works() public {
+        address[] memory erc20s = new address[](1);
+        erc20s[0] = makeAddr('erc20');
+
+        vm.startPrank(address(dao.timelock()));
+        dao._setForkParams(
+            makeAddr('fork escrow'),
+            makeAddr('fork DAO deployer'),
+            erc20s,
+            NounsDAOAdmin.MIN_FORK_PERIOD + 1,
+            42
+        );
+        vm.stopPrank();
+
+        assertEq(address(dao.forkEscrow()), makeAddr('fork escrow'));
+        assertEq(address(dao.forkDAODeployer()), makeAddr('fork DAO deployer'));
+        assertEq(dao.erc20TokensToIncludeInFork().length, 1);
+        assertEq(dao.erc20TokensToIncludeInFork()[0], erc20s[0]);
+        assertEq(dao.forkPeriod(), NounsDAOAdmin.MIN_FORK_PERIOD + 1);
+        assertEq(dao.forkThresholdBPS(), 42);
     }
 
     function test_setErc20TokensToIncludeInFork_onlyAdmin() public {
