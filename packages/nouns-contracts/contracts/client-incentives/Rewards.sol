@@ -300,7 +300,7 @@ contract Rewards is
      * Gas spent is refunded in `ethToken`.
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
-     * @param votingClientIds array of sorted client ids that were used to vote on of all eligible the eligible proposals in
+     * @param votingClientIds array of sorted client ids that were used to vote on the eligible proposals in
      * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
      */
     function updateRewardsForProposalWritingAndVoting(
