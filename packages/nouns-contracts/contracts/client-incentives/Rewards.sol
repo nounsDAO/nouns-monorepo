@@ -450,7 +450,7 @@ contract Rewards is
 
     /**
      * @notice Withdraws the balance of a client
-     * @dev The caller must be the owner of the NFT with id `clientId`
+     * @dev The caller must be the owner of the NFT with id `clientId` and the client must be approved by the DAO.
      * @param clientId Which client balance to withdraw
      * @param to the address to withdraw to
      * @param amount amount to withdraw
