@@ -302,6 +302,7 @@ contract Rewards is
      * including this id must have ended voting.
      * @param votingClientIds array of sorted client ids that were used to vote on the eligible proposals in
      * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
+     * You may use `getVotingClientIds` as a convenience function to get the correct `votingClientIds`.
      */
     function updateRewardsForProposalWritingAndVoting(
         uint32 lastProposalId,
