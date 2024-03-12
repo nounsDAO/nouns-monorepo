@@ -487,7 +487,7 @@ contract Rewards is
     }
 
     /**
-     * @notice Returns the clientIds that is needed to be passed as a parameter to updateRewardsForProposalWritingAndVoting
+     * @notice Returns the clientIds that are needed to be passed as a parameter to updateRewardsForProposalWritingAndVoting
      * @dev This is not meant to be called onchain because it may be very gas intensive.
      */
     function getVotingClientIds(uint32 lastProposalId) public view returns (uint32[] memory) {
