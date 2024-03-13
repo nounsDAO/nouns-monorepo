@@ -1,5 +1,5 @@
 import { utils } from 'ethers';
-import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicV3Factory } from '@nouns/contracts';
+import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
@@ -38,7 +38,7 @@ export interface VoteSignalDetail {
   };
 }
 
-const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
+const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 export const useCreateProposalCandidate = () => {
   const { send: createProposalCandidate, state: createProposalCandidateState } =
@@ -62,7 +62,6 @@ export const useAddSignature = () => {
   return { addSignature, addSignatureState };
 };
 
-
 const deDupeSigners = (signers: string[]) => {
   const uniqueSigners: string[] = [];
   signers.forEach(signer => {
@@ -79,7 +78,7 @@ const filterSigners = (
   activePendingProposers: string[],
   signers?: CandidateSignature[],
   proposalIdToUpdate?: number,
-  updatableProposalIds?: number[]
+  updatableProposalIds?: number[],
 ) => {
   const sigsFiltered = signers?.filter(
     sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
@@ -93,8 +92,10 @@ const filterSigners = (
         ?.nounsRepresented.length || 0;
     // don't count votes from signers who have active or pending proposals
     // but include them in the list of signers to display with a note that they have an active proposal
-    const parentProposalIsUpdatable = proposalIdToUpdate && updatableProposalIds?.includes(proposalIdToUpdate ?? 0);
-    const activeOrPendingProposal = !parentProposalIsUpdatable && activePendingProposers.includes(signature.signer.id);
+    const parentProposalIsUpdatable =
+      proposalIdToUpdate && updatableProposalIds?.includes(proposalIdToUpdate ?? 0);
+    const activeOrPendingProposal =
+      !parentProposalIsUpdatable && activePendingProposers.includes(signature.signer.id);
     if (!activeOrPendingProposal) {
       voteCount += delegateVoteCount;
     }
@@ -103,17 +104,15 @@ const filterSigners = (
       signer: {
         ...signature.signer,
         voteCount: delegateVoteCount,
-        activeOrPendingProposal: activeOrPendingProposal
+        activeOrPendingProposal: activeOrPendingProposal,
       },
     };
     activeSigs.push(sigWithVotes);
   });
 
-  const filteredSignatures = activeSigs.filter(
-    (signature: CandidateSignature) => {
-      return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
-    },
-  );
+  const filteredSignatures = activeSigs.filter((signature: CandidateSignature) => {
+    return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
+  });
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
   });
@@ -124,29 +123,39 @@ const filterSigners = (
 export const useCandidateProposals = (blockNumber?: number) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: ProposalCandidateSubgraphEntity[] = candidates?.proposalCandidates?.filter(
-    (candidate: ProposalCandidateSubgraphEntity) =>
-      candidate.latestVersion.content.matchingProposalIds.length === 0 &&
-      candidate.canceled === false,
-  );
+  const unmatchedCandidates: ProposalCandidateSubgraphEntity[] =
+    candidates?.proposalCandidates?.filter(
+      (candidate: ProposalCandidateSubgraphEntity) =>
+        candidate.latestVersion.content.matchingProposalIds.length === 0 &&
+        candidate.canceled === false,
+    );
   const activeCandidateProposers = unmatchedCandidates?.map(
     (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
   );
-  const proposerDelegates =
-    useDelegateNounsAtBlockQuery(activeCandidateProposers, blockNumber ?? 0);
+  const proposerDelegates = useDelegateNounsAtBlockQuery(
+    activeCandidateProposers,
+    blockNumber ?? 0,
+  );
   const threshold = useProposalThreshold() || 0;
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
-  const allSigners = unmatchedCandidates?.map(
-    (candidate: ProposalCandidateSubgraphEntity) =>
+  const allSigners = unmatchedCandidates
+    ?.map((candidate: ProposalCandidateSubgraphEntity) =>
       candidate.latestVersion.content.contentSignatures?.map(
         (sig: CandidateSignature) => sig.signer.id,
       ),
-  ).flat();
-  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(allSigners ? deDupeSigners(allSigners) : [], blockNumber ?? 0);
+    )
+    .flat();
+  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
+    allSigners ? deDupeSigners(allSigners) : [],
+    blockNumber ?? 0,
+  );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
-  const candidatesData = proposerDelegates.data && unmatchedCandidates?.map(
-    (candidate: ProposalCandidateSubgraphEntity) => {
-      const proposerVotes = proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())?.nounsRepresented?.length || 0;
+  const candidatesData =
+    proposerDelegates.data &&
+    unmatchedCandidates?.map((candidate: ProposalCandidateSubgraphEntity) => {
+      const proposerVotes =
+        proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
+          ?.nounsRepresented?.length || 0;
       const parsedData = parseSubgraphCandidate(
         candidate,
         proposerVotes,
@@ -155,19 +164,24 @@ export const useCandidateProposals = (blockNumber?: number) => {
         activePendingProposers.data,
         false,
         signersDelegateSnapshot.data,
-        updatableProposalIds.data
+        updatableProposalIds.data,
       );
       return parsedData;
-    },
-  );
+    });
 
-  candidatesData && candidatesData?.sort((a, b) => {
-    return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
-  });
+  candidatesData &&
+    candidatesData?.sort((a, b) => {
+      return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
+    });
   return { loading, data: candidatesData, error };
 };
 
-export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate?: boolean, blockNumber?: number) => {
+export const useCandidateProposal = (
+  id: string,
+  pollInterval?: number,
+  toUpdate?: boolean,
+  blockNumber?: number,
+) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
     pollInterval: pollInterval || 0,
@@ -176,22 +190,30 @@ export const useCandidateProposal = (id: string, pollInterval?: number, toUpdate
   const threshold = useProposalThreshold() || 0;
   const versionSignatures = data?.proposalCandidate.latestVersion.content.contentSignatures;
   const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
-  const proposerDelegates =
-    useDelegateNounsAtBlockQuery([data?.proposalCandidate.proposer], blockNumber || 0);
+  const proposerDelegates = useDelegateNounsAtBlockQuery(
+    [data?.proposalCandidate.proposer],
+    blockNumber || 0,
+  );
   const proposerNounVotes =
     (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
-  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(allSigners ? deDupeSigners(allSigners) : [], blockNumber ?? 0);
-  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
-  const parsedData = proposerDelegates.data && data?.proposalCandidate && parseSubgraphCandidate(
-    data.proposalCandidate,
-    proposerNounVotes,
-    threshold,
-    timestampNow,
-    activePendingProposers.data,
-    toUpdate,
-    signersDelegateSnapshot.data,
-    updatableProposalIds.data
+  const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
+    allSigners ? deDupeSigners(allSigners) : [],
+    blockNumber ?? 0,
   );
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
+  const parsedData =
+    proposerDelegates.data &&
+    data?.proposalCandidate &&
+    parseSubgraphCandidate(
+      data.proposalCandidate,
+      proposerNounVotes,
+      threshold,
+      timestampNow,
+      activePendingProposers.data,
+      toUpdate,
+      signersDelegateSnapshot.data,
+      updatableProposalIds.data,
+    );
   return { loading, data: parsedData, error, refetch };
 };
 
@@ -300,7 +322,7 @@ const parseSubgraphCandidate = (
   activePendingProposers: string[],
   toUpdate?: boolean,
   delegateSnapshot?: Delegates,
-  updatableProposalIds?: number[]
+  updatableProposalIds?: number[],
 ) => {
   const description = candidate.latestVersion.content.description
     ?.replace(/\\n/g, '\n')
@@ -324,8 +346,10 @@ const parseSubgraphCandidate = (
     delegateSnapshot,
     activePendingProposers,
     candidate.latestVersion.content.contentSignatures,
-    candidate.latestVersion.content.proposalIdToUpdate ? parseInt(candidate.latestVersion.content.proposalIdToUpdate) : undefined,
-    updatableProposalIds
+    candidate.latestVersion.content.proposalIdToUpdate
+      ? parseInt(candidate.latestVersion.content.proposalIdToUpdate)
+      : undefined,
+    updatableProposalIds,
   );
   const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
   return {

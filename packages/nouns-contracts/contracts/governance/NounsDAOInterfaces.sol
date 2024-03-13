@@ -32,9 +32,9 @@
 // NounsDAOStorageV3
 // See NounsDAOLogicV3.sol for more details.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
-contract NounsDAOEvents {
+interface NounsDAOEventsV3 {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
         uint256 id,
@@ -89,9 +89,6 @@ contract NounsDAOEvents {
     /// @notice An event emitted when the voting period is set
     event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
 
-    /// @notice Emitted when implementation is changed
-    event NewImplementation(address oldImplementation, address newImplementation);
-
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
 
@@ -106,9 +103,7 @@ contract NounsDAOEvents {
 
     /// @notice Emitted when vetoer is changed
     event NewVetoer(address oldVetoer, address newVetoer);
-}
 
-contract NounsDAOEventsV2 is NounsDAOEvents {
     /// @notice Emitted when minQuorumVotesBPS is set
     event MinQuorumVotesBPSSet(uint16 oldMinQuorumVotesBPS, uint16 newMinQuorumVotesBPS);
 
@@ -126,25 +121,17 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when pendingVetoer is changed
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
-}
 
-contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     /// @notice An event emitted when a new proposal is created, which includes additional information
     /// @dev V3 adds `signers`, `updatePeriodEndBlock` compared to the V1/V2 event.
+    /// @dev V4: Removed data that's already emitted in `ProposalCreated`, added clientId
     event ProposalCreatedWithRequirements(
         uint256 id,
-        address proposer,
         address[] signers,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
         uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
-        string description
+        uint32 indexed clientId
     );
 
     /// @notice Emitted when a proposal is created to be executed on timelockV1
@@ -202,12 +189,6 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         uint32 newProposalUpdatablePeriodInBlocks
     );
 
-    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
-    event VoteSnapshotBlockSwitchProposalIdSet(
-        uint256 oldVoteSnapshotBlockSwitchProposalId,
-        uint256 newVoteSnapshotBlockSwitchProposalId
-    );
-
     /// @notice Emitted when the erc20 tokens to include in a fork are set
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
@@ -258,285 +239,11 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when withdrawing nouns from escrow increases adjusted total supply
     event DAONounsSupplyIncreasedFromEscrow(uint256 numTokens, address to);
-}
 
-contract NounsDAOProxyStorage {
-    /// @notice Administrator for this contract
-    address public admin;
-
-    /// @notice Pending administrator for this contract
-    address public pendingAdmin;
-
-    /// @notice Active brains of Governor
-    address public implementation;
-}
-
-/**
- * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV1. Create a new
- * contract which implements NounsDAOStorageV1 and following the naming convention
- * NounsDAOStorageVX.
- */
-contract NounsDAOStorageV1 is NounsDAOProxyStorage {
-    /// @notice Vetoer who has the ability to veto any proposal
-    address public vetoer;
-
-    /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
-    uint256 public votingDelay;
-
-    /// @notice The duration of voting on a proposal, in blocks
-    uint256 public votingPeriod;
-
-    /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
-    uint256 public proposalThresholdBPS;
-
-    /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-    uint256 public quorumVotesBPS;
-
-    /// @notice The total number of proposals
-    uint256 public proposalCount;
-
-    /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-    INounsDAOExecutor public timelock;
-
-    /// @notice The address of the Nouns tokens
-    NounsTokenLike public nouns;
-
-    /// @notice The official record of all proposals ever proposed
-    mapping(uint256 => Proposal) public proposals;
-
-    /// @notice The latest proposal for each proposer
-    mapping(address => uint256) public latestProposalIds;
-
-    struct Proposal {
-        /// @notice Unique id for looking up a proposal
-        uint256 id;
-        /// @notice Creator of the proposal
-        address proposer;
-        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 proposalThreshold;
-        /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 quorumVotes;
-        /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
-        uint256 eta;
-        /// @notice the ordered list of target addresses for calls to be made
-        address[] targets;
-        /// @notice The ordered list of values (i.e. msg.value) to be passed to the calls to be made
-        uint256[] values;
-        /// @notice The ordered list of function signatures to be called
-        string[] signatures;
-        /// @notice The ordered list of calldata to be passed to each call
-        bytes[] calldatas;
-        /// @notice The block at which voting begins: holders must delegate their votes prior to this block
-        uint256 startBlock;
-        /// @notice The block at which voting ends: votes must be cast prior to this block
-        uint256 endBlock;
-        /// @notice Current number of votes in favor of this proposal
-        uint256 forVotes;
-        /// @notice Current number of votes in opposition to this proposal
-        uint256 againstVotes;
-        /// @notice Current number of votes for abstaining for this proposal
-        uint256 abstainVotes;
-        /// @notice Flag marking whether the proposal has been canceled
-        bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
-        /// @notice Flag marking whether the proposal has been executed
-        bool executed;
-        /// @notice Receipts of ballots for the entire set of voters
-        mapping(address => Receipt) receipts;
-    }
-
-    /// @notice Ballot receipt record for a voter
-    struct Receipt {
-        /// @notice Whether or not a vote has been cast
-        bool hasVoted;
-        /// @notice Whether or not the voter supports the proposal or abstains
-        uint8 support;
-        /// @notice The number of votes the voter had, which were cast
-        uint96 votes;
-    }
-
-    /// @notice Possible states that a proposal may be in
-    enum ProposalState {
-        Pending,
-        Active,
-        Canceled,
-        Defeated,
-        Succeeded,
-        Queued,
-        Expired,
-        Executed,
-        Vetoed
-    }
-}
-
-/**
- * @title Extra fields added to the `Proposal` struct from NounsDAOStorageV1
- * @notice The following fields were added to the `Proposal` struct:
- * - `Proposal.totalSupply`
- * - `Proposal.creationBlock`
- */
-contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
-    /// @notice Vetoer who has the ability to veto any proposal
-    address public vetoer;
-
-    /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
-    uint256 public votingDelay;
-
-    /// @notice The duration of voting on a proposal, in blocks
-    uint256 public votingPeriod;
-
-    /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
-    uint256 public proposalThresholdBPS;
-
-    /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-    uint256 public quorumVotesBPS;
-
-    /// @notice The total number of proposals
-    uint256 public proposalCount;
-
-    /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-    INounsDAOExecutor public timelock;
-
-    /// @notice The address of the Nouns tokens
-    NounsTokenLike public nouns;
-
-    /// @notice The official record of all proposals ever proposed
-    mapping(uint256 => Proposal) internal _proposals;
-
-    /// @notice The latest proposal for each proposer
-    mapping(address => uint256) public latestProposalIds;
-
-    struct Proposal {
-        /// @notice Unique id for looking up a proposal
-        uint256 id;
-        /// @notice Creator of the proposal
-        address proposer;
-        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 proposalThreshold;
-        /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 quorumVotes;
-        /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
-        uint256 eta;
-        /// @notice the ordered list of target addresses for calls to be made
-        address[] targets;
-        /// @notice The ordered list of values (i.e. msg.value) to be passed to the calls to be made
-        uint256[] values;
-        /// @notice The ordered list of function signatures to be called
-        string[] signatures;
-        /// @notice The ordered list of calldata to be passed to each call
-        bytes[] calldatas;
-        /// @notice The block at which voting begins: holders must delegate their votes prior to this block
-        uint256 startBlock;
-        /// @notice The block at which voting ends: votes must be cast prior to this block
-        uint256 endBlock;
-        /// @notice Current number of votes in favor of this proposal
-        uint256 forVotes;
-        /// @notice Current number of votes in opposition to this proposal
-        uint256 againstVotes;
-        /// @notice Current number of votes for abstaining for this proposal
-        uint256 abstainVotes;
-        /// @notice Flag marking whether the proposal has been canceled
-        bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
-        /// @notice Flag marking whether the proposal has been executed
-        bool executed;
-        /// @notice Receipts of ballots for the entire set of voters
-        mapping(address => Receipt) receipts;
-        /// @notice The total supply at the time of proposal creation
-        uint256 totalSupply;
-        /// @notice The block at which this proposal was created
-        uint256 creationBlock;
-    }
-
-    /// @notice Ballot receipt record for a voter
-    struct Receipt {
-        /// @notice Whether or not a vote has been cast
-        bool hasVoted;
-        /// @notice Whether or not the voter supports the proposal or abstains
-        uint8 support;
-        /// @notice The number of votes the voter had, which were cast
-        uint96 votes;
-    }
-
-    /// @notice Possible states that a proposal may be in
-    enum ProposalState {
-        Pending,
-        Active,
-        Canceled,
-        Defeated,
-        Succeeded,
-        Queued,
-        Expired,
-        Executed,
-        Vetoed
-    }
-}
-
-/**
- * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV2. Create a new
- * contract which implements NounsDAOStorageV2 and following the naming convention
- * NounsDAOStorageVX.
- */
-contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
-    DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
-
-    /// @notice Pending new vetoer
-    address public pendingVetoer;
-
-    struct DynamicQuorumParams {
-        /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
-        uint16 minQuorumVotesBPS;
-        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
-        uint16 maxQuorumVotesBPS;
-        /// @notice The dynamic quorum coefficient
-        /// @dev Assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
-        uint32 quorumCoefficient;
-    }
-
-    /// @notice A checkpoint for storing dynamic quorum params from a given block
-    struct DynamicQuorumParamsCheckpoint {
-        /// @notice The block at which the new values were set
-        uint32 fromBlock;
-        /// @notice The parameter values of this checkpoint
-        DynamicQuorumParams params;
-    }
-
-    struct ProposalCondensed {
-        /// @notice Unique id for looking up a proposal
-        uint256 id;
-        /// @notice Creator of the proposal
-        address proposer;
-        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 proposalThreshold;
-        /// @notice The minimum number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 quorumVotes;
-        /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
-        uint256 eta;
-        /// @notice The block at which voting begins: holders must delegate their votes prior to this block
-        uint256 startBlock;
-        /// @notice The block at which voting ends: votes must be cast prior to this block
-        uint256 endBlock;
-        /// @notice Current number of votes in favor of this proposal
-        uint256 forVotes;
-        /// @notice Current number of votes in opposition to this proposal
-        uint256 againstVotes;
-        /// @notice Current number of votes for abstaining for this proposal
-        uint256 abstainVotes;
-        /// @notice Flag marking whether the proposal has been canceled
-        bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
-        /// @notice Flag marking whether the proposal has been executed
-        bool executed;
-        /// @notice The total supply at the time of proposal creation
-        uint256 totalSupply;
-        /// @notice The block at which this proposal was created
-        uint256 creationBlock;
-    }
+    /// @notice An event emitted when a vote has been cast with a non-zero client Id.
+    /// @dev Assumes the `VoteCast` event is emitted, and that indexers can use the voter address and propose ID to
+    /// find the relevant vote and set its client ID.
+    event VoteCastWithClientId(address indexed voter, uint256 indexed proposalId, uint32 indexed clientId);
 }
 
 interface INounsDAOExecutor {
@@ -578,17 +285,9 @@ interface NounsTokenLike {
 
     function totalSupply() external view returns (uint256);
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) external;
+    function transferFrom(address from, address to, uint256 tokenId) external;
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) external;
+    function safeTransferFrom(address from, address to, uint256 tokenId) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -602,9 +301,10 @@ interface NounsTokenLike {
 }
 
 interface IForkDAODeployer {
-    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrowAddress)
-        external
-        returns (address treasury, address token);
+    function deployForkDAO(
+        uint256 forkingPeriodEndTimestamp,
+        INounsDAOForkEscrow forkEscrowAddress
+    ) external returns (address treasury, address token);
 
     function tokenImpl() external view returns (address);
 
@@ -618,11 +318,7 @@ interface IForkDAODeployer {
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendETH(address recipient, uint256 ethToSend) external;
 
-    function sendERC20(
-        address recipient,
-        address erc20Token,
-        uint256 tokensToSend
-    ) external;
+    function sendERC20(address recipient, address erc20Token, uint256 tokensToSend) external;
 }
 
 interface INounsDAOForkEscrow {
@@ -647,10 +343,8 @@ interface INounsDAOForkEscrow {
     function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address);
 }
 
-contract NounsDAOStorageV3 {
-    StorageV3 ds;
-
-    struct StorageV3 {
+interface NounsDAOTypes {
+    struct Storage {
         // ================ PROXY ================ //
         /// @notice Administrator for this contract
         address admin;
@@ -710,15 +404,18 @@ contract NounsDAOStorageV3 {
         uint256 forkThresholdBPS;
         /// @notice Address of the original timelock
         INounsDAOExecutor timelockV1;
-        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
-        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
+        /// @dev To be zeroed-out in the upcoming DAO upgrade.
         uint256 voteSnapshotBlockSwitchProposalId;
     }
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal
-        uint256 id;
+        uint32 id;
+        /// @notice client id for rewards
+        uint32 clientId;
+        /// @notice currently unused
+        uint192 _gap;
         /// @notice Creator of the proposal
         address proposer;
         /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
@@ -756,7 +453,9 @@ contract NounsDAOStorageV3 {
         /// @notice The total supply at the time of proposal creation
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
-        uint64 creationBlock;
+        uint32 creationBlock;
+        /// @notice The timestamp of the block at which this proposal was created
+        uint32 creationTimestamp;
         /// @notice The last block which allows updating a proposal's description and transactions
         uint64 updatePeriodEndBlock;
         /// @notice Starts at 0 and is set to the block at which the objection period ends when the objection period is initiated
@@ -767,6 +466,15 @@ contract NounsDAOStorageV3 {
         address[] signers;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
+        /// @notice How many votes and vote transactions each clientId contributed to this proposal
+        mapping(uint32 => ClientVoteData) voteClients;
+    }
+
+    struct ClientVoteData {
+        /// @notice The number of votes the client facilitated on a proposal
+        uint32 votes;
+        /// @notice The number of vote transactions the client facilitated on a proposal
+        uint32 txs;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -788,7 +496,28 @@ contract NounsDAOStorageV3 {
         uint256 expirationTimestamp;
     }
 
-    struct ProposalCondensed {
+    /// @notice A subset of Proposal data, used for client rewards calculation
+    struct ProposalForRewards {
+        /// @notice The proposal's voting period end block
+        uint256 endBlock;
+        /// @notice The proposal's objection period end block
+        uint256 objectionPeriodEndBlock;
+        /// @notice The proposal's For votes count
+        uint256 forVotes;
+        /// @notice The proposal's Against votes count
+        uint256 againstVotes;
+        /// @notice The proposal's Abstain votes count
+        uint256 abstainVotes;
+        /// @notice The proposal's snapshot of total supply
+        uint256 totalSupply;
+        /// @notice The timestamp of the block at which the proposal was created
+        uint256 creationTimestamp;
+        /// @notice The ID for the client that facilitated the proposal
+        uint32 clientId;
+        ClientVoteData[] voteData;
+    }
+
+    struct ProposalCondensedV3 {
         /// @notice Unique id for looking up a proposal
         uint256 id;
         /// @notice Creator of the proposal
@@ -827,6 +556,39 @@ contract NounsDAOStorageV3 {
         uint256 objectionPeriodEndBlock;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
+    }
+
+    struct ProposalCondensedV2 {
+        /// @notice Unique id for looking up a proposal
+        uint256 id;
+        /// @notice Creator of the proposal
+        address proposer;
+        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint256 proposalThreshold;
+        /// @notice The minimum number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint256 quorumVotes;
+        /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
+        uint256 eta;
+        /// @notice The block at which voting begins: holders must delegate their votes prior to this block
+        uint256 startBlock;
+        /// @notice The block at which voting ends: votes must be cast prior to this block
+        uint256 endBlock;
+        /// @notice Current number of votes in favor of this proposal
+        uint256 forVotes;
+        /// @notice Current number of votes in opposition to this proposal
+        uint256 againstVotes;
+        /// @notice Current number of votes for abstaining for this proposal
+        uint256 abstainVotes;
+        /// @notice Flag marking whether the proposal has been canceled
+        bool canceled;
+        /// @notice Flag marking whether the proposal has been vetoed
+        bool vetoed;
+        /// @notice Flag marking whether the proposal has been executed
+        bool executed;
+        /// @notice The total supply at the time of proposal creation
+        uint256 totalSupply;
+        /// @notice The block at which this proposal was created
+        uint256 creationBlock;
     }
 
     struct DynamicQuorumParams {
@@ -870,4 +632,8 @@ contract NounsDAOStorageV3 {
         ObjectionPeriod,
         Updatable
     }
+}
+
+contract NounsDAOStorage is NounsDAOTypes {
+    Storage ds;
 }

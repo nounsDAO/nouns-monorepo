@@ -99,6 +99,9 @@ type Bid @entity {
 
   "The timestamp of the block the bid is in"
   blockTimestamp: BigInt!
+
+  "The ID of the client that facilitated this bid"
+  clientId: Int
 }
 
 type Auction @entity {
@@ -122,6 +125,8 @@ type Auction @entity {
 
   "Whether or not the auction has been settled"
   settled: Boolean!
+
+  clientId: Int!
 
   "The auction bids"
   bids: [Bid!]! @derivedFrom(field: "auction")
@@ -228,10 +233,10 @@ type Proposal @entity {
   endBlock: BigInt!
 
   "The proposal threshold at the time of proposal creation"
-  proposalThreshold: BigInt!
+  proposalThreshold: BigInt
 
   "The required number of votes for quorum at the time of proposal creation"
-  quorumVotes: BigInt!
+  quorumVotes: BigInt
 
   "The number of votes in favor of the proposal"
   forVotes: BigInt!
@@ -249,7 +254,7 @@ type Proposal @entity {
   description: String!
 
   "Status of the proposal"
-  status: ProposalStatus!
+  status: ProposalStatus
 
   "Once the proposal is queued for execution it will have an ETA of the execution"
   executionETA: BigInt
@@ -276,7 +281,7 @@ type Proposal @entity {
   objectionPeriodEndBlock: BigInt!
 
   "The update period end block"
-  updatePeriodEndBlock: BigInt!
+  updatePeriodEndBlock: BigInt
 
   "Feedback posts associated to this proposal"
   feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
@@ -310,6 +315,9 @@ type Proposal @entity {
 
   "The timestamp when this proposal was queued"
   queuedTimestamp: BigInt
+
+  "The ID of the client that facilitated this proposal"
+  clientId: Int!
 }
 
 type ProposalVersion @entity(immutable: true) {
@@ -379,6 +387,9 @@ type Vote @entity {
 
   "The timestamp of the block the vote is in"
   blockTimestamp: BigInt!
+
+  "The ID of the client that facilitated this vote"
+  clientId: Int!
 }
 
 type Governance @entity {

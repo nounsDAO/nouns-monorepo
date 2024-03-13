@@ -1,8 +1,4 @@
-import {
-  NounsDAOV2ABI,
-  NounsDAOV3ABI,
-  NounsDaoLogicV3Factory,
-} from '@nouns/sdk';
+import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -166,7 +162,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-  PartialProposalSubgraphEntity {
+    PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -266,8 +262,7 @@ export interface ForkSubgraphEntity {
 }
 
 const abi = new utils.Interface(NounsDAOV3ABI);
-const abiV2 = new utils.Interface(NounsDAOV2ABI);
-const nounsDaoContract = NounsDaoLogicV3Factory.connect(config.addresses.nounsDAOProxy, undefined!);
+const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -545,7 +540,11 @@ const getProposalState = (
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
-    if (isDaoGteV3 && proposal.updatePeriodEndBlock && blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
+    if (
+      isDaoGteV3 &&
+      proposal.updatePeriodEndBlock &&
+      blockNumber <= parseInt(proposal.updatePeriodEndBlock)
+    ) {
       return ProposalState.UPDATABLE;
     }
 
@@ -584,7 +583,7 @@ const getProposalState = (
       return ProposalState.UNDETERMINED;
     }
     // if v3+ and not on timelock v1, grace period is 21 days, otherwise 14 days
-    const GRACE_PERIOD = (isDaoGteV3 && !onTimelockV1) ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
+    const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
     if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
       return ProposalState.EXPIRED;
     }
@@ -603,11 +602,17 @@ const parsePartialSubgraphProposal = (
   if (!proposal) {
     return;
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true
+  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3, onTimelockV1),
+    status: getProposalState(
+      blockNumber,
+      new Date((timestamp ?? 0) * 1000),
+      proposal,
+      isDaoGteV3,
+      onTimelockV1,
+    ),
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
     updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
@@ -648,13 +653,19 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true
+  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
   return {
     id: proposal.id,
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
-    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal, isDaoGteV3, onTimelockV1),
+    status: getProposalState(
+      blockNumber,
+      new Date((timestamp ?? 0) * 1000),
+      proposal,
+      isDaoGteV3,
+      onTimelockV1,
+    ),
     proposalThreshold: parseInt(proposal.proposalThreshold),
     quorumVotes: parseInt(proposal.quorumVotes),
     forCount: parseInt(proposal.forVotes),
@@ -757,7 +768,7 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
     blockNumber,
     timestamp,
     toUpdate,
-    isDaoGteV3
+    isDaoGteV3,
   );
 };
 
@@ -1062,10 +1073,7 @@ const eventsWithforkCycleEvents = (
     id: 'fork-ended',
     createdAt: endTimestamp ? endTimestamp.toString() : null,
   };
-  const forkEvents: ForkCycleEvent[] = [
-    executed,
-    forkEnded,
-  ];
+  const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
   const sortedEvents = [...events, ...forkEvents].sort(
     (
@@ -1198,12 +1206,16 @@ export const useForks = (pollInterval?: number) => {
 };
 
 export const useIsForkActive = () => {
-  const timestamp = parseInt((new Date().getTime() / 1000).toFixed(0))
+  const timestamp = parseInt((new Date().getTime() / 1000).toFixed(0));
   const {
     loading,
     data: forksData,
     error,
-  } = useQuery(isForkActiveQuery(timestamp)) as { loading: boolean; data: { forks: Fork[] }; error: Error; };
+  } = useQuery(isForkActiveQuery(timestamp)) as {
+    loading: boolean;
+    data: { forks: Fork[] };
+    error: Error;
+  };
   const data = forksData?.forks.length > 0 ? true : false;
   return {
     loading,
@@ -1287,22 +1299,6 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
 };
 
 export const useIsDaoGteV3 = (): boolean => {
-  const [implementation] =
-    useContractCall({
-      abi: abiV2,
-      address: config.addresses.nounsDAOProxy,
-      method: 'implementation',
-    }) || [];
-  if (
-    implementation &&
-    config.addresses.nounsDAOLogicV2 &&
-    implementation.toLowerCase() !== config.addresses.nounsDAOLogicV2.toLowerCase()
-  ) {
-    return true;
-  }
-  if (!config.featureToggles.daoGteV3) {
-    return false;
-  }
   return true;
 };
 
@@ -1315,7 +1311,6 @@ export const useLastMinuteWindowInBlocks = (): number | undefined => {
     }) || [];
   return lastMinuteWindowInBlocks?.toNumber();
 };
-
 
 export const useUpdatableProposalIds = (blockNumber: number) => {
   const {
@@ -1335,4 +1330,4 @@ export const useUpdatableProposalIds = (blockNumber: number) => {
     data,
     error,
   };
-}
+};

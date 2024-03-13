@@ -3,23 +3,16 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './DeployUtilsV3.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
 import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract DeployUtilsFork is DeployUtilsV3 {
-    function _deployForkDAO(INounsDAOForkEscrow escrow)
-        public
-        returns (
-            address treasury,
-            address token,
-            address dao
-        )
-    {
+    function _deployForkDAO(INounsDAOForkEscrow escrow) public returns (address treasury, address token, address dao) {
         ForkDAODeployer deployer = new ForkDAODeployer(
             address(new NounsTokenFork()),
             address(new NounsAuctionHouseFork()),
@@ -36,15 +29,8 @@ abstract contract DeployUtilsFork is DeployUtilsV3 {
         dao = NounsDAOExecutorV2(payable(treasury)).admin();
     }
 
-    function _deployForkDAO()
-        public
-        returns (
-            address treasury,
-            address token,
-            address dao
-        )
-    {
-        NounsDAOLogicV3 originalDAO = _deployDAOV3();
+    function _deployForkDAO() public returns (address treasury, address token, address dao) {
+        INounsDAOLogic originalDAO = _deployDAOV3();
         return _deployForkDAO(originalDAO.forkEscrow());
     }
 }

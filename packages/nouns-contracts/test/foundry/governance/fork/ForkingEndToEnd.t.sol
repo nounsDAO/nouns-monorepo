@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
-import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
@@ -12,10 +11,11 @@ import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newda
 import { NounsAuctionHouseFork } from '../../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
+import { INounsDAOLogic } from '../../../../contracts/interfaces/INounsDAOLogic.sol';
 
 contract ForkingHappyFlowTest is DeployUtilsFork {
     address minter;
-    NounsDAOLogicV3 daoV3;
+    INounsDAOLogic daoV3;
     NounsToken ogToken;
     NounsTokenFork forkToken;
     NounsDAOExecutorV2 forkTreasury;
@@ -170,7 +170,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
 }
 
 abstract contract ForkDAOBase is DeployUtilsFork {
-    NounsDAOLogicV3 originalDAO;
+    INounsDAOLogic originalDAO;
     NounsTokenLike originalToken;
     NounsDAOLogicV1Fork forkDAO;
     NounsDAOExecutorV2 forkTreasury;

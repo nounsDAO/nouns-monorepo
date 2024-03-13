@@ -186,14 +186,7 @@ contract NounsTokenFork_DelegateBySig_Test is NounsTokenForkBase {
         uint256 nonce,
         uint256 expiry,
         uint256 pk
-    )
-        internal
-        returns (
-            uint8 v,
-            bytes32 r,
-            bytes32 s
-        )
-    {
+    ) internal view returns (uint8 v, bytes32 r, bytes32 s) {
         bytes32 domainSeparator = keccak256(
             abi.encode(
                 keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)'),

@@ -2,10 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { INounsDAOShared } from './INounsDAOShared.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
-import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { DeployUtilsFork } from './DeployUtilsFork.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
@@ -15,8 +12,12 @@ import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor
 import { INounsTokenForkLike } from '../../../contracts/governance/fork/newdao/governance/INounsTokenForkLike.sol';
 import { Utils } from './Utils.sol';
 
+interface DAOLogicFork {
+    function _setQuorumVotesBPS(uint256 newQuorumVotesBPS) external;
+}
+
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
-    INounsDAOShared daoProxy;
+    INounsDAOLogic daoProxy;
     NounsToken nounsToken;
     NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
@@ -47,7 +48,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal virtual returns (INounsDAOShared);
+    ) internal virtual returns (INounsDAOLogic);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -99,36 +100,28 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
         vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
     }
 
-    function vote(
-        address voter,
-        uint256 proposalId,
-        uint8 support
-    ) internal {
+    function vote(address voter, uint256 proposalId, uint8 support) internal {
         vm.prank(voter);
         daoProxy.castVote(proposalId, support);
     }
 
-    function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
-        return NounsDAOLogicV2(payable(address(daoProxy)));
-    }
-
-    function deployForkDAOProxy() internal returns (INounsDAOShared) {
+    function deployForkDAOProxy() internal returns (INounsDAOLogic) {
         (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO();
         timelock = NounsDAOExecutor(payable(treasuryAddress));
         nounsToken = NounsToken(tokenAddress);
         minter = nounsToken.minter();
 
-        INounsDAOShared dao = INounsDAOShared(daoAddress);
+        INounsDAOLogic dao = INounsDAOLogic(daoAddress);
 
-        vm.startPrank(dao.timelock());
+        vm.startPrank(address(dao.timelock()));
         dao._setVotingPeriod(votingPeriod);
         dao._setVotingDelay(votingDelay);
         dao._setProposalThresholdBPS(proposalThresholdBPS);
-        dao._setQuorumVotesBPS(1000);
+        DAOLogicFork(address(dao))._setQuorumVotesBPS(1000);
         vm.stopPrank();
 
         vm.warp(INounsTokenForkLike(tokenAddress).forkingPeriodEndTimestamp());
 
-        return INounsDAOShared(daoAddress);
+        return INounsDAOLogic(daoAddress);
     }
 }

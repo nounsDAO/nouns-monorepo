@@ -9,26 +9,24 @@ export enum ChainId {
   Sepolia = 11155111,
 }
 
-// prettier-ignore
-export type DescriptorV1ContractNames = 'NFTDescriptor' | 'NounsDescriptor';
-// prettier-ignore
-export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'NounsDescriptorV2' | 'SVGRenderer' | 'NounsArt' | 'Inflator';
-// prettier-ignore
-export type ContractName = DescriptorV2ContractNames | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
-// prettier-ignore
-export type ContractNameDescriptorV1 = DescriptorV1ContractNames | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
-// prettier-ignore
-export type ContractNamesDAOV2 = Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'> | 'NounsDAOLogicV2' | 'NounsDAOProxyV2';
-
 export type ContractNamesDAOV3 =
-  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOExecutor'>
-  | 'NounsDAOLogicV3'
+  | 'NFTDescriptorV2'
+  | 'NounsDescriptorV2'
+  | 'SVGRenderer'
+  | 'NounsArt'
+  | 'Inflator'
+  | 'NounsSeeder'
+  | 'NounsToken'
+  | 'NounsAuctionHouse'
+  | 'NounsAuctionHouseProxyAdmin'
+  | 'NounsAuctionHouseProxy'
+  | 'NounsDAOLogicV4'
   | 'NounsDAOProxyV3'
-  | 'NounsDAOV3Admin'
-  | 'NounsDAOV3DynamicQuorum'
-  | 'NounsDAOV3Proposals'
-  | 'NounsDAOV3Votes'
-  | 'NounsDAOV3Fork'
+  | 'NounsDAOAdmin'
+  | 'NounsDAODynamicQuorum'
+  | 'NounsDAOProposals'
+  | 'NounsDAOVotes'
+  | 'NounsDAOFork'
   | 'NounsDAOForkEscrow'
   | 'ForkDAODeployer'
   | 'NounsTokenFork'

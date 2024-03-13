@@ -1,5 +1,5 @@
 import { task } from 'hardhat/config';
-import { ContractName, DeployedContract } from './types';
+import { DeployedContract } from './types';
 
 async function delay(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, 1000 * seconds));

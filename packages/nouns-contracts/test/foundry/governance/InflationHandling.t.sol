@@ -2,14 +2,15 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { Utils } from '../helpers/Utils.sol';
+import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 
-abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
+abstract contract NounsDAOLogicV3InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
     uint256 constant proposalThresholdBPS_ = 678; // 6.78%
     uint16 constant minQuorumVotesBPS = 1100; // 11%
     address tokenHolder;
@@ -18,35 +19,32 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
     address user3;
 
     function daoVersion() internal pure override returns (uint256) {
-        return 2;
+        return 3;
     }
 
     function deployDAOProxy(
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOShared) {
-        NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
-
+    ) internal override returns (INounsDAOLogic) {
         return
-            INounsDAOShared(
-                address(
-                    new NounsDAOProxyV2(
-                        timelock,
-                        nounsToken,
-                        vetoer,
-                        admin,
-                        address(daoLogic),
-                        votingPeriod,
-                        votingDelay,
-                        proposalThresholdBPS_,
-                        NounsDAOStorageV2.DynamicQuorumParams({
-                            minQuorumVotesBPS: minQuorumVotesBPS,
-                            maxQuorumVotesBPS: 2000,
-                            quorumCoefficient: 10000
-                        })
-                    )
-                )
+            _createDAOV3Proxy(
+                timelock,
+                nounsToken,
+                vetoer,
+                NounsDAOTypes.NounsDAOParams({
+                    votingPeriod: votingPeriod,
+                    votingDelay: votingDelay,
+                    proposalThresholdBPS: proposalThresholdBPS_,
+                    lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
+                    objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
+                    proposalUpdatablePeriodInBlocks: 0
+                }),
+                NounsDAOTypes.DynamicQuorumParams({
+                    minQuorumVotesBPS: minQuorumVotesBPS,
+                    maxQuorumVotesBPS: 2000,
+                    quorumCoefficient: 10000
+                })
             );
     }
 
@@ -72,7 +70,7 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
     }
 }
 
-contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2InflationHandlingTest {
+contract NounsDAOLogic3InflationHandling40TotalSupplyTest is NounsDAOLogicV3InflationHandlingTest {
     function setUp() public virtual override {
         super.setUp();
 
@@ -82,7 +80,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
     function testSetsParametersCorrectly() public {
         assertEq(daoProxy.proposalThresholdBPS(), proposalThresholdBPS_);
-        assertEq(daoProxyAsV2().getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, minQuorumVotesBPS);
+        assertEq(daoProxy.getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, minQuorumVotesBPS);
     }
 
     function testProposalThresholdBasedOnTotalSupply() public {
@@ -92,7 +90,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
     function testMinimumQuorumVotes() public {
         // 11% of 40 = 4.4, floored to 4
-        assertEq(daoProxyAsV2().minQuorumVotes(), 4);
+        assertEq(daoProxy.minQuorumVotes(), 4);
     }
 
     function testRejectsIfProposingBelowThreshold() public {
@@ -106,7 +104,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
 
         assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 2);
 
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOProposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 
@@ -126,7 +124,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
     }
 }
 
-abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV2InflationHandlingTest {
+abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV3InflationHandlingTest {
     uint256 proposalId;
 
     function setUp() public virtual override {
@@ -163,8 +161,8 @@ abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV2InflationHan
 
 contract InflationHandlingWithAProposalTest is TotalSupply40WithAProposalState {
     function testSetsProposalAttrbiutesCorrectly() public {
-        assertEq(daoProxyAsV2().proposals(proposalId).proposalThreshold, 2);
-        assertEq(daoProxyAsV2().proposals(proposalId).quorumVotes, 4);
+        assertEq(daoProxy.proposals(proposalId).proposalThreshold, 2);
+        assertEq(daoProxy.proposals(proposalId).quorumVotes, 4);
     }
 }
 
@@ -181,17 +179,17 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
         assertEq(daoProxy.proposalThreshold(), 5);
 
         // 11% of 80 = 8.88, floored to 8
-        assertEq(daoProxyAsV2().minQuorumVotes(), 8);
+        assertEq(daoProxy.minQuorumVotes(), 8);
     }
 
     function testRejectsProposalsPreviouslyAboveThresholdButNowBelowBecauseSupplyIncreased() public {
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert(NounsDAOProposals.VotesBelowProposalThreshold.selector);
         propose(user1, address(0), 0, '', '');
     }
 
     function testDoesntChangePreviousProposalAttributes() public {
-        assertEq(daoProxyAsV2().proposals(proposalId).proposalThreshold, 2);
-        assertEq(daoProxyAsV2().proposals(proposalId).quorumVotes, 4);
+        assertEq(daoProxy.proposals(proposalId).proposalThreshold, 2);
+        assertEq(daoProxy.proposals(proposalId).quorumVotes, 4);
     }
 
     function testProposalPassesWhenForVotesAboveQuorumAndAgainstVotes() public {
@@ -204,11 +202,11 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
         vm.prank(user3);
         daoProxy.castVote(proposalId, 0); // 5 votes
 
-        assertEq(daoProxyAsV2().proposals(proposalId).forVotes, 6);
-        assertEq(daoProxyAsV2().proposals(proposalId).againstVotes, 5);
+        assertEq(daoProxy.proposals(proposalId).forVotes, 6);
+        assertEq(daoProxy.proposals(proposalId).againstVotes, 5);
 
         vm.roll(block.number + votingPeriod);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1.ProposalState.Succeeded));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOTypes.ProposalState.Succeeded));
     }
 }

@@ -4,31 +4,9 @@ import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/No
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
-import { ContractName } from './types';
+import { ContractNamesDAOV3 } from './types';
 
-type LocalContractName =
-  | Exclude<
-    ContractName,
-    'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
-  >
-  | 'NounsDAOLogicV3'
-  | 'NounsDAOProxyV3'
-  | 'NounsDAOV3Admin'
-  | 'NounsDAOV3DynamicQuorum'
-  | 'NounsDAOV3Proposals'
-  | 'NounsDAOV3Votes'
-  | 'NounsDAOV3Fork'
-  | 'NounsDAOForkEscrow'
-  | 'ForkDAODeployer'
-  | 'NounsTokenFork'
-  | 'NounsAuctionHouseFork'
-  | 'NounsDAOLogicV1Fork'
-  | 'NounsDAOExecutorV2'
-  | 'NounsDAOExecutorProxy'
-  | 'WETH'
-  | 'Multicall2'
-  | 'NounsDAOData'
-  | 'NounsDAODataProxy';
+type LocalContractName = ContractNamesDAOV3 | 'WETH' | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -156,18 +134,18 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
             ]),
         ],
       },
-      NounsDAOV3DynamicQuorum: {},
+      NounsDAODynamicQuorum: {},
       NounsDAOV3Admin: {},
-      NounsDAOV3Proposals: {},
-      NounsDAOV3Votes: {},
-      NounsDAOV3Fork: {},
-      NounsDAOLogicV3: {
+      NounsDAOProposals: {},
+      NounsDAOVotes: {},
+      NounsDAOFork: {},
+      NounsDAOLogicV4: {
         libraries: () => ({
           NounsDAOV3Admin: contracts.NounsDAOV3Admin.instance?.address as string,
-          NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
-          NounsDAOV3Proposals: contracts.NounsDAOV3Proposals.instance?.address as string,
-          NounsDAOV3Votes: contracts.NounsDAOV3Votes.instance?.address as string,
-          NounsDAOV3Fork: contracts.NounsDAOV3Fork.instance?.address as string,
+          NounsDAODynamicQuorum: contracts.NounsDAODynamicQuorum.instance?.address as string,
+          NounsDAOProposals: contracts.NounsDAOProposals.instance?.address as string,
+          NounsDAOVotes: contracts.NounsDAOVotes.instance?.address as string,
+          NounsDAOFork: contracts.NounsDAOFork.instance?.address as string,
         }),
         waitForConfirmation: true,
       },
@@ -212,7 +190,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
           () => contracts.ForkDAODeployer.instance?.address, // forkDAODeployer
           args.noundersdao || deployer.address, // vetoer
           () => contracts.NounsDAOExecutorProxy.instance?.address, // admin
-          () => contracts.NounsDAOLogicV3.instance?.address, // implementation
+          () => contracts.NounsDAOLogicV4.instance?.address, // implementation
           {
             votingPeriod: args.votingPeriod,
             votingDelay: args.votingDelay,

@@ -18,15 +18,17 @@
 pragma solidity ^0.8.19;
 
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
-import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOStorageV3 } from '../NounsDAOInterfaces.sol';
+import { IForkDAODeployer, INounsDAOForkEscrow, NounsDAOTypes } from '../NounsDAOInterfaces.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 import { NounsAuctionHouseFork } from './newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
-import { NounsDAOProxy } from '../NounsDAOProxy.sol';
-import { NounsDAOLogicV3 } from '../NounsDAOLogicV3.sol';
 import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsToken } from '../../NounsToken.sol';
 import { NounsAuctionHouse } from '../../NounsAuctionHouse.sol';
+
+interface INounsDAOForkTokens {
+    function erc20TokensToIncludeInFork() external view returns (address[] memory);
+}
 
 contract ForkDAODeployer is IForkDAODeployer {
     event DAODeployed(address token, address auction, address governor, address treasury);
@@ -89,10 +91,10 @@ contract ForkDAODeployer is IForkDAODeployer {
      * @return treasury The address of the fork DAO treasury
      * @return token The address of the fork DAO token
      */
-    function deployForkDAO(uint256 forkingPeriodEndTimestamp, INounsDAOForkEscrow forkEscrow)
-        external
-        returns (address treasury, address token)
-    {
+    function deployForkDAO(
+        uint256 forkingPeriodEndTimestamp,
+        INounsDAOForkEscrow forkEscrow
+    ) external returns (address treasury, address token) {
         token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
         address governor = address(new ERC1967Proxy(governorImpl, ''));
@@ -131,13 +133,8 @@ contract ForkDAODeployer is IForkDAODeployer {
     /**
      * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
      */
-    function initDAO(
-        address governor,
-        address treasury,
-        address token,
-        NounsDAOExecutorV2 originalTimelock
-    ) internal {
-        NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
+    function initDAO(address governor, address treasury, address token, NounsDAOExecutorV2 originalTimelock) internal {
+        INounsDAOForkTokens originalDAO = INounsDAOForkTokens(payable(originalTimelock.admin()));
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,

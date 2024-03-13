@@ -1,5 +1,5 @@
 import { task } from 'hardhat/config';
-import { ContractName, DeployedContract } from './types';
+import { ContractNamesDAOV3, DeployedContract } from './types';
 import { printContractsTable } from './utils';
 
 async function delay(seconds: number) {
@@ -12,8 +12,8 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     'The address of the NounsDAOExecutor that should be the owner of the descriptor.',
   )
   .setAction(async ({ daoExecutor }, { ethers, run, network }) => {
-    const contracts: Record<ContractName, DeployedContract> = {} as Record<
-      ContractName,
+    const contracts: Record<ContractNamesDAOV3, DeployedContract> = {} as Record<
+      ContractNamesDAOV3,
       DeployedContract
     >;
     const [deployer] = await ethers.getSigners();

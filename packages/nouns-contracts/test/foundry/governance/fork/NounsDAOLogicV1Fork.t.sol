@@ -5,7 +5,6 @@ import 'forge-std/Test.sol';
 import 'forge-std/Base.sol';
 
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
-import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
@@ -18,6 +17,7 @@ import { ERC20Mock, IERC20Receiver } from '../../helpers/ERC20Mock.sol';
 import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.sol';
 import { NounsAuctionHouse } from '../../../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
+import { INounsDAOLogic } from '../../../../contracts/interfaces/INounsDAOLogic.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
@@ -203,7 +203,7 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
 abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
     NounsDAOForkEscrowMock escrow;
     NounsTokenLike originalToken;
-    NounsDAOLogicV3 originalDAO;
+    INounsDAOLogic originalDAO;
 
     address owner1 = makeAddr('owner1');
 

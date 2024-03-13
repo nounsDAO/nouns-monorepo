@@ -92,6 +92,7 @@ export function getOrCreateVote(
 
   if (vote == null && createIfNotFound) {
     vote = new Vote(id);
+    vote.clientId = 0;
 
     if (save) {
       vote.save();
@@ -253,7 +254,7 @@ function keccak256Bytes(bytes: Bytes): Bytes {
 }
 
 /**
- * encodes the proposal content as done in `NounsDAOV3Proposals.calcProposalEncodeData`
+ * encodes the proposal content as done in `NounsDAOProposals.calcProposalEncodeData`
  * and hashes it with keccak256
  */
 export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): Bytes {
@@ -281,12 +282,12 @@ export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): 
   }
 
   let params = new ethereum.Tuple();
-  params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer)));
+  params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer!)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(targetsConcat)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(valuesConcat)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(signatureHashes)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(calldatasHashes)));
-  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description))));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description!))));
 
   let proposalEncodeData = ethereum.encode(ethereum.Value.fromTuple(params))!;
 
