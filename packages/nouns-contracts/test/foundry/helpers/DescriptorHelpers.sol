@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../../contracts/NounsDescriptorV3.sol';
 import { Constants } from './Constants.sol';
 import { strings } from '../lib/strings.sol';
 
@@ -33,6 +34,40 @@ abstract contract DescriptorHelpers is Test, Constants {
     }
 
     function _populateDescriptorV2(NounsDescriptorV2 descriptor) internal {
+        // created with `npx hardhat descriptor-art-to-console`
+        (bytes memory palette, string[] memory backgrounds) = abi.decode(
+            readFile('./test/foundry/files/descriptor_v2/paletteAndBackgrounds.abi'),
+            (bytes, string[])
+        );
+        descriptor.setPalette(0, palette);
+        descriptor.addManyBackgrounds(backgrounds);
+
+        (bytes memory bodies, uint80 bodiesLength, uint16 bodiesCount) = abi.decode(
+            readFile('./test/foundry/files/descriptor_v2/bodiesPage.abi'),
+            (bytes, uint80, uint16)
+        );
+        descriptor.addBodies(bodies, bodiesLength, bodiesCount);
+
+        (bytes memory heads, uint80 headsLength, uint16 headsCount) = abi.decode(
+            readFile('./test/foundry/files/descriptor_v2/headsPage.abi'),
+            (bytes, uint80, uint16)
+        );
+        descriptor.addHeads(heads, headsLength, headsCount);
+
+        (bytes memory accessories, uint80 accessoriesLength, uint16 accessoriesCount) = abi.decode(
+            readFile('./test/foundry/files/descriptor_v2/accessoriesPage.abi'),
+            (bytes, uint80, uint16)
+        );
+        descriptor.addAccessories(accessories, accessoriesLength, accessoriesCount);
+
+        (bytes memory glasses, uint80 glassesLength, uint16 glassesCount) = abi.decode(
+            readFile('./test/foundry/files/descriptor_v2/glassesPage.abi'),
+            (bytes, uint80, uint16)
+        );
+        descriptor.addGlasses(glasses, glassesLength, glassesCount);
+    }
+
+    function _populateDescriptorV3(NounsDescriptorV3 descriptor) internal {
         // created with `npx hardhat descriptor-art-to-console`
         (bytes memory palette, string[] memory backgrounds) = abi.decode(
             readFile('./test/foundry/files/descriptor_v2/paletteAndBackgrounds.abi'),

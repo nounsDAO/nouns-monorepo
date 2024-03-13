@@ -22,7 +22,7 @@ import { ISVGRenderer } from './ISVGRenderer.sol';
 import { INounsArt } from './INounsArt.sol';
 import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
-interface INounsDescriptorV2 is INounsDescriptorMinimal {
+interface INounsDescriptorV3 is INounsDescriptorMinimal {
     event PartsLocked();
 
     event DataURIToggled(bool enabled);
@@ -139,5 +139,51 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
 
     function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 
+    function updateAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
+    function updateBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 }

@@ -22,16 +22,21 @@ services:
       ethereum: 'mainnet:http://host.docker.internal:8545'
       GRAPH_LOG: info
   ipfs:
-    image: ipfs/go-ipfs:v0.4.23
+    image: ipfs/go-ipfs:latest
     ports:
       - '5001:5001'
     volumes:
       - ./data/ipfs:/data/ipfs
   postgres:
-    image: postgres
+    image: postgres:15
     ports:
       - '5432:5432'
-    command: ['postgres', '-cshared_preload_libraries=pg_stat_statements']
+    command:
+      [
+        "postgres",
+        "-cshared_preload_libraries=pg_stat_statements",
+        "-cmax_connections=200"
+      ]
     environment:
       POSTGRES_USER: graph-node
       POSTGRES_PASSWORD: let-me-in

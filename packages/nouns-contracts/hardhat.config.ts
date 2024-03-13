@@ -47,6 +47,8 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       initialBaseFeePerGas: 0,
+      blockGasLimit: 1000000000000,
+      // allowUnlimitedContractSize: true,
     },
   },
   etherscan: {

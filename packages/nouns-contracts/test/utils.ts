@@ -5,6 +5,8 @@ import {
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDescriptorV2,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDescriptorV3,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
   NounsToken,
   NounsToken__factory as NounsTokenFactory,
   NounsSeeder,
@@ -99,6 +101,33 @@ export const deployNounsDescriptorV2 = async (
   return descriptor;
 };
 
+export const deployNounsDescriptorV3 = async (
+  deployer?: SignerWithAddress,
+): Promise<NounsDescriptorV3> => {
+  const signer = deployer || (await getSigners()).deployer;
+  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptorV2', signer);
+  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
+  const nounsDescriptorFactory = new NounsDescriptorV3Factory(
+    {
+      'contracts/libs/NFTDescriptorV2.sol:NFTDescriptorV2': nftDescriptorLibrary.address,
+    },
+    signer,
+  );
+
+  const renderer = await new SVGRendererFactory(signer).deploy();
+  const descriptor = await nounsDescriptorFactory.deploy(
+    ethers.constants.AddressZero,
+    renderer.address,
+  );
+
+  const inflator = await new Inflator__factory(signer).deploy();
+
+  const art = await new NounsArtFactory(signer).deploy(descriptor.address, inflator.address);
+  await descriptor.setArt(art.address);
+
+  return descriptor;
+};
+
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
   const factory = new NounsSeederFactory(deployer || (await getSigners()).deployer);
 
@@ -148,7 +177,7 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
   ]);
 };
 
-export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2): Promise<void> => {
+export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2 | NounsDescriptorV3): Promise<void> => {
   const { bgcolors, palette, images } = ImageDataV2;
   const { bodies, accessories, heads, glasses } = images;
 
