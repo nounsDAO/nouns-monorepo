@@ -134,32 +134,40 @@ contract NounsDescriptorV3Test is Test {
 
     function testBackgroundCountUsesArt() public {
         vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundCount.selector), abi.encode(42));
-        assertEq(descriptor.backgroundCount(), 42);
+        assertEq(art.backgroundCount(), 42);
         vm.clearMockedCalls();
     }
 
     function testBodyCountUsesArt() public {
         vm.prank(address(descriptor));
-        art.addBodiesFromPointer(address(0), 1, 42);
-        assertEq(descriptor.bodyCount(), 42);
+        uint80 decompressedLength = 123;
+        uint16 imageCount = 456;
+        art.addBodiesFromPointer(address(0), decompressedLength, imageCount);
+        assertEq(art.bodyCount(), imageCount);
     }
 
     function testAccessoryCountUsesArt() public {
         vm.prank(address(descriptor));
-        art.addAccessoriesFromPointer(address(0), 1, 42);
-        assertEq(descriptor.accessoryCount(), 42);
+        uint80 decompressedLength = 123;
+        uint16 imageCount = 456;
+        art.addAccessoriesFromPointer(address(0), decompressedLength, imageCount);
+        assertEq(art.accessoryCount(), imageCount);
     }
 
     function testHeadCountUsesArt() public {
         vm.prank(address(descriptor));
-        art.addHeadsFromPointer(address(0), 1, 42);
-        assertEq(descriptor.headCount(), 42);
+        uint80 decompressedLength = 123;
+        uint16 imageCount = 456;
+        art.addHeadsFromPointer(address(0), decompressedLength, imageCount);
+        assertEq(art.headCount(), imageCount);
     }
 
     function testGlassesCountUsesArt() public {
         vm.prank(address(descriptor));
-        art.addGlassesFromPointer(address(0), 1, 42);
-        assertEq(descriptor.glassesCount(), 42);
+        uint80 decompressedLength = 123;
+        uint16 imageCount = 456;
+        art.addGlassesFromPointer(address(0), decompressedLength, imageCount);
+        assertEq(art.glassesCount(), imageCount);
     }
 
     function testAddManyBackgroundsUsesArt() public {
@@ -224,10 +232,10 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddBodiesUsesArt() public {
         bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.addBodies, (someBytes, decompressedLen, imageCount)));
-        descriptor.addBodies(someBytes, decompressedLen, imageCount);
+        vm.expectCall(address(art), abi.encodeCall(art.addBodies, (someBytes, decompressedLength, imageCount)));
+        descriptor.addBodies(someBytes, decompressedLength, imageCount);
     }
 
     function testCannotAddBodiesWhenPartsLocked() public {
@@ -244,10 +252,10 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddAccessoriesUsesArt() public {
         bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.addAccessories, (someBytes, decompressedLen, imageCount)));
-        descriptor.addAccessories(someBytes, decompressedLen, imageCount);
+        vm.expectCall(address(art), abi.encodeCall(art.addAccessories, (someBytes, decompressedLength, imageCount)));
+        descriptor.addAccessories(someBytes, decompressedLength, imageCount);
     }
 
     function testCannotAddAccessoriesWhenPartsLocked() public {
@@ -264,10 +272,10 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddHeadsUsesArt() public {
         bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.addHeads, (someBytes, decompressedLen, imageCount)));
-        descriptor.addHeads(someBytes, decompressedLen, imageCount);
+        vm.expectCall(address(art), abi.encodeCall(art.addHeads, (someBytes, decompressedLength, imageCount)));
+        descriptor.addHeads(someBytes, decompressedLength, imageCount);
     }
 
     function testCannotAddHeadsWhenPartsLocked() public {
@@ -284,10 +292,10 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddGlassesUsesArt() public {
         bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.addGlasses, (someBytes, decompressedLen, imageCount)));
-        descriptor.addGlasses(someBytes, decompressedLen, imageCount);
+        vm.expectCall(address(art), abi.encodeCall(art.addGlasses, (someBytes, decompressedLength, imageCount)));
+        descriptor.addGlasses(someBytes, decompressedLength, imageCount);
     }
 
     function testCannotAddGlassesWhenPartsLocked() public {
@@ -304,13 +312,13 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddBodiesFromPointerUsesArt() public {
         address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
         vm.expectCall(
             address(art),
-            abi.encodeCall(art.addBodiesFromPointer, (somePointer, decompressedLen, imageCount))
+            abi.encodeCall(art.addBodiesFromPointer, (somePointer, decompressedLength, imageCount))
         );
-        descriptor.addBodiesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addBodiesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotAddBodiesFromPointerWhenPartsLocked() public {
@@ -327,13 +335,13 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddAccessoriesFromPointerUsesArt() public {
         address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
         vm.expectCall(
             address(art),
-            abi.encodeCall(art.addAccessoriesFromPointer, (somePointer, decompressedLen, imageCount))
+            abi.encodeCall(art.addAccessoriesFromPointer, (somePointer, decompressedLength, imageCount))
         );
-        descriptor.addAccessoriesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addAccessoriesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotAddAccessoriesFromPointerWhenPartsLocked() public {
@@ -350,13 +358,13 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddHeadsFromPointerUsesArt() public {
         address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
         vm.expectCall(
             address(art),
-            abi.encodeCall(art.addHeadsFromPointer, (somePointer, decompressedLen, imageCount))
+            abi.encodeCall(art.addHeadsFromPointer, (somePointer, decompressedLength, imageCount))
         );
-        descriptor.addHeadsFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addHeadsFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotAddHeadsFromPointerWhenPartsLocked() public {
@@ -373,13 +381,13 @@ contract NounsDescriptorV3Test is Test {
 
     function testAddGlassesFromPointerUsesArt() public {
         address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
         vm.expectCall(
             address(art),
-            abi.encodeCall(art.addGlassesFromPointer, (somePointer, decompressedLen, imageCount))
+            abi.encodeCall(art.addGlassesFromPointer, (somePointer, decompressedLength, imageCount))
         );
-        descriptor.addGlassesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addGlassesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotAddGlassesFromPointerWhenPartsLocked() public {
@@ -394,14 +402,6 @@ contract NounsDescriptorV3Test is Test {
         descriptor.addGlassesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateBodies() public {
-        bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
-        uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateBodies, (someBytes, decompressedLen, imageCount)));
-        descriptor.updateBodies(someBytes, decompressedLen, imageCount);
-    }
-
     function testCannotUpdateBodiesWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
@@ -414,12 +414,12 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateBodiesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateHeads() public {
+    function testUpdateHeadsIfImageountDoesntEqualTraitCount() public {
         bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
-        uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateHeads, (someBytes, decompressedLen, imageCount)));
-        descriptor.updateHeads(someBytes, decompressedLen, imageCount);
+        uint80 decompressedLength = 123;
+        uint16 imageCount = 450;
+        vm.expectRevert(bytes('Image count must equal trait count'));
+        descriptor.updateHeads(someBytes, decompressedLength, imageCount);
     }
 
     function testCannotUpdateHeadsWhenPartsLocked() public {
@@ -434,14 +434,6 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateHeadsFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateAccessories() public {
-        bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
-        uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateAccessories, (someBytes, decompressedLen, imageCount)));
-        descriptor.updateAccessories(someBytes, decompressedLen, imageCount);
-    }
-
     function testCannotUpdateAccessoriesWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
@@ -454,13 +446,6 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateGlasses() public {
-        bytes memory someBytes = 'some bytes';
-        uint80 decompressedLen = 123;
-        uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateGlasses, (someBytes, decompressedLen, imageCount)));
-        descriptor.updateGlasses(someBytes, decompressedLen, imageCount);
-    }
 
     function testCannotUpdateGlassesWhenPartsLocked() public {
         descriptor.lockParts();
@@ -474,12 +459,22 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateGlassesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateBodiesFromPointerUsesArt() public {
-        address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+    function testUpdateBodiesFromPointer() public {
+        address pointer = address(1337);
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateBodiesFromPointer, (somePointer, decompressedLen, imageCount)));
-        descriptor.updateBodiesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addBodiesFromPointer(pointer, decompressedLength, imageCount);(address(1337), decompressedLength, imageCount);
+        assertEq(art.bodyCount(), imageCount);
+
+        uint256 initialBodyCount = art.bodyCount();
+        require(initialBodyCount == imageCount, "Initial setup did not match expected state");
+
+        address somePointer = address(1337);
+        vm.expectCall(
+            address(art),
+            abi.encodeCall(art.updateBodiesFromPointer, (somePointer, decompressedLength, imageCount))
+        );
+        descriptor.updateBodiesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotUpdateBodiesFromPointerWhenPartsLocked() public {
@@ -494,12 +489,21 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateBodiesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateHeadsFromPointerUsesArt() public {
-        address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+    function testUpdateHeadsFromPointer() public {
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateHeadsFromPointer, (somePointer, decompressedLen, imageCount)));
-        descriptor.updateHeadsFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addHeadsFromPointer(address(1337), decompressedLength, imageCount);
+        assertEq(art.headCount(), imageCount);
+
+        uint256 initialHeadCount = art.headCount();
+        require(initialHeadCount == imageCount, "Initial setup did not match expected state");
+
+        address somePointer = address(1337);
+        vm.expectCall(
+            address(art),
+            abi.encodeCall(art.updateHeadsFromPointer, (somePointer, decompressedLength, imageCount))
+        );
+        descriptor.updateHeadsFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotUpdateHeadsFromPointerWhenPartsLocked() public {
@@ -514,12 +518,22 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateHeadsFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateAccessoriesFromPointerUsesArt() public {
-        address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+    function testUpdateAccessoriesFromPointer() public {
+        address pointer = address(1337);
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateAccessoriesFromPointer, (somePointer, decompressedLen, imageCount)));
-        descriptor.updateAccessoriesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addAccessoriesFromPointer(pointer, decompressedLength, imageCount);(address(1337), decompressedLength, imageCount);
+        assertEq(art.accessoryCount(), imageCount);
+
+        uint256 initialHeadCount = art.accessoryCount();
+        require(initialHeadCount == imageCount, "Initial setup did not match expected state");
+
+        address somePointer = address(1337);
+        vm.expectCall(
+            address(art),
+            abi.encodeCall(art.updateAccessoriesFromPointer, (somePointer, decompressedLength, imageCount))
+        );
+        descriptor.updateAccessoriesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotUpdateAccessoriesFromPointerWhenPartsLocked() public {
@@ -534,12 +548,22 @@ contract NounsDescriptorV3Test is Test {
         descriptor.updateAccessoriesFromPointer(address(1337), 1, 1);
     }
 
-    function testUpdateGlassesFromPointerUsesArt() public {
-        address somePointer = address(1337);
-        uint80 decompressedLen = 123;
+    function testUpdateGlassesFromPointer() public {
+        address pointer = address(1337);
+        uint80 decompressedLength = 123;
         uint16 imageCount = 456;
-        vm.expectCall(address(art), abi.encodeCall(art.updateGlassesFromPointer, (somePointer, decompressedLen, imageCount)));
-        descriptor.updateGlassesFromPointer(somePointer, decompressedLen, imageCount);
+        descriptor.addGlassesFromPointer(pointer, decompressedLength, imageCount);(address(1337), decompressedLength, imageCount);
+        assertEq(art.glassesCount(), imageCount);
+
+        uint256 initialGlassesCount = art.glassesCount();
+        require(initialGlassesCount == imageCount, "Initial setup did not match expected state");
+
+        address somePointer = address(1337);
+        vm.expectCall(
+            address(art),
+            abi.encodeCall(art.updateGlassesFromPointer, (somePointer, decompressedLength, imageCount))
+        );
+        descriptor.updateGlassesFromPointer(somePointer, decompressedLength, imageCount);
     }
 
     function testCannotUpdateGlassesFromPointerWhenPartsLocked() public {

@@ -481,6 +481,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.accessoryCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateAccessories(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -497,6 +499,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.bodyCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateBodies(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -513,6 +517,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.headCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateHeads(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -529,6 +535,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.glassesCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateGlasses(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -546,6 +554,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.accessoryCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateAccessoriesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -563,6 +573,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.bodyCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateBodiesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -580,6 +592,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.headCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateHeadsFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -597,6 +611,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
+        uint256 count = art.glassesCount();
+        require(count == imageCount, 'Image count must equal trait count');
         art.updateGlassesFromPointer(pointer, decompressedLength, imageCount);
     }
 }
