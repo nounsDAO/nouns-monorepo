@@ -177,6 +177,20 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         assertEq(expectedVotingDelay, NOUNS_DAO_PROXY_MAINNET.votingDelay());
     }
 
+    function test_voteSnapshotBlockSwitchProposalId_zeroOutWorks() public {
+        assertNotEq(NOUNS_DAO_PROXY_MAINNET.voteSnapshotBlockSwitchProposalId(), 0);
+
+        uint256 proposalId = propose(
+            address(NOUNS_DAO_PROXY_MAINNET),
+            0,
+            '_zeroOutVoteSnapshotBlockSwitchProposalId()',
+            ''
+        );
+        voteAndExecuteProposal(proposalId);
+
+        assertEq(NOUNS_DAO_PROXY_MAINNET.voteSnapshotBlockSwitchProposalId(), 0);
+    }
+
     function test_clientId_savedOnProposals() public {
         uint32 expectedClientId = 42;
         uint256 proposalId = propose(address(NOUNS_DAO_PROXY_MAINNET), 0, '', '', expectedClientId);

@@ -349,6 +349,18 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         assertEq(dao.forkThresholdBPS(), 42);
     }
 
+    function test__zeroOutVoteSnapshotBlockSwitchProposalId_onlyAdmin() public {
+        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
+        dao._zeroOutVoteSnapshotBlockSwitchProposalId();
+    }
+
+    function test__zeroOutVoteSnapshotBlockSwitchProposalId_works() public {
+        vm.prank(address(dao.timelock()));
+        dao._zeroOutVoteSnapshotBlockSwitchProposalId();
+
+        assertEq(dao.voteSnapshotBlockSwitchProposalId(), 0);
+    }
+
     function test_setErc20TokensToIncludeInFork_onlyAdmin() public {
         tokens = [address(1), address(2)];
 

@@ -536,6 +536,15 @@ library NounsDAOAdmin {
         emit TimelocksAndAdminSet(timelock, timelockV1, admin);
     }
 
+    /**
+     * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
+     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and 
+     * be ready to reuse this slot.
+     */
+    function _zeroOutVoteSnapshotBlockSwitchProposalId() external onlyAdmin {
+        ds().voteSnapshotBlockSwitchProposalId = 0;
+    }
+
     function _writeQuorumParamsCheckpoint(NounsDAOTypes.DynamicQuorumParams memory params) internal {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
         uint256 pos = ds().quorumParamsCheckpoints.length;

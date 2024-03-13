@@ -442,6 +442,13 @@ interface INounsDAOLogic {
     function _setTimelocksAndAdmin(address newTimelock, address newTimelockV1, address newAdmin) external;
 
     /**
+     * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
+     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and 
+     * be ready to reuse this slot.
+     */
+    function _zeroOutVoteSnapshotBlockSwitchProposalId() external;
+
+    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   DYNAMIC QUORUM
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -690,4 +697,6 @@ interface INounsDAOLogic {
     function proposalUpdatablePeriodInBlocks() external view returns (uint256);
 
     function timelockV1() external view returns (address);
+
+    function voteSnapshotBlockSwitchProposalId() external view returns (uint256);
 }
