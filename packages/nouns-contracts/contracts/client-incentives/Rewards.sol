@@ -320,11 +320,16 @@ contract Rewards is
         require(lastProposalId >= t.nextProposalIdToReward, 'bad lastProposalId');
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
+        uint16 proposalEligibilityQuorumBps_ = $.params.proposalEligibilityQuorumBps;
+
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             t.nextProposalIdToReward,
             lastProposalId,
+            proposalEligibilityQuorumBps_,
+            true,
             votingClientIds
         );
+        require(proposals.length > 0, 'at least one eligible proposal');
         $.nextProposalIdToReward = lastProposalId + 1;
 
         t.lastProposal = proposals[proposals.length - 1];
@@ -341,8 +346,6 @@ contract Rewards is
         t.proposalRewardForPeriod = (auctionRevenue * $.params.proposalRewardBps) / 10_000;
         t.votingRewardForPeriod = (auctionRevenue * $.params.votingRewardBps) / 10_000;
 
-        uint16 proposalEligibilityQuorumBps_ = $.params.proposalEligibilityQuorumBps;
-
         //// First loop over the proposals:
         //// 1. Make sure all proposals have finished voting.
         //// 2. Delete (zero out) proposals that are non elgibile (i.e. not enough For votes).
@@ -354,26 +357,17 @@ contract Rewards is
             uint endBlock = max(proposals[i].endBlock, proposals[i].objectionPeriodEndBlock);
             require(block.number > endBlock, 'all proposals must be done with voting');
 
-            // skip non eligible proposals
-            if (proposals[i].forVotes < (proposals[i].totalSupply * proposalEligibilityQuorumBps_) / 10_000) {
-                delete proposals[i];
-                continue;
-            }
-
-            // proposal is eligible for reward
-            ++t.numEligibleProposals;
-
             uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
             t.numEligibleVotes += votesInProposal;
         }
 
-        //// Check that distribution is allowed:
-        //// 1. At least one eligible proposal.
-        //// 2. One of the two conditions must be true:
-        //// 2.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
-        //// 2.b. At least `minimumRewardPeriod` seconds have passed since the last update.
+        t.numEligibleProposals = proposals.length;
 
-        require(t.numEligibleProposals > 0, 'at least one eligible proposal');
+        //// Check that distribution is allowed:
+        //// 1. One of the two conditions must be true:
+        //// 1.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
+        //// 1.b. At least `minimumRewardPeriod` seconds have passed since the last update.
+
         if (t.numEligibleProposals < $.params.numProposalsEnoughForReward) {
             require(
                 t.lastProposal.creationTimestamp > $.lastProposalRewardsUpdate + $.params.minimumRewardPeriod,
@@ -409,9 +403,6 @@ contract Rewards is
         bool[] memory didClientIdHaveVotes = new bool[](votingClientIds.length);
 
         for (uint256 i; i < proposals.length; ++i) {
-            // skip non eligible deleted proposals
-            if (proposals[i].endBlock == 0) continue;
-
             uint32 clientId = proposals[i].clientId;
             if (clientId != 0 && clientId <= t.maxClientId) {
                 m.inc(clientId, t.rewardPerProposal);
@@ -502,6 +493,8 @@ contract Rewards is
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
             $.nextProposalIdToReward,
             lastProposalId,
+            $.params.proposalEligibilityQuorumBps,
+            true,
             allClientIds
         );
 

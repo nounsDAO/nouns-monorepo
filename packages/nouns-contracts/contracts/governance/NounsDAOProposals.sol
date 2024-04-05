@@ -720,6 +720,8 @@ library NounsDAOProposals {
         NounsDAOTypes.Storage storage ds,
         uint256 firstProposalId,
         uint256 lastProposalId,
+        uint16 proposalEligibilityQuorumBps,
+        bool excludeCanceled,
         uint32[] calldata votingClientIds
     ) internal view returns (NounsDAOTypes.ProposalForRewards[] memory) {
         require(lastProposalId >= firstProposalId, 'lastProposalId >= firstProposalId');
@@ -730,6 +732,9 @@ library NounsDAOProposals {
         uint256 i;
         for (uint256 pid = firstProposalId; pid <= lastProposalId; ++pid) {
             proposal = ds._proposals[pid];
+
+            if (excludeCanceled && proposal.canceled) continue;
+            if (proposal.forVotes < (proposal.totalSupply * proposalEligibilityQuorumBps) / 10_000) continue;
 
             NounsDAOTypes.ClientVoteData[] memory c = new NounsDAOTypes.ClientVoteData[](votingClientIds.length);
             for (uint256 j; j < votingClientIds.length; ++j) {
@@ -747,6 +752,11 @@ library NounsDAOProposals {
                 clientId: proposal.clientId,
                 voteData: c
             });
+        }
+
+        // change array size to the actually used size
+        assembly {
+            mstore(data, i)
         }
 
         return data;

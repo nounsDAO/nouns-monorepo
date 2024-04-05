@@ -529,9 +529,18 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     function proposalDataForRewards(
         uint256 firstProposalId,
         uint256 lastProposalId,
+        uint16 proposalEligibilityQuorumBps,
+        bool excludeCanceled,
         uint32[] calldata votingClientIds
     ) external view returns (ProposalForRewards[] memory) {
-        return ds.proposalDataForRewards(firstProposalId, lastProposalId, votingClientIds);
+        return
+            ds.proposalDataForRewards(
+                firstProposalId,
+                lastProposalId,
+                proposalEligibilityQuorumBps,
+                excludeCanceled,
+                votingClientIds
+            );
     }
 
     /**

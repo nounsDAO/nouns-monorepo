@@ -30,8 +30,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     function setUp() public virtual override {
         _setUpDAO();
 
-        vm.deal(bidder1, 100 ether);
-        vm.deal(bidder2, 100 ether);
+        vm.deal(bidder1, 1000 ether);
+        vm.deal(bidder2, 1000 ether);
 
         // need at least one settled auction
         bidAndSettleAuction(1 ether);
@@ -294,6 +294,53 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         assertEq(rewards.clientBalance(clientId2), 0.15 ether); // 15 eth * 1%
     }
 
+    function test_onlyEligibleProposalsCanSetTheRewardsPeriod() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+        proposeVoteAndEndVotingPeriod(clientId2);
+
+        settleAuction();
+        bidAndSettleAuction({ bidAmount: 100 ether });
+
+        // trying to create a bogus proposal to capture the high auction as reward
+        uint32 proposalId = uint32(propose(bidder2, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + VOTING_PERIOD + 1);
+
+        votingClientIds = [0];
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+
+        assertEq(rewards.clientBalance(clientId2), 0.15 ether); // 15 eth * 1%
+    }
+
+    function test_cantUseIneligibleProposalToPassTheMinimumPeriod() public {
+        uint256 startTimestamp = block.timestamp;
+
+        bidAndSettleAuction({ bidAmount: 5 ether });
+        bidAndSettleAuction({ bidAmount: 10 ether });
+
+        proposeVoteAndEndVotingPeriod(clientId2);
+
+        vm.warp(startTimestamp + 2 weeks + 1);
+
+        // bogus proposal no one will vote on
+        uint32 proposalId = uint32(propose(bidder2, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + VOTING_PERIOD + 1);
+
+        votingClientIds = [0];
+        vm.expectRevert('not enough time passed');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
+
     function test_splitsRewardsBetweenEligibleProposals() public {
         uint256 firstAuctionId = rewards.nextProposalRewardFirstAuctionId();
         uint256 startTimestamp = block.timestamp;
@@ -437,7 +484,7 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_ineligibleIfBelowQuorum() public {
-        // set quorum to > 66%
+        // set quorum to >= 75% so that quorum requires 9 votes
         params.proposalEligibilityQuorumBps = 7500;
         vm.prank(address(dao.timelock()));
         rewards.setParams(params);
@@ -454,6 +501,21 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
         vm.prank(address(dao.timelock()));
         rewards.setParams(params);
 
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId,
+            votingClientIds: votingClientIds
+        });
+    }
+
+    function test_canceledProposalsAreIneligible() public {
+        params.proposalEligibilityQuorumBps = 7000;
+        vm.prank(address(dao.timelock()));
+        rewards.setParams(params);
+
+        vm.prank(bidder1);
+        dao.cancel(proposalId);
+
+        vm.expectRevert('at least one eligible proposal');
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
             votingClientIds: votingClientIds
@@ -707,6 +769,51 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
         vote(makeAddr('noundersDAO'), proposalId, 0, 'against');
         expectedClientIds = [0, 1, 2];
         assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+    }
+
+    function test_getVotingClientIds_filtersProposalsBelowEligibilityQuorum() public {
+        // clientId1 should not be included because proposal only had against votes
+        vote(bidder1, proposalId, 0, 'against', clientId1);
+        mineBlocks(VOTING_PERIOD);
+
+        uint32 proposalId2 = uint32(propose(bidder1, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + 1);
+        vote(bidder1, proposalId2, 1, 'i support', clientId2);
+        mineBlocks(VOTING_PERIOD);
+        uint32[] memory votingClientIds = rewards.getVotingClientIds(proposalId2);
+
+        // doesn't revert
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId2,
+            votingClientIds: votingClientIds
+        });
+
+        expectedClientIds = [clientId2];
+        assertEq(votingClientIds, expectedClientIds);
+    }
+
+    function test_getVotingClientIds_filtersCanceledProposals() public {
+        // clientId1 should not be included because proposal was canceled
+        vote(bidder1, proposalId, 1, 'for', clientId1);
+        mineBlocks(VOTING_PERIOD);
+
+        vm.prank(bidder1);
+        dao.cancel(proposalId);
+
+        uint32 proposalId2 = uint32(propose(bidder1, address(1), 1 ether, '', '', 'my proposal', 0));
+        mineBlocks(VOTING_DELAY + UPDATABLE_PERIOD_BLOCKS + 1);
+        vote(bidder1, proposalId2, 1, 'i support', clientId2);
+        mineBlocks(VOTING_PERIOD);
+        uint32[] memory votingClientIds = rewards.getVotingClientIds(proposalId2);
+
+        // doesn't revert
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: proposalId2,
+            votingClientIds: votingClientIds
+        });
+
+        expectedClientIds = [clientId2];
+        assertEq(votingClientIds, expectedClientIds);
     }
 
     function assertEq(uint32[] memory a, uint32[] memory b) internal {
