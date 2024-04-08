@@ -734,7 +734,10 @@ library NounsDAOProposals {
             proposal = ds._proposals[pid];
 
             if (excludeCanceled && proposal.canceled) continue;
-            if (proposal.forVotes < (proposal.totalSupply * proposalEligibilityQuorumBps) / 10_000) continue;
+
+            uint256 forVotes = proposal.forVotes;
+            uint256 totalSupply = proposal.totalSupply;
+            if (forVotes < (totalSupply * proposalEligibilityQuorumBps) / 10_000) continue;
 
             NounsDAOTypes.ClientVoteData[] memory c = new NounsDAOTypes.ClientVoteData[](votingClientIds.length);
             for (uint256 j; j < votingClientIds.length; ++j) {
@@ -744,10 +747,10 @@ library NounsDAOProposals {
             data[i++] = NounsDAOTypes.ProposalForRewards({
                 endBlock: proposal.endBlock,
                 objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
-                forVotes: proposal.forVotes,
+                forVotes: forVotes,
                 againstVotes: proposal.againstVotes,
                 abstainVotes: proposal.abstainVotes,
-                totalSupply: proposal.totalSupply,
+                totalSupply: totalSupply,
                 creationTimestamp: proposal.creationTimestamp,
                 clientId: proposal.clientId,
                 voteData: c
