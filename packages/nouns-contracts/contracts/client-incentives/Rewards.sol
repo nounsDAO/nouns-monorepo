@@ -330,6 +330,7 @@ contract Rewards is
             votingClientIds
         );
         require(proposals.length > 0, 'at least one eligible proposal');
+        t.numEligibleProposals = proposals.length;
         $.nextProposalIdToReward = lastProposalId + 1;
 
         t.lastProposal = proposals[proposals.length - 1];
@@ -360,8 +361,6 @@ contract Rewards is
             uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
             t.numEligibleVotes += votesInProposal;
         }
-
-        t.numEligibleProposals = proposals.length;
 
         //// Check that distribution is allowed:
         //// 1. One of the two conditions must be true:
