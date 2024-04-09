@@ -294,14 +294,19 @@ contract Rewards is
 
     /**
      * @notice Distribute rewards for proposal creation and voting from the last update until `lastProposalId`.
-     * A proposal is eligible for rewards if for-votes/total-votes >= params.proposalEligibilityQuorumBps.
-     * Rewards are calculated by the auctions revenue during the period between the creation time of last proposal in
-     * the previous update until the current last proposal with id `lastProposalId`.
+     * A proposal is eligible for rewards if it wasn't canceled and for-votes/total-votes >= params.proposalEligibilityQuorumBps.
+     * Rewards are calculated by the auctions revenue during the period between the creation time of last processed
+     * eligible proposal in until the current last eligible proposal with id <= `lastProposalId`.
+     * One of two conditions must be true in order for rewards to be distributed:
+     * 1. There are at least `numProposalsEnoughForReward` proposals in this update
+     * 2. At least `minimumRewardPeriod` time has passed since the last update until the creation time of the last
+     *     eligible proposal in this update.
      * Gas spent is refunded in `ethToken`.
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
      * @param votingClientIds array of sorted client ids that were used to vote on the eligible proposals in
-     * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
+     * this rewards distribution. Reverts if it contains duplicates. Reverts if it's not sorted. Reverts if a clientId
+     * had zero votes on all eligible proposals from this update.
      * You may use `getVotingClientIds` as a convenience function to get the correct `votingClientIds`.
      */
     function updateRewardsForProposalWritingAndVoting(
