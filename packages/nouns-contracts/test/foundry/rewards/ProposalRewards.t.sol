@@ -320,6 +320,10 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
     }
 
     function test_cantUseIneligibleProposalToPassTheMinimumPeriod() public {
+        // The state in this test:
+        // Number of eligible proposals < `numProposalsEnoughForReward`
+        // The last proposal is after `minimumRewardPeriod`, but it's not eligible, so it shouldn't
+        // be considered when looking at how much time passed.
         uint256 startTimestamp = block.timestamp;
 
         bidAndSettleAuction({ bidAmount: 5 ether });
