@@ -786,7 +786,8 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
         mineBlocks(VOTING_PERIOD);
         uint32[] memory votingClientIds = rewards.getVotingClientIds(proposalId2);
 
-        // doesn't revert
+        // doesn't revert. if votingClientIds included clientId1 then it would revert because the first proposal is
+        // ineligible, so clientId1 has zero votes
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId2,
             votingClientIds: votingClientIds
