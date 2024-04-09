@@ -501,7 +501,7 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_eligibleIfAboveQuorum() public {
-        params.proposalEligibilityQuorumBps = 7000;
+        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
         rewards.setParams(params);
 
@@ -512,7 +512,7 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_canceledProposalsAreIneligible() public {
-        params.proposalEligibilityQuorumBps = 7000;
+        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
         rewards.setParams(params);
 
