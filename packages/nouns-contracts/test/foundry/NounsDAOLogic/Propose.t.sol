@@ -90,6 +90,7 @@ contract ProposalDataForRewardsTest is NounsDAOLogicBaseTest {
             lastProposalId: proposalId,
             proposalEligibilityQuorumBps: 0,
             excludeCanceled: false,
+            requireVotingEnded: false,
             votingClientIds: emptyArray
         });
 
@@ -109,10 +110,42 @@ contract ProposalDataForRewardsTest is NounsDAOLogicBaseTest {
             lastProposalId: proposalId,
             proposalEligibilityQuorumBps: 0,
             excludeCanceled: true,
+            requireVotingEnded: false,
             votingClientIds: emptyArray
         });
 
         assertEq(data.length, 0);
+    }
+
+    function test_requireVotingEnded_revertsIfVotingNotEnded() public {
+        uint256 proposalId = propose(proposer, address(1), 0, '', '', 'proposal', 123);
+
+        uint32[] memory emptyArray = new uint32[](0);
+        vm.expectRevert('all proposals must be done with voting');
+        dao.proposalDataForRewards({
+            firstProposalId: proposalId,
+            lastProposalId: proposalId,
+            proposalEligibilityQuorumBps: 0,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: emptyArray
+        });
+    }
+
+    function test_requireVotingEnded_doesntRevertIfVotingEnded() public {
+        uint256 proposalId = propose(proposer, address(1), 0, '', '', 'proposal', 123);
+
+        vm.roll(dao.proposals(proposalId).endBlock + 1);
+
+        uint32[] memory emptyArray = new uint32[](0);
+        dao.proposalDataForRewards({
+            firstProposalId: proposalId,
+            lastProposalId: proposalId,
+            proposalEligibilityQuorumBps: 0,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: emptyArray
+        });
     }
 
     function test_includesCanceledProposalsIfFlagIsOff() public {
@@ -127,6 +160,7 @@ contract ProposalDataForRewardsTest is NounsDAOLogicBaseTest {
             lastProposalId: proposalId,
             proposalEligibilityQuorumBps: 0,
             excludeCanceled: false,
+            requireVotingEnded: false,
             votingClientIds: emptyArray
         });
 
@@ -142,6 +176,7 @@ contract ProposalDataForRewardsTest is NounsDAOLogicBaseTest {
             lastProposalId: proposalId,
             proposalEligibilityQuorumBps: 2000,
             excludeCanceled: false,
+            requireVotingEnded: false,
             votingClientIds: emptyArray
         });
 
@@ -156,6 +191,7 @@ contract ProposalDataForRewardsTest is NounsDAOLogicBaseTest {
             lastProposalId: proposalId,
             proposalEligibilityQuorumBps: 2000,
             excludeCanceled: false,
+            requireVotingEnded: false,
             votingClientIds: emptyArray
         });
 

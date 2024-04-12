@@ -200,7 +200,8 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
     }
 
     function getProposalDataForRewards(uint256 proposalId) internal returns (NounsDAOTypes.ProposalForRewards memory) {
-        return NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(proposalId, proposalId, 0, false, new uint32[](0))[0];
+        return
+            NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(proposalId, proposalId, 0, false, false, new uint32[](0))[0];
     }
 
     function test_clientId_savedOnVotes() public {
@@ -224,6 +225,7 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
             proposalId,
             proposalId,
             0,
+            false,
             false,
             clientIds
         );

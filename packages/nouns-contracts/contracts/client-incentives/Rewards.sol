@@ -327,13 +327,14 @@ contract Rewards is
 
         uint16 proposalEligibilityQuorumBps_ = $.params.proposalEligibilityQuorumBps;
 
-        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
-            t.nextProposalIdToReward,
-            lastProposalId,
-            proposalEligibilityQuorumBps_,
-            true,
-            votingClientIds
-        );
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
+            firstProposalId: t.nextProposalIdToReward,
+            lastProposalId: lastProposalId,
+            proposalEligibilityQuorumBps: proposalEligibilityQuorumBps_,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: votingClientIds
+        });
         require(proposals.length > 0, 'at least one eligible proposal');
         t.numEligibleProposals = proposals.length;
         $.nextProposalIdToReward = lastProposalId + 1;
@@ -353,16 +354,9 @@ contract Rewards is
         t.votingRewardForPeriod = (auctionRevenue * $.params.votingRewardBps) / 10_000;
 
         //// First loop over the proposals:
-        //// 1. Make sure all proposals have finished voting.
-        //// 2. Delete (zero out) proposals that are non elgibile (i.e. not enough For votes).
-        //// 3. Count the number of eligible proposals.
-        //// 4. Count the number of votes in eligible proposals.
+        //// 1. Count the number of votes in eligible proposals.
 
         for (uint256 i; i < proposals.length; ++i) {
-            // make sure proposal finished voting
-            uint endBlock = max(proposals[i].endBlock, proposals[i].objectionPeriodEndBlock);
-            require(block.number > endBlock, 'all proposals must be done with voting');
-
             uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
             t.numEligibleVotes += votesInProposal;
         }
@@ -395,10 +389,9 @@ contract Rewards is
         );
 
         //// Second loop over the proposals:
-        //// 1. Skip proposals that were deleted for non eligibility.
-        //// 2. Reward proposal's clientId.
-        //// 3. Reward the clientIds that faciliated voting.
-        //// 4. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
+        //// 1. Reward proposal's clientId.
+        //// 2. Reward the clientIds that faciliated voting.
+        //// 3. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
         ////    a large array of votingClientIds, spend a lot of gas, and have that gas refunded.
 
         ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
@@ -494,13 +487,14 @@ contract Rewards is
         for (uint32 i; i < numClientIds; ++i) {
             allClientIds[i] = i;
         }
-        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
-            $.nextProposalIdToReward,
-            lastProposalId,
-            $.params.proposalEligibilityQuorumBps,
-            true,
-            allClientIds
-        );
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
+            firstProposalId: $.nextProposalIdToReward,
+            lastProposalId: lastProposalId,
+            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: allClientIds
+        });
 
         uint32[] memory sumVotes = new uint32[](numClientIds);
         for (uint256 i; i < proposals.length; ++i) {
@@ -692,10 +686,6 @@ contract Rewards is
         for (uint256 i = 0; i < s.length; ++i) {
             sum += s[i].amount;
         }
-    }
-
-    function max(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a > b ? a : b;
     }
 
     /**

@@ -181,6 +181,22 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
         });
     }
 
+    function test_revertsIfProposalWithNoVotesYetIsNotDoneWithVoting() public {
+        bidAndSettleAuction({ bidAmount: 5 ether });
+
+        vm.warp(block.timestamp + 2 weeks + 1);
+        proposeVoteAndEndVotingPeriod(clientId1);
+        uint256 proposalId2 = propose(bidder1, address(1), 1 ether, '', '', 'my proposal', clientId1);
+
+        settleAuction();
+        votingClientIds = [0];
+        vm.expectRevert('all proposals must be done with voting');
+        rewards.updateRewardsForProposalWritingAndVoting({
+            lastProposalId: uint32(proposalId2),
+            votingClientIds: votingClientIds
+        });
+    }
+
     function test_rewardsAfterMinimumRewardPeriod() public {
         uint256 startTimestamp = block.timestamp;
 
@@ -764,13 +780,23 @@ contract VotesRewardsTest is BaseProposalRewardsTest {
     function test_getVotingClientIds() public {
         vote(bidder1, proposalId, 1, 'i support', clientId1);
         expectedClientIds = [1];
+        mineBlocks(VOTING_PERIOD);
         assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+    }
 
+    function test_getVotingClientIds2() public {
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
         vote(bidder2, proposalId, 1, 'i support', clientId2);
+        mineBlocks(VOTING_PERIOD);
         expectedClientIds = [1, 2];
         assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
+    }
 
+    function test_getVotingClientIds3() public {
+        vote(bidder1, proposalId, 1, 'i support', clientId1);
+        vote(bidder2, proposalId, 1, 'i support', clientId2);
         vote(makeAddr('noundersDAO'), proposalId, 0, 'against');
+        mineBlocks(VOTING_PERIOD);
         expectedClientIds = [0, 1, 2];
         assertEq(rewards.getVotingClientIds(proposalId), expectedClientIds);
     }

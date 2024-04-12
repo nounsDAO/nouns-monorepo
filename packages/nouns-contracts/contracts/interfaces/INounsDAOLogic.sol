@@ -266,6 +266,7 @@ interface INounsDAOLogic {
         uint256 lastProposalId,
         uint16 proposalEligibilityQuorumBps,
         bool excludeCanceled,
+        bool requireVotingEnded,
         uint32[] calldata votingClientIds
     ) external view returns (NounsDAOTypes.ProposalForRewards[] memory);
 
