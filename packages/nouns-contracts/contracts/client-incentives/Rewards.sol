@@ -282,12 +282,10 @@ contract Rewards is
     struct Temp {
         uint32 maxClientId;
         uint256 numEligibleVotes;
-        uint256 numEligibleProposals;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
         uint256 proposalRewardForPeriod;
         uint256 votingRewardForPeriod;
-        uint32 nextProposalIdToReward;
         uint256 firstAuctionIdForRevenue;
         NounsDAOTypes.ProposalForRewards lastProposal;
     }
@@ -319,24 +317,21 @@ contract Rewards is
         Temp memory t;
 
         t.maxClientId = nextTokenId() - 1;
-        t.nextProposalIdToReward = $.nextProposalIdToReward;
+        uint32 nextProposalIdToReward_ = $.nextProposalIdToReward;
 
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
-        require(lastProposalId >= t.nextProposalIdToReward, 'bad lastProposalId');
+        require(lastProposalId >= nextProposalIdToReward_, 'bad lastProposalId');
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
-        uint16 proposalEligibilityQuorumBps_ = $.params.proposalEligibilityQuorumBps;
-
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
-            firstProposalId: t.nextProposalIdToReward,
+            firstProposalId: nextProposalIdToReward_,
             lastProposalId: lastProposalId,
-            proposalEligibilityQuorumBps: proposalEligibilityQuorumBps_,
+            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
             excludeCanceled: true,
             requireVotingEnded: true,
             votingClientIds: votingClientIds
         });
         require(proposals.length > 0, 'at least one eligible proposal');
-        t.numEligibleProposals = proposals.length;
         $.nextProposalIdToReward = lastProposalId + 1;
 
         t.lastProposal = proposals[proposals.length - 1];
@@ -366,7 +361,7 @@ contract Rewards is
         //// 1.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
         //// 1.b. At least `minimumRewardPeriod` seconds have passed since the last update.
 
-        if (t.numEligibleProposals < $.params.numProposalsEnoughForReward) {
+        if (proposals.length < $.params.numProposalsEnoughForReward) {
             require(
                 t.lastProposal.creationTimestamp > $.lastProposalRewardsUpdate + $.params.minimumRewardPeriod,
                 'not enough time passed'
@@ -375,11 +370,11 @@ contract Rewards is
         $.lastProposalRewardsUpdate = uint40(t.lastProposal.creationTimestamp);
 
         // Calculate the reward per proposal and per vote
-        t.rewardPerProposal = t.proposalRewardForPeriod / t.numEligibleProposals;
+        t.rewardPerProposal = t.proposalRewardForPeriod / proposals.length;
         t.rewardPerVote = t.votingRewardForPeriod / t.numEligibleVotes;
 
         emit ProposalRewardsUpdated(
-            t.nextProposalIdToReward,
+            nextProposalIdToReward_,
             lastProposalId,
             t.firstAuctionIdForRevenue,
             lastAuctionIdForRevenue,
