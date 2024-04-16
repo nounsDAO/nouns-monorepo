@@ -716,10 +716,18 @@ library NounsDAOProposals {
             });
     }
 
+    struct Temp {
+        uint256 endBlock;
+        uint256 objectionPeriodEndBlock;
+    }
+
     function proposalDataForRewards(
         NounsDAOTypes.Storage storage ds,
         uint256 firstProposalId,
         uint256 lastProposalId,
+        uint16 proposalEligibilityQuorumBps,
+        bool excludeCanceled,
+        bool requireVotingEnded,
         uint32[] calldata votingClientIds
     ) internal view returns (NounsDAOTypes.ProposalForRewards[] memory) {
         require(lastProposalId >= firstProposalId, 'lastProposalId >= firstProposalId');
@@ -728,8 +736,22 @@ library NounsDAOProposals {
 
         NounsDAOTypes.Proposal storage proposal;
         uint256 i;
+        Temp memory t;
         for (uint256 pid = firstProposalId; pid <= lastProposalId; ++pid) {
             proposal = ds._proposals[pid];
+
+            if (excludeCanceled && proposal.canceled) continue;
+
+            t.endBlock = proposal.endBlock;
+            t.objectionPeriodEndBlock = proposal.objectionPeriodEndBlock;
+            if (requireVotingEnded) {
+                uint256 votingEndBlock = max(t.endBlock, t.objectionPeriodEndBlock);
+                require(block.number > votingEndBlock, 'all proposals must be done with voting');
+            }
+
+            uint256 forVotes = proposal.forVotes;
+            uint256 totalSupply = proposal.totalSupply;
+            if (forVotes < (totalSupply * proposalEligibilityQuorumBps) / 10_000) continue;
 
             NounsDAOTypes.ClientVoteData[] memory c = new NounsDAOTypes.ClientVoteData[](votingClientIds.length);
             for (uint256 j; j < votingClientIds.length; ++j) {
@@ -737,16 +759,21 @@ library NounsDAOProposals {
             }
 
             data[i++] = NounsDAOTypes.ProposalForRewards({
-                endBlock: proposal.endBlock,
-                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
-                forVotes: proposal.forVotes,
+                endBlock: t.endBlock,
+                objectionPeriodEndBlock: t.objectionPeriodEndBlock,
+                forVotes: forVotes,
                 againstVotes: proposal.againstVotes,
                 abstainVotes: proposal.abstainVotes,
-                totalSupply: proposal.totalSupply,
+                totalSupply: totalSupply,
                 creationTimestamp: proposal.creationTimestamp,
                 clientId: proposal.clientId,
                 voteData: c
             });
+        }
+
+        // change array size to the actually used size
+        assembly {
+            mstore(data, i)
         }
 
         return data;
@@ -992,5 +1019,9 @@ library NounsDAOProposals {
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
         return (number * bps) / 10000;
+    }
+
+    function max(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a > b ? a : b;
     }
 }

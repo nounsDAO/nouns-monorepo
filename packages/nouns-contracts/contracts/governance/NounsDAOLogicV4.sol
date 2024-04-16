@@ -523,15 +523,29 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @notice Get a range of proposals, in the format of a samller struct tailored to client incentives rewards.
      * @param firstProposalId the id of the first proposal to get the data for
      * @param lastProposalId the id of the last proposal to get the data for
+     * @param proposalEligibilityQuorumBps filters proposals with for-votes/total-supply higher than this quorum
+     * @param excludeCanceled if true, excludes canceled proposals
+     * @param requireVotingEnded if true, reverts if one of the proposals hasn't finished voting yet
      * @param votingClientIds the ids of the clients that facilitated votes on the proposals
      * @return An array of `ProposalForRewards` structs with the proposal data
      */
     function proposalDataForRewards(
         uint256 firstProposalId,
         uint256 lastProposalId,
+        uint16 proposalEligibilityQuorumBps,
+        bool excludeCanceled,
+        bool requireVotingEnded,
         uint32[] calldata votingClientIds
     ) external view returns (ProposalForRewards[] memory) {
-        return ds.proposalDataForRewards(firstProposalId, lastProposalId, votingClientIds);
+        return
+            ds.proposalDataForRewards(
+                firstProposalId,
+                lastProposalId,
+                proposalEligibilityQuorumBps,
+                excludeCanceled,
+                requireVotingEnded,
+                votingClientIds
+            );
     }
 
     /**

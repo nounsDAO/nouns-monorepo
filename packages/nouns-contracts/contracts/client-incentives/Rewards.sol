@@ -282,26 +282,29 @@ contract Rewards is
     struct Temp {
         uint32 maxClientId;
         uint256 numEligibleVotes;
-        uint256 numEligibleProposals;
         uint256 rewardPerProposal;
         uint256 rewardPerVote;
         uint256 proposalRewardForPeriod;
         uint256 votingRewardForPeriod;
-        uint32 nextProposalIdToReward;
         uint256 firstAuctionIdForRevenue;
         NounsDAOTypes.ProposalForRewards lastProposal;
     }
 
     /**
      * @notice Distribute rewards for proposal creation and voting from the last update until `lastProposalId`.
-     * A proposal is eligible for rewards if for-votes/total-votes >= params.proposalEligibilityQuorumBps.
-     * Rewards are calculated by the auctions revenue during the period between the creation time of last proposal in
-     * the previous update until the current last proposal with id `lastProposalId`.
+     * A proposal is eligible for rewards if it wasn't canceled and for-votes/total-votes >= params.proposalEligibilityQuorumBps.
+     * Rewards are calculated by the auctions revenue during the period between the creation time of last processed
+     * eligible proposal in until the current last eligible proposal with id <= `lastProposalId`.
+     * One of two conditions must be true in order for rewards to be distributed:
+     * 1. There are at least `numProposalsEnoughForReward` proposals in this update
+     * 2. At least `minimumRewardPeriod` time has passed since the last update until the creation time of the last
+     *     eligible proposal in this update.
      * Gas spent is refunded in `ethToken`.
      * @param lastProposalId id of the last proposal to include in the rewards distribution. all proposals up to and
      * including this id must have ended voting.
      * @param votingClientIds array of sorted client ids that were used to vote on the eligible proposals in
-     * this rewards distribution. reverts if contains duplicates. reverts if not sorted. reverts if a clientId had zero votes.
+     * this rewards distribution. Reverts if it contains duplicates. Reverts if it's not sorted. Reverts if a clientId
+     * had zero votes on all eligible proposals from this update.
      * You may use `getVotingClientIds` as a convenience function to get the correct `votingClientIds`.
      */
     function updateRewardsForProposalWritingAndVoting(
@@ -314,17 +317,21 @@ contract Rewards is
         Temp memory t;
 
         t.maxClientId = nextTokenId() - 1;
-        t.nextProposalIdToReward = $.nextProposalIdToReward;
+        uint32 nextProposalIdToReward_ = $.nextProposalIdToReward;
 
         require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
-        require(lastProposalId >= t.nextProposalIdToReward, 'bad lastProposalId');
+        require(lastProposalId >= nextProposalIdToReward_, 'bad lastProposalId');
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
-        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
-            t.nextProposalIdToReward,
-            lastProposalId,
-            votingClientIds
-        );
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
+            firstProposalId: nextProposalIdToReward_,
+            lastProposalId: lastProposalId,
+            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: votingClientIds
+        });
+        require(proposals.length > 0, 'at least one eligible proposal');
         $.nextProposalIdToReward = lastProposalId + 1;
 
         t.lastProposal = proposals[proposals.length - 1];
@@ -341,40 +348,20 @@ contract Rewards is
         t.proposalRewardForPeriod = (auctionRevenue * $.params.proposalRewardBps) / 10_000;
         t.votingRewardForPeriod = (auctionRevenue * $.params.votingRewardBps) / 10_000;
 
-        uint16 proposalEligibilityQuorumBps_ = $.params.proposalEligibilityQuorumBps;
-
         //// First loop over the proposals:
-        //// 1. Make sure all proposals have finished voting.
-        //// 2. Delete (zero out) proposals that are non elgibile (i.e. not enough For votes).
-        //// 3. Count the number of eligible proposals.
-        //// 4. Count the number of votes in eligible proposals.
+        //// 1. Count the number of votes in eligible proposals.
 
         for (uint256 i; i < proposals.length; ++i) {
-            // make sure proposal finished voting
-            uint endBlock = max(proposals[i].endBlock, proposals[i].objectionPeriodEndBlock);
-            require(block.number > endBlock, 'all proposals must be done with voting');
-
-            // skip non eligible proposals
-            if (proposals[i].forVotes < (proposals[i].totalSupply * proposalEligibilityQuorumBps_) / 10_000) {
-                delete proposals[i];
-                continue;
-            }
-
-            // proposal is eligible for reward
-            ++t.numEligibleProposals;
-
             uint256 votesInProposal = proposals[i].forVotes + proposals[i].againstVotes + proposals[i].abstainVotes;
             t.numEligibleVotes += votesInProposal;
         }
 
         //// Check that distribution is allowed:
-        //// 1. At least one eligible proposal.
-        //// 2. One of the two conditions must be true:
-        //// 2.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
-        //// 2.b. At least `minimumRewardPeriod` seconds have passed since the last update.
+        //// 1. One of the two conditions must be true:
+        //// 1.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
+        //// 1.b. At least `minimumRewardPeriod` seconds have passed since the last update.
 
-        require(t.numEligibleProposals > 0, 'at least one eligible proposal');
-        if (t.numEligibleProposals < $.params.numProposalsEnoughForReward) {
+        if (proposals.length < $.params.numProposalsEnoughForReward) {
             require(
                 t.lastProposal.creationTimestamp > $.lastProposalRewardsUpdate + $.params.minimumRewardPeriod,
                 'not enough time passed'
@@ -383,11 +370,11 @@ contract Rewards is
         $.lastProposalRewardsUpdate = uint40(t.lastProposal.creationTimestamp);
 
         // Calculate the reward per proposal and per vote
-        t.rewardPerProposal = t.proposalRewardForPeriod / t.numEligibleProposals;
+        t.rewardPerProposal = t.proposalRewardForPeriod / proposals.length;
         t.rewardPerVote = t.votingRewardForPeriod / t.numEligibleVotes;
 
         emit ProposalRewardsUpdated(
-            t.nextProposalIdToReward,
+            nextProposalIdToReward_,
             lastProposalId,
             t.firstAuctionIdForRevenue,
             lastAuctionIdForRevenue,
@@ -397,10 +384,9 @@ contract Rewards is
         );
 
         //// Second loop over the proposals:
-        //// 1. Skip proposals that were deleted for non eligibility.
-        //// 2. Reward proposal's clientId.
-        //// 3. Reward the clientIds that faciliated voting.
-        //// 4. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
+        //// 1. Reward proposal's clientId.
+        //// 2. Reward the clientIds that faciliated voting.
+        //// 3. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
         ////    a large array of votingClientIds, spend a lot of gas, and have that gas refunded.
 
         ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
@@ -409,9 +395,6 @@ contract Rewards is
         bool[] memory didClientIdHaveVotes = new bool[](votingClientIds.length);
 
         for (uint256 i; i < proposals.length; ++i) {
-            // skip non eligible deleted proposals
-            if (proposals[i].endBlock == 0) continue;
-
             uint32 clientId = proposals[i].clientId;
             if (clientId != 0 && clientId <= t.maxClientId) {
                 m.inc(clientId, t.rewardPerProposal);
@@ -499,11 +482,14 @@ contract Rewards is
         for (uint32 i; i < numClientIds; ++i) {
             allClientIds[i] = i;
         }
-        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards(
-            $.nextProposalIdToReward,
-            lastProposalId,
-            allClientIds
-        );
+        NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
+            firstProposalId: $.nextProposalIdToReward,
+            lastProposalId: lastProposalId,
+            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
+            excludeCanceled: true,
+            requireVotingEnded: true,
+            votingClientIds: allClientIds
+        });
 
         uint32[] memory sumVotes = new uint32[](numClientIds);
         for (uint256 i; i < proposals.length; ++i) {
@@ -695,10 +681,6 @@ contract Rewards is
         for (uint256 i = 0; i < s.length; ++i) {
             sum += s[i].amount;
         }
-    }
-
-    function max(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a > b ? a : b;
     }
 
     /**

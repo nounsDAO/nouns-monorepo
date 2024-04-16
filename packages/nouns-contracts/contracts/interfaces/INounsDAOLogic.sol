@@ -264,6 +264,9 @@ interface INounsDAOLogic {
     function proposalDataForRewards(
         uint256 firstProposalId,
         uint256 lastProposalId,
+        uint16 proposalEligibilityQuorumBps,
+        bool excludeCanceled,
+        bool requireVotingEnded,
         uint32[] calldata votingClientIds
     ) external view returns (NounsDAOTypes.ProposalForRewards[] memory);
 
@@ -443,7 +446,7 @@ interface INounsDAOLogic {
 
     /**
      * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
-     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and 
+     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and
      * be ready to reuse this slot.
      */
     function _zeroOutVoteSnapshotBlockSwitchProposalId() external;
