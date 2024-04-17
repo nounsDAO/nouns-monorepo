@@ -404,9 +404,8 @@ interface NounsDAOTypes {
         uint256 forkThresholdBPS;
         /// @notice Address of the original timelock
         INounsDAOExecutor timelockV1;
-        /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
-        /// @dev To be zeroed-out in the upcoming DAO upgrade.
-        uint256 voteSnapshotBlockSwitchProposalId;
+        /// @notice The address of the Nouns-backed ERC20 token
+        address nounsFungibleToken;
     }
 
     struct Proposal {

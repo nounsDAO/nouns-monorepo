@@ -461,6 +461,15 @@ library NounsDAOAdmin {
      */
     function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) public onlyAdmin {
         checkForDuplicates(erc20tokens);
+        address fungibleToken = ds().nounsFungibleToken;
+        if (fungibleToken != address(0)) {
+            for (uint256 i = 0; i < erc20tokens.length; i++) {
+                require(
+                    erc20tokens[i] != fungibleToken,
+                    'NounsDAO::_setErc20TokensToIncludeInFork: cannot include fungible token'
+                );
+            }
+        }
 
         emit ERC20TokensToIncludeInForkSet(ds().erc20TokensToIncludeInFork, erc20tokens);
 
@@ -537,12 +546,10 @@ library NounsDAOAdmin {
     }
 
     /**
-     * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
-     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and 
-     * be ready to reuse this slot.
+     * @notice Admin function for setting the canonical Nouns Fungible Token address
      */
-    function _zeroOutVoteSnapshotBlockSwitchProposalId() external onlyAdmin {
-        ds().voteSnapshotBlockSwitchProposalId = 0;
+    function _setNounsFungibleToken(address newNounsFungibleToken) public onlyAdmin {
+        ds().nounsFungibleToken = newNounsFungibleToken;
     }
 
     function _writeQuorumParamsCheckpoint(NounsDAOTypes.DynamicQuorumParams memory params) internal {

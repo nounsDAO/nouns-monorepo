@@ -21,6 +21,10 @@ import { NounsDAOTypes, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../Noun
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
+interface NounsFungibleToken {
+    function balanceToBackingNFTCount(address account) external view returns (uint256);
+}
+
 library NounsDAOFork {
     error ForkThresholdNotMet();
     error ForkPeriodNotActive();
@@ -220,7 +224,16 @@ library NounsDAOFork {
      * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
      */
     function adjustedTotalSupply(NounsDAOTypes.Storage storage ds) internal view returns (uint256) {
-        return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.forkEscrow.numTokensOwnedByDAO();
+        uint256 nounsHeldViaFungibleToken = 0;
+        address tokenAddress = ds.nounsFungibleToken;
+        if (tokenAddress != address(0)) {
+            nounsHeldViaFungibleToken = NounsFungibleToken(tokenAddress).balanceToBackingNFTCount(address(ds.timelock));
+        }
+        return
+            ds.nouns.totalSupply() -
+            ds.nouns.balanceOf(address(ds.timelock)) -
+            ds.forkEscrow.numTokensOwnedByDAO() -
+            nounsHeldViaFungibleToken;
     }
 
     /**
