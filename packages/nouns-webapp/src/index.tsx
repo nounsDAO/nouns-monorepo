@@ -27,12 +27,7 @@ import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, {
-  CHAIN_ID,
-  ChainId_Sepolia,
-  createNetworkHttpUrl,
-  multicallOnLocalhost,
-} from './config';
+import { CHAIN_ID, ChainId_Sepolia, createNetworkHttpUrl, multicallOnLocalhost } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish, Event } from 'ethers';
 // import { NounsAuctionHouseFactory } from '@nouns/sdk';
