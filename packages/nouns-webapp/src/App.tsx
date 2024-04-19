@@ -60,7 +60,7 @@ function App() {
           provider={chainId === ChainId.Mainnet ? library : undefined}
           batchLookups={true}
         >
-          <NavBar />
+          {/* <NavBar /> */}
           <Switch>
             <Route exact path="/" component={AuctionPage} />
             <Redirect from="/auction/:id" to="/noun/:id" />
