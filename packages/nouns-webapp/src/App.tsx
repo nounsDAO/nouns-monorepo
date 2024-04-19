@@ -63,7 +63,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={AuctionPage} />
-          <Redirect from="/auction/:id" to="/noun/:id" />
+          {/* <Redirect from="/auction/:id" to="/noun/:id" />
           <Route
             exact
             path="/noun/:id"
@@ -90,7 +90,7 @@ function App() {
           <Route exact path="/explore" component={ExplorePage} />
           <Route exact path="/fork/:id" component={ForkPage} />
           <Route exact path="/fork" component={ForksPage} />
-          <Route component={NotFoundPage} />
+          <Route component={NotFoundPage} /> */}
         </Switch>
         <Footer />
         {/* </AvatarProvider> */}
