@@ -98,11 +98,18 @@ const Auction: React.FC<AuctionProps> = props => {
         <div className={classes.logo}>
           <Image src={heroImage} alt="Bg Hero" />
         </div>
-        <div className={classes.soon}>
-          <h1>
-            <Trans>Join the waitlist</Trans>
-          </h1>
-        </div>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://www.blunts.wtf/waitlist"
+          style={{ textDecoration: 'none' }}
+        >
+          <div className={classes.soon}>
+            <h1>
+              <Trans>Join the waitlist</Trans>
+            </h1>
+          </div>
+        </a>
       </div>
     </div>
   );
