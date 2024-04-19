@@ -151,3 +151,11 @@
 .nounsIntroLinks:hover {
   color: #d63c5e;
 }
+
+
+.imageClass {
+  padding: 10px;
+  width: 536px;
+  height: 536px;
+}
+
