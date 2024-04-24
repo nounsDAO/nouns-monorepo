@@ -569,7 +569,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
 
     function test_setDescriptor_revertsForNonOwner() public {
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert('Ownable: caller is not the owner');
+        vm.expectRevert('Caller must be owner or admin');
         vm.prank(nonOwner);
         rewards.setDescriptor(address(0));
     }
@@ -578,6 +578,15 @@ contract NFTFunctionsTest is RewardsBaseTest {
         address newDescriptor = makeAddr('newDescriptor');
 
         vm.prank(rewards.owner());
+        rewards.setDescriptor(newDescriptor);
+
+        assertEq(rewards.descriptor(), newDescriptor);
+    }
+
+    function test_setDescriptor_worksForAdmin() public {
+        address newDescriptor = makeAddr('newDescriptor');
+
+        vm.prank(rewards.admin());
         rewards.setDescriptor(newDescriptor);
 
         assertEq(rewards.descriptor(), newDescriptor);
