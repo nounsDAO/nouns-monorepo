@@ -22,7 +22,7 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
 interface NounsFungibleToken {
-    function balanceToBackingNFTCount(address account) external view returns (uint256);
+    function redeemableNFTsBalance(address account) external view returns (uint256);
 }
 
 library NounsDAOFork {
@@ -165,10 +165,9 @@ library NounsDAOFork {
      * @dev Only the DAO can call this function
      * @param tokenIds the tokenIds to withdraw
      */
-    function withdrawDAONounsFromEscrowToTreasury(
-        NounsDAOTypes.Storage storage ds,
-        uint256[] calldata tokenIds
-    ) external {
+    function withdrawDAONounsFromEscrowToTreasury(NounsDAOTypes.Storage storage ds, uint256[] calldata tokenIds)
+        external
+    {
         withdrawDAONounsFromEscrow(ds, tokenIds, address(ds.timelock));
     }
 
@@ -227,7 +226,7 @@ library NounsDAOFork {
         uint256 nounsHeldViaFungibleToken = 0;
         address tokenAddress = ds.nounsFungibleToken;
         if (tokenAddress != address(0)) {
-            nounsHeldViaFungibleToken = NounsFungibleToken(tokenAddress).balanceToBackingNFTCount(address(ds.timelock));
+            nounsHeldViaFungibleToken = NounsFungibleToken(tokenAddress).redeemableNFTsBalance(address(ds.timelock));
         }
         return
             ds.nouns.totalSupply() -

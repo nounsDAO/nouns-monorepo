@@ -17,7 +17,7 @@ contract FungibleTokenMock {
         values[account] = value;
     }
 
-    function balanceToBackingNFTCount(address account) external view returns (uint256) {
+    function redeemableNFTsBalance(address account) external view returns (uint256) {
         return values[account];
     }
 }
