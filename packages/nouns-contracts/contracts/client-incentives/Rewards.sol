@@ -666,7 +666,7 @@ contract Rewards is
     /**
      * @notice Set the descriptor for the client token
      */
-    function setDescriptor(address descriptor_) public onlyOwner {
+    function setDescriptor(address descriptor_) public onlyOwnerOrAdmin {
         RewardsStorage storage $ = _getRewardsStorage();
         $.descriptor = descriptor_;
     }

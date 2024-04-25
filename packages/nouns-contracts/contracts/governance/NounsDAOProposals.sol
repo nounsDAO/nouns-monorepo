@@ -920,7 +920,7 @@ library NounsDAOProposals {
         newProposal.endBlock = endBlock;
         newProposal.totalSupply = adjustedTotalSupply;
         newProposal.creationBlock = SafeCast.toUint32(block.number);
-        newProposal.creationTimestamp = uint32(block.timestamp);
+        newProposal.creationTimestamp = SafeCast.toUint32(block.timestamp);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 
