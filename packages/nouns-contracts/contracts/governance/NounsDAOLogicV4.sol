@@ -925,5 +925,9 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
         return address(ds.timelockV1);
     }
 
+    function nounsFungibleToken() public view returns (address) {
+        return ds.nounsFungibleToken;
+    }
+
     receive() external payable {}
 }
