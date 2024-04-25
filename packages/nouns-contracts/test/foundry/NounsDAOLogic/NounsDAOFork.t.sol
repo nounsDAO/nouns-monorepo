@@ -10,6 +10,18 @@ import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOF
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { INounsDAOForkEscrow } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
+contract FungibleTokenMock {
+    mapping(address => uint256) values;
+
+    function set(address account, uint256 value) public {
+        values[account] = value;
+    }
+
+    function balanceToBackingNFTCount(address account) external view returns (uint256) {
+        return values[account];
+    }
+}
+
 abstract contract DAOForkZeroState is NounsDAOLogicBaseTest {
     address tokenHolder = makeAddr('tokenHolder');
     address tokenHolder2 = makeAddr('tokenHolder2');
@@ -45,7 +57,11 @@ abstract contract DAOForkZeroState is NounsDAOLogicBaseTest {
         escrow = dao.forkEscrow();
     }
 
-    function assertOwnerOfTokens(address token, uint256[] memory tokenIds_, address owner) internal {
+    function assertOwnerOfTokens(
+        address token,
+        uint256[] memory tokenIds_,
+        address owner
+    ) internal {
         for (uint256 i = 0; i < tokenIds_.length; i++) {
             assertEq(IERC721(token).ownerOf(tokenIds_[i]), owner);
         }
@@ -307,6 +323,25 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         vm.roll(block.number + 1);
         propose(someone, address(0), 0, '', '', '');
     }
+
+    function test_adjustedTotalSupply_takesFungibleTokensIntoAccount() public {
+        dao.executeFork();
+
+        // Before token is set
+        assertEq(dao.adjustedTotalSupply(), 15);
+
+        FungibleTokenMock ft = new FungibleTokenMock();
+        vm.prank(address(dao.timelock()));
+        dao._setNounsFungibleToken(address(ft));
+
+        // After token is set, before any balance is set
+        assertEq(dao.adjustedTotalSupply(), 15);
+
+        ft.set(address(dao.timelock()), 2);
+
+        // After fungible token balance is set
+        assertEq(dao.adjustedTotalSupply(), 13);
+    }
 }
 
 abstract contract DAOForkExecutedState is DAOForkSignaledOverThresholdState {
@@ -337,6 +372,27 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
         vm.expectRevert(NounsDAOFork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
         dao.withdrawFromForkEscrow(tokenIds);
+    }
+
+    function test_adjustedTotalSupply_takesFungibleTokensIntoAccount() public {
+        // Before join fork
+        assertEq(dao.adjustedTotalSupply(), 15);
+
+        tokenIds = [8, 9];
+        proposalIds = [1, 2];
+        vm.prank(tokenHolder);
+        dao.joinFork(tokenIds, proposalIds, 'some reason');
+
+        // After join fork, before fungible token balance is set
+        assertEq(dao.adjustedTotalSupply(), 13);
+
+        FungibleTokenMock ft = new FungibleTokenMock();
+        vm.prank(address(dao.timelock()));
+        dao._setNounsFungibleToken(address(ft));
+        ft.set(address(dao.timelock()), 3);
+
+        // After fungible token balance is set
+        assertEq(dao.adjustedTotalSupply(), 10);
     }
 
     function test_joinFork() public {
