@@ -388,6 +388,22 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         dao._setErc20TokensToIncludeInFork(tokens_);
     }
 
+    function test__setErc20TokensToIncludeInFork_givenFungibleTokenInInput_reverts() public {
+        address fungibleToken = makeAddr('fungible token');
+        vm.prank(address(dao.timelock()));
+        dao._setNounsFungibleToken(fungibleToken);
+
+        address anotherToken = makeAddr('another token');
+
+        address[] memory tokens_ = new address[](2);
+        tokens_[0] = anotherToken;
+        tokens_[1] = fungibleToken;
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert('NounsDAO::_setErc20TokensToIncludeInFork: cannot include fungible token');
+        dao._setErc20TokensToIncludeInFork(tokens_);
+    }
+
     function test_setForkEscrow_onlyAdmin() public {
         vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
         dao._setForkEscrow(address(1));
