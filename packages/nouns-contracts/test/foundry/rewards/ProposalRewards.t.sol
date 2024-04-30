@@ -23,7 +23,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     uint32 clientId1;
     uint32 clientId2;
     uint32[] votingClientIds;
-    Rewards.RewardParams params;
+    Rewards.AuctionRewardParams auctionParams;
+    Rewards.ProposalRewardParams proposalParams;
 
     uint256 constant SECONDS_IN_BLOCK = 12;
 
@@ -51,20 +52,22 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
             admin,
             minter,
             address(erc20Mock),
-            1,
-            2,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 3
-            }),
+            // 1,
+            // 2,
+            // auctionHouse.auction().nounId,
+            // Rewards.RewardParams({
+            //     minimumRewardPeriod: 2 weeks,
+            //     numProposalsEnoughForReward: 30,
+            //     proposalRewardBps: 100,
+            //     votingRewardBps: 50,
+            //     auctionRewardBps: 150,
+            //     proposalEligibilityQuorumBps: 1000,
+            //     minimumAuctionsBetweenUpdates: 3
+            // }),
             address(0)
         );
+
+        // TODO: set all these params
 
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient('client1', 'client1 description');
@@ -450,15 +453,13 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
     function test_rewardsIfMinimumNumberOfProposalsWereCreated_evenIfMinimumPeriodHasntPassed() public {
         // set numProposalsEnoughForReward to 1
         vm.prank(address(dao.timelock()));
-        rewards.setParams(
-            Rewards.RewardParams({
+        rewards.setProposalRewardParams(
+            Rewards.ProposalRewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 1,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
-                auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 3
+                proposalEligibilityQuorumBps: 1000
             })
         );
 
@@ -505,9 +506,9 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
 
     function test_ineligibleIfBelowQuorum() public {
         // set quorum to >= 75% so that quorum requires 9 votes
-        params.proposalEligibilityQuorumBps = 7500;
+        proposalParams.proposalEligibilityQuorumBps = 7500;
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         vm.expectRevert('at least one eligible proposal');
         rewards.updateRewardsForProposalWritingAndVoting({
@@ -517,9 +518,9 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_eligibleIfAboveQuorum() public {
-        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
+        proposalParams.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
@@ -528,9 +529,14 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_canceledProposalsAreIneligible() public {
-        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
+        // TODO: need to set proposalParams ??
+        // TODO: need to set proposalParams ??
+        // TODO: need to set proposalParams ??
+        // TODO: need to set proposalParams ??
+
+        proposalParams.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         vm.prank(bidder1);
         dao.cancel(proposalId);

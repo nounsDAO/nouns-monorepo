@@ -11,22 +11,14 @@ library RewardsDeployer {
         address admin,
         address auctionHouse,
         address erc20,
-        uint32 nextProposalIdToReward,
-        uint256 nextAuctionIdToReward,
-        uint96 nextProposalRewardFirstAuctionId,
-        Rewards.RewardParams memory rewardParams,
         address descriptor
     ) internal returns (Rewards) {
         Rewards rewardsLogic = new Rewards(address(dao), auctionHouse);
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,address,address,uint32,uint32,uint32,(uint32,uint8,uint16,uint16,uint16,uint16,uint8),address)',
+            'initialize(address,address,address,address)',
             address(dao.timelock()),
             admin,
             erc20,
-            nextProposalIdToReward,
-            nextAuctionIdToReward,
-            nextProposalRewardFirstAuctionId,
-            rewardParams,
             descriptor
         );
 

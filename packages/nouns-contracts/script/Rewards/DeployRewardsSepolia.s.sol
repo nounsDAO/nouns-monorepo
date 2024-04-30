@@ -18,16 +18,7 @@ contract DeployRewardsSepolia is DeployRewardsBase {
                 dao: INounsDAOLogic(DAO_PROXY_SEPOLIA),
                 auctionHouse: INounsAuctionHouseV2(AUCTION_HOUSE_SEPOLIA),
                 admin: VERBS_SAFE_SEPOLIA,
-                ethToken: MOCK_ETH_TOKEN_SEPOLIA,
-                params: Rewards.RewardParams({
-                    minimumRewardPeriod: 1 hours,
-                    numProposalsEnoughForReward: 3,
-                    proposalRewardBps: 100,
-                    votingRewardBps: 50,
-                    auctionRewardBps: 150,
-                    proposalEligibilityQuorumBps: 1000,
-                    minimumAuctionsBetweenUpdates: 3
-                })
+                ethToken: MOCK_ETH_TOKEN_SEPOLIA
             });
     }
 }

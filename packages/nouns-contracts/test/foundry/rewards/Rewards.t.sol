@@ -48,20 +48,22 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
             admin,
             minter,
             address(erc20Mock),
-            uint32(dao.proposalCount()) + 1,
-            1,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
+            // uint32(dao.proposalCount()) + 1,
+            // 1,
+            // auctionHouse.auction().nounId,
+            // Rewards.RewardParams({
+            //     minimumRewardPeriod: 2 weeks,
+            //     numProposalsEnoughForReward: 30,
+            //     proposalRewardBps: 100,
+            //     votingRewardBps: 50,
+            //     auctionRewardBps: 100,
+            //     proposalEligibilityQuorumBps: 1000,
+            //     minimumAuctionsBetweenUpdates: 0
+            // }),
             address(0)
         );
+
+        // TODO ^^^
 
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
@@ -202,10 +204,10 @@ contract AuctionRewards is RewardsBaseTest {
     function test_requiresMinimumNumberOfAuctionsToPass() public {
         rewards.updateRewardsForAuctions(nounId);
 
-        Rewards.RewardParams memory params = rewards.getParams();
+        Rewards.AuctionRewardParams memory params = rewards.getAuctionRewardParams();
         params.minimumAuctionsBetweenUpdates = 5;
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setAuctionRewardParams(params);
 
         bidAndSettleAuction(1 ether, CLIENT_ID);
         bidAndSettleAuction(1 ether, CLIENT_ID);
@@ -335,24 +337,7 @@ contract RewardsUpgradeTest is RewardsBaseTest {
         Rewards implementation = Rewards(get1967Implementation(address(rewards)));
 
         vm.expectRevert('Initializable: contract is already initialized');
-        implementation.initialize(
-            address(0),
-            address(0),
-            address(0),
-            1,
-            1,
-            1,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
-            address(0)
-        );
+        implementation.initialize(address(0), address(0), address(0), address(0));
     }
 }
 
@@ -408,12 +393,20 @@ contract PausedTest is RewardsBaseTest {
 }
 
 contract OwnerFunctionsTest is RewardsBaseTest {
-    function test_setParams_revertsForNonOwner() public {
-        Rewards.RewardParams memory params = rewards.getParams();
+    function test_setAuctionRewardParams_revertsForNonOwner() public {
+        Rewards.AuctionRewardParams memory params = rewards.getAuctionRewardParams();
 
         vm.prank(makeAddr('non owner'));
         vm.expectRevert('Ownable: caller is not the owner');
-        rewards.setParams(params);
+        rewards.setAuctionRewardParams(params);
+    }
+
+    function test_setProposalRewardParams_revertsForNonOwner() public {
+        Rewards.ProposalRewardParams memory params = rewards.getProposalRewardParams();
+
+        vm.prank(makeAddr('non owner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.setProposalRewardParams(params);
     }
 
     function test_setAdmin_revertsForNonOwner() public {
@@ -499,20 +492,22 @@ contract NFTFunctionsTest is RewardsBaseTest {
             admin,
             minter,
             address(erc20Mock),
-            uint32(dao.proposalCount()) + 1,
-            1,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
+            // uint32(dao.proposalCount()) + 1,
+            // 1,
+            // auctionHouse.auction().nounId,
+            // Rewards.RewardParams({
+            //     minimumRewardPeriod: 2 weeks,
+            //     numProposalsEnoughForReward: 30,
+            //     proposalRewardBps: 100,
+            //     votingRewardBps: 50,
+            //     auctionRewardBps: 100,
+            //     proposalEligibilityQuorumBps: 1000,
+            //     minimumAuctionsBetweenUpdates: 0
+            // }),
             address(0)
         );
+
+        // TODO ^
     }
 
     function test_registerClient_firstIdIsOne() public {

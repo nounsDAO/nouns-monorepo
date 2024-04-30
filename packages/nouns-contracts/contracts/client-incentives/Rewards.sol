@@ -80,8 +80,7 @@ contract Rewards is
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    struct RewardParams {
-        /// @dev Used for proposal rewards
+    struct ProposalRewardParams {
         /// @dev The minimum reward period for proposal updates if number of proposals is below `numProposalsEnoughForReward`
         uint32 minimumRewardPeriod;
         /// @dev The number of proposals required for an update before `minimumRewardPeriod` has passed
@@ -92,7 +91,9 @@ contract Rewards is
         uint16 votingRewardBps;
         /// @dev How many (in bips) FOR votes out of total votes are required for a proposal to be eligible for rewards
         uint16 proposalEligibilityQuorumBps;
-        /// @dev Used for auction rewards
+    }
+
+    struct AuctionRewardParams {
         /// @dev How much bips out of auction revnue to use for rewarding auction bidding
         uint16 auctionRewardBps;
         /// @dev Minimum number of auctions between updates. Zero means 1 auction is enough.
@@ -103,16 +104,20 @@ contract Rewards is
     struct RewardsStorage {
         /// @dev The next client token id to be minted
         uint32 nextTokenId;
+        bool auctionRewardsEnabled;
         /// @dev Used for auction rewards state
         uint32 nextAuctionIdToReward;
+        bool proposalRewardsEnabled;
         /// @dev Used for proposal rewards state
         uint32 nextProposalIdToReward;
         /// @dev The first auction id to consider for revenue tracking on the next proposal rewards update
         uint32 nextProposalRewardFirstAuctionId;
         /// @dev Last time the proposal rewards update was performed
         uint40 lastProposalRewardsUpdate;
-        /// @dev Params for both auction & rewards
-        RewardParams params;
+        /// @dev Params for both proposal rewards
+        ProposalRewardParams proposalRewardParams;
+        /// @dev Params for auction rewards
+        AuctionRewardParams auctionRewardParams;
         /// @dev An ETH pegged ERC20 token to use for rewarding
         IERC20 ethToken;
         /// @dev admin account able to pause/unpause the contract in case of a quick response is needed
@@ -147,16 +152,7 @@ contract Rewards is
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
     }
 
-    function initialize(
-        address owner,
-        address admin_,
-        address ethToken_,
-        uint32 nextProposalIdToReward_,
-        uint32 nextAuctionIdToReward_,
-        uint32 nextProposalRewardFirstAuctionId_,
-        RewardParams memory rewardParams,
-        address descriptor_
-    ) public initializer {
+    function initialize(address owner, address admin_, address ethToken_, address descriptor_) public initializer {
         __Pausable_init_unchained();
         __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
 
@@ -167,10 +163,6 @@ contract Rewards is
         _transferOwnership(owner);
         $.admin = admin_;
         $.ethToken = IERC20(ethToken_);
-        $.nextProposalIdToReward = nextProposalIdToReward_;
-        $.nextAuctionIdToReward = nextAuctionIdToReward_;
-        $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
-        $.params = rewardParams;
         $.descriptor = descriptor_;
     }
 
@@ -230,11 +222,12 @@ contract Rewards is
     function updateRewardsForAuctions(uint32 lastNounId) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
+        require($.auctionRewardsEnabled, 'auction rewards disabled');
 
         bool sawValidClientId = false;
         uint256 nextAuctionIdToReward_ = $.nextAuctionIdToReward;
         require(
-            lastNounId >= nextAuctionIdToReward_ + $.params.minimumAuctionsBetweenUpdates,
+            lastNounId >= nextAuctionIdToReward_ + $.auctionRewardParams.minimumAuctionsBetweenUpdates,
             'lastNounId must be higher'
         );
         $.nextAuctionIdToReward = lastNounId + 1;
@@ -260,7 +253,7 @@ contract Rewards is
             }
         }
 
-        uint16 auctionRewardBps = $.params.auctionRewardBps;
+        uint16 auctionRewardBps = $.auctionRewardParams.auctionRewardBps;
         uint256 numValues = m.numValues();
         for (uint32 i = 0; i < numValues; ++i) {
             ClientRewardsMemoryMapping.ClientBalance memory cb = m.getValue(i);
@@ -313,6 +306,7 @@ contract Rewards is
     ) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
+        require($.proposalRewardsEnabled, 'proposal rewards disabled');
 
         Temp memory t;
 
@@ -326,7 +320,7 @@ contract Rewards is
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
             firstProposalId: nextProposalIdToReward_,
             lastProposalId: lastProposalId,
-            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
+            proposalEligibilityQuorumBps: $.proposalRewardParams.proposalEligibilityQuorumBps,
             excludeCanceled: true,
             requireVotingEnded: true,
             votingClientIds: votingClientIds
@@ -345,8 +339,8 @@ contract Rewards is
 
         require(auctionRevenue > 0, 'auctionRevenue must be > 0');
 
-        t.proposalRewardForPeriod = (auctionRevenue * $.params.proposalRewardBps) / 10_000;
-        t.votingRewardForPeriod = (auctionRevenue * $.params.votingRewardBps) / 10_000;
+        t.proposalRewardForPeriod = (auctionRevenue * $.proposalRewardParams.proposalRewardBps) / 10_000;
+        t.votingRewardForPeriod = (auctionRevenue * $.proposalRewardParams.votingRewardBps) / 10_000;
 
         //// First loop over the proposals:
         //// 1. Count the number of votes in eligible proposals.
@@ -361,9 +355,10 @@ contract Rewards is
         //// 1.a. Number of eligible proposals is at least `numProposalsEnoughForReward`.
         //// 1.b. At least `minimumRewardPeriod` seconds have passed since the last update.
 
-        if (proposals.length < $.params.numProposalsEnoughForReward) {
+        if (proposals.length < $.proposalRewardParams.numProposalsEnoughForReward) {
             require(
-                t.lastProposal.creationTimestamp > $.lastProposalRewardsUpdate + $.params.minimumRewardPeriod,
+                t.lastProposal.creationTimestamp >
+                    $.lastProposalRewardsUpdate + $.proposalRewardParams.minimumRewardPeriod,
                 'not enough time passed'
             );
         }
@@ -485,7 +480,7 @@ contract Rewards is
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
             firstProposalId: $.nextProposalIdToReward,
             lastProposalId: lastProposalId,
-            proposalEligibilityQuorumBps: $.params.proposalEligibilityQuorumBps,
+            proposalEligibilityQuorumBps: $.proposalRewardParams.proposalEligibilityQuorumBps,
             excludeCanceled: true,
             requireVotingEnded: true,
             votingClientIds: allClientIds
@@ -553,9 +548,14 @@ contract Rewards is
         return $.lastProposalRewardsUpdate;
     }
 
-    function getParams() public view returns (RewardParams memory) {
+    function getAuctionRewardParams() public view returns (AuctionRewardParams memory) {
         RewardsStorage storage $ = _getRewardsStorage();
-        return $.params;
+        return $.auctionRewardParams;
+    }
+
+    function getProposalRewardParams() public view returns (ProposalRewardParams memory) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return $.proposalRewardParams;
     }
 
     function ethToken() public view returns (IERC20) {
@@ -618,12 +618,44 @@ contract Rewards is
         emit ClientApprovalSet(clientId, approved);
     }
 
-    /**
-     * @dev Only `owner` can call this function
-     */
-    function setParams(RewardParams calldata newParams) public onlyOwner {
+    // /**
+    //  * @dev Only `owner` can call this function
+    //  */
+    // function setParams(RewardParams calldata newParams) public onlyOwner {
+    //     RewardsStorage storage $ = _getRewardsStorage();
+    //     $.params = newParams;
+    // }
+    function setAuctionRewardParams(AuctionRewardParams calldata newParams) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        $.params = newParams;
+        $.auctionRewardParams = newParams;
+    }
+
+    function enableAuctionRewards() public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId + 1);
+        $.auctionRewardsEnabled = true;
+    }
+
+    function disableAuctionRewards() public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.auctionRewardsEnabled = false;
+    }
+
+    function setProposalRewardParams(ProposalRewardParams calldata newParams) public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.proposalRewardParams = newParams;
+    }
+
+    function enableProposalRewards() public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.nextProposalIdToReward = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
+        $.nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId + 1);
+        $.proposalRewardsEnabled = true;
+    }
+
+    function disableProposalRewards() public onlyOwner {
+        RewardsStorage storage $ = _getRewardsStorage();
+        $.proposalRewardsEnabled = false;
     }
 
     /**
