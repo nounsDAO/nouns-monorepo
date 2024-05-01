@@ -58,7 +58,7 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
           startBlock: contracts.NounsDAOProxyV3.instance.deployTransaction.blockNumber,
         },
         nounsDAOData: {
-          addresses: contracts.NounsDAODataProxy.address,
+          address: contracts.NounsDAODataProxy.address,
           startBlock: contracts.NounsDAODataProxy.instance.deployTransaction.blockNumber,
         },
       };
