@@ -520,7 +520,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Get a range of proposals, in the format of a samller struct tailored to client incentives rewards.
+     * @notice Get a range of proposals, in the format of a smaller struct tailored to client incentives rewards.
      * @param firstProposalId the id of the first proposal to get the data for
      * @param lastProposalId the id of the last proposal to get the data for
      * @param proposalEligibilityQuorumBps filters proposals with for-votes/total-supply higher than this quorum
