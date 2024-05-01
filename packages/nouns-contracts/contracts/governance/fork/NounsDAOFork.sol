@@ -219,7 +219,7 @@ library NounsDAOFork {
 
     /**
      * @notice Returns the number of nouns in supply minus nouns owned by the DAO, i.e. held in the treasury or in an
-     * escrow after it has closed.
+     * escrow after it has closed, minus nouns hold via holding the nouns fungible token.
      * This is used when calculating proposal threshold, quorum, fork threshold & treasury split.
      */
     function adjustedTotalSupply(NounsDAOTypes.Storage storage ds) internal view returns (uint256) {
