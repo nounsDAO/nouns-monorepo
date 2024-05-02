@@ -41,14 +41,13 @@ contract NounsClientTokenDescriptor is INounsClientTokenDescriptor {
         '<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="155.433">Total Rewarded:</tspan></text><text fill="black" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="174.433">';
     string private constant CLIENT_ID_START =
         '<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="211.433">Client ID:</tspan></text><text fill="black" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="230.433">';
-    string private constant CLIENT_URL_START =
-        '<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="267.433">Client URL:</tspan></text><text fill="black" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="286.433">';
+    string private constant CLIENT_DESCRIPTION_START =
+        '<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="267.433">Client Description:</tspan></text><text fill="black" xml:space="preserve" style="white-space: pre" font-family="Courier" font-size="15" letter-spacing="0em"><tspan x="30" y="286.433">';
 
-    function tokenURI(uint256 tokenId, INounsClientTokenTypes.ClientMetadata memory metadata)
-        external
-        pure
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId,
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) external pure returns (string memory) {
         string memory name = string(abi.encodePacked('Nouns Client ', tokenId.toString(), ': ', metadata.name));
         string memory image = Base64.encode(
             bytes(abi.encodePacked(_SVG_START_TAG, _generateSVGText(tokenId, metadata), _SVG_END_TAG))
@@ -76,11 +75,10 @@ contract NounsClientTokenDescriptor is INounsClientTokenDescriptor {
             );
     }
 
-    function _generateSVGText(uint256 tokenId, INounsClientTokenTypes.ClientMetadata memory metadata)
-        private
-        pure
-        returns (string memory)
-    {
+    function _generateSVGText(
+        uint256 tokenId,
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) private pure returns (string memory) {
         return
             string(
                 abi.encodePacked(
@@ -88,32 +86,26 @@ contract NounsClientTokenDescriptor is INounsClientTokenDescriptor {
                     _clientStatusSVG(metadata),
                     _totalRewardedSVG(metadata),
                     _clientIdSVG(tokenId),
-                    _clientURLSVG(metadata)
+                    _clientDescriptionSVG(metadata)
                 )
             );
     }
 
-    function _clientNameSVG(INounsClientTokenTypes.ClientMetadata memory metadata)
-        private
-        pure
-        returns (string memory)
-    {
+    function _clientNameSVG(
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) private pure returns (string memory) {
         return string(abi.encodePacked(CLIENT_NAME_START, metadata.name, TEXT_SPAN_END));
     }
 
-    function _clientStatusSVG(INounsClientTokenTypes.ClientMetadata memory metadata)
-        private
-        pure
-        returns (string memory)
-    {
+    function _clientStatusSVG(
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) private pure returns (string memory) {
         return string(abi.encodePacked(STATUS_START, metadata.approved ? 'Approved' : 'Not Approved', TEXT_SPAN_END));
     }
 
-    function _totalRewardedSVG(INounsClientTokenTypes.ClientMetadata memory metadata)
-        private
-        pure
-        returns (string memory)
-    {
+    function _totalRewardedSVG(
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) private pure returns (string memory) {
         return string(abi.encodePacked(TOTAL_REWARDED_START, metadata.rewarded.toETHString(), ETH, TEXT_SPAN_END));
     }
 
@@ -121,7 +113,9 @@ contract NounsClientTokenDescriptor is INounsClientTokenDescriptor {
         return string(abi.encodePacked(CLIENT_ID_START, tokenId.toString(), TEXT_SPAN_END));
     }
 
-    function _clientURLSVG(INounsClientTokenTypes.ClientMetadata memory metadata) private pure returns (string memory) {
-        return string(abi.encodePacked(CLIENT_URL_START, metadata.description, TEXT_SPAN_END));
+    function _clientDescriptionSVG(
+        INounsClientTokenTypes.ClientMetadata memory metadata
+    ) private pure returns (string memory) {
+        return string(abi.encodePacked(CLIENT_DESCRIPTION_START, metadata.description, TEXT_SPAN_END));
     }
 }
