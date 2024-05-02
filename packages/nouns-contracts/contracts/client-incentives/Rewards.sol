@@ -104,9 +104,11 @@ contract Rewards is
     struct RewardsStorage {
         /// @dev The next client token id to be minted
         uint32 nextTokenId;
+        /// @dev Flag controlling if auction rewards are enabled
         bool auctionRewardsEnabled;
         /// @dev Used for auction rewards state
         uint32 nextAuctionIdToReward;
+        /// @dev Flag controlling if proposal rewards are enabled
         bool proposalRewardsEnabled;
         /// @dev Used for proposal rewards state
         uint32 nextProposalIdToReward;
