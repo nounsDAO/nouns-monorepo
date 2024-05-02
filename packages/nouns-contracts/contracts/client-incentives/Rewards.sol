@@ -63,6 +63,10 @@ contract Rewards is
         uint256 rewardPerVote
     );
     event ClientApprovalSet(uint32 indexed clientId, bool approved);
+    event AuctionRewardsEnabled(uint32 nextAuctionIdToReward);
+    event AuctionRewardsDisabled();
+    event ProposalRewardsEnabled(uint32 nextProposalIdToReward, uint32 nextProposalRewardFirstAuctionId);
+    event ProposalRewardsDisabled();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -644,8 +648,11 @@ contract Rewards is
      */
     function enableAuctionRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        $.nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId);
+        uint32 nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId);
+        $.nextAuctionIdToReward = nextAuctionIdToReward;
         $.auctionRewardsEnabled = true;
+
+        emit AuctionRewardsEnabled(nextAuctionIdToReward);
     }
 
     /**
@@ -654,6 +661,8 @@ contract Rewards is
     function disableAuctionRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.auctionRewardsEnabled = false;
+
+        emit AuctionRewardsDisabled();
     }
 
     /**
@@ -671,9 +680,13 @@ contract Rewards is
      */
     function enableProposalRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        $.nextProposalIdToReward = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
-        $.nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId);
+        uint32 nextProposalIdToReward = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
+        uint32 nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId);
+        $.nextProposalIdToReward = nextProposalIdToReward;
+        $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId;
         $.proposalRewardsEnabled = true;
+
+        emit ProposalRewardsEnabled(nextProposalIdToReward, nextProposalRewardFirstAuctionId);
     }
 
     /**
@@ -682,6 +695,8 @@ contract Rewards is
     function disableProposalRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.proposalRewardsEnabled = false;
+
+        emit ProposalRewardsDisabled();
     }
 
     /**
