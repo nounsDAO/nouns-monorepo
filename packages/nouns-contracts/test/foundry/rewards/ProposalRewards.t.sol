@@ -174,7 +174,7 @@ contract DisabledTest is BaseProposalRewardsTest {
     }
 
     function test_updateRewardsReverts() public {
-        vm.expectRevert('proposal rewards disabled');
+        vm.expectRevert(Rewards.RewardsDisabled.selector);
         rewards.updateRewardsForProposalWritingAndVoting(5, votingClientIds);
     }
 }
@@ -556,11 +556,6 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_canceledProposalsAreIneligible() public {
-        // TODO: need to set proposalParams ??
-        // TODO: need to set proposalParams ??
-        // TODO: need to set proposalParams ??
-        // TODO: need to set proposalParams ??
-
         proposalParams.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
         rewards.setProposalRewardParams(proposalParams);
@@ -657,7 +652,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
     }
 
     function test_withdraw_revertsIfNotClientIdOwner() public {
-        vm.expectRevert('must be client NFT owner');
+        vm.expectRevert(Rewards.OnlyNFTOwner.selector);
         rewards.withdrawClientBalance(clientId1, client1Wallet, 1);
     }
 }

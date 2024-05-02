@@ -42,6 +42,12 @@ contract Rewards is
     using SafeERC20 for IERC20;
     using ClientRewardsMemoryMapping for ClientRewardsMemoryMapping.Mapping;
 
+    error RewardsDisabled();
+    error OnlyOwnerOrAdmin();
+    error OnlyNFTOwner();
+    error LastNounIdMustBeSettled();
+    error LastNounIdMustBeHigher();
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   EVENTS
@@ -149,7 +155,7 @@ contract Rewards is
      */
     modifier onlyOwnerOrAdmin() {
         RewardsStorage storage $ = _getRewardsStorage();
-        require(owner() == _msgSender() || $.admin == _msgSender(), 'Caller must be owner or admin');
+        if (!(owner() == _msgSender() || $.admin == _msgSender())) revert OnlyOwnerOrAdmin();
         _;
     }
 
@@ -208,7 +214,7 @@ contract Rewards is
     function updateClientMetadata(uint32 tokenId, string calldata name, string calldata description) external {
         RewardsStorage storage $ = _getRewardsStorage();
 
-        require(ownerOf(tokenId) == msg.sender, 'NounsClientToken: not owner');
+        if (ownerOf(tokenId) != msg.sender) revert OnlyNFTOwner();
         ClientMetadata storage md = $._clientMetadata[tokenId];
         md.name = name;
         md.description = description;
@@ -228,14 +234,13 @@ contract Rewards is
     function updateRewardsForAuctions(uint32 lastNounId) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
-        require($.auctionRewardsEnabled, 'auction rewards disabled');
+        if (!$.auctionRewardsEnabled) revert RewardsDisabled();
 
         bool sawValidClientId = false;
         uint256 nextAuctionIdToReward_ = $.nextAuctionIdToReward;
-        require(
-            lastNounId >= nextAuctionIdToReward_ + $.auctionRewardParams.minimumAuctionsBetweenUpdates,
-            'lastNounId must be higher'
-        );
+        if (lastNounId < nextAuctionIdToReward_ + $.auctionRewardParams.minimumAuctionsBetweenUpdates)
+            revert LastNounIdMustBeHigher();
+
         $.nextAuctionIdToReward = lastNounId + 1;
 
         INounsAuctionHouseV2.Settlement[] memory settlements = auctionHouse.getSettlements(
@@ -244,7 +249,8 @@ contract Rewards is
             true
         );
         INounsAuctionHouseV2.Settlement memory lastSettlement = settlements[settlements.length - 1];
-        require(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1, 'lastNounId must be settled');
+        if (!(lastSettlement.nounId == lastNounId && lastSettlement.blockTimestamp > 1))
+            revert LastNounIdMustBeSettled();
 
         uint32 maxClientId = nextTokenId() - 1;
         ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
@@ -312,15 +318,17 @@ contract Rewards is
     ) public whenNotPaused {
         uint256 startGas = gasleft();
         RewardsStorage storage $ = _getRewardsStorage();
-        require($.proposalRewardsEnabled, 'proposal rewards disabled');
+        if (!$.proposalRewardsEnabled) revert RewardsDisabled();
 
         Temp memory t;
 
         t.maxClientId = nextTokenId() - 1;
         uint32 nextProposalIdToReward_ = $.nextProposalIdToReward;
 
-        require(lastProposalId <= nounsDAO.proposalCount(), 'bad lastProposalId');
-        require(lastProposalId >= nextProposalIdToReward_, 'bad lastProposalId');
+        require(
+            (lastProposalId <= nounsDAO.proposalCount()) && (lastProposalId >= nextProposalIdToReward_),
+            'bad lastProposalId'
+        );
         require(isSortedAndNoDuplicates(votingClientIds), 'must be sorted & unique');
 
         NounsDAOTypes.ProposalForRewards[] memory proposals = nounsDAO.proposalDataForRewards({
@@ -443,8 +451,8 @@ contract Rewards is
         RewardsStorage storage $ = _getRewardsStorage();
         ClientMetadata storage md = $._clientMetadata[clientId];
 
-        require(ownerOf(clientId) == msg.sender, 'must be client NFT owner');
-        require(md.approved, 'client not approved');
+        if (ownerOf(clientId) != msg.sender) revert OnlyNFTOwner();
+        require(md.approved, 'not approved');
 
         uint96 withdrawnCache = md.withdrawn;
         require(amount <= md.rewarded - withdrawnCache, 'amount too large');
@@ -535,61 +543,50 @@ contract Rewards is
      */
 
     function nextAuctionIdToReward() public view returns (uint256) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.nextAuctionIdToReward;
+        return _getRewardsStorage().nextAuctionIdToReward;
     }
 
     function nextProposalIdToReward() public view returns (uint32) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.nextProposalIdToReward;
+        return _getRewardsStorage().nextProposalIdToReward;
     }
 
     function nextProposalRewardFirstAuctionId() public view returns (uint256) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.nextProposalRewardFirstAuctionId;
+        return _getRewardsStorage().nextProposalRewardFirstAuctionId;
     }
 
     function lastProposalRewardsUpdate() public view returns (uint256) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.lastProposalRewardsUpdate;
+        return _getRewardsStorage().lastProposalRewardsUpdate;
     }
 
     function getAuctionRewardParams() public view returns (AuctionRewardParams memory) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.auctionRewardParams;
+        return _getRewardsStorage().auctionRewardParams;
     }
 
     function getProposalRewardParams() public view returns (ProposalRewardParams memory) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.proposalRewardParams;
+        return _getRewardsStorage().proposalRewardParams;
     }
 
     function auctionRewardsEnabled() public view returns (bool) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.auctionRewardsEnabled;
+        return _getRewardsStorage().auctionRewardsEnabled;
     }
 
     function proposalRewardsEnabled() public view returns (bool) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.proposalRewardsEnabled;
+        return _getRewardsStorage().proposalRewardsEnabled;
     }
 
     function ethToken() public view returns (IERC20) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.ethToken;
+        return _getRewardsStorage().ethToken;
     }
 
     function admin() public view returns (address) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.admin;
+        return _getRewardsStorage().admin;
     }
 
     /**
      * @notice Get the metadata of a client
      */
     function clientMetadata(uint32 tokenId) public view returns (ClientMetadata memory) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $._clientMetadata[tokenId];
+        return _getRewardsStorage()._clientMetadata[tokenId];
     }
 
     /**
@@ -604,16 +601,14 @@ contract Rewards is
      * @notice Get the descriptor for the client token
      */
     function descriptor() public view returns (address) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.descriptor;
+        return _getRewardsStorage().descriptor;
     }
 
     /**
      * @notice Get the next token ID
      */
     function nextTokenId() public view returns (uint32) {
-        RewardsStorage storage $ = _getRewardsStorage();
-        return $.nextTokenId;
+        return _getRewardsStorage().nextTokenId;
     }
 
     /**
@@ -638,8 +633,7 @@ contract Rewards is
      * @dev Only `owner` can call this function
      */
     function setAuctionRewardParams(AuctionRewardParams calldata newParams) public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.auctionRewardParams = newParams;
+        _getRewardsStorage().auctionRewardParams = newParams;
     }
 
     /**
@@ -659,8 +653,7 @@ contract Rewards is
      * @dev Only `owner` can call this function
      */
     function disableAuctionRewards() public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.auctionRewardsEnabled = false;
+        _getRewardsStorage().auctionRewardsEnabled = false;
 
         emit AuctionRewardsDisabled();
     }
@@ -669,8 +662,7 @@ contract Rewards is
      * @dev Only `owner` can call this function
      */
     function setProposalRewardParams(ProposalRewardParams calldata newParams) public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.proposalRewardParams = newParams;
+        _getRewardsStorage().proposalRewardParams = newParams;
     }
 
     /**
@@ -693,8 +685,7 @@ contract Rewards is
      * @dev Only `owner` can call this function
      */
     function disableProposalRewards() public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.proposalRewardsEnabled = false;
+        _getRewardsStorage().proposalRewardsEnabled = false;
 
         emit ProposalRewardsDisabled();
     }
@@ -703,16 +694,14 @@ contract Rewards is
      * @dev Only `owner` can call this function
      */
     function setAdmin(address newAdmin) public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.admin = newAdmin;
+        _getRewardsStorage().admin = newAdmin;
     }
 
     /**
      * @dev Only `owner` can call this function
      */
     function setETHToken(address newToken) public onlyOwner {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.ethToken = IERC20(newToken);
+        _getRewardsStorage().ethToken = IERC20(newToken);
     }
 
     /**
@@ -740,8 +729,7 @@ contract Rewards is
      * @notice Set the descriptor for the client token
      */
     function setDescriptor(address descriptor_) public onlyOwnerOrAdmin {
-        RewardsStorage storage $ = _getRewardsStorage();
-        $.descriptor = descriptor_;
+        _getRewardsStorage().descriptor = descriptor_;
     }
 
     /**

@@ -171,7 +171,7 @@ contract AuctionRewards is RewardsBaseTest {
         assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
         assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
 
-        vm.expectRevert('client not approved');
+        vm.expectRevert('not approved');
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
     }
@@ -203,7 +203,7 @@ contract AuctionRewards is RewardsBaseTest {
         bidAndSettleAuction(1 ether, CLIENT_ID);
         nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
 
-        vm.expectRevert('lastNounId must be higher');
+        vm.expectRevert(Rewards.LastNounIdMustBeHigher.selector);
         rewards.updateRewardsForAuctions(nounId);
 
         bidAndSettleAuction(1 ether, CLIENT_ID);
@@ -214,7 +214,7 @@ contract AuctionRewards is RewardsBaseTest {
     function test_revertsIfAlreadyProcessedNounId() public {
         rewards.updateRewardsForAuctions(nounId);
 
-        vm.expectRevert('lastNounId must be higher');
+        vm.expectRevert(Rewards.LastNounIdMustBeHigher.selector);
         rewards.updateRewardsForAuctions(nounId);
     }
 
@@ -244,7 +244,7 @@ contract AuctionRewards is RewardsBaseTest {
     }
 
     function test_nounIdMustBeSettled() public {
-        vm.expectRevert('lastNounId must be settled');
+        vm.expectRevert(Rewards.LastNounIdMustBeSettled.selector);
         rewards.updateRewardsForAuctions(nounId + 1);
     }
 
@@ -358,7 +358,7 @@ contract DisabledTest is RewardsBaseTest {
     }
 
     function test_updateRewardsReverts() public {
-        vm.expectRevert('auction rewards disabled');
+        vm.expectRevert(Rewards.RewardsDisabled.selector);
         rewards.updateRewardsForAuctions(123);
     }
 }
@@ -366,7 +366,7 @@ contract DisabledTest is RewardsBaseTest {
 contract PausingTest is RewardsBaseTest {
     function test_pause_revertsForNonAdminNonOwner() public {
         vm.prank(makeAddr('non admin non owner'));
-        vm.expectRevert('Caller must be owner or admin');
+        vm.expectRevert(Rewards.OnlyOwnerOrAdmin.selector);
         rewards.pause();
     }
 
@@ -541,7 +541,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
         uint32 tokenId = rewards.registerClient('name', 'description');
 
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert('NounsClientToken: not owner');
+        vm.expectRevert(Rewards.OnlyNFTOwner.selector);
         vm.prank(nonOwner);
         rewards.updateClientMetadata(tokenId, 'newName', 'newDescription');
     }
@@ -566,7 +566,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
 
     function test_setDescriptor_revertsForNonOwner() public {
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert('Caller must be owner or admin');
+        vm.expectRevert(Rewards.OnlyOwnerOrAdmin.selector);
         vm.prank(nonOwner);
         rewards.setDescriptor(address(0));
     }
