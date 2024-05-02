@@ -47,27 +47,21 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         vm.prank(makeAddr('noundersDAO'));
         nounsToken.transferFrom(makeAddr('noundersDAO'), bidder2, 0);
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            // 1,
-            // 2,
-            // auctionHouse.auction().nounId,
-            // Rewards.RewardParams({
-            //     minimumRewardPeriod: 2 weeks,
-            //     numProposalsEnoughForReward: 30,
-            //     proposalRewardBps: 100,
-            //     votingRewardBps: 50,
-            //     auctionRewardBps: 150,
-            //     proposalEligibilityQuorumBps: 1000,
-            //     minimumAuctionsBetweenUpdates: 3
-            // }),
-            address(0)
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+
+        vm.prank(address(dao.timelock()));
+        rewards.setProposalRewardParams(
+            Rewards.ProposalRewardParams({
+                minimumRewardPeriod: 2 weeks,
+                numProposalsEnoughForReward: 30,
+                proposalRewardBps: 100,
+                votingRewardBps: 50,
+                proposalEligibilityQuorumBps: 1000
+            })
         );
 
-        // TODO: set all these params
+        vm.prank(address(dao.timelock()));
+        rewards.enableProposalRewards();
 
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient('client1', 'client1 description');
@@ -149,6 +143,39 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
+    }
+}
+
+contract DisablingTest is BaseProposalRewardsTest {
+    function test_rewardsAreDisabledByDefault() public {
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+        assertFalse(rewards.proposalRewardsEnabled());
+    }
+
+    function test_disableRewards_revertsForNonOwner() public {
+        vm.prank(makeAddr('rando'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.disableProposalRewards();
+    }
+
+    function test_disableRewards_worksForOwner() public {
+        vm.prank(rewards.owner());
+        rewards.disableProposalRewards();
+
+        assertFalse(rewards.proposalRewardsEnabled());
+    }
+}
+
+contract DisabledTest is BaseProposalRewardsTest {
+    function setUp() public override {
+        super.setUp();
+        vm.prank(rewards.owner());
+        rewards.disableProposalRewards();
+    }
+
+    function test_updateRewardsReverts() public {
+        vm.expectRevert('proposal rewards disabled');
+        rewards.updateRewardsForProposalWritingAndVoting(5, votingClientIds);
     }
 }
 

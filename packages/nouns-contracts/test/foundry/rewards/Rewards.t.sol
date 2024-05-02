@@ -10,6 +10,7 @@ import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionH
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import { INounsClientTokenTypes } from '../../../contracts/client-incentives/INounsClientTokenTypes.sol';
+import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
     Rewards rewards;
@@ -43,27 +44,15 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            // uint32(dao.proposalCount()) + 1,
-            // 1,
-            // auctionHouse.auction().nounId,
-            // Rewards.RewardParams({
-            //     minimumRewardPeriod: 2 weeks,
-            //     numProposalsEnoughForReward: 30,
-            //     proposalRewardBps: 100,
-            //     votingRewardBps: 50,
-            //     auctionRewardBps: 100,
-            //     proposalEligibilityQuorumBps: 1000,
-            //     minimumAuctionsBetweenUpdates: 0
-            // }),
-            address(0)
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+
+        vm.prank(address(dao.timelock()));
+        rewards.setAuctionRewardParams(
+            Rewards.AuctionRewardParams({ auctionRewardBps: 100, minimumAuctionsBetweenUpdates: 0 })
         );
 
-        // TODO ^^^
+        vm.prank(address(dao.timelock()));
+        rewards.enableAuctionRewards();
 
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
@@ -341,6 +330,39 @@ contract RewardsUpgradeTest is RewardsBaseTest {
     }
 }
 
+contract DisablingTest is RewardsBaseTest {
+    function test_rewardsAreDisabledByDefault() public {
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+        assertFalse(rewards.auctionRewardsEnabled());
+    }
+
+    function test_disableRewards_revertsForNonOwner() public {
+        vm.prank(makeAddr('rando'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.disableAuctionRewards();
+    }
+
+    function test_disableRewards_worksForOwner() public {
+        vm.prank(rewards.owner());
+        rewards.disableAuctionRewards();
+
+        assertFalse(rewards.auctionRewardsEnabled());
+    }
+}
+
+contract DisabledTest is RewardsBaseTest {
+    function setUp() public override {
+        super.setUp();
+        vm.prank(rewards.owner());
+        rewards.disableAuctionRewards();
+    }
+
+    function test_updateRewardsReverts() public {
+        vm.expectRevert('auction rewards disabled');
+        rewards.updateRewardsForAuctions(123);
+    }
+}
+
 contract PausingTest is RewardsBaseTest {
     function test_pause_revertsForNonAdminNonOwner() public {
         vm.prank(makeAddr('non admin non owner'));
@@ -487,27 +509,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            // uint32(dao.proposalCount()) + 1,
-            // 1,
-            // auctionHouse.auction().nounId,
-            // Rewards.RewardParams({
-            //     minimumRewardPeriod: 2 weeks,
-            //     numProposalsEnoughForReward: 30,
-            //     proposalRewardBps: 100,
-            //     votingRewardBps: 50,
-            //     auctionRewardBps: 100,
-            //     proposalEligibilityQuorumBps: 1000,
-            //     minimumAuctionsBetweenUpdates: 0
-            // }),
-            address(0)
-        );
-
-        // TODO ^
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
     }
 
     function test_registerClient_firstIdIsOne() public {

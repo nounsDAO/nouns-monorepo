@@ -558,6 +558,16 @@ contract Rewards is
         return $.proposalRewardParams;
     }
 
+    function auctionRewardsEnabled() public view returns (bool) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return $.auctionRewardsEnabled;
+    }
+
+    function proposalRewardsEnabled() public view returns (bool) {
+        RewardsStorage storage $ = _getRewardsStorage();
+        return $.proposalRewardsEnabled;
+    }
+
     function ethToken() public view returns (IERC20) {
         RewardsStorage storage $ = _getRewardsStorage();
         return $.ethToken;
@@ -618,41 +628,55 @@ contract Rewards is
         emit ClientApprovalSet(clientId, approved);
     }
 
-    // /**
-    //  * @dev Only `owner` can call this function
-    //  */
-    // function setParams(RewardParams calldata newParams) public onlyOwner {
-    //     RewardsStorage storage $ = _getRewardsStorage();
-    //     $.params = newParams;
-    // }
+    /**
+     * @dev Only `owner` can call this function
+     */
     function setAuctionRewardParams(AuctionRewardParams calldata newParams) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.auctionRewardParams = newParams;
     }
 
+    /**
+     * @notice Enables auction rewards and sets the next auction id to reward to be the current noun on auction
+     * @dev Only `owner` can call this function
+     */
     function enableAuctionRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        $.nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId + 1);
+        $.nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId);
         $.auctionRewardsEnabled = true;
     }
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function disableAuctionRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.auctionRewardsEnabled = false;
     }
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function setProposalRewardParams(ProposalRewardParams calldata newParams) public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.proposalRewardParams = newParams;
     }
 
+    /**
+     * @notice Enables proposal rewards and sets the next proposal ID to reward to be the next proposal to be created.
+     * The first auction ID to be considered for revenue calculation is set to be the current noun in auction.
+     * @dev Only `owner` can call this function
+     */
     function enableProposalRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.nextProposalIdToReward = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
-        $.nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId + 1);
+        $.nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId);
         $.proposalRewardsEnabled = true;
     }
 
+    /**
+     * @dev Only `owner` can call this function
+     */
     function disableProposalRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
         $.proposalRewardsEnabled = false;
