@@ -541,11 +541,7 @@ library NounsDAOAdmin {
      * @param timelockV1 the new timelockV1 contract
      * @param admin the new admin address
      */
-    function _setTimelocksAndAdmin(
-        address timelock,
-        address timelockV1,
-        address admin
-    ) external onlyAdmin {
+    function _setTimelocksAndAdmin(address timelock, address timelockV1, address admin) external onlyAdmin {
         ds().timelock = INounsDAOExecutorV2(timelock);
         ds().timelockV1 = INounsDAOExecutor(timelockV1);
         ds().admin = admin;
