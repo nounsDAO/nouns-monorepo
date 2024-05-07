@@ -14,8 +14,7 @@ abstract contract DeployRewardsBase is OptimizedScript {
         INounsDAOLogic dao,
         INounsAuctionHouseV2 auctionHouse,
         address admin,
-        address ethToken,
-        Rewards.RewardParams memory params
+        address ethToken
     ) internal returns (Rewards rewards) {
         requireDefaultProfile();
 
@@ -23,17 +22,11 @@ abstract contract DeployRewardsBase is OptimizedScript {
 
         vm.startBroadcast(deployerKey);
 
-        uint96 currentNounId = uint96(auctionHouse.auction().nounId);
-
         rewards = RewardsDeployer.deployRewards({
             dao: dao,
             admin: admin,
             auctionHouse: address(auctionHouse),
             erc20: ethToken,
-            nextProposalIdToReward: uint32(dao.proposalCount()),
-            nextAuctionIdToReward: currentNounId,
-            nextProposalRewardFirstAuctionId: currentNounId,
-            rewardParams: params,
             descriptor: address(new NounsClientTokenDescriptor())
         });
 

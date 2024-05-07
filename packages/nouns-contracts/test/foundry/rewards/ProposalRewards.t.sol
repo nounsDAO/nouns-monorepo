@@ -23,7 +23,8 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     uint32 clientId1;
     uint32 clientId2;
     uint32[] votingClientIds;
-    Rewards.RewardParams params;
+    Rewards.AuctionRewardParams auctionParams;
+    Rewards.ProposalRewardParams proposalParams;
 
     uint256 constant SECONDS_IN_BLOCK = 12;
 
@@ -46,25 +47,21 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         vm.prank(makeAddr('noundersDAO'));
         nounsToken.transferFrom(makeAddr('noundersDAO'), bidder2, 0);
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            1,
-            2,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+
+        vm.prank(address(dao.timelock()));
+        rewards.setProposalRewardParams(
+            Rewards.ProposalRewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 30,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
-                auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 3
-            }),
-            address(0)
+                proposalEligibilityQuorumBps: 1000
+            })
         );
+
+        vm.prank(address(dao.timelock()));
+        rewards.enableProposalRewards();
 
         vm.prank(client1Wallet);
         clientId1 = rewards.registerClient('client1', 'client1 description');
@@ -146,6 +143,39 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
     function vote(address voter_, uint256 proposalId_, uint8 support, string memory reason, uint32 clientId) internal {
         vm.prank(voter_);
         dao.castRefundableVoteWithReason(proposalId_, support, reason, clientId);
+    }
+}
+
+contract DisablingTest is BaseProposalRewardsTest {
+    function test_rewardsAreDisabledByDefault() public {
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+        assertFalse(rewards.proposalRewardsEnabled());
+    }
+
+    function test_disableRewards_revertsForNonOwner() public {
+        vm.prank(makeAddr('rando'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.disableProposalRewards();
+    }
+
+    function test_disableRewards_worksForOwner() public {
+        vm.prank(rewards.owner());
+        rewards.disableProposalRewards();
+
+        assertFalse(rewards.proposalRewardsEnabled());
+    }
+}
+
+contract DisabledTest is BaseProposalRewardsTest {
+    function setUp() public override {
+        super.setUp();
+        vm.prank(rewards.owner());
+        rewards.disableProposalRewards();
+    }
+
+    function test_updateRewardsReverts() public {
+        vm.expectRevert(Rewards.RewardsDisabled.selector);
+        rewards.updateRewardsForProposalWritingAndVoting(5, votingClientIds);
     }
 }
 
@@ -450,15 +480,13 @@ contract ProposalRewardsTest is BaseProposalRewardsTest {
     function test_rewardsIfMinimumNumberOfProposalsWereCreated_evenIfMinimumPeriodHasntPassed() public {
         // set numProposalsEnoughForReward to 1
         vm.prank(address(dao.timelock()));
-        rewards.setParams(
-            Rewards.RewardParams({
+        rewards.setProposalRewardParams(
+            Rewards.ProposalRewardParams({
                 minimumRewardPeriod: 2 weeks,
                 numProposalsEnoughForReward: 1,
                 proposalRewardBps: 100,
                 votingRewardBps: 50,
-                auctionRewardBps: 150,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 3
+                proposalEligibilityQuorumBps: 1000
             })
         );
 
@@ -505,9 +533,9 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
 
     function test_ineligibleIfBelowQuorum() public {
         // set quorum to >= 75% so that quorum requires 9 votes
-        params.proposalEligibilityQuorumBps = 7500;
+        proposalParams.proposalEligibilityQuorumBps = 7500;
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         vm.expectRevert('at least one eligible proposal');
         rewards.updateRewardsForProposalWritingAndVoting({
@@ -517,9 +545,9 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_eligibleIfAboveQuorum() public {
-        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
+        proposalParams.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         rewards.updateRewardsForProposalWritingAndVoting({
             lastProposalId: proposalId,
@@ -528,9 +556,9 @@ contract ProposalRewardsEligibilityTest is BaseProposalRewardsTest {
     }
 
     function test_canceledProposalsAreIneligible() public {
-        params.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
+        proposalParams.proposalEligibilityQuorumBps = 7000; // (12 * 7000 / 10000) = 8
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setProposalRewardParams(proposalParams);
 
         vm.prank(bidder1);
         dao.cancel(proposalId);
@@ -624,7 +652,7 @@ contract AfterOneSuccessfulRewardsDistributionTest is BaseProposalRewardsTest {
     }
 
     function test_withdraw_revertsIfNotClientIdOwner() public {
-        vm.expectRevert('must be client NFT owner');
+        vm.expectRevert(Rewards.OnlyNFTOwner.selector);
         rewards.withdrawClientBalance(clientId1, client1Wallet, 1);
     }
 }

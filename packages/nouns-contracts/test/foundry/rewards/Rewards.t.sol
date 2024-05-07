@@ -10,6 +10,7 @@ import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionH
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import { INounsClientTokenTypes } from '../../../contracts/client-incentives/INounsClientTokenTypes.sol';
+import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
     Rewards rewards;
@@ -43,25 +44,15 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            uint32(dao.proposalCount()) + 1,
-            1,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
-            address(0)
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+
+        vm.prank(address(dao.timelock()));
+        rewards.setAuctionRewardParams(
+            Rewards.AuctionRewardParams({ auctionRewardBps: 100, minimumAuctionsBetweenUpdates: 0 })
         );
+
+        vm.prank(address(dao.timelock()));
+        rewards.enableAuctionRewards();
 
         vm.deal(address(rewards), 100 ether);
         vm.deal(address(dao.timelock()), 100 ether);
@@ -180,7 +171,7 @@ contract AuctionRewards is RewardsBaseTest {
         assertEq(rewards.clientBalance(CLIENT_ID), 0.05 ether);
         assertEq(rewards.clientBalance(CLIENT_ID2), 0.02 ether);
 
-        vm.expectRevert('client not approved');
+        vm.expectRevert('not approved');
         vm.prank(client1Wallet);
         rewards.withdrawClientBalance(CLIENT_ID, client1Wallet, 0.05 ether);
     }
@@ -202,17 +193,17 @@ contract AuctionRewards is RewardsBaseTest {
     function test_requiresMinimumNumberOfAuctionsToPass() public {
         rewards.updateRewardsForAuctions(nounId);
 
-        Rewards.RewardParams memory params = rewards.getParams();
+        Rewards.AuctionRewardParams memory params = rewards.getAuctionRewardParams();
         params.minimumAuctionsBetweenUpdates = 5;
         vm.prank(address(dao.timelock()));
-        rewards.setParams(params);
+        rewards.setAuctionRewardParams(params);
 
         bidAndSettleAuction(1 ether, CLIENT_ID);
         bidAndSettleAuction(1 ether, CLIENT_ID);
         bidAndSettleAuction(1 ether, CLIENT_ID);
         nounId = bidAndSettleAuction(1 ether, CLIENT_ID);
 
-        vm.expectRevert('lastNounId must be higher');
+        vm.expectRevert(Rewards.LastNounIdMustBeHigher.selector);
         rewards.updateRewardsForAuctions(nounId);
 
         bidAndSettleAuction(1 ether, CLIENT_ID);
@@ -223,7 +214,7 @@ contract AuctionRewards is RewardsBaseTest {
     function test_revertsIfAlreadyProcessedNounId() public {
         rewards.updateRewardsForAuctions(nounId);
 
-        vm.expectRevert('lastNounId must be higher');
+        vm.expectRevert(Rewards.LastNounIdMustBeHigher.selector);
         rewards.updateRewardsForAuctions(nounId);
     }
 
@@ -253,7 +244,7 @@ contract AuctionRewards is RewardsBaseTest {
     }
 
     function test_nounIdMustBeSettled() public {
-        vm.expectRevert('lastNounId must be settled');
+        vm.expectRevert(Rewards.LastNounIdMustBeSettled.selector);
         rewards.updateRewardsForAuctions(nounId + 1);
     }
 
@@ -335,31 +326,47 @@ contract RewardsUpgradeTest is RewardsBaseTest {
         Rewards implementation = Rewards(get1967Implementation(address(rewards)));
 
         vm.expectRevert('Initializable: contract is already initialized');
-        implementation.initialize(
-            address(0),
-            address(0),
-            address(0),
-            1,
-            1,
-            1,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
-            address(0)
-        );
+        implementation.initialize(address(0), address(0), address(0), address(0));
+    }
+}
+
+contract DisablingTest is RewardsBaseTest {
+    function test_rewardsAreDisabledByDefault() public {
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
+        assertFalse(rewards.auctionRewardsEnabled());
+    }
+
+    function test_disableRewards_revertsForNonOwner() public {
+        vm.prank(makeAddr('rando'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.disableAuctionRewards();
+    }
+
+    function test_disableRewards_worksForOwner() public {
+        vm.prank(rewards.owner());
+        rewards.disableAuctionRewards();
+
+        assertFalse(rewards.auctionRewardsEnabled());
+    }
+}
+
+contract DisabledTest is RewardsBaseTest {
+    function setUp() public override {
+        super.setUp();
+        vm.prank(rewards.owner());
+        rewards.disableAuctionRewards();
+    }
+
+    function test_updateRewardsReverts() public {
+        vm.expectRevert(Rewards.RewardsDisabled.selector);
+        rewards.updateRewardsForAuctions(123);
     }
 }
 
 contract PausingTest is RewardsBaseTest {
     function test_pause_revertsForNonAdminNonOwner() public {
         vm.prank(makeAddr('non admin non owner'));
-        vm.expectRevert('Caller must be owner or admin');
+        vm.expectRevert(Rewards.OnlyOwnerOrAdmin.selector);
         rewards.pause();
     }
 
@@ -408,12 +415,20 @@ contract PausedTest is RewardsBaseTest {
 }
 
 contract OwnerFunctionsTest is RewardsBaseTest {
-    function test_setParams_revertsForNonOwner() public {
-        Rewards.RewardParams memory params = rewards.getParams();
+    function test_setAuctionRewardParams_revertsForNonOwner() public {
+        Rewards.AuctionRewardParams memory params = rewards.getAuctionRewardParams();
 
         vm.prank(makeAddr('non owner'));
         vm.expectRevert('Ownable: caller is not the owner');
-        rewards.setParams(params);
+        rewards.setAuctionRewardParams(params);
+    }
+
+    function test_setProposalRewardParams_revertsForNonOwner() public {
+        Rewards.ProposalRewardParams memory params = rewards.getProposalRewardParams();
+
+        vm.prank(makeAddr('non owner'));
+        vm.expectRevert('Ownable: caller is not the owner');
+        rewards.setProposalRewardParams(params);
     }
 
     function test_setAdmin_revertsForNonOwner() public {
@@ -494,25 +509,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
 
-        rewards = RewardsDeployer.deployRewards(
-            dao,
-            admin,
-            minter,
-            address(erc20Mock),
-            uint32(dao.proposalCount()) + 1,
-            1,
-            auctionHouse.auction().nounId,
-            Rewards.RewardParams({
-                minimumRewardPeriod: 2 weeks,
-                numProposalsEnoughForReward: 30,
-                proposalRewardBps: 100,
-                votingRewardBps: 50,
-                auctionRewardBps: 100,
-                proposalEligibilityQuorumBps: 1000,
-                minimumAuctionsBetweenUpdates: 0
-            }),
-            address(0)
-        );
+        rewards = RewardsDeployer.deployRewards(dao, admin, minter, address(erc20Mock), address(0));
     }
 
     function test_registerClient_firstIdIsOne() public {
@@ -544,7 +541,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
         uint32 tokenId = rewards.registerClient('name', 'description');
 
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert('NounsClientToken: not owner');
+        vm.expectRevert(Rewards.OnlyNFTOwner.selector);
         vm.prank(nonOwner);
         rewards.updateClientMetadata(tokenId, 'newName', 'newDescription');
     }
@@ -569,7 +566,7 @@ contract NFTFunctionsTest is RewardsBaseTest {
 
     function test_setDescriptor_revertsForNonOwner() public {
         address nonOwner = makeAddr('nonOwner');
-        vm.expectRevert('Caller must be owner or admin');
+        vm.expectRevert(Rewards.OnlyOwnerOrAdmin.selector);
         vm.prank(nonOwner);
         rewards.setDescriptor(address(0));
     }

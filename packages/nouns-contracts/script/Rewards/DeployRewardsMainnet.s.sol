@@ -18,16 +18,7 @@ contract DeployRewardsMainnet is DeployRewardsBase {
                 dao: INounsDAOLogic(DAO_PROXY_MAINNET),
                 auctionHouse: INounsAuctionHouseV2(AUCTION_HOUSE_MAINNET),
                 admin: VERBS_SAFE_MAINNET,
-                ethToken: WETH_MAINNET,
-                params: Rewards.RewardParams({
-                    minimumRewardPeriod: 14 days,
-                    numProposalsEnoughForReward: 3,
-                    proposalRewardBps: 100,
-                    votingRewardBps: 50,
-                    auctionRewardBps: 150,
-                    proposalEligibilityQuorumBps: 1000,
-                    minimumAuctionsBetweenUpdates: 7
-                })
+                ethToken: WETH_MAINNET
             });
     }
 }
