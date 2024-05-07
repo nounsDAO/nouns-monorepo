@@ -44,6 +44,11 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
         vm.deal(address(NOUNS_DAO_PROXY_MAINNET), 100 ether);
         vm.fee(50 gwei);
         vm.txGasPrice(50 gwei);
+
+        // zero-out the slot where `voteSnapshotBlockSwitchProposalId` was
+        // as will happen in the upcoming upgrade
+        // so that `nounsFungibleToken` will be address(0) by default
+        vm.store(address(NOUNS_DAO_PROXY_MAINNET), bytes32(uint256(0x19)), bytes32(uint256(0)));
     }
 
     function propose(
@@ -175,20 +180,6 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         voteAndExecuteProposal(proposalId);
 
         assertEq(expectedVotingDelay, NOUNS_DAO_PROXY_MAINNET.votingDelay());
-    }
-
-    function test_voteSnapshotBlockSwitchProposalId_zeroOutWorks() public {
-        assertNotEq(NOUNS_DAO_PROXY_MAINNET.voteSnapshotBlockSwitchProposalId(), 0);
-
-        uint256 proposalId = propose(
-            address(NOUNS_DAO_PROXY_MAINNET),
-            0,
-            '_zeroOutVoteSnapshotBlockSwitchProposalId()',
-            ''
-        );
-        voteAndExecuteProposal(proposalId);
-
-        assertEq(NOUNS_DAO_PROXY_MAINNET.voteSnapshotBlockSwitchProposalId(), 0);
     }
 
     function test_clientId_savedOnProposals() public {

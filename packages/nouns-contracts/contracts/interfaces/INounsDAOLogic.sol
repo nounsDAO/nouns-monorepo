@@ -445,6 +445,11 @@ interface INounsDAOLogic {
     function _setTimelocksAndAdmin(address newTimelock, address newTimelockV1, address newAdmin) external;
 
     /**
+     * @notice Admin function for setting the canonical Nouns Fungible Token address
+     */
+    function _setNounsFungibleToken(address newNounsFungibleToken) external;
+
+    /**
      * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
      * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and
      * be ready to reuse this slot.

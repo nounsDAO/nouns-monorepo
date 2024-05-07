@@ -349,18 +349,6 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
         assertEq(dao.forkThresholdBPS(), 42);
     }
 
-    function test__zeroOutVoteSnapshotBlockSwitchProposalId_onlyAdmin() public {
-        vm.expectRevert(NounsDAOAdmin.AdminOnly.selector);
-        dao._zeroOutVoteSnapshotBlockSwitchProposalId();
-    }
-
-    function test__zeroOutVoteSnapshotBlockSwitchProposalId_works() public {
-        vm.prank(address(dao.timelock()));
-        dao._zeroOutVoteSnapshotBlockSwitchProposalId();
-
-        assertEq(dao.voteSnapshotBlockSwitchProposalId(), 0);
-    }
-
     function test_setErc20TokensToIncludeInFork_onlyAdmin() public {
         tokens = [address(1), address(2)];
 
@@ -397,6 +385,22 @@ contract NounsDAOLogicAdminTest is NounsDAOLogicBaseTest {
 
         vm.prank(address(dao.timelock()));
         vm.expectRevert(NounsDAOAdmin.DuplicateTokenAddress.selector);
+        dao._setErc20TokensToIncludeInFork(tokens_);
+    }
+
+    function test__setErc20TokensToIncludeInFork_givenFungibleTokenInInput_reverts() public {
+        address fungibleToken = makeAddr('fungible token');
+        vm.prank(address(dao.timelock()));
+        dao._setNounsFungibleToken(fungibleToken);
+
+        address anotherToken = makeAddr('another token');
+
+        address[] memory tokens_ = new address[](2);
+        tokens_[0] = anotherToken;
+        tokens_[1] = fungibleToken;
+
+        vm.prank(address(dao.timelock()));
+        vm.expectRevert('NounsDAO::_setErc20TokensToIncludeInFork: cannot include fungible token');
         dao._setErc20TokensToIncludeInFork(tokens_);
     }
 

@@ -102,6 +102,9 @@ library NounsDAOAdmin {
     /// @notice Emitted when the main timelock, timelockV1 and admin are set
     event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
 
+    /// @notice Emitted when the Nouns Fungible Token address is set
+    event NounsFungibleTokenSet(address oldNounsFungibleToken, address newNounsFungibleToken);
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -457,10 +460,20 @@ library NounsDAOAdmin {
     }
 
     /**
-     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork
+     * @notice Admin function for setting the ERC20 tokens that are used when splitting funds to a fork.
+     * Reverts if `erc20tokens` includes `nounsFungibleToken` and `nounsFungibleToken` is set.
      */
     function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) public onlyAdmin {
         checkForDuplicates(erc20tokens);
+        address fungibleToken = ds().nounsFungibleToken;
+        if (fungibleToken != address(0)) {
+            for (uint256 i = 0; i < erc20tokens.length; i++) {
+                require(
+                    erc20tokens[i] != fungibleToken,
+                    'NounsDAO::_setErc20TokensToIncludeInFork: cannot include fungible token'
+                );
+            }
+        }
 
         emit ERC20TokensToIncludeInForkSet(ds().erc20TokensToIncludeInFork, erc20tokens);
 
@@ -537,12 +550,13 @@ library NounsDAOAdmin {
     }
 
     /**
-     * @notice Admin function for zeroing out the state variable `voteSnapshotBlockSwitchProposalId`
-     * @dev We want to zero-out this state slot so we can remove this temporary variable from contract code and 
-     * be ready to reuse this slot.
+     * @notice Admin function for setting the canonical Nouns Fungible Token address
      */
-    function _zeroOutVoteSnapshotBlockSwitchProposalId() external onlyAdmin {
-        ds().voteSnapshotBlockSwitchProposalId = 0;
+    function _setNounsFungibleToken(address newNounsFungibleToken) public onlyAdmin {
+        address oldNounsFungibleToken = ds().nounsFungibleToken;
+        ds().nounsFungibleToken = newNounsFungibleToken;
+
+        emit NounsFungibleTokenSet(oldNounsFungibleToken, newNounsFungibleToken);
     }
 
     function _writeQuorumParamsCheckpoint(NounsDAOTypes.DynamicQuorumParams memory params) internal {
