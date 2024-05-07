@@ -170,7 +170,6 @@ contract Rewards is
 
         RewardsStorage storage $ = _getRewardsStorage();
         $.nextTokenId = 1;
-        $.lastProposalRewardsUpdate = uint40(block.timestamp);
 
         _transferOwnership(owner);
         $.admin = admin_;
@@ -676,6 +675,7 @@ contract Rewards is
         uint32 nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId);
         $.nextProposalIdToReward = nextProposalIdToReward;
         $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId;
+        $.lastProposalRewardsUpdate = uint40(block.timestamp);
         $.proposalRewardsEnabled = true;
 
         emit ProposalRewardsEnabled(nextProposalIdToReward, nextProposalRewardFirstAuctionId);
