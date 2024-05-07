@@ -80,8 +80,10 @@ contract Rewards is
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /// @notice Nouns DAO proxy contract
     INounsDAOLogic public immutable nounsDAO;
 
+    /// @notice Nouns Auction House proxy contract
     INounsAuctionHouseV2 public immutable auctionHouse;
 
     /**
@@ -164,6 +166,12 @@ contract Rewards is
         auctionHouse = INounsAuctionHouseV2(auctionHouse_);
     }
 
+    /**
+     * @param owner Address of the owner who has administration permissions as well as contract upgrade permissions
+     * @param admin_ Address which has permissions to pause and unpause
+     * @param ethToken_ An ETH pegged token (e.g. WETH) which will be used for rewards and gas refunds
+     * @param descriptor_ Address of a INounsClientTokenDescriptor contract to provide tokenURI for the NFTs
+     */
     function initialize(address owner, address admin_, address ethToken_, address descriptor_) public initializer {
         __Pausable_init_unchained();
         __ERC721_init('Nouns Client Token', 'NOUNSCLIENT');
@@ -185,6 +193,8 @@ contract Rewards is
 
     /**
      * @notice Register a client, mints an NFT and assigns a clientId
+     * @param name a short name identifying the client
+     * @param description a longer description for the client, ideally a URL
      * @return uint32 the newly assigned clientId
      */
     function registerClient(string calldata name, string calldata description) external whenNotPaused returns (uint32) {
@@ -520,7 +530,7 @@ contract Rewards is
     }
 
     /**
-     * Returns the sum of revenue via auctions from auctioning noun with id `firstNounId` until timestamp of `endTimestamp
+     * @notice Returns the sum of revenue via auctions from auctioning noun with id `firstNounId` until timestamp of `endTimestamp
      */
     function getAuctionRevenue(
         uint256 firstNounId,
@@ -629,6 +639,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Updates the auction rewards params
      * @dev Only `owner` can call this function
      */
     function setAuctionRewardParams(AuctionRewardParams calldata newParams) public onlyOwner {
@@ -649,6 +660,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Disables auction rewards
      * @dev Only `owner` can call this function
      */
     function disableAuctionRewards() public onlyOwner {
@@ -658,6 +670,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Updates the proposal rewards params
      * @dev Only `owner` can call this function
      */
     function setProposalRewardParams(ProposalRewardParams calldata newParams) public onlyOwner {
@@ -682,6 +695,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Disables proposal rewards
      * @dev Only `owner` can call this function
      */
     function disableProposalRewards() public onlyOwner {
@@ -705,6 +719,10 @@ contract Rewards is
     }
 
     /**
+     * @notice Withdraws any ERC20 token held by the contract
+     * @param token Address of ERC20 token
+     * @param to Address to send tokens to
+     * @param amount Amount of tokens to withdraw
      * @dev Only `owner` can call this function
      */
     function withdrawToken(address token, address to, uint256 amount) public onlyOwner {
@@ -712,6 +730,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Pauses reward distributes, client registration and withdrawals
      * @dev Only `owner` or `admin` can call this function
      */
     function pause() public onlyOwnerOrAdmin {
@@ -719,6 +738,7 @@ contract Rewards is
     }
 
     /**
+     * @notice Unpauses reward distributes, client registration and withdrawals
      * @dev Only `owner` or `admin` can call this function
      */
     function unpause() public onlyOwnerOrAdmin {
@@ -727,6 +747,7 @@ contract Rewards is
 
     /**
      * @notice Set the descriptor for the client token
+     * @dev Only `owner` or `admin` can call this function
      */
     function setDescriptor(address descriptor_) public onlyOwnerOrAdmin {
         _getRewardsStorage().descriptor = descriptor_;
