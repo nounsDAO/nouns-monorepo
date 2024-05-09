@@ -1,5 +1,7 @@
-import { Bytes, log, ethereum, store, BigInt } from '@graphprotocol/graph-ts';
+import { Bytes, log, ethereum, store, BigInt, Address } from '@graphprotocol/graph-ts';
 import {
+  NounsDAO,
+  ProposalCreated,
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
   ProposalCanceled,
@@ -22,6 +24,10 @@ import {
   ProposalCreatedOnTimelockV1,
   VoteSnapshotBlockSwitchProposalIdSet,
 } from './types/NounsDAO/NounsDAO';
+import {
+  VoteCastWithClientId,
+  ProposalCreatedWithRequirements1 as ProposalCreatedWithRequirementsV4,
+} from './types/NounsDAOV4/NounsDAOV4';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,
@@ -56,83 +62,40 @@ import {
   ProposalCandidateContent,
 } from './types/schema';
 
-export function handleProposalCreatedWithRequirements(
-  event: ProposalCreatedWithRequirements1,
-): void {
-  handleProposalCreated(ParsedProposalV3.fromV1Event(event));
-}
-
-export function handleProposalCreatedWithRequirementsV3(
-  event: ProposalCreatedWithRequirements,
-): void {
-  handleProposalCreated(ParsedProposalV3.fromV3Event(event));
-}
-
-export function handleProposalCreatedOnTimelockV1(event: ProposalCreatedOnTimelockV1): void {
+export function handleProposalCreated(event: ProposalCreated): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
-  proposal.onTimelockV1 = true;
-  proposal.save();
-}
+  let proposerResult = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString());
 
-export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
-  let proposal = getOrCreateProposal(parsedProposal.id);
-  let proposerResult = getOrCreateDelegateWithNullOption(parsedProposal.proposer);
-
-  // Check if the proposer was a delegate already accounted for, if not we should log an error
-  // since it shouldn't be possible for a delegate to propose anything without first being 'created'
-  if (proposerResult.created && parsedProposal.signers.length == 0) {
-    log.error('Delegate {} not found on ProposalCreated. tx_hash: {}', [
-      parsedProposal.proposer,
-      parsedProposal.txHash,
-    ]);
-  }
-
-  // Create it anyway, which supports V3 cases of proposers not having any Nouns
   proposal.proposer = proposerResult.entity!.id;
-  proposal.targets = parsedProposal.targets;
-  proposal.values = parsedProposal.values;
-  proposal.signatures = parsedProposal.signatures;
-  proposal.calldatas = parsedProposal.calldatas;
-  proposal.createdTimestamp = parsedProposal.createdTimestamp;
-  proposal.createdBlock = parsedProposal.createdBlock;
-  proposal.lastUpdatedTimestamp = parsedProposal.createdTimestamp;
-  proposal.lastUpdatedBlock = parsedProposal.createdBlock;
-  proposal.createdTransactionHash = parsedProposal.createdTransactionHash;
-  proposal.startBlock = parsedProposal.startBlock;
-  proposal.endBlock = parsedProposal.endBlock;
-  proposal.updatePeriodEndBlock = parsedProposal.updatePeriodEndBlock;
-  proposal.proposalThreshold = parsedProposal.proposalThreshold;
-  proposal.quorumVotes = parsedProposal.quorumVotes;
+  proposal.targets = changetype<Bytes[]>(event.params.targets);
+  proposal.values = event.params.values;
+  proposal.signatures = event.params.signatures;
+  proposal.calldatas = event.params.calldatas;
+  proposal.createdTimestamp = event.block.timestamp;
+  proposal.createdBlock = event.block.number;
+  proposal.lastUpdatedTimestamp = event.block.timestamp;
+  proposal.lastUpdatedBlock = event.block.number;
+  proposal.createdTransactionHash = event.transaction.hash;
+  proposal.startBlock = event.params.startBlock;
+  proposal.endBlock = event.params.endBlock;
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
   proposal.abstainVotes = BIGINT_ZERO;
-  proposal.description = parsedProposal.description;
-  proposal.title = parsedProposal.title;
-  proposal.status = parsedProposal.status;
+  let desc = event.params.description.split('\\n').join('\n');
+  proposal.description = desc;
+  proposal.title = extractTitle(desc);
+  proposal.status = event.block.number >= proposal.startBlock! ? STATUS_ACTIVE : STATUS_PENDING;
   proposal.objectionPeriodEndBlock = BIGINT_ZERO;
 
-  const signerDelegates = new Array<string>(parsedProposal.signers.length);
-  for (let i = 0; i < parsedProposal.signers.length; i++) {
-    const signerAddress = parsedProposal.signers[i];
-    const signerDelegateResult = getOrCreateDelegateWithNullOption(signerAddress);
-    if (signerDelegateResult.created) {
-      log.error('Signer delegate {} not found on ProposalCreated. tx_hash: {}', [
-        signerAddress,
-        parsedProposal.txHash,
-      ]);
-    }
-    signerDelegates[i] = signerDelegateResult.entity!.id;
-  }
-  proposal.signers = signerDelegates;
-
-  // Storing state for dynamic quorum calculations
-  // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
-  if (parsedProposal.adjustedTotalSupply.equals(BIGINT_ZERO)) {
-    proposal.adjustedTotalSupply = proposal.totalSupply;
+  const nounsDAO = NounsDAO.bind(event.address);
+  let adjustedSupplyResult = nounsDAO.try_adjustedTotalSupply();
+
+  if (!adjustedSupplyResult.reverted) {
+    proposal.adjustedTotalSupply = adjustedSupplyResult.value;
   } else {
-    proposal.adjustedTotalSupply = parsedProposal.adjustedTotalSupply;
+    proposal.adjustedTotalSupply = proposal.totalSupply;
   }
 
   if (
@@ -149,9 +112,68 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
   proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
+  proposal.clientId = 0;
   proposal.save();
 
-  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal, false);
+  captureProposalVersion(
+    event.transaction.hash.toHexString(),
+    event.logIndex.toString(),
+    proposal,
+    false,
+  );
+}
+
+export function handleProposalCreatedWithRequirements(
+  event: ProposalCreatedWithRequirements1,
+): void {
+  saveProposalExtraDetails(ParsedProposalV3.fromV1Event(event));
+}
+
+export function handleProposalCreatedWithRequirementsV3(
+  event: ProposalCreatedWithRequirements,
+): void {
+  saveProposalExtraDetails(ParsedProposalV3.fromV3Event(event));
+}
+
+export function handleProposalCreatedWithRequirementsV4(
+  event: ProposalCreatedWithRequirementsV4,
+): void {
+  saveProposalExtraDetails(ParsedProposalV3.fromV4Event(event));
+}
+
+export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void {
+  let proposal = getOrCreateProposal(parsedProposal.id);
+
+  proposal.forVotes = BIGINT_ZERO;
+  proposal.againstVotes = BIGINT_ZERO;
+  proposal.abstainVotes = BIGINT_ZERO;
+
+  proposal.updatePeriodEndBlock = parsedProposal.updatePeriodEndBlock;
+  proposal.proposalThreshold = parsedProposal.proposalThreshold;
+  proposal.quorumVotes = parsedProposal.quorumVotes;
+
+  const signerDelegates = new Array<string>(parsedProposal.signers.length);
+  for (let i = 0; i < parsedProposal.signers.length; i++) {
+    const signerAddress = parsedProposal.signers[i];
+    const signerDelegateResult = getOrCreateDelegateWithNullOption(signerAddress);
+    if (signerDelegateResult.created) {
+      log.error('Signer delegate {} not found on ProposalCreated. tx_hash: {}', [
+        signerAddress,
+        parsedProposal.txHash,
+      ]);
+    }
+    signerDelegates[i] = signerDelegateResult.entity!.id;
+  }
+  proposal.signers = signerDelegates;
+  proposal.clientId = parsedProposal.clientId.toI32();
+
+  proposal.save();
+}
+
+export function handleProposalCreatedOnTimelockV1(event: ProposalCreatedOnTimelockV1): void {
+  let proposal = getOrCreateProposal(event.params.id.toString());
+  proposal.onTimelockV1 = true;
+  proposal.save();
 }
 
 export function handleProposalUpdated(event: ProposalUpdated): void {
@@ -165,7 +187,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;
   proposal.description = event.params.description.split('\\n').join('\n');
-  proposal.title = extractTitle(proposal.description);
+  proposal.title = extractTitle(proposal.description!);
   proposal.save();
 
   captureProposalVersion(
@@ -183,7 +205,7 @@ export function handleProposalDescriptionUpdated(event: ProposalDescriptionUpdat
   proposal.lastUpdatedTimestamp = event.block.timestamp;
   proposal.lastUpdatedBlock = event.block.number;
   proposal.description = event.params.description.split('\\n').join('\n');
-  proposal.title = extractTitle(proposal.description);
+  proposal.title = extractTitle(proposal.description!);
   proposal.save();
 
   captureProposalVersion(
@@ -263,24 +285,13 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 
 export function handleVoteCast(event: VoteCast): void {
   let proposal = getOrCreateProposal(event.params.proposalId.toString());
-  let voteId = event.params.voter
-    .toHexString()
-    .concat('-')
-    .concat(event.params.proposalId.toString());
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
   let vote = getOrCreateVote(voteId);
+
+  // Voter can be created here and not earlier because we support zero-voting-balance votes.
   let voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
-
-  // Check if the voter was a delegate already accounted for, if not we should log an error
-  // since it shouldn't be possible for a delegate to vote without first being 'created'
-  if (voterResult.created) {
-    log.error('Delegate {} not found on VoteCast. tx_hash: {}', [
-      event.params.voter.toHexString(),
-      event.transaction.hash.toHexString(),
-    ]);
-  }
-
-  // Create it anyway since we will want to account for this event data, even though it should've never happened
   const voter = voterResult.entity!;
+
   vote.proposal = proposal.id;
   vote.voter = voter.id;
   vote.votesRaw = event.params.votes;
@@ -308,15 +319,15 @@ export function handleVoteCast(event: VoteCast): void {
   const dqParams = getOrCreateDynamicQuorumParams();
   const usingDynamicQuorum =
     dqParams.dynamicQuorumStartBlock !== null &&
-    dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock);
+    dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock!);
 
   if (usingDynamicQuorum) {
     proposal.quorumVotes = dynamicQuorumVotes(
       proposal.againstVotes,
-      proposal.adjustedTotalSupply,
+      proposal.adjustedTotalSupply!,
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
-      proposal.quorumCoefficient,
+      proposal.quorumCoefficient!,
     );
   }
 
@@ -324,6 +335,13 @@ export function handleVoteCast(event: VoteCast): void {
     proposal.status = STATUS_ACTIVE;
   }
   proposal.save();
+}
+
+export function handleVoteCastWithClientId(event: VoteCastWithClientId): void {
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  let vote = getOrCreateVote(voteId);
+  vote.clientId = event.params.clientId.toI32();
+  vote.save();
 }
 
 export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {
@@ -379,14 +397,14 @@ function captureProposalVersion(
   const versionId = txHash.concat('-').concat(logIndex);
   const previousVersion = getOrCreateProposalVersion(versionId);
   previousVersion.proposal = proposal.id;
-  previousVersion.createdBlock = proposal.lastUpdatedBlock;
-  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
+  previousVersion.createdBlock = proposal.lastUpdatedBlock!;
+  previousVersion.createdAt = proposal.lastUpdatedTimestamp!;
   previousVersion.targets = proposal.targets;
   previousVersion.values = proposal.values;
   previousVersion.signatures = proposal.signatures;
   previousVersion.calldatas = proposal.calldatas;
-  previousVersion.title = proposal.title;
-  previousVersion.description = proposal.description;
+  previousVersion.title = proposal.title!;
+  previousVersion.description = proposal.description!;
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
 
@@ -512,4 +530,8 @@ export function handleVoteSnapshotBlockSwitchProposalIdSet(
 
 function genericUniqueId(event: ethereum.Event): string {
   return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+}
+
+function generateVoteId(voter: Address, proposalId: BigInt): string {
+  return voter.toHexString().concat('-').concat(proposalId.toString());
 }
