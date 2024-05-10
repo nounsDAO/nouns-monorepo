@@ -187,18 +187,18 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           }
         },
       },
-      NounsDAOV3DynamicQuorum: {},
-      NounsDAOV3Admin: {},
-      NounsDAOV3Proposals: {},
-      NounsDAOV3Votes: {},
-      NounsDAOV3Fork: {},
-      NounsDAOLogicV3: {
+      NounsDAODynamicQuorum: {},
+      NounsDAOAdmin: {},
+      NounsDAOProposals: {},
+      NounsDAOVotes: {},
+      NounsDAOFork: {},
+      NounsDAOLogicV4: {
         libraries: () => ({
-          NounsDAOV3Admin: deployment.NounsDAOV3Admin.address,
-          NounsDAOV3DynamicQuorum: deployment.NounsDAOV3DynamicQuorum.address,
-          NounsDAOV3Proposals: deployment.NounsDAOV3Proposals.address,
-          NounsDAOV3Votes: deployment.NounsDAOV3Votes.address,
-          NounsDAOV3Fork: deployment.NounsDAOV3Fork.address,
+          NounsDAOAdmin: deployment.NounsDAOAdmin.address,
+          NounsDAODynamicQuorum: deployment.NounsDAODynamicQuorum.address,
+          NounsDAOProposals: deployment.NounsDAOProposals.address,
+          NounsDAOVotes: deployment.NounsDAOVotes.address,
+          NounsDAOFork: deployment.NounsDAOFork.address,
         }),
         waitForConfirmation: true,
       },
@@ -242,7 +242,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           () => deployment.ForkDAODeployer.address, // forkDAODeployer
           args.noundersdao || deployer.address, // vetoer
           () => deployment.NounsDAOExecutorProxy.address, // admin
-          () => deployment.NounsDAOLogicV3.address, // implementation
+          () => deployment.NounsDAOLogicV4.address, // implementation
           {
             votingPeriod: args.votingPeriod,
             votingDelay: args.votingDelay,
@@ -287,9 +287,22 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
-      let gasPrice = await ethers.provider.getGasPrice();
+      let gasOptions;
+      let feeData = await ethers.provider.getFeeData();
+      if (args.autoDeploy) {
+        gasOptions = {
+          maxFeePerGas: feeData.maxFeePerGas,
+          maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+        };
+      } else {
+        gasOptions = {
+          gasPrice: feeData.gasPrice!,
+        };
+      }
       if (!args.autoDeploy) {
-        const gasInGwei = Math.round(Number(ethers.utils.formatUnits(gasPrice, 'gwei')));
+        const gasInGwei = Math.round(
+          Number(ethers.utils.formatUnits(gasOptions.gasPrice!, 'gwei')),
+        );
 
         promptjs.start();
 
@@ -305,7 +318,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
             },
           },
         ]);
-        gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
+        gasOptions.gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
 
       let nameForFactory: string;
@@ -313,7 +326,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
         case 'NounsDAOExecutorV2':
           nameForFactory = 'NounsDAOExecutorV2Test';
           break;
-        case 'NounsDAOLogicV3':
+        case 'NounsDAOLogicV4':
           nameForFactory = 'NounsDAOLogicV3Harness';
           break;
         default:
@@ -328,21 +341,20 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
       const deploymentGas = await factory.signer.estimateGas(
         factory.getDeployTransaction(
           ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
-          {
-            gasPrice,
-          },
+          gasOptions,
         ),
-      );
-      const deploymentCost = deploymentGas.mul(gasPrice);
-
-      console.log(
-        `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
-          deploymentCost,
-          'ether',
-        )} ETH`,
       );
 
       if (!args.autoDeploy) {
+        const deploymentCost = deploymentGas.mul(gasOptions.gasPrice!);
+
+        console.log(
+          `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
+            deploymentCost,
+            'ether',
+          )} ETH`,
+        );
+
         const result = await promptjs.get([
           {
             properties: {
@@ -367,9 +379,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
 
       const deployedContract = await factory.deploy(
         ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
-        {
-          gasPrice,
-        },
+        gasOptions,
       );
 
       if (contract.waitForConfirmation) {

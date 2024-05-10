@@ -25,10 +25,12 @@ import {
   NounsDAOExecutor,
   Inflator__factory,
   NounsDAOStorageV2,
-  NounsDAOLogicV3,
-  NounsDAOLogicV3__factory as NounsDaoLogicV3Factory,
+  NounsDAOLogicV4,
+  NounsDAOLogicV4__factory as NounsDaoLogicFactory,
   NounsDAOProxyV3__factory as NounsDaoProxyV3Factory,
   NounsDAOForkEscrow__factory as NounsDAOForkEscrowFactory,
+  INounsDAOLogic__factory,
+  INounsDAOLogic,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
@@ -498,7 +500,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
 };
 
 export const propose = async (
-  gov: NounsDAOLogicV1 | NounsDAOLogicV2 | NounsDAOLogicV3,
+  gov: INounsDAOLogic,
   proposer: SignerWithAddress,
   stubPropUserAddress: string = address(0),
 ) => {
@@ -507,7 +509,15 @@ export const propose = async (
   const signatures = ['getBalanceOf(address)'];
   const callDatas = [encodeParameters(['address'], [stubPropUserAddress])];
 
-  await gov.connect(proposer).propose(targets, values, signatures, callDatas, 'do nothing');
+  await gov
+    .connect(proposer)
+    ['propose(address[],uint256[],string[],bytes[],string)'](
+      targets,
+      values,
+      signatures,
+      callDatas,
+      'do nothing',
+    );
   return await gov.latestProposalIds(proposer.address);
 };
 
@@ -531,32 +541,25 @@ function dataToDescriptorInput(data: string[]): {
   };
 }
 
-export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV3> => {
-  const NounsDAOV3Proposals = await (
-    await ethers.getContractFactory('NounsDAOV3Proposals', deployer)
+export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<NounsDAOLogicV4> => {
+  const NounsDAOProposals = await (
+    await ethers.getContractFactory('NounsDAOProposals', deployer)
   ).deploy();
-  const NounsDAOV3Admin = await (
-    await ethers.getContractFactory('NounsDAOV3Admin', deployer)
-  ).deploy();
-  const NounsDAOV3Fork = await (
-    await ethers.getContractFactory('NounsDAOV3Fork', deployer)
-  ).deploy();
-  const NounsDAOV3Votes = await (
-    await ethers.getContractFactory('NounsDAOV3Votes', deployer)
-  ).deploy();
-  const NounsDAOV3DynamicQuorum = await (
-    await ethers.getContractFactory('NounsDAOV3DynamicQuorum', deployer)
+  const NounsDAOAdmin = await (await ethers.getContractFactory('NounsDAOAdmin', deployer)).deploy();
+  const NounsDAOFork = await (await ethers.getContractFactory('NounsDAOFork', deployer)).deploy();
+  const NounsDAOVotes = await (await ethers.getContractFactory('NounsDAOVotes', deployer)).deploy();
+  const NounsDAODynamicQuorum = await (
+    await ethers.getContractFactory('NounsDAODynamicQuorum', deployer)
   ).deploy();
 
-  return await new NounsDaoLogicV3Factory(
+  return await new NounsDaoLogicFactory(
     {
-      'contracts/governance/NounsDAOV3Proposals.sol:NounsDAOV3Proposals':
-        NounsDAOV3Proposals.address,
-      'contracts/governance/NounsDAOV3Admin.sol:NounsDAOV3Admin': NounsDAOV3Admin.address,
-      'contracts/governance/fork/NounsDAOV3Fork.sol:NounsDAOV3Fork': NounsDAOV3Fork.address,
-      'contracts/governance/NounsDAOV3Votes.sol:NounsDAOV3Votes': NounsDAOV3Votes.address,
-      'contracts/governance/NounsDAOV3DynamicQuorum.sol:NounsDAOV3DynamicQuorum':
-        NounsDAOV3DynamicQuorum.address,
+      'contracts/governance/NounsDAOAdmin.sol:NounsDAOAdmin': NounsDAOAdmin.address,
+      'contracts/governance/NounsDAOProposals.sol:NounsDAOProposals': NounsDAOProposals.address,
+      'contracts/governance/fork/NounsDAOFork.sol:NounsDAOFork': NounsDAOFork.address,
+      'contracts/governance/NounsDAOVotes.sol:NounsDAOVotes': NounsDAOVotes.address,
+      'contracts/governance/NounsDAODynamicQuorum.sol:NounsDAODynamicQuorum':
+        NounsDAODynamicQuorum.address,
     },
     deployer,
   ).deploy();
@@ -565,13 +568,13 @@ export const deployGovernorV3 = async (deployer: SignerWithAddress): Promise<Nou
 export const deployGovernorV3AndSetImpl = async (
   deployer: SignerWithAddress,
   proxyAddress: string,
-): Promise<NounsDAOLogicV3> => {
+): Promise<INounsDAOLogic> => {
   const v3LogicContract = await deployGovernorV3(deployer);
 
   const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
   await proxy._setImplementation(v3LogicContract.address);
 
-  return NounsDaoLogicV3Factory.connect(proxyAddress, deployer);
+  return INounsDAOLogic__factory.connect(proxyAddress, deployer);
 };
 
 export const deployGovernorV3WithV3Proxy = async (
@@ -584,7 +587,7 @@ export const deployGovernorV3WithV3Proxy = async (
   votingDelay?: number,
   proposalThresholdBPs?: number,
   dynamicQuorumParams?: DynamicQuorumParams,
-): Promise<NounsDAOLogicV3> => {
+): Promise<INounsDAOLogic> => {
   const v3LogicContract = await deployGovernorV3(deployer);
   const predictedProxyAddress = ethers.utils.getContractAddress({
     from: deployer.address,
@@ -618,5 +621,5 @@ export const deployGovernorV3WithV3Proxy = async (
     },
   );
 
-  return NounsDaoLogicV3Factory.connect(proxy.address, deployer);
+  return INounsDAOLogic__factory.connect(proxy.address, deployer);
 };

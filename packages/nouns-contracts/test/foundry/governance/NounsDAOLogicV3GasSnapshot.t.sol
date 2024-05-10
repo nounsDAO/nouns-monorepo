@@ -4,13 +4,10 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 
 import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { INounsDAOShared } from '../helpers/INounsDAOShared.sol';
+import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
-import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOStorageV2, NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract NounsDAOLogic_GasSnapshot_propose is NounsDAOLogicSharedBaseTest {
     address immutable target = makeAddr('target');
@@ -51,7 +48,7 @@ abstract contract NounsDAOLogic_GasSnapshot_propose is NounsDAOLogicSharedBaseTe
         daoProxy.propose(targets, values, signatures, calldatas, getLongDescription());
     }
 
-    function getLongDescription() internal returns (string memory) {
+    function getLongDescription() internal view returns (string memory) {
         return vm.readFile('./test/foundry/files/longProposalDescription.txt');
     }
 }
@@ -155,18 +152,8 @@ contract NounsDAOLogic_GasSnapshot_V3_propose is DeployUtilsV3, NounsDAOLogic_Ga
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOShared) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
-    }
-}
-
-contract NounsDAOLogic_GasSnapshot_V2_propose is DeployUtilsV3, NounsDAOLogic_GasSnapshot_propose {
-    function deployDAOProxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal override returns (INounsDAOShared) {
-        return _createDAOV2Proxy(timelock, nounsToken, vetoer);
     }
 }
 
@@ -175,18 +162,12 @@ contract NounsDAOLogic_GasSnapshot_V3_vote is DeployUtilsV3, NounsDAOLogic_GasSn
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOShared) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
-}
 
-contract NounsDAOLogic_GasSnapshot_V2_vote is DeployUtilsV3, NounsDAOLogic_GasSnapshot_castVote {
-    function deployDAOProxy(
-        address timelock,
-        address nounsToken,
-        address vetoer
-    ) internal override returns (INounsDAOShared) {
-        return _createDAOV2Proxy(timelock, nounsToken, vetoer);
+    function test_proposalsV3() public view {
+        daoProxy.proposalsV3(1);
     }
 }
 
@@ -198,7 +179,7 @@ contract NounsDAOLogic_GasSnapshot_V3_voteDuringObjectionPeriod is
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal override returns (INounsDAOShared) {
+    ) internal override returns (INounsDAOLogic) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 }

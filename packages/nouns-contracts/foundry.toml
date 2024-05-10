@@ -3,5 +3,8 @@ src = 'contracts'
 libs = ['lib', '../../node_modules']
 cache_path = 'foundry-cache'
 out = 'foundry-out'
-solc_version = '0.8.19'
+solc_version = '0.8.23'
 fs_permissions = [{ access = "read", path = "./"}]
+
+[profile.lite]
+optimizer = false

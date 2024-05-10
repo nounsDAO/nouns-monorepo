@@ -16,6 +16,7 @@ import {
   ProposalVetoed,
   ProposalExecuted,
   ProposalQueued,
+  ProposalCreated,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -23,7 +24,7 @@ import {
   handleQuorumCoefficientSet,
 } from '../src/nouns-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
-import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
+import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from '../src/utils/constants';
 import { ProposalCandidateCreated, SignatureAdded } from '../src/types/NounsDAOData/NounsDAOData';
 import {
   DelegateChanged,
@@ -749,6 +750,66 @@ export function createDelegateVotesChangedEvent(
   newEvent.parameters.push(
     new ethereum.EventParam('newBalance', ethereum.Value.fromUnsignedBigInt(newBalance)),
   );
+
+  return newEvent;
+}
+
+export class ProposalCreatedData {
+  id: BigInt = BIGINT_ZERO;
+  proposer: Address = Address.fromString(ZERO_ADDRESS);
+  signers: Address[] = [];
+  targets: Address[] = [];
+  values: BigInt[] = [];
+  signatures: string[] = [];
+  calldatas: Bytes[] = [];
+  startBlock: BigInt = BIGINT_ZERO;
+  endBlock: BigInt = BIGINT_ZERO;
+  description: string = '';
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+  address: Address = Address.fromString(ZERO_ADDRESS);
+}
+
+export function createProposalCreatedEvent(input: ProposalCreatedData): ProposalCreated {
+  let newEvent = changetype<ProposalCreated>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(input.id)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(input.proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(input.targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(input.values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(input.signatures)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(input.calldatas)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('startBlock', ethereum.Value.fromUnsignedBigInt(input.startBlock)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('endBlock', ethereum.Value.fromUnsignedBigInt(input.endBlock)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(input.description)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+  newEvent.address = input.address;
 
   return newEvent;
 }
