@@ -652,11 +652,11 @@ contract Rewards is
      */
     function enableAuctionRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        uint32 nextAuctionIdToReward = SafeCast.toUint32(auctionHouse.auction().nounId);
-        $.nextAuctionIdToReward = nextAuctionIdToReward;
+        uint32 nextAuctionIdToReward_ = SafeCast.toUint32(auctionHouse.auction().nounId);
+        $.nextAuctionIdToReward = nextAuctionIdToReward_;
         $.auctionRewardsEnabled = true;
 
-        emit AuctionRewardsEnabled(nextAuctionIdToReward);
+        emit AuctionRewardsEnabled(nextAuctionIdToReward_);
     }
 
     /**
@@ -684,14 +684,14 @@ contract Rewards is
      */
     function enableProposalRewards() public onlyOwner {
         RewardsStorage storage $ = _getRewardsStorage();
-        uint32 nextProposalIdToReward = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
-        uint32 nextProposalRewardFirstAuctionId = SafeCast.toUint32(auctionHouse.auction().nounId);
-        $.nextProposalIdToReward = nextProposalIdToReward;
-        $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId;
+        uint32 nextProposalIdToReward_ = SafeCast.toUint32(nounsDAO.proposalCount() + 1);
+        uint32 nextProposalRewardFirstAuctionId_ = SafeCast.toUint32(auctionHouse.auction().nounId);
+        $.nextProposalIdToReward = nextProposalIdToReward_;
+        $.nextProposalRewardFirstAuctionId = nextProposalRewardFirstAuctionId_;
         $.lastProposalRewardsUpdate = uint40(block.timestamp);
         $.proposalRewardsEnabled = true;
 
-        emit ProposalRewardsEnabled(nextProposalIdToReward, nextProposalRewardFirstAuctionId);
+        emit ProposalRewardsEnabled(nextProposalIdToReward_, nextProposalRewardFirstAuctionId_);
     }
 
     /**
