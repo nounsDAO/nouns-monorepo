@@ -53,15 +53,15 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
         bytes memory data
     ) internal returns (uint256 proposalId) {
         vm.prank(proposerAddr);
-        address[] memory targets = new address[](1);
-        targets[0] = target;
-        uint256[] memory values = new uint256[](1);
-        values[0] = value;
-        string[] memory signatures = new string[](1);
-        signatures[0] = signature;
-        bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = data;
-        proposalId = NOUNS_DAO_PROXY_MAINNET.propose(targets, values, signatures, calldatas, 'my proposal');
+        address[] memory targets_ = new address[](1);
+        targets_[0] = target;
+        uint256[] memory values_ = new uint256[](1);
+        values_[0] = value;
+        string[] memory signatures_ = new string[](1);
+        signatures_[0] = signature;
+        bytes[] memory calldatas_ = new bytes[](1);
+        calldatas_[0] = data;
+        proposalId = NOUNS_DAO_PROXY_MAINNET.propose(targets_, values_, signatures_, calldatas_, 'my proposal');
     }
 
     function propose(
@@ -72,15 +72,22 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
         uint32 clientId
     ) internal returns (uint256 proposalId) {
         vm.prank(proposerAddr);
-        address[] memory targets = new address[](1);
-        targets[0] = target;
-        uint256[] memory values = new uint256[](1);
-        values[0] = value;
-        string[] memory signatures = new string[](1);
-        signatures[0] = signature;
-        bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = data;
-        proposalId = NOUNS_DAO_PROXY_MAINNET.propose(targets, values, signatures, calldatas, 'my proposal', clientId);
+        address[] memory targets_ = new address[](1);
+        targets_[0] = target;
+        uint256[] memory values_ = new uint256[](1);
+        values_[0] = value;
+        string[] memory signatures_ = new string[](1);
+        signatures_[0] = signature;
+        bytes[] memory calldatas_ = new bytes[](1);
+        calldatas_[0] = data;
+        proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
+            targets_,
+            values_,
+            signatures_,
+            calldatas_,
+            'my proposal',
+            clientId
+        );
     }
 
     function voteAndExecuteProposal(uint256 proposalId) internal {
@@ -199,7 +206,9 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         assertEq(expectedClientId, propsData.clientId);
     }
 
-    function getProposalDataForRewards(uint256 proposalId) internal returns (NounsDAOTypes.ProposalForRewards memory) {
+    function getProposalDataForRewards(
+        uint256 proposalId
+    ) internal view returns (NounsDAOTypes.ProposalForRewards memory) {
         return
             NOUNS_DAO_PROXY_MAINNET.proposalDataForRewards(proposalId, proposalId, 0, false, false, new uint32[](0))[0];
     }
