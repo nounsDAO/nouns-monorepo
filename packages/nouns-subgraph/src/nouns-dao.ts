@@ -84,7 +84,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   let desc = event.params.description.split('\\n').join('\n');
   proposal.description = desc;
   proposal.title = extractTitle(desc);
-  proposal.status = event.block.number >= proposal.startBlock! ? STATUS_ACTIVE : STATUS_PENDING;
+  proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
   proposal.objectionPeriodEndBlock = BIGINT_ZERO;
 
   const governance = getGovernanceEntity();
@@ -187,7 +187,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;
   proposal.description = event.params.description.split('\\n').join('\n');
-  proposal.title = extractTitle(proposal.description!);
+  proposal.title = extractTitle(proposal.description);
   proposal.save();
 
   captureProposalVersion(
@@ -205,7 +205,7 @@ export function handleProposalDescriptionUpdated(event: ProposalDescriptionUpdat
   proposal.lastUpdatedTimestamp = event.block.timestamp;
   proposal.lastUpdatedBlock = event.block.number;
   proposal.description = event.params.description.split('\\n').join('\n');
-  proposal.title = extractTitle(proposal.description!);
+  proposal.title = extractTitle(proposal.description);
   proposal.save();
 
   captureProposalVersion(
@@ -319,15 +319,15 @@ export function handleVoteCast(event: VoteCast): void {
   const dqParams = getOrCreateDynamicQuorumParams();
   const usingDynamicQuorum =
     dqParams.dynamicQuorumStartBlock !== null &&
-    dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock!);
+    dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock);
 
   if (usingDynamicQuorum) {
     proposal.quorumVotes = dynamicQuorumVotes(
       proposal.againstVotes,
-      proposal.adjustedTotalSupply!,
+      proposal.adjustedTotalSupply,
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
-      proposal.quorumCoefficient!,
+      proposal.quorumCoefficient,
     );
   }
 
@@ -397,14 +397,14 @@ function captureProposalVersion(
   const versionId = txHash.concat('-').concat(logIndex);
   const previousVersion = getOrCreateProposalVersion(versionId);
   previousVersion.proposal = proposal.id;
-  previousVersion.createdBlock = proposal.lastUpdatedBlock!;
-  previousVersion.createdAt = proposal.lastUpdatedTimestamp!;
+  previousVersion.createdBlock = proposal.lastUpdatedBlock;
+  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
   previousVersion.targets = proposal.targets;
   previousVersion.values = proposal.values;
   previousVersion.signatures = proposal.signatures;
   previousVersion.calldatas = proposal.calldatas;
-  previousVersion.title = proposal.title!;
-  previousVersion.description = proposal.description!;
+  previousVersion.title = proposal.title;
+  previousVersion.description = proposal.description;
   previousVersion.updateMessage = updateMessage;
   previousVersion.save();
 
