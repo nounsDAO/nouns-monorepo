@@ -10,6 +10,7 @@ export interface IBid {
   amount: BigNumber;
   blockNumber: number;
   blockTimestamp: number;
+  txHash: string;
   txIndex?: number;
   noun: {
     id: number;
@@ -386,6 +387,7 @@ export const latestAuctionsQuery = () => gql`
         amount
         blockNumber
         blockTimestamp
+        txHash
         txIndex
         bidder {
           id

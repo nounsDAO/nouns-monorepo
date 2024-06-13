@@ -76,7 +76,7 @@ type Noun @entity {
 }
 
 type Bid @entity {
-  "Bid transaction hash"
+  "Noun.id-amount"
   id: ID!
 
   "The Noun being bid on"
@@ -90,6 +90,9 @@ type Bid @entity {
 
   "Block number of the bid"
   blockNumber: BigInt!
+
+  "Transaction has for the bid"
+  txHash: Bytes!
 
   "Index of transaction within block"
   txIndex: BigInt!
