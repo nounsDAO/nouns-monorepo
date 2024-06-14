@@ -11,6 +11,8 @@ In the first shell:
 ```sh
 # Install all dependencies and build contract artifacts
 yarn
+# Build all packages
+yarn build
 # Switch to nouns-contracts
 cd packages/nouns-contracts
 # Start local simnet
