@@ -22,5 +22,5 @@
   directory = "packages/nouns-webapp/functions"
 
 [build]
-  command = "git submodule update --init --recursive --depth=1 && yarn workspace @nouns/webapp build"
+  command = "git submodule update --init --recursive --depth=1 && yarn workspace @nouns/webapp add @nouns/sdk@0.4.0 && yarn workspace @nouns/webapp build"
   publish = "packages/nouns-webapp/build"
