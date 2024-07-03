@@ -5,6 +5,7 @@ cache_path = 'foundry-cache'
 out = 'foundry-out'
 solc_version = '0.8.23'
 fs_permissions = [{ access = "read", path = "./"}]
+ignored_warnings_from = ["contracts/test/Multicall2.sol"]
 
 [profile.lite]
 optimizer = false
