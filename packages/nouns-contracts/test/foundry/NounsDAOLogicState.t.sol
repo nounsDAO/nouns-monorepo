@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { INounsDAOLogic } from '../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../contracts/NounsDescriptorV3.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';

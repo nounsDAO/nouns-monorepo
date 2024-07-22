@@ -8,13 +8,13 @@ import {
   setTotalSupply,
   blockNumber,
   advanceBlocks,
-  populateDescriptorV2,
+  populateDescriptorV3,
   deployGovernorV3WithV3Proxy,
 } from '../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
   INounsDAOLogic,
   NounsDAOLogicV4__factory,
 } from '../../typechain';
@@ -37,8 +37,8 @@ const V1_QUORUM_BPS = 201;
 async function setup() {
   token = await deployNounsToken(signers.deployer);
 
-  await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+  await populateDescriptorV3(
+    NounsDescriptorV3Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);

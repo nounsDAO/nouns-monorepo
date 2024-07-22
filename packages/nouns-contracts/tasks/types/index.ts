@@ -9,7 +9,7 @@ export enum ChainId {
   Sepolia = 11155111,
 }
 
-export type ContractNamesDAOV3 =
+  export type ContractNamesDAOV3 =
   | 'NFTDescriptorV2'
   | 'NounsDescriptorV2'
   | 'NounsDescriptorV3'
@@ -37,6 +37,7 @@ export type ContractNamesDAOV3 =
   | 'NounsDAOExecutorProxy'
   | 'NounsDAOData'
   | 'NounsDAODataProxy';
+
 
 export interface ContractDeployment {
   args?: (string | number | (() => string))[];

@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../contracts/NounsDescriptorV3.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
@@ -16,8 +16,8 @@ contract NounsTokenTest is Test, DeployUtils {
     address minter = address(2);
 
     function setUp() public {
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
-        _populateDescriptorV2(descriptor);
+        NounsDescriptorV3 descriptor = _deployAndPopulateV3();
+        _populateDescriptorV3(descriptor);
 
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
     }
