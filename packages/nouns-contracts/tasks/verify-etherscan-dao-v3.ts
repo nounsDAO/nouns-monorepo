@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { ContractName, ContractNamesDAOV3, DeployedContract } from './types';
+import { ContractNamesDAOV3, DeployedContract } from './types';
 
 // prettier-ignore
 // These contracts require a fully qualified name to be passed because

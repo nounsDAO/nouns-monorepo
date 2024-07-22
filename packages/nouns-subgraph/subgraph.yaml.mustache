@@ -34,6 +34,31 @@ dataSources:
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
   - kind: ethereum/contract
+    name: NounsAuctionHouseV2
+    network: {{network}}
+    source:
+      address: '{{nounsAuctionHouse.address}}'
+      abi: NounsAuctionHouseV2
+      startBlock: {{nounsAuctionHouse.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/nouns-auction-house.ts
+      entities:
+        - Account
+        - Auction
+        - Bid
+        - Noun
+      abis:
+        - name: NounsAuctionHouseV2
+          file: ../nouns-contracts/abi/contracts/NounsAuctionHouseV2.json
+      eventHandlers:
+        - event: AuctionBidWithClientId(indexed uint256,uint256,indexed uint32)
+          handler: handleAuctionBidWithClientId
+        - event: AuctionSettledWithClientId(indexed uint256,indexed uint32)
+          handler: handleAuctionSettledWithClientId
+  - kind: ethereum/contract
     name: NounsToken
     network: {{network}}
     source:
@@ -86,6 +111,8 @@ dataSources:
         - name: NounsDAO
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
       eventHandlers:
+        - event: ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)
+          handler: handleProposalCreated
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
         - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,uint256,string)
@@ -128,6 +155,33 @@ dataSources:
           handler: handleJoinFork
         - event: VoteSnapshotBlockSwitchProposalIdSet(uint256,uint256)
           handler: handleVoteSnapshotBlockSwitchProposalIdSet
+  - kind: ethereum/contract
+    name: NounsDAOV4
+    network: {{network}}
+    source:
+      address: '{{nounsDAO.address}}'
+      abi: NounsDAOV4
+      startBlock: {{nounsDAO.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/nouns-dao.ts
+      entities:
+        - Account
+        - Delegate
+        - Proposal
+        - Vote
+        - Governance
+        - ProposalCandidateSignature
+      abis:
+        - name: NounsDAOV4
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV4.json
+      eventHandlers:
+        - event: ProposalCreatedWithRequirements(uint256,address[],uint256,uint256,uint256,indexed uint32)
+          handler: handleProposalCreatedWithRequirementsV4
+        - event: VoteCastWithClientId(indexed address,indexed uint256,indexed uint32)
+          handler: handleVoteCastWithClientId
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}

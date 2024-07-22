@@ -27,7 +27,7 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
         nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,
         nounsDaoExecutor: contracts.NounsDAOExecutorProxy.address,
         nounsDAOProxy: contracts.NounsDAOProxyV3.address,
-        nounsDAOLogicV1: contracts.NounsDAOLogicV3.address,
+        nounsDAOLogicV1: contracts.NounsDAOLogicV4.address,
         nounsDAOData: contracts.NounsDAODataProxy.address,
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
@@ -58,7 +58,7 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
           startBlock: contracts.NounsDAOProxyV3.instance.deployTransaction.blockNumber,
         },
         nounsDAOData: {
-          addresses: contracts.NounsDAODataProxy.address,
+          address: contracts.NounsDAODataProxy.address,
           startBlock: contracts.NounsDAODataProxy.instance.deployTransaction.blockNumber,
         },
       };

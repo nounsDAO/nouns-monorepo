@@ -4,29 +4,29 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { AuctionHelpers } from './helpers/AuctionHelpers.sol';
-import { INounsDAOShared } from './helpers/INounsDAOShared.sol';
-import { NounsTokenLike, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDAOLogic } from '../../contracts/interfaces/INounsDAOLogic.sol';
+import { NounsTokenLike, NounsDAOTypes } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
 import { NounsDAODataEvents } from '../../contracts/governance/data/NounsDAODataEvents.sol';
 import { NounsDAODataProxy } from '../../contracts/governance/data/NounsDAODataProxy.sol';
-import { NounsDAOV3Proposals } from '../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOProposals } from '../../contracts/governance/NounsDAOProposals.sol';
 import { SigUtils } from './helpers/SigUtils.sol';
 
 abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataEvents, AuctionHelpers {
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
-    INounsDAOShared nounsDao;
+    INounsDAOLogic nounsDao;
     INounsAuctionHouse auction;
     address feeRecipient = makeAddr('fee recipient');
     address otherProposer = makeAddr('other proposer');
     address notNouner = makeAddr('not nouner');
 
     function setUp() public virtual {
-        nounsDao = INounsDAOShared(address(_deployDAOV3()));
+        nounsDao = INounsDAOLogic(address(_deployDAOV3()));
         auction = INounsAuctionHouse(nounsDao.nouns().minter());
-        vm.prank(nounsDao.timelock());
+        vm.prank(address(nounsDao.timelock()));
         auction.unpause();
 
         NounsDAOData logic = new NounsDAOData(address(nounsDao.nouns()), address(nounsDao));
@@ -53,7 +53,7 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
         uint256 value,
         string memory signature,
         bytes memory callData
-    ) internal pure returns (NounsDAOV3Proposals.ProposalTxs memory) {
+    ) internal pure returns (NounsDAOProposals.ProposalTxs memory) {
         return createTxs(1, target, value, signature, callData);
     }
 
@@ -63,7 +63,7 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
         uint256 value,
         string memory signature,
         bytes memory callData
-    ) internal pure returns (NounsDAOV3Proposals.ProposalTxs memory) {
+    ) internal pure returns (NounsDAOProposals.ProposalTxs memory) {
         address[] memory targets = new address[](count);
         uint256[] memory values = new uint256[](count);
         string[] memory signatures = new string[](count);
@@ -74,13 +74,13 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
             signatures[i] = signature;
             calldatas[i] = callData;
         }
-        return NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
+        return NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas);
     }
 }
 
 contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_revertsForNonNounerAndNoPayment() public {
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
         vm.prank(notNouner);
@@ -96,9 +96,9 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
         uint256 value = 300;
         string memory signature = 'some signature';
         bytes memory callData = 'some data';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(target, value, signature, callData);
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(target, value, signature, callData);
 
-        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        bytes memory encodedProp = NounsDAOProposals.calcProposalEncodeData(proposer, txs, description);
         bytes32 digest = keccak256(encodedProp);
 
         assertEq(digest, 0xcf95b7d08d761ff0bf1223220f45b79baffbce6c8bcceb8df5399cbc6d22c40d);
@@ -116,8 +116,8 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
         calldatas[0] = callData;
         calldatas[1] = hex'aabbccdd';
 
-        txs = NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas);
-        encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(proposer, txs, description);
+        txs = NounsDAOProposals.ProposalTxs(targets, values, signatures, calldatas);
+        encodedProp = NounsDAOProposals.calcProposalEncodeData(proposer, txs, description);
         digest = keccak256(encodedProp);
 
         assertEq(digest, 0x5d6f3b870407fff8109c6c9469173eef879d0d2eaf3de0fb5770b7f48f760101);
@@ -132,7 +132,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_worksForNouner() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCandidateCreated(
@@ -144,7 +144,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
             description,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, description))
         );
 
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
@@ -153,7 +153,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_worksForNonNounerWithEnoughPayment() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         uint256 recipientBalanceBefore = feeRecipient.balance;
 
         vm.expectEmit(true, true, true, true);
@@ -166,7 +166,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
             description,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, description))
         );
 
         data.createProposalCandidate{ value: data.createCandidateCost() }(
@@ -185,7 +185,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.prank(dataAdmin);
         data.setFeeRecipient(payable(address(0)));
@@ -202,7 +202,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
             description,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, description))
         );
 
         data.createProposalCandidate{ value: data.createCandidateCost() }(
@@ -224,7 +224,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
 
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         vm.expectEmit(true, true, true, true);
         emit ProposalCandidateCreated(
@@ -236,7 +236,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
             description,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description))
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, description))
         );
 
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
@@ -245,7 +245,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_revertsOnSlugReuseBySameProposer() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugAlreadyUsed.selector));
@@ -255,7 +255,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_createProposalCandidate_worksWithSameSlugButDifferentProposers() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
 
         vm.prank(otherProposer);
@@ -265,7 +265,7 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
     function test_updateProposalCandidate_revertsForNonNounerAndNoPayment() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -296,9 +296,9 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
 
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(11, address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(11, address(0), 0, 'some signature', 'some data');
 
-        vm.expectRevert(NounsDAOV3Proposals.TooManyActions.selector);
+        vm.expectRevert(NounsDAOProposals.TooManyActions.selector);
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
@@ -308,9 +308,9 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
 
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(0, address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(0, address(0), 0, 'some signature', 'some data');
 
-        vm.expectRevert(NounsDAOV3Proposals.MustProvideActions.selector);
+        vm.expectRevert(NounsDAOProposals.MustProvideActions.selector);
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 
@@ -320,17 +320,17 @@ contract NounsDAOData_CreateCandidateTest is NounsDAODataBaseTest {
 
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(1, address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(1, address(0), 0, 'some signature', 'some data');
         uint256[] memory values = new uint256[](2);
 
-        vm.expectRevert(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector);
+        vm.expectRevert(NounsDAOProposals.ProposalInfoArityMismatch.selector);
         data.createProposalCandidate(txs.targets, values, txs.signatures, txs.calldatas, description, slug, 0);
     }
 }
 
 contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
     function test_updateProposalCandidate_revertsOnUnseenSlug() public {
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
 
         uint256 value = data.updateCandidateCost();
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugDoesNotExist.selector));
@@ -349,7 +349,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
     function test_updateProposalCandidate_worksForNouner() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
         string memory updateDescription = 'new description';
 
@@ -363,7 +363,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
             updateDescription,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
 
@@ -382,7 +382,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
     function test_updateProposalCandidate_worksForNonNounerWithEnoughPayment() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -405,7 +405,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
             updateDescription,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
 
@@ -426,7 +426,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
     function test_updateProposalCandidate_givenFeeRecipientZero_accumelatesETHFee() public {
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -453,7 +453,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
             updateDescription,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
 
@@ -476,7 +476,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
         data.setUpdateCandidateCost(0);
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -498,7 +498,7 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
             updateDescription,
             slug,
             0,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            keccak256(NounsDAOProposals.calcProposalEncodeData(address(this), txs, updateDescription)),
             'reason'
         );
 
@@ -519,11 +519,11 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
         data.setUpdateCandidateCost(0);
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
         txs = createTxs(11, address(0), 0, 'some signature', 'some data');
 
-        vm.expectRevert(NounsDAOV3Proposals.TooManyActions.selector);
+        vm.expectRevert(NounsDAOProposals.TooManyActions.selector);
         data.updateProposalCandidate(
             txs.targets,
             txs.values,
@@ -541,11 +541,11 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
         data.setUpdateCandidateCost(0);
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
         txs = createTxs(0, address(0), 0, 'some signature', 'some data');
 
-        vm.expectRevert(NounsDAOV3Proposals.MustProvideActions.selector);
+        vm.expectRevert(NounsDAOProposals.MustProvideActions.selector);
         data.updateProposalCandidate(
             txs.targets,
             txs.values,
@@ -563,11 +563,11 @@ contract NounsDAOData_UpdateCandidateTest is NounsDAODataBaseTest {
         data.setUpdateCandidateCost(0);
         string memory description = 'some description';
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug, 0);
         uint256[] memory values = new uint256[](2);
 
-        vm.expectRevert(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector);
+        vm.expectRevert(NounsDAOProposals.ProposalInfoArityMismatch.selector);
         data.updateProposalCandidate(
             txs.targets,
             values,
@@ -588,7 +588,7 @@ contract NounsDAOData_CancelCandidateTest is NounsDAODataBaseTest {
     }
 
     function test_cancelProposalCandidate_emitsACancelEvent() public {
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -619,7 +619,7 @@ contract NounsDAOData_AddSignatureTest is NounsDAODataBaseTest {
     function test_addSignature_revertsWhenSenderIsntSigner() public {
         string memory description = 'some description';
         string memory slug = 'slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -644,7 +644,7 @@ contract NounsDAOData_AddSignatureTest is NounsDAODataBaseTest {
             verifyingContract,
             'Nouns DAO'
         );
-        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description);
+        bytes memory encodedProp = NounsDAOProposals.calcProposalEncodeData(address(this), txs, description);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.InvalidSignature.selector));
         vm.prank(makeAddr('not signer'));
@@ -654,7 +654,7 @@ contract NounsDAOData_AddSignatureTest is NounsDAODataBaseTest {
     function test_addSignature_emitsEvent() public {
         string memory description = 'some description';
         string memory slug = 'slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -679,9 +679,9 @@ contract NounsDAOData_AddSignatureTest is NounsDAODataBaseTest {
             verifyingContract,
             'Nouns DAO'
         );
-        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description);
-        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(
-            NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
+        bytes memory encodedProp = NounsDAOProposals.calcProposalEncodeData(address(this), txs, description);
+        bytes32 sigDigest = NounsDAOProposals.sigDigest(
+            NounsDAOProposals.PROPOSAL_TYPEHASH,
             encodedProp,
             expiration,
             verifyingContract
@@ -722,7 +722,7 @@ contract NounsDAOData_SendFeedbackTest is NounsDAODataBaseTest {
 
     function test_sendCandidateFeedback_revertsWithBadSupportValue() public {
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -742,7 +742,7 @@ contract NounsDAOData_SendFeedbackTest is NounsDAODataBaseTest {
     function test_sendCandidateFeedback_emitsEventForNouner() public {
         address nouner = makeAddr('nouner');
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -765,7 +765,7 @@ contract NounsDAOData_SendFeedbackTest is NounsDAODataBaseTest {
     function test_sendCandidateFeedback_emitsEventForNonNouner() public {
         address nonNouner = makeAddr('non nouner');
         string memory slug = 'some slug';
-        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        NounsDAOProposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
@@ -872,7 +872,7 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
     address signer;
     uint256 signerPK;
     uint256 proposalId;
-    NounsDAOV3Proposals.ProposalTxs updateTxs;
+    NounsDAOProposals.ProposalTxs updateTxs;
     string updateDescription = 'some description';
 
     function setUp() public override {
@@ -896,7 +896,7 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         bytes32 encodedProp = keccak256(
             abi.encodePacked(
                 proposalId,
-                NounsDAOV3Proposals.calcProposalEncodeData(notNouner, updateTxs, updateDescription)
+                NounsDAOProposals.calcProposalEncodeData(notNouner, updateTxs, updateDescription)
             )
         );
 
@@ -980,7 +980,7 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         string memory signature,
         bytes memory data,
         string memory description
-    ) internal returns (uint256 proposalId) {
+    ) internal returns (uint256) {
         vm.prank(proposer);
         address[] memory targets = new address[](1);
         targets[0] = target;
@@ -990,21 +990,21 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         signatures[0] = signature;
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
-        proposalId = nounsDao.propose(targets, values, signatures, calldatas, description);
+        return nounsDao.propose(targets, values, signatures, calldatas, description);
     }
 
     function proposeBySigs(
         address proposer,
-        address signer,
-        uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        address signer_,
+        uint256 signerPK_,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp
-    ) internal returns (uint256 proposalId) {
+    ) internal returns (uint256 proposalId_) {
         address[] memory signers = new address[](1);
-        signers[0] = signer;
+        signers[0] = signer_;
         uint256[] memory signerPKs = new uint256[](1);
-        signerPKs[0] = signerPK;
+        signerPKs[0] = signerPK_;
         uint256[] memory expirationTimestamps = new uint256[](1);
         expirationTimestamps[0] = expirationTimestamp;
 
@@ -1016,12 +1016,12 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         address[] memory signers,
         uint256[] memory signerPKs,
         uint256[] memory expirationTimestamps,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description
-    ) internal returns (uint256 proposalId) {
-        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+    ) internal returns (uint256 proposalId_) {
+        NounsDAOTypes.ProposerSignature[] memory sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+            sigs[i] = NounsDAOTypes.ProposerSignature(
                 signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(nounsDao)),
                 signers[i],
                 expirationTimestamps[i]
@@ -1029,6 +1029,6 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
         }
 
         vm.prank(proposer);
-        proposalId = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+        proposalId_ = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
     }
 }

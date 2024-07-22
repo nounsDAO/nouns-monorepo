@@ -4,8 +4,8 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
-import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOProposals } from '../../../contracts/governance/NounsDAOProposals.sol';
 
 contract SigUtils is Test {
     bytes32 public constant DOMAIN_TYPEHASH =
@@ -25,7 +25,7 @@ contract SigUtils is Test {
     struct UpdateProposalParams {
         uint256 proposalId;
         address proposer;
-        NounsDAOV3Proposals.ProposalTxs txs;
+        NounsDAOProposals.ProposalTxs txs;
         string description;
     }
 
@@ -35,7 +35,7 @@ contract SigUtils is Test {
         uint256[] memory expirationTimestamps,
         UpdateProposalParams memory proposalParams,
         address verifyingContract
-    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
+    ) internal view returns (NounsDAOTypes.ProposerSignature[] memory sigs) {
         return
             makeUpdateProposalSigs(
                 signers,
@@ -54,10 +54,10 @@ contract SigUtils is Test {
         UpdateProposalParams memory proposalParams,
         address verifyingContract,
         string memory domainName
-    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
-        sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+    ) internal view returns (NounsDAOTypes.ProposerSignature[] memory sigs) {
+        sigs = new NounsDAOTypes.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
-            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+            sigs[i] = NounsDAOTypes.ProposerSignature(
                 signProposalUpdate(
                     proposalParams.proposalId,
                     proposalParams.proposer,
@@ -78,12 +78,12 @@ contract SigUtils is Test {
         uint256 proposalId,
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract,
         string memory domainName
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return
             sign(
                 abi.encodePacked(proposalId, calcProposalEncodeData(proposer, txs, description)),
@@ -98,23 +98,23 @@ contract SigUtils is Test {
     function signProposal(
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return signProposal(proposer, signerPK, txs, description, expirationTimestamp, verifyingContract, 'Nouns DAO');
     }
 
     function signProposal(
         address proposer,
         uint256 signerPK,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
         address verifyingContract,
         string memory domainName
-    ) public returns (bytes memory) {
+    ) public view returns (bytes memory) {
         return
             sign(
                 calcProposalEncodeData(proposer, txs, description),
@@ -148,7 +148,7 @@ contract SigUtils is Test {
 
     function calcProposalEncodeData(
         address proposer,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
+        NounsDAOProposals.ProposalTxs memory txs,
         string memory description
     ) internal pure returns (bytes memory) {
         bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
