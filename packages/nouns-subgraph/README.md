@@ -46,6 +46,16 @@ yarn deploy:[network] # Supports rinkeby and mainnet
 yarn deploy [organization]/[subgraph-name]
 ```
 
+### Compile and deploy to The Graph studio for The Graph's decentralized network
+
+```sh
+# Auth (only the first time)
+yarn graph auth [deploy-key] --product=subgraph-studio
+
+# Deploy
+yarn deploy-studio:[network] # mainnet|sepolia
+```
+
 ## Running a local deployment
 
 Make sure you have Docker installed.
