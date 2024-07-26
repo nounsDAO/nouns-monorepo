@@ -2849,13 +2849,15 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@graphprotocol/graph-cli@0.51.0":
-  version "0.51.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.51.0.tgz#c9b864b249b98946b4b666045d7e7a56154c72ec"
-  integrity sha512-Yvwhx9Q31egUOVUQH2Hti9ysqPk1Ti9+si8Ii/xpGnXp6qZC/elSr/1rzEOgi84OSR1Y74GLwmNNGZImjD/uLg==
+"@graphprotocol/graph-cli@0.71.2":
+  version "0.71.2"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.71.2.tgz#e10966fe6da1466a6b89e54a5a259560bc4a8a33"
+  integrity sha512-vTc2LEJMsSxCs9N1ATZuTUONi0H3wuh5o9w60zsNoNASBPtmo8elzgoXcM5ohpyMg+7cXaYaV885rG7bhYwBAQ==
   dependencies:
     "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
-    "@oclif/core" "2.8.4"
+    "@oclif/core" "2.8.6"
+    "@oclif/plugin-autocomplete" "^2.3.6"
+    "@oclif/plugin-not-found" "^2.4.0"
     "@whatwg-node/fetch" "^0.8.4"
     assemblyscript "0.19.23"
     binary-install-raw "0.0.13"
@@ -2866,14 +2868,13 @@
     dockerode "2.5.8"
     fs-extra "9.1.0"
     glob "9.3.5"
-    gluegun "5.1.2"
+    gluegun "5.1.6"
     graphql "15.5.0"
     immutable "4.2.1"
     ipfs-http-client "55.0.0"
     jayson "4.0.0"
     js-yaml "3.14.1"
-    prettier "1.19.1"
-    request "2.88.2"
+    prettier "3.0.3"
     semver "7.4.0"
     sync-request "6.1.0"
     tmp-promise "3.0.3"
@@ -2881,17 +2882,10 @@
     which "2.0.2"
     yaml "1.10.2"
 
-"@graphprotocol/graph-ts@0.31.0":
-  version "0.31.0"
-  resolved "https://registry.npmjs.org/@graphprotocol/graph-ts/-/graph-ts-0.31.0.tgz#730668c0369828b31bef81e8d9bc66b9b48e3480"
-  integrity sha512-xreRVM6ho2BtolyOh2flDkNoGZximybnzUnF53zJVp0+Ed0KnAlO1/KOCUYw06euVI9tk0c9nA2Z/D5SIQV2Rg==
-  dependencies:
-    assemblyscript "0.19.10"
-
-"@graphprotocol/graph-ts@^0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.27.0.tgz#948fe1716f6082964a01a63a19bcbf9ac44e06ff"
-  integrity sha512-r1SPDIZVQiGMxcY8rhFSM0y7d/xAbQf5vHMWUf59js1KgoyWpM6P3tczZqmQd7JTmeyNsDGIPzd9FeaxllsU4w==
+"@graphprotocol/graph-ts@0.35.1":
+  version "0.35.1"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.35.1.tgz#1e1ecc36d8f7a727ef3a6f1fed4c5ce16de378c2"
+  integrity sha512-74CfuQmf7JI76/XCC34FTkMMKeaf+3Pn0FIV3m9KNeaOJ+OI3CvjMIVRhOZdKcJxsFCBGaCCl0eQjh47xTjxKA==
   dependencies:
     assemblyscript "0.19.10"
 
@@ -4562,10 +4556,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@oclif/core@2.8.4":
-  version "2.8.4"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.8.4.tgz#7b453be6d4cd060ff4990bc8e31824a1de308354"
-  integrity sha512-VlFDhoAJ1RDwcpDF46wAlciWTIryapMUViACttY9GwX6Ci6Lud1awe/pC3k4jad5472XshnPQV4bHAl4a/yxpA==
+"@oclif/core@2.8.6":
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.8.6.tgz#7eb6984108f471ad0d719d3c07cde14c47ab17c5"
+  integrity sha512-1QlPaHMhOORySCXkQyzjsIsy2GYTilOw3LkjeHkCgsPJQjAT4IclVytJusWktPbYNys9O+O4V23J44yomQvnBQ==
   dependencies:
     "@types/cli-progress" "^3.11.0"
     ansi-escapes "^4.3.2"
@@ -4596,6 +4590,58 @@
     widest-line "^3.1.0"
     wordwrap "^1.0.0"
     wrap-ansi "^7.0.0"
+
+"@oclif/core@^2.15.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.16.0.tgz#e6f3c6c359d4313a15403d8652bbdd0e99ce4b3a"
+  integrity sha512-dL6atBH0zCZl1A1IXCKJgLPrM/wR7K+Wi401E/IvqsK8m2iCHW+0TEOGrans/cuN3oTW+uxIyJFHJ8Im0k4qBw==
+  dependencies:
+    "@types/cli-progress" "^3.11.0"
+    ansi-escapes "^4.3.2"
+    ansi-styles "^4.3.0"
+    cardinal "^2.1.1"
+    chalk "^4.1.2"
+    clean-stack "^3.0.1"
+    cli-progress "^3.12.0"
+    debug "^4.3.4"
+    ejs "^3.1.8"
+    get-package-type "^0.1.0"
+    globby "^11.1.0"
+    hyperlinker "^1.0.0"
+    indent-string "^4.0.0"
+    is-wsl "^2.2.0"
+    js-yaml "^3.14.1"
+    natural-orderby "^2.0.3"
+    object-treeify "^1.1.33"
+    password-prompt "^1.1.2"
+    slice-ansi "^4.0.0"
+    string-width "^4.2.3"
+    strip-ansi "^6.0.1"
+    supports-color "^8.1.1"
+    supports-hyperlinks "^2.2.0"
+    ts-node "^10.9.1"
+    tslib "^2.5.0"
+    widest-line "^3.1.0"
+    wordwrap "^1.0.0"
+    wrap-ansi "^7.0.0"
+
+"@oclif/plugin-autocomplete@^2.3.6":
+  version "2.3.10"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-autocomplete/-/plugin-autocomplete-2.3.10.tgz#787f6208cdfe10ffc68ad89e9e7f1a7ad0e8987f"
+  integrity sha512-Ow1AR8WtjzlyCtiWWPgzMyT8SbcDJFr47009riLioHa+MHX2BCDtVn2DVnN/E6b9JlPV5ptQpjefoRSNWBesmg==
+  dependencies:
+    "@oclif/core" "^2.15.0"
+    chalk "^4.1.0"
+    debug "^4.3.4"
+
+"@oclif/plugin-not-found@^2.4.0":
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-not-found/-/plugin-not-found-2.4.3.tgz#3d24095adb0f3876cb4bcfdfdcb775086cf6d4b5"
+  integrity sha512-nIyaR4y692frwh7wIHZ3fb+2L6XEecQwRDIb4zbEam0TvaVmBQWZoColQyWA84ljFBPZ8XWiQyTz+ixSwdRkqg==
+  dependencies:
+    "@oclif/core" "^2.15.0"
+    chalk "^4"
+    fast-levenshtein "^3.0.0"
 
 "@octokit/auth-token@^2.4.0":
   version "2.5.0"
@@ -7505,7 +7551,7 @@ assemblyscript@0.19.10:
     binaryen "101.0.0-nightly.20210723"
     long "^4.0.0"
 
-assemblyscript@0.19.23, assemblyscript@^0.19.20:
+assemblyscript@0.19.23:
   version "0.19.23"
   resolved "https://registry.yarnpkg.com/assemblyscript/-/assemblyscript-0.19.23.tgz#16ece69f7f302161e2e736a0f6a474e6db72134c"
   integrity sha512-fwOQNZVTMga5KRsfY80g7cpOl4PsFQczMwHzdtgoqLXaYhkhavufKb0sB0l3T1DUxpAufA0KNhlbpuuhZUwxMA==
@@ -9335,7 +9381,7 @@ chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.2:
+chalk@^4, chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -11406,12 +11452,12 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-ejs@3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.6.tgz#5bfd0a0689743bb5268b3550cceeebbc1702822a"
-  integrity sha512-9lt9Zse4hPucPkoP7FHDF0LQAlGyF9JVpnClFLFH3aSSbxmyoqINRpp/9wePWJTUl4KOQwRL72Iw3InHPDkoGw==
+ejs@3.1.8:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.8.tgz#758d32910c78047585c7ef1f92f9ee041c1c190b"
+  integrity sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==
   dependencies:
-    jake "^10.6.1"
+    jake "^10.8.5"
 
 ejs@^2.6.1:
   version "2.7.4"
@@ -12837,6 +12883,13 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-levenshtein@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-3.0.0.tgz#37b899ae47e1090e40e3fd2318e4d5f0142ca912"
+  integrity sha512-hKKNajm46uNmTlhHSyZkmToAc56uZJwYq7yrciZjqOxnlfQwERDQJmHPUp7m1m9wx8vgOe8IaCKZ5Kv2k1DdCQ==
+  dependencies:
+    fastest-levenshtein "^1.0.7"
+
 fast-querystring@^1.1.1:
   version "1.1.2"
   resolved "https://registry.npmjs.org/fast-querystring/-/fast-querystring-1.1.2.tgz#a6d24937b4fc6f791b4ee31dcb6f53aeafb89f53"
@@ -12860,6 +12913,11 @@ fast-url-parser@^1.1.3:
   integrity sha512-5jOCVXADYNuRkKFzNJ0dCCewsZiYo0dz8QNYljkOpFC6r2U4OBmKtvm/Tsuh4w1YYdDqDb31a8TVhBJ2OJKdqQ==
   dependencies:
     punycode "^1.3.2"
+
+fastest-levenshtein@^1.0.7:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
+  integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
 
 fastq@^1.6.0:
   version "1.13.0"
@@ -13837,10 +13895,10 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
-gluegun@5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/gluegun/-/gluegun-5.1.2.tgz#ffa0beda0fb6bbc089a867157b08602beae2c8cf"
-  integrity sha512-Cwx/8S8Z4YQg07a6AFsaGnnnmd8mN17414NcPS3OoDtZRwxgsvwRNJNg69niD6fDa8oNwslCG0xH7rEpRNNE/g==
+gluegun@5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/gluegun/-/gluegun-5.1.6.tgz#74ec13193913dc610f5c1a4039972c70c96a7bad"
+  integrity sha512-9zbi4EQWIVvSOftJWquWzr9gLX2kaDgPkNR5dYWbM53eVvCI3iKuxLlnKoHC0v4uPoq+Kr/+F569tjoFbA4DSA==
   dependencies:
     apisauce "^2.1.5"
     app-module-path "^2.2.0"
@@ -13848,7 +13906,7 @@ gluegun@5.1.2:
     colors "1.4.0"
     cosmiconfig "7.0.1"
     cross-spawn "7.0.3"
-    ejs "3.1.6"
+    ejs "3.1.8"
     enquirer "2.3.6"
     execa "5.1.1"
     fs-jetpack "4.3.1"
@@ -15693,7 +15751,7 @@ it-to-stream@^1.0.0:
     p-fifo "^1.0.0"
     readable-stream "^3.6.0"
 
-jake@^10.6.1, jake@^10.8.5:
+jake@^10.8.5:
   version "10.8.7"
   resolved "https://registry.npmjs.org/jake/-/jake-10.8.7.tgz#63a32821177940c33f356e0ba44ff9d34e1c7d8f"
   integrity sha512-ZDi3aP+fG/LchyBzUM804VjddnwfSfsdeYkwt8NcbKRvo4rFkjhs456iLFn3k2ZUWvNe4i48WACDbza8fhq2+w==
@@ -17359,13 +17417,11 @@ markdown-table@^1.1.3:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.3.tgz#9fcb69bcfdb8717bfd0398c6ec2d93036ef8de60"
   integrity sha512-1RUZVgQlpJSPWYbFSpmudq5nHY1doEIv89gBtF0s4gW1GF2XorxcA/70M5vq7rLv0a6mhOUccRsqkwhwLCIQ2Q==
 
-matchstick-as@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/matchstick-as/-/matchstick-as-0.5.0.tgz#cdafc1ef49d670b9cbe98e933bc2a5cb7c450aeb"
-  integrity sha512-4K619YDH+so129qt4RB4JCNxaFwJJYLXPc7drpG+/mIj86Cfzg6FKs/bA91cnajmS1CLHdhHl9vt6Kd6Oqvfkg==
+matchstick-as@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/matchstick-as/-/matchstick-as-0.6.0.tgz#c65296b1f51b1014d605c52067d9b5321ea630e8"
+  integrity sha512-E36fWsC1AbCkBFt05VsDDRoFvGSdcZg6oZJrtIe/YDBbuFh8SKbR5FcoqDhNWqSN+F7bN/iS2u8Md0SM+4pUpw==
   dependencies:
-    "@graphprotocol/graph-ts" "^0.27.0"
-    assemblyscript "^0.19.20"
     wabt "1.0.24"
 
 mcl-wasm@^0.7.1:
@@ -20652,10 +20708,10 @@ prettier-plugin-solidity@^1.2.0:
     semver "^7.5.4"
     solidity-comments-extractor "^0.0.8"
 
-prettier@1.19.1:
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
-  integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
+prettier@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.0.3.tgz#432a51f7ba422d1469096c0fdc28e235db8f9643"
+  integrity sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==
 
 prettier@^2.1.2, prettier@^2.3.0:
   version "2.5.0"
@@ -22023,7 +22079,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@2.88.2, request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.88.0:
+request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.88.0:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
