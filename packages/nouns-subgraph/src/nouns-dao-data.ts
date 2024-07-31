@@ -91,6 +91,7 @@ export function handleProposalCandidateCanceled(event: ProposalCandidateCanceled
   candidate.canceled = true;
   candidate.canceledTimestamp = event.block.timestamp;
   candidate.canceledBlock = event.block.number;
+  candidate.canceledTransactionHash = event.transaction.hash;
 
   candidate.save();
 }
