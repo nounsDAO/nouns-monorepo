@@ -606,6 +606,9 @@ type ProposalCandidateSignature @entity {
 
   "The signature's creation block"
   createdBlock: BigInt!
+
+  "The signature's transaction hash"
+  createdTransactionHash: Bytes!
 }
 
 type ProposalFeedback @entity(immutable: true) {
