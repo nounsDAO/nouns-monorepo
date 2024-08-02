@@ -75,6 +75,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   proposal.createdBlock = event.block.number;
   proposal.lastUpdatedTimestamp = event.block.timestamp;
   proposal.lastUpdatedBlock = event.block.number;
+  proposal.lastUpdatedTransactionHash = event.transaction.hash;
   proposal.createdTransactionHash = event.transaction.hash;
   proposal.startBlock = event.params.startBlock;
   proposal.endBlock = event.params.endBlock;
@@ -182,6 +183,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   // Then update the proposal to the latest state
   proposal.lastUpdatedTimestamp = event.block.timestamp;
   proposal.lastUpdatedBlock = event.block.number;
+  proposal.lastUpdatedTransactionHash = event.transaction.hash;
   proposal.targets = changetype<Bytes[]>(event.params.targets);
   proposal.values = event.params.values;
   proposal.signatures = event.params.signatures;
@@ -243,6 +245,7 @@ export function handleProposalCanceled(event: ProposalCanceled): void {
   proposal.status = STATUS_CANCELLED;
   proposal.canceledBlock = event.block.number;
   proposal.canceledTimestamp = event.block.timestamp;
+  proposal.canceledTransactionHash = event.transaction.hash;
   proposal.save();
 }
 
@@ -252,6 +255,7 @@ export function handleProposalVetoed(event: ProposalVetoed): void {
   proposal.status = STATUS_VETOED;
   proposal.vetoedBlock = event.block.number;
   proposal.vetoedTimestamp = event.block.timestamp;
+  proposal.vetoedTransactionHash = event.transaction.hash;
   proposal.save();
 }
 
@@ -263,6 +267,7 @@ export function handleProposalQueued(event: ProposalQueued): void {
   proposal.executionETA = event.params.eta;
   proposal.queuedBlock = event.block.number;
   proposal.queuedTimestamp = event.block.timestamp;
+  proposal.queuedTransactionHash = event.transaction.hash;
   proposal.save();
 
   governance.proposalsQueued = governance.proposalsQueued.plus(BIGINT_ONE);
@@ -277,6 +282,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   proposal.executionETA = null;
   proposal.executedBlock = event.block.number;
   proposal.executedTimestamp = event.block.timestamp;
+  proposal.executedTransactionHash = event.transaction.hash;
   proposal.save();
 
   governance.proposalsQueued = governance.proposalsQueued.minus(BIGINT_ONE);
@@ -301,6 +307,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.nouns = voter.nounsRepresented;
   vote.blockNumber = event.block.number;
   vote.blockTimestamp = event.block.timestamp;
+  vote.transactionHash = event.transaction.hash;
 
   if (event.params.reason != '') {
     vote.reason = event.params.reason;
@@ -399,6 +406,7 @@ function captureProposalVersion(
   previousVersion.proposal = proposal.id;
   previousVersion.createdBlock = proposal.lastUpdatedBlock!;
   previousVersion.createdAt = proposal.lastUpdatedTimestamp!;
+  previousVersion.createdTransactionHash = proposal.lastUpdatedTransactionHash!;
   previousVersion.targets = proposal.targets;
   previousVersion.values = proposal.values;
   previousVersion.signatures = proposal.signatures;

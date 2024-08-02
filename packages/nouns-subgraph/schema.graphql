@@ -91,7 +91,7 @@ type Bid @entity {
   "Block number of the bid"
   blockNumber: BigInt!
 
-  "Transaction has for the bid"
+  "Transaction hash for the bid"
   txHash: Bytes!
 
   "Index of transaction within block"
@@ -229,6 +229,9 @@ type Proposal @entity {
   "The proposal creation transaction hash"
   createdTransactionHash: Bytes!
 
+  "The proposal's last update transaction hash"
+  lastUpdatedTransactionHash: Bytes!
+
   "Block number from where the voting starts"
   startBlock: BigInt!
 
@@ -301,11 +304,17 @@ type Proposal @entity {
   "The timestamp when this proposal was canceled"
   canceledTimestamp: BigInt
 
+  "The transaction hash when the proposal was canceled"
+  canceledTransactionHash: Bytes
+
   "The block number at which this proposal was executed"
   executedBlock: BigInt
 
   "The timestamp when this proposal was executed"
   executedTimestamp: BigInt
+
+  "The transaction hash when the proposal was executed"
+  executedTransactionHash: Bytes
 
   "The block number at which this proposal was vetoed"
   vetoedBlock: BigInt
@@ -313,11 +322,17 @@ type Proposal @entity {
   "The timestamp when this proposal was vetoed"
   vetoedTimestamp: BigInt
 
+  "The transaction hash when the proposal was vetoed"
+  vetoedTransactionHash: Bytes
+
   "The block number at which this proposal was queued"
   queuedBlock: BigInt
 
   "The timestamp when this proposal was queued"
   queuedTimestamp: BigInt
+
+  "The transaction hash when the proposal was queued"
+  queuedTransactionHash: Bytes
 
   "The ID of the client that facilitated this proposal"
   clientId: Int!
@@ -334,6 +349,9 @@ type ProposalVersion @entity(immutable: true) {
 
   "The block timestamp of the update"
   createdAt: BigInt!
+
+  "The transaction hash of the update"
+  createdTransactionHash: Bytes!
 
   "Targets data for the change"
   targets: [Bytes!]
@@ -390,6 +408,9 @@ type Vote @entity {
 
   "The timestamp of the block the vote is in"
   blockTimestamp: BigInt!
+
+  "The transaction hash of the vote"
+  transactionHash: Bytes!
 
   "The ID of the client that facilitated this vote"
   clientId: Int!
@@ -480,6 +501,9 @@ type ProposalCandidate @entity {
 
   "The block number at which this candidate was canceled"
   canceledBlock: BigInt
+
+  "The transaction hash at which this candidate was canceled"
+  canceledTransactionHash: Bytes
 
   "Latest version of the proposal"
   latestVersion: ProposalCandidateVersion!
@@ -582,6 +606,9 @@ type ProposalCandidateSignature @entity {
 
   "The signature's creation block"
   createdBlock: BigInt!
+
+  "The signature's transaction hash"
+  createdTransactionHash: Bytes!
 }
 
 type ProposalFeedback @entity(immutable: true) {
