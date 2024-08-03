@@ -52,6 +52,21 @@ export const useAuctionMinBidIncPercentage = () => {
   return new BigNumber(minBidIncrement[0]);
 };
 
+export const useAuctionReservePrice = () => {
+  const reservePrice = useContractCall({
+    abi,
+    address: config.addresses.nounsAuctionHouseProxy,
+    method: 'reservePrice',
+    args: [],
+  });
+
+  if (!reservePrice) {
+    return;
+  }
+
+  return new BigNumber(reservePrice[0]);
+};
+
 /**
  * Computes timestamp after which a Noun could vote
  * @param nounId TokenId of Noun
