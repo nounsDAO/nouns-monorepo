@@ -559,6 +559,9 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) internal {
+        if (encodedCompressed.length == 0) {
+            revert EmptyBytes();
+        }
         delete trait.storagePages;
         delete trait.storedImagesCount;
 
@@ -571,6 +574,12 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) internal {
+        if (decompressedLength == 0) {
+            revert BadDecompressedLength();
+        }
+        if (imageCount == 0) {
+            revert BadImageCount();
+        }
         delete trait.storagePages;
         delete trait.storedImagesCount;
 
