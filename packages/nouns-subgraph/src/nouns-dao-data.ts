@@ -91,6 +91,7 @@ export function handleProposalCandidateCanceled(event: ProposalCandidateCanceled
   candidate.canceled = true;
   candidate.canceledTimestamp = event.block.timestamp;
   candidate.canceledBlock = event.block.number;
+  candidate.canceledTransactionHash = event.transaction.hash;
 
   candidate.save();
 }
@@ -125,6 +126,7 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   candidateSig.reason = event.params.reason;
   candidateSig.createdBlock = event.block.number;
   candidateSig.createdTimestamp = event.block.timestamp;
+  candidateSig.createdTransactionHash = event.transaction.hash;
 
   candidateSig.save();
 }
