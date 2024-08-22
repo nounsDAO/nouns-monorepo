@@ -418,7 +418,7 @@ contract NounsDescriptorV3Test is Test {
         bytes memory someBytes = 'some bytes';
         uint80 decompressedLength = 123;
         uint16 imageCount = 450;
-        vm.expectRevert(bytes('Image count must equal trait count'));
+        vm.expectRevert(bytes('Image count must remain the same'));
         descriptor.updateHeads(someBytes, decompressedLength, imageCount);
     }
 
