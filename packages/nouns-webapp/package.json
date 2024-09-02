@@ -79,7 +79,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "yarn i18n:compile && react-scripts build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider yarn i18n:compile && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "yarn i18n:compile",
