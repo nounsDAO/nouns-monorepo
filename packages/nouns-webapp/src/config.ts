@@ -25,7 +25,7 @@ interface AppConfig {
 }
 
 export const ChainId_Sepolia = 11155111;
-type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia | 80084;
 
 interface CacheBucket {
   name: string;
@@ -58,12 +58,12 @@ const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
+  return custom || `https://bartio.drpc.org`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
+  return custom || `wss://bartio.drpc.org`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
@@ -92,6 +92,12 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+  },
+  80084: {
+    jsonRpcUri: createNetworkHttpUrl('mainnet'),
+    wsRpcUri: createNetworkWsUrl('mainnet'),
+    subgraphApiUri: 'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };
@@ -137,13 +143,23 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     steth: undefined,
     nounsStreamFactory: undefined,
   },
+  80084: {
+    lidoToken: undefined,
+    usdcToken: undefined,
+    payerContract: undefined,
+    tokenBuyer: undefined,
+    chainlinkEthUsdc: undefined,
+    weth: undefined,
+    steth: undefined,
+    nounsStreamFactory: undefined,
+  }
 };
 
 const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch { }
+  } catch (error) { console.log("failed", error) }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 

@@ -89,6 +89,7 @@ const supportedChainURLs = {
   [ChainId.Hardhat]: 'http://localhost:8545',
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
+  80084: createNetworkHttpUrl('sepolia'),
 };
 
 export const Sepolia: Chain = {
@@ -110,6 +111,7 @@ const useDappConfig = {
   },
   multicallAddresses: {
     [ChainId.Hardhat]: multicallOnLocalhost,
+    80084: '0xcA11bde05977b3631167028862bE2a173976CA11',
   },
   networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
 };
@@ -135,6 +137,19 @@ const ChainSubscriber: React.FC = () => {
       config.addresses.nounsAuctionHouseProxy,
       wsProvider,
     );
+
+    console.log('NounsAuctionHouseContract:', nounsAuctionHouseContract);
+
+
+    // try {
+    //   const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
+    //     config.addresses.nounsAuctionHouseProxy,
+    //     wsProvider,
+    //   );
+    //   console.log('NounsAuctionHouseContract:', nounsAuctionHouseContract);
+    // } catch (error) {
+    //   console.error('Error connecting to NounsAuctionHouse:', error);
+    // }
 
     const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
@@ -196,7 +211,10 @@ const ChainSubscriber: React.FC = () => {
     }
 
     nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
-      processBidFilter(nounId, sender, value, extended, event),
+    { 
+      alert('caooed')
+      return processBidFilter(nounId, sender, value, extended, event)
+    }
     );
     nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
       processAuctionCreated(nounId, startTime, endTime),
