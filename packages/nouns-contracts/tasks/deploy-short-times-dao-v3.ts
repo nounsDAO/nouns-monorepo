@@ -7,7 +7,7 @@ import { task, types } from 'hardhat/config';
 import { constants } from 'ethers';
 import promptjs from 'prompt';
 
-promptjs.colors = false;
+promptjs.colors = true;
 promptjs.message = '> ';
 promptjs.delimiter = '';
 
@@ -157,6 +157,14 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           () => deployment.NounsSeeder.address,
           proxyRegistryAddress,
         ],
+        postDeployAction: async (deployedContract) => {
+          console.log('NounsToken deployed. Important addresses:');
+          console.log(`NounsToken address: ${deployedContract.address}`);
+          console.log(`Nounders DAO address: ${args.noundersdao}`);
+          console.log(`Expected Auction House Proxy address: ${expectedAuctionHouseProxyAddress}`);
+          console.log(`Desired creator address: 0x90d0eE4f5BD5F4d168A1EeDb2609F8b3ca8bcC66`);
+          console.log('NOTE: Ensure that the address minting tokens (usually the Auction House) is set to the desired creator address.');
+        },
       },
       NounsAuctionHouse: {
         waitForConfirmation: true,
@@ -394,10 +402,15 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
         libraries: contract?.libraries?.() ?? {},
       };
 
+      // Execute post-deployment action if it exists
+      if (contract.postDeployAction) {
+        await contract.postDeployAction(deployedContract);
+      }
+
       contract.validateDeployment?.();
 
       console.log(`${name} contract deployed to ${deployedContract.address}`);
     }
 
-    return deployment;
+    return contracts;
   });

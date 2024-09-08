@@ -12,3 +12,7 @@ export * from './deploy-short-times-dao-v3';
 export * from './deploy-and-configure-short-times-dao-v3';
 export * from './verify-etherscan-dao-v3';
 export * from './update-configs-dao-v3';
+export * from './mint-noun';
+export * from './deploy-nouns-token';
+export * from './run-remote-dao-v3';
+export * from './deploy-remote-dao-v3';

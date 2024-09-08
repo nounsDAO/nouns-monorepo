@@ -1,0 +1,20 @@
+{
+    "network": "berachain-bartio",
+    "nounsToken": {
+      "address": "0x246428e64e7410464948883b594bd96403d429aa",
+      "startBlock": 3985628
+    },
+    "nounsAuctionHouse": {
+      "address": "0x9Ff73bb1216708481E9a93Acc2a461d6da32D836",
+      "startBlock": 3985628
+    },
+    "nounsDAO": {
+      "address": "0xDa68B53BFa750B9B318CC86164598b437e62dFa8",
+      "startBlock": 3985628
+    },
+    "nounsDAOData": {
+      "address": "0x432d5Faa2142c2E5030c4829671eabc556f23643",
+      "startBlock": 3985628
+    }
+  }
+  

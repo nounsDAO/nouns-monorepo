@@ -45,6 +45,13 @@ const config: HardhatUserConfig = {
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
+    berachain: {
+      chainId: 80084,
+      url: `https://bartio.drpc.org`,
+      accounts: process.env.MNEMONIC
+        ? { mnemonic: process.env.MNEMONIC }
+        : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
+    },
     hardhat: {
       initialBaseFeePerGas: 0,
     },

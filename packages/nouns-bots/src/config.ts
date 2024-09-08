@@ -9,7 +9,7 @@ export const config = {
   redisPassword: process.env.REDIS_PASSWORD,
   nounsSubgraph:
     process.env.NOUNS_SUBGRAPH_URL ??
-    'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
+    'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/nouns/1.0.0/gn',
   twitterEnabled: process.env.TWITTER_ENABLED === 'true',
   twitterAppKey: process.env.TWITTER_APP_KEY ?? '',
   twitterAppSecret: process.env.TWITTER_APP_SECRET ?? '',
