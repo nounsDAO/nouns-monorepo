@@ -138,19 +138,6 @@ const ChainSubscriber: React.FC = () => {
       wsProvider,
     );
 
-    console.log('NounsAuctionHouseContract:', nounsAuctionHouseContract);
-
-
-    // try {
-    //   const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
-    //     config.addresses.nounsAuctionHouseProxy,
-    //     wsProvider,
-    //   );
-    //   console.log('NounsAuctionHouseContract:', nounsAuctionHouseContract);
-    // } catch (error) {
-    //   console.error('Error connecting to NounsAuctionHouse:', error);
-    // }
-
     const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
     const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);

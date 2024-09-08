@@ -79,7 +79,7 @@ const NounderNounContent: React.FC<{
         </Row>
         <Row className={auctionActivityClasses.activityRow}>
           <Col lg={4} className={auctionActivityClasses.currentBidCol}>
-            {/* <CurrentBid currentBid={BID_N_A} auctionEnded={true} /> */}
+            <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
           </Col>
           <Col
             lg={5}
