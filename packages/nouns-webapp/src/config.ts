@@ -58,12 +58,12 @@ const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return custom || `https://bartio.drpc.org`;
+  return `https://bartio.drpc.org`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `wss://bartio.drpc.org`;
+  return `wss://bartio.drpc.org`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
