@@ -29,6 +29,7 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
+import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
@@ -68,6 +69,12 @@ contract NounsAuctionHouseV2 is
 
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
+
+    uint16 public immediateTreasuryBps;
+
+    uint16 public streamLengthInAuctions;
+
+    IStreamEscrow public streamEscrow;
 
     constructor(INounsToken _nouns, address _weth, uint256 _duration) initializer {
         nouns = _nouns;
@@ -284,8 +291,18 @@ contract NounsAuctionHouseV2 is
             nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
 
-        if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+        uint256 amountToSendTreasury = (_auction.amount * immediateTreasuryBps) / 10_000;
+        uint256 amountToStream = _auction.amount - amountToSendTreasury;
+
+        if (amountToSendTreasury > 0) {
+            _safeTransferETHWithFallback(owner(), amountToSendTreasury);
+        }
+
+        // TODO maybe separate in case there's no winner and no auction.amount?
+        if (amountToStream > 0) {
+            streamEscrow.createStreamAndForwardAll{ value: amountToStream }(_auction.nounId, streamLengthInAuctions);
+        } else {
+            streamEscrow.forwardAll();
         }
 
         SettlementState storage settlementState = settlementHistory[_auction.nounId];
