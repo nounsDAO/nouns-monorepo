@@ -88,7 +88,7 @@ contract StreamEscrow is IStreamEscrow {
 
     function withdrawToTreasury(uint256 amount) external {
         require(msg.sender == daoTreasury);
-        require(amount >= (ethStreamedToDAO - ethWithdrawn), 'not enough to withdraw');
+        require(amount <= (ethStreamedToDAO - ethWithdrawn), 'not enough to withdraw');
         ethWithdrawn += amount;
         (bool sent, ) = daoTreasury.call{ value: amount }('');
         require(sent, 'failed to send eth');
