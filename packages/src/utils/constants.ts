@@ -1,1 +1,0 @@
-export const AVERAGE_BLOCK_TIME_IN_SECS = 12;

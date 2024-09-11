@@ -108,12 +108,12 @@ const NavBar = () => {
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" />
             </Navbar.Brand>
-            {/* {Number(CHAIN_ID) !== 1 && (
+            {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
                 <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
-            )} */}
+            )}
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link

@@ -75,12 +75,11 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/react-transition-group": "^4.4.5",
     "@types/lodash.merge": "^4.6.7",
-    "dotenv": "^10.0.0",
-    "node-gyp": "^10.0.1"
+    "dotenv": "^10.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider yarn i18n:compile && react-scripts build",
+    "build": "yarn i18n:compile && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "yarn i18n:compile",

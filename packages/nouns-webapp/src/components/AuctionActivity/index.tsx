@@ -112,7 +112,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
           <Row className={classes.activityRow}>
-            <Col lg={5} className={classes.currentBidCol}>
+            <Col lg={4} className={classes.currentBidCol}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}

@@ -25,7 +25,7 @@ interface AppConfig {
 }
 
 export const ChainId_Sepolia = 11155111;
-type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia | 80084;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia;
 
 interface CacheBucket {
   name: string;
@@ -58,12 +58,12 @@ const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return `https://lb.drpc.org/ogrpc?network=bartio&dkey=AsqxZTssRUSkrfGe2E9XIm47D0KDbeIR773SUh7cII5S`;
+  return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return `wss://lb.drpc.org/ogws?network=bartio&dkey=AsqxZTssRUSkrfGe2E9XIm47D0KDbeIR773SUh7cII5S`;
+  return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
@@ -78,7 +78,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/nouns/0.2.5/gn',
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
@@ -92,12 +92,6 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
-    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
-  },
-  80084: {
-    jsonRpcUri: createNetworkHttpUrl('mainnet'),
-    wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri: 'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/nouns/0.2.5/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };
@@ -143,23 +137,13 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     steth: undefined,
     nounsStreamFactory: undefined,
   },
-  80084: {
-    lidoToken: undefined,
-    usdcToken: undefined,
-    payerContract: undefined,
-    tokenBuyer: undefined,
-    chainlinkEthUsdc: undefined,
-    weth: undefined,
-    steth: undefined,
-    nounsStreamFactory: undefined,
-  }
 };
 
 const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch (error) { console.log("failed", error) }
+  } catch { }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 

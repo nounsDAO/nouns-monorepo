@@ -330,7 +330,7 @@ const ForkPage = ({
                   )}
                 </p>
                 <p>
-                  Fork treasury balance: BERA
+                  Fork treasury balance: Ξ
                   {Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
                 </p>
               </div>

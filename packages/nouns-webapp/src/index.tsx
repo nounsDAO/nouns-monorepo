@@ -89,7 +89,6 @@ const supportedChainURLs = {
   [ChainId.Hardhat]: 'http://localhost:8545',
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
-  80084: createNetworkHttpUrl('sepolia'),
 };
 
 export const Sepolia: Chain = {
@@ -111,7 +110,6 @@ const useDappConfig = {
   },
   multicallAddresses: {
     [ChainId.Hardhat]: multicallOnLocalhost,
-    80084: '0xcA11bde05977b3631167028862bE2a173976CA11',
   },
   networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
 };
@@ -132,40 +130,11 @@ const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const loadState = async () => {
-    console.log('Config:', config.app.wsRpcUri, config.addresses.nounsAuctionHouseProxy);
-
-      try {
-        const wsProvider1 = new WebSocketProvider(config.app.wsRpcUri);
-      
-        console.log('WebSocketProvider connected:', await wsProvider1.ready);
-        console.log('Network:', await wsProvider1.getNetwork());
-
-        const nounsAuctionHouseContract1 = NounsAuctionHouseFactory.connect(
-          config.addresses.nounsAuctionHouseProxy,
-          wsProvider1,
-        );
-      } catch (error) {
-        console.error('EEEEEEEEEEEEEEError initializing WebSocketProvider:', error);
-      }
-
     const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    
-    console.log('WebSocketProvider connected:', await wsProvider.ready);
-    console.log('Network:', await wsProvider.getNetwork());
-
     const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
       config.addresses.nounsAuctionHouseProxy,
       wsProvider,
     );
-
-    console.log('Contract address:', nounsAuctionHouseContract.address);
-
-    try {
-      const currentAuction = await nounsAuctionHouseContract.auction();
-      console.log('Current auction:', currentAuction);
-    } catch (error) {
-      console.error('Error fetching current auction:', error);
-    }
 
     const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
@@ -226,39 +195,20 @@ const ChainSubscriber: React.FC = () => {
       processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
-    // Debugging: Log when each event listener is set up
-    nounsAuctionHouseContract.on('Bid', (nounId, sender, value, extended, event) => {
-      console.log('Bid event received:', { nounId, sender, value, extended });
-      processBidFilter(nounId, sender, value, extended, event);
-    });
-    nounsAuctionHouseContract.on('AuctionCreated', (nounId, startTime, endTime) => {
-      console.log('AuctionCreated event received:', { nounId, startTime, endTime });
-      processAuctionCreated(nounId, startTime, endTime);
-    });
-    nounsAuctionHouseContract.on('AuctionExtended', (nounId, endTime) => {
-      console.log('AuctionExtended event received:', { nounId, endTime });
-      processAuctionExtended(nounId, endTime);
-    });
-    nounsAuctionHouseContract.on('AuctionSettled', (nounId, winner, amount) => {
-      console.log('AuctionSettled event received:', { nounId, winner, amount });
-      processAuctionSettled(nounId, winner, amount);
-    });
-
-    // Debugging: Log when the function completes
-    console.log('loadState completed');
+    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
+      processBidFilter(nounId, sender, value, extended, event),
+    );
+    nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
+      processAuctionCreated(nounId, startTime, endTime),
+    );
+    nounsAuctionHouseContract.on(extendedFilter, (nounId, endTime) =>
+      processAuctionExtended(nounId, endTime),
+    );
+    nounsAuctionHouseContract.on(settledFilter, (nounId, winner, amount) =>
+      processAuctionSettled(nounId, winner, amount),
+    );
   };
-
-  useEffect(() => {
-    const runLoadState = async () => {
-      try {
-        await loadState();
-      } catch (error) {
-        console.error('Error in loadState:', error);
-      }
-    };
-
-    runLoadState();
-  }, [dispatch]);
+  loadState();
 
   return <></>;
 };

@@ -258,7 +258,7 @@ const Bid: React.FC<{
             <span className={classes.customPlaceholderBidAmt}>
               {!auctionEnded && !bidInput ? (
                 <>
-                  BERA {minBidEth(minBid)}{' '}
+                  Ξ {minBidEth(minBid)}{' '}
                   <span
                     className={
                       activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
