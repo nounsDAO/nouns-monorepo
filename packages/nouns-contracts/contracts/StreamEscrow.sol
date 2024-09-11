@@ -24,6 +24,7 @@ contract StreamEscrow is IStreamEscrow {
     struct Stream {
         uint256 ethPerAuction;
         bool canceled;
+        // @dev This is the last auctionCounter for which this stream will be active
         uint256 streamEndId;
     }
 
@@ -47,16 +48,16 @@ contract StreamEscrow is IStreamEscrow {
     function createStreamAndForwardAll(uint256 nounId, uint16 streamLengthInAuctions) external payable {
         require(msg.sender == auctionHouse, 'only auction house');
 
+        forwardAll();
+
         // register new stream
-        uint256 streamEndId = auctionsCounter + streamLengthInAuctions + 1;
+        uint256 streamEndId = auctionsCounter + streamLengthInAuctions; // streamEndId is inclusive
         streamEndIds[streamEndId].push(nounId);
 
         // TODO: check for rounding issues. probably best to immediately vest the rounded down amount
         uint256 ethPerAuction = msg.value / streamLengthInAuctions;
         ethStreamedPerAuction += ethPerAuction;
         streams[nounId] = Stream({ ethPerAuction: ethPerAuction, canceled: false, streamEndId: streamEndId });
-
-        forwardAll();
     }
 
     // used for example when there were no bids on a noun
@@ -64,8 +65,8 @@ contract StreamEscrow is IStreamEscrow {
         require(msg.sender == auctionHouse, 'only auction house');
 
         auctionsCounter++;
-        finishStreams();
         ethStreamedToDAO += ethStreamedPerAuction;
+        finishStreams();
     }
 
     // TODO add versions with uint256[] nounIds?
@@ -80,7 +81,7 @@ contract StreamEscrow is IStreamEscrow {
 
         // calculate how much needs to be refunded
         // TODO: assuming lastSeenNounId < streamEndId, but need to handle the other case
-        uint256 auctionsLeft = streams[nounId].streamEndId - auctionsCounter - 1;
+        uint256 auctionsLeft = streams[nounId].streamEndId - auctionsCounter;
         uint256 amountToRefund = streams[nounId].ethPerAuction * auctionsLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');

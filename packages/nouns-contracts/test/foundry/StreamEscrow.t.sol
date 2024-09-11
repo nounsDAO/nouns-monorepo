@@ -22,10 +22,10 @@ contract StreamEscrowTest is Test {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
-        // check that one 'tick' has been streamed
-        assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
+        // check that nothing has streamed yet
+        assertEq(escrow.ethStreamedToDAO(), 0 ether);
 
-        for (uint i; i < 3; i++) {
+        for (uint i; i < 4; i++) {
             vm.prank(auctionHouse);
             escrow.forwardAll();
         }
@@ -50,7 +50,7 @@ contract StreamEscrowTest is Test {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
-        for (uint i; i < 3; i++) {
+        for (uint i; i < 4; i++) {
             vm.prank(auctionHouse);
             escrow.forwardAll();
         }
@@ -62,6 +62,8 @@ contract StreamEscrowTest is Test {
         vm.prank(user);
         escrow.cancelStream(1);
 
+        assertEq(user.balance, 8 ether);
+
         // make sure moving forward works with canceled streams
         for (uint i; i < 20; i++) {
             vm.prank(auctionHouse);
@@ -72,6 +74,8 @@ contract StreamEscrowTest is Test {
     function testDAOCanWithdrawLessThanStreamed() public {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        vm.prank(auctionHouse);
+        escrow.forwardAll();
 
         assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
 
@@ -82,6 +86,8 @@ contract StreamEscrowTest is Test {
     function testDAOCantWithdrawMoreThanStreamed() public {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        vm.prank(auctionHouse);
+        escrow.forwardAll();
 
         vm.expectRevert('not enough to withdraw');
         vm.prank(treasury);
