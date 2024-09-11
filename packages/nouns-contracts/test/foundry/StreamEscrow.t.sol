@@ -93,4 +93,25 @@ contract StreamEscrowTest is Test {
         vm.prank(treasury);
         escrow.withdrawToTreasury(0.6 ether);
     }
+
+    function testRoundingDownStreamAmount() public {
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 1 ether}({ nounId: 1, streamLengthInAuctions: 1500});
+
+        // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
+        // ethPerAuction should be: 666,666,666,666,666
+        // the remainder, 0.666.. * 1500 = 1000 should be immediately streamed to the DAO
+        assertEq(escrow.ethStreamedToDAO(), 1000);
+
+        vm.prank(auctionHouse);
+        escrow.forwardAll();
+        assertEq(escrow.ethStreamedToDAO(), 1000 + 666_666_666_666_666);
+        
+        // after streaming ends the entire amount is withdrawable
+        for (uint i; i < 1500; i++) {
+            vm.prank(auctionHouse);
+            escrow.forwardAll();
+        }
+        assertEq(escrow.ethStreamedToDAO(), 1 ether);
+    }
 }

@@ -54,8 +54,12 @@ contract StreamEscrow is IStreamEscrow {
         uint256 streamEndId = auctionsCounter + streamLengthInAuctions; // streamEndId is inclusive
         streamEndIds[streamEndId].push(nounId);
 
-        // TODO: check for rounding issues. probably best to immediately vest the rounded down amount
+        
         uint256 ethPerAuction = msg.value / streamLengthInAuctions;
+
+        // the remainder is immediately streamed to the DAO
+        uint256 remainder = msg.value % streamLengthInAuctions;
+        ethStreamedToDAO += remainder;
         ethStreamedPerAuction += ethPerAuction;
         streams[nounId] = Stream({ ethPerAuction: ethPerAuction, canceled: false, streamEndId: streamEndId });
     }
