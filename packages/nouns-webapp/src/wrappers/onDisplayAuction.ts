@@ -61,12 +61,11 @@ const useOnDisplayAuction = (): Auction | undefined => {
 
     return deserializeAuction(emptyNounderAuction);
   }
-
+  
   // past auction
-  const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
-    const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
-    return nounId && nounId.toNumber() === onDisplayAuctionNounId;
-  })?.activeAuction;
+  const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => 
+    BigNumber.from(auction.activeAuction?.nounId).eq(BigNumber.from(onDisplayAuctionNounId))
+  )?.activeAuction;
 
   return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
 };

@@ -234,11 +234,11 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
  * @param nounId Id of Noun who's history we will fetch
  */
 export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse => {
-  const {
-    loading: loadingVotes,
-    error: votesError,
-    data: votesData,
-  } = useNounProposalVoteEvents(nounId);
+  // const {
+  //   loading: loadingVotes,
+  //   error: votesError,
+  //   data: votesData,
+  // } = useNounProposalVoteEvents(nounId);
   const {
     loading: loadingNounTransfer,
     error: nounTransferError,
@@ -250,14 +250,14 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     data: delegationEventsData,
   } = useDelegationEvents(nounId);
 
-  if (loadingDelegationEvents || loadingNounTransfer || loadingVotes) {
+  if (loadingDelegationEvents || loadingNounTransfer) {
     return {
       loading: true,
       error: false,
     };
   }
 
-  if (votesError || nounTransferError || delegationEventsError) {
+  if (nounTransferError || delegationEventsError) {
     return {
       loading: false,
       error: true,
@@ -266,7 +266,7 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
 
   if (
     nounTransferData === undefined ||
-    votesData === undefined ||
+    // votesData === undefined ||
     delegationEventsData === undefined
   ) {
     return {
@@ -275,11 +275,12 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     };
   }
 
-  const events = votesData
-    ?.concat(nounTransferData)
+  const events = nounTransferData
     .concat(delegationEventsData)
     .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
     .reverse();
+
+    console.log("events", events)
 
   const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
 
