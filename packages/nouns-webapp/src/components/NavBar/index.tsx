@@ -108,12 +108,12 @@ const NavBar = () => {
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" />
             </Navbar.Brand>
-            {Number(CHAIN_ID) !== 1 && (
+            {/* {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
                 <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
-            )}
+            )} */}
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link
@@ -190,7 +190,7 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <Nav.Link
+            {/* <Nav.Link
               href={externalURL(ExternalURL.nounsCenter)}
               className={classes.nounsNavLink}
               target="_blank"
@@ -215,7 +215,7 @@ const NavBar = () => {
                 buttonIcon={<FontAwesomeIcon icon={faComments} />}
                 buttonStyle={nonWalletButtonStyle}
               />
-            </Nav.Link>
+            </Nav.Link> */}
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}
@@ -276,7 +276,7 @@ const NavBar = () => {
                 </Dropdown.Item>
               </NavDropdown>
             </div>
-            <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
+            {/* <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} /> */}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>

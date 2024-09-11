@@ -25,7 +25,7 @@ interface AppConfig {
 }
 
 export const ChainId_Sepolia = 11155111;
-type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia | 80084;
 
 interface CacheBucket {
   name: string;
@@ -58,12 +58,12 @@ const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
+  return custom || `https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
+  return custom || `wss://lb.drpc.org/ogws?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
@@ -82,6 +82,13 @@ const app: Record<SupportedChains, AppConfig> = {
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
+    jsonRpcUri: createNetworkHttpUrl('mainnet'),
+    wsRpcUri: createNetworkWsUrl('mainnet'),
+    subgraphApiUri:
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+  },
+  80084: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
@@ -137,6 +144,16 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     steth: undefined,
     nounsStreamFactory: undefined,
   },
+  80084: {
+    lidoToken: undefined,
+    usdcToken: undefined,
+    payerContract: undefined,
+    tokenBuyer: undefined,
+    chainlinkEthUsdc: undefined,
+    weth: '0x7507c1dc16935B82698e4C63f2746A2fCf994dF8',
+    steth: undefined,
+    nounsStreamFactory: undefined,
+  },
 };
 
 const getAddresses = (): ContractAddresses => {
@@ -160,4 +177,4 @@ const config = {
 
 export default config;
 
-export const multicallOnLocalhost = '0x4A679253410272dd5232B3Ff7cF5dbB88f295319';
+export const multicallOnLocalhost = '0xcA11bde05977b3631167028862bE2a173976CA11';

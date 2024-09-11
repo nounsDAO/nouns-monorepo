@@ -89,6 +89,7 @@ const supportedChainURLs = {
   [ChainId.Hardhat]: 'http://localhost:8545',
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
+  80084: createNetworkHttpUrl('sepolia'),
 };
 
 export const Sepolia: Chain = {
@@ -109,7 +110,7 @@ const useDappConfig = {
     [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
   },
   multicallAddresses: {
-    [ChainId.Hardhat]: multicallOnLocalhost,
+    80084: multicallOnLocalhost,
   },
   networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
 };
