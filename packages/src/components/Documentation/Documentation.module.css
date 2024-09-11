@@ -1,0 +1,86 @@
+.documentationSection {
+  padding: 4rem 0 !important;
+}
+
+.headerWrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 4rem;
+}
+
+.headerWrapper p {
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+  line-height: 28px;
+  margin: 3rem 0;
+}
+
+.accordionItem {
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+  line-height: 28px;
+  font-size: 1.2rem !important;
+  background: transparent;
+}
+
+@media (max-width: 992px) {
+  .headerWrapper {
+    padding: 1rem;
+  }
+}
+
+.accordionItem {
+  margin-bottom: 2.5rem;
+  border: none;
+}
+
+.aboutText {
+  margin: 0px !important;
+}
+
+.accordionItem,
+.headerWrapper {
+  font-size: 1.3rem;
+}
+
+.accordionHeader button:hover {
+  color: var(--brand-dark-red) !important;
+}
+
+.accordionHeader button {
+  border: none;
+  background-color: transparent;
+  font-family: 'Londrina Solid';
+  font-size: 2.5rem !important;
+  cursor: pointer;
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.accordionHeader button:not(.collapsed) {
+  color: #212529;
+  background-color: transparent;
+  box-shadow: none !important;
+}
+
+/* override bootstrap color */
+.accordionHeader button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+.accordionHeader button:focus {
+  color: var(--brand-dark-red) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 992px) {
+  .documentationSection {
+    padding: 2rem 0 !important;
+  }
+
+  .accordionHeader button {
+    padding-left: 20px;
+  }
+}

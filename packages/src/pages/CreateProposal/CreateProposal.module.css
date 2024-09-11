@@ -1,0 +1,140 @@
+.createProposalPage {
+  font-family: 'PT Root UI';
+}
+
+.createProposalPage a {
+  color: var(--brand-dark-red);
+}
+
+.createProposalForm {
+  border-radius: 5px;
+  padding: 0rem 2.5rem;
+  background-color: white;
+}
+
+.heading {
+  margin: 1rem 0;
+  font-family: 'Londrina Solid';
+  font-size: 42px;
+}
+
+.section {
+  border-top: 1px solid #e9ecef;
+  word-wrap: break-word;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.addTransactionButton,
+.createProposalButton {
+  margin-top: 1rem;
+}
+
+.backButton {
+  -webkit-appearance: none;
+  padding: 0;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 1rem;
+  margin-top: 0.1rem;
+}
+
+.proposalActionButton {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+}
+
+.proposalActionButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.proposalActionButtonSection {
+  border-top: 0px;
+}
+
+.voterIneligibleAlert {
+  border-radius: 8px;
+}
+
+.tokenBuyerNotif {
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.createProposalButton {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.125s ease-in-out;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.feeNotice {
+  text-align: center;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.commitMessage input {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #212529;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+}
+button.modalButtonLink {
+  font-weight: bold;
+  text-decoration: underline;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+button.modalButtonLink:hover {
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.note {
+  font-size: 14px;
+  color: var(--text-light-gray);
+  margin: 0;
+  padding: 0;
+}
+.note a {
+  color: var(--text-light-gray);
+  font-weight: normal;
+}
+
+.timelockOption {
+  margin: 1rem 0;
+  padding: 1rem 0 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  font-size: 14px;
+}
+.inlineButton {
+  display: inline;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  background: transparent;
+}
+.inlineButton:hover {
+  text-decoration: none;
+}

@@ -1,0 +1,153 @@
+.videoSection {
+  padding-top: 4rem !important;
+  padding-bottom: 2rem 0 !important;
+}
+
+.iosSection {
+  padding-top: 4rem;
+  padding-bottom: 0 !important;
+}
+
+.textWrapper {
+  padding-right: 2rem;
+}
+
+.textWrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 5rem;
+}
+
+.textWrapper p {
+  font-size: 1.2rem;
+}
+
+.youtubeSectionText {
+  margin-left: 20px;
+  padding-right: 0px;
+}
+
+.embedContainer {
+  padding: 36% 0 0 0;
+  position: relative;
+}
+
+.youtubeEmbedContainer {
+  padding: 32% 0 0 0;
+  position: relative;
+}
+
+.embedContainer iframe {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 350px;
+}
+
+.youtubeEmbedContainer iframe {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  height: 320px;
+  width: 100%;
+}
+
+.videoSubtitle {
+  position: absolute;
+  top: 365px;
+}
+
+.youtubeVideoSubtitle {
+  position: absolute;
+  top: 350px;
+}
+
+.videoSubtitle a {
+  display: inline-block;
+  text-decoration: underline;
+  color: #6c757d;
+  padding: 0;
+}
+
+.iosImgContainer {
+  padding: 0;
+  position: relative;
+}
+
+.iosImg {
+  max-width: 100%;
+  height: 35rem;
+  bottom: 0;
+}
+
+.dlFromAppStoreImg {
+  margin-top: 2rem;
+  width: 10rem;
+}
+
+@media (max-width: 992px) {
+  .videoSection {
+    padding: 0 !important;
+  }
+
+  .iosSection {
+    padding-top: 0;
+    padding-bottom: 2rem;
+  }
+
+  .textWrapper {
+    margin-left: 20px;
+    padding: 2rem;
+  }
+
+  .textWrapper h1 {
+    font-size: 3.75rem;
+  }
+
+  .embedContainer {
+    padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
+  }
+
+  .youtubeEmbedContainer {
+    padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
+  }
+
+  .embedContainer iframe {
+    top: 0;
+    height: 100%;
+  }
+  .youtubeEmbedContainer iframe {
+    top: 0;
+    height: 100%;
+  }
+
+  .videoSubtitle {
+    top: unset;
+    bottom: -40px;
+    padding: 0 2.5rem;
+  }
+
+  .iosImgContainer {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .videoSubtitle {
+    bottom: -30px;
+  }
+
+  .videoMintedSubtitle {
+    display: none;
+  }
+}
+
+.nounsIntroLinks {
+  color: #d63c5e;
+}
+
+.nounsIntroLinks:hover {
+  color: #d63c5e;
+}

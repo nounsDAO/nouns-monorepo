@@ -1,0 +1,47 @@
+.modal {
+  position: fixed;
+  top: 15vh;
+  z-index: 100;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 15px;
+  left: calc(50% - 12.5rem);
+  width: 25rem;
+}
+
+.displayNounFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.displayNounFooter span {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.displayNounFooter button {
+  width: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+}
+
+.displayNounFooter button:hover,
+.displayNounFooter button:active,
+.displayNounFooter button:focus {
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: none !important;
+}
+
+.nounImg {
+  border-radius: 16px;
+}
+.nounWrapper {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+  .modal {
+    width: 80% !important;
+    left: 10% !important;
+  }
+}

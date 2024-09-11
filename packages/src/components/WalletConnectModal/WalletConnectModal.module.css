@@ -1,0 +1,16 @@
+.clickable {
+  cursor: pointer;
+}
+
+.walletConnectData {
+  font-size: 15px;
+  padding-top: 1.5rem;
+  padding-bottom: 0rem;
+  margin-bottom: -1.25rem;
+  opacity: 0.5;
+  transition: all 0.15s ease-in-out;
+}
+
+.walletConnectData:hover {
+  opacity: 1;
+}

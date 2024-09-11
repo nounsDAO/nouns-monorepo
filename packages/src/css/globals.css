@@ -1,0 +1,15 @@
+@media (min-width: 1400px) {
+  .container,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    max-width: 1140px !important;
+  }
+}
+
+body {
+  overflow-x: hidden;
+}
+#root {
+  width: 100%;
+}

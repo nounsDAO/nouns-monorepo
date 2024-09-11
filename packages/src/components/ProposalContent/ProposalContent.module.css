@@ -1,0 +1,143 @@
+.section {
+  word-wrap: break-word;
+  padding-top: 2rem;
+  margin: 2rem auto 0;
+}
+
+.section h5 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-family: 'Londrina Solid';
+}
+
+.markdown {
+  font-family: 'PT Root UI';
+  font-size: 1.1rem;
+}
+
+.markdown h1 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.markdown h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.markdown h3 {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
+.txnInfoText {
+  color: var(--brand-gray-light-text);
+  margin-left: -0.1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .txnInfoText {
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+
+  .txnInfoIcon {
+    margin-top: 0.25rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.txnInfoIcon {
+  height: 18px;
+  width: 18px;
+  opacity: 0.5;
+}
+
+.txnInfoIconWrapper {
+  width: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.hasSidebar.section {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* transaction diffs */
+.transactionDiffsList {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  list-style-type: none;
+}
+
+li.transactionDiffsRow {
+  position: relative;
+}
+.listItemNum {
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+}
+.transactionDiffsRow :global(table) {
+  margin: 0 !important;
+  width: 100% !important;
+  background-color: #fafbfc !important;
+}
+
+.transactionDiffsRow :global(table),
+.transactionDiffsRow :global(tbody) {
+  display: block;
+}
+
+.transactionDiffsRow :global(tr) {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+.transactionDiffsRow :global(td:nth-child(even)) {
+  width: calc(50% - 25px) !important;
+}
+.transactionDiffsRow :global(td:nth-child(odd)) {
+  padding-right: 5px;
+}
+
+.transactionDiffsRow table:first-of-type {
+  margin-left: 0;
+  @media (min-width: 992px) {
+    margin-left: 0;
+  }
+}
+
+.diffsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+.diffsHeader > p {
+  width: 50%;
+}
+.diffsHeader p {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}

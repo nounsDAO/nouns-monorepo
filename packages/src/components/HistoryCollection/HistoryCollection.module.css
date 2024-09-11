@@ -1,0 +1,32 @@
+.historyCollection {
+  display: grid;
+  grid-auto-flow: column dense;
+  column-gap: 8px;
+  width: 100%;
+  max-height: 175px;
+  padding: 8px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow: hidden;
+  max-width: 1700px;
+}
+.historyCollection img:hover {
+  cursor: pointer;
+  transform: scale(1.025);
+}
+
+.rtl {
+  direction: ltr;
+}
+
+.historyCollection div {
+  width: 146px;
+  margin: 2px;
+}
+
+@media (max-width: 992px) {
+  .historyCollection {
+    grid-template-columns: repeat(10, 150px);
+    overflow-x: auto;
+  }
+}

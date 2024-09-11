@@ -1,0 +1,65 @@
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
+.voteIcon {
+  width: 38px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 6px;
+}
+
+.voteInfoContainer {
+  display: inline-block;
+  margin-top: 4px;
+  width: 100%;
+}
+@media (max-width: 992px) {
+  .voteInfoContainer {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.voteProposalStatus {
+  text-align: right;
+  width: max-content;
+}
+
+.proposalTitle {
+  text-decoration: none;
+  color: black;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.voteInfoRow {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.voteInfoRow:hover {
+  --bs-table-hover-bg: rgba(0, 0, 0, 0.03);
+}
+
+.voteStatusWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.nullStateCopy:hover {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.voteInfoTableCell {
+  max-width: 50vw;
+}

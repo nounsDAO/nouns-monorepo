@@ -1,0 +1,72 @@
+.headerRow {
+  margin: 2rem 0;
+}
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 56px;
+  font-family: 'Londrina Solid';
+}
+.headerRow p {
+  color: #14161b;
+}
+
+.primaryBtn {
+  width: 100%;
+  height: 4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.primaryBtn:focus,
+.primaryBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.primaryBtn:active {
+  background-color: var(--brand-dark-red) !important;
+}
+.traitForm {
+  height: 4rem;
+}
+.traitFormBtn {
+  height: 100% !important;
+  width: 100%;
+  margin: 0.5rem 0;
+  border-radius: 12px;
+  background-color: white !important;
+  border-color: #e2e3e8 !important;
+  font-size: 18px;
+  font-weight: bold;
+  color: #14161b;
+}
+.traitFormBtn:hover,
+.traitFormBtn:focus {
+  border-color: #e2e3e8 !important;
+  background-color: #f4f4f8 !important;
+  box-shadow: none !important;
+}
+.floatingLabel,
+.fileUpload {
+  font-size: 15px;
+  color: #8c8d92;
+}
+.nounYearsFooter {
+  font-style: italic;
+}
+.nounImg {
+  border-radius: 16px;
+}
+.nounImg:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+}
+.nounWrapper {
+  margin-bottom: 1rem;
+}

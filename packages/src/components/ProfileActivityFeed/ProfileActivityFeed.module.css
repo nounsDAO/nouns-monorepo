@@ -1,0 +1,55 @@
+.headerWrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 32px;
+}
+
+.headerWrapper p {
+  margin: 3rem 0;
+}
+
+@media (min-width: 992px) {
+  .headerWrapper {
+    padding: 1rem;
+    display: block;
+    padding-bottom: 16px;
+  }
+}
+
+.nounInfoPadding {
+  padding-bottom: 1rem;
+  font-size: 18px;
+}
+
+.expandCollapseCopy {
+  color: var(--brand-cool-light-text);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.aboveTheFoldEventsTable {
+  margin-bottom: 0rem;
+}
+
+.aboveTheFoldEventsTable td {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 12px;
+}
+
+.nullStateCopy {
+  opacity: 0.5;
+  margin-left: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  color: var(--brand-gray-light-text);
+}

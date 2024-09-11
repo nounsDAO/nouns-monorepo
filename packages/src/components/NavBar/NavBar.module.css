@@ -1,0 +1,138 @@
+.navBarBrand {
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 0rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.navBarBrand:hover {
+  transform: scale(0.95);
+}
+
+.navBarLogo {
+  width: 80px;
+  height: 80px;
+}
+
+.navBarCustom {
+  padding-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+  .navBarLogo {
+    width: 75px;
+    height: 75px;
+  }
+
+  .navBarCustom {
+    margin-bottom: -1px;
+    margin-right: -5px;
+    padding-bottom: 0rem;
+  }
+}
+
+/* connect button displays differently to default NavBarItems, thus the !importants */
+.connectBtn {
+  cursor: pointer;
+}
+
+.connectBtn:hover,
+.connectBtn:active,
+.connectBtn:focus {
+  cursor: pointer !important;
+}
+
+.disconnectBtn {
+  cursor: pointer;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.disconnectBtn:hover,
+.disconnectBtn:active,
+.disconnectBtn:focus {
+  cursor: pointer !important;
+}
+
+.greenStatusCircle {
+  display: relative;
+  width: 10px;
+  height: 10px;
+  background-color: #7fc59c;
+  border-radius: 50%;
+  margin-right: -30px;
+  margin-left: 20px;
+  margin-top: -20px;
+  z-index: 3;
+}
+
+.nounsNavLink,
+.nounsNavLink:active,
+.nounsNavLink:visited,
+.nounsNavDropdownButton > button {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.3rem !important;
+  color: black !important;
+}
+
+.nounsNavDropdownButton > button {
+  background: transparent;
+}
+
+.testnetImg {
+  width: auto;
+  height: 45px;
+}
+
+.addressNavLink {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.brandAndTreasuryWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.navBarToggle {
+  border-radius: 10px;
+  height: 44px;
+  padding: 0.25rem 0.5rem;
+  margin-right: 12px;
+}
+
+.nounsNavDropdownButton {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  padding: 0px 12px 0px 12px;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.nounsNavDropdownButton button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+/* Unique styling for non-fa icon on Explore button */
+@media (max-width: 992px) {
+  .exploreButton svg {
+    max-height: none;
+    min-height: 40px;
+    max-width: 40px;
+  }
+}

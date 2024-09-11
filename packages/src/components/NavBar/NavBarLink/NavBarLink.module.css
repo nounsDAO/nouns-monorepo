@@ -1,0 +1,31 @@
+.navBarLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  padding: 1.75rem;
+  height: 2rem;
+  background-color: white;
+  color: var(--brand-black);
+  border-radius: 50px;
+  border: 0 none;
+  font-size: large;
+  font-weight: normal;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+.navBarLink:hover {
+  color: var(--brand-dark-green) !important;
+  background-color: #f2f2f2;
+}
+
+@media (max-width: 992px) {
+  .navBarLink {
+    background-color: transparent !important;
+    color: var(--brand-black) !important;
+  }
+  .navBarLink:hover {
+    background-color: transparent !important;
+    color: var(--brand-dark-green) !important;
+  }
+}

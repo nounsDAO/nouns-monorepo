@@ -1,0 +1,82 @@
+.bidHistoryWrapper {
+  background-color: var(--brand-cool-accent);
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidHistoryWrapperCool {
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: var(--brand-cool-light-text);
+}
+
+.bidHistoryWrapperWarm {
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: var(--brand-warm-light-text);
+}
+
+.bidHistory {
+  margin-left: 0.5rem;
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+  padding-bottom: 1rem;
+}
+
+.bidHistoryWarm {
+  margin-left: 0.5rem;
+  color: var(--brand-color-red);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+}
+
+.bidHistoryCool {
+  margin-left: 0.5rem;
+  color: var(--brand-color-blue);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 1rem;
+  font-size: 16px;
+}
+
+.bidHistoryWarm,
+.bidHistoryCool {
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidHistoryWarm:hover {
+  filter: brightness(110%);
+  color: var(--brand-color-red);
+}
+
+.bidHistoryCool:hover {
+  filter: brightness(110%);
+  color: var(--brand-color-blue);
+}
+
+.bidHistoryWrapperWarm:hover {
+  color: var(--brand-color-warm);
+}
+
+.bidHistoryWrapperCool:hover {
+  color: var(--brand-color-blue);
+}
+
+.bidHistoryWrapper:hover {
+  background-color: var(--brand-gray-hover);
+}

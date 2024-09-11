@@ -1,0 +1,52 @@
+.nounWrapper {
+  align-self: flex-end;
+  width: 100%;
+}
+
+.nounContentCol {
+  display: flex;
+}
+
+.auctionActivityCol {
+  padding-right: 5rem;
+  padding-bottom: 0rem;
+  min-height: 558px;
+  align-self: flex-end !important;
+}
+
+@media (max-width: 992px) {
+  .nounWrapper {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+  .auctionActivityCol {
+    padding-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: 100%;
+    background-color: white;
+  }
+}
+
+@media (max-width: 568px) {
+  .auctionActivityCol {
+    width: 100%;
+    margin-left: unset;
+    margin-right: unset;
+    padding-top: 2rem;
+    padding-right: unset;
+    padding-left: 0;
+  }
+
+  .nounWrapper {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2rem;
+  }
+
+  .nounContentCol {
+    padding: 0rem;
+  }
+}

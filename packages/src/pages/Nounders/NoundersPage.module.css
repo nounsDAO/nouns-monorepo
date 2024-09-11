@@ -1,0 +1,66 @@
+.noundersPage h1,
+.noundersPage h2,
+.noundersPage h3 {
+  font-family: 'Londrina Solid';
+}
+
+.noundersPage h2 {
+  margin-bottom: 2rem;
+}
+
+.noundersPage a {
+  color: var(--brand-black);
+}
+.noundersPage a:hover {
+  color: var(--brand-dark-red);
+}
+
+.bioGroup {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.bioGroup a {
+  font-size: 1rem;
+}
+
+.noundersPage img {
+  border-radius: 50%;
+  width: 50%;
+}
+
+.marginBottom {
+  margin-bottom: 0rem;
+}
+
+.bioGroup {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.bioGroup a:hover svg {
+  fill: var(--brand-dark-red);
+}
+.bioGroup img {
+  margin-bottom: 1rem;
+}
+
+.twitterIcon {
+  width: 20px;
+  color: #aaa;
+  margin-right: 5px;
+}
+
+.card {
+  border: none;
+}
+
+.card,
+.headerWrapper {
+  font-size: 1.3rem;
+}
+.cardHeader {
+  border: none;
+  background-color: transparent;
+  font-family: 'Londrina Solid';
+  font-size: 2.5rem;
+  cursor: pointer;
+}

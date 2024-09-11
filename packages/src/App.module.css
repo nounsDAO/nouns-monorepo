@@ -1,0 +1,20 @@
+@import './css/colors.css';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100vw;
+}
+
+/* solution to allow for sticky sidebar on Explore page */
+@media (min-width: 993px) {
+  .wrapper {
+    contain: paint;
+  }
+}
+@media (max-width: 992px) {
+  .wrapper {
+    overflow-x: hidden;
+  }
+}

@@ -1,0 +1,38 @@
+.nounInfoHeader {
+  display: inline-block;
+  padding-left: 0rem;
+  font-family: 'Londrina Solid';
+}
+
+@media only screen and (max-width: 600px) {
+  .nounInfoHeader {
+    padding-top: 1.5rem;
+    margin-bottom: 0;
+  }
+}
+
+.nounInfoHeader h2 {
+  font-size: 56px;
+  margin-bottom: 18px;
+}
+
+.nounInfoHeader h3 {
+  font-size: 24px;
+  margin-bottom: '0px';
+  color: #79809c;
+}
+
+.nounInfoRow {
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  font-size: 18px;
+  display: flex;
+}
+
+.nounInfoRowText {
+  padding-left: 4;
+  font-family: 'PT Root UI';
+  font-family: bold;
+}

@@ -1,0 +1,76 @@
+.header {
+  padding: 1rem 0.75rem 0rem 0.75rem;
+}
+
+.title {
+  font-family: 'Londrina Solid';
+  display: flex;
+  flex-direction: column;
+  line-height: 42px;
+  height: 2rem;
+  font-size: 42px;
+  color: var(--brand-cool-dark-text);
+}
+
+.copy {
+  font-weight: 500;
+  font-family: 'PT Root UI';
+  color: var(--brand-cool-dark-text);
+}
+
+.copy .emph {
+  font-weight: bold;
+}
+
+.contentWrapper {
+  border-radius: 14px;
+  background-color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.current {
+  color: var(--brand-cool-light-text);
+  font-size: 18px;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.delegateInfoWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ens {
+  display: flex;
+  flex-direction: row;
+  font-size: 26px;
+  color: var(--brand-cool-dark-text);
+}
+
+.shortAddress {
+  color: var(--brand-cool-light-text);
+  font-weight: 500;
+  font-size: 16px;
+  text-align: right;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .buttonWrapper {
+    margin-bottom: 1rem;
+  }
+}

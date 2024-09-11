@@ -1,0 +1,17 @@
+.hover {
+  box-sizing: border-box;
+  min-width: 217px;
+  width: max-content;
+  height: fit-content;
+  left: 301px;
+  top: 396px;
+
+  /* White */
+  background-color: #ffffff !important;
+
+  /* Gray/Border */
+  border: 1px solid #e2e3e8 !important;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.01) !important;
+  border-radius: 14px !important;
+  color: black !important;
+}

@@ -1,0 +1,173 @@
+.bidWrapper {
+  margin: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.bidBtn {
+  font-family: 'PT Root UI';
+  border-radius: 12px !important;
+  margin-left: 0.6rem !important;
+  margin-top: 3px;
+  width: auto;
+  padding: 10px 16px;
+  height: 3rem;
+  color: white;
+  border: transparent;
+  background-color: var(--brand-black);
+  font-weight: bold;
+  letter-spacing: normal;
+  font-size: 19px;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidBtn:disabled {
+  cursor: not-allowed;
+}
+
+.bidBtn:hover,
+.bidBtn:active,
+.bidBtn:focus .bidBtn:disabled {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: #2125298a;
+}
+
+.bidBtn:disabled {
+  background-color: gray !important;
+}
+
+.minBidCopy {
+  padding-top: 0;
+  font-size: small;
+  margin-left: 0.25rem;
+  margin-bottom: 0.3rem;
+}
+
+.bidInput {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: auto;
+  height: 54px;
+  color: black;
+  border-radius: 12px !important;
+  box-shadow: inset 0px 0px 0px 1px #fff;
+  background-color: white;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 25px;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.bidInput:focus {
+  box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
+}
+
+.customPlaceholder {
+  color: var(--brand-cool-light-text);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  z-index: 3;
+  user-select: none;
+}
+
+.customPlaceholderBidAmt {
+  position: absolute;
+  opacity: 0.3;
+  top: 15%;
+  left: 3%;
+  color: var(--brand-cool-light-text);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 25px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.activityRow .form-floating {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  justify-content: space-between !important;
+}
+
+.bidBtnAuctionEnded {
+  width: 100%;
+  height: 3rem;
+  color: white;
+  border: transparent;
+  background-color: var(--brand-black);
+  font-weight: bold;
+  font-family: 'PT Root UI';
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.bidBtnAuctionEnded:hover,
+.bidBtnAuctionEnded:active,
+.bidBtnAuctionEnded:focus,
+.bidBtnAuctionEnded:disabled {
+  background-color: gray !important;
+  color: rgb(209, 207, 207);
+  outline: none !important;
+  box-shadow: none;
+}
+
+.bidInputAuctionEnded {
+  display: none;
+}
+
+.bidInput:focus {
+  outline: none;
+}
+
+/* REMOVE UP/DOWN ARROWS FROM INPUT */
+/* Chrome, Safari, Edge, Opera */
+.bidInput::-webkit-outer-spin-button,
+.bidInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.bidInput[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 992px) {
+  .bidInput {
+    border: none;
+    border: 1px solid #8c8d9275;
+  }
+
+  .customPlaceholder {
+    left: 40%;
+  }
+  .customPlaceholderBidAmt {
+    left: 3.5%;
+    top: 16%;
+  }
+  .emergencySettleWrapper {
+    text-align: center;
+  }
+
+  .voteForNextNounBtnWrapper {
+    width: 100%;
+  }
+}
+
+.emergencySettleButton {
+  color: var(--brand-dark-red);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
