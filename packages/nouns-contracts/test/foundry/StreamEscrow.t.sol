@@ -68,4 +68,23 @@ contract StreamEscrowTest is Test {
             escrow.forwardAll();
         }
     }
+
+    function testDAOCanWithdrawLessThanStreamed() public {
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+
+        assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
+
+        vm.prank(treasury);
+        escrow.withdrawToTreasury(0.4 ether);
+    }
+
+    function testDAOCantWithdrawMoreThanStreamed() public {
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+
+        vm.expectRevert('not enough to withdraw');
+        vm.prank(treasury);
+        escrow.withdrawToTreasury(0.6 ether);
+    }
 }
