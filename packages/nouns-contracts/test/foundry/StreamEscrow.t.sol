@@ -71,6 +71,55 @@ contract StreamEscrowTest is Test {
         }
     }
 
+    function testCantCancelAlreadyCanceledStream() public {
+        nounsToken.mint(user, 1);
+
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(user);
+        escrow.cancelStream(1);
+
+        // try to cancel again, should fail because user doesn't own noun 1 any more
+        vm.expectRevert('ERC721: transfer caller is not owner nor approved');
+        vm.prank(user);
+        escrow.cancelStream(1);
+
+        // fails even if user gets the noun again
+        vm.prank(treasury);
+        nounsToken.transferFrom(treasury, user, 1);
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+
+        vm.expectRevert('already canceled');
+        vm.prank(user);
+        escrow.cancelStream(1);
+    }
+
+    function testCantCancelAFinishedStream() public {
+        nounsToken.mint(user, 1);
+
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+
+        for (uint i; i < 20; i++) {
+            vm.prank(auctionHouse);
+            escrow.forwardAll();
+        }
+
+        // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 2, streamLengthInAuctions: 20 });
+
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.expectRevert('stream finished');
+        vm.prank(user);
+        escrow.cancelStream(1);
+    }
+
     function testDAOCanWithdrawLessThanStreamed() public {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
@@ -96,7 +145,7 @@ contract StreamEscrowTest is Test {
 
     function testRoundingDownStreamAmount() public {
         vm.prank(auctionHouse);
-        escrow.createStreamAndForwardAll{ value: 1 ether}({ nounId: 1, streamLengthInAuctions: 1500});
+        escrow.createStreamAndForwardAll{ value: 1 ether }({ nounId: 1, streamLengthInAuctions: 1500 });
 
         // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
         // ethPerAuction should be: 666,666,666,666,666
@@ -106,7 +155,7 @@ contract StreamEscrowTest is Test {
         vm.prank(auctionHouse);
         escrow.forwardAll();
         assertEq(escrow.ethStreamedToDAO(), 1000 + 666_666_666_666_666);
-        
+
         // after streaming ends the entire amount is withdrawable
         for (uint i; i < 1500; i++) {
             vm.prank(auctionHouse);

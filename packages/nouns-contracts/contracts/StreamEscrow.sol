@@ -54,7 +54,6 @@ contract StreamEscrow is IStreamEscrow {
         uint256 streamEndId = auctionsCounter + streamLengthInAuctions; // streamEndId is inclusive
         streamEndIds[streamEndId].push(nounId);
 
-        
         uint256 ethPerAuction = msg.value / streamLengthInAuctions;
 
         // the remainder is immediately streamed to the DAO
@@ -84,7 +83,7 @@ contract StreamEscrow is IStreamEscrow {
         ethStreamedPerAuction -= streams[nounId].ethPerAuction;
 
         // calculate how much needs to be refunded
-        // TODO: assuming lastSeenNounId < streamEndId, but need to handle the other case
+        require(streams[nounId].streamEndId > auctionsCounter, 'stream finished');
         uint256 auctionsLeft = streams[nounId].streamEndId - auctionsCounter;
         uint256 amountToRefund = streams[nounId].ethPerAuction * auctionsLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
