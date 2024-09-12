@@ -38,6 +38,7 @@ contract StreamEscrow is IStreamEscrow {
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
     mapping(uint256 streamId => Stream) streams;
     uint256 public auctionsCounter;
+    uint256 public lastForwardTimestamp;
 
     constructor(address daoTreasury_, address auctionHouse_, address nounsToken_) {
         daoTreasury = daoTreasury_;
@@ -67,6 +68,12 @@ contract StreamEscrow is IStreamEscrow {
     function forwardAll() public {
         require(msg.sender == auctionHouse, 'only auction house');
 
+        // silently fail if at least a day hasn't passed. this is in order not to revert auction house.
+        if (block.timestamp < lastForwardTimestamp + 24 hours) {
+            return;
+        }
+
+        lastForwardTimestamp = block.timestamp;
         auctionsCounter++;
         ethStreamedToDAO += ethStreamedPerAuction;
         finishStreams();

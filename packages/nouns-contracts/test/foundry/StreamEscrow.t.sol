@@ -26,8 +26,7 @@ contract StreamEscrowTest is Test {
         assertEq(escrow.ethStreamedToDAO(), 0 ether);
 
         for (uint i; i < 4; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
 
         assertEq(escrow.ethStreamedToDAO(), 2 ether);
@@ -37,11 +36,23 @@ contract StreamEscrowTest is Test {
 
         // forward past the point of stream ending
         for (uint i; i < 20; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
 
         assertEq(escrow.ethStreamedToDAO(), 10 ether);
+    }
+
+    function testSilentlyFailsIf24HoursDidntPass() public {
+        vm.prank(auctionHouse);
+        escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+
+        assertEq(escrow.ethStreamedToDAO(), 0 ether);
+
+        vm.warp(block.timestamp + 24 hours - 1000);
+        vm.prank(auctionHouse);
+        escrow.forwardAll();
+
+        assertEq(escrow.ethStreamedToDAO(), 0 ether);
     }
 
     function testCancelStream() public {
@@ -51,8 +62,7 @@ contract StreamEscrowTest is Test {
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
         for (uint i; i < 4; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
 
         assertEq(escrow.ethStreamedToDAO(), 2 ether);
@@ -66,8 +76,7 @@ contract StreamEscrowTest is Test {
 
         // make sure moving forward works with canceled streams
         for (uint i; i < 20; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
     }
 
@@ -105,8 +114,7 @@ contract StreamEscrowTest is Test {
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
         for (uint i; i < 20; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
 
         // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
@@ -123,8 +131,7 @@ contract StreamEscrowTest is Test {
     function testDAOCanWithdrawLessThanStreamed() public {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
-        vm.prank(auctionHouse);
-        escrow.forwardAll();
+        forwardOneDay();
 
         assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
 
@@ -135,12 +142,17 @@ contract StreamEscrowTest is Test {
     function testDAOCantWithdrawMoreThanStreamed() public {
         vm.prank(auctionHouse);
         escrow.createStreamAndForwardAll{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
-        vm.prank(auctionHouse);
-        escrow.forwardAll();
+        forwardOneDay();
 
         vm.expectRevert('not enough to withdraw');
         vm.prank(treasury);
         escrow.withdrawToTreasury(0.6 ether);
+    }
+
+    function forwardOneDay() internal {
+        vm.warp(block.timestamp + 24 hours);
+        vm.prank(auctionHouse);
+        escrow.forwardAll();
     }
 
     function testRoundingDownStreamAmount() public {
@@ -152,14 +164,12 @@ contract StreamEscrowTest is Test {
         // the remainder, 0.666.. * 1500 = 1000 should be immediately streamed to the DAO
         assertEq(escrow.ethStreamedToDAO(), 1000);
 
-        vm.prank(auctionHouse);
-        escrow.forwardAll();
+        forwardOneDay();
         assertEq(escrow.ethStreamedToDAO(), 1000 + 666_666_666_666_666);
 
         // after streaming ends the entire amount is withdrawable
         for (uint i; i < 1500; i++) {
-            vm.prank(auctionHouse);
-            escrow.forwardAll();
+            forwardOneDay();
         }
         assertEq(escrow.ethStreamedToDAO(), 1 ether);
     }
