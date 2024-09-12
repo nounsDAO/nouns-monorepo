@@ -25,20 +25,16 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
 
   const winner = data && data.auction.bidder?.id;
 
-  if (loading || !winner) {
-    return (
-      <div className={classes.nounHolderInfoContainer}>
-        <span className={classes.nounHolderLoading}>
-          <Trans>Loading...</Trans>
-        </span>
-      </div>
-    );
-  } else if (error) {
+  if (error) {
     return (
       <div>
         <Trans>Failed to fetch Noun info</Trans>
       </div>
     );
+  }
+
+  if (!winner) {
+    return null;
   }
 
   const etherscanURL = buildEtherscanAddressLink(winner);

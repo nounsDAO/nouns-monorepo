@@ -92,12 +92,12 @@ const supportedChainURLs = {
   80084: createNetworkHttpUrl('sepolia'),
 };
 
-export const Sepolia: Chain = {
-  chainId: ChainId_Sepolia,
-  chainName: 'Sepolia',
+export const Berachain: Chain = {
+  chainId: 80084,
+  chainName: 'Berachain',
   isTestChain: true,
   isLocalChain: false,
-  multicallAddress: '0x6a19Dbfc67233760E0fF235b29158bE45Cc53765',
+  multicallAddress: '0xcA11bde05977b3631167028862bE2a173976CA11',
   getExplorerAddressLink: (address: string) => `https://sepolia.etherscan.io/address/${address}`,
   getExplorerTransactionLink: (transactionHash: string) =>
     `https://sepolia.etherscan.io/tx/${transactionHash}`,
@@ -105,14 +105,14 @@ export const Sepolia: Chain = {
 
 // prettier-ignore
 const useDappConfig = {
-  readOnlyChainId: CHAIN_ID,
+  readOnlyChainId: 80084,
   readOnlyUrls: {
-    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
+    80084: supportedChainURLs[80084],
   },
   multicallAddresses: {
     80084: multicallOnLocalhost,
   },
-  networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
+  networks: [Berachain],
 };
 
 const client = clientFactory(config.app.subgraphApiUri);

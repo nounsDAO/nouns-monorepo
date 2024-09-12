@@ -34,9 +34,27 @@ import ForkPage from './pages/Fork';
 import ForksPage from './pages/Forks';
 
 function App() {
-  const { account, chainId, library } = useEthers();
+  const { account, chainId, library, activateBrowserWallet } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
+
+  useEffect(() => {
+    if (!account) {
+      const connect = async () => {
+        try {
+          await activateBrowserWallet();
+        } catch (error) {
+          console.error('Failed to connect wallet:', error);
+        }
+      };
+      connect();
+    }
+
+    // Cleanup function
+    return () => {
+      // If possible, remove any listeners here
+    };
+  }, []); // Empty dependency array
 
   useEffect(() => {
     // Local account array updated

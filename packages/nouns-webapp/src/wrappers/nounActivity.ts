@@ -280,8 +280,6 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
     .reverse();
 
-    console.log("events", events)
-
   const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
 
   // Wrap this line in a try-catch to prevent edge case
