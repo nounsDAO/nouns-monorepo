@@ -79,8 +79,13 @@ contract StreamEscrow is IStreamEscrow {
         finishStreams();
     }
 
-    // TODO add versions with uint256[] nounIds?
-    function cancelStream(uint256 nounId) external {
+    function cancelStreams(uint256[] calldata nounIds) external {
+        for (uint256 i; i < nounIds.length; ++i) {
+            cancelStream(nounIds[i]);
+        }
+    }
+
+    function cancelStream(uint256 nounId) public {
         // transfer noun to treasury
         nounsToken.transferFrom(msg.sender, daoTreasury, nounId);
 
