@@ -110,6 +110,11 @@ contract StreamEscrow is IStreamEscrow {
         daoTreasury = newAddress;
     }
 
+    function setAuctionHouseAddress(address newAddress) external {
+        require(msg.sender == daoTreasury);
+        auctionHouse = newAddress;
+    }
+
     function finishStreams() internal {
         uint256[] storage endingStreams = streamEndIds[auctionsCounter];
         for (uint256 i; i < endingStreams.length; i++) {
