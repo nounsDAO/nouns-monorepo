@@ -9,7 +9,7 @@ interface NavBarTreasuryProps {
   treasuryStyle: NavBarButtonStyle;
 }
 
-const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
+const   NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
   const { treasuryBalance, treasuryStyle } = props;
 
   let treasuryStyleClass;

@@ -18,10 +18,10 @@ export const useTreasuryBalance = () => {
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
   const zero = BigNumber.from(0);
+  
   return (
     ethBalance
-      ?.add(ethBalanceTreasuryV2 ?? zero)
-      .add(lidoBalanceAsETH ?? zero)
+      ?.add(lidoBalanceAsETH ?? zero)
       .add(lidoBalanceTreasuryV2AsETH ?? zero)
       .add(tokenBuyerBalanceAsETH ?? zero) ?? zero
   );
