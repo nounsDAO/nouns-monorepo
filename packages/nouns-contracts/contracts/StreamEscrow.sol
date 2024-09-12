@@ -21,6 +21,8 @@ import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
+    event ETHStreamedToDAO(uint256 amount, uint256 totalStreamed);
+
     struct Stream {
         uint256 ethPerAuction;
         bool canceled;
@@ -59,7 +61,11 @@ contract StreamEscrow is IStreamEscrow {
 
         // the remainder is immediately streamed to the DAO
         uint256 remainder = msg.value % streamLengthInAuctions;
-        ethStreamedToDAO += remainder;
+        if (remainder > 0) {
+            ethStreamedToDAO += remainder;
+            emit ETHStreamedToDAO(remainder, ethStreamedToDAO);
+        }
+
         ethStreamedPerAuction += ethPerAuction;
         streams[nounId] = Stream({ ethPerAuction: ethPerAuction, canceled: false, streamEndId: streamEndId });
     }
@@ -76,6 +82,7 @@ contract StreamEscrow is IStreamEscrow {
         lastForwardTimestamp = block.timestamp;
         auctionsCounter++;
         ethStreamedToDAO += ethStreamedPerAuction;
+        emit ETHStreamedToDAO(ethStreamedPerAuction, ethStreamedToDAO);
         finishStreams();
     }
 
