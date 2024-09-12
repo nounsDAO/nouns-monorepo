@@ -106,7 +106,8 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" />
+              {/* <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" /> */}
+              <span style={{ fontSize: '50px' }}>🐻⛓️</span>
             </Navbar.Brand>
             {/* {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -177,19 +178,13 @@ const NavBar = () => {
                 </>
               )}
             </div>
-            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
-              {isDaoGteV3 ? (
-                v3DaoNavItem
-              ) : (
-                <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                   <NavBarButton
-                    buttonText={<Trans>DAO</Trans>}
+                    buttonText={<Trans>Proposals</Trans>}
                     buttonIcon={<FontAwesomeIcon icon={faUsers} />}
                     buttonStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
-              )}
-            </div>
             {/* <Nav.Link
               href={externalURL(ExternalURL.nounsCenter)}
               className={classes.nounsNavLink}

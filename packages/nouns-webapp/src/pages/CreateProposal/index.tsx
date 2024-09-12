@@ -62,18 +62,20 @@ const CreateProposalPage = () => {
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
       const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
-      transactionsArray.forEach(transaction => {
-        if (!transaction.address.startsWith('0x')) {
-          transaction.address = `0x${transaction.address}`;
-        }
-        if (!transaction.calldata.startsWith('0x')) {
-          transaction.calldata = `0x${transaction.calldata}`;
-        }
+      console.log(transactionsArray)
+      // transactionsArray.forEach(transaction => {
+        // alert(transaction.address)
+        // if (!transaction.address.startsWith('0x')) {
+        //   transaction.address = `0x${transaction.address}`;
+        // }
+        // if (!transaction.calldata.startsWith('0x')) {
+        //   transaction.calldata = `0x${transaction.calldata}`;
+        // }
 
-        if (transaction.usdcValue) {
-          setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
-        }
-      });
+        // if (transaction.usdcValue) {
+        //   setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
+        // }
+      // });
       setProposalTransactions([...proposalTransactions, ...transactionsArray]);
 
       setShowTransactionFormModal(false);
