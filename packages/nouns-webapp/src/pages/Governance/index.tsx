@@ -62,9 +62,10 @@ const GovernancePage = () => {
                 <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
                   <h1>
                     {treasuryBalance &&
-                      i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)))}
+                      i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(2)))}
+                      {' '}<small style={{fontSize: '20px'}}>BERA</small>
                   </h1>
-                  BERA
+                  
                 </Col>
                 <Col className={classes.usdTreasuryAmt}>
                   <h1 className={classes.usdBalance}>

@@ -92,7 +92,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/bouns/1.0.2/gn',
+      'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/bouns/1.0.3/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
@@ -147,7 +147,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   80084: {
     lidoToken: undefined,
     usdcToken: undefined,
-    payerContract: undefined,
+    payerContract: '0x90d0eE4f5BD5F4d168A1EeDb2609F8b3ca8bcC66',
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
     weth: '0x7507c1dc16935B82698e4C63f2746A2fCf994dF8',

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.21",
-    "@davatar/react": "^1.10.3",
+    "@davatar/react": "github:Firstset/davatar-berachain#main",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
@@ -22,7 +22,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@usedapp/coingecko": "0.5.1",
-    "@usedapp/core": "npm:usedapp-core-fork",
+    "@usedapp/core": "github:Firstset/usedapp-core#main",
     "@walletconnect/ethereum-provider": "^2.8.4",
     "@walletconnect/modal": "^2.4.5",
     "@web3-react/core": "^6.1.9",
