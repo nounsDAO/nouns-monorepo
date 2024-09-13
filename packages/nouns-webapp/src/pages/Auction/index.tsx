@@ -7,7 +7,6 @@ import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
-import NounsIntroSection from '../../components/NounsIntroSection';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -43,10 +42,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     }
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
-  const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
-  const backgroundColor = isCoolBackground
-    ? 'var(--brand-cool-background)'
-    : 'var(--brand-warm-background)';
+  const backgroundColor = 'var(--brand-warm-background)';
 
   return (
     <>
@@ -55,11 +51,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : null}
       <Documentation
-        backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
-            ? backgroundColor
-            : undefined
-        }
+        backgroundColor={backgroundColor}
       />
     </>
   );

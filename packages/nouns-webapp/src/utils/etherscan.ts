@@ -25,7 +25,7 @@ export const buildEtherscanAddressLink = (address: string): string => {
 };
 
 export const buildEtherscanTokenLink = (tokenContractAddress: string, tokenId: number): string => {
-  const path = `token/${tokenContractAddress}?a=${tokenId}`;
+  const path = `${tokenContractAddress}?a=${tokenId}`;
   return new URL(path, BASE_URL).toString();
 };
 
@@ -40,7 +40,7 @@ const getApiBaseURL = (network: number) => {
     case ChainId_Sepolia:
       return 'https://api-sepolia.etherscan.io/';
     default:
-      return 'https://api.etherscan.io/';
+      return 'https://bartio.beratrail.io/';
   }
 };
 

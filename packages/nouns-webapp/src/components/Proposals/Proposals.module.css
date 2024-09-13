@@ -1,6 +1,7 @@
 .proposals {
   display: flex;
   flex-direction: column;
+  background: var(--brand-warm-background);
 }
 
 .proposals > div {

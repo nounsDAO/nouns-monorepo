@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
   flex: 1;
+  background: var(--brand-warm-background);
 }
 
 .container {

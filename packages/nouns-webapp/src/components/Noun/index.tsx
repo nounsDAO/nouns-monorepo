@@ -19,8 +19,9 @@ const Noun: React.FC<{
 }> = props => {
   const { imgPath, alt, className, wrapperClassName } = props;
   return (
-    <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
+    <div className={`${classes.imgWrapper} ${wrapperClassName}`} style={{backgroundColor: 'var(--brand-warm-background) !important'}}>
       <Image
+        // style={{backgroundColor: 'var(--brand-warm-background) !important'}}  
         className={`${classes.img} ${className}`}
         src={imgPath ? imgPath : loadingNoun}
         alt={alt}

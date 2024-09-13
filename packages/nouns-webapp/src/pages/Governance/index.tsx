@@ -4,8 +4,8 @@ import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';
-import clsx from 'clsx';
-import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
+// import clsx from 'clsx';
+import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 
@@ -15,7 +15,7 @@ const GovernancePage = () => {
   const nounsRequired = threshold !== undefined ? threshold + 1 : undefined;
 
   const treasuryBalance = useTreasuryBalance();
-  const treasuryBalanceUSD = useTreasuryUSDValue();
+  // const treasuryBalanceUSD = useTreasuryUSDValue();
 
   // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
   const nounSingular = <Trans>Noun</Trans>;
@@ -39,7 +39,7 @@ const GovernancePage = () => {
 
   return (
     <>
-      <Section fullWidth={false} className={classes.section}>
+      <Section fullWidth={false} className={classes.section} style={{backgroundColor: 'var(--brand-warm-background)'}}>
         <Col lg={10} className={classes.wrapper}>
           <Row className={classes.headerRow}>
             <span>

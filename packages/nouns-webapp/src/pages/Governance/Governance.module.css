@@ -47,7 +47,7 @@ p {
 .treasuryInfoCard {
   margin-bottom: 3rem;
   border-radius: 20px;
-  border: 1px solid #e2e3e8;
+  border: 1px solid #C9C1BE;
 }
 
 .treasuryAmtWrapper {
@@ -99,10 +99,10 @@ p {
 
 @media (min-width: 992px) {
   .treasuryAmtWrapper {
-    border-right: 2px solid #e2e3e8;
+    border-right: 2px solid #C9C1BE;
   }
 
   .ethTreasuryAmt {
-    border-right: 2px solid #e2e3e8;
+    border-right: 2px solid #C9C1BE;
   }
 }

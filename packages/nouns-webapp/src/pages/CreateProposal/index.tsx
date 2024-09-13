@@ -313,15 +313,15 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <p className='m-0 p-0'>Looking for treasury v1?</p>
+        {/* <p className='m-0 p-0'>Looking for treasury v1?</p>
         <p className={classes.note}>
           If you're not sure what this means, you probably don't need it. Otherwise, you can interact with the original treasury <button
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
           >here</button>.
-        </p>
+        </p> */}
 
-        {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
+        {/* {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
           <div className={classes.timelockOption}>
             <div className={classes.timelockSelect}>
               <Form.Check
@@ -338,7 +338,7 @@ const CreateProposalPage = () => {
               </a>. Most proposers can ignore this.
             </p>
           </div>
-        )}
+        )} */}
         <CreateProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}

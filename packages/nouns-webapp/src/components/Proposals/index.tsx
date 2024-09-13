@@ -96,15 +96,15 @@ const Proposals = ({
   const currentBlock = useBlockNumber();
   const { account } = useEthers();
   const history = useHistory();
-  const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
+  // const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
-  const isDaoGteV3 = useIsDaoGteV3();
-  const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
+  // const isDaoGteV3 = useIsDaoGteV3();
+  const tabs = ['Proposals'];
   const { hash } = useLocation();
 
   useEffect(() => {
@@ -322,57 +322,6 @@ const Proposals = ({
         {activeTab === 1 && (
           <Col lg={10} className={classes.proposalsList}>
             <Row>
-              <Col lg={9}>
-                {nounsRequired && candidates?.length ? (
-                  candidates
-                    .slice(0)
-                    .reverse()
-                    .map((c, i) => {
-                      if (+c.version.content.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(
-                          p => p.id === c.version.content.proposalIdToUpdate,
-                        );
-                        let isOriginalPropUpdatable =
-                          prop &&
-                            blockNumber &&
-                            isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
-                            ? true
-                            : false;
-                        if (!isOriginalPropUpdatable) return null;
-                      }
-                      return (
-                        <div key={i}>
-                          <CandidateCard
-                            latestProposal={proposals[proposals.length - 1]}
-                            candidate={c}
-                            key={c.id}
-                            nounsRequired={threshold}
-                            currentBlock={blockNumber ? blockNumber - 1 : 0}
-                          />
-                        </div>
-                      );
-                    })
-                ) : (
-                  <>
-                    {!candidates && (
-                      <Alert variant="secondary" className={classes.dataStatus}>
-                        <Spinner animation="border" className={classes.spinner} />
-                        Loading candidates...
-                      </Alert>
-                    )}
-                    {candidates?.length === 0 && (
-                      <Alert variant="secondary" className={classes.alert}>
-                        <Alert.Heading>
-                          <Trans>No candidates found</Trans>
-                        </Alert.Heading>
-                        <p>
-                          <Trans>Candidates submitted by community members will appear here.</Trans>
-                        </p>
-                      </Alert>
-                    )}
-                  </>
-                )}
-              </Col>
               <Col lg={3} className={classes.candidatesSidebar}>
                 <h4>
                   <strong>

@@ -15,7 +15,7 @@ const DesktopNounActivityRow: React.FC<DesktopNounActivityRowProps> = props => {
   const activeLocale = useActiveLocale();
 
   return (
-    <tr className={classes.wrapper}>
+    <tr className={classes.wrapper} style={{ borderBottom: '1px solid #C9C1BE' }}>
       <td className={classes.icon}>{icon}</td>
       <td className={classes.activityTableCell}>
         <div className={classes.infoContainer}>{primaryContent}</div>

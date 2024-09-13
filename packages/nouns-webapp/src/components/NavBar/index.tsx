@@ -90,7 +90,7 @@ const NavBar = () => {
       >
         <Trans>Proposals</Trans>
       </Dropdown.Item>
-      {candidatesNavItem}
+      {/* {candidatesNavItem} */}
       {forkNavItem}
     </NavDropdown>
   );
@@ -99,7 +99,7 @@ const NavBar = () => {
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+        style={{ backgroundColor: `var(--brand-warm-background)` }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >

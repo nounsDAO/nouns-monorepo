@@ -170,8 +170,8 @@ const config = {
   featureToggles: {
     daoGteV3: false,
     proposeOnV1: true,
-    candidates: true,
-    fork: true,
+    candidates: false,
+    fork: false,
   },
 };
 
