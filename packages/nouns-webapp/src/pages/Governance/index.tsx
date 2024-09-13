@@ -52,22 +52,19 @@ const GovernancePage = () => {
           <p className={classes.subheading}>{subHeading}</p>
 
           <Row className={classes.treasuryInfoCard}>
-            <Col lg={8} className={classes.treasuryAmtWrapper}>
+            <Col lg={4} className={classes.treasuryAmtWrapper}>
               <Row className={classes.headerRow}>
                 <span>
                   <Trans>Treasury</Trans>
                 </span>
               </Row>
               <Row>
-                <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
-                  <h1>
+              <h1>
                     {treasuryBalance &&
                       i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(2)))}
                       {' '}<small style={{fontSize: '20px'}}>BERA</small>
                   </h1>
-                  
-                </Col>
-                <Col className={classes.usdTreasuryAmt}>
+                {/* <Col className={classes.usdTreasuryAmt}>
                   <h1 className={classes.usdBalance}>
                     {treasuryBalanceUSD &&
                       i18n.number(Number(treasuryBalanceUSD.toFixed(0)), {
@@ -75,7 +72,7 @@ const GovernancePage = () => {
                         currency: 'USD',
                       })}
                   </h1>
-                </Col>
+                </Col> */}
               </Row>
             </Col>
             <Col className={classes.treasuryInfoText}>
