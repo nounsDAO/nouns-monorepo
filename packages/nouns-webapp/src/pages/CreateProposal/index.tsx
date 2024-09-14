@@ -1,9 +1,8 @@
-import { Col, Alert, Button, Form } from 'react-bootstrap';
+import { Col, Alert, Button, } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
   ProposalTransaction,
-  useIsDaoGteV3,
   useProposal,
   useProposalCount,
   useProposalThreshold,
@@ -27,7 +26,6 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -37,8 +35,7 @@ const CreateProposalPage = () => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
-  const [isProposeOnV1, setIsProposeOnV1] = useState(false);
-  const [isV1OptionVisible, setIsV1OptionVisible] = useState(false);
+  const [isProposeOnV1] = useState(false);
   const [previousProposalId, setPreviousProposalId] = useState<number | undefined>(undefined);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
@@ -53,10 +50,6 @@ const CreateProposalPage = () => {
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
-  );
-  const isDaoGteV3 = useIsDaoGteV3();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
   );
 
   const handleAddProposalAction = useCallback(
@@ -80,7 +73,7 @@ const CreateProposalPage = () => {
 
       setShowTransactionFormModal(false);
     },
-    [proposalTransactions, totalUSDCPayment],
+    [proposalTransactions],
   );
 
   const handleRemoveProposalAction = useCallback(

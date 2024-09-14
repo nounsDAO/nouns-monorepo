@@ -25,7 +25,7 @@ export async function dynamicActivate(locale: SupportedLocale) {
     // Bundlers will either export it as default or as a named export named default.
     i18n.load(locale, catalog.messages || catalog.default.messages);
   } catch {}
-  console.log('activating: ', locale);
+  // console.log('activating: ', locale);
   i18n.activate(locale);
 }
 

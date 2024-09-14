@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ChainId, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -34,27 +34,9 @@ import ForkPage from './pages/Fork';
 import ForksPage from './pages/Forks';
 
 function App() {
-  const { account, chainId, library, activateBrowserWallet } = useEthers();
+  const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
-
-  useEffect(() => {
-    if (!account) {
-      const connect = async () => {
-        try {
-          await activateBrowserWallet();
-        } catch (error) {
-          console.error('Failed to connect wallet:', error);
-        }
-      };
-      connect();
-    }
-
-    // Cleanup function
-    return () => {
-      // If possible, remove any listeners here
-    };
-  }, []); // Empty dependency array
 
   useEffect(() => {
     // Local account array updated

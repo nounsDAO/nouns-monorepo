@@ -73,7 +73,7 @@ export const auctionSlice = createSlice({
       console.log('processed auction create', action.payload);
     },
     setFullAuction: (state, action: PayloadAction<IAuction>) => {
-      console.log(`from set full auction: `, action.payload);
+      // console.log(`from set full auction: `, action.payload);
       state.activeAuction = reduxSafeAuction(action.payload);
     },
     appendBid: (state, action: PayloadAction<BidEvent>) => {
@@ -83,19 +83,19 @@ export const auctionSlice = createSlice({
       const maxBid_ = maxBid(state.bids);
       state.activeAuction.amount = BigNumber.from(maxBid_.value).toJSON();
       state.activeAuction.bidder = maxBid_.sender;
-      console.log('processed bid', action.payload);
+      // console.log('processed bid', action.payload);
     },
     setAuctionSettled: (state, action: PayloadAction<AuctionSettledEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
       state.activeAuction.settled = true;
       state.activeAuction.bidder = action.payload.winner;
       state.activeAuction.amount = BigNumber.from(action.payload.amount).toJSON();
-      console.log('processed auction settled', action.payload);
+      // console.log('processed auction settled', action.payload);
     },
     setAuctionExtended: (state, action: PayloadAction<AuctionExtendedEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
       state.activeAuction.endTime = BigNumber.from(action.payload.endTime).toJSON();
-      console.log('processed auction extended', action.payload);
+      // console.log('processed auction extended', action.payload);
     },
   },
 });

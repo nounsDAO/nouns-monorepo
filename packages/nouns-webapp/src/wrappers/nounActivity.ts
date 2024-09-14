@@ -1,12 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { NounVoteHistory } from '../components/ProfileActivityFeed';
-import { useNounCanVoteTimestamp } from './nounsAuction';
-import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
+import { Proposal } from './nounsDao';
 import {
-  createTimestampAllProposals,
+  // createTimestampAllProposals,
   nounDelegationHistoryQuery,
   nounTransferHistoryQuery,
-  nounVotingHistoryQuery,
+  // nounVotingHistoryQuery,
 } from './subgraph';
 
 export enum NounEventType {
@@ -61,85 +59,85 @@ export type NounProfileEventFetcherResponse = {
  * Fetch list of ProposalVoteEvents representing the voting history of the given Noun
  * @param nounId Id of Noun who's voting history will be fetched
  */
-const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
+// const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
+//   const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
 
-  const {
-    loading: proposalTimestampLoading,
-    error: proposalTimestampError,
-    data: proposalCreatedTimestamps,
-  } = useQuery(createTimestampAllProposals());
+//   const {
+//     loading: proposalTimestampLoading,
+//     error: proposalTimestampError,
+//     data: proposalCreatedTimestamps,
+//   } = useQuery(createTimestampAllProposals());
 
-  const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
+//   const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
 
-  const { data: proposals } = useAllProposals();
+//   const { data: proposals } = useAllProposals();
 
-  if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
-    return {
-      loading: true,
-      error: false,
-    };
-  } else if (error || proposalTimestampError) {
-    return {
-      loading: false,
-      error: true,
-    };
-  }
+//   if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
+//     return {
+//       loading: true,
+//       error: false,
+//     };
+//   } else if (error || proposalTimestampError) {
+//     return {
+//       loading: false,
+//       error: true,
+//     };
+//   }
 
-  const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
-    .slice(0)
-    .reduce((acc: any, h: NounVoteHistory, i: number) => {
-      acc[h.proposal.id] = h;
-      return acc;
-    }, {});
+//   const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
+//     .slice(0)
+//     .reduce((acc: any, h: NounVoteHistory, i: number) => {
+//       acc[h.proposal.id] = h;
+//       return acc;
+//     }, {});
 
-  const filteredProposals = proposals.filter((p: PartialProposal, id: number) => {
-    if (!p.id) {
-      return false;
-    }
+//   const filteredProposals = proposals.filter((p: PartialProposal, id: number) => {
+//     if (!p.id) {
+//       return false;
+//     }
 
-    const proposalCreationTimestamp = parseInt(
-      proposalCreatedTimestamps.proposals[id].createdTimestamp,
-    );
+//     const proposalCreationTimestamp = parseInt(
+//       proposalCreatedTimestamps.proposals[id].createdTimestamp,
+//     );
 
-    // Filter props from before the Noun was born
-    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
-      return false;
-    }
-    // Filter props which were cancelled and got 0 votes of any kind
-    if (
-      p.status === ProposalState.CANCELLED &&
-      p.forCount + p.abstainCount + p.againstCount === 0
-    ) {
-      return false;
-    }
-    return true;
-  });
+//     // Filter props from before the Noun was born
+//     if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+//       return false;
+//     }
+//     // Filter props which were cancelled and got 0 votes of any kind
+//     if (
+//       p.status === ProposalState.CANCELLED &&
+//       p.forCount + p.abstainCount + p.againstCount === 0
+//     ) {
+//       return false;
+//     }
+//     return true;
+//   });
 
-  const events = filteredProposals.map((proposal: PartialProposal) => {
-    const vote = nounVotes[proposal.id as string];
-    const didVote = vote !== undefined;
-    return {
-      // If no vote was cast, for indexing / sorting purposes declear the block number of this event
-      // to be the end block of the voting period
-      blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
-      eventType: NounEventType.PROPOSAL_VOTE,
-      payload: {
-        proposal,
-        vote: {
-          voter: didVote ? vote.voter.id : undefined,
-          supportDetailed: didVote ? vote.supportDetailed : undefined,
-        },
-      },
-    };
-  }) as NounProfileEvent[];
+//   const events = filteredProposals.map((proposal: PartialProposal) => {
+//     const vote = nounVotes[proposal.id as string];
+//     const didVote = vote !== undefined;
+//     return {
+//       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
+//       // to be the end block of the voting period
+//       blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
+//       eventType: NounEventType.PROPOSAL_VOTE,
+//       payload: {
+//         proposal,
+//         vote: {
+//           voter: didVote ? vote.voter.id : undefined,
+//           supportDetailed: didVote ? vote.supportDetailed : undefined,
+//         },
+//       },
+//     };
+//   }) as NounProfileEvent[];
 
-  return {
-    loading: false,
-    error: false,
-    data: events,
-  };
-};
+//   return {
+//     loading: false,
+//     error: false,
+//     data: events,
+//   };
+// };
 
 /**
  * Fetch list of TransferEvents for given Noun

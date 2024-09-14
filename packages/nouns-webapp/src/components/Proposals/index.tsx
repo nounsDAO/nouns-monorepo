@@ -1,10 +1,9 @@
 import {
   PartialProposal,
   ProposalState,
-  useIsDaoGteV3,
   useProposalThreshold,
 } from '../../wrappers/nounsDao';
-import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -25,11 +24,7 @@ import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
-import CandidateCard from '../CandidateCard';
 import { Link } from 'react-router-dom';
-import { useCandidateProposals } from '../../wrappers/nounsData';
-import { isProposalUpdatable } from '../../utils/proposals';
-import config from '../../config';
 
 dayjs.extend(relativeTime);
 

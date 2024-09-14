@@ -24,7 +24,6 @@ import {
 } from '../../utils/addressAndENSDisplayUtils';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 
 interface NavWalletProps {
   address: string;
@@ -57,7 +56,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
-  const hasENS = useIsNetworkEnsSupported();
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
   };

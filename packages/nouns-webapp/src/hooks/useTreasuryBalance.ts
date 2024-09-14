@@ -12,7 +12,6 @@ import { BigNumber, ethers } from 'ethers';
  */
 export const useTreasuryBalance = () => {
   const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const ethBalanceTreasuryV2 = useEtherBalance(config.addresses.nounsDaoExecutorProxy);
   const lidoBalanceAsETH = useLidoBalance(config.addresses.nounsDaoExecutor);
   const lidoBalanceTreasuryV2AsETH = useLidoBalance(config.addresses.nounsDaoExecutorProxy);
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();

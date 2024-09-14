@@ -1,25 +1,20 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import noggles from '../../assets/noggles.svg';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
-import testnetNoun from '../../assets/testnet-noun.png';
-import config, { CHAIN_ID } from '../../config';
+import config from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCodeFork, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCodeFork, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
 import { useState } from 'react';
-import NavLocaleSwitcher from '../NavLocaleSwitcher';
 import NavDropdown from '../NavDropdown';
 import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
@@ -33,7 +28,6 @@ import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
 const NavBar = () => {
   const isDaoGteV3 = useIsDaoGteV3();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
   const treasuryBalance = useTreasuryBalance();
@@ -54,46 +48,6 @@ const NavBar = () => {
       : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
-  const buttonClasses = usePickByState(
-    navDropdownClasses.whiteInfoSelectedBottom,
-    navDropdownClasses.coolInfoSelected,
-    navDropdownClasses.warmInfoSelected,
-    history,
-  );
-  const candidatesNavItem = config.featureToggles.candidates ? (
-    <Dropdown.Item className={buttonClasses} href="/vote#candidates">
-      <Trans>Candidates</Trans>
-    </Dropdown.Item>
-  ) : null;
-  const forkNavItem = config.featureToggles.fork ? (
-    <Dropdown.Item className={buttonClasses} href="/fork">
-      <Trans>Fork</Trans>
-    </Dropdown.Item>
-  ) : null;
-
-  const v3DaoNavItem = (
-    <NavDropdown
-      buttonText="DAO"
-      buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-      buttonStyle={nonWalletButtonStyle}
-    >
-      <Dropdown.Item
-        className={clsx(
-          usePickByState(
-            navDropdownClasses.whiteInfoSelectedBottom,
-            navDropdownClasses.coolInfoSelected,
-            navDropdownClasses.warmInfoSelected,
-            history,
-          ),
-        )}
-        href="/vote"
-      >
-        <Trans>Proposals</Trans>
-      </Dropdown.Item>
-      {/* {candidatesNavItem} */}
-      {forkNavItem}
-    </NavDropdown>
-  );
 
   return (
     <>
