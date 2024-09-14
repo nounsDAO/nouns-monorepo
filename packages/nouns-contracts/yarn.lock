@@ -2120,12 +2120,7 @@ camelcase@^6.0.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.0.tgz#924af881c9d525ac9d87f40d964e5cea982a1809"
   integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
-
-caniuse-lite@^1.0.30000844:
-  version "1.0.30001234"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001234.tgz#8fc2e709e3b0679d7af7f073a1c661155c39b975"
-  integrity sha512-a3gjUVKkmwLdNysa1xkUAwN2VfJUJyVW47rsi3aCbkRCtbHAfo+rOsCqVw29G6coQ8gzAPb5XBXwiGHwme3isA==
-
+  
 caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
