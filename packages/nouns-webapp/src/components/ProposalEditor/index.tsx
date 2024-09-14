@@ -31,7 +31,7 @@ const ProposalEditor = ({
   }, [body]);
 
   return (
-    <div>
+    <div style={{backgroundColor: 'white', borderRadius: '10px'}}>
       <InputGroup className={`${classes.proposalEditor} d-flex flex-column`}>
         <FormText>{isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}</FormText>
         <FormControl

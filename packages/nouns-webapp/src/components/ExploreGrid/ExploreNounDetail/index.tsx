@@ -216,7 +216,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
       <motion.div
         className={classes.detailWrap}
         style={{
-          background: backgroundColor,
+          background: "var(--brand-warm-background)",
         }}
         variants={motionVariants}
         initial="initial"
@@ -234,7 +234,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         <motion.div
           className={classes.detail}
           style={{
-            background: backgroundColor,
+            background: "var(--brand-warm-background)",
           }}
           exit={{
             opacity: !isMobile ? 0 : 1,

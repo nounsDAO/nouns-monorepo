@@ -70,7 +70,7 @@ const ProposalHistory = ({
   };
 
   return (
-    <Section fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className={classes.votePage} style={{backgroundColor: 'var(--brand-warm-background)'}}>
       <Col lg={12} className={classes.wrapper}>
         {proposal && (
           <>

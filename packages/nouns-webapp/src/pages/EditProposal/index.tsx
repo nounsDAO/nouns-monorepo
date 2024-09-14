@@ -486,7 +486,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }
 
   return (
-    <Section fullWidth={false} className={classes.createProposalPage}>
+    <Section fullWidth={false} className={classes.createProposalPage} style={{backgroundColor: 'var(--brand-warm-background)'}}>
       <ProposalActionModal
         onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}

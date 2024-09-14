@@ -490,7 +490,7 @@ const VotePage = ({
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
-    <Section fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className={classes.votePage} style={{backgroundColor: 'var(--brand-warm-background)'}}>
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}

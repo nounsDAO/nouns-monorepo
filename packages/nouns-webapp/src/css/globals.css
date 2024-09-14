@@ -7,6 +7,10 @@
   }
 }
 
+html, body {
+  background: "var(--brand-warm-background) !important",
+}
+
 body {
   overflow-x: hidden;
 }

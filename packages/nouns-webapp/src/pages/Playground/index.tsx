@@ -259,7 +259,7 @@ const Playground: React.FC = () => {
         />
       )}
 
-      <Container fluid="lg">
+      <Container fluid="lg" style={{backgroundColor: 'var(--brand-warm-background)'}}>
         <Row>
           <Col lg={10} className={classes.headerRow}>
             <span>

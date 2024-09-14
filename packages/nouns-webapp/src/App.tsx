@@ -24,14 +24,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
-import CreateCandidatePage from './pages/CreateCandidate';
-import CandidatePage from './pages/Candidate';
 import EditProposalPage from './pages/EditProposal';
-import EditCandidatePage from './pages/EditCandidate';
 import ProposalHistory from './pages/ProposalHistory';
-import CandidateHistoryPage from './pages/CandidateHistoryPage';
-import ForkPage from './pages/Fork';
-import ForksPage from './pages/Forks';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -46,7 +40,7 @@ function App() {
   const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
-    <div className={`${classes.wrapper}`}>
+    <div className={`${classes.wrapper}`} style={{backgroundColor: 'var(--brand-warm-background)'}}>
       {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -60,6 +54,7 @@ function App() {
           provider={library}
           batchLookups={true}
         >
+          <div style={{backgroundColor: 'var(--brand-warm-background)'}}>
           <NavBar />
           <Switch>
             <Route exact path="/" component={AuctionPage} />
@@ -71,28 +66,29 @@ function App() {
             />
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
-            <Route exact path="/create-candidate" component={CreateCandidatePage} />
+            {/* <Route exact path="/create-candidate" component={CreateCandidatePage} /> */}
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />
             <Route exact path="/vote/:id/history/:versionNumber?" component={ProposalHistory} />
             <Route exact path="/vote/:id/edit" component={EditProposalPage} />
-            <Route exact path="/candidates/:id" component={CandidatePage} />
-            <Route exact path="/candidates/:id/edit" component={EditCandidatePage} />
-            <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} />
-            <Route
+            {/* <Route exact path="/candidates/:id" component={CandidatePage} /> */}
+            {/* <Route exact path="/candidates/:id/edit" component={EditCandidatePage} /> */}
+            {/* <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} /> */}
+            {/* <Route
               exact
               path="/candidates/:id/history/:versionNumber?"
               component={CandidateHistoryPage}
-            />
+            /> */}
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />
-            <Route exact path="/fork/:id" component={ForkPage} />
-            <Route exact path="/fork" component={ForksPage} />
+            {/* <Route exact path="/fork/:id" component={ForkPage} />
+            <Route exact path="/fork" component={ForksPage} /> */}
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
+          </div>
         </AvatarProvider>
       </BrowserRouter>
     </div>
