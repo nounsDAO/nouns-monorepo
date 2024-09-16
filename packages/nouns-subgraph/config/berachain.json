@@ -1,5 +1,5 @@
 {
-    "network": "berachain-bartio",
+    "network": "berachain-bartio-80084",
     "nounsToken": {
       "address": "0x85c8e77fD48C241f18f62B720812f1acD5CdF04d",
       "startBlock": 3000000

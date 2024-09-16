@@ -19,7 +19,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'mainnet:http://host.docker.internal:8545'
+      ethereum: 'berachain-bartio-80084:https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ'
       GRAPH_LOG: info
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
