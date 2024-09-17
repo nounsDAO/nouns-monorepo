@@ -61,7 +61,7 @@ export const createNetworkHttpUrl = (network: string): string => {
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `ws://37.27.97.232:8554`;
+  return custom || `wss://37.27.97.232:8554`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
@@ -88,7 +88,7 @@ const app: Record<SupportedChains, AppConfig> = {
   },
   80084: {
     jsonRpcUri: 'http://37.27.97.232:26657',
-    wsRpcUri: 'ws://37.27.97.232:8554',
+    wsRpcUri: 'wss://ws.bouns.wtf',
     subgraphApiUri:
       'http://37.27.97.232:8000/subgraphs/name/bouns',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
