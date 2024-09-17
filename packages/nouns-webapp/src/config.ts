@@ -56,12 +56,12 @@ export const WALLET_CONNECT_V2_PROJECT_ID =
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return custom || `https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ`;
+  return custom || `http://37.27.97.232:26657`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `wss://lb.drpc.org/ogws?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ`;
+  return custom || `ws://37.27.97.232:8554`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
