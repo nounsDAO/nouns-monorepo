@@ -51,8 +51,9 @@
 }
 
 .activeTab {
+  background-color: var(--brand-warm-background);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid var(--brand-warm-background);
   padding: 10px 14px 10px;
   position: relative;
   top: 2px;

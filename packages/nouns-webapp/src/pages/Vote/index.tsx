@@ -524,7 +524,7 @@ const VotePage = ({
           />
         )}
       </Col>
-      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)} style={{backgroundColor: 'var(--brand-warm-background)'}}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
             .filter(txn => txn?.functionSig?.includes('createStream'))

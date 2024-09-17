@@ -91,7 +91,7 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end">
-            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+            {/* <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
@@ -131,7 +131,7 @@ const NavBar = () => {
                   )}
                 </>
               )}
-            </div>
+            </div> */}
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                   <NavBarButton
                     buttonText={<Trans>Proposals</Trans>}
@@ -165,7 +165,7 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link> */}
-            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+            {/* <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}
                 to="/playground"
@@ -190,8 +190,8 @@ const NavBar = () => {
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
-            </div>
-            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+            </div> */}
+            {/* <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
                 buttonText="Explore"
                 buttonIcon={<Noggles />}
@@ -224,7 +224,7 @@ const NavBar = () => {
                   Playground
                 </Dropdown.Item>
               </NavDropdown>
-            </div>
+            </div> */}
             {/* <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} /> */}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
