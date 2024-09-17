@@ -18,7 +18,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'berachain-bartio-80084:http://37.27.97.232:26657'
+      ethereum: 'berachain-bartio-80084:https://bartio.drpc.org'
       GRAPH_LOG: info
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
