@@ -87,10 +87,10 @@ const app: Record<SupportedChains, AppConfig> = {
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   80084: {
-    jsonRpcUri: createNetworkHttpUrl('mainnet'),
-    wsRpcUri: createNetworkWsUrl('mainnet'),
+    jsonRpcUri: 'http://37.27.97.232:26657',
+    wsRpcUri: 'ws://37.27.97.232:8554',
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cm0qqp5o8vr8h01ut6wxm0p1l/subgraphs/bouns/1.0.3/gn',
+      'http://37.27.97.232:8000/subgraphs/name/bouns',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
