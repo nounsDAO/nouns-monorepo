@@ -8,25 +8,14 @@ import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCodeFork, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
 import { useState } from 'react';
-import NavDropdown from '../NavDropdown';
-import { Dropdown } from 'react-bootstrap';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
-import clsx from 'clsx';
-import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
 
 const NavBar = () => {
-  const isDaoGteV3 = useIsDaoGteV3();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();

@@ -56,12 +56,12 @@ export const WALLET_CONNECT_V2_PROJECT_ID =
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
-  return custom || `http://37.27.97.232:26657`;
+  return custom || `https://rpc.bouns.wtf`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_WSRPC`];
-  return custom || `wss://37.27.97.232:8554`;
+  return custom || `wss://ws.bouns.wtf`;
 };
 
 const app: Record<SupportedChains, AppConfig> = {
