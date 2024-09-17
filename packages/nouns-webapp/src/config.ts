@@ -87,10 +87,10 @@ const app: Record<SupportedChains, AppConfig> = {
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   80084: {
-    jsonRpcUri: 'http://37.27.97.232:26657',
+    jsonRpcUri: 'https://rpc.bouns.wtf',
     wsRpcUri: 'wss://ws.bouns.wtf',
     subgraphApiUri:
-      'http://37.27.97.232:8000/subgraphs/name/bouns',
+      'https://graph.bouns.wtf/subgraphs/name/bouns',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
