@@ -15,7 +15,7 @@ const getBaseURL = (network: ChainId) => {
 const BASE_URL = getBaseURL(CHAIN_ID);
 
 export const buildEtherscanTxLink = (txHash: string): string => {
-  const path = `tx/${txHash}`;
+  const path = `/tx/${txHash}`;
   return new URL(path, BASE_URL).toString();
 };
 

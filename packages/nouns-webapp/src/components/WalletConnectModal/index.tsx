@@ -17,15 +17,53 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { activate } = useEthers();
   const supportedChainIds = [CHAIN_ID];
 
+  const addOrSwitchNetwork = async () => {
+    const provider = (window as any).ethereum;
+    if (!provider) return;
+
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${CHAIN_ID.toString(16)}` }],
+      });
+    } catch (switchError: any) {
+      if (switchError.code === 4902) {
+        try {
+          await provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: `0x${CHAIN_ID.toString(16)}`,
+                chainName: 'Berachain bArtio',
+                rpcUrls: [config.app.jsonRpcUri],
+                nativeCurrency: {
+                  name: 'BERA',
+                  symbol: 'BERA',
+                  decimals: 18,
+                },
+                blockExplorerUrls: ['https://etherscan.io/'],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error('Failed to add network', addError);
+        }
+      } else {
+        console.error('Failed to switch network', switchError);
+      }
+    }
+  };
+
+  const handleMetaMaskConnect = async () => {
+    await addOrSwitchNetwork();
+    const injected = new InjectedConnector({ supportedChainIds: [CHAIN_ID] });
+    await activate(injected);
+  };
+
   const wallets = (
     <div className={classes.walletConnectModal}>
       <WalletButton
-        onClick={() => {
-          const injected = new InjectedConnector({
-            supportedChainIds,
-          });
-          activate(injected);
-        }}
+        onClick={handleMetaMaskConnect}
         walletType={WALLET_TYPE.metamask}
       />
       <WalletButton
