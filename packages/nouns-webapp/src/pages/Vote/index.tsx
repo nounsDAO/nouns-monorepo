@@ -109,7 +109,7 @@ const VotePage = ({
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
   const [forkPeriodMessage, setForkPeriodMessage] = useState<ReactNode>(<></>);
-  const [isExecutable, setIsExecutable] = useState<boolean>(false);
+  const [isExecutable, setIsExecutable] = useState<boolean>(true);
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
   const activeLocale = useActiveLocale();
@@ -468,8 +468,6 @@ const VotePage = ({
     if (proposal?.status === ProposalState.QUEUED && isForkActive) {
       setForkPeriodMessage(<p><Trans>Proposals cannot be executed during a forking period</Trans></p>);
       setIsExecutable(false);
-    } else if (proposal?.status === ProposalState.QUEUED && !isForkActive) {
-      setIsExecutable(true);
     }
   }, [proposal?.status, isForkActive, setForkPeriodMessage, setIsExecutable]);
 

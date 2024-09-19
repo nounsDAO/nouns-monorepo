@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
     },
     berachain: {
       chainId: 80084,
-      url: `https://bartio.drpc.org`,
+      url: `https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxD0Z264r9oR7ouAzs04wJzJ`,
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
@@ -57,7 +57,19 @@ const config: HardhatUserConfig = {
     },
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      berachain: "verifyContract"
+    },
+    customChains: [
+      {
+        network: "berachain",
+        chainId: 80084,
+        urls: {
+          apiURL: "https://api.routescan.io/v2/network/testnet/evm/80084/etherscan",
+          browserURL: "https://bartio.beratrail.io"
+        }
+      }
+    ]
   },
   abiExporter: {
     path: './abi',

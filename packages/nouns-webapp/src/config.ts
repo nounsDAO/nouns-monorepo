@@ -145,7 +145,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   80084: {
     lidoToken: undefined,
     usdcToken: undefined,
-    payerContract: '0x90d0eE4f5BD5F4d168A1EeDb2609F8b3ca8bcC66',
+    payerContract: '0xaFeb316B4ED09DD348E15837eA71C067d61FEBfe',
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
     weth: '0x7507c1dc16935B82698e4C63f2746A2fCf994dF8',
