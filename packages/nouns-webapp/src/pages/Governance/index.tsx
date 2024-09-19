@@ -17,23 +17,11 @@ const GovernancePage = () => {
   const treasuryBalance = useTreasuryBalance();
   // const treasuryBalanceUSD = useTreasuryUSDValue();
 
-  // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
-  const nounSingular = <Trans>Noun</Trans>;
-  const nounPlural = <Trans>Nouns</Trans>;
+  // // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
   const subHeading = (
     <Trans>
       Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on proposals
-      or delegate their vote to a third party. A minimum of{' '}
-      <span className={classes.boldText}>
-        {nounsRequired ? (
-          <>
-            {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
-          </>
-        ) : (
-          '...'
-        )}
-      </span>{' '}
-      is required to submit proposals.
+      or delegate their vote to a third party.
     </Trans>
   );
 
