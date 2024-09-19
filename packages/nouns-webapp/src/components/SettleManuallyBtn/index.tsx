@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { CHAIN_ID } from '../../config';
 import { Trans } from '@lingui/macro';
+import { Button } from 'react-bootstrap';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;
@@ -54,9 +55,9 @@ const SettleManuallyBtn: React.FC<{
 
   return (
     <p className={classes.emergencySettleWrapper}>
-      <button
+      <Button
         onClick={settleAuctionHandler}
-        className={classes.emergencySettleButton}
+        className={classes.verifyButton}
         disabled={!settleEnabled}
       >
         {settleEnabled ? (
@@ -73,7 +74,7 @@ const SettleManuallyBtn: React.FC<{
             )}
           </>
         )}
-      </button>
+      </Button>
     </p>
   );
 };
