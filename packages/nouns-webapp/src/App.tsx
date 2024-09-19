@@ -15,7 +15,7 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
-import NoundersPage from './pages/Nounders';
+// import NoundersPage from './pages/Nounders';
 import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
@@ -64,7 +64,7 @@ function App() {
               path="/noun/:id"
               render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
             />
-            <Route exact path="/nounders" component={NoundersPage} />
+            {/* <Route exact path="/nounders" component={NoundersPage} /> */}
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             {/* <Route exact path="/create-candidate" component={CreateCandidatePage} /> */}
             <Route exact path="/vote" component={GovernancePage} />
