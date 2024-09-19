@@ -20,7 +20,7 @@ export const buildEtherscanTxLink = (txHash: string): string => {
 };
 
 export const buildEtherscanAddressLink = (address: string): string => {
-  const path = `address/${address}`;
+  const path = `/address/${address}`;
   return new URL(path, BASE_URL).toString();
 };
 
