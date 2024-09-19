@@ -1,5 +1,5 @@
 {
-    "network": "berachain-bartio-80084",
+    "network": "bartio-beacon-80084",
     "nounsToken": {
       "address": "0x87901D50205a69aF4Fc4cB98c6B1DACB64298BC8",
       "startBlock": 4000000

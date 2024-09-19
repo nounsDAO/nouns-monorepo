@@ -23,7 +23,7 @@
     "test": "graph test",
     "create:localnode": "graph create --node http://localhost:8020/ bouns",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:localnode": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
+    "deploy:localnode": "yarn clean && yarn prepare:berachain && yarn codegen && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
     " ": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:berachain": "yarn clean && yarn prepare:berachain && yarn codegen && yarn graph build && goldsky subgraph deploy bouns/1.0.4",
