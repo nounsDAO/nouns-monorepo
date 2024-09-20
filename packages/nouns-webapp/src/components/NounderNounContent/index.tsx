@@ -118,12 +118,12 @@ const NounderNounContent: React.FC<{
               isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
             }
           >
-            <Link
+            {/* <Link
               to="/nounders"
               className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
             >
               <Trans>Learn more</Trans> →
-            </Link>
+            </Link> */}
           </div>
         </Col>
       </Row>
