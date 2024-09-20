@@ -15,10 +15,7 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
-// import NoundersPage from './pages/Nounders';
-import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
-import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
@@ -80,7 +77,7 @@ function App() {
                 path="/noun/:id"
                 render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
               />
-<!--               <Route exact path="/nounders" component={NoundersPage} /> -->
+              {/* <Route exact path="/nounders" component={NoundersPage} /> */}
               <Route exact path="/create-proposal" component={CreateProposalPage} />
               {/* <Route exact path="/create-candidate" component={CreateCandidatePage} /> */}
               <Route exact path="/vote" component={GovernancePage} />
@@ -92,11 +89,11 @@ function App() {
               {/* <Route exact path="/candidates/:id/edit" component={EditCandidatePage} /> */}
               {/* <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} /> */}
               {/* <Route exact path="/candidates/:id/history/:versionNumber?" component={CandidateHistoryPage} /> */}
-<!--               <Route exact path="/playground" component={Playground} /> -->
+              {/* <Route exact path="/playground" component={Playground} /> */}
               <Route exact path="/delegate" component={DelegatePage} />
-<!--               <Route exact path="/explore" component={ExplorePage} /> -->
-              {/* <Route exact path="/fork/:id" component={ForkPage} />
-            <Route exact path="/fork" component={ForksPage} /> */}
+              {/* <Route exact path="/explore" component={ExplorePage} /> */}
+              {/* <Route exact path="/fork/:id" component={ForkPage} /> */}
+              {/* <Route exact path="/fork" component={ForksPage} /> */}
               <Route component={NotFoundPage} />
             </Switch>
             <Footer />
