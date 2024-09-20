@@ -48,17 +48,6 @@ contract SVGRenderer is ISVGRenderer {
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
     function generateSVG(SVGParams calldata params) external pure override returns (string memory svg) {
-        if (bytes(params.background).length != 0) {
-            // prettier-ignore
-            return string(
-                abi.encodePacked(
-                    _SVG_START_TAG,
-                    '<rect width="100%" height="100%" fill="#', params.background, '" />',
-                    _generateSVGRects(params),
-                    _SVG_END_TAG
-                )
-            );
-        }
         return string(abi.encodePacked(_SVG_START_TAG, _generateSVGRects(params), _SVG_END_TAG));
     }
 
@@ -69,14 +58,14 @@ contract SVGRenderer is ISVGRenderer {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
-        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
+        return _generateSVGRects(SVGParams({ parts: parts }));
     }
 
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
     function generateSVGParts(Part[] calldata parts) external pure override returns (string memory partialSVG) {
-        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
+        return _generateSVGRects(SVGParams({ parts: parts }));
     }
 
     /**

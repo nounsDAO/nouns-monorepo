@@ -100,13 +100,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Get the number of available Noun `backgrounds`.
-     */
-    function backgroundCount() external view override returns (uint256) {
-        return art.backgroundCount();
-    }
-
-    /**
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
@@ -132,22 +125,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      */
     function glassesCount() external view override returns (uint256) {
         return art.glassesCount();
-    }
-
-    /**
-     * @notice Batch add Noun backgrounds.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyBackgrounds(string[] calldata _backgrounds) external override onlyOwner whenPartsNotLocked {
-        art.addManyBackgrounds(_backgrounds);
-    }
-
-    /**
-     * @notice Add a Noun background.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addBackground(string calldata _background) external override onlyOwner whenPartsNotLocked {
-        art.addBackground(_background);
     }
 
     /**
@@ -307,15 +284,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Get a background color by ID.
-     * @param index the index of the background.
-     * @return string the RGB hex value of the background.
-     */
-    function backgrounds(uint256 index) public view override returns (string memory) {
-        return art.backgrounds(index);
-    }
-
-    /**
      * @notice Get a head image by ID.
      * @param index the index of the head.
      * @return bytes the RLE-encoded bytes of the image.
@@ -427,8 +395,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         NFTDescriptorV2.TokenURIParams memory params = NFTDescriptorV2.TokenURIParams({
             name: name,
             description: description,
-            parts: getPartsForSeed(seed),
-            background: art.backgrounds(seed.background)
+            parts: getPartsForSeed(seed)
         });
         return NFTDescriptorV2.constructTokenURI(renderer, params);
     }
@@ -438,8 +405,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
         ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
-            parts: getPartsForSeed(seed),
-            background: art.backgrounds(seed.background)
+            parts: getPartsForSeed(seed)
         });
         return NFTDescriptorV2.generateSVGImage(renderer, params);
     }

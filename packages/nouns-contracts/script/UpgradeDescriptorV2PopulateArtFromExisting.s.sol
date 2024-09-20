@@ -20,12 +20,6 @@ contract UpgradeDescriptorV2PopulateArtFromExisting is Script {
 
         address palettePointer = EXISTING_ART.palettesPointers(0);
 
-        uint256 backgroundCount = EXISTING_DESCRIPTOR.backgroundCount();
-        string[] memory backgrounds = new string[](backgroundCount);
-        for (uint256 i = 0; i < backgroundCount; i++) {
-            backgrounds[i] = EXISTING_ART.backgrounds(i);
-        }
-
         INounsArt.Trait memory bodies = EXISTING_ART.getBodiesTrait();
         INounsArt.Trait memory accessories = EXISTING_ART.getAccessoriesTrait();
         INounsArt.Trait memory heads = EXISTING_ART.getHeadsTrait();
@@ -41,7 +35,6 @@ contract UpgradeDescriptorV2PopulateArtFromExisting is Script {
 
         // Populate new art contract using existing pointers
         descriptor.setPalettePointer(0, palettePointer);
-        descriptor.addManyBackgrounds(backgrounds);
 
         for (uint256 i = 0; i < bodies.storagePages.length; i++) {
             descriptor.addBodiesFromPointer(

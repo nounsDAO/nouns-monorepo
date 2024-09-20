@@ -21,7 +21,6 @@ import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
 interface INounsSeeder {
     struct Seed {
-        uint48 background;
         uint48 body;
         uint48 accessory;
         uint48 head;

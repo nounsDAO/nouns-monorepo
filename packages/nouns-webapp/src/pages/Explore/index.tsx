@@ -181,7 +181,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }, []);
 
   return (
-    <div className={classes.exploreWrap} ref={containerRef} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+    <div className={classes.exploreWrap} ref={containerRef} style={{backgroundColor: 'transparent'}}>
       <div className={classes.contentWrap}>
         <motion.div
           className={cx(classes.gridWrap, isNounHoverDisabled && classes.nounHoverDisabled)}

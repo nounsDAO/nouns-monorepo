@@ -488,7 +488,7 @@ const VotePage = ({
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
-    <Section fullWidth={false} className={classes.votePage} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+    <Section fullWidth={false} className={classes.votePage} style={{backgroundColor: 'transparent'}}>
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
@@ -522,7 +522,7 @@ const VotePage = ({
           />
         )}
       </Col>
-      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)} style={{backgroundColor: 'transparent'}}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
             .filter(txn => txn?.functionSig?.includes('createStream'))

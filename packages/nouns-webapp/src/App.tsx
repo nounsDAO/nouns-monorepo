@@ -40,7 +40,23 @@ function App() {
   const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
-    <div className={`${classes.wrapper}`} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+    <div className={`${classes.wrapper}`}>
+         <div className="skyBackground">
+        <div className="cloudContainer leftClouds">
+          <div className="pixelatedCloud tinyCloud" />
+          <div className="pixelatedCloud smallCloud" />
+          <div className="pixelatedCloud mediumCloud" />
+          <div className="pixelatedCloud largeCloud" />
+          <div className="pixelatedCloud extraLargeCloud" />
+        </div>
+        <div className="cloudContainerFaster rightClouds">
+          <div className="pixelatedCloud tinyCloud" />
+          <div className="pixelatedCloud smallCloud" />
+          <div className="pixelatedCloud mediumCloud" />
+          <div className="pixelatedCloud largeCloud" />
+          <div className="pixelatedCloud extraLargeCloud" />
+        </div>
+      </div>
       {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -54,40 +70,40 @@ function App() {
           provider={library}
           batchLookups={true}
         >
-          <div style={{backgroundColor: 'var(--brand-warm-background)'}}>
-          <NavBar />
-          <Switch>
-            <Route exact path="/" component={AuctionPage} />
-            <Redirect from="/auction/:id" to="/noun/:id" />
-            <Route
-              exact
-              path="/noun/:id"
-              render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
-            />
-            <Route exact path="/nounders" component={NoundersPage} />
-            <Route exact path="/create-proposal" component={CreateProposalPage} />
-            {/* <Route exact path="/create-candidate" component={CreateCandidatePage} /> */}
-            <Route exact path="/vote" component={GovernancePage} />
-            <Route exact path="/vote/:id" component={VotePage} />
-            <Route exact path="/vote/:id/history" component={ProposalHistory} />
-            <Route exact path="/vote/:id/history/:versionNumber?" component={ProposalHistory} />
-            <Route exact path="/vote/:id/edit" component={EditProposalPage} />
-            {/* <Route exact path="/candidates/:id" component={CandidatePage} /> */}
-            {/* <Route exact path="/candidates/:id/edit" component={EditCandidatePage} /> */}
-            {/* <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} /> */}
-            {/* <Route
+          <div>
+            <NavBar />
+            <Switch>
+              <Route exact path="/" component={AuctionPage} />
+              <Redirect from="/auction/:id" to="/noun/:id" />
+              <Route
+                exact
+                path="/noun/:id"
+                render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
+              />
+              <Route exact path="/nounders" component={NoundersPage} />
+              <Route exact path="/create-proposal" component={CreateProposalPage} />
+              {/* <Route exact path="/create-candidate" component={CreateCandidatePage} /> */}
+              <Route exact path="/vote" component={GovernancePage} />
+              <Route exact path="/vote/:id" component={VotePage} />
+              <Route exact path="/vote/:id/history" component={ProposalHistory} />
+              <Route exact path="/vote/:id/history/:versionNumber?" component={ProposalHistory} />
+              <Route exact path="/vote/:id/edit" component={EditProposalPage} />
+              {/* <Route exact path="/candidates/:id" component={CandidatePage} /> */}
+              {/* <Route exact path="/candidates/:id/edit" component={EditCandidatePage} /> */}
+              {/* <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} /> */}
+              {/* <Route
               exact
               path="/candidates/:id/history/:versionNumber?"
               component={CandidateHistoryPage}
             /> */}
-            <Route exact path="/playground" component={Playground} />
-            <Route exact path="/delegate" component={DelegatePage} />
-            <Route exact path="/explore" component={ExplorePage} />
-            {/* <Route exact path="/fork/:id" component={ForkPage} />
+              <Route exact path="/playground" component={Playground} />
+              <Route exact path="/delegate" component={DelegatePage} />
+              <Route exact path="/explore" component={ExplorePage} />
+              {/* <Route exact path="/fork/:id" component={ForkPage} />
             <Route exact path="/fork" component={ForksPage} /> */}
-            <Route component={NotFoundPage} />
-          </Switch>
-          <Footer />
+              <Route component={NotFoundPage} />
+            </Switch>
+            <Footer />
           </div>
         </AvatarProvider>
       </BrowserRouter>

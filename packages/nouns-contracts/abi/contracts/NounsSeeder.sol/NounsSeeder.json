@@ -18,11 +18,6 @@
         "components": [
           {
             "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
             "name": "body",
             "type": "uint48"
           },

@@ -98,19 +98,6 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "_background",
-        "type": "string"
-      }
-    ],
-    "name": "addBackground",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes",
         "name": "_body",
         "type": "bytes"
@@ -174,19 +161,6 @@
       }
     ],
     "name": "addManyAccessories",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string[]",
-        "name": "_backgrounds",
-        "type": "string[]"
-      }
-    ],
-    "name": "addManyBackgrounds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -263,38 +237,6 @@
   },
   {
     "inputs": [],
-    "name": "backgroundCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "backgrounds",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "baseURI",
     "outputs": [
       {
@@ -349,11 +291,6 @@
         "components": [
           {
             "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
             "name": "body",
             "type": "uint48"
           },
@@ -393,11 +330,6 @@
     "inputs": [
       {
         "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
           {
             "internalType": "uint48",
             "name": "body",
@@ -449,11 +381,6 @@
       },
       {
         "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
           {
             "internalType": "uint48",
             "name": "body",
@@ -648,11 +575,6 @@
       },
       {
         "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
           {
             "internalType": "uint48",
             "name": "body",

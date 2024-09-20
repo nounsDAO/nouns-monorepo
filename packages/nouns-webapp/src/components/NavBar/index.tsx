@@ -42,7 +42,7 @@ const NavBar = () => {
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `var(--brand-warm-background)` }}
+        style={{ backgroundColor: `transparent` }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >

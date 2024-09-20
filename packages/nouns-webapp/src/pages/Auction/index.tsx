@@ -42,7 +42,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     }
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
-  const backgroundColor = 'var(--brand-warm-background)';
+  const backgroundColor = 'transparent';
 
   return (
     <>
