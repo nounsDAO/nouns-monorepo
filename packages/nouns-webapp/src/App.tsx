@@ -37,8 +37,8 @@ function App() {
   const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
-    <div className={`${classes.wrapper}`}>
-         <div className="skyBackground">
+    <div className={`${classes.wrapper}`} style={{ backgroundColor: '#3D692F' }}>
+         {/* <div className="skyBackground">
         <div className="cloudContainer leftClouds">
           <div className="pixelatedCloud tinyCloud" />
           <div className="pixelatedCloud smallCloud" />
@@ -53,7 +53,7 @@ function App() {
           <div className="pixelatedCloud largeCloud" />
           <div className="pixelatedCloud extraLargeCloud" />
         </div>
-      </div>
+      </div> */}
       {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal

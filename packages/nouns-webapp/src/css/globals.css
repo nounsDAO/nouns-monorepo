@@ -18,6 +18,11 @@ body {
   width: 100%;
 }
 
+.btn-primary {
+  color: #abffb2 !important;
+  background: #00340c !important;
+  border-color: #00340c !important;
+}
 
 .skyBackground {
   position: fixed;
