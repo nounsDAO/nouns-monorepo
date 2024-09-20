@@ -30,16 +30,12 @@ contract NounsSeeder is INounsSeeder {
             keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
         );
 
-        uint256 backgroundCount = descriptor.backgroundCount();
         uint256 bodyCount = descriptor.bodyCount();
         uint256 accessoryCount = descriptor.accessoryCount();
         uint256 headCount = descriptor.headCount();
         uint256 glassesCount = descriptor.glassesCount();
 
         return Seed({
-            background: uint48(
-                uint48(pseudorandomness) % backgroundCount
-            ),
             body: uint48(
                 uint48(pseudorandomness >> 48) % bodyCount
             ),

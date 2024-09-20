@@ -27,7 +27,7 @@ const GovernancePage = () => {
 
   return (
     <>
-      <Section fullWidth={false} className={classes.section} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+      <Section fullWidth={false} className={classes.section} style={{backgroundColor: 'transparent'}}>
         <Col lg={10} className={classes.wrapper}>
           <Row className={classes.headerRow}>
             <span>

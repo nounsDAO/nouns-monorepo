@@ -24,7 +24,6 @@ abstract contract DescriptorHelpers is Test, Constants {
             bytes[] memory glasses
         ) = abi.decode(content, (string[], string[], bytes[], bytes[], bytes[], bytes[]));
 
-        descriptor.addManyBackgrounds(bgcolors);
         descriptor.addManyColorsToPalette(0, palette);
         descriptor.addManyBodies(bodies);
         descriptor.addManyAccessories(accessories);
@@ -33,18 +32,8 @@ abstract contract DescriptorHelpers is Test, Constants {
     }
 
     function _populateDescriptorV2(NounsDescriptorV2 descriptor) internal {
-        // created with `npx hardhat descriptor-art-to-console`
-        (bytes memory palette, string[] memory backgrounds) = abi.decode(
-            readFile('./test/foundry/files/descriptor_v2/paletteAndBackgrounds.abi'),
-            (bytes, string[])
-        );
         descriptor.setPalette(0, palette);
-        descriptor.addManyBackgrounds(backgrounds);
-
-        (bytes memory bodies, uint80 bodiesLength, uint16 bodiesCount) = abi.decode(
-            readFile('./test/foundry/files/descriptor_v2/bodiesPage.abi'),
-            (bytes, uint80, uint16)
-        );
+        
         descriptor.addBodies(bodies, bodiesLength, bodiesCount);
 
         (bytes memory heads, uint80 headsLength, uint16 headsCount) = abi.decode(

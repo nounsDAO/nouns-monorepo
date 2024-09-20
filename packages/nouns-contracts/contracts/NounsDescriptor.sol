@@ -43,9 +43,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // Noun Color Palettes (Index => Hex Colors)
     mapping(uint8 => string[]) public override palettes;
 
-    // Noun Backgrounds (Hex Colors)
-    string[] public override backgrounds;
-
     // Noun Bodies (Custom RLE)
     bytes[] public override bodies;
 
@@ -65,14 +62,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         require(!arePartsLocked, 'Parts are locked');
         _;
     }
-
-    /**
-     * @notice Get the number of available Noun `backgrounds`.
-     */
-    function backgroundCount() external view override returns (uint256) {
-        return backgrounds.length;
-    }
-
     /**
      * @notice Get the number of available Noun `bodies`.
      */
@@ -109,26 +98,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
         for (uint256 i = 0; i < newColors.length; i++) {
             _addColorToPalette(paletteIndex, newColors[i]);
-        }
-    }
-
-    /**
-     * @notice Batch add Noun backgrounds.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyBackgrounds(string[] calldata _backgrounds) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _backgrounds.length; i++) {
-            _addBackground(_backgrounds[i]);
-        }
-    }
-
-    /**
-     * @notice Batch add Noun bodies.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyBodies(bytes[] calldata _bodies) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _bodies.length; i++) {
-            _addBody(_bodies[i]);
         }
     }
 
@@ -170,15 +139,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         require(palettes[_paletteIndex].length <= 255, 'Palettes can only hold 256 colors');
         _addColorToPalette(_paletteIndex, _color);
     }
-
-    /**
-     * @notice Add a Noun background.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addBackground(string calldata _background) external override onlyOwner whenPartsNotLocked {
-        _addBackground(_background);
-    }
-
+    
     /**
      * @notice Add a Noun body.
      * @dev This function can only be called by the owner when not locked.
@@ -278,8 +239,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: name,
             description: description,
-            parts: _getPartsForSeed(seed),
-            background: backgrounds[seed.background]
+            parts: _getPartsForSeed(seed)
         });
         return NFTDescriptor.constructTokenURI(params, palettes);
     }
@@ -289,8 +249,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
         MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
-            parts: _getPartsForSeed(seed),
-            background: backgrounds[seed.background]
+            parts: _getPartsForSeed(seed)
         });
         return NFTDescriptor.generateSVGImage(params, palettes);
     }
@@ -300,13 +259,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
         palettes[_paletteIndex].push(_color);
-    }
-
-    /**
-     * @notice Add a Noun background.
-     */
-    function _addBackground(string calldata _background) internal {
-        backgrounds.push(_background);
     }
 
     /**

@@ -32,8 +32,6 @@ interface INounsDescriptorMinimal {
     /// USED BY SEEDER
     ///
 
-    function backgroundCount() external view returns (uint256);
-
     function bodyCount() external view returns (uint256);
 
     function accessoryCount() external view returns (uint256);

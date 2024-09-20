@@ -8,7 +8,7 @@
 }
 
 html, body {
-  background: "var(--brand-warm-background) !important",
+  background: "transparent !important",
 }
 
 body {
@@ -16,4 +16,114 @@ body {
 }
 #root {
   width: 100%;
+}
+
+
+.skyBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #adebff;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.cloudContainer {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  animation: moveDown 60s linear infinite;
+}
+
+.cloudContainerFaster {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  animation: moveDown 30s linear infinite;
+}
+
+@keyframes moveDown {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.leftClouds {
+  left: 0;
+}
+
+.rightClouds {
+  right: -30%;
+}
+
+.pixelatedCloud {
+  position: absolute;
+  background-color: #d9f6ff;
+}
+
+.tinyCloud {
+  width: 80px;
+  height: 48px;
+  left: 5%;
+  top: 10%;
+  clip-path: polygon(
+    0% 50%, 25% 50%, 25% 25%, 50% 25%, 50% 50%, 75% 50%, 75% 75%,
+    50% 75%, 50% 100%, 25% 100%, 25% 75%, 0% 75%
+  );
+}
+
+.smallCloud {
+  width: 100px;
+  height: 60px;
+  left: 10%;
+  top: 15%;
+  clip-path: polygon(
+    0% 50%, 20% 50%, 20% 30%, 40% 30%, 40% 20%, 60% 20%, 60% 30%,
+    80% 30%, 80% 50%, 100% 50%, 100% 70%, 80% 70%, 80% 80%, 
+    60% 80%, 60% 90%, 40% 90%, 40% 80%, 20% 80%, 20% 70%, 0% 70%
+  );
+}
+
+.mediumCloud {
+  width: 150px;
+  height: 90px;
+  left: 50%;
+  top: 40%;
+  clip-path: polygon(
+    0% 40%, 10% 40%, 10% 20%, 30% 20%, 30% 10%, 50% 10%, 50% 20%,
+    70% 20%, 70% 30%, 90% 30%, 90% 40%, 100% 40%, 100% 60%, 90% 60%,
+    90% 70%, 70% 70%, 70% 80%, 50% 80%, 50% 90%, 30% 90%, 30% 80%,
+    10% 80%, 10% 60%, 0% 60%
+  );
+}
+
+.largeCloud {
+  width: 200px;
+  height: 120px;
+  left: 75%;
+  top: 70%;
+  clip-path: polygon(
+    0% 45%, 15% 45%, 15% 30%, 30% 30%, 30% 15%, 45% 15%, 45% 30%,
+    60% 30%, 60% 15%, 75% 15%, 75% 30%, 90% 30%, 90% 45%, 100% 45%,
+    100% 60%, 90% 60%, 90% 75%, 75% 75%, 75% 90%, 60% 90%, 60% 75%,
+    45% 75%, 45% 90%, 30% 90%, 30% 75%, 15% 75%, 15% 60%, 0% 60%
+  );
+}
+
+.extraLargeCloud {
+  width: 250px;
+  height: 150px;
+  left: 85%;
+  top: 70%;
+  clip-path: polygon(
+    0% 40%, 10% 40%, 10% 20%, 25% 20%, 25% 10%, 40% 10%, 40% 20%,
+    55% 20%, 55% 10%, 70% 10%, 70% 20%, 85% 20%, 85% 40%, 100% 40%,
+    100% 60%, 85% 60%, 85% 80%, 70% 80%, 70% 90%, 55% 90%, 55% 80%,
+    40% 80%, 40% 90%, 25% 90%, 25% 80%, 10% 80%, 10% 60%, 0% 60%
+  );
 }

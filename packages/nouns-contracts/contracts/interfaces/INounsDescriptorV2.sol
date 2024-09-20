@@ -45,8 +45,6 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
 
     function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
-    function backgrounds(uint256 index) external view returns (string memory);
-
     function bodies(uint256 index) external view returns (bytes memory);
 
     function accessories(uint256 index) external view returns (bytes memory);
@@ -55,8 +53,6 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
 
     function glasses(uint256 index) external view returns (bytes memory);
 
-    function backgroundCount() external view override returns (uint256);
-
     function bodyCount() external view override returns (uint256);
 
     function accessoryCount() external view override returns (uint256);
@@ -64,10 +60,6 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
     function headCount() external view override returns (uint256);
 
     function glassesCount() external view override returns (uint256);
-
-    function addManyBackgrounds(string[] calldata backgrounds) external;
-
-    function addBackground(string calldata background) external;
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
