@@ -6,13 +6,13 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptorV2` contract address',
-    '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    '0xcE6217A670A8FcF45F75AF5DD4420Ac714167Aa5',
     types.string,
   )
   .addOptionalParam(
     'nounsDescriptor',
     'The `NounsDescriptorV2` contract address',
-    '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    '0xbAa2508Ec3965AB5136895A81acC7923C5d6D752',
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
@@ -33,7 +33,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     const glassesPage = dataToDescriptorInput(glasses.map(({ data }) => data));
     const accessoriesPage = dataToDescriptorInput(accessories.map(({ data }) => data));
 
-    await descriptorContract.addManyBackgrounds(bgcolors);
+    // await descriptorContract.addManyBackgrounds(bgcolors);
     await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
     await descriptorContract.addBodies(

@@ -13,6 +13,7 @@ const encode = async () => {
     const folderpath = path.join(__dirname, '../images/v0', folder);
     const files = await fs.readdir(folderpath);
     for (const file of files) {
+      console.log(file)
       const image = await readPngImage(path.join(folderpath, file));
       encoder.encodeImage(file.replace(/\.png$/, ''), image, folder.replace(/^\d-/, ''));
     }

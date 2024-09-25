@@ -53,7 +53,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 5 /* 2 minutes */,
+    60 * 2 /* 2 minutes */,
     types.int,
   )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
@@ -158,7 +158,12 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           proxyRegistryAddress,
         ],
         postDeployAction: async (deployedContract) => {
+          console.log('NounsToken deployed. Important addresses:');
           console.log(`NounsToken address: ${deployedContract.address}`);
+          console.log(`Nounders DAO address: ${args.noundersdao}`);
+          console.log(`Expected Auction House Proxy address: ${expectedAuctionHouseProxyAddress}`);
+          console.log(`Desired creator address: 0x90d0eE4f5BD5F4d168A1EeDb2609F8b3ca8bcC66`);
+          console.log('NOTE: Ensure that the address minting tokens (usually the Auction House) is set to the desired creator address.');
         },
       },
       NounsAuctionHouse: {
