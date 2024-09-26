@@ -6,7 +6,7 @@ const Footer = () => {
     <div className={classes.wrapper}>
       <Container className={classes.container}>
         <footer className={classes.footerSignature}>
-          Powered by <a href="https://firstset.xyz">Firstset</a>
+          Built by<a href="https://firstset.xyz">Firstset</a>
         </footer>
       </Container>
     </div>

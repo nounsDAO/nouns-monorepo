@@ -75,6 +75,9 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <ul>
                 <li>
+                  <Trans>Bouns is a fork of Nouns on Berachain.</Trans>
+                </li>
+                <li>
                   <Trans>Bouns artwork is in the {publicDomainLink}.</Trans>
                 </li>
                 <li>
@@ -87,10 +90,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   <Trans>Settlement of one auction kicks off the next.</Trans>
                 </li>
                 <li>
-                  <Trans>When an auction settles for less than the average historical auction price, the next auction's epoch is increased by 10%.</Trans>
-                </li>
-                <li>
-                  <Trans>When an auction settles for more or equal to the average historical auction price, the next auction's epoch does not change.</Trans>
+                  <Trans>When an auction settles for less than the average historical auction sale price, the next auction's epoch is increased by 10%.</Trans>
                 </li>
                 <li>
                   <Trans>All Bouns are members of Bouns DAO.</Trans>
@@ -123,13 +123,13 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
 
           <Accordion.Item eventKey="1" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Daily Auctions</Trans>
+              <Trans>Auction Design</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                  The Bouns Auction Contract will act as a self-sufficient Boun generation and
-                  distribution mechanism, auctioning one Boun every 24 hours, forever. 100% of
+                  Like Nouns, the Bouns Auction Contract will act as a self-sufficient Boun generation and
+                  distribution mechanism, auctioning one Boun every epoch, forever. 100% of
                   auction proceeds (BERA) are automatically deposited in the Bouns DAO treasury,
                   where they are governed by Boun owners.
                 </Trans>
@@ -138,7 +138,16 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  Boun to be minted and a new 24 hour auction to begin.{' '}
+                  Boun to be minted and a new epoch to begin.{' '}
+                </Trans>
+              </p>
+
+              <p>
+                <Trans>
+                  Unlike Nouns, the Bouns auction mechanism consists of a dynamic duration with the goal 
+                  of achieving naturally deflationary issuance over time. This is accomplished by 
+                  increasing the epoch duration by 10% when an auction settles for less than the average 
+                  historical auction sale price. An epoch is 24 hours at time of launch.
                 </Trans>
               </p>
               <p>
@@ -156,7 +165,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
-                Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
+                Like Nouns, Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
                 Bouns ecosystem. The Bouns DAO treasury receives 100% of BERA proceeds from daily
                 Boun auctions. Each Boun is an irrevocable member of Bouns DAO and entitled to one
                 vote in all governance matters. Boun votes are non-transferable (if you sell your
@@ -204,7 +213,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
               <p>
                 <Trans>
-                  In the case of Bouns DAO, veto power will be stewarded by Firstset, 
+                  In the case of Bouns DAO, veto power will be stewarded by <a href="https://firstset.xyz">Firstset</a>, 
                   as the founding entity of the project.
                 </Trans>
               </p>
@@ -242,15 +251,12 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p>
                 <Trans>
-                  Bouns are generated randomly based Ethereum block hashes. There are no 'if'
+                  Bouns are generated randomly based Berachain block hashes. There are no 'if'
                   statements or other rules governing Noun trait scarcity, which makes all Bouns
                   equally rare. As of this writing, Bouns are made up of:
                 </Trans>
               </p>
               <ul>
-                <li>
-                  <Trans>backgrounds (2) </Trans>
-                </li>
                 <li>
                   <Trans>bodies (30)</Trans>
                 </li>
@@ -258,10 +264,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   <Trans>accessories (140) </Trans>
                 </li>
                 <li>
-                  <Trans>heads (242) </Trans>
+                  <Trans>heads (50) </Trans>
                 </li>
                 <li>
-                  <Trans>glasses (23)</Trans>
+                  <Trans>glasses (30)</Trans>
                 </li>
               </ul>
               <Trans>
@@ -276,7 +282,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p>
                 <Trans>
-                  Bouns are stored directly on Ethereum and do not utilize pointers to other
+                  Bouns are stored directly on Berachain and do not utilize pointers to other
                   networks such as IPFS. This is possible because Noun parts are compressed and
                   stored on-chain using a custom run-length encoding (RLE), which is a form of
                   lossless compression.
@@ -296,15 +302,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Noun Seeder Contract</Trans>
+              <Trans>Boun Seeder Contract</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  The Noun Seeder contract is used to determine Noun traits during the minting
+                  The Boun Seeder contract is used to determine Boun traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
                   algorithm upgrades. Additionally, it can be locked by the Bouns DAO to prevent any
-                  future updates. Currently, Noun traits are determined using pseudo-random number
+                  future updates. Currently, Boun traits are determined using pseudo-random number
                   generation:
                 </Trans>
               </p>
@@ -313,7 +319,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <br />
               <p>
                 <Trans>
-                  Trait generation is not truly random. Traits can be predicted when minting a Noun
+                  Trait generation is not truly random. Traits can be predicted when minting a Boun
                   on the pending block.
                 </Trans>
               </p>
@@ -321,73 +327,29 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nounder's Reward</Trans>
+              <Trans>Bounder's Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Nounders' are the group of ten builders that initiated Bouns. Here are the
-                  Nounders:
+                  'Bounders' refers to the original founders of the project. In this case, it refers to <a href="https://firstset.xyz">Firstset</a>, 
+                  the founding entity of the project.
                 </Trans>
               </p>
-              <ul>
-                <li>
-                  <Link
-                    text="@cryptoseneca"
-                    url="https://twitter.com/cryptoseneca"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@gremplin" url="https://twitter.com/gremplin" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@_solimander_"
-                    url="https://twitter.com/_solimander_"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@lastpunk9999"
-                    url="https://twitter.com/lastpunk9999"
-                    leavesPage={true}
-                  />
-                </li>
-              </ul>
               <p>
                 <Trans>
-                  Because 100% of Noun auction proceeds are sent to Bouns DAO, Nounders have chosen
-                  to compensate themselves with Bouns. Every 10th Noun for the first 5 years of the
-                  project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  Nounder's multisig to be vested and shared among the founding members of the
+                  Because 100% of Boun auction proceeds are sent to Bouns DAO, Bounders have chosen
+                  to compensate themselves with Bouns. Every 10th Boun for the first 5 years of the
+                  project (Boun ids #0, #10, #20, #30 and so on) will be automatically sent to the
+                  Bounder's multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 24 hour auctions. Bouns
-                  are sent directly to the Nounder's Multisig, and auctions continue on schedule
-                  with the next available Noun ID.
+                  Bounder distributions don't interfere with the cadence of auctions. Bouns
+                  are sent directly to the Bounder's Multisig, and auctions continue on schedule
+                  with the next available Boun ID.
                 </Trans>
               </p>
             </Accordion.Body>
