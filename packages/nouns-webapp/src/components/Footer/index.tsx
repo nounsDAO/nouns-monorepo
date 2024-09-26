@@ -6,7 +6,7 @@ const Footer = () => {
     <div className={classes.wrapper}>
       <Container className={classes.container}>
         <footer className={classes.footerSignature} style={{ color: 'var(--brand-warm-light-text) !important' }}>
-          Powered by<a href="https://firstset.xyz" style={{ color: 'var(--brand-warm-light-text)' }}>Firstset</a>
+          Built by<a href="https://firstset.xyz" style={{ color: 'var(--brand-warm-light-text)' }}>Firstset</a>
         </footer>
       </Container>
     </div>
