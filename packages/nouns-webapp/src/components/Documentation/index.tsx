@@ -52,16 +52,16 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
     >
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
-          <h1>
+          <h1 style={{ color: 'var(--brand-warm-light-text)' }}>
             <Trans>WTF?</Trans>
           </h1>
-          <p className={classes.aboutText}>
+          <p className={classes.aboutText} style={{ color: 'var(--brand-warm-light-text)' }}>
             <Trans>
               Bouns is a {nounsLink} experiment for community-based {polLink} participation on Berachain. 
               Bouns attempt to bootstrap identity, community, governance, and a treasury that can be used to participate in Proof of Liquidity.
             </Trans>
           </p>
-          <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
+          <p className={classes.aboutText} style={{ paddingBottom: '4rem', color: 'var(--brand-warm-light-text)' }}>
             <Trans>
               Learn more below, or start creating Bouns off-chain using the {playgroundLink}.
             </Trans>
@@ -70,10 +70,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
         <Accordion flush>
           <Accordion.Item eventKey="0" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Summary</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Summary</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <ul>
+              <ul style={{ color: 'var(--brand-warm-light-text)' }}>
                 <li>
                   <Trans>Bouns is a fork of Nouns on Berachain.</Trans>
                 </li>
@@ -123,10 +123,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
 
           <Accordion.Item eventKey="1" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Auction Design</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Auction Design</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p className={classes.aboutText}>
+              <p className={classes.aboutText} style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Like Nouns, the Bouns Auction Contract will act as a self-sufficient Boun generation and
                   distribution mechanism, auctioning one Boun every epoch, forever. 100% of
@@ -135,7 +135,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
 
-              <p className={classes.aboutText}>
+              <p className={classes.aboutText} style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
                   Boun to be minted and a new epoch to begin.{' '}
@@ -150,7 +150,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   historical auction sale price. An epoch is 24 hours at time of launch.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   While settlement is most heavily incentivized for the winning bidder, it can be
                   triggered by anyone, allowing the system to trustlessly auction Bouns as long as
@@ -161,7 +161,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Bouns DAO</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Bouns DAO</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
@@ -176,10 +176,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Governance ‘Slow Start’</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Governance ‘Slow Start’</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Bouns DAO Governance is currently in a 'slow start' phase, given the history and 
                   learnings from Nouns DAO, which are explained in more detail below for context.
@@ -196,7 +196,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   the right is removed.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   The Nouns community has undertaken a preliminary exploration of proposal veto
                   alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult
@@ -204,20 +204,20 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   before a satisfactory solution can be implemented.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Consequently, the Nouns Foundation anticipates being the steward of the veto power
                   until Nouns DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   In the case of Bouns DAO, veto power will be stewarded by <a href="https://firstset.xyz">Firstset</a>, 
                   as the founding entity of the project.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Firstset considers the veto an emergency power that should not be
                   exercised in the normal course of business. Firstset will veto
@@ -226,7 +226,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   that:
                 </Trans>
               </p>
-              <ul>
+              <ul style={{ color: 'var(--brand-warm-light-text)' }}>
                 <li>unequally withdraw the treasury for personal gain</li>
                 <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
                 <li>
@@ -235,7 +235,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </li>
                 <li>make upgrades to critical smart contracts without undergoing an audit</li>
               </ul>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   There are unfortunately no algorithmic solutions for making these determinations
                   in advance (if there were, the veto would not be required), and proposals must be
@@ -246,17 +246,17 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Noun Traits</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Noun Traits</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Bouns are generated randomly based Berachain block hashes. There are no 'if'
                   statements or other rules governing Noun trait scarcity, which makes all Bouns
                   equally rare. As of this writing, Bouns are made up of:
                 </Trans>
               </p>
-              <ul>
+              <ul style={{ color: 'var(--brand-warm-light-text)' }}>
                 <li>
                   <Trans>bodies (30)</Trans>
                 </li>
@@ -270,17 +270,19 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   <Trans>glasses (30)</Trans>
                 </li>
               </ul>
-              <Trans>
-                You can experiment with off-chain Noun generation at the {playgroundLink}.
-              </Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}>
+                <Trans>
+                  You can experiment with off-chain Noun generation at the {playgroundLink}.
+                </Trans>
+              </span>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="5" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>On-Chain Artwork</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>On-Chain Artwork</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Bouns are stored directly on Berachain and do not utilize pointers to other
                   networks such as IPFS. This is possible because Noun parts are compressed and
@@ -289,7 +291,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
 
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   The compressed parts are efficiently converted into a single base64 encoded SVG
                   image on-chain. To accomplish this, each part is decoded into an intermediate
@@ -302,10 +304,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Boun Seeder Contract</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Boun Seeder Contract</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   The Boun Seeder contract is used to determine Boun traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
@@ -317,7 +319,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
               <br />
               <br />
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Trait generation is not truly random. Traits can be predicted when minting a Boun
                   on the pending block.
@@ -327,16 +329,60 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Bounder's Reward</Trans>
+              <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Bounder's Reward</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   'Bounders' refers to the original founders of the project. In this case, it refers to <a href="https://firstset.xyz">Firstset</a>, 
                   the founding entity of the project.
                 </Trans>
               </p>
-              <p>
+              <ul style={{ color: 'var(--brand-warm-light-text)' }}>
+                <li>
+                  <Link
+                    text="@cryptoseneca"
+                    url="https://twitter.com/cryptoseneca"
+                    leavesPage={true}
+                  />
+                </li>
+                <li>
+                  <Link text="@gremplin" url="https://twitter.com/gremplin" leavesPage={true} />
+                </li>
+                <li>
+                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
+                </li>
+                <li>
+                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
+                </li>
+                <li>
+                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
+                </li>
+                <li>
+                  <Link
+                    text="@_solimander_"
+                    url="https://twitter.com/_solimander_"
+                    leavesPage={true}
+                  />
+                </li>
+                <li>
+                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
+                </li>
+                <li>
+                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
+                </li>
+                <li>
+                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
+                </li>
+                <li>
+                  <Link
+                    text="@lastpunk9999"
+                    url="https://twitter.com/lastpunk9999"
+                    leavesPage={true}
+                  />
+                </li>
+              </ul>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Because 100% of Boun auction proceeds are sent to Bouns DAO, Bounders have chosen
                   to compensate themselves with Bouns. Every 10th Boun for the first 5 years of the
@@ -345,7 +391,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   project.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Bounder distributions don't interfere with the cadence of auctions. Bouns
                   are sent directly to the Bounder's Multisig, and auctions continue on schedule

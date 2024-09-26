@@ -40,8 +40,6 @@ interface INounsArt {
 
     event InflatorUpdated(address oldInflator, address newInflator);
 
-    event BackgroundsAdded(uint256 count);
-
     event PaletteSet(uint8 paletteIndex);
 
     event BodiesAdded(uint16 count);
@@ -70,10 +68,6 @@ interface INounsArt {
     function setDescriptor(address descriptor) external;
 
     function setInflator(IInflator inflator) external;
-
-    function addManyBackgrounds(string[] calldata _backgrounds) external;
-
-    function addBackground(string calldata _background) external;
 
     function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
@@ -129,8 +123,6 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
-    function backgroundCount() external view returns (uint256);
-
     function bodyCount() external view returns (uint256);
 
     function accessoryCount() external view returns (uint256);
@@ -138,8 +130,6 @@ interface INounsArt {
     function headCount() external view returns (uint256);
 
     function glassesCount() external view returns (uint256);
-
-    function backgrounds(uint256 index) external view returns (string memory);
 
     function heads(uint256 index) external view returns (bytes memory);
 

@@ -39,14 +39,13 @@ const getRectLength = (currentX: number, drawLength: number, rightBound: number)
  * Given RLE parts, palette colors, and a background color, build an SVG image.
  * @param parts The RLE part datas
  * @param paletteColors The hex palette colors
- * @param bgColor The hex background color
  */
 export const buildSVG = (
   parts: { data: string }[],
   paletteColors: string[],
-  bgColor?: string,
 ): string => {
-  const svgWithoutEndTag = parts.reduce((result, part) => {
+  const filteredParts = parts.filter(part => part !== undefined);
+  const svgWithoutEndTag = filteredParts.reduce((result, part) => {
     const svgRects: string[] = [];
     const { bounds, rects } = decodeImage(part.data);
 
@@ -81,7 +80,7 @@ export const buildSVG = (
     });
     result += svgRects.join('');
     return result;
-  }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="${bgColor ? `#${bgColor}` : 'none'}" />`);
+  }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="none" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };

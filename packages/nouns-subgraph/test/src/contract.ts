@@ -163,7 +163,6 @@ export function handleNounCreated(event: NounCreatedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.tokenId = event.params.tokenId
-  entity.seed_background = event.params.seed.background
   entity.seed_body = event.params.seed.body
   entity.seed_accessory = event.params.seed.accessory
   entity.seed_head = event.params.seed.head

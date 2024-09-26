@@ -311,10 +311,10 @@ contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpoint
      * @notice Mint a new token using the original Nouns seed.
      */
     function _mintWithOriginalSeed(address to, uint256 nounId) internal {
-        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsTokenFork(
+        (uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsTokenFork(
             address(escrow.nounsToken())
         ).seeds(nounId);
-        INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
+        INounsSeeder.Seed memory seed = INounsSeeder.Seed(body, accessory, head, glasses);
 
         seeds[nounId] = seed;
         _mint(to, nounId);

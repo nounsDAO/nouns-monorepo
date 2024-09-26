@@ -13,7 +13,6 @@ export function handleNounCreated(event: NounCreated): void {
   let nounId = event.params.tokenId.toString();
 
   let seed = new Seed(nounId);
-  seed.background = event.params.seed.background;
   seed.body = event.params.seed.body;
   seed.accessory = event.params.seed.accessory;
   seed.head = event.params.seed.head;

@@ -45,9 +45,6 @@ type Seed @entity {
   "The Noun's ERC721 token id"
   id: ID!
 
-  "The background index"
-  background: BigInt!
-
   "The body index"
   body: BigInt!
 

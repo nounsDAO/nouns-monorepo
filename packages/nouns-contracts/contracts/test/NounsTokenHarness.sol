@@ -30,14 +30,12 @@ contract NounsTokenHarness is NounsToken {
 
     function mintSeed(
         address to,
-        uint48 background,
         uint48 body,
         uint48 accessory,
         uint48 head,
         uint48 glasses
     ) public {
         seeds[currentNounId] = INounsSeeder.Seed({
-            background: background,
             body: body,
             accessory: accessory,
             head: head,

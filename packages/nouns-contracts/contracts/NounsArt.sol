@@ -28,9 +28,6 @@ contract NounsArt is INounsArt {
     /// @notice Current inflator address
     IInflator public override inflator;
 
-    /// @notice Noun Backgrounds (Hex Colors)
-    string[] public override backgrounds;
-
     /// @notice Noun Color Palettes (Index => Hex Colors, stored as a contract using SSTORE2)
     mapping(uint8 => address) public palettesPointers;
 
@@ -121,28 +118,6 @@ contract NounsArt is INounsArt {
      */
     function getGlassesTrait() external view override returns (Trait memory) {
         return glassesTrait;
-    }
-
-    /**
-     * @notice Batch add Noun backgrounds.
-     * @dev This function can only be called by the descriptor.
-     */
-    function addManyBackgrounds(string[] calldata _backgrounds) external override onlyDescriptor {
-        for (uint256 i = 0; i < _backgrounds.length; i++) {
-            _addBackground(_backgrounds[i]);
-        }
-
-        emit BackgroundsAdded(_backgrounds.length);
-    }
-
-    /**
-     * @notice Add a Noun background.
-     * @dev This function can only be called by the descriptor.
-     */
-    function addBackground(string calldata _background) external override onlyDescriptor {
-        _addBackground(_background);
-
-        emit BackgroundsAdded(1);
     }
 
     /**
@@ -328,13 +303,6 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Get the number of available Noun `backgrounds`.
-     */
-    function backgroundCount() external view returns (uint256) {
-        return backgrounds.length;
-    }
-
-    /**
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view returns (uint256) {
@@ -399,10 +367,6 @@ contract NounsArt is INounsArt {
             revert PaletteNotFound();
         }
         return SSTORE2.read(palettesPointers[paletteIndex]);
-    }
-
-    function _addBackground(string calldata _background) internal {
-        backgrounds.push(_background);
     }
 
     function addPage(

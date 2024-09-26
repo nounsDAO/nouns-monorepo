@@ -240,14 +240,14 @@ const CreateProposalPage = () => {
   ]);
 
   return (
-    <Section fullWidth={false} className={classes.createProposalPage} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+    <Section fullWidth={false} className={classes.createProposalPage} style={{backgroundColor: 'transparent'}}>
       <ProposalActionModal
         onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}
         onActionAdd={handleAddProposalAction}
       />
 
-      <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm} style={{backgroundColor: 'var(--brand-warm-background)'}}>
+      <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm} style={{backgroundColor: 'transparent'}}>
         <div className={classes.wrapper}>
           <Link to={'/vote'}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>

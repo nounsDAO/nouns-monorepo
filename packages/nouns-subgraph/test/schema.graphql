@@ -81,7 +81,6 @@ type NounBurned @entity(immutable: true) {
 type NounCreated @entity(immutable: true) {
   id: Bytes!
   tokenId: BigInt! # uint256
-  seed_background: BigInt! # uint48
   seed_body: BigInt! # uint48
   seed_accessory: BigInt! # uint48
   seed_head: BigInt! # uint48
