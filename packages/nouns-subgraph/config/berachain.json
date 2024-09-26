@@ -1,19 +1,19 @@
 {
     "network": "bartio-beacon-80084",
     "nounsToken": {
-      "address": "0x87901D50205a69aF4Fc4cB98c6B1DACB64298BC8",
+      "address": "0x5D3170c3143a3406fD9430Ac4840c406b8e6786a",
       "startBlock": 4000000
     },
     "nounsAuctionHouse": {
-      "address": "0xE36659572eD6F5a702A5A0d76D357d6E1B15F94E",
+      "address": "0x60D4fF3E96035B66795510772cDCCD074Dbb6Dee",
       "startBlock": 4000000
     },
     "nounsDAO": {
-      "address": "0xE3FB471458a6C9ab90a7f7e1bdCb48D61FB58B29",
+      "address": "0x0705F98e37e9D8dE32c18ce3d66a4DfCb9B9Ec1F",
       "startBlock": 4000000
     },
     "nounsDAOData": {
-      "address": "0x4420e115c10523734cC93c80A61a8DdD666422aD",
+      "address": "0xA8F89beFe2Dc3C5f416D773f0e5b06ade3F010E2",
       "startBlock": 4000000
     }
   }
