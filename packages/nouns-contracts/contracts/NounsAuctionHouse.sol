@@ -57,6 +57,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The total amount of ETH raised in auctions
     uint256 public totalRaised;
 
+    // The total number of auctions
+    uint256 public totalAuctions;
+
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
@@ -87,7 +90,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         minBidIncrementPercentage = _minBidIncrementPercentage;
         duration = _duration;
         durationIncreasePercentage = _durationIncreasePercentage;
-        totalRaised = 0;
     }
 
     /**
@@ -250,6 +252,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             nouns.burn(_auction.nounId);
         } else {
             nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+            totalAuctions += 1;
         }
 
         if (_auction.amount > 0) {
@@ -257,7 +260,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             totalRaised += _auction.amount;
         }
 
-        if (totalRaised / nouns.totalSupply() > _auction.amount) {
+        if (totalAuctions > 0 && totalRaised / totalAuctions > _auction.amount) {
             duration += (duration * durationIncreasePercentage) / 100;
         }
 
