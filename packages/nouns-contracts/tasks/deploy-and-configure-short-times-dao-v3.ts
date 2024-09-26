@@ -34,6 +34,12 @@ task(
     60 * 2 /* 2 minutes */,
     types.int,
   )
+  .addOptionalParam(
+    'auctionDurationIncreasePercentage',
+    'The auction duration increase percentage (out of 100)',
+    10 /* 10% */,
+    types.int,
+  )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
   .addOptionalParam(
     'votingPeriod',
