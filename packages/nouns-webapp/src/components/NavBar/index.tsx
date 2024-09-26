@@ -43,7 +43,7 @@ const NavBar = () => {
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `transparent` }}
+        style={{ backgroundColor: `#adebff` }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >

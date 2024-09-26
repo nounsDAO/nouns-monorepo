@@ -40,6 +40,7 @@ const   NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
               classes.treasuryHeader,
               treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
             )}
+            style={{color: 'var(--brand-cool-dark-text)'}}
           >
             <Trans>Treasury</Trans>
           </div>

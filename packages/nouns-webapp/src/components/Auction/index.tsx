@@ -79,8 +79,91 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <div style={{ backgroundColor: 'transparent' }} className={classes.wrapper}>
-      <Container fluid="xl">
+    <div
+      style={{
+        backgroundColor: '#adebff',
+        position: 'relative',
+        zIndex: 1
+      }}
+      className={classes.wrapper}
+    >
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100vw); }
+          }
+        `}
+      </style>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }}>
+        {[...Array(15)].map((_, index) => {
+          const pixelSize = 16;
+          const cloudShapes = [
+            [[0, 1, 1, 0],
+            [1, 1, 1, 1],
+            [0, 1, 1, 0]],
+            [[0, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 0]],
+            [[0, 0, 1, 1, 0],
+            [0, 1, 1, 1, 1],
+            [1, 1, 1, 1, 0]],
+            [[0, 1, 1, 0, 0],
+            [1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1],
+            [0, 0, 1, 1, 0]],
+            [[0, 0, 1, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 0, 0]]
+          ];
+          const cloudShape = cloudShapes[index % cloudShapes.length];
+          const cloudWidth = cloudShape[0].length;
+          const cloudHeight = cloudShape.length;
+          return (
+            <div
+              key={index}
+              style={{
+                position: 'absolute',
+                width: `${cloudWidth * pixelSize}px`,
+                height: `${cloudHeight * pixelSize}px`,
+                top: `${15 + (index * 15)}%`,
+                left: `-${cloudWidth * pixelSize}px`,
+                animation: `float ${60 + Math.random() * 40}s linear infinite`,
+                animationDelay: `${-Math.random() * 60}s`,
+              }}
+            >
+              {cloudShape.flatMap((row, y) =>
+                row.map((pixel, x) =>
+                  pixel ? (
+                    <div
+                      key={`${x}-${y}`}
+                      style={{
+                        position: 'absolute',
+                        width: `${pixelSize}px`,
+                        height: `${pixelSize}px`,
+                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                        left: `${x * pixelSize}px`,
+                        top: `${y * pixelSize}px`,
+                      }}
+                    />
+                  ) : null
+                )
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <Container fluid="xl" style={{ position: 'relative', zIndex: 2 }}>
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
             {currentAuction ? nounContent : loadingNoun}
