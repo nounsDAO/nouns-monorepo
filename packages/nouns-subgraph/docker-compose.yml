@@ -27,6 +27,8 @@ services:
       - '5001:5001'
     volumes:
       - ./data/ipfs:/data/ipfs
+    environment:
+      - IPFS_PROFILE=server
   postgres:
     image: postgres
     ports:
