@@ -51,6 +51,15 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The duration of a single auction
     uint256 public duration;
 
+    // The percentage increase of an auction's duration after an auction is settled for less than the average
+    uint256 public durationIncreasePercentage;
+
+    // The total amount of ETH raised in auctions
+    uint256 public totalRaised;
+
+    // The total number of auctions
+    uint256 public totalAuctions;
+
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
@@ -65,7 +74,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         uint256 _timeBuffer,
         uint256 _reservePrice,
         uint8 _minBidIncrementPercentage,
-        uint256 _duration
+        uint256 _duration,
+        uint256 _durationIncreasePercentage
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -79,6 +89,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         reservePrice = _reservePrice;
         minBidIncrementPercentage = _minBidIncrementPercentage;
         duration = _duration;
+        durationIncreasePercentage = _durationIncreasePercentage;
     }
 
     /**
@@ -188,6 +199,16 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
     }
 
+    /** 
+     * @notice Set the auction duration increase percentage.
+     * @dev Only callable by the owner.
+     */
+    function setDurationIncreasePercentage(uint256 _durationIncreasePercentage) external override onlyOwner {
+        durationIncreasePercentage = _durationIncreasePercentage;
+
+        emit AuctionDurationIncreasePercentageUpdated(_durationIncreasePercentage);
+    }
+
     /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
@@ -231,10 +252,16 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             nouns.burn(_auction.nounId);
         } else {
             nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+            totalAuctions += 1;
         }
 
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
+            totalRaised += _auction.amount;
+        }
+
+        if (totalAuctions > 0 && totalRaised / totalAuctions > _auction.amount) {
+            duration += (duration * durationIncreasePercentage) / 100;
         }
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);

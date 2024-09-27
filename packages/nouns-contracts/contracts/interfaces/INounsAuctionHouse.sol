@@ -47,6 +47,8 @@ interface INounsAuctionHouse {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
+    event AuctionDurationIncreasePercentageUpdated(uint256 durationIncreasePercentage);
+
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
@@ -62,6 +64,8 @@ interface INounsAuctionHouse {
     function setReservePrice(uint256 reservePrice) external;
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
+
+    function setDurationIncreasePercentage(uint256 durationIncreasePercentage) external;
 
     function auction()
         external

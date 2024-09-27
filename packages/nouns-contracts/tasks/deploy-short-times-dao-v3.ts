@@ -56,6 +56,12 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     60 * 2 /* 2 minutes */,
     types.int,
   )
+  .addOptionalParam(
+    'auctionDurationIncreasePercentage',
+    'The auction duration increase percentage (out of 100)',
+    10 /* 10% */,
+    types.int,
+  )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
   .addOptionalParam(
     'votingPeriod',
@@ -182,6 +188,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
+              args.auctionDurationIncreasePercentage,
             ]),
         ],
         waitForConfirmation: true,
