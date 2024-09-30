@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import noggles from '../../assets/honey-noggles.svg';
-import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import config from '../../config';
@@ -19,17 +19,20 @@ import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const history = useHistory();
+  const location = useLocation();
   const treasuryBalance = useTreasuryBalance();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
   );
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
+  const isHomePage = location.pathname === '/' || location.pathname.includes('/noun/');
+  const navBarBackgroundColor = isHomePage ? '#adebff' : 'white';
+
   const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
-    history.location.pathname.includes('/auction/');
+    location.pathname === '/' ||
+    location.pathname.includes('/noun/') ||
+    location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
@@ -43,7 +46,7 @@ const NavBar = () => {
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `#adebff` }}
+        style={{ backgroundColor: navBarBackgroundColor }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >

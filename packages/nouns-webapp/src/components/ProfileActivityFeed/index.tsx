@@ -37,7 +37,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
 
   if (loading || !data || data === undefined) {
     return (
-      <Section fullWidth={false} style={{ backgroundColor: 'transparent' }}>
+      <Section fullWidth={false} style={{ backgroundColor: 'transparent', color: 'var(--brand-warm-light-text)' }}>
         <Col lg={{ span: 10, offset: 1 }}>
           <div className={classes.headerWrapper}>
             <h1>
@@ -61,7 +61,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   }
 
   return (
-    <Section fullWidth={false} style={{ backgroundColor: 'transparent' }}>
+    <Section fullWidth={false} style={{ backgroundColor: 'transparent', color: 'var(--brand-warm-light-text)' }}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>

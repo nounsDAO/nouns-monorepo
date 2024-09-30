@@ -298,7 +298,6 @@ export const auctionQuery = (auctionId: number) => gql`
       id
       seed {
         id
-        background
         body
         accessory
         head
@@ -341,7 +340,6 @@ export const nounQuery = (id: string) => gql`
 	noun(id:"${id}") {
 	  id
 	  seed {
-	  background
 		body
 		accessory
 		head

@@ -10,12 +10,6 @@ interface DocumentationProps {
 }
 
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
-  const cryptopunksLink = (
-    <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
-  );
-  const playgroundLink = (
-    <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
-  );
   const publicDomainLink = (
     <Link
       text={<Trans>public domain</Trans>}
@@ -266,11 +260,6 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   <Trans>glasses (30)</Trans>
                 </li>
               </ul>
-              <span style={{ color: 'var(--brand-warm-light-text)' }}>
-                <Trans>
-                  You can experiment with off-chain Noun generation at the {playgroundLink}.
-                </Trans>
-              </span>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="5" className={classes.accordionItem}>

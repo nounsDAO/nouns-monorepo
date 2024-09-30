@@ -6,28 +6,7 @@
     "API": "/ip4/0.0.0.0/tcp/5001",
     "Announce": [],
     "Gateway": "/ip4/0.0.0.0/tcp/8080",
-    "NoAnnounce": [
-      "/ip4/10.0.0.0/ipcidr/8",
-      "/ip4/100.64.0.0/ipcidr/10",
-      "/ip4/169.254.0.0/ipcidr/16",
-      "/ip4/172.16.0.0/ipcidr/12",
-      "/ip4/192.0.0.0/ipcidr/24",
-      "/ip4/192.0.0.0/ipcidr/29",
-      "/ip4/192.0.0.8/ipcidr/32",
-      "/ip4/192.0.0.170/ipcidr/32",
-      "/ip4/192.0.0.171/ipcidr/32",
-      "/ip4/192.0.2.0/ipcidr/24",
-      "/ip4/192.168.0.0/ipcidr/16",
-      "/ip4/198.18.0.0/ipcidr/15",
-      "/ip4/198.51.100.0/ipcidr/24",
-      "/ip4/203.0.113.0/ipcidr/24",
-      "/ip4/240.0.0.0/ipcidr/4",
-      "/ip6/100::/ipcidr/64",
-      "/ip6/2001:2::/ipcidr/48",
-      "/ip6/2001:db8::/ipcidr/32",
-      "/ip6/fc00::/ipcidr/7",
-      "/ip6/fe80::/ipcidr/10"
-    ],
+    "NoAnnounce": [],
     "Swarm": [
       "/ip4/0.0.0.0/tcp/4001",
       "/ip6/::/tcp/4001"
@@ -83,7 +62,7 @@
   },
   "Discovery": {
     "MDNS": {
-      "Enabled": false,
+      "Enabled": true,
       "Interval": 10
     }
   },
@@ -117,8 +96,8 @@
     "Writable": false
   },
   "Identity": {
-    "PeerID": "QmQpQ1JsM1zU1E9xAKwLHR1mSehjiF5dZh9bdFjg7uRvZ2",
-    "PrivKey": "CAASqAkwggSkAgEAAoIBAQC7BHKRFc5rceZSpVdTgt2KAQW2JDM4G1ivVvOTZOjhKbHNwkbFwZoUC77druJBiAWdnaZ5B0o37UTyfrCD4ifwkm3SD8yE3h3JFz9f+LLFuu9WiX+cPO5VcCuqSWXT3DDZKVPkC1GJIBVsn2Wxuz6GB+TEYADpZpiAn5mRvJocBZZdgqY41Ai7RMBKoU3EUOGd/sEaRAjgNx0uKGcjdoAxBh28KlnlsGNvhZM7/tmRrplw/jvKBPz33xhlJfmxIWLcWda3YHBBO2zKJIN+bagr8KSR9PGjTwnJcsqPxRukQNzYWtWWSw2mvqYJ4tDVNQJxqB2/ttlBHd+MNoRnaIevAgMBAAECggEBALOilAE0NvARmbBszLKUkwOJ89h+cQxFiCvzk0dSuDX+/KCtKZmuWrdCiPUalI1pgCtjUJIUJIAP0hgzBI3JX5++puoM7t/5Ehcj02X11pIC+v3eWMrT5AIBGpAYrEyRxgHxpnj3Pjw+qxWJDf9n4aiQUHcn1/hY6ccyhinsRQL/3GtXn898ZoRBSpF9JqmIjP36zSTpkUGAEm+90lxUQ+qbGtx5d9QMPJ/wdCH10WytNYfNGiOysu0D7AfjcY69DUGjcn7/rfhAxa71w4pVPhV7q7W7c+t8lLqcMxp0wIJPiKGxjcK1hdosNK3LQp+kY3v6YCQ/TeYVrzhHVSVVFGECgYEAxbkOf6mr71y62vnx/PmnvVhZ5u2/toBoggxeqOpXDInNGVs3+xMLhMJRJPPtyTqDZ18dvP0VOb5MAmi1fVzo5z1LjlEZ3azuapqpLdndVfu6cNYx7jbaSMiBK0HRmCyC82mCoj10ClebMOY8E5mPjBcFMYNWfAaTtFvnU6jpkscCgYEA8iOerw7mSptBbGiOv6n1mAh7OIG2NivYYfRk79H67Go76i6+7uzI3Z5XM3FJgRek3ORw43Tr1ORTFGBedMGKKsOUiGZU9v65TjfL4MG8NyyZ+m+QH7U7Z3dIFwzqtZC+bbXTBZQ/29rlKPxiIcZf0bk+wk4w31d/GAKdCbNu+9kCgYAiEtgazASjRVm2Luiy7dsoWDd2AnbNXqej8bnGZkwGDyFXQ08MZ6XOhSYytg6+ZOUMRWn8jajAwLicmardJcvFPdztc7B/cTPND0Ykbq0kCjOBCoikQrOvY05PRBJ4pQMUK5SlnO2Icrx92s9zmT0RqU3t0HJxATknFcdxtWQ7NQKBgD+9qLQkk/Ln090Z2RoTP5d6BBXn73NrL1b54uhOumMpxAPtsk1q/6V3XTUpiVP2SWvsptr5mGs+f7BJfhP2Lsz7F0qgxZUPkPBKN90+orFTiGUooSP3rV+bQtruh4qsQ7TVvGsnj3fss46KgbqqYebvgNndg3gHrGlBpt064uhhAoGBAJCfMHzkKQyiHMJiDc2sER1qqusn4YzO3i3QRwzdMwUPcri/snoCzHcTwSNK4qGkVhOb9ITseuonCvfgfGIR7Xq3HILfDS/9v0hmBxmz7cpEQDMgycW2PIjPKmDtclYs+Obuu1r7Nut+6F/AnOEiz4wmgkbPR6hsRfKhQ1zxy7G0"
+    "PeerID": "Qmdex5RVymtyYuBMuMxNd8cKfTZnm9gYx4gih31nz4PKa3",
+    "PrivKey": "CAASpwkwggSjAgEAAoIBAQCfnUbUyZSNh9lSpC4ei7huPy3+BLudt4V9x+/gBZQmx0dHUrVi3YdkpOEtcbxcCHmR/qLETrUO1w0wnm21XjBGVOuUQx7Ustm7qRq91cqovMH8DoBFxFEPOOiCEhfg7RZiL8voTnQTWCe3xgWnFOoNto5N+JyL9AHqIUO/hfFuslGK0/Jl6hquc3mGQKqawj63cATJhRjnqf4GujBbW3sj6p+iwlMQwTiQAqZCezuOhS9yfqx7fJQ4Q73CEXyWoXiu27pdS+RDYL7A/U6pAkprakJ41y7sjR1xnfxeG0n7U4OWz1FUXKo+w+iYOrkU3b1nR5nkD8q8Oa+1sglhhGfRAgMBAAECggEAXN9RmHyWUGesPxbCswlPTe67HyO32wQuy0oru+jjFFE9mzV3z0fhAOGjGCMmm1JfEmDcamb1mOXuicyVP0PHyRSeYo1Pgily4Wt64Nxl6Bq0sKnrXyzkkXvmZdCLTlgFfyoadlg32A2iRp8VKOvVaBdB5AJ1bEWVW5rxZZ5VJbf2psI1DufwItJHsHq2rNnTuRtVw4g2Kyqxr3soggAnr/Be/LEQg25blPSg7uZjoTisoNs8KErLtfU0Jz0+mR8vvfpYSt+jPG0KLZMqHrVdibYZqE9KbWmmjwEs81hY8ELmv1d3dfc2bL/Os048yCiDVG4mcgjI6O4Rsta0896gMQKBgQDCLEcngFCzlg2t6nvpIdnLJIWsinCQmKQaV/0knKyd876YZEocDrcPnJptrM7DLUtIFj8Wj9VGjls0rOnLDupDFPZLeWC3JVtgpYrhTDESZiq9JF5ql75R8NZYGmev+W2tvTdp4B7EEQeGW2ziqvUQ0h6ab2/DfthJfBE1M30vXQKBgQDScAFwLAWyBkn4yMCDCoYY212NpS8DC9Y2UpsF0N8s42y0hZH+JIHCFIJbWXrNJSV7lmMJ6QCHyhziqZx+TFL65FAljWCcr5kXOT0O4vJXQB6wqW+qVtWu2lFJIk6w/xzifVSXOghWYsGd/EvCWgDD27Nk8lnhgz8Tk+Zd96O3BQKBgHBn140rgAxmembKzo6odP9fli7LOdzLMHy7oST3ugn6V8S6khhqAFl+S/vfxRZB+0mw7zatb0bYFD6LNxDBAqZw1R/eFToQ2zQ4wQwp4mKHWIiELFBCpf+jj0ITjyDVIUQpvJGDF+xi+1sxQ/h4BUSGjwbSKf4fSTBJLWEB/J9VAoGBALK6qp4I5bV0HfONHeSuVYJbHjQlra4aqY9tzXi9FC/d4P/Zyktd2k9qd+T6NJB0EkfLTMan/OlXwfzJLb8fOAMbUu7yCrJJee79kFxKaKWuMeK9pbe5FLfzeMJyvv8ZTgEXjXb7tQUZz3RNSlMBelDfEpiUNb6RaEtKfIgmwge5AoGAR2Ruq3NyjG+LXIWJQEszNnSsvmfYE3bThVYX0EktC2Pt+NwMC/1Ovs24gYZL8kWulR9lALkiU9zKOj6RmaU7qFP/226CFuTOAlQ9SpP4pH5f4G+dKOb8YRkrAB45/xrvajdVnX3TB8V/JEZ50TBI1BmFen7zVzrpdlS5kctmJ4U="
   },
   "Ipns": {
     "RecordLifetime": "",
@@ -143,33 +122,7 @@
     "Type": "dht"
   },
   "Swarm": {
-    "AddrFilters": [
-      "/ip4/10.0.0.0/ipcidr/8",
-      "/ip4/100.64.0.0/ipcidr/10",
-      "/ip4/169.254.0.0/ipcidr/16",
-      "/ip4/172.16.0.0/ipcidr/12",
-      "/ip4/192.0.0.0/ipcidr/24",
-      "/ip4/192.0.0.0/ipcidr/29",
-      "/ip4/192.0.0.8/ipcidr/32",
-      "/ip4/192.0.0.170/ipcidr/32",
-      "/ip4/192.0.0.171/ipcidr/32",
-      "/ip4/192.0.2.0/ipcidr/24",
-      "/ip4/192.168.0.0/ipcidr/16",
-      "/ip4/198.18.0.0/ipcidr/15",
-      "/ip4/198.51.100.0/ipcidr/24",
-      "/ip4/203.0.113.0/ipcidr/24",
-      "/ip4/240.0.0.0/ipcidr/4",
-      "/ip6/100::/ipcidr/64",
-      "/ip6/2001:2::/ipcidr/48",
-      "/ip6/2001:db8::/ipcidr/32",
-      "/ip6/fc00::/ipcidr/7",
-      "/ip6/fe80::/ipcidr/10",
-      "/ip4/10.0.0.0/ipcidr/8",
-      "/ip4/172.16.0.0/ipcidr/12",
-      "/ip4/192.168.0.0/ipcidr/16",
-      "/ip4/100.64.0.0/ipcidr/10",
-      "/ip4/169.254.0.0/ipcidr/16"
-    ],
+    "AddrFilters": null,
     "ConnMgr": {
       "GracePeriod": "20s",
       "HighWater": 900,
@@ -177,7 +130,7 @@
       "Type": "basic"
     },
     "DisableBandwidthMetrics": false,
-    "DisableNatPortMap": true,
+    "DisableNatPortMap": false,
     "DisableRelay": false,
     "EnableAutoNATService": false,
     "EnableAutoRelay": false,

@@ -33,7 +33,7 @@ interface AppContentProps {
 function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
   const location = useLocation();
   const isHomePage = location.pathname === '/' || location.pathname.includes('/noun/');
-  const backgroundColor = isHomePage ? '#3D692F' : 'rgb(173, 235, 255)';
+  const backgroundColor = isHomePage ? '#3D692F' : 'white';
 
   return (
     <div className={classes.wrapper} style={{ backgroundColor }}>
