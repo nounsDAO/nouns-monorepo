@@ -2,6 +2,8 @@ src/types
 subgraph.yaml
 # graph-node docker data folder
 data
+!data/ipfs/config
+
 matchstick.yaml
 tests/.bin
 tests/.latest.json
