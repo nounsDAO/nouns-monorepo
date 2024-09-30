@@ -78,6 +78,12 @@ const Auction: React.FC<AuctionProps> = props => {
     />
   );
 
+  // Simple pseudo-random number generator
+  const seededRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+
   return (
     <div
       style={{
@@ -90,7 +96,7 @@ const Auction: React.FC<AuctionProps> = props => {
       <style>
         {`
           @keyframes float {
-            0% { transform: translateX(0); }
+            0% { transform: translateX(-100%); }
             100% { transform: translateX(100vw); }
           }
         `}
@@ -105,7 +111,7 @@ const Auction: React.FC<AuctionProps> = props => {
         pointerEvents: 'none',
         zIndex: 0,
       }}>
-        {[...Array(15)].map((_, index) => {
+        {[...Array(12)].map((_, index) => {
           const pixelSize = 16;
           const cloudShapes = [
             [[0, 1, 1, 0],
@@ -129,6 +135,12 @@ const Auction: React.FC<AuctionProps> = props => {
           const cloudShape = cloudShapes[index % cloudShapes.length];
           const cloudWidth = cloudShape[0].length;
           const cloudHeight = cloudShape.length;
+
+          // Generate pseudo-random values for positioning and animation
+          const randomTop = seededRandom(index * 2.2) * 70 + 10; // 10% to 80% vertically
+          const randomDuration = seededRandom(index * 3.3) * 60 + 120; // 120s to 180s
+          const randomDelay = seededRandom(index * 4.4) * -randomDuration;
+
           return (
             <div
               key={index}
@@ -136,10 +148,10 @@ const Auction: React.FC<AuctionProps> = props => {
                 position: 'absolute',
                 width: `${cloudWidth * pixelSize}px`,
                 height: `${cloudHeight * pixelSize}px`,
-                top: `${15 + (index * 15)}%`,
-                left: `-${cloudWidth * pixelSize}px`,
-                animation: `float ${60 + Math.random() * 40}s linear infinite`,
-                animationDelay: `${-Math.random() * 60}s`,
+                top: `${randomTop}%`,
+                left: 0,
+                animation: `float ${randomDuration}s linear infinite`,
+                animationDelay: `${randomDelay}s`,
               }}
             >
               {cloudShape.flatMap((row, y) =>
