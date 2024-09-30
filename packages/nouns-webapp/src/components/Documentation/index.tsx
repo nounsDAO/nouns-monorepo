@@ -61,11 +61,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               Bouns attempt to bootstrap identity, community, governance, and a treasury that can be used to participate in Proof of Liquidity.
             </Trans>
           </p>
-          <p className={classes.aboutText} style={{ paddingBottom: '4rem', color: 'var(--brand-warm-light-text)' }}>
-            <Trans>
-              Learn more below, or start creating Bouns off-chain using the {playgroundLink}.
-            </Trans>
-          </p>
+          <p className={classes.aboutText} style={{ paddingBottom: '4rem', color: 'var(--brand-warm-light-text)' }}></p>
         </div>
         <Accordion flush>
           <Accordion.Item eventKey="0" className={classes.accordionItem}>
