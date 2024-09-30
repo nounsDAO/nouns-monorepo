@@ -20,7 +20,7 @@ const GovernancePage = () => {
   // // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
   const subHeading = (
     <Trans>
-      Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on proposals
+      Bouns govern <span className={classes.boldText}>Bouns DAO</span>. Bouns can vote on proposals
       or delegate their vote to a third party.
     </Trans>
   );
@@ -34,7 +34,7 @@ const GovernancePage = () => {
               <Trans>Governance</Trans>
             </span>
             <h1>
-              <Trans>Nouns DAO</Trans>
+              <Trans>Bouns DAO</Trans>
             </h1>
           </Row>
           <p className={classes.subheading}>{subHeading}</p>
@@ -65,7 +65,7 @@ const GovernancePage = () => {
             </Col>
             <Col className={classes.treasuryInfoText}>
               <Trans>
-                This treasury exists for <span className={classes.boldText}>Nouns DAO</span>{' '}
+                This treasury exists for <span className={classes.boldText}>Bouns DAO</span>{' '}
                 participants to allocate resources for the long-term growth and prosperity of the
                 Nouns project.
               </Trans>

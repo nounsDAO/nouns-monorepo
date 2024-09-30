@@ -133,7 +133,7 @@ const Proposals = ({
   };
 
   return (
-    <div className={classes.proposals}>
+    <div className={classes.proposals} style={{backgroundColor: 'transparent'}}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
       <div className={classes.sectionWrapper}>
         <Section fullWidth={false} className={classes.section}>
