@@ -60,9 +60,6 @@ const Holder: React.FC<HolderProps> = props => {
       <Row className={clsx(classes.wrapper, classes.section)}>
         <Col xs={1} lg={12} className={classes.leftCol}>
           <h4
-            style={{
-              color: 'var(--brand-cool-dark-text)',
-            }}
             className={classes.holderCopy}
           >
             <Trans>Held by</Trans>
@@ -71,9 +68,6 @@ const Holder: React.FC<HolderProps> = props => {
         <Col xs="auto" lg={12}>
           <h2
             className={classes.holderContent}
-            style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-            }}
           >
             {isNounders ? nounderNounContent : nonNounderNounContent}
           </h2>
