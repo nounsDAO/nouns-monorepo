@@ -15,7 +15,7 @@
   font-size: 18px;
   padding-bottom: 4rem;
   padding-top: 2rem;
-  color: var(--brand-black) !important;
+  color: var(--brand-warm-light-text) !important;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -23,14 +23,10 @@
 }
 
 .footerSignature a {
-  text-decoration: none;
-  color: black;
-  margin: 8px 14px;
-  transition: all 0.15s ease-in-out;
+  color: var(--brand-warm-light-text) !important;
 }
 
 .footerSignature a:hover {
-  text-decoration: none;
   font-weight: bold;
 }
 
