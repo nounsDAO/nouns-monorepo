@@ -1734,7 +1734,7 @@ msgstr "すべての入札を表示"
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/pages/Fork/DeployForkButton.tsx
-msgid "View on Etherscan"
+msgid "View on Beratrail"
 msgstr "イーサスキャンで見る"
 
 #: src/components/Bid/index.tsx

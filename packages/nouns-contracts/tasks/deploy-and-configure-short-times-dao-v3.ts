@@ -83,7 +83,7 @@ task(
     // Deploy the Nouns DAO contracts and return deployment information
     const contracts = await run('deploy-short-times-dao-v3', args);
 
-    // Verify the contracts on Etherscan
+    // Verify the contracts on Beratrail
     await run('verify-etherscan-dao-v3', {
       contracts,
     });

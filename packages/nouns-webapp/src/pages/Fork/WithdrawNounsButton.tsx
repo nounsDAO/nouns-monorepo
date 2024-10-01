@@ -114,7 +114,7 @@ function WithdrawNounsButton(props: Props) {
                 target="_blank"
                 rel="noreferrer"
               >
-                View on Etherscan
+                View on Beratrail
               </a>
             )}
           </>

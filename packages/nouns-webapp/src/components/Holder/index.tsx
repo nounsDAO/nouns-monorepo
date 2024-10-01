@@ -42,9 +42,9 @@ const Holder: React.FC<HolderProps> = props => {
       className={classes.link}
     >
       <Tooltip
-        tip="View on Etherscan"
+        tip="View on Beratrail"
         tooltipContent={(tip: string) => {
-          return <Trans>View on Etherscan</Trans>;
+          return <Trans>View on Beratrail</Trans>;
         }}
         id="holder-etherscan-tooltip"
       >

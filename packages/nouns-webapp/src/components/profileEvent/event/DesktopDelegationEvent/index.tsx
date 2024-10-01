@@ -30,12 +30,12 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>;
+              return <Trans>View on Beratrail</Trans>;
             }}
           />
           Delegate changed from
           <span
-            data-tip={`View on Etherscan`}
+            data-tip={`View on Beratrail`}
             onClick={() => window.open(buildEtherscanAddressLink(event.previousDelegate), '_blank')}
             data-for="view-on-etherscan-tooltip"
             className={classes.address}
@@ -45,7 +45,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
           </span>{' '}
           to{' '}
           <span
-            data-tip={`View on Etherscan`}
+            data-tip={`View on Beratrail`}
             data-for="view-on-etherscan-tooltip"
             onClick={() => window.open(buildEtherscanAddressLink(event.newDelegate), '_blank')}
             className={classes.address}
@@ -61,10 +61,10 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>;
+              return <Trans>View on Beratrail</Trans>;
             }}
           />
-          <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-txn-delegate-tooltip">
+          <div data-tip={`View on Beratrail`} data-for="view-on-etherscan-txn-delegate-tooltip">
             <TransactionHashPill transactionHash={event.transactionHash} />
           </div>
         </>
