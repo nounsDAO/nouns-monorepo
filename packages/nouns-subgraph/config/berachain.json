@@ -1,23 +1,23 @@
 {
   "network": "berachain-bartio",
   "nounsToken": {
-    "address": "0x5D3170c3143a3406fD9430Ac4840c406b8e6786a",
-    "startBlock": 4200000,
+    "address": "0x1A86280f3Fe1E9D1e24D1993Cac45759CcDDb5dC",
+    "startBlock": 5000000,
     "contractName": "NounsToken"
   },
   "nounsAuctionHouse": {
-    "address": "0xb0b974cEe00449581648F5F75F7ff0C6834887b6",
-    "startBlock": 4200000,
+    "address": "0xd172eb43c2361f3091e2aaAd041e50E823b7a37E",
+    "startBlock": 5000000,
     "contractName": "NounsAuctionHouseProxy"
   },
   "nounsDAO": {
-    "address": "0xf66D8892fBEd8B86EBA2BfD6e2e4B807dE304579",
-    "startBlock": 4200000,
+    "address": "0xe87E78e416B77D3809f4Aa25056ba0e13becb05d",
+    "startBlock": 5000000,
     "contractName": "NounsDAOExecutorProxy"
   },
   "nounsDAOData": {
-    "address": "0xCb01373d28F73b69Ee83ACA4b0038CcEf2e66C8e",
-    "startBlock": 4200000,
+    "address": "0xf028E579F692Fe045F5B566d22F147c617C9B8a9",
+    "startBlock": 5000000,
     "contractName": "NounsDAODataProxy"
   }
 }
