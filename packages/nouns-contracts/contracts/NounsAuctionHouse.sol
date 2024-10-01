@@ -203,7 +203,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction duration increase percentage.
      * @dev Only callable by the owner.
      */
-    function setDurationIncreasePercentage(uint256 _durationIncreasePercentage) external override onlyOwner {
+    function setDurationIncreasePercentage(uint256 _durationIncreasePercentage) external onlyOwner {
         durationIncreasePercentage = _durationIncreasePercentage;
 
         emit AuctionDurationIncreasePercentageUpdated(_durationIncreasePercentage);
