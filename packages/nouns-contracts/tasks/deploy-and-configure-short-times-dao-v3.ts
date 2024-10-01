@@ -31,7 +31,7 @@ task(
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 2 /* 2 minutes */,
+    60 * 60 /* 60 minutes */,
     types.int,
   )
   .addOptionalParam(

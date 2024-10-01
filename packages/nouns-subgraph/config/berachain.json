@@ -1,20 +1,23 @@
 {
-    "network": "berachain-bartio",
-    "nounsToken": {
-      "address": "0x5D3170c3143a3406fD9430Ac4840c406b8e6786a",
-      "startBlock": 4200000
-    },
-    "nounsAuctionHouse": {
-      "address": "0xb0b974cEe00449581648F5F75F7ff0C6834887b6",
-      "startBlock": 4200000
-    },
-    "nounsDAO": {
-      "address": "0xf66D8892fBEd8B86EBA2BfD6e2e4B807dE304579",
-      "startBlock": 4200000
-    },
-    "nounsDAOData": {
-      "address": "0xCb01373d28F73b69Ee83ACA4b0038CcEf2e66C8e",
-      "startBlock": 4200000
-    }
+  "network": "berachain-bartio",
+  "nounsToken": {
+    "address": "0x5D3170c3143a3406fD9430Ac4840c406b8e6786a",
+    "startBlock": 4200000,
+    "contractName": "NounsToken"
+  },
+  "nounsAuctionHouse": {
+    "address": "0xb0b974cEe00449581648F5F75F7ff0C6834887b6",
+    "startBlock": 4200000,
+    "contractName": "NounsAuctionHouseProxy"
+  },
+  "nounsDAO": {
+    "address": "0xf66D8892fBEd8B86EBA2BfD6e2e4B807dE304579",
+    "startBlock": 4200000,
+    "contractName": "NounsDAOExecutorProxy"
+  },
+  "nounsDAOData": {
+    "address": "0xCb01373d28F73b69Ee83ACA4b0038CcEf2e66C8e",
+    "startBlock": 4200000,
+    "contractName": "NounsDAODataProxy"
   }
-  
+}
