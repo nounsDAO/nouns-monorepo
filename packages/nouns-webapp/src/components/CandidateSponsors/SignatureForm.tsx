@@ -14,7 +14,7 @@ import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
 
 const domain = {
-  name: 'Nouns DAO',
+  name: 'Bouns DAO',
   chainId: CHAIN_ID,
   verifyingContract: config.addresses.nounsDAOProxy,
 };

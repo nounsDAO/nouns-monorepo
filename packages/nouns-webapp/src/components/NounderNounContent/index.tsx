@@ -102,7 +102,7 @@ const NounderNounContent: React.FC<{
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
               <Link to="/vote" className={nounContentClasses.link}>
-                <Trans>Nouns DAO</Trans>
+                <Trans>Bouns DAO</Trans>
               </Link>
               .{' '}
               <Trans>

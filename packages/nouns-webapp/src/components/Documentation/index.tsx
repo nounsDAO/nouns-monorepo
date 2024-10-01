@@ -172,13 +172,13 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Bouns DAO Governance is currently in a 'slow start' phase, given the history and 
-                  learnings from Nouns DAO, which are explained in more detail below for context.
+                  learnings from Bouns DAO, which are explained in more detail below for context.
                 </Trans>
               </p>
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially
+                  problem of ‘51% attacks’ on the Bouns DAO treasury. While Nounders initially
                   believed that a healthy distribution of Nouns would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
                   general consensus within the Nounders, the Nouns Foundation, and the wider
@@ -197,7 +197,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Consequently, the Nouns Foundation anticipates being the steward of the veto power
-                  until Nouns DAO is ready to implement an alternative, and therefore wishes to
+                  until Bouns DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>

@@ -69,7 +69,7 @@ const ForksPage: React.FC<Props> = props => {
 
                   return (
                     <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
-                      <div className={classes.title}>Nouns DAO Fork #{fork.id}</div>
+                      <div className={classes.title}>Bouns DAO Fork #{fork.id}</div>
                       <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                         {/* <ForkStatus status={
                       fork.executed ? ForkState.EXECUTED : ForkState.ACTIVE} /> */}

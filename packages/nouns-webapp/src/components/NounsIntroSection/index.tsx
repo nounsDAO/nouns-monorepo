@@ -24,7 +24,7 @@ const NounsIntroSection = () => {
         <Col lg={6}>
           <div className={classes.textWrapper}>
             <h1>
-              <Trans>One Noun, Every Day, Forever.</Trans>
+              <Trans>One Boun, Every Day, Forever.</Trans>
             </h1>
             <p>
               <Trans>
