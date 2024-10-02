@@ -53,7 +53,24 @@ const Holder: React.FC<HolderProps> = props => {
     </a>
   );
 
-  const nounderNounContent = 'nounders.eth';
+  const nounderNounContent = (
+    <a
+      href={buildEtherscanAddressLink('0x1a90FBb6Eb1f8d43d94F595C99Df7a5081e47909')}
+      target={'_blank'}
+      rel="noreferrer"
+      className={classes.link}
+    >
+      <Tooltip
+        tip="View on Beratrail"
+        tooltipContent={(tip: string) => {
+          return <Trans>View on Beratrail</Trans>;
+        }}
+        id="holder-etherscan-tooltip"
+      >
+        Bounders
+      </Tooltip>
+    </a>
+  );
 
   return (
     <>
