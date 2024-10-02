@@ -58,7 +58,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
         <span>
           <a
             className={
-              isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
+              classes.nounHolderEtherscanLinkCool
             }
             href={etherscanURL}
             target={'_blank'}

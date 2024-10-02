@@ -3,6 +3,7 @@
   flex-flow: row nowrap;
   gap: 6px;
   align-items: center;
+  color: var(--brand-warm-dark-text);
 }
 
 .shortAddress > div {
