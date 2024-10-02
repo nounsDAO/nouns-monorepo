@@ -38,6 +38,14 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       leavesPage={true}
     />
   );
+  const firstsetLink = (
+    <Link
+      text={<Trans>Firstset</Trans>}
+      url="https://firstset.xyz"
+      leavesPage={true}
+    />
+  );
+
   return (
     <Section
       fullWidth={false}
@@ -205,7 +213,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
-                  In the case of Bouns DAO, veto power will be stewarded by <a href="https://firstset.xyz">Firstset</a>, 
+                  In the case of Bouns DAO, veto power will be stewarded by {firstsetLink}, 
                   as the founding entity of the project.
                 </Trans>
               </p>
@@ -321,7 +329,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
-                  'Bounders' refers to the original founders of the project. In this case, it refers to <a href="https://firstset.xyz">Firstset</a>, 
+                  'Bounders' refers to the original founders of the project. In this case, it refers to {firstsetLink}, 
                   the founding entity of the project.
                 </Trans>
               </p>
