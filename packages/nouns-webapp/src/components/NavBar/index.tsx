@@ -26,15 +26,16 @@ const NavBar = () => {
   );
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  const isHomePage = location.pathname === '/' || location.pathname.includes('/noun/');
+  const isHomePage = location.pathname === '/' || location.pathname.includes('/boun/');
   const navBarBackgroundColor = isHomePage ? '#adebff' : 'white';
 
   const useStateBg =
     location.pathname === '/' ||
-    location.pathname.includes('/noun/') ||
+    location.pathname.includes('/boun/') ||
     location.pathname.includes('/auction/');
 
-  const nonWalletButtonStyle = !useStateBg
+  //const nonWalletButtonStyle = !useStateBg
+  const nonWalletButtonStyle = true
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
       ? NavBarButtonStyle.COOL_INFO

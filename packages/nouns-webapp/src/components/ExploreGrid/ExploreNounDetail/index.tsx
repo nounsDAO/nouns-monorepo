@@ -349,7 +349,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             </ul>
             {nounId !== null && seed && (
               <p className={classes.activityLink}>
-                <a href={`/noun/${nounId}`}>
+                <a href={`/boun/${nounId}`}>
                   <Trans>Vote history</Trans>
                 </a>
               </p>

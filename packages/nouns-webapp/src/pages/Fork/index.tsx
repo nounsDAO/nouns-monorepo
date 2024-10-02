@@ -393,7 +393,7 @@ const ForkPage = ({
                 {(isForkPeriodActive || isForked) && (
                   <div className={classes.nounsInFork}>
                     {forkDetails.data.addedNouns.map((nounId, i) => (
-                      <a href={`/noun/${nounId}`} target="_blank" rel="noreferrer" key={i}>
+                      <a href={`/boun/${nounId}`} target="_blank" rel="noreferrer" key={i}>
                         <img
                           src={`https://noun.pics/${nounId}`}
                           alt="noun"

@@ -1,6 +1,7 @@
 .headerWrapper h1 {
   font-family: 'Londrina Solid';
   font-size: 32px;
+  padding-left: 1rem;
 }
 
 .headerWrapper p {

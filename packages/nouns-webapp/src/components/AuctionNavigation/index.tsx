@@ -25,7 +25,7 @@ const AuctionNavigation: React.FC<{
         // This is a hack. If we don't put this the first keystoke
         // from the noun at / doesn't work (i.e. to go from current noun to current noun - 1 would take two arrow presses)
         if (onDisplayAuctionNounId === lastAuctionNounId) {
-          history.push(`/noun/${lastAuctionNounId}`);
+          history.push(`/boun/${lastAuctionNounId}`);
         }
 
         if (!isFirstAuction) {

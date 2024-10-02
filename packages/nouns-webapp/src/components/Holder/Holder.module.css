@@ -10,6 +10,7 @@
 
 .holderCopy {
   min-width: 250px;
+  color: var(--brand-warm-dark-text);
 }
 
 .section h4 {
@@ -43,6 +44,7 @@
 
 .holderContent {
   white-space: nowrap;
+  color: var(--brand-warm-dark-text);
 }
 
 @media (max-width: 992px) {
@@ -73,6 +75,7 @@
 
   .holderContent {
     margin-right: 0.5rem;
+    color: var(--brand-cool-dark-text);
   }
 
   .wrapper {

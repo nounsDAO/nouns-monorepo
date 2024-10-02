@@ -11,7 +11,7 @@ const nameToFullyQualifiedName: Record<string, string> = {
   NounsDAOExecutorV2Test: 'contracts/test/NounsDAOExecutorHarness.sol:NounsDAOExecutorV2Test',
 };
 
-task('verify-etherscan-dao-v3', 'Verify the Solidity contracts on Etherscan')
+task('verify-etherscan-dao-v3', 'Verify the Solidity contracts on Beratrail')
   .addParam('contracts', 'Contract objects from the deployment', undefined, types.json)
   .setAction(
     async ({ contracts }: { contracts: Record<ContractNamesDAOV3, DeployedContract> }, hre) => {

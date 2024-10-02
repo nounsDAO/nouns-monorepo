@@ -42,9 +42,9 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
 
   return (
     <Tooltip
-      tip="View on Etherscan"
+      tip="View on Beratrail"
       tooltipContent={(tip: string) => {
-        return <Trans>View on Etherscan</Trans>;
+        return <Trans>View on Beratrail</Trans>;
       }}
       id="holder-etherscan-tooltip"
     >
@@ -58,7 +58,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
         <span>
           <a
             className={
-              isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
+              classes.nounHolderEtherscanLinkCool
             }
             href={etherscanURL}
             target={'_blank'}

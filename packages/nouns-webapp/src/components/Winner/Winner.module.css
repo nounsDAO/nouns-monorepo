@@ -10,6 +10,7 @@
 
 .winnerCopy {
   min-width: 250px;
+  color: var(--brand-cool-dark-text);
 }
 
 .link,
@@ -89,6 +90,7 @@
 
   .winnerContent {
     margin-right: 0.5rem;
+    color: var(--brand-cool-dark-text);
   }
 
   .wrapper {

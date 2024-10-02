@@ -26,10 +26,10 @@ task('deploy-test-token', 'Deploy NounsTokenHarness given a descriptor')
     console.log(`NounsTokenHarness deployed to: ${token.address}`);
 
     if (network.name !== 'localhost') {
-      console.log('Waiting 1 minute before verifying contracts on Etherscan');
+      console.log('Waiting 1 minute before verifying contracts on Beratrail');
       await delay(60);
 
-      console.log('Verifying contracts on Etherscan...');
+      console.log('Verifying contracts on Beratrail...');
       const contracts: Record<string, DeployedContract> = {} as Record<string, DeployedContract>;
 
       contracts.NounsTokenHarness = {

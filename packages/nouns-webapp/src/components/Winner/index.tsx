@@ -30,9 +30,6 @@ const Winner: React.FC<WinnerProps> = props => {
       <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
         <h2
           className={classes.winnerContent}
-          style={{
-            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-          }}
         >
           <Trans>You</Trans>
         </h2>
@@ -44,19 +41,19 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const nounderNounContent = (
     <a
-      href={buildEtherscanAddressLink('nounders.eth')}
+      href={buildEtherscanAddressLink('0x1a90FBb6Eb1f8d43d94F595C99Df7a5081e47909')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
     >
       <Tooltip
-        tip="View on Etherscan"
+        tip="View on Beratrail"
         tooltipContent={(tip: string) => {
-          return <Trans>View on Etherscan</Trans>;
+          return <Trans>View on Beratrail</Trans>;
         }}
         id="holder-etherscan-tooltip"
       >
-        nounders.eth
+        Bounders
       </Tooltip>
     </a>
   );
@@ -65,21 +62,13 @@ const Winner: React.FC<WinnerProps> = props => {
     <>
       <Row className={clsx(classes.wrapper, classes.section)}>
         <Col xs={1} lg={12} className={classes.leftCol}>
-          <h4
-            style={{
-              color: 'var(--brand-cool-dark-text)'
-            }}
-            className={classes.winnerCopy}
-          >
+          <h4 className={classes.winnerCopy}>
             <Trans>Winner</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>
           <h2
             className={classes.winnerContent}
-            style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-            }}
           >
             {isNounders ? nounderNounContent : nonNounderNounContent}
           </h2>

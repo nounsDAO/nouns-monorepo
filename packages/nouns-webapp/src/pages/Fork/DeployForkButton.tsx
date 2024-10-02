@@ -125,7 +125,7 @@ function DeployForkButton(props: Props) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Trans>View on Etherscan</Trans>
+                <Trans>View on Beratrail</Trans>
               </a>
             )}
           </>

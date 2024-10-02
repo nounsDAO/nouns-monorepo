@@ -131,32 +131,24 @@ const NoundersPage = () => {
     <Section fullWidth={true} className={classes.noundersPage} style={{backgroundColor: 'transparent'}}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>
-          <Trans>The Nounders</Trans>
+          <Trans>The Bounders</Trans>
         </h2>
-        <h3 style={{ marginBottom: '2rem' }}>
-          <Trans>3.5 artists, 6.5 technologists</Trans>
-        </h3>
-        <Row style={{ marginBottom: '0rem' }}>
-          <BioCards min={0} max={5} />
-          <BioCards min={5} max={10} />
-        </Row>
         <h3>
-          <Trans>Nounders' Reward</Trans>
+          <Trans>Bounders' Reward</Trans>
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            All Noun auction proceeds are sent to the Bouns DAO. For this reason, we, the project's
-            founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun
+            All Boun auction proceeds are sent to the Bouns DAO. For this reason, we, the project's
+            founders (‘Bounders’) have chosen to compensate ourselves with Bouns. Every 10th boun
             for the first 5 years of the project will be sent to our multisig (5/10), where it will
-            be vested and distributed to individual Nounders.
+            be vested and distributed to individual Bounders.
           </Trans>
         </p>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            The Nounders reward is intended as compensation for our pre and post-launch
+            The Bounders reward is intended as compensation for our pre and post-launch
             contributions to the project, and to help us participate meaningfully in governance as
-            the project matures. Since there are 10 Nounders, after 5 years each Nounder could
-            receive up to 1% of the Noun supply.
+            the project matures.
           </Trans>
         </p>
       </Col>

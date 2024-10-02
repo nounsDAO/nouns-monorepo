@@ -15,7 +15,6 @@
   font-size: 18px;
   padding-bottom: 4rem;
   padding-top: 2rem;
-  color: var(--brand-black) !important;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -23,14 +22,10 @@
 }
 
 .footerSignature a {
-  text-decoration: none;
-  color: black;
-  margin: 8px 14px;
-  transition: all 0.15s ease-in-out;
+  color: var(--bs-body-color);
 }
 
 .footerSignature a:hover {
-  text-decoration: none;
   font-weight: bold;
 }
 
@@ -38,6 +33,14 @@
   width: 32px;
   height: 32px;
   margin: 0 8px;
+}
+
+.homePage {
+  color: var(--brand-warm-light-text);
+}
+
+.homePage a {
+  color: var(--brand-warm-light-text);
 }
 
 @media (max-width: 992px) {

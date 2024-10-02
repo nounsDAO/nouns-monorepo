@@ -13,7 +13,7 @@ const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
       className={isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm}
       onClick={onClick}
     >
-      <div className={bidBtnClasses.bidHistory} style={{ color: 'var(--brand-cool-dark-text)' }}>
+      <div className={bidBtnClasses.bidHistory}>
         <Trans>View all bids</Trans>
       </div>
     </div>

@@ -38,6 +38,14 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       leavesPage={true}
     />
   );
+  const firstsetLink = (
+    <Link
+      text={<Trans>Firstset</Trans>}
+      url="https://firstset.xyz"
+      leavesPage={true}
+    />
+  );
+
   return (
     <Section
       fullWidth={false}
@@ -132,7 +140,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
 
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Unlike Nouns, the Bouns auction mechanism consists of a dynamic duration with the goal 
                   of achieving naturally deflationary issuance over time. This is accomplished by 
@@ -154,14 +162,16 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               <span style={{ color: 'var(--brand-warm-light-text)' }}><Trans>Bouns DAO</Trans></span>
             </Accordion.Header>
             <Accordion.Body>
-              <Trans>
-                Like Nouns, Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
-                Bouns ecosystem. The Bouns DAO treasury receives 100% of BERA proceeds from daily
-                Boun auctions. Each Boun is an irrevocable member of Bouns DAO and entitled to one
-                vote in all governance matters. Boun votes are non-transferable (if you sell your
-                Boun the vote goes with it) but delegatable, which means you can assign your vote to
-                someone else as long as you own your Boun.
-              </Trans>
+              <p className={classes.aboutText} style={{ color: 'var(--brand-warm-light-text)' }}>
+                <Trans>
+                  Like Nouns, Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
+                  Bouns ecosystem. The Bouns DAO treasury receives 100% of BERA proceeds from daily
+                  Boun auctions. Each Boun is an irrevocable member of Bouns DAO and entitled to one
+                  vote in all governance matters. Boun votes are non-transferable (if you sell your
+                  Boun the vote goes with it) but delegatable, which means you can assign your vote to
+                  someone else as long as you own your Boun.
+                </Trans>
+              </p>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
@@ -175,7 +185,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   learnings from Bouns DAO, which are explained in more detail below for context.
                 </Trans>
               </p>
-              <p>
+              <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
                   problem of ‘51% attacks’ on the Bouns DAO treasury. While Nounders initially
@@ -203,7 +213,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
-                  In the case of Bouns DAO, veto power will be stewarded by <a href="https://firstset.xyz">Firstset</a>, 
+                  In the case of Bouns DAO, veto power will be stewarded by {firstsetLink}, 
                   as the founding entity of the project.
                 </Trans>
               </p>
@@ -301,7 +311,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   generation:
                 </Trans>
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
+              <code style={{ backgroundColor: '#0f3806', padding: '8px', borderRadius: '4px' }}>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
               <br />
               <br />
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
@@ -319,54 +329,10 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
-                  'Bounders' refers to the original founders of the project. In this case, it refers to <a href="https://firstset.xyz">Firstset</a>, 
+                  'Bounders' refers to the original founders of the project. In this case, it refers to {firstsetLink}, 
                   the founding entity of the project.
                 </Trans>
               </p>
-              <ul style={{ color: 'var(--brand-warm-light-text)' }}>
-                <li>
-                  <Link
-                    text="@cryptoseneca"
-                    url="https://twitter.com/cryptoseneca"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@gremplin" url="https://twitter.com/gremplin" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@_solimander_"
-                    url="https://twitter.com/_solimander_"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@lastpunk9999"
-                    url="https://twitter.com/lastpunk9999"
-                    leavesPage={true}
-                  />
-                </li>
-              </ul>
               <p style={{ color: 'var(--brand-warm-light-text)' }}>
                 <Trans>
                   Because 100% of Boun auction proceeds are sent to Bouns DAO, Bounders have chosen
