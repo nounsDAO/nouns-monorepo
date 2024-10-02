@@ -32,8 +32,9 @@ interface AppContentProps {
 
 function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
   const location = useLocation();
-  const isHomePage = location.pathname === '/' || location.pathname.includes('/noun/');
+  const isHomePage = location.pathname === '/' || location.pathname.includes('/boun/');
   const backgroundColor = isHomePage ? '#3D692F' : 'white';
+  const currentPath = location.pathname; // Get the current path
 
   return (
     <div className={classes.wrapper} style={{ backgroundColor }}>
@@ -49,10 +50,10 @@ function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
         <NavBar />
         <Switch>
           <Route exact path="/" component={AuctionPage} />
-          <Redirect from="/auction/:id" to="/noun/:id" />
+          <Redirect from="/auction/:id" to="/boun/:id" />
           <Route
             exact
-            path="/noun/:id"
+            path="/boun/:id"
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           {/* <Route exact path="/nounders" component={NoundersPage} /> */}
@@ -74,7 +75,7 @@ function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
           {/* <Route exact path="/fork" component={ForksPage} /> */}
           <Route component={NotFoundPage} />
         </Switch>
-        <Footer />
+        <Footer currentPath={currentPath} /> {/* Pass the current path to Footer */}
       </div>
     </div>
   );
