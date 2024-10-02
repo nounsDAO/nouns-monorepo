@@ -10,7 +10,6 @@ import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import ShortAddress from '../ShortAddress';
 
-import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
 import Tooltip from '../Tooltip';
 
@@ -20,7 +19,6 @@ interface NounInfoRowHolderProps {
 
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const { error, data } = useQuery(auctionQuery(nounId));
 
   const winner = data && data.auction.bidder?.id;

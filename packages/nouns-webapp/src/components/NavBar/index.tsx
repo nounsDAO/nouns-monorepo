@@ -29,11 +29,6 @@ const NavBar = () => {
   const isHomePage = location.pathname === '/' || location.pathname.includes('/boun/');
   const navBarBackgroundColor = isHomePage ? '#adebff' : 'white';
 
-  const useStateBg =
-    location.pathname === '/' ||
-    location.pathname.includes('/boun/') ||
-    location.pathname.includes('/auction/');
-
   //const nonWalletButtonStyle = !useStateBg
   const nonWalletButtonStyle = true
     ? NavBarButtonStyle.WHITE_INFO

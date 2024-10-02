@@ -1,5 +1,4 @@
 import { Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
 import classes from './Holder.module.css';
 import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
@@ -17,8 +16,6 @@ interface HolderProps {
 
 const Holder: React.FC<HolderProps> = props => {
   const { nounId, isNounders } = props;
-
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
 

@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AlertModal from './components/Modal';
 import NavBar from './components/NavBar';
 import NetworkAlert from './components/NetworkAlert';
-import Footer from './components/Footer';
 import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
@@ -34,7 +33,6 @@ function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
   const location = useLocation();
   const isHomePage = location.pathname === '/' || location.pathname.includes('/boun/');
   const backgroundColor = isHomePage ? '#3D692F' : 'white';
-  const currentPath = location.pathname; // Get the current path
 
   return (
     <div className={classes.wrapper} style={{ backgroundColor }}>

@@ -18,8 +18,6 @@ const Winner: React.FC<WinnerProps> = props => {
   const { winner, isNounders } = props;
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
-
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 

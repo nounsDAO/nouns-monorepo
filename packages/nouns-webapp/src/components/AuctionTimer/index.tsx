@@ -4,7 +4,6 @@ import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
@@ -58,7 +57,6 @@ const AuctionTimer: React.FC<{
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   if (!auction) return null;
 
