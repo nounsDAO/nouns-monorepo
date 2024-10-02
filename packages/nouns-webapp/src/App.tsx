@@ -75,7 +75,7 @@ function AppContent({ chainId, alertModal, dispatch }: AppContentProps) {
           {/* <Route exact path="/fork" component={ForksPage} /> */}
           <Route component={NotFoundPage} />
         </Switch>
-        <Footer currentPath={currentPath} /> {/* Pass the current path to Footer */}
+        {/* <Footer currentPath={currentPath} /> */}
       </div>
     </div>
   );
