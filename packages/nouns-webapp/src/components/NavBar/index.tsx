@@ -34,7 +34,8 @@ const NavBar = () => {
     location.pathname.includes('/noun/') ||
     location.pathname.includes('/auction/');
 
-  const nonWalletButtonStyle = !useStateBg
+  //const nonWalletButtonStyle = !useStateBg
+  const nonWalletButtonStyle = true
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
       ? NavBarButtonStyle.COOL_INFO
