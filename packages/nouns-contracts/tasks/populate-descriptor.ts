@@ -16,7 +16,8 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
-    const options = { gasLimit: network.name === 'hardhat' ? 30000000 : undefined };
+    //const options = { gasLimit: network.name === 'hardhat' ? 30000000 : undefined };
+    const options = { gasLimit: network.name === 'hardhat' ? 30000000 : 30000000 };
 
     const descriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
       libraries: {

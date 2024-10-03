@@ -125,6 +125,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     }
 
     const nonce = await deployer.getTransactionCount();
+    
     const expectedNounsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + NOUNS_ART_NONCE_OFFSET,
@@ -188,6 +189,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
+              args.auctionDurationIncreasePercentage,
             ]),
         ],
         waitForConfirmation: true,
@@ -303,6 +305,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     for (const [name, contract] of Object.entries(contracts)) {
       let gasOptions;
       let feeData = await ethers.provider.getFeeData();
+      console.log("feeData:", feeData);
       if (args.autoDeploy) {
         gasOptions = {
           maxFeePerGas: feeData.maxFeePerGas,

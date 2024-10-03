@@ -42,6 +42,7 @@ export interface ContractDeployment {
   libraries?: () => Record<string, string>;
   waitForConfirmation?: boolean;
   validateDeployment?: () => void;
+  postDeployAction?: (deployedContract: Contract) => void;
 }
 
 export interface DeployedContract {
