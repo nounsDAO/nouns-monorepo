@@ -11,9 +11,9 @@
     "contractName": "NounsAuctionHouseProxy"
   },
   "nounsDAO": {
-    "address": "0xe87E78e416B77D3809f4Aa25056ba0e13becb05d",
+    "address": "0x8C51732569c777b42d333f833F72E4eA3FeC2B6d",
     "startBlock": 5000000,
-    "contractName": "NounsDAOExecutorProxy"
+    "contractName": "NounsDAOProxyV3"
   },
   "nounsDAOData": {
     "address": "0xf028E579F692Fe045F5B566d22F147c617C9B8a9",
