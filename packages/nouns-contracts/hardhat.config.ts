@@ -47,8 +47,7 @@ const config: HardhatUserConfig = {
     },
     berachain: {
       chainId: 80084,
-      //url: `https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxAQashRgWAR74jrpldAe0Cl`,
-      url: `https://rpc.bouns.wtf`,
+      url: `https://lb.drpc.org/ogrpc?network=bartio&dkey=AjirufN3pUwtkrUzZP-gdxAQashRgWAR74jrpldAe0Cl`,
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
