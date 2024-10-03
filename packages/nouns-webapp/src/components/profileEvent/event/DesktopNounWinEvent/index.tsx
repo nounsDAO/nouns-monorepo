@@ -36,7 +36,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
           />
           {isNounderNoun ? (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} sent to </span>{' '}
+              <span className={classes.bold}> Boun {event.nounId} sent to </span>{' '}
               <span
                 data-tip={`View on Beratrail`}
                 onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
@@ -49,7 +49,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} won by</span>{' '}
+              <span className={classes.bold}> Boun {event.nounId} won by</span>{' '}
               <span
                 data-tip={`View on Beratrail`}
                 onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
