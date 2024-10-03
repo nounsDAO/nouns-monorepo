@@ -102,17 +102,8 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     types.int,
   )
   .setAction(async (args, { ethers }) => {
-    //start debugging
-    console.log("args:", args);
-    //end debugging
-
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
-
-    //start debugging
-    console.log("network:", network);
-    console.log("deployer:", deployer);
-    //end debugging
 
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? constants.AddressZero;
@@ -135,13 +126,6 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
 
     const nonce = await deployer.getTransactionCount();
     
-    //start debugging
-    console.log("nonce:", nonce);
-    const balance = await deployer.getBalance();
-    console.log("balance:", balance);
-    //end debugging
-
-
     const expectedNounsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + NOUNS_ART_NONCE_OFFSET,
@@ -160,11 +144,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     >;
     const contracts: Record<ContractNamesDAOV3, ContractDeployment> = {
       NFTDescriptorV2: {},
-      SVGRenderer: {
-        //start debugging
-        waitForConfirmation: true, //wait for confirmation that it's deployed on berachain before proceeding
-        //end debugging
-      },
+      SVGRenderer: {},
       NounsDescriptorV2: {
         args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
