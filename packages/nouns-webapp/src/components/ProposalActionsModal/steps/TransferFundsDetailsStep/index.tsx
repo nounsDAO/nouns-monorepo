@@ -10,17 +10,16 @@ import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 
 export enum SupportedCurrency {
-  ETH = 'ETH',
-  WETH = 'WETH',
-  STETH = 'STETH',
-  USDC = 'USDC',
+  BERA = 'BERA',
+  WBERA = 'WBERA',
+  HONEY = 'HONEY',
 }
 
 const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
 
   const [currency, setCurrency] = useState<SupportedCurrency>(
-    state.TransferFundsCurrency ?? SupportedCurrency.USDC,
+    state.TransferFundsCurrency ?? SupportedCurrency.HONEY,
   );
   const [amount, setAmount] = useState<string>(state.amount ?? '');
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
@@ -45,9 +44,8 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         onChange={e => setCurrency(SupportedCurrency[e.target.value as SupportedCurrency])}
         chevronTop={38}
       >
-        <option value="USDC">USDC</option>
-        <option value="ETH">ETH</option>
-        <option value="STETH">Lido Staked ETH</option>
+        <option value="BERA">BERA</option>
+        <option value="HONEY">HONEY</option>
       </BrandDropdown>
 
       <BrandNumericEntry

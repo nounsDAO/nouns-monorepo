@@ -38,12 +38,12 @@ msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
-msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
+msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request BERA to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an BERA or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, BERA, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
+msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request BERA to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an BERA or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, BERA, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-#~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
-#~ msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+#~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request BERA to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an BERA or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of BERA or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+#~ msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request BERA to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an BERA or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of BERA or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -100,8 +100,8 @@ msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
 #~ msgstr "<0>Proposed by: </0><1>{proposer}</1>{transactionLink}"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-#~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
-#~ msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of BERA or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of BERA or USDC.<3/><4>• Function Call: </4>Call a contract function."
 
 #: src/components/Proposals/index.tsx
 msgid "About Proposal Candidates"
@@ -317,8 +317,8 @@ msgstr "Because 100% of Noun auction proceeds are sent to Bouns DAO, Nounders ha
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/EditProposal/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
+msgid "Because this proposal contains a USDC fund transfer action we've added an additional BERA transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
+msgstr "Because this proposal contains a USDC fund transfer action we've added an additional BERA transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
@@ -962,8 +962,8 @@ msgid "Bouns DAO uses a fork of {compoundGovLink}."
 msgstr "Bouns DAO uses a fork of {compoundGovLink}."
 
 #: src/components/Documentation/index.tsx
-msgid "Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Bouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Bouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr "Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Bouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Bouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgid "Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Bouns DAO treasury receives 100% of BERA proceeds from daily Noun auctions. Each Noun is an irrevocable member of Bouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr "Bouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Bouns DAO treasury receives 100% of BERA proceeds from daily Noun auctions. Each Noun is an irrevocable member of Bouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
 
 #: src/pages/Playground/index.tsx
 msgid "Nouns Protocol"
@@ -1073,8 +1073,8 @@ msgid "Playground"
 msgstr "Playground"
 
 #: src/components/Bid/index.tsx
-msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
-msgstr "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
+msgid "Please place a bid higher than or equal to the minimum bid amount of {0} BERA"
+msgstr "Please place a bid higher than or equal to the minimum bid amount of {0} BERA"
 
 #: src/components/AddNounsToForkModal/index.tsx
 #: src/components/AddNounsToForkModal/index.tsx
@@ -1365,8 +1365,8 @@ msgid "Streams start and end at 00:00 UTC on selected dates."
 msgstr "Streams start and end at 00:00 UTC on selected dates."
 
 #: src/pages/CreateCandidate/index.tsx
-msgid "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
-msgstr "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
+msgid "Submissions are free for Nouns voters. Non-voters can submit for a {0} BERA fee."
+msgstr "Submissions are free for Nouns voters. Non-voters can submit for a {0} BERA fee."
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Submit"
@@ -1565,8 +1565,8 @@ msgstr "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
 
 #: src/components/ProposalContent/ProposalTransaction.tsx
 #: src/components/ProposalContent/ProposalTransactions.tsx
-msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
-msgstr "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
+msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this BERA."
+msgstr "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this BERA."
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Bouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
@@ -1688,8 +1688,8 @@ msgid "Value"
 msgstr "Value"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Value in ETH (Optional)"
-#~ msgstr "Value in ETH (Optional)"
+#~ msgid "Value in BERA (Optional)"
+#~ msgstr "Value in BERA (Optional)"
 
 #: src/pages/ProposalHistory/VersionTab.tsx
 msgid "Version"
@@ -2011,8 +2011,8 @@ msgid "{0} <0>Addresses</0>"
 msgstr "{0} <0>Addresses</0>"
 
 #: src/pages/CreateCandidate/index.tsx
-msgid "{0} ETH fee upon submission"
-msgstr "{0} ETH fee upon submission"
+msgid "{0} BERA fee upon submission"
+msgstr "{0} BERA fee upon submission"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"

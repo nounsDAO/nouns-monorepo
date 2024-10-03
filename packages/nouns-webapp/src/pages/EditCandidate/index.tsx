@@ -305,7 +305,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             :{' '}
             <Trans>
               Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
+              BERA transaction to refill the TokenBuyer contract. This action allows to DAO to
               continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
@@ -338,7 +338,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
         {!hasVotes && updateCandidateCost && +ethers.utils.formatEther(updateCandidateCost) > 0 && (
           <p className={classes.feeNotice}>
-            {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
+            {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} BERA fee upon
             submission
           </p>
         )}

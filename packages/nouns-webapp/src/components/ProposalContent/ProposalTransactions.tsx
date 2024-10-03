@@ -48,7 +48,7 @@ export default function ProposalTransactions({ details }: Props) {
                 <div>
                   <Trans>
                     This transaction was automatically added to refill the TokenBuyer. Proposers do
-                    not receive this ETH.
+                    not receive this BERA.
                   </Trans>
                 </div>
               </div>

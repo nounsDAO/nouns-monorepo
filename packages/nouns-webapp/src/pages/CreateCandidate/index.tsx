@@ -216,7 +216,7 @@ const CreateCandidatePage = () => {
           <strong>
             <Trans>
               Submissions are free for Nouns voters. Non-voters can submit for a{' '}
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee.
+              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} BERA fee.
             </Trans>
           </strong>
         </Alert>
@@ -241,7 +241,7 @@ const CreateCandidatePage = () => {
             :{' '}
             <Trans>
               Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
+              BERA transaction to refill the TokenBuyer contract. This action allows to DAO to
               continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
@@ -264,7 +264,7 @@ const CreateCandidatePage = () => {
         <p className={classes.feeNotice}>
           {!hasVotes && (
             <Trans>
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
+              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} BERA fee upon
               submission
             </Trans>
           )}

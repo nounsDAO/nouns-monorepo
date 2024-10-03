@@ -146,7 +146,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
       />
 
       <BrandTextEntry
-        label={'Included ETH (optional)'}
+        label={'Included BERA (optional)'}
         onChange={e => setValue(e.target.value)}
         value={value}
         type="number"

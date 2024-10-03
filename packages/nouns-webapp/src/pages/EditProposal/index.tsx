@@ -539,7 +539,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
             :{' '}
             <Trans>
               Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
+              BERA transaction to refill the TokenBuyer contract. This action allows to DAO to
               continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>

@@ -15,8 +15,8 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
 
   const [amount, setAmount] = useState<string>(state.amount ?? '');
-  const [currency, setCurrency] = useState<SupportedCurrency.WETH | SupportedCurrency.USDC>(
-    SupportedCurrency.USDC,
+  const [currency, setCurrency] = useState<SupportedCurrency.WBERA | SupportedCurrency.HONEY>(
+    SupportedCurrency.HONEY,
   );
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState(state.address ?? '');
@@ -41,18 +41,18 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
 
       <BrandDropdown
         label={'Currency'}
-        value={currency === SupportedCurrency.WETH ? 'WETH' : 'USDC'}
+        value={currency === SupportedCurrency.WBERA ? 'WBERA' : 'HONEY'}
         onChange={e => {
-          if (e.target.value === 'WETH') {
-            setCurrency(SupportedCurrency.WETH);
+          if (e.target.value === 'WBERA') {
+            setCurrency(SupportedCurrency.WBERA);
           } else {
-            setCurrency(SupportedCurrency.USDC);
+            setCurrency(SupportedCurrency.HONEY);
           }
         }}
         chevronTop={38}
       >
-        <option value="USDC">USDC</option>
-        <option value="WETH">WETH</option>
+        <option value="HONEY">HONEY</option>
+        <option value="WBERA">WBERA</option>
       </BrandDropdown>
 
       <BrandNumericEntry
@@ -62,7 +62,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
           setAmount(e.value);
           setFormattedAmount(e.formattedValue);
         }}
-        placeholder={`0 ${currency === SupportedCurrency.USDC ? 'USDC' : 'WETH'}`}
+        placeholder={`0 ${currency === SupportedCurrency.HONEY ? 'HONEY' : 'WBERA'}`}
         isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 

@@ -15,9 +15,9 @@ task("mint-noun", "Mints a noun")
     const nounsToken = NounsToken.attach(nounsTokenAddress);
 
     try {
-      // Check signer's ETH balance
+      // Check signer's BERA balance
       const balance = await signer.getBalance();
-      console.log("Signer ETH balance:", ethers.utils.formatEther(balance), "ETH");
+      console.log("Signer BERA balance:", ethers.utils.formatEther(balance), "ETH");
 
       // Check minter role
       const minter = await nounsToken.minter();
@@ -54,7 +54,7 @@ task("mint-noun", "Mints a noun")
       } else if (error.message.includes("Sender is not the minter")) {
         console.log("Make sure the signer account is set as the minter on the NounsToken contract.");
       } else if (error.message.includes("transaction failed")) {
-        console.log("The transaction failed. Check the contract state and ensure you have enough ETH for gas fees.");
+        console.log("The transaction failed. Check the contract state and ensure you have enough BERA for gas fees.");
         console.log("You might also need to check if the minter role is correctly set.");
       }
       // Log more detailed error information

@@ -456,14 +456,14 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         return {
           target,
           callData: concatSelectorToCalldata(signature, callData),
-          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} BERA } ` : '',
         };
       }
 
       return {
         target,
         functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-        callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+        callData: types ? types : value ? `${utils.formatEther(value)} BERA` : '',
       };
     }
 
@@ -474,14 +474,14 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         target,
         functionSig: name,
         callData: decoded.join(),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} BERA }` : '',
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
       return {
         target,
         callData: concatSelectorToCalldata(signature, callData),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} BERA } ` : '',
       };
     }
   });

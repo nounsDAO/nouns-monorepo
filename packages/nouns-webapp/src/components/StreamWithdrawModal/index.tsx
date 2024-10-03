@@ -46,7 +46,7 @@ const StreamWithdrawModalOverlay: React.FC<{
   } = props;
 
   const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
-  const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
+  const unitForDisplay = isUSDC ? 'HONEY' : 'WBERA';
 
   const withdrawableBalance = useStreamRemainingBalance(streamAddress ?? '') ?? 0;
   const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
@@ -184,7 +184,7 @@ const StreamWithdrawModalOverlay: React.FC<{
           withdrawTokens(
             formatTokenAmount(
               withdrawAmount.toString(),
-              isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
+              isUSDC ? SupportedCurrency.HONEY : SupportedCurrency.WBERA,
             ),
           );
         }}

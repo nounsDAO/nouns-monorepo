@@ -28,7 +28,7 @@ export const useTreasuryBalance = () => {
 };
 
 /**
- * Computes treasury usd value of treasury assets (ETH + Lido) at current ETH-USD exchange rate
+ * Computes treasury usd value of treasury assets (ETH + Lido) at current BERA-USD exchange rate
  *
  * @returns USD value of treasury assets (ETH + Lido) at current exchange rate
  */

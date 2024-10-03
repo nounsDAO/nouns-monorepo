@@ -116,7 +116,7 @@ const Bid: React.FC<{
         message: (
           <Trans>
             Please place a bid higher than or equal to the minimum bid amount of {minBidEth(minBid)}{' '}
-            ETH
+            BERA
           </Trans>
         ),
       });

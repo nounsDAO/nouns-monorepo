@@ -38,10 +38,10 @@ export function usePredictStreamAddress({
 export function formatTokenAmount(amount?: string, currency?: SupportedCurrency) {
   const amt = amount ?? '0';
   switch (currency) {
-    case SupportedCurrency.USDC:
+    case SupportedCurrency.HONEY:
       return Math.round(parseFloat(amt) * 1_000_000).toString();
-    case SupportedCurrency.WETH:
-    case SupportedCurrency.STETH:
+    case SupportedCurrency.WBERA:
+    // case SupportedCurrency.STETH:
       return utils.parseEther(amt).toString();
     default:
       return amt;
@@ -50,12 +50,12 @@ export function formatTokenAmount(amount?: string, currency?: SupportedCurrency)
 
 export function getTokenAddressForCurrency(currency?: SupportedCurrency) {
   switch (currency) {
-    case SupportedCurrency.USDC:
-      return config.addresses.usdcToken;
-    case SupportedCurrency.WETH:
-      return config.addresses.weth;
-    case SupportedCurrency.STETH:
-      return config.addresses.steth;
+    case SupportedCurrency.HONEY:
+      return config.addresses.honey;
+    case SupportedCurrency.WBERA:
+      return config.addresses.wbera;
+    // case SupportedCurrency.STETH:
+    //   return config.addresses.steth;
     default:
       return '';
   }

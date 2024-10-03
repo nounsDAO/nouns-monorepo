@@ -369,7 +369,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
             deploymentCost,
             'ether',
-          )} ETH`,
+          )} BERA`,
         );
 
         const result = await promptjs.get([

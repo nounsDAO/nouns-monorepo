@@ -45,7 +45,7 @@ const ProposalTransactions = ({
             <Col sm="3">
               <b>Value</b>
             </Col>
-            <Col sm="9">{tx.value ? `${utils.formatEther(tx.value)} ETH` : 'None'}</Col>
+            <Col sm="9">{tx.value ? `${utils.formatEther(tx.value)} BERA` : 'None'}</Col>
           </Row>
           <Row>
             <Col sm="3">

@@ -28,7 +28,7 @@ export default function useStreamPaymentTransactions({
   }
 
   const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,uint8,address)';
-  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
+  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.HONEY;
   const amount = state.amount ?? '0';
 
   const actions = [
@@ -40,7 +40,7 @@ export default function useStreamPaymentTransactions({
       decodedCalldata: JSON.stringify([
         state.address,
         isUSDC ? human2ContractUSDCFormat(amount) : utils.parseEther(amount.toString()).toString(),
-        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
+        isUSDC ? config.addresses.honey : config.addresses.wbera,
         state.streamStartTimestamp,
         state.streamEndTimestamp,
         0,
@@ -60,7 +60,7 @@ export default function useStreamPaymentTransactions({
 
   if (!isUSDC) {
     actions.push({
-      address: config.addresses.weth ?? '',
+      address: config.addresses.wbera ?? '',
       signature: 'deposit()',
       usdcValue: 0,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
@@ -69,7 +69,7 @@ export default function useStreamPaymentTransactions({
     });
     const wethTransfer = 'transfer(address,uint256)';
     actions.push({
-      address: config.addresses.weth ?? '',
+      address: config.addresses.wbera ?? '',
       signature: wethTransfer,
       usdcValue: 0,
       value: '0',

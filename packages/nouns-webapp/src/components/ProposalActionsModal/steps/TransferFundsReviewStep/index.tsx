@@ -11,23 +11,23 @@ import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
-  if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
+  if (state.TransferFundsCurrency === SupportedCurrency.BERA) {
     onActionAdd({
       address: state.address,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
       signature: '',
       calldata: '0x',
     });
-  } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
-    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()];
-    onActionAdd({
-      address: config.addresses.steth,
-      value: '0',
-      signature: 'transfer(address,uint256)',
-      decodedCalldata: JSON.stringify(values),
-      calldata: utils.defaultAbiCoder.encode(['address', 'uint256'], values),
-    });
-  } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
+  // } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
+  //   const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()];
+  //   onActionAdd({
+  //     address: config.addresses.steth,
+  //     value: '0',
+  //     signature: 'transfer(address,uint256)',
+  //     decodedCalldata: JSON.stringify(values),
+  //     calldata: utils.defaultAbiCoder.encode(['address', 'uint256'], values),
+  //   });
+  } else if (state.TransferFundsCurrency === SupportedCurrency.HONEY) {
     const signature = 'sendOrRegisterDebt(address,uint256)';
     const abi = new utils.Interface(payerABI);
 

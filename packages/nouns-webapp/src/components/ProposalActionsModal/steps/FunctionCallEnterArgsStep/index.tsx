@@ -10,7 +10,7 @@ import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import { Interface } from 'ethers/lib/utils';
 
 export enum SupportedCurrencies {
-  ETH = 'ETH',
+  BERA = 'ETH',
   USDC = 'USDC',
 }
 

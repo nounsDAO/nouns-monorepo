@@ -13,6 +13,8 @@ interface ExternalContractAddresses {
   nounsStreamFactory: string | undefined;
   weth: string | undefined;
   steth: string | undefined;
+  wbera?: string | undefined;
+  honey?: string | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -49,7 +51,7 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
 
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
-export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
+export const BERAERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
 export const WALLET_CONNECT_V2_PROJECT_ID =
   process.env.REACT_APP_WALLET_CONNECT_V2_PROJECT_ID ?? '';
@@ -148,8 +150,10 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: '0xaFeb316B4ED09DD348E15837eA71C067d61FEBfe',
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
-    weth: '0x7507c1dc16935B82698e4C63f2746A2fCf994dF8',
+    weth: undefined,
     steth: undefined,
+    wbera: '0x7507c1dc16935B82698e4C63f2746A2fCf994dF8',
+    honey: '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
     nounsStreamFactory: undefined,
   },
 };

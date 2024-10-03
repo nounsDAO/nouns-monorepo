@@ -17,7 +17,7 @@ export enum NounEventType {
 export type ProposalVoteEvent = {
   proposal: Proposal;
   vote: {
-    // Delegate (possibly holder in case of self-delegation) ETH address (undefined in the case of no vote cast)
+    // Delegate (possibly holder in case of self-delegation) BERA address (undefined in the case of no vote cast)
     voter: string | undefined;
     supportDetailed: 0 | 1 | 2 | undefined;
   };
