@@ -188,6 +188,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
+              args.auctionDurationIncreasePercentage,
             ]),
         ],
         waitForConfirmation: true,
