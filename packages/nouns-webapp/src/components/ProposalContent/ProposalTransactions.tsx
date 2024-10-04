@@ -64,7 +64,7 @@ export default function ProposalTransactions({ details }: Props) {
                     {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
                       Number(utils.formatUnits(d.callData.split(',')[1], 6)),
                     )}{' '}
-                    USDC to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
+                    HONEY to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
                     PayerContract.
                   </Trans>
                 </div>
