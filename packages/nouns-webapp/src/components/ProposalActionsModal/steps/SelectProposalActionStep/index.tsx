@@ -37,15 +37,11 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <Trans>
           <hr />
           <b>Guidelines</b>
-          <hr />• Do <b>NOT</b> request BERA to trade into USDC. Instead, request USDC directly.
-          <br />• Do <b>NOT</b> transfer funds externally to create an BERA or USDC stream. Instead,
-          use the "Stream Funds" action.
+          <hr />• Do <b>NOT</b> request BERA to trade into HONEY. Instead, request HONEY directly.
           <hr />
           <b>Supported Action Types</b>
-          <hr />
-          <b>• Transfer Funds: </b>Send USDC, BERA, or stETH.
           <br />
-          <b>• Stream Funds: </b>Stream USDC or WETH over time.
+          <b>• Transfer Funds: </b>Send HONEY or BERA.
           <br />
           <b>• Function Call: </b>Call a contract function.
         </Trans>
