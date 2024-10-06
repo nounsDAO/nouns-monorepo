@@ -92,7 +92,7 @@ const app: Record<SupportedChains, AppConfig> = {
     jsonRpcUri: 'https://rpc.bouns.wtf',
     wsRpcUri: 'wss://ws.bouns.wtf',
     subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cm1p24aohtsfs01x64i0p4umb/subgraphs/bouns/0.0.5/gn',
+      'https://api.goldsky.com/api/public/project_cm1p24aohtsfs01x64i0p4umb/subgraphs/bouns/0.0.6/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {

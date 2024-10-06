@@ -26,7 +26,7 @@
     "deploy:localnode": "yarn clean && yarn prepare:berachain && yarn codegen && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
     " ": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
-    "deploy:berachain": "yarn clean && yarn prepare:berachain && yarn codegen && yarn graph build && goldsky subgraph deploy bouns/0.0.5",
+    "deploy:berachain": "yarn clean && yarn prepare:berachain && yarn codegen && yarn graph build && goldsky subgraph deploy bouns/0.0.6",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn graph build && goldsky subgraph deploy nouns-v3-goerli/0.1.6",
     "deploy:sepolia": "yarn clean && yarn prepare:sepolia && yarn codegen && yarn graph build && goldsky subgraph deploy nouns-sepolia-client-incentives/0.1.1",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn graph build && goldsky subgraph deploy nouns/0.2.5",

@@ -5,7 +5,6 @@ import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import ShortAddress from '../../../ShortAddress';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import classes from './TransferFundsReviewStep.module.css';
-import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';

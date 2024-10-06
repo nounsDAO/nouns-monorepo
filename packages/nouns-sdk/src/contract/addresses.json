@@ -68,18 +68,18 @@
     "nounsDAOData": "0x9040f720AA8A693F950B9cF94764b4b06079D002"
   },
   "80084": {
-    "nounsToken": "0x1A86280f3Fe1E9D1e24D1993Cac45759CcDDb5dC",
-    "nounsSeeder": "0xCb4AcBa600cFe7eee0a27eEABE00cD1f32BDd897",
-    "nounsDescriptor": "0xd5675a9ba7C0cd669055E507Db6B835635563924",
-    "nftDescriptor": "0x16c10bCdc23e3A3F8a32e5324bb320ad144d9ca5",
-    "nounsAuctionHouse": "0xd310c628a07886eD8b58e6e00d97732D91De586c",
-    "nounsAuctionHouseProxy": "0xd172eb43c2361f3091e2aaAd041e50E823b7a37E",
-    "nounsAuctionHouseProxyAdmin": "0x01B055883d9a6b8B30b657857870D09828BFC285",
-    "nounsDaoExecutorProxy": "0xe87E78e416B77D3809f4Aa25056ba0e13becb05d",
-    "nounsDaoExecutor": "0x3FF4721823493c1c8fB5cd7dE2770746B572D1A6",
-    "nounsDAOProxy": "0x8C51732569c777b42d333f833F72E4eA3FeC2B6d",
-    "nounsDAOLogicV4": "0x441860ae0eba5bf8F89EB5eC442315e0982f9EA3",
-    "nounsDAOData": "0x31E39F01f18fc339aE5F02D95aac63cA5D303946",
-    "nounsDAODataProxy": "0xf028E579F692Fe045F5B566d22F147c617C9B8a9"
+    "nounsToken": "0x84c37d41FBBDFE705BD657cd77248b9B83BcFda2",
+    "nounsSeeder": "0x9FD5d23eBD4603d1cEA2470f2684bA59341279AB",
+    "nounsDescriptor": "0xd070a97B2c752fF1606D51F214CE06227516a96f",
+    "nftDescriptor": "0x10Bb96b5aAf9C8af610ac1585E6b5e8fd6ab8a9D",
+    "nounsAuctionHouse": "0xe4FeE33d229B74F9a0C5699EDDc443D36c4253E5",
+    "nounsAuctionHouseProxy": "0xa12DffC14E250BeF99d607E1c92F22cc7A062fA8",
+    "nounsAuctionHouseProxyAdmin": "0x44C66D7A7818d6F813c02F68C993C25Cfbc182C8",
+    "nounsDaoExecutorProxy": "0x33CB5eBb9a79D2ec679602560260a638658BFa99",
+    "nounsDaoExecutor": "0xf5a07CFa00cB24168fB73Aea061eBc66609691F9",
+    "nounsDAOProxy": "0xC25510ba09d3660ed4116a14283C9ca1F77f3744",
+    "nounsDAOLogicV4": "0xa36c40baBF1550b77EdDa513A43760491729c53b",
+    "nounsDAOData": "0x6226eC2c18214831254859Ed60b0b73bBE9F92CE",
+    "nounsDAODataProxy": "0x0A4191ef669b20D4eB25928BF104db2D5Bb9C031"
   }
 }
