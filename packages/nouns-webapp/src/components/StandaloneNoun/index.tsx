@@ -10,6 +10,8 @@ import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import nounClasses from '../Noun/Noun.module.css';
 import Image from 'react-bootstrap/Image';
 
+console.log(data)
+
 interface StandaloneNounProps {
   nounId: EthersBN;
 }
@@ -26,9 +28,10 @@ interface StandaloneNounWithSeedProps {
 
 export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
   const id = nounId.toString();
-  const name = `Noun ${id}`;
-  const description = `Noun ${id} is a member of the Bouns DAO`;
+  const name = `Boun ${id}`;
+  const description = `Boun ${id} is a member of the Bouns DAO`;
   const { parts } = getNounData(seed);
+  console.log(parts)
   const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette))}`;
 
   return {
@@ -63,7 +66,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Boun'} />
     </Link>
   );
 };
@@ -80,7 +83,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
   };
 
-  if (!seed || !nounId) return <Noun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
+  if (!seed || !nounId) return <Noun imgPath="" alt="Boun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
     <Link
@@ -118,7 +121,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
     >
       <Noun
         imgPath={noun ? noun.image : ''}
-        alt={noun ? noun.description : 'Noun'}
+        alt={noun ? noun.description : 'Boun'}
         className={nounClasses.rounded}
       />
     </Link>
@@ -134,7 +137,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   const seed = useNounSeed(nounId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Boun" />;
 
   onLoadSeed(seed);
 

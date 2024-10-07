@@ -1,7 +1,7 @@
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { NounSeed, NounData } from './types';
-import { images, bgcolors } from './image-data.json';
+import { images } from './image-data.json';
 
 const { bodies, accessories, heads, glasses } = images;
 
@@ -19,7 +19,6 @@ export const getNounData = (seed: NounSeed): NounData => {
       heads[seed.head],
       glasses[seed.glasses],
     ],
-    background: bgcolors[seed.background],
   };
 };
 
@@ -29,7 +28,6 @@ export const getNounData = (seed: NounSeed): NounData => {
  */
 export const getRandomNounSeed = (): NounSeed => {
   return {
-    background: Math.floor(Math.random() * bgcolors.length),
     body: Math.floor(Math.random() * bodies.length),
     accessory: Math.floor(Math.random() * accessories.length),
     head: Math.floor(Math.random() * heads.length),
@@ -77,7 +75,6 @@ export const getPseudorandomPart = (
 export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {
   const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, nounId]);
   return {
-    background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
     accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
     head: getPseudorandomPart(pseudorandomness, heads.length, 144),

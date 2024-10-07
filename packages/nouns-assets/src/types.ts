@@ -1,5 +1,4 @@
 export interface NounSeed {
-  background: number;
   body: number;
   accessory: number;
   head: number;
@@ -13,5 +12,4 @@ export interface EncodedImage {
 
 export interface NounData {
   parts: EncodedImage[];
-  background: string;
 }
