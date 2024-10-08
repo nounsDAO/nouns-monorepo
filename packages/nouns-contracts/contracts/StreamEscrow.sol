@@ -48,7 +48,7 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken = INounsToken(nounsToken_);
     }
 
-    function createStreamAndForwardAll(uint256 nounId, uint16 streamLengthInAuctions) external payable {
+    function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInAuctions) external payable {
         require(msg.sender == auctionHouse, 'only auction house');
 
         forwardAll();

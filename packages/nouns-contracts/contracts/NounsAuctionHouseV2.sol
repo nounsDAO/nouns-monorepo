@@ -300,7 +300,7 @@ contract NounsAuctionHouseV2 is
 
         // TODO maybe separate in case there's no winner and no auction.amount?
         if (amountToStream > 0) {
-            streamEscrow.createStreamAndForwardAll{ value: amountToStream }(_auction.nounId, streamLengthInAuctions);
+            streamEscrow.forwardAllAndCreateStream{ value: amountToStream }(_auction.nounId, streamLengthInAuctions);
         } else {
             streamEscrow.forwardAll();
         }
