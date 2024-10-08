@@ -68,12 +68,6 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
             _mintTo(voter3);
         }
 
-        AuctionHouseUpgrader.upgradeAuctionHouse(
-            address(dao.timelock()),
-            auctionHouseProxyAdmin,
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
-        );
-
         rewards.registerClient('some client', 'some client description');
         vm.prank(client1Wallet);
         CLIENT_ID = rewards.registerClient('client1', 'client1 description');

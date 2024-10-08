@@ -2,12 +2,10 @@
 pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
-import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
-import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
@@ -15,8 +13,9 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
-import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
+import { StreamEscrow } from '../../../contracts/StreamEscrow.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
@@ -28,29 +27,33 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant AUCTION_RESERVE_PRICE = 1;
     uint8 constant AUCTION_MIN_BID_INCREMENT_PRCT = 2;
     uint256 constant AUCTION_DURATION = 24 hours;
+    uint16 constant IMMEDIATE_TREASURY_BPS = 2000;
+    uint16 constant STREAM_LENGTH_IN_AUCTIONS = 1500;
 
-    function _deployAuctionHouseV1AndToken(
+    function _deployAuctionHouseAndToken(
         address owner,
         address noundersDAO,
         address minter
     ) internal returns (NounsAuctionHouseProxy, NounsAuctionHouseProxyAdmin) {
-        NounsAuctionHouse logic = new NounsAuctionHouse();
         NounsToken token = deployToken(noundersDAO, minter);
-        WETH weth = new WETH();
+        NounsAuctionHouseV3 logic = new NounsAuctionHouseV3(token, address(new WETH()), AUCTION_DURATION);
         NounsAuctionHouseProxyAdmin admin = new NounsAuctionHouseProxyAdmin();
         admin.transferOwnership(owner);
 
+        address predictedProxyAddress = computeCreateAddress(address(this), vm.getNonce(address(this)) + 1);
+        StreamEscrow streamEscrow = new StreamEscrow(makeAddr('daoTreasury'), predictedProxyAddress, address(token));
+
         bytes memory data = abi.encodeWithSelector(
-            NounsAuctionHouse.initialize.selector,
-            address(token),
-            address(weth),
-            AUCTION_TIME_BUFFER,
+            NounsAuctionHouseV3.initialize.selector,
             AUCTION_RESERVE_PRICE,
+            AUCTION_TIME_BUFFER,
             AUCTION_MIN_BID_INCREMENT_PRCT,
-            AUCTION_DURATION
+            IMMEDIATE_TREASURY_BPS,
+            STREAM_LENGTH_IN_AUCTIONS,
+            streamEscrow
         );
         NounsAuctionHouseProxy proxy = new NounsAuctionHouseProxy(address(logic), address(admin), data);
-        NounsAuctionHouse auction = NounsAuctionHouse(address(proxy));
+        NounsAuctionHouseV3 auction = NounsAuctionHouseV3(address(proxy));
 
         auction.transferOwnership(owner);
         token.setMinter(address(proxy));

@@ -81,12 +81,6 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         auctionHouse = INounsAuctionHouseV2(minter);
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
-
-        AuctionHouseUpgrader.upgradeAuctionHouse(
-            address(dao.timelock()),
-            auctionHouseProxyAdmin,
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
-        );
     }
 
     function proposeVoteAndEndVotingPeriod(uint32 clientId) internal returns (uint32) {

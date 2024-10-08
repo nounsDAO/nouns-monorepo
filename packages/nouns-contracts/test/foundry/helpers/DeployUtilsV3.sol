@@ -9,7 +9,7 @@ import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.s
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
-import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
@@ -21,6 +21,9 @@ import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
+import { INounsToken } from '../../../contracts/interfaces/INounsToken.sol';
+import { WETH } from '../../../contracts/test/WETH.sol';
+import { StreamEscrow } from '../../../contracts/StreamEscrow.sol';
 
 abstract contract DeployUtilsV3 is DeployUtils {
     NounsAuctionHouseProxyAdmin auctionHouseProxyAdmin;
@@ -88,8 +91,14 @@ abstract contract DeployUtilsV3 is DeployUtils {
         t.timelock.initialize(address(1), TIMELOCK_DELAY);
 
         auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
+        address predictedTokenAddress = computeCreateAddress(address(this), vm.getNonce(address(this)) + 9);
+        NounsAuctionHouseV3 auctionHouseImpl = new NounsAuctionHouseV3(
+            INounsToken(predictedTokenAddress),
+            address(new WETH()),
+            auctionDuration
+        );
         NounsAuctionHouseProxy auctionProxy = new NounsAuctionHouseProxy(
-            address(new NounsAuctionHouse()),
+            address(auctionHouseImpl),
             address(auctionHouseProxyAdmin),
             ''
         );
@@ -149,8 +158,21 @@ abstract contract DeployUtilsV3 is DeployUtils {
 
         address(new NounsDAOForkEscrow(address(dao), address(t.nounsToken)));
 
+        StreamEscrow streamEscrow = new StreamEscrow({
+            daoTreasury_: address(t.timelock),
+            auctionHouse_: address(auctionProxy),
+            nounsToken_: address(t.nounsToken)
+        });
+
         vm.prank(address(t.timelock));
-        NounsAuctionHouse(address(auctionProxy)).initialize(t.nounsToken, makeAddr('weth'), 2, 0, 1, auctionDuration);
+        NounsAuctionHouseV3(address(auctionProxy)).initialize({
+            _reservePrice: 0,
+            _timeBuffer: 2,
+            _minBidIncrementPercentage: 1,
+            _immediateTreasuryBps: 2000,
+            _streamLengthInAuctions: 1500,
+            _streamEscrow: address(streamEscrow)
+        });
 
         vm.prank(address(t.timelock));
         t.timelock.setPendingAdmin(address(dao));

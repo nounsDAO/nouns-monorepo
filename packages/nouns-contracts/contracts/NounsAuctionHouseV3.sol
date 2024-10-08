@@ -37,7 +37,7 @@ import { IWETH } from './interfaces/IWETH.sol';
  * @dev The contract inherits from PausableUpgradeable & ReentrancyGuardUpgradeable most of all the keep the same
  * storage layout as the NounsAuctionHouse contract
  */
-contract NounsAuctionHouseV2 is
+contract NounsAuctionHouseV3 is
     INounsAuctionHouseV2,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
@@ -90,7 +90,10 @@ contract NounsAuctionHouseV2 is
     function initialize(
         uint192 _reservePrice,
         uint56 _timeBuffer,
-        uint8 _minBidIncrementPercentage
+        uint8 _minBidIncrementPercentage,
+        uint16 _immediateTreasuryBps,
+        uint16 _streamLengthInAuctions,
+        address _streamEscrow
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -101,6 +104,9 @@ contract NounsAuctionHouseV2 is
         reservePrice = _reservePrice;
         timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
+        immediateTreasuryBps = _immediateTreasuryBps;
+        streamLengthInAuctions = _streamLengthInAuctions;
+        streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
     /**

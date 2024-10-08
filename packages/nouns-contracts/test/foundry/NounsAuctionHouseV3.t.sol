@@ -3,34 +3,25 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
-import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
 import { INounsAuctionHouseV2 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
-contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
+contract NounsAuctionHouseV3TestBase is Test, DeployUtils {
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
     uint256[] nounIds;
     uint32 timestamp = 1702289583;
 
-    NounsAuctionHouseV2 auction;
+    IAH auction;
 
     function setUp() public virtual {
         vm.warp(timestamp);
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
-            owner,
-            noundersDAO,
-            minter
-        );
+        (NounsAuctionHouseProxy auctionProxy, ) = _deployAuctionHouseAndToken(owner, noundersDAO, minter);
 
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = IAH(address(auctionProxy));
 
         vm.prank(owner);
         auction.unpause();
@@ -63,7 +54,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     }
 }
 
-contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
+contract NounsAuctionHouseV3Test is NounsAuctionHouseV3TestBase {
     function test_createBid_revertsGivenWrongNounId() public {
         uint128 nounId = auction.auction().nounId;
 
@@ -165,13 +156,8 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_settleAuction_revertsWhenAuctionHasntBegunYet() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
-            owner,
-            noundersDAO,
-            minter
-        );
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        (NounsAuctionHouseProxy auctionProxy, ) = _deployAuctionHouseAndToken(owner, noundersDAO, minter);
+        auction = IAH(address(auctionProxy));
 
         vm.expectRevert("Auction hasn't begun");
         auction.settleAuction();
@@ -186,77 +172,6 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
         vm.expectRevert('Pausable: paused');
         auction.settleCurrentAndCreateNewAuction();
-    }
-
-    function test_V2Migration_works() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
-            owner,
-            noundersDAO,
-            minter
-        );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
-        vm.prank(owner);
-        auctionV1.unpause();
-        vm.roll(block.number + 1);
-        (uint256 nounId, , uint256 startTime, uint256 endTime, , ) = auctionV1.auction();
-
-        address payable bidder = payable(address(0x142));
-        uint256 amount = 142 ether;
-        vm.deal(bidder, amount);
-        vm.prank(bidder);
-        auctionV1.createBid{ value: amount }(nounId);
-
-        address nounsBefore = address(auctionV1.nouns());
-        address wethBefore = address(auctionV1.weth());
-
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
-
-        IAH.AuctionV2View memory auctionV2State = auctionV2.auction();
-
-        assertEq(auctionV2State.nounId, nounId);
-        assertEq(auctionV2State.amount, amount);
-        assertEq(auctionV2State.startTime, startTime);
-        assertEq(auctionV2State.endTime, endTime);
-        assertEq(auctionV2State.bidder, bidder);
-        assertEq(auctionV2State.settled, false);
-
-        assertEq(address(auctionV2.nouns()), nounsBefore);
-        assertEq(address(auctionV2.weth()), wethBefore);
-        assertEq(auctionV2.timeBuffer(), AUCTION_TIME_BUFFER);
-        assertEq(auctionV2.reservePrice(), AUCTION_RESERVE_PRICE);
-        assertEq(auctionV2.minBidIncrementPercentage(), AUCTION_MIN_BID_INCREMENT_PRCT);
-        assertEq(auctionV2.duration(), AUCTION_DURATION);
-        assertEq(auctionV2.paused(), false);
-        assertEq(auctionV2.owner(), owner);
-    }
-
-    function test_V2Migration_copiesPausedWhenTrue() public {
-        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
-            owner,
-            noundersDAO,
-            minter
-        );
-        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
-        vm.prank(owner);
-        auctionV1.unpause();
-        vm.roll(block.number + 1);
-        (uint256 nounId, , , , , ) = auctionV1.auction();
-
-        address payable bidder = payable(address(0x142));
-        uint256 amount = 142 ether;
-        vm.deal(bidder, amount);
-        vm.prank(bidder);
-        auctionV1.createBid{ value: amount }(nounId);
-
-        vm.prank(owner);
-        auctionV1.pause();
-
-        AuctionHouseUpgrader.upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
-
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
-        assertEq(auctionV2.paused(), true);
     }
 
     function test_auctionGetter_compatibleWithV1() public {
@@ -292,7 +207,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_setMinBidIncrementPercentage_givenZero_reverts() public {
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         vm.expectRevert('must be greater than zero');
         auction.setMinBidIncrementPercentage(0);
     }
@@ -300,14 +215,14 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     function test_setMinBidIncrementPercentage_givenNonZeroInput_works() public {
         assertNotEq(auction.minBidIncrementPercentage(), 42);
 
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         auction.setMinBidIncrementPercentage(42);
 
         assertEq(auction.minBidIncrementPercentage(), 42);
     }
 }
 
-abstract contract NoracleBaseTest is NounsAuctionHouseV2TestBase {
+abstract contract NoracleBaseTest is NounsAuctionHouseV3TestBase {
     uint256[] expectedPrices;
     IAH.Settlement[] expectedSettlements;
     address bidder = makeAddr('bidder');
@@ -864,7 +779,7 @@ contract NoracleTest_NoActiveAuction is NoracleBaseTest {
         bidAndWinCurrentAuction(makeAddr('bidder'), 1 ether);
         bidDontCreateNewAuction(makeAddr('bidder 2'), 2 ether);
 
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         auction.pause();
         auction.settleAuction();
     }
@@ -943,7 +858,7 @@ contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
             nounId++;
         }
 
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         auction.setPrices(settlements);
 
         IAH.Settlement[] memory actualSettlements = auction.getSettlements(0, 23, true);
@@ -957,14 +872,14 @@ contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
     }
 }
 
-contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
+contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
     function test_setTimeBuffer_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setTimeBuffer(1 days);
     }
 
     function test_setTimeBuffer_revertsGivenValueAboveMax() public {
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         vm.expectRevert('timeBuffer too large');
         auction.setTimeBuffer(1 days + 1);
     }
@@ -972,9 +887,13 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
     function test_setTimeBuffer_worksForOwner() public {
         assertEq(auction.timeBuffer(), 5 minutes);
 
-        vm.prank(auction.owner());
+        vm.prank(IOwner(address(auction)).owner());
         auction.setTimeBuffer(1 days);
 
         assertEq(auction.timeBuffer(), 1 days);
     }
+}
+
+interface IOwner {
+    function owner() external view returns (address);
 }

@@ -9,8 +9,6 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOData } from '../../../contracts/governance/data/NounsDAOData.sol';
-import { DeployAuctionHouseV2Mainnet } from '../../../script/AuctionHouseV2/DeployAuctionHouseV2Mainnet.s.sol';
-import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
 import { NounsAuctionHousePreV2Migration } from '../../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 
@@ -261,116 +259,116 @@ contract DAOUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
     }
 }
 
-contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
-    uint256 v1NounId;
-    uint256 v1Amount;
-    uint256 v1StartTime;
-    uint256 v1EndTime;
-    address v1Bidder;
-    bool v1Settled;
-    address v1NounsAddress;
-    address v1WethAddress;
-    address v1Owner;
-    uint256 v1Duration;
-    uint8 v1MinBidIncrementPercentage;
-    uint256 v1ReservePrice;
-    uint256 v1TimeBuffer;
+// contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
+//     uint256 v1NounId;
+//     uint256 v1Amount;
+//     uint256 v1StartTime;
+//     uint256 v1EndTime;
+//     address v1Bidder;
+//     bool v1Settled;
+//     address v1NounsAddress;
+//     address v1WethAddress;
+//     address v1Owner;
+//     uint256 v1Duration;
+//     uint8 v1MinBidIncrementPercentage;
+//     uint256 v1ReservePrice;
+//     uint256 v1TimeBuffer;
 
-    function setUp() public override {
-        super.setUp();
+//     function setUp() public override {
+//         super.setUp();
 
-        // Save AH V1 state before the upgrade
-        NounsAuctionHouse ahv1 = NounsAuctionHouse(AUCTION_HOUSE_PROXY_MAINNET);
-        (v1NounId, v1Amount, v1StartTime, v1EndTime, v1Bidder, v1Settled) = ahv1.auction();
-        v1NounsAddress = address(ahv1.nouns());
-        v1WethAddress = address(ahv1.weth());
-        v1Owner = ahv1.owner();
-        v1Duration = ahv1.duration();
-        v1MinBidIncrementPercentage = ahv1.minBidIncrementPercentage();
-        v1ReservePrice = ahv1.reservePrice();
-        v1TimeBuffer = ahv1.timeBuffer();
+//         // Save AH V1 state before the upgrade
+//         NounsAuctionHouse ahv1 = NounsAuctionHouse(AUCTION_HOUSE_PROXY_MAINNET);
+//         (v1NounId, v1Amount, v1StartTime, v1EndTime, v1Bidder, v1Settled) = ahv1.auction();
+//         v1NounsAddress = address(ahv1.nouns());
+//         v1WethAddress = address(ahv1.weth());
+//         v1Owner = ahv1.owner();
+//         v1Duration = ahv1.duration();
+//         v1MinBidIncrementPercentage = ahv1.minBidIncrementPercentage();
+//         v1ReservePrice = ahv1.reservePrice();
+//         v1TimeBuffer = ahv1.timeBuffer();
 
-        // Propose and execute the upgrade proposal
+//         // Propose and execute the upgrade proposal
 
-        NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2(ahv1.nouns(), ahv1.weth(), ahv1.duration());
-        NounsAuctionHousePreV2Migration migratorLogic = new NounsAuctionHousePreV2Migration();
+//         NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2(ahv1.nouns(), ahv1.weth(), ahv1.duration());
+//         NounsAuctionHousePreV2Migration migratorLogic = new NounsAuctionHousePreV2Migration();
 
-        uint256 txCount = 3;
-        address[] memory targets = new address[](txCount);
-        uint256[] memory values = new uint256[](txCount);
-        string[] memory signatures = new string[](txCount);
-        bytes[] memory calldatas = new bytes[](txCount);
+//         uint256 txCount = 3;
+//         address[] memory targets = new address[](txCount);
+//         uint256[] memory values = new uint256[](txCount);
+//         string[] memory signatures = new string[](txCount);
+//         bytes[] memory calldatas = new bytes[](txCount);
 
-        // proxyAdmin.upgrade(proxy, address(migratorLogic));
-        targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
-        signatures[0] = 'upgrade(address,address)';
-        calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(migratorLogic));
+//         // proxyAdmin.upgrade(proxy, address(migratorLogic));
+//         targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
+//         signatures[0] = 'upgrade(address,address)';
+//         calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(migratorLogic));
 
-        // // migrator.migrate();
-        targets[1] = AUCTION_HOUSE_PROXY_MAINNET;
-        signatures[1] = 'migrate()';
+//         // // migrator.migrate();
+//         targets[1] = AUCTION_HOUSE_PROXY_MAINNET;
+//         signatures[1] = 'migrate()';
 
-        // proxyAdmin.upgrade(proxy, address(newLogic));
-        targets[2] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
-        signatures[2] = 'upgrade(address,address)';
-        calldatas[2] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(newLogic));
+//         // proxyAdmin.upgrade(proxy, address(newLogic));
+//         targets[2] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
+//         signatures[2] = 'upgrade(address,address)';
+//         calldatas[2] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(newLogic));
 
-        vm.prank(proposerAddr);
-        uint256 proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
-            targets,
-            values,
-            signatures,
-            calldatas,
-            'Upgrading to AuctionHouseV2'
-        );
+//         vm.prank(proposerAddr);
+//         uint256 proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
+//             targets,
+//             values,
+//             signatures,
+//             calldatas,
+//             'Upgrading to AuctionHouseV2'
+//         );
 
-        voteAndExecuteProposal(proposalId);
-    }
+//         voteAndExecuteProposal(proposalId);
+//     }
 
-    function test_auctionState_survivesUpgrade() public {
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        NounsAuctionHouseV2.AuctionV2View memory auctionV2State = auctionV2.auction();
+//     function test_auctionState_survivesUpgrade() public {
+//         NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
+//         NounsAuctionHouseV2.AuctionV2View memory auctionV2State = auctionV2.auction();
 
-        assertEq(auctionV2State.nounId, v1NounId);
-        assertEq(auctionV2State.amount, v1Amount);
-        assertEq(auctionV2State.startTime, v1StartTime);
-        assertEq(auctionV2State.endTime, v1EndTime);
-        assertEq(auctionV2State.bidder, v1Bidder);
-        assertEq(auctionV2State.settled, false);
+//         assertEq(auctionV2State.nounId, v1NounId);
+//         assertEq(auctionV2State.amount, v1Amount);
+//         assertEq(auctionV2State.startTime, v1StartTime);
+//         assertEq(auctionV2State.endTime, v1EndTime);
+//         assertEq(auctionV2State.bidder, v1Bidder);
+//         assertEq(auctionV2State.settled, false);
 
-        assertEq(address(auctionV2.nouns()), v1NounsAddress);
-        assertEq(address(auctionV2.weth()), v1WethAddress);
-        assertEq(auctionV2.timeBuffer(), v1TimeBuffer);
-        assertEq(auctionV2.reservePrice(), v1ReservePrice);
-        assertEq(auctionV2.minBidIncrementPercentage(), v1MinBidIncrementPercentage);
-        assertEq(auctionV2.duration(), v1Duration);
-        assertEq(auctionV2.paused(), false);
-        assertEq(auctionV2.owner(), v1Owner);
-    }
+//         assertEq(address(auctionV2.nouns()), v1NounsAddress);
+//         assertEq(address(auctionV2.weth()), v1WethAddress);
+//         assertEq(auctionV2.timeBuffer(), v1TimeBuffer);
+//         assertEq(auctionV2.reservePrice(), v1ReservePrice);
+//         assertEq(auctionV2.minBidIncrementPercentage(), v1MinBidIncrementPercentage);
+//         assertEq(auctionV2.duration(), v1Duration);
+//         assertEq(auctionV2.paused(), false);
+//         assertEq(auctionV2.owner(), v1Owner);
+//     }
 
-    function test_bidAndSettleInV2_worksAndCapturesSettlementHistory() public {
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        auctionV2.settleCurrentAndCreateNewAuction();
-        uint32 clientId = 42;
-        uint96 nounId = auctionV2.auction().nounId;
+//     function test_bidAndSettleInV2_worksAndCapturesSettlementHistory() public {
+//         NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
+//         auctionV2.settleCurrentAndCreateNewAuction();
+//         uint32 clientId = 42;
+//         uint96 nounId = auctionV2.auction().nounId;
 
-        auctionV2.createBid{ value: 0.042 ether }(nounId, clientId);
-        vm.warp(block.timestamp + auctionV2.auction().endTime);
-        uint32 settlementTime = uint32(block.timestamp);
-        auctionV2.settleCurrentAndCreateNewAuction();
+//         auctionV2.createBid{ value: 0.042 ether }(nounId, clientId);
+//         vm.warp(block.timestamp + auctionV2.auction().endTime);
+//         uint32 settlementTime = uint32(block.timestamp);
+//         auctionV2.settleCurrentAndCreateNewAuction();
 
-        NounsAuctionHouseV2.Settlement[] memory settlements = auctionV2.getSettlementsFromIdtoTimestamp(
-            nounId,
-            block.timestamp,
-            true
-        );
+//         NounsAuctionHouseV2.Settlement[] memory settlements = auctionV2.getSettlementsFromIdtoTimestamp(
+//             nounId,
+//             block.timestamp,
+//             true
+//         );
 
-        assertEq(settlements.length, 1);
-        NounsAuctionHouseV2.Settlement memory s = settlements[0];
-        assertEq(s.nounId, nounId);
-        assertEq(s.winner, address(this));
-        assertEq(s.amount, 0.042 ether);
-        assertEq(s.clientId, clientId);
-        assertEq(s.blockTimestamp, settlementTime);
-    }
-}
+//         assertEq(settlements.length, 1);
+//         NounsAuctionHouseV2.Settlement memory s = settlements[0];
+//         assertEq(s.nounId, nounId);
+//         assertEq(s.winner, address(this));
+//         assertEq(s.amount, 0.042 ether);
+//         assertEq(s.clientId, clientId);
+//         assertEq(s.blockTimestamp, settlementTime);
+//     }
+// }
