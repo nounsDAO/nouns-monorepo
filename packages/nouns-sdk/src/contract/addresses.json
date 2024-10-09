@@ -2,8 +2,8 @@
   "1": {
     "nounsToken": "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
     "nounsSeeder": "0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515",
-    "nounsDescriptor": "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63",
-    "nftDescriptor": "0x0BBAd8c947210ab6284699605ce2a61780958264",
+    "nounsDescriptor": "0x33A9c445fb4FB21f2c030A6b2d3e2F12D017BFAC",
+    "nftDescriptor": "0xdEdd7Ec3F440B19C627AE909D020ff037F618336",
     "nounsAuctionHouse": "0xF15a943787014461d94da08aD4040f79Cd7c124e",
     "nounsAuctionHouseProxy": "0x830BD73E4184ceF73443C15111a1DF14e495C706",
     "nounsAuctionHouseProxyAdmin": "0xC1C119932d78aB9080862C5fcb964029f086401e",
