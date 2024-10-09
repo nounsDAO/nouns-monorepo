@@ -32,7 +32,6 @@ import ProposalHistory from './pages/ProposalHistory';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
 import ForkPage from './pages/Fork';
 import ForksPage from './pages/Forks';
-import GeneratePage from './pages/Generate'
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -91,10 +90,6 @@ function App() {
             <Route exact path="/explore" component={ExplorePage} />
             <Route exact path="/fork/:id" component={ForkPage} />
             <Route exact path="/fork" component={ForksPage} />
-
-            <Route exact path="/test" component={GeneratePage} />
-
-            
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
