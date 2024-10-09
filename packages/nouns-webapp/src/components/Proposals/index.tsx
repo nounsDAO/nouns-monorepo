@@ -1,11 +1,8 @@
 import {
   PartialProposal,
   ProposalState,
-  useCancelProposal,
-  useExecuteProposal,
   useIsDaoGteV3,
   useProposalThreshold,
-  useQueueProposal,
 } from '../../wrappers/nounsDao';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
@@ -33,7 +30,6 @@ import { Link } from 'react-router-dom';
 import { useCandidateProposals } from '../../wrappers/nounsData';
 import { isProposalUpdatable } from '../../utils/proposals';
 import config from '../../config';
-import VoteModal from '../VoteModal';
 
 dayjs.extend(relativeTime);
 
@@ -46,17 +42,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -111,11 +107,6 @@ const Proposals = ({
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
   const { hash } = useLocation();
 
-  const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  const { queueProposal, queueProposalState } = useQueueProposal();
-  const { executeProposal, executeProposalState } = useExecuteProposal();
-  const { cancelProposal, cancelProposalState } = useCancelProposal();
-
   useEffect(() => {
     // prevent blockNumber from triggering a re-render when it's already set
     if (blockNumber === 0) {
@@ -146,20 +137,9 @@ const Proposals = ({
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
-  const propID = '2';
-
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-
-      <VoteModal
-        show={showVoteModal}
-        onHide={() => setShowVoteModal(false)}
-        proposalId={propID}
-        availableVotes={2}
-        isObjectionPeriod={false}
-      />
-
       <div className={classes.sectionWrapper}>
         <Section fullWidth={false} className={classes.section}>
           <Col
@@ -224,19 +204,6 @@ const Proposals = ({
                 )}
               </div>
             )}
-
-            <Button className={classes.generateBtn} onClick={() => setShowVoteModal(true)}>
-              Vote
-            </Button>
-            <Button className={classes.generateBtn} onClick={() => cancelProposal(propID)}>
-              Cancel
-            </Button>
-            <Button className={classes.generateBtn} onClick={() => queueProposal(propID)}>
-              Queue
-            </Button>
-            <Button className={classes.generateBtn} onClick={() => executeProposal(propID)}>
-              Execute
-            </Button>
           </Col>
         </Section>
       </div>
@@ -367,8 +334,8 @@ const Proposals = ({
                         );
                         let isOriginalPropUpdatable =
                           prop &&
-                          blockNumber &&
-                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
+                            blockNumber &&
+                            isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
                             ? true
                             : false;
                         if (!isOriginalPropUpdatable) return null;
