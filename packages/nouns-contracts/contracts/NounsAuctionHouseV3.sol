@@ -109,6 +109,16 @@ contract NounsAuctionHouseV3 is
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
+    function setStreamEscrowParams(
+        uint16 _immediateTreasuryBps,
+        uint16 _streamLengthInAuctions,
+        address _streamEscrow
+    ) external onlyOwner {
+        immediateTreasuryBps = _immediateTreasuryBps;
+        streamLengthInAuctions = _streamLengthInAuctions;
+        streamEscrow = IStreamEscrow(_streamEscrow);
+    }
+
     /**
      * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */

@@ -23,13 +23,6 @@ import { INounsToken } from './interfaces/INounsToken.sol';
 contract StreamEscrow is IStreamEscrow {
     event ETHStreamedToDAO(uint256 amount, uint256 totalStreamed);
 
-    struct Stream {
-        uint256 ethPerAuction;
-        bool canceled;
-        // @dev This is the last auctionCounter for which this stream will be active
-        uint256 streamEndId;
-    }
-
     address public daoTreasury;
     address public auctionHouse;
     INounsToken public nounsToken; // TODO immutable?
@@ -38,7 +31,7 @@ contract StreamEscrow is IStreamEscrow {
     uint256 public ethStreamedToDAO;
     uint256 public ethWithdrawn;
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
-    mapping(uint256 streamId => Stream) streams;
+    mapping(uint256 streamId => Stream) public streams;
     uint256 public auctionsCounter;
     uint256 public lastForwardTimestamp;
 
@@ -125,6 +118,10 @@ contract StreamEscrow is IStreamEscrow {
     function setAuctionHouseAddress(address newAddress) external {
         require(msg.sender == daoTreasury);
         auctionHouse = newAddress;
+    }
+
+    function getStream(uint256 nounId) external view returns (Stream memory) {
+        return streams[nounId];
     }
 
     function finishStreams() internal {

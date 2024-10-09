@@ -18,6 +18,7 @@
 pragma solidity ^0.8.19;
 
 import { INounsToken } from './INounsToken.sol';
+import { IStreamEscrow } from './IStreamEscrow.sol';
 
 interface INounsAuctionHouseV2 {
     struct AuctionV2 {
@@ -123,15 +124,19 @@ interface INounsAuctionHouseV2 {
 
     function setTimeBuffer(uint56 timeBuffer) external;
 
-    function timeBuffer() external returns (uint56);
+    function timeBuffer() external view returns (uint56);
 
     function setReservePrice(uint192 reservePrice) external;
 
+    function reservePrice() external view returns (uint192);
+
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
 
-    function minBidIncrementPercentage() external returns (uint8);
+    function minBidIncrementPercentage() external view returns (uint8);
 
-    function nouns() external returns (INounsToken);
+    function nouns() external view returns (INounsToken);
+
+    function weth() external view returns (address);
 
     function auction() external view returns (AuctionV2View memory);
 
@@ -161,4 +166,6 @@ interface INounsAuctionHouseV2 {
     function biddingClient(uint256 nounId) external view returns (uint32 clientId);
 
     function setPrices(SettlementNoClientId[] memory settlements) external;
+
+    function streamEscrow() external view returns (IStreamEscrow);
 }
