@@ -5,8 +5,6 @@ import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.so
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import 'forge-std/Test.sol';

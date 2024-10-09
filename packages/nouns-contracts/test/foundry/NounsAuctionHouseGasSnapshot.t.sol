@@ -5,7 +5,6 @@ import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHous
 import { INounsAuctionHouseV2 } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsToken } from '../../contracts/interfaces/INounsToken.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { AuctionHouseUpgrader } from './helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 

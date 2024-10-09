@@ -5,12 +5,9 @@ import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.so
 import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
-import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
 import { INounsClientTokenTypes } from '../../../contracts/client-incentives/INounsClientTokenTypes.sol';
-import { console } from 'forge-std/console.sol';
 
 abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
     Rewards rewards;
