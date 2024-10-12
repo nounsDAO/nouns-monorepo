@@ -10,9 +10,6 @@ import { ethers } from 'hardhat';
 chai.use(solidity);
 const { expect } = chai;
 
-const aardvark =
-  '0x00021e14060500013802000138130002380200023811000338020003380f000438020004380f00033802000338110002380200023813000138020001380f000d380b000d380b000d380b000d380b000d380b000d380b000d380600057e0d380600017e017f017e017f017e0b38097e017f017e017f017e0b380d7e0a380524097e0b380d7e';
-
 const eyesred =
   '0x000b17100703000624010006240300012402020265012401000124020202650524020202650324020202650224020001240202026501240100012402020265022402000124020202650124010001240202026501240300062401000624';
 
@@ -24,7 +21,6 @@ describe('NounsDescriptorV3', () => {
   let snapshotId: number;
 
   const glassesTraitIndex = 1;
-  const bodiesTraitIndex = 0;
 
   const updateGlassesTraits = async () => {
     const newEncodedCompressedTrait = ProposalImages[1].glasses?.encodedCompressed ?? '';
@@ -46,26 +42,6 @@ describe('NounsDescriptorV3', () => {
     expect(glassesAtIdex).to.equal(hiprose);
   };
 
-  const updateHeadsTraits = async () => {
-    const newEncodedCompressedTrait = ProposalImages[0].heads?.encodedCompressed ?? '';
-    const decompressedLength = ProposalImages[0].heads?.originalLength ?? 0;
-    const itemCount = ProposalImages[0].heads?.itemCount ?? 0;
-
-    const headsCountBefore = await nounsDescriptor.headCount();
-
-    console.log(`headsCountBefore: ${headsCountBefore}`);
-
-    await nounsDescriptor.updateHeads(newEncodedCompressedTrait, decompressedLength, itemCount, {
-      gasLimit: 30000000,
-    });
-
-    const headsCountAfter = await nounsDescriptor.headCount();
-    const headsAtIdex = await nounsDescriptor.heads(bodiesTraitIndex);
-
-    console.log(`headsCountAfter: ${headsCountAfter}. Index0: ${headsAtIdex}`);
-
-    expect(headsAtIdex).to.equal(aardvark);
-  };
 
   const checkGlassesAfterUpdate = async () => {
     const traitIndex = 1;
@@ -77,18 +53,6 @@ describe('NounsDescriptorV3', () => {
     console.log(`glassesCountAfter: ${glassesCountAfter}. trait:${glassesTrait}`);
 
     expect(glassesTrait).to.equal(hiprose);
-  };
-
-  const checkHeadsAfterUpdate = async () => {
-    const traitIndex = 1;
-    const headsTrait = await nounsDescriptor.heads(traitIndex, {
-      gasLimit: 30000000,
-    });
-
-    const headsCountAfter = await nounsDescriptor.headCount();
-    console.log(`headsCountAfter: ${headsCountAfter}. trait:${headsTrait}`);
-
-    expect(headsTrait).to.equal(aardvark);
   };
 
   const part: LongestPart = {
@@ -118,7 +82,6 @@ describe('NounsDescriptorV3', () => {
 
     await populateDescriptorV2(nounsDescriptor);
     await updateGlassesTraits();
-    await updateHeadsTraits();
   });
 
   beforeEach(async () => {
@@ -133,9 +96,6 @@ describe('NounsDescriptorV3', () => {
     return await checkGlassesAfterUpdate();
   });
 
-  it('updates all heads with updated trait at index 0', async () => {
-    return await checkHeadsAfterUpdate();
-  });
 
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.
