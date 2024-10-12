@@ -102,35 +102,35 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
     /**
      * @notice Get the number of available Noun `backgrounds`.
      */
-    function backgroundCount() external view override returns (uint256) {
+    function backgroundCount() public view override returns (uint256) {
         return art.backgroundCount();
     }
 
     /**
      * @notice Get the number of available Noun `bodies`.
      */
-    function bodyCount() external view override returns (uint256) {
+    function bodyCount() public view override returns (uint256) {
         return art.bodyCount();
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
-    function accessoryCount() external view override returns (uint256) {
+    function accessoryCount() public view override returns (uint256) {
         return art.accessoryCount();
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
-    function headCount() external view override returns (uint256) {
+    function headCount() public view override returns (uint256) {
         return art.headCount();
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
-    function glassesCount() external view override returns (uint256) {
+    function glassesCount() public view override returns (uint256) {
         return art.glassesCount();
     }
 
