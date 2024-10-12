@@ -14,7 +14,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDescriptorV2__factory as NounsDescriptorV3Factory,
   INounsDAOLogic,
   NounsDAOLogicV4__factory,
 } from '../../typechain';
@@ -38,7 +38,7 @@ async function setup() {
   token = await deployNounsToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsDescriptorV3Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);
