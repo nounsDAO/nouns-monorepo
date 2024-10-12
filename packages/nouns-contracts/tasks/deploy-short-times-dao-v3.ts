@@ -138,7 +138,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
     const contracts: Record<ContractNamesDAOV3, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
-      NounsDescriptorV2: {
+      NounsDescriptorV3: {
         args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
@@ -146,14 +146,14 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
       },
       Inflator: {},
       NounsArt: {
-        args: [() => deployment.NounsDescriptorV2.address, () => deployment.Inflator.address],
+        args: [() => deployment.NounsDescriptorV3.address, () => deployment.Inflator.address],
       },
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.NounsDescriptorV2.address,
+          () => deployment.NounsDescriptorV3.address,
           () => deployment.NounsSeeder.address,
           proxyRegistryAddress,
         ],
