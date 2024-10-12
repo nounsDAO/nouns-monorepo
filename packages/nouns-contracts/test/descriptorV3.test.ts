@@ -23,9 +23,9 @@ describe('NounsDescriptorV3', () => {
   const glassesTraitIndex = 1;
 
   const updateGlassesTraits = async () => {
-    const newEncodedCompressedTrait = ProposalImages[1].glasses?.encodedCompressed ?? '';
-    const decompressedLength = ProposalImages[1].glasses?.originalLength ?? 0;
-    const itemCount = ProposalImages[1].glasses?.itemCount ?? 0;
+    const newEncodedCompressedTrait = ProposalImages[0].glasses?.encodedCompressed ?? '';
+    const decompressedLength = ProposalImages[0].glasses?.originalLength ?? 0;
+    const itemCount = ProposalImages[0].glasses?.itemCount ?? 0;
 
     const glassesCountBefore = await nounsDescriptor.glassesCount();
 
