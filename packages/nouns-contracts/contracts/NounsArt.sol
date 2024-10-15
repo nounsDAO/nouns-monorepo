@@ -328,7 +328,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of body images with new ones.
+     * @notice Replace all pages of body images with new ones.
      * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
@@ -346,7 +346,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of accessory images with new ones.
+     * @notice Replace all pages of accessory images with new ones.
      * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
@@ -364,7 +364,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of head images with new ones.
+     * @notice Replace all pages of head images with new ones.
      * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
@@ -382,7 +382,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of glasses images with new ones.
+     * @notice Replace all pages of glasses images with new ones.
      * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
@@ -400,7 +400,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of body images with new ones from an existing storage contract.
+     * @notice Replace all pages of body images with new ones from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
@@ -419,7 +419,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of accessory images with new ones from an existing storage contract.
+     * @notice Replace all pages of accessory images with new ones from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
@@ -438,7 +438,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of head images with new ones from an existing storage contract.
+     * @notice Replace all pages of head images with new ones from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
@@ -457,7 +457,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Replace current batch of glasses images with new ones from an existing storage contract.
+     * @notice Replace all pages of glasses images with new ones from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
