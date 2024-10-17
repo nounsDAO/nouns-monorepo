@@ -657,11 +657,3 @@ contract NounsArt is INounsArt {
         return abi.decode(decompressedData, (bytes[]));
     }
 }
-
-
-
-// forge test --match-contract UpgradeMainnetFork --match-path test/foundry/UpgradeMainnetFork.t.sol -vvv --ffi  
-// forge test --match-contract NounsDescriptorV3 --match-path test/foundry/NounsDescriptorV3.t.sol -vvv --ffi  
-
-UpgradeMainnetFork.t.sol
-test/foundry/Upgrade/UpgradeMainnetFork.t.sol:DAOUpgradeMainnetForkTest
