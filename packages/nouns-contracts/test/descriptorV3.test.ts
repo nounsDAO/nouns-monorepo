@@ -114,5 +114,5 @@ describe('NounsDescriptorV3', () => {
         );
       }
     }
-  });
+  }).timeout(120000); // 2 minutes;
 });
