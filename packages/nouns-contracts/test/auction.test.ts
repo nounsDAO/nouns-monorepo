@@ -6,7 +6,7 @@ import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
   NounsToken,
   WETH,
 } from '../typechain';
@@ -51,7 +51,7 @@ describe('NounsAuctionHouse', () => {
 
     const descriptor = await nounsToken.descriptor();
 
-    await populateDescriptorV2(NounsDescriptorV2Factory.connect(descriptor, deployer));
+    await populateDescriptorV2(NounsDescriptorV3Factory.connect(descriptor, deployer));
 
     await nounsToken.setMinter(nounsAuctionHouse.address);
   });

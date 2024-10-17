@@ -19,7 +19,7 @@ task(
 
   await run('populate-descriptor', {
     nftDescriptor: contracts.NFTDescriptorV2.instance.address,
-    nounsDescriptor: contracts.NounsDescriptorV2.instance.address,
+    nounsDescriptor: contracts.NounsDescriptorV3.instance.address,
   });
 
   await contracts.NounsAuctionHouse.instance
@@ -30,7 +30,7 @@ task(
 
   // Transfer ownership
   const executorAddress = contracts.NounsDAOExecutorProxy.instance.address;
-  await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
+  await contracts.NounsDescriptorV3.instance.transferOwnership(executorAddress);
   await contracts.NounsToken.instance.transferOwnership(executorAddress);
   await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
   await contracts.NounsAuctionHouse.instance

@@ -2,7 +2,7 @@ export * from './accounts';
 export * from './create-proposal';
 export * from './populate-descriptor';
 export * from './descriptor-art-to-console';
-export * from './deploy-descriptor-v2';
+export * from './deploy-descriptor-v3';
 export * from './populate-descriptor-via-proposal';
 export * from './deploy-test-token';
 export * from './upgrade-descriptor-via-proposal';

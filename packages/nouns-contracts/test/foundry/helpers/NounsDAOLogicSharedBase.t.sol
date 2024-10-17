@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
-import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../../contracts/NounsDescriptorV3.sol';
 import { DeployUtilsFork } from './DeployUtilsFork.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
@@ -31,7 +31,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtilsFork {
     Utils utils;
 
     function setUp() public virtual {
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        NounsDescriptorV3 descriptor = _deployAndPopulateV3();
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
 
         daoProxy = deployDAOProxy(address(timelock), address(nounsToken), vetoer);

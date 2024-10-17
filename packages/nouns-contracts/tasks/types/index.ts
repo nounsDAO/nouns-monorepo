@@ -11,7 +11,7 @@ export enum ChainId {
 
 export type ContractNamesDAOV3 =
   | 'NFTDescriptorV2'
-  | 'NounsDescriptorV2'
+  | 'NounsDescriptorV3'
   | 'SVGRenderer'
   | 'NounsArt'
   | 'Inflator'

@@ -2,17 +2,17 @@ import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data-v2.json';
 import { dataToDescriptorInput } from './utils';
 
-task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
+task('populate-descriptor-v3.', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptorV2` contract address',
-    '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    undefined,
     types.string,
   )
   .addOptionalParam(
     'nounsDescriptor',
     'The `NounsDescriptorV3` contract address',
-    '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    undefined,
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {

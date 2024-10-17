@@ -92,7 +92,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       WETH: {},
       NFTDescriptorV2: {},
       SVGRenderer: {},
-      NounsDescriptorV2: {
+      NounsDescriptorV3: {
         args: [expectedNounsArtAddress, () => contracts.SVGRenderer.instance?.address],
         libraries: () => ({
           NFTDescriptorV2: contracts.NFTDescriptorV2.instance?.address as string,
@@ -101,7 +101,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       Inflator: {},
       NounsArt: {
         args: [
-          () => contracts.NounsDescriptorV2.instance?.address,
+          () => contracts.NounsDescriptorV3.instance?.address,
           () => contracts.Inflator.instance?.address,
         ],
       },
@@ -110,7 +110,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts.NounsDescriptorV2.instance?.address,
+          () => contracts.NounsDescriptorV3.instance?.address,
           () => contracts.NounsSeeder.instance?.address,
           proxyRegistryAddress,
         ],
