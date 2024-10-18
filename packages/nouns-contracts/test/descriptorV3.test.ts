@@ -13,7 +13,9 @@ const { expect } = chai;
 const hiprose =
   '0x000b1710070300062101000621030001210202022401210100012102020224052102020224032102020224052102020224032102020224022102000121020202240121010001210202022401210300062101000621';
 
-describe('NounsDescriptorV3', () => {
+describe('NounsDescriptorV3', function() {
+  this.timeout(120000); // 2 minutes
+  
   let nounsDescriptor: NounsDescriptorV3;
   let snapshotId: number;
 
@@ -114,5 +116,5 @@ describe('NounsDescriptorV3', () => {
         );
       }
     }
-  }).timeout(120000); // 2 minutes;
+  })
 });
