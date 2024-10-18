@@ -6,10 +6,10 @@ async function delay(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, 1000 * seconds));
 }
 
-task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
+task('deploy-descriptor-v3', 'Deploy NounsDescriptorV3 & populate it with art')
   .addParam(
     'daoExecutor',
-    'The address of the NounsDAOExecutor that should be the owner of the descriptor.',
+    'The address of the NounsDAOExecutor that should be the owner of the descriptor.'
   )
   .setAction(async ({ daoExecutor }, { ethers, run, network }) => {
     const contracts: Record<ContractNamesDAOV3, DeployedContract> = {} as Record<
@@ -44,7 +44,7 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
       libraries: {},
     };
 
-    const nounsDescriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
+    const nounsDescriptorFactory = await ethers.getContractFactory('NounsDescriptorV3', {
       libraries: {
         NFTDescriptorV2: library.address,
       },
@@ -53,8 +53,8 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
       expectedNounsArtAddress,
       renderer.address,
     );
-    contracts.NounsDescriptorV2 = {
-      name: 'NounsDescriptorV2',
+    contracts.NounsDescriptorV3 = {
+      name: 'NounsDescriptorV3',
       address: nounsDescriptor.address,
       constructorArguments: [expectedNounsArtAddress, renderer.address],
       instance: nounsDescriptor,
@@ -96,7 +96,7 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     console.log('Populating Descriptor...');
     await run('populate-descriptor', {
       nftDescriptor: contracts.NFTDescriptorV2.address,
-      nounsDescriptor: contracts.NounsDescriptorV2.address,
+      nounsDescriptor: contracts.NounsDescriptorV3.address,
     });
     console.log('Population complete.');
 

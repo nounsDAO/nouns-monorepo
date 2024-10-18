@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsArt
+/// @title Interface for NounsDescriptorV3
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,73 +17,57 @@
 
 pragma solidity ^0.8.6;
 
-import { IInflator } from './IInflator.sol';
+import { INounsSeeder } from './INounsSeeder.sol';
+import { ISVGRenderer } from './ISVGRenderer.sol';
+import { INounsArt } from './INounsArt.sol';
+import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
-interface INounsArt {
-    error SenderIsNotDescriptor();
+interface INounsDescriptorV3 is INounsDescriptorMinimal {
+    event PartsLocked();
+
+    event DataURIToggled(bool enabled);
+
+    event BaseURIUpdated(string baseURI);
+
+    event ArtUpdated(INounsArt art);
+
+    event RendererUpdated(ISVGRenderer renderer);
 
     error EmptyPalette();
-
     error BadPaletteLength();
+    error IndexNotFound();
 
-    error EmptyBytes();
+    function arePartsLocked() external returns (bool);
 
-    error BadDecompressedLength();
+    function isDataURIEnabled() external returns (bool);
 
-    error BadImageCount();
-
-    error ImageNotFound();
-
-    error PaletteNotFound();
-
-    event DescriptorUpdated(address oldDescriptor, address newDescriptor);
-
-    event InflatorUpdated(address oldInflator, address newInflator);
-
-    event BackgroundsAdded(uint256 count);
-
-    event PaletteSet(uint8 paletteIndex);
-
-    event BodiesAdded(uint16 count);
-
-    event AccessoriesAdded(uint16 count);
-
-    event HeadsAdded(uint16 count);
-
-    event GlassesAdded(uint16 count);
-
-    event BodiesUpdated(uint16 count);
-
-    event AccessoriesUpdated(uint16 count);
-
-    event HeadsUpdated(uint16 count);
-
-    event GlassesUpdated(uint16 count);
-
-    struct NounArtStoragePage {
-        uint16 imageCount;
-        uint80 decompressedLength;
-        address pointer;
-    }
-
-    struct Trait {
-        NounArtStoragePage[] storagePages;
-        uint256 storedImagesCount;
-    }
-
-    function descriptor() external view returns (address);
-
-    function inflator() external view returns (IInflator);
-
-    function setDescriptor(address descriptor) external;
-
-    function setInflator(IInflator inflator) external;
-
-    function addManyBackgrounds(string[] calldata _backgrounds) external;
-
-    function addBackground(string calldata _background) external;
+    function baseURI() external returns (string memory);
 
     function palettes(uint8 paletteIndex) external view returns (bytes memory);
+
+    function backgrounds(uint256 index) external view returns (string memory);
+
+    function bodies(uint256 index) external view returns (bytes memory);
+
+    function accessories(uint256 index) external view returns (bytes memory);
+
+    function heads(uint256 index) external view returns (bytes memory);
+
+    function glasses(uint256 index) external view returns (bytes memory);
+
+    function backgroundCount() external view override returns (uint256);
+
+    function bodyCount() external view override returns (uint256);
+
+    function accessoryCount() external view override returns (uint256);
+
+    function headCount() external view override returns (uint256);
+
+    function glassesCount() external view override returns (uint256);
+
+    function addManyBackgrounds(string[] calldata backgrounds) external;
+
+    function addBackground(string calldata background) external;
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
@@ -111,13 +95,13 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
+    function setPalettePointer(uint8 paletteIndex, address pointer) external;
+
     function addBodiesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
-
-    function setPalettePointer(uint8 paletteIndex, address pointer) external;
 
     function addAccessoriesFromPointer(
         address pointer,
@@ -137,41 +121,31 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
-    function backgroundCount() external view returns (uint256);
+    function lockParts() external;
 
-    function bodyCount() external view returns (uint256);
+    function toggleDataURIEnabled() external;
 
-    function accessoryCount() external view returns (uint256);
+    function setBaseURI(string calldata baseURI) external;
 
-    function headCount() external view returns (uint256);
+    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
 
-    function glassesCount() external view returns (uint256);
+    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
 
-    function backgrounds(uint256 index) external view returns (string memory);
+    function genericDataURI(
+        string calldata name,
+        string calldata description,
+        INounsSeeder.Seed memory seed
+    ) external view returns (string memory);
 
-    function heads(uint256 index) external view returns (bytes memory);
+    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 
-    function bodies(uint256 index) external view returns (bytes memory);
-
-    function accessories(uint256 index) external view returns (bytes memory);
-
-    function glasses(uint256 index) external view returns (bytes memory);
-
-    function getBodiesTrait() external view returns (Trait memory);
-
-    function getAccessoriesTrait() external view returns (Trait memory);
-
-    function getHeadsTrait() external view returns (Trait memory);
-
-    function getGlassesTrait() external view returns (Trait memory);
-
-    function updateBodies(
+    function updateAccessories(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    function updateAccessories(
+    function updateBodies(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
@@ -189,13 +163,13 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
-    function updateBodiesFromPointer(
+    function updateAccessoriesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    function updateAccessoriesFromPointer(
+    function updateBodiesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount

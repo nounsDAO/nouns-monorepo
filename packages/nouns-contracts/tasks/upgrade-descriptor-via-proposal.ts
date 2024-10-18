@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 
-task('upgrade-descriptor-via-proposal', 'Upgrade NounsToken to use Descriptor V2.')
-  .addParam('descriptor', 'The `NounsDescriptorV2` contract address')
+task('upgrade-descriptor-via-proposal', 'Upgrade NounsToken to use Descriptor V3.')
+  .addParam('descriptor', 'The `NounsDescriptorV3` contract address')
   .addParam('dao', 'The `NounsDAOProxy` contract address')
   .addParam('token', 'The `NounsToken` contract address')
   .setAction(async ({ descriptor, dao, token }, { ethers }) => {
@@ -16,7 +16,7 @@ task('upgrade-descriptor-via-proposal', 'Upgrade NounsToken to use Descriptor V2
       values,
       signatures,
       calldatas,
-      `# Upgrade NounsToken descriptor to V2\nThis proposal calls a function on NounsToken to set its descriptor to V2.`,
+      `# Upgrade NounsToken descriptor to V3\nThis proposal calls a function on NounsToken to set its descriptor to V3.`,
     );
     await propTx.wait();
 
