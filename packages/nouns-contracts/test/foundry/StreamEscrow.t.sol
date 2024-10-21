@@ -18,7 +18,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testSingleStream() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         // check that nothing has streamed yet
         assertEq(escrow.ethStreamedToDAO(), 0 ether);
@@ -41,7 +41,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testSilentlyFailsIf24HoursDidntPass() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         assertEq(escrow.ethStreamedToDAO(), 0 ether);
 
@@ -52,7 +52,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testCancelStream() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         nounsToken.transferFrom(address(this), user, 1);
 
         for (uint i; i < 4; i++) {
@@ -75,7 +75,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAlreadyCanceledStream() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         nounsToken.transferFrom(address(this), user, 1);
 
         vm.prank(user);
@@ -100,7 +100,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAFinishedStream() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         nounsToken.transferFrom(address(this), user, 1);
 
         for (uint i; i < 20; i++) {
@@ -109,7 +109,7 @@ contract StreamEscrowTest is Test {
 
         // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
         nounsToken.mint(address(this), 2);
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInTicks: 20 });
 
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
@@ -119,7 +119,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testDAOCanWithdrawLessThanStreamed() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         forwardOneDay();
 
         assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
@@ -129,7 +129,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testDAOCantWithdrawMoreThanStreamed() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         forwardOneDay();
 
         vm.expectRevert('not enough to withdraw');
@@ -143,7 +143,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testRoundingDownStreamAmount() public {
-        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInAuctions: 1500 });
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 1500 });
 
         // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
         // ethPerAuction should be: 666,666,666,666,666

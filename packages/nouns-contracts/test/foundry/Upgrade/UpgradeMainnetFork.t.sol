@@ -185,7 +185,7 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
 
         IStreamEscrow streamEscrow = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow();
         IStreamEscrow.Stream memory stream = streamEscrow.getStream(nounId);
-        assertEq(stream.ethPerAuction, 0.0024 ether); // (80% * 4.5 eth / 1500)
+        assertEq(stream.ethPerTick, 0.0024 ether); // (80% * 4.5 eth / 1500)
     }
 }
 

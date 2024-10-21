@@ -26,12 +26,12 @@ contract StreamEscrow is IStreamEscrow {
     address public daoTreasury;
     INounsToken public nounsToken; // TODO immutable?
 
-    uint256 public ethStreamedPerAuction;
+    uint256 public ethStreamedPerTick;
     uint256 public ethStreamedToDAO;
     uint256 public ethWithdrawn;
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
     mapping(uint256 streamId => Stream) public streams;
-    uint256 public auctionsCounter;
+    uint256 public ticks;
     uint256 public lastForwardTimestamp;
 
     constructor(address daoTreasury_, address nounsToken_) {
@@ -39,32 +39,32 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken = INounsToken(nounsToken_);
     }
 
-    function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInAuctions) external payable {
+    function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable {
         forwardAll();
 
-        createStream(nounId, streamLengthInAuctions);
+        createStream(nounId, streamLengthInTicks);
     }
 
-    function createStream(uint256 nounId, uint16 streamLengthInAuctions) public payable {
-        // TODO limit streamLengthInAuctions values range?
+    function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
+        // TODO limit streamLengthInTicks values range?
         require(nounsToken.ownerOf(nounId) == msg.sender, 'only noun owner');
-        require(!streams[nounId].active || streams[nounId].streamEndId > auctionsCounter, 'stream active');
+        require(!streams[nounId].active || streams[nounId].streamEndId > ticks, 'stream active');
 
         // register new stream
-        uint256 streamEndId = auctionsCounter + streamLengthInAuctions; // streamEndId is inclusive
+        uint256 streamEndId = ticks + streamLengthInTicks; // streamEndId is inclusive
         streamEndIds[streamEndId].push(nounId);
 
-        uint256 ethPerAuction = msg.value / streamLengthInAuctions;
+        uint256 ethPerTick = msg.value / streamLengthInTicks;
 
         // the remainder is immediately streamed to the DAO
-        uint256 remainder = msg.value % streamLengthInAuctions;
+        uint256 remainder = msg.value % streamLengthInTicks;
         if (remainder > 0) {
             ethStreamedToDAO += remainder;
             emit ETHStreamedToDAO(remainder, ethStreamedToDAO);
         }
 
-        ethStreamedPerAuction += ethPerAuction;
-        streams[nounId] = Stream({ ethPerAuction: ethPerAuction, active: true, streamEndId: streamEndId });
+        ethStreamedPerTick += ethPerTick;
+        streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, streamEndId: streamEndId });
     }
 
     // used for example when there were no bids on a noun
@@ -75,9 +75,9 @@ contract StreamEscrow is IStreamEscrow {
         }
 
         lastForwardTimestamp = block.timestamp;
-        auctionsCounter++;
-        ethStreamedToDAO += ethStreamedPerAuction;
-        emit ETHStreamedToDAO(ethStreamedPerAuction, ethStreamedToDAO);
+        ticks++;
+        ethStreamedToDAO += ethStreamedPerTick;
+        emit ETHStreamedToDAO(ethStreamedPerTick, ethStreamedToDAO);
         finishStreams();
     }
 
@@ -94,12 +94,12 @@ contract StreamEscrow is IStreamEscrow {
         // cancel stream
         require(streams[nounId].active, 'already canceled');
         streams[nounId].active = false;
-        ethStreamedPerAuction -= streams[nounId].ethPerAuction;
+        ethStreamedPerTick -= streams[nounId].ethPerTick;
 
         // calculate how much needs to be refunded
-        require(streams[nounId].streamEndId > auctionsCounter, 'stream finished');
-        uint256 auctionsLeft = streams[nounId].streamEndId - auctionsCounter;
-        uint256 amountToRefund = streams[nounId].ethPerAuction * auctionsLeft;
+        require(streams[nounId].streamEndId > ticks, 'stream finished');
+        uint256 ticksLeft = streams[nounId].streamEndId - ticks;
+        uint256 amountToRefund = streams[nounId].ethPerTick * ticksLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');
     }
@@ -122,11 +122,11 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     function finishStreams() internal {
-        uint256[] storage endingStreams = streamEndIds[auctionsCounter];
+        uint256[] storage endingStreams = streamEndIds[ticks];
         for (uint256 i; i < endingStreams.length; i++) {
             uint256 streamId = endingStreams[i];
             if (streams[streamId].active) {
-                ethStreamedPerAuction -= streams[streamId].ethPerAuction;
+                ethStreamedPerTick -= streams[streamId].ethPerTick;
             }
         }
     }
