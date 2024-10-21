@@ -160,7 +160,6 @@ abstract contract DeployUtilsV3 is DeployUtils {
 
         StreamEscrow streamEscrow = new StreamEscrow({
             daoTreasury_: address(t.timelock),
-            auctionHouse_: address(auctionProxy),
             nounsToken_: address(t.nounsToken)
         });
 

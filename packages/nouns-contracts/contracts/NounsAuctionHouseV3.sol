@@ -300,13 +300,6 @@ contract NounsAuctionHouseV3 is
         require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
 
         auctionStorage.settled = true;
-
-        if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
-        } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
-        }
-
         uint256 amountToSendTreasury = (_auction.amount * immediateTreasuryBps) / 10_000;
         uint256 amountToStream = _auction.amount - amountToSendTreasury;
 
@@ -319,6 +312,12 @@ contract NounsAuctionHouseV3 is
             streamEscrow.forwardAllAndCreateStream{ value: amountToStream }(_auction.nounId, streamLengthInAuctions);
         } else {
             streamEscrow.forwardAll();
+        }
+
+        if (_auction.bidder == address(0)) {
+            nouns.burn(_auction.nounId);
+        } else {
+            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
 
         SettlementState storage settlementState = settlementHistory[_auction.nounId];

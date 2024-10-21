@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
 interface IStreamEscrow {
     struct Stream {
         uint256 ethPerAuction;
-        bool canceled;
+        bool active;
         // @dev This is the last auctionCounter for which this stream will be active
         uint256 streamEndId;
     }

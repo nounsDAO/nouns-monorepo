@@ -8,18 +8,16 @@ import { ERC721Mock } from './helpers/ERC721Mock.sol';
 contract StreamEscrowTest is Test {
     StreamEscrow escrow;
     address treasury = makeAddr('treasury');
-    address auctionHouse = makeAddr('auctionHouse');
     ERC721Mock nounsToken = new ERC721Mock();
     address user = makeAddr('user');
 
     function setUp() public {
-        escrow = new StreamEscrow(treasury, auctionHouse, address(nounsToken));
+        escrow = new StreamEscrow(treasury, address(nounsToken));
 
-        vm.deal(auctionHouse, 1000 ether);
+        nounsToken.mint(address(this), 1);
     }
 
     function testSingleStream() public {
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
         // check that nothing has streamed yet
@@ -43,23 +41,19 @@ contract StreamEscrowTest is Test {
     }
 
     function testSilentlyFailsIf24HoursDidntPass() public {
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
 
         assertEq(escrow.ethStreamedToDAO(), 0 ether);
 
         vm.warp(block.timestamp + 24 hours - 1000);
-        vm.prank(auctionHouse);
         escrow.forwardAll();
 
         assertEq(escrow.ethStreamedToDAO(), 0 ether);
     }
 
     function testCancelStream() public {
-        nounsToken.mint(user, 1);
-
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        nounsToken.transferFrom(address(this), user, 1);
 
         for (uint i; i < 4; i++) {
             forwardOneDay();
@@ -81,10 +75,8 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAlreadyCanceledStream() public {
-        nounsToken.mint(user, 1);
-
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        nounsToken.transferFrom(address(this), user, 1);
 
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
@@ -108,17 +100,15 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAFinishedStream() public {
-        nounsToken.mint(user, 1);
-
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
+        nounsToken.transferFrom(address(this), user, 1);
 
         for (uint i; i < 20; i++) {
             forwardOneDay();
         }
 
         // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
-        vm.prank(auctionHouse);
+        nounsToken.mint(address(this), 2);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInAuctions: 20 });
 
         vm.prank(user);
@@ -129,7 +119,6 @@ contract StreamEscrowTest is Test {
     }
 
     function testDAOCanWithdrawLessThanStreamed() public {
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
         forwardOneDay();
 
@@ -140,7 +129,6 @@ contract StreamEscrowTest is Test {
     }
 
     function testDAOCantWithdrawMoreThanStreamed() public {
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInAuctions: 20 });
         forwardOneDay();
 
@@ -151,12 +139,10 @@ contract StreamEscrowTest is Test {
 
     function forwardOneDay() internal {
         vm.warp(block.timestamp + 24 hours);
-        vm.prank(auctionHouse);
         escrow.forwardAll();
     }
 
     function testRoundingDownStreamAmount() public {
-        vm.prank(auctionHouse);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInAuctions: 1500 });
 
         // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....

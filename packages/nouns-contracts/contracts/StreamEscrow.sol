@@ -24,7 +24,6 @@ contract StreamEscrow is IStreamEscrow {
     event ETHStreamedToDAO(uint256 amount, uint256 totalStreamed);
 
     address public daoTreasury;
-    address public auctionHouse;
     INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerAuction;
@@ -35,16 +34,21 @@ contract StreamEscrow is IStreamEscrow {
     uint256 public auctionsCounter;
     uint256 public lastForwardTimestamp;
 
-    constructor(address daoTreasury_, address auctionHouse_, address nounsToken_) {
+    constructor(address daoTreasury_, address nounsToken_) {
         daoTreasury = daoTreasury_;
-        auctionHouse = auctionHouse_;
         nounsToken = INounsToken(nounsToken_);
     }
 
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInAuctions) external payable {
-        require(msg.sender == auctionHouse, 'only auction house');
-
         forwardAll();
+
+        createStream(nounId, streamLengthInAuctions);
+    }
+
+    function createStream(uint256 nounId, uint16 streamLengthInAuctions) public payable {
+        // TODO limit streamLengthInAuctions values range?
+        require(nounsToken.ownerOf(nounId) == msg.sender, 'only noun owner');
+        require(!streams[nounId].active || streams[nounId].streamEndId > auctionsCounter, 'stream active');
 
         // register new stream
         uint256 streamEndId = auctionsCounter + streamLengthInAuctions; // streamEndId is inclusive
@@ -60,13 +64,11 @@ contract StreamEscrow is IStreamEscrow {
         }
 
         ethStreamedPerAuction += ethPerAuction;
-        streams[nounId] = Stream({ ethPerAuction: ethPerAuction, canceled: false, streamEndId: streamEndId });
+        streams[nounId] = Stream({ ethPerAuction: ethPerAuction, active: true, streamEndId: streamEndId });
     }
 
     // used for example when there were no bids on a noun
     function forwardAll() public {
-        require(msg.sender == auctionHouse, 'only auction house');
-
         // silently fail if at least a day hasn't passed. this is in order not to revert auction house.
         if (block.timestamp < lastForwardTimestamp + 24 hours) {
             return;
@@ -90,8 +92,8 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken.transferFrom(msg.sender, daoTreasury, nounId);
 
         // cancel stream
-        require(!streams[nounId].canceled, 'already canceled');
-        streams[nounId].canceled = true;
+        require(streams[nounId].active, 'already canceled');
+        streams[nounId].active = false;
         ethStreamedPerAuction -= streams[nounId].ethPerAuction;
 
         // calculate how much needs to be refunded
@@ -115,11 +117,6 @@ contract StreamEscrow is IStreamEscrow {
         daoTreasury = newAddress;
     }
 
-    function setAuctionHouseAddress(address newAddress) external {
-        require(msg.sender == daoTreasury);
-        auctionHouse = newAddress;
-    }
-
     function getStream(uint256 nounId) external view returns (Stream memory) {
         return streams[nounId];
     }
@@ -128,7 +125,7 @@ contract StreamEscrow is IStreamEscrow {
         uint256[] storage endingStreams = streamEndIds[auctionsCounter];
         for (uint256 i; i < endingStreams.length; i++) {
             uint256 streamId = endingStreams[i];
-            if (!streams[streamId].canceled) {
+            if (streams[streamId].active) {
                 ethStreamedPerAuction -= streams[streamId].ethPerAuction;
             }
         }
