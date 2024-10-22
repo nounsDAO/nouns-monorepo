@@ -21,34 +21,31 @@ contract StreamEscrowTest is Test {
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         // check that nothing has streamed yet
-        assertEq(escrow.ethStreamedToDAO(), 0 ether);
+        assertEq(treasury.balance, 0 ether);
 
         for (uint i; i < 4; i++) {
             forwardOneDay();
         }
 
-        assertEq(escrow.ethStreamedToDAO(), 2 ether);
-
-        vm.prank(treasury);
-        escrow.withdrawToTreasury(2 ether);
+        assertEq(treasury.balance, 2 ether);
 
         // forward past the point of stream ending
         for (uint i; i < 20; i++) {
             forwardOneDay();
         }
 
-        assertEq(escrow.ethStreamedToDAO(), 10 ether);
+        assertEq(treasury.balance, 10 ether);
     }
 
     function testSilentlyFailsIf24HoursDidntPass() public {
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
-        assertEq(escrow.ethStreamedToDAO(), 0 ether);
+        assertEq(treasury.balance, 0 ether);
 
         vm.warp(block.timestamp + 24 hours - 1000);
         escrow.forwardAll();
 
-        assertEq(escrow.ethStreamedToDAO(), 0 ether);
+        assertEq(treasury.balance, 0 ether);
     }
 
     function testCancelStream() public {
@@ -59,7 +56,7 @@ contract StreamEscrowTest is Test {
             forwardOneDay();
         }
 
-        assertEq(escrow.ethStreamedToDAO(), 2 ether);
+        assertEq(treasury.balance, 2 ether);
 
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
@@ -118,25 +115,6 @@ contract StreamEscrowTest is Test {
         escrow.cancelStream(1);
     }
 
-    function testDAOCanWithdrawLessThanStreamed() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        forwardOneDay();
-
-        assertEq(escrow.ethStreamedToDAO(), 0.5 ether);
-
-        vm.prank(treasury);
-        escrow.withdrawToTreasury(0.4 ether);
-    }
-
-    function testDAOCantWithdrawMoreThanStreamed() public {
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        forwardOneDay();
-
-        vm.expectRevert('not enough to withdraw');
-        vm.prank(treasury);
-        escrow.withdrawToTreasury(0.6 ether);
-    }
-
     function forwardOneDay() internal {
         vm.warp(block.timestamp + 24 hours);
         escrow.forwardAll();
@@ -148,15 +126,15 @@ contract StreamEscrowTest is Test {
         // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
         // ethPerAuction should be: 666,666,666,666,666
         // the remainder, 0.666.. * 1500 = 1000 should be immediately streamed to the DAO
-        assertEq(escrow.ethStreamedToDAO(), 1000);
+        assertEq(treasury.balance, 1000);
 
         forwardOneDay();
-        assertEq(escrow.ethStreamedToDAO(), 1000 + 666_666_666_666_666);
+        assertEq(treasury.balance, 1000 + 666_666_666_666_666);
 
         // after streaming ends the entire amount is withdrawable
         for (uint i; i < 1500; i++) {
             forwardOneDay();
         }
-        assertEq(escrow.ethStreamedToDAO(), 1 ether);
+        assertEq(treasury.balance, 1 ether);
     }
 }

@@ -21,13 +21,12 @@ import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
-    event ETHStreamedToDAO(uint256 amount, uint256 totalStreamed);
+    event ETHStreamedToDAO(uint256 amount);
 
     address public daoTreasury;
     INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerTick;
-    uint256 public ethStreamedToDAO;
     uint256 public ethWithdrawn;
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
     mapping(uint256 streamId => Stream) public streams;
@@ -58,11 +57,8 @@ contract StreamEscrow is IStreamEscrow {
 
         // the remainder is immediately streamed to the DAO
         uint256 remainder = msg.value % streamLengthInTicks;
-        if (remainder > 0) {
-            ethStreamedToDAO += remainder;
-            emit ETHStreamedToDAO(remainder, ethStreamedToDAO);
-        }
-
+        sendETHToTreasury(remainder);
+        
         ethStreamedPerTick += ethPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, streamEndId: streamEndId });
     }
@@ -76,9 +72,18 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = block.timestamp;
         ticks++;
-        ethStreamedToDAO += ethStreamedPerTick;
-        emit ETHStreamedToDAO(ethStreamedPerTick, ethStreamedToDAO);
+        
+        sendETHToTreasury(ethStreamedPerTick);
+
         finishStreams();
+    }
+
+    function sendETHToTreasury(uint256 amount) internal {
+        if (amount > 0) {
+            (bool sent, ) = daoTreasury.call{ value: amount }('');
+            require(sent, 'failed to send eth');
+            emit ETHStreamedToDAO(amount);
+        }
     }
 
     function cancelStreams(uint256[] calldata nounIds) external {
@@ -101,14 +106,6 @@ contract StreamEscrow is IStreamEscrow {
         uint256 ticksLeft = streams[nounId].streamEndId - ticks;
         uint256 amountToRefund = streams[nounId].ethPerTick * ticksLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
-        require(sent, 'failed to send eth');
-    }
-
-    function withdrawToTreasury(uint256 amount) external {
-        require(msg.sender == daoTreasury);
-        require(amount <= (ethStreamedToDAO - ethWithdrawn), 'not enough to withdraw');
-        ethWithdrawn += amount;
-        (bool sent, ) = daoTreasury.call{ value: amount }('');
         require(sent, 'failed to send eth');
     }
 
