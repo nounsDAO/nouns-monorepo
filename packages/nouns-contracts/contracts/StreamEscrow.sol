@@ -27,7 +27,6 @@ contract StreamEscrow is IStreamEscrow {
     INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerTick;
-    uint256 public ethWithdrawn;
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
     mapping(uint256 streamId => Stream) public streams;
     uint256 public ticks;
