@@ -70,7 +70,7 @@ contract NounsAuctionHouseV3 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
-    uint16 public immediateTreasuryBps;
+    uint16 public immediateTreasuryBPs;
 
     uint16 public streamLengthInTicks;
 
@@ -91,7 +91,7 @@ contract NounsAuctionHouseV3 is
         uint192 _reservePrice,
         uint56 _timeBuffer,
         uint8 _minBidIncrementPercentage,
-        uint16 _immediateTreasuryBps,
+        uint16 _immediateTreasuryBPs,
         uint16 _streamLengthInTicks,
         address _streamEscrow
     ) external initializer {
@@ -104,17 +104,17 @@ contract NounsAuctionHouseV3 is
         reservePrice = _reservePrice;
         timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
-        immediateTreasuryBps = _immediateTreasuryBps;
+        immediateTreasuryBPs = _immediateTreasuryBPs;
         streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
     function setStreamEscrowParams(
-        uint16 _immediateTreasuryBps,
+        uint16 _immediateTreasuryBPs,
         uint16 _streamLengthInTicks,
         address _streamEscrow
     ) external onlyOwner {
-        immediateTreasuryBps = _immediateTreasuryBps;
+        immediateTreasuryBPs = _immediateTreasuryBPs;
         streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
@@ -300,7 +300,7 @@ contract NounsAuctionHouseV3 is
         require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
 
         auctionStorage.settled = true;
-        uint256 amountToSendTreasury = (_auction.amount * immediateTreasuryBps) / 10_000;
+        uint256 amountToSendTreasury = (_auction.amount * immediateTreasuryBPs) / 10_000;
         uint256 amountToStream = _auction.amount - amountToSendTreasury;
 
         if (amountToSendTreasury > 0) {

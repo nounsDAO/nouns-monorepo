@@ -168,7 +168,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             _reservePrice: 0,
             _timeBuffer: 2,
             _minBidIncrementPercentage: 1,
-            _immediateTreasuryBps: 2000,
+            _immediateTreasuryBPs: 2000,
             _streamLengthInTicks: 1500,
             _streamEscrow: address(streamEscrow)
         });
