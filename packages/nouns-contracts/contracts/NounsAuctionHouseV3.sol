@@ -72,7 +72,7 @@ contract NounsAuctionHouseV3 is
 
     uint16 public immediateTreasuryBps;
 
-    uint16 public streamLengthInAuctions;
+    uint16 public streamLengthInTicks;
 
     IStreamEscrow public streamEscrow;
 
@@ -92,7 +92,7 @@ contract NounsAuctionHouseV3 is
         uint56 _timeBuffer,
         uint8 _minBidIncrementPercentage,
         uint16 _immediateTreasuryBps,
-        uint16 _streamLengthInAuctions,
+        uint16 _streamLengthInTicks,
         address _streamEscrow
     ) external initializer {
         __Pausable_init();
@@ -105,17 +105,17 @@ contract NounsAuctionHouseV3 is
         timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
         immediateTreasuryBps = _immediateTreasuryBps;
-        streamLengthInAuctions = _streamLengthInAuctions;
+        streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
     function setStreamEscrowParams(
         uint16 _immediateTreasuryBps,
-        uint16 _streamLengthInAuctions,
+        uint16 _streamLengthInTicks,
         address _streamEscrow
     ) external onlyOwner {
         immediateTreasuryBps = _immediateTreasuryBps;
-        streamLengthInAuctions = _streamLengthInAuctions;
+        streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
@@ -309,7 +309,7 @@ contract NounsAuctionHouseV3 is
 
         // TODO maybe separate in case there's no winner and no auction.amount?
         if (amountToStream > 0) {
-            streamEscrow.forwardAllAndCreateStream{ value: amountToStream }(_auction.nounId, streamLengthInAuctions);
+            streamEscrow.forwardAllAndCreateStream{ value: amountToStream }(_auction.nounId, streamLengthInTicks);
         } else {
             streamEscrow.forwardAll();
         }
