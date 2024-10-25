@@ -28,7 +28,7 @@ contract StreamEscrow is IStreamEscrow {
 
     uint256 public ethStreamedPerTick;
     mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
-    mapping(uint256 streamId => Stream) public streams;
+    mapping(uint256 streamId => Stream) internal streams;
     uint256 public ticks;
     uint256 public lastForwardTimestamp;
 
