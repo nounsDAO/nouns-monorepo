@@ -23,7 +23,9 @@ import { INounsToken } from './interfaces/INounsToken.sol';
 contract StreamEscrow is IStreamEscrow {
     event ETHStreamedToDAO(uint256 amount);
 
-    address public daoTreasury;
+    address public daoExecutor;
+    address public ethRecipient;
+    address public nounsRecipient;
     INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerTick;
@@ -32,8 +34,10 @@ contract StreamEscrow is IStreamEscrow {
     uint256 public ticks;
     uint256 public lastForwardTimestamp;
 
-    constructor(address daoTreasury_, address nounsToken_) {
-        daoTreasury = daoTreasury_;
+    constructor(address daoExecutor_, address ethRecipient_, address nounsRecipient_, address nounsToken_) {
+        daoExecutor = daoExecutor_;
+        ethRecipient = ethRecipient_;
+        nounsRecipient = nounsRecipient_;
         nounsToken = INounsToken(nounsToken_);
     }
 
@@ -79,7 +83,7 @@ contract StreamEscrow is IStreamEscrow {
 
     function sendETHToTreasury(uint256 amount) internal {
         if (amount > 0) {
-            (bool sent, ) = daoTreasury.call{ value: amount }('');
+            (bool sent, ) = ethRecipient.call{ value: amount }('');
             require(sent, 'failed to send eth');
             emit ETHStreamedToDAO(amount);
         }
@@ -93,7 +97,7 @@ contract StreamEscrow is IStreamEscrow {
 
     function cancelStream(uint256 nounId) public {
         // transfer noun to treasury
-        nounsToken.transferFrom(msg.sender, daoTreasury, nounId);
+        nounsToken.transferFrom(msg.sender, nounsRecipient, nounId);
 
         // cancel stream
         require(streams[nounId].active, 'already canceled');
@@ -108,9 +112,19 @@ contract StreamEscrow is IStreamEscrow {
         require(sent, 'failed to send eth');
     }
 
-    function setDAOTreasuryAddress(address newAddress) external {
-        require(msg.sender == daoTreasury);
-        daoTreasury = newAddress;
+    function setDAOExecutorAddress(address newAddress) external {
+        require(msg.sender == daoExecutor);
+        daoExecutor = newAddress;
+    }
+
+    function setETHRecipient(address newAddress) external {
+        require(msg.sender == daoExecutor);
+        ethRecipient = newAddress;
+    }
+
+    function setNounsRecipient(address newAddress) external {
+        require(msg.sender == daoExecutor);
+        nounsRecipient = newAddress;
     }
 
     function getStream(uint256 nounId) external view returns (Stream memory) {

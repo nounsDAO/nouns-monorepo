@@ -40,7 +40,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsAuctionHouseProxyAdmin admin = new NounsAuctionHouseProxyAdmin();
         admin.transferOwnership(owner);
 
-        StreamEscrow streamEscrow = new StreamEscrow(makeAddr('daoTreasury'), address(token));
+        StreamEscrow streamEscrow = new StreamEscrow(makeAddr('daoTreasury'), makeAddr('daoTreasury'), makeAddr('daoTreasury'), address(token));
 
         bytes memory data = abi.encodeWithSelector(
             NounsAuctionHouseV3.initialize.selector,

@@ -105,6 +105,8 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         NounsAuctionHouseV3 newLogic = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
         StreamEscrow streamEscrow = new StreamEscrow(
             address(NOUNS_DAO_PROXY_MAINNET.timelock()),
+            address(NOUNS_DAO_PROXY_MAINNET.timelock()),
+            address(NOUNS_DAO_PROXY_MAINNET.timelock()),
             address(ahv2.nouns())
         );
 

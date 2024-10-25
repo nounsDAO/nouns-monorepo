@@ -159,7 +159,9 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address(new NounsDAOForkEscrow(address(dao), address(t.nounsToken)));
 
         StreamEscrow streamEscrow = new StreamEscrow({
-            daoTreasury_: address(t.timelock),
+            daoExecutor_: address(t.timelock),
+            ethRecipient_: address(t.timelock),
+            nounsRecipient_: address(t.timelock),
             nounsToken_: address(t.nounsToken)
         });
 
