@@ -50,7 +50,7 @@ contract StreamEscrow is IStreamEscrow {
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
         // TODO limit streamLengthInTicks values range?
         require(nounsToken.ownerOf(nounId) == msg.sender, 'only noun owner');
-        require(!streams[nounId].active || streams[nounId].streamEndId > ticks, 'stream active');
+        require(!streams[nounId].active || streams[nounId].streamEndId < ticks, 'stream active');
 
         // register new stream
         uint256 streamEndId = ticks + streamLengthInTicks; // streamEndId is inclusive
@@ -61,7 +61,7 @@ contract StreamEscrow is IStreamEscrow {
         // the remainder is immediately streamed to the DAO
         uint256 remainder = msg.value % streamLengthInTicks;
         sendETHToTreasury(remainder);
-        
+
         ethStreamedPerTick += ethPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, streamEndId: streamEndId });
     }
@@ -75,7 +75,7 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = block.timestamp;
         ticks++;
-        
+
         sendETHToTreasury(ethStreamedPerTick);
 
         finishStreams();

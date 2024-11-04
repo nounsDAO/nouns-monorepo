@@ -39,6 +39,13 @@ contract StreamEscrowTest is Test {
         assertEq(ethRecipient.balance, 10 ether);
     }
 
+    function testCantCreateMoreThanOneActiveStreamForSameNoun() public {
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        vm.expectRevert('stream active');
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+
     function testSilentlyFailsIf24HoursDidntPass() public {
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
