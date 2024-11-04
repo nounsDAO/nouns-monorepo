@@ -29,7 +29,9 @@ contract StreamEscrow is IStreamEscrow {
     INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerTick;
-    mapping(uint256 streamEndId => uint256[] streamIds) public streamEndIds;
+
+    // @dev a mapping of how much ethPerTick will end at this tick
+    mapping(uint256 tick => uint256 ethPerTick) public ethStreamEndingAtTick;
     mapping(uint256 streamId => Stream) internal streams;
     uint256 public ticks;
     uint256 public lastForwardTimestamp;
@@ -50,20 +52,19 @@ contract StreamEscrow is IStreamEscrow {
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
         // TODO limit streamLengthInTicks values range?
         require(nounsToken.ownerOf(nounId) == msg.sender, 'only noun owner');
-        require(!streams[nounId].active || streams[nounId].streamEndId < ticks, 'stream active');
+        require(!streams[nounId].active || streams[nounId].lastTick < ticks, 'stream active');
 
         // register new stream
-        uint256 streamEndId = ticks + streamLengthInTicks; // streamEndId is inclusive
-        streamEndIds[streamEndId].push(nounId);
-
         uint256 ethPerTick = msg.value / streamLengthInTicks;
+        uint256 streamLastTick = ticks + streamLengthInTicks; // streamLastTick is inclusive
+        ethStreamEndingAtTick[streamLastTick] += ethPerTick;
 
         // the remainder is immediately streamed to the DAO
         uint256 remainder = msg.value % streamLengthInTicks;
         sendETHToTreasury(remainder);
 
         ethStreamedPerTick += ethPerTick;
-        streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, streamEndId: streamEndId });
+        streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, lastTick: streamLastTick });
     }
 
     // used for example when there were no bids on a noun
@@ -74,11 +75,10 @@ contract StreamEscrow is IStreamEscrow {
         }
 
         lastForwardTimestamp = block.timestamp;
-        ticks++;
 
         sendETHToTreasury(ethStreamedPerTick);
 
-        finishStreams();
+        increaseTicksAndFinishStreams();
     }
 
     function sendETHToTreasury(uint256 amount) internal {
@@ -103,10 +103,11 @@ contract StreamEscrow is IStreamEscrow {
         require(streams[nounId].active, 'already canceled');
         streams[nounId].active = false;
         ethStreamedPerTick -= streams[nounId].ethPerTick;
+        ethStreamEndingAtTick[streams[nounId].lastTick] -= streams[nounId].ethPerTick;
 
         // calculate how much needs to be refunded
-        require(streams[nounId].streamEndId > ticks, 'stream finished');
-        uint256 ticksLeft = streams[nounId].streamEndId - ticks;
+        require(streams[nounId].lastTick > ticks, 'stream finished');
+        uint256 ticksLeft = streams[nounId].lastTick - ticks;
         uint256 amountToRefund = streams[nounId].ethPerTick * ticksLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');
@@ -131,13 +132,11 @@ contract StreamEscrow is IStreamEscrow {
         return streams[nounId];
     }
 
-    function finishStreams() internal {
-        uint256[] storage endingStreams = streamEndIds[ticks];
-        for (uint256 i; i < endingStreams.length; i++) {
-            uint256 streamId = endingStreams[i];
-            if (streams[streamId].active) {
-                ethStreamedPerTick -= streams[streamId].ethPerTick;
-            }
+    function increaseTicksAndFinishStreams() internal {
+        ticks++;
+        uint256 ethPerTickEnding = ethStreamEndingAtTick[ticks];
+        if (ethPerTickEnding > 0) {
+            ethStreamedPerTick -= ethPerTickEnding;
         }
     }
 }

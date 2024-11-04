@@ -22,7 +22,7 @@ interface IStreamEscrow {
         uint256 ethPerTick;
         bool active;
         // @dev This is the last tick for which this stream will be active
-        uint256 streamEndId;
+        uint256 lastTick;
     }
 
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable;
