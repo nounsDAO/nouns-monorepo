@@ -146,4 +146,63 @@ contract StreamEscrowTest is Test {
         }
         assertEq(ethRecipient.balance, 1 ether);
     }
+
+    function test_onlyOwnerCanFastForward() public {
+        // setup
+        vm.deal(user, 10 ether);
+        nounsToken.mint(user, 3);
+        vm.prank(user);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        vm.expectRevert('not noun owner');
+        escrow.fastForward({ nounId: 3, ticksToForward: 50 });
+    }
+
+    function test_fastForward() public {
+        // setup
+        vm.deal(user, 10 ether);
+        nounsToken.mint(user, 3);
+        vm.prank(user);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        // forward 20 days
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+        assertEq(ethRecipient.balance, 0.2 ether);
+
+        // fast forward 40 days out of the 80 left
+        vm.prank(user);
+        escrow.fastForward({ nounId: 3, ticksToForward: 40 });
+
+        assertEq(ethRecipient.balance, 0.6 ether);
+    }
+
+    function test_fastForward_cantForwardPastStreamEnd() public {
+        // setup
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+
+        vm.deal(user, 10 ether);
+        nounsToken.mint(user, 3);
+        vm.prank(user);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        vm.prank(user);
+        vm.expectRevert('too many ticks');
+        escrow.fastForward({ nounId: 3, ticksToForward: 101 });
+
+        vm.prank(user);
+        escrow.fastForward({ nounId: 3, ticksToForward: 100 });
+
+        assertEq(ethRecipient.balance, 1 ether);
+
+        vm.prank(user);
+        vm.expectRevert('stream not active');
+        escrow.fastForward({ nounId: 3, ticksToForward: 1 });
+    }
+
+    // TODO: test fastForward: fails for canceled or finished streams
+    // TODO: test fastForward: fails if too many ticks
 }

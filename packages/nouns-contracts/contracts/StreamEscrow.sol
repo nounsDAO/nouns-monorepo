@@ -113,6 +113,30 @@ contract StreamEscrow is IStreamEscrow {
         require(sent, 'failed to send eth');
     }
 
+    function fastForward(uint256 nounId, uint256 ticksToForward) public {
+        require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
+        uint256 lastTick = streams[nounId].lastTick;
+        require(streams[nounId].active && lastTick > ticks, 'stream not active');
+
+        // move last tick
+        require(ticksToForward <= lastTick, 'ticksToForward must be <= lastTick');
+        uint256 newLastTick = lastTick - ticksToForward;
+        require(newLastTick >= ticks, 'too many ticks');
+        streams[nounId].lastTick = newLastTick;
+        ethStreamEndingAtTick[lastTick] -= streams[nounId].ethPerTick;
+
+        if (newLastTick > ticks) {
+            // stream is still active, so register the new end tick
+            ethStreamEndingAtTick[newLastTick] += streams[nounId].ethPerTick;
+        } else {
+            // no more ticks left, so finished the stream
+            ethStreamedPerTick -= streams[nounId].ethPerTick;
+        }
+
+        uint256 ethToStream = ticksToForward * streams[nounId].ethPerTick;
+        sendETHToTreasury(ethToStream);
+    }
+
     function setDAOExecutorAddress(address newAddress) external {
         require(msg.sender == daoExecutor);
         daoExecutor = newAddress;
