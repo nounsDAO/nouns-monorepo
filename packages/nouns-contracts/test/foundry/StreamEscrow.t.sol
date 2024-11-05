@@ -190,7 +190,7 @@ contract StreamEscrowTest is Test {
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
 
         vm.prank(user);
-        vm.expectRevert('too many ticks');
+        vm.expectRevert('ticksToFoward too large');
         escrow.fastForward({ nounId: 3, ticksToForward: 101 });
 
         vm.prank(user);

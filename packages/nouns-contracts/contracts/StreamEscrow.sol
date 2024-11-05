@@ -119,9 +119,9 @@ contract StreamEscrow is IStreamEscrow {
         require(streams[nounId].active && lastTick > ticks, 'stream not active');
 
         // move last tick
-        require(ticksToForward <= lastTick, 'ticksToForward must be <= lastTick');
+        require(ticksToForward <= lastTick - ticks, 'ticksToFoward too large');
         uint256 newLastTick = lastTick - ticksToForward;
-        require(newLastTick >= ticks, 'too many ticks');
+
         streams[nounId].lastTick = newLastTick;
         ethStreamEndingAtTick[lastTick] -= streams[nounId].ethPerTick;
 
