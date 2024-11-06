@@ -59,7 +59,6 @@ contract StreamEscrow is IStreamEscrow {
 
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
         require(allowedToCreateStream[msg.sender], 'not allowed');
-        // TODO limit streamLengthInTicks values range?
         require(isApprovedOrOwner(msg.sender, nounId), 'only noun owner or approved');
         require(!streams[nounId].active || streams[nounId].lastTick < currentTick, 'stream active');
 
