@@ -10,16 +10,57 @@ contract StreamEscrowTest is Test {
     address treasury = makeAddr('treasury');
     address ethRecipient = makeAddr('ethRecipient');
     address nounsRecipient = makeAddr('nounsRecipient');
+    address streamCreator = makeAddr('streamCreator');
     ERC721Mock nounsToken = new ERC721Mock();
     address user = makeAddr('user');
 
     function setUp() public {
-        escrow = new StreamEscrow(treasury, ethRecipient, nounsRecipient, address(nounsToken));
+        escrow = new StreamEscrow(treasury, ethRecipient, nounsRecipient, address(nounsToken), streamCreator);
 
-        nounsToken.mint(address(this), 1);
+        nounsToken.mint(streamCreator, 1);
+        vm.deal(streamCreator, 1000 ether);
+    }
+
+    function test_createStream_failsIfNotWhitelisted() public {
+        vm.expectRevert('not allowed');
+        escrow.createStream(1, 1000);
+    }
+
+    function test_createStream_allowsIfWhitelistedAndOwner() public {
+        assertEq(nounsToken.ownerOf(1), streamCreator);
+
+        vm.prank(streamCreator);
+        escrow.createStream(1, 1000);
+    }
+
+    function test_createStream_failsIfWhitelistedAndNotOwner() public {
+        nounsToken.mint(user, 2);
+
+        vm.prank(streamCreator);
+        vm.expectRevert('only noun owner or approved');
+        escrow.createStream(2, 1000);
+    }
+
+    function test_createStream_allowsIfWhitelistedAndApprovedSingleToken() public {
+        nounsToken.mint(user, 2);
+        vm.prank(user);
+        nounsToken.approve(streamCreator, 2);
+
+        vm.prank(streamCreator);
+        escrow.createStream(2, 1000);
+    }
+
+    function test_createStream_allowsIfWhitelistedAndApprovedAll() public {
+        nounsToken.mint(user, 2);
+        vm.prank(user);
+        nounsToken.setApprovalForAll(streamCreator, true);
+
+        vm.prank(streamCreator);
+        escrow.createStream(2, 1000);
     }
 
     function testSingleStream() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         // check that nothing has streamed yet
@@ -40,13 +81,16 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCreateMoreThanOneActiveStreamForSameNoun() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
+        vm.prank(streamCreator);
         vm.expectRevert('stream active');
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
     }
 
     function testSilentlyFailsIf24HoursDidntPass() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         assertEq(ethRecipient.balance, 0 ether);
@@ -58,8 +102,10 @@ contract StreamEscrowTest is Test {
     }
 
     function testCancelStream() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        nounsToken.transferFrom(address(this), user, 1);
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
 
         for (uint i; i < 4; i++) {
             forwardOneDay();
@@ -81,8 +127,10 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAlreadyCanceledStream() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        nounsToken.transferFrom(address(this), user, 1);
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
 
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
@@ -106,15 +154,18 @@ contract StreamEscrowTest is Test {
     }
 
     function testCantCancelAFinishedStream() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        nounsToken.transferFrom(address(this), user, 1);
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
 
         for (uint i; i < 20; i++) {
             forwardOneDay();
         }
 
         // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
-        nounsToken.mint(address(this), 2);
+        nounsToken.mint(streamCreator, 2);
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInTicks: 20 });
 
         vm.prank(user);
@@ -130,6 +181,7 @@ contract StreamEscrowTest is Test {
     }
 
     function testRoundingDownStreamAmount() public {
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 1500 });
 
         // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
@@ -149,10 +201,12 @@ contract StreamEscrowTest is Test {
 
     function test_onlyOwnerCanFastForward() public {
         // setup
-        vm.deal(user, 10 ether);
-        nounsToken.mint(user, 3);
-        vm.prank(user);
+        nounsToken.mint(streamCreator, 3);
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 3);
 
         vm.expectRevert('not noun owner');
         escrow.fastForward({ nounId: 3, ticksToForward: 50 });
@@ -160,10 +214,12 @@ contract StreamEscrowTest is Test {
 
     function test_fastForward() public {
         // setup
-        vm.deal(user, 10 ether);
-        nounsToken.mint(user, 3);
-        vm.prank(user);
+        nounsToken.mint(streamCreator, 3);
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 3);
 
         // forward 20 days
         for (uint i; i < 20; i++) {
@@ -184,10 +240,12 @@ contract StreamEscrowTest is Test {
             forwardOneDay();
         }
 
-        vm.deal(user, 10 ether);
-        nounsToken.mint(user, 3);
-        vm.prank(user);
+        nounsToken.mint(streamCreator, 3);
+        vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
+
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 3);
 
         vm.prank(user);
         vm.expectRevert('ticksToFoward too large');

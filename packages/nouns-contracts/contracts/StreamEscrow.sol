@@ -35,12 +35,20 @@ contract StreamEscrow is IStreamEscrow {
     mapping(uint256 streamId => Stream) internal streams;
     uint256 public currentTick;
     uint256 public lastForwardTimestamp;
+    mapping(address => bool) public allowedToCreateStream;
 
-    constructor(address daoExecutor_, address ethRecipient_, address nounsRecipient_, address nounsToken_) {
+    constructor(
+        address daoExecutor_,
+        address ethRecipient_,
+        address nounsRecipient_,
+        address nounsToken_,
+        address streamCreator_
+    ) {
         daoExecutor = daoExecutor_;
         ethRecipient = ethRecipient_;
         nounsRecipient = nounsRecipient_;
         nounsToken = INounsToken(nounsToken_);
+        allowedToCreateStream[streamCreator_] = true;
     }
 
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable {
@@ -50,8 +58,9 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
+        require(allowedToCreateStream[msg.sender], 'not allowed');
         // TODO limit streamLengthInTicks values range?
-        require(nounsToken.ownerOf(nounId) == msg.sender, 'only noun owner');
+        require(isApprovedOrOwner(msg.sender, nounId), 'only noun owner or approved');
         require(!streams[nounId].active || streams[nounId].lastTick < currentTick, 'stream active');
 
         // register new stream
@@ -65,6 +74,14 @@ contract StreamEscrow is IStreamEscrow {
 
         ethStreamedPerTick += ethPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, lastTick: streamLastTick });
+    }
+
+    function isApprovedOrOwner(address caller, uint256 nounId) internal view returns (bool) {
+        address owner = nounsToken.ownerOf(nounId);
+        if (owner == caller) return true;
+        if (nounsToken.isApprovedForAll(owner, caller)) return true;
+        if (nounsToken.getApproved(nounId) == caller) return true;
+        return false;
     }
 
     // used for example when there were no bids on a noun

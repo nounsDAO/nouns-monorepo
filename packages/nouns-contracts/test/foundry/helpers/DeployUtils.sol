@@ -40,7 +40,15 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         NounsAuctionHouseProxyAdmin admin = new NounsAuctionHouseProxyAdmin();
         admin.transferOwnership(owner);
 
-        StreamEscrow streamEscrow = new StreamEscrow(makeAddr('daoTreasury'), makeAddr('daoTreasury'), makeAddr('daoTreasury'), address(token));
+        address predictedAuctionHouseProxyAddress = computeCreateAddress(address(this), vm.getNonce(address(this)) + 1);
+
+        StreamEscrow streamEscrow = new StreamEscrow(
+            makeAddr('daoTreasury'),
+            makeAddr('daoTreasury'),
+            makeAddr('daoTreasury'),
+            address(token),
+            predictedAuctionHouseProxyAddress
+        );
 
         bytes memory data = abi.encodeWithSelector(
             NounsAuctionHouseV3.initialize.selector,
@@ -52,6 +60,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             streamEscrow
         );
         NounsAuctionHouseProxy proxy = new NounsAuctionHouseProxy(address(logic), address(admin), data);
+        assertEq(predictedAuctionHouseProxyAddress, address(proxy), 'wrong address');
         NounsAuctionHouseV3 auction = NounsAuctionHouseV3(address(proxy));
 
         auction.transferOwnership(owner);

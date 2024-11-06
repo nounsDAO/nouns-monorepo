@@ -162,7 +162,8 @@ abstract contract DeployUtilsV3 is DeployUtils {
             daoExecutor_: address(t.timelock),
             ethRecipient_: address(t.timelock),
             nounsRecipient_: address(t.timelock),
-            nounsToken_: address(t.nounsToken)
+            nounsToken_: address(t.nounsToken),
+            streamCreator_: address(auctionProxy)
         });
 
         vm.prank(address(t.timelock));
