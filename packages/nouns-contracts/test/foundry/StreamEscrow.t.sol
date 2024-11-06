@@ -329,6 +329,30 @@ contract CancelStreamTest is BaseStreamEscrowTest {
         vm.prank(user);
         escrow.cancelStream(1);
     }
+
+    function test_cancelMultipleStreams() public {
+        // mint noun 2 to streamCreator
+        nounsToken.mint(streamCreator, 2);
+        // create stream for noun 2
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInTicks: 20 });
+
+        // transfer noun 2 to user
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 2);
+
+        // cancel both streams
+        vm.prank(user);
+        nounsToken.setApprovalForAll(address(escrow), true);
+        uint256[] memory nounIds = new uint256[](2);
+        nounIds[0] = 1;
+        nounIds[1] = 2;
+        vm.prank(user);
+        escrow.cancelStreams(nounIds);
+
+        // check that both streams were canceled
+        assertEq(escrow.ethStreamedPerTick(), 0);
+    }
 }
 
 contract FastForwardStreamTest is BaseStreamEscrowTest {
