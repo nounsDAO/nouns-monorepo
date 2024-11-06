@@ -5,7 +5,7 @@ import { Test } from 'forge-std/Test.sol';
 import { StreamEscrow } from '../../contracts/StreamEscrow.sol';
 import { ERC721Mock } from './helpers/ERC721Mock.sol';
 
-contract StreamEscrowTest is Test {
+abstract contract BaseStreamEscrowTest is Test {
     StreamEscrow escrow;
     address treasury = makeAddr('treasury');
     address ethRecipient = makeAddr('ethRecipient');
@@ -14,16 +14,25 @@ contract StreamEscrowTest is Test {
     ERC721Mock nounsToken = new ERC721Mock();
     address user = makeAddr('user');
 
-    function setUp() public {
+    function setUp() public virtual {
         escrow = new StreamEscrow(treasury, ethRecipient, nounsRecipient, address(nounsToken), streamCreator);
 
         nounsToken.mint(streamCreator, 1);
         vm.deal(streamCreator, 1000 ether);
     }
+}
 
+contract CreateStreamPermissionsTest is BaseStreamEscrowTest {
     function test_createStream_failsIfNotWhitelisted() public {
         vm.expectRevert('not allowed');
         escrow.createStream(1, 1000);
+    }
+
+    function test_nounOwner_failsIfNotWhitelisted() public {
+        nounsToken.mint(user, 2);
+        vm.prank(user);
+        vm.expectRevert('not allowed');
+        escrow.createStream(2, 1000);
     }
 
     function test_createStream_allowsIfWhitelistedAndOwner() public {
@@ -58,7 +67,41 @@ contract StreamEscrowTest is Test {
         vm.prank(streamCreator);
         escrow.createStream(2, 1000);
     }
+}
 
+contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
+    function setUp() public virtual override {
+        super.setUp();
+        nounsToken.mint(user, 2);
+    }
+
+    function test_addAddressToWhitelist() public {
+        vm.prank(treasury);
+        escrow.setAllowedToCreateStream(user, true);
+
+        vm.prank(user);
+        escrow.createStream(2, 1000);
+    }
+
+    function test_removesAddressFromWhitelist() public {
+        vm.prank(treasury);
+        escrow.setAllowedToCreateStream(user, true);
+
+        vm.prank(treasury);
+        escrow.setAllowedToCreateStream(user, false);
+
+        vm.prank(user);
+        vm.expectRevert('not allowed');
+        escrow.createStream(2, 1000);
+    }
+
+    function test_failsIfNotCalledByDAO() public {
+        vm.expectRevert('only dao');
+        escrow.setAllowedToCreateStream(address(1), true);
+    }
+}
+
+contract StreamEscrowTest is BaseStreamEscrowTest {
     function testSingleStream() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });

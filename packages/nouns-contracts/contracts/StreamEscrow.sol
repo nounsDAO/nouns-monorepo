@@ -154,18 +154,24 @@ contract StreamEscrow is IStreamEscrow {
         sendETHToTreasury(ethToStream);
     }
 
-    function setDAOExecutorAddress(address newAddress) external {
-        require(msg.sender == daoExecutor);
+    modifier onlyDAO() {
+        require(msg.sender == daoExecutor, 'only dao');
+        _;
+    }
+
+    function setAllowedToCreateStream(address address_, bool allowed) external onlyDAO {
+        allowedToCreateStream[address_] = allowed;
+    }
+
+    function setDAOExecutorAddress(address newAddress) external onlyDAO {
         daoExecutor = newAddress;
     }
 
-    function setETHRecipient(address newAddress) external {
-        require(msg.sender == daoExecutor);
+    function setETHRecipient(address newAddress) external onlyDAO {
         ethRecipient = newAddress;
     }
 
-    function setNounsRecipient(address newAddress) external {
-        require(msg.sender == daoExecutor);
+    function setNounsRecipient(address newAddress) external onlyDAO {
         nounsRecipient = newAddress;
     }
 
