@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import { Test } from 'forge-std/Test.sol';
 import { StreamEscrow } from '../../contracts/StreamEscrow.sol';
 import { ERC721Mock } from './helpers/ERC721Mock.sol';
+import 'forge-std/console.sol';
 
 abstract contract BaseStreamEscrowTest is Test {
     StreamEscrow escrow;
@@ -19,6 +20,11 @@ abstract contract BaseStreamEscrowTest is Test {
 
         nounsToken.mint(streamCreator, 1);
         vm.deal(streamCreator, 1000 ether);
+    }
+
+    function forwardOneDay() internal {
+        vm.warp(block.timestamp + 24 hours);
+        escrow.forwardAll();
     }
 }
 
@@ -101,38 +107,45 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
     }
 }
 
-contract StreamEscrowTest is BaseStreamEscrowTest {
-    function testSingleStream() public {
+contract SingleStreamTest is BaseStreamEscrowTest {
+    function test_singleStreamLifetime() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
         // check that nothing has streamed yet
         assertEq(ethRecipient.balance, 0 ether);
+        // check state changes
+        assertEq(escrow.ethStreamedPerTick(), 0.5 ether);
+        assertEq(escrow.getStream(1).lastTick, 20);
+        assertEq(escrow.getStream(1).ethPerTick, 0.5 ether);
+        assertEq(escrow.getStream(1).active, true);
+
+        assertTrue(escrow.isStreamActive(1));
 
         for (uint i; i < 4; i++) {
             forwardOneDay();
         }
 
         assertEq(ethRecipient.balance, 2 ether);
+        assertTrue(escrow.isStreamActive(1));
 
         // forward past the point of stream ending
-        for (uint i; i < 20; i++) {
+        for (uint i; i < 16; i++) {
             forwardOneDay();
         }
 
         assertEq(ethRecipient.balance, 10 ether);
+        assertFalse(escrow.isStreamActive(1));
+        // check that no more eth is streaming
+        assertEq(escrow.ethStreamedPerTick(), 0 ether);
+
+        // can keep forwarding days
+        for (uint i; i < 10; i++) {
+            forwardOneDay();
+        }
     }
 
-    function testCantCreateMoreThanOneActiveStreamForSameNoun() public {
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-
-        vm.prank(streamCreator);
-        vm.expectRevert('stream active');
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-    }
-
-    function testSilentlyFailsIf24HoursDidntPass() public {
+    function test_forwardAll_silentlyFailsIf24HoursDidntPass() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
@@ -144,37 +157,158 @@ contract StreamEscrowTest is BaseStreamEscrowTest {
         assertEq(ethRecipient.balance, 0 ether);
     }
 
-    function testCancelStream() public {
+    function testRoundingDownStreamAmount() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 1500 });
+
+        // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
+        // ethPerTick should be: 666,666,666,666,666
+        // the remainder, 0.666.. * 1500 = 1000 should be immediately streamed to the DAO
+        assertEq(ethRecipient.balance, 1000);
+
+        forwardOneDay();
+        assertEq(ethRecipient.balance, 1000 + 666_666_666_666_666);
+
+        // after streaming ends the entire amount is withdrawable
+        for (uint i; i < 1500; i++) {
+            forwardOneDay();
+        }
+        assertEq(ethRecipient.balance, 1 ether);
+    }
+}
+
+contract SingleActiveStreamPerNoun is BaseStreamEscrowTest {
+    function setUp() public virtual override {
+        super.setUp();
+
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+
+    function test_cantCreateStreamForNounIdIfAlreadyActive() public {
+        vm.prank(streamCreator);
+        vm.expectRevert('stream active');
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+
+    function test_canCreateNewStreamIfPreviousStreamEnded() public {
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+
+    function test_canCreateNewStreamIfPreviousStreamWasCanceled() public {
+        vm.prank(streamCreator);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(streamCreator);
+        escrow.cancelStream(1);
+
+        // transfer noun back to streamCreator
+        vm.prank(nounsRecipient);
+        nounsToken.transferFrom(nounsRecipient, streamCreator, 1);
+
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+}
+
+contract CancelStreamTest is BaseStreamEscrowTest {
+    function setUp() public virtual override {
+        super.setUp();
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
         vm.prank(streamCreator);
         nounsToken.transferFrom(streamCreator, user, 1);
+    }
 
-        for (uint i; i < 4; i++) {
-            forwardOneDay();
-        }
+    function test_onlyNounOwnerCanCancel() public {
+        vm.expectRevert('ERC721: transfer caller is not owner nor approved');
+        escrow.cancelStream(1);
 
-        assertEq(ethRecipient.balance, 2 ether);
+        // must approve first
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
 
+        vm.expectRevert('ERC721: transfer of token that is not own');
+        escrow.cancelStream(1);
+
+        // still has to be called by the owner
+        vm.prank(user);
+        escrow.cancelStream(1);
+    }
+
+    function test_cancelImmediately() public {
+        // cancel stream
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
         escrow.cancelStream(1);
 
-        assertEq(user.balance, 8 ether);
+        // check that nothing was streamed
+        assertEq(ethRecipient.balance, 0 ether);
 
-        // make sure moving forward works with canceled streams
+        // check that user was refunded
+        assertEq(user.balance, 10 ether);
+
+        // check that noun was transfered
+        assertEq(nounsToken.ownerOf(1), nounsRecipient);
+
+        // check that stream is no longer active
+        assertFalse(escrow.isStreamActive(1));
+
+        // forward days and test no more eth is streamed
         for (uint i; i < 20; i++) {
             forwardOneDay();
         }
+        assertEq(ethRecipient.balance, 0 ether);
     }
 
-    function testCantCancelAlreadyCanceledStream() public {
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        vm.prank(streamCreator);
-        nounsToken.transferFrom(streamCreator, user, 1);
+    function test_cancelMidStream() public {
+        // forward 5 days, quarter way through the stream
+        for (uint i; i < 5; i++) {
+            forwardOneDay();
+        }
 
+        // cancel stream
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(user);
+        escrow.cancelStream(1);
+
+        // check streamed amount
+        assertEq(ethRecipient.balance, 2.5 ether);
+
+        // check user was refunded
+        assertEq(user.balance, 7.5 ether);
+
+        assertEq(nounsToken.ownerOf(1), nounsRecipient);
+        assertFalse(escrow.isStreamActive(1));
+
+        // forward days and test no more eth is streamed
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+        assertEq(ethRecipient.balance, 2.5 ether);
+    }
+
+    function test_cancelFailsAfterStreamEnds() public {
+        // forward until stream ends
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+
+        // try to cancel stream
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.expectRevert('stream not active');
+        vm.prank(user);
+        escrow.cancelStream(1);
+    }
+
+    function test_cantCancelAlreadyCanceledStream() public {
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
@@ -191,57 +325,13 @@ contract StreamEscrowTest is BaseStreamEscrowTest {
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
 
-        vm.expectRevert('already canceled');
+        vm.expectRevert('stream not active');
         vm.prank(user);
         escrow.cancelStream(1);
     }
+}
 
-    function testCantCancelAFinishedStream() public {
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
-        vm.prank(streamCreator);
-        nounsToken.transferFrom(streamCreator, user, 1);
-
-        for (uint i; i < 20; i++) {
-            forwardOneDay();
-        }
-
-        // creating another stream, otherwise it fails because ethStreamedPerAuction underflows below zero
-        nounsToken.mint(streamCreator, 2);
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 2, streamLengthInTicks: 20 });
-
-        vm.prank(user);
-        nounsToken.approve(address(escrow), 1);
-        vm.expectRevert('stream finished');
-        vm.prank(user);
-        escrow.cancelStream(1);
-    }
-
-    function forwardOneDay() internal {
-        vm.warp(block.timestamp + 24 hours);
-        escrow.forwardAll();
-    }
-
-    function testRoundingDownStreamAmount() public {
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 1500 });
-
-        // 1 ether divided by 1500 = 10^18/1500 = 666,666,666,666,666.666666666....
-        // ethPerAuction should be: 666,666,666,666,666
-        // the remainder, 0.666.. * 1500 = 1000 should be immediately streamed to the DAO
-        assertEq(ethRecipient.balance, 1000);
-
-        forwardOneDay();
-        assertEq(ethRecipient.balance, 1000 + 666_666_666_666_666);
-
-        // after streaming ends the entire amount is withdrawable
-        for (uint i; i < 1500; i++) {
-            forwardOneDay();
-        }
-        assertEq(ethRecipient.balance, 1 ether);
-    }
-
+contract StreamEscrowTest is BaseStreamEscrowTest {
     function test_onlyOwnerCanFastForward() public {
         // setup
         nounsToken.mint(streamCreator, 3);

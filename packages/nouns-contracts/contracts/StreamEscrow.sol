@@ -60,7 +60,7 @@ contract StreamEscrow is IStreamEscrow {
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
         require(allowedToCreateStream[msg.sender], 'not allowed');
         require(isApprovedOrOwner(msg.sender, nounId), 'only noun owner or approved');
-        require(!streams[nounId].active || streams[nounId].lastTick < currentTick, 'stream active');
+        require(!isStreamActive(nounId), 'stream active');
 
         // register new stream
         uint256 ethPerTick = msg.value / streamLengthInTicks;
@@ -115,14 +115,14 @@ contract StreamEscrow is IStreamEscrow {
         // transfer noun to treasury
         nounsToken.transferFrom(msg.sender, nounsRecipient, nounId);
 
+        require(isStreamActive(nounId), 'stream not active');
+
         // cancel stream
-        require(streams[nounId].active, 'already canceled');
         streams[nounId].active = false;
         ethStreamedPerTick -= streams[nounId].ethPerTick;
         ethStreamEndingAtTick[streams[nounId].lastTick] -= streams[nounId].ethPerTick;
 
         // calculate how much needs to be refunded
-        require(streams[nounId].lastTick > currentTick, 'stream finished');
         uint256 ticksLeft = streams[nounId].lastTick - currentTick;
         uint256 amountToRefund = streams[nounId].ethPerTick * ticksLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
@@ -132,7 +132,7 @@ contract StreamEscrow is IStreamEscrow {
     function fastForward(uint256 nounId, uint256 ticksToForward) public {
         require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
         uint256 lastTick = streams[nounId].lastTick;
-        require(streams[nounId].active && lastTick > currentTick, 'stream not active');
+        require(isStreamActive(nounId), 'stream not active');
 
         // move last tick
         require(ticksToForward <= lastTick - currentTick, 'ticksToFoward too large');
@@ -151,6 +151,10 @@ contract StreamEscrow is IStreamEscrow {
 
         uint256 ethToStream = ticksToForward * streams[nounId].ethPerTick;
         sendETHToTreasury(ethToStream);
+    }
+
+    function isStreamActive(uint256 nounId) public view returns (bool) {
+        return streams[nounId].active && streams[nounId].lastTick > currentTick;
     }
 
     modifier onlyDAO() {
