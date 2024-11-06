@@ -331,29 +331,78 @@ contract CancelStreamTest is BaseStreamEscrowTest {
     }
 }
 
-contract StreamEscrowTest is BaseStreamEscrowTest {
+contract FastForwardStreamTest is BaseStreamEscrowTest {
+    function setUp() public virtual override {
+        super.setUp();
+
+        // create stream and transfer noun 1 to user
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
+    }
+
     function test_onlyOwnerCanFastForward() public {
-        // setup
-        nounsToken.mint(streamCreator, 3);
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
-
-        vm.prank(streamCreator);
-        nounsToken.transferFrom(streamCreator, user, 3);
-
         vm.expectRevert('not noun owner');
-        escrow.fastForward({ nounId: 3, ticksToForward: 50 });
+        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+
+        vm.prank(user);
+        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+    }
+
+    function test_cantFastForwardACanceledStream() public {
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(user);
+        escrow.cancelStream(1);
+
+        // transfer noun back to user
+        vm.prank(nounsRecipient);
+        nounsToken.transferFrom(nounsRecipient, user, 1);
+
+        vm.prank(user);
+        vm.expectRevert('stream not active');
+        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+    }
+
+    function test_cantFastForwardAStreamThatEnded() public {
+        // forward until stream ends
+        for (uint i; i < 100; i++) {
+            forwardOneDay();
+        }
+
+        vm.prank(user);
+        vm.expectRevert('stream not active');
+        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+    }
+
+    function test_cantFastForwardAStreamThatEndedByFastForwarding() public {
+        vm.prank(user);
+        escrow.fastForward({ nounId: 1, ticksToForward: 100 });
+
+        vm.prank(user);
+        vm.expectRevert('stream not active');
+        escrow.fastForward({ nounId: 1, ticksToForward: 1 });
+    }
+
+    function test_ticksLargerThanZero() public {
+        vm.prank(user);
+        vm.expectRevert('ticksToForward must be positive');
+        escrow.fastForward({ nounId: 1, ticksToForward: 0 });
+    }
+
+    function test_ticksMustBeUnderNumberOfTicksLeftInStream() public {
+        // forward 20 days
+        for (uint i; i < 20; i++) {
+            forwardOneDay();
+        }
+
+        vm.prank(user);
+        vm.expectRevert('ticksToFoward too large');
+        escrow.fastForward({ nounId: 1, ticksToForward: 81 });
     }
 
     function test_fastForward() public {
-        // setup
-        nounsToken.mint(streamCreator, 3);
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
-
-        vm.prank(streamCreator);
-        nounsToken.transferFrom(streamCreator, user, 3);
-
         // forward 20 days
         for (uint i; i < 20; i++) {
             forwardOneDay();
@@ -362,38 +411,34 @@ contract StreamEscrowTest is BaseStreamEscrowTest {
 
         // fast forward 40 days out of the 80 left
         vm.prank(user);
-        escrow.fastForward({ nounId: 3, ticksToForward: 40 });
+        escrow.fastForward({ nounId: 1, ticksToForward: 40 });
 
         assertEq(ethRecipient.balance, 0.6 ether);
+
+        // forward the rest of the days
+        for (uint i; i < 40; i++) {
+            forwardOneDay();
+        }
+
+        // test that the stream ended
+        assertEq(ethRecipient.balance, 1 ether);
+        assertEq(escrow.ethStreamedPerTick(), 0 ether);
+        assertEq(escrow.isStreamActive(1), false);
     }
 
-    function test_fastForward_cantForwardPastStreamEnd() public {
-        // setup
+    function test_fastForwardMaxTicks_finishesStream() public {
+        // forward 20 days
         for (uint i; i < 20; i++) {
             forwardOneDay();
         }
 
-        nounsToken.mint(streamCreator, 3);
-        vm.prank(streamCreator);
-        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 3, streamLengthInTicks: 100 });
-
-        vm.prank(streamCreator);
-        nounsToken.transferFrom(streamCreator, user, 3);
-
+        // fast forward 80 days out of the 80 left
         vm.prank(user);
-        vm.expectRevert('ticksToFoward too large');
-        escrow.fastForward({ nounId: 3, ticksToForward: 101 });
+        escrow.fastForward({ nounId: 1, ticksToForward: 80 });
 
-        vm.prank(user);
-        escrow.fastForward({ nounId: 3, ticksToForward: 100 });
-
+        // test that the stream ended
         assertEq(ethRecipient.balance, 1 ether);
-
-        vm.prank(user);
-        vm.expectRevert('stream not active');
-        escrow.fastForward({ nounId: 3, ticksToForward: 1 });
+        assertEq(escrow.ethStreamedPerTick(), 0 ether);
+        assertEq(escrow.isStreamActive(1), false);
     }
-
-    // TODO: test fastForward: fails for canceled or finished streams
-    // TODO: test fastForward: fails if too many ticks
 }

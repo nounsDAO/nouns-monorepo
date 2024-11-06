@@ -130,6 +130,7 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     function fastForward(uint256 nounId, uint256 ticksToForward) public {
+        require(ticksToForward > 0, 'ticksToForward must be positive');
         require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
         uint256 lastTick = streams[nounId].lastTick;
         require(isStreamActive(nounId), 'stream not active');
