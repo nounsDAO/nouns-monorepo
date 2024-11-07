@@ -51,6 +51,14 @@ contract StreamEscrow is IStreamEscrow {
     mapping(uint256 streamId => Stream) internal streams;
     mapping(address => bool) public allowedToCreateStream;
 
+    /**
+     * @notice Initializes the StreamEscrow contract
+     * @param daoExecutor_ The address of the DAO executor contract
+     * @param ethRecipient_ The address that will receive ETH payments
+     * @param nounsRecipient_ The address that will receive Nouns tokens when streams are canceled
+     * @param nounsToken_ The address of the Nouns ERC721 token contract
+     * @param streamCreator_ The address that will be initially allowed to create streams
+     */
     constructor(
         address daoExecutor_,
         address ethRecipient_,
@@ -65,12 +73,29 @@ contract StreamEscrow is IStreamEscrow {
         allowedToCreateStream[streamCreator_] = true;
     }
 
+    /**
+     * @notice Forwards all streams and creates a new stream for a Noun.
+     * @notice ETH value must be sent with this function call.
+     * @dev Combines forwardAll() and createStream() operations into a single transaction.
+     * @param nounId The ID of the Noun token for which the stream is being created.
+     * @param streamLengthInTicks The duration of the stream in ticks. 1 day must pass for a tick to increase.
+     */
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable {
         forwardAll();
 
         createStream(nounId, streamLengthInTicks);
     }
 
+    /**
+     * @notice Creates a new ETH stream for a specific Noun token.
+     * @dev Only allowed addresses and Noun owners/approved operators can create streams.
+     * @param nounId The ID of the Noun token to create a stream for.
+     * @param streamLengthInTicks The duration of the stream in ticks.
+     * @custom:throws 'not allowed' if sender is not allowed to create streams.
+     * @custom:throws 'only noun owner or approved' if sender is not owner/approved.
+     * @custom:throws 'stream active' if a stream already exists for the Noun.
+     * @notice ETH value must be sent with this function call.
+     */
     function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
         require(allowedToCreateStream[msg.sender], 'not allowed');
         require(isApprovedOrOwner(msg.sender, nounId), 'only noun owner or approved');
@@ -90,7 +115,10 @@ contract StreamEscrow is IStreamEscrow {
         emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick);
     }
 
-    // used for example when there were no bids on a noun
+    /**
+     * @notice Forwards all pending ETH streams if at least a day has passed since last forward.
+     * @dev This function silently returns if called before 24 hours have elapsed since last forward.
+     */
     function forwardAll() public {
         // silently fail if at least a day hasn't passed. this is in order not to revert auction house.
         if (block.timestamp < lastForwardTimestamp + 24 hours) {
@@ -107,12 +135,22 @@ contract StreamEscrow is IStreamEscrow {
         emit StreamsForwarded(newTick, ethStreamedPerTickBefore, ethStreamedPerTick, lastForwardTimestamp);
     }
 
+    /**
+     * @notice Cancels multiple streams at once.
+     * @param nounIds The IDs of the Noun tokens to cancel streams for.
+     */
     function cancelStreams(uint256[] calldata nounIds) external {
         for (uint256 i; i < nounIds.length; ++i) {
             cancelStream(nounIds[i]);
         }
     }
 
+    /**
+     * @notice Cancels a stream for a specific Noun token. Transfers the Noun to `nounRecipient`
+     *  and refunds the remaining ETH back to the caller.
+     * @notice The caller must be the Noun owner.
+     * @param nounId The ID of the Noun token to cancel the stream for.
+     */
     function cancelStream(uint256 nounId) public {
         require(isStreamActive(nounId), 'stream not active');
 
@@ -134,6 +172,15 @@ contract StreamEscrow is IStreamEscrow {
         emit StreamCanceled(nounId, amountToRefund);
     }
 
+    /**
+     * @notice Fast-forwards a stream by a certain number of ticks.
+     * @param nounId The ID of the Noun token to fast-forward the stream for.
+     * @param ticksToForward The number of ticks to fast-forward the stream by.
+     * @custom:throws 'ticksToForward must be positive' if `ticksToForward` is not positive.
+     * @custom:throws 'ticksToFoward too large' if `ticksToForward` is larger than the remaining ticks.
+     * @custom:throws 'not noun owner' if the caller is not the Noun owner.
+     * @custom:throws 'stream not active' if the stream is not active.
+     */
     function fastForwardStream(uint256 nounId, uint32 ticksToForward) public {
         require(ticksToForward > 0, 'ticksToForward must be positive');
         require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
@@ -164,6 +211,11 @@ contract StreamEscrow is IStreamEscrow {
         emit StreamFastForwarded(nounId, ticksToForward, newLastTick);
     }
 
+    /**
+     * @notice Checks if a stream is active (not canceled and not finished) for a specific Noun token.
+     * @param nounId The ID of the Noun token to check the stream for.
+     * @return `true` if the stream is active, `false` otherwise.
+     */
     function isStreamActive(uint256 nounId) public view returns (bool) {
         return !streams[nounId].canceled && streams[nounId].lastTick > currentTick;
     }
@@ -177,21 +229,35 @@ contract StreamEscrow is IStreamEscrow {
         _;
     }
 
+    /**
+     * @notice Allows the DAO to set whether an address is allowed to create streams.
+     * @param address_ The address to allow or disallow.
+     * @param allowed Whether the address is allowed to create streams.
+     */
     function setAllowedToCreateStream(address address_, bool allowed) external onlyDAO {
         allowedToCreateStream[address_] = allowed;
         emit AllowedToCreateStreamChanged(address_, allowed);
     }
 
+    /**
+     * @notice Allows the DAO to set the address of the DAO executor contract.
+     */
     function setDAOExecutorAddress(address newAddress) external onlyDAO {
         daoExecutor = newAddress;
         emit DAOExecutorAddressSet(newAddress);
     }
 
+    /**
+     * @notice Allows the DAO to set the address that the ETH will stream to.
+     */
     function setETHRecipient(address newAddress) external onlyDAO {
         ethRecipient = newAddress;
         emit ETHRecipientSet(newAddress);
     }
 
+    /**
+     * @notice Allows the DAO to set the address that the Nouns tokens will be sent to when streams are canceled.
+     */
     function setNounsRecipient(address newAddress) external onlyDAO {
         nounsRecipient = newAddress;
         emit NounsRecipientSet(newAddress);
