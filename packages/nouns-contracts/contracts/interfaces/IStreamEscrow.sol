@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
 interface IStreamEscrow {
     struct Stream {
         uint256 ethPerTick;
-        bool active;
+        bool canceled;
         // @dev This is the last tick for which this stream will be active
         uint256 lastTick;
     }

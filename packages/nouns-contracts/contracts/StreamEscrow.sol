@@ -72,7 +72,7 @@ contract StreamEscrow is IStreamEscrow {
         sendETHToTreasury(remainder);
 
         ethStreamedPerTick += ethPerTick;
-        streams[nounId] = Stream({ ethPerTick: ethPerTick, active: true, lastTick: streamLastTick });
+        streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
     }
 
     function isApprovedOrOwner(address caller, uint256 nounId) internal view returns (bool) {
@@ -118,7 +118,7 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken.transferFrom(msg.sender, nounsRecipient, nounId);
 
         // cancel stream
-        streams[nounId].active = false;
+        streams[nounId].canceled = true;
         ethStreamedPerTick -= streams[nounId].ethPerTick;
         ethStreamEndingAtTick[streams[nounId].lastTick] -= streams[nounId].ethPerTick;
 
@@ -155,7 +155,7 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     function isStreamActive(uint256 nounId) public view returns (bool) {
-        return streams[nounId].active && streams[nounId].lastTick > currentTick;
+        return !streams[nounId].canceled && streams[nounId].lastTick > currentTick;
     }
 
     modifier onlyDAO() {

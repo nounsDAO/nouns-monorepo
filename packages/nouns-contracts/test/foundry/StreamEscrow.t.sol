@@ -130,7 +130,7 @@ contract SingleStreamTest is BaseStreamEscrowTest {
         assertEq(escrow.ethStreamedPerTick(), 0.5 ether);
         assertEq(escrow.getStream(1).lastTick, 20);
         assertEq(escrow.getStream(1).ethPerTick, 0.5 ether);
-        assertEq(escrow.getStream(1).active, true);
+        assertEq(escrow.getStream(1).canceled, false);
 
         assertTrue(escrow.isStreamActive(1));
 
