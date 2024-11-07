@@ -655,3 +655,29 @@ contract DAOSettersTest is BaseStreamEscrowTest {
         assertEq(nounsToken.ownerOf(1), makeAddr('nounsRecipient2'));
     }
 }
+
+contract StreamEscrowGasTest is BaseStreamEscrowTest {
+    function setUp() public virtual override {
+        super.setUp();
+        nounsToken.mint(streamCreator, 2);
+        nounsToken.mint(streamCreator, 3);
+    }
+
+    // 102844 gas
+    function test_createStreamSingleStream() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+    }
+
+    // 330527 gas
+    function test_createMultipleStreams() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        forwardOneDay();
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 2 ether }({ nounId: 2, streamLengthInTicks: 100 });
+        forwardOneDay();
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 3 ether }({ nounId: 3, streamLengthInTicks: 100 });
+    }
+}

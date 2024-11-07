@@ -36,18 +36,19 @@ contract StreamEscrow is IStreamEscrow {
     event ETHRecipientSet(address newAddress);
     event NounsRecipientSet(address newAddress);
 
+    INounsToken public immutable nounsToken;
+
     address public daoExecutor;
     address public ethRecipient;
     address public nounsRecipient;
-    INounsToken public nounsToken; // TODO immutable?
 
     uint256 public ethStreamedPerTick;
+    uint32 public currentTick;
+    uint256 public lastForwardTimestamp;
 
     // @dev a mapping of how much ethPerTick will end at this tick
     mapping(uint256 tick => uint256 ethPerTick) public ethStreamEndingAtTick;
     mapping(uint256 streamId => Stream) internal streams;
-    uint256 public currentTick;
-    uint256 public lastForwardTimestamp;
     mapping(address => bool) public allowedToCreateStream;
 
     constructor(
@@ -76,8 +77,8 @@ contract StreamEscrow is IStreamEscrow {
         require(!isStreamActive(nounId), 'stream active');
 
         // register new stream
-        uint256 ethPerTick = msg.value / streamLengthInTicks;
-        uint256 streamLastTick = currentTick + streamLengthInTicks; // streamLastTick is inclusive
+        uint128 ethPerTick = toUint128(msg.value / streamLengthInTicks);
+        uint32 streamLastTick = currentTick + streamLengthInTicks; // streamLastTick is inclusive
         ethStreamEndingAtTick[streamLastTick] += ethPerTick;
 
         // the remainder is immediately streamed to the DAO
@@ -132,15 +133,15 @@ contract StreamEscrow is IStreamEscrow {
         emit StreamCanceled(nounId, amountToRefund);
     }
 
-    function fastForwardStream(uint256 nounId, uint256 ticksToForward) public {
+    function fastForwardStream(uint256 nounId, uint32 ticksToForward) public {
         require(ticksToForward > 0, 'ticksToForward must be positive');
         require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
-        uint256 lastTick = streams[nounId].lastTick;
+        uint32 lastTick = streams[nounId].lastTick;
         require(isStreamActive(nounId), 'stream not active');
 
         // move last tick
         require(ticksToForward <= lastTick - currentTick, 'ticksToFoward too large');
-        uint256 newLastTick = lastTick - ticksToForward;
+        uint32 newLastTick = lastTick - ticksToForward;
 
         streams[nounId].lastTick = newLastTick;
         ethStreamEndingAtTick[lastTick] -= streams[nounId].ethPerTick;
@@ -214,5 +215,12 @@ contract StreamEscrow is IStreamEscrow {
         if (nounsToken.isApprovedForAll(owner, caller)) return true;
         if (nounsToken.getApproved(nounId) == caller) return true;
         return false;
+    }
+
+    function toUint128(uint256 value) internal pure returns (uint128) {
+        if (value > type(uint128).max) {
+            revert('value too large');
+        }
+        return uint128(value);
     }
 }

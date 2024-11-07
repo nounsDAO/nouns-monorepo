@@ -19,10 +19,10 @@ pragma solidity ^0.8.19;
 
 interface IStreamEscrow {
     struct Stream {
-        uint256 ethPerTick;
+        uint128 ethPerTick;
         bool canceled;
         // @dev This is the last tick for which this stream will be active
-        uint256 lastTick;
+        uint32 lastTick;
     }
 
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable;
