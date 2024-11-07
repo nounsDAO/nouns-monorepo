@@ -83,6 +83,8 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
 
     function test_addAddressToWhitelist() public {
         vm.prank(treasury);
+        vm.expectEmit();
+        emit StreamEscrow.AllowedToCreateStreamChanged(user, true);
         escrow.setAllowedToCreateStream(user, true);
 
         vm.prank(user);
@@ -94,6 +96,8 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
         escrow.setAllowedToCreateStream(user, true);
 
         vm.prank(treasury);
+        vm.expectEmit();
+        emit StreamEscrow.AllowedToCreateStreamChanged(user, false);
         escrow.setAllowedToCreateStream(user, false);
 
         vm.prank(user);
@@ -118,6 +122,36 @@ contract SingleStreamTest is BaseStreamEscrowTest {
         for (uint i; i < 30; i++) {
             forwardOneDay();
         }
+    }
+
+    function test_createStream_emitsEvent() public {
+        // create stream
+        vm.prank(streamCreator);
+        // check that event was emitted
+        vm.expectEmit();
+        emit StreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+    }
+
+    function test_forwardStreams_emitsEvent() public {
+        // create stream
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        // forward 1 day
+        vm.expectEmit();
+        emit StreamEscrow.StreamsForwarded(1, 0.05 ether, 0.05 ether, block.timestamp + 24 hours);
+        forwardOneDay();
+
+        // forward 18 days
+        for (uint i; i < 18; i++) {
+            forwardOneDay();
+        }
+
+        // forward last day
+        vm.expectEmit();
+        emit StreamEscrow.StreamsForwarded(20, 0.05 ether, 0 ether, block.timestamp + 24 hours);
+        forwardOneDay();
     }
 
     function test_singleStreamLifetime() public {
@@ -288,6 +322,8 @@ contract CancelStreamTest is BaseStreamEscrowTest {
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
+        vm.expectEmit();
+        emit StreamEscrow.StreamCanceled(1, 7.5 ether);
         escrow.cancelStream(1);
 
         // check streamed amount
@@ -375,10 +411,12 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
     function test_onlyOwnerCanFastForward() public {
         vm.expectRevert('not noun owner');
-        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 20 });
 
         vm.prank(user);
-        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+        vm.expectEmit();
+        emit StreamEscrow.StreamFastForwarded(1, 20, 80);
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 20 });
     }
 
     function test_cantFastForwardACanceledStream() public {
@@ -393,7 +431,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectRevert('stream not active');
-        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 50 });
     }
 
     function test_cantFastForwardAStreamThatEnded() public {
@@ -404,22 +442,22 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectRevert('stream not active');
-        escrow.fastForward({ nounId: 1, ticksToForward: 50 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 50 });
     }
 
     function test_cantFastForwardAStreamThatEndedByFastForwarding() public {
         vm.prank(user);
-        escrow.fastForward({ nounId: 1, ticksToForward: 100 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 100 });
 
         vm.prank(user);
         vm.expectRevert('stream not active');
-        escrow.fastForward({ nounId: 1, ticksToForward: 1 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 1 });
     }
 
     function test_ticksLargerThanZero() public {
         vm.prank(user);
         vm.expectRevert('ticksToForward must be positive');
-        escrow.fastForward({ nounId: 1, ticksToForward: 0 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 0 });
     }
 
     function test_ticksMustBeUnderNumberOfTicksLeftInStream() public {
@@ -430,7 +468,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectRevert('ticksToFoward too large');
-        escrow.fastForward({ nounId: 1, ticksToForward: 81 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 81 });
     }
 
     function test_fastForward() public {
@@ -442,7 +480,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         // fast forward 40 days out of the 80 left
         vm.prank(user);
-        escrow.fastForward({ nounId: 1, ticksToForward: 40 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 40 });
 
         assertEq(ethRecipient.balance, 0.6 ether);
 
@@ -465,7 +503,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         // fast forward 80 days out of the 80 left
         vm.prank(user);
-        escrow.fastForward({ nounId: 1, ticksToForward: 80 });
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 80 });
 
         // test that the stream ended
         assertEq(ethRecipient.balance, 1 ether);
@@ -556,6 +594,8 @@ contract DAOSettersTest is BaseStreamEscrowTest {
 
     function test_setDAOExecutorAddress() public {
         vm.prank(treasury);
+        vm.expectEmit();
+        emit StreamEscrow.DAOExecutorAddressSet(address(1));
         escrow.setDAOExecutorAddress(address(1));
 
         assertEq(escrow.daoExecutor(), address(1));
@@ -577,6 +617,8 @@ contract DAOSettersTest is BaseStreamEscrowTest {
 
     function test_setETHRecipient() public {
         vm.prank(treasury);
+        vm.expectEmit();
+        emit StreamEscrow.ETHRecipientSet(makeAddr('ethRecipient2'));
         escrow.setETHRecipient(makeAddr('ethRecipient2'));
 
         // create a stream
@@ -595,6 +637,8 @@ contract DAOSettersTest is BaseStreamEscrowTest {
 
     function test_setNounsRecipient() public {
         vm.prank(treasury);
+        vm.expectEmit();
+        emit StreamEscrow.NounsRecipientSet(makeAddr('nounsRecipient2'));
         escrow.setNounsRecipient(makeAddr('nounsRecipient2'));
 
         // create a stream

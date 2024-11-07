@@ -22,6 +22,19 @@ import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
     event ETHStreamedToDAO(uint256 amount);
+    event StreamCreated(uint256 indexed nounId, uint256 totalAmount, uint16 streamLengthInTicks, uint256 ethPerTick);
+    event StreamsForwarded(
+        uint256 currentTick,
+        uint256 previousEthStreamedPerTick,
+        uint256 nextEthStreamedPerTick,
+        uint256 lastForwardTimestamp
+    );
+    event StreamCanceled(uint256 indexed nounId, uint256 amountToRefund);
+    event StreamFastForwarded(uint256 indexed nounId, uint256 ticksToForward, uint256 newLastTick);
+    event AllowedToCreateStreamChanged(address address_, bool allowed);
+    event DAOExecutorAddressSet(address newAddress);
+    event ETHRecipientSet(address newAddress);
+    event NounsRecipientSet(address newAddress);
 
     address public daoExecutor;
     address public ethRecipient;
@@ -73,14 +86,7 @@ contract StreamEscrow is IStreamEscrow {
 
         ethStreamedPerTick += ethPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
-    }
-
-    function isApprovedOrOwner(address caller, uint256 nounId) internal view returns (bool) {
-        address owner = nounsToken.ownerOf(nounId);
-        if (owner == caller) return true;
-        if (nounsToken.isApprovedForAll(owner, caller)) return true;
-        if (nounsToken.getApproved(nounId) == caller) return true;
-        return false;
+        emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick);
     }
 
     // used for example when there were no bids on a noun
@@ -92,17 +98,12 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = block.timestamp;
 
-        sendETHToTreasury(ethStreamedPerTick);
+        uint256 ethStreamedPerTickBefore = ethStreamedPerTick;
+        sendETHToTreasury(ethStreamedPerTickBefore);
 
         increaseTicksAndFinishStreams();
-    }
 
-    function sendETHToTreasury(uint256 amount) internal {
-        if (amount > 0) {
-            (bool sent, ) = ethRecipient.call{ value: amount }('');
-            require(sent, 'failed to send eth');
-            emit ETHStreamedToDAO(amount);
-        }
+        emit StreamsForwarded(currentTick, ethStreamedPerTickBefore, ethStreamedPerTick, lastForwardTimestamp);
     }
 
     function cancelStreams(uint256[] calldata nounIds) external {
@@ -127,9 +128,11 @@ contract StreamEscrow is IStreamEscrow {
         uint256 amountToRefund = streams[nounId].ethPerTick * ticksLeft;
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');
+
+        emit StreamCanceled(nounId, amountToRefund);
     }
 
-    function fastForward(uint256 nounId, uint256 ticksToForward) public {
+    function fastForwardStream(uint256 nounId, uint256 ticksToForward) public {
         require(ticksToForward > 0, 'ticksToForward must be positive');
         require(nounsToken.ownerOf(nounId) == msg.sender, 'not noun owner');
         uint256 lastTick = streams[nounId].lastTick;
@@ -152,6 +155,8 @@ contract StreamEscrow is IStreamEscrow {
 
         uint256 ethToStream = ticksToForward * streams[nounId].ethPerTick;
         sendETHToTreasury(ethToStream);
+
+        emit StreamFastForwarded(nounId, ticksToForward, newLastTick);
     }
 
     function isStreamActive(uint256 nounId) public view returns (bool) {
@@ -165,22 +170,34 @@ contract StreamEscrow is IStreamEscrow {
 
     function setAllowedToCreateStream(address address_, bool allowed) external onlyDAO {
         allowedToCreateStream[address_] = allowed;
+        emit AllowedToCreateStreamChanged(address_, allowed);
     }
 
     function setDAOExecutorAddress(address newAddress) external onlyDAO {
         daoExecutor = newAddress;
+        emit DAOExecutorAddressSet(newAddress);
     }
 
     function setETHRecipient(address newAddress) external onlyDAO {
         ethRecipient = newAddress;
+        emit ETHRecipientSet(newAddress);
     }
 
     function setNounsRecipient(address newAddress) external onlyDAO {
         nounsRecipient = newAddress;
+        emit NounsRecipientSet(newAddress);
     }
 
     function getStream(uint256 nounId) external view returns (Stream memory) {
         return streams[nounId];
+    }
+
+    function sendETHToTreasury(uint256 amount) internal {
+        if (amount > 0) {
+            (bool sent, ) = ethRecipient.call{ value: amount }('');
+            require(sent, 'failed to send eth');
+            emit ETHStreamedToDAO(amount);
+        }
     }
 
     function increaseTicksAndFinishStreams() internal {
@@ -189,5 +206,13 @@ contract StreamEscrow is IStreamEscrow {
         if (ethPerTickEnding > 0) {
             ethStreamedPerTick -= ethPerTickEnding;
         }
+    }
+
+    function isApprovedOrOwner(address caller, uint256 nounId) internal view returns (bool) {
+        address owner = nounsToken.ownerOf(nounId);
+        if (owner == caller) return true;
+        if (nounsToken.isApprovedForAll(owner, caller)) return true;
+        if (nounsToken.getApproved(nounId) == caller) return true;
+        return false;
     }
 }
