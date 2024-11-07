@@ -481,9 +481,9 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.accessoryCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = accessoryCount();
         art.updateAccessories(encodedCompressed, decompressedLength, imageCount);
+        require(originalCount == accessoryCount(), 'Image count must remain the same');
     }
 
     /**
@@ -499,13 +499,13 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.bodyCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = bodyCount();
         art.updateBodies(encodedCompressed, decompressedLength, imageCount);
+        require(originalCount == bodyCount(), 'Image count must remain the same');
     }
 
     /**
-     * @notice Replace all pages of head images with new ones.
+     * @notice Replace current batch of head images with new ones.
      * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
@@ -517,9 +517,9 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.headCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = headCount();
         art.updateHeads(encodedCompressed, decompressedLength, imageCount);
+        require(originalCount == headCount(), 'Image count must remain the same');
     }
 
     /**
@@ -535,13 +535,13 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.glassesCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = glassesCount();
         art.updateGlasses(encodedCompressed, decompressedLength, imageCount);
+        require(originalCount == glassesCount(), 'Image count must remain the same');
     }
 
     /**
-     * @notice Replace all pages of accessories images with new ones from an existing storage contract.
+     * @notice Replace current batch of accessories images with new ones from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
@@ -554,9 +554,9 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.accessoryCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = accessoryCount();
         art.updateAccessoriesFromPointer(pointer, decompressedLength, imageCount);
+        require(originalCount == accessoryCount(), 'Image count must remain the same');
     }
 
     /**
@@ -573,9 +573,9 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.bodyCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = bodyCount();
         art.updateBodiesFromPointer(pointer, decompressedLength, imageCount);
+        require(originalCount == bodyCount(), 'Image count must remain the same');
     }
 
     /**
@@ -592,9 +592,9 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.headCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = headCount();
         art.updateHeadsFromPointer(pointer, decompressedLength, imageCount);
+        require(originalCount == headCount(), 'Image count must remain the same');
     }
 
     /**
@@ -611,8 +611,8 @@ contract NounsDescriptorV3 is INounsDescriptorV3, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        uint256 count = art.glassesCount();
-        require(count == imageCount, 'Image count must equal trait count');
+        uint256 originalCount = glassesCount();
         art.updateGlassesFromPointer(pointer, decompressedLength, imageCount);
+        require(originalCount == glassesCount(), 'Image count must remain the same');
     }
 }
