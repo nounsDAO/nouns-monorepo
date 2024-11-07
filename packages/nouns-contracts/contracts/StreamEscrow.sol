@@ -112,10 +112,10 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     function cancelStream(uint256 nounId) public {
+        require(isStreamActive(nounId), 'stream not active');
+
         // transfer noun to treasury
         nounsToken.transferFrom(msg.sender, nounsRecipient, nounId);
-
-        require(isStreamActive(nounId), 'stream not active');
 
         // cancel stream
         streams[nounId].active = false;

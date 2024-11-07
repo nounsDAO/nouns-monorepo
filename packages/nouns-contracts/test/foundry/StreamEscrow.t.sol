@@ -108,6 +108,18 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
 }
 
 contract SingleStreamTest is BaseStreamEscrowTest {
+    function test_createStreamWithZeroValue_doesntFail() public {
+        // just making sure it doesn't break somehow
+
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 0 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        // forward 30 days
+        for (uint i; i < 30; i++) {
+            forwardOneDay();
+        }
+    }
+
     function test_singleStreamLifetime() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 10 ether }({ nounId: 1, streamLengthInTicks: 20 });
@@ -311,11 +323,6 @@ contract CancelStreamTest is BaseStreamEscrowTest {
     function test_cantCancelAlreadyCanceledStream() public {
         vm.prank(user);
         nounsToken.approve(address(escrow), 1);
-        vm.prank(user);
-        escrow.cancelStream(1);
-
-        // try to cancel again, should fail because user doesn't own noun 1 any more
-        vm.expectRevert('ERC721: transfer caller is not owner nor approved');
         vm.prank(user);
         escrow.cancelStream(1);
 
