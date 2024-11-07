@@ -663,13 +663,13 @@ contract StreamEscrowGasTest is BaseStreamEscrowTest {
         nounsToken.mint(streamCreator, 3);
     }
 
-    // 102844 gas
+    // 99430 gas
     function test_createStreamSingleStream() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
     }
 
-    // 330527 gas
+    // 289916 gas
     function test_createMultipleStreams() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
@@ -679,5 +679,40 @@ contract StreamEscrowGasTest is BaseStreamEscrowTest {
         forwardOneDay();
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 3 ether }({ nounId: 3, streamLengthInTicks: 100 });
+    }
+
+    // 192163 gas
+    function test_cancelStream() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
+
+        vm.prank(user);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(user);
+        escrow.cancelStream(1);
+    }
+
+    // 194647 gas
+    function test_fastForwardStream() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
+
+        vm.prank(user);
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 50 });
+    }
+
+    // 152689 gas
+    function test_fastForwardStreamMax() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 1);
+
+        vm.prank(user);
+        escrow.fastForwardStream({ nounId: 1, ticksToForward: 100 });
     }
 }
