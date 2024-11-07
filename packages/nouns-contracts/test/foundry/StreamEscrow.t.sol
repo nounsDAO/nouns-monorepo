@@ -466,3 +466,77 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
         assertEq(escrow.isStreamActive(1), false);
     }
 }
+
+contract MultipleStreamsTest is BaseStreamEscrowTest {
+    address user2 = makeAddr('user2');
+    address user3 = makeAddr('user3');
+
+    function setUp() public virtual override {
+        super.setUp();
+        nounsToken.mint(streamCreator, 2);
+        nounsToken.mint(streamCreator, 3);
+
+        vm.startPrank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        vm.warp(block.timestamp + 24 hours);
+        nounsToken.transferFrom(streamCreator, user, 1);
+
+        escrow.forwardAllAndCreateStream{ value: 2 ether }({ nounId: 2, streamLengthInTicks: 100 });
+        vm.warp(block.timestamp + 24 hours);
+        nounsToken.transferFrom(streamCreator, user2, 2);
+
+        escrow.forwardAllAndCreateStream{ value: 3 ether }({ nounId: 3, streamLengthInTicks: 100 });
+        vm.warp(block.timestamp + 24 hours);
+        nounsToken.transferFrom(streamCreator, user3, 3);
+        vm.stopPrank();
+    }
+
+    function test_ethStreamedOverTheNextDays() public {
+        // stream 1 = 0.01 eth/tick, streamed for 2 days = 0.02 eth
+        // stream 2 = 0.02 eth/tick, streamed for 1 day = 0.02 eth
+        // total = 0.04 eth
+        assertEq(ethRecipient.balance, 0.04 ether);
+
+        forwardOneDay();
+
+        // stream 1 = 0.01 eth/tick, streamed for 1 day = 0.01 eth
+        // stream 2 = 0.02 eth/tick, streamed for 1 day = 0.02 eth
+        // stream 3 = 0.03 eth/tick, streamed for 1 day = 0.03 eth
+        // total = 0.06 eth (+0.04 ether from previous day)
+        assertEq(ethRecipient.balance, 0.1 ether);
+
+        // forward 99 days
+        for (uint i; i < 99; i++) {
+            forwardOneDay();
+        }
+        assertEq(ethRecipient.balance, 6 ether);
+    }
+
+    function test_oneStreamCanceledMidWay() public {
+        assertEq(ethRecipient.balance, 0.04 ether);
+
+        // forward 50 days
+        for (uint i; i < 50; i++) {
+            forwardOneDay();
+        }
+        // 50 days streamed = 50 * 0.06 = 3 eth
+        assertEq(ethRecipient.balance, 3.04 ether);
+
+        // cancel stream 2
+        vm.prank(user2);
+        nounsToken.approve(address(escrow), 2);
+        vm.prank(user2);
+        escrow.cancelStream(2);
+
+        // check user2 refund amount
+        // stream 2 has streamed for 51 days, 51 * 0.02 = 1.02 eth, 2 eth - 1.02 eth = 0.98 eth
+        assertEq(user2.balance, 0.98 ether);
+
+        // forward 50 days
+        for (uint i; i < 50; i++) {
+            forwardOneDay();
+        }
+        // total streamed = 6 - 0.98 = 5.02 eth
+        assertEq(ethRecipient.balance, 5.02 ether);
+    }
+}
