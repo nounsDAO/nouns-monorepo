@@ -540,3 +540,67 @@ contract MultipleStreamsTest is BaseStreamEscrowTest {
         assertEq(ethRecipient.balance, 5.02 ether);
     }
 }
+
+contract DAOSettersTest is BaseStreamEscrowTest {
+    function test_setDAOExecutorAddress_onlyDAO() public {
+        vm.expectRevert('only dao');
+        escrow.setDAOExecutorAddress(address(1));
+    }
+
+    function test_setDAOExecutorAddress() public {
+        vm.prank(treasury);
+        escrow.setDAOExecutorAddress(address(1));
+
+        assertEq(escrow.daoExecutor(), address(1));
+
+        // treasury can't call setter now
+        vm.prank(treasury);
+        vm.expectRevert('only dao');
+        escrow.setDAOExecutorAddress(address(2));
+
+        // address(1) needs to call it
+        vm.prank(address(1));
+        escrow.setDAOExecutorAddress(address(2));
+    }
+
+    function test_setETHRecipient_onlyDAO() public {
+        vm.expectRevert('only dao');
+        escrow.setETHRecipient(address(1));
+    }
+
+    function test_setETHRecipient() public {
+        vm.prank(treasury);
+        escrow.setETHRecipient(makeAddr('ethRecipient2'));
+
+        // create a stream
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+        forwardOneDay();
+
+        // test that ethRecipient2 received the eth
+        assertEq(makeAddr('ethRecipient2').balance, 0.01 ether);
+    }
+
+    function test_setNounsRecipient_onlyDAO() public {
+        vm.expectRevert('only dao');
+        escrow.setNounsRecipient(address(1));
+    }
+
+    function test_setNounsRecipient() public {
+        vm.prank(treasury);
+        escrow.setNounsRecipient(makeAddr('nounsRecipient2'));
+
+        // create a stream
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 100 });
+
+        // cancel stream
+        vm.prank(streamCreator);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(streamCreator);
+        escrow.cancelStream(1);
+
+        // check that new recipient received the noun
+        assertEq(nounsToken.ownerOf(1), makeAddr('nounsRecipient2'));
+    }
+}
