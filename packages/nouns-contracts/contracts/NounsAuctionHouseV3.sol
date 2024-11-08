@@ -70,10 +70,13 @@ contract NounsAuctionHouseV3 is
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
 
+    /// @notice The portion of the winning bid, in bips, sent to the treasury immediately after an auction settles
     uint16 public immediateTreasuryBPs;
 
+    /// @notice The length of the stream in ticks
     uint16 public streamLengthInTicks;
 
+    /// @notice The address of the StreamEscrow contract
     IStreamEscrow public streamEscrow;
 
     constructor(INounsToken _nouns, address _weth, uint256 _duration) initializer {
@@ -251,6 +254,10 @@ contract NounsAuctionHouseV3 is
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
     }
 
+    /**
+     * @notice Set the stream escrow parameters.
+     * @dev Only callable by the owner.
+     */
     function setStreamEscrowParams(
         uint16 _immediateTreasuryBPs,
         uint16 _streamLengthInTicks,
@@ -264,12 +271,20 @@ contract NounsAuctionHouseV3 is
         emit StreamEscrowParamsUpdated(_immediateTreasuryBPs, _streamLengthInTicks, _streamEscrow);
     }
 
+    /**
+     * @notice Set the portion of the winning bid, in bips, sent to the treasury immediately after an auction settles.
+     * @dev Only callable by the owner.
+     */
     function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) external onlyOwner {
         require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
         immediateTreasuryBPs = _immediateTreasuryBPs;
         emit ImmediateTreasuryBPsUpdated(_immediateTreasuryBPs);
     }
 
+    /**
+     * @notice Set the length of the stream in ticks.
+     * @dev Only callable by the owner.
+     */
     function setStreamLengthInTicks(uint16 _streamLengthInTicks) external onlyOwner {
         require(_streamLengthInTicks > 0, 'streamLengthInTicks too low');
         streamLengthInTicks = _streamLengthInTicks;
@@ -305,6 +320,7 @@ contract NounsAuctionHouseV3 is
 
     /**
      * @notice Settle an auction, finalizing the bid and paying out to the owner.
+     *   Part of the winning bid amount is sent immediately to the owner, and the rest is streamed via `streamEscrow`.
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
