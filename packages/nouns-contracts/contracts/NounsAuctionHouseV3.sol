@@ -114,9 +114,20 @@ contract NounsAuctionHouseV3 is
         uint16 _streamLengthInTicks,
         address _streamEscrow
     ) external onlyOwner {
+        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
         immediateTreasuryBPs = _immediateTreasuryBPs;
         streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
+    }
+
+    function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) external onlyOwner {
+        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
+        immediateTreasuryBPs = _immediateTreasuryBPs;
+    }
+
+    function setStreamLengthInTicks(uint16 _streamLengthInTicks) external onlyOwner {
+        require(_streamLengthInTicks > 0, 'streamLengthInTicks too low');
+        streamLengthInTicks = _streamLengthInTicks;
     }
 
     /**
@@ -307,7 +318,6 @@ contract NounsAuctionHouseV3 is
             _safeTransferETHWithFallback(owner(), amountToSendTreasury);
         }
 
-        // TODO maybe separate in case there's no winner and no auction.amount?
         if (amountToStream > 0) {
             streamEscrow.forwardAllAndCreateStream{ value: amountToStream }(_auction.nounId, streamLengthInTicks);
         } else {

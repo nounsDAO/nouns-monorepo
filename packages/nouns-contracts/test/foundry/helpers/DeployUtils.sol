@@ -43,9 +43,9 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address predictedAuctionHouseProxyAddress = computeCreateAddress(address(this), vm.getNonce(address(this)) + 1);
 
         StreamEscrow streamEscrow = new StreamEscrow(
-            makeAddr('daoTreasury'),
-            makeAddr('daoTreasury'),
-            makeAddr('daoTreasury'),
+            owner,
+            owner,
+            owner,
             address(token),
             predictedAuctionHouseProxyAddress
         );
