@@ -1002,7 +1002,7 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
     function test_setStreamEscrowParams_worksForOWner() public {
         vm.prank(IOwner(address(auction)).owner());
         vm.expectEmit();
-        emit IAH.StreamEscrowParamsUpdated(1000, 501, address(123));
+        emit IAH.StreamEscrowParamsUpdated(1000, 500, address(123));
         auction.setStreamEscrowParams({
             _immediateTreasuryBPs: 1000,
             _streamLengthInTicks: 500,
