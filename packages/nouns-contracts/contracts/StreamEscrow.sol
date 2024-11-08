@@ -88,7 +88,7 @@ contract StreamEscrow is IStreamEscrow {
 
     /**
      * @notice Creates a new ETH stream for a specific Noun token.
-     * @dev Only allowed addresses and Noun owners/approved operators can create streams.
+     * @dev Only allowed addresses that are also Noun owners/approved operators can create streams.
      * @param nounId The ID of the Noun token to create a stream for.
      * @param streamLengthInTicks The duration of the stream in ticks.
      * @custom:throws 'not allowed' if sender is not allowed to create streams.
