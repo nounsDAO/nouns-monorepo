@@ -28,7 +28,7 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
+import { INounsAuctionHouseV3 } from './interfaces/INounsAuctionHouseV3.sol';
 import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
@@ -38,7 +38,7 @@ import { IWETH } from './interfaces/IWETH.sol';
  * storage layout as the NounsAuctionHouse contract
  */
 contract NounsAuctionHouseV3 is
-    INounsAuctionHouseV2,
+    INounsAuctionHouseV3,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
@@ -65,7 +65,7 @@ contract NounsAuctionHouseV3 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV2.AuctionV2 public auctionStorage;
+    INounsAuctionHouseV3.AuctionV2 public auctionStorage;
 
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
@@ -109,27 +109,6 @@ contract NounsAuctionHouseV3 is
         streamEscrow = IStreamEscrow(_streamEscrow);
     }
 
-    function setStreamEscrowParams(
-        uint16 _immediateTreasuryBPs,
-        uint16 _streamLengthInTicks,
-        address _streamEscrow
-    ) external onlyOwner {
-        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
-        immediateTreasuryBPs = _immediateTreasuryBPs;
-        streamLengthInTicks = _streamLengthInTicks;
-        streamEscrow = IStreamEscrow(_streamEscrow);
-    }
-
-    function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) external onlyOwner {
-        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
-        immediateTreasuryBPs = _immediateTreasuryBPs;
-    }
-
-    function setStreamLengthInTicks(uint16 _streamLengthInTicks) external onlyOwner {
-        require(_streamLengthInTicks > 0, 'streamLengthInTicks too low');
-        streamLengthInTicks = _streamLengthInTicks;
-    }
-
     /**
      * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */
@@ -161,7 +140,7 @@ contract NounsAuctionHouseV3 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId, uint32 clientId) public payable override {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
 
         (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
             reservePrice,
@@ -272,6 +251,31 @@ contract NounsAuctionHouseV3 is
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
     }
 
+    function setStreamEscrowParams(
+        uint16 _immediateTreasuryBPs,
+        uint16 _streamLengthInTicks,
+        address _streamEscrow
+    ) external onlyOwner {
+        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
+        immediateTreasuryBPs = _immediateTreasuryBPs;
+        streamLengthInTicks = _streamLengthInTicks;
+        streamEscrow = IStreamEscrow(_streamEscrow);
+
+        emit StreamEscrowParamsUpdated(_immediateTreasuryBPs, _streamLengthInTicks, _streamEscrow);
+    }
+
+    function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) external onlyOwner {
+        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
+        immediateTreasuryBPs = _immediateTreasuryBPs;
+        emit ImmediateTreasuryBPsUpdated(_immediateTreasuryBPs);
+    }
+
+    function setStreamLengthInTicks(uint16 _streamLengthInTicks) external onlyOwner {
+        require(_streamLengthInTicks > 0, 'streamLengthInTicks too low');
+        streamLengthInTicks = _streamLengthInTicks;
+        emit StreamLengthInTicksUpdated(_streamLengthInTicks);
+    }
+
     /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
@@ -304,7 +308,7 @@ contract NounsAuctionHouseV3 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');

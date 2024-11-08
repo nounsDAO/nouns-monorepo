@@ -6,7 +6,7 @@ import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseV3 } from '../../contracts/NounsAuctionHouseV3.sol';
-import { INounsAuctionHouseV2 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
+import { INounsAuctionHouseV3 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV3.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV3TestBase is Test, DeployUtils {
@@ -279,6 +279,8 @@ contract AuctionHouseStreamingTest is NounsAuctionHouseV3TestBase {
     function test_treasuryPercentageIs100() public {
         uint256 nounId = auction.auction().nounId;
         vm.prank(owner);
+        vm.expectEmit();
+        emit IAH.ImmediateTreasuryBPsUpdated(10_000);
         auction.setImmediateTreasuryBPs(10_000);
 
         // settle an auction
@@ -999,6 +1001,8 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
 
     function test_setStreamEscrowParams_worksForOWner() public {
         vm.prank(IOwner(address(auction)).owner());
+        vm.expectEmit();
+        emit IAH.StreamEscrowParamsUpdated(1000, 501, address(123));
         auction.setStreamEscrowParams({
             _immediateTreasuryBPs: 1000,
             _streamLengthInTicks: 500,
@@ -1023,6 +1027,8 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
         assertEq(auction.streamLengthInTicks(), 1500);
 
         vm.prank(IOwner(address(auction)).owner());
+        vm.expectEmit();
+        emit IAH.StreamLengthInTicksUpdated(1);
         auction.setStreamLengthInTicks(1);
 
         assertEq(auction.streamLengthInTicks(), 1);
