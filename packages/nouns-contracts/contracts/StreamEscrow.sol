@@ -21,6 +21,11 @@ import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
+    modifier onlyDAO() {
+        require(msg.sender == daoExecutor, 'only dao');
+        _;
+    }
+
     /// @notice The address of the Nouns token contract
     INounsToken public immutable nounsToken;
 
@@ -223,11 +228,6 @@ contract StreamEscrow is IStreamEscrow {
 
     function isStreamActive(Stream memory stream, uint32 tick) internal pure returns (bool) {
         return !stream.canceled && stream.lastTick > tick;
-    }
-
-    modifier onlyDAO() {
-        require(msg.sender == daoExecutor, 'only dao');
-        _;
     }
 
     /**
