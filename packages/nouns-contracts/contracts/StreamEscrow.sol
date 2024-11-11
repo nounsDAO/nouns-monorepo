@@ -264,6 +264,9 @@ contract StreamEscrow is IStreamEscrow {
         emit NounsRecipientSet(newAddress);
     }
 
+    /**
+     * @notice Returns the stream data for a specific Noun token.
+     */
     function getStream(uint256 nounId) external view returns (Stream memory) {
         return streams[nounId];
     }
