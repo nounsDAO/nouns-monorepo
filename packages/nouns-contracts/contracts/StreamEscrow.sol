@@ -118,7 +118,7 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     /**
-     * @notice Forwards all pending ETH streams if at least a day has passed since last forward.
+     * @notice Forwards all pending ETH streams if at least `minimumTickDuration` seconds has passed since last forward.
      * @dev This function silently returns if called before `minimumTickDuration` have elapsed since last forward.
      */
     function forwardAll() public {
