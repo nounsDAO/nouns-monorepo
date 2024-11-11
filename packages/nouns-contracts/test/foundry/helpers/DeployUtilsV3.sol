@@ -163,7 +163,8 @@ abstract contract DeployUtilsV3 is DeployUtils {
             ethRecipient_: address(t.timelock),
             nounsRecipient_: address(t.timelock),
             nounsToken_: address(t.nounsToken),
-            streamCreator_: address(auctionProxy)
+            streamCreator_: address(auctionProxy),
+            minimumTickDuration_: 24 hours
         });
 
         vm.prank(address(t.timelock));

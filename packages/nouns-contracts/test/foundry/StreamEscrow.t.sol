@@ -17,7 +17,7 @@ abstract contract BaseStreamEscrowTest is Test {
     address user = makeAddr('user');
 
     function setUp() public virtual {
-        escrow = new StreamEscrow(treasury, ethRecipient, nounsRecipient, address(nounsToken), streamCreator);
+        escrow = new StreamEscrow(treasury, ethRecipient, nounsRecipient, address(nounsToken), streamCreator, 24 hours);
 
         nounsToken.mint(streamCreator, 1);
         vm.deal(streamCreator, 1000 ether);

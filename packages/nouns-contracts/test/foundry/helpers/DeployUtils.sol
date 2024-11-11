@@ -47,7 +47,8 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             owner,
             owner,
             address(token),
-            predictedAuctionHouseProxyAddress
+            predictedAuctionHouseProxyAddress,
+            24 hours
         );
 
         bytes memory data = abi.encodeWithSelector(

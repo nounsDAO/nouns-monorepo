@@ -21,7 +21,11 @@ import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
+    /// @notice The address of the Nouns token contract
     INounsToken public immutable nounsToken;
+
+    /// @notice The minimum duration of a tick in seconds
+    uint32 public immutable minimumTickDuration;
 
     /// @notice The address of the DAO executor contract
     address public daoExecutor;
@@ -53,19 +57,22 @@ contract StreamEscrow is IStreamEscrow {
      * @param nounsRecipient_ The address that will receive Nouns tokens when streams are canceled
      * @param nounsToken_ The address of the Nouns ERC721 token contract
      * @param streamCreator_ The address that will be initially allowed to create streams
+     * @param minimumTickDuration_ The minimum duration of a tick in seconds
      */
     constructor(
         address daoExecutor_,
         address ethRecipient_,
         address nounsRecipient_,
         address nounsToken_,
-        address streamCreator_
+        address streamCreator_,
+        uint32 minimumTickDuration_
     ) {
         daoExecutor = daoExecutor_;
         ethRecipient = ethRecipient_;
         nounsRecipient = nounsRecipient_;
         nounsToken = INounsToken(nounsToken_);
         allowedToCreateStream[streamCreator_] = true;
+        minimumTickDuration = minimumTickDuration_;
     }
 
     /**
@@ -112,11 +119,11 @@ contract StreamEscrow is IStreamEscrow {
 
     /**
      * @notice Forwards all pending ETH streams if at least a day has passed since last forward.
-     * @dev This function silently returns if called before 24 hours have elapsed since last forward.
+     * @dev This function silently returns if called before `minimumTickDuration` have elapsed since last forward.
      */
     function forwardAll() public {
         // silently fail if at least a day hasn't passed. this is in order not to revert auction house.
-        if (block.timestamp < lastForwardTimestamp + 24 hours) {
+        if (block.timestamp < lastForwardTimestamp + minimumTickDuration) {
             return;
         }
 

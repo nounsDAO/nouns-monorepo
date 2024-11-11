@@ -108,7 +108,8 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
             address(NOUNS_DAO_PROXY_MAINNET.timelock()),
             address(NOUNS_DAO_PROXY_MAINNET.timelock()),
             address(ahv2.nouns()),
-            AUCTION_HOUSE_PROXY_MAINNET
+            AUCTION_HOUSE_PROXY_MAINNET,
+            24 hours
         );
 
         uint256 txCount = 2;
