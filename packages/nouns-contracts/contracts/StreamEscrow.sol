@@ -23,12 +23,22 @@ import { INounsToken } from './interfaces/INounsToken.sol';
 contract StreamEscrow is IStreamEscrow {
     INounsToken public immutable nounsToken;
 
+    /// @notice The address of the DAO executor contract
     address public daoExecutor;
+
+    /// @notice The address that will receive ETH payments
     address public ethRecipient;
+
+    /// @notice The address that will receive Nouns tokens when streams are canceled
     address public nounsRecipient;
 
+    /// @notice The amount of ETH streamed per tick
     uint128 public ethStreamedPerTick;
+
+    /// @notice The current tick
     uint32 public currentTick;
+
+    /// @notice The timestamp of the last forward
     uint48 public lastForwardTimestamp;
 
     // @dev a mapping of how much ethPerTick will end at this tick
