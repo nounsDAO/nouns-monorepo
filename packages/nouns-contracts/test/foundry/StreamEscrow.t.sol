@@ -35,7 +35,7 @@ contract CreateStreamPermissionsTest is BaseStreamEscrowTest {
         escrow.createStream(1, 1000);
     }
 
-    function test_nounOwner_failsIfNotWhitelisted() public {
+    function test_createStream_nounOwner_failsIfNotWhitelisted() public {
         nounsToken.mint(user, 2);
         vm.prank(user);
         vm.expectRevert('not allowed');
