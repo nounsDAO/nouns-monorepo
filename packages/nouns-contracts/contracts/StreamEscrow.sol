@@ -21,21 +21,6 @@ import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 
 contract StreamEscrow is IStreamEscrow {
-    event ETHStreamedToDAO(uint256 amount);
-    event StreamCreated(uint256 indexed nounId, uint256 totalAmount, uint16 streamLengthInTicks, uint256 ethPerTick);
-    event StreamsForwarded(
-        uint256 currentTick,
-        uint256 previousEthStreamedPerTick,
-        uint256 nextEthStreamedPerTick,
-        uint256 lastForwardTimestamp
-    );
-    event StreamCanceled(uint256 indexed nounId, uint256 amountToRefund);
-    event StreamFastForwarded(uint256 indexed nounId, uint256 ticksToForward, uint256 newLastTick);
-    event AllowedToCreateStreamChanged(address address_, bool allowed);
-    event DAOExecutorAddressSet(address newAddress);
-    event ETHRecipientSet(address newAddress);
-    event NounsRecipientSet(address newAddress);
-
     INounsToken public immutable nounsToken;
 
     address public daoExecutor;

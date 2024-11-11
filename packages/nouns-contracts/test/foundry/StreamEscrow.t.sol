@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 import { Test } from 'forge-std/Test.sol';
 import { StreamEscrow } from '../../contracts/StreamEscrow.sol';
+import { IStreamEscrow } from '../../contracts/interfaces/IStreamEscrow.sol';
 import { ERC721Mock } from './helpers/ERC721Mock.sol';
 import 'forge-std/console.sol';
 
@@ -84,7 +85,7 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
     function test_addAddressToWhitelist() public {
         vm.prank(treasury);
         vm.expectEmit();
-        emit StreamEscrow.AllowedToCreateStreamChanged(user, true);
+        emit IStreamEscrow.AllowedToCreateStreamChanged(user, true);
         escrow.setAllowedToCreateStream(user, true);
 
         vm.prank(user);
@@ -97,7 +98,7 @@ contract SetAllowedToCreateStreamTest is BaseStreamEscrowTest {
 
         vm.prank(treasury);
         vm.expectEmit();
-        emit StreamEscrow.AllowedToCreateStreamChanged(user, false);
+        emit IStreamEscrow.AllowedToCreateStreamChanged(user, false);
         escrow.setAllowedToCreateStream(user, false);
 
         vm.prank(user);
@@ -129,7 +130,7 @@ contract SingleStreamTest is BaseStreamEscrowTest {
         vm.prank(streamCreator);
         // check that event was emitted
         vm.expectEmit();
-        emit StreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether);
+        emit IStreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
     }
 
@@ -140,7 +141,7 @@ contract SingleStreamTest is BaseStreamEscrowTest {
 
         // forward 1 day
         vm.expectEmit();
-        emit StreamEscrow.StreamsForwarded(1, 0.05 ether, 0.05 ether, block.timestamp + 24 hours);
+        emit IStreamEscrow.StreamsForwarded(1, 0.05 ether, 0.05 ether, block.timestamp + 24 hours);
         forwardOneDay();
 
         // forward 18 days
@@ -150,7 +151,7 @@ contract SingleStreamTest is BaseStreamEscrowTest {
 
         // forward last day
         vm.expectEmit();
-        emit StreamEscrow.StreamsForwarded(20, 0.05 ether, 0 ether, block.timestamp + 24 hours);
+        emit IStreamEscrow.StreamsForwarded(20, 0.05 ether, 0 ether, block.timestamp + 24 hours);
         forwardOneDay();
     }
 
@@ -323,7 +324,7 @@ contract CancelStreamTest is BaseStreamEscrowTest {
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
         vm.expectEmit();
-        emit StreamEscrow.StreamCanceled(1, 7.5 ether);
+        emit IStreamEscrow.StreamCanceled(1, 7.5 ether);
         escrow.cancelStream(1);
 
         // check streamed amount
@@ -415,7 +416,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectEmit();
-        emit StreamEscrow.StreamFastForwarded(1, 20, 80);
+        emit IStreamEscrow.StreamFastForwarded(1, 20, 80);
         escrow.fastForwardStream({ nounId: 1, ticksToForward: 20 });
     }
 
@@ -595,7 +596,7 @@ contract DAOSettersTest is BaseStreamEscrowTest {
     function test_setDAOExecutorAddress() public {
         vm.prank(treasury);
         vm.expectEmit();
-        emit StreamEscrow.DAOExecutorAddressSet(address(1));
+        emit IStreamEscrow.DAOExecutorAddressSet(address(1));
         escrow.setDAOExecutorAddress(address(1));
 
         assertEq(escrow.daoExecutor(), address(1));
@@ -618,7 +619,7 @@ contract DAOSettersTest is BaseStreamEscrowTest {
     function test_setETHRecipient() public {
         vm.prank(treasury);
         vm.expectEmit();
-        emit StreamEscrow.ETHRecipientSet(makeAddr('ethRecipient2'));
+        emit IStreamEscrow.ETHRecipientSet(makeAddr('ethRecipient2'));
         escrow.setETHRecipient(makeAddr('ethRecipient2'));
 
         // create a stream
@@ -638,7 +639,7 @@ contract DAOSettersTest is BaseStreamEscrowTest {
     function test_setNounsRecipient() public {
         vm.prank(treasury);
         vm.expectEmit();
-        emit StreamEscrow.NounsRecipientSet(makeAddr('nounsRecipient2'));
+        emit IStreamEscrow.NounsRecipientSet(makeAddr('nounsRecipient2'));
         escrow.setNounsRecipient(makeAddr('nounsRecipient2'));
 
         // create a stream
