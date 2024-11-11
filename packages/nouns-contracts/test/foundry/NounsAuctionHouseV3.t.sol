@@ -302,7 +302,7 @@ contract AuctionHouseStreamingTest is NounsAuctionHouseV3TestBase {
 
         vm.prank(owner);
         vm.expectRevert('immediateTreasuryBPs too high');
-        auction.setStreamEscrowParams(10_001, 1, address(5));
+        auction.setStreamEscrowParams(address(5), 10_001, 1);
     }
 
     function test_treasuryPercentageIsZeroSendsAllToStreamEscrow() public {
@@ -996,17 +996,21 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
 
     function test_setStreamEscrowParams_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
-        auction.setStreamEscrowParams(1, 2, address(3));
+        auction.setStreamEscrowParams(address(3), 1, 2);
     }
 
     function test_setStreamEscrowParams_worksForOWner() public {
         vm.prank(IOwner(address(auction)).owner());
         vm.expectEmit();
-        emit IAH.StreamEscrowParamsUpdated(1000, 500, address(123));
+        emit IAH.StreamEscrowUpdated(address(123));
+        vm.expectEmit();
+        emit IAH.ImmediateTreasuryBPsUpdated(1000);
+        vm.expectEmit();
+        emit IAH.StreamLengthInTicksUpdated(500);
         auction.setStreamEscrowParams({
+            _streamEscrow: address(123),
             _immediateTreasuryBPs: 1000,
-            _streamLengthInTicks: 500,
-            _streamEscrow: address(123)
+            _streamLengthInTicks: 500
         });
         assertEq(auction.immediateTreasuryBPs(), 1000);
         assertEq(auction.streamLengthInTicks(), 500);

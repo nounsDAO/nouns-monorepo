@@ -110,7 +110,7 @@ interface INounsAuctionHouseV3 {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
-    event StreamEscrowParamsUpdated(uint16 immediateTreasuryBPs, uint16 streamLengthInTicks, address streamEscrow);
+    event StreamEscrowUpdated(address streamEscrow);
 
     event ImmediateTreasuryBPsUpdated(uint16 immediateTreasuryBPs);
 

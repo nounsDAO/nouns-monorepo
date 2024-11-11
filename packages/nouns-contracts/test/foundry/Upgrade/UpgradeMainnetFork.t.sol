@@ -121,10 +121,10 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
         signatures[0] = 'upgrade(address,address)';
         calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(newLogic));
-        // auctionHouse.setStreamEscrowParams(immediateTreasuryBps, streamLengthInAuctions, streamEscrow));
+        // auctionHouse.setStreamEscrowParams(streamEscrow, immediateTreasuryBps, streamLengthInAuctions));
         targets[1] = AUCTION_HOUSE_PROXY_MAINNET;
-        signatures[1] = 'setStreamEscrowParams(uint16,uint16,address)';
-        calldatas[1] = abi.encode(2000, 1500, streamEscrow);
+        signatures[1] = 'setStreamEscrowParams(address,uint16,uint16)';
+        calldatas[1] = abi.encode(streamEscrow, 2000, 1500);
         vm.prank(proposerAddr);
         uint256 proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
             targets,

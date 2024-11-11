@@ -259,23 +259,22 @@ contract NounsAuctionHouseV3 is
      * @dev Only callable by the owner.
      */
     function setStreamEscrowParams(
+        address _streamEscrow,
         uint16 _immediateTreasuryBPs,
-        uint16 _streamLengthInTicks,
-        address _streamEscrow
+        uint16 _streamLengthInTicks
     ) external onlyOwner {
-        require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
-        immediateTreasuryBPs = _immediateTreasuryBPs;
-        streamLengthInTicks = _streamLengthInTicks;
         streamEscrow = IStreamEscrow(_streamEscrow);
+        emit StreamEscrowUpdated(_streamEscrow);
 
-        emit StreamEscrowParamsUpdated(_immediateTreasuryBPs, _streamLengthInTicks, _streamEscrow);
+        setImmediateTreasuryBPs(_immediateTreasuryBPs);
+        setStreamLengthInTicks(_streamLengthInTicks);
     }
 
     /**
      * @notice Set the portion of the winning bid, in bips, sent to the treasury immediately after an auction settles.
      * @dev Only callable by the owner.
      */
-    function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) external onlyOwner {
+    function setImmediateTreasuryBPs(uint16 _immediateTreasuryBPs) public onlyOwner {
         require(_immediateTreasuryBPs <= 10_000, 'immediateTreasuryBPs too high');
         immediateTreasuryBPs = _immediateTreasuryBPs;
         emit ImmediateTreasuryBPsUpdated(_immediateTreasuryBPs);
@@ -285,7 +284,7 @@ contract NounsAuctionHouseV3 is
      * @notice Set the length of the stream in ticks.
      * @dev Only callable by the owner.
      */
-    function setStreamLengthInTicks(uint16 _streamLengthInTicks) external onlyOwner {
+    function setStreamLengthInTicks(uint16 _streamLengthInTicks) public onlyOwner {
         require(_streamLengthInTicks > 0, 'streamLengthInTicks too low');
         streamLengthInTicks = _streamLengthInTicks;
         emit StreamLengthInTicksUpdated(_streamLengthInTicks);
