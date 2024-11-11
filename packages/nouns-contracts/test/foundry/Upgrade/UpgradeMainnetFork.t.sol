@@ -231,6 +231,172 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         // check that user2 got the 80% back
         assertEq(user2.balance, balance + 2.4 ether);
     }
+
+    function test_setImmediateTreasuryBpsToMax() public {
+        // change param via proposal
+        uint256 proposalId = propose(
+            AUCTION_HOUSE_PROXY_MAINNET,
+            0,
+            'setImmediateTreasuryBPs(uint16)',
+            abi.encode(10000)
+        );
+        voteAndExecuteProposal(proposalId);
+
+        // win a noun and create a stream
+        uint256 balance = address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance;
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        auction.settleCurrentAndCreateNewAuction();
+
+        uint32 tick = auction.streamEscrow().currentTick();
+        uint96 nounId1 = auction.auction().nounId;
+        vm.prank(user1);
+        auction.createBid{ value: 3 ether }(nounId1);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        // entire amount should go to treasury
+        assertEq(address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance, balance + 3 ether);
+        // no stream should be created
+        assertEq(auction.streamEscrow().getStream(nounId1).ethPerTick, 0);
+        assertEq(auction.streamEscrow().isStreamActive(nounId1), false);
+        assertEq(auction.streamEscrow().currentTick(), tick + 1);
+    }
+
+    function test_setImmediateTreasuryBpsToZero() public {
+        // change param via proposal
+        uint256 proposalId = propose(AUCTION_HOUSE_PROXY_MAINNET, 0, 'setImmediateTreasuryBPs(uint16)', abi.encode(0));
+        voteAndExecuteProposal(proposalId);
+
+        // win a noun and create a stream
+        uint256 balance = address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance;
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        auction.settleCurrentAndCreateNewAuction();
+
+        uint96 nounId1 = auction.auction().nounId;
+        vm.prank(user1);
+        auction.createBid{ value: 3 ether }(nounId1);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        // entire amount should go to stream
+        assertEq(address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance, balance);
+        assertEq(address(auction.streamEscrow()).balance, 3 ether);
+        assertEq(auction.streamEscrow().getStream(nounId1).ethPerTick, 0.002 ether);
+    }
+
+    function test_setETHRecipient() public {
+        // change param via proposal
+        uint256 proposalId = propose(
+            address(INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow()),
+            0,
+            'setETHRecipient(address)',
+            abi.encode(makeAddr('newRecipient'))
+        );
+        voteAndExecuteProposal(proposalId);
+
+        // win a noun and create a stream
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        auction.settleCurrentAndCreateNewAuction();
+
+        uint96 nounId1 = auction.auction().nounId;
+        vm.prank(user1);
+        auction.createBid{ value: 3 ether }(nounId1);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        // advance by 1 tick
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        // a tick was streamed to the new recipient
+        assertEq(auction.streamEscrow().getStream(nounId1).ethPerTick, 0.0016 ether);
+        assertEq(address(makeAddr('newRecipient')).balance, 0.0016 ether);
+    }
+
+    function test_setNounsRecipient() public {
+        // change param via proposal
+        uint256 proposalId = propose(
+            address(INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow()),
+            0,
+            'setNounsRecipient(address)',
+            abi.encode(makeAddr('newRecipient'))
+        );
+        voteAndExecuteProposal(proposalId);
+
+        // win a noun and create a stream
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        auction.settleCurrentAndCreateNewAuction();
+
+        uint96 nounId1 = auction.auction().nounId;
+        vm.prank(user1);
+        auction.createBid{ value: 3 ether }(nounId1);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        IStreamEscrow streamEscrow = auction.streamEscrow();
+        // cancel stream
+        vm.prank(user1);
+        nouns.approve(address(streamEscrow), nounId1);
+        vm.prank(user1);
+        streamEscrow.cancelStream(nounId1);
+
+        // check that the noun were sent to the new recipient
+        assertEq(nouns.ownerOf(nounId1), makeAddr('newRecipient'));
+    }
+
+    function test_setAllowedToCreateStream() public {
+        NewStreamCreator newStreamCreator = new NewStreamCreator(
+            INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow()
+        );
+        // change param via proposal
+        uint256 proposalId = propose(
+            address(INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow()),
+            0,
+            'setAllowedToCreateStream(address,bool)',
+            abi.encode(address(newStreamCreator), true)
+        );
+        voteAndExecuteProposal(proposalId);
+
+        // propose to transfer a treasury noun to the new contract
+        uint256 proposalId2 = propose(
+            address(nouns),
+            0,
+            'transferFrom(address,address,uint256)',
+            abi.encode(address(NOUNS_DAO_PROXY_MAINNET.timelock()), address(newStreamCreator), 1188)
+        );
+        voteAndExecuteProposal(proposalId2);
+
+        // new contract creates a stream
+        newStreamCreator.createStream{ value: 6 ether }(1188, 1000);
+
+        // check that stream was created
+        IStreamEscrow streamEscrow = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow();
+        uint32 tick = streamEscrow.currentTick();
+        assertEq(streamEscrow.getStream(1188).ethPerTick, 0.006 ether);
+        assertEq(streamEscrow.getStream(1188).lastTick, tick + 1000);
+
+        // change param via proposal to false
+        uint256 proposalId3 = propose(
+            address(INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow()),
+            0,
+            'setAllowedToCreateStream(address,bool)',
+            abi.encode(address(newStreamCreator), false)
+        );
+        voteAndExecuteProposal(proposalId3);
+
+        // propose to transfer a treasury noun to the new contract
+        uint256 proposalId4 = propose(
+            address(nouns),
+            0,
+            'transferFrom(address,address,uint256)',
+            abi.encode(address(NOUNS_DAO_PROXY_MAINNET.timelock()), address(newStreamCreator), 1193)
+        );
+        voteAndExecuteProposal(proposalId4);
+
+        // new contract can't create a stream
+        vm.expectRevert('not allowed');
+        newStreamCreator.createStream{ value: 6 ether }(1193, 1000);
+    }
 }
 
 interface IOwner {
@@ -239,4 +405,16 @@ interface IOwner {
 
 interface IPausible {
     function paused() external view returns (bool);
+}
+
+contract NewStreamCreator {
+    IStreamEscrow streamEscrow;
+
+    constructor(IStreamEscrow streamEscrow_) {
+        streamEscrow = streamEscrow_;
+    }
+
+    function createStream(uint256 nounId, uint16 streamLengthInTicks) public payable {
+        streamEscrow.createStream{ value: msg.value }(nounId, streamLengthInTicks);
+    }
 }

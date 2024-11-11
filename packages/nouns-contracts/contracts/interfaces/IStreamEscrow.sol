@@ -62,4 +62,6 @@ interface IStreamEscrow {
     function setETHRecipient(address newAddress) external;
 
     function setNounsRecipient(address newAddress) external;
+
+    function currentTick() external view returns (uint32);
 }
