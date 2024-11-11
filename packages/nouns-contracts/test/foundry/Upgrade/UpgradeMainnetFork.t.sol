@@ -31,7 +31,7 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
     bytes[] calldatas;
 
     function setUp() public virtual {
-        vm.createSelectFork(vm.envString('RPC_MAINNET'), 20927301);
+        vm.createSelectFork(vm.envString('RPC_MAINNET'), 21164133);
 
         // Get votes
         vm.prank(NOUNDERS);
@@ -80,29 +80,37 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
 }
 
 contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
-    address v1NounsAddress;
-    address v1WethAddress;
-    address v1Owner;
-    uint256 v1Duration;
-    uint8 v1MinBidIncrementPercentage;
-    uint256 v1ReservePrice;
-    uint256 v1TimeBuffer;
+    address v2NounsAddress;
+    address v2WethAddress;
+    address v2Owner;
+    uint256 v2Duration;
+    uint8 v2MinBidIncrementPercentage;
+    uint256 v2ReservePrice;
+    uint256 v2TimeBuffer;
     INounsAuctionHouseV2.AuctionV2View auctionV2State;
+
+    address user1 = makeAddr('user1');
+    address user2 = makeAddr('user2');
+
     function setUp() public override {
         super.setUp();
+
+        vm.deal(user1, 100 ether);
+        vm.deal(user2, 100 ether);
 
         // Save AH V2 state before the upgrade
         INounsAuctionHouseV2 ahv2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
         auctionV2State = ahv2.auction();
 
-        v1NounsAddress = address(ahv2.nouns());
-        v1WethAddress = address(ahv2.weth());
-        v1Owner = IOwner(address(ahv2)).owner();
-        v1Duration = ahv2.duration();
-        v1MinBidIncrementPercentage = ahv2.minBidIncrementPercentage();
-        v1ReservePrice = ahv2.reservePrice();
-        v1TimeBuffer = ahv2.timeBuffer();
+        v2NounsAddress = address(ahv2.nouns());
+        v2WethAddress = address(ahv2.weth());
+        v2Owner = IOwner(address(ahv2)).owner();
+        v2Duration = ahv2.duration();
+        v2MinBidIncrementPercentage = ahv2.minBidIncrementPercentage();
+        v2ReservePrice = ahv2.reservePrice();
+        v2TimeBuffer = ahv2.timeBuffer();
 
+        // Deploy new contracts
         NounsAuctionHouseV3 newLogic = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
         StreamEscrow streamEscrow = new StreamEscrow(
             address(NOUNS_DAO_PROXY_MAINNET.timelock()),
@@ -113,6 +121,7 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
             24 hours
         );
 
+        // Propose upgrade
         uint256 txCount = 2;
         address[] memory targets = new address[](txCount);
         uint256[] memory values = new uint256[](txCount);
@@ -146,17 +155,17 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         assertEq(auctionV3State.endTime, auctionV2State.endTime);
         assertEq(auctionV3State.bidder, auctionV2State.bidder);
         assertEq(auctionV3State.settled, false);
-        assertEq(address(auctionV3.nouns()), v1NounsAddress);
-        assertEq(address(auctionV3.weth()), v1WethAddress);
-        assertEq(auctionV3.timeBuffer(), v1TimeBuffer);
-        assertEq(auctionV3.reservePrice(), v1ReservePrice);
-        assertEq(auctionV3.minBidIncrementPercentage(), v1MinBidIncrementPercentage);
-        assertEq(auctionV3.duration(), v1Duration);
+        assertEq(address(auctionV3.nouns()), v2NounsAddress);
+        assertEq(address(auctionV3.weth()), v2WethAddress);
+        assertEq(auctionV3.timeBuffer(), v2TimeBuffer);
+        assertEq(auctionV3.reservePrice(), v2ReservePrice);
+        assertEq(auctionV3.minBidIncrementPercentage(), v2MinBidIncrementPercentage);
+        assertEq(auctionV3.duration(), v2Duration);
         assertEq(IPausible(address(auctionV3)).paused(), false);
-        assertEq(IOwner(address(auctionV3)).owner(), v1Owner);
+        assertEq(IOwner(address(auctionV3)).owner(), v2Owner);
     }
 
-    function test_bidAndSettleInV2_worksAndCapturesSettlementHistory() public {
+    function test_bidAndSettleInV3_worksAndCapturesSettlementHistory() public {
         INounsAuctionHouseV2 auctionV2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
         auctionV2.settleCurrentAndCreateNewAuction();
         uint32 clientId = 42;
@@ -179,18 +188,48 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         assertEq(s.blockTimestamp, settlementTime);
     }
 
-    function test_bidAndSettleCreatesAStream() public {
-        INounsAuctionHouseV2 auctionV2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        auctionV2.settleCurrentAndCreateNewAuction();
+    function test_auctionHouseV3_bidsAndStreams() public {
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        IStreamEscrow streamEscrow = auction.streamEscrow();
+        auction.settleCurrentAndCreateNewAuction();
 
-        uint96 nounId = auctionV2.auction().nounId;
-        auctionV2.createBid{ value: 4.5 ether }(nounId);
-        vm.warp(block.timestamp + auctionV2.auction().endTime);
-        auctionV2.settleCurrentAndCreateNewAuction();
+        // Buy 2 nouns on auction
+        // first noun
+        uint96 nounId1 = auction.auction().nounId;
+        vm.prank(user1);
+        auction.createBid{ value: 2 ether }(nounId1);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
 
-        IStreamEscrow streamEscrow = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow();
-        IStreamEscrow.Stream memory stream = streamEscrow.getStream(nounId);
-        assertEq(stream.ethPerTick, 0.0024 ether); // (80% * 4.5 eth / 1500)
+        // second noun
+        uint96 nounId2 = auction.auction().nounId;
+        vm.prank(user2);
+        auction.createBid{ value: 3 ether }(nounId2);
+        vm.warp(block.timestamp + auction.auction().endTime);
+        auction.settleCurrentAndCreateNewAuction();
+
+        // check that stream was created for noun 1
+        // 2 ether * 80% / 1500 = 0.0010666666 ether
+        assertEq(streamEscrow.getStream(nounId1).ethPerTick, 1066666666666666);
+        // 3 ether * 80% / 1500 = 0.0016 ether
+        assertEq(streamEscrow.getStream(nounId2).ethPerTick, 0.0016 ether);
+
+        // check that fast forward works as expected
+        uint256 balance = address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance;
+        vm.prank(user1);
+        streamEscrow.fastForwardStream(nounId1, 300);
+        assertEq(address(NOUNS_DAO_PROXY_MAINNET.timelock()).balance, balance + 300 * 1066666666666666);
+
+        // check that cancel works
+        balance = user2.balance;
+        vm.prank(user2);
+        nouns.approve(address(streamEscrow), nounId2);
+        vm.prank(user2);
+        streamEscrow.cancelStream(nounId2);
+
+        assertEq(nouns.ownerOf(nounId2), address(NOUNS_DAO_PROXY_MAINNET.timelock()));
+        // check that user2 got the 80% back
+        assertEq(user2.balance, balance + 2.4 ether);
     }
 }
 

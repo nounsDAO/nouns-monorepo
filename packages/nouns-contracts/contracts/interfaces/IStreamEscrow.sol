@@ -41,7 +41,25 @@ interface IStreamEscrow {
 
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable;
 
+    function createStream(uint256 nounId, uint16 streamLengthInTicks) external payable;
+
     function forwardAll() external;
 
+    function cancelStreams(uint256[] calldata nounIds) external;
+
+    function cancelStream(uint256 nounId) external;
+
+    function fastForwardStream(uint256 nounId, uint32 ticksToForward) external;
+
+    function isStreamActive(uint256 nounId) external view returns (bool);
+
     function getStream(uint256 nounId) external view returns (Stream memory);
+
+    function setAllowedToCreateStream(address address_, bool allowed) external;
+
+    function setDAOExecutorAddress(address newAddress) external;
+
+    function setETHRecipient(address newAddress) external;
+
+    function setNounsRecipient(address newAddress) external;
 }
