@@ -190,14 +190,13 @@ contract StreamEscrow is IStreamEscrow {
         Stream memory stream = streams[nounId];
         uint32 currentTick_ = currentTick;
         require(isStreamActive(stream, currentTick_), 'stream not active');
-        uint32 lastTick = stream.lastTick;
 
         // move last tick
-        require(ticksToForward <= lastTick - currentTick_, 'ticksToFoward too large');
-        uint32 newLastTick = lastTick - ticksToForward;
+        require(ticksToForward <= stream.lastTick - currentTick_, 'ticksToFoward too large');
+        uint32 newLastTick = stream.lastTick - ticksToForward;
 
+        ethStreamEndingAtTick[stream.lastTick] -= stream.ethPerTick;
         streams[nounId].lastTick = newLastTick;
-        ethStreamEndingAtTick[lastTick] -= stream.ethPerTick;
 
         if (newLastTick > currentTick_) {
             // stream is still active, so register the new end tick
