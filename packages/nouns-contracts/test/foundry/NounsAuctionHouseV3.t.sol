@@ -1022,6 +1022,17 @@ contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
         auction.setImmediateTreasuryBPs(1);
     }
 
+    function test_setImmediateTreasuryBPs_worksForOwner() public {
+        assertEq(auction.immediateTreasuryBPs(), 2000);
+
+        vm.prank(IOwner(address(auction)).owner());
+        vm.expectEmit();
+        emit IAH.ImmediateTreasuryBPsUpdated(1);
+        auction.setImmediateTreasuryBPs(1);
+
+        assertEq(auction.immediateTreasuryBPs(), 1);
+    }
+
     function test_setStreamLengthInTicks_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setStreamLengthInTicks(1);
