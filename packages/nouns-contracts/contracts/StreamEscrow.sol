@@ -105,7 +105,7 @@ contract StreamEscrow is IStreamEscrow {
 
         // register new stream
         uint128 ethPerTick = toUint128(msg.value / streamLengthInTicks);
-        uint32 streamLastTick = currentTick + streamLengthInTicks; // streamLastTick is inclusive
+        uint32 streamLastTick = currentTick + streamLengthInTicks;
         ethStreamEndingAtTick[streamLastTick] += ethPerTick;
 
         // the remainder is immediately streamed to the DAO

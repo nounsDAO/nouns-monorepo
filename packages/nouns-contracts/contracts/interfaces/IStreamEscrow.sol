@@ -36,7 +36,6 @@ interface IStreamEscrow {
     struct Stream {
         uint128 ethPerTick;
         bool canceled;
-        // @dev This is the last tick for which this stream will be active
         uint32 lastTick;
     }
 
