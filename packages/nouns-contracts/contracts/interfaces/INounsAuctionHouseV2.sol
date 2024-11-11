@@ -166,6 +166,4 @@ interface INounsAuctionHouseV2 {
     function biddingClient(uint256 nounId) external view returns (uint32 clientId);
 
     function setPrices(SettlementNoClientId[] memory settlements) external;
-
-    function streamEscrow() external view returns (IStreamEscrow);
 }

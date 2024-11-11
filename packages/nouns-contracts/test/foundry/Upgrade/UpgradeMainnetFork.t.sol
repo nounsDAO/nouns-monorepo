@@ -9,6 +9,7 @@ import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.
 import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
 import { StreamEscrow } from '../../../contracts/StreamEscrow.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
+import { INounsAuctionHouseV3 } from '../../../contracts/interfaces/INounsAuctionHouseV3.sol';
 
 abstract contract UpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -187,7 +188,7 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         vm.warp(block.timestamp + auctionV2.auction().endTime);
         auctionV2.settleCurrentAndCreateNewAuction();
 
-        IStreamEscrow streamEscrow = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow();
+        IStreamEscrow streamEscrow = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET).streamEscrow();
         IStreamEscrow.Stream memory stream = streamEscrow.getStream(nounId);
         assertEq(stream.ethPerTick, 0.0024 ether); // (80% * 4.5 eth / 1500)
     }
