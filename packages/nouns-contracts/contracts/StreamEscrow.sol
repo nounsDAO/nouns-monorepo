@@ -85,7 +85,7 @@ contract StreamEscrow is IStreamEscrow {
      * @notice ETH value must be sent with this function call.
      * @dev Combines forwardAll() and createStream() operations into a single transaction.
      * @param nounId The ID of the Noun token for which the stream is being created.
-     * @param streamLengthInTicks The duration of the stream in ticks. 1 day must pass for a tick to increase.
+     * @param streamLengthInTicks The duration of the stream in ticks. `minimumTickDuration` must pass for a tick to increase.
      */
     function forwardAllAndCreateStream(uint256 nounId, uint16 streamLengthInTicks) external payable {
         forwardAll();
