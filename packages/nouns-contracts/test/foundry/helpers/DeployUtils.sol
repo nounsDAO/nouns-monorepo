@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import 'forge-std/Test.sol';
 import { DescriptorHelpers } from './DescriptorHelpers.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
+import { NounsDescriptorV3 } from '../../../contracts/NounsDescriptorV3.sol';
 import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
@@ -102,9 +103,24 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return descriptorV2;
     }
 
+    function _deployAndPopulateV3() internal returns (NounsDescriptorV3) {
+        NounsDescriptorV3 descriptorV3 = _deployDescriptorV3();
+        _populateDescriptorV3(descriptorV3);
+        return descriptorV3;
+    }
+
+    function _deployDescriptorV3() internal returns (NounsDescriptorV3) {
+        SVGRenderer renderer = new SVGRenderer();
+        Inflator inflator = new Inflator();
+        NounsDescriptorV3 descriptorV3 = new NounsDescriptorV3(NounsArt(address(0)), renderer);
+        NounsArt art = new NounsArt(address(descriptorV3), inflator);
+        descriptorV3.setArt(art);
+        return descriptorV3;
+    }
+
     function deployToken(address noundersDAO, address minter) internal returns (NounsToken nounsToken) {
         IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        NounsDescriptorV3 descriptor = _deployAndPopulateV3();
 
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
     }

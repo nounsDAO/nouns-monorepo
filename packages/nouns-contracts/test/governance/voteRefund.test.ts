@@ -6,7 +6,7 @@ import { ethers } from 'hardhat';
 import {
   NounsDAOLogicV4__factory,
   NounsDAOLogicV4,
-  NounsDescriptorV2__factory,
+  NounsDescriptorV3__factory,
   NounsToken,
   Voter__factory,
   INounsDAOLogic,
@@ -52,7 +52,7 @@ describe('V3 Vote Refund', () => {
     user2 = signers.account1;
 
     token = await deployNounsToken(deployer);
-    const descriptor = NounsDescriptorV2__factory.connect(await token.descriptor(), deployer);
+    const descriptor = NounsDescriptorV3__factory.connect(await token.descriptor(), deployer);
     await populateDescriptorV2(descriptor);
 
     await token.connect(deployer).mint();

@@ -13,7 +13,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
   NounsDAOLogicV4,
 } from '../../typechain';
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../constants';
@@ -30,7 +30,7 @@ async function setup() {
   token = await deployNounsToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsDescriptorV3Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);
