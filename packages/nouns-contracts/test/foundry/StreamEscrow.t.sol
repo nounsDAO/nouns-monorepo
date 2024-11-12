@@ -5,6 +5,7 @@ import { Test } from 'forge-std/Test.sol';
 import { StreamEscrow } from '../../contracts/StreamEscrow.sol';
 import { IStreamEscrow } from '../../contracts/interfaces/IStreamEscrow.sol';
 import { ERC721Mock } from './helpers/ERC721Mock.sol';
+import { ERC20Mock } from './helpers/ERC20Mock.sol';
 import 'forge-std/console.sol';
 
 abstract contract BaseStreamEscrowTest is Test {
@@ -654,6 +655,28 @@ contract DAOSettersTest is BaseStreamEscrowTest {
 
         // check that new recipient received the noun
         assertEq(nounsToken.ownerOf(1), makeAddr('nounsRecipient2'));
+    }
+}
+
+contract RescueTokensTest is BaseStreamEscrowTest {
+    ERC20Mock erc20 = new ERC20Mock();
+
+    function setUp() public virtual override {
+        super.setUp();
+        // send some erc20 tokens to the contract
+        erc20.mint(address(escrow), 1000);
+    }
+
+    function test_rescueToken_onlyDAO() public {
+        vm.expectRevert('only dao');
+        escrow.rescueToken(address(erc20), address(123), 1000);
+    }
+
+    function test_rescueToken_worksForDAO() public {
+        vm.prank(treasury);
+        escrow.rescueToken(address(erc20), address(123), 1000);
+
+        assertEq(erc20.balanceOf(address(123)), 1000);
     }
 }
 

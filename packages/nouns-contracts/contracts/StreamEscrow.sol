@@ -19,6 +19,7 @@ pragma solidity ^0.8.19;
 
 import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract StreamEscrow is IStreamEscrow {
     modifier onlyDAO() {
@@ -262,6 +263,16 @@ contract StreamEscrow is IStreamEscrow {
     function setNounsRecipient(address newAddress) external onlyDAO {
         nounsRecipient = newAddress;
         emit NounsRecipientSet(newAddress);
+    }
+
+    /**
+     * @notice Allows the DAO to rescue ERC20 tokens that were accidentally sent to the contract.
+     * @param token The address of the ERC20 token to rescue.
+     * @param to The address to send the tokens to.
+     * @param amount The amount of tokens to rescue.
+     */
+    function rescueToken(address token, address to, uint256 amount) external onlyDAO {
+        IERC20(token).transfer(to, amount);
     }
 
     /**
