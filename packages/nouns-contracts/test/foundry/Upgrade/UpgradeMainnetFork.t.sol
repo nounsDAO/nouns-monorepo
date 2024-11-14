@@ -10,6 +10,7 @@ import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol'
 import { StreamEscrow } from '../../../contracts/StreamEscrow.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsAuctionHouseV3 } from '../../../contracts/interfaces/INounsAuctionHouseV3.sol';
+import { DeployAuctionHouseV3StreamEscrowMainnet } from '../../../script/StreamEscrow/DeployAuctionHouseV3StreamEscrowMainnet.s.sol';
 
 abstract contract UpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -111,15 +112,8 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         v2TimeBuffer = ahv2.timeBuffer();
 
         // Deploy new contracts
-        NounsAuctionHouseV3 newLogic = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
-        StreamEscrow streamEscrow = new StreamEscrow(
-            address(NOUNS_DAO_PROXY_MAINNET.timelock()),
-            address(NOUNS_DAO_PROXY_MAINNET.timelock()),
-            address(NOUNS_DAO_PROXY_MAINNET.timelock()),
-            address(ahv2.nouns()),
-            AUCTION_HOUSE_PROXY_MAINNET,
-            24 hours
-        );
+        vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        (StreamEscrow streamEscrow, NounsAuctionHouseV3 ahv3) = new DeployAuctionHouseV3StreamEscrowMainnet().run();
 
         // Propose upgrade
         uint256 txCount = 2;
@@ -131,11 +125,11 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         // proxyAdmin.upgrade(proxy, address(newLogic));
         targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
         signatures[0] = 'upgrade(address,address)';
-        calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(newLogic));
+        calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(ahv3));
         // auctionHouse.setStreamEscrowParams(streamEscrow, immediateTreasuryBps, streamLengthInAuctions));
         targets[1] = AUCTION_HOUSE_PROXY_MAINNET;
         signatures[1] = 'setStreamEscrowParams(address,uint16,uint16)';
-        calldatas[1] = abi.encode(streamEscrow, 2000, 1500);
+        calldatas[1] = abi.encode(address(streamEscrow), 2000, 1500);
         vm.prank(proposerAddr);
         uint256 proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
             targets,
