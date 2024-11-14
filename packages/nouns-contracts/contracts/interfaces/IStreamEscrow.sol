@@ -19,10 +19,16 @@ pragma solidity ^0.8.19;
 
 interface IStreamEscrow {
     event ETHStreamedToDAO(uint256 amount);
-    event StreamCreated(uint256 indexed nounId, uint256 totalAmount, uint16 streamLengthInTicks, uint256 ethPerTick);
+    event StreamCreated(
+        uint256 indexed nounId,
+        uint256 totalAmount,
+        uint16 streamLengthInTicks,
+        uint256 ethPerTick,
+        uint128 newEthStreamedPerTick
+    );
     event StreamsForwarded(
         uint256 currentTick,
-        uint256 previousEthStreamedPerTick,
+        uint256 ethPerTickStreamEnded,
         uint256 nextEthStreamedPerTick,
         uint256 lastForwardTimestamp
     );

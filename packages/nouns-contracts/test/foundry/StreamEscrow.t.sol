@@ -131,8 +131,15 @@ contract SingleStreamTest is BaseStreamEscrowTest {
         vm.prank(streamCreator);
         // check that event was emitted
         vm.expectEmit();
-        emit IStreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether);
+        emit IStreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether, 0.05 ether);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        // created another stream
+        nounsToken.mint(streamCreator, 2);
+        vm.prank(streamCreator);
+        vm.expectEmit();
+        emit IStreamEscrow.StreamCreated(2, 1 ether, 20, 0.05 ether, 0.1 ether);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 2, streamLengthInTicks: 20 });
     }
 
     function test_forwardStreams_emitsEvent() public {
@@ -142,7 +149,7 @@ contract SingleStreamTest is BaseStreamEscrowTest {
 
         // forward 1 day
         vm.expectEmit();
-        emit IStreamEscrow.StreamsForwarded(1, 0.05 ether, 0.05 ether, block.timestamp + 24 hours);
+        emit IStreamEscrow.StreamsForwarded(1, 0, 0.05 ether, block.timestamp + 24 hours);
         forwardOneDay();
 
         // forward 18 days

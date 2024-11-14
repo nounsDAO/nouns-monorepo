@@ -118,9 +118,10 @@ contract StreamEscrow is IStreamEscrow {
         uint256 remainder = msg.value % streamLengthInTicks;
         sendETHToTreasury(remainder);
 
-        ethStreamedPerTick += ethPerTick;
+        uint128 newEthStreamedPerTick = ethStreamedPerTick + ethPerTick;
+        ethStreamedPerTick = newEthStreamedPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
-        emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick);
+        emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick, newEthStreamedPerTick);
     }
 
     /**
@@ -135,12 +136,11 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = toUint48(block.timestamp);
 
-        uint256 ethStreamedPerTickBefore = ethStreamedPerTick;
-        sendETHToTreasury(ethStreamedPerTickBefore);
+        sendETHToTreasury(ethStreamedPerTick);
 
-        uint32 newTick = increaseTicksAndFinishStreams();
+        (uint32 newTick, uint128 ethPerTickEnded) = increaseTicksAndFinishStreams();
 
-        emit StreamsForwarded(newTick, ethStreamedPerTickBefore, ethStreamedPerTick, lastForwardTimestamp);
+        emit StreamsForwarded(newTick, ethPerTickEnded, ethStreamedPerTick, lastForwardTimestamp);
     }
 
     /**
@@ -290,9 +290,9 @@ contract StreamEscrow is IStreamEscrow {
         }
     }
 
-    function increaseTicksAndFinishStreams() internal returns (uint32 newTick) {
+    function increaseTicksAndFinishStreams() internal returns (uint32 newTick, uint128 ethPerTickEnding) {
         newTick = ++currentTick;
-        uint128 ethPerTickEnding = ethStreamEndingAtTick[newTick];
+        ethPerTickEnding = ethStreamEndingAtTick[newTick];
         if (ethPerTickEnding > 0) {
             ethStreamedPerTick -= ethPerTickEnding;
         }
