@@ -18,6 +18,7 @@ export type ContractNamesDAOV3 =
   | 'NounsSeeder'
   | 'NounsToken'
   | 'NounsAuctionHouse'
+  | 'NounsAuctionHouseV2'
   | 'NounsAuctionHouseProxyAdmin'
   | 'NounsAuctionHouseProxy'
   | 'NounsDAOLogicV4'
