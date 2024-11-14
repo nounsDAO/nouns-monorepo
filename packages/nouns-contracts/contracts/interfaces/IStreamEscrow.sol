@@ -24,7 +24,8 @@ interface IStreamEscrow {
         uint256 totalAmount,
         uint16 streamLengthInTicks,
         uint256 ethPerTick,
-        uint128 newEthStreamedPerTick
+        uint128 newEthStreamedPerTick,
+        uint32 lastTick
     );
     event StreamsForwarded(
         uint256 currentTick,

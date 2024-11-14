@@ -131,14 +131,16 @@ contract SingleStreamTest is BaseStreamEscrowTest {
         vm.prank(streamCreator);
         // check that event was emitted
         vm.expectEmit();
-        emit IStreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether, 0.05 ether);
+        emit IStreamEscrow.StreamCreated(1, 1 ether, 20, 0.05 ether, 0.05 ether, 20);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        forwardOneDay();
 
         // created another stream
         nounsToken.mint(streamCreator, 2);
         vm.prank(streamCreator);
         vm.expectEmit();
-        emit IStreamEscrow.StreamCreated(2, 1 ether, 20, 0.05 ether, 0.1 ether);
+        emit IStreamEscrow.StreamCreated(2, 1 ether, 20, 0.05 ether, 0.1 ether, 21);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 2, streamLengthInTicks: 20 });
     }
 

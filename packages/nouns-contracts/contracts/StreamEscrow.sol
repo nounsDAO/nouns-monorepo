@@ -121,7 +121,7 @@ contract StreamEscrow is IStreamEscrow {
         uint128 newEthStreamedPerTick = ethStreamedPerTick + ethPerTick;
         ethStreamedPerTick = newEthStreamedPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
-        emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick, newEthStreamedPerTick);
+        emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick, newEthStreamedPerTick, streamLastTick);
     }
 
     /**
