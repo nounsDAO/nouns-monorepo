@@ -14,6 +14,7 @@ import {
   Fork,
   ProposalCandidateContent,
   CandidateFeedback,
+  StreamEscrowState,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -300,4 +301,22 @@ export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): 
 
   const hashedProposal = keccak256Bytes(proposalEncodeData);
   return hashedProposal;
+}
+
+export function getStreamEscrowState(): StreamEscrowState {
+  let s = StreamEscrowState.load('STATE');
+
+  if (s == null) {
+    s = new StreamEscrowState('STATE');
+    s.currentTick = 0;
+    s.lastForwardTimestamp = 0;
+    s.ethStreamedPerTick = BIGINT_ZERO;
+    s.totalAmountStreamedToDAO = BIGINT_ZERO;
+  }
+
+  return s as StreamEscrowState;
+}
+
+export function genericUniqueId(event: ethereum.Event): string {
+  return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
 }

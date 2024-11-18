@@ -772,12 +772,22 @@ type StreamEscrowState @entity {
   totalAmountStreamedToDAO: BigInt!
 }
 
-type ETHStreamedToDAO @entity(immutable: true) {
+type ETHStreamed @entity(immutable: true) {
   id: ID!
 
-  createdAt: BigInt!
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
 
   amount: BigInt!
+}
+
+type StreamFastforward @entity(immutable: true) {
+  id: ID!
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+  stream: Stream!
+  ticksToForward: BigInt!
+  newLastTick: BigInt!
 }
 
 type Stream @entity {
@@ -791,5 +801,7 @@ type Stream @entity {
   totalAmount: BigInt!
   streamLengthInTicks: Int!
   ethPerTick: BigInt!
-  lastTick: Int!
+  lastTick: BigInt!
+
+  canceled: Boolean!
 }
