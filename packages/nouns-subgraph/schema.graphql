@@ -760,3 +760,36 @@ type ForkJoinedNoun @entity(immutable: true) {
 
   forkJoin: ForkJoin!
 }
+
+type StreamEscrowState @entity {
+  id: ID!
+
+  currentTick: Int!
+  lastForwardTimestamp: Int!
+
+  ethStreamedPerTick: BigInt!
+
+  totalAmountStreamedToDAO: BigInt!
+}
+
+type ETHStreamedToDAO @entity(immutable: true) {
+  id: ID!
+
+  createdAt: BigInt!
+
+  amount: BigInt!
+}
+
+type Stream @entity {
+  id: ID!
+
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+
+  noun: Noun!
+
+  totalAmount: BigInt!
+  streamLengthInTicks: Int!
+  ethPerTick: BigInt!
+  lastTick: Int!
+}
