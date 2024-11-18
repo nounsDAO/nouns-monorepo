@@ -31,7 +31,11 @@ import {
   DelegateVotesChanged,
   Transfer,
 } from '../src/types/NounsToken/NounsToken';
-import { ETHStreamedToDAO } from '../src/types/StreamEscrow/StreamEscrow';
+import {
+  ETHStreamedToDAO,
+  StreamCreated,
+  StreamFastForwarded,
+} from '../src/types/StreamEscrow/StreamEscrow';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -829,6 +833,89 @@ export function createETHStreamedToDAOEvent(input: ETHStreamedToDAOData): ETHStr
 
   newEvent.parameters.push(
     new ethereum.EventParam('amount', ethereum.Value.fromUnsignedBigInt(input.amount)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class StreamCreatedData {
+  nounId: BigInt = BIGINT_ZERO;
+  totalAmount: BigInt = BIGINT_ZERO;
+  streamLengthInTicks: BigInt = BIGINT_ZERO;
+  ethPerTick: BigInt = BIGINT_ZERO;
+  newEthStreamedPerTick: BigInt = BIGINT_ZERO;
+  lastTick: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamCreatedEvent(input: StreamCreatedData): StreamCreated {
+  let newEvent = changetype<StreamCreated>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('nounId', ethereum.Value.fromUnsignedBigInt(input.nounId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('totalAmount', ethereum.Value.fromUnsignedBigInt(input.totalAmount)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'streamLengthInTicks',
+      ethereum.Value.fromUnsignedBigInt(input.streamLengthInTicks),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('ethPerTick', ethereum.Value.fromUnsignedBigInt(input.ethPerTick)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'newEthStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.newEthStreamedPerTick),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('lastTick', ethereum.Value.fromUnsignedBigInt(input.lastTick)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+
+  return newEvent;
+}
+
+export class StreamFastForwardedData {
+  nounId: BigInt = BIGINT_ZERO;
+  ticksToForward: BigInt = BIGINT_ZERO;
+  newLastTick: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamFastForwardedEvent(
+  input: StreamFastForwardedData,
+): StreamFastForwarded {
+  let newEvent = changetype<StreamFastForwarded>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('nounId', ethereum.Value.fromUnsignedBigInt(input.nounId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ticksToForward',
+      ethereum.Value.fromUnsignedBigInt(input.ticksToForward),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('newLastTick', ethereum.Value.fromUnsignedBigInt(input.newLastTick)),
   );
 
   newEvent.block.number = input.eventBlockNumber;
