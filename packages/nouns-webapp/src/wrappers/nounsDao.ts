@@ -842,15 +842,16 @@ export const useCastVoteWithReason = () => {
 
 export const useCastRefundableVote = () => {
   const { library } = useEthers();
+  const functionSig = 'castRefundableVote(uint256,uint8)';
   const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
     nounsDaoContract,
-    'castRefundableVote',
+    functionSig
   );
 
   return {
     castRefundableVote: async (...args: any[]): Promise<void> => {
       const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas.castRefundableVote(...args);
+      const gasLimit = await contract.estimateGas[functionSig](...args);
       return castRefundableVote(...args, {
         gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
       });
@@ -862,15 +863,14 @@ export const useCastRefundableVote = () => {
 export const useCastRefundableVoteWithReason = () => {
   const { library } = useEthers();
   // prettier-ignore
-  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
-    nounsDaoContract,
-    'castRefundableVoteWithReason',
-  );
+  const functionSig = 'castRefundableVoteWithReason(uint256,uint8,string)';
+  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } =
+    useContractFunction(nounsDaoContract, functionSig);
 
   return {
     castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
       const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
+      const gasLimit = await contract.estimateGas[functionSig](...args);
       return castRefundableVoteWithReason(...args, {
         gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
       });
