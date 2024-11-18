@@ -31,6 +31,7 @@ import {
   DelegateVotesChanged,
   Transfer,
 } from '../src/types/NounsToken/NounsToken';
+import { ETHStreamedToDAO } from '../src/types/StreamEscrow/StreamEscrow';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -812,4 +813,32 @@ export function createProposalCreatedEvent(input: ProposalCreatedData): Proposal
   newEvent.address = input.address;
 
   return newEvent;
+}
+
+export class ETHStreamedToDAOData {
+  amount: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createETHStreamedToDAOEvent(input: ETHStreamedToDAOData): ETHStreamedToDAO {
+  let newEvent = changetype<ETHStreamedToDAO>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('amount', ethereum.Value.fromUnsignedBigInt(input.amount)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export function genericUniqueId(txHash: Bytes, logIndex: BigInt): string {
+  return txHash.toHexString().concat('-').concat(logIndex.toString());
 }

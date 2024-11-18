@@ -15,6 +15,7 @@ import {
   ProposalCandidateContent,
   CandidateFeedback,
   StreamEscrowState,
+  StreamCreationPermission,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -308,13 +309,28 @@ export function getStreamEscrowState(): StreamEscrowState {
 
   if (s == null) {
     s = new StreamEscrowState('STATE');
-    s.currentTick = 0;
-    s.lastForwardTimestamp = 0;
+    s.currentTick = BIGINT_ZERO;
+    s.lastForwardTimestamp = BIGINT_ZERO;
     s.ethStreamedPerTick = BIGINT_ZERO;
     s.totalAmountStreamedToDAO = BIGINT_ZERO;
+    s.daoExecutor = '';
+    s.daoExecutorSetBlock = BIGINT_ZERO;
+    s.ethRecipient = '';
+    s.ethRecipientSetBlock = BIGINT_ZERO;
+    s.nounsRecipient = '';
+    s.nounsRecipientSetBlock = BIGINT_ZERO;
   }
 
   return s as StreamEscrowState;
+}
+
+export function getOrCreateStreamCreationPermission(id: string): StreamCreationPermission {
+  let p = StreamCreationPermission.load(id);
+  if (p == null) {
+    p = new StreamCreationPermission(id);
+    p.allowed = false;
+  }
+  return p;
 }
 
 export function genericUniqueId(event: ethereum.Event): string {

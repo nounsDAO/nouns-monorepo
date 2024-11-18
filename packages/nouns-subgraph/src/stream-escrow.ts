@@ -10,7 +10,12 @@ import {
   StreamFastForwarded,
   StreamsForwarded,
 } from './types/StreamEscrow/StreamEscrow';
-import { genericUniqueId, getStreamEscrowState } from './utils/helpers';
+import { BIGINT_ZERO } from './utils/constants';
+import {
+  genericUniqueId,
+  getOrCreateStreamCreationPermission,
+  getStreamEscrowState,
+} from './utils/helpers';
 
 export function handleETHStreamedToDAO(event: ETHStreamedToDAO): void {
   const es = new ETHStreamed(genericUniqueId(event));
@@ -35,6 +40,7 @@ export function handleStreamCreated(event: StreamCreated): void {
   s.ethPerTick = event.params.ethPerTick;
   s.lastTick = event.params.lastTick;
   s.canceled = false;
+  s.cancellationRefundAmount = BIGINT_ZERO;
   s.save();
 }
 
@@ -55,14 +61,46 @@ export function handleStreamFastForwarded(event: StreamFastForwarded): void {
   s.save();
 }
 
-export function handleStreamCanceled(event: StreamCanceled): void {}
+export function handleStreamCanceled(event: StreamCanceled): void {
+  const nounId = event.params.nounId.toString();
 
-export function handleStreamsForwarded(event: StreamsForwarded): void {}
+  const s = Stream.load(nounId)!;
+  s.canceled = true;
+  s.cancellationRefundAmount = event.params.amountToRefund;
+  s.save();
+}
 
-export function handleAllowedToCreateStreamChanged(event: AllowedToCreateStreamChanged): void {}
+export function handleStreamsForwarded(event: StreamsForwarded): void {
+  const s = getStreamEscrowState();
+  s.currentTick = event.params.currentTick;
+  s.ethStreamedPerTick = event.params.nextEthStreamedPerTick;
+  s.lastForwardTimestamp = event.params.lastForwardTimestamp;
+  s.save();
+}
 
-export function handleDAOExecutorAddressSet(event: DAOExecutorAddressSet): void {}
+export function handleAllowedToCreateStreamChanged(event: AllowedToCreateStreamChanged): void {
+  const p = getOrCreateStreamCreationPermission(event.params.address_.toHexString());
+  p.allowed = event.params.allowed;
+  p.save();
+}
 
-export function handleETHRecipientSet(event: ETHRecipientSet): void {}
+export function handleDAOExecutorAddressSet(event: DAOExecutorAddressSet): void {
+  const s = getStreamEscrowState();
+  s.daoExecutor = event.params.newAddress.toHexString();
+  s.daoExecutorSetBlock = event.block.number;
+  s.save();
+}
 
-export function handleNounsRecipientSet(event: NounsRecipientSet): void {}
+export function handleETHRecipientSet(event: ETHRecipientSet): void {
+  const s = getStreamEscrowState();
+  s.ethRecipient = event.params.newAddress.toHexString();
+  s.ethRecipientSetBlock = event.block.number;
+  s.save();
+}
+
+export function handleNounsRecipientSet(event: NounsRecipientSet): void {
+  const s = getStreamEscrowState();
+  s.nounsRecipient = event.params.newAddress.toHexString();
+  s.nounsRecipientSetBlock = event.block.number;
+  s.save();
+}

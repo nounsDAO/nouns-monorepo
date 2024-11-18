@@ -764,12 +764,24 @@ type ForkJoinedNoun @entity(immutable: true) {
 type StreamEscrowState @entity {
   id: ID!
 
-  currentTick: Int!
-  lastForwardTimestamp: Int!
+  currentTick: BigInt!
+  lastForwardTimestamp: BigInt!
 
   ethStreamedPerTick: BigInt!
 
   totalAmountStreamedToDAO: BigInt!
+
+  daoExecutor: String!
+  daoExecutorSetBlock: BigInt!
+  ethRecipient: String!
+  ethRecipientSetBlock: BigInt!
+  nounsRecipient: String!
+  nounsRecipientSetBlock: BigInt!
+}
+
+type StreamCreationPermission @entity {
+  id: ID!
+  allowed: Boolean!
 }
 
 type ETHStreamed @entity(immutable: true) {
@@ -804,4 +816,5 @@ type Stream @entity {
   lastTick: BigInt!
 
   canceled: Boolean!
+  cancellationRefundAmount: BigInt!
 }
