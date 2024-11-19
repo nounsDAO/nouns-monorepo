@@ -79,6 +79,11 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken = INounsToken(nounsToken_);
         allowedToCreateStream[streamCreator_] = true;
         minimumTickDuration = minimumTickDuration_;
+
+        emit DAOExecutorAddressSet(daoExecutor_);
+        emit ETHRecipientSet(ethRecipient_);
+        emit NounsRecipientSet(nounsRecipient_);
+        emit AllowedToCreateStreamChanged(streamCreator_, true);
     }
 
     /**
