@@ -315,11 +315,11 @@ export function getStreamEscrowState(): StreamEscrowState {
     s.lastForwardTimestamp = BIGINT_ZERO;
     s.ethStreamedPerTick = BIGINT_ZERO;
     s.totalAmountStreamedToDAO = BIGINT_ZERO;
-    s.daoExecutor = '';
+    s.daoExecutor = ZERO_ADDRESS;
     s.daoExecutorSetBlock = BIGINT_ZERO;
-    s.ethRecipient = '';
+    s.ethRecipient = ZERO_ADDRESS;
     s.ethRecipientSetBlock = BIGINT_ZERO;
-    s.nounsRecipient = '';
+    s.nounsRecipient = ZERO_ADDRESS;
     s.nounsRecipientSetBlock = BIGINT_ZERO;
   }
 

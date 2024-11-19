@@ -9,22 +9,39 @@ import {
   createMockedFunction,
 } from 'matchstick-as/assembly/index';
 import {
+  handleAllowedToCreateStreamChanged,
+  handleDAOExecutorAddressSet,
+  handleETHRecipientSet,
   handleETHStreamedToDAO,
+  handleNounsRecipientSet,
+  handleStreamCanceled,
   handleStreamCreated,
   handleStreamFastForwarded,
+  handleStreamsForwarded,
 } from '../src/stream-escrow';
 import {
+  AddressSetData,
+  AllowedToCreateStreamChangedData,
+  createAllowedToCreateStreamChangedEvent,
+  createDAOExecutorAddressSetEvent,
+  createETHRecipientSetEvent,
   createETHStreamedToDAOEvent,
+  createNounsRecipientSetEvent,
+  createStreamCanceledEvent,
   createStreamCreatedEvent,
   createStreamFastForwardedEvent,
+  createStreamsForwardedEvent,
   ETHStreamedToDAOData,
   genericUniqueId,
+  StreamCanceledData,
   StreamCreatedData,
   StreamFastForwardedData,
+  StreamsForwardedData,
 } from './utils';
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
-import { StreamsOfNoun } from '../src/types/schema';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { BIGINT_10K, BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from '../src/utils/constants';
+import { StreamCreationPermission, StreamsOfNoun } from '../src/types/schema';
+import { getStreamEscrowState } from '../src/utils/helpers';
 
 describe('stream-escrow', () => {
   beforeEach(() => {
@@ -224,7 +241,141 @@ describe('stream-escrow', () => {
         BigInt.fromI32(10).minus(ed.ticksToForward).toString(),
       );
     });
-    test('bla', () => {});
-    test('bla', () => {});
+    test('cancel a stream', () => {
+      const ed = new StreamCanceledData();
+      ed.nounId = BigInt.fromI32(2142);
+      ed.amountToRefund = BigInt.fromI32(142000);
+      const nounId = ed.nounId.toString();
+      const streamId = StreamsOfNoun.load(nounId)!.currentStream!;
+
+      handleStreamCanceled(createStreamCanceledEvent(ed));
+
+      assert.fieldEquals('Stream', streamId, 'canceled', true.toString());
+      assert.fieldEquals(
+        'Stream',
+        streamId,
+        'cancellationRefundAmount',
+        ed.amountToRefund.toString(),
+      );
+    });
+    test('forward streams', () => {
+      const stateBefore = getStreamEscrowState();
+      const ed = new StreamsForwardedData();
+      ed.currentTick = stateBefore.currentTick.plus(BIGINT_ONE);
+      ed.ethPerTickStreamEnded = BIGINT_ZERO;
+      ed.nextEthStreamedPerTick = stateBefore.ethStreamedPerTick.plus(BIGINT_ONE);
+      ed.lastForwardTimestamp = stateBefore.lastForwardTimestamp.plus(BIGINT_10K);
+
+      handleStreamsForwarded(createStreamsForwardedEvent(ed));
+
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'currentTick', ed.currentTick.toString());
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        ed.nextEthStreamedPerTick.toString(),
+      );
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'lastForwardTimestamp',
+        ed.lastForwardTimestamp.toString(),
+      );
+    });
+  });
+  describe('admin events', () => {
+    test('handleAllowedToCreateStreamChanged', () => {
+      const ed = new AllowedToCreateStreamChangedData();
+      ed.address = Address.fromString('0x0000000000000000000000000000000000000001');
+      ed.allowed = true;
+      const entityId = ed.address.toHexString();
+
+      // Check BEFORE
+      assert.assertNull(StreamCreationPermission.load(entityId));
+
+      handleAllowedToCreateStreamChanged(createAllowedToCreateStreamChangedEvent(ed));
+
+      assert.fieldEquals('StreamCreationPermission', entityId, 'allowed', ed.allowed.toString());
+    });
+    test('handleDAOExecutorAddressSet', () => {
+      const ed = new AddressSetData();
+      ed.eventBlockNumber = BigInt.fromI32(1234);
+      ed.newAddress = Address.fromString('0x0000000000000000000000000000000000000001');
+
+      // Check BEFORE
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'daoExecutor', ZERO_ADDRESS);
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'daoExecutorSetBlock',
+        BIGINT_ZERO.toString(),
+      );
+
+      handleDAOExecutorAddressSet(createDAOExecutorAddressSetEvent(ed));
+
+      // Check AFTER
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'daoExecutor', ed.newAddress.toHexString());
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'daoExecutorSetBlock',
+        ed.eventBlockNumber.toString(),
+      );
+    });
+    test('handleETHRecipientSet', () => {
+      const ed = new AddressSetData();
+      ed.eventBlockNumber = BigInt.fromI32(1234);
+      ed.newAddress = Address.fromString('0x0000000000000000000000000000000000000001');
+
+      // Check BEFORE
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'ethRecipient', ZERO_ADDRESS);
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethRecipientSetBlock',
+        BIGINT_ZERO.toString(),
+      );
+
+      handleETHRecipientSet(createETHRecipientSetEvent(ed));
+
+      // Check AFTER
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'ethRecipient', ed.newAddress.toHexString());
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethRecipientSetBlock',
+        ed.eventBlockNumber.toString(),
+      );
+    });
+    test('handleNounsRecipientSet', () => {
+      const ed = new AddressSetData();
+      ed.eventBlockNumber = BigInt.fromI32(1234);
+      ed.newAddress = Address.fromString('0x0000000000000000000000000000000000000001');
+
+      // Check BEFORE
+      assert.fieldEquals('StreamEscrowState', 'STATE', 'nounsRecipient', ZERO_ADDRESS);
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'nounsRecipientSetBlock',
+        BIGINT_ZERO.toString(),
+      );
+
+      handleNounsRecipientSet(createNounsRecipientSetEvent(ed));
+
+      // Check AFTER
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'nounsRecipient',
+        ed.newAddress.toHexString(),
+      );
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'nounsRecipientSetBlock',
+        ed.eventBlockNumber.toString(),
+      );
+    });
   });
 });
