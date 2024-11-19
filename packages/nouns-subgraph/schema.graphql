@@ -803,6 +803,7 @@ type StreamFastforward @entity(immutable: true) {
 }
 
 type Stream @entity {
+  "The generic ID of tx hash + log index"
   id: ID!
 
   createdTimestamp: BigInt!
@@ -817,4 +818,15 @@ type Stream @entity {
 
   canceled: Boolean!
   cancellationRefundAmount: BigInt!
+}
+
+type StreamsOfNoun @entity {
+  "The noun ID"
+  id: ID!
+
+  "A list of past streams of this Noun, not including the current stream"
+  pastStreams: [Stream!]!
+
+  "The current or latest stream of this Noun"
+  currentStream: Stream
 }

@@ -852,6 +852,8 @@ export class StreamCreatedData {
   lastTick: BigInt = BIGINT_ZERO;
   eventBlockNumber: BigInt = BIGINT_ZERO;
   eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
 }
 
 export function createStreamCreatedEvent(input: StreamCreatedData): StreamCreated {
@@ -885,6 +887,8 @@ export function createStreamCreatedEvent(input: StreamCreatedData): StreamCreate
 
   newEvent.block.number = input.eventBlockNumber;
   newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
 
   return newEvent;
 }

@@ -16,6 +16,8 @@ import {
   CandidateFeedback,
   StreamEscrowState,
   StreamCreationPermission,
+  StreamsOfNoun,
+  Stream,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -333,6 +335,19 @@ export function getOrCreateStreamCreationPermission(id: string): StreamCreationP
   return p;
 }
 
+export function getOrCreateStreamsOfNoun(nounId: string): StreamsOfNoun {
+  let s = StreamsOfNoun.load(nounId);
+  if (s == null) {
+    s = new StreamsOfNoun(nounId);
+    s.pastStreams = [];
+  }
+  return s;
+}
+
 export function genericUniqueId(event: ethereum.Event): string {
   return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+}
+
+export function getCurrentStream(nounId: string): Stream {
+  return Stream.load(StreamsOfNoun.load(nounId)!.currentStream!)!;
 }

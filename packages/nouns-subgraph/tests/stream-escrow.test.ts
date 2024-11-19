@@ -24,6 +24,7 @@ import {
 } from './utils';
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
+import { StreamsOfNoun } from '../src/types/schema';
 
 describe('stream-escrow', () => {
   beforeEach(() => {
@@ -112,37 +113,28 @@ describe('stream-escrow', () => {
       ed.ethPerTick = BigInt.fromI32(42);
       ed.newEthStreamedPerTick = BigInt.fromI32(42);
       ed.lastTick = BigInt.fromI32(10);
+      ed.txHash = Bytes.fromI32(192837);
       handleStreamCreated(createStreamCreatedEvent(ed));
+      let streamId = genericUniqueId(ed.txHash, ed.logIndex);
+      let nounId = ed.nounId.toString();
 
+      assert.fieldEquals('Stream', streamId, 'createdTimestamp', ed.eventBlockTimestamp.toString());
+      assert.fieldEquals('Stream', streamId, 'createdBlock', ed.eventBlockNumber.toString());
+      assert.fieldEquals('Stream', streamId, 'noun', ed.nounId.toString());
+      assert.fieldEquals('Stream', streamId, 'totalAmount', ed.totalAmount.toString());
       assert.fieldEquals(
         'Stream',
-        ed.nounId.toString(),
-        'createdTimestamp',
-        ed.eventBlockTimestamp.toString(),
-      );
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
-        'createdBlock',
-        ed.eventBlockNumber.toString(),
-      );
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'noun', ed.nounId.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'totalAmount', ed.totalAmount.toString());
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
+        streamId,
         'streamLengthInTicks',
         ed.streamLengthInTicks.toString(),
       );
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'ethPerTick', ed.ethPerTick.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'lastTick', ed.lastTick.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'canceled', false.toString());
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
-        'cancellationRefundAmount',
-        BIGINT_ZERO.toString(),
-      );
+      assert.fieldEquals('Stream', streamId, 'ethPerTick', ed.ethPerTick.toString());
+      assert.fieldEquals('Stream', streamId, 'lastTick', ed.lastTick.toString());
+      assert.fieldEquals('Stream', streamId, 'canceled', false.toString());
+      assert.fieldEquals('Stream', streamId, 'cancellationRefundAmount', BIGINT_ZERO.toString());
+
+      assert.fieldEquals('StreamsOfNoun', nounId, 'currentStream', streamId);
+      assert.fieldEquals('StreamsOfNoun', nounId, 'pastStreams', '[]');
 
       const prevStreamPerTick = ed.newEthStreamedPerTick;
 
@@ -155,36 +147,26 @@ describe('stream-escrow', () => {
       ed.eventBlockNumber = BIGINT_ONE;
       ed.eventBlockTimestamp = BIGINT_ONE;
       handleStreamCreated(createStreamCreatedEvent(ed));
+      streamId = genericUniqueId(ed.txHash, ed.logIndex);
+      nounId = ed.nounId.toString();
 
+      assert.fieldEquals('Stream', streamId, 'createdTimestamp', ed.eventBlockTimestamp.toString());
+      assert.fieldEquals('Stream', streamId, 'createdBlock', ed.eventBlockNumber.toString());
+      assert.fieldEquals('Stream', streamId, 'noun', ed.nounId.toString());
+      assert.fieldEquals('Stream', streamId, 'totalAmount', ed.totalAmount.toString());
       assert.fieldEquals(
         'Stream',
-        ed.nounId.toString(),
-        'createdTimestamp',
-        ed.eventBlockTimestamp.toString(),
-      );
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
-        'createdBlock',
-        ed.eventBlockNumber.toString(),
-      );
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'noun', ed.nounId.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'totalAmount', ed.totalAmount.toString());
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
+        streamId,
         'streamLengthInTicks',
         ed.streamLengthInTicks.toString(),
       );
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'ethPerTick', ed.ethPerTick.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'lastTick', ed.lastTick.toString());
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'canceled', false.toString());
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
-        'cancellationRefundAmount',
-        BIGINT_ZERO.toString(),
-      );
+      assert.fieldEquals('Stream', streamId, 'ethPerTick', ed.ethPerTick.toString());
+      assert.fieldEquals('Stream', streamId, 'lastTick', ed.lastTick.toString());
+      assert.fieldEquals('Stream', streamId, 'canceled', false.toString());
+      assert.fieldEquals('Stream', streamId, 'cancellationRefundAmount', BIGINT_ZERO.toString());
+
+      assert.fieldEquals('StreamsOfNoun', nounId, 'currentStream', streamId);
+      assert.fieldEquals('StreamsOfNoun', nounId, 'pastStreams', '[]');
     });
     test('fast-forward a stream', () => {
       const ed = new StreamFastForwardedData();
@@ -192,15 +174,12 @@ describe('stream-escrow', () => {
       ed.newLastTick = BigInt.fromI32(6);
       ed.ticksToForward = BigInt.fromI32(4);
       ed.txHash = Bytes.fromI32(9876);
+      let nounId = ed.nounId.toString();
+      let streamId = StreamsOfNoun.load(nounId)!.currentStream!;
 
       // Stream state BEFORE
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'lastTick', BigInt.fromI32(10).toString());
-      assert.fieldEquals(
-        'Stream',
-        ed.nounId.toString(),
-        'streamLengthInTicks',
-        BigInt.fromI32(10).toString(),
-      );
+      assert.fieldEquals('Stream', streamId, 'lastTick', BigInt.fromI32(10).toString());
+      assert.fieldEquals('Stream', streamId, 'streamLengthInTicks', BigInt.fromI32(10).toString());
 
       // handle the event
       handleStreamFastForwarded(createStreamFastForwardedEvent(ed));
@@ -237,10 +216,10 @@ describe('stream-escrow', () => {
       );
 
       // Stream state AFTER
-      assert.fieldEquals('Stream', ed.nounId.toString(), 'lastTick', ed.newLastTick.toString());
+      assert.fieldEquals('Stream', streamId, 'lastTick', ed.newLastTick.toString());
       assert.fieldEquals(
         'Stream',
-        ed.nounId.toString(),
+        streamId,
         'streamLengthInTicks',
         BigInt.fromI32(10).minus(ed.ticksToForward).toString(),
       );

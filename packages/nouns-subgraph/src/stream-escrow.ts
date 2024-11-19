@@ -13,7 +13,9 @@ import {
 import { BIGINT_ZERO } from './utils/constants';
 import {
   genericUniqueId,
+  getCurrentStream,
   getOrCreateStreamCreationPermission,
+  getOrCreateStreamsOfNoun,
   getStreamEscrowState,
 } from './utils/helpers';
 
@@ -31,7 +33,9 @@ export function handleETHStreamedToDAO(event: ETHStreamedToDAO): void {
 
 export function handleStreamCreated(event: StreamCreated): void {
   const nounId = event.params.nounId.toString();
-  const s = new Stream(nounId);
+  const streamId = genericUniqueId(event);
+
+  const s = new Stream(streamId);
   s.createdTimestamp = event.block.timestamp;
   s.createdBlock = event.block.number;
   s.noun = nounId;
@@ -42,6 +46,13 @@ export function handleStreamCreated(event: StreamCreated): void {
   s.canceled = false;
   s.cancellationRefundAmount = BIGINT_ZERO;
   s.save();
+
+  const son = getOrCreateStreamsOfNoun(nounId);
+  if (son.currentStream != null) {
+    son.pastStreams.push(son.currentStream!);
+  }
+  son.currentStream = s.id;
+  son.save();
 }
 
 export function handleStreamFastForwarded(event: StreamFastForwarded): void {
@@ -55,7 +66,7 @@ export function handleStreamFastForwarded(event: StreamFastForwarded): void {
   ff.newLastTick = event.params.newLastTick;
   ff.save();
 
-  const s = Stream.load(nounId)!;
+  const s = getCurrentStream(nounId);
   s.lastTick = event.params.newLastTick;
   s.streamLengthInTicks = s.streamLengthInTicks - event.params.ticksToForward.toI32();
   s.save();
@@ -64,7 +75,7 @@ export function handleStreamFastForwarded(event: StreamFastForwarded): void {
 export function handleStreamCanceled(event: StreamCanceled): void {
   const nounId = event.params.nounId.toString();
 
-  const s = Stream.load(nounId)!;
+  const s = getCurrentStream(nounId);
   s.canceled = true;
   s.cancellationRefundAmount = event.params.amountToRefund;
   s.save();
