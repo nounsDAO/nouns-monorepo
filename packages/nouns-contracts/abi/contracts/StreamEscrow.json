@@ -245,7 +245,13 @@
     "name": "StreamCanceled",
     "inputs": [
       { "name": "nounId", "type": "uint256", "indexed": true, "internalType": "uint256" },
-      { "name": "amountToRefund", "type": "uint256", "indexed": false, "internalType": "uint256" }
+      { "name": "amountToRefund", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      {
+        "name": "ethStreamedPerTick",
+        "type": "uint128",
+        "indexed": false,
+        "internalType": "uint128"
+      }
     ],
     "anonymous": false
   },
@@ -278,7 +284,13 @@
     "inputs": [
       { "name": "nounId", "type": "uint256", "indexed": true, "internalType": "uint256" },
       { "name": "ticksToForward", "type": "uint256", "indexed": false, "internalType": "uint256" },
-      { "name": "newLastTick", "type": "uint256", "indexed": false, "internalType": "uint256" }
+      { "name": "newLastTick", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      {
+        "name": "ethStreamedPerTick",
+        "type": "uint128",
+        "indexed": false,
+        "internalType": "uint128"
+      }
     ],
     "anonymous": false
   },

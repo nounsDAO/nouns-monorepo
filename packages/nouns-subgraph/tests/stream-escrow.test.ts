@@ -123,6 +123,10 @@ describe('stream-escrow', () => {
   });
   describe('stream lifecycle', () => {
     test('create a couple of streams', () => {
+      let es = getStreamEscrowState();
+      es.currentTick = BigInt.fromI32(1);
+      es.save();
+
       const ed = new StreamCreatedData();
       ed.nounId = BigInt.fromI32(142);
       ed.totalAmount = BigInt.fromI32(420);
@@ -137,6 +141,7 @@ describe('stream-escrow', () => {
 
       assert.fieldEquals('Stream', streamId, 'createdTimestamp', ed.eventBlockTimestamp.toString());
       assert.fieldEquals('Stream', streamId, 'createdBlock', ed.eventBlockNumber.toString());
+      assert.fieldEquals('Stream', streamId, 'startTick', es.currentTick.toString());
       assert.fieldEquals('Stream', streamId, 'noun', ed.nounId.toString());
       assert.fieldEquals('Stream', streamId, 'totalAmount', ed.totalAmount.toString());
       assert.fieldEquals(
@@ -155,12 +160,16 @@ describe('stream-escrow', () => {
 
       const prevStreamPerTick = ed.newEthStreamedPerTick;
 
+      es = getStreamEscrowState();
+      es.currentTick = BigInt.fromI32(2);
+      es.save();
+
       ed.nounId = BigInt.fromI32(2142);
       ed.totalAmount = BigInt.fromI32(2420);
       ed.streamLengthInTicks = BigInt.fromI32(10);
       ed.ethPerTick = BigInt.fromI32(242);
       ed.newEthStreamedPerTick = prevStreamPerTick.plus(ed.ethPerTick);
-      ed.lastTick = BigInt.fromI32(10);
+      ed.lastTick = BigInt.fromI32(12);
       ed.eventBlockNumber = BIGINT_ONE;
       ed.eventBlockTimestamp = BIGINT_ONE;
       handleStreamCreated(createStreamCreatedEvent(ed));
@@ -169,6 +178,7 @@ describe('stream-escrow', () => {
 
       assert.fieldEquals('Stream', streamId, 'createdTimestamp', ed.eventBlockTimestamp.toString());
       assert.fieldEquals('Stream', streamId, 'createdBlock', ed.eventBlockNumber.toString());
+      assert.fieldEquals('Stream', streamId, 'startTick', es.currentTick.toString());
       assert.fieldEquals('Stream', streamId, 'noun', ed.nounId.toString());
       assert.fieldEquals('Stream', streamId, 'totalAmount', ed.totalAmount.toString());
       assert.fieldEquals(
@@ -195,7 +205,7 @@ describe('stream-escrow', () => {
       let streamId = StreamsOfNoun.load(nounId)!.currentStream!;
 
       // Stream state BEFORE
-      assert.fieldEquals('Stream', streamId, 'lastTick', BigInt.fromI32(10).toString());
+      assert.fieldEquals('Stream', streamId, 'lastTick', BigInt.fromI32(12).toString());
       assert.fieldEquals('Stream', streamId, 'streamLengthInTicks', BigInt.fromI32(10).toString());
 
       // handle the event

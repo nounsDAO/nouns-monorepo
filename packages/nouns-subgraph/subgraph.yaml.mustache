@@ -241,9 +241,9 @@ dataSources:
           handler: handleETHStreamedToDAO
         - event: StreamCreated(indexed uint256,uint256,uint16,uint256,uint128,uint32)
           handler: handleStreamCreated
-        - event: StreamFastForwarded(indexed uint256,uint256,uint256)
+        - event: StreamFastForwarded(indexed uint256,uint256,uint256,uint128)
           handler: handleStreamFastForwarded
-        - event: StreamCanceled(indexed uint256,uint256)
+        - event: StreamCanceled(indexed uint256,uint256,uint128)
           handler: handleStreamCanceled
         - event: StreamsForwarded(uint256,uint256,uint256,uint256)
           handler: handleStreamsForwarded

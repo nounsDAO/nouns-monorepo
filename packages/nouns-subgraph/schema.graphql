@@ -808,6 +808,7 @@ type Stream @entity {
 
   createdTimestamp: BigInt!
   createdBlock: BigInt!
+  startTick: BigInt!
 
   noun: Noun!
 

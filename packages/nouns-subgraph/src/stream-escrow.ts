@@ -38,6 +38,7 @@ export function handleStreamCreated(event: StreamCreated): void {
   const s = new Stream(streamId);
   s.createdTimestamp = event.block.timestamp;
   s.createdBlock = event.block.number;
+  s.startTick = getStreamEscrowState().currentTick;
   s.noun = nounId;
   s.totalAmount = event.params.totalAmount;
   s.streamLengthInTicks = event.params.streamLengthInTicks;
