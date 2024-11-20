@@ -224,6 +224,19 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     /**
+     * @notice Fast-forwards multiple streams by a certain number of ticks. See `fastForwardStream` for more details.
+     * @param nounIds The IDs of the Noun tokens to fast-forward streams for.
+     * @param ticksToForward An array of the number of ticks to fast-forward each stream by.
+     */
+    function fastForwardMultipleStreams(uint256[] calldata nounIds, uint32[] calldata ticksToForward) external {
+        require(nounIds.length == ticksToForward.length, 'length mismatch');
+
+        for (uint256 i; i < nounIds.length; ++i) {
+            fastForwardStream(nounIds[i], ticksToForward[i]);
+        }
+    }
+
+    /**
      * @notice Checks if a stream is active (not canceled and not finished) for a specific Noun token.
      * @param nounId The ID of the Noun token to check the stream for.
      * @return `true` if the stream is active, `false` otherwise.
