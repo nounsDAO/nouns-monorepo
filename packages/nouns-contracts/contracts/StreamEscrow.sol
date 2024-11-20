@@ -182,7 +182,7 @@ contract StreamEscrow is IStreamEscrow {
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');
 
-        emit StreamCanceled(nounId, amountToRefund);
+        emit StreamCanceled(nounId, amountToRefund, ethStreamedPerTick);
     }
 
     /**
@@ -220,7 +220,7 @@ contract StreamEscrow is IStreamEscrow {
         uint256 ethToStream = ticksToForward * stream.ethPerTick;
         sendETHToTreasury(ethToStream);
 
-        emit StreamFastForwarded(nounId, ticksToForward, newLastTick);
+        emit StreamFastForwarded(nounId, ticksToForward, newLastTick, ethStreamedPerTick);
     }
 
     /**

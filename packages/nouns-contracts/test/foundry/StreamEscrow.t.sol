@@ -334,7 +334,7 @@ contract CancelStreamTest is BaseStreamEscrowTest {
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
         vm.expectEmit();
-        emit IStreamEscrow.StreamCanceled(1, 7.5 ether);
+        emit IStreamEscrow.StreamCanceled(1, 7.5 ether, 0);
         escrow.cancelStream(1);
 
         // check streamed amount
@@ -426,7 +426,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectEmit();
-        emit IStreamEscrow.StreamFastForwarded(1, 20, 80);
+        emit IStreamEscrow.StreamFastForwarded(1, 20, 80, 0.01 ether);
         escrow.fastForwardStream({ nounId: 1, ticksToForward: 20 });
     }
 
