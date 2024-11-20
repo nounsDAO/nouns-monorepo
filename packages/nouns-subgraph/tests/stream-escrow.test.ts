@@ -227,7 +227,7 @@ describe('stream-escrow', () => {
         'StreamFastforward',
         genericUniqueId(ed.txHash, ed.logIndex),
         'stream',
-        ed.nounId.toString(),
+        streamId,
       );
       assert.fieldEquals(
         'StreamFastforward',

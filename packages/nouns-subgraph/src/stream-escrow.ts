@@ -58,16 +58,16 @@ export function handleStreamCreated(event: StreamCreated): void {
 
 export function handleStreamFastForwarded(event: StreamFastForwarded): void {
   const nounId = event.params.nounId.toString();
+  const s = getCurrentStream(nounId);
 
   const ff = new StreamFastforward(genericUniqueId(event));
   ff.createdTimestamp = event.block.timestamp;
   ff.createdBlock = event.block.number;
-  ff.stream = nounId;
+  ff.stream = s.id;
   ff.ticksToForward = event.params.ticksToForward;
   ff.newLastTick = event.params.newLastTick;
   ff.save();
 
-  const s = getCurrentStream(nounId);
   s.lastTick = event.params.newLastTick;
   s.streamLengthInTicks = s.streamLengthInTicks - event.params.ticksToForward.toI32();
   s.save();
