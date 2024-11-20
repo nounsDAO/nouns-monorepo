@@ -30,7 +30,7 @@ jobs:
       - name: Prepare subgraph yaml
         run: |
           cd packages/nouns-subgraph
-          yarn prepare:rinkeby
+          yarn prepare:sepolia
       - name: Generate code
         run: |
           cd packages/nouns-subgraph
