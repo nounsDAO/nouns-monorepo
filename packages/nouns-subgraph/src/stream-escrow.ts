@@ -71,6 +71,10 @@ export function handleStreamFastForwarded(event: StreamFastForwarded): void {
   s.lastTick = event.params.newLastTick;
   s.streamLengthInTicks = s.streamLengthInTicks - event.params.ticksToForward.toI32();
   s.save();
+
+  const state = getStreamEscrowState();
+  state.ethStreamedPerTick = event.params.ethStreamedPerTick;
+  state.save();
 }
 
 export function handleStreamCanceled(event: StreamCanceled): void {
@@ -80,6 +84,10 @@ export function handleStreamCanceled(event: StreamCanceled): void {
   s.canceled = true;
   s.cancellationRefundAmount = event.params.amountToRefund;
   s.save();
+
+  const state = getStreamEscrowState();
+  state.ethStreamedPerTick = event.params.ethStreamedPerTick;
+  state.save();
 }
 
 export function handleStreamsForwarded(event: StreamsForwarded): void {

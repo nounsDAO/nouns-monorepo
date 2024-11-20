@@ -903,6 +903,7 @@ export class StreamFastForwardedData {
   nounId: BigInt = BIGINT_ZERO;
   ticksToForward: BigInt = BIGINT_ZERO;
   newLastTick: BigInt = BIGINT_ZERO;
+  ethStreamedPerTick: BigInt = BIGINT_ZERO;
   eventBlockNumber: BigInt = BIGINT_ZERO;
   eventBlockTimestamp: BigInt = BIGINT_ZERO;
   txHash: Bytes = Bytes.fromI32(0);
@@ -927,6 +928,12 @@ export function createStreamFastForwardedEvent(
   newEvent.parameters.push(
     new ethereum.EventParam('newLastTick', ethereum.Value.fromUnsignedBigInt(input.newLastTick)),
   );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ethStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.ethStreamedPerTick),
+    ),
+  );
 
   newEvent.block.number = input.eventBlockNumber;
   newEvent.block.timestamp = input.eventBlockTimestamp;
@@ -939,6 +946,7 @@ export function createStreamFastForwardedEvent(
 export class StreamCanceledData {
   nounId: BigInt = BIGINT_ZERO;
   amountToRefund: BigInt = BIGINT_ZERO;
+  ethStreamedPerTick: BigInt = BIGINT_ZERO;
 
   eventBlockNumber: BigInt = BIGINT_ZERO;
   eventBlockTimestamp: BigInt = BIGINT_ZERO;
@@ -957,6 +965,12 @@ export function createStreamCanceledEvent(input: StreamCanceledData): StreamCanc
     new ethereum.EventParam(
       'amountToRefund',
       ethereum.Value.fromUnsignedBigInt(input.amountToRefund),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ethStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.ethStreamedPerTick),
     ),
   );
 

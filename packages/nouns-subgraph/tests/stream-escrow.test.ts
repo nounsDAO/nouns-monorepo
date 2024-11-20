@@ -201,12 +201,21 @@ describe('stream-escrow', () => {
       ed.newLastTick = BigInt.fromI32(6);
       ed.ticksToForward = BigInt.fromI32(4);
       ed.txHash = Bytes.fromI32(9876);
+      ed.ethStreamedPerTick = BigInt.fromI32(777);
       let nounId = ed.nounId.toString();
       let streamId = StreamsOfNoun.load(nounId)!.currentStream!;
 
       // Stream state BEFORE
       assert.fieldEquals('Stream', streamId, 'lastTick', BigInt.fromI32(12).toString());
       assert.fieldEquals('Stream', streamId, 'streamLengthInTicks', BigInt.fromI32(10).toString());
+
+      // General state BEFORE
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        BigInt.fromI32(0).toString(),
+      );
 
       // handle the event
       handleStreamFastForwarded(createStreamFastForwardedEvent(ed));
@@ -250,13 +259,30 @@ describe('stream-escrow', () => {
         'streamLengthInTicks',
         BigInt.fromI32(10).minus(ed.ticksToForward).toString(),
       );
+
+      // General state AFTER
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        ed.ethStreamedPerTick.toString(),
+      );
     });
     test('cancel a stream', () => {
       const ed = new StreamCanceledData();
       ed.nounId = BigInt.fromI32(2142);
       ed.amountToRefund = BigInt.fromI32(142000);
+      ed.ethStreamedPerTick = BigInt.fromI32(765);
       const nounId = ed.nounId.toString();
       const streamId = StreamsOfNoun.load(nounId)!.currentStream!;
+
+      // General state BEFORE
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        BigInt.fromI32(777).toString(),
+      );
 
       handleStreamCanceled(createStreamCanceledEvent(ed));
 
@@ -266,6 +292,14 @@ describe('stream-escrow', () => {
         streamId,
         'cancellationRefundAmount',
         ed.amountToRefund.toString(),
+      );
+
+      // General state AFTER
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        ed.ethStreamedPerTick.toString(),
       );
     });
     test('forward streams', () => {
