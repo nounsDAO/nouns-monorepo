@@ -33,8 +33,13 @@ interface IStreamEscrow {
         uint256 nextEthStreamedPerTick,
         uint256 lastForwardTimestamp
     );
-    event StreamCanceled(uint256 indexed nounId, uint256 amountToRefund);
-    event StreamFastForwarded(uint256 indexed nounId, uint256 ticksToForward, uint256 newLastTick);
+    event StreamCanceled(uint256 indexed nounId, uint256 amountToRefund, uint128 ethStreamedPerTick);
+    event StreamFastForwarded(
+        uint256 indexed nounId,
+        uint256 ticksToForward,
+        uint256 newLastTick,
+        uint128 ethStreamedPerTick
+    );
     event AllowedToCreateStreamChanged(address address_, bool allowed);
     event DAOExecutorAddressSet(address newAddress);
     event ETHRecipientSet(address newAddress);

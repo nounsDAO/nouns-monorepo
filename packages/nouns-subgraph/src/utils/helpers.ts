@@ -14,6 +14,10 @@ import {
   Fork,
   ProposalCandidateContent,
   CandidateFeedback,
+  StreamEscrowState,
+  StreamCreationPermission,
+  StreamsOfNoun,
+  Stream,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -300,4 +304,50 @@ export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): 
 
   const hashedProposal = keccak256Bytes(proposalEncodeData);
   return hashedProposal;
+}
+
+export function getStreamEscrowState(): StreamEscrowState {
+  let s = StreamEscrowState.load('STATE');
+
+  if (s == null) {
+    s = new StreamEscrowState('STATE');
+    s.currentTick = BIGINT_ZERO;
+    s.lastForwardTimestamp = BIGINT_ZERO;
+    s.ethStreamedPerTick = BIGINT_ZERO;
+    s.totalAmountStreamedToDAO = BIGINT_ZERO;
+    s.daoExecutor = ZERO_ADDRESS;
+    s.daoExecutorSetBlock = BIGINT_ZERO;
+    s.ethRecipient = ZERO_ADDRESS;
+    s.ethRecipientSetBlock = BIGINT_ZERO;
+    s.nounsRecipient = ZERO_ADDRESS;
+    s.nounsRecipientSetBlock = BIGINT_ZERO;
+  }
+
+  return s as StreamEscrowState;
+}
+
+export function getOrCreateStreamCreationPermission(id: string): StreamCreationPermission {
+  let p = StreamCreationPermission.load(id);
+  if (p == null) {
+    p = new StreamCreationPermission(id);
+    p.allowed = false;
+  }
+  return p;
+}
+
+export function getOrCreateStreamsOfNoun(nounId: string): StreamsOfNoun {
+  let s = StreamsOfNoun.load(nounId);
+  if (s == null) {
+    s = new StreamsOfNoun(nounId);
+    s.pastStreams = [];
+  }
+  return s;
+}
+
+export function genericUniqueId(event: ethereum.Event): string {
+  return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+}
+
+export function getCurrentStream(nounId: string): Stream {
+  return Stream.load(StreamsOfNoun.load(nounId)!.currentStream!)!;
 }

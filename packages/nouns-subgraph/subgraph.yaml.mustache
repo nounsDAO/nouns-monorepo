@@ -216,3 +216,42 @@ dataSources:
           handler: handleFeedbackSent
         - event: CandidateFeedbackSent(indexed address,indexed address,string,uint8,string)
           handler: handleCandidateFeedbackSent
+  - kind: ethereum/contract
+    name: StreamEscrow
+    network: {{network}}
+    source:
+      address: '{{streamEscrow.address}}'
+      abi: StreamEscrow
+      startBlock: {{streamEscrow.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/stream-escrow.ts
+      entities:
+        - StreamEscrowState        
+        - ETHStreamedToDAO
+        - Stream
+        - StreamCreationPermission
+      abis:
+        - name: StreamEscrow
+          file: ../nouns-contracts/abi/contracts/StreamEscrow.json
+      eventHandlers:
+        - event: ETHStreamedToDAO(uint256)
+          handler: handleETHStreamedToDAO
+        - event: StreamCreated(indexed uint256,uint256,uint16,uint256,uint128,uint32)
+          handler: handleStreamCreated
+        - event: StreamFastForwarded(indexed uint256,uint256,uint256,uint128)
+          handler: handleStreamFastForwarded
+        - event: StreamCanceled(indexed uint256,uint256,uint128)
+          handler: handleStreamCanceled
+        - event: StreamsForwarded(uint256,uint256,uint256,uint256)
+          handler: handleStreamsForwarded
+        - event: AllowedToCreateStreamChanged(address,bool)
+          handler: handleAllowedToCreateStreamChanged
+        - event: DAOExecutorAddressSet(address)
+          handler: handleDAOExecutorAddressSet
+        - event: ETHRecipientSet(address)
+          handler: handleETHRecipientSet
+        - event: NounsRecipientSet(address)
+          handler: handleNounsRecipientSet

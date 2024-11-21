@@ -334,7 +334,7 @@ contract CancelStreamTest is BaseStreamEscrowTest {
         nounsToken.approve(address(escrow), 1);
         vm.prank(user);
         vm.expectEmit();
-        emit IStreamEscrow.StreamCanceled(1, 7.5 ether);
+        emit IStreamEscrow.StreamCanceled(1, 7.5 ether, 0);
         escrow.cancelStream(1);
 
         // check streamed amount
@@ -426,7 +426,7 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
 
         vm.prank(user);
         vm.expectEmit();
-        emit IStreamEscrow.StreamFastForwarded(1, 20, 80);
+        emit IStreamEscrow.StreamFastForwarded(1, 20, 80, 0.01 ether);
         escrow.fastForwardStream({ nounId: 1, ticksToForward: 20 });
     }
 
@@ -520,6 +520,34 @@ contract FastForwardStreamTest is BaseStreamEscrowTest {
         assertEq(ethRecipient.balance, 1 ether);
         assertEq(escrow.ethStreamedPerTick(), 0 ether);
         assertEq(escrow.isStreamActive(1), false);
+    }
+
+    function test_fastForwardMultipleStreams() public {
+        forwardOneDay();
+
+        // mint noun 2 to streamCreator
+        nounsToken.mint(streamCreator, 2);
+
+        // create a stream for noun 2 and transfer to user
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 2, streamLengthInTicks: 100 });
+        vm.prank(streamCreator);
+        nounsToken.transferFrom(streamCreator, user, 2);
+
+        // fast forward stream 1 by 20 days, and stream 2 by 40 days
+        vm.prank(user);
+        uint256[] memory nounIds = new uint256[](2);
+        nounIds[0] = 1;
+        nounIds[1] = 2;
+        uint32[] memory ticksToForward = new uint32[](2);
+        ticksToForward[0] = 20;
+        ticksToForward[1] = 40;
+        escrow.fastForwardMultipleStreams(nounIds, ticksToForward);
+
+        // expecting that stream 1 has streamed 1 + 20 ticks, total 21 ticks = 0.21 eth
+        // expecting that stream 2 has streamed 40 ticks = 0.4 eth
+        // together they streamed 0.61 eth
+        assertEq(ethRecipient.balance, 0.61 ether);
     }
 }
 

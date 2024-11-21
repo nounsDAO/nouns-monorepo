@@ -79,6 +79,11 @@ contract StreamEscrow is IStreamEscrow {
         nounsToken = INounsToken(nounsToken_);
         allowedToCreateStream[streamCreator_] = true;
         minimumTickDuration = minimumTickDuration_;
+
+        emit DAOExecutorAddressSet(daoExecutor_);
+        emit ETHRecipientSet(ethRecipient_);
+        emit NounsRecipientSet(nounsRecipient_);
+        emit AllowedToCreateStreamChanged(streamCreator_, true);
     }
 
     /**
@@ -177,7 +182,7 @@ contract StreamEscrow is IStreamEscrow {
         (bool sent, ) = msg.sender.call{ value: amountToRefund }('');
         require(sent, 'failed to send eth');
 
-        emit StreamCanceled(nounId, amountToRefund);
+        emit StreamCanceled(nounId, amountToRefund, ethStreamedPerTick);
     }
 
     /**
@@ -215,7 +220,20 @@ contract StreamEscrow is IStreamEscrow {
         uint256 ethToStream = ticksToForward * stream.ethPerTick;
         sendETHToTreasury(ethToStream);
 
-        emit StreamFastForwarded(nounId, ticksToForward, newLastTick);
+        emit StreamFastForwarded(nounId, ticksToForward, newLastTick, ethStreamedPerTick);
+    }
+
+    /**
+     * @notice Fast-forwards multiple streams by a certain number of ticks. See `fastForwardStream` for more details.
+     * @param nounIds The IDs of the Noun tokens to fast-forward streams for.
+     * @param ticksToForward An array of the number of ticks to fast-forward each stream by.
+     */
+    function fastForwardMultipleStreams(uint256[] calldata nounIds, uint32[] calldata ticksToForward) external {
+        require(nounIds.length == ticksToForward.length, 'length mismatch');
+
+        for (uint256 i; i < nounIds.length; ++i) {
+            fastForwardStream(nounIds[i], ticksToForward[i]);
+        }
     }
 
     /**
