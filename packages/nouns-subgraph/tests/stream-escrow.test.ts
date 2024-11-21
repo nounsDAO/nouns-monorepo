@@ -158,6 +158,13 @@ describe('stream-escrow', () => {
       assert.fieldEquals('StreamsOfNoun', nounId, 'currentStream', streamId);
       assert.fieldEquals('StreamsOfNoun', nounId, 'pastStreams', '[]');
 
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        ed.newEthStreamedPerTick.toString(),
+      );
+
       const prevStreamPerTick = ed.newEthStreamedPerTick;
 
       es = getStreamEscrowState();
@@ -194,6 +201,13 @@ describe('stream-escrow', () => {
 
       assert.fieldEquals('StreamsOfNoun', nounId, 'currentStream', streamId);
       assert.fieldEquals('StreamsOfNoun', nounId, 'pastStreams', '[]');
+
+      assert.fieldEquals(
+        'StreamEscrowState',
+        'STATE',
+        'ethStreamedPerTick',
+        ed.newEthStreamedPerTick.toString(),
+      );
     });
     test('fast-forward a stream', () => {
       const ed = new StreamFastForwardedData();
@@ -214,7 +228,7 @@ describe('stream-escrow', () => {
         'StreamEscrowState',
         'STATE',
         'ethStreamedPerTick',
-        BigInt.fromI32(0).toString(),
+        BigInt.fromI32(284).toString(),
       );
 
       // handle the event
