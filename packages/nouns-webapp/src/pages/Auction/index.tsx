@@ -49,7 +49,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     : 'var(--brand-warm-background)';
 
   return (
-    <>
+    <div>
       <Auction auction={onDisplayAuction} />
       {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
@@ -63,7 +63,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
             : undefined
         }
       />
-    </>
+    </div>
   );
 };
 export default AuctionPage;

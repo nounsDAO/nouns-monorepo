@@ -5,6 +5,13 @@
 
 .nounContentCol {
   display: flex;
+  padding: 40px;
+  display: flex;
+  width: 100%;
+  height: max-content;
+  img {
+    height: max-content;
+  }
 }
 
 .auctionActivityCol {
@@ -48,5 +55,51 @@
 
   .nounContentCol {
     padding: 0rem;
+
+  }
+}
+.wrapper {
+  border-radius: 20px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.topHero {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.soon {
+  padding: 10px 25px;
+  background: #5caf42;
+  border-radius: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;;
+  h1 {
+    color: white;
+    font-size: 50px;
   }
 }

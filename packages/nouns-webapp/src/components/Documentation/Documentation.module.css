@@ -84,3 +84,22 @@
     padding-left: 20px;
   }
 }
+
+
+.singleRow {
+  ul {
+    margin-top: 10px;
+    margin-left: 40px;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+}
+
+.rule {
+  margin: 40px 0;
+  color: white;
+  height: 10px;
+  border: 2px solid white;
+}
