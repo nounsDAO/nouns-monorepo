@@ -54,7 +54,9 @@ export function handleStreamCreated(event: StreamCreated): void {
 
   const son = getOrCreateStreamsOfNoun(nounId);
   if (son.currentStream != null) {
-    son.pastStreams.push(son.currentStream!);
+    let pastStreams = son.pastStreams;
+    pastStreams.push(son.currentStream!);
+    son.pastStreams = pastStreams;
   }
   son.currentStream = s.id;
   son.save();
