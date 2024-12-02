@@ -740,7 +740,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
         assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
     }
 
-    function test_unstreamETHForNoun_canceledStream() public {
+    function test_unstreamedETHForNoun_canceledStream() public {
         vm.prank(streamCreator);
         escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
 
@@ -762,6 +762,17 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
 
         // check unstreamed eth is zero
         assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+    }
+
+    function test_unstreamedETHForNoun_returnsZeroForNonExistentStream() public {
+        assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+
+        // forward 5 ticks
+        for (uint i; i < 5; i++) {
+            forwardOneDay();
+        }
+
+        assertEq(escrow.unstreamedETHForNoun(3), 0 ether);
     }
 }
 
