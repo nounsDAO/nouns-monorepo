@@ -245,6 +245,17 @@ contract StreamEscrow is IStreamEscrow {
         return !streams[nounId].canceled && streams[nounId].lastTick > currentTick;
     }
 
+    function unstreamedETHForNoun(uint256 nounId) public view returns (uint256) {
+        Stream memory stream = streams[nounId];
+        uint32 currentTick_ = currentTick;
+        if (!isStreamActive(stream, currentTick_)) {
+            return 0;
+        }
+
+        uint256 ticksLeft = stream.lastTick - currentTick_;
+        return ticksLeft * stream.ethPerTick;
+    }
+
     function isStreamActive(Stream memory stream, uint32 tick) internal pure returns (bool) {
         return !stream.canceled && stream.lastTick > tick;
     }
