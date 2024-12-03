@@ -245,6 +245,22 @@ contract StreamEscrow is IStreamEscrow {
         return !streams[nounId].canceled && streams[nounId].lastTick > currentTick;
     }
 
+    /**
+     * @notice Returns the amount of ETH that was not yet streamed for a specific Noun token.
+     * Returns zero for inactive streams.
+     * @param nounId The ID of the Noun token to check the stream for.
+     */
+    function unstreamedETHForNoun(uint256 nounId) public view returns (uint256) {
+        Stream memory stream = streams[nounId];
+        uint32 currentTick_ = currentTick;
+        if (!isStreamActive(stream, currentTick_)) {
+            return 0;
+        }
+
+        uint256 ticksLeft = stream.lastTick - currentTick_;
+        return ticksLeft * stream.ethPerTick;
+    }
+
     function isStreamActive(Stream memory stream, uint32 tick) internal pure returns (bool) {
         return !stream.canceled && stream.lastTick > tick;
     }

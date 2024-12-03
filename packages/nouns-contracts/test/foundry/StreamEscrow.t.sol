@@ -717,6 +717,65 @@ contract RescueTokensTest is BaseStreamEscrowTest {
     }
 }
 
+contract UnstreamedETHTest is BaseStreamEscrowTest {
+    function test_unstreamedETHForNoun() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        // 1 ether / 20 = 0.05 eth per tick
+        assertEq(escrow.unstreamedETHForNoun(1), 1 ether);
+
+        // forward 5 ticks
+        for (uint i; i < 5; i++) {
+            forwardOneDay();
+        }
+        // check unstreamed eth
+        assertEq(escrow.unstreamedETHForNoun(1), 0.75 ether);
+
+        // forward 15 more ticks
+        for (uint i; i < 15; i++) {
+            forwardOneDay();
+        }
+        // check unstreamed eth
+        assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+    }
+
+    function test_unstreamedETHForNoun_canceledStream() public {
+        vm.prank(streamCreator);
+        escrow.forwardAllAndCreateStream{ value: 1 ether }({ nounId: 1, streamLengthInTicks: 20 });
+
+        // 1 ether / 20 = 0.05 eth per tick
+        assertEq(escrow.unstreamedETHForNoun(1), 1 ether);
+
+        // forward 5 ticks
+        for (uint i; i < 5; i++) {
+            forwardOneDay();
+        }
+        // check unstreamed eth
+        assertEq(escrow.unstreamedETHForNoun(1), 0.75 ether);
+
+        // cancel stream
+        vm.prank(streamCreator);
+        nounsToken.approve(address(escrow), 1);
+        vm.prank(streamCreator);
+        escrow.cancelStream(1);
+
+        // check unstreamed eth is zero
+        assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+    }
+
+    function test_unstreamedETHForNoun_returnsZeroForNonExistentStream() public {
+        assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+
+        // forward 5 ticks
+        for (uint i; i < 5; i++) {
+            forwardOneDay();
+        }
+
+        assertEq(escrow.unstreamedETHForNoun(3), 0 ether);
+    }
+}
+
 contract StreamEscrowGasTest is BaseStreamEscrowTest {
     function setUp() public virtual override {
         super.setUp();
