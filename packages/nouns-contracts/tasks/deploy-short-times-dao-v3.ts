@@ -1,4 +1,4 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as NounsAuctionHouseV2ABI } from '../abi/contracts/NounsAuctionHouseV2.json';
 import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { ChainId, ContractDeployment, ContractNamesDAOV3, DeployedContract } from './types';
@@ -158,22 +158,20 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      NounsAuctionHouseV2: {
+        args: [() => deployment.NounsToken.address, args.weth, args.auctionDuration],
         waitForConfirmation: true,
       },
       NounsAuctionHouseProxyAdmin: {},
       NounsAuctionHouseProxy: {
         args: [
-          () => deployment.NounsAuctionHouse.address,
+          () => deployment.NounsAuctionHouseV2.address,
           () => deployment.NounsAuctionHouseProxyAdmin.address,
           () =>
-            new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              deployment.NounsToken.address,
-              args.weth,
-              args.auctionTimeBuffer,
+            new Interface(NounsAuctionHouseV2ABI).encodeFunctionData('initialize', [
               args.auctionReservePrice,
+              args.auctionTimeBuffer,
               args.auctionMinIncrementBidPercentage,
-              args.auctionDuration,
             ]),
         ],
         waitForConfirmation: true,
