@@ -119,14 +119,14 @@ contract StreamEscrow is IStreamEscrow {
         uint32 streamLastTick = currentTick + streamLengthInTicks;
         ethStreamEndingAtTick[streamLastTick] += ethPerTick;
 
-        // the remainder is immediately streamed to the DAO
-        uint256 remainder = msg.value % streamLengthInTicks;
-        sendETHToTreasury(remainder);
-
         uint128 newEthStreamedPerTick = ethStreamedPerTick + ethPerTick;
         ethStreamedPerTick = newEthStreamedPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
         emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick, newEthStreamedPerTick, streamLastTick);
+
+        // the remainder is immediately streamed to the DAO
+        uint256 remainder = msg.value % streamLengthInTicks;
+        sendETHToTreasury(remainder);
     }
 
     /**
@@ -141,11 +141,13 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = toUint48(block.timestamp);
 
-        sendETHToTreasury(ethStreamedPerTick);
+        uint128 ethStreamedPerTick_ = ethStreamedPerTick;
 
         (uint32 newTick, uint128 ethPerTickEnded) = increaseTicksAndFinishStreams();
 
         emit StreamsForwarded(newTick, ethPerTickEnded, ethStreamedPerTick, lastForwardTimestamp);
+
+        sendETHToTreasury(ethStreamedPerTick_);
     }
 
     /**
