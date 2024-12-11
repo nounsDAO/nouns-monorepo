@@ -73,6 +73,8 @@ contract StreamEscrow is IStreamEscrow {
         address streamCreator_,
         uint32 minimumTickDuration_
     ) {
+        require(nounsRecipient_ != address(0), 'zero address');
+
         daoExecutor = daoExecutor_;
         ethRecipient = ethRecipient_;
         nounsRecipient = nounsRecipient_;
@@ -295,8 +297,10 @@ contract StreamEscrow is IStreamEscrow {
 
     /**
      * @notice Allows the DAO to set the address that the Nouns tokens will be sent to when streams are canceled.
+     * The zero address is not allowed because it will cause the transfer to revert, which will cause all cancellations to revert.
      */
     function setNounsRecipient(address newAddress) external onlyDAO {
+        require(newAddress != address(0), 'zero address');
         nounsRecipient = newAddress;
         emit NounsRecipientSet(newAddress);
     }

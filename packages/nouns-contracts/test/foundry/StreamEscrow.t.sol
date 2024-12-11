@@ -693,6 +693,17 @@ contract DAOSettersTest is BaseStreamEscrowTest {
         // check that new recipient received the noun
         assertEq(nounsToken.ownerOf(1), makeAddr('nounsRecipient2'));
     }
+
+    function test_setNounsRecipient_cantBeZero() public {
+        vm.prank(treasury);
+        vm.expectRevert('zero address');
+        escrow.setNounsRecipient(address(0));
+    }
+
+    function test_nounsReceipient_cantBeZeroInConstructor() public {
+        vm.expectRevert('zero address');
+        new StreamEscrow(treasury, ethRecipient, address(0), address(nounsToken), streamCreator, 24 hours);
+    }
 }
 
 contract RescueTokensTest is BaseStreamEscrowTest {
