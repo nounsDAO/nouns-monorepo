@@ -20,8 +20,11 @@ pragma solidity ^0.8.19;
 import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 contract StreamEscrow is IStreamEscrow {
+    using SafeERC20 for IERC20;
+
     modifier onlyDAO() {
         require(msg.sender == daoExecutor, 'only dao');
         _;
@@ -312,7 +315,7 @@ contract StreamEscrow is IStreamEscrow {
      * @param amount The amount of tokens to rescue.
      */
     function rescueToken(address token, address to, uint256 amount) external onlyDAO {
-        IERC20(token).transfer(to, amount);
+        IERC20(token).safeTransfer(to, amount);
     }
 
     /**
