@@ -253,19 +253,41 @@ contract StreamEscrow is IStreamEscrow {
     }
 
     /**
+     * @notice Returns the amount of ETH that was not yet streamed and the number of ticks left for a specific Noun token.
+     * Returns zero for inactive streams.
+     * @param nounId The ID of the Noun token to check the stream for.
+     */
+    function unstreamedETHAndTicksLeftForNoun(
+        uint256 nounId
+    ) public view returns (uint256 unstreamedETH, uint256 ticksLeft) {
+        Stream memory stream = streams[nounId];
+        uint32 currentTick_ = currentTick;
+        if (!isStreamActive(stream, currentTick_)) {
+            return (0, 0);
+        } else {
+            ticksLeft = stream.lastTick - currentTick_;
+            unstreamedETH = ticksLeft * stream.ethPerTick;
+        }
+    }
+
+    /**
      * @notice Returns the amount of ETH that was not yet streamed for a specific Noun token.
      * Returns zero for inactive streams.
      * @param nounId The ID of the Noun token to check the stream for.
      */
     function unstreamedETHForNoun(uint256 nounId) public view returns (uint256) {
-        Stream memory stream = streams[nounId];
-        uint32 currentTick_ = currentTick;
-        if (!isStreamActive(stream, currentTick_)) {
-            return 0;
-        }
+        (uint256 unstreamedETH, ) = unstreamedETHAndTicksLeftForNoun(nounId);
+        return unstreamedETH;
+    }
 
-        uint256 ticksLeft = stream.lastTick - currentTick_;
-        return ticksLeft * stream.ethPerTick;
+    /**
+     * @notice Returns the number of ticks left in a stream for a specific Noun token.
+     * Returns zero for inactive streams.
+     * @param nounId The ID of the Noun token to check the stream for.
+     */
+    function ticksLeftForNoun(uint256 nounId) public view returns (uint256) {
+        (, uint256 ticksLeft) = unstreamedETHAndTicksLeftForNoun(nounId);
+        return ticksLeft;
     }
 
     function isStreamActive(Stream memory stream, uint32 tick) internal pure returns (bool) {
