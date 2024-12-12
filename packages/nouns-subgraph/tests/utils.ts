@@ -31,6 +31,17 @@ import {
   DelegateVotesChanged,
   Transfer,
 } from '../src/types/NounsToken/NounsToken';
+import {
+  AllowedToCreateStreamChanged,
+  DAOExecutorAddressSet,
+  ETHRecipientSet,
+  ETHStreamedToDAO,
+  NounsRecipientSet,
+  StreamCanceled,
+  StreamCreated,
+  StreamFastForwarded,
+  StreamsForwarded,
+} from '../src/types/StreamEscrow/StreamEscrow';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -812,4 +823,298 @@ export function createProposalCreatedEvent(input: ProposalCreatedData): Proposal
   newEvent.address = input.address;
 
   return newEvent;
+}
+
+export class ETHStreamedToDAOData {
+  amount: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createETHStreamedToDAOEvent(input: ETHStreamedToDAOData): ETHStreamedToDAO {
+  let newEvent = changetype<ETHStreamedToDAO>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('amount', ethereum.Value.fromUnsignedBigInt(input.amount)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class StreamCreatedData {
+  nounId: BigInt = BIGINT_ZERO;
+  totalAmount: BigInt = BIGINT_ZERO;
+  streamLengthInTicks: BigInt = BIGINT_ZERO;
+  ethPerTick: BigInt = BIGINT_ZERO;
+  newEthStreamedPerTick: BigInt = BIGINT_ZERO;
+  lastTick: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamCreatedEvent(input: StreamCreatedData): StreamCreated {
+  let newEvent = changetype<StreamCreated>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('nounId', ethereum.Value.fromUnsignedBigInt(input.nounId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('totalAmount', ethereum.Value.fromUnsignedBigInt(input.totalAmount)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'streamLengthInTicks',
+      ethereum.Value.fromUnsignedBigInt(input.streamLengthInTicks),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('ethPerTick', ethereum.Value.fromUnsignedBigInt(input.ethPerTick)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'newEthStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.newEthStreamedPerTick),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('lastTick', ethereum.Value.fromUnsignedBigInt(input.lastTick)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class StreamFastForwardedData {
+  nounId: BigInt = BIGINT_ZERO;
+  ticksToForward: BigInt = BIGINT_ZERO;
+  newLastTick: BigInt = BIGINT_ZERO;
+  ethStreamedPerTick: BigInt = BIGINT_ZERO;
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamFastForwardedEvent(
+  input: StreamFastForwardedData,
+): StreamFastForwarded {
+  let newEvent = changetype<StreamFastForwarded>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('nounId', ethereum.Value.fromUnsignedBigInt(input.nounId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ticksToForward',
+      ethereum.Value.fromUnsignedBigInt(input.ticksToForward),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('newLastTick', ethereum.Value.fromUnsignedBigInt(input.newLastTick)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ethStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.ethStreamedPerTick),
+    ),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class StreamCanceledData {
+  nounId: BigInt = BIGINT_ZERO;
+  amountToRefund: BigInt = BIGINT_ZERO;
+  ethStreamedPerTick: BigInt = BIGINT_ZERO;
+
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamCanceledEvent(input: StreamCanceledData): StreamCanceled {
+  let newEvent = changetype<StreamCanceled>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('nounId', ethereum.Value.fromUnsignedBigInt(input.nounId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'amountToRefund',
+      ethereum.Value.fromUnsignedBigInt(input.amountToRefund),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ethStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.ethStreamedPerTick),
+    ),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class StreamsForwardedData {
+  currentTick: BigInt = BIGINT_ZERO;
+  ethPerTickStreamEnded: BigInt = BIGINT_ZERO;
+  nextEthStreamedPerTick: BigInt = BIGINT_ZERO;
+  lastForwardTimestamp: BigInt = BIGINT_ZERO;
+
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createStreamsForwardedEvent(input: StreamsForwardedData): StreamsForwarded {
+  let newEvent = changetype<StreamsForwarded>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('currentTick', ethereum.Value.fromUnsignedBigInt(input.currentTick)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'ethPerTickStreamEnded',
+      ethereum.Value.fromUnsignedBigInt(input.ethPerTickStreamEnded),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'nextEthStreamedPerTick',
+      ethereum.Value.fromUnsignedBigInt(input.nextEthStreamedPerTick),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'lastForwardTimestamp',
+      ethereum.Value.fromUnsignedBigInt(input.lastForwardTimestamp),
+    ),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class AllowedToCreateStreamChangedData {
+  address: Address = Address.fromString('0x0000000000000000000000000000000000000000');
+  allowed: boolean = false;
+
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createAllowedToCreateStreamChangedEvent(
+  input: AllowedToCreateStreamChangedData,
+): AllowedToCreateStreamChanged {
+  let newEvent = changetype<AllowedToCreateStreamChanged>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('address_', ethereum.Value.fromAddress(input.address)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('allowed', ethereum.Value.fromBoolean(input.allowed)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export class AddressSetData {
+  newAddress: Address = Address.fromString('0x0000000000000000000000000000000000000000');
+  eventBlockNumber: BigInt = BIGINT_ZERO;
+  eventBlockTimestamp: BigInt = BIGINT_ZERO;
+  txHash: Bytes = Bytes.fromI32(0);
+  logIndex: BigInt = BIGINT_ZERO;
+}
+
+export function createDAOExecutorAddressSetEvent(input: AddressSetData): DAOExecutorAddressSet {
+  let newEvent = changetype<DAOExecutorAddressSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('newAddress', ethereum.Value.fromAddress(input.newAddress)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export function createETHRecipientSetEvent(input: AddressSetData): ETHRecipientSet {
+  let newEvent = changetype<ETHRecipientSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('newAddress', ethereum.Value.fromAddress(input.newAddress)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export function createNounsRecipientSetEvent(input: AddressSetData): NounsRecipientSet {
+  let newEvent = changetype<NounsRecipientSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('newAddress', ethereum.Value.fromAddress(input.newAddress)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+  newEvent.block.timestamp = input.eventBlockTimestamp;
+  newEvent.transaction.hash = input.txHash;
+  newEvent.logIndex = input.logIndex;
+
+  return newEvent;
+}
+
+export function genericUniqueId(txHash: Bytes, logIndex: BigInt): string {
+  return txHash.toHexString().concat('-').concat(logIndex.toString());
 }

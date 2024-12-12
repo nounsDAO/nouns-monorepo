@@ -20,7 +20,7 @@ pragma solidity ^0.8.19;
 import { INounsToken } from './INounsToken.sol';
 import { IStreamEscrow } from './IStreamEscrow.sol';
 
-interface INounsAuctionHouseV2 {
+interface INounsAuctionHouseV3 {
     struct AuctionV2 {
         // ID for the Noun (ERC721 token ID)
         uint96 nounId;
@@ -110,6 +110,12 @@ interface INounsAuctionHouseV2 {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
+    event StreamEscrowUpdated(address streamEscrow);
+
+    event ImmediateTreasuryBPsUpdated(uint16 immediateTreasuryBPs);
+
+    event StreamLengthInTicksUpdated(uint16 streamLengthInTicks);
+
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
@@ -166,4 +172,6 @@ interface INounsAuctionHouseV2 {
     function biddingClient(uint256 nounId) external view returns (uint32 clientId);
 
     function setPrices(SettlementNoClientId[] memory settlements) external;
+
+    function streamEscrow() external view returns (IStreamEscrow);
 }
