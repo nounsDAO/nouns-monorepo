@@ -263,8 +263,7 @@ contract StreamEscrow is IStreamEscrow {
         Stream memory stream = streams[nounId];
         uint32 currentTick_ = currentTick;
         if (!isStreamActive(stream, currentTick_)) {
-            ticksLeft = 0;
-            unstreamedETH = 0;
+            return (0, 0);
         } else {
             ticksLeft = stream.lastTick - currentTick_;
             unstreamedETH = ticksLeft * stream.ethPerTick;
