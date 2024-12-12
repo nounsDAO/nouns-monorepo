@@ -8,13 +8,14 @@ on:
     paths:
       - 'packages/nouns-contracts/abi/contracts/**'
       - 'packages/nouns-subgraph/**'
+      - '.github/workflows/subgraph-test.yaml'
     branches:
       - '**'
 
 jobs:
   build_and_test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
         with:
