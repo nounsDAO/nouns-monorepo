@@ -735,6 +735,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
 
         // 1 ether / 20 = 0.05 eth per tick
         assertEq(escrow.unstreamedETHForNoun(1), 1 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 20);
 
         // forward 5 ticks
         for (uint i; i < 5; i++) {
@@ -742,6 +743,11 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
         }
         // check unstreamed eth
         assertEq(escrow.unstreamedETHForNoun(1), 0.75 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 15);
+
+        (uint256 unstreamedETH, uint256 ticksLeft) = escrow.unstreamedETHAndTicksLeftForNoun(1);
+        assertEq(unstreamedETH, 0.75 ether);
+        assertEq(ticksLeft, 15);
 
         // forward 15 more ticks
         for (uint i; i < 15; i++) {
@@ -749,6 +755,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
         }
         // check unstreamed eth
         assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 0);
     }
 
     function test_unstreamedETHForNoun_canceledStream() public {
@@ -757,6 +764,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
 
         // 1 ether / 20 = 0.05 eth per tick
         assertEq(escrow.unstreamedETHForNoun(1), 1 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 20);
 
         // forward 5 ticks
         for (uint i; i < 5; i++) {
@@ -764,6 +772,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
         }
         // check unstreamed eth
         assertEq(escrow.unstreamedETHForNoun(1), 0.75 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 15);
 
         // cancel stream
         vm.prank(streamCreator);
@@ -773,10 +782,12 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
 
         // check unstreamed eth is zero
         assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 0);
     }
 
     function test_unstreamedETHForNoun_returnsZeroForNonExistentStream() public {
         assertEq(escrow.unstreamedETHForNoun(1), 0 ether);
+        assertEq(escrow.ticksLeftForNoun(1), 0);
 
         // forward 5 ticks
         for (uint i; i < 5; i++) {
@@ -784,6 +795,7 @@ contract UnstreamedETHTest is BaseStreamEscrowTest {
         }
 
         assertEq(escrow.unstreamedETHForNoun(3), 0 ether);
+        assertEq(escrow.ticksLeftForNoun(3), 0);
     }
 }
 
