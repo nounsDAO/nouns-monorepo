@@ -20,8 +20,11 @@ pragma solidity ^0.8.19;
 import { IStreamEscrow } from './interfaces/IStreamEscrow.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 contract StreamEscrow is IStreamEscrow {
+    using SafeERC20 for IERC20;
+
     modifier onlyDAO() {
         require(msg.sender == daoExecutor, 'only dao');
         _;
@@ -73,6 +76,8 @@ contract StreamEscrow is IStreamEscrow {
         address streamCreator_,
         uint32 minimumTickDuration_
     ) {
+        require(nounsRecipient_ != address(0), 'zero address');
+
         daoExecutor = daoExecutor_;
         ethRecipient = ethRecipient_;
         nounsRecipient = nounsRecipient_;
@@ -119,14 +124,14 @@ contract StreamEscrow is IStreamEscrow {
         uint32 streamLastTick = currentTick + streamLengthInTicks;
         ethStreamEndingAtTick[streamLastTick] += ethPerTick;
 
-        // the remainder is immediately streamed to the DAO
-        uint256 remainder = msg.value % streamLengthInTicks;
-        sendETHToTreasury(remainder);
-
         uint128 newEthStreamedPerTick = ethStreamedPerTick + ethPerTick;
         ethStreamedPerTick = newEthStreamedPerTick;
         streams[nounId] = Stream({ ethPerTick: ethPerTick, canceled: false, lastTick: streamLastTick });
         emit StreamCreated(nounId, msg.value, streamLengthInTicks, ethPerTick, newEthStreamedPerTick, streamLastTick);
+
+        // the remainder is immediately streamed to the DAO
+        uint256 remainder = msg.value % streamLengthInTicks;
+        sendETHToTreasury(remainder);
     }
 
     /**
@@ -141,11 +146,13 @@ contract StreamEscrow is IStreamEscrow {
 
         lastForwardTimestamp = toUint48(block.timestamp);
 
-        sendETHToTreasury(ethStreamedPerTick);
+        uint128 ethStreamedPerTick_ = ethStreamedPerTick;
 
         (uint32 newTick, uint128 ethPerTickEnded) = increaseTicksAndFinishStreams();
 
         emit StreamsForwarded(newTick, ethPerTickEnded, ethStreamedPerTick, lastForwardTimestamp);
+
+        sendETHToTreasury(ethStreamedPerTick_);
     }
 
     /**
@@ -293,8 +300,10 @@ contract StreamEscrow is IStreamEscrow {
 
     /**
      * @notice Allows the DAO to set the address that the Nouns tokens will be sent to when streams are canceled.
+     * The zero address is not allowed because it will cause the transfer to revert, which will cause all cancellations to revert.
      */
     function setNounsRecipient(address newAddress) external onlyDAO {
+        require(newAddress != address(0), 'zero address');
         nounsRecipient = newAddress;
         emit NounsRecipientSet(newAddress);
     }
@@ -306,7 +315,7 @@ contract StreamEscrow is IStreamEscrow {
      * @param amount The amount of tokens to rescue.
      */
     function rescueToken(address token, address to, uint256 amount) external onlyDAO {
-        IERC20(token).transfer(to, amount);
+        IERC20(token).safeTransfer(to, amount);
     }
 
     /**
