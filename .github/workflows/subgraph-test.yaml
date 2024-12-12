@@ -8,6 +8,7 @@ on:
     paths:
       - 'packages/nouns-contracts/abi/contracts/**'
       - 'packages/nouns-subgraph/**'
+      - '.github/workflows/subgraph-test.yaml'
     branches:
       - '**'
 
