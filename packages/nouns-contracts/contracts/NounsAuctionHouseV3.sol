@@ -87,7 +87,8 @@ contract NounsAuctionHouseV3 is
     function initialize(
         uint192 _reservePrice,
         uint56 _timeBuffer,
-        uint8 _minBidIncrementPercentage
+        uint8 _minBidIncrementPercentage,
+        IChainalysisSanctionsList _sanctionsOracle
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -98,6 +99,9 @@ contract NounsAuctionHouseV3 is
         reservePrice = _reservePrice;
         timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
+        sanctionsOracle = _sanctionsOracle;
+
+        emit SanctionsOracleSet(address(_sanctionsOracle));
     }
 
     /**
@@ -247,7 +251,7 @@ contract NounsAuctionHouseV3 is
      * @notice Set the sanctions oracle address.
      * @dev Only callable by the owner.
      */
-    function setSanctionsOracle(address newSanctionsOracle) external onlyOwner {
+    function setSanctionsOracle(address newSanctionsOracle) public onlyOwner {
         sanctionsOracle = IChainalysisSanctionsList(newSanctionsOracle);
 
         emit SanctionsOracleSet(newSanctionsOracle);
@@ -334,7 +338,7 @@ contract NounsAuctionHouseV3 is
         }
         return success;
     }
-    
+
     /**
      * @notice Revert if `sanctionsOracle` is set and `account` is sanctioned.
      */

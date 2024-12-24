@@ -8,19 +8,7 @@ import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.
 import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsAuctionHouseV3 } from '../../../contracts/interfaces/INounsAuctionHouseV3.sol';
-import { IChainalysisSanctionsList } from '../../../contracts/external/chainalysis/IChainalysisSanctionsList.sol';
-
-contract ChainalysisSanctionsListMock is IChainalysisSanctionsList {
-    mapping(address => bool) public sanctioned;
-
-    function isSanctioned(address addr) external view returns (bool) {
-        return sanctioned[addr];
-    }
-
-    function setSanctioned(address addr, bool value) public {
-        sanctioned[addr] = value;
-    }
-}
+import { ChainalysisSanctionsListMock } from '../helpers/ChainalysisSanctionsListMock.sol';
 
 abstract contract UpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
