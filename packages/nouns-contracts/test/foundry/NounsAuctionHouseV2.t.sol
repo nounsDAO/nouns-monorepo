@@ -6,24 +6,25 @@ import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
-import { INounsAuctionHouseV2 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
+import { INounsAuctionHouseV3 as IAH } from '../../contracts/interfaces/INounsAuctionHouseV3.sol';
+import { NounsAuctionHouseV3 } from '../../contracts/NounsAuctionHouseV3.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
+import { ChainalysisSanctionsListMock } from './helpers/ChainalysisSanctionsListMock.sol';
 
-contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
+contract NounsAuctionHouseV3TestBase is Test, DeployUtils {
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
     uint256[] nounIds;
     uint32 timestamp = 1702289583;
 
-    NounsAuctionHouseV2 auction;
+    NounsAuctionHouseV3 auction;
 
     function setUp() public virtual {
         vm.warp(timestamp);
         (NounsAuctionHouseProxy auctionProxy, ) = _deployAuctionHouseAndToken(owner, noundersDAO, minter);
 
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = NounsAuctionHouseV3(address(auctionProxy));
 
         vm.prank(owner);
         auction.unpause();
@@ -56,7 +57,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     }
 }
 
-contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
+contract NounsAuctionHouseV3Test is NounsAuctionHouseV3TestBase {
     function test_createBid_revertsGivenWrongNounId() public {
         uint128 nounId = auction.auction().nounId;
 
@@ -160,7 +161,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     function test_settleAuction_revertsWhenAuctionHasntBegunYet() public {
         (NounsAuctionHouseProxy auctionProxy, ) = _deployAuctionHouseAndToken(owner, noundersDAO, minter);
 
-        auction = NounsAuctionHouseV2(address(auctionProxy));
+        auction = NounsAuctionHouseV3(address(auctionProxy));
 
         vm.expectRevert("Auction hasn't begun");
         auction.settleAuction();
@@ -198,7 +199,27 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 }
 
-abstract contract NoracleBaseTest is NounsAuctionHouseV2TestBase {
+contract AuctionHouseSanctionsTest is NounsAuctionHouseV3TestBase {
+    address sanctionedBidder = makeAddr('sanctioned bidder');
+    ChainalysisSanctionsListMock sanctionsMock;
+
+    function setUp() public override {
+        super.setUp();
+        sanctionsMock = ChainalysisSanctionsListMock(address(auction.sanctionsOracle()));
+        sanctionsMock.setSanctioned(sanctionedBidder, true);
+        vm.deal(sanctionedBidder, 1 ether);
+    }
+
+    function test_createBid_revertsGivenSanctionedBidder() public {
+        uint128 nounId = auction.auction().nounId;
+
+        vm.expectRevert('Sanctioned bidder');
+        vm.prank(sanctionedBidder);
+        auction.createBid{ value: 1 ether }(nounId);
+    }
+}
+
+abstract contract NoracleBaseTest is NounsAuctionHouseV3TestBase {
     uint256[] expectedPrices;
     IAH.Settlement[] expectedSettlements;
     address bidder = makeAddr('bidder');
@@ -798,7 +819,7 @@ contract NoracleTest_NoActiveAuction is NoracleBaseTest {
     }
 }
 
-contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
+contract NounsAuctionHouseV3_setPricesTest is NoracleBaseTest {
     function test_setPrices_revertsForNonOwner() public {
         IAH.SettlementNoClientId[] memory settlements = new IAH.SettlementNoClientId[](1);
         settlements[0] = IAH.SettlementNoClientId({
@@ -848,7 +869,7 @@ contract NounsAuctionHouseV2_setPricesTest is NoracleBaseTest {
     }
 }
 
-contract NounsAuctionHouseV2_OwnerFunctionsTest is NounsAuctionHouseV2TestBase {
+contract NounsAuctionHouseV3_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
     function test_setTimeBuffer_revertsForNonOwner() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setTimeBuffer(1 days);
