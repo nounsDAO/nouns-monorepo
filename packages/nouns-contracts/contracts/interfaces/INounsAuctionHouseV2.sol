@@ -17,6 +17,8 @@
 
 pragma solidity ^0.8.19;
 
+import { INounsToken } from './INounsToken.sol';
+
 interface INounsAuctionHouseV2 {
     struct AuctionV2 {
         // ID for the Noun (ERC721 token ID)
@@ -151,4 +153,14 @@ interface INounsAuctionHouseV2 {
     function duration() external view returns (uint256);
 
     function biddingClient(uint256 nounId) external view returns (uint32 clientId);
+
+    function minBidIncrementPercentage() external view returns (uint8);
+
+    function nouns() external view returns (INounsToken);
+
+    function weth() external view returns (address);
+
+    function reservePrice() external view returns (uint192);
+
+    function timeBuffer() external view returns (uint56);
 }
