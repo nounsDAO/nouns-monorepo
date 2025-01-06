@@ -339,7 +339,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     }
 
     /**
-     * @notice TODO
+     * @notice Signal a proposal's compliance status. Only `dunaAdmin` account can call this function.
      * @param proposalId the ID of the proposal in question.
      * @param signal 0: not compliant; 1: compliant; 2: undetermined.
      * @param reason text content to explain the signal decision.
