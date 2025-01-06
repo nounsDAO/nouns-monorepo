@@ -32,11 +32,12 @@ abstract contract NounsDAODataBaseTest is DeployUtilsV3, SigUtils, NounsDAODataE
         NounsDAOData logic = new NounsDAOData(address(nounsDao.nouns()), address(nounsDao));
 
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,uint256,uint256,address)',
+            'initialize(address,uint256,uint256,address,address)',
             address(dataAdmin),
             0.01 ether,
             0.01 ether,
-            feeRecipient
+            feeRecipient,
+            address(0)
         );
 
         proxy = new NounsDAODataProxy(address(logic), initCallData);

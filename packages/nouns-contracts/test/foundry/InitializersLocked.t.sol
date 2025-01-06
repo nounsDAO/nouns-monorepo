@@ -20,7 +20,7 @@ contract InitializersLocked is Test {
     function test_NounsDAOData_locks_initializer() public {
         NounsDAOData c = new NounsDAOData(address(1), address(2));
         vm.expectRevert('Initializable: contract is already initialized');
-        c.initialize(address(1), 0, 0, payable(address(2)));
+        c.initialize(address(1), 0, 0, payable(address(2)), address(0));
     }
 
     function test_NounsAuctionHouseFork_locks_initializer() public {

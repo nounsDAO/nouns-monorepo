@@ -22,13 +22,13 @@ import { NounsDAOProposals } from '../NounsDAOProposals.sol';
 import { NounsTokenLike, NounsDAOTypes } from '../NounsDAOInterfaces.sol';
 import { SignatureChecker } from '../../external/openzeppelin/SignatureChecker.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
-import { NounsDAODataEvents } from './NounsDAODataEvents.sol';
+import { NounsDAODataEventsV1 } from './NounsDAODataEventsV1.sol';
 
 interface INounsDAO {
     function proposalsV3(uint256 proposalId) external view returns (NounsDAOTypes.ProposalCondensedV3 memory);
 }
 
-contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents {
+contract NounsDAODataV1 is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEventsV1 {
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ERRORS
@@ -45,8 +45,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error ProposalToUpdateMustBeUpdatable();
     error OnlyProposerCanCreateUpdateCandidate();
     error UpdateProposalCandidatesOnlyWorkWithProposalsBySigs();
-    error MustHaveVotes();
-    error MustBeDunaAdmin();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -75,8 +73,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
     /// @notice The account to send ETH fees to.
     address payable public feeRecipient;
-    /// @notice The account the DUNA admins use to communicate with the DAO onchain.
-    address public dunaAdmin;
 
     constructor(address nounsToken_, address nounsDao_) initializer {
         nounsToken = NounsTokenLike(nounsToken_);
@@ -93,15 +89,13 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         address admin,
         uint256 createCandidateCost_,
         uint256 updateCandidateCost_,
-        address payable feeRecipient_,
-        address dunaAdmin_
+        address payable feeRecipient_
     ) external initializer {
         _transferOwnership(admin);
 
         createCandidateCost = createCandidateCost_;
         updateCandidateCost = updateCandidateCost_;
         feeRecipient = feeRecipient_;
-        dunaAdmin = dunaAdmin_;
     }
 
     /**
@@ -311,47 +305,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     }
 
     /**
-     * @notice Send a message to DUNA admins onchain. Must have at least one vote `PRIOR_VOTES_BLOCKS_AGO` blocks ago.
-     * @param message the text content of the message.
-     * @param relatedProposals IDs of relevant proposals.
-     */
-    function postVoterMessageToDunaAdmin(string memory message, uint256[] memory relatedProposals) external {
-        if (!isNouner(msg.sender)) revert MustHaveVotes();
-
-        emit VoterMessageToDunaAdminPosted(message, relatedProposals);
-    }
-
-    /**
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     *   DUNA ADMIN FUNCTIONS
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     */
-
-    /**
-     * @notice Send a message from DUNA admins to DAO members onchain. Only `dunaAdmin` account can call this function.
-     * @param message the text content of the message.
-     * @param relatedProposals IDs of relevant proposals.
-     */
-    function postDunaAdminMessage(string memory message, uint256[] memory relatedProposals) external {
-        if (msg.sender != dunaAdmin) revert MustBeDunaAdmin();
-
-        emit DunaAdminMessagePosted(message, relatedProposals);
-    }
-
-    /**
-     * @notice TODO
-     * @param proposalId the ID of the proposal in question.
-     * @param signal 0: not compliant; 1: compliant; 2: undetermined.
-     * @param reason text content to explain the signal decision.
-     */
-    function signalProposalCompliance(uint256 proposalId, uint8 signal, string memory reason) external {
-        if (msg.sender != dunaAdmin) revert MustBeDunaAdmin();
-        if (signal > 2) revert InvalidSupportValue();
-
-        emit ProposalComplianceSignaled(proposalId, signal, reason);
-    }
-
-    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   ADMIN (OWNER) FUNCTIONS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -376,13 +329,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         feeRecipient = newFeeRecipient;
 
         emit FeeRecipientSet(oldFeeRecipient, newFeeRecipient);
-    }
-
-    function setDunaAdmin(address newDunaAdmin) external onlyOwner {
-        address oldDunaAdmin = dunaAdmin;
-        dunaAdmin = newDunaAdmin;
-
-        emit DunaAdminSet(oldDunaAdmin, newDunaAdmin);
     }
 
     /**

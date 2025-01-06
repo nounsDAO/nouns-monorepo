@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.19;
 
-contract NounsDAODataEvents {
+contract NounsDAODataEventsV1 {
     event ProposalCandidateCreated(
         address indexed msgSender,
         address[] targets,
@@ -65,8 +65,4 @@ contract NounsDAODataEvents {
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
     event ETHWithdrawn(address indexed to, uint256 amount);
     event FeeRecipientSet(address indexed oldFeeRecipient, address indexed newFeeRecipient);
-    event DunaAdminSet(address indexed oldDunaAdmin, address indexed newDunaAdmin);
-    event VoterMessageToDunaAdminPosted(string message, uint256[] relatedProposals);
-    event DunaAdminMessagePosted(string message, uint256[] relatedProposals);
-    event ProposalComplianceSignaled(uint256 indexed proposalId, uint8 signal, string reason);
 }
