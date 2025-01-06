@@ -868,19 +868,29 @@ contract NounsDAOData_AdminFunctionsTest is NounsDAODataBaseTest {
         assertEq(recipient.balance, 1.42 ether);
     }
 
-    function test_setDunaAdmin_revertsForNonOwner() public {
-        vm.expectRevert('Ownable: caller is not the owner');
+    function test_setDunaAdmin_revertsForNonOwnerNonDunaAdmin() public {
+        vm.expectRevert(NounsDAOData.MustBeDunaAdminOrOwner.selector);
         data.setDunaAdmin(makeAddr('some admin'));
     }
 
-    function test_setDunaAdmin_worksForOwner() public {
-        address dunaAdmin = makeAddr('new admin wallet');
+    function test_setDunaAdmin_worksForOwnerAndDunaAdmin() public {
+        address dunaAdmin = makeAddr('first admin');
         assertEq(data.dunaAdmin(), address(0));
 
         vm.prank(dataAdmin);
         data.setDunaAdmin(dunaAdmin);
 
         assertEq(data.dunaAdmin(), dunaAdmin);
+
+        address secondDunaAdmin = makeAddr('second duna admin');
+
+        vm.expectEmit(true, true, true, true);
+        emit DunaAdminSet(dunaAdmin, secondDunaAdmin);
+
+        vm.prank(dunaAdmin);
+        data.setDunaAdmin(secondDunaAdmin);
+
+        assertEq(data.dunaAdmin(), secondDunaAdmin);
     }
 }
 

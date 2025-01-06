@@ -47,6 +47,7 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
     error UpdateProposalCandidatesOnlyWorkWithProposalsBySigs();
     error MustHaveVotes();
     error MustBeDunaAdmin();
+    error MustBeDunaAdminOrOwner();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -357,6 +358,19 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /**
+     * @notice Set the DUNA admin account. Only owner or current DUNA admin can call this function.
+     * @param newDunaAdmin the new DUNA admin account.
+     */
+    function setDunaAdmin(address newDunaAdmin) external {
+        if (msg.sender != owner() && msg.sender != dunaAdmin) revert MustBeDunaAdminOrOwner();
+
+        address oldDunaAdmin = dunaAdmin;
+        dunaAdmin = newDunaAdmin;
+
+        emit DunaAdminSet(oldDunaAdmin, newDunaAdmin);
+    }
+
     function setCreateCandidateCost(uint256 newCreateCandidateCost) external onlyOwner {
         uint256 oldCreateCandidateCost = createCandidateCost;
         createCandidateCost = newCreateCandidateCost;
@@ -376,13 +390,6 @@ contract NounsDAOData is OwnableUpgradeable, UUPSUpgradeable, NounsDAODataEvents
         feeRecipient = newFeeRecipient;
 
         emit FeeRecipientSet(oldFeeRecipient, newFeeRecipient);
-    }
-
-    function setDunaAdmin(address newDunaAdmin) external onlyOwner {
-        address oldDunaAdmin = dunaAdmin;
-        dunaAdmin = newDunaAdmin;
-
-        emit DunaAdminSet(oldDunaAdmin, newDunaAdmin);
     }
 
     /**
