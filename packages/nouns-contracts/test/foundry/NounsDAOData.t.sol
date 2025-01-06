@@ -867,6 +867,21 @@ contract NounsDAOData_AdminFunctionsTest is NounsDAODataBaseTest {
 
         assertEq(recipient.balance, 1.42 ether);
     }
+
+    function test_setDunaAdmin_revertsForNonOwner() public {
+        vm.expectRevert('Ownable: caller is not the owner');
+        data.setDunaAdmin(makeAddr('some admin'));
+    }
+
+    function test_setDunaAdmin_worksForOwner() public {
+        address dunaAdmin = makeAddr('new admin wallet');
+        assertEq(data.dunaAdmin(), address(0));
+
+        vm.prank(dataAdmin);
+        data.setDunaAdmin(dunaAdmin);
+
+        assertEq(data.dunaAdmin(), dunaAdmin);
+    }
 }
 
 contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTest {
@@ -1031,5 +1046,47 @@ contract NounsDAOData_CreateCandidateToUpdateProposalTest is NounsDAODataBaseTes
 
         vm.prank(proposer);
         proposalId_ = nounsDao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+    }
+}
+
+contract NounsDAOData_DunaAdminFunctionsTest is NounsDAODataBaseTest {
+    address dunaAdmin = makeAddr('duna admin');
+    uint256[] relatedProposals;
+
+    function setUp() public override {
+        super.setUp();
+
+        vm.prank(data.owner());
+        data.setDunaAdmin(dunaAdmin);
+
+        delete relatedProposals;
+    }
+
+    function test_postDunaAdminMessage_revertsForNonDunaAdmin() public {
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeDunaAdmin.selector));
+        data.postDunaAdminMessage('some message', relatedProposals);
+    }
+
+    function test_postDunaAdminMessage_worksForDunaAdmin() public {
+        relatedProposals.push(142);
+
+        vm.expectEmit(true, true, true, true);
+        emit DunaAdminMessagePosted('some message', relatedProposals);
+
+        vm.prank(dunaAdmin);
+        data.postDunaAdminMessage('some message', relatedProposals);
+    }
+
+    function test_signalProposalCompliance_revertsForNonDunaAdmin() public {
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeDunaAdmin.selector));
+        data.signalProposalCompliance(142, 0, 'some reason');
+    }
+
+    function test_signalProposalCompliance_worksForDunaAdmin() public {
+        vm.expectEmit(true, true, true, true);
+        emit ProposalComplianceSignaled(142, 1, 'some reason');
+
+        vm.prank(dunaAdmin);
+        data.signalProposalCompliance(142, 1, 'some reason');
     }
 }
