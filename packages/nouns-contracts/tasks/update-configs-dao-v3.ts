@@ -22,7 +22,7 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
         nounsSeeder: contracts.NounsSeeder.address,
         nounsDescriptor: contracts.NounsDescriptorV3.address,
         nftDescriptor: contracts.NFTDescriptorV2.address,
-        nounsAuctionHouse: contracts.NounsAuctionHouse.address,
+        nounsAuctionHouse: contracts.NounsAuctionHouseV2.address,
         nounsAuctionHouseProxy: contracts.NounsAuctionHouseProxy.address,
         nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,
         nounsDaoExecutor: contracts.NounsDAOExecutorProxy.address,

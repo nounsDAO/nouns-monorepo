@@ -760,3 +760,74 @@ type ForkJoinedNoun @entity(immutable: true) {
 
   forkJoin: ForkJoin!
 }
+
+type StreamEscrowState @entity {
+  id: ID!
+
+  currentTick: BigInt!
+  lastForwardTimestamp: BigInt!
+
+  ethStreamedPerTick: BigInt!
+
+  totalAmountStreamedToDAO: BigInt!
+
+  daoExecutor: String!
+  daoExecutorSetBlock: BigInt!
+  ethRecipient: String!
+  ethRecipientSetBlock: BigInt!
+  nounsRecipient: String!
+  nounsRecipientSetBlock: BigInt!
+}
+
+type StreamCreationPermission @entity {
+  id: ID!
+  allowed: Boolean!
+}
+
+type ETHStreamed @entity(immutable: true) {
+  id: ID!
+
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+
+  amount: BigInt!
+}
+
+type StreamFastforward @entity(immutable: true) {
+  id: ID!
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+  stream: Stream!
+  ticksToForward: BigInt!
+  newLastTick: BigInt!
+}
+
+type Stream @entity {
+  "The generic ID of tx hash + log index"
+  id: ID!
+
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+  startTick: BigInt!
+
+  noun: Noun!
+
+  totalAmount: BigInt!
+  streamLengthInTicks: Int!
+  ethPerTick: BigInt!
+  lastTick: BigInt!
+
+  canceled: Boolean!
+  cancellationRefundAmount: BigInt!
+}
+
+type StreamsOfNoun @entity {
+  "The noun ID"
+  id: ID!
+
+  "A list of past streams of this Noun, not including the current stream"
+  pastStreams: [Stream!]!
+
+  "The current or latest stream of this Noun"
+  currentStream: Stream
+}
