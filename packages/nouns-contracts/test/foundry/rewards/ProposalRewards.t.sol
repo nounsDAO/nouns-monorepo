@@ -5,7 +5,6 @@ import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.so
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
@@ -81,12 +80,6 @@ abstract contract BaseProposalRewardsTest is NounsDAOLogicBaseTest {
         auctionHouse = INounsAuctionHouseV2(minter);
         vm.prank(address(dao.timelock()));
         auctionHouse.unpause();
-
-        AuctionHouseUpgrader.upgradeAuctionHouse(
-            address(dao.timelock()),
-            auctionHouseProxyAdmin,
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
-        );
     }
 
     function proposeVoteAndEndVotingPeriod(uint32 clientId) internal returns (uint32) {
