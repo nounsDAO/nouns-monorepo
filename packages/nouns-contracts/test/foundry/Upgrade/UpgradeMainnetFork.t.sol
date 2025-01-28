@@ -5,10 +5,8 @@ import 'forge-std/Test.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
-import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { INounsAuctionHouseV3 } from '../../../contracts/interfaces/INounsAuctionHouseV3.sol';
-import { ChainalysisSanctionsListMock } from '../helpers/ChainalysisSanctionsListMock.sol';
+import { DeployDataContractsMainnet } from '../../../script/Data/DeployDataContractsMainnet.s.sol';
+import { NounsDAOData } from '../../../contracts/governance/data/NounsDAOData.sol';
 
 abstract contract UpgradeMainnetForkBaseTest is Test {
     address public constant NOUNDERS = 0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5;
@@ -78,40 +76,33 @@ abstract contract UpgradeMainnetForkBaseTest is Test {
     }
 }
 
-contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
-    address v2NounsAddress;
-    address v2WethAddress;
-    address v2Owner;
-    uint256 v2Duration;
-    uint8 v2MinBidIncrementPercentage;
-    uint256 v2ReservePrice;
-    uint256 v2TimeBuffer;
-    INounsAuctionHouseV2.AuctionV2View auctionV2State;
-    ChainalysisSanctionsListMock sanctionsOracle;
+contract DataContractUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
+    event VoterMessageToDunaAdminPosted(string message, uint256[] relatedProposals);
+    event DunaAdminMessagePosted(string message, uint256[] relatedProposals);
+    event ProposalComplianceSignaled(uint256 indexed proposalId, uint8 signal, string reason);
 
-    address user1 = makeAddr('user1');
-    address user2 = makeAddr('user2');
+    address public constant DATA_PROXY_ADDRESS = 0xf790A5f59678dd733fb3De93493A91f472ca1365;
+    NounsDAOData public constant dataProxy = NounsDAOData(DATA_PROXY_ADDRESS);
+
+    address public dunaAdmin = makeAddr('DUNA admin');
+
+    address public originalFeeRecipient;
+    uint256 public originalCreateCandidateCost;
+
+    uint256[] public relatedProposals;
 
     function setUp() public override {
         super.setUp();
 
-        vm.deal(user1, 100 ether);
-        vm.deal(user2, 100 ether);
+        relatedProposals.push(142);
 
-        // Save AH V2 state before the upgrade
-        INounsAuctionHouseV2 ahv2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        auctionV2State = ahv2.auction();
+        originalFeeRecipient = dataProxy.feeRecipient();
+        originalCreateCandidateCost = dataProxy.createCandidateCost();
 
-        v2NounsAddress = address(ahv2.nouns());
-        v2WethAddress = address(ahv2.weth());
-        v2Owner = IOwner(address(ahv2)).owner();
-        v2Duration = ahv2.duration();
-        v2MinBidIncrementPercentage = ahv2.minBidIncrementPercentage();
-        v2ReservePrice = ahv2.reservePrice();
-        v2TimeBuffer = ahv2.timeBuffer();
+        vm.setEnv('DEPLOYER_PRIVATE_KEY', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
-        NounsAuctionHouseV3 ahv3 = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
-        sanctionsOracle = new ChainalysisSanctionsListMock();
+        DeployDataContractsMainnet logicDeployScript = new DeployDataContractsMainnet();
+        NounsDAOData newDataLogic = logicDeployScript.run();
 
         // Propose upgrade
         uint256 txCount = 2;
@@ -120,94 +111,53 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         string[] memory signatures = new string[](txCount);
         bytes[] memory calldatas = new bytes[](txCount);
 
-        // proxyAdmin.upgrade(proxy, address(newLogic));
-        targets[0] = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
-        signatures[0] = 'upgrade(address,address)';
-        calldatas[0] = abi.encode(AUCTION_HOUSE_PROXY_MAINNET, address(ahv3));
-        // auctionHouse.setSanctionsOracle(sanctionsOracle);
-        targets[1] = AUCTION_HOUSE_PROXY_MAINNET;
-        signatures[1] = 'setSanctionsOracle(address)';
-        calldatas[1] = abi.encode(address(sanctionsOracle));
+        // dataProxy.upgradeTo(address(newLogic));
+        targets[0] = DATA_PROXY_ADDRESS;
+        signatures[0] = 'upgradeTo(address)';
+        calldatas[0] = abi.encode(address(newDataLogic));
+
+        // dataProxy.setDunaAdmin(dunaAdmin);
+        targets[1] = DATA_PROXY_ADDRESS;
+        signatures[1] = 'setDunaAdmin(address)';
+        calldatas[1] = abi.encode(dunaAdmin);
         vm.prank(proposerAddr);
         uint256 proposalId = NOUNS_DAO_PROXY_MAINNET.propose(
             targets,
             values,
             signatures,
             calldatas,
-            'Upgrading to AuctionHouseV3'
+            'Upgrading Data to support DUNA admin comms'
         );
         voteAndExecuteProposal(proposalId);
     }
-    function test_auctionState_survivesUpgrade() public {
-        INounsAuctionHouseV2 auctionV3 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        INounsAuctionHouseV2.AuctionV2View memory auctionV3State = auctionV3.auction();
-        assertEq(auctionV3State.nounId, auctionV2State.nounId);
-        assertEq(auctionV3State.amount, auctionV2State.amount);
-        assertEq(auctionV3State.startTime, auctionV2State.startTime);
-        assertEq(auctionV3State.endTime, auctionV2State.endTime);
-        assertEq(auctionV3State.bidder, auctionV2State.bidder);
-        assertEq(auctionV3State.settled, false);
-        assertEq(address(auctionV3.nouns()), v2NounsAddress);
-        assertEq(address(auctionV3.weth()), v2WethAddress);
-        assertEq(auctionV3.timeBuffer(), v2TimeBuffer);
-        assertEq(auctionV3.reservePrice(), v2ReservePrice);
-        assertEq(auctionV3.minBidIncrementPercentage(), v2MinBidIncrementPercentage);
-        assertEq(auctionV3.duration(), v2Duration);
-        assertEq(IPausible(address(auctionV3)).paused(), false);
-        assertEq(IOwner(address(auctionV3)).owner(), v2Owner);
+
+    function test_stateSurvivedUpgrade_andDunaAdminSet() public {
+        assertEq(dataProxy.feeRecipient(), originalFeeRecipient);
+        assertEq(dataProxy.createCandidateCost(), originalCreateCandidateCost);
+        assertEq(dataProxy.dunaAdmin(), dunaAdmin);
     }
 
-    function test_bidAndSettleInV3_worksAndCapturesSettlementHistory() public {
-        INounsAuctionHouseV2 auctionV2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        auctionV2.settleCurrentAndCreateNewAuction();
-        uint32 clientId = 42;
-        uint96 nounId = auctionV2.auction().nounId;
-        auctionV2.createBid{ value: 0.042 ether }(nounId, clientId);
-        vm.warp(block.timestamp + auctionV2.auction().endTime);
-        uint32 settlementTime = uint32(block.timestamp);
-        auctionV2.settleCurrentAndCreateNewAuction();
-        INounsAuctionHouseV2.Settlement[] memory settlements = auctionV2.getSettlementsFromIdtoTimestamp(
-            nounId,
-            block.timestamp,
-            true
-        );
-        assertEq(settlements.length, 1);
-        INounsAuctionHouseV2.Settlement memory s = settlements[0];
-        assertEq(s.nounId, nounId);
-        assertEq(s.winner, address(this));
-        assertEq(s.amount, 0.042 ether);
-        assertEq(s.clientId, clientId);
-        assertEq(s.blockTimestamp, settlementTime);
+    function test_postVoterMessageToDunaAdmin_works() public {
+        vm.expectEmit(true, true, true, true);
+        emit VoterMessageToDunaAdminPosted('some message', relatedProposals);
+
+        vm.prank(proposerAddr);
+        dataProxy.postVoterMessageToDunaAdmin('some message', relatedProposals);
     }
 
-    function test_auctionHouseV3_rejectsBidFromSanctionedAddress() public {
-        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
-        auction.settleCurrentAndCreateNewAuction();
-        uint96 nounId = auction.auction().nounId;
+    function test_postDunaAdminMessage_works() public {
+        vm.expectEmit(true, true, true, true);
+        emit DunaAdminMessagePosted('some admin message', relatedProposals);
 
-        sanctionsOracle.setSanctioned(user1, true);
-
-        vm.expectRevert('Sanctioned bidder');
-        vm.prank(user1);
-        auction.createBid{ value: 0.042 ether }(nounId, 0);
+        vm.prank(dunaAdmin);
+        dataProxy.postDunaAdminMessage('some admin message', relatedProposals);
     }
 
-    function test_auctionHouseV3_acceptsBidFromNonSanctionedAddress() public {
-        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
-        auction.settleCurrentAndCreateNewAuction();
-        uint96 nounId = auction.auction().nounId;
+    function test_signalProposalCompliance_works() public {
+        vm.expectEmit(true, true, true, true);
+        emit ProposalComplianceSignaled(142, 1, 'some admin reason');
 
-        sanctionsOracle.setSanctioned(user1, false);
-
-        vm.prank(user1);
-        auction.createBid{ value: 0.042 ether }(nounId, 0);
+        vm.prank(dunaAdmin);
+        dataProxy.signalProposalCompliance(142, 1, 'some admin reason');
     }
-}
-
-interface IOwner {
-    function owner() external view returns (address);
-}
-
-interface IPausible {
-    function paused() external view returns (bool);
 }
