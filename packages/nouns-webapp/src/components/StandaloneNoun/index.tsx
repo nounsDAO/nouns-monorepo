@@ -1,7 +1,7 @@
 import { ImageData as data, getNounData } from '@nouns/assets';
 import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
-import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
+import { INounSeed, useGenerateSVGImage, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
 import { Link } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
@@ -29,6 +29,21 @@ export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
   const name = `Noun ${id}`;
   const description = `Noun ${id} is a member of the Nouns DAO`;
   const { parts, background } = getNounData(seed);
+   
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const svg = useGenerateSVGImage(seed);
+
+  // if some parts are undefined, call nounsDescriptor.generateSVGImage and return the image
+  if (parts.some(part => part === undefined)) {
+  
+    return {
+      name,
+      description,
+      image: `data:image/svg+xml;base64,${svg}`
+    };
+  
+  }
+
   const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette, background))}`;
 
   return {

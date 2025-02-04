@@ -1,6 +1,6 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import { NounsDescriptorABI, NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import {
@@ -42,6 +42,7 @@ export enum NounsTokenContractFunction {
 }
 
 const abi = new utils.Interface(NounsTokenABI);
+const descriptorAbi = new utils.Interface(NounsDescriptorABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 const nounsTokenContract = NounsTokenFactory.connect(config.addresses.nounsToken, undefined!);
 const isSeedValid = (seed: Record<string, any> | undefined) => {
@@ -128,6 +129,16 @@ export const useNounSeed = (nounId: EthersBN): INounSeed => {
     return response;
   }
   return seed;
+};
+
+export const useGenerateSVGImage = (seed: INounSeed) => {
+  const image = useContractCall({
+    abi: descriptorAbi,
+    address: config.addresses.nounsDescriptor,
+    method: 'generateSVGImage',
+    args: [seed],
+  });
+  return image;
 };
 
 export const useUserVotes = (): number | undefined => {
