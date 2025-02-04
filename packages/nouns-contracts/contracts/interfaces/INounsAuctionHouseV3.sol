@@ -17,9 +17,7 @@
 
 pragma solidity ^0.8.19;
 
-import { INounsToken } from './INounsToken.sol';
-
-interface INounsAuctionHouseV2 {
+interface INounsAuctionHouseV3 {
     struct AuctionV2 {
         // ID for the Noun (ERC721 token ID)
         uint96 nounId;
@@ -109,6 +107,8 @@ interface INounsAuctionHouseV2 {
 
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
+    event SanctionsOracleSet(address newSanctionsOracle);
+
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
@@ -126,6 +126,8 @@ interface INounsAuctionHouseV2 {
     function setReservePrice(uint192 reservePrice) external;
 
     function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
+
+    function setSanctionsOracle(address newSanctionsOracle) external;
 
     function auction() external view returns (AuctionV2View memory);
 
@@ -153,14 +155,4 @@ interface INounsAuctionHouseV2 {
     function duration() external view returns (uint256);
 
     function biddingClient(uint256 nounId) external view returns (uint32 clientId);
-
-    function minBidIncrementPercentage() external view returns (uint8);
-
-    function nouns() external view returns (INounsToken);
-
-    function weth() external view returns (address);
-
-    function reservePrice() external view returns (uint192);
-
-    function timeBuffer() external view returns (uint56);
 }

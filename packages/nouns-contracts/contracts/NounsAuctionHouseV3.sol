@@ -28,16 +28,17 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouseV2 } from './interfaces/INounsAuctionHouseV2.sol';
+import { INounsAuctionHouseV3 } from './interfaces/INounsAuctionHouseV3.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
+import { IChainalysisSanctionsList } from './external/chainalysis/IChainalysisSanctionsList.sol';
 
 /**
  * @dev The contract inherits from PausableUpgradeable & ReentrancyGuardUpgradeable most of all the keep the same
  * storage layout as the NounsAuctionHouse contract
  */
-contract NounsAuctionHouseV2 is
-    INounsAuctionHouseV2,
+contract NounsAuctionHouseV3 is
+    INounsAuctionHouseV3,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
@@ -64,10 +65,13 @@ contract NounsAuctionHouseV2 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV2.AuctionV2 public auctionStorage;
+    INounsAuctionHouseV3.AuctionV2 public auctionStorage;
 
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
+
+    /// @notice The contract used to verify bidders are not sanctioned wallets
+    IChainalysisSanctionsList public sanctionsOracle;
 
     constructor(INounsToken _nouns, address _weth, uint256 _duration) initializer {
         nouns = _nouns;
@@ -83,7 +87,8 @@ contract NounsAuctionHouseV2 is
     function initialize(
         uint192 _reservePrice,
         uint56 _timeBuffer,
-        uint8 _minBidIncrementPercentage
+        uint8 _minBidIncrementPercentage,
+        IChainalysisSanctionsList _sanctionsOracle
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -94,6 +99,9 @@ contract NounsAuctionHouseV2 is
         reservePrice = _reservePrice;
         timeBuffer = _timeBuffer;
         minBidIncrementPercentage = _minBidIncrementPercentage;
+        sanctionsOracle = _sanctionsOracle;
+
+        emit SanctionsOracleSet(address(_sanctionsOracle));
     }
 
     /**
@@ -127,7 +135,7 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId, uint32 clientId) public payable override {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
 
         (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
             reservePrice,
@@ -135,6 +143,7 @@ contract NounsAuctionHouseV2 is
             minBidIncrementPercentage
         );
 
+        _requireNotSanctioned(msg.sender);
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
         require(msg.value >= _reservePrice, 'Must send at least reservePrice');
@@ -239,6 +248,16 @@ contract NounsAuctionHouseV2 is
     }
 
     /**
+     * @notice Set the sanctions oracle address.
+     * @dev Only callable by the owner.
+     */
+    function setSanctionsOracle(address newSanctionsOracle) public onlyOwner {
+        sanctionsOracle = IChainalysisSanctionsList(newSanctionsOracle);
+
+        emit SanctionsOracleSet(newSanctionsOracle);
+    }
+
+    /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      * If the mint reverts, the minter was updated without pausing this contract first. To remedy this,
@@ -270,7 +289,7 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouseV2.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
@@ -318,6 +337,16 @@ contract NounsAuctionHouseV2 is
             success := call(30000, to, value, 0, 0, 0, 0)
         }
         return success;
+    }
+
+    /**
+     * @notice Revert if `sanctionsOracle` is set and `account` is sanctioned.
+     */
+    function _requireNotSanctioned(address account) internal view {
+        IChainalysisSanctionsList sanctionsOracle_ = sanctionsOracle;
+        if (address(sanctionsOracle_) != address(0)) {
+            require(!sanctionsOracle_.isSanctioned(account), 'Sanctioned bidder');
+        }
     }
 
     /**
