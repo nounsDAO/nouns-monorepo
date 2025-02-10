@@ -3,7 +3,7 @@ import { useNounSeed } from '../../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
 import { StandalonePart } from '../../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
-import { ImageData } from '@nouns/assets';
+import { ImageData } from '@nomonouns/assets';
 import { Trans } from '@lingui/macro';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { XIcon } from '@heroicons/react/solid';

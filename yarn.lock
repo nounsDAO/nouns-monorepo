@@ -4546,6 +4546,15 @@
     "@types/sinon-chai" "^3.2.3"
     "@types/web3" "1.0.19"
 
+"@nomonouns/assets@0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@nomonouns/assets/-/assets-0.11.0.tgz#736a41343d5a4c710cec8644764db1c3d4b9913a"
+  integrity sha512-/jD4UfMR7OTScuAJBM9g3BqYZ3z9nXWLopPR5+QYfh30446P4d/4R2mzYa/7tz4/YZQlGX0kw+IcSy1ofTh+BA==
+  dependencies:
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/solidity" "^5.5.0"
+    pako "^2.1.0"
+
 "@npmcli/fs@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.0.0.tgz#589612cfad3a6ea0feafcb901d29c63fd52db09f"
@@ -19410,6 +19419,11 @@ package-json@^6.3.0:
     registry-auth-token "^4.0.0"
     registry-url "^5.0.0"
     semver "^6.2.0"
+
+pako@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
 
 pako@~1.0.5:
   version "1.0.11"
