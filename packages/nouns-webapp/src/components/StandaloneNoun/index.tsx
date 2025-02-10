@@ -1,4 +1,4 @@
-import { ImageData as data, getNounData } from '@nouns/assets';
+import { ImageData as data, getNounData } from '@nomonouns/assets';
 import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { INounSeed, useNounSeed } from '../../wrappers/nounToken';

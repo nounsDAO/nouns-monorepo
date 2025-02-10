@@ -4,8 +4,9 @@ libs = ['lib', '../../node_modules']
 cache_path = 'foundry-cache'
 out = 'foundry-out'
 solc_version = '0.8.23'
-fs_permissions = [{ access = "read", path = "./"}]
+fs_permissions = [{ access = "read", path = "./" }]
 ignored_warnings_from = ["contracts/test/Multicall2.sol"]
+evm_version = 'shanghai'
 
 [profile.lite]
 optimizer = false

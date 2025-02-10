@@ -5,7 +5,6 @@ import { NounsDAOLogicBaseTest } from '../NounsDAOLogic/NounsDAOLogicBaseTest.so
 import { Rewards } from '../../../contracts/client-incentives/Rewards.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
-import { AuctionHouseUpgrader } from '../helpers/AuctionHouseUpgrader.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { RewardsDeployer } from '../../../script/Rewards/RewardsDeployer.sol';
@@ -67,12 +66,6 @@ abstract contract RewardsBaseTest is NounsDAOLogicBaseTest {
         for (uint256 i; i < 5; i++) {
             _mintTo(voter3);
         }
-
-        AuctionHouseUpgrader.upgradeAuctionHouse(
-            address(dao.timelock()),
-            auctionHouseProxyAdmin,
-            NounsAuctionHouseProxy(payable(address(auctionHouse)))
-        );
 
         rewards.registerClient('some client', 'some client description');
         vm.prank(client1Wallet);
