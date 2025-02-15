@@ -1,92 +1,57 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Col, Nav } from 'react-bootstrap';
+import { Col, Image, Row } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
-import { Link } from 'react-router-dom';
-import nounsIosGif from '../../assets/nouns-ios.gif';
-import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
+import bluntImg1 from '../../assets/blunts-1.jpg';
+import bluntImg2 from '../../assets/blunts-2.jpg';
+import bluntImg4 from '../../assets/blunts-4.jpg';
+
+import Noun from '../Noun';
 
 const NounsIntroSection = () => {
-  const prophouseLink = (
-    <a
-      href="https://prop.house/"
-      target="_blank"
-      rel="noreferrer"
-      className={classes.nounsIntroLinks}
-    >
-      <Trans>Prop House</Trans>
-    </a>
-  );
-
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
         <Col lg={6}>
           <div className={classes.textWrapper}>
             <h1>
-              <Trans>One Noun, Every Day, Forever.</Trans>
+              <Trans>The treasury for your local sesh</Trans>
             </h1>
             <p>
               <Trans>
-                Behold, an infinite work of art! Nouns is a community-owned brand that makes a
-                positive impact by funding ideas and fostering collaboration. From collectors and
-                technologists, to non-profits and brands, Nouns is for everyone.
+                For 2+ years we have been doing BluntsDAO (also JointsDAO & SpliffDAO) for free. Now
+                in year 3: we are on the path to scale: unlimited sesh. A replenishing treasury for
+                holders to vote on global requests for sesh.
               </Trans>
             </p>
           </div>
         </Col>
-        <Col lg={6} className={classes.youtubeEmbedContainer}>
-          <iframe
-            src="https://www.youtube.com/embed/lOzCA7bZG_k"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-
-          <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
-            This video was commissioned in{' '}
-            <Nav.Link as={Link} to="/vote/113">
-              Prop 113
-            </Nav.Link>{' '}
-            <span className={classes.videoMintedSubtitle}>
-              and minted in{' '}
-              <Nav.Link as={Link} to="/vote/190">
-                Prop 190
-              </Nav.Link>
-            </span>
-          </small>
+        <Col lg={6} className={`order-lg-1 order-2`}>
+          <Image src={bluntImg2} alt="Blunt" className={classes.imageClass} />
         </Col>
       </Section>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6} className={`${classes.youtubeEmbedContainer} order-lg-1 order-2`}>
-          <iframe
-            src="https://www.youtube.com/embed/oa79nN4gMPs"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-
-          <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
-            This video was produced as part of{' '}
-            <Nav.Link as={Link} to="/vote/143">
-              Prop 143
-            </Nav.Link>
-          </small>
+        <Col lg={6} className={`order-lg-1 order-2`}>
+          <Image src={bluntImg1} alt="Blunt" className={classes.imageClass} />
         </Col>
 
         <Col lg={6} className={`order-lg-2 order-1`}>
           <div className={`${classes.textWrapper} ${classes.youtubeSectionText}`}>
             <h1>
-              <Trans>Build With Nouns. Get Funded.</Trans>
+              <Trans>Background</Trans>
             </h1>
             <p>
               <Trans>
-                There's a way for everyone to get involved with Nouns. From whimsical endeavors like
-                naming a frog, to ambitious projects like constructing a giant float for the Rose
-                Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of
-                all sizes and domains.
+                Originally started on Solana, we went all around the world to onboard the next
+                million users 1 blunt at a time. We have sold nothing. We were too high to
+                coordinate. Core team struggled with sobriety and then spurts of passion. We were so
+                IRL. You must be validated in person by another validator. We were only allowing
+                blunts. We vowed to do 420 on every chain. We did Solana. We did NEAR. At Breakpoint
+                we launched SpliffDAO, allowing spliffs due to the scarcity of Blunts and us coming
+                out of the hood and understanding the power of localization. We did Eth a year ago
+                and allowed any smoke stick. Recently we built an abstracted process using telegram.
+                Still friction. We got a SQDS, AstroDAO, and Snapshot, but without direct incentives
+                and a treasury governance is hard, especially when everybody is high.
               </Trans>
             </p>
           </div>
@@ -97,30 +62,25 @@ const NounsIntroSection = () => {
         <Col lg={6}>
           <div className={classes.textWrapper}>
             <h1>
-              <Trans>Download the Free iOS App</Trans>
+              <Trans>Mission </Trans>
             </h1>
+            <h3>
+              <Trans>
+                Our mission is to onboard the next million users to Web3 1 blunt a a time.
+              </Trans>
+            </h3>
             <p>
               <Trans>
-                Every new Noun pushed right to your pocket! View the current auction, remix your own
-                Noun, and explore the entire history directly from the app.
+                But ultimately trying to get people to do on-chain stuff while they’re high,
+                although it forces us to create innovative onboarding mechanisms, shouldnt be the
+                point. Or joint? The “joint” should be to use proof of sesh, to raise awareness, and
+                drive incentivies for expanding the sesh..
               </Trans>
-              <br />
-              <a
-                href="https://apps.apple.com/us/app/nouns-explore-create-play/id1592583925"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  src={dlFromAppStoreImg}
-                  className={classes.dlFromAppStoreImg}
-                  alt="download nouns ios app from app store"
-                />
-              </a>
             </p>
           </div>
         </Col>
         <Col lg={6} className={classes.iosImgContainer}>
-          <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />
+          <img src={bluntImg4} className={classes.iosImg} alt="nouns ios" />
         </Col>
       </Section>
     </>

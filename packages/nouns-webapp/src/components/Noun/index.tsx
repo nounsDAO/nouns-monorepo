@@ -1,6 +1,6 @@
 import classes from './Noun.module.css';
 import React from 'react';
-import loadingNoun from '../../assets/loading-skull-noun.gif';
+import loadingNoun from '../../assets/bluntsLogo.png';
 import Image from 'react-bootstrap/Image';
 
 export const LoadingNoun = () => {
