@@ -1,4 +1,4 @@
-import { ImageData as imageData, getPartData } from '@nomonouns/assets';
+import { ImageData as imageData, getPartData } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
 import Image from 'react-bootstrap/Image';
 import classes from './StandalonePart.module.css';
