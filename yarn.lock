@@ -4546,10 +4546,10 @@
     "@types/sinon-chai" "^3.2.3"
     "@types/web3" "1.0.19"
 
-"@nomonouns/assets@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@nomonouns/assets/-/assets-0.11.0.tgz#736a41343d5a4c710cec8644764db1c3d4b9913a"
-  integrity sha512-/jD4UfMR7OTScuAJBM9g3BqYZ3z9nXWLopPR5+QYfh30446P4d/4R2mzYa/7tz4/YZQlGX0kw+IcSy1ofTh+BA==
+"@nomonouns/assets@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/@nomonouns/assets/-/assets-0.12.0.tgz#2ef39e11f6bf0d8f00456d80815dbf9fdf97e27d"
+  integrity sha512-SIfSPJy2HPqxLNGaR1cUfJe7lSK17JYy2GQzREkz8l+5lDSEzWV1aadn8Ris9+WOoFKjmqJP30BgFnQvrNN32w==
   dependencies:
     "@ethersproject/bignumber" "^5.5.0"
     "@ethersproject/solidity" "^5.5.0"
