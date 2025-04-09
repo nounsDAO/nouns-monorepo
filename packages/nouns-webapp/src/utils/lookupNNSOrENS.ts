@@ -1,8 +1,18 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { BigNumber as EthersBN, utils } from 'ethers';
+import { Contract, providers, utils } from 'ethers';
+import { createNetworkHttpUrl } from '../config';
+
+const NOUNS_CLD_ID = utils.namehash('nouns');
+
+const resolver = new Contract(
+  // https://basescan.org/address/0xF4Cc2b5F631998eBc7fA362aEE30141C5a10F519
+  '0x78997D8ca4316421620A09f015512D779Dc34217',
+  ['function reverseNameOf(address, uint256[], bool) view returns (string)'],
+  new providers.JsonRpcProvider(createNetworkHttpUrl('base-mainnet')),
+);
 
 /**
- * Look up either NNS or ENS (using NNS contract to resolve NNS with ENS fallback)
+ * Look up NNS and fallback to ENS
  * @param library provider
  * @param address  Address to resolve
  * @returns  NNS or ENS or null (if neither resolve)
@@ -12,16 +22,11 @@ export async function lookupNNSOrENS(
   address: string,
 ): Promise<string | null> {
   try {
-    // Call resolver contract
-    const res = await library.call({
-      to: '0x849f92178950f6254db5d16d1ba265e70521ac1b', // see https://etherscan.io/address/0x849f92178950f6254db5d16d1ba265e70521ac1b
-      data: `0x55ea6c47000000000000000000000000${address.substring(2)}`, // call .resolve(address) method
-    });
-    // Parse result into a string.
-    const offset = EthersBN.from(utils.hexDataSlice(res, 0, 32)).toNumber();
-    const length = EthersBN.from(utils.hexDataSlice(res, offset, offset + 32)).toNumber();
-    const data = utils.hexDataSlice(res, offset + 32, offset + 32 + length);
-    return utils.toUtf8String(data) || null;
+    const name = await resolver.reverseNameOf(address, [NOUNS_CLD_ID], true);
+    if (!name) {
+      return library.lookupAddress(address);
+    }
+    return name;
   } catch (e) {
     return null;
   }
