@@ -1,10 +1,8 @@
-import classes from './NounsIntroSection.module.css';
-import Section from '../../layout/Section';
-import { Col, Nav } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
+import { Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import nounsIosGif from '../../assets/nouns-ios.gif';
-import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
+import Section from '../../layout/Section';
+import classes from './NounsIntroSection.module.css';
 
 const NounsIntroSection = () => {
   const prophouseLink = (
@@ -90,37 +88,6 @@ const NounsIntroSection = () => {
               </Trans>
             </p>
           </div>
-        </Col>
-      </Section>
-
-      <Section fullWidth={false} className={classes.iosSection}>
-        <Col lg={6}>
-          <div className={classes.textWrapper}>
-            <h1>
-              <Trans>Download the Free iOS App</Trans>
-            </h1>
-            <p>
-              <Trans>
-                Every new Noun pushed right to your pocket! View the current auction, remix your own
-                Noun, and explore the entire history directly from the app.
-              </Trans>
-              <br />
-              <a
-                href="https://apps.apple.com/us/app/nouns-explore-create-play/id1592583925"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  src={dlFromAppStoreImg}
-                  className={classes.dlFromAppStoreImg}
-                  alt="download nouns ios app from app store"
-                />
-              </a>
-            </p>
-          </div>
-        </Col>
-        <Col lg={6} className={classes.iosImgContainer}>
-          <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />
         </Col>
       </Section>
     </>
