@@ -10,8 +10,9 @@
 }
 
 .navBarLogo {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 50px;
+object-fit: contain;
 }
 
 .navBarCustom {
