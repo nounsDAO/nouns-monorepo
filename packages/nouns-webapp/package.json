@@ -119,6 +119,7 @@
     "locales": [
       "en-US",
       "ja-JP",
+      "zh-CN",
       "pseudo"
     ],
     "orderBy": "messageId",
