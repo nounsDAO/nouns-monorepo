@@ -581,16 +581,16 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/NavBar/index.tsx
-msgid "Discourse"
-msgstr ""
+#~ msgid "Discourse"
+#~ msgstr ""
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Download the Free iOS App"
-msgstr ""
+#~ msgid "Download the Free iOS App"
+#~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
@@ -684,8 +684,8 @@ msgid "Etherscan"
 msgstr ""
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-msgstr ""
+#~ msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -731,6 +731,10 @@ msgstr ""
 msgid "Failed to fetch Noun info"
 msgstr ""
 
+#: src/components/Footer/index.tsx
+msgid "Farcaster"
+msgstr ""
+
 #: src/components/VoteCard/index.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
@@ -760,8 +764,8 @@ msgid "Forking is the crypto-native way for groups of token holders to exit toge
 msgstr ""
 
 #: src/components/Footer/index.tsx
-msgid "Forums"
-msgstr ""
+#~ msgid "Forums"
+#~ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
@@ -1214,6 +1218,10 @@ msgstr ""
 msgid "Proposals"
 msgstr ""
 
+#: src/pages/Vote/index.tsx
+msgid "Proposals cannot be executed during a forking period"
+msgstr ""
+
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
 msgstr ""
@@ -1459,12 +1467,12 @@ msgstr ""
 #~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on created block"
-msgstr ""
+#~ msgid "Taken on created block"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on start block"
-msgstr ""
+#~ msgid "Taken on start block"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."

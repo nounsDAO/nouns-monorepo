@@ -578,16 +578,12 @@ msgstr "切断する"
 #~ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
-msgid "Discourse"
-msgstr "Discourse"
-
-#: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr "ドキュメント"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Download the Free iOS App"
-msgstr ""
+#~ msgid "Download the Free iOS App"
+#~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
@@ -677,8 +673,8 @@ msgid "Etherscan"
 msgstr "Etherscan"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-msgstr ""
+#~ msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -724,6 +720,10 @@ msgstr "Noun の活動履歴の取得に失敗しました。"
 msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
 
+#: src/components/Footer/index.tsx
+msgid "Farcaster"
+msgstr ""
+
 #: src/components/VoteCard/index.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
@@ -751,10 +751,6 @@ msgstr ""
 #: src/pages/Forks/index.tsx
 msgid "Forking is the crypto-native way for groups of token holders to exit together into a new instance of their protocol, resulting in maximal conservation of momentum in the ecosystem."
 msgstr ""
-
-#: src/components/Footer/index.tsx
-msgid "Forums"
-msgstr "Forums"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
@@ -1199,6 +1195,10 @@ msgstr "提案 {0}"
 msgid "Proposals"
 msgstr "提案"
 
+#: src/pages/Vote/index.tsx
+msgid "Proposals cannot be executed during a forking period"
+msgstr ""
+
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
 msgstr "コミュニティメンバーが提出した提案はここに表示されます。"
@@ -1444,12 +1444,12 @@ msgstr "ウォレットを切り替える"
 #~ msgstr "ブロックで撮影"
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on created block"
-msgstr ""
+#~ msgid "Taken on created block"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on start block"
-msgstr ""
+#~ msgid "Taken on start block"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."

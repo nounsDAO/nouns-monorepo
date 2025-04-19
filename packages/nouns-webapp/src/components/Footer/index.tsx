@@ -9,7 +9,7 @@ import { Trans } from '@lingui/macro';
 const Footer = () => {
   const twitterURL = externalURL(ExternalURL.twitter);
   const etherscanURL = buildEtherscanAddressLink(config.addresses.nounsToken);
-  const discourseURL = externalURL(ExternalURL.discourse);
+  const farcasterURL = externalURL(ExternalURL.farcaster);
 
   return (
     <div className={classes.wrapper}>
@@ -17,7 +17,7 @@ const Footer = () => {
         <footer className={classes.footerSignature}>
           <Link text={<Trans>Twitter</Trans>} url={twitterURL} leavesPage={true} />
           <Link text={<Trans>Etherscan</Trans>} url={etherscanURL} leavesPage={true} />
-          <Link text={<Trans>Forums</Trans>} url={discourseURL} leavesPage={false} />
+          <Link text={<Trans>Farcaster</Trans>} url={farcasterURL} leavesPage={true} />
         </footer>
       </Container>
     </div>

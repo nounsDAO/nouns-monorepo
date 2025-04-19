@@ -573,16 +573,16 @@ msgstr "Disconnect"
 #~ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
-msgid "Discourse"
-msgstr "Discourse"
+#~ msgid "Discourse"
+#~ msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr "Docs"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Download the Free iOS App"
-msgstr "Download the Free iOS App"
+#~ msgid "Download the Free iOS App"
+#~ msgstr "Download the Free iOS App"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
@@ -672,8 +672,8 @@ msgid "Etherscan"
 msgstr "Etherscan"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-msgstr "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+#~ msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+#~ msgstr "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -719,6 +719,10 @@ msgstr "Failed to fetch Noun activity history"
 msgid "Failed to fetch Noun info"
 msgstr "Failed to fetch Noun info"
 
+#: src/components/Footer/index.tsx
+msgid "Farcaster"
+msgstr "Farcaster"
+
 #: src/components/VoteCard/index.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
@@ -748,8 +752,8 @@ msgid "Forking is the crypto-native way for groups of token holders to exit toge
 msgstr "Forking is the crypto-native way for groups of token holders to exit together into a new instance of their protocol, resulting in maximal conservation of momentum in the ecosystem."
 
 #: src/components/Footer/index.tsx
-msgid "Forums"
-msgstr "Forums"
+#~ msgid "Forums"
+#~ msgstr "Forums"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
@@ -1194,6 +1198,10 @@ msgstr "Proposal {0}"
 msgid "Proposals"
 msgstr "Proposals"
 
+#: src/pages/Vote/index.tsx
+msgid "Proposals cannot be executed during a forking period"
+msgstr "Proposals cannot be executed during a forking period"
+
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
 msgstr "Proposals submitted by community members will appear here."
@@ -1439,12 +1447,12 @@ msgstr "Switch wallet"
 #~ msgstr "Taken at block"
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on created block"
-msgstr "Taken on created block"
+#~ msgid "Taken on created block"
+#~ msgstr "Taken on created block"
 
 #: src/pages/Vote/index.tsx
-msgid "Taken on start block"
-msgstr "Taken on start block"
+#~ msgid "Taken on start block"
+#~ msgstr "Taken on start block"
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
