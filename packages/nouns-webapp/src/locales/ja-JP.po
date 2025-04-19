@@ -734,8 +734,6 @@ msgstr "賛成"
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
-#: src/components/NavBar/index.tsx
-#: src/components/NavBar/index.tsx
 #: src/pages/Forks/index.tsx
 msgid "Fork"
 msgstr ""

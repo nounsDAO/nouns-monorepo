@@ -11,7 +11,7 @@ import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCodeFork, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
@@ -64,11 +64,6 @@ const NavBar = () => {
       <Trans>Candidates</Trans>
     </Dropdown.Item>
   ) : null;
-  const forkNavItem = config.featureToggles.fork ? (
-    <Dropdown.Item className={buttonClasses} href="/fork">
-      <Trans>Fork</Trans>
-    </Dropdown.Item>
-  ) : null;
 
   const v3DaoNavItem = (
     <NavDropdown
@@ -90,7 +85,6 @@ const NavBar = () => {
         <Trans>Proposals</Trans>
       </Dropdown.Item>
       {candidatesNavItem}
-      {forkNavItem}
     </NavDropdown>
   );
 
@@ -155,20 +149,6 @@ const NavBar = () => {
                       <NavBarButton
                         buttonText={<Trans>Candidates</Trans>}
                         buttonIcon={<FontAwesomeIcon icon={faPenToSquare} />}
-                        buttonStyle={nonWalletButtonStyle}
-                      />
-                    </Nav.Link>
-                  )}
-                  {config.featureToggles.fork && (
-                    <Nav.Link
-                      as={Link}
-                      to="/fork"
-                      className={classes.nounsNavLink}
-                      onClick={closeNav}
-                    >
-                      <NavBarButton
-                        buttonText={<Trans>Fork</Trans>}
-                        buttonIcon={<FontAwesomeIcon icon={faCodeFork} />}
                         buttonStyle={nonWalletButtonStyle}
                       />
                     </Nav.Link>

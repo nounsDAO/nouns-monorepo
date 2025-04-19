@@ -733,8 +733,6 @@ msgstr "For"
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 
-#: src/components/NavBar/index.tsx
-#: src/components/NavBar/index.tsx
 #: src/pages/Forks/index.tsx
 msgid "Fork"
 msgstr "Fork"
