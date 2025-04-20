@@ -4,17 +4,10 @@ Nouns DAO is a generative avatar art collective run by a group of crypto misfits
 
 ## Packages
 
-### nouns-api
-
-The [nouns api](packages/nouns-api) is an HTTP webserver that hosts token metadata. This is currently unused because on-chain, data URIs are enabled.
-
 ### nouns-assets
 
 The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-length encoded image data.
 
-### nouns-bots
-
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
 
 ### nouns-contracts
 
