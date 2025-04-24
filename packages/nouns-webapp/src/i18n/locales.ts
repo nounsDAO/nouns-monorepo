@@ -1,11 +1,11 @@
 import en, { Locale as DaysJSLocale } from 'dayjs/locale/en';
 import ja from 'dayjs/locale/ja';
-import zh from 'dayjs/locale/zh-cn';
+// import zh from 'dayjs/locale/zh-cn';
 export const SUPPORTED_LOCALES = [
   // order as they appear in the language dropdown
   'en-US',
   'ja-JP',
-  'zh-CN',
+  // 'zh-CN',
 ];
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number] | 'pseudo';
 
@@ -14,20 +14,20 @@ export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   'en-US': 'English',
   'ja-JP': '日本語',
-  'zh-CN': '中文',
+  // 'zh-CN': '中文',
   pseudo: 'ƥƨèúδô',
 };
 
 export enum Locales {
   en_US = 'en-US',
   ja_JP = 'ja-JP',
-  zh_CN = 'zh-CN',
+  // zh_CN = 'zh-CN',
 }
 
 // Map SupportedLocale string to DaysJS locale object (used for locale aware time formatting)
 export const SUPPORTED_LOCALE_TO_DAYSJS_LOCALE: { [locale in SupportedLocale]: DaysJSLocale } = {
   'en-US': en,
   'ja-JP': ja,
-  'zh-CN': zh,
+  // 'zh-CN': zh,
   pseudo: en,
 };
