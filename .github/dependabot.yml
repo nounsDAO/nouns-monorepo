@@ -1,0 +1,55 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: 'github-actions'
+    # Files stored in the repository root
+    directory: '/'
+    # Check for updates every weekday
+    schedule:
+      interval: 'daily'
+      time: '00:00'
+      timezone: 'UTC'
+    # Add assignees
+    assignees:
+      - 'nekofar'
+    # Include a list of updated dependencies
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+    # Specify labels for pull requests
+    labels:
+      - 'dependencies'
+    # Allow up to 20 open pull requests for dependencies
+    open-pull-requests-limit: 20
+    # Add reviewers
+    reviewers:
+      - 'nekofar'
+    # Raise pull requests against the `feature/migrate-from-node-16-to-22` branch
+    target-branch: 'feature/migrate-from-node-16-to-22'
+
+  # Maintain dependencies for PNPM
+  - package-ecosystem: 'npm'
+    # Files stored in the repository root
+    directory: '/'
+    # Check for updates every weekday
+    schedule:
+      interval: 'daily'
+      time: '00:00'
+      timezone: 'UTC'
+    # Add assignees
+    assignees:
+      - 'nekofar'
+    # Include a list of updated dependencies
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    # Specify labels for pull requests
+    labels:
+      - 'dependencies'
+    # Allow up to 10 open pull requests for dependencies
+    open-pull-requests-limit: 20
+    # Add reviewers
+    reviewers:
+      - 'nekofar'
+    # Raise pull requests against the `feature/migrate-from-node-16-to-22` branch
+    target-branch: 'feature/migrate-from-node-16-to-22'
