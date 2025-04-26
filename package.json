@@ -47,5 +47,8 @@
       "yarn format"
     ]
   },
-  "packageManager": "yarn@1.22.17"
+  "packageManager": "yarn@1.22.17",
+  "engines": {
+    "node": "16.20.2"
+  }
 }
