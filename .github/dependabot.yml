@@ -20,7 +20,7 @@ updates:
     labels:
       - 'dependencies'
     # Allow up to 20 open pull requests for dependencies
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 200
     # Add reviewers
     reviewers:
       - 'nekofar'
@@ -47,7 +47,7 @@ updates:
     labels:
       - 'dependencies'
     # Allow up to 10 open pull requests for dependencies
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 200
     # Add reviewers
     reviewers:
       - 'nekofar'
