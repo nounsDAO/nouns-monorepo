@@ -169,15 +169,15 @@ function captureProposalCandidateVersion(
   logIndex: string,
   candidateId: string,
   targets: Bytes[],
-  values: bigint[],
+  values: BigInt[],
   signatures: string[],
   calldatas: Bytes[],
   description: string,
-  proposalIdToUpdate: bigint,
+  proposalIdToUpdate: BigInt,
   encodedProposalHash: Bytes,
   block: ethereum.Block,
   proposer: Bytes,
-  updateMessage = '',
+  updateMessage: string = '',
 ): ProposalCandidateVersion {
   const content = getOrCreateProposalCandidateContent(encodedProposalHash.toHexString());
   content.targets = targets;

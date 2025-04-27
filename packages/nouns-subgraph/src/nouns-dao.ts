@@ -63,8 +63,8 @@ import {
 } from './types/schema';
 
 export function handleProposalCreated(event: ProposalCreated): void {
-  const proposal = getOrCreateProposal(event.params.id.toString());
-  const proposerResult = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString());
+  let proposal = getOrCreateProposal(event.params.id.toString());
+  let proposerResult = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString());
 
   proposal.proposer = proposerResult.entity!.id;
   proposal.targets = changetype<Bytes[]>(event.params.targets);
@@ -82,7 +82,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
   proposal.abstainVotes = BIGINT_ZERO;
-  const desc = event.params.description.split('\\n').join('\n');
+  let desc = event.params.description.split('\\n').join('\n');
   proposal.description = desc;
   proposal.title = extractTitle(desc);
   proposal.status = event.block.number >= proposal.startBlock! ? STATUS_ACTIVE : STATUS_PENDING;
@@ -91,7 +91,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
   const nounsDAO = NounsDAO.bind(event.address);
-  const adjustedSupplyResult = nounsDAO.try_adjustedTotalSupply();
+  let adjustedSupplyResult = nounsDAO.try_adjustedTotalSupply();
 
   if (!adjustedSupplyResult.reverted) {
     proposal.adjustedTotalSupply = adjustedSupplyResult.value;
@@ -143,7 +143,7 @@ export function handleProposalCreatedWithRequirementsV4(
 }
 
 export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void {
-  const proposal = getOrCreateProposal(parsedProposal.id);
+  let proposal = getOrCreateProposal(parsedProposal.id);
 
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
@@ -172,7 +172,7 @@ export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void
 }
 
 export function handleProposalCreatedOnTimelockV1(event: ProposalCreatedOnTimelockV1): void {
-  const proposal = getOrCreateProposal(event.params.id.toString());
+  let proposal = getOrCreateProposal(event.params.id.toString());
   proposal.onTimelockV1 = true;
   proposal.save();
 }
@@ -240,7 +240,7 @@ export function handleProposalTransactionsUpdated(event: ProposalTransactionsUpd
 }
 
 export function handleProposalCanceled(event: ProposalCanceled): void {
-  const proposal = getOrCreateProposal(event.params.id.toString());
+  let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_CANCELLED;
   proposal.canceledBlock = event.block.number;
@@ -250,7 +250,7 @@ export function handleProposalCanceled(event: ProposalCanceled): void {
 }
 
 export function handleProposalVetoed(event: ProposalVetoed): void {
-  const proposal = getOrCreateProposal(event.params.id.toString());
+  let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_VETOED;
   proposal.vetoedBlock = event.block.number;
@@ -260,8 +260,8 @@ export function handleProposalVetoed(event: ProposalVetoed): void {
 }
 
 export function handleProposalQueued(event: ProposalQueued): void {
-  const governance = getGovernanceEntity();
-  const proposal = getOrCreateProposal(event.params.id.toString());
+  let governance = getGovernanceEntity();
+  let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_QUEUED;
   proposal.executionETA = event.params.eta;
@@ -275,8 +275,8 @@ export function handleProposalQueued(event: ProposalQueued): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  const governance = getGovernanceEntity();
-  const proposal = getOrCreateProposal(event.params.id.toString());
+  let governance = getGovernanceEntity();
+  let proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_EXECUTED;
   proposal.executionETA = null;
@@ -290,12 +290,12 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 }
 
 export function handleVoteCast(event: VoteCast): void {
-  const proposal = getOrCreateProposal(event.params.proposalId.toString());
-  const voteId = generateVoteId(event.params.voter, event.params.proposalId);
-  const vote = getOrCreateVote(voteId);
+  let proposal = getOrCreateProposal(event.params.proposalId.toString());
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  let vote = getOrCreateVote(voteId);
 
   // Voter can be created here and not earlier because we support zero-voting-balance votes.
-  const voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
+  let voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
   const voter = voterResult.entity!;
 
   vote.proposal = proposal.id;
@@ -345,8 +345,8 @@ export function handleVoteCast(event: VoteCast): void {
 }
 
 export function handleVoteCastWithClientId(event: VoteCastWithClientId): void {
-  const voteId = generateVoteId(event.params.voter, event.params.proposalId);
-  const vote = getOrCreateVote(voteId);
+  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  let vote = getOrCreateVote(voteId);
   vote.clientId = event.params.clientId.toI32();
   vote.save();
 }
@@ -399,7 +399,7 @@ function captureProposalVersion(
   logIndex: string,
   proposal: Proposal,
   isUpdate: boolean,
-  updateMessage = '',
+  updateMessage: string = '',
 ): void {
   const versionId = txHash.concat('-').concat(logIndex);
   const previousVersion = getOrCreateProposalVersion(versionId);
@@ -540,6 +540,6 @@ function genericUniqueId(event: ethereum.Event): string {
   return event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
 }
 
-function generateVoteId(voter: Address, proposalId: bigint): string {
+function generateVoteId(voter: Address, proposalId: BigInt): string {
   return voter.toHexString().concat('-').concat(proposalId.toString());
 }

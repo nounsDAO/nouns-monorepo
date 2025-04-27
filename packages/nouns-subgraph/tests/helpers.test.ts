@@ -18,7 +18,7 @@ describe('getOrCreateDynamicQuorumParams', () => {
   test('sets dynamicQuorumStartBlock to input block number', () => {
     const params = getOrCreateDynamicQuorumParams(BIGINT_10K);
 
-    assert.bigIntEquals(BIGINT_10K, params.dynamicQuorumStartBlock as bigint);
+    assert.bigIntEquals(BIGINT_10K, params.dynamicQuorumStartBlock as BigInt);
   });
 
   test('sets dynamicQuorumStartBlock first number after first being null, and later attempt to set to a different number', () => {
@@ -26,10 +26,10 @@ describe('getOrCreateDynamicQuorumParams', () => {
     assert.assertTrue(params.dynamicQuorumStartBlock === null);
 
     params = getOrCreateDynamicQuorumParams(BIGINT_ONE);
-    assert.bigIntEquals(BIGINT_ONE, params.dynamicQuorumStartBlock as bigint);
+    assert.bigIntEquals(BIGINT_ONE, params.dynamicQuorumStartBlock as BigInt);
 
     params = getOrCreateDynamicQuorumParams(BIGINT_10K);
-    assert.bigIntEquals(BIGINT_ONE, params.dynamicQuorumStartBlock as bigint);
+    assert.bigIntEquals(BIGINT_ONE, params.dynamicQuorumStartBlock as BigInt);
   });
 
   test('calcEncodedProposalHash', () => {
