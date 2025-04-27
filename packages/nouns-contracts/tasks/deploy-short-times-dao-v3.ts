@@ -288,7 +288,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
 
     for (const [name, contract] of Object.entries(contracts)) {
       let gasOptions;
-      const feeData = await ethers.provider.getFeeData();
+      let feeData = await ethers.provider.getFeeData();
       if (args.autoDeploy) {
         gasOptions = {
           maxFeePerGas: feeData.maxFeePerGas,
