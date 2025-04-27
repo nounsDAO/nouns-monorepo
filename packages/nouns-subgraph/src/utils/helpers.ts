@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Address, BigInt, Bytes, crypto, ethereum } from '@graphprotocol/graph-ts';
 import {
   Account,
@@ -145,7 +146,7 @@ export function getGovernanceEntity(): Governance {
   return governance as Governance;
 }
 
-export function getOrCreateDynamicQuorumParams(block: bigint | null = null): DynamicQuorumParams {
+export function getOrCreateDynamicQuorumParams(block: BigInt | null = null): DynamicQuorumParams {
   let params = DynamicQuorumParams.load('LATEST');
 
   if (params == null) {
@@ -229,7 +230,7 @@ export function getOrCreateCandidateFeedback(id: string): CandidateFeedback {
   return feedback;
 }
 
-export function getOrCreateFork(id: bigint): Fork {
+export function getOrCreateFork(id: BigInt): Fork {
   let fork = Fork.load(id.toString());
   if (fork == null) {
     fork = new Fork(id.toString());
@@ -240,7 +241,7 @@ export function getOrCreateFork(id: bigint): Fork {
   return fork;
 }
 
-export function getCandidateIndex(): bigint {
+export function getCandidateIndex(): BigInt {
   const governance = getGovernanceEntity();
   return governance.candidates;
 }
