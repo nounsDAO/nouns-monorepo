@@ -90,9 +90,9 @@
     "dotenv": "^10.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "yarn i18n:compile && react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "yarn i18n:compile && craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "prepare": "yarn i18n:compile",
     "i18n:extract": "lingui extract",
