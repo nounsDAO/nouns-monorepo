@@ -18,22 +18,23 @@ module.exports = {
       );
 
       if (svgrRule && svgrRule.oneOf) {
-        const svgOneOfRule = svgrRule.oneOf.find(rule =>
-          rule.test && rule.test.toString().includes('svg')
-        );
+        // Find all rules that handle SVG files
+        svgrRule.oneOf.forEach(rule => {
+          if (rule.test && rule.test.toString().includes('svg') && rule.use) {
+            // Find the SVGR loader in the use array
+            const svgrLoader = rule.use.find(loader =>
+              loader.loader && loader.loader.includes('@svgr/webpack')
+            );
 
-        if (svgOneOfRule && svgOneOfRule.use) {
-          const svgrLoader = svgOneOfRule.use.find(loader =>
-            loader.loader && loader.loader.includes('@svgr/webpack')
-          );
-
-          if (svgrLoader) {
-            svgrLoader.options = {
-              ...svgrLoader.options,
-              throwIfNamespace: false,
-            };
+            if (svgrLoader) {
+              // Set throwIfNamespace to false
+              svgrLoader.options = {
+                ...svgrLoader.options,
+                throwIfNamespace: false,
+              };
+            }
           }
-        }
+        });
       }
 
       // Add fallbacks for Node.js core modules
