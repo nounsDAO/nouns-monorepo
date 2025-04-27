@@ -11,3 +11,7 @@ evm_version = 'shanghai'
 
 [profile.lite]
 optimizer = false
+
+[profile.ci]
+optimizer = false
+ignored_error_codes = [9302, 3860, 5574]
