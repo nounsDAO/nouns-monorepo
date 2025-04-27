@@ -2,12 +2,12 @@ import { BigInt } from '@graphprotocol/graph-ts';
 import { BIGINT_10K } from './constants';
 
 export function dynamicQuorumVotes(
-  againstVotes: BigInt,
-  totalSupply: BigInt,
+  againstVotes: bigint,
+  totalSupply: bigint,
   minQuorumVotesBPS: i32,
   maxQuorumVotesBPS: i32,
-  quorumCoefficient: BigInt,
-): BigInt {
+  quorumCoefficient: bigint,
+): bigint {
   const againstVotesBPS = againstVotes.times(BIGINT_10K).div(totalSupply);
   const quorumAdjustmentBPS = quorumCoefficient
     .times(againstVotesBPS)

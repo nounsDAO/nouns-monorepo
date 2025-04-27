@@ -7,13 +7,13 @@ import { ProposalCreatedWithRequirements1 as ProposalCreatedWithRequirementsV4 }
 import { BIGINT_ZERO } from '../utils/constants';
 
 export class ParsedProposalV3 {
-  id: string = '';
-  txHash: string = '';
-  updatePeriodEndBlock: BigInt = BIGINT_ZERO;
-  proposalThreshold: BigInt = BIGINT_ZERO;
-  quorumVotes: BigInt = BIGINT_ZERO;
+  id = '';
+  txHash = '';
+  updatePeriodEndBlock: bigint = BIGINT_ZERO;
+  proposalThreshold: bigint = BIGINT_ZERO;
+  quorumVotes: bigint = BIGINT_ZERO;
   signers: string[] = [];
-  clientId: BigInt = BIGINT_ZERO;
+  clientId: bigint = BIGINT_ZERO;
 
   static fromV1Event(event: ProposalCreatedWithRequirements1): ParsedProposalV3 {
     const proposal = new ParsedProposalV3();
@@ -68,7 +68,7 @@ export class ParsedProposalV3 {
  */
 export function extractTitle(description: string): string {
   // Extract a markdown title from a proposal body that uses the `# Title` or `Title\n===` formats
-  let splitDescription = description.split('#', 3);
+  const splitDescription = description.split('#', 3);
   if (splitDescription.length > 1) {
     splitDescription.shift(); // Remove any characters before `#`
   }
