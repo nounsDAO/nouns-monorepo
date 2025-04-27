@@ -47,7 +47,7 @@
     "pngjs": "^6.0.0",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
-    "react-bootstrap": "^2.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-diff-viewer": "^3.1.1",
     "react-dom": "^17.0.2",
     "react-markdown": "^7.0.0",
