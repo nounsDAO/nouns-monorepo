@@ -1,4 +1,5 @@
 [profile.default]
+allow_internal_expect_revert = true
 src = 'contracts'
 libs = ['lib', '../../node_modules']
 cache_path = 'foundry-cache'
