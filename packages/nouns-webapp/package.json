@@ -41,7 +41,7 @@
     "connected-react-router": "^6.9.1",
     "dayjs": "^1.10.7",
     "eslint-config-react-app": "^6.0.0",
-    "ethers": "^5.6.8",
+    "ethers": "^5.8.0",
     "framer-motion": "^6.5.1",
     "graphql": "^15.10.1",
     "pngjs": "^6.0.0",

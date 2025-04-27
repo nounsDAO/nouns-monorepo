@@ -49,6 +49,6 @@
     "typechain": "^8.0.0"
   },
   "dependencies": {
-    "ethers": "^5.6.8"
+    "ethers": "^5.8.0"
   }
 }
