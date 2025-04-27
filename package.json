@@ -31,7 +31,8 @@
   "resolutions": {
     "**/ethers": "5.6.8",
     "@usedapp/core/ethers": "5.6.8",
-    "**/@ethersproject/contracts": "5.6.2"
+    "**/@ethersproject/contracts": "5.6.2",
+    "elliptic": ">=6.6.1"
   },
   "workspaces": [
     "packages/*"
