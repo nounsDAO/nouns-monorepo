@@ -70,7 +70,7 @@ jobs:
         run: |
           cd packages/nouns-contracts
           forge --version
-          FOUNDRY_PROFILE=ci forge build --sizes
+          FOUNDRY_PROFILE=ci forge build --sizes --skip test
 
       - name: Run Forge tests
         run: |
