@@ -9,9 +9,6 @@ updates:
       interval: 'daily'
       time: '00:00'
       timezone: 'UTC'
-    # Add assignees
-    assignees:
-      - 'nekofar'
     # Include a list of updated dependencies
     commit-message:
       prefix: 'ci'
@@ -20,12 +17,7 @@ updates:
     labels:
       - 'dependencies'
     # Allow up to 20 open pull requests for dependencies
-    open-pull-requests-limit: 200
-    # Add reviewers
-    reviewers:
-      - 'nekofar'
-    # Raise pull requests against the `feature/migrate-from-node-16-to-22` branch
-    target-branch: 'feature/migrate-from-node-16-to-22'
+    open-pull-requests-limit: 20
 
   # Maintain dependencies for PNPM
   - package-ecosystem: 'npm'
@@ -36,9 +28,6 @@ updates:
       interval: 'daily'
       time: '00:00'
       timezone: 'UTC'
-    # Add assignees
-    assignees:
-      - 'nekofar'
     # Include a list of updated dependencies
     commit-message:
       prefix: 'chore'
@@ -47,12 +36,7 @@ updates:
     labels:
       - 'dependencies'
     # Allow up to 10 open pull requests for dependencies
-    open-pull-requests-limit: 200
-    # Add reviewers
-    reviewers:
-      - 'nekofar'
-    # Raise pull requests against the `feature/migrate-from-node-16-to-22` branch
-    target-branch: 'feature/migrate-from-node-16-to-22'
+    open-pull-requests-limit: 20
     # Allow only direct dependencies to be updated
     allow:
       - dependency-type: 'direct'
