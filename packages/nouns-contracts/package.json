@@ -44,7 +44,7 @@
     "hardhat-gas-reporter": "^1.0.8",
     "prettier-plugin-solidity": "^1.2.0",
     "prompt": "^1.1.0",
-    "shx": "^0.3.3",
+    "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typechain": "^8.0.0"
   },
