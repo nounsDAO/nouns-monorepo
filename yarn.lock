@@ -5470,13 +5470,10 @@
   resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-ethers/-/hardhat-ethers-2.2.3.tgz#b41053e360c31a32c2640c9a45ee981a7e603fe0"
   integrity sha512-YhzPdzb612X591FOe68q+qXVXGG2ANZRvDo0RRUtimev85rCrAlv/TLMEZw5c+kq9AbzocLTVX/h2jVIFPL9Xg==
 
-"@nomiclabs/hardhat-waffle@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-waffle/-/hardhat-waffle-2.0.3.tgz#9c538a09c5ed89f68f5fd2dc3f78f16ed1d6e0b1"
-  integrity sha512-049PHSnI1CZq6+XTbrMbMv5NaL7cednTfPenx02k3cEh8wBMLa6ys++dBETJa6JjfwgA9nBhhHQ173LJv6k2Pg==
-  dependencies:
-    "@types/sinon-chai" "^3.2.3"
-    "@types/web3" "1.0.19"
+"@nomiclabs/hardhat-waffle@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-waffle/-/hardhat-waffle-2.0.5.tgz#97c217f1db795395c04404291937edb528f3f218"
+  integrity sha512-U1RH9OQ1mWYQfb+moX5aTgGjpVVlOcpiFI47wwnaGG4kLhcTy90cNiapoqZenxcRAITVbr0/+QSduINL5EsUIQ==
 
 "@noundry/nouns-assets@^1.5.0":
   version "1.5.0"
@@ -6027,13 +6024,6 @@
   dependencies:
     type-detect "4.0.8"
 
-"@sinonjs/fake-timers@^7.1.0":
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/@sinonjs/fake-timers/-/fake-timers-7.1.2.tgz#2524eae70c4910edccf99b2f4e6efc5894aff7b5"
-  integrity sha512-iQADsW4LBMISqZ6Ci1dupJL9pprqwcVFTcOsEmQOEhW+KLCVn/Y4Jrvg2k19fIHCp+iFprriYPTdRcQR8NbUPg==
-  dependencies:
-    "@sinonjs/commons" "^1.7.0"
-
 "@sinonjs/fake-timers@^8.0.1":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/fake-timers/-/fake-timers-8.1.0.tgz#3fdc2b6cb58935b21bfb8d1625eb1300484316e7"
@@ -6496,17 +6486,17 @@
   resolved "https://registry.yarnpkg.com/@types/bad-words/-/bad-words-3.0.1.tgz#6a20fb08814af5e1f2428fa9e0098ca7b36f730a"
   integrity sha512-7la3ZDJG1tlRqySO+pnXycZpacaMEw/iLEm8kc4l+I+jN8KjBfoQVwO6jm98xzXVLrxV8vDrB5TaMoop8sKclQ==
 
-"@types/bn.js@*", "@types/bn.js@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.0.tgz#32c5d271503a12653c62cf4d2b45e6eab8cebc68"
-  integrity sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==
-  dependencies:
-    "@types/node" "*"
-
 "@types/bn.js@^4.11.0", "@types/bn.js@^4.11.3", "@types/bn.js@^4.11.5":
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.6.tgz#c306c70d9358aaea33cd4eda092a742b9505967c"
   integrity sha512-pqr857jrp2kPuO9uRjZ3PwnJTjoQy+fcdxvBTvHm6dkmEL9q+hDD/2j/0ELOBPtPnS8LjCX0gI9nbl8lVkadpg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/bn.js@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.0.tgz#32c5d271503a12653c62cf4d2b45e6eab8cebc68"
+  integrity sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==
   dependencies:
     "@types/node" "*"
 
@@ -6525,7 +6515,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/chai@*", "@types/chai@^4.2.15":
+"@types/chai@^4.2.15":
   version "4.2.22"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.22.tgz#47020d7e4cf19194d43b5202f35f75bd2ad35ce7"
   integrity sha512-tFfcE+DSTzWAgifkjik9AySNqIyNoYwmR+uecPwwD/XRNfvOjmC/FjCxpiUGDkDVDphPfCUecSQVFw+lN3M3kQ==
@@ -7106,21 +7096,6 @@
     "@types/node" "*"
     "@types/send" "*"
 
-"@types/sinon-chai@^3.2.3":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@types/sinon-chai/-/sinon-chai-3.2.6.tgz#3504a744e2108646394766fb1339f52ea5d6bd0f"
-  integrity sha512-Z57LprQ+yOQNu9d6mWdHNvnmncPXzDWGSeLj+8L075/QahToapC4Q13zAFRVKV4clyBmdJ5gz4xBfVkOso5lXw==
-  dependencies:
-    "@types/chai" "*"
-    "@types/sinon" "*"
-
-"@types/sinon@*":
-  version "10.0.6"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-10.0.6.tgz#bc3faff5154e6ecb69b797d311b7cf0c1b523a1d"
-  integrity sha512-6EF+wzMWvBNeGrfP3Nx60hhx+FfwSg1JJBLAAP/IdIUq0EYkqCYf70VT3PhuhPX9eLD+Dp+lNdpb/ZeHG8Yezg==
-  dependencies:
-    "@sinonjs/fake-timers" "^7.1.0"
-
 "@types/sockjs@^0.3.33":
   version "0.3.36"
   resolved "https://registry.yarnpkg.com/@types/sockjs/-/sockjs-0.3.36.tgz#ce322cf07bcc119d4cbf7f88954f3a3bd0f67535"
@@ -7145,11 +7120,6 @@
   resolved "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.3.tgz#a136f83b0758698df454e328759dbd3d44555311"
   integrity sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==
 
-"@types/underscore@*":
-  version "1.11.3"
-  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.3.tgz#d6734f3741ce41b2630018c6b61c6745f6188c07"
-  integrity sha512-Fl1TX1dapfXyDqFg2ic9M+vlXRktcPJrc4PR7sRc7sdVrjavg/JHlbUXBt8qWWqhJrmSqg3RNAkAPRiOYw6Ahw==
-
 "@types/unist@*", "@types/unist@^2.0.0":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
@@ -7166,14 +7136,6 @@
   integrity sha512-SaAfLJY/40wKFDsNFwaNfwqFSL6kVhTx9JD18qM+Gaw1qdAXLYF/6E7TIqWEdoG4so6fki/zxURP5NsoCePYJw==
   dependencies:
     "@types/ethereum-protocol" "*"
-
-"@types/web3@1.0.19":
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/@types/web3/-/web3-1.0.19.tgz#46b85d91d398ded9ab7c85a5dd57cb33ac558924"
-  integrity sha512-fhZ9DyvDYDwHZUp5/STa9XW2re0E8GxoioYJ4pEUZ13YHpApSagixj7IAdoYH5uAK+UalGq6Ml8LYzmgRA/q+A==
-  dependencies:
-    "@types/bn.js" "*"
-    "@types/underscore" "*"
 
 "@types/ws@^7.4.4":
   version "7.4.7"
