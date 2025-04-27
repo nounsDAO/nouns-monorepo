@@ -27,6 +27,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
 
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
@@ -40,6 +50,14 @@ jobs:
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
+
+      - name: Cache Foundry build
+        uses: actions/cache@v3
+        with:
+          path: |
+            packages/nouns-contracts/out
+            packages/nouns-contracts/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**') }}
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
