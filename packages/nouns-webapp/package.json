@@ -22,7 +22,7 @@
     "@apollo/client": "^3.3.21",
     "@davatar/react": "^1.11.1",
     "@ethersproject/bignumber": "^5.7.0",
-    "@ethersproject/contracts": "^5.7.0",
+    "@ethersproject/contracts": "^5.8.0",
     "@ethersproject/providers": "^5.7.2",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
