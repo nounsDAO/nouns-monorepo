@@ -2,6 +2,17 @@
   "name": "@nouns/webapp",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "craco start",
+    "build": "yarn i18n:compile && craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "prepare": "yarn i18n:compile",
+    "i18n:extract": "lingui extract",
+    "i18n:compile": "lingui compile",
+    "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
+    "update-browserslist": "npx update-browserslist-db@latest"
+  },
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "postcss-normalize": "^10.0.1",
@@ -91,17 +102,6 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/react-transition-group": "^4.4.5",
     "dotenv": "^10.0.0"
-  },
-  "scripts": {
-    "start": "craco start",
-    "build": "yarn i18n:compile && craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "prepare": "yarn i18n:compile",
-    "i18n:extract": "lingui extract",
-    "i18n:compile": "lingui compile",
-    "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "update-browserslist": "npx update-browserslist-db@latest"
   },
   "browserslist": [
     ">0.2%",
