@@ -70,11 +70,20 @@ jobs:
         run: |
           cd packages/nouns-contracts
           forge --version
-          FOUNDRY_PROFILE=ci forge build --sizes --skip test
+          forge build --optimize --optimizer-runs 1 --sizes --skip test
+
+      - name: Cache Foundry test data
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages/nouns-contracts/out 
+            packages/nouns-contracts/cache
+            ~/.foundry/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**', '~/.foundry/cache/**') }}
 
       - name: Run Forge tests
+        env:
+          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
         run: |
           cd packages/nouns-contracts
           forge test -vvv --ffi
-        env:
-          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
