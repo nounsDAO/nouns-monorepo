@@ -12,6 +12,7 @@ import ShortAddress from '../ShortAddress';
 
 import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
+import Tooltip from '../Tooltip';
 
 interface NounInfoRowHolderProps {
   nounId: number;
@@ -22,7 +23,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const { loading, error, data } = useQuery(auctionQuery(nounId));
 
-  const winner = data && data.auction.bidder.id;
+  const winner = data && data.auction.bidder?.id;
 
   if (loading || !winner) {
     return (
@@ -44,33 +45,41 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const shortAddressComponent = <ShortAddress address={winner} />;
 
   return (
-    <div className={classes.nounHolderInfoContainer}>
-      <span>
-        <Image src={_HeartIcon} className={classes.heartIcon} />
-      </span>
-      <span>
-        <Trans>Winner</Trans>
-      </span>
-      <span>
-        <a
-          className={
-            isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
-          }
-          href={etherscanURL}
-          target={'_blank'}
-          rel="noreferrer"
-        >
-          {winner.toLowerCase() === config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
-            <Trans>Nouns Auction House</Trans>
-          ) : (
-            shortAddressComponent
-          )}
-        </a>
-      </span>
-      <span className={classes.linkIconSpan}>
-        <Image src={_LinkIcon} className={classes.linkIcon} />
-      </span>
-    </div>
+    <Tooltip
+      tip="View on Etherscan"
+      tooltipContent={(tip: string) => {
+        return <Trans>View on Etherscan</Trans>;
+      }}
+      id="holder-etherscan-tooltip"
+    >
+      <div className={classes.nounHolderInfoContainer}>
+        <span>
+          <Image src={_HeartIcon} className={classes.heartIcon} />
+        </span>
+        <span>
+          <Trans>Winner</Trans>
+        </span>
+        <span>
+          <a
+            className={
+              isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
+            }
+            href={etherscanURL}
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            {winner.toLowerCase() === config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
+              <Trans>Nouns Auction House</Trans>
+            ) : (
+              shortAddressComponent
+            )}
+            <span className={classes.linkIconSpan}>
+              <Image src={_LinkIcon} className={classes.linkIcon} />
+            </span>
+          </a>
+        </span>
+      </div>
+    </Tooltip>
   );
 };
 

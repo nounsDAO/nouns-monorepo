@@ -1,17 +1,29 @@
-import React, { Fragment } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import React from 'react';
+import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { Proposal } from '../../wrappers/nounsDao';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
+import {
+  buildEtherscanAddressLink,
+  buildEtherscanHoldingsLink,
+  buildEtherscanTxLink,
+} from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
 import EnsOrLongAddress from '../EnsOrLongAddress';
+import clsx from 'clsx';
+import ProposalTransactions from './ProposalTransactions';
+import linkIcon from '../../assets/icons/Link.svg';
+import config from '../../config';
 
 interface ProposalContentProps {
-  proposal?: Proposal;
+  description: string;
+  title: string;
+  details: ProposalDetail[];
+  hasSidebar?: boolean;
+  proposeOnV1?: boolean;
 }
 
 export const linkIfAddress = (content: string) => {
@@ -32,57 +44,56 @@ export const transactionLink = (content: string) => {
     </a>
   );
 };
+export const transactionIconLink = (content: string) => {
+  return (
+    <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
+      <img src={linkIcon} width={16} alt="link symbol" />
+    </a>
+  );
+};
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
-  const { proposal } = props;
+  const { description, title, details } = props;
+  const daoEtherscanLink = buildEtherscanHoldingsLink(
+    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
+  );
 
   return (
     <>
       <Row>
-        <Col className={classes.section}>
+        <Col className={clsx(classes.section, props.hasSidebar && classes.hasSidebar)}>
           <h5>
             <Trans>Description</Trans>
           </h5>
-          {proposal?.description && (
+          {description && (
             <ReactMarkdown
               className={classes.markdown}
-              children={processProposalDescriptionText(proposal.description, proposal.title)}
+              children={processProposalDescriptionText(description, title)}
               remarkPlugins={[remarkBreaks]}
             />
           )}
         </Col>
       </Row>
-      <Row>
-        <Col className={classes.section}>
-          <h5>
-            <Trans>Proposed Transactions</Trans>
-          </h5>
-          <ol>
-            {proposal?.details?.map((d, i) => {
-              return (
-                <li key={i} className="m-0">
-                  {linkIfAddress(d.target)}.{d.functionSig}
-                  {d.value}(
-                  <br />
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <span key={i}>
-                          &emsp;
-                          {linkIfAddress(content)}
-                          {d.callData.split(',').length - 1 === i ? '' : ','}
-                        </span>
-                        <br />
-                      </Fragment>
-                    );
-                  })}
-                  )
-                </li>
-              );
-            })}
-          </ol>
-        </Col>
-      </Row>
+      {details && (
+        <Row>
+          <Col className={classes.section}>
+            <h5>
+              <Trans>Proposed Transactions</Trans>
+            </h5>
+            {props.proposeOnV1 && (
+              <Alert variant="warning" className="mb-4">
+                <Trans>
+                  This proposal interacts with the{' '}
+                  <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
+                    original treasury
+                  </a>
+                </Trans>
+              </Alert>
+            )}
+            <ProposalTransactions details={details} />
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

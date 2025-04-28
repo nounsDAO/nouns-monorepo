@@ -6,6 +6,9 @@ import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import React from 'react';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import Tooltip from '../Tooltip';
 
 interface WinnerProps {
   winner: string;
@@ -39,13 +42,23 @@ const Winner: React.FC<WinnerProps> = props => {
       {!isMobile && (
         <Col>
           <a
-            href="https://nouns.center/nouners"
+            href="https://nouns.center/groups"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
             <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
+              <Trans>Get Involved</Trans>
+            </Button>
+          </a>
+          <a
+            href="https://www.nounsagora.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>Delegate</Trans>
             </Button>
           </a>
         </Col>
@@ -55,7 +68,24 @@ const Winner: React.FC<WinnerProps> = props => {
     <ShortAddress size={40} address={winner} avatar={true} />
   );
 
-  const nounderNounContent = 'nounders.eth';
+  const nounderNounContent = (
+    <a
+      href={buildEtherscanAddressLink('nounders.eth')}
+      target={'_blank'}
+      rel="noreferrer"
+      className={classes.link}
+    >
+      <Tooltip
+        tip="View on Etherscan"
+        tooltipContent={(tip: string) => {
+          return <Trans>View on Etherscan</Trans>;
+        }}
+        id="holder-etherscan-tooltip"
+      >
+        nounders.eth
+      </Tooltip>
+    </a>
+  );
 
   return (
     <>
@@ -84,13 +114,23 @@ const Winner: React.FC<WinnerProps> = props => {
       {isWinnerYou && isMobile && (
         <Row>
           <a
-            href="https://nouns.center/nouners"
+            href="https://nouns.center/groups"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
             <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
+              <Trans>Get Involved</Trans>
+            </Button>
+          </a>
+          <a
+            href="https://www.nounsagora.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>Delegate</Trans>
             </Button>
           </a>
         </Row>

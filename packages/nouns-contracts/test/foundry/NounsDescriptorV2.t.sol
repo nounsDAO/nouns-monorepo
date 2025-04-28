@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.19;
 
 import 'forge-std/Test.sol';
+import 'forge-std/StdJson.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { ISVGRenderer } from '../../contracts/interfaces/ISVGRenderer.sol';
@@ -11,6 +12,8 @@ import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
 import { IInflator } from '../../contracts/interfaces/IInflator.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
+import { strings } from './lib/strings.sol';
 
 contract NounsDescriptorV2Test is Test {
     NounsDescriptorV2 descriptor;
@@ -130,49 +133,33 @@ contract NounsDescriptorV2Test is Test {
     }
 
     function testBackgroundCountUsesArt() public {
-        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundsCount.selector), abi.encode(42));
+        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundCount.selector), abi.encode(42));
         assertEq(descriptor.backgroundCount(), 42);
         vm.clearMockedCalls();
     }
 
     function testBodyCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getBodiesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addBodiesFromPointer(address(0), 1, 42);
         assertEq(descriptor.bodyCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testAccessoryCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getAccessoriesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addAccessoriesFromPointer(address(0), 1, 42);
         assertEq(descriptor.accessoryCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testHeadCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getHeadsTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addHeadsFromPointer(address(0), 1, 42);
         assertEq(descriptor.headCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testGlassesCountUsesArt() public {
-        vm.mockCall(
-            address(art),
-            abi.encodeWithSelector(NounsArt.getGlassesTrait.selector),
-            abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
-        );
+        vm.prank(address(descriptor));
+        art.addGlassesFromPointer(address(0), 1, 42);
         assertEq(descriptor.glassesCount(), 42);
-        vm.clearMockedCalls();
     }
 
     function testAddManyBackgroundsUsesArt() public {
@@ -474,12 +461,51 @@ contract NounsDescriptorV2Test is Test {
     }
 
     function _makeArtGettersNotRevert() internal {
-        vm.mockCall(address(art), abi.encodeWithSelector(NounsArt.backgroundsCount.selector), abi.encode(123));
+        vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgroundCount.selector), abi.encode(123));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.backgrounds.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.bodies.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.accessories.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.heads.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.glasses.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.palettes.selector), abi.encode('return value'));
+    }
+}
+
+contract NounsDescriptorV2WithRealArtTest is DeployUtils {
+    using strings for *;
+    using stdJson for string;
+    using Base64 for string;
+
+    NounsDescriptorV2 descriptor;
+
+    function setUp() public {
+        descriptor = _deployAndPopulateV2();
+    }
+
+    function testGeneratesValidTokenURI() public {
+        string memory uri = descriptor.tokenURI(
+            0,
+            INounsSeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
+        );
+
+        string memory json = string(removeDataTypePrefix(uri).decode());
+        string memory imageDecoded = string(removeDataTypePrefix(json.readString('.image')).decode());
+        strings.slice memory imageSlice = imageDecoded.toSlice();
+
+        assertEq(json.readString('.name'), 'Noun 0');
+        assertEq(json.readString('.description'), 'Noun 0 is a member of the Nouns DAO');
+        assertEq(bytes(imageDecoded).length, 6849);
+        assertTrue(
+            imageSlice.startsWith(
+                '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">'
+                    .toSlice()
+            )
+        );
+        assertTrue(
+            imageSlice.endsWith(
+                '<rect width="60" height="10" x="100" y="160" fill="#ff638d" /><rect width="60" height="10" x="170" y="160" fill="#ff638d" /></svg>'
+                    .toSlice()
+            )
+        );
     }
 }

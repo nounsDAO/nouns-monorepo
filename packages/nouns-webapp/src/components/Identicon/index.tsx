@@ -22,6 +22,10 @@ class IdenticonInner extends Component<IdenticonInnerProps> {
     return { fallback: true };
   }
 
+  componentDidCatch(error: any, errorInfo: any) {
+    console.log(error, errorInfo);
+  }
+
   renderDavatar(address: string, provider: Web3Provider, size: number) {
     return <Davatar address={address} size={size} provider={provider} />;
   }
@@ -34,8 +38,8 @@ class IdenticonInner extends Component<IdenticonInnerProps> {
     return (
       <>
         {this.state.fallback
-          ? this.renderDavatar(this.props.address, this.props.provider, this.props.size)
-          : this.renderJazzicon(this.props.address, this.props.size)}
+          ? this.renderJazzicon(this.props.address, this.props.size)
+          : this.renderDavatar(this.props.address, this.props.provider, this.props.size)}
       </>
     );
   }

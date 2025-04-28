@@ -1,3 +1,46 @@
+type DelegationEvent @entity {
+  "The txn hash of this event + nounId"
+  id: ID!
+
+  "The Noun being delegated"
+  noun: Noun!
+
+  "Current delegator address"
+  delegator: Account!
+
+  "Previous delegate address"
+  previousDelegate: Delegate!
+
+  "New delegate address"
+  newDelegate: Delegate!
+
+  "Block number of the event"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the event is in"
+  blockTimestamp: BigInt!
+}
+
+type TransferEvent @entity {
+  "The txn hash of this event"
+  id: ID!
+
+  "The Noun being transfered"
+  noun: Noun!
+
+  "Previous holder address"
+  previousHolder: Account!
+
+  "New holder address"
+  newHolder: Account!
+
+  "Block number of the event"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the event is in"
+  blockTimestamp: BigInt!
+}
+
 type Seed @entity {
   "The Noun's ERC721 token id"
   id: ID!
@@ -33,7 +76,7 @@ type Noun @entity {
 }
 
 type Bid @entity {
-  "Bid transaction hash"
+  "Noun.id-amount"
   id: ID!
 
   "The Noun being bid on"
@@ -48,6 +91,9 @@ type Bid @entity {
   "Block number of the bid"
   blockNumber: BigInt!
 
+  "Transaction hash for the bid"
+  txHash: Bytes!
+
   "Index of transaction within block"
   txIndex: BigInt!
 
@@ -56,6 +102,9 @@ type Bid @entity {
 
   "The timestamp of the block the bid is in"
   blockTimestamp: BigInt!
+
+  "The ID of the client that facilitated this bid"
+  clientId: Int
 }
 
 type Auction @entity {
@@ -79,6 +128,8 @@ type Auction @entity {
 
   "Whether or not the auction has been settled"
   settled: Boolean!
+
+  clientId: Int!
 
   "The auction bids"
   bids: [Bid!]! @derivedFrom(field: "auction")
@@ -148,6 +199,9 @@ type Proposal @entity {
   "Delegate that proposed the change"
   proposer: Delegate!
 
+  "Delegates that signed on this proposal to get it over the proposal threshold"
+  signers: [Delegate!]
+
   "Targets data for the change"
   targets: [Bytes!]
 
@@ -166,8 +220,17 @@ type Proposal @entity {
   "The proposal creation block"
   createdBlock: BigInt!
 
+  "The proposal's last update timestamp"
+  lastUpdatedTimestamp: BigInt!
+
+  "The proposal's last update block"
+  lastUpdatedBlock: BigInt!
+
   "The proposal creation transaction hash"
   createdTransactionHash: Bytes!
+
+  "The proposal's last update transaction hash"
+  lastUpdatedTransactionHash: Bytes!
 
   "Block number from where the voting starts"
   startBlock: BigInt!
@@ -176,10 +239,10 @@ type Proposal @entity {
   endBlock: BigInt!
 
   "The proposal threshold at the time of proposal creation"
-  proposalThreshold: BigInt!
+  proposalThreshold: BigInt
 
   "The required number of votes for quorum at the time of proposal creation"
-  quorumVotes: BigInt!
+  quorumVotes: BigInt
 
   "The number of votes in favor of the proposal"
   forVotes: BigInt!
@@ -190,17 +253,126 @@ type Proposal @entity {
   "The number of votes to abstain on the proposal"
   abstainVotes: BigInt!
 
-  "String description of the change"
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The full proposal description, which includes the title"
   description: String!
 
   "Status of the proposal"
-  status: ProposalStatus!
+  status: ProposalStatus
 
   "Once the proposal is queued for execution it will have an ETA of the execution"
   executionETA: BigInt
 
   "Votes associated to this proposal"
   votes: [Vote!]! @derivedFrom(field: "proposal")
+
+  "Total supply when this proposal was created"
+  totalSupply: BigInt!
+
+  "Adjusted total supply when this proposal was created"
+  adjustedTotalSupply: BigInt!
+
+  "Dynamic quorum param snapshot: min quorum basis points"
+  minQuorumVotesBPS: Int!
+
+  "Dynamic quorum param snapshot: max quorum basis points"
+  maxQuorumVotesBPS: Int!
+
+  "Dynamic quorum param snapshot: the dynamic quorum coefficient"
+  quorumCoefficient: BigInt!
+
+  "The objection period end block"
+  objectionPeriodEndBlock: BigInt!
+
+  "The update period end block"
+  updatePeriodEndBlock: BigInt
+
+  "Feedback posts associated to this proposal"
+  feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
+
+  "True if the proposal was created via proposeOnTimelockV1"
+  onTimelockV1: Boolean
+
+  "The block at which voting balance snapshots are taken for this proposal"
+  voteSnapshotBlock: BigInt!
+
+  "The block number at which this proposal was canceled"
+  canceledBlock: BigInt
+
+  "The timestamp when this proposal was canceled"
+  canceledTimestamp: BigInt
+
+  "The transaction hash when the proposal was canceled"
+  canceledTransactionHash: Bytes
+
+  "The block number at which this proposal was executed"
+  executedBlock: BigInt
+
+  "The timestamp when this proposal was executed"
+  executedTimestamp: BigInt
+
+  "The transaction hash when the proposal was executed"
+  executedTransactionHash: Bytes
+
+  "The block number at which this proposal was vetoed"
+  vetoedBlock: BigInt
+
+  "The timestamp when this proposal was vetoed"
+  vetoedTimestamp: BigInt
+
+  "The transaction hash when the proposal was vetoed"
+  vetoedTransactionHash: Bytes
+
+  "The block number at which this proposal was queued"
+  queuedBlock: BigInt
+
+  "The timestamp when this proposal was queued"
+  queuedTimestamp: BigInt
+
+  "The transaction hash when the proposal was queued"
+  queuedTransactionHash: Bytes
+
+  "The ID of the client that facilitated this proposal"
+  clientId: Int!
+}
+
+type ProposalVersion @entity(immutable: true) {
+  id: ID!
+
+  "The proposal that was updated"
+  proposal: Proposal!
+
+  "The block number of the update"
+  createdBlock: BigInt!
+
+  "The block timestamp of the update"
+  createdAt: BigInt!
+
+  "The transaction hash of the update"
+  createdTransactionHash: Bytes!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The full proposal description, which includes the title"
+  description: String!
+
+  "The update message of this proposal version, relevant when it's a proposal update"
+  updateMessage: String!
 }
 
 type Vote @entity {
@@ -230,6 +402,18 @@ type Vote @entity {
 
   "Proposal that is being voted on"
   proposal: Proposal!
+
+  "Block number of vote"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the vote is in"
+  blockTimestamp: BigInt!
+
+  "The transaction hash of the vote"
+  transactionHash: Bytes!
+
+  "The ID of the client that facilitated this vote"
+  clientId: Int!
 }
 
 type Governance @entity {
@@ -259,4 +443,320 @@ type Governance @entity {
 
   "Number of proposals currently queued for execution"
   proposalsQueued: BigInt!
+
+  "The proposal ID from which vote snapshots are taken at vote start instead of proposal creation"
+  voteSnapshotBlockSwitchProposalId: BigInt!
+
+  "Number of candidates created"
+  candidates: BigInt!
+}
+
+type DynamicQuorumParams @entity {
+  "Unique entity used to store the latest dymanic quorum params"
+  id: ID!
+
+  "Min quorum basis points"
+  minQuorumVotesBPS: Int!
+
+  "Max quorum basis points"
+  maxQuorumVotesBPS: Int!
+
+  "The dynamic quorum coefficient"
+  quorumCoefficient: BigInt!
+
+  "The block from which proposals are using DQ, based on when we first see configuration being set"
+  dynamicQuorumStartBlock: BigInt
+}
+
+type ProposalCandidate @entity {
+  "A concatination of proposer and slug"
+  id: ID!
+
+  "The proposer account"
+  proposer: Bytes!
+
+  "The candidate slug, together with the proposer account makes the candidate's unique key"
+  slug: String!
+
+  "The proposal candidate creation transaction hash"
+  createdTransactionHash: Bytes!
+
+  "The proposal candidate creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The proposal candidate creation block"
+  createdBlock: BigInt!
+
+  "The proposal candidate's last update timestamp"
+  lastUpdatedTimestamp: BigInt!
+
+  "The proposal candidate's last update block"
+  lastUpdatedBlock: BigInt!
+
+  "Whether this candidate was canceled or not"
+  canceled: Boolean!
+
+  "The timestamp at which this candidate was canceled"
+  canceledTimestamp: BigInt
+
+  "The block number at which this candidate was canceled"
+  canceledBlock: BigInt
+
+  "The transaction hash at which this candidate was canceled"
+  canceledTransactionHash: Bytes
+
+  "Latest version of the proposal"
+  latestVersion: ProposalCandidateVersion!
+
+  "This candidate's versions"
+  versions: [ProposalCandidateVersion!]! @derivedFrom(field: "proposal")
+
+  "This candidate's number"
+  number: BigInt!
+}
+
+type ProposalCandidateVersion @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "The proposal candidate this entity is a version of"
+  proposal: ProposalCandidate!
+
+  "This version's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The version's creation block"
+  createdBlock: BigInt!
+
+  "The update message of this version, relevant when it's an update"
+  updateMessage: String!
+
+  "The proposal content"
+  content: ProposalCandidateContent!
+}
+
+type ProposalCandidateContent @entity {
+  "The encoded proposal hash"
+  id: ID!
+
+  "The proposer account"
+  proposer: Bytes!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "The full proposal description, which includes the title"
+  description: String!
+
+  "The proposal id that this content is updating. 0 if it's a new proposal"
+  proposalIdToUpdate: BigInt!
+
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The encoded proposal hash in bytes"
+  encodedProposalHash: Bytes!
+
+  "IDs of proposals (not candidates) with the same content"
+  matchingProposalIds: [BigInt!]
+
+  "This proposal's content signatures by signers"
+  contentSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "content")
+}
+
+type ProposalCandidateSignature @entity {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "The candidate content this signature is signing on"
+  content: ProposalCandidateContent!
+
+  "The signing account"
+  signer: Delegate!
+
+  "The signature bytes"
+  sig: Bytes!
+
+  "The signature's expiration timestamp"
+  expirationTimestamp: BigInt!
+
+  "The hash of the abi encoded proposal data"
+  encodedProposalHash: Bytes!
+
+  "The typed signature hash"
+  sigDigest: Bytes!
+
+  "The free text signer reason"
+  reason: String!
+
+  "Whether this signature has been canceled"
+  canceled: Boolean!
+
+  "The signature's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The signature's creation block"
+  createdBlock: BigInt!
+
+  "The signature's transaction hash"
+  createdTransactionHash: Bytes!
+}
+
+type ProposalFeedback @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "This feedback's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The feedback's creation block"
+  createdBlock: BigInt!
+
+  "The proposal this feedback is provided on"
+  proposal: Proposal!
+
+  "The voter account providing the feedback"
+  voter: Delegate!
+
+  "The integer support value: against (0), for (1), or abstain (2)"
+  supportDetailed: Int!
+
+  "Amount of votes voter had when feedback was submitted"
+  votes: BigInt!
+
+  "The optional feedback reason free text"
+  reason: String
+}
+
+type CandidateFeedback @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "This feedback's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The feedback's creation block"
+  createdBlock: BigInt!
+
+  "The proposal candidate this feedback is provided on"
+  candidate: ProposalCandidate!
+
+  "The voter account providing the feedback"
+  voter: Delegate!
+
+  "The integer support value: against (0), for (1), or abstain (2)"
+  supportDetailed: Int!
+
+  "Amount of votes voter had when feedback was submitted"
+  votes: BigInt!
+
+  "The optional feedback reason free text"
+  reason: String
+}
+
+type Fork @entity {
+  "The fork ID given by the escrow contract"
+  id: ID!
+
+  "The fork ID as int, to make it easier to query for the latest fork"
+  forkID: BigInt!
+
+  tokensInEscrowCount: Int!
+
+  escrowDeposits: [EscrowDeposit!]! @derivedFrom(field: "fork")
+
+  escrowWithdrawals: [EscrowWithdrawal!]! @derivedFrom(field: "fork")
+
+  executed: Boolean
+
+  executedAt: BigInt
+
+  forkingPeriodEndTimestamp: BigInt
+
+  forkTreasury: Bytes
+
+  forkToken: Bytes
+
+  tokensForkingCount: Int!
+
+  escrowedNouns: [EscrowedNoun!]! @derivedFrom(field: "fork")
+
+  joinedNouns: [ForkJoinedNoun!]! @derivedFrom(field: "fork")
+}
+
+type EscrowDeposit @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+
+  proposalIDs: [BigInt!]!
+
+  reason: String
+}
+
+type EscrowWithdrawal @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+}
+
+type ForkJoin @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  createdAt: BigInt!
+
+  owner: Delegate!
+
+  tokenIDs: [BigInt!]!
+
+  proposalIDs: [BigInt!]!
+
+  reason: String
+}
+
+type EscrowedNoun @entity {
+  id: ID!
+
+  fork: Fork!
+
+  noun: Noun!
+
+  owner: Delegate!
+
+  escrowDeposit: EscrowDeposit!
+}
+
+type ForkJoinedNoun @entity(immutable: true) {
+  id: ID!
+
+  fork: Fork!
+
+  noun: Noun!
+
+  owner: Delegate!
+
+  forkJoin: ForkJoin!
 }

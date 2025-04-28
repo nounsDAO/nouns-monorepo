@@ -11,14 +11,14 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
   )
   .addOptionalParam(
     'nounsDescriptor',
-    'The `NounsDescriptorV2` contract address',
+    'The `NounsDescriptorV3` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
     const options = { gasLimit: network.name === 'hardhat' ? 30000000 : undefined };
 
-    const descriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
+    const descriptorFactory = await ethers.getContractFactory('NounsDescriptorV3', {
       libraries: {
         NFTDescriptorV2: nftDescriptor,
       },

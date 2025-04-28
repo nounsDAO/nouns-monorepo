@@ -5,13 +5,13 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
-const Documentation = () => {
+interface DocumentationProps {
+  backgroundColor?: string;
+}
+
+const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
   const cryptopunksLink = (
-    <Link
-      text={<Trans>Cryptopunks</Trans>}
-      url="https://www.larvalabs.com/cryptopunks"
-      leavesPage={true}
-    />
+    <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
   );
   const playgroundLink = (
     <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
@@ -31,7 +31,11 @@ const Documentation = () => {
     />
   );
   return (
-    <Section fullWidth={false}>
+    <Section
+      fullWidth={false}
+      className={classes.documentationSection}
+      style={{ background: props.backgroundColor }}
+    >
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>
@@ -221,13 +225,13 @@ const Documentation = () => {
                   <Trans>bodies (30)</Trans>
                 </li>
                 <li>
-                  <Trans>accessories (137) </Trans>
+                  <Trans>accessories (140) </Trans>
                 </li>
                 <li>
-                  <Trans>heads (234) </Trans>
+                  <Trans>heads (242) </Trans>
                 </li>
                 <li>
-                  <Trans>glasses (21)</Trans>
+                  <Trans>glasses (23)</Trans>
                 </li>
               </ul>
               <Trans>
@@ -316,7 +320,13 @@ const Documentation = () => {
                 <li>
                   <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
                 </li>
-                <li>solimander</li>
+                <li>
+                  <Link
+                    text="@_solimander_"
+                    url="https://twitter.com/_solimander_"
+                    leavesPage={true}
+                  />
+                </li>
                 <li>
                   <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
                 </li>

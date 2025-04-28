@@ -1,6 +1,7 @@
 name: Contracts CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -17,15 +18,15 @@ env:
 jobs:
   build_and_test:
     name: Build and Test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
@@ -34,17 +35,13 @@ jobs:
         run: |
           cd packages/nouns-contracts
           yarn test
-      - name: Run contract coverage
-        run: |
-          cd packages/nouns-contracts
-          yarn coverage
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly
+          version: stable
       - name: Run Forge build
         run: |
           cd packages/nouns-contracts
@@ -54,3 +51,5 @@ jobs:
         run: |
           cd packages/nouns-contracts
           forge test -vvv --ffi
+        env:
+          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}

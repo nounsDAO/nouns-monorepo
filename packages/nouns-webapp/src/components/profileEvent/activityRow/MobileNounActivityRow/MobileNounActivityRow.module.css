@@ -1,0 +1,22 @@
+.wrapper {
+  border-bottom: 1px solid var(--brand-gray-border);
+  padding-bottom: 0.5rem;
+  font-family: PT Root UI;
+  font-size: 18px;
+  margin-top: 1rem;
+  display: flex;
+}
+
+.icon {
+  width: 38px;
+  margin-right: 0px;
+  margin-top: 0.25rem;
+  margin-left: 6px;
+}
+
+.content {
+  margin-left: 1.5rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

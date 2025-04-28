@@ -17,7 +17,6 @@
 
 pragma solidity ^0.8.6;
 
-import { Inflate } from '../libs/Inflate.sol';
 import { IInflator } from './IInflator.sol';
 
 interface INounsArt {
@@ -52,6 +51,14 @@ interface INounsArt {
     event HeadsAdded(uint16 count);
 
     event GlassesAdded(uint16 count);
+
+    event BodiesUpdated(uint16 count);
+
+    event AccessoriesUpdated(uint16 count);
+
+    event HeadsUpdated(uint16 count);
+
+    event GlassesUpdated(uint16 count);
 
     struct NounArtStoragePage {
         uint16 imageCount;
@@ -130,7 +137,15 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
-    function backgroundsCount() external view returns (uint256);
+    function backgroundCount() external view returns (uint256);
+
+    function bodyCount() external view returns (uint256);
+
+    function accessoryCount() external view returns (uint256);
+
+    function headCount() external view returns (uint256);
+
+    function glassesCount() external view returns (uint256);
 
     function backgrounds(uint256 index) external view returns (string memory);
 
@@ -149,4 +164,52 @@ interface INounsArt {
     function getHeadsTrait() external view returns (Trait memory);
 
     function getGlassesTrait() external view returns (Trait memory);
+
+    function updateBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function updateGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 }

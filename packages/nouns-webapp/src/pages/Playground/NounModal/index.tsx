@@ -29,7 +29,7 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
     window.addEventListener('resize', handleWindowSizeChange);
 
     const loadPng = async () => {
-      setPng(await svg2png(svg, 500, 500));
+      setPng(await svg2png(svg, 512, 512));
     };
     loadPng();
 

@@ -1,0 +1,87 @@
+<svg width="160" height="60" viewbox="0 0 160 60" xmlns="http://www.w3.org/2000/svg" shaperendering="crispEdges">
+  <g id="frame" fill="black">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M30 0H90V20H100V0H160V60H100V30H90V60H30V30H10V50H0V30V20H30V0Z" />
+  </g>
+  <g id="state-1" class="state">
+    <path d="M50 10H80V40H70V20H50V10Z" />
+    <path d="M120 10H150V40H140V20H120V10Z" />
+  </g>
+  <g id="state-2" class="state">
+    <path d="M80 10H70V50H80V10Z" />
+    <path d="M150 10H140V50H150V10Z" />
+  </g>
+  <g id="state-3" class="state">
+    <path d="M70 30H80V50H50V40H70V30Z" />
+    <path d="M140 30H150V50H120V40H140V30Z" />
+  </g>
+  <g id="state-4" class="state">
+    <path d="M150 40H110V50H150V40Z" />
+    <path d="M80 40H40V50H80V40Z" />
+  </g>
+  <g id="state-5" class="state">
+    <path d="M50 20H40V50H70V40H50V20Z" />
+    <path d="M120 20H110V50H140V40H120V20Z" />
+  </g>
+  <g id="state-6" class="state">
+    <path d="M50 10H40V50H50V10Z" />
+    <path d="M120 10H110V50H120V10Z" />
+  </g>
+  <g id="state-7" class="state">
+    <path d="M50 40H40V10H70V20H50V40Z" />
+    <path d="M120 40H110V10H140V20H120V40Z" />
+  </g>
+  <g id="state-8" class="state">
+    <path d="M150 10H110V20H150V10Z" />
+    <path d="M80 10H40V20H80V10Z" />
+  </g>
+  
+  <style>
+    :root {
+      --d: .75s; /* animation duration */
+    }
+
+    @keyframes toggle {
+      0% {
+        visibility: visible;
+      }
+
+      12.5% {
+        visibility: hidden;
+      }
+    }
+
+    .state {
+      fill: white;
+      visibility: hidden;
+      animation: toggle var(--d) infinite;
+    }
+
+    .state:nth-child(3) {
+      animation-delay: calc(var(--d) * .125);
+    }
+
+    .state:nth-child(4) {
+      animation-delay: calc(var(--d) * .25);
+    }
+
+    .state:nth-child(5) {
+      animation-delay: calc(var(--d) * .375);
+    }
+
+    .state:nth-child(6) {
+      animation-delay: calc(var(--d) * .5);
+    }
+
+    .state:nth-child(7) {
+      animation-delay: calc(var(--d) * .625);
+    }
+
+    .state:nth-child(8) {
+      animation-delay: calc(var(--d) * .75);
+    }
+
+    .state:nth-child(9) {
+      animation-delay: calc(var(--d) * .875);
+    }
+  </style>
+</svg>

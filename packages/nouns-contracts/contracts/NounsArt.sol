@@ -328,10 +328,186 @@ contract NounsArt is INounsArt {
     }
 
     /**
+     * @notice Replace all pages of body images with new ones.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(bodiesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit BodiesUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of accessory images with new ones.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(accessoriesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit AccessoriesUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of head images with new ones.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        replaceTraitData(headsTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit HeadsUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of glasses images with new ones.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(glassesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit GlassesUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of body images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(bodiesTrait, pointer, decompressedLength, imageCount);
+
+        emit BodiesUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of accessory images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(accessoriesTrait, pointer, decompressedLength, imageCount);
+
+        emit AccessoriesUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of head images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        replaceTraitData(headsTrait, pointer, decompressedLength, imageCount);
+
+        emit HeadsUpdated(imageCount);
+    }
+
+    /**
+     * @notice Replace all pages of glasses images with new ones from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
+    function updateGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyDescriptor {
+        replaceTraitData(glassesTrait, pointer, decompressedLength, imageCount);
+
+        emit GlassesUpdated(imageCount);
+    }
+
+    /**
      * @notice Get the number of available Noun `backgrounds`.
      */
-    function backgroundsCount() public view override returns (uint256) {
+    function backgroundCount() external view returns (uint256) {
         return backgrounds.length;
+    }
+
+    /**
+     * @notice Get the number of available Noun `bodies`.
+     */
+    function bodyCount() external view returns (uint256) {
+        return bodiesTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `accessories`.
+     */
+    function accessoryCount() external view returns (uint256) {
+        return accessoriesTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `heads`.
+     */
+    function headCount() external view returns (uint256) {
+        return headsTrait.storedImagesCount;
+    }
+
+    /**
+     * @notice Get the number of available Noun `glasses`.
+     */
+    function glassesCount() external view returns (uint256) {
+        return glassesTrait.storedImagesCount;
     }
 
     /**
@@ -375,6 +551,39 @@ contract NounsArt is INounsArt {
 
     function _addBackground(string calldata _background) internal {
         backgrounds.push(_background);
+    }
+
+    function replaceTraitData(
+        Trait storage trait,
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) internal {
+        if (encodedCompressed.length == 0) {
+            revert EmptyBytes();
+        }
+        delete trait.storagePages;
+        delete trait.storedImagesCount;
+
+        addPage(trait, encodedCompressed, decompressedLength, imageCount);
+    }
+
+    function replaceTraitData(
+        Trait storage trait,
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) internal {
+        if (decompressedLength == 0) {
+            revert BadDecompressedLength();
+        }
+        if (imageCount == 0) {
+            revert BadImageCount();
+        }
+        delete trait.storagePages;
+        delete trait.storedImagesCount;
+
+        addPage(trait, pointer, decompressedLength, imageCount);
     }
 
     function addPage(

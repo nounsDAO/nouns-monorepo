@@ -1,4 +1,5 @@
-.proposalStatus {
+.proposalStatus,
+.forkStatus {
   font-family: 'PT Root UI';
   font-weight: bold;
   color: white;
@@ -9,14 +10,15 @@
   padding-right: 0.65rem;
   padding-top: 0.36rem;
   padding-bottom: 0.36rem;
+  border: 2px solid transparent;
 }
 
 .primary {
-  background-color: var(--brand-color-blue);
+  background-color: var(--brand-color-green);
 }
 
 .success {
-  background-color: var(--brand-color-green);
+  background-color: var(--brand-color-blue);
 }
 
 .danger {
@@ -25,6 +27,19 @@
 
 .secondary {
   background-color: var(--brand-gray-light-text);
+}
+
+.updatable {
+  border: 2px solid #f0ad4e;
+  background-color: #fff;
+  /* slightly darker text for legibility */
+  color: #dc9e46;
+}
+.objection {
+  border: 2px solid var(--brand-color-red);
+  background-color: #fff;
+  /* slightly darker text for legibility */
+  color: var(--brand-color-red);
 }
 
 .votePageProposalStatus {

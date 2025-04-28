@@ -5,6 +5,8 @@ import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import HoverCard from '../HoverCard';
 import NounHoverCard from '../NounHoverCard';
+import React, { useState } from 'react';
+import VoteCardPager from '../VoteCardPager';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -18,24 +20,26 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const { nounIds, propId } = props;
 
   const shuffledNounIds = pseudoRandomPredictableShuffle(nounIds, propId);
-  const paddedNounIds = shuffledNounIds
-    .map((nounId: string) => {
-      return (
-        <HoverCard
-          hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
-          tip={nounId.toString()}
-          id="nounHoverCard"
-        >
-          <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
-        </HoverCard>
-      );
-    })
-    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />))
-    .slice(0, NOUNS_PER_VOTE_CARD_DESKTOP);
+  const [page, setPage] = useState(0);
 
-  const content = () => {
+  const content = (page: number) => {
     const rows = 3;
     const rowLength = isXLScreen ? 5 : 4;
+
+    const paddedNounIds = shuffledNounIds
+      .map((nounId: string) => {
+        return (
+          <HoverCard
+            hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
+            tip={nounId.toString()}
+            id="nounHoverCard"
+          >
+            <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+          </HoverCard>
+        );
+      })
+      .slice(page * NOUNS_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP)
+      .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />));
 
     return Array(rows)
       .fill(0)
@@ -51,9 +55,19 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   };
 
   return (
-    <table className={classes.wrapper}>
-      <tbody>{content()}</tbody>
-    </table>
+    <>
+      <table className={classes.wrapper}>
+        <tbody>{content(page)}</tbody>
+      </table>
+      <VoteCardPager
+        onLeftArrowClick={() => setPage(page - 1)}
+        onRightArrowClick={() => setPage(page + 1)}
+        isLeftArrowDisabled={page === 0}
+        isRightArrowDisabled={(page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP > nounIds.length}
+        numPages={Math.floor(nounIds.length / NOUNS_PER_VOTE_CARD_DESKTOP) + 1}
+        currentPage={page}
+      />
+    </>
   );
 };
 

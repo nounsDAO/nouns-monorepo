@@ -46,3 +46,10 @@
   font-weight: 500;
   font-size: 18px;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  color: var(--brand-gray-light-text);
+}

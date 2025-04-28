@@ -1,5 +1,5 @@
 /**
- * NounsI18nProvier.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
+ * NounsI18nProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
  */
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -15,6 +15,7 @@ type LocalePlural = {
 const plurals: LocalePlural = {
   'en-US': en,
   'ja-JP': ja,
+  // 'zh-CN': zh,
   pseudo: en,
 };
 
@@ -61,7 +62,7 @@ export function NounsI18nProvider({
   }
 
   return (
-    <I18nProvider forceRenderOnLocaleChange={forceRenderAfterLocaleChange} i18n={i18n}>
+    <I18nProvider forceRenderOnLocaleChange={forceRenderAfterLocaleChange} i18n={i18n as any}>
       {children}
     </I18nProvider>
   );

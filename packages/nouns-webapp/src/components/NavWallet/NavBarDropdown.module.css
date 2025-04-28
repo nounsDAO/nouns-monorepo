@@ -96,6 +96,15 @@
   color: black !important;
 }
 
+.dropdownBtnIcon {
+  margin-right: 0.4rem;
+}
+
+.dropdownBtnIcon > svg {
+  max-height: 14px;
+  opacity: 0.5;
+}
+
 .arrowDown {
   margin-bottom: 0.25rem;
   margin-left: 0.5rem;

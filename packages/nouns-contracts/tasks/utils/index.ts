@@ -1,6 +1,11 @@
 import { ethers } from 'ethers';
+import promptjs from 'prompt';
 import { deflateRawSync } from 'zlib';
-import { ContractName, ContractRow, DeployedContract } from '../types';
+import { ContractNamesDAOV3, ContractRow, DeployedContract } from '../types';
+
+promptjs.colors = false;
+promptjs.message = '> ';
+promptjs.delimiter = '';
 
 export function dataToDescriptorInput(data: string[]): {
   encodedCompressed: string;
@@ -22,7 +27,7 @@ export function dataToDescriptorInput(data: string[]): {
   };
 }
 
-export function printContractsTable(contracts: Record<ContractName, DeployedContract>) {
+export function printContractsTable(contracts: Record<ContractNamesDAOV3, DeployedContract>) {
   console.table(
     Object.values<DeployedContract>(contracts).reduce(
       (acc: Record<string, ContractRow>, contract: DeployedContract) => {

@@ -9,9 +9,7 @@
     "./abi/**/*.json",
     "./files/*.json"
   ],
-  "exclude": [
-    "./test/foundry/**",
-  ],
+  "exclude": ["./test/foundry/**"],
   "files": ["./hardhat.config.ts"],
   "references": [
     {

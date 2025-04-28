@@ -12,6 +12,15 @@
   min-width: 250px;
 }
 
+.link,
+.link:hover,
+.link:active {
+  color: black;
+  text-decoration: none;
+  display: flex;
+  cursor: pointer;
+}
+
 .verifyButton {
   height: 3rem;
   color: white;
