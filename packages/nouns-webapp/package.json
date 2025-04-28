@@ -60,7 +60,7 @@
     "clsx": "^1.2.1",
     "connected-react-router": "^6.9.1",
     "dayjs": "^1.10.7",
-    "eslint-config-react-app": "^6.0.0",
+    "eslint-config-react-app": "^7.0.1",
     "ethers": "^5.8.0",
     "framer-motion": "^6.5.1",
     "graphql": "^15.10.1",
