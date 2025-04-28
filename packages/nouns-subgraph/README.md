@@ -5,7 +5,7 @@ A subgraph that indexes nouns events.
 ## Quickstart
 
 ```sh
-yarn
+pnpm install
 ```
 
 ## Nouns Subgraph
@@ -17,43 +17,43 @@ This repo contains the templates for compiling and deploying a graphql schema to
 To authenticate for thegraph deployment use the `Access Token` from thegraph dashboard:
 
 ```sh
-yarn run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
+pnpm run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
 ```
 
 ### Create subgraph.yaml from config template
 
 ```sh
 # Official Subgraph
-yarn prepare:[network] # Supports rinkeby and mainnet
+pnpm prepare:[network] # Supports rinkeby and mainnet
 
 # Fork
-yarn --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
+pnpm --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
 ```
 
 ### Generate types to use with Typescript
 
 ```sh
-yarn codegen
+pnpm codegen
 ```
 
 ### Compile and deploy to thegraph (must be authenticated)
 
 ```sh
 # Official Subgraph
-yarn deploy:[network] # Supports rinkeby and mainnet
+pnpm deploy:[network] # Supports rinkeby and mainnet
 
 # Fork
-yarn deploy [organization]/[subgraph-name]
+pnpm deploy [organization]/[subgraph-name]
 ```
 
 ### Compile and deploy to The Graph studio for The Graph's decentralized network
 
 ```sh
 # Auth (only the first time)
-yarn graph auth [deploy-key] --product=subgraph-studio
+pnpm graph auth [deploy-key] --product=subgraph-studio
 
 # Deploy
-yarn deploy-studio:[network] # mainnet|sepolia
+pnpm deploy-studio:[network] # mainnet|sepolia
 ```
 
 ## Running a local deployment
@@ -62,19 +62,19 @@ Make sure you have Docker installed.
 Run your local graph node by running:
 
 ```sh
-yarn graph-node
+pnpm graph-node
 ```
 
 Make sure your local chain is running: in a new terminal go to the `nouns-contracts` package and run:
 
 ```sh
-yarn task:run-local
+pnpm task:run-local
 ```
 
 Then in a new terminal run:
 
 ```sh
-yarn deploy:hardhat
+pnpm deploy:hardhat
 ```
 
 ## Running tests
@@ -90,7 +90,7 @@ Copy `matchstick.yaml.example` and name the copy `matchstick.yaml`. Make sure th
 From a clean pull run these commands in sequence:
 
 ```sh
-yarn prepare:rinkeby && yarn codegen
+pnpm prepare:rinkeby && pnpm codegen
 
-yarn test
+pnpm test
 ```
