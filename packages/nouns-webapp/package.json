@@ -59,6 +59,7 @@
     "ethers": "^5.8.0",
     "framer-motion": "^6.5.1",
     "graphql": "^15.10.1",
+    "history": "^4.10.1",
     "pngjs": "^6.0.0",
     "postcss-normalize": "^10.0.1",
     "ramda": "^0.30.1",
