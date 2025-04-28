@@ -1,5 +1,4 @@
 [functions]
-  base = "/"
   directory = "packages/nouns-webapp/functions"
 
 [build]
