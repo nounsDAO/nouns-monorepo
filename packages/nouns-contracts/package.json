@@ -15,7 +15,6 @@
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "coverage": "npx hardhat coverage",
     "hardhat": "npx hardhat",
-    "prepare": "pnpm build",
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",
     "task:deploy-and-configure": "npx hardhat deploy-and-configure",
@@ -23,6 +22,7 @@
     "task:populate-descriptor": "npx hardhat populate-descriptor",
     "task:run-local": "npx hardhat run-local-dao-v3",
     "test": "npx hardhat test"
+    "prepare": "pnpm build:sol && pnpm build:ts && pnpm build:declarations",
   },
   "dependencies": {
     "@ethersproject/abi": "^5.8.0",

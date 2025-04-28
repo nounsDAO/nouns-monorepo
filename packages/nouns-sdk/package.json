@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
-    "prepare": "pnpm build",
+    "prepare": "tsc -p tsconfig.build.json",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {
