@@ -90,6 +90,57 @@ importers:
 
   packages/nouns-contracts:
     dependencies:
+      '@ethersproject/abi':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/abstract-provider':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/abstract-signer':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/address':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/bignumber':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/bytes':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/constants':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/contracts':
+        specifier: 5.6.2
+        version: 5.6.2
+      '@ethersproject/hash':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/keccak256':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/logger':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/networks':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/properties':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/providers':
+        specifier: ^5.8.0
+        version: 5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
+      '@ethersproject/strings':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/transactions':
+        specifier: ^5.8.0
+        version: 5.8.0
+      '@ethersproject/web':
+        specifier: ^5.8.0
+        version: 5.8.0
       ethers:
         specifier: 5.6.8
         version: 5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7)
@@ -163,6 +214,9 @@ importers:
 
   packages/nouns-sdk:
     dependencies:
+      '@ethersproject/providers':
+        specifier: ^5.8.0
+        version: 5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
       '@nouns/contracts':
         specifier: workspace:*
         version: link:../nouns-contracts
