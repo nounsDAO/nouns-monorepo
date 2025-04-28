@@ -1755,8 +1755,8 @@ msgid "Voted against"
 msgstr "Voted against"
 
 #: src/components/NounProfileVoteRow/index.tsx
-#~ msgid "Voted aginst"
-#~ msgstr "Voted aginst"
+#~ msgid "Voted against"
+#~ msgstr "Voted against"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
