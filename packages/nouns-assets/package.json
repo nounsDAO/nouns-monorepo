@@ -13,7 +13,7 @@
     "append-image-data": "ts-node scripts/append-image-data.ts",
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
-    "prepare": "yarn build",
+    "prepare": "pnpm build",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "devDependencies": {
