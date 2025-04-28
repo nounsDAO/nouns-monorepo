@@ -9,7 +9,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
-    "build": "yarn build:sol --force && yarn build:ts && yarn build:declarations",
+    "build": "pnpm build:sol --force && pnpm build:ts && pnpm build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
     "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
@@ -22,7 +22,7 @@
     "task:run-local": "npx hardhat run-local-dao-v3",
     "test": "npx hardhat test",
     "coverage": "npx hardhat coverage",
-    "prepare": "yarn build"
+    "prepare": "pnpm build"
   },
   "devDependencies": {
     "solidity-coverage": "0.7.21",
