@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import classes from './Explore.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
-import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import { useKeyPress } from '../../hooks/useKeyPress';

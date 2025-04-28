@@ -19,7 +19,7 @@
   "devDependencies": {
     "@nouns/sdk": "^0.4.0",
     "@types/pngjs": "^6.0.1",
-    "chai": "^4.2.0",
+    "chai": "^4.5.0",
     "mocha": "^8.4.0",
     "pngjs": "^6.0.0"
   },

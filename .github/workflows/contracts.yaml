@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - 'feature/*'
   pull_request:
     paths:
       - 'packages/nouns-contracts/**'
@@ -23,33 +24,66 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 22.x
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
       - run: yarn build
+
       - name: Run contract tests
         run: |
           cd packages/nouns-contracts
           yarn test
+
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
+
+      - name: Cache Foundry build
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages/nouns-contracts/out
+            packages/nouns-contracts/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**') }}
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: stable
+
       - name: Run Forge build
         run: |
           cd packages/nouns-contracts
           forge --version
-          forge build --sizes
+          forge build --optimize --optimizer-runs 1 --sizes --skip test
+
+      - name: Cache Foundry test data
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages/nouns-contracts/out 
+            packages/nouns-contracts/cache
+            ~/.foundry/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**', '~/.foundry/cache/**') }}
+
       - name: Run Forge tests
+        env:
+          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
         run: |
           cd packages/nouns-contracts
           forge test -vvv --ffi
-        env:
-          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
