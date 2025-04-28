@@ -2,12 +2,13 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "pnpm -r run build",
-    "clean": "pnpm -r --parallel run clean",
+    "build": "turbo run build",
+    "clean": "turbo run clean",
     "format": "NODE_OPTIONS=--max_old_space_size=16384 prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'",
     "lint": "eslint 'packages/**/*.ts' --fix",
-    "prepare": "pnpm --filter @nouns/assets --filter @nouns/contracts --filter @nouns/sdk run prepare",
-    "test": "pnpm -r --parallel run test"
+    "prepare": "turbo run prepare",
+    "test": "turbo run test",
+    "dev": "turbo run dev"
   },
   "husky": {
     "hooks": {
@@ -41,7 +42,7 @@
   },
   "packageManager": "pnpm@10.10.0",
   "engines": {
-    "node": "22.x"
+    "node": ">=16.x"
   },
   "pnpm": {
     "overrides": {
