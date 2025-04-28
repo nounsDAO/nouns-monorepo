@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier-plugin-packagejson"],
   "singleQuote": true,
   "trailingComma": "all",
   "arrowParens": "avoid",
