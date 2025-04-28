@@ -14,9 +14,6 @@
     "clean": {
       "cache": false
     },
-    "prepare": {
-      "dependsOn": ["^prepare"]
-    },
     "lint": {
       "outputs": []
     },

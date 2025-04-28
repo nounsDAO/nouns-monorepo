@@ -9,7 +9,6 @@
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "prepare": "pnpm i18n:compile",
     "start": "craco start",
     "test": "craco test",
     "update-browserslist": "npx update-browserslist-db@latest"
