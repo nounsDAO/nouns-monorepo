@@ -2,11 +2,10 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "lerna": "lerna",
-    "build": "lerna run build",
-    "test": "lerna run --parallel test",
-    "clean": "lerna run --parallel clean",
-    "prepare": "lerna run prepare --scope=@nouns/{assets,contracts,sdk}",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r --parallel run test",
+    "clean": "pnpm -r --parallel run clean",
+    "prepare": "pnpm --filter @nouns/assets --filter @nouns/contracts --filter @nouns/sdk run prepare",
     "lint": "eslint 'packages/**/*.ts' --fix",
     "format": "NODE_OPTIONS=--max_old_space_size=16384 prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'"
   },
@@ -44,8 +43,8 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "yarn lint",
-      "yarn format"
+      "pnpm lint",
+      "pnpm format"
     ]
   },
   "packageManager": "pnpm@10.10.0",
