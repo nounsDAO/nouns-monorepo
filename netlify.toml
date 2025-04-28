@@ -1,6 +1,9 @@
 [functions]
+  base = "/"
   directory = "packages/nouns-webapp/functions"
 
 [build]
-  command = "git submodule update --init --recursive --depth=1 && yarn workspace @nouns/webapp build"
+  base = "/"
+  package = "packages/nouns-webapp"
+  command = "yarn build"
   publish = "packages/nouns-webapp/build"
