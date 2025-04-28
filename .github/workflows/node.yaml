@@ -36,11 +36,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Install Yarn
-        run: npm install -g yarn
-      - run: yarn
-      - run: yarn build
-
       - name: Install dependencies
         run: pnpm install
 
