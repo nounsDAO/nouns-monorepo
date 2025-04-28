@@ -5,7 +5,7 @@
 ### Install dependencies
 
 ```sh
-yarn
+pnpm install
 ```
 
 ## Usage

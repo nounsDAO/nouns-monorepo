@@ -30,23 +30,23 @@ The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with N
 ### Install dependencies
 
 ```sh
-yarn
+pnpm install
 ```
 
 ### Build all packages
 
 ```sh
-yarn build
+pnpm build
 ```
 
 ### Run Linter
 
 ```sh
-yarn lint
+pnpm lint
 ```
 
 ### Run Prettier
 
 ```sh
-yarn format
+pnpm format
 ```
