@@ -13,7 +13,6 @@
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
-    "prepare": "tsc -p tsconfig.build.json",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {
