@@ -28,7 +28,7 @@
     "@lingui/react": "3.13.3",
     "@netlify/functions": "^0.7.2",
     "@noundry/nouns-assets": "^1.5.0",
-    "@nouns/sdk": "^0.4.0",
+    "@nouns/sdk": "workspace:*",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
