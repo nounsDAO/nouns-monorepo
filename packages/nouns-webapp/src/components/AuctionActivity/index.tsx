@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
+import type { RootState } from '../../index';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
 import Holder from '../Holder';
@@ -49,7 +50,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     displayGraphDepComps,
   } = props;
 
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
+  const isCool = useAppSelector((state: RootState) => state.application.isCoolBackground);
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);

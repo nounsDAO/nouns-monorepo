@@ -10,6 +10,7 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import type { RootState } from '../../index';
 import { isNounderNoun } from '../../utils/nounderNoun';
 import {
   setNextOnDisplayAuctionNounId,
@@ -26,8 +27,8 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const history = useHistory();
   const dispatch = useAppDispatch();
-  let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
-  const lastNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  let stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
+  const lastNounId = useAppSelector((state: RootState) => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
     dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
