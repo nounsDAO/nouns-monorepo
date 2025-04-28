@@ -498,6 +498,9 @@ importers:
       '@types/react-redux':
         specifier: ^7.1.34
         version: 7.1.34
+      '@types/react-router':
+        specifier: ^5.1.20
+        version: 5.1.20
       '@types/react-router-dom':
         specifier: ^5.1.7
         version: 5.3.2
@@ -2874,6 +2877,9 @@ packages:
   '@types/hdkey@0.7.1':
     resolution: {integrity: sha512-4Kkr06hq+R8a9EzVNqXGOY2x1xA7dhY6qlp6OvaZ+IJy1BCca1Cv126RD9X7CMJoXoLo8WvAizy8gQHpqW6K0Q==}
 
+  '@types/history@4.7.11':
+    resolution: {integrity: sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==}
+
   '@types/history@5.0.0':
     resolution: {integrity: sha512-hy8b7Y1J8OGe6LbAjj3xniQrj3v6lsivCcrmf4TzSgPzLkhIeKgc5IZnT7ReIqmEuodjfO8EYAuoFvIrHi/+jQ==}
     deprecated: This is a stub types definition. history provides its own type definitions, so you do not need this installed.
@@ -3010,8 +3016,8 @@ packages:
   '@types/react-router-dom@5.3.2':
     resolution: {integrity: sha512-ELEYRUie2czuJzaZ5+ziIp9Hhw+juEw8b7C11YNA4QdLCVbQ3qLi2l4aq8XnlqM7V31LZX8dxUuFUCrzHm6sqQ==}
 
-  '@types/react-router@5.1.17':
-    resolution: {integrity: sha512-RNSXOyb3VyRs/EOGmjBhhGKTbnN6fHWvy5FNLzWfOWOGjgVUKqJZXfpKzLmgoU8h6Hj8mpALj/mbXQASOb92wQ==}
+  '@types/react-router@5.1.20':
+    resolution: {integrity: sha512-jGjmu/ZqS7FjSH6owMcD5qpq19+1RS9DeVRqfl1FeBMxTDQAGwlMWOcs52NDoXaNKyG3d1cYQFMs9rCrb88o9Q==}
 
   '@types/react-transition-group@4.4.12':
     resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
@@ -16000,6 +16006,8 @@ snapshots:
     dependencies:
       '@types/node': 16.11.11
 
+  '@types/history@4.7.11': {}
+
   '@types/history@5.0.0':
     dependencies:
       history: 4.10.1
@@ -16142,11 +16150,11 @@ snapshots:
     dependencies:
       '@types/history': 5.0.0
       '@types/react': 17.0.37
-      '@types/react-router': 5.1.17
+      '@types/react-router': 5.1.20
 
-  '@types/react-router@5.1.17':
+  '@types/react-router@5.1.20':
     dependencies:
-      '@types/history': 5.0.0
+      '@types/history': 4.7.11
       '@types/react': 17.0.37
 
   '@types/react-transition-group@4.4.12(@types/react@17.0.37)':
