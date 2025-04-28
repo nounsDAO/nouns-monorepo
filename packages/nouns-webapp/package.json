@@ -3,19 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "craco start",
-    "build": "yarn i18n:compile && craco build",
-    "test": "craco test",
+    "build": "pnpm i18n:compile && craco build",
     "eject": "react-scripts eject",
-    "prepare": "yarn i18n:compile",
-    "i18n:extract": "lingui extract",
     "i18n:compile": "lingui compile",
+    "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
+    "prepare": "pnpm i18n:compile",
+    "start": "craco start",
+    "test": "craco test",
     "update-browserslist": "npx update-browserslist-db@latest"
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@apollo/client": "^3.3.21",
-    "postcss-normalize": "^10.0.1",
     "@davatar/react": "^1.11.1",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -56,6 +60,7 @@
     "framer-motion": "^6.5.1",
     "graphql": "^15.10.1",
     "pngjs": "^6.0.0",
+    "postcss-normalize": "^10.0.1",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.10.9",
@@ -79,17 +84,6 @@
     "@babel/eslint-parser": "^7.22.15",
     "@babel/preset-react": "^7.22.15",
     "@craco/craco": "^7.1.0",
-    "assert": "^2.0.0",
-    "babel-eslint": "^10.1.0",
-    "browserify-zlib": "^0.2.0",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.0",
-    "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "stream-browserify": "^3.0.0",
-    "update-browserslist-db": "^1.0.13",
-    "vm-browserify": "^1.1.2",
     "@types/bad-words": "^3.0.1",
     "@types/jest": "^26.0.15",
     "@types/lodash.merge": "^4.6.9",
@@ -101,13 +95,19 @@
     "@types/react-fontawesome": "^1.6.5",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-transition-group": "^4.4.5",
-    "dotenv": "^10.0.0"
+    "assert": "^2.0.0",
+    "babel-eslint": "^10.1.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^10.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "update-browserslist-db": "^1.0.13",
+    "vm-browserify": "^1.1.2"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ],
   "lingui": {
     "catalogs": [
       {
