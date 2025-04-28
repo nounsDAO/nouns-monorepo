@@ -21,6 +21,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@davatar/react": "^1.11.1",
+    "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/contracts": "^5.7.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
