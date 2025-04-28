@@ -70,8 +70,8 @@ importers:
         version: 5.8.0
     devDependencies:
       '@nouns/sdk':
-        specifier: ^0.4.0
-        version: 0.4.0(bufferutil@4.0.5)(ethers@5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7))(utf-8-validate@5.0.7)
+        specifier: workspace:*
+        version: link:../nouns-sdk
       '@types/pngjs':
         specifier: ^6.0.1
         version: 6.0.1
@@ -161,8 +161,8 @@ importers:
   packages/nouns-sdk:
     dependencies:
       '@nouns/contracts':
-        specifier: ^0.3.0
-        version: 0.3.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
+        specifier: workspace:*
+        version: link:../nouns-contracts
       ethers:
         specifier: 5.6.8
         version: 5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7)
@@ -231,8 +231,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       '@nouns/sdk':
-        specifier: ^0.4.0
-        version: 0.4.0(bufferutil@4.0.5)(ethers@5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7))(utf-8-validate@5.0.7)
+        specifier: workspace:*
+        version: link:../nouns-sdk
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@7.2.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)
@@ -2234,14 +2234,6 @@ packages:
 
   '@noundry/nouns-assets@1.5.0':
     resolution: {integrity: sha512-zzbG4SLJT3spX+i7n2ljDj4PDHu/VwsZ00uqnJ9gjNwnfPyby+jiiFvxAgEGB0cVrSSW26QnDUgA7Df4eKXLrQ==}
-
-  '@nouns/contracts@0.3.0':
-    resolution: {integrity: sha512-l619EP77QqX0gPGw3gPfh9tgBlz5lFwK8EzB+orLJx3JrfHSUqfjjYCfZih+I++bhJuK78ro2FgFx6U0kZnXEw==}
-
-  '@nouns/sdk@0.4.0':
-    resolution: {integrity: sha512-PLRDUad/TXCsGmP2ITXkYBrwlzQfO9DaoB0xwikvNPF/Vul+rAVnsXgMf8gm5KQ8CKVlxImoEnxsL8Dcx5elAw==}
-    peerDependencies:
-      ethers: 5.6.8
 
   '@oclif/core@4.2.10':
     resolution: {integrity: sha512-fAqcXgqkUm4v5FYy7qWP4w1HaOlVSVJveah+yVTo5Nm5kTiXhmD5mQQ7+knGeBaStyrtQy6WardoC2xSic9rlQ==}
@@ -15099,21 +15091,6 @@ snapshots:
     dependencies:
       '@ethersproject/bignumber': 5.8.0
       '@ethersproject/solidity': 5.8.0
-
-  '@nouns/contracts@0.3.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)':
-    dependencies:
-      ethers: 5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7)
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
-  '@nouns/sdk@0.4.0(bufferutil@4.0.5)(ethers@5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7))(utf-8-validate@5.0.7)':
-    dependencies:
-      '@nouns/contracts': 0.3.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
-      ethers: 5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7)
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   '@oclif/core@4.2.10':
     dependencies:
