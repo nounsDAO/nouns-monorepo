@@ -60,6 +60,7 @@
     "framer-motion": "^6.5.1",
     "graphql": "^15.10.1",
     "history": "^4.10.1",
+    "make-plural": "^7.2.0",
     "pngjs": "^6.0.0",
     "postcss-normalize": "^10.0.1",
     "ramda": "^0.27.1",
