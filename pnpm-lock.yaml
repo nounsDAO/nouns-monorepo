@@ -10,6 +10,7 @@ overrides:
   '@openzeppelin/hardhat-upgrades': 1.8.2
   '@openzeppelin/upgrades-core': 1.10.0
   elliptic: '>=6.6.1'
+  flat: '>=5.0.1'
   underscore: '>=1.12.1'
 
 importers:
@@ -6241,10 +6242,6 @@ packages:
   flat-cache@3.0.4:
     resolution: {integrity: sha512-dm9s5Pw7Jc0GvMYbshN6zchCA9RgQlzzEZX3vylR9IqFfS8XciblUXOKfW6SiuJ0e13eDYZoZV5wdrev7P3Nwg==}
     engines: {node: ^10.12.0 || >=12.0.0}
-
-  flat@4.1.1:
-    resolution: {integrity: sha512-FmTtBsHskrU6FJ2VxCnsDb84wu9zhmO3cUX2kGFb5tuwhfXxGciiT0oRY+cck35QmG+NmGh5eLz6lLCpWTqwpA==}
-    hasBin: true
 
   flat@5.0.2:
     resolution: {integrity: sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==}
@@ -20855,10 +20852,6 @@ snapshots:
       flatted: 3.2.4
       rimraf: 3.0.2
 
-  flat@4.1.1:
-    dependencies:
-      is-buffer: 2.0.5
-
   flat@5.0.2: {}
 
   flatted@3.2.4: {}
@@ -28761,7 +28754,7 @@ snapshots:
 
   yargs-unparser@1.6.0:
     dependencies:
-      flat: 4.1.1
+      flat: 5.0.2
       lodash: 4.17.21
       yargs: 13.3.2
 
