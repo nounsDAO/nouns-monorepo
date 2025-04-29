@@ -35,7 +35,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@usedapp/coingecko": "0.5.1",
     "@usedapp/core": "npm:usedapp-core-fork",
-    "@walletconnect/ethereum-provider": "^2.8.4",
+    "@walletconnect/ethereum-provider": "^2.20.0",
     "@walletconnect/modal": "^2.4.5",
     "@web3-react/core": "^6.1.9",
     "@web3-react/fortmatic-connector": "^6.1.6",
