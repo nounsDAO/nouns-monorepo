@@ -350,8 +350,8 @@ importers:
         specifier: 3.13.3
         version: 3.13.3(react@17.0.2)
       '@netlify/functions':
-        specifier: ^0.7.2
-        version: 0.7.2
+        specifier: ^0.11.1
+        version: 0.11.1
       '@noundry/nouns-assets':
         specifier: ^1.5.0
         version: 1.5.0
@@ -2662,8 +2662,8 @@ packages:
     resolution: {integrity: sha512-RDvY+WWacc/5MBPLseNwtHTouGj3CNSZzquMa2X6C+6vGECsMXSem2mKobnqcewL1IUZeAin/O8poHTwdgpQSQ==}
     engines: {node: ^14.16.0 || >=16.0.0}
 
-  '@netlify/functions@0.7.2':
-    resolution: {integrity: sha512-xf45ZqQukMxmlkqNMC5BXdFMaVZ8VqF42MV5zA5nKVOh2V0mhYlcbTYlVbS/K2/rtvQ3W8lxxixYl4NT7kq6Bg==}
+  '@netlify/functions@0.11.1':
+    resolution: {integrity: sha512-J2QUAYRblvTrl/cOYU2RNHdv/EYy4qnKQhds0aDNB560Y83wfpaMS3F7PKpHygGWrVuLRyevenIzsV9MaQrKlQ==}
     engines: {node: '>=8.3.0'}
 
   '@netlify/git-utils@5.2.0':
@@ -10450,6 +10450,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-emoji@1.11.0:
     resolution: {integrity: sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==}
@@ -18199,7 +18200,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@netlify/functions@0.7.2':
+  '@netlify/functions@0.11.1':
     dependencies:
       is-promise: 4.0.0
 
