@@ -29,29 +29,29 @@ jobs:
         with:
           node-version: 22.x
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
           path: |
             **/node_modules
-            ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
-      - name: Install Yarn
-        run: npm install -g yarn
-      - run: yarn
-      - run: yarn build
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build packages
+        run: pnpm build
 
       - name: Run contract tests
         run: |
           cd packages/nouns-contracts
-          yarn test
-
-      - name: Uninstall Yarn
-        if: always()
-        run: npm uninstall -g yarn
+          pnpm test
 
       - name: Cache Foundry build
         uses: actions/cache@v4
@@ -83,7 +83,7 @@ jobs:
 
       - name: Run Forge tests
         env:
-          RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
+          RPC_MAINNET: https://eth.llamarpc.com
         run: |
           cd packages/nouns-contracts
           forge test -vvv --ffi

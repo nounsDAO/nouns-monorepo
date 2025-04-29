@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
+import type { RootState } from './index';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { setAlertModal } from './state/slices/application';
@@ -43,7 +44,7 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  const alertModal = useAppSelector(state => state.application.alertModal);
+  const alertModal = useAppSelector((state: RootState) => state.application.alertModal);
 
   return (
     <div className={`${classes.wrapper}`}>

@@ -2,7 +2,5 @@
   directory = "packages/nouns-webapp/functions"
 
 [build]
-  base = "/"
-  package = "packages/nouns-webapp"
-  command = "yarn build"
+  command = "pnpm build"
   publish = "packages/nouns-webapp/build"

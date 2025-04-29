@@ -2,29 +2,28 @@
   "name": "@nouns/assets",
   "version": "0.10.0",
   "description": "Nouns run-length encoded image data",
-  "author": "Nounders",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
+  "author": "Nounders",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "append-image-data": "ts-node scripts/append-image-data.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
-    "append-image-data": "ts-node scripts/append-image-data.ts",
-    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
-    "build": "tsc -p tsconfig.build.json",
-    "prepare": "yarn build",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
-  },
-  "devDependencies": {
-    "@nouns/sdk": "^0.4.0",
-    "@types/pngjs": "^6.0.1",
-    "chai": "^4.5.0",
-    "mocha": "^8.4.0",
-    "pngjs": "^6.0.0"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/solidity": "^5.5.0"
+  },
+  "devDependencies": {
+    "@nouns/sdk": "workspace:*",
+    "@types/pngjs": "^6.0.1",
+    "chai": "^4.5.0",
+    "mocha": "^8.4.0",
+    "pngjs": "^6.0.0"
   }
 }

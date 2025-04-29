@@ -31,19 +31,19 @@ One Noun is generated and auctioned every day, forever. All Noun artwork is stor
 ### Install dependencies
 
 ```sh
-yarn
+pnpm insttall
 ```
 
 ### Compile typescript, contracts, and generate typechain wrappers
 
 ```sh
-yarn build
+pnpm build
 ```
 
 ### Run tests
 
 ```sh
-yarn test
+pnpm test
 ```
 
 ### Install forge dependencies
@@ -66,18 +66,18 @@ Copy `.env.example` to `.env` and fill in fields
 
 ```sh
 # Compile Solidity
-yarn build:sol
+pnpm build:sol
 
 # Command Help
-yarn task:[task-name] --help
+pnpm task:[task-name] --help
 
 # Deploy & Configure for Local Development (Hardhat)
-yarn task:run-local
+pnpm task:run-local
 
 # Deploy & Configure (Testnet/Mainnet)
 # This task deploys and verifies the contracts, populates the descriptor, and transfers contract ownership.
-# For parameter and flag information, run `yarn task:deploy-and-configure --help`.
-yarn task:deploy-and-configure --network [network] --update-configs
+# For parameter and flag information, run `pnpm task:deploy-and-configure --help`.
+pnpm task:deploy-and-configure --network [network] --update-configs
 ```
 
 ### Automated Testnet Deployments

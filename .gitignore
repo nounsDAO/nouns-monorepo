@@ -12,3 +12,5 @@ dist
 
 # Local Netlify folder
 .netlify
+
+.turbo
