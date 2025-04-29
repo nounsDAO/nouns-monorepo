@@ -4,10 +4,10 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
+    "dev": "turbo run dev",
     "format": "NODE_OPTIONS=--max_old_space_size=16384 prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'",
     "lint": "eslint 'packages/**/*.ts' --fix",
-    "test": "turbo run test",
-    "dev": "turbo run dev"
+    "test": "turbo run test"
   },
   "husky": {
     "hooks": {
@@ -48,6 +48,7 @@
       "@openzeppelin/contracts": "4.4.0",
       "@openzeppelin/contracts-upgradeable": "4.4.0",
       "@openzeppelin/hardhat-upgrades": "1.8.2",
+      "@openzeppelin/upgrades-core": "1.10.0",
       "elliptic": ">=6.6.1"
     }
   }
