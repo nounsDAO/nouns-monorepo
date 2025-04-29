@@ -24,7 +24,7 @@
     "@lingui/cli": "3.13.3",
     "@lingui/core": "3.13.3",
     "@lingui/detect-locale": "3.13.3",
-    "@lingui/macro": "3.13.3",
+    "@lingui/macro": "3.17.2",
     "@lingui/react": "3.13.3",
     "@netlify/functions": "^0.7.2",
     "@noundry/nouns-assets": "^1.5.0",
