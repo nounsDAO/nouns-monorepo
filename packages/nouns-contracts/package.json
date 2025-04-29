@@ -64,7 +64,7 @@
     "prettier-plugin-solidity": "^1.2.0",
     "prompt": "^1.1.0",
     "shx": "^0.4.0",
-    "solidity-coverage": "0.7.21",
+    "solidity-coverage": "0.8.15",
     "ts-node": "^10.9.2",
     "typechain": "^8.0.0"
   }
