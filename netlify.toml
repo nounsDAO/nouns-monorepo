@@ -2,5 +2,5 @@
   directory = "packages/nouns-webapp/functions"
 
 [build]
-  command = "git submodule update --init --recursive --depth=1 && pnpm --filter @nouns/webapp build"
+  command = "pnpm build"
   publish = "packages/nouns-webapp/build"
