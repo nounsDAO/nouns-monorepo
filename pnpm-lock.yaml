@@ -180,7 +180,7 @@ importers:
         specifier: ^6.0.0
         version: 6.1.6(@ethersproject/abi@5.8.0)(@ethersproject/providers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.8.0)(@ethersproject/providers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(typechain@8.3.2(typescript@4.9.5))(typescript@4.9.5))(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7))(typechain@8.3.2(typescript@4.9.5))
       '@types/express':
-        specifier: ^4.17.11
+        specifier: ^4.17.21
         version: 4.17.21
       '@types/prompt':
         specifier: ^1.1.0
@@ -457,8 +457,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(browserslist@4.24.4)(postcss@8.5.3)
       ramda:
-        specifier: ^0.27.1
-        version: 0.27.2
+        specifier: ^0.30.1
+        version: 0.30.1
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -484,7 +484,7 @@ importers:
         specifier: ^5.2.0
         version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.2.0
+        specifier: ^5.3.4
         version: 5.3.4(react@17.0.2)
       react-scripts:
         specifier: 5.0.1
@@ -560,7 +560,7 @@ importers:
         specifier: ^5.1.20
         version: 5.1.20
       '@types/react-router-dom':
-        specifier: ^5.1.7
+        specifier: ^5.3.3
         version: 5.3.3
       '@types/react-transition-group':
         specifier: ^4.4.5
@@ -2940,9 +2940,6 @@ packages:
 
   '@types/express@4.17.21':
     resolution: {integrity: sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==}
-
-  '@types/express@5.0.1':
-    resolution: {integrity: sha512-UZUw8vjpWFXuDnjFTh7/5c2TWDlQqeXHi6hcN7F2XSVT5P+WmUnnbFS3KA6Jnc6IsEqI2qCVu2bK0R0J4A8ZQQ==}
 
   '@types/form-data@0.0.33':
     resolution: {integrity: sha512-8BSvG1kGm83cyJITQMZSulnl6QV8jqAGreJsc5tPu1Jq0vTSOiY/k24Wx82JRpWwZSqrala6sd5rWi6aNXvqcw==}
@@ -9950,6 +9947,9 @@ packages:
   ramda@0.27.2:
     resolution: {integrity: sha512-SbiLPU40JuJniHexQSAgad32hfwd+DRUdwF2PlVuI5RZD0/vahUco7R8vD86J/tcEKKF9vZrUVwgtmGCqlCKyA==}
 
+  ramda@0.30.1:
+    resolution: {integrity: sha512-tEF5I22zJnuclswcZMc8bDIrwRHRzf+NqVEmqg50ShAZMP7MWeR/RGDthfM/p+BlqvF2fXAzpn8i+SJcYD3alw==}
+
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
@@ -16432,12 +16432,6 @@ snapshots:
       '@types/qs': 6.9.7
       '@types/serve-static': 1.15.7
 
-  '@types/express@5.0.1':
-    dependencies:
-      '@types/body-parser': 1.19.2
-      '@types/express-serve-static-core': 5.0.6
-      '@types/serve-static': 1.15.7
-
   '@types/form-data@0.0.33':
     dependencies:
       '@types/node': 22.15.3
@@ -16656,7 +16650,7 @@ snapshots:
 
   '@types/serve-index@1.9.4':
     dependencies:
-      '@types/express': 5.0.1
+      '@types/express': 4.17.21
 
   '@types/serve-static@1.15.7':
     dependencies:
@@ -25690,6 +25684,8 @@ snapshots:
       performance-now: 2.1.0
 
   ramda@0.27.2: {}
+
+  ramda@0.30.1: {}
 
   randombytes@2.1.0:
     dependencies:
