@@ -45,10 +45,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@ethersproject/contracts": "5.6.2",
-      "@usedapp/core>ethers": "5.6.8",
-      "elliptic": ">=6.6.1",
-      "ethers": "5.6.8"
+      "elliptic": ">=6.6.1"
     }
   }
 }
