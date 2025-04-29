@@ -497,7 +497,7 @@ importers:
         specifier: ^7.0.0
         version: 7.0.2(react@17.0.2)
       react-tooltip:
-        specifier: ^4.2.21
+        specifier: ^4.5.1
         version: 4.5.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-transition-group:
         specifier: ^4.4.5
