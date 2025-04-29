@@ -9,6 +9,7 @@ overrides:
   '@openzeppelin/contracts-upgradeable': 4.4.0
   '@openzeppelin/hardhat-upgrades': 1.8.2
   '@openzeppelin/upgrades-core': 1.10.0
+  '@types/node': ^22.15.3
   axios: '>=0.30.0'
   cross-spawn: '>=7.0.5'
   elliptic: '>=6.6.1'
@@ -27,9 +28,6 @@ importers:
       '@types/mocha':
         specifier: ^8.2.2
         version: 8.2.3
-      '@types/node':
-        specifier: ^14.14.34
-        version: 14.18.63
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.59.0
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5)
@@ -65,7 +63,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@14.18.63)(typescript@4.9.5)
+        version: 10.9.2(@types/node@22.15.3)(typescript@4.9.5)
       turbo:
         specifier: ^2.0.0
         version: 2.5.2
@@ -325,8 +323,8 @@ importers:
         specifier: ^6.4.0
         version: 6.7.2
       '@fortawesome/react-fontawesome':
-        specifier: 0.2.0
-        version: 0.2.0(@fortawesome/fontawesome-svg-core@6.7.2)(react@17.0.2)
+        specifier: 0.2.2
+        version: 0.2.2(@fortawesome/fontawesome-svg-core@6.7.2)(react@17.0.2)
       '@heroicons/react':
         specifier: ^1.0.6
         version: 1.0.6(react@17.0.2)
@@ -478,7 +476,7 @@ importers:
         specifier: ^7.0.0
         version: 7.1.2(@types/react@17.0.85)(react@17.0.2)
       react-number-format:
-        specifier: ^5.1.2
+        specifier: ^5.4.4
         version: 5.4.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-redux:
         specifier: ^7.2.9
@@ -539,7 +537,7 @@ importers:
         specifier: ^4.6.9
         version: 4.6.9
       '@types/node':
-        specifier: ^22.0.0
+        specifier: ^22.15.3
         version: 22.15.3
       '@types/pngjs':
         specifier: ^6.0.1
@@ -1773,8 +1771,8 @@ packages:
     resolution: {integrity: sha512-GsBrnOzU8uj0LECDfD5zomZJIjrPhIlWU82AHwa2s40FKH+kcxQaBvBo3Z4TxyZHIyX8XTDxsyA33/Vx9eFuQA==}
     engines: {node: '>=6'}
 
-  '@fortawesome/react-fontawesome@0.2.0':
-    resolution: {integrity: sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==}
+  '@fortawesome/react-fontawesome@0.2.2':
+    resolution: {integrity: sha512-EnkrprPNqI6SXJl//m29hpaNzOp1bruISWaOiRtkMi/xSvHJlzc2j2JAYS7egxt/EbjSNV/k6Xy0AQI6vB2+1g==}
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~1 || ~6
       react: '>=16.3'
@@ -1817,7 +1815,7 @@ packages:
     resolution: {integrity: sha512-swPczVU+at65xa5uPfNP9u3qx/alNwiaykiI/ExpsmMSQW55trmZcwhYWzw/7fj+n6Q8z1eENvR7vFfq9oPSAQ==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1826,7 +1824,7 @@ packages:
     resolution: {integrity: sha512-NgQCnHqFTjF7Ys2fsqK2WtnA8X1kHyInyG+nMIuHowVTIgIuS10T4AznI/PvbqSpJqjCUqNBlKGh1v3bwLFL4w==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1835,7 +1833,7 @@ packages:
     resolution: {integrity: sha512-roDaKeY1PYY0aCqhRmXihrHjoSW2A00pV3Ke5fTpMCkzcGF64R8e0lw3dK+eLEHwS4vB5RnW1wuQmvzoRul8Mw==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1844,7 +1842,7 @@ packages:
     resolution: {integrity: sha512-5GVWJ+qeI6BzR6TIInLP9SXhWCEcvgFQYmcRG6d6RIlhFjM5TyG18paTGBgRYyEouvCmzeco47x9zX9tQEofkw==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1853,7 +1851,7 @@ packages:
     resolution: {integrity: sha512-jV8QoZE1fC0vPe6TnsOfig+qwu7Iza1pkXoUJ3SroRagrt2hxiL+RbM432YAihNR7m7XnU0HWl/WQ35RIGmXHw==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1866,7 +1864,7 @@ packages:
     resolution: {integrity: sha512-mshNG24Ij5KqsQtOZMgj5TwEjIf+F2HOESk6bjMwGWgcH5UBe8UoljwzNFHqdMbGYbgAf6v2wU/X9CAdKJzgOA==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1875,7 +1873,7 @@ packages:
     resolution: {integrity: sha512-7HRFHxbPCA4e4jMxTQglHJwP+v/kpFsCf2szzfBHy98Wlc3L08HL76UDiA87TOdX5fwj2HMOLWqRWv9Pnn+Z5Q==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1884,7 +1882,7 @@ packages:
     resolution: {integrity: sha512-FlOB0zvuELPEbnBYiPaOdJIaDzb2PmJ7ghi/SVwIHDDSQ2K4opGBkF+5kXOg6ucrtSUQdLhVVY5tycH0j0l+0g==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1893,7 +1891,7 @@ packages:
     resolution: {integrity: sha512-UlmM5FVOZF0gpoe1PT/jN4vk8JmpIWBlMvTL8M+hlvPmzN89K6z03+IFmyeu/oFCenwdwHDr2gky7nIGSEVvlA==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1902,7 +1900,7 @@ packages:
     resolution: {integrity: sha512-wNPJZy8Oc7RyGISPxp9/MpTOqX8lr0r+lCCWm7hQra+MDtYRgINv1hxw7R+vKP71Bu/3LszabxOodfV/uTfsaA==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1911,7 +1909,7 @@ packages:
     resolution: {integrity: sha512-H/kDJA3kNlnNIjB8YsaXoQI0Qccgf0Na14K1h8ExWhNmUg2E941dyFPrZeugihEa9AZNW5NdsD/NcvUME83OPQ==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1920,7 +1918,7 @@ packages:
     resolution: {integrity: sha512-IUXzzTKVdiVNMA+2yUvPxWsSgOG4kfX93jOM4Zb5FgujeInotv5SPIJVeXQ+fO4xu7tW8VowFhdG5JRmmCyQ1Q==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -1929,7 +1927,7 @@ packages:
     resolution: {integrity: sha512-/mKVCtVpyBu3IDarv0G+59KC4stsD5mDsGpYh+GKs1NZT88Jh52+cuoA1AtLk2Q0r/quNl+1cSUyLRHBFeD0XA==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@types/node': '>=18'
+      '@types/node': ^22.15.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -3034,23 +3032,8 @@ packages:
   '@types/node-forge@1.3.11':
     resolution: {integrity: sha512-FQx220y22OKNTqaByeBGqHWYz4cl94tpcxeFdvBo3wjG6XPBuZ0BNgNZRV5J5TFmmcsJ4IzsLkmGRiQbnYsBEQ==}
 
-  '@types/node@10.17.60':
-    resolution: {integrity: sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==}
-
-  '@types/node@12.20.55':
-    resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@14.18.63':
-    resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
-
-  '@types/node@16.11.11':
-    resolution: {integrity: sha512-KB0sixD67CeecHC33MYn+eYARkqTheIRNuu97y2XMjR7Wu3XibO1vaY6VBV6O/a89SPI81cEUIYT87UqUWlZNw==}
-
   '@types/node@22.15.3':
     resolution: {integrity: sha512-lX7HFZeHf4QG/J7tBZqrCAXwz9J5RD56Y6MpP0eJkka8p+K0RY/yBTW7CYFJ4VGCclxqOLKmiGP5juQc6MKgcw==}
-
-  '@types/node@8.10.66':
-    resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
 
   '@types/parse-json@4.0.0':
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -4923,7 +4906,7 @@ packages:
     resolution: {integrity: sha512-tRuMRhxN4m1Y8hP9SNYfz7jRwt8lZdWxdjg/ohg5esKmsndJIn4yT96oJVcf5x0eA11taXl+sIp+ielu529k6g==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': ^22.15.3
       cosmiconfig: '>=7'
       typescript: '>=3'
 
@@ -4931,7 +4914,7 @@ packages:
     resolution: {integrity: sha512-NTxV1MFfZDLPiBMjxbHRwSh5LaLcPMwNdCutmnHJCKoVnlvldPWlllonKwrsRJ5pYZBIBGRWWU2tfvzxgeSW5Q==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': ^22.15.3
       cosmiconfig: '>=7'
       ts-node: '>=10'
       typescript: '>=3'
@@ -11441,7 +11424,7 @@ packages:
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
+      '@types/node': ^22.15.3
       typescript: '>=2.7'
     peerDependenciesMeta:
       '@swc/core':
@@ -14617,7 +14600,7 @@ snapshots:
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.7.2
 
-  '@fortawesome/react-fontawesome@0.2.0(@fortawesome/fontawesome-svg-core@6.7.2)(react@17.0.2)':
+  '@fortawesome/react-fontawesome@0.2.2(@fortawesome/fontawesome-svg-core@6.7.2)(react@17.0.2)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 6.7.2
       prop-types: 15.8.1
@@ -16534,19 +16517,9 @@ snapshots:
     dependencies:
       '@types/node': 22.15.3
 
-  '@types/node@10.17.60': {}
-
-  '@types/node@12.20.55': {}
-
-  '@types/node@14.18.63': {}
-
-  '@types/node@16.11.11': {}
-
   '@types/node@22.15.3':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/node@8.10.66': {}
 
   '@types/parse-json@4.0.0': {}
 
@@ -16556,13 +16529,13 @@ snapshots:
 
   '@types/pngjs@6.0.5':
     dependencies:
-      '@types/node': 16.11.11
+      '@types/node': 22.15.3
 
   '@types/prettier@2.7.3': {}
 
   '@types/prompt@1.1.9':
     dependencies:
-      '@types/node': 16.11.11
+      '@types/node': 22.15.3
       '@types/revalidator': 0.3.8
 
   '@types/prop-types@15.7.14': {}
@@ -22190,7 +22163,7 @@ snapshots:
 
   http-response-object@3.0.2:
     dependencies:
-      '@types/node': 10.17.60
+      '@types/node': 22.15.3
 
   http-signature@1.2.0:
     dependencies:
@@ -22731,7 +22704,7 @@ snapshots:
   jayson@4.1.3(bufferutil@4.0.5)(utf-8-validate@5.0.7):
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       '@types/ws': 7.4.7
       JSONStream: 1.3.5
       commander: 2.20.3
@@ -27439,7 +27412,7 @@ snapshots:
     dependencies:
       '@types/concat-stream': 1.6.1
       '@types/form-data': 0.0.33
-      '@types/node': 8.10.66
+      '@types/node': 22.15.3
       '@types/qs': 6.9.7
       caseless: 0.12.0
       concat-stream: 1.6.2
@@ -27596,24 +27569,6 @@ snapshots:
   ts-invariant@0.10.3:
     dependencies:
       tslib: 2.8.1
-
-  ts-node@10.9.2(@types/node@14.18.63)(typescript@4.9.5):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.8
-      '@tsconfig/node12': 1.0.9
-      '@tsconfig/node14': 1.0.1
-      '@tsconfig/node16': 1.0.2
-      '@types/node': 14.18.63
-      acorn: 8.14.1
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 4.9.5
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
 
   ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5):
     dependencies:
@@ -28224,7 +28179,7 @@ snapshots:
 
   web3-bzz@1.2.11(bufferutil@4.0.5)(utf-8-validate@5.0.7):
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       got: 9.6.0
       swarm-js: 0.1.40(bufferutil@4.0.5)(utf-8-validate@5.0.7)
       underscore: 1.13.7
@@ -28236,7 +28191,7 @@ snapshots:
 
   web3-bzz@1.5.3(bufferutil@4.0.5)(utf-8-validate@5.0.7):
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       got: 9.6.0
       swarm-js: 0.1.40(bufferutil@4.0.5)(utf-8-validate@5.0.7)
     transitivePeerDependencies:
@@ -28320,7 +28275,7 @@ snapshots:
   web3-core@1.2.11:
     dependencies:
       '@types/bn.js': 4.11.6
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       bignumber.js: 9.3.0
       web3-core-helpers: 1.2.11
       web3-core-method: 1.2.11
@@ -28333,7 +28288,7 @@ snapshots:
   web3-core@1.5.3:
     dependencies:
       '@types/bn.js': 4.11.6
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       bignumber.js: 9.3.0
       web3-core-helpers: 1.5.3
       web3-core-method: 1.5.3
@@ -28471,7 +28426,7 @@ snapshots:
 
   web3-eth-personal@1.2.11:
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       web3-core: 1.2.11
       web3-core-helpers: 1.2.11
       web3-core-method: 1.2.11
@@ -28483,7 +28438,7 @@ snapshots:
 
   web3-eth-personal@1.5.3:
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 22.15.3
       web3-core: 1.5.3
       web3-core-helpers: 1.5.3
       web3-core-method: 1.5.3
