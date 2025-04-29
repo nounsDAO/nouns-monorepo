@@ -167,10 +167,10 @@ importers:
         version: 2.0.6(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)))(@types/sinon-chai@3.2.12)(ethereum-waffle@3.4.4(bufferutil@4.0.5)(encoding@0.1.13)(typescript@5.8.3)(utf-8-validate@5.0.7))(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
       '@openzeppelin/contracts':
         specifier: 4.4.0
-        version: 4.9.6
+        version: 4.4.0
       '@openzeppelin/contracts-upgradeable':
         specifier: 4.4.0
-        version: 4.4.0
+        version: 4.9.6
       '@openzeppelin/hardhat-upgrades':
         specifier: 1.8.2
         version: 1.8.2(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
@@ -3030,11 +3030,11 @@ packages:
     resolution: {integrity: sha512-I/s6F7yKUDdtMsoBWXJe8Qz40Tui5vsuKCWJEWVL+5q9sSWRzzx6v2KeNsOBEwd94j0eWkpWCH4yB6rZg9Mf0w==}
     engines: {node: '>=8.0.0'}
 
-  '@openzeppelin/contracts-upgradeable@4.4.0':
-    resolution: {integrity: sha512-hIEyWJHu7bDTv6ckxOaV+K3+7mVzhjtyvp3QSaz56Rk5PscXtPAbkiNTb3yz6UJCWHPWpxVyULVgZ6RubuFEZg==}
+  '@openzeppelin/contracts-upgradeable@4.9.6':
+    resolution: {integrity: sha512-m4iHazOsOCv1DgM7eD7GupTJ+NFVujRZt1wzddDPSVGpWdKq1SKkla5htKG7+IS4d2XOCtzkUNwRZ7Vq5aEUMA==}
 
-  '@openzeppelin/contracts@4.9.6':
-    resolution: {integrity: sha512-xSmezSupL+y9VkHZJGDoCBpmnB2ogM13ccaYDWqJTfS3dbuHkgjuwDFUmaFauBCboQMGB/S5UqUl2y54X99BmA==}
+  '@openzeppelin/contracts@4.4.0':
+    resolution: {integrity: sha512-dlKiZmDvJnGRLHojrDoFZJmsQVeltVeoiRN7RK+cf2FmkhASDEblE0RiaYdxPNsUZa6mRG8393b9bfyp+V5IAw==}
 
   '@openzeppelin/hardhat-upgrades@1.8.2':
     resolution: {integrity: sha512-G+z1WdsjBYQX4j0yPU+pM3rcmVgQNI6g3N05prxpXgAj8QhSDDisfWH2hC1XW8FLm7+dijz7FpUaEEdidpOA9Q==}
@@ -18526,9 +18526,9 @@ snapshots:
 
   '@opentelemetry/api@1.8.0': {}
 
-  '@openzeppelin/contracts-upgradeable@4.4.0': {}
+  '@openzeppelin/contracts-upgradeable@4.9.6': {}
 
-  '@openzeppelin/contracts@4.9.6': {}
+  '@openzeppelin/contracts@4.4.0': {}
 
   '@openzeppelin/hardhat-upgrades@1.8.2(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))':
     dependencies:
@@ -24421,7 +24421,7 @@ snapshots:
 
   ethereumjs-abi@https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
     dependencies:
-      bn.js: 4.12.2
+      bn.js: 4.12.0
       ethereumjs-util: 6.2.1
 
   ethereumjs-account@2.0.5:
