@@ -50,6 +50,7 @@
       "@openzeppelin/hardhat-upgrades": "1.8.2",
       "@openzeppelin/upgrades-core": "1.10.0",
       "elliptic": ">=6.6.1",
+      "flat": ">=5.0.1",
       "underscore": ">=1.12.1"
     }
   }
