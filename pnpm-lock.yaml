@@ -167,7 +167,7 @@ importers:
         version: 2.0.6(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)))(@types/sinon-chai@3.2.12)(ethereum-waffle@3.4.4(bufferutil@4.0.5)(encoding@0.1.13)(typescript@5.8.3)(utf-8-validate@5.0.7))(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
       '@openzeppelin/contracts':
         specifier: 4.4.0
-        version: 4.9.6
+        version: 4.4.0
       '@openzeppelin/contracts-upgradeable':
         specifier: 4.4.0
         version: 4.4.0
@@ -251,8 +251,8 @@ importers:
         specifier: 0.38.0
         version: 0.38.0
       assemblyscript:
-        specifier: ^0.19.23
-        version: 0.19.23
+        specifier: ^0.27.36
+        version: 0.27.36
       matchstick-as:
         specifier: 0.6.0
         version: 0.6.0
@@ -3033,8 +3033,8 @@ packages:
   '@openzeppelin/contracts-upgradeable@4.4.0':
     resolution: {integrity: sha512-hIEyWJHu7bDTv6ckxOaV+K3+7mVzhjtyvp3QSaz56Rk5PscXtPAbkiNTb3yz6UJCWHPWpxVyULVgZ6RubuFEZg==}
 
-  '@openzeppelin/contracts@4.9.6':
-    resolution: {integrity: sha512-xSmezSupL+y9VkHZJGDoCBpmnB2ogM13ccaYDWqJTfS3dbuHkgjuwDFUmaFauBCboQMGB/S5UqUl2y54X99BmA==}
+  '@openzeppelin/contracts@4.4.0':
+    resolution: {integrity: sha512-dlKiZmDvJnGRLHojrDoFZJmsQVeltVeoiRN7RK+cf2FmkhASDEblE0RiaYdxPNsUZa6mRG8393b9bfyp+V5IAw==}
 
   '@openzeppelin/hardhat-upgrades@1.8.2':
     resolution: {integrity: sha512-G+z1WdsjBYQX4j0yPU+pM3rcmVgQNI6g3N05prxpXgAj8QhSDDisfWH2hC1XW8FLm7+dijz7FpUaEEdidpOA9Q==}
@@ -3590,9 +3590,6 @@ packages:
   '@types/chai@4.3.20':
     resolution: {integrity: sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ==}
 
-  '@types/chai@5.2.1':
-    resolution: {integrity: sha512-iu1JLYmGmITRzUgNiLMZD3WCoFzpYtueuyAgHTXqgwSRAMIlFTnZqG6/xenkpUGRJEzSfklUTI4GNSzks/dc0w==}
-
   '@types/concat-stream@1.6.1':
     resolution: {integrity: sha512-eHE4cQPoj6ngxBZMvVf6Hw7Mh4jMW4U9lpGmS5GBPB9RYxlFg+CHaVN7ErNY4W9XfLIEn20b4VDYaIrbq0q4uA==}
 
@@ -3604,9 +3601,6 @@ packages:
 
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
-
-  '@types/deep-eql@4.0.2':
-    resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
   '@types/dns-packet@5.6.5':
     resolution: {integrity: sha512-qXOC7XLOEe43ehtWJCMnQXvgcIpv6rPmQ1jXT98Ad8A3TB1Ue50jsCbSSSyuazScEuZ/Q026vHbrOTVkmwA+7Q==}
@@ -4654,6 +4648,11 @@ packages:
   assemblyscript@0.27.31:
     resolution: {integrity: sha512-Ra8kiGhgJQGZcBxjtMcyVRxOEJZX64kd+XGpjWzjcjgxWJVv+CAQO0aDBk4GQVhjYbOkATarC83mHjAVGtwPBQ==}
     engines: {node: '>=16', npm: '>=7'}
+    hasBin: true
+
+  assemblyscript@0.27.36:
+    resolution: {integrity: sha512-1qX2zf6p7l/mNYv8r21jC/Yft7kX7XKR3xUHw41zvV4xad5lyC8w7jZiwZBGoy64VKZLc+bTDJDWi8Kb70YrHA==}
+    engines: {node: '>=18', npm: '>=10'}
     hasBin: true
 
   assert-plus@1.0.0:
@@ -18528,7 +18527,7 @@ snapshots:
 
   '@openzeppelin/contracts-upgradeable@4.4.0': {}
 
-  '@openzeppelin/contracts@4.9.6': {}
+  '@openzeppelin/contracts@4.4.0': {}
 
   '@openzeppelin/hardhat-upgrades@1.8.2(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))':
     dependencies:
@@ -19340,10 +19339,6 @@ snapshots:
 
   '@types/chai@4.3.20': {}
 
-  '@types/chai@5.2.1':
-    dependencies:
-      '@types/deep-eql': 4.0.2
-
   '@types/concat-stream@1.6.1':
     dependencies:
       '@types/node': 22.15.3
@@ -19360,8 +19355,6 @@ snapshots:
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 0.7.31
-
-  '@types/deep-eql@4.0.2': {}
 
   '@types/dns-packet@5.6.5':
     dependencies:
@@ -19637,7 +19630,7 @@ snapshots:
 
   '@types/sinon-chai@3.2.12':
     dependencies:
-      '@types/chai': 5.2.1
+      '@types/chai': 4.3.20
       '@types/sinon': 17.0.4
 
   '@types/sinon@17.0.4':
@@ -21129,6 +21122,11 @@ snapshots:
       source-map-support: 0.5.21
 
   assemblyscript@0.27.31:
+    dependencies:
+      binaryen: 116.0.0-nightly.20240114
+      long: 5.3.2
+
+  assemblyscript@0.27.36:
     dependencies:
       binaryen: 116.0.0-nightly.20240114
       long: 5.3.2
