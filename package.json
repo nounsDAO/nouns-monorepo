@@ -14,12 +14,6 @@
       "pre-commit": "lint-staged"
     }
   },
-  "lint-staged": {
-    "*.{ts,js}": [
-      "pnpm lint",
-      "pnpm format"
-    ]
-  },
   "devDependencies": {
     "@types/chai": "^4.2.15",
     "@types/mocha": "^8.2.2",
