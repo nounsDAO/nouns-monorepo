@@ -46,3 +46,28 @@ updates:
         update-types: ['version-update:semver-major']
     # Optional: safer versioning to prefer patch/minor bumps only
     versioning-strategy: increase
+    # Create a group of dependencies to be updated together in one pull request
+    groups:
+      babel:
+        patterns:
+          - '@babel/*'
+          - 'babel-*'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '@typescript-eslint/eslint-plugin'
+          - '@typescript-eslint/parser'
+      lingui:
+        patterns:
+          - '@lingui/*'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      prettier:
+        patterns:
+          - 'prettier'
+          - 'prettier-*'
