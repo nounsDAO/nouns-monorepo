@@ -38,6 +38,7 @@
     "@ethersproject/strings": "^5.8.0",
     "@ethersproject/transactions": "^5.8.0",
     "@ethersproject/web": "^5.8.0",
+    "@ethersproject/wallet": "^5.8.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "0.2.2",

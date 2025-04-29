@@ -313,6 +313,9 @@ importers:
       '@ethersproject/transactions':
         specifier: ^5.8.0
         version: 5.8.0
+      '@ethersproject/wallet':
+        specifier: ^5.8.0
+        version: 5.8.0
       '@ethersproject/web':
         specifier: ^5.8.0
         version: 5.8.0
