@@ -22,7 +22,6 @@
     "deploy:sepolia": "pnpm clean && pnpm prepare:sepolia && pnpm codegen && pnpm graph build && goldsky subgraph deploy nouns-sepolia-client-incentives/0.1.1",
     "graph-node": "docker-compose up",
     "mustache": "mustache",
-    "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:sepolia": "mustache config/sepolia.json subgraph.yaml.mustache > subgraph.yaml",
