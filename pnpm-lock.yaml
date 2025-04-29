@@ -5,6 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@openzeppelin/contracts': 4.4.0
+  '@openzeppelin/contracts-upgradeable': 4.4.0
   elliptic: '>=6.6.1'
 
 importers:
@@ -155,11 +157,11 @@ importers:
         specifier: ^2.0.5
         version: 2.0.6(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7)))(@types/sinon-chai@3.2.12)(ethereum-waffle@3.4.4(bufferutil@4.0.5)(encoding@0.1.13)(typescript@4.9.5)(utf-8-validate@5.0.7))(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7))
       '@openzeppelin/contracts':
-        specifier: ^4.1.0
-        version: 4.9.6
+        specifier: 4.4.0
+        version: 4.4.0
       '@openzeppelin/contracts-upgradeable':
-        specifier: ^4.1.0
-        version: 4.9.6
+        specifier: 4.4.0
+        version: 4.4.0
       '@openzeppelin/hardhat-upgrades':
         specifier: ^1.8.2
         version: 1.28.0(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7)))(@nomiclabs/hardhat-etherscan@3.1.8(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7)))(encoding@0.1.13)(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7))
@@ -2452,11 +2454,11 @@ packages:
     resolution: {integrity: sha512-lwYtVXdQaBJV94DglPu140Bc6NmmysHhX5PZtdxeNcUG2BgSX/Sre7oCzMEgmuhe4Lu2jDviMxTX81a8wv6v1w==}
     engines: {node: '>=18.0.0'}
 
-  '@openzeppelin/contracts-upgradeable@4.9.6':
-    resolution: {integrity: sha512-m4iHazOsOCv1DgM7eD7GupTJ+NFVujRZt1wzddDPSVGpWdKq1SKkla5htKG7+IS4d2XOCtzkUNwRZ7Vq5aEUMA==}
+  '@openzeppelin/contracts-upgradeable@4.4.0':
+    resolution: {integrity: sha512-hIEyWJHu7bDTv6ckxOaV+K3+7mVzhjtyvp3QSaz56Rk5PscXtPAbkiNTb3yz6UJCWHPWpxVyULVgZ6RubuFEZg==}
 
-  '@openzeppelin/contracts@4.9.6':
-    resolution: {integrity: sha512-xSmezSupL+y9VkHZJGDoCBpmnB2ogM13ccaYDWqJTfS3dbuHkgjuwDFUmaFauBCboQMGB/S5UqUl2y54X99BmA==}
+  '@openzeppelin/contracts@4.4.0':
+    resolution: {integrity: sha512-dlKiZmDvJnGRLHojrDoFZJmsQVeltVeoiRN7RK+cf2FmkhASDEblE0RiaYdxPNsUZa6mRG8393b9bfyp+V5IAw==}
 
   '@openzeppelin/defender-base-client@1.54.6':
     resolution: {integrity: sha512-PTef+rMxkM5VQ7sLwLKSjp2DBakYQd661ZJiSRywx+q/nIpm3B/HYGcz5wPZCA5O/QcEP6TatXXDoeMwimbcnw==}
@@ -15686,9 +15688,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@openzeppelin/contracts-upgradeable@4.9.6': {}
+  '@openzeppelin/contracts-upgradeable@4.4.0': {}
 
-  '@openzeppelin/contracts@4.9.6': {}
+  '@openzeppelin/contracts@4.4.0': {}
 
   '@openzeppelin/defender-base-client@1.54.6(debug@4.4.0)(encoding@0.1.13)':
     dependencies:

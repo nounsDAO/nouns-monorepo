@@ -45,6 +45,8 @@
   },
   "pnpm": {
     "overrides": {
+      "@openzeppelin/contracts": "4.4.0",
+      "@openzeppelin/contracts-upgradeable": "4.4.0",
       "elliptic": ">=6.6.1"
     }
   }
