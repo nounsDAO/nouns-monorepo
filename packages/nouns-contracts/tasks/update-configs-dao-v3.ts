@@ -32,7 +32,7 @@ task('update-configs-dao-v3', 'Write the deployed addresses to the SDK and subgr
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
       try {
-        execSync('yarn build', {
+        execSync('pnpm build', {
           cwd: sdkPath,
         });
       } catch {
