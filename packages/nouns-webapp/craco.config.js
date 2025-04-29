@@ -55,6 +55,9 @@ module.exports = {
       webpackConfig.ignoreWarnings.push({
         message: /require function is used in a way/
       });
+      webpackConfig.ignoreWarnings.push({
+        message: /Failed to parse source map/
+      });
 
       return webpackConfig;
     },
