@@ -47,6 +47,7 @@
     "overrides": {
       "@openzeppelin/contracts": "4.4.0",
       "@openzeppelin/contracts-upgradeable": "4.4.0",
+      "@openzeppelin/hardhat-upgrades": "1.8.2",
       "elliptic": ">=6.6.1"
     }
   }
