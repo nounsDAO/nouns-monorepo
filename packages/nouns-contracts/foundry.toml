@@ -1,7 +1,7 @@
 [profile.default]
 allow_internal_expect_revert = true
 src = 'contracts'
-libs = ['lib', '../../node_modules']
+libs = ['lib', 'node_modules']
 cache_path = 'foundry-cache'
 out = 'foundry-out'
 solc_version = '0.8.23'
