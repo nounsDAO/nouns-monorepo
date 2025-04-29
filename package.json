@@ -49,7 +49,8 @@
       "@openzeppelin/contracts-upgradeable": "4.4.0",
       "@openzeppelin/hardhat-upgrades": "1.8.2",
       "@openzeppelin/upgrades-core": "1.10.0",
-      "elliptic": ">=6.6.1"
+      "elliptic": ">=6.6.1",
+      "underscore": ">=1.12.1"
     }
   }
 }
