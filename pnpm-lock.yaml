@@ -338,8 +338,8 @@ importers:
         specifier: 3.13.3
         version: 3.13.3
       '@lingui/macro':
-        specifier: 3.13.3
-        version: 3.13.3(@lingui/core@3.13.3)(@lingui/react@3.13.3(react@17.0.2))(@types/node@22.15.3)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)
+        specifier: 3.17.2
+        version: 3.17.2(@lingui/core@3.13.3)(@lingui/react@3.13.3(react@17.0.2))(@types/node@22.15.3)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)
       '@lingui/react':
         specifier: 3.13.3
         version: 3.13.3(react@17.0.2)
@@ -473,7 +473,7 @@ importers:
         specifier: ^17.0.2
         version: 17.0.2(react@17.0.2)
       react-markdown:
-        specifier: ^7.0.0
+        specifier: ^7.1.2
         version: 7.1.2(@types/react@17.0.85)(react@17.0.2)
       react-number-format:
         specifier: ^5.4.4
@@ -2131,13 +2131,13 @@ packages:
     resolution: {integrity: sha512-GhJKjnpGh5N0Y96XJNjeGOEiVyO7b0Kwddv8cY5ORA0yS0+gCETAdlECeP0YrJBrzIVUeddpQTyaexAUDmeY+A==}
     engines: {node: '>=10.0.0'}
 
-  '@lingui/macro@3.13.3':
-    resolution: {integrity: sha512-nPldmgPGNfGTVW3TTkSZiaPI5jDQKwv/Hfmjzwo/VzfXpcjxoqz0oDGQBx8mbdKcMgpq+g6fV2Y5aCosTazdqg==}
-    engines: {node: '>=10.0.0'}
+  '@lingui/macro@3.17.2':
+    resolution: {integrity: sha512-kk1ZtwYSx5Knu/5LsRGisTqfNoLIeVkJJPn6xjZXcItoxUgRsykyKb3BqCJwxqYUClz4i4A8Ld/aA4xBi4apRQ==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
       '@lingui/core': ^3.13.0
       '@lingui/react': ^3.13.0
-      babel-plugin-macros: "2 ||\_3"
+      babel-plugin-macros: 2 || 3
 
   '@lingui/react@3.13.3':
     resolution: {integrity: sha512-sCCI5xMcUY9b6w2lwbwy6iHpo1Fb9TDcjcHAD2KI5JueLH+WWQG66tIHiVAlSsQ+hmQ9Tt+f86H05JQEiDdIvg==}
@@ -7276,10 +7276,6 @@ packages:
   is-plain-obj@3.0.0:
     resolution: {integrity: sha512-gwsOE28k+23GP1B6vFl1oVh/WOzmawBrKwo5Ev6wMKzPkaXaCDIQKzLnvsA42DRlbVTWorkgTKIviAKCWkfUwA==}
     engines: {node: '>=10'}
-
-  is-plain-obj@4.0.0:
-    resolution: {integrity: sha512-NXRbBtUdBioI73y/HmOhogw/U5msYPC9DAtGkJXeFcFWSFZw0mCUsPxk/snTuJHzNKA8kLBK4rH97RMB1BfCXw==}
-    engines: {node: '>=12'}
 
   is-plain-obj@4.1.0:
     resolution: {integrity: sha512-+Pgi+vMuUNkJyExiMBt5IlFoMyKnr5zhJ4Uspz58WOhBF5QoIZkFyNHIbBAtHwzVAgk5RtndVNsDRN61/mmDqg==}
@@ -15192,9 +15188,10 @@ snapshots:
 
   '@lingui/detect-locale@3.13.3': {}
 
-  '@lingui/macro@3.13.3(@lingui/core@3.13.3)(@lingui/react@3.13.3(react@17.0.2))(@types/node@22.15.3)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)':
+  '@lingui/macro@3.17.2(@lingui/core@3.13.3)(@lingui/react@3.13.3(react@17.0.2))(@types/node@22.15.3)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)':
     dependencies:
       '@babel/runtime': 7.27.0
+      '@babel/types': 7.27.0
       '@lingui/conf': 3.17.2(@types/node@22.15.3)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)
       '@lingui/core': 3.13.3
       '@lingui/react': 3.13.3(react@17.0.2)
@@ -22482,8 +22479,6 @@ snapshots:
 
   is-plain-obj@3.0.0: {}
 
-  is-plain-obj@4.0.0: {}
-
   is-plain-obj@4.1.0: {}
 
   is-plain-object@2.0.4:
@@ -27833,7 +27828,7 @@ snapshots:
       bail: 2.0.2
       extend: 3.0.2
       is-buffer: 2.0.5
-      is-plain-obj: 4.0.0
+      is-plain-obj: 4.1.0
       trough: 2.0.2
       vfile: 5.2.0
 
