@@ -1,5 +1,5 @@
 import { utils } from 'ethers';
-import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from './contractsData';
+import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction } from '@usedapp/core';
 import config from '../config';
 import {
