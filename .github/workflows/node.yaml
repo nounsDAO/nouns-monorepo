@@ -42,3 +42,6 @@ jobs:
 
       - name: Build packages
         run: pnpm build
+
+      - name: Build Netlify
+        run: pnpm netlify build --offline --filter packages/nouns-webapp
