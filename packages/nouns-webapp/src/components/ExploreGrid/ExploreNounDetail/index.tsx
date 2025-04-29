@@ -5,7 +5,7 @@ import { StandalonePart } from '../../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@noundry/nouns-assets';
 import { Trans } from '@lingui/macro';
-import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from '@heroicons/react/solid';
 import NounInfoRowBirthday from '../../NounInfoRowBirthday';
 import loadingNoun from '../../../assets/loading-skull-noun.gif';

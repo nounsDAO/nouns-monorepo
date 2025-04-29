@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
 import { ProposalCandidate } from '../../wrappers/nounsData';
-import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   useDelegateNounsAtBlockQuery,
   useUserVotes,

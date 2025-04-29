@@ -135,13 +135,13 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         ],
       },
       NounsDAODynamicQuorum: {},
-      NounsDAOV3Admin: {},
+      NounsDAOAdmin: {},
       NounsDAOProposals: {},
       NounsDAOVotes: {},
       NounsDAOFork: {},
       NounsDAOLogicV4: {
         libraries: () => ({
-          NounsDAOV3Admin: contracts.NounsDAOV3Admin.instance?.address as string,
+          NounsDAOAdmin: contracts.NounsDAOAdmin.instance?.address as string,
           NounsDAODynamicQuorum: contracts.NounsDAODynamicQuorum.instance?.address as string,
           NounsDAOProposals: contracts.NounsDAOProposals.instance?.address as string,
           NounsDAOVotes: contracts.NounsDAOVotes.instance?.address as string,

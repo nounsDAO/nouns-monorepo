@@ -1,4 +1,4 @@
-type DelegationEvent @entity {
+type DelegationEvent @entity(immutable: true) {
   "The txn hash of this event + nounId"
   id: ID!
 
@@ -21,7 +21,7 @@ type DelegationEvent @entity {
   blockTimestamp: BigInt!
 }
 
-type TransferEvent @entity {
+type TransferEvent @entity(immutable: true) {
   "The txn hash of this event"
   id: ID!
 
@@ -41,7 +41,7 @@ type TransferEvent @entity {
   blockTimestamp: BigInt!
 }
 
-type Seed @entity {
+type Seed @entity(immutable: true) {
   "The Noun's ERC721 token id"
   id: ID!
 
@@ -61,7 +61,7 @@ type Seed @entity {
   glasses: BigInt!
 }
 
-type Noun @entity {
+type Noun @entity(immutable: true) {
   "The Noun's ERC721 token id"
   id: ID!
 
@@ -75,7 +75,7 @@ type Noun @entity {
   votes: [Vote!]! @derivedFrom(field: "nouns")
 }
 
-type Bid @entity {
+type Bid @entity(immutable: true) {
   "Noun.id-amount"
   id: ID!
 
@@ -107,7 +107,7 @@ type Bid @entity {
   clientId: Int
 }
 
-type Auction @entity {
+type Auction @entity(immutable: true) {
   "The Noun's ERC721 token id"
   id: ID!
 
@@ -144,7 +144,7 @@ enum ProposalStatus {
   EXECUTED
 }
 
-type Account @entity {
+type Account @entity(immutable: true) {
   "An Account is any address that holds any amount of Nouns, the id used is the blockchain address."
   id: ID!
 
@@ -167,7 +167,7 @@ type Account @entity {
   nouns: [Noun!]!
 }
 
-type Delegate @entity {
+type Delegate @entity(immutable: true) {
   "A Delegate is any address that has been delegated with voting tokens by a token holder, id is the blockchain address of said delegate"
   id: ID!
 
@@ -192,7 +192,7 @@ type Delegate @entity {
   proposals: [Proposal!]! @derivedFrom(field: "proposer")
 }
 
-type Proposal @entity {
+type Proposal @entity(immutable: true) {
   "Internal proposal ID, in this implementation it seems to be a autoincremental id"
   id: ID!
 
@@ -375,7 +375,7 @@ type ProposalVersion @entity(immutable: true) {
   updateMessage: String!
 }
 
-type Vote @entity {
+type Vote @entity(immutable: true) {
   "Delegate ID + Proposal ID"
   id: ID!
 
@@ -416,7 +416,7 @@ type Vote @entity {
   clientId: Int!
 }
 
-type Governance @entity {
+type Governance @entity(immutable: true) {
   "Unique entity used to keep track of common aggregated data"
   id: ID!
 
@@ -451,7 +451,7 @@ type Governance @entity {
   candidates: BigInt!
 }
 
-type DynamicQuorumParams @entity {
+type DynamicQuorumParams @entity(immutable: true) {
   "Unique entity used to store the latest dymanic quorum params"
   id: ID!
 
@@ -468,7 +468,7 @@ type DynamicQuorumParams @entity {
   dynamicQuorumStartBlock: BigInt
 }
 
-type ProposalCandidate @entity {
+type ProposalCandidate @entity(immutable: true) {
   "A concatination of proposer and slug"
   id: ID!
 
@@ -535,7 +535,7 @@ type ProposalCandidateVersion @entity(immutable: true) {
   content: ProposalCandidateContent!
 }
 
-type ProposalCandidateContent @entity {
+type ProposalCandidateContent @entity(immutable: true) {
   "The encoded proposal hash"
   id: ID!
 
@@ -573,7 +573,7 @@ type ProposalCandidateContent @entity {
   contentSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "content")
 }
 
-type ProposalCandidateSignature @entity {
+type ProposalCandidateSignature @entity(immutable: true) {
   "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
   id: ID!
 
@@ -663,7 +663,7 @@ type CandidateFeedback @entity(immutable: true) {
   reason: String
 }
 
-type Fork @entity {
+type Fork @entity(immutable: true) {
   "The fork ID given by the escrow contract"
   id: ID!
 
@@ -737,7 +737,7 @@ type ForkJoin @entity(immutable: true) {
   reason: String
 }
 
-type EscrowedNoun @entity {
+type EscrowedNoun @entity(immutable: true) {
   id: ID!
 
   fork: Fork!

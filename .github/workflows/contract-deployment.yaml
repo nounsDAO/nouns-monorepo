@@ -11,18 +11,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 22.x
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
       - run: yarn build
+
       - name: Run contract tests
         run: |
           cd packages/nouns-contracts
           yarn test
+
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn

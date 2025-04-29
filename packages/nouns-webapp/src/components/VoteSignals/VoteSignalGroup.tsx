@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import VoteSignal from './VoteSignal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { VoteSignalDetail } from '../../wrappers/nounsData';
 
 type Props = {
