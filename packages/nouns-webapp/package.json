@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "pnpm i18n:compile && craco build",
+    "build": "pnpm i18n:compile && GENERATE_SOURCEMAP=false craco build",
     "dev": "craco start",
     "eject": "react-scripts eject",
     "i18n:compile": "lingui compile",
