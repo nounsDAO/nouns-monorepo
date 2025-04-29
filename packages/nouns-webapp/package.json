@@ -65,6 +65,7 @@
     "@web3-react/ledger-connector": "^6.1.9",
     "@web3-react/trezor-connector": "^6.1.9",
     "@web3-react/walletlink-connector": "^6.2.14",
+    "@web3-react/types": "^6.0.7",
     "axios": "^0.30.0",
     "bad-words": "^3.0.4",
     "bignumber.js": "^9.3.0",
