@@ -58,6 +58,10 @@ updates:
           - 'eslint-*'
           - '@typescript-eslint/eslint-plugin'
           - '@typescript-eslint/parser'
+      ethers:
+        patterns:
+          - 'ethers'
+          - '@ethersproject/*'
       lingui:
         patterns:
           - '@lingui/*'
