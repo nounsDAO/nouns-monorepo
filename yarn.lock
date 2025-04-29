@@ -6424,13 +6424,12 @@
   dependencies:
     ethers "^5.0.2"
 
-"@typechain/hardhat@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@typechain/hardhat/-/hardhat-6.0.0.tgz#5e305641de67276efbfaa8c37c78e38f22b22ef4"
-  integrity sha512-AnhwODKHxx3+st5uc1j2NQh79Lv2OuvDQe4dKn8ZxhqYsAsTPnHTLBeI8KPZ+mfdE7v13D2QYssRTIkkGhK35A==
+"@typechain/hardhat@^6.1.6":
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/@typechain/hardhat/-/hardhat-6.1.6.tgz#1a749eb35e5054c80df531cf440819cb347c62ea"
+  integrity sha512-BiVnegSs+ZHVymyidtK472syodx1sXYlYJJixZfRstHVGYTi8V1O7QG4nsjyb0PC/LORcq7sfBUcHto1y6UgJA==
   dependencies:
     fs-extra "^9.1.0"
-    lodash "^4.17.15"
 
 "@types/aria-query@^4.2.0":
   version "4.2.2"
