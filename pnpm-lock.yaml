@@ -10,6 +10,7 @@ overrides:
   '@openzeppelin/hardhat-upgrades': 1.8.2
   '@openzeppelin/upgrades-core': 1.10.0
   elliptic: '>=6.6.1'
+  underscore: '>=1.12.1'
 
 importers:
 
@@ -11610,8 +11611,8 @@ packages:
   uncrypto@0.1.3:
     resolution: {integrity: sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==}
 
-  underscore@1.9.1:
-    resolution: {integrity: sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==}
+  underscore@1.13.7:
+    resolution: {integrity: sha512-GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==}
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
@@ -27360,7 +27361,7 @@ snapshots:
 
   uncrypto@0.1.3: {}
 
-  underscore@1.9.1:
+  underscore@1.13.7:
     optional: true
 
   undici-types@6.21.0: {}
@@ -27694,7 +27695,7 @@ snapshots:
       '@types/node': 12.20.55
       got: 9.6.0
       swarm-js: 0.1.40(bufferutil@4.0.5)(utf-8-validate@5.0.7)
-      underscore: 1.9.1
+      underscore: 1.13.7
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -27713,7 +27714,7 @@ snapshots:
 
   web3-core-helpers@1.2.11:
     dependencies:
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-eth-iban: 1.2.11
       web3-utils: 1.2.11
     optional: true
@@ -27726,7 +27727,7 @@ snapshots:
   web3-core-method@1.2.11:
     dependencies:
       '@ethersproject/transactions': 5.8.0
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core-helpers: 1.2.11
       web3-core-promievent: 1.2.11
       web3-core-subscriptions: 1.2.11
@@ -27753,7 +27754,7 @@ snapshots:
 
   web3-core-requestmanager@1.2.11:
     dependencies:
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core-helpers: 1.2.11
       web3-providers-http: 1.2.11
       web3-providers-ipc: 1.2.11
@@ -27775,7 +27776,7 @@ snapshots:
   web3-core-subscriptions@1.2.11:
     dependencies:
       eventemitter3: 4.0.4
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core-helpers: 1.2.11
     optional: true
 
@@ -27816,7 +27817,7 @@ snapshots:
   web3-eth-abi@1.2.11:
     dependencies:
       '@ethersproject/abi': 5.0.0-beta.153
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-utils: 1.2.11
     optional: true
 
@@ -27843,7 +27844,7 @@ snapshots:
       ethereumjs-common: 1.5.2
       ethereumjs-tx: 2.1.2
       scrypt-js: 3.0.1
-      underscore: 1.9.1
+      underscore: 1.13.7
       uuid: 3.3.2
       web3-core: 1.2.11
       web3-core-helpers: 1.2.11
@@ -27872,7 +27873,7 @@ snapshots:
   web3-eth-contract@1.2.11:
     dependencies:
       '@types/bn.js': 4.11.6
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core: 1.2.11
       web3-core-helpers: 1.2.11
       web3-core-method: 1.2.11
@@ -27901,7 +27902,7 @@ snapshots:
     dependencies:
       content-hash: 2.5.2
       eth-ens-namehash: 2.0.8
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core: 1.2.11
       web3-core-helpers: 1.2.11
       web3-core-promievent: 1.2.11
@@ -27961,7 +27962,7 @@ snapshots:
 
   web3-eth@1.2.11:
     dependencies:
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core: 1.2.11
       web3-core-helpers: 1.2.11
       web3-core-method: 1.2.11
@@ -28083,7 +28084,7 @@ snapshots:
   web3-providers-ipc@1.2.11:
     dependencies:
       oboe: 2.1.4
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core-helpers: 1.2.11
     optional: true
 
@@ -28095,7 +28096,7 @@ snapshots:
   web3-providers-ws@1.2.11:
     dependencies:
       eventemitter3: 4.0.4
-      underscore: 1.9.1
+      underscore: 1.13.7
       web3-core-helpers: 1.2.11
       websocket: 1.0.34
     transitivePeerDependencies:
@@ -28139,7 +28140,7 @@ snapshots:
       ethjs-unit: 0.1.6
       number-to-bn: 1.7.0
       randombytes: 2.1.0
-      underscore: 1.9.1
+      underscore: 1.13.7
       utf8: 3.0.0
     optional: true
 
