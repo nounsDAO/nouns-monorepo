@@ -41,7 +41,7 @@
     "ethereum-waffle": "^3.4.4",
     "hardhat": "^2.23.0",
     "hardhat-abi-exporter": "^2.9.0",
-    "hardhat-gas-reporter": "^1.0.8",
+    "hardhat-gas-reporter": "^1.0.10",
     "prettier-plugin-solidity": "^1.2.0",
     "prompt": "^1.1.0",
     "shx": "^0.4.0",
