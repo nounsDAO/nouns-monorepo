@@ -50,6 +50,12 @@ module.exports = {
         vm: require.resolve('vm-browserify'),
       };
 
+      // Ignore specific webpack warnings
+      webpackConfig.ignoreWarnings = webpackConfig.ignoreWarnings || [];
+      webpackConfig.ignoreWarnings.push({
+        message: /require function is used in a way/
+      });
+
       return webpackConfig;
     },
     plugins: {
