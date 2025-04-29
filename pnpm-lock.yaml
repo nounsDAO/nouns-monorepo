@@ -8,6 +8,7 @@ overrides:
   '@openzeppelin/contracts': 4.4.0
   '@openzeppelin/contracts-upgradeable': 4.4.0
   '@openzeppelin/hardhat-upgrades': 1.8.2
+  '@openzeppelin/upgrades-core': 1.10.0
   elliptic: '>=6.6.1'
 
 importers:
@@ -1301,9 +1302,6 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@bytecodealliance/preview2-shim@0.17.0':
-    resolution: {integrity: sha512-JorcEwe4ud0x5BS/Ar2aQWOQoFzjq/7jcnxYXCvSMh0oRm0dQXzOA+hqLDBnOMks1LLBA7dmiLLsEBl09Yd6iQ==}
-
   '@chainsafe/is-ip@2.1.0':
     resolution: {integrity: sha512-KIjt+6IfysQ4GCv66xihEitBjvhU/bixbbbFxdJ1sqCp4uJ0wuZiYBPhksZoy4lfaF0k9cwNzY5upEW/VWdw3w==}
 
@@ -2331,9 +2329,6 @@ packages:
     peerDependencies:
       hardhat: ^2.0.4
 
-  '@nomicfoundation/slang@0.18.3':
-    resolution: {integrity: sha512-YqAWgckqbHM0/CZxi9Nlf4hjk9wUNLC9ngWCWBiqMxPIZmzsVKYuChdlrfeBPQyvQQBoOhbx+7C1005kLVQDZQ==}
-
   '@nomicfoundation/solidity-analyzer-darwin-arm64@0.1.1':
     resolution: {integrity: sha512-KcTodaQw8ivDZyF+D76FokN/HdpgGpfjc/gFCImdLUyqB6eSWVaZPazMbeAjmfhx3R0zm/NYVzxwAokFKgrc0w==}
     engines: {node: '>= 10'}
@@ -2449,9 +2444,8 @@ packages:
       '@nomiclabs/hardhat-ethers': ^2.0.0
       hardhat: ^2.0.2
 
-  '@openzeppelin/upgrades-core@1.44.0':
-    resolution: {integrity: sha512-AUnQW7cbh2ntFuQdHi5C0vKB+QfkTQtzXgCmzazXLJDX7slFTF676lw+x97ZKfzwQw5unO1+ALZMx+s+2yQUew==}
-    hasBin: true
+  '@openzeppelin/upgrades-core@1.10.0':
+    resolution: {integrity: sha512-N20t1i1wlHrVmu3etVZLiaRxT6XLkCrO9gIo4mUZNpsaVftl8V+WBu8o940AjoYXvzTEqj7O0re2DSFzjpkRBw==}
 
   '@pinax/graph-networks-registry@0.6.7':
     resolution: {integrity: sha512-xogeCEZ50XRMxpBwE3TZjJ8RCO8Guv39gDRrrKtlpDEDEMLm0MzD3A0SQObgj7aF7qTZNRTWzsuvQdxgzw25wQ==}
@@ -4463,10 +4457,6 @@ packages:
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
 
-  cbor@10.0.3:
-    resolution: {integrity: sha512-72Jnj81xMsqepqdcSdf2+fflz/UDsThOHy5hj2MW5F5xzHL8Oa0KQ6I6V9CwVUPxg5pf+W9xp6W2KilaRXWWtw==}
-    engines: {node: '>=18'}
-
   cbor@8.1.0:
     resolution: {integrity: sha512-DwGjNW9omn6EwP70aXsn7FQJx5kO12tX0bZkaTjzdVFM6/7nhA4t0EENocKGx6D2Bch9PE2KzCUf5SceBdeijg==}
     engines: {node: '>=12.19'}
@@ -4761,8 +4751,8 @@ packages:
   commondir@1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
 
-  compare-versions@6.1.1:
-    resolution: {integrity: sha512-4hm4VPpIecmlg59CHXnRDnqGplJFrbLG4aFEl5vl6cK1u76ws3LLvX7ikFnTDl5vo39sjWD6AaDPYodJp/NNHg==}
+  compare-versions@3.6.0:
+    resolution: {integrity: sha512-W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==}
 
   component-emitter@1.3.0:
     resolution: {integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==}
@@ -8666,10 +8656,6 @@ packages:
 
   node-gettext@3.0.0:
     resolution: {integrity: sha512-/VRYibXmVoN6tnSAY2JWhNRhWYJ8Cd844jrZU/DwLVoI4vBI6ceYbd8i42sYZ9uOgDH3S7vslIKOWV/ZrT2YBA==}
-
-  node-gyp-build@4.3.0:
-    resolution: {integrity: sha512-iWjXZvmboq0ja1pUGULQBexmxq8CV4xBhX7VDOTbL7ZR4FOowwY/VOtRxBN/yKxmdGoIp4j5ysNT4u3S2pDQ3Q==}
-    hasBin: true
 
   node-gyp-build@4.8.4:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
@@ -13619,8 +13605,6 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@bytecodealliance/preview2-shim@0.17.0': {}
-
   '@chainsafe/is-ip@2.1.0': {}
 
   '@chainsafe/netmask@2.0.0':
@@ -15447,10 +15431,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nomicfoundation/slang@0.18.3':
-    dependencies:
-      '@bytecodealliance/preview2-shim': 0.17.0
-
   '@nomicfoundation/solidity-analyzer-darwin-arm64@0.1.1':
     optional: true
 
@@ -15590,22 +15570,19 @@ snapshots:
   '@openzeppelin/hardhat-upgrades@1.8.2(@nomiclabs/hardhat-ethers@2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7)))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7))':
     dependencies:
       '@nomiclabs/hardhat-ethers': 2.2.3(ethers@5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7))(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7))
-      '@openzeppelin/upgrades-core': 1.44.0
+      '@openzeppelin/upgrades-core': 1.10.0
       hardhat: 2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@4.9.5))(typescript@4.9.5)(utf-8-validate@5.0.7)
     transitivePeerDependencies:
       - supports-color
 
-  '@openzeppelin/upgrades-core@1.44.0':
+  '@openzeppelin/upgrades-core@1.10.0':
     dependencies:
-      '@nomicfoundation/slang': 0.18.3
-      bignumber.js: 9.3.0
-      cbor: 10.0.3
+      bn.js: 5.2.1
+      cbor: 8.1.0
       chalk: 4.1.2
-      compare-versions: 6.1.1
+      compare-versions: 3.6.0
       debug: 4.4.0(supports-color@8.1.1)
       ethereumjs-util: 7.1.5
-      minimatch: 9.0.5
-      minimist: 1.2.8
       proper-lockfile: 4.1.2
       solidity-ast: 0.4.60
     transitivePeerDependencies:
@@ -18535,10 +18512,6 @@ snapshots:
 
   caseless@0.12.0: {}
 
-  cbor@10.0.3:
-    dependencies:
-      nofilter: 3.1.0
-
   cbor@8.1.0:
     dependencies:
       nofilter: 3.1.0
@@ -18863,7 +18836,7 @@ snapshots:
 
   commondir@1.0.1: {}
 
-  compare-versions@6.1.1: {}
+  compare-versions@3.6.0: {}
 
   component-emitter@1.3.0: {}
 
@@ -22910,7 +22883,7 @@ snapshots:
   keccak@3.0.4:
     dependencies:
       node-addon-api: 2.0.2
-      node-gyp-build: 4.3.0
+      node-gyp-build: 4.8.4
       readable-stream: 3.6.0
 
   keyv@3.1.0:
@@ -23954,8 +23927,6 @@ snapshots:
   node-gettext@3.0.0:
     dependencies:
       lodash.get: 4.4.2
-
-  node-gyp-build@4.3.0: {}
 
   node-gyp-build@4.8.4: {}
 
