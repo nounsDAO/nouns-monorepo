@@ -30,7 +30,7 @@
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:sepolia": "mustache config/sepolia.json subgraph.yaml.mustache > subgraph.yaml",
     "test": "graph test",
-    "test:configgen": "echo libsFolder: $(dirname `cd ../..; pwd`)/nouns-monorepo/node_modules > matchstick.yaml"
+    "test:configgen": "echo libsFolder: $(pwd)/node_modules > matchstick.yaml"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.97.0",
