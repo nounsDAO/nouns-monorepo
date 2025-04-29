@@ -6948,10 +6948,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-fontawesome@^1.6.5":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@types/react-fontawesome/-/react-fontawesome-1.6.5.tgz#a5102b086613cf6d6c9ce944e9fb1eee604635b6"
-  integrity sha512-O75ViR81klU7TfVt4TAdEOWzzEf58RM8PVQHUmKsHjhDt/WLMcb+h/k5XxHUv9iYAKI5u81IoMJ20wC+QLe3Dw==
+"@types/react-fontawesome@^1.6.8":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@types/react-fontawesome/-/react-fontawesome-1.6.8.tgz#9da5356bfb181b71b85e9720b1aeacb502211e56"
+  integrity sha512-+dQ+4jccHraCd/FI4uSeY/O7c1RZ+wVASTgpCgbC6ijh1zSDsr0cb9XU3Dbfy5eJPyXq5QPp9W9RJTVRf+5+pA==
   dependencies:
     "@types/react" "*"
 
