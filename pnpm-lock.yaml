@@ -354,6 +354,9 @@ importers:
       '@nouns/assets':
         specifier: workspace:*
         version: link:../nouns-assets
+      '@nouns/contracts':
+        specifier: workspace:*
+        version: link:../nouns-contracts
       '@nouns/sdk':
         specifier: workspace:*
         version: link:../nouns-sdk
