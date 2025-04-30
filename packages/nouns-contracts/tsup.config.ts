@@ -12,6 +12,7 @@ export default defineConfig({
   },
   target: 'es2020',
   sourcemap: true,
+  treeshake: true,
   loader: {
     '.json': 'json',
   },
