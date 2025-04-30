@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { lingui } from '@lingui/vite-plugin';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,6 +13,13 @@ export default defineConfig({
       },
     }),
     lingui(),
+    nodePolyfills({
+      // Override the default polyfills for specific modules.
+      overrides: {
+        // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
+        fs: 'memfs',
+      },
+    }),
   ],
   server: {
     port: 3000,
