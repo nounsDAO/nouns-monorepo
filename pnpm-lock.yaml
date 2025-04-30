@@ -237,6 +237,9 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.15.3)(typescript@5.8.3)
+      tsup:
+        specifier: ^8.4.0
+        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)(yaml@2.7.1)
       typechain:
         specifier: ^8.0.0
         version: 8.3.2(typescript@5.8.3)
@@ -553,7 +556,7 @@ importers:
         version: 7.1.0(@types/node@22.15.3)(postcss@8.5.3)(react-scripts@5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.10))(@babel/plugin-transform-react-jsx@7.25.9(@babel/core@7.26.10))(@types/babel__core@7.20.5)(bufferutil@4.0.5)(eslint@9.25.1(jiti@2.4.2))(react@18.3.1)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.7.3))(type-fest@4.39.1)(typescript@5.7.3)(utf-8-validate@5.0.7))(typescript@5.7.3)
       '@eslint/js':
         specifier: ^9.21.0
-        version: 9.25.0
+        version: 9.25.1
       '@types/bad-words':
         specifier: ^3.0.1
         version: 3.0.3
@@ -1754,10 +1757,6 @@ packages:
   '@eslint/js@8.57.1':
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  '@eslint/js@9.25.0':
-    resolution: {integrity: sha512-iWhsUS8Wgxz9AXNfvfOPFSW4VfMXdVhp1hjkZVhXCrpgh/aLcc45rX6MPu+tIVUWDw0HfNwth7O28M1xDxNf9w==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.25.1':
     resolution: {integrity: sha512-dEIwmjntEx8u3Uvv+kr3PDeeArL8Hw07H9kyYxCjnM9pBjfEhk6uLXSchxxzgiwtRhhzVzqmUSDFBOi1TuZ7qg==}
@@ -16404,8 +16403,6 @@ snapshots:
       - supports-color
 
   '@eslint/js@8.57.1': {}
-
-  '@eslint/js@9.25.0': {}
 
   '@eslint/js@9.25.1': {}
 
