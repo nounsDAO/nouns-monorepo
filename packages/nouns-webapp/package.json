@@ -10,8 +10,7 @@
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
     "start": "craco start",
-    "test": "craco test",
-    "update-browserslist": "npx update-browserslist-db@latest"
+    "test": "craco test"
   },
   "browserslist": [
     ">0.2%",
