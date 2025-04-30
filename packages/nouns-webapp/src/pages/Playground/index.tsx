@@ -189,7 +189,9 @@ const Playground: React.FC = () => {
     reader.onload = e => {
       try {
         const result = e?.target?.result;
-        const buffer = Buffer.from(result instanceof ArrayBuffer ? result : new Uint8Array());
+        const buffer = Buffer.from(
+          result instanceof ArrayBuffer ? new Uint8Array(result) : new Uint8Array()
+        );
         const png = PNG.sync.read(buffer);
         if (png.width !== 32 || png.height !== 32) {
           throw new Error('Image must be 32x32');
