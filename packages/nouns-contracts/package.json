@@ -63,7 +63,7 @@
     "hardhat": "^2.23.0",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-gas-reporter": "^1.0.8",
-    "prettier-plugin-solidity": "^1.2.0",
+    "prettier-plugin-solidity": "^2.0.0",
     "prompt": "^1.1.0",
     "shx": "^0.4.0",
     "solidity-coverage": "0.8.15",
