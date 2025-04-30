@@ -8,7 +8,7 @@ import { ProposalState } from '../../wrappers/nounsDao';
 
 import classes from './NounProfileVoteRow.module.css';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import VoteStatusPill from '../VoteStatusPill';
 
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
@@ -112,8 +112,8 @@ const selectProposalText = (proposal: Proposal) => {
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { proposal, vote } = props;
 
-  const history = useHistory();
-  const proposalOnClickHandler = () => history.push(proposal.id ? `/vote/${proposal.id}` : '/vote');
+  const navigate = useNavigate()
+  const proposalOnClickHandler = () => navigate(proposal.id ? `/vote/${proposal.id}` : '/vote');
   const activeLocale = useActiveLocale();
 
   return (

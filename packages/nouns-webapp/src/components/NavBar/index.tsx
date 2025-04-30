@@ -1,8 +1,7 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import noggles from '../../assets/noggles.svg';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
@@ -34,7 +33,7 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const history = useHistory();
+  const location = useLocation();
   const treasuryBalance = useTreasuryBalance();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
@@ -42,22 +41,21 @@ const NavBar = () => {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
-    history.location.pathname.includes('/auction/');
+    location.pathname === '/' ||
+    location.pathname.includes('/noun/') ||
+    location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
-      ? NavBarButtonStyle.COOL_INFO
-      : NavBarButtonStyle.WARM_INFO;
+    ? NavBarButtonStyle.COOL_INFO
+    : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
     navDropdownClasses.whiteInfoSelectedBottom,
     navDropdownClasses.coolInfoSelected,
     navDropdownClasses.warmInfoSelected,
-    history,
   );
   const candidatesNavItem = config.featureToggles.candidates ? (
     <Dropdown.Item className={buttonClasses} href="/vote#candidates">
@@ -77,7 +75,6 @@ const NavBar = () => {
             navDropdownClasses.whiteInfoSelectedBottom,
             navDropdownClasses.coolInfoSelected,
             navDropdownClasses.warmInfoSelected,
-            history,
           ),
         )}
         href="/vote"
@@ -220,7 +217,6 @@ const NavBar = () => {
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
                       navDropdownClasses.warmInfoSelected,
-                      history,
                     ),
                   )}
                   href="/explore"
@@ -233,7 +229,6 @@ const NavBar = () => {
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
                       navDropdownClasses.warmInfoSelected,
-                      history,
                     ),
                   )}
                   href="/playground"

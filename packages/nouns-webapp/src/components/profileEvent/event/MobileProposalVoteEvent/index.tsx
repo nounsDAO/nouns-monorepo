@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import classes from './MobileProposalVoteEvent.module.css';
 import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
@@ -14,9 +14,9 @@ interface MobileProposalVoteEventProps {
 
 const MobileProposalVoteEvent: React.FC<MobileProposalVoteEventProps> = props => {
   const { event } = props;
-  const history = useHistory();
+  const navigate = useNavigate()
   const proposalOnClickHandler = () =>
-    history.push(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
+    navigate(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
 
   return (
     <MobileNounActivityRow

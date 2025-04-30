@@ -7,7 +7,6 @@ import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
 import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
@@ -39,7 +38,6 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
 
   const [buttonUp, setButtonUp] = useState(false);
-  const history = useHistory();
   const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
   const activeLocale = useActiveLocale();
 
@@ -47,28 +45,24 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     navDropdownClasses.whiteInfo,
     navDropdownClasses.coolInfo,
     navDropdownClasses.warmInfo,
-    history,
   );
 
   const stateSelectedDropdownClass = usePickByState(
     navDropdownClasses.whiteInfoSelected,
     navDropdownClasses.dropdownActive,
     navDropdownClasses.dropdownActive,
-    history,
   );
 
   const buttonStyleTop = usePickByState(
     navDropdownClasses.whiteInfoSelectedTop,
     navDropdownClasses.coolInfoSelected,
     navDropdownClasses.warmInfoSelected,
-    history,
   );
 
   const buttonStyleBottom = usePickByState(
     navDropdownClasses.whiteInfoSelectedBottom,
     navDropdownClasses.coolInfoSelected,
     navDropdownClasses.warmInfoSelected,
-    history,
   );
 
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
