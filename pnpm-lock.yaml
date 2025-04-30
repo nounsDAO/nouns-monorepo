@@ -164,6 +164,9 @@ importers:
       '@ethersproject/web':
         specifier: ^5.8.0
         version: 5.8.0
+      ds-test:
+        specifier: dapphub/ds-test
+        version: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0
       ethers:
         specifier: ^5.8.0
         version: 5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
@@ -6450,6 +6453,10 @@ packages:
   drbg.js@1.0.1:
     resolution: {integrity: sha512-F4wZ06PvqxYLFEZKkFxTDcns9oFNk34hvmJSEwdzsxVQ8YI5YaxtACgQatkYgv2VI2CFkUd2Y+xosPQnHv809g==}
     engines: {node: '>=0.10'}
+
+  ds-test@https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0:
+    resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0}
+    version: 1.0.0
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -23089,6 +23096,8 @@ snapshots:
       browserify-aes: 1.2.0
       create-hash: 1.2.0
       create-hmac: 1.1.7
+
+  ds-test@https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0: {}
 
   dunder-proto@1.0.1:
     dependencies:

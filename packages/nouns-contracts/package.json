@@ -42,6 +42,7 @@
     "@ethersproject/strings": "^5.8.0",
     "@ethersproject/transactions": "^5.8.0",
     "@ethersproject/web": "^5.8.0",
+    "ds-test": "dapphub/ds-test",
     "ethers": "^5.8.0",
     "forge-std": "foundry-rs/forge-std#v1.7.2"
   },
