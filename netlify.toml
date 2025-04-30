@@ -3,4 +3,4 @@
 
 [build]
   command = "pnpm build"
-  publish = "packages/nouns-webapp/build"
+  publish = "packages/nouns-webapp/dist"
