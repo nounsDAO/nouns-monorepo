@@ -11,6 +11,7 @@ interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
   buttonIcon?: React.ReactNode;
   buttonText: string;
+  children: React.ReactNode;
 }
 
 type Props = {

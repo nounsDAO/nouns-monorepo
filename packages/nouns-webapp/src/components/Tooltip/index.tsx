@@ -6,6 +6,7 @@ interface TooltipProps {
   tooltipContent: (dataTip: string) => React.ReactNode;
   tip: string;
   id: string;
+  children: React.ReactNode;
 }
 
 const Tooltip: React.FC<TooltipProps> = props => {

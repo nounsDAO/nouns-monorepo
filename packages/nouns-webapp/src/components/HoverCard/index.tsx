@@ -6,6 +6,7 @@ interface HoverCardProps {
   hoverCardContent: (dataTip: string) => React.ReactNode;
   tip: string;
   id: string;
+  children: React.ReactNode;
 }
 
 const HoverCard: React.FC<HoverCardProps> = props => {

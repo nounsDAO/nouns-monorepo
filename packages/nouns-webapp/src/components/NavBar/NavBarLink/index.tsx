@@ -1,7 +1,11 @@
 import { Link } from 'react-router';
 import classes from './NavBarLink.module.css';
 
-const NavBarLink: React.FC<{ to: string; className?: string }> = props => {
+const NavBarLink: React.FC<{
+  children: React.ReactNode;
+  to: string;
+  className?: string;
+}> = props => {
   const { to, children, className } = props;
   // hacks to make React Router work with external links
   const onClick = () => (/http/.test(to) ? (window.location.href = to) : null);

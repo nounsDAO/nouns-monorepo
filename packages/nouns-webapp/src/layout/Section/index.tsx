@@ -6,6 +6,7 @@ const Section: React.FC<{
   fullWidth: boolean;
   className?: string;
   style?: CSSProperties;
+  children: React.ReactNode;
 }> = props => {
   const { fullWidth, className, children, style } = props;
   return (
