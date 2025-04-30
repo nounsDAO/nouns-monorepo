@@ -13,13 +13,7 @@ export default defineConfig({
       },
     }),
     lingui(),
-    nodePolyfills({
-      // Override the default polyfills for specific modules.
-      overrides: {
-        // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
-        fs: 'memfs',
-      },
-    }),
+    nodePolyfills(),
   ],
   server: {
     port: 3000,
