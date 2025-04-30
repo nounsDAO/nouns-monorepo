@@ -51,6 +51,7 @@
       "braces": ">=3.0.3",
       "cross-spawn": ">=7.0.5",
       "elliptic": ">=6.6.1",
+      "esbuild": ">=0.25.0",
       "flat": ">=5.0.1",
       "http-cache-semantics": ">=4.1.1",
       "lodash": ">=4.17.21",
