@@ -7,8 +7,8 @@
   "author": "Nounders",
   "exports": {
     ".": {
-      "import": "./dist/src/index.js",
-      "require": "./dist/src/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
   "main": "dist/index.js",
