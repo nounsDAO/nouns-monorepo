@@ -16,11 +16,6 @@ export default defineConfig({
       '@nouns/assets': path.resolve(__dirname, '../../packages/nouns-assets/dist'),
       '@nouns/sdk': path.resolve(__dirname, '../../packages/nouns-sdk/dist'),
       '@nouns/contracts': path.resolve(__dirname, '../../packages/nouns-contracts/dist'),
-    }
-  },
-  build: {
-    rollupOptions: {
-      external: ['fs'],
     },
   },
-})
+});
