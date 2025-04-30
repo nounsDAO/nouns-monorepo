@@ -95,7 +95,7 @@
     "react-number-format": "^5.4.4",
     "react-redux": "^7.2.9",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.3.4",
+    "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
     "react-stepz": "^1.0.2",
     "react-swipeable": "^7.0.0",
