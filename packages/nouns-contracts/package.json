@@ -7,6 +7,12 @@
   "author": "Nounders",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js"
+    }
+  },
   "scripts": {
     "build": "pnpm build:sol && pnpm build:ts && pnpm build:declarations",
     "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
