@@ -21,6 +21,7 @@ overrides:
   http-cache-semantics: '>=4.1.1'
   minimatch: '>=3.0.5'
   node-gettext: '>=3.0.0'
+  qs: '>=6.5.3'
   semver: '>=7.5.2'
   underscore: '>=1.12.1'
   ws: '>=7.5.10'
@@ -11872,10 +11873,6 @@ packages:
 
   qs@6.13.0:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
-    engines: {node: '>=0.6'}
-
-  qs@6.5.2:
-    resolution: {integrity: sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==}
     engines: {node: '>=0.6'}
 
   query-string@5.1.1:
@@ -30262,8 +30259,6 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
-  qs@6.5.2: {}
-
   query-string@5.1.1:
     dependencies:
       decode-uri-component: 0.2.2
@@ -30932,7 +30927,7 @@ snapshots:
       mime-types: 2.1.35
       oauth-sign: 0.9.0
       performance-now: 2.1.0
-      qs: 6.5.2
+      qs: 6.13.0
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
