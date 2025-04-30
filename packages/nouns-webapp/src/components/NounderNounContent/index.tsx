@@ -39,7 +39,7 @@ const NounderNounContent: React.FC<{
   // Page through Nouns via keyboard
   // handle what happens on key press
   const handleKeyPress = useCallback(
-    event => {
+    (event: { key: string; }) => {
       if (event.key === 'ArrowLeft') {
         onPrevAuctionClick();
       }
