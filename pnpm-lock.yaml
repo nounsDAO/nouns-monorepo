@@ -11,7 +11,6 @@ overrides:
   '@openzeppelin/hardhat-upgrades': 1.8.2
   '@openzeppelin/upgrades-core': 1.10.0
   '@types/node': ^22.15.3
-  ansi-regex: '>=4.1.1'
   async: '>=2.6.4'
   axios: '>=0.30.0'
   braces: '>=3.0.3'
@@ -4302,6 +4301,18 @@ packages:
     resolution: {integrity: sha512-ozbS3LuenHVxNRh/wdnN16QapUHzauqSomAl1jwwJRRsGwFwtj644lIhxfWu0Fy0acCij2+AEgHvjscq3dlVXg==}
     engines: {'0': node >= 0.8.0}
     hasBin: true
+
+  ansi-regex@2.1.1:
+    resolution: {integrity: sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==}
+    engines: {node: '>=0.10.0'}
+
+  ansi-regex@3.0.0:
+    resolution: {integrity: sha512-wFUFA5bg5dviipbQQ32yOQhl6gcJaJXiHE7dvR8VYPG97+J/GNC5FKGepKdEDUFeXRzDxPF1X/Btc8L+v7oqIQ==}
+    engines: {node: '>=4'}
+
+  ansi-regex@4.1.0:
+    resolution: {integrity: sha512-1apePfXM1UOSqw0o9IiFAovVz9M5S1Dg+4TrDwfMewQ6p/rmMueb7tWZjQ1rx4Loy1ArBggoqGpfqqdI4rondg==}
+    engines: {node: '>=6'}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -20563,6 +20574,12 @@ snapshots:
 
   ansi-html@0.0.9: {}
 
+  ansi-regex@2.1.1: {}
+
+  ansi-regex@3.0.0: {}
+
+  ansi-regex@4.1.0: {}
+
   ansi-regex@5.0.1: {}
 
   ansi-regex@6.1.0: {}
@@ -25471,7 +25488,7 @@ snapshots:
 
   has-ansi@2.0.0:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 2.1.1
 
   has-bigints@1.1.0: {}
 
@@ -29834,14 +29851,14 @@ snapshots:
 
   pretty-format@27.5.1:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
 
   pretty-format@28.1.3:
     dependencies:
       '@jest/schemas': 28.1.3
-      ansi-regex: 6.1.0
+      ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 18.3.1
 
@@ -31635,15 +31652,15 @@ snapshots:
 
   strip-ansi@3.0.1:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 2.1.1
 
   strip-ansi@4.0.0:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 3.0.0
 
   strip-ansi@5.2.0:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 4.1.0
 
   strip-ansi@6.0.1:
     dependencies:
