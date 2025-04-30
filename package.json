@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
@@ -38,6 +41,13 @@
     "node": ">=16.x"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "netlify-cli",
+      "sharp",
+      "unix-dgram"
+    ],
     "overrides": {
       "@babel/traverse": ">=7.23.2",
       "@openzeppelin/contracts": "4.4.0",
@@ -63,13 +73,6 @@
       "semver": ">=7.5.2",
       "underscore": ">=1.12.1",
       "ws": ">=7.5.10"
-    },
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "esbuild",
-      "netlify-cli",
-      "sharp",
-      "unix-dgram"
-    ]
+    }
   }
 }
