@@ -113,7 +113,6 @@
     "@eslint/js": "^9.21.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
     "@types/bad-words": "^3.0.1",
-    "@types/history": "^4.7.11",
     "@types/jest": "^26.0.15",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^22.20.55",
