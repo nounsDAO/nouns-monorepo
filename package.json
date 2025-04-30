@@ -46,6 +46,7 @@
       "@openzeppelin/upgrades-core": "1.10.0",
       "@types/node": "^22.15.3",
       "axios": ">=0.30.0",
+      "braces": ">=3.0.3",
       "cross-spawn": ">=7.0.5",
       "elliptic": ">=6.6.1",
       "flat": ">=5.0.1",
