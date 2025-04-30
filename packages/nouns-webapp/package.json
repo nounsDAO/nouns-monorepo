@@ -131,6 +131,7 @@
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
+    "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "update-browserslist-db": "^1.0.13",
     "vite": "^6.2.0",
