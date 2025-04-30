@@ -90,7 +90,7 @@
     "react": "^17.0.2",
     "react-bootstrap": "^2.10.9",
     "react-diff-viewer": "^3.1.1",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.3.1",
     "react-markdown": "^7.1.2",
     "react-number-format": "^5.4.4",
     "react-redux": "^7.2.9",
