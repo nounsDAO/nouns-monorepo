@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import classes from './Fork.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';

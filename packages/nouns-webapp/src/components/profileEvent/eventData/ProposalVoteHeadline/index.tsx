@@ -1,5 +1,5 @@
 import classes from './ProposalVoteHeadline.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { Proposal, ProposalState, Vote } from '../../../../wrappers/nounsDao';
 import ShortAddress from '../../../ShortAddress';
 import { buildEtherscanAddressLink } from '../../../../utils/etherscan';

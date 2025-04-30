@@ -6,7 +6,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './CandidateSponsors.module.css';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 type OriginalSignatureProps = {
   voteCount: number;

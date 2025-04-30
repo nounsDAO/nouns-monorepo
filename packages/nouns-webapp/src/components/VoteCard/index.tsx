@@ -4,7 +4,7 @@ import { Proposal } from '../../wrappers/nounsDao';
 import NounImageVoteTable from '../NounImageVoteTable';
 import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
 import { useEthers } from '@usedapp/core';

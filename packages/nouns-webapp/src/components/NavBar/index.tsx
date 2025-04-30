@@ -16,7 +16,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
 import NavDropdown from '../NavDropdown';

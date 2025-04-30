@@ -6,7 +6,7 @@ import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';
 import clsx from 'clsx';
 import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 const GovernancePage = () => {

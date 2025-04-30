@@ -12,7 +12,7 @@ import pfpSolimander from '../../assets/nounder-pfps/solimander.png';
 import pfpGremplin from '../../assets/nounder-pfps/gremplin.png';
 import pfpTimpers from '../../assets/nounder-pfps/timpers.png';
 import pfpVapeape from '../../assets/nounder-pfps/vapeape.png';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 const bios = [
   {

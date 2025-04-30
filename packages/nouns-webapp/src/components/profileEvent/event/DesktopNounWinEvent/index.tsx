@@ -7,7 +7,7 @@ import { CakeIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface DesktopNounWinEventProps {
   event: NounWinEvent;

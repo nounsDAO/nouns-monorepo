@@ -4,7 +4,7 @@ import classes from './Vote.module.css';
 import clsx from 'clsx';
 import { useBlockNumber } from '@usedapp/core';
 import dayjs from 'dayjs';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router';
 
 type Props = {

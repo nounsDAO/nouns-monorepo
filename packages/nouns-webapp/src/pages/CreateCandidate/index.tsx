@@ -10,7 +10,7 @@ import ProposalEditor from '../../components/ProposalEditor';
 import ProposalTransactions from '../../components/ProposalTransactions';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';

@@ -12,7 +12,7 @@ import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';

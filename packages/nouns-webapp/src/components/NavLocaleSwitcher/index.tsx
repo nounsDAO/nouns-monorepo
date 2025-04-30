@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';

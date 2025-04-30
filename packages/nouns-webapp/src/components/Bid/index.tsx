@@ -14,7 +14,7 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 

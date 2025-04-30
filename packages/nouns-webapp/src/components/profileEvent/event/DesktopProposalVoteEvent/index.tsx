@@ -8,7 +8,7 @@ import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalV
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import ReactTooltip from 'react-tooltip';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface DesktopProposalVoteEventProps {
   event: ProposalVoteEvent;

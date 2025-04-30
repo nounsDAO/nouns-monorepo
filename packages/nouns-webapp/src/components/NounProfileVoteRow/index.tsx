@@ -14,7 +14,7 @@ import VoteStatusPill from '../VoteStatusPill';
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
 import { Vote } from '../../utils/vote';
 import { NounVoteHistory } from '../ProfileActivityFeed';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ShortAddress from '../ShortAddress';

@@ -12,7 +12,7 @@ import bidBtnClasses from '../BidHistoryBtn/BidHistoryBtn.module.css';
 import auctionActivityClasses from '../AuctionActivity/AuctionActivity.module.css';
 import CurrentBid, { BID_N_A } from '../CurrentBid';
 import Winner from '../Winner';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 import { useAppSelector } from '../../hooks';
 import { useCallback, useEffect } from 'react';

@@ -41,7 +41,7 @@ import {
   propUsingDynamicQuorum,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';

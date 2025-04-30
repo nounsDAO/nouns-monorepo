@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { isAddress } from 'ethers/lib/utils';

@@ -6,7 +6,7 @@ import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { transactionIconLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';

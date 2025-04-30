@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
 import { ProposalCandidate } from '../../wrappers/nounsData';

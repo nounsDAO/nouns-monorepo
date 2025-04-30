@@ -5,7 +5,7 @@ import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bo
 import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { MinusCircleIcon } from '@heroicons/react/solid';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
 import config from '../../config';
 import { useSetApprovalForAll, useIsApprovedForAll } from '../../wrappers/nounToken';

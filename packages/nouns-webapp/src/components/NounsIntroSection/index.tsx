@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Section from '../../layout/Section';

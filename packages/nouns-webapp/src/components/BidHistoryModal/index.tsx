@@ -7,7 +7,7 @@ import { StandaloneNounRoundedCorners } from '../StandaloneNoun';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { Bid } from '../../utils/types';
 import BidHistoryModalRow from '../BidHistoryModalRow';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;

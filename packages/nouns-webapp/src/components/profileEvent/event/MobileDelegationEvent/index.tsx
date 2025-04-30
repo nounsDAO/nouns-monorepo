@@ -6,7 +6,7 @@ import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface MobileDelegationEventProps {
   event: DelegationEvent;

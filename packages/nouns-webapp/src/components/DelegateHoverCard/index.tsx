@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { delegateNounsAtBlockQuery } from '../../wrappers/subgraph';

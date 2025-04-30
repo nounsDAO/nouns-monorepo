@@ -14,7 +14,7 @@ import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import {
   shortENS,
   useShortAddress,

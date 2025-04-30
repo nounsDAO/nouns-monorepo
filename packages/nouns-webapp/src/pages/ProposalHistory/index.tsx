@@ -14,7 +14,7 @@ import clsx from 'clsx';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';

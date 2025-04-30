@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classes from './StreamWithdrawModal.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import ModalTitle from '../ModalTitle';
 import config from '../../config';
 import { contract2humanUSDCFormat } from '../../utils/usdcUtils';

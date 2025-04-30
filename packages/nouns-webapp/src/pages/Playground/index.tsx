@@ -18,7 +18,7 @@ import InfoIcon from '../../assets/icons/Info.svg';
 import Noun from '../../components/Noun';
 import NounModal from './NounModal';
 import { PNG } from 'pngjs';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 interface Trait {

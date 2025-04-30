@@ -3,7 +3,7 @@ import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 import calendar_noun from '../../assets/calendar_noun.png';
 import Noun from '../Noun';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 const Banner = () => {
   return (

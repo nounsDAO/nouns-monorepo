@@ -12,7 +12,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';

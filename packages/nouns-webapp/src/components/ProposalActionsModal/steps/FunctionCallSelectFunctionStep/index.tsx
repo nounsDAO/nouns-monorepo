@@ -6,7 +6,7 @@ import { ChangeEvent, useState } from 'react';
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 import { buildEtherscanApiQuery } from '../../../../utils/etherscan';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import ModalTitle from '../../../ModalTitle';
 import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';

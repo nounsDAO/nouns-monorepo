@@ -7,7 +7,7 @@ import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
 import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 

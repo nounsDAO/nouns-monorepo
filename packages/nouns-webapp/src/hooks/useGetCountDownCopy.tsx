@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import dayjs, { locale } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { SupportedLocale, SUPPORTED_LOCALE_TO_DAYSJS_LOCALE } from '../i18n/locales';

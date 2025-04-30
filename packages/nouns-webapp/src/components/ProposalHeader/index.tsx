@@ -17,7 +17,7 @@ import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { transactionIconLink } from '../ProposalContent';
