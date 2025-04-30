@@ -13,6 +13,10 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
+  "files": [
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "pnpm build:sol && pnpm build:ts",
     "build:sol": "hardhat compile",
