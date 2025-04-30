@@ -5,14 +5,14 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/src/index.js",
       "require": "./dist/src/index.js"
     }
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
     "build": "pnpm build:sol && pnpm build:ts && pnpm build:declarations",
     "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
