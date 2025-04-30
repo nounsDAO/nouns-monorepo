@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "pnpm i18n:compile && GENERATE_SOURCEMAP=false craco build",
-    "dev": "craco start",
+    "build": "pnpm i18n:compile && tsc -b && vite build",
+    "dev": "vite",
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "start": "craco start",
-    "test": "craco test"
+    "preview": "vite preview"
   },
   "browserslist": [
     ">0.2%",
