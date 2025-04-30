@@ -13,6 +13,10 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
+  "files": [
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
     "append-image-data": "ts-node scripts/append-image-data.ts",
     "build": "tsup",
