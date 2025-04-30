@@ -2,6 +2,7 @@
   "name": "@nouns/webapp",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "pnpm i18n:compile && tsc -b && vite build",
     "dev": "vite",
