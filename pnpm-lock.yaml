@@ -167,6 +167,9 @@ importers:
       ethers:
         specifier: ^5.8.0
         version: 5.8.0(bufferutil@4.0.5)(utf-8-validate@5.0.7)
+      forge-std:
+        specifier: foundry-rs/forge-std#v1.7.2
+        version: https://codeload.github.com/foundry-rs/forge-std/tar.gz/bdea49f9bb3c58c8c35850c3bdc17eaeea756e9a
     devDependencies:
       '@nomicfoundation/hardhat-verify':
         specifier: ^1.0.0
@@ -7414,6 +7417,10 @@ packages:
 
   forever-agent@0.6.1:
     resolution: {integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==}
+
+  forge-std@https://codeload.github.com/foundry-rs/forge-std/tar.gz/bdea49f9bb3c58c8c35850c3bdc17eaeea756e9a:
+    resolution: {tarball: https://codeload.github.com/foundry-rs/forge-std/tar.gz/bdea49f9bb3c58c8c35850c3bdc17eaeea756e9a}
+    version: 1.7.2
 
   fork-ts-checker-webpack-plugin@6.5.3:
     resolution: {integrity: sha512-SbH/l9ikmMWycd5puHJKTkZJKddF4iRLyW3DeZ08HTI7NGyLS38MXd/KGgeWumQO7YNQbW2u/NtPT2YowbPaGQ==}
@@ -24595,6 +24602,8 @@ snapshots:
       signal-exit: 4.1.0
 
   forever-agent@0.6.1: {}
+
+  forge-std@https://codeload.github.com/foundry-rs/forge-std/tar.gz/bdea49f9bb3c58c8c35850c3bdc17eaeea756e9a: {}
 
   fork-ts-checker-webpack-plugin@6.5.3(eslint@8.57.1)(typescript@5.8.3)(webpack@5.99.7):
     dependencies:
