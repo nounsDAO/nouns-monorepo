@@ -11,7 +11,7 @@ import {
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '../../wrappers/nounsData';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FormControl } from 'react-bootstrap';
 
 type Props = {

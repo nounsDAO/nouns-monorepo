@@ -10,7 +10,7 @@ import {
   useUpdateProposalTransactions,
 } from '../../wrappers/nounsDao';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';

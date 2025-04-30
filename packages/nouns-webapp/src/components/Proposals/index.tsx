@@ -7,7 +7,7 @@ import {
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
@@ -26,7 +26,7 @@ import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useCandidateProposals } from '../../wrappers/nounsData';
 import { isProposalUpdatable } from '../../utils/proposals';
 import config from '../../config';

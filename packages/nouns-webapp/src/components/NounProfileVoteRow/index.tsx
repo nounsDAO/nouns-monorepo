@@ -8,7 +8,7 @@ import { ProposalState } from '../../wrappers/nounsDao';
 
 import classes from './NounProfileVoteRow.module.css';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import VoteStatusPill from '../VoteStatusPill';
 
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';

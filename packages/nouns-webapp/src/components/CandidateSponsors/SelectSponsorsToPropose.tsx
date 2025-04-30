@@ -9,7 +9,7 @@ import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
 import ShortAddress from '../ShortAddress';
 import { usePropose } from '../../wrappers/nounsDao';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Alert } from 'react-bootstrap';
 
 type Props = {

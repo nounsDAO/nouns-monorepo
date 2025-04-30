@@ -7,7 +7,7 @@ import {
   ForkCycleEvent,
 } from '../../wrappers/nounsDao';
 import { Trans } from '@lingui/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import ShortAddress from '../../components/ShortAddress';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';

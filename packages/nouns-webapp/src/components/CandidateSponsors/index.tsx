@@ -22,7 +22,7 @@ import SelectSponsorsToPropose from './SelectSponsorsToPropose';
 import clsx from 'clsx';
 import SubmitUpdateProposal from './SubmitUpdateProposal';
 import OriginalSignature from './OriginalSignature';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;

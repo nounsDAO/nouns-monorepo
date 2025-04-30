@@ -1,6 +1,6 @@
 import React from 'react';
 import { useBlockNumber } from '@usedapp/core';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import clsx from 'clsx';

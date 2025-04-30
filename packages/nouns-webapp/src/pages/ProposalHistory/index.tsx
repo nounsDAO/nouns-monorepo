@@ -21,8 +21,8 @@ import ProposalTransactionsDiffs from '../../components/ProposalContent/Proposal
 import ProposalStatus from '../../components/ProposalStatus';
 import { i18n } from '@lingui/core';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { Link, useParams } from 'react-router-dom';
-
+import { useParams } from 'react-router';
+import { Link } from 'react-router';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);

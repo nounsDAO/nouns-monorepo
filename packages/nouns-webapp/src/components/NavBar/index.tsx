@@ -1,7 +1,8 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import noggles from '../../assets/noggles.svg';
-import { Link, useLocation } from 'react-router-dom';
+import {  useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';

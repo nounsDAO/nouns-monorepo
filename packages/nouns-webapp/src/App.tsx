@@ -3,7 +3,7 @@ import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import type { RootState } from './index';
 import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router/dom';
 import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import '../src/css/globals.css';
@@ -56,8 +56,13 @@ function App() {
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
       )}
-      <BrowserRouter>
-        <AvatarProvider
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath  : true,
+          v7_startTransition    : true,
+        }}
+      >
+      <AvatarProvider
           provider={chainId === ChainId.Mainnet ? library : undefined}
           batchLookups={true}
         >

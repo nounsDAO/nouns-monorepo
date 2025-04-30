@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Col, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Section from '../../layout/Section';
 import classes from './NounsIntroSection.module.css';
 

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useEffect } from 'react';
 import { useBlockNumber } from '@usedapp/core';
 import { Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 export const useScrollToLocation = () => {
   const scrolledRef = React.useRef(false);

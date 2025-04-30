@@ -3,7 +3,7 @@ import Section from '../../layout/Section';
 import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { withStepProgress } from 'react-stepz';
 import ProposalEditor from '../../components/ProposalEditor';

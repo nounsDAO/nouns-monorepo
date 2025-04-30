@@ -1,6 +1,6 @@
 import React from 'react';
 import { Fork, ForkState, useForks } from '../../wrappers/nounsDao';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Section from '../../layout/Section';
 import { Col, Row } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';

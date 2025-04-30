@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import DelegationModal from '../../components/DelegationModal';
 import { getAddressFromQueryParams } from '../../utils/getAddressFromQueryParams';
 
