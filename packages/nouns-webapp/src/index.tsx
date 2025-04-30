@@ -221,7 +221,7 @@ const PastAuctions: React.FC = () => {
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    {/*<ConnectedRouter history={history}>*/}
       <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
@@ -240,7 +240,7 @@ createRoot(document.getElementById('root')!).render(
           </ApolloProvider>
         </Web3ReactProvider>
       </React.StrictMode>
-    </ConnectedRouter>
+    {/*</ConnectedRouter>*/}
   </Provider>,
 );
 
