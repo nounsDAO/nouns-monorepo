@@ -51,7 +51,8 @@
       "flat": ">=5.0.1",
       "http-cache-semantics": ">=4.1.1",
       "semver": ">=7.5.2",
-      "underscore": ">=1.12.1"
+      "underscore": ">=1.12.1",
+      "node-gettext": ">=3.0.0"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
