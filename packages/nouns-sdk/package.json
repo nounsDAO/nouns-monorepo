@@ -5,6 +5,12 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
