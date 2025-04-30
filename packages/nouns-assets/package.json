@@ -15,8 +15,8 @@
   "module": "dist/index.mjs",
   "scripts": {
     "append-image-data": "ts-node scripts/append-image-data.ts",
-    "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
+    "build": "tsup",
+    "clean": "rimraf dist",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
