@@ -17,6 +17,7 @@ overrides:
   elliptic: '>=6.6.1'
   flat: '>=5.0.1'
   http-cache-semantics: '>=4.1.1'
+  minimatch: '>=3.0.5'
   node-gettext: '>=3.0.0'
   semver: '>=7.5.2'
   underscore: '>=1.12.1'
@@ -10135,23 +10136,8 @@ packages:
     resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
     engines: {node: 20 || >=22}
 
-  minimatch@3.0.4:
-    resolution: {integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==}
-
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
-
-  minimatch@5.0.1:
-    resolution: {integrity: sha512-nLDxIFRyhDblz3qMuq+SoRZED4+miJ/G+tdDrjkkkRnjAsBexeGpgjLEQ0blJy7rHhR2b93rhQY4SvyWu9v03g==}
-    engines: {node: '>=10'}
-
-  minimatch@5.1.6:
-    resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
-    engines: {node: '>=10'}
-
-  minimatch@9.0.5:
-    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
-    engines: {node: '>=16 || 14 >=14.17'}
 
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
@@ -16286,7 +16272,7 @@ snapshots:
       ignore: 5.2.4
       import-fresh: 3.3.0
       js-yaml: 4.1.0
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -17101,7 +17087,7 @@ snapshots:
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
       debug: 4.4.0(supports-color@9.4.0)
-      minimatch: 3.1.2
+      minimatch: 10.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -17870,7 +17856,7 @@ snapshots:
       '@iarna/toml': 2.2.5
       dot-prop: 7.2.0
       find-up: 6.3.0
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       read-pkg: 7.1.0
       semver: 7.7.1
       yaml: 2.7.1
@@ -17909,7 +17895,7 @@ snapshots:
       log-process-errors: 8.0.0
       map-obj: 5.0.2
       memoize-one: 6.0.0
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       node-fetch: 3.3.2
       os-name: 5.1.0
       p-event: 6.0.1
@@ -18148,7 +18134,7 @@ snapshots:
       junk: 4.0.1
       locate-path: 7.2.0
       merge-options: 3.0.4
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       normalize-path: 3.0.0
       p-map: 7.0.3
       path-exists: 5.0.0
@@ -18328,7 +18314,7 @@ snapshots:
       indent-string: 4.0.0
       is-wsl: 2.2.0
       lilconfig: 3.1.3
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       semver: 7.7.1
       string-width: 4.2.3
       supports-color: 8.1.1
@@ -18349,7 +18335,7 @@ snapshots:
       indent-string: 4.0.0
       is-wsl: 2.2.0
       lilconfig: 3.1.3
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       semver: 7.7.1
       string-width: 4.2.3
       supports-color: 8.1.1
@@ -21175,7 +21161,7 @@ snapshots:
       debug: 2.6.9
       json5: 0.5.1
       lodash: 4.17.21
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       path-is-absolute: 1.0.1
       private: 0.1.8
       slash: 1.0.0
@@ -23504,7 +23490,7 @@ snapshots:
 
   dotignore@0.1.2:
     dependencies:
-      minimatch: 3.1.2
+      minimatch: 10.0.1
 
   drbg.js@1.0.1:
     dependencies:
@@ -23931,7 +23917,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -23970,7 +23956,7 @@ snapshots:
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
       language-tags: 1.0.9
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
@@ -23991,7 +23977,7 @@ snapshots:
       estraverse: 5.3.0
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       object.entries: 1.1.9
       object.fromentries: 2.0.8
       object.values: 1.2.1
@@ -24920,7 +24906,7 @@ snapshots:
 
   filelist@1.0.4:
     dependencies:
-      minimatch: 5.1.6
+      minimatch: 10.0.1
 
   filename-reserved-regex@3.0.0: {}
 
@@ -25065,7 +25051,7 @@ snapshots:
       fs-extra: 9.1.0
       glob: 7.2.3
       memfs: 3.6.0
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       schema-utils: 2.7.0
       semver: 7.7.1
       tapable: 1.1.3
@@ -25199,7 +25185,7 @@ snapshots:
 
   fs-jetpack@4.3.1:
     dependencies:
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       rimraf: 2.7.1
 
   fs-minipass@1.2.7:
@@ -25417,7 +25403,7 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
-      minimatch: 9.0.5
+      minimatch: 10.0.1
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
@@ -25435,7 +25421,7 @@ snapshots:
     dependencies:
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25444,7 +25430,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25453,7 +25439,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25462,7 +25448,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25471,7 +25457,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25480,7 +25466,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -25489,7 +25475,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 5.1.6
+      minimatch: 10.0.1
       once: 1.4.0
 
   global-directory@4.0.1:
@@ -26699,7 +26685,7 @@ snapshots:
       async: 3.2.6
       chalk: 4.1.2
       filelist: 1.0.4
-      minimatch: 3.1.2
+      minimatch: 10.0.1
 
   jayson@4.1.3(bufferutil@4.0.5)(utf-8-validate@5.0.7):
     dependencies:
@@ -28266,25 +28252,9 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  minimatch@3.0.4:
-    dependencies:
-      brace-expansion: 1.1.11
-
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
-
-  minimatch@5.0.1:
-    dependencies:
-      brace-expansion: 2.0.1
-
-  minimatch@5.1.6:
-    dependencies:
-      brace-expansion: 2.0.1
-
-  minimatch@9.0.5:
-    dependencies:
-      brace-expansion: 2.0.1
 
   minimist@1.2.8: {}
 
@@ -28361,7 +28331,7 @@ snapshots:
       he: 1.2.0
       js-yaml: 4.1.0
       log-symbols: 4.1.0
-      minimatch: 5.0.1
+      minimatch: 10.0.1
       ms: 2.1.3
       nanoid: 3.3.3
       serialize-javascript: 6.0.0
@@ -28385,7 +28355,7 @@ snapshots:
       he: 1.2.0
       js-yaml: 4.1.0
       log-symbols: 4.1.0
-      minimatch: 5.1.6
+      minimatch: 10.0.1
       ms: 2.1.3
       serialize-javascript: 6.0.2
       strip-json-comments: 3.1.1
@@ -28409,7 +28379,7 @@ snapshots:
       he: 1.2.0
       js-yaml: 3.13.1
       log-symbols: 3.0.0
-      minimatch: 3.0.4
+      minimatch: 10.0.1
       mkdirp: 0.5.5
       ms: 2.1.1
       node-environment-flags: 1.0.6
@@ -28437,7 +28407,7 @@ snapshots:
       he: 1.2.0
       js-yaml: 4.0.0
       log-symbols: 4.0.0
-      minimatch: 3.0.4
+      minimatch: 10.0.1
       ms: 2.1.3
       nanoid: 3.1.20
       serialize-javascript: 5.0.1
@@ -30788,7 +30758,7 @@ snapshots:
 
   readdir-glob@1.1.3:
     dependencies:
-      minimatch: 5.1.6
+      minimatch: 10.0.1
 
   readdirp@3.2.0:
     dependencies:
@@ -30814,7 +30784,7 @@ snapshots:
 
   recursive-readdir@2.2.3:
     dependencies:
-      minimatch: 3.1.2
+      minimatch: 10.0.1
 
   redent@3.0.0:
     dependencies:
@@ -32321,7 +32291,7 @@ snapshots:
     dependencies:
       '@istanbuljs/schema': 0.1.3
       glob: 7.2.3
-      minimatch: 3.1.2
+      minimatch: 10.0.1
 
   test-value@2.1.0:
     dependencies:
