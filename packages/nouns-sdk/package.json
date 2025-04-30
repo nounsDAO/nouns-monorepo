@@ -13,7 +13,10 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
