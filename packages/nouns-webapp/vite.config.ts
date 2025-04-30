@@ -34,4 +34,9 @@ export default defineConfig({
       '@nouns/contracts': path.resolve(__dirname, '../../packages/nouns-contracts/dist'),
     },
   },
+  build: {
+    rollupOptions: {
+      external: ['fs'],
+    },
+  },
 });
