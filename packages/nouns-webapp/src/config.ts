@@ -47,22 +47,22 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_APP_CHAIN_ID ?? '4');
+export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_CHAIN_ID ?? '4');
 
-export const ETHERSCAN_API_KEY = import.meta.env.VITE_APP_ETHERSCAN_API_KEY ?? '';
+export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
 
 export const WALLET_CONNECT_V2_PROJECT_ID =
-  import.meta.env.VITE_APP_WALLET_CONNECT_V2_PROJECT_ID ?? '';
+  import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
-const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
+const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
-  const custom = import.meta.env[`VITE_APP_${network.toUpperCase()}_JSONRPC`];
+  const custom = import.meta.env[`VITE_${network.toUpperCase()}_JSONRPC`];
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
-  const custom = import.meta.env[`VITE_APP_${network.toUpperCase()}_WSRPC`];
+  const custom = import.meta.env[`VITE_${network.toUpperCase()}_WSRPC`];
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
@@ -72,27 +72,27 @@ const app: Record<SupportedChains, AppConfig> = {
     wsRpcUri: createNetworkWsUrl('goerli'),
     subgraphApiUri:
       'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn',
-    enableHistory: import.meta.env.VITE_APP_ENABLE_HISTORY === 'true',
+    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
   [ChainId_Sepolia]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
     subgraphApiUri:
       'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
-    enableHistory: import.meta.env.VITE_APP_ENABLE_HISTORY === 'true',
+    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
     subgraphApiUri:
       'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
-    enableHistory: import.meta.env.VITE_APP_ENABLE_HISTORY === 'true',
+    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
-    enableHistory: import.meta.env.VITE_APP_ENABLE_HISTORY === 'true',
+    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
 };
 
