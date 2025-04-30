@@ -5,7 +5,14 @@ import { lingui } from '@lingui/vite-plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), lingui()],
+  plugins: [
+    react({
+      babel: {
+        plugins: ['@lingui/babel-plugin-lingui-macro'],
+      },
+    }),
+    lingui(),
+  ],
   server: {
     port: 3000,
   },
