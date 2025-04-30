@@ -62,7 +62,7 @@ export function NounsI18nProvider({
   }
 
   return (
-    <I18nProvider forceRenderOnLocaleChange={forceRenderAfterLocaleChange} i18n={i18n as any}>
+    <I18nProvider i18n={i18n}>
       {children}
     </I18nProvider>
   );
