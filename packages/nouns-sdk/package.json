@@ -15,8 +15,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
+    "build": "tsup",
+    "clean": "rimraf dist",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {
