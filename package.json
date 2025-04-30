@@ -51,6 +51,13 @@
       "http-cache-semantics": ">=4.1.1",
       "semver": ">=7.5.2",
       "underscore": ">=1.12.1"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "netlify-cli",
+      "sharp",
+      "unix-dgram"
+    ]
   }
 }
