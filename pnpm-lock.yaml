@@ -277,7 +277,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.3.21
-        version: 3.13.8(@types/react@17.0.85)(graphql@15.10.1)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 3.13.8(@types/react@18.3.20)(graphql@15.10.1)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@davatar/react':
         specifier: ^1.11.1
         version: 1.11.1(bufferutil@4.0.5)(react@17.0.2)(utf-8-validate@5.0.7)
@@ -397,10 +397,10 @@ importers:
         version: usedapp-core-fork@0.9.2(bufferutil@4.0.5)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(utf-8-validate@5.0.7)
       '@walletconnect/ethereum-provider':
         specifier: ^2.8.4
-        version: 2.20.0(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+        version: 2.20.0(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@walletconnect/modal':
         specifier: ^2.4.5
-        version: 2.7.0(@types/react@17.0.85)(react@17.0.2)
+        version: 2.7.0(@types/react@18.3.20)(react@17.0.2)
       '@web3-react/abstract-connector':
         specifier: ^6.0.7
         version: 6.0.7
@@ -484,7 +484,7 @@ importers:
         version: 17.0.2
       react-bootstrap:
         specifier: ^2.10.9
-        version: 2.10.9(@types/react@17.0.85)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 2.10.9(@types/react@18.3.20)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react-diff-viewer:
         specifier: ^3.1.1
         version: 3.1.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -493,7 +493,7 @@ importers:
         version: 17.0.2(react@17.0.2)
       react-markdown:
         specifier: ^7.1.2
-        version: 7.1.2(@types/react@17.0.85)(react@17.0.2)
+        version: 7.1.2(@types/react@18.3.20)(react@17.0.2)
       react-number-format:
         specifier: ^5.4.4
         version: 5.4.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -565,11 +565,11 @@ importers:
         specifier: ^0.30.2
         version: 0.30.2
       '@types/react':
-        specifier: ^17.0.0
-        version: 17.0.85
+        specifier: ^18.0.0
+        version: 18.3.20
       '@types/react-dom':
-        specifier: ^17.0.0
-        version: 17.0.26(@types/react@17.0.85)
+        specifier: ^18.0.0
+        version: 18.3.6(@types/react@18.3.20)
       '@types/react-fontawesome':
         specifier: ^1.6.5
         version: 1.6.8
@@ -584,7 +584,7 @@ importers:
         version: 5.3.3
       '@types/react-transition-group':
         specifier: ^4.4.5
-        version: 4.4.12(@types/react@17.0.85)
+        version: 4.4.12(@types/react@18.3.20)
       assert:
         specifier: ^2.0.0
         version: 2.1.0
@@ -3628,10 +3628,10 @@ packages:
   '@types/react-blockies@1.4.1':
     resolution: {integrity: sha512-aDX0g0hwzdodkGLSDNUQr6gXxwclGjnhS8jhsR8uQhAfe/7i3GZD/NDcSlQ2SiQiLhfRxX3NlY+nvBwf5Y0tTg==}
 
-  '@types/react-dom@17.0.26':
-    resolution: {integrity: sha512-Z+2VcYXJwOqQ79HreLU/1fyQ88eXSSFh6I3JdrEHQIfYSI0kCQpTGvOrbE6jFGGYXKsHuwY9tBa/w5Uo6KzrEg==}
+  '@types/react-dom@18.3.6':
+    resolution: {integrity: sha512-nf22//wEbKXusP6E9pfOCDwFdHAX4u172eaJI4YkDRQEZiorm6KfYnSC2SWLDMVWUOWPERmJnN0ujeAfTBLvrw==}
     peerDependencies:
-      '@types/react': ^17.0.0
+      '@types/react': ^18.0.0
 
   '@types/react-fontawesome@1.6.8':
     resolution: {integrity: sha512-+dQ+4jccHraCd/FI4uSeY/O7c1RZ+wVASTgpCgbC6ijh1zSDsr0cb9XU3Dbfy5eJPyXq5QPp9W9RJTVRf+5+pA==}
@@ -3653,8 +3653,8 @@ packages:
   '@types/react@17.0.1':
     resolution: {integrity: sha512-w8t9f53B2ei4jeOqf/gxtc2Sswnc3LBK5s0DyJcg5xd10tMHXts2N31cKjWfH9IC/JvEPa/YF1U4YeP1t4R6HQ==}
 
-  '@types/react@17.0.85':
-    resolution: {integrity: sha512-5oBDUsRDsrYq4DdyHaL99gE1AJCfuDhyxqF6/55fvvOIRkp1PpKuwJ+aMiGJR+GJt7YqMNclPROTHF20vY2cXA==}
+  '@types/react@18.3.20':
+    resolution: {integrity: sha512-IPaCZN7PShZK/3t6Q87pfTkRm6oLTd4vztyoj+cbHUF1g3FfVb2tFIL79uCRKEfv16AhqDMBywP2VW3KIZUvcg==}
 
   '@types/resolve@0.0.8':
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}
@@ -3670,9 +3670,6 @@ packages:
 
   '@types/revalidator@0.3.8':
     resolution: {integrity: sha512-q6KSi3PklLGQ0CesZ/XuLwly4DXXlnJuucYOG9lrBqrP8rKiuPZThav2h2+pFjaheNpnT0qKK3i304QWIePeJw==}
-
-  '@types/scheduler@0.16.2':
-    resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
 
   '@types/secp256k1@4.0.6':
     resolution: {integrity: sha512-hHxJU6PAEUn0TP4S/ZOzuTUvJWuZ6eIKeNKb5RBpODvSl6hp1Wrw4s7ATY50rklRCScUDpHzVA/DQdSjJ3UoYQ==}
@@ -14691,7 +14688,7 @@ snapshots:
   '@0x/typescript-typings@4.3.0':
     dependencies:
       '@types/bn.js': 4.11.6
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       bignumber.js: 8.0.2
       ethereum-types: 2.1.6
       popper.js: 1.14.3
@@ -14741,7 +14738,7 @@ snapshots:
       jsonpointer: 5.0.1
       leven: 3.1.0
 
-  '@apollo/client@3.13.8(@types/react@17.0.85)(graphql@15.10.1)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+  '@apollo/client@3.13.8(@types/react@18.3.20)(graphql@15.10.1)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@15.10.1)
       '@wry/caches': 1.0.1
@@ -14752,7 +14749,7 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       optimism: 0.18.1
       prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@17.0.85)(react@17.0.2)
+      rehackt: 0.1.0(@types/react@18.3.20)(react@17.0.2)
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.8.1
@@ -18259,12 +18256,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-controllers@1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
+  '@reown/appkit-controllers@1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
     dependencies:
       '@reown/appkit-common': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@reown/appkit-wallet': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)
       '@walletconnect/universal-provider': 2.19.2(@netlify/blobs@8.2.0)(bufferutil@4.0.5)(encoding@0.1.13)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      valtio: 1.13.2(@types/react@17.0.85)(react@17.0.2)
+      valtio: 1.13.2(@types/react@18.3.20)(react@17.0.2)
       viem: 2.28.1(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18297,12 +18294,12 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))(zod@3.24.3)':
+  '@reown/appkit-scaffold-ui@1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))(zod@3.24.3)':
     dependencies:
       '@reown/appkit-common': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-utils': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))(zod@3.24.3)
+      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-utils': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))(zod@3.24.3)
       '@reown/appkit-wallet': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)
       lit: 3.1.0
     transitivePeerDependencies:
@@ -18333,10 +18330,10 @@ snapshots:
       - valtio
       - zod
 
-  '@reown/appkit-ui@1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
+  '@reown/appkit-ui@1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
     dependencies:
       '@reown/appkit-common': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@reown/appkit-wallet': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)
       lit: 3.1.0
       qrcode: 1.5.3
@@ -18367,15 +18364,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))(zod@3.24.3)':
+  '@reown/appkit-utils@1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))(zod@3.24.3)':
     dependencies:
       '@reown/appkit-common': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@reown/appkit-polyfills': 1.7.3
       '@reown/appkit-wallet': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)
       '@walletconnect/logger': 2.1.2
       '@walletconnect/universal-provider': 2.19.2(@netlify/blobs@8.2.0)(bufferutil@4.0.5)(encoding@0.1.13)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      valtio: 1.13.2(@types/react@17.0.85)(react@17.0.2)
+      valtio: 1.13.2(@types/react@18.3.20)(react@17.0.2)
       viem: 2.28.1(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18415,19 +18412,19 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@reown/appkit@1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
+  '@reown/appkit@1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
     dependencies:
       '@reown/appkit-common': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-controllers': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@reown/appkit-polyfills': 1.7.3
-      '@reown/appkit-scaffold-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))(zod@3.24.3)
-      '@reown/appkit-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
-      '@reown/appkit-utils': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))(zod@3.24.3)
+      '@reown/appkit-scaffold-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))(zod@3.24.3)
+      '@reown/appkit-ui': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit-utils': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))(zod@3.24.3)
       '@reown/appkit-wallet': 1.7.3(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)
       '@walletconnect/types': 2.19.2(@netlify/blobs@8.2.0)
       '@walletconnect/universal-provider': 2.19.2(@netlify/blobs@8.2.0)(bufferutil@4.0.5)(encoding@0.1.13)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       bs58: 6.0.0
-      valtio: 1.13.2(@types/react@17.0.85)(react@17.0.2)
+      valtio: 1.13.2(@types/react@18.3.20)(react@17.0.2)
       viem: 2.28.1(bufferutil@4.0.5)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18983,7 +18980,7 @@ snapshots:
 
   '@types/hoist-non-react-statics@3.3.1':
     dependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       hoist-non-react-statics: 3.3.2
 
   '@types/html-minifier-terser@6.1.0': {}
@@ -19092,47 +19089,46 @@ snapshots:
 
   '@types/react-blockies@1.4.1':
     dependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
-  '@types/react-dom@17.0.26(@types/react@17.0.85)':
+  '@types/react-dom@18.3.6(@types/react@18.3.20)':
     dependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
   '@types/react-fontawesome@1.6.8':
     dependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
   '@types/react-redux@7.1.34':
     dependencies:
       '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       hoist-non-react-statics: 3.3.2
       redux: 4.2.1
 
   '@types/react-router-dom@5.3.3':
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       '@types/react-router': 5.1.20
 
   '@types/react-router@5.1.20':
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
-  '@types/react-transition-group@4.4.12(@types/react@17.0.85)':
+  '@types/react-transition-group@4.4.12(@types/react@18.3.20)':
     dependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
   '@types/react@17.0.1':
     dependencies:
       '@types/prop-types': 15.7.14
       csstype: 3.0.10
 
-  '@types/react@17.0.85':
+  '@types/react@18.3.20':
     dependencies:
       '@types/prop-types': 15.7.14
-      '@types/scheduler': 0.16.2
       csstype: 3.0.10
 
   '@types/resolve@0.0.8':
@@ -19148,8 +19144,6 @@ snapshots:
   '@types/retry@0.12.1': {}
 
   '@types/revalidator@0.3.8': {}
-
-  '@types/scheduler@0.16.2': {}
 
   '@types/secp256k1@4.0.6':
     dependencies:
@@ -19549,9 +19543,9 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.20.0(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
+  '@walletconnect/ethereum-provider@2.20.0(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)':
     dependencies:
-      '@reown/appkit': 1.7.3(@netlify/blobs@8.2.0)(@types/react@17.0.85)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
+      '@reown/appkit': 1.7.3(@netlify/blobs@8.2.0)(@types/react@18.3.20)(bufferutil@4.0.5)(encoding@0.1.13)(react@17.0.2)(typescript@5.8.3)(utf-8-validate@5.0.7)(zod@3.24.3)
       '@walletconnect/jsonrpc-http-connection': 1.0.8(encoding@0.1.13)
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
@@ -19665,16 +19659,16 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       pino: 7.11.0
 
-  '@walletconnect/modal-core@2.7.0(@types/react@17.0.85)(react@17.0.2)':
+  '@walletconnect/modal-core@2.7.0(@types/react@18.3.20)(react@17.0.2)':
     dependencies:
-      valtio: 1.11.2(@types/react@17.0.85)(react@17.0.2)
+      valtio: 1.11.2(@types/react@18.3.20)(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - react
 
-  '@walletconnect/modal-ui@2.7.0(@types/react@17.0.85)(react@17.0.2)':
+  '@walletconnect/modal-ui@2.7.0(@types/react@18.3.20)(react@17.0.2)':
     dependencies:
-      '@walletconnect/modal-core': 2.7.0(@types/react@17.0.85)(react@17.0.2)
+      '@walletconnect/modal-core': 2.7.0(@types/react@18.3.20)(react@17.0.2)
       lit: 2.8.0
       motion: 10.16.2
       qrcode: 1.5.3
@@ -19682,10 +19676,10 @@ snapshots:
       - '@types/react'
       - react
 
-  '@walletconnect/modal@2.7.0(@types/react@17.0.85)(react@17.0.2)':
+  '@walletconnect/modal@2.7.0(@types/react@18.3.20)(react@17.0.2)':
     dependencies:
-      '@walletconnect/modal-core': 2.7.0(@types/react@17.0.85)(react@17.0.2)
-      '@walletconnect/modal-ui': 2.7.0(@types/react@17.0.85)(react@17.0.2)
+      '@walletconnect/modal-core': 2.7.0(@types/react@18.3.20)(react@17.0.2)
+      '@walletconnect/modal-ui': 2.7.0(@types/react@18.3.20)(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - react
@@ -22869,9 +22863,9 @@ snapshots:
 
   dequal@2.0.3: {}
 
-  derive-valtio@0.1.0(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2)):
+  derive-valtio@0.1.0(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2)):
     dependencies:
-      valtio: 1.13.2(@types/react@17.0.85)(react@17.0.2)
+      valtio: 1.13.2(@types/react@18.3.20)(react@17.0.2)
 
   des.js@1.0.1:
     dependencies:
@@ -29837,13 +29831,13 @@ snapshots:
       prop-types: 15.8.1
       react: 17.0.2
 
-  react-bootstrap@2.10.9(@types/react@17.0.85)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+  react-bootstrap@2.10.9(@types/react@18.3.20)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.27.0
       '@restart/hooks': 0.4.16(react@17.0.2)
       '@restart/ui': 1.9.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@types/prop-types': 15.7.14
-      '@types/react-transition-group': 4.4.12(@types/react@17.0.85)
+      '@types/react-transition-group': 4.4.12(@types/react@18.3.20)
       classnames: 2.5.1
       dom-helpers: 5.2.1
       invariant: 2.2.4
@@ -29855,7 +29849,7 @@ snapshots:
       uncontrollable: 7.2.1(react@17.0.2)
       warning: 4.0.3
     optionalDependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
 
   react-dev-utils@12.0.1(eslint@8.57.1)(typescript@5.8.3)(webpack@5.99.7):
     dependencies:
@@ -29926,10 +29920,10 @@ snapshots:
 
   react-lifecycles-compat@3.0.4: {}
 
-  react-markdown@7.1.2(@types/react@17.0.85)(react@17.0.2):
+  react-markdown@7.1.2(@types/react@18.3.20)(react@17.0.2):
     dependencies:
       '@types/hast': 2.3.4
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       '@types/unist': 2.0.6
       comma-separated-tokens: 2.0.2
       hast-util-whitespace: 2.0.0
@@ -30331,9 +30325,9 @@ snapshots:
     dependencies:
       jsesc: 3.0.2
 
-  rehackt@0.1.0(@types/react@17.0.85)(react@17.0.2):
+  rehackt@0.1.0(@types/react@18.3.20)(react@17.0.2):
     optionalDependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       react: 17.0.2
 
   relateurl@0.2.7: {}
@@ -32190,7 +32184,7 @@ snapshots:
   uncontrollable@7.2.1(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.27.0
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       invariant: 2.2.4
       react: 17.0.2
       react-lifecycles-compat: 3.0.4
@@ -32479,21 +32473,21 @@ snapshots:
     dependencies:
       builtins: 5.1.0
 
-  valtio@1.11.2(@types/react@17.0.85)(react@17.0.2):
+  valtio@1.11.2(@types/react@18.3.20)(react@17.0.2):
     dependencies:
       proxy-compare: 2.5.1
       use-sync-external-store: 1.2.0(react@17.0.2)
     optionalDependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       react: 17.0.2
 
-  valtio@1.13.2(@types/react@17.0.85)(react@17.0.2):
+  valtio@1.13.2(@types/react@18.3.20)(react@17.0.2):
     dependencies:
-      derive-valtio: 0.1.0(valtio@1.13.2(@types/react@17.0.85)(react@17.0.2))
+      derive-valtio: 0.1.0(valtio@1.13.2(@types/react@18.3.20)(react@17.0.2))
       proxy-compare: 2.6.0
       use-sync-external-store: 1.2.0(react@17.0.2)
     optionalDependencies:
-      '@types/react': 17.0.85
+      '@types/react': 18.3.20
       react: 17.0.2
 
   value-equal@1.0.1: {}
