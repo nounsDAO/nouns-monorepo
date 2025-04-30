@@ -4,7 +4,7 @@ import classes from '../ProposalHistory/Vote.module.css';
 import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -28,12 +28,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const CandidateHistoryPage = ({
-  match: {
-    params: { id, versionNumber },
-  },
-}: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-  const proposal = useCandidateProposalVersions(id);
+const CandidateHistoryPage = () => {
+  const { id, versionNumber } = useParams<{ id: string; versionNumber?: string }>();
+  const proposal = useCandidateProposalVersions(Number(id).toString());
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
@@ -177,7 +174,7 @@ const CandidateHistoryPage = ({
                       return (
                         <VersionTab
                           key={i}
-                          id={id}
+                          id={Number(id).toString()}
                           createdAt={version.createdAt}
                           versionNumber={version.versionNumber}
                           updateMessage={version.updateMessage}
