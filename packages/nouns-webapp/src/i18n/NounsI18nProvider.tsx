@@ -25,7 +25,9 @@ export async function dynamicActivate(locale: SupportedLocale) {
     const catalog = await import(`../locales/${locale}.js`);
     // Bundlers will either export it as default or as a named export named default.
     i18n.load(locale, catalog.messages || catalog.default.messages);
-  } catch { /* empty */ }
+  } catch {
+    /* empty */
+  }
   console.log('activating: ', locale);
   i18n.activate(locale);
 }
@@ -37,12 +39,7 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export function NounsI18nProvider({
-  locale,
-  forceRenderAfterLocaleChange = true,
-  onActivate,
-  children,
-}: ProviderProps) {
+export function NounsI18nProvider({ locale, onActivate, children }: ProviderProps) {
   useEffect(() => {
     dynamicActivate(locale)
       .then(() => onActivate?.(locale))
@@ -61,9 +58,5 @@ export function NounsI18nProvider({
     i18n.activate(DEFAULT_LOCALE);
   }
 
-  return (
-    <I18nProvider i18n={i18n}>
-      {children}
-    </I18nProvider>
-  );
+  return <I18nProvider i18n={i18n}>{children}</I18nProvider>;
 }
