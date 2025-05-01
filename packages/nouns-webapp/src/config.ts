@@ -48,7 +48,6 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
 };
 
 export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_CHAIN_ID ?? '4');
-console.log(`Using chain ID: ${CHAIN_ID}`);
 
 export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
 
