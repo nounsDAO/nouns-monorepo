@@ -370,6 +370,9 @@ importers:
       '@lingui/detect-locale':
         specifier: 5.3.1
         version: 5.3.1
+      '@lingui/loader':
+        specifier: 5.3.1
+        version: 5.3.1(webpack@5.99.7)
       '@lingui/macro':
         specifier: 5.3.1
         version: 5.3.1(@lingui/babel-plugin-lingui-macro@5.3.1(babel-plugin-macros@3.1.0))(babel-plugin-macros@3.1.0)(react@18.3.1)
@@ -2492,6 +2495,12 @@ packages:
   '@lingui/format-po@5.3.1':
     resolution: {integrity: sha512-TE4nbvOspzj4M1PdBr6lYpMQAM4qulhQij8uyO32aNpejt6psivZ1bdcG6UGh1+ue38C5QYvjVSlWR8UCShTWg==}
     engines: {node: '>=20.0.0'}
+
+  '@lingui/loader@5.3.1':
+    resolution: {integrity: sha512-Rx0QXOodlBTngtqn9SAm+GiBW65DuHGjG6d77Okxwbd5WSf/HC2Peb0BpIU10mYD3N5DEiD3HA7N+uUSyuGYEw==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      webpack: ^5.0.0
 
   '@lingui/macro@5.3.1':
     resolution: {integrity: sha512-8n6dcziAVuNDtVdjuCqbrcmspqFrzK5aRlYP14R3XrCaKb4mcP5UdHD8+nk4yvLDABoMJgZUQrnWB5Ca2vpHvQ==}
@@ -17981,6 +17990,15 @@ snapshots:
       '@lingui/message-utils': 5.3.1
       date-fns: 3.6.0
       pofile: 1.1.4
+
+  '@lingui/loader@5.3.1(webpack@5.99.7)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@lingui/cli': 5.3.1
+      '@lingui/conf': 5.3.1
+      webpack: 5.99.7
+    transitivePeerDependencies:
+      - supports-color
 
   '@lingui/macro@5.3.1(@lingui/babel-plugin-lingui-macro@5.3.1(babel-plugin-macros@3.1.0))(babel-plugin-macros@3.1.0)(react@18.3.1)':
     dependencies:
