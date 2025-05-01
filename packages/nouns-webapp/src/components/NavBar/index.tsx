@@ -24,7 +24,7 @@ import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import Noggles from '../../assets/icons/Noggles.svg';
+import NogglesIcon from '../../assets/icons/Noggles.svg';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
 import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
@@ -201,7 +201,7 @@ const NavBar = () => {
               >
                 <NavBarButton
                   buttonText={<Trans>Nouns &amp; Traits</Trans>}
-                  // buttonIcon={<Noggles />}
+                  buttonIcon={<NogglesIcon />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
@@ -209,7 +209,7 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
                 buttonText="Explore"
-                // buttonIcon={<Noggles />}
+                buttonIcon={<NogglesIcon />}
                 buttonStyle={nonWalletButtonStyle}
               >
                 <Dropdown.Item
