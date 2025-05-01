@@ -653,6 +653,9 @@ importers:
       stream-browserify:
         specifier: ^3.0.0
         version: 3.0.0
+      terser:
+        specifier: ^5.39.0
+        version: 5.39.0
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
