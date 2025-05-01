@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import noggles from '../../assets/noggles.svg';
-import {  useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { Link } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
@@ -49,8 +49,8 @@ const NavBar = () => {
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
     : isCool
-    ? NavBarButtonStyle.COOL_INFO
-    : NavBarButtonStyle.WARM_INFO;
+      ? NavBarButtonStyle.COOL_INFO
+      : NavBarButtonStyle.WARM_INFO;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
@@ -201,7 +201,7 @@ const NavBar = () => {
               >
                 <NavBarButton
                   buttonText={<Trans>Nouns &amp; Traits</Trans>}
-                  buttonIcon={<Noggles />}
+                  // buttonIcon={<Noggles />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
@@ -209,7 +209,7 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
                 buttonText="Explore"
-                buttonIcon={<Noggles />}
+                // buttonIcon={<Noggles />}
                 buttonStyle={nonWalletButtonStyle}
               >
                 <Dropdown.Item
