@@ -21,7 +21,10 @@ export default defineConfig({
         svgoConfig: {
           floatPrecision: 2,
         },
+        exportType: 'default',
+        ref: true,
       },
+      include: '**/*.svg',
     }),
   ],
   server: {
