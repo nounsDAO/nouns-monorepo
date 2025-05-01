@@ -110,6 +110,9 @@ importers:
       pngjs:
         specifier: ^6.0.0
         version: 6.0.0
+      terser:
+        specifier: ^5.39.0
+        version: 5.39.0
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)(yaml@2.7.1)
@@ -237,6 +240,9 @@ importers:
       solidity-coverage:
         specifier: 0.8.15
         version: 0.8.15(hardhat@2.23.0(bufferutil@4.0.5)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
+      terser:
+        specifier: ^5.39.0
+        version: 5.39.0
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.15.3)(typescript@5.8.3)
@@ -265,6 +271,9 @@ importers:
       pngjs:
         specifier: ^6.0.0
         version: 6.0.0
+      terser:
+        specifier: ^5.39.0
+        version: 5.39.0
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)(yaml@2.7.1)
