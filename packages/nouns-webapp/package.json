@@ -149,40 +149,6 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
     "vm-browserify": "^1.1.2",
-    "webpack": "^5.99.7",
-    "terser": "^5.39.0"
-  },
-  "lingui": {
-    "catalogs": [
-      {
-        "path": "<rootDir>/src/locales/{locale}",
-        "include": [
-          "<rootDir>/src"
-        ]
-      }
-    ],
-    "compileNamespace": "cjs",
-    "fallbackLocales": {
-      "default": "en-US",
-      "pseudo": "en-US"
-    },
-    "format": "po",
-    "formatOptions": {
-      "lineNumbers": false
-    },
-    "locales": [
-      "en-US",
-      "ja-JP",
-      "zh-CN",
-      "pseudo"
-    ],
-    "orderBy": "messageId",
-    "rootDir": ".",
-    "runtimeConfigModule": [
-      "@lingui/core",
-      "i18n"
-    ],
-    "sourceLocale": "en-US",
-    "pseudoLocale": "pseudo"
+    "webpack": "^5.99.7"
   }
 }
