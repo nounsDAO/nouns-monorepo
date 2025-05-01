@@ -112,6 +112,7 @@
     "@craco/craco": "^7.1.0",
     "@eslint/js": "^9.21.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
+    "@svgr/plugin-svgo": "^8.1.0",
     "@types/bad-words": "^3.0.1",
     "@types/jest": "^26.0.15",
     "@types/lodash.merge": "^4.6.9",
