@@ -13,6 +13,13 @@ export default defineConfig({
   target: 'es2020',
   sourcemap: true,
   treeshake: true,
+  splitting: false,
+  minify: 'terser',
+  terserOptions: {
+    format: {
+      comments: false,
+    },
+  },
   loader: {
     '.json': 'json',
   },
