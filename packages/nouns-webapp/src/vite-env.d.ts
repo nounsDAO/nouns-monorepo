@@ -14,3 +14,5 @@ declare module '*.svg?*' {
   const Component: React.FC<React.SVGProps<SVGSVGElement> & { title?: string }>
   export default Component
 }
+
+declare module 'bs-custom-file-input';
