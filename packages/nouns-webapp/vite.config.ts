@@ -27,9 +27,6 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  esbuild: {
-    target: 'es2018', // Specify ES2018 or later
-  },
   resolve: {
     alias: {
       '@nouns/assets': path.resolve(__dirname, '../../packages/nouns-assets/dist'),
