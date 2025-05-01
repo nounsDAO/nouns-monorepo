@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import NogglesLogo from '../../assets/noggles.svg';
+import RawNoggles from '../../assets/noggles.svg';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
@@ -86,6 +86,8 @@ const NavBar = () => {
     </NavDropdown>
   );
 
+  const NogglesLogo = RawNoggles as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
+
   return (
     <>
       <Navbar
@@ -97,7 +99,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <NogglesLogo className={classes.navBarLogo} alt="Nouns DAO noggles" />
+              <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
