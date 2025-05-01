@@ -24,7 +24,7 @@ export default defineConfig({
         exportType: 'default',
         ref: true,
       },
-      include: '**/*.svg',
+      include: '**/*.svg?react',
     }),
   ],
   server: {
