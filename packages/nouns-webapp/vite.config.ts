@@ -42,5 +42,12 @@ export default defineConfig({
       external: ['fs'],
       output: { format: 'esm' },
     },
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        // Remove console logs in production builds
+        drop_console: true,
+      },
+    },
   },
 });
