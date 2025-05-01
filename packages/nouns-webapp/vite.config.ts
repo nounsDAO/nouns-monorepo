@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { lingui } from '@lingui/vite-plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import svgrPlugin from 'vite-plugin-svgr';
+import svgr from 'vite-plugin-svgr';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,7 +15,7 @@ export default defineConfig({
     }),
     lingui(),
     nodePolyfills(),
-    svgrPlugin({
+    svgr({
       svgrOptions: {
         plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
         svgoConfig: {
