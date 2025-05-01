@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import RawNoggles from '../../assets/noggles.svg';
+import NogglesLogo from '../../assets/noggles.svg?react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
@@ -85,8 +85,6 @@ const NavBar = () => {
       {candidatesNavItem}
     </NavDropdown>
   );
-
-  const NogglesLogo = RawNoggles as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 
   return (
     <>
