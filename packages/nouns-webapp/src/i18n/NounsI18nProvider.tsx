@@ -4,31 +4,29 @@
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { DEFAULT_LOCALE, SupportedLocale } from './locales';
-import { en, ja } from 'make-plural/plurals';
-import { PluralCategory } from 'make-plural/plurals';
 import { ReactNode, useEffect } from 'react';
 
-type LocalePlural = {
-  [key in SupportedLocale]: (n: number | string, ord?: boolean) => PluralCategory;
-};
-
-const plurals: LocalePlural = {
-  'en-US': en,
-  'ja-JP': ja,
-  // 'zh-CN': zh,
-  pseudo: en,
-};
-
 export async function dynamicActivate(locale: SupportedLocale) {
-  i18n.loadLocaleData(locale, { plurals: plurals[locale] });
+  console.log(`Starting locale activation for: ${locale}`);
+
   try {
-    const catalog = await import(`../locales/${locale}.js`);
-    // Bundlers will either export it as default or as a named export named default.
-    i18n.load(locale, catalog.messages || catalog.default.messages);
-  } catch {
-    /* empty */
+    // Use a standard import without the loader syntax
+    const catalog = await import(`../locales/${locale}.po`);
+
+    // Check if catalog loaded successfully
+    if (catalog && (catalog.messages || catalog.default)) {
+      // Load the messages into i18n
+      i18n.load(locale, catalog.messages || catalog.default);
+      console.log(`Successfully loaded messages for ${locale}`);
+    } else {
+      console.error(`Catalog loaded but no messages found for ${locale}`);
+    }
+  } catch (error) {
+    console.error(`Failed to load messages for ${locale}:`, error);
   }
-  console.log('activating: ', locale);
+
+  // Activate the locale
+  console.log('Activating locale:', locale);
   i18n.activate(locale);
 }
 
@@ -53,7 +51,6 @@ export function NounsI18nProvider({ locale, onActivate, children }: ProviderProp
   // as [there are no "default" messages](https://github.com/lingui/js-lingui/issues/388#issuecomment-497779030).
   // See https://github.com/lingui/js-lingui/issues/1194#issuecomment-1068488619.
   if (i18n.locale === undefined && locale === DEFAULT_LOCALE) {
-    i18n.loadLocaleData(DEFAULT_LOCALE, { plurals: plurals[DEFAULT_LOCALE] });
     i18n.load(DEFAULT_LOCALE, {});
     i18n.activate(DEFAULT_LOCALE);
   }
