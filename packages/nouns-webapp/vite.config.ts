@@ -40,6 +40,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: ['fs'],
+      output: { format: 'esm' },
     },
   },
 });
