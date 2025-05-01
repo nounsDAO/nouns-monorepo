@@ -27,7 +27,7 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  let stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
+  const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
   const lastNounId = useAppSelector((state: RootState) => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
