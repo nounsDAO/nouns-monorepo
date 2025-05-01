@@ -17,7 +17,7 @@ export const useScrollToLocation = () => {
         const element = document.getElementById(id);
 
         if (element) {
-          var elementOffset = 30;
+          const elementOffset = 30;
           const elementPosition = element?.getBoundingClientRect().top || 0;
           const offsetPosition = elementPosition + window.pageYOffset - elementOffset;
           window.scrollTo({

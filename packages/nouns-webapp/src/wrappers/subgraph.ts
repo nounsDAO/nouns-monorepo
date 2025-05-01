@@ -397,7 +397,7 @@ export const latestAuctionsQuery = () => gql`
   }
 `;
 
-export const latestBidsQuery = (first: number = 10) => gql`
+export const latestBidsQuery = (first = 10) => gql`
 {
 	bids(
 	  first: ${first},

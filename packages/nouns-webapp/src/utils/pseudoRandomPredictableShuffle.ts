@@ -7,7 +7,7 @@
  * @param seed random seed
  * @returns  elements in inputs pseudorandomly shuffled as a function of seed
  */
-export const pseudoRandomPredictableShuffle = (input: Array<any> = [], seed: number = 1) => {
+export const pseudoRandomPredictableShuffle = (input: Array<any> = [], seed = 1) => {
   input = [...input];
   const output = [];
 

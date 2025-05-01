@@ -84,7 +84,7 @@ const filterSigners = (
     sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
   );
   let voteCount = 0;
-  let activeSigs: CandidateSignature[] = [];
+  const activeSigs: CandidateSignature[] = [];
 
   sigsFiltered?.forEach(signature => {
     const delegateVoteCount =
