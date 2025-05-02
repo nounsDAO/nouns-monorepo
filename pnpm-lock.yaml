@@ -535,9 +535,6 @@ importers:
       react-router-dom:
         specifier: ^7.5.3
         version: 7.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-scripts:
-        specifier: 5.0.1
-        version: 5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.10))(@babel/plugin-transform-react-jsx@7.27.1(@babel/core@7.26.10))(@types/babel__core@7.20.5)(bufferutil@4.0.5)(eslint@9.25.1(jiti@2.4.2))(react@18.3.1)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(type-fest@4.39.1)(typescript@5.8.3)(utf-8-validate@5.0.7)
       react-stepz:
         specifier: ^1.0.2
         version: 1.0.2(react@18.3.1)

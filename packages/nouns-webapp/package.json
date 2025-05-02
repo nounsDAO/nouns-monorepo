@@ -97,7 +97,6 @@
     "react-redux": "^7.2.9",
     "react-router": "^7.5.3",
     "react-router-dom": "^7.5.3",
-    "react-scripts": "5.0.1",
     "react-stepz": "^1.0.2",
     "react-swipeable": "^7.0.0",
     "react-tooltip": "^4.5.1",
