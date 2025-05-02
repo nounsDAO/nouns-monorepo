@@ -107,7 +107,7 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.22.15",
+    "@babel/eslint-parser": "^7.27.1",
     "@babel/preset-react": "^7.22.15",
     "@craco/craco": "^7.1.0",
     "@types/bad-words": "^3.0.1",
