@@ -108,15 +108,18 @@ export default defineConfig({
             if (id.includes('react-router')) return 'routing';
             if (id.includes('remark')) return 'markdown';
 
-            // FALLBACK CHUNKING STRATEGY - Distribute remaining deps alphabetically
+            // FALLBACK CHUNKING STRATEGY - Split into smaller chunks to isolate the issue
             const pkgName = id.split('node_modules/').pop()?.split('/')[0];
             if (pkgName) {
               const firstChar = pkgName.charAt(0).toLowerCase();
-              if ('abcde'.includes(firstChar)) return 'vendor-a-e';
-              if ('fghij'.includes(firstChar)) return 'vendor-f-j';
-              if ('klmno'.includes(firstChar)) return 'vendor-k-o';
-              if ('pqrst'.includes(firstChar)) return 'vendor-p-t';
-              return 'vendor-u-z';
+              if ('abc'.includes(firstChar)) return 'vendor-a-c';
+              if ('def'.includes(firstChar)) return 'vendor-d-f';
+              if ('ghi'.includes(firstChar)) return 'vendor-g-i';
+              if ('jkl'.includes(firstChar)) return 'vendor-j-l';
+              if ('mno'.includes(firstChar)) return 'vendor-m-o';
+              if ('pqr'.includes(firstChar)) return 'vendor-p-r';
+              if ('stu'.includes(firstChar)) return 'vendor-s-u';
+              return 'vendor-v-z';
             }
 
             // Default vendor chunk for anything else
