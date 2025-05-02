@@ -73,9 +73,6 @@
       "semver": ">=7.5.2",
       "underscore": ">=1.12.1",
       "ws": ">=7.5.10"
-    },
-    "ignoredBuiltDependencies": [
-      "keccak"
-    ]
+    }
   }
 }
