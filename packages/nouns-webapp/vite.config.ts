@@ -4,6 +4,7 @@ import * as path from 'path';
 import { lingui } from '@lingui/vite-plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
+import Inspect from 'vite-plugin-inspect';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -26,6 +27,7 @@ export default defineConfig({
       },
       include: '**/*.svg?react',
     }),
+    Inspect(),
   ],
   server: {
     port: 3000,
