@@ -71,6 +71,7 @@
       "postcss": ">=8.4.31",
       "qs": ">=6.5.3",
       "semver": ">=7.5.2",
+      "serialize-javascript": ">=6.0.2",
       "underscore": ">=1.12.1",
       "ws": ">=7.5.10"
     }
