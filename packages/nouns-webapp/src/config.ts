@@ -57,12 +57,12 @@ export const WALLET_CONNECT_V2_PROJECT_ID =
 const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
-  const custom = import.meta.env[`VITE_${network.toUpperCase()}_JSONRPC`];
+  const custom = import.meta.env.VITE_MAINNET_JSONRPC;
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
-  const custom = import.meta.env[`VITE_${network.toUpperCase()}_WSRPC`];
+  const custom = import.meta.env.VITE_MAINNET_WSRPC;
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
