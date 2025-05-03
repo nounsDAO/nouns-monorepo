@@ -21,7 +21,7 @@ overrides:
   got: '>=11.8.5'
   http-cache-semantics: '>=4.1.1'
   lodash: '>=4.17.21'
-  nanoid: '>=5.1.5'
+  nanoid: '>=3.3.8 <4'
   node-gettext: '>=3.0.0'
   nth-check: '>=2.0.1'
   postcss: '>=8.4.31'
@@ -18272,12 +18272,12 @@ packages:
         integrity: sha512-9MqxMH/BSJC7dnLsEMPyfN5Dvoo49IsPFYMcHw3Bcfc2kN0lpHRBSzlMSVx4HGyJ7s9B31CyBTVehWJoQ8Ctew==,
       }
 
-  nanoid@5.1.5:
+  nanoid@3.3.11:
     resolution:
       {
-        integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==,
+        integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==,
       }
-    engines: { node: ^18 || >=20 }
+    engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
     hasBin: true
 
   nanomatch@1.2.13:
@@ -31595,7 +31595,7 @@ snapshots:
       fetch-mock: 9.11.0(node-fetch@3.3.2)
       lodash.merge: 4.6.2
       lodash.pickby: 4.6.0
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       react: 17.0.2
     transitivePeerDependencies:
       - bufferutil
@@ -39196,7 +39196,7 @@ snapshots:
       it-to-stream: 1.0.0
       merge-options: 3.0.4
       multiformats: 13.3.2
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       native-fetch: 4.0.2(undici@7.4.0)
       parse-duration: 2.1.4
       react-native-fetch-api: 3.0.0
@@ -40196,7 +40196,7 @@ snapshots:
       log-symbols: 4.1.0
       minimatch: 5.0.1
       ms: 2.1.3
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       serialize-javascript: 6.0.2
       strip-json-comments: 3.1.1
       supports-color: 8.1.1
@@ -40272,7 +40272,7 @@ snapshots:
       log-symbols: 4.0.0
       minimatch: 3.0.4
       ms: 2.1.3
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       serialize-javascript: 6.0.2
       strip-json-comments: 3.1.1
       supports-color: 8.1.1
@@ -40392,7 +40392,7 @@ snapshots:
   nano-json-stream-parser@0.1.2:
     optional: true
 
-  nanoid@5.1.5: {}
+  nanoid@3.3.11: {}
 
   nanomatch@1.2.13:
     dependencies:
@@ -41889,7 +41889,7 @@ snapshots:
 
   postcss@8.5.3:
     dependencies:
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -44937,7 +44937,7 @@ snapshots:
       '@web3-react/network-connector': 6.1.5
       ethers: 5.6.8(bufferutil@4.0.5)(utf-8-validate@5.0.7)
       lodash.merge: 4.6.2
-      nanoid: 5.1.5
+      nanoid: 3.3.11
       react: 18.3.1
     transitivePeerDependencies:
       - bufferutil
