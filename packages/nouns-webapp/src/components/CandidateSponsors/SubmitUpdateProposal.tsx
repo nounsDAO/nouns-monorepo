@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import classes from './SelectSponsorsToPropose.module.css';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
@@ -11,7 +11,7 @@ import {
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '../../wrappers/nounsData';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FormControl } from 'react-bootstrap';
 
 type Props = {

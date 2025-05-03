@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { StandalonePart } from '../../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@noundry/nouns-assets';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from '@heroicons/react/solid';
 import NounInfoRowBirthday from '../../NounInfoRowBirthday';

@@ -4,7 +4,7 @@ import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import React from 'react';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';

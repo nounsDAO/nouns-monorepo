@@ -23,7 +23,7 @@ import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
 import type { RootState } from '../../index';
 import BidHistoryModal from '../BidHistoryModal';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {

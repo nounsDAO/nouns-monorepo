@@ -7,7 +7,7 @@ import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import EnsOrLongAddress from '../EnsOrLongAddress';
 
 import clsx from 'clsx';

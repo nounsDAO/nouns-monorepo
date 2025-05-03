@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
 import { ProposalCandidate } from '../../wrappers/nounsData';
@@ -22,7 +22,7 @@ import SelectSponsorsToPropose from './SelectSponsorsToPropose';
 import clsx from 'clsx';
 import SubmitUpdateProposal from './SubmitUpdateProposal';
 import OriginalSignature from './OriginalSignature';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;

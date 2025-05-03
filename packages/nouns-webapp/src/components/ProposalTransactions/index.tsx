@@ -21,7 +21,7 @@ const ProposalTransactions = ({
     let calldata =
       tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let [name, types] = tx.signature.substring(0, tx.signature.length - 1)?.split(/\((.*)/s);
+    const [name, types] = tx.signature.substring(0, tx.signature.length - 1).split(/\((.*)/s);
     if (isProposalUpdate && types) {
       const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), tx.calldata);
       calldata = JSON.stringify([decoded.join()]);

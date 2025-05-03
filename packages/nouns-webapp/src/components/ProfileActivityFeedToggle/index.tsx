@@ -1,6 +1,6 @@
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React from 'react';
 import classes from './ProfileActivityFeedToggle.module.css';
 

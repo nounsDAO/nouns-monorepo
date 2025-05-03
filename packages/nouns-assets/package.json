@@ -5,12 +5,22 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
+  "files": [
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
     "append-image-data": "ts-node scripts/append-image-data.ts",
-    "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
+    "build": "tsup",
+    "clean": "rimraf dist",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
@@ -24,6 +34,8 @@
     "@types/pngjs": "^6.0.1",
     "chai": "^4.5.0",
     "mocha": "^8.4.0",
-    "pngjs": "^6.0.0"
+    "pngjs": "^6.0.0",
+    "terser": "^5.39.0",
+    "tsup": "^8.4.0"
   }
 }

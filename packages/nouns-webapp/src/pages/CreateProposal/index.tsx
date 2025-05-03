@@ -12,7 +12,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -21,7 +21,7 @@ import ProposalTransactions from '../../components/ProposalTransactions';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';

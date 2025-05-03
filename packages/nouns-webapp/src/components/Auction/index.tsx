@@ -8,7 +8,7 @@ import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import type { RootState } from '../../index';
 import { isNounderNoun } from '../../utils/nounderNoun';
@@ -25,9 +25,9 @@ interface AuctionProps {
 const Auction: React.FC<AuctionProps> = props => {
   const { auction: currentAuction } = props;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  let stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
+  const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
   const lastNounId = useAppSelector((state: RootState) => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
@@ -36,11 +36,11 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
 
   const nounContent = currentAuction && (

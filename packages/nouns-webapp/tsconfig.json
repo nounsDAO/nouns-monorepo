@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "composite": false,
@@ -11,13 +11,7 @@
     "module": "esnext",
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "sourceMap": false
+    "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "../nouns-contracts/tsconfig.build.json"
-    }
-  ]
+  "include": ["src", "src/vite-env.d.ts"]
 }

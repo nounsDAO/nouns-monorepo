@@ -7,12 +7,12 @@ import {
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
@@ -26,7 +26,7 @@ import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useCandidateProposals } from '../../wrappers/nounsData';
 import { isProposalUpdatable } from '../../utils/proposals';
 import config from '../../config';
@@ -42,17 +42,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -95,7 +95,7 @@ const Proposals = ({
   const [blockNumber, setBlockNumber] = useState<number>(0);
   const currentBlock = useBlockNumber();
   const { account } = useEthers();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
@@ -121,11 +121,11 @@ const Proposals = ({
   }, [hash]);
   useEffect(() => {
     if (activeTab === 1) {
-      history.push('/vote#candidates');
+      navigate('/vote#candidates');
     } else {
-      history.push('/vote');
+      navigate('/vote');
     }
-  }, [activeTab, history]);
+  }, [activeTab, navigate]);
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -165,7 +165,7 @@ const Proposals = ({
                 <div className={classes.submitProposalButtonWrapper}>
                   <Button
                     className={classes.generateBtn}
-                    onClick={() => history.push('create-proposal')}
+                    onClick={() => navigate('create-proposal')}
                   >
                     <Trans>Submit Proposal</Trans>
                   </Button>
@@ -222,7 +222,7 @@ const Proposals = ({
                   <div className={classes.submitProposalButtonWrapper}>
                     <Button
                       className={classes.generateBtn}
-                      onClick={() => history.push('create-proposal')}
+                      onClick={() => navigate('create-proposal')}
                     >
                       <Trans>Submit Proposal</Trans>
                     </Button>
@@ -334,8 +334,8 @@ const Proposals = ({
                         );
                         let isOriginalPropUpdatable =
                           prop &&
-                            blockNumber &&
-                            isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
+                          blockNumber &&
+                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
                             ? true
                             : false;
                         if (!isOriginalPropUpdatable) return null;

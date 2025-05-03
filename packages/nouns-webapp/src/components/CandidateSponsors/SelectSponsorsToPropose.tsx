@@ -2,14 +2,14 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import classes from './SelectSponsorsToPropose.module.css';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import link from '../../assets/icons/Link.svg';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
 import ShortAddress from '../ShortAddress';
 import { usePropose } from '../../wrappers/nounsDao';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Alert } from 'react-bootstrap';
 
 type Props = {

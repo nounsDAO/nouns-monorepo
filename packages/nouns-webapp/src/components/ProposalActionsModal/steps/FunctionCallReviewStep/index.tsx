@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers/lib/ethers';
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';

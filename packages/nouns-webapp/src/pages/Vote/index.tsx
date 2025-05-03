@@ -13,11 +13,11 @@ import {
   useProposal,
   useProposalVersions,
   useQueueProposal,
-  useIsForkActive
+  useIsForkActive,
 } from '../../wrappers/nounsDao';
 import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -41,7 +41,7 @@ import {
   propUsingDynamicQuorum,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
@@ -57,6 +57,7 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 import { isProposalUpdatable } from '../../utils/proposals';
 import { useProposalFeedback } from '../../wrappers/nounsData';
+import { useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -71,9 +72,9 @@ const getUpdatableCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   return (
@@ -85,11 +86,8 @@ const getUpdatableCountdownCopy = (
   );
 };
 
-const VotePage = ({
-  match: {
-    params: { id },
-  },
-}: RouteComponentProps<{ id: string }>) => {
+const VotePage = () => {
+  const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
@@ -110,8 +108,8 @@ const VotePage = ({
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
   const [forkPeriodMessage, setForkPeriodMessage] = useState<ReactNode>(<></>);
   const [isExecutable, setIsExecutable] = useState<boolean>(true);
-  const proposal = useProposal(id);
-  const proposalVersions = useProposalVersions(id);
+  const proposal = useProposal(Number(id));
+  const proposalVersions = useProposalVersions(Number(id));
   const activeLocale = useActiveLocale();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -127,7 +125,7 @@ const VotePage = ({
     useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
-  const proposalFeedback = useProposalFeedback(id, dataFetchPollInterval);
+  const proposalFeedback = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const forkActiveState = useIsForkActive();
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
@@ -137,9 +135,9 @@ const VotePage = ({
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-        'seconds',
-      )
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
       : undefined;
 
   const endBlock =
@@ -161,9 +159,10 @@ const VotePage = ({
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // Use user votes as of the current or proposal snapshot block
-  const currentOrSnapshotBlock = useMemo(() =>
-    Math.min(proposal?.voteSnapshotBlock ?? 0, (currentBlock ? currentBlock - 1 : 0)) || undefined,
-    [proposal, currentBlock]
+  const currentOrSnapshotBlock = useMemo(
+    () =>
+      Math.min(proposal?.voteSnapshotBlock ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
+    [proposal, currentBlock],
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
@@ -263,9 +262,9 @@ const VotePage = ({
     const time =
       proposal && timestamp && currentBlock
         ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
-          'seconds',
-        )
+            AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
+            'seconds',
+          )
         : undefined;
     return time;
   };
@@ -451,7 +450,8 @@ const VotePage = ({
 
   useEffect(() => {
     if (
-      isDaoGteV3 && proposal &&
+      isDaoGteV3 &&
+      proposal &&
       currentBlock &&
       proposal?.objectionPeriodEndBlock > 0 &&
       currentBlock > proposal?.endBlock &&
@@ -463,10 +463,13 @@ const VotePage = ({
     }
   }, [currentBlock, proposal?.status, proposal, isDaoGteV3]);
 
-
   useEffect(() => {
     if (proposal?.status === ProposalState.QUEUED && isForkActive) {
-      setForkPeriodMessage(<p><Trans>Proposals cannot be executed during a forking period</Trans></p>);
+      setForkPeriodMessage(
+        <p>
+          <Trans>Proposals cannot be executed during a forking period</Trans>
+        </p>,
+      );
       setIsExecutable(false);
     } else if (proposal?.status === ProposalState.QUEUED && !isForkActive) {
       setIsExecutable(true);
@@ -780,9 +783,7 @@ const VotePage = ({
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>Taken at block</span>
-                    <h3>
-                      {proposal?.voteSnapshotBlock}
-                    </h3>
+                    <h3>{proposal?.voteSnapshotBlock}</h3>
                   </div>
                 </div>
               </Card.Body>

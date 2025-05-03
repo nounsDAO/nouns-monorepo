@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import classes from './Fork.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import Section from '../../layout/Section';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -21,7 +21,8 @@ import ForkEvent from './ForkEvent';
 import DeployForkButton from './DeployForkButton';
 import WithdrawNounsButton from './WithdrawNounsButton';
 import { useScrollToLocation } from '../../hooks/useScrollToLocation';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { useParams } from 'react-router';
+import { Link } from 'react-router';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
 import NotFoundPage from '../NotFound';
@@ -30,11 +31,8 @@ import { utils } from 'ethers/lib/ethers';
 
 const now = new Date();
 
-const ForkPage = ({
-  match: {
-    params: { id },
-  },
-}: RouteComponentProps<{ id: string }>) => {
+const ForkPage = () => {
+  const { id } = useParams<{ id: string }>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
@@ -53,9 +51,9 @@ const ForkPage = ({
   const forkThreshold = useForkThreshold();
   const forkThresholdBPS = useForkThresholdBPS();
   const numTokensInForkEscrow = useNumTokensInForkEscrow();
-  const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval, id);
+  const userEscrowedNounIds = useUserEscrowedNounIds(dataFetchPollInterval, Number(id).toString());
   const userOwnedNounIds = useUserOwnedNounIds(dataFetchPollInterval);
-  const escrowEvents = useEscrowEvents(dataFetchPollInterval, id);
+  const escrowEvents = useEscrowEvents(dataFetchPollInterval, Number(id).toString());
   const forkDetails = useForkDetails(dataFetchPollInterval, id || '');
   const forks = useForks(dataFetchPollInterval);
   const { account } = useEthers();
@@ -149,7 +147,7 @@ const ForkPage = ({
       // match id to upcoming fork id
       if (
         forks?.data.length === 0 ||
-        (forks?.data.length > 0 && +id === +forks.data[forks.data.length - 1].id + 1)
+        (forks?.data.length > 0 && +Number(id) === +forks.data[forks.data.length - 1].id + 1)
       ) {
         setIsNewForkPage(true);
       } else {
@@ -167,7 +165,7 @@ const ForkPage = ({
     );
   }
 
-  if (forks.data.length > 0 && +id > +forks.data[forks.data.length - 1].id + 1) {
+  if (forks.data.length > 0 && +Number(id) > +forks.data[forks.data.length - 1].id + 1) {
     // fork doesn't exist
     return <NotFoundPage />;
   }
@@ -284,12 +282,11 @@ const ForkPage = ({
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={
                         forkDetails?.data?.executed &&
-                          +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+                        +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
                           ? true
                           : false
                       }
                     />
-
                   </div>
                 )}
               <div className={clsx(classes.isForked)}>
@@ -297,9 +294,7 @@ const ForkPage = ({
                   <p>
                     <strong>
                       This fork was executed on{' '}
-                      {dayjs
-                        .unix(+forkDetails.data.executedAt)
-                        .format('MMM D, YYYY')}
+                      {dayjs.unix(+forkDetails.data.executedAt).format('MMM D, YYYY')}
                     </strong>
                   </p>
                 )}
@@ -368,8 +363,8 @@ const ForkPage = ({
                         ? ''
                         : 's'
                       : numTokensInForkEscrow === 1
-                        ? ''
-                        : 's'}
+                      ? ''
+                      : 's'}
                   </strong>
                   {isForkPeriodActive || isForked ? null : (
                     <span className={classes.thresholdCount}>

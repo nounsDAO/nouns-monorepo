@@ -14,7 +14,7 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
@@ -52,7 +52,7 @@ const Bid: React.FC<{
 }> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
-  let { auction, auctionEnded } = props;
+  const { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
   const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
     config.addresses.nounsAuctionHouseProxy,

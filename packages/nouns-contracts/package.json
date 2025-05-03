@@ -5,14 +5,23 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "files": [
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "pnpm build:sol && pnpm build:ts && pnpm build:declarations",
-    "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
+    "build": "pnpm build:sol && pnpm build:ts",
     "build:sol": "hardhat compile",
-    "build:ts": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
+    "build:ts": "tsup",
+    "clean": "rimraf dist",
     "coverage": "hardhat coverage",
     "dev": "pnpm task:run-local",
     "hardhat": "hardhat",
@@ -42,7 +51,9 @@
     "@ethersproject/strings": "^5.8.0",
     "@ethersproject/transactions": "^5.8.0",
     "@ethersproject/web": "^5.8.0",
-    "ethers": "^5.8.0"
+    "ds-test": "dapphub/ds-test",
+    "ethers": "^5.8.0",
+    "forge-std": "foundry-rs/forge-std#v1.7.2"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-verify": "^1.0.0",
@@ -56,16 +67,18 @@
     "@types/express": "^4.17.21",
     "@types/prompt": "^1.1.0",
     "base64-sol": "^1.0.1",
-    "dotenv": "^10.0.0",
+    "dotenv": "^16.5.0",
     "ethereum-waffle": "^3.4.4",
     "hardhat": "^2.23.0",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-gas-reporter": "^1.0.8",
-    "prettier-plugin-solidity": "^1.2.0",
+    "prettier-plugin-solidity": "^2.0.0",
     "prompt": "^1.1.0",
     "shx": "^0.4.0",
     "solidity-coverage": "0.8.15",
+    "terser": "^5.39.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.4.0",
     "typechain": "^8.0.0"
   }
 }

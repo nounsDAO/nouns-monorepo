@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface DocumentationProps {
   backgroundColor?: string;

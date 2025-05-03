@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);

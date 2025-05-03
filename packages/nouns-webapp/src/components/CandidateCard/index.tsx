@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import CandidateSponsors from './CandidateSponsors';
 import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/macro';
-import { Link } from 'react-router-dom';
+import { Trans } from '@lingui/react/macro';
+import { Link } from 'react-router';
 import { PartialProposal } from '../../wrappers/nounsDao';
 import { relativeTimestamp } from '../../utils/timeUtils';
 

@@ -1,7 +1,8 @@
 import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Candidate.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import {  useParams } from 'react-router';
+import { Link } from 'react-router';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -11,7 +12,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import CandidateSponsors from '../../components/CandidateSponsors';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
@@ -35,11 +36,8 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const CandidatePage = ({
-  match: {
-    params: { id },
-  },
-}: RouteComponentProps<{ id: string }>) => {
+const CandidatePage = () => {
+  const { id } = useParams<{ id: string }>();
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
@@ -51,13 +49,18 @@ const CandidatePage = ({
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = !(activeAccount === undefined);
   const blockNumber = useBlockNumber();
-  const candidate = useCandidateProposal(id, dataFetchPollInterval, false, currentBlock);
+  const candidate = useCandidateProposal(
+    Number(id).toString(),
+    dataFetchPollInterval,
+    false,
+    currentBlock,
+  );
   const { account } = useEthers();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
-  const feedback = useCandidateFeedback(id, dataFetchPollInterval);
+  const feedback = useCandidateFeedback(Number(id).toString(), dataFetchPollInterval);
   const [isProposal, setIsProposal] = useState<boolean>(false);
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
@@ -211,7 +214,7 @@ const CandidatePage = ({
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             isUpdateToProposal={isUpdateToProposal}
-            submitButtonClickHandler={() => { }}
+            submitButtonClickHandler={() => {}}
           />
         )}
       </Col>
@@ -256,7 +259,9 @@ const CandidatePage = ({
       {candidate.data && (
         <Row>
           <Col lg={12}>
-            <a className={classes.jump} href="#feedback">Jump to Sponsored Votes and Feedback</a>
+            <a className={classes.jump} href="#feedback">
+              Jump to Sponsored Votes and Feedback
+            </a>
           </Col>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate.data} />

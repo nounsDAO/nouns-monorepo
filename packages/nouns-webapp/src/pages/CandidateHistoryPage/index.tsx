@@ -4,7 +4,8 @@ import classes from '../ProposalHistory/Vote.module.css';
 import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { useParams } from 'react-router';
+import { Link } from 'react-router';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -14,7 +15,7 @@ import clsx from 'clsx';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import VersionTab from '../ProposalHistory/VersionTab';
 import remarkBreaks from 'remark-breaks';
 import {
@@ -28,12 +29,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const CandidateHistoryPage = ({
-  match: {
-    params: { id, versionNumber },
-  },
-}: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
-  const proposal = useCandidateProposalVersions(id);
+const CandidateHistoryPage = () => {
+  const { id, versionNumber } = useParams<{ id: string; versionNumber?: string }>();
+  const proposal = useCandidateProposalVersions(Number(id).toString());
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
@@ -177,7 +175,7 @@ const CandidateHistoryPage = ({
                       return (
                         <VersionTab
                           key={i}
-                          id={id}
+                          id={Number(id).toString()}
                           createdAt={version.createdAt}
                           versionNumber={version.versionNumber}
                           updateMessage={version.updateMessage}

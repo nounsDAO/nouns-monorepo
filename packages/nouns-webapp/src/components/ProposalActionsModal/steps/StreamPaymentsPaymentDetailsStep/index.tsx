@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
 import BrandNumericEntry from '../../../BrandNumericEntry';

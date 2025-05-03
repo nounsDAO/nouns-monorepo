@@ -8,6 +8,7 @@ interface BrandDropdownProps {
   value: any;
   chevonRight?: number;
   chevronTop?: number;
+  children: React.ReactNode;
 }
 
 const BrandDropdown: React.FC<BrandDropdownProps> = props => {

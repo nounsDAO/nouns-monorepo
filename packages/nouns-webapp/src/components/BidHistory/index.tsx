@@ -1,7 +1,7 @@
 import React from 'react';
 import ShortAddress from '../ShortAddress';
 import dayjs from 'dayjs';
-import link from '../../assets/icons/Link.svg';
+import LinkIcon from '../../assets/icons/Link.svg?react';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
@@ -34,7 +34,7 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
           <div className={classes.bidAmount}>{bidAmount}</div>
           <div className={classes.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
-              <img src={link} width={24} alt="link symbol" />
+              <LinkIcon width={24} height={24} aria-label="link symbol" />
             </a>
           </div>
         </div>
