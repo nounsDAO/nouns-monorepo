@@ -10,8 +10,8 @@ import { buildEtherscanTxLink } from '../../utils/etherscan';
 type Props = {
   tokenIds: number[];
   isWithdrawModalOpen: boolean;
-  setIsWithdrawModalOpen: Function;
-  setDataFetchPollInterval: Function;
+  setIsWithdrawModalOpen: (isOpen: boolean) => void;
+  setDataFetchPollInterval: (interval: number) => void;
 };
 
 function WithdrawNounsButton(props: Props) {
