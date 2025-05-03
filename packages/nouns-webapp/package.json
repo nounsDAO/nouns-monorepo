@@ -122,7 +122,6 @@
     "@types/react-transition-group": "^4.4.5",
     "@vitejs/plugin-react": "^4.3.4",
     "@wagmi/cli": "^2.3.0",
-    "assert": "^2.0.0",
     "dotenv": "^16.5.0",
     "eslint": "^9.21.0",
     "eslint-config-react-app": "^7.0.1",
