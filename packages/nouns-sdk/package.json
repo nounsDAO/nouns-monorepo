@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.8.0",
