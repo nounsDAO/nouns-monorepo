@@ -5,6 +5,7 @@ import { lingui } from '@lingui/vite-plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
+import checker from 'vite-plugin-checker';
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
@@ -30,6 +31,13 @@ export default defineConfig({
       include: '**/*.svg?react',
     }),
     Inspect(),
+    checker({
+      typescript: true,
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+        useFlatConfig: true
+      },
+    }),
   ],
   server: {
     port: 3000,
