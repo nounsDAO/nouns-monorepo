@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b && vite build",
+    "build:contracts": "wagmi generate",
     "dev": "vite",
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
