@@ -150,7 +150,6 @@
     "vite-plugin-inspect": "^11.0.1",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
-    "vm-browserify": "^1.1.2",
-    "webpack": "^5.99.8"
+    "wagmi": "^2.15.2"
   }
 }
