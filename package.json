@@ -59,6 +59,7 @@
       "got": ">=11.8.5",
       "http-cache-semantics": ">=4.1.1",
       "lodash": ">=4.17.21",
+      "nanoid": ">=3.3.8 <4",
       "node-gettext": ">=3.0.0",
       "nth-check": ">=2.0.1",
       "postcss": ">=8.4.31",
