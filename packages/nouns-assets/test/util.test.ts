@@ -1,15 +1,10 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
-import {
-  shiftRightAndCast,
-  getPseudorandomPart,
-  getNounSeedFromBlockHash,
-  getNounData,
-} from '../src/index';
+import { shiftRightAndCast, getPseudorandomPart, getNounSeedFromBlockHash } from '../src/index';
 import { images } from '../src/image-data.json';
 import { NounSeed } from '../src/types';
 
-const { bodies, accessories, heads, glasses } = images;
+const { heads } = images;
 
 describe('@noun/assets utils', () => {
   // Test against Noun 116, created at block 13661786
