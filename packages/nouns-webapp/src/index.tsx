@@ -190,7 +190,7 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
-    for (let event of previousBids) {
+    for (const event of previousBids) {
       if (event.args === undefined) return;
       processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }

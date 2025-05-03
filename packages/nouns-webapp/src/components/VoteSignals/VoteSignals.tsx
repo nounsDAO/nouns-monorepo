@@ -41,9 +41,9 @@ function VoteSignals(props: Props) {
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
-    let forIt: VoteSignalDetail[] = [];
-    let againstIt: VoteSignalDetail[] = [];
-    let abstainIt: VoteSignalDetail[] = [];
+    const forIt: VoteSignalDetail[] = [];
+    const againstIt: VoteSignalDetail[] = [];
+    const abstainIt: VoteSignalDetail[] = [];
 
     if (props.feedback) {
       // filter feedback to this version

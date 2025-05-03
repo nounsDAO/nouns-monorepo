@@ -89,7 +89,7 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
   const { buttonText, buttonIcon, buttonStyle, onClick, disabled, className = '' } = props;
 
-  let isDisabled = disabled ?? false;
+  const isDisabled = disabled ?? false;
 
   return (
     <>

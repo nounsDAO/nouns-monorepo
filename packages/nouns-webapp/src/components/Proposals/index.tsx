@@ -332,7 +332,7 @@ const Proposals = ({
                         const prop = proposals.find(
                           p => p.id === c.version.content.proposalIdToUpdate,
                         );
-                        let isOriginalPropUpdatable =
+                        const isOriginalPropUpdatable =
                           prop &&
                           blockNumber &&
                           isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
