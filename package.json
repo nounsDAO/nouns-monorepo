@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "^5.59.0",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
-    "husky": "^5.0.9",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "mocha": "^8.4.0",
     "netlify-cli": "^20.1.1",
