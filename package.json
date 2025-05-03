@@ -21,7 +21,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "netlify-cli": "^20.1.1",
-    "pinst": "^2.1.6",
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "^2.5.10",
     "rimraf": "^6.0.1",
