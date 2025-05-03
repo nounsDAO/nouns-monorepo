@@ -103,7 +103,6 @@
     "@babel/eslint-parser": "^7.27.1",
     "@babel/preset-react": "^7.22.15",
     "@craco/craco": "^7.1.0",
-    "@eslint/js": "^9.21.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
     "@lingui/cli": "5.3.1",
     "@lingui/vite-plugin": "5.3.1",
