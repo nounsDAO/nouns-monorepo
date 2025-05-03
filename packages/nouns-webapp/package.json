@@ -125,6 +125,7 @@
     "@types/react-redux": "^7.1.34",
     "@types/react-transition-group": "^4.4.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "@wagmi/cli": "^2.3.0",
     "assert": "^2.0.0",
     "babel-eslint": "^10.1.0",
     "browserify-zlib": "^0.2.0",
