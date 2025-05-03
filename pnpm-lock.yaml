@@ -22,21 +22,12 @@ importers:
 
   .:
     devDependencies:
-      '@types/chai':
-        specifier: ^4.2.15
-        version: 4.3.20
-      '@types/mocha':
-        specifier: ^8.2.2
-        version: 8.2.3
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.59.0
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5)
       '@typescript-eslint/parser':
         specifier: ^5.59.0
         version: 5.62.0(eslint@8.57.1)(typescript@4.9.5)
-      chai:
-        specifier: ^4.5.0
-        version: 4.5.0
       eslint:
         specifier: ^8.38.0
         version: 8.57.1
@@ -3754,9 +3745,6 @@ packages:
 
   '@types/mkdirp@0.5.2':
     resolution: {integrity: sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==}
-
-  '@types/mocha@8.2.3':
-    resolution: {integrity: sha512-ekGvFhFgrc2zYQoX4JeZPmVzZxw6Dtllga7iGHzfbYIYkAMUx/sAFP2GdFpLff+vdHXu5fl7WX9AT+TtqYcsyw==}
 
   '@types/ms@0.7.31':
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
@@ -19609,8 +19597,6 @@ snapshots:
   '@types/mkdirp@0.5.2':
     dependencies:
       '@types/node': 22.15.3
-
-  '@types/mocha@8.2.3': {}
 
   '@types/ms@0.7.31': {}
 
