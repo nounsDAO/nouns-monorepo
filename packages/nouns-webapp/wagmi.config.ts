@@ -1,7 +1,7 @@
-import { defineConfig } from '@wagmi/cli'
-import { etherscan, react } from '@wagmi/cli/plugins'
-import 'dotenv/config'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { defineConfig } from '@wagmi/cli';
+import { etherscan, react } from '@wagmi/cli/plugins';
+import 'dotenv/config';
+import { mainnet, sepolia } from 'wagmi/chains';
 
 export default defineConfig({
   out: 'src/contracts/index.ts',
@@ -58,4 +58,4 @@ export default defineConfig({
     }),
     react(),
   ],
-})
+});
