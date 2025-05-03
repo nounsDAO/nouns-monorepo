@@ -38,8 +38,8 @@ updates:
     # Allow up to 10 open pull requests for dependencies
     open-pull-requests-limit: 20
     # Allow only direct dependencies to be updated
-    allow:
-      - dependency-type: 'direct'
+    # allow:
+    #  - dependency-type: 'direct'
     # Ignore major version updates to avoid engine incompatibility
     #    ignore:
     #      - dependency-name: '*'
