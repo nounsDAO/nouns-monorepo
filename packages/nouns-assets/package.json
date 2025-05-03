@@ -24,7 +24,7 @@
     "clean": "rimraf dist",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
