@@ -5,6 +5,7 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
