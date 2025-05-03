@@ -26,6 +26,7 @@
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
     "husky": "^5.0.9",
+    "lint-staged": "^15.5.1",
     "mocha": "^8.4.0",
     "netlify-cli": "^20.1.1",
     "pinst": "^2.1.6",
