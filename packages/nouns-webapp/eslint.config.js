@@ -24,6 +24,8 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
+      react: reactPlugin,
+      import: importPlugin,
       unicorn: unicornPlugin,
     },
     rules: {
