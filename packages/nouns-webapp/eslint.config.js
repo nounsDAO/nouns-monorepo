@@ -5,6 +5,7 @@ import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import importPlugin from 'eslint-plugin-import';
+import unicornPlugin from 'eslint-plugin-unicorn';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -23,6 +24,7 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
+      unicorn: unicornPlugin,
     },
     rules: {
       ...reactHooksPlugin.configs.recommended.rules,
