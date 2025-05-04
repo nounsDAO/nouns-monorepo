@@ -1,11 +1,11 @@
-const { defineConfig, globalIgnores } = require('eslint/config');
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-const tsParser = require('@typescript-eslint/parser');
-const typescriptEslintEslintPlugin = require('@typescript-eslint/eslint-plugin');
-const globals = require('globals');
-const js = require('@eslint/js');
-
-const { FlatCompat } = require('@eslint/eslintrc');
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import globals from 'globals';
+import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import turbo from 'eslint-plugin-turbo';
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -13,7 +13,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-module.exports = defineConfig([
+export default defineConfig([
   {
     ignores: ['**/*.config.js', '**/*.config.ts'],
   },
@@ -33,6 +33,7 @@ module.exports = defineConfig([
 
     plugins: {
       '@typescript-eslint': typescriptEslintEslintPlugin,
+      turbo,
     },
 
     extends: compat.extends('plugin:@typescript-eslint/recommended', 'prettier'),
