@@ -129,6 +129,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.1.0",
+    "playwright": "^1.44.1",
     "process": "^0.11.10",
     "tailwindcss": "^4.1.5",
     "terser": "^5.39.0",
