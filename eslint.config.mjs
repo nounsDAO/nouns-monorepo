@@ -8,7 +8,6 @@ import tsParser from '@typescript-eslint/parser';
 import turbo from 'eslint-plugin-turbo';
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
