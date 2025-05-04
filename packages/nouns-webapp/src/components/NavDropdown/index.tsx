@@ -38,6 +38,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
     navDropdownClasses.dropdownActive,
   );
 
+  // @ts-ignore
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div

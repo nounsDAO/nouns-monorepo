@@ -712,7 +712,7 @@ const VotePage = () => {
                     <ReactTooltip
                       id={'view-dq-info'}
                       className={classes.delegateHover}
-                      getContent={dataTip => {
+                      getContent={() => {
                         return <Trans>View Threshold Info</Trans>;
                       }}
                     />

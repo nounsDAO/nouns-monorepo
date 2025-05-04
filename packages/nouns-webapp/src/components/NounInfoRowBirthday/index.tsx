@@ -17,7 +17,7 @@ interface NounInfoRowBirthdayProps {
 
 export const getNounBirthday = (nounId: number, pastAuctions: AuctionState[]) => {
   return BigNumber.from(
-    pastAuctions.find((auction: AuctionState, i: number) => {
+    pastAuctions.find((auction: AuctionState) => {
       const maybeNounId = auction.activeAuction?.nounId;
       return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounId)) : false;
     })?.activeAuction?.startTime || 0,

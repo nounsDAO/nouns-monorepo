@@ -363,8 +363,8 @@ const ForkPage = () => {
                         ? ''
                         : 's'
                       : numTokensInForkEscrow === 1
-                      ? ''
-                      : 's'}
+                        ? ''
+                        : 's'}
                   </strong>
                   {isForkPeriodActive || isForked ? null : (
                     <span className={classes.thresholdCount}>
@@ -415,7 +415,7 @@ const ForkPage = () => {
                   </div>
                 )}
                 {escrowEvents.data &&
-                  escrowEvents.data.map((event, i) => {
+                  escrowEvents.data.map(event => {
                     if (event?.eventType === 'ForkingEnded') {
                       if (
                         event.createdAt &&

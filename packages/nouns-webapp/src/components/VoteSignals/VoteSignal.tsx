@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from './VoteSignals.module.css';
 import ShortAddress from '../ShortAddress';
 import Avatar from '@davatar/react';

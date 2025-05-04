@@ -10,7 +10,7 @@ import ForkStatus from '../../components/ForkStatus';
 
 type Props = {};
 
-const ForksPage: React.FC<Props> = props => {
+const ForksPage: React.FC<Props> = () => {
   const forks = useForks();
   const now = new Date();
   const currentTime = now.getTime() / 1000;

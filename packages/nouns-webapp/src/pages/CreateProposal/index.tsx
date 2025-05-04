@@ -185,54 +185,52 @@ const CreateProposalPage = () => {
     }
   };
 
-  const handleAddProposalState = useCallback(
-    (proposeState: TransactionStatus, previousProposalId?: number) => {
-      switch (proposeState.status) {
-        case 'None':
-          setProposePending(false);
-          break;
-        case 'Mining':
-          setProposePending(true);
-          break;
-        case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: (
-              <Trans>
-                Proposal Created!
-                <br />
-              </Trans>
-            ),
-            show: true,
-          });
-          setProposePending(false);
-          break;
-        case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
-          setProposePending(false);
-          break;
-        case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
-          setProposePending(false);
-          break;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [],
-  );
+  const handleAddProposalState = useCallback((proposeState: TransactionStatus) => {
+    switch (proposeState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: (
+            <Trans>
+              Proposal Created!
+              <br />
+            </Trans>
+          ),
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isProposeOnV1) {
-      handleAddProposalState(proposeOnTimelockV1State, previousProposalId);
+      handleAddProposalState(proposeOnTimelockV1State);
     } else {
-      handleAddProposalState(proposeState, previousProposalId);
+      handleAddProposalState(proposeState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

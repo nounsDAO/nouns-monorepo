@@ -198,7 +198,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                     <Trans>Sponsored by</Trans>
                   </span>
                 </h3>{' '}
-                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                {props.proposal.signers.map((signer: { id: string }) => {
                   return (
                     <>
                       <HoverCard
@@ -235,7 +235,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 <h3>
                   <span className={classes.proposedByJp}>Sponsored by</span>
                 </h3>{' '}
-                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                {props.proposal.signers.map((signer: { id: string }) => {
                   return (
                     <>
                       <HoverCard

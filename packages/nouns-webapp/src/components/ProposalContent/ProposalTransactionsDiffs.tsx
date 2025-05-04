@@ -9,11 +9,7 @@ type Props = {
   activeVersionNumber: number;
 };
 
-export default function ProposalTransactions({
-  oldTransactions,
-  newTransactions,
-  activeVersionNumber,
-}: Props) {
+export default function ProposalTransactions({ oldTransactions, newTransactions }: Props) {
   const buildTxObject = (tx: ProposalDetail) => {
     if (!tx) {
       return {
@@ -42,9 +38,7 @@ export default function ProposalTransactions({
   });
 
   const stringifyTx = (tx: ProposalDetail) => {
-    const item =
-      tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
-    return item;
+    return tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
   };
 
   const isEmptyTx = (tx: ProposalDetail) => {

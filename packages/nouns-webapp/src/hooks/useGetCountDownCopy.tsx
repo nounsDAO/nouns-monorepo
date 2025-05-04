@@ -1,6 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import dayjs, { locale } from 'dayjs';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { SupportedLocale, SUPPORTED_LOCALE_TO_DAYSJS_LOCALE } from '../i18n/locales';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../utils/constants';
 import { PartialProposal } from '../wrappers/nounsDao';

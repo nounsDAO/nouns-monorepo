@@ -104,6 +104,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     NavBarButtonStyle.WARM_WALLET,
   );
 
+  // @ts-ignore
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div

@@ -105,7 +105,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     props.handleRefetchCandidateData();
   };
 
-  const handleSignatureRemoved = (voteCount: number) => {
+  const handleSignatureRemoved = () => {
     refetchData();
   };
   return (

@@ -9,7 +9,7 @@ interface ExploreGridItemProps {
 }
 
 const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef(
-  (props, ref: React.Ref<HTMLButtonElement>) => {
+  (props, _ref: React.Ref<HTMLButtonElement>) => {
     const [isImageLoaded, setIsImageLoaded] = useState<boolean | undefined>();
     const [isImageError, setIsImageError] = useState<boolean | undefined>();
 

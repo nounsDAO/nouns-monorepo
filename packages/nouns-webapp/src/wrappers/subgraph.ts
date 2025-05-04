@@ -113,7 +113,7 @@ export const partialProposalsQuery = (first = 1_000) => gql`
 }
 `;
 
-export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => gql`
+export const activePendingUpdatableProposersQuery = (_first = 1_000, currentBlock?: number) => gql`
 {
   proposals(
     where: {
@@ -130,7 +130,7 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
 }
 `;
 
-export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => gql`
+export const updatableProposalsQuery = (_first = 1_000, currentBlock?: number) => gql`
 {
   proposals(
     where: {
@@ -579,7 +579,7 @@ export const ownedNounsQuery = (owner: string) => gql`
   }
 `;
 
-export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
+export const accountEscrowedNounsQuery = (owner: string) => gql`
   {
     escrowedNouns(where: {owner_: {id: "${owner}"}}, first: 1000) {
       noun {

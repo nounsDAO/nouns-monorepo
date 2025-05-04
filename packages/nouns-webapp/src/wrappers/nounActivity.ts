@@ -88,7 +88,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
 
   const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
     .slice(0)
-    .reduce((acc: any, h: NounVoteHistory, i: number) => {
+    .reduce((acc: any, h: NounVoteHistory) => {
       acc[h.proposal.id] = h;
       return acc;
     }, {});

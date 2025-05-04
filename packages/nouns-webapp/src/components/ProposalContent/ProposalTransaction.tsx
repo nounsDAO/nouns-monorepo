@@ -2,7 +2,7 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import config from '../../config';
 import { utils } from 'ethers';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { linkIfAddress } from '.';
 import { ProposalDetail } from '../../wrappers/nounsDao';
 import ShortAddress from '../ShortAddress';

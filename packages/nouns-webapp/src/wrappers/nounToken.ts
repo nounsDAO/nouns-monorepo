@@ -226,7 +226,7 @@ export const useUserOwnedNounIds = (pollInterval: number) => {
 export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { account } = useEthers();
   const { loading, data, error, refetch } = useQuery(
-    accountEscrowedNounsQuery(account?.toLowerCase() ?? '', forkId),
+    accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
     {
       pollInterval: pollInterval,
     },

@@ -65,6 +65,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     navDropdownClasses.warmInfoSelected,
   );
 
+  // @ts-ignore
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div

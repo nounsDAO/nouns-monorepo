@@ -17,7 +17,7 @@ type Noun = {
   imgSrc: string | undefined;
 };
 
-const ExplorePage: React.FC<ExplorePageProps> = props => {
+const ExplorePage: React.FC<ExplorePageProps> = () => {
   // Borrowed from /src/pages/Playground/NounModal/index.tsx
   const [width, setWidth] = useState<number>(window.innerWidth);
   const isMobile: boolean = width <= 991;
@@ -171,7 +171,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     });
 
     // Remove block on hover over noun
-    window.addEventListener('mousemove', event => {});
+    window.addEventListener('mousemove', () => {});
     onmousemove = () => {
       setIsNounHoverDisabled(false);
     };

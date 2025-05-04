@@ -64,7 +64,7 @@ export const useNounCanVoteTimestamp = (nounId: number) => {
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  const maybeNounCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
+  const maybeNounCanVoteTimestamp = pastAuctions.find((auction: AuctionState) => {
     const maybeNounId = auction.activeAuction?.nounId;
     return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
   })?.activeAuction?.startTime;

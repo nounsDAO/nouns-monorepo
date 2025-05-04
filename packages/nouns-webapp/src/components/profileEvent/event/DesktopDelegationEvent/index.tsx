@@ -29,7 +29,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             id={'view-on-etherscan-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
@@ -60,7 +60,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             id={'view-on-etherscan-txn-delegate-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />

@@ -38,7 +38,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // Fetch initial nouns by url
     const nouns = new Array(individualCount)
       .fill(placeholderNoun)
-      .map((x, i): Noun => {
+      .map((_x, i): Noun => {
         return {
           id: i + (props.nounCount - individualCount),
           imgSrc: `https://noun.pics/${i + (props.nounCount - individualCount)}.svg`,
@@ -62,8 +62,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
       for (let i = nounCount - individualNouns.length; i >= 0; i -= rangeChunkSize) {
         const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
         const end = i - 1;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const nounsRange = await fetchNouns(start, end);
+        await fetchNouns(start, end);
       }
     }
   };
@@ -74,7 +73,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
       const response = await fetch(url);
       const json = await response.json();
       // Convert noun.pic svg key to generic imgSrc key
-      const rangeNouns: Noun[] = json.reverse().map((noun: NounPic, i: number) => {
+      const rangeNouns: Noun[] = json.reverse().map((noun: NounPic) => {
         return {
           id: noun.id,
           imgSrc: noun.svg,
@@ -101,7 +100,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
   useEffect(() => {
     const placeholderNounsData = new Array(rangeChunkSize)
       .fill(placeholderNoun)
-      .map((x, i): Noun => {
+      .map((): Noun => {
         return {
           id: null,
           imgSrc: undefined,
@@ -135,8 +134,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
               <button
                 ref={el => (props.buttonsRef.current[noun.id ? noun.id : -1] = el)}
                 key={`${i}${noun.id}`}
-                onClick={e => noun.id !== null && props.handleFocusNoun(noun.id)}
-                onFocus={e => noun.id !== null && props.handleFocusNoun(noun.id)}
+                onClick={() => noun.id !== null && props.handleFocusNoun(noun.id)}
+                onFocus={() => noun.id !== null && props.handleFocusNoun(noun.id)}
                 onMouseOver={() =>
                   !props.isNounHoverDisabled && noun.id !== null && props.setActiveNoun(noun.id)
                 }

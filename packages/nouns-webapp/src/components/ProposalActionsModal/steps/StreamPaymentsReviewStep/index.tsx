@@ -41,7 +41,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         id={'address-tooltip'}
         effect={'solid'}
         className={classes.hover}
-        getContent={dataTip => {
+        getContent={() => {
           return state.address;
         }}
       />
