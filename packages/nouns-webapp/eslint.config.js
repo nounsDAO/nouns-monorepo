@@ -3,8 +3,8 @@ import globals from 'globals';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
-import importPlugin from 'eslint-plugin-import';
+// import reactPlugin from 'eslint-plugin-react';
+// import importPlugin from 'eslint-plugin-import';
 import unicornPlugin from 'eslint-plugin-unicorn';
 
 export default tseslint.config(
@@ -13,8 +13,8 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      ...reactPlugin.configs.flat.recommended,
-      ...importPlugin.flatConfigs.recommended,
+      // ...reactPlugin.configs.flat.recommended,
+      // ...importPlugin.flatConfigs.recommended,
     ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -24,8 +24,8 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
-      react: reactPlugin,
-      import: importPlugin,
+      // react: reactPlugin,
+      // import: importPlugin,
       unicorn: unicornPlugin,
     },
     rules: {
