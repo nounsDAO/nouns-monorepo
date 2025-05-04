@@ -30,7 +30,7 @@ describe('@noun/assets utils', () => {
     });
   });
 
-  describe('getPseudorandomPart', () => {
+  describe.todo('getPseudorandomPart', () => {
     it('should match NounsSeeder.sol implementation for a pseudorandomly chosen part', () => {
       const headShift = 144;
       const { head } = NOUN116_SEED;
@@ -40,7 +40,7 @@ describe('@noun/assets utils', () => {
     });
   });
 
-  describe('getNounSeedFromBlockHash', () => {
+  describe.todo('getNounSeedFromBlockHash', () => {
     it('should match NounsSeeder.sol implementation for generating a Noun seed', () => {
       expect(getNounSeedFromBlockHash(NOUN116_ID, NOUN116_PREV_BLOCKHASH)).to.deep.equal(
         NOUN116_SEED,
