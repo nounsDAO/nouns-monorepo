@@ -110,7 +110,7 @@
     "@babel/eslint-parser": "^7.27.1",
     "@babel/preset-react": "^7.22.15",
     "@craco/craco": "^7.1.0",
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.26.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-svgo": "^8.1.0",
