@@ -407,6 +407,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.75.2
         version: 5.75.2(react@18.3.1)
+      '@testing-library/jest-dom':
+        specifier: ^6.6.3
+        version: 6.6.3
       '@usedapp/coingecko':
         specifier: 0.5.1
         version: 0.5.1(bufferutil@4.0.9)(encoding@0.1.13)(node-fetch@3.3.2)(utf-8-validate@5.0.10)
@@ -452,6 +455,9 @@ importers:
       bignumber.js:
         specifier: ^9.3.0
         version: 9.3.0
+      blo:
+        specifier: ^2.0.0
+        version: 2.0.0
       bootstrap:
         specifier: ^5.1
         version: 5.3.5(@popperjs/core@2.11.8)
@@ -570,9 +576,6 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.5
         version: 4.1.5(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(yaml@2.7.1))
-      '@testing-library/jest-dom':
-        specifier: ^6.6.3
-        version: 6.6.3
       '@testing-library/react':
         specifier: ^16.3.0
         version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.7(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4496,6 +4499,9 @@ packages:
 
   blakejs@1.2.1:
     resolution: {integrity: sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==}
+
+  blo@2.0.0:
+    resolution: {integrity: sha512-VUUr1+vWisNSaHVswkbPbk1+GhygClKILkGchae7nsyuJ4ZVz5l1hEW4eR5F/ly/asM5vzigYGXjPnvrd//CVg==}
 
   blob-to-it@2.0.8:
     resolution: {integrity: sha512-1MKnG2ul1DtSgrxFHqhdJgIJODJbNj7alOLSJRD7O9S2iCJ72ZWU6j8+CVpjIdLueqwpWhy4ouvpanYlFLqkRw==}
@@ -19051,6 +19057,8 @@ snapshots:
       readable-stream: 3.6.2
 
   blakejs@1.2.1: {}
+
+  blo@2.0.0: {}
 
   blob-to-it@2.0.8:
     dependencies:
