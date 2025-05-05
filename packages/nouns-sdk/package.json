@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
+    "lint": "eslint",
     "test": "vitest run"
   },
   "dependencies": {

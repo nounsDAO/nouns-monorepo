@@ -25,6 +25,7 @@
     "coverage": "hardhat coverage",
     "dev": "pnpm task:run-local",
     "hardhat": "hardhat",
+    "lint": "eslint",
     "task:accounts": "hardhat accounts",
     "task:deploy": "hardhat deploy",
     "task:deploy-and-configure": "hardhat deploy-and-configure",

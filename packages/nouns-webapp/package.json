@@ -10,7 +10,7 @@
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint",
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

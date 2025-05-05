@@ -24,6 +24,7 @@
     "clean": "rimraf dist",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
+    "lint": "eslint",
     "test": "vitest run"
   },
   "dependencies": {
