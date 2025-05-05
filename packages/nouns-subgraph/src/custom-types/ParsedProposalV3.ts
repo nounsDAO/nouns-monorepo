@@ -68,7 +68,7 @@ export class ParsedProposalV3 {
  */
 export function extractTitle(description: string): string {
   // Extract a markdown title from a proposal body that uses the `# Title` or `Title\n===` formats
-  let splitDescription = description.split('#', 3);
+  const splitDescription = description.split('#', 3);
   if (splitDescription.length > 1) {
     splitDescription.shift(); // Remove any characters before `#`
   }

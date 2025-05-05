@@ -656,14 +656,14 @@ describe('forking', () => {
       assert.i32Equals(fork.tokensInEscrowCount, 2);
       assert.i32Equals(fork.escrowedNouns.load().length, 2);
 
-      let escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
-      let escrowDespositId = txHash.toHexString().concat('-0');
+      const escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
+      const escrowDespositId = txHash.toHexString().concat('-0');
       assert.stringEquals(escrowedNoun.fork, forkId.toString());
       assert.stringEquals(escrowedNoun.noun, '4');
       assert.stringEquals(escrowedNoun.owner, nouner.toHexString());
       assert.stringEquals(escrowedNoun.escrowDeposit, escrowDespositId);
 
-      let escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
+      const escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
       assert.stringEquals(escrowDeposit.fork, forkId.toString());
       assert.bigIntEquals(escrowDeposit.createdAt, escrowBlockTimestamp);
       assert.stringEquals(escrowDeposit.owner, nouner.toHexString());
