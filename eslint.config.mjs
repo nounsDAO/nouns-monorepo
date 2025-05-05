@@ -1,16 +1,18 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
-
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import globals from 'globals';
+
+// TypeScript plugins and parsers
+import tseslint from 'typescript-eslint';
 import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
 // React plugins
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+
 // Other plugins
 import importPlugin from 'eslint-plugin-import';
 import linguiPlugin from 'eslint-plugin-lingui';
@@ -19,12 +21,15 @@ import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import vitestPlugin from 'eslint-plugin-vitest';
+
+// Compatibility layer for traditional configs
 const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
 
 export default defineConfig([
+  // Common ignores
   {
     ignores: [
       '**/node_modules/*',
@@ -35,29 +40,30 @@ export default defineConfig([
       'packages/nouns-subgraph/src/types/*',
     ],
   },
+
+  // Base TypeScript configuration for all TypeScript files
   {
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       sourceType: 'module',
-
-      parserOptions: {
-        project: true,
-      },
-
+      ecmaVersion: 2020,
       globals: {
         ...globals.node,
       },
+      parserOptions: {
+        project: true,
+      },
     },
-
     plugins: {
       '@typescript-eslint': typescriptEslintEslintPlugin,
+      import: importPlugin,
+      lingui: linguiPlugin,
+      prettier: prettierPlugin,
+      sonarjs: sonarjsPlugin,
       turbo: turboPlugin,
       unicorn: unicornPlugin,
       vitest: vitestPlugin,
-      import: importPlugin,
-      lingui: linguiPlugin,
-      sonarjs: sonarjsPlugin,
-      prettier: prettierPlugin,
     },
     extends: [
       ...tseslint.configs.recommended,
