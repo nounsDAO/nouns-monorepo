@@ -37,8 +37,6 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import { createRoot } from 'react-dom/client';
 
 import { useAppDispatch, useAppSelector } from './hooks';
-import { connectRouter, push, routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory, History } from 'history';
 import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -51,11 +49,8 @@ import { config as wagmiConfig } from './wagmi';
 
 const queryClient = new QueryClient();
 
-export const history = createBrowserHistory();
-
-const createRootReducer = (history: History) =>
+const createRootReducer = () =>
   combineReducers({
-    router: connectRouter(history),
     account,
     application,
     auction,
@@ -66,13 +61,11 @@ const createRootReducer = (history: History) =>
 
 export default function configureStore(preloadedState: PreloadedState<any>) {
   const store = createStore(
-    createRootReducer(history), // root reducer with router state
+    createRootReducer(), // root reducer without router state
     preloadedState,
     composeWithDevTools(
-      applyMiddleware(
-        routerMiddleware(history), // for dispatching history actions
-        // ... other middlewares ...
-      ),
+      applyMiddleware(),
+      // ... other middlewares ...
     ),
   );
 
@@ -172,7 +165,7 @@ const ChainSubscriber: React.FC = () => {
         setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
       );
       const nounIdNumber = BigNumber.from(nounId).toNumber();
-      dispatch(push(nounPath(nounIdNumber)));
+      window.location.href = nounPath(nounIdNumber);
       dispatch(setOnDisplayAuctionNounId(nounIdNumber));
       dispatch(setLastAuctionNounId(nounIdNumber));
     };
@@ -191,7 +184,7 @@ const ChainSubscriber: React.FC = () => {
     // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (const event of previousBids) {
-      if (event.args === undefined) return;
+      if (event.args == undefined) return;
       processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
@@ -219,7 +212,9 @@ const PastAuctions: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    data && dispatch(addPastAuctions({ data }));
+    if (data) {
+      dispatch(addPastAuctions({ data }));
+    }
   }, [data, latestAuctionId, dispatch]);
 
   return <></>;

@@ -1,18 +1,21 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
-import NounsIntroSection from '../../components/NounsIntroSection';
-import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import { useNavigate } from 'react-router-dom';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
+import { useEffect } from 'react';
+import ProfileActivityFeed from '../../components/ProfileActivityFeed';
+import NounsIntroSection from '../../components/NounsIntroSection';
 
-const AuctionPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
-  const initialAuctionId = id ? parseInt(id) : undefined;
+interface AuctionPageProps {
+  initialAuctionId?: number;
+}
 
+const AuctionPage: React.FC<AuctionPageProps> = props => {
+  // eslint-disable-next-line react/prop-types
+  const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
@@ -29,11 +32,8 @@ const AuctionPage: React.FC = () => {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
         navigate(nounPath(lastAuctionNounId));
       } else {
-        if (
-          onDisplayAuction === undefined ||
-          onDisplayAuction.nounId.toNumber() !== initialAuctionId
-        ) {
-          // handle regular noun path ids on first load or when URL changes
+        if (onDisplayAuction === undefined) {
+          // handle regular noun path ids on first load
           dispatch(setOnDisplayAuctionNounId(initialAuctionId));
         }
       }
@@ -43,7 +43,7 @@ const AuctionPage: React.FC = () => {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
       }
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction, navigate, id]);
+  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction, navigate]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
   const backgroundColor = isCoolBackground
