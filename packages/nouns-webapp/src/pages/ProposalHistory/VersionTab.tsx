@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import classes from './Vote.module.css';
 import clsx from 'clsx';
 import { useBlockNumber } from '@usedapp/core';

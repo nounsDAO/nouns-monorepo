@@ -107,7 +107,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             </p>
             <p className={classes.expiration}>
               {(props.isUpdateToProposal && !props.isParentProposalUpdatable) ||
-                props.expirationTimestamp < timestampNow
+              props.expirationTimestamp < timestampNow
                 ? 'Expired'
                 : 'Expires'}{' '}
               {expiration}
@@ -128,7 +128,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => { }}>
+              <button className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}
@@ -164,24 +164,24 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           className={clsx(
             classes.cancelStatusOverlay,
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
-            classes.errorMessage,
+              classes.errorMessage,
             cancelSigState.status === 'Success' && classes.successMessage,
           )}
         >
           {(cancelSigState.status === 'Exception' ||
             cancelSigState.status === 'Fail' ||
             cancelSigState.status === 'Success') && (
-              <button
-                className={classes.closeButton}
-                onClick={() => {
-                  props.handleRefetchCandidateData();
-                  setCancelStatusOverlay(undefined);
-                  cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
-                }}
-              >
-                &times;
-              </button>
-            )}
+            <button
+              className={classes.closeButton}
+              onClick={() => {
+                props.handleRefetchCandidateData();
+                setCancelStatusOverlay(undefined);
+                cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
+              }}
+            >
+              &times;
+            </button>
+          )}
           <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
           <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
         </div>

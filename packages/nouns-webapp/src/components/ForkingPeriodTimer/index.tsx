@@ -109,7 +109,7 @@ const ForkingPeriodTimer: React.FC<{
             }}
           >
             <div className={clsx(classes.timerSection, classes.clockSection)}>
-              <span>{i18n.date(new Date(endTimeUnix * 1000))}</span> {" "}
+              <span>{i18n.date(new Date(endTimeUnix * 1000))}</span>{' '}
               <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
             </div>
           </h2>

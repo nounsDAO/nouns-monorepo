@@ -17,7 +17,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -57,7 +57,6 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 import { isProposalUpdatable } from '../../utils/proposals';
 import { useProposalFeedback } from '../../wrappers/nounsData';
-import { useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

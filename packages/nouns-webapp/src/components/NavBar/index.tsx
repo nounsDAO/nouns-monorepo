@@ -1,9 +1,8 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
 import NogglesLogo from '../../assets/noggles.svg?react';
-import { useLocation } from 'react-router';
-import { Link } from 'react-router';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { useLocation, Link } from 'react-router';
+import { Nav, Navbar, Container, Dropdown } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
@@ -11,16 +10,19 @@ import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBookOpen,
+  faFile,
+  faPenToSquare,
+  faUsers,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/react/macro';
 import { useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
 import NavDropdown from '../NavDropdown';
-import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';

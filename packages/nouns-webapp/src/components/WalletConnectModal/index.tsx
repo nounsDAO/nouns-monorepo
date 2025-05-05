@@ -1,6 +1,5 @@
 import Modal from '../Modal';
-import WalletButton from '../WalletButton';
-import { WALLET_TYPE } from '../WalletButton';
+import WalletButton, { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { InjectedConnector } from '@web3-react/injected-connector';

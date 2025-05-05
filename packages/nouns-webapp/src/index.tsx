@@ -45,11 +45,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { LanguageProvider } from './i18n/LanguageProvider';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
-import { config as wagmiConfig } from './wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { config as wagmiConfig } from './wagmi';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 export const history = createBrowserHistory();
 
@@ -228,28 +228,28 @@ const PastAuctions: React.FC = () => {
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     {/*<ConnectedRouter history={history}>*/}
-      <ChainSubscriber />
-      <React.StrictMode>
-        <Web3ReactProvider
-          getLibrary={
-            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-          }
-        >
-          <ApolloProvider client={client}>
-            <PastAuctions />
-            <DAppProvider config={useDappConfig}>
-              <LanguageProvider>
-                <WagmiProvider config={wagmiConfig}>
-                  <QueryClientProvider client={queryClient}>
-                    <App />
-                  </QueryClientProvider>
-                </WagmiProvider>
-              </LanguageProvider>
-              <Updaters />
-            </DAppProvider>
-          </ApolloProvider>
-        </Web3ReactProvider>
-      </React.StrictMode>
+    <ChainSubscriber />
+    <React.StrictMode>
+      <Web3ReactProvider
+        getLibrary={
+          provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+        }
+      >
+        <ApolloProvider client={client}>
+          <PastAuctions />
+          <DAppProvider config={useDappConfig}>
+            <LanguageProvider>
+              <WagmiProvider config={wagmiConfig}>
+                <QueryClientProvider client={queryClient}>
+                  <App />
+                </QueryClientProvider>
+              </WagmiProvider>
+            </LanguageProvider>
+            <Updaters />
+          </DAppProvider>
+        </ApolloProvider>
+      </Web3ReactProvider>
+    </React.StrictMode>
     {/*</ConnectedRouter>*/}
   </Provider>,
 );

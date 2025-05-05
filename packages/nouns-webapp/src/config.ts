@@ -51,8 +51,7 @@ export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_CHAIN_ID 
 
 export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
 
-export const WALLET_CONNECT_V2_PROJECT_ID =
-  import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
+export const WALLET_CONNECT_V2_PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
@@ -143,7 +142,9 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch { /* empty */ }
+  } catch {
+    /* empty */
+  }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 

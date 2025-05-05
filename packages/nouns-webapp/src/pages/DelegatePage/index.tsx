@@ -6,7 +6,7 @@ const DelegatePage = () => {
   const { search } = useLocation();
   const delegateTo = getAddressFromQueryParams('to', search);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (!delegateTo || delegateTo.length === 0) {
     return (

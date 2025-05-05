@@ -1,8 +1,7 @@
 import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './Candidate.module.css';
-import {  useParams } from 'react-router';
-import { Link } from 'react-router';
+import { useParams, Link } from 'react-router';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';

@@ -845,7 +845,7 @@ export const useCastRefundableVote = () => {
   const functionSig = 'castRefundableVote(uint256,uint8)';
   const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
     nounsDaoContract,
-    functionSig
+    functionSig,
   );
 
   return {

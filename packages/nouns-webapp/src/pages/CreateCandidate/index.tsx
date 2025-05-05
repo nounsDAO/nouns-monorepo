@@ -184,7 +184,6 @@ const CreateCandidatePage = () => {
         setProposePending(false);
         break;
     }
-     
   }, [createProposalCandidateState, setModal]);
 
   return (

@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
-import { useEffect, useState } from 'react';
 import { ProposalCandidate } from '../../wrappers/nounsData';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  useDelegateNounsAtBlockQuery,
-  useUserVotes,
-} from '../../wrappers/nounToken';
+import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -63,7 +59,10 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   useEffect(() => {
     // set relevant vars from fetched candidate data
-    if (props.candidate.proposerVotes + props.candidate.voteCount >= props.candidate.requiredVotes) {
+    if (
+      props.candidate.proposerVotes + props.candidate.voteCount >=
+      props.candidate.requiredVotes
+    ) {
       setIsThresholdMet(true);
     } else {
       setIsThresholdMet(false);
@@ -154,13 +153,14 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       ) : (
                         <>
                           {props.candidate.voteCount === 0 &&
-                            props.candidate.proposerVotes > props.candidate.requiredVotes ? (
+                          props.candidate.proposerVotes > props.candidate.requiredVotes ? (
                             <>
                               <Trans>No sponsored votes needed</Trans>
                             </>
                           ) : (
                             <>
-                              {props.candidate.voteCount >= 0 ? props.candidate.voteCount : '...'} of{' '}
+                              {props.candidate.voteCount >= 0 ? props.candidate.voteCount : '...'}{' '}
+                              of{' '}
                               {props.candidate.proposerVotes > props.candidate.requiredVotes ? (
                                 <em className={classes.naVotesLabel}>n/a</em>
                               ) : props.candidate.requiredVotes !== undefined ? (
@@ -220,7 +220,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                           }
                           sig={signature.sig}
                           setDataFetchPollInterval={props.setDataFetchPollInterval}
-                          signerHasActiveOrPendingProposal={signature.signer.activeOrPendingProposal}
+                          signerHasActiveOrPendingProposal={
+                            signature.signer.activeOrPendingProposal
+                          }
                           isUpdateToProposal={props.isUpdateToProposal}
                           isParentProposalUpdatable={isParentProposalUpdatable}
                           handleRefetchCandidateData={refetchData}
@@ -293,25 +295,25 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                               (props.isUpdateToProposal &&
                                 isOriginalSigner &&
                                 !isAccountSigner)) && (
-                                <>
-                                  {!props.isProposer && connectedAccountNounVotes > 0 ? (
-                                    <button
-                                      className={classes.button}
-                                      onClick={() => setIsFormDisplayed(!isFormDisplayed)}
-                                    >
-                                      {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
-                                    </button>
-                                  ) : (
-                                    <div className={classes.withoutVotesMsg}>
-                                      <p>
-                                        <Trans>
-                                          Sponsoring a proposal requires at least one Noun vote
-                                        </Trans>
-                                      </p>
-                                    </div>
-                                  )}
-                                </>
-                              )}
+                              <>
+                                {!props.isProposer && connectedAccountNounVotes > 0 ? (
+                                  <button
+                                    className={classes.button}
+                                    onClick={() => setIsFormDisplayed(!isFormDisplayed)}
+                                  >
+                                    {props.isUpdateToProposal ? 'Re-sign' : 'Sponsor'}
+                                  </button>
+                                ) : (
+                                  <div className={classes.withoutVotesMsg}>
+                                    <p>
+                                      <Trans>
+                                        Sponsoring a proposal requires at least one Noun vote
+                                      </Trans>
+                                    </p>
+                                  </div>
+                                )}
+                              </>
+                            )}
                           </>
                         )}
                       </>

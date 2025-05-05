@@ -140,8 +140,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2="100%"
                     y2={PLOTTING_CONSTANTS.minQHeightPlotSpace}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <line
                     x1="0"
@@ -149,8 +149,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2="100%"
                     y2={PLOTTING_CONSTANTS.maxQHeightPlotSpace}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <line
                     x1={470}
@@ -158,8 +158,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2={470}
                     y2={PLOTTING_CONSTANTS.height}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <g fill="#4965F080" stroke="none">
                     <polygon points={`950,288 950,32 470,32 0,288`} />
@@ -181,7 +181,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     y2={y}
                     x2={x}
                     stroke="var(--brand-color-red)"
-                    stroke-width="4"
+                    strokeWidth="4"
                   />
                   {/* Horizontal Line Indicating Required For BPS */}
                   <line
@@ -190,7 +190,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     y2={y}
                     x2={x}
                     stroke="var(--brand-color-green)"
-                    stroke-width="4"
+                    strokeWidth="4"
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">

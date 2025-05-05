@@ -1,10 +1,9 @@
-import { Proposal } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState } from '../../wrappers/nounsDao';
 import { Image } from 'react-bootstrap';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
 import _AbstainVoteIcon from '../../assets/icons/Abstain.svg';
-import { ProposalState } from '../../wrappers/nounsDao';
 
 import classes from './NounProfileVoteRow.module.css';
 
@@ -112,7 +111,7 @@ const selectProposalText = (proposal: Proposal) => {
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { proposal, vote } = props;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const proposalOnClickHandler = () => navigate(proposal.id ? `/vote/${proposal.id}` : '/vote');
   const activeLocale = useActiveLocale();
 

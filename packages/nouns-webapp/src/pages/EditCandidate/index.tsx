@@ -83,7 +83,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-     
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -93,7 +93,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-     
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -214,7 +214,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setProposePending(false);
         break;
     }
-     
   }, [updateProposalCandidateState, setModal]);
 
   // set initial values on page load
@@ -256,7 +255,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
       commitMessage,
-      { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
+      { value: hasVotes ? 0 : (updateCandidateCost ?? 0) }, // Fee for non-nouners
     );
   };
 

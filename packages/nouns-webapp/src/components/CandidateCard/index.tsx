@@ -15,7 +15,6 @@ type Props = {
   currentBlock?: number;
 };
 
-
 function CandidateCard(props: Props) {
   const signers = props.candidate.version.content.contentSignatures;
   const proposerVoteCount = props.candidate.proposerVotes;
@@ -52,11 +51,11 @@ function CandidateCard(props: Props) {
               className={clsx(
                 classes.sponsorCount,
                 props.candidate.voteCount - props.candidate.requiredVotes > 0 &&
-                classes.sponsorCountOverflow,
+                  classes.sponsorCountOverflow,
               )}
             >
               <strong>
-                {props.candidate.voteCount} /{" "}
+                {props.candidate.voteCount} /{' '}
                 {props.candidate.proposerVotes > props.nounsRequired ? (
                   <em className={classes.naVotesLabel}>n/a</em>
                 ) : (

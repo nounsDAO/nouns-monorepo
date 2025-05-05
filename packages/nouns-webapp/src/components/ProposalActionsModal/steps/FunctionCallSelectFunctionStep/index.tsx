@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
 import { utils } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
-import { ChangeEvent, useState } from 'react';
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 import { buildEtherscanApiQuery } from '../../../../utils/etherscan';

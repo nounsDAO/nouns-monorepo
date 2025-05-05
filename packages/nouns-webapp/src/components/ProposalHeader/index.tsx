@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useBlockNumber } from '@usedapp/core';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -67,9 +66,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
-  const currentOrSnapshotBlock = useMemo(() =>
-    Math.min(proposal?.voteSnapshotBlock, (currentBlock ? currentBlock - 1 : 0)) || undefined,
-    [proposal, currentBlock]
+  const currentOrSnapshotBlock = useMemo(
+    () => Math.min(proposal?.voteSnapshotBlock, currentBlock ? currentBlock - 1 : 0) || undefined,
+    [proposal, currentBlock],
   );
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
@@ -154,10 +153,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                   <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
                 </div>
                 <div>
-                  <ProposalStatus
-                    status={proposal?.status}
-                    className={classes.proposalStatus}
-                  />
+                  <ProposalStatus status={proposal?.status} className={classes.proposalStatus} />
                 </div>
               </div>
             </span>
@@ -283,18 +279,22 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
-        <Alert variant="success" className={classes.voterIneligibleAlert}>
-          <Trans>
-            Only Nouns you owned or were delegated to you before{' '}
-            {i18n.date(new Date(proposalCreationTimestamp * 1000), {
-              dateStyle: 'long',
-              timeStyle: 'long',
-            })}{' '}
-            are eligible to vote.
-          </Trans>
-        </Alert>
-      )}
+      {proposal &&
+        isActiveForVoting &&
+        proposalCreationTimestamp &&
+        !!availableVotes &&
+        !hasVoted && (
+          <Alert variant="success" className={classes.voterIneligibleAlert}>
+            <Trans>
+              Only Nouns you owned or were delegated to you before{' '}
+              {i18n.date(new Date(proposalCreationTimestamp * 1000), {
+                dateStyle: 'long',
+                timeStyle: 'long',
+              })}{' '}
+              are eligible to vote.
+            </Trans>
+          </Alert>
+        )}
     </>
   );
 };

@@ -20,7 +20,7 @@ const ProposalTransactions = ({
   const getPopover = (tx: ProposalTransaction) => {
     let calldata =
       tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata;
-     
+
     const [, types] = tx.signature.substring(0, tx.signature.length - 1).split(/\((.*)/s);
     if (isProposalUpdate && types) {
       const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), tx.calldata);

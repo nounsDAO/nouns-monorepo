@@ -38,7 +38,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       return acc + votes;
     }, 0);
     setSelectedVoteCount(voteCount);
-
   }, [selectedSignatures]);
 
   const clearTransactionState = () => {
@@ -174,8 +173,8 @@ export default function SelectSponsorsToPropose(props: Props) {
                 onClick={() => {
                   selectedSignatures.includes(signature)
                     ? setSelectedSignatures(
-                      selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                    )
+                        selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                      )
                     : setSelectedSignatures([...selectedSignatures, signature]);
                 }}
                 disabled={
@@ -212,8 +211,17 @@ export default function SelectSponsorsToPropose(props: Props) {
               handleSubmission(selectedSignatures);
             }}
           >
-
-            {!isWaiting && !isLoading && <>{selectedSignatures.length === 0 ? <>Submit with no sponsors</> : <>Submit {selectedVoteCount} vote{selectedVoteCount > 1 && "s"}</>}</>}
+            {!isWaiting && !isLoading && (
+              <>
+                {selectedSignatures.length === 0 ? (
+                  <>Submit with no sponsors</>
+                ) : (
+                  <>
+                    Submit {selectedVoteCount} vote{selectedVoteCount > 1 && 's'}
+                  </>
+                )}
+              </>
+            )}
             <span>
               {(isWaiting || isLoading) && (
                 <img

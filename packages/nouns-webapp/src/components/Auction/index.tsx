@@ -1,21 +1,21 @@
-import { Col, Container, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Col, Row, Container } from 'react-bootstrap';
+import { StandaloneNounWithSeed } from '../StandaloneNoun';
+import AuctionActivity from '../AuctionActivity';
+import { setStateBackgroundColor } from '../../state/slices/application';
+import { LoadingNoun } from '../Noun';
+import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import classes from './Auction.module.css';
+import { INounSeed } from '../../wrappers/nounToken';
+import NounderNounContent from '../NounderNounContent';
+import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import type { RootState } from '../../index';
-import { setStateBackgroundColor } from '../../state/slices/application';
+import { isNounderNoun } from '../../utils/nounderNoun';
 import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
 } from '../../state/slices/onDisplayAuction';
 import { beige, grey } from '../../utils/nounBgColors';
-import { isNounderNoun } from '../../utils/nounderNoun';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
-import { INounSeed } from '../../wrappers/nounToken';
-import AuctionActivity from '../AuctionActivity';
-import { LoadingNoun } from '../Noun';
-import NounderNounContent from '../NounderNounContent';
-import { StandaloneNounWithSeed } from '../StandaloneNoun';
-import classes from './Auction.module.css';
 
 interface AuctionProps {
   auction?: IAuction;
@@ -34,23 +34,12 @@ const Auction: React.FC<AuctionProps> = props => {
   };
 
   const prevAuctionHandler = () => {
-    if (!currentAuction) return;
-
-    const prevNounId = currentAuction.nounId.toNumber() - 1;
-    if (prevNounId < 0) return;
-
     dispatch(setPrevOnDisplayAuctionNounId());
-    navigate(`/noun/${prevNounId}`);
+    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() - 1}`);
   };
-
   const nextAuctionHandler = () => {
-    if (!currentAuction || !lastNounId) return;
-
-    const nextNounId = currentAuction.nounId.toNumber() + 1;
-    if (nextNounId > lastNounId) return;
-
     dispatch(setNextOnDisplayAuctionNounId());
-    navigate(`/noun/${nextNounId}`);
+    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
 
   const nounContent = currentAuction && (

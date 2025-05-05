@@ -318,7 +318,7 @@ function SignatureForm(props: Props) {
             <span
               className={clsx(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                classes.loadingButton,
+                  classes.loadingButton,
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (

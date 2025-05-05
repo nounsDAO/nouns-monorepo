@@ -98,14 +98,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
   // Once nounCount is known, run dependent functions
   useEffect(() => {
-    const placeholderNounsData = new Array(rangeChunkSize)
-      .fill(placeholderNoun)
-      .map((): Noun => {
-        return {
-          id: null,
-          imgSrc: undefined,
-        };
-      });
+    const placeholderNounsData = new Array(rangeChunkSize).fill(placeholderNoun).map((): Noun => {
+      return {
+        id: null,
+        imgSrc: undefined,
+      };
+    });
     props.setNounsList(placeholderNounsData);
 
     if (props.nounCount >= 0) {

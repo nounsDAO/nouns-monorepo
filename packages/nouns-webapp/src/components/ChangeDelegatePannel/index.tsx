@@ -176,7 +176,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       ChangeDelegateState.CHANGE_SUCCESS,
       ChangeDelegateState.CHANGE_FAILURE,
     ],
-     
+
     [
       <Trans>
         Enter the Ethereum address or ENS name of the account you would like to delegate your votes
@@ -217,18 +217,19 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         )}
       </div>
 
-      {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) && delegateTo === undefined && (
-        <FormControl
-          className={clsx(classes.delegateInput, delegateInputClass)}
-          type="string"
-          onChange={e => {
-            setDelegateAddress(e.target.value);
-            setDelegateInputText(e.target.value);
-          }}
-          value={delegateInputText}
-          placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
-        />
-      )}
+      {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) &&
+        delegateTo === undefined && (
+          <FormControl
+            className={clsx(classes.delegateInput, delegateInputClass)}
+            type="string"
+            onChange={e => {
+              setDelegateAddress(e.target.value);
+              setDelegateInputText(e.target.value);
+            }}
+            value={delegateInputText}
+            placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
+          />
+        )}
 
       {delegateTo !== undefined && !isAddress(delegateAddress) && (
         <div className={classes.delegteDeepLinkSpinner}>

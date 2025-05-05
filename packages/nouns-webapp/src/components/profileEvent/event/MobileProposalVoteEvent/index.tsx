@@ -14,7 +14,7 @@ interface MobileProposalVoteEventProps {
 
 const MobileProposalVoteEvent: React.FC<MobileProposalVoteEventProps> = props => {
   const { event } = props;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const proposalOnClickHandler = () =>
     navigate(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
 

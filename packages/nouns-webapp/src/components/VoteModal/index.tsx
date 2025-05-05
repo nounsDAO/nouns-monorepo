@@ -155,8 +155,8 @@ const VoteModal = ({
                     vote === Vote.FOR
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>
@@ -172,8 +172,8 @@ const VoteModal = ({
                 vote === Vote.AGAINST
                   ? ''
                   : vote === undefined
-                  ? classes.inactive
-                  : classes.unselected
+                    ? classes.inactive
+                    : classes.unselected
               }
             />
           </div>
@@ -189,8 +189,8 @@ const VoteModal = ({
                     vote === Vote.ABSTAIN
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>

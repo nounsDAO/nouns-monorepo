@@ -17,11 +17,12 @@ function CandidateSponsors({
   signers,
   nounsRequired,
   currentBlock,
-  isThresholdMetByProposer
+  isThresholdMetByProposer,
 }: Props) {
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
-  const activeSigners = signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
+  const activeSigners =
+    signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0),

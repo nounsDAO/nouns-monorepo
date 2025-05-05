@@ -188,9 +188,8 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
             </>
           )}
         </h3>
-        {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') && event.reason && (
-          <p className={classes.message}>{event.reason}</p>
-        )}
+        {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
+          event.reason && <p className={classes.message}>{event.reason}</p>}
         <div className={classes.nounsList}>{nounsInEvent}</div>
         {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
           proposalsList &&
