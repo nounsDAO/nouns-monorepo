@@ -1,6 +1,6 @@
 /** @type {import('prettier').Config} */
 module.exports = {
-  plugins: ['prettier-plugin-packagejson'],
+  plugins: ['prettier-plugin-packagejson', 'prettier-plugin-tailwindcss'],
   singleQuote: true,
   trailingComma: 'all',
   arrowParens: 'avoid',
