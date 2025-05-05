@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 
 export default defineConfig([
   {
-    ignores: ['**/*.config.js', '**/*.config.ts'],
+    ignores: ['**/*.config.js', '**/*.config.ts', '**/*.setup.ts'],
   },
   {
     languageOptions: {
