@@ -6,12 +6,10 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
 import checker from 'vite-plugin-checker';
-import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    tailwindcss(),
     react({
       babel: {
         plugins: ['@lingui/babel-plugin-lingui-macro'],
