@@ -1,4 +1,3 @@
-import Davatar from '@davatar/react';
 import { useEthers } from '@usedapp/core';
 import React, { useState } from 'react';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
@@ -23,6 +22,7 @@ import {
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
+import { blo } from 'blo';
 
 interface NavWalletProps {
   address: string;
@@ -30,11 +30,9 @@ interface NavWalletProps {
 }
 
 type Props = {
-  onClick: (e: any) => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   value: string;
 };
-
-type RefType = number;
 
 type CustomMenuProps = {
   children?: React.ReactNode;
@@ -48,7 +46,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const [buttonUp, setButtonUp] = useState(false);
   const [showConnectModal, setShowConnectModal] = useState(false);
-  const { library: provider } = useEthers();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
   const ens = useReverseENSLookUp(address);
@@ -119,7 +116,15 @@ const NavWallet: React.FC<NavWalletProps> = props => {
         <div className={navDropdownClasses.button}>
           <div className={classes.icon}>
             {' '}
-            {hasENS && <Davatar size={21} address={address} provider={provider} />}
+            {hasENS && (
+              <img
+                alt={address}
+                src={blo(address as `0x${string}`)}
+                width={21}
+                height={21}
+                style={{ borderRadius: '50%' }}
+              />
+            )}
           </div>
           <div className={navDropdownClasses.dropdownBtnContent}>{ens ? ens : shortAddress}</div>
           <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
@@ -129,6 +134,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       </div>
     </>
   ));
+  customDropdownToggle.displayName = 'CustomDropdownToggle';
 
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
@@ -174,6 +180,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       </div>
     );
   });
+  CustomMenu.displayName = 'CustomMenu';
 
   const renderENS = (ens: string) => {
     if (activeLocale === 'ja-JP') {
@@ -192,7 +199,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const walletConnectedContentMobile = (
     <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
       <div
-        className={'d-flex flex-row justify-content-between'}
+        className={'d-flex justify-content-between flex-row'}
         style={{
           justifyContent: 'space-between',
         }}
@@ -202,7 +209,13 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             <div className={navDropdownClasses.button}>
               <div className={classes.icon}>
                 {' '}
-                <Davatar size={21} address={address} provider={provider} />
+                <img
+                  alt={address}
+                  src={blo(address as `0x${string}`)}
+                  width={21}
+                  height={21}
+                  style={{ borderRadius: '50%' }}
+                />
               </div>
               <div className={navDropdownClasses.dropdownBtnContent}>
                 {ens ? renderENS(ens) : renderAddress(address)}
@@ -211,7 +224,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           </div>
         </div>
 
-        <div className={`d-flex flex-row  ${classes.connectContentMobileText}`}>
+        <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
           <div
             style={{
               borderRight: `1px solid ${mobileBorderColor}`,

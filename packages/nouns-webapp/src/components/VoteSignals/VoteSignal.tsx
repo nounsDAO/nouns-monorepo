@@ -1,6 +1,6 @@
 import classes from './VoteSignals.module.css';
 import ShortAddress from '../ShortAddress';
-import Avatar from '@davatar/react';
+import { blo } from 'blo';
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 
 type Props = {
@@ -18,7 +18,13 @@ const VoteSignal = (props: Props) => {
         <div className={classes.voter}>
           {hasENS && (
             <div className={classes.avatar}>
-              <Avatar address={props.address} size={30} />
+              <img
+                alt={props.address}
+                src={blo(props.address as `0x${string}`)}
+                width={30}
+                height={30}
+                style={{ borderRadius: '50%' }}
+              />
             </div>
           )}
           <div className={classes.details}>

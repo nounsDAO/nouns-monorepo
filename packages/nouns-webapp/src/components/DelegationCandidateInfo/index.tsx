@@ -1,4 +1,3 @@
-import Avatar from '@davatar/react';
 import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
@@ -9,6 +8,7 @@ import { usePickByState } from '../../utils/pickByState';
 import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
 import BrandSpinner from '../BrandSpinner';
 import classes from './DelegationCandidateInfo.module.css';
+import { blo } from 'blo';
 
 interface DelegationCandidateInfoProps {
   address: string;
@@ -58,16 +58,19 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     ],
     [
       <DelegationCandidateVoteCountInfo
+        key="enter-delegate"
         text={countDelegatedNouns > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
         voteCount={countDelegatedNouns}
         isLoading={false}
       />,
       <DelegationCandidateVoteCountInfo
+        key="changing"
         text={<Trans>Will have</Trans>}
         voteCount={willHaveVoteCount}
         isLoading={true}
       />,
       <DelegationCandidateVoteCountInfo
+        key="success"
         text={<Trans>Now has</Trans>}
         voteCount={countDelegatedNouns}
         isLoading={false}
@@ -75,7 +78,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     ],
   );
 
-  if (votes === null) {
+  if (votes == null) {
     return (
       <div className={classes.spinner}>
         <BrandSpinner />
@@ -87,7 +90,13 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     <div className={classes.wrapper}>
       <div className={classes.delegateCandidateInfoWrapper}>
         <div className={classes.avatarWrapper}>
-          <Avatar address={address} size={45} />
+          <img
+            alt={address}
+            src={blo(address as `0x${string}`)}
+            width={45}
+            height={45}
+            style={{ borderRadius: '50%' }}
+          />
         </div>
         <div>
           <div className={classes.ensText}>

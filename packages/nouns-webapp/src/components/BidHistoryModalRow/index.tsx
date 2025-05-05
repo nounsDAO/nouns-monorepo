@@ -3,18 +3,18 @@ import React from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { Bid } from '../../utils/types';
 import clsx from 'clsx';
 import auctionActivityClasses from '../AuctionActivity/BidHistory.module.css';
 import _trophy from '../../assets/icons/trophy.svg';
-import Davatar from '@davatar/react';
-import { useEthers } from '@usedapp/core';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
 import { i18n } from '@lingui/core';
 import { shortENS, useShortAddress } from '../../utils/addressAndENSDisplayUtils';
+import { blo } from 'blo';
+
 interface BidHistoryModalRowProps {
   bid: Bid;
   index: number;
@@ -23,7 +23,6 @@ interface BidHistoryModalRowProps {
 const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const { bid, index } = props;
   const txLink = buildEtherscanTxLink(bid.transactionHash);
-  const { library: provider } = useEthers();
 
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
 
@@ -37,7 +36,13 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
         <div className={auctionActivityClasses.leftSectionWrapper}>
           <div className={auctionActivityClasses.bidder}>
             <div className={classes.bidderInfoWrapper}>
-              <Davatar size={40} address={bid.sender} provider={provider} />
+              <img
+                alt={bid.sender}
+                src={blo(bid.sender as `0x${string}`)}
+                width={40}
+                height={40}
+                style={{ borderRadius: '50%' }}
+              />
               <div className={classes.bidderInfoText}>
                 <span>
                   {ens && !ensMatchesBlocklistRegex ? shortENS(ens) : shortAddress}
