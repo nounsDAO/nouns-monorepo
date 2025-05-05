@@ -199,6 +199,9 @@ importers:
       '@typechain/hardhat':
         specifier: ^6.0.0
         version: 6.1.6(@ethersproject/abi@5.8.0)(@ethersproject/providers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@typechain/ethers-v5@11.1.2(@ethersproject/abi@5.8.0)(@ethersproject/providers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3))(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.23.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.8.3))
+      '@types/chai':
+        specifier: ^5.2.1
+        version: 5.2.1
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -208,6 +211,9 @@ importers:
       base64-sol:
         specifier: ^1.0.1
         version: 1.1.0
+      chai:
+        specifier: ^5.2.0
+        version: 5.2.0
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
