@@ -618,6 +618,9 @@ importers:
       '@svgr/plugin-svgo':
         specifier: ^8.1.0
         version: 8.1.0(@svgr/core@8.1.0(typescript@5.8.3))(typescript@5.8.3)
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
       '@testing-library/react':
         specifier: ^16.3.0
         version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.7(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

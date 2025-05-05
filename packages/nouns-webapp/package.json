@@ -113,6 +113,7 @@
     "@lingui/vite-plugin": "5.3.1",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-svgo": "^8.1.0",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/bad-words": "^3.0.1",
