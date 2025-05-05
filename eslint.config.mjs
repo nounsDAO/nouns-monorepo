@@ -22,7 +22,7 @@ export default defineConfig([
       sourceType: 'module',
 
       parserOptions: {
-        project: 'packages/*/tsconfig.json',
+        project: true,
       },
 
       globals: {
