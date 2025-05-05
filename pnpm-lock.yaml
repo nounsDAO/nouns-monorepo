@@ -512,9 +512,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      connected-react-router:
-        specifier: ^6.9.1
-        version: 6.9.3(history@5.3.0)(react-redux@7.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)
       dayjs:
         specifier: ^1.10.7
         version: 1.11.13
@@ -5050,15 +5047,6 @@ packages:
     resolution: {integrity: sha512-yk7/5PN5im4qwz0WFZW3PXnzHgPu9mX29Y8uZ3aefe2lBPC1FYttWZRcaW9fKkT0pBCJyuQ2HfbmPVaODi9jcQ==}
     engines: {node: '>=18'}
 
-  connected-react-router@6.9.3:
-    resolution: {integrity: sha512-4ThxysOiv/R2Dc4Cke1eJwjKwH1Y51VDwlOrOfs1LjpdYOVvCNjNkZDayo7+sx42EeGJPQUNchWkjAIJdXGIOQ==}
-    peerDependencies:
-      history: ^4.7.2
-      react: ^16.4.0 || ^17.0.0
-      react-redux: ^6.0.0 || ^7.1.0
-      react-router: ^4.3.1 || ^5.0.0
-      redux: ^3.6.0 || ^4.0.0
-
   consola@3.4.2:
     resolution: {integrity: sha512-5IKcdX0nnYavi6G7TtOhwkYzyjfJlatbjMjuLSfE2kYT5pMDOilZ4OvMhi637CcDICTmz3wARPoyhqyX1Y+XvA==}
     engines: {node: ^14.18.0 || >=16.10.0}
@@ -8367,9 +8355,6 @@ packages:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
-  lodash.isequalwith@4.4.0:
-    resolution: {integrity: sha512-dcZON0IalGBpRmJBmMkaoV7d3I80R2O+FrzsZyHdNSFrANq/cgDqKQNmAHE8UEj4+QYWwwhkQOVdLHiAopzlsQ==}
-
   lodash.isinteger@4.0.4:
     resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
 
@@ -10812,9 +10797,6 @@ packages:
   scslre@0.3.0:
     resolution: {integrity: sha512-3A6sD0WYP7+QrjbfNA2FN3FsOaGGFoekCVgTyypy53gPxhbkCIjtO6YWgdrfM+n/8sI8JeXZOIxsHjMTNxQ4nQ==}
     engines: {node: ^14.0.0 || >=16.0.0}
-
-  seamless-immutable@7.1.4:
-    resolution: {integrity: sha512-XiUO1QP4ki4E2PHegiGAlu6r82o5A+6tRh7IkGGTVg/h+UoeX4nFBeCGPOhb4CYjvkqsfm/TUtvOMYC1xmV30A==}
 
   secp256k1@3.8.1:
     resolution: {integrity: sha512-tArjQw2P0RTdY7QmkNehgp6TVvQXq6ulIhxv8gaH6YubKG/wxxAoNKcbuXjDhybbc+b2Ihc7e0xxiGN744UIiQ==}
@@ -19783,19 +19765,6 @@ snapshots:
       graceful-fs: 4.2.11
       xdg-basedir: 5.1.0
 
-  connected-react-router@6.9.3(history@5.3.0)(react-redux@7.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1):
-    dependencies:
-      history: 5.3.0
-      lodash.isequalwith: 4.4.0
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-redux: 7.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-router: 7.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      redux: 4.2.1
-    optionalDependencies:
-      immutable: 4.3.7
-      seamless-immutable: 7.1.4
-
   consola@3.4.2: {}
 
   console-browserify@1.2.0: {}
@@ -24012,8 +23981,6 @@ snapshots:
 
   lodash.isequal@4.5.0: {}
 
-  lodash.isequalwith@4.4.0: {}
-
   lodash.isinteger@4.0.4: {}
 
   lodash.isnumber@3.0.3: {}
@@ -26855,9 +26822,6 @@ snapshots:
       '@eslint-community/regexpp': 4.12.1
       refa: 0.12.1
       regexp-ast-analysis: 0.7.1
-
-  seamless-immutable@7.1.4:
-    optional: true
 
   secp256k1@3.8.1:
     dependencies:
