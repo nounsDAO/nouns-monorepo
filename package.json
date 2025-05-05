@@ -9,7 +9,7 @@
     "clean": "turbo run clean",
     "dev": "turbo run dev",
     "format": "NODE_OPTIONS=--max_old_space_size=16384 prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'",
-    "lint": "eslint 'packages/**/*.ts' --fix",
+    "lint": "turbo run lint",
     "prepare": "husky",
     "test": "turbo run test"
   },
