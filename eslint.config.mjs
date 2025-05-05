@@ -17,6 +17,7 @@ import turbo from 'eslint-plugin-turbo';
 import importPlugin from 'eslint-plugin-import';
 import linguiPlugin from 'eslint-plugin-lingui';
 import vitestPlugin from 'eslint-plugin-vitest';
+import sonarjsPlugin from 'eslint-plugin-sonarjs';
 
 const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
@@ -54,6 +55,7 @@ export default defineConfig([
       unicorn: unicornPlugin,
       import: importPlugin,
       lingui: linguiPlugin,
+      sonarjs: sonarjsPlugin,
     },
     extends: [
       ...tseslint.configs.recommended,
@@ -61,6 +63,7 @@ export default defineConfig([
         'plugin:@typescript-eslint/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
+        'plugin:sonarjs/recommended',
         'prettier',
       ),
     ],
