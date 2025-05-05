@@ -347,9 +347,6 @@ importers:
       '@apollo/client':
         specifier: ^3.3.21
         version: 3.13.8(@types/react@18.3.20)(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@davatar/react':
-        specifier: ^1.11.1
-        version: 1.11.1(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10)
       '@ethersproject/abi':
         specifier: ^5.8.0
         version: 5.8.0
@@ -945,11 +942,6 @@ packages:
 
   '@dabh/diagnostics@2.0.3':
     resolution: {integrity: sha512-hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==}
-
-  '@davatar/react@1.11.1':
-    resolution: {integrity: sha512-j28OvzkRs/Ce+kVJ+w14HPlV9bTtGE43pr2BZb2plgptoT8LRCziX/abzFDNk9Zib5/Qf3/eWUitI0ksXAl+3w==}
-    peerDependencies:
-      react: '>=16.8'
 
   '@dependents/detective-less@4.1.0':
     resolution: {integrity: sha512-KrkT6qO5NxqNfy68sBl6CTSoJ4SNDIS5iQArkibhlbGU4LaDukZ3q2HIkh8aUKDio6o4itU4xDR7t82Y2eP1Bg==}
@@ -3148,9 +3140,6 @@ packages:
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
-
-  '@types/react-blockies@1.4.4':
-    resolution: {integrity: sha512-7QfFeT1y/izwP/Wxmnl9Ii73udFQIBsfI/IvG+841sPxqc7Pf79ZDZP3XQsmYzAjDXdoZXquLgI/Q/tmAZwB0w==}
 
   '@types/react-dom@18.3.7':
     resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
@@ -8669,9 +8658,6 @@ packages:
   merkle-patricia-tree@3.0.0:
     resolution: {integrity: sha512-soRaMuNf/ILmw3KWbybaCjhx86EYeBbD8ph0edQCTed0JN/rxDt1EBN52Ajre3VyGo+91f8+/rfPIRQnnGMqmQ==}
 
-  mersenne-twister@1.1.0:
-    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
-
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
@@ -10271,11 +10257,6 @@ packages:
   rc@1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
-
-  react-blockies@1.4.1:
-    resolution: {integrity: sha512-4N015X5oPNnD3xQPsiqolOFzPZSSWyc5mJhJUZShUCHtiGUxVN+1qsWTcglkHMNySux9hUofaispqcw9QkWP5Q==}
-    peerDependencies:
-      react: '>=15.0.0'
 
   react-bootstrap@2.10.9:
     resolution: {integrity: sha512-TJUCuHcxdgYpOqeWmRApM/Dy0+hVsxNRFvq2aRFQuxhNi/+ivOxC5OdWIeHS3agxvzJ4Ev4nDw2ZdBl9ymd/JQ==}
@@ -13363,23 +13344,6 @@ snapshots:
       colorspace: 1.1.4
       enabled: 2.0.0
       kuler: 2.0.0
-
-  '@davatar/react@1.11.1(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@ethersproject/abstract-signer': 5.8.0
-      '@ethersproject/contracts': 5.8.0
-      '@ethersproject/logger': 5.8.0
-      '@ethersproject/properties': 5.8.0
-      '@ethersproject/providers': 5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@types/react-blockies': 1.4.4
-      bn.js: 5.2.2
-      color: 3.2.1
-      mersenne-twister: 1.1.0
-      react: 18.3.1
-      react-blockies: 1.4.1(react@18.3.1)
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   '@dependents/detective-less@4.1.0':
     dependencies:
@@ -16631,10 +16595,6 @@ snapshots:
       types-ramda: 0.30.1
 
   '@types/range-parser@1.2.7': {}
-
-  '@types/react-blockies@1.4.4':
-    dependencies:
-      '@types/react': 18.3.20
 
   '@types/react-dom@18.3.7(@types/react@18.3.20)':
     dependencies:
@@ -24355,8 +24315,6 @@ snapshots:
       rlp: 2.2.7
       semaphore: 1.1.0
 
-  mersenne-twister@1.1.0: {}
-
   methods@1.1.2: {}
 
   micro-api-client@3.3.0: {}
@@ -26238,11 +26196,6 @@ snapshots:
       ini: 1.3.8
       minimist: 1.2.8
       strip-json-comments: 2.0.1
-
-  react-blockies@1.4.1(react@18.3.1):
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.3.1
 
   react-bootstrap@2.10.9(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
