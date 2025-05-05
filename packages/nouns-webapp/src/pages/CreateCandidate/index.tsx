@@ -184,7 +184,7 @@ const CreateCandidatePage = () => {
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [createProposalCandidateState, setModal]);
 
   return (

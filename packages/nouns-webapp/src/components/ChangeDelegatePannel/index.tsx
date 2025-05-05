@@ -176,7 +176,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       ChangeDelegateState.CHANGE_SUCCESS,
       ChangeDelegateState.CHANGE_FAILURE,
     ],
-    // eslint-disable-next-line no-sparse-arrays
+     
     [
       <Trans>
         Enter the Ethereum address or ENS name of the account you would like to delegate your votes

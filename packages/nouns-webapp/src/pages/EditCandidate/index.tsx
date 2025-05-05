@@ -83,7 +83,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -93,7 +93,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -214,7 +214,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [updateProposalCandidateState, setModal]);
 
   // set initial values on page load

@@ -232,7 +232,7 @@ const CreateProposalPage = () => {
     } else {
       handleAddProposalState(proposeState);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     propose,
     proposeState,
