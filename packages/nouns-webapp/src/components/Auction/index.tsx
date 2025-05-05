@@ -16,6 +16,7 @@ import {
   setPrevOnDisplayAuctionNounId,
 } from '../../state/slices/onDisplayAuction';
 import { beige, grey } from '../../utils/nounBgColors';
+import React from 'react';
 
 interface AuctionProps {
   auction?: IAuction;
@@ -35,11 +36,15 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    if (currentAuction) {
+      navigate(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    }
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    if (currentAuction) {
+      navigate(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    }
   };
 
   const nounContent = currentAuction && (
