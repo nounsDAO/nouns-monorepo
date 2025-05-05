@@ -6,7 +6,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
 import checker from 'vite-plugin-checker';
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -37,10 +37,14 @@ export default defineConfig({
       //   lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
       //   useFlatConfig: true
       // },
+      overlay: true,
     }),
   ],
   server: {
     port: 3000,
+    hmr: {
+      overlay: false,
+    },
   },
   resolve: {
     alias: {
