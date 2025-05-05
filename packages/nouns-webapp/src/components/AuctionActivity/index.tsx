@@ -63,6 +63,13 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     setShowBidHistoryModal(false);
   };
 
+  const renderAuctionWinner = () => {
+    if (isLastAuction) {
+      return <Winner winner={auction.bidder} />;
+    }
+    return <Holder nounId={auction.nounId.toNumber()} />;
+  };
+
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
     if (!auction) return;
@@ -121,11 +128,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
             <Col lg={6} className={classes.auctionTimerCol}>
               {auctionEnded ? (
-                isLastAuction ? (
-                  <Winner winner={auction.bidder} />
-                ) : (
-                  <Holder nounId={auction.nounId.toNumber()} />
-                )
+                renderAuctionWinner()
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
               )}
