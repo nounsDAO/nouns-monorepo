@@ -665,7 +665,7 @@ const parseSubgraphProposal = (
   const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
-    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
     status: getProposalState(
