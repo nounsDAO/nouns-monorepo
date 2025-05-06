@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import dayjs from 'dayjs';
@@ -20,7 +19,7 @@ vi.mock('@/components/ShortAddress', () => ({
 }));
 
 vi.mock('@/components/TruncatedAmount', () => ({
-  default: ({ amount }: { amount: BigNumber }) => (
+  default: ({ amount }: { amount: bigint }) => (
     <div data-testid="truncated-amount">Amount: {amount.toString()}</div>
   ),
 }));
@@ -43,13 +42,13 @@ describe('BidHistoryItem Component', () => {
   };
 
   const mockBid = {
-    nounId: BigNumber.from('1'),
+    nounId: 1n,
     sender: '0x123456789abcdef123456789abcdef123456789a',
-    value: BigNumber.from('1000000000000000000'),
+    value: 1000000000000000000n,
     extended: false,
     transactionHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
     transactionIndex: 1,
-    timestamp: BigNumber.from(Math.floor(Date.now() / 1000)),
+    timestamp: BigInt(Math.floor(Date.now() / 1000)),
   };
 
   // Mock window.innerWidth
@@ -70,9 +69,9 @@ describe('BidHistoryItem Component', () => {
     expect(screen.getByTestId('truncated-amount')).toBeInTheDocument();
     expect(screen.getByTestId('truncated-amount')).toHaveTextContent(mockBid.value.toString());
 
-    // Check timestamp is formatted correctly
-    const date = `${dayjs(mockBid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
-      mockBid.timestamp.toNumber() * 1000,
+    // Check the timestamp is formatted correctly
+    const date = `${dayjs(Number(mockBid.timestamp) * 1000).format('MMM DD')} at ${dayjs(
+      Number(mockBid.timestamp) * 1000,
     ).format('hh:mm a')}`;
     expect(screen.getByText(date)).toBeInTheDocument();
 
