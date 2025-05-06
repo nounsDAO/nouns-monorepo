@@ -78,6 +78,30 @@ export default defineConfig([
       'import/default': 'error',
       'import/namespace': 'error',
       'import/export': 'error',
+      "import/order": ["error", {
+        "groups": [
+          // Type imports first
+          "type",
+          // Imports of builtins second
+          "builtin",
+          // Then external packages
+          "external",
+          // Then sibling and parent imports. They can be mingled together
+          ["sibling", "parent"],
+          // Then index file imports
+          "index",
+          // Then any arcane TypeScript imports
+          "object",
+          // Then the rest: internal, unknown
+          "internal",
+          "unknown"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }],
       // Lingui plugin rules
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
