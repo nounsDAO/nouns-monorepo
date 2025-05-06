@@ -16,7 +16,10 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = props => {
 
   const connectToWallet = (connector?: Connector) => {
     if (connector) {
+      console.log(`Attempting to connect with wallet: ${connector.id}`);
       connect({ connector });
+    } else {
+      console.log('No connector provided for wallet connection');
     }
   };
 
