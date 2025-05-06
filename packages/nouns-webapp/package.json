@@ -146,7 +146,7 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.24.1",
     "update-browserslist-db": "^1.0.13",
-    "vite": "^6.3.4",
+    "vite": "^6.3.5",
     "vite-plugin-inspect": "^11.0.1",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
