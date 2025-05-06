@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import type { RootState } from './index';
 import { setActiveAccount } from './state/slices/account';
@@ -32,9 +31,12 @@ import ProposalHistory from './pages/ProposalHistory';
 import CandidateHistoryPage from './pages/CandidateHistoryPage';
 import ForkPage from './pages/Fork';
 import ForksPage from './pages/Forks';
+import { useAccount } from 'wagmi';
 
 function App() {
-  const { account, chainId } = useEthers();
+  const { address: account, chain } = useAccount();
+  const chainId = chain?.id;
+
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
