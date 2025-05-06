@@ -1,6 +1,5 @@
 import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
-import { has } from 'remeda';
 import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
 import { isNounDelegate, isNounOwner, nounsQuery } from '../theGraph';
 
@@ -17,9 +16,11 @@ const invalidBodyCheck = (body: string | undefined | null): false | ErrorReason 
       error: 'empty_body',
       message: 'Request body is missing or empty',
     };
-  if (!has('msg')) return errorBuilder('missing_msg', 'Request is missing msg');
-  if (!has('sig')) return errorBuilder('missing_sig', 'Request is missing signature');
-  if (!has('signer')) return errorBuilder('missing_signer', 'Request is missing signer');
+  const { message, signature, signer } = JSON.parse(body);
+
+  if (!message) return errorBuilder('missing_msg', 'Request is missing msg');
+  if (!signature) return errorBuilder('missing_sig', 'Request is missing signature');
+  if (!signer) return errorBuilder('missing_signer', 'Request is missing signer');
   return false;
 };
 
