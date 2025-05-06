@@ -5,7 +5,6 @@ import { useLocation, Link } from 'react-router';
 import { Nav, Navbar, Container, Dropdown } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
-import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
@@ -30,6 +29,7 @@ import NogglesIcon from '../../assets/icons/Noggles.svg?react';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
 import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
+import { formatEther } from 'viem';
 
 const NavBar = () => {
   const isDaoGteV3 = useIsDaoGteV3();
@@ -48,11 +48,9 @@ const NavBar = () => {
     location.pathname.includes('/noun/') ||
     location.pathname.includes('/auction/');
 
-  const nonWalletButtonStyle = !useStateBg
-    ? NavBarButtonStyle.WHITE_INFO
-    : isCool
-      ? NavBarButtonStyle.COOL_INFO
-      : NavBarButtonStyle.WARM_INFO;
+  const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
+
+  const nonWalletButtonStyle = !useStateBg ? NavBarButtonStyle.WHITE_INFO : stateBasedButtonStyle;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
@@ -116,7 +114,9 @@ const NavBar = () => {
                   rel="noreferrer"
                 >
                   <NavBarTreasury
-                    treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                    treasuryBalance={Number(
+                      formatEther(BigInt(treasuryBalance.toString())),
+                    ).toFixed(0)}
                     treasuryStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
@@ -132,8 +132,8 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
-                  buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faFile} />}
+                  buttonText={isDaoGteV3 ? <Trans>Proposals</Trans> : <Trans>DAO</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faFile} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>

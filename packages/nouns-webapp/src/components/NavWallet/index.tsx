@@ -1,6 +1,4 @@
-import { useEthers } from '@usedapp/core';
 import React, { useState } from 'react';
-import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavWallet.module.css';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
@@ -23,6 +21,7 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 import { blo } from 'blo';
+import { useDisconnect, useEnsName } from 'wagmi';
 
 interface NavWalletProps {
   address: string;
@@ -47,8 +46,8 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const [buttonUp, setButtonUp] = useState(false);
   const [showConnectModal, setShowConnectModal] = useState(false);
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { deactivate } = useEthers();
-  const ens = useReverseENSLookUp(address);
+  const { disconnect: deactivate } = useDisconnect();
+  const { data: ens } = useEnsName({ address: address as `0x${string}` });
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
   const hasENS = useIsNetworkEnsSupported();
@@ -100,7 +99,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     NavBarButtonStyle.WARM_WALLET,
   );
 
-  // @ts-ignore
+  // @ts-expect-error RefType is not defined but is needed for the forwardRef
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
