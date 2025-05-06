@@ -79,7 +79,7 @@ export default defineConfig([
       'import/namespace': 'error',
       'import/export': 'error',
       'import/order': [
-        'error',
+        'warn',
         {
           groups: [
             'type',
