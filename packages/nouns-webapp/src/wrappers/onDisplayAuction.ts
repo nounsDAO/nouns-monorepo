@@ -1,8 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber';
+
 import { useAppSelector } from '../hooks';
 import { compareBids } from '../utils/compareBids';
 import { generateEmptyNounderAuction, isNounderNoun } from '../utils/nounderNoun';
 import { Bid, BidEvent } from '../utils/types';
+
 import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
@@ -71,13 +73,13 @@ const useOnDisplayAuction = (): Auction | undefined => {
   return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
 };
 
-export const useAuctionBids = (auctionNounId: BigNumber): Bid[] | undefined => {
+export const useAuctionBids = (auctionNounId: bigint): Bid[] | undefined => {
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const lastAuctionBids = useAppSelector(state => state.auction.bids);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
   // auction requested is active auction
-  if (lastAuctionNounId === auctionNounId.toNumber()) {
+  if (lastAuctionNounId === Number(auctionNounId)) {
     return deserializeBids(lastAuctionBids);
   } else {
     // find bids for past auction requested
