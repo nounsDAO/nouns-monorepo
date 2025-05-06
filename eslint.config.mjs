@@ -85,6 +85,16 @@ export default defineConfig([
       // Prettier rules
       'prettier/prettier': 'error',
     },
+    settings: {
+      'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx'],
+      },
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      }
+    }
   },
 
   // Additional React-specific rules only for the webapp package
