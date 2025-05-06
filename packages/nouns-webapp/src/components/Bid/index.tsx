@@ -1,9 +1,8 @@
-import { Trans } from '@lingui/react/macro';
 import React, { useCallback, useEffect, useRef, useState, ChangeEvent } from 'react';
+
+import { Trans } from '@lingui/react/macro';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { formatEther, parseEther } from 'viem';
-
-import classes from './Bid.module.css';
 
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
 import WalletConnectModal from '@/components/WalletConnectModal';
@@ -15,8 +14,11 @@ import {
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 import { Auction } from '@/wrappers/nounsAuction';
+
+import classes from './Bid.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const computeMinimumNextBid = (
   currentBid: bigint,
