@@ -92,9 +92,10 @@ export default defineConfig([
       'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
+          project: 'packages/*/{ts,js}config.json',
         },
-      }
-    }
+      },
+    },
   },
 
   // Additional React-specific rules only for the webapp package
