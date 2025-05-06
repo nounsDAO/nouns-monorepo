@@ -144,7 +144,7 @@
     "tailwindcss": "^4.1.4",
     "terser": "^5.39.0",
     "typescript": "~5.8.3",
-    "typescript-eslint": "^8.24.1",
+    "typescript-eslint": "^8.32.0",
     "update-browserslist-db": "^1.0.13",
     "vite": "^6.3.4",
     "vite-plugin-inspect": "^11.0.1",
