@@ -1,57 +1,28 @@
 import React from 'react';
-import ShortAddress from '../ShortAddress';
-import dayjs from 'dayjs';
-import LinkIcon from '../../assets/icons/Link.svg?react';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import TruncatedAmount from '../TruncatedAmount';
-import { Bid } from '../../utils/types';
-import { useAuctionBids } from '../../wrappers/onDisplayAuction';
-import { useAppSelector } from '../../hooks';
-import { BigNumber } from 'ethers';
 
-const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
-  const bidAmount = <TruncatedAmount amount={BigInt(bid.value.toString())} />;
-  const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
-    bid.timestamp.toNumber() * 1000,
-  ).format('hh:mm a')}`;
+import { BidHistoryItem } from '@/components/BidHistoryItem';
+import { useAppSelector } from '@/hooks';
+import { Bid } from '@/utils/types';
+import { useAuctionBids } from '@/wrappers/onDisplayAuction';
 
-  const txLink = buildEtherscanTxLink(bid.transactionHash);
-  const isMobile = window.innerWidth < 992;
+interface BidHistoryProps {
+  auctionId: string;
+  max: number;
+  classes: Record<string, string>;
+}
 
-  return (
-    <li key={index} className={isCool ? classes.bidRowCool : classes.bidRowWarm}>
-      <div className={classes.bidItem}>
-        <div className={classes.leftSectionWrapper}>
-          <div className={classes.bidder}>
-            <div>
-              <ShortAddress address={bid.sender} avatar={isMobile ? false : true} />
-            </div>
-          </div>
-          <div className={classes.bidDate}>{date}</div>
-        </div>
-        <div className={classes.rightSectionWrapper}>
-          <div className={classes.bidAmount}>{bidAmount}</div>
-          <div className={classes.linkSymbol}>
-            <a href={txLink} target="_blank" rel="noreferrer">
-              <LinkIcon width={24} height={24} aria-label="link symbol" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </li>
-  );
-};
-
-const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
+const BidHistory: React.FC<BidHistoryProps> = props => {
   const { auctionId, max, classes } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const bids = useAuctionBids(BigNumber.from(auctionId));
+  const bids = useAuctionBids(BigInt(auctionId));
   const bidContent =
     bids &&
     bids
-      .sort((bid1: Bid, bid2: Bid) => -1 * (bid1.timestamp.toNumber() - bid2.timestamp.toNumber()))
+      .toSorted(
+        (bid1: Bid, bid2: Bid) => -1 * (bid1.timestamp.toNumber() - bid2.timestamp.toNumber()),
+      )
       .map((bid: Bid, i: number) => {
-        return bidItem(bid, i, classes, isCool);
+        return <BidHistoryItem key={i} bid={bid} classes={classes} isCool={isCool} />;
       })
       .slice(0, max);
 
