@@ -101,7 +101,7 @@
     "redux-devtools-extension": "^2.13.9",
     "remark-breaks": "^3.0.3",
     "remeda": "^2.21.3",
-    "viem": "^2.28.1",
+    "viem": "^2.29.0",
     "wagmi": "^2.15.2",
     "web-vitals": "^1.0.1"
   },
