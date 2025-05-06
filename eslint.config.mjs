@@ -78,30 +78,39 @@ export default defineConfig([
       'import/default': 'error',
       'import/namespace': 'error',
       'import/export': 'error',
-      "import/order": ["error", {
-        "groups": [
-          // Type imports first
-          "type",
-          // Imports of builtins second
-          "builtin",
-          // Then external packages
-          "external",
-          // Then sibling and parent imports. They can be mingled together
-          ["sibling", "parent"],
-          // Then index file imports
-          "index",
-          // Then any arcane TypeScript imports
-          "object",
-          // Then the rest: internal, unknown
-          "internal",
-          "unknown"
-        ],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
-      }],
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'type',
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+          ],
+          pathGroups: [
+            {
+              pattern: 'react',
+              group: 'builtin',
+              position: 'before',
+            },
+            {
+              pattern: '**/*.{css,scss,sass,less,module.css,module.scss}',
+              group: 'object',
+              position: 'after',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['react', 'builtin'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
       // Lingui plugin rules
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
