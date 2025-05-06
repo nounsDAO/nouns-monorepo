@@ -1,5 +1,4 @@
 import { Trans } from '@lingui/react/macro';
-import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
@@ -33,6 +32,14 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
     }
   }, [amount, address, isValidForNextStage]);
 
+  const isValidNumber = (value: string): boolean => {
+    try {
+      return value.trim() !== '' && !isNaN(parseFloat(value));
+    } catch {
+      return false;
+    }
+  };
+
   return (
     <div>
       <ModalTitle>
@@ -58,7 +65,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
           setFormattedAmount(e.formattedValue);
         }}
         placeholder={`0 ${currency}`}
-        isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
+        isInvalid={parseFloat(amount) > 0 && !isValidNumber(amount)}
       />
 
       <BrandTextEntry

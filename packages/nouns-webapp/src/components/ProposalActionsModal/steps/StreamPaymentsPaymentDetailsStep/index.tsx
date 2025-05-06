@@ -6,7 +6,6 @@ import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
-import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
 import ModalSubTitle from '../../../ModalSubtitle';
 import BrandDropdown from '../../../BrandDropdown';
@@ -28,6 +27,14 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
       setIsValidForNextStage(true);
     }
   }, [amount, address, isValidForNextStage]);
+
+  const isValidNumber = (value: string): boolean => {
+    try {
+      return value.trim() !== '' && !isNaN(parseFloat(value));
+    } catch {
+      return false;
+    }
+  };
 
   return (
     <>
@@ -63,7 +70,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
           setFormattedAmount(e.formattedValue);
         }}
         placeholder={`0 ${currency === SupportedCurrency.USDC ? 'USDC' : 'WETH'}`}
-        isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
+        isInvalid={parseFloat(amount) > 0 && !isValidNumber(amount)}
       />
 
       <BrandTextEntry

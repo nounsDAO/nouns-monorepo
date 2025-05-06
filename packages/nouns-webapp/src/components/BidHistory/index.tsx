@@ -4,14 +4,13 @@ import dayjs from 'dayjs';
 import LinkIcon from '../../assets/icons/Link.svg?react';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
-import BigNumber from 'bignumber.js';
 import { Bid } from '../../utils/types';
-import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { useAppSelector } from '../../hooks';
+import { BigNumber } from 'ethers';
 
 const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
-  const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
+  const bidAmount = <TruncatedAmount amount={BigInt(bid.value.toString())} />;
   const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
     bid.timestamp.toNumber() * 1000,
   ).format('hh:mm a')}`;
@@ -46,7 +45,7 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const bids = useAuctionBids(EthersBN.from(auctionId));
+  const bids = useAuctionBids(BigNumber.from(auctionId));
   const bidContent =
     bids &&
     bids

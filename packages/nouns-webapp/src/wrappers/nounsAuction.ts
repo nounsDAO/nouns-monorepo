@@ -2,7 +2,6 @@ import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/sdk';
 import config from '../config';
-import BigNumber from 'bignumber.js';
 import { isNounderNoun } from '../utils/nounderNoun';
 import { useAppSelector } from '../hooks';
 import { AuctionState } from '../state/slices/auction';
@@ -49,7 +48,7 @@ export const useAuctionMinBidIncPercentage = () => {
     return;
   }
 
-  return new BigNumber(minBidIncrement[0]);
+  return BigInt(minBidIncrement[0].toString());
 };
 
 /**

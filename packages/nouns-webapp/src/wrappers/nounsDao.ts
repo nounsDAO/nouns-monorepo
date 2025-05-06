@@ -29,7 +29,6 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
 export interface DynamicQuorumParams {
@@ -566,8 +565,8 @@ const getProposalState = (
       blockNumber > parseInt(proposal.endBlock) &&
       blockNumber > parseInt(proposal.objectionPeriodEndBlock)
     ) {
-      const forVotes = new BigNumber(proposal.forVotes);
-      if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
+      const forVotes = BigInt(proposal.forVotes);
+      if (forVotes <= BigInt(proposal.againstVotes) || forVotes < BigInt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
       }
       if (!proposal.executionETA) {

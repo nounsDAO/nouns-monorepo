@@ -3,8 +3,6 @@ import React from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
-import { BigNumber } from 'bignumber.js';
-import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { Bid } from '../../utils/types';
 import clsx from 'clsx';
 import auctionActivityClasses from '../AuctionActivity/BidHistory.module.css';
@@ -24,7 +22,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const { bid, index } = props;
   const txLink = buildEtherscanTxLink(bid.transactionHash);
 
-  const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
+  const bidAmount = <TruncatedAmount amount={BigInt(bid.value.toString())} />;
 
   const ens = useReverseENSLookUp(bid.sender);
   const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');

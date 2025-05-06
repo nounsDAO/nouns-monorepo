@@ -1,13 +1,12 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { BigNumberish } from '@ethersproject/bignumber';
-import BigNumber from 'bignumber.js';
 
 export interface IBid {
   id: string;
   bidder: {
     id: string;
   };
-  amount: BigNumber;
+  amount: bigint;
   blockNumber: number;
   blockTimestamp: number;
   txHash: string;
