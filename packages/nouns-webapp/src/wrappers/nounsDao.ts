@@ -471,7 +471,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
 
       return {
         target,
-        functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
+        functionSig: name === '' ? 'transfer' : (name == undefined ? 'unknown' : name),
         callData: determineCallData(types, value),
       };
     }
