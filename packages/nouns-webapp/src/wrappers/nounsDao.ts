@@ -30,6 +30,7 @@ import {
   updatableProposalsQuery,
 } from './subgraph';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
+import { formatEther } from 'viem';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -437,6 +438,16 @@ export const concatSelectorToCalldata = (signature: string, callData: string) =>
   return callData;
 };
 
+const determineCallData = (types: string | undefined, value: EthersBN | undefined): string => {
+  if (types) {
+    return types;
+  }
+  if (value) {
+    return `${formatEther(value)} ETH`;
+  }
+  return '';
+};
+
 export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details?.targets?.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
@@ -461,7 +472,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
       return {
         target,
         functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-        callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+        callData: determineCallData(types, value),
       };
     }
 
