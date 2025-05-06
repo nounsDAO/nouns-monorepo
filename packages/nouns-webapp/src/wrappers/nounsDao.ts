@@ -744,7 +744,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
         const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
-          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+          title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
