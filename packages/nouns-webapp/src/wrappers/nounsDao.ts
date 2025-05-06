@@ -591,7 +591,7 @@ const getProposalState = (
     if (!blockTimestamp || !proposal.executionETA) {
       return ProposalState.UNDETERMINED;
     }
-    // if v3+ and not on timelock v1, grace period is 21 days, otherwise 14 days
+    // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
     const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
     if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
       return ProposalState.EXPIRED;
@@ -611,7 +611,7 @@ const parsePartialSubgraphProposal = (
   if (!proposal) {
     return;
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+  const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
@@ -662,7 +662,7 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+  const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
