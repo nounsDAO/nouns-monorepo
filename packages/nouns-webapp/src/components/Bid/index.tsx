@@ -1,20 +1,22 @@
-import { Auction } from '@/wrappers/nounsAuction';
-import { useAppSelector, useAppDispatch } from '@/hooks';
-import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
-import classes from './Bid.module.css';
-import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
-import WalletConnectModal from '../WalletConnectModal';
-import SettleManuallyBtn from '../SettleManuallyBtn';
 import { Trans } from '@lingui/react/macro';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import React, { useCallback, useEffect, useRef, useState, ChangeEvent } from 'react';
+import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { formatEther, parseEther } from 'viem';
+
+import classes from './Bid.module.css';
+
+import SettleManuallyBtn from '@/components/SettleManuallyBtn';
+import WalletConnectModal from '@/components/WalletConnectModal';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
   useWriteNounsAuctionHouseCreateBid,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
-} from '../../contracts';
+} from '@/contracts';
+import { useAppSelector, useAppDispatch } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import { Auction } from '@/wrappers/nounsAuction';
 
 const computeMinimumNextBid = (
   currentBid: bigint,
@@ -46,10 +48,12 @@ const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
   return parseEther(bidInputRef.current.value);
 };
 
-const Bid: React.FC<{
+interface BidProps {
   auction: Auction;
   auctionEnded: boolean;
-}> = props => {
+}
+
+const Bid: React.FC<BidProps> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
@@ -100,7 +104,7 @@ const Bid: React.FC<{
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
-    // disable more than 2 digits after decimal point
+    // disable more than 2 digits after the decimal point
     if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
       return;
     }
@@ -151,7 +155,7 @@ const Bid: React.FC<{
 
     // tx state is mining
     const isMiningUserTx = isPlacingBid;
-    // allows user to rebid against themselves so long as it is not the same tx
+    // allows user to rebid against themselves so long as it is different tx
     const isCorrectTx = currentBid(bidInputRef) === BigInt(auction.amount.toString());
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
       setModal({
@@ -284,7 +288,7 @@ const Bid: React.FC<{
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
-            {/* Only show force settle button if wallet connected */}
+            {/* Only show the force settles button if the wallet connected */}
             {isWalletConnected && (
               <Col lg={12}>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
