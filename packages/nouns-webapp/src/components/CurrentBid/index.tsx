@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
 import classes from './CurrentBid.module.css';
 import TruncatedAmount from '../TruncatedAmount';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { Trans } from '@lingui/react/macro';
+import React from 'react';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that
@@ -17,7 +17,12 @@ export const BID_N_A = 'n/a';
  */
 type BidNa = typeof BID_N_A;
 
-const CurrentBid: React.FC<{ currentBid: BigNumber | BidNa; auctionEnded: boolean }> = props => {
+interface CurrentBidProps {
+  currentBid: bigint | BidNa;
+  auctionEnded: boolean;
+}
+
+const CurrentBid: React.FC<CurrentBidProps> = props => {
   const { currentBid, auctionEnded } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const titleContent = auctionEnded ? <Trans>Winning bid</Trans> : <Trans>Current bid</Trans>;
@@ -38,7 +43,11 @@ const CurrentBid: React.FC<{ currentBid: BigNumber | BidNa; auctionEnded: boolea
           className={classes.currentBid}
           style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
-          {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid && currentBid} />}
+          {currentBid === BID_N_A ? (
+            BID_N_A
+          ) : (
+            <TruncatedAmount amount={!!currentBid && currentBid} />
+          )}
         </h2>
       </Col>
     </Row>

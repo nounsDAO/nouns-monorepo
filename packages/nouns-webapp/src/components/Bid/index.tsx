@@ -8,7 +8,6 @@ import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
-import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -21,31 +20,33 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 const computeMinimumNextBid = (
-  currentBid: BigNumber,
-  minBidIncPercentage: BigNumber | undefined,
-): BigNumber => {
+  currentBid: bigint,
+  minBidIncPercentage: bigint | undefined,
+): bigint => {
   if (!minBidIncPercentage) {
-    return new BigNumber(0);
+    return 0n;
   }
-  return currentBid
-    .times(minBidIncPercentage.div(100).plus(1))
-    .decimalPlaces(0, BigNumber.ROUND_UP);
+  // Calculate minBidIncPercentage/100 + 1 with bigint
+  // Since bigint division truncates, we multiply first then divide to maintain precision
+  return (currentBid * (minBidIncPercentage + 100n)) / 100n;
 };
 
-const minBidEth = (minBid: BigNumber): string => {
-  if (minBid.isZero()) {
+const minBidEth = (minBid: bigint): string => {
+  if (minBid === 0n) {
     return '0.01';
   }
 
   const eth = utils.formatEther(EthersBN.from(minBid.toString()));
-  return new BigNumber(eth).toFixed(2, BigNumber.ROUND_CEIL);
+  // We need to round up to 2 decimal places
+  const ethNum = parseFloat(eth);
+  return (Math.ceil(ethNum * 100) / 100).toFixed(2);
 };
 
 const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
   if (!bidInputRef.current || !bidInputRef.current.value) {
-    return new BigNumber(0);
+    return 0n;
   }
-  return new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
+  return BigInt(utils.parseEther(bidInputRef.current.value).toString());
 };
 
 const Bid: React.FC<{
@@ -82,8 +83,8 @@ const Bid: React.FC<{
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
-    auction && new BigNumber(auction.amount.toString()),
-    minBidIncPercentage,
+    auction && BigInt(auction.amount.toString()),
+    minBidIncPercentage ? BigInt(minBidIncPercentage.toString()) : undefined,
   );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
@@ -111,7 +112,7 @@ const Bid: React.FC<{
       return;
     }
 
-    if (currentBid(bidInputRef).isLessThan(minBid)) {
+    if (currentBid(bidInputRef) < minBid) {
       setModal({
         show: true,
         title: <Trans>Insufficient bid amount 🤏</Trans>,
@@ -154,7 +155,7 @@ const Bid: React.FC<{
     // tx state is mining
     const isMiningUserTx = placeBidState.status === 'Mining';
     // allows user to rebid against themselves so long as it is not the same tx
-    const isCorrectTx = currentBid(bidInputRef).isEqualTo(new BigNumber(auction.amount.toString()));
+    const isCorrectTx = currentBid(bidInputRef) === BigInt(auction.amount.toString());
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
       placeBidState.status = 'Success';
       setModal({

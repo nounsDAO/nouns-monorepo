@@ -1,6 +1,5 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import React, { useState, useEffect } from 'react';
-import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import bidHistoryClasses from './BidHistory.module.css';
@@ -122,7 +121,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Row className={classes.activityRow}>
             <Col lg={4} className={classes.currentBidCol}>
               <CurrentBid
-                currentBid={new BigNumber(auction.amount.toString())}
+                currentBid={BigInt(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
             </Col>
