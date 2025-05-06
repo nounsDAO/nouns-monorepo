@@ -5,17 +5,15 @@ import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import { useNavigate } from 'react-router-dom';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 import NounsIntroSection from '../../components/NounsIntroSection';
+import { useParams } from 'react-router';
 
-interface AuctionPageProps {
-  initialAuctionId?: number;
-}
+type AuctionPageProps = object;
 
-const AuctionPage: React.FC<AuctionPageProps> = props => {
-  // eslint-disable-next-line react/prop-types
-  const { initialAuctionId } = props;
+const AuctionPage: React.FC<AuctionPageProps> = () => {
+  const { id: initialAuctionId } = useParams<{ id: string }>();
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
@@ -27,14 +25,14 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     if (!lastAuctionNounId) return;
 
     if (initialAuctionId !== undefined) {
-      // handle out of bounds noun path ids
-      if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
+      // handle out-of-bounds noun path ids
+      if (Number(initialAuctionId) > lastAuctionNounId || Number(initialAuctionId) < 0) {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
         navigate(nounPath(lastAuctionNounId));
       } else {
         if (onDisplayAuction === undefined) {
-          // handle regular noun path ids on first load
-          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+          // handle regular noun path ids on the first load
+          dispatch(setOnDisplayAuctionNounId(Number(initialAuctionId)));
         }
       }
     } else {
