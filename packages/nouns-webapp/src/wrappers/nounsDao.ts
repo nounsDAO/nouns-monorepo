@@ -443,7 +443,7 @@ const determineCallData = (types: string | undefined, value: EthersBN | undefine
     return types;
   }
   if (value) {
-    return `${formatEther(value)} ETH`;
+    return `${formatEther(value.toBigInt())} ETH`;
   }
   return '';
 };
@@ -471,7 +471,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
 
       return {
         target,
-        functionSig: name === '' ? 'transfer' : (name == undefined ? 'unknown' : name),
+        functionSig: name === '' ? 'transfer' : name == undefined ? 'unknown' : name,
         callData: determineCallData(types, value),
       };
     }
