@@ -12,6 +12,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["@vitest/browser/providers/playwright"],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Linting */
     "strict": true,
