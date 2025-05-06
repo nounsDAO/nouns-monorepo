@@ -287,12 +287,12 @@ const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
  * Extract a markdown title from a proposal body that uses the `# Title` format
  * Returns null if no title found.
  */
-const extractHashTitle = (body: string) => body.match(hashRegex);
+const extractHashTitle = (body: string) => RegExp(hashRegex).exec(body);
 /**
  * Extract a markdown title from a proposal body that uses the `Title\n===` format.
  * Returns null if no title found.
  */
-const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
+const extractEqualTitle = (body: string) => RegExp(equalTitleRegex).exec(body);
 
 /**
  * Extract title from a proposal's body/description. Returns null if no title found in the first line.
