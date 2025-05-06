@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
-import { has } from 'ramda';
+import { has } from 'remeda';
 import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
 import { isNounDelegate, isNounOwner, nounsQuery } from '../theGraph';
 

@@ -22,7 +22,7 @@ import {
   useProposalThreshold,
   useUpdatableProposalIds,
 } from './nounsDao';
-import * as R from 'ramda';
+import * as R from 'remeda';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
 
 const abi = new utils.Interface(NounsDAODataABI);
@@ -169,10 +169,11 @@ export const useCandidateProposals = (blockNumber?: number) => {
       return parsedData;
     });
 
-  candidatesData &&
-    candidatesData?.sort((a, b) => {
+  if (candidatesData) {
+    candidatesData.sort((a, b) => {
       return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
     });
+  }
   return { loading, data: candidatesData, error };
 };
 
@@ -369,7 +370,7 @@ const parseSubgraphCandidate = (
     voteCount: voteCount,
     version: {
       content: {
-        title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+        title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
         transactionHash: details.encodedProposalHash,
@@ -391,7 +392,7 @@ const parseSubgraphCandidateVersions = (
     return;
   }
   const versionsList = candidateVersions.versions.map(version => version);
-  const versionsByDate = versionsList.sort((a, b) => {
+  const versionsByDate = versionsList.toSorted((a, b) => {
     return b.createdTimestamp - a.createdTimestamp;
   });
   const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
@@ -407,7 +408,7 @@ const parseSubgraphCandidateVersions = (
     };
     const details = formatProposalTransactionDetails(transactionDetails);
     return {
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
       description: description ?? 'No description.',
       details: details,
       createdAt: version.createdTimestamp,
@@ -425,7 +426,7 @@ const parseSubgraphCandidateVersions = (
     versionsCount: candidateVersions.versions.length,
     createdTransactionHash: candidateVersions.createdTransactionHash,
     title:
-      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
+      R.pipe(candidateVersions.latestVersion.description, extractTitle, removeMarkdownStyle) ??
       'Untitled',
     description: candidateVersions.latestVersion.description ?? 'No description.',
     versions: versions,

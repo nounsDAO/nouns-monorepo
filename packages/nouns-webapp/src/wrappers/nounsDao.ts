@@ -12,7 +12,7 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
-import * as R from 'ramda';
+import * as R from 'remeda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import {
@@ -305,12 +305,11 @@ export const extractTitle = (body: string | undefined): string | null => {
   return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
 };
 
-const removeBold = (text: string | null): string | null =>
-  text ? text.replace(/\*\*/g, '') : text;
-const removeItalics = (text: string | null): string | null =>
-  text ? text.replace(/__/g, '') : text;
+const removeBold = (text: string): string => text.replace(/\*\*/g, '');
+const removeItalics = (text: string): string => text.replace(/__/g, '');
 
-export const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+export const removeMarkdownStyle = (text: string | null): string | null =>
+  text === null ? null : R.pipe(text, removeBold, removeItalics);
 /**
  * Add missing schemes to markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
