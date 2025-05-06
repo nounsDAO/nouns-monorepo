@@ -1,18 +1,38 @@
 import { http, createConfig } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
-import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors';
+import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors';
+import { CHAIN_ID, WALLET_CONNECT_V2_PROJECT_ID } from './config';
+import { find, pipe } from 'remeda';
+
+const activeChainId = Number(CHAIN_ID);
+
+const activeChain =
+  pipe(
+    [mainnet, sepolia],
+    find(chain => chain.id === activeChainId),
+  ) ?? sepolia;
+
+const mainnetRpcUrl = process.env.VITE_MAINNET_RPC_URL || 'https://ethereum-rpc.publicnode.com';
+const sepoliaRpcUrl =
+  process.env.VITE_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com';
 
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [activeChain],
+  transports: {
+    [mainnet.id]: http(mainnetRpcUrl),
+    [sepolia.id]: http(sepoliaRpcUrl),
+  },
   connectors: [
     injected(),
-    coinbaseWallet(),
-    walletConnect({ projectId: import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID }),
+    walletConnect({
+      projectId: WALLET_CONNECT_V2_PROJECT_ID,
+      showQrModal: true,
+    }),
+    coinbaseWallet({
+      appName: 'Nouns.WTF',
+      appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
+    }),
   ],
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-  },
 });
 
 declare module 'wagmi' {
