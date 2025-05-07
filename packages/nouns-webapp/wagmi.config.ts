@@ -112,7 +112,7 @@ const contractConfigs = [
 
 export default defineConfig(
   contractConfigs.map(({ name, fileName, address }) => ({
-    out: `src/contracts/${fileName}.ts`,
+    out: `src/contracts/${fileName}.gen.ts`,
     plugins: [
       etherscan({
         apiKey: process.env.VITE_ETHERSCAN_API_KEY!,
