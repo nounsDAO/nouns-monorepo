@@ -1,5 +1,5 @@
-import { EncodedImage, IEncoder, ImageData, PngImage } from './types';
 import { Image } from './image';
+import { EncodedImage, IEncoder, ImageData, PngImage } from './types';
 
 /**
  * A class used to convert PNG images into the following RLE format:
@@ -21,7 +21,7 @@ export class PNGCollectionEncoder implements IEncoder {
     if (this._isNode) {
       try {
         // Use dynamic import to avoid bundler issues
-        import('fs').then(fs => this._fs = fs.promises);
+        import('fs').then(fs => (this._fs = fs.promises));
       } catch (e) {
         console.warn('File system module not available');
       }

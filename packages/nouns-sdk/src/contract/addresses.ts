@@ -1,5 +1,5 @@
-import { ContractAddresses } from './types';
 import addresses from './addresses.json';
+import { ContractAddresses } from './types';
 
 /**
  * Get addresses of contracts that have been deployed to the

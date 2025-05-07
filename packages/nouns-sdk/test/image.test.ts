@@ -1,11 +1,14 @@
-import { expect, describe, it, beforeEach } from 'vitest';
 import { join } from 'path';
+
+import { glob } from 'glob';
+import { expect, describe, it, beforeEach } from 'vitest';
+
+import { buildSVG, RGBAColor } from '../src';
 import { Image } from '../src/image/image';
+import { decodeImage } from '../src/image/svg-builder';
+
 import { Image as Image1 } from './image';
 import { readPngImage } from './lib';
-import { buildSVG, RGBAColor } from '../src';
-import { glob } from 'glob';
-import { decodeImage } from '../src/image/svg-builder';
 
 async function encodeSingleLineRLE(filepath: string) {
   const transparent: [string, number] = ['', 0];

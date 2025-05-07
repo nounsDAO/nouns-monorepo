@@ -1,8 +1,11 @@
-import { expect, describe, it, beforeEach } from 'vitest';
-import { expected, readPngImage } from './lib';
-import { PNGCollectionEncoder } from '../src';
 import { promises as fs } from 'fs';
 import { join } from 'path';
+
+import { expect, describe, it, beforeEach } from 'vitest';
+
+import { PNGCollectionEncoder } from '../src';
+
+import { expected, readPngImage } from './lib';
 
 describe('PNGCollectionEncoder', () => {
   let encoder: PNGCollectionEncoder;
