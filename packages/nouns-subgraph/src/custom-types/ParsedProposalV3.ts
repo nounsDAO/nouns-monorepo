@@ -1,4 +1,5 @@
 import { BigInt } from '@graphprotocol/graph-ts';
+
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,

@@ -1,4 +1,5 @@
 import { log } from '@graphprotocol/graph-ts';
+
 import {
   DelegateChanged,
   DelegateVotesChanged,

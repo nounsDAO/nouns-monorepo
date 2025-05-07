@@ -1,8 +1,9 @@
-import { assert, clearStore, test, describe, afterEach } from 'matchstick-as/assembly/index';
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { assert, clearStore, test, describe, afterEach } from 'matchstick-as/assembly/index';
+
+import { Proposal } from '../src/types/schema';
 import { BIGINT_10K, BIGINT_ONE } from '../src/utils/constants';
 import { calcEncodedProposalHash, getOrCreateDynamicQuorumParams } from '../src/utils/helpers';
-import { Proposal } from '../src/types/schema';
 
 describe('getOrCreateDynamicQuorumParams', () => {
   afterEach(() => {

@@ -1,5 +1,6 @@
-import { assert, test, describe } from 'matchstick-as/assembly/index';
 import { BigInt } from '@graphprotocol/graph-ts';
+import { assert, test, describe } from 'matchstick-as/assembly/index';
+
 import { BIGINT_ZERO } from '../src/utils/constants';
 import { dynamicQuorumVotes } from '../src/utils/dynamicQuorum';
 

@@ -1,4 +1,6 @@
 import { Bytes, log, ethereum, store, BigInt, Address } from '@graphprotocol/graph-ts';
+
+import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
 import {
   NounsDAO,
   ProposalCreated,
@@ -29,16 +31,15 @@ import {
   ProposalCreatedWithRequirements1 as ProposalCreatedWithRequirementsV4,
 } from './types/NounsDAOV4/NounsDAOV4';
 import {
-  getOrCreateDelegate,
-  getOrCreateProposal,
-  getOrCreateVote,
-  getGovernanceEntity,
-  getOrCreateDelegateWithNullOption,
-  getOrCreateDynamicQuorumParams,
-  getOrCreateProposalVersion,
-  getOrCreateFork,
-  calcEncodedProposalHash,
-} from './utils/helpers';
+  Proposal,
+  ProposalCandidateSignature,
+  EscrowDeposit,
+  EscrowWithdrawal,
+  ForkJoin,
+  ForkJoinedNoun,
+  EscrowedNoun,
+  ProposalCandidateContent,
+} from './types/schema';
 import {
   BIGINT_ONE,
   STATUS_ACTIVE,
@@ -50,17 +51,17 @@ import {
   BIGINT_ZERO,
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
-import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
 import {
-  Proposal,
-  ProposalCandidateSignature,
-  EscrowDeposit,
-  EscrowWithdrawal,
-  ForkJoin,
-  ForkJoinedNoun,
-  EscrowedNoun,
-  ProposalCandidateContent,
-} from './types/schema';
+  getOrCreateDelegate,
+  getOrCreateProposal,
+  getOrCreateVote,
+  getGovernanceEntity,
+  getOrCreateDelegateWithNullOption,
+  getOrCreateDynamicQuorumParams,
+  getOrCreateProposalVersion,
+  getOrCreateFork,
+  calcEncodedProposalHash,
+} from './utils/helpers';
 
 export function handleProposalCreated(event: ProposalCreated): void {
   const proposal = getOrCreateProposal(event.params.id.toString());

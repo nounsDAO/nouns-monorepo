@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
 import { Address, BigInt, Bytes, crypto, ethereum } from '@graphprotocol/graph-ts';
+
 import {
   Account,
   Delegate,
@@ -17,6 +18,7 @@ import {
   ProposalCandidateContent,
   CandidateFeedback,
 } from '../types/schema';
+
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
 export class GetOrCreateResult<T> {

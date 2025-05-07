@@ -1,4 +1,11 @@
+import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { newMockEvent } from 'matchstick-as/assembly/index';
+
+import {
+  handleMinQuorumVotesBPSSet,
+  handleMaxQuorumVotesBPSSet,
+  handleQuorumCoefficientSet,
+} from '../src/nouns-dao';
 import {
   ProposalCreatedWithRequirements,
   ProposalCreatedWithRequirements1,
@@ -18,19 +25,13 @@ import {
   ProposalQueued,
   ProposalCreated,
 } from '../src/types/NounsDAO/NounsDAO';
-import {
-  handleMinQuorumVotesBPSSet,
-  handleMaxQuorumVotesBPSSet,
-  handleQuorumCoefficientSet,
-} from '../src/nouns-dao';
-import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
-import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from '../src/utils/constants';
 import { ProposalCandidateCreated, SignatureAdded } from '../src/types/NounsDAOData/NounsDAOData';
 import {
   DelegateChanged,
   DelegateVotesChanged,
   Transfer,
 } from '../src/types/NounsToken/NounsToken';
+import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from '../src/utils/constants';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,

@@ -1,3 +1,4 @@
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   assert,
   clearStore,
@@ -8,19 +9,20 @@ import {
   afterEach,
   beforeEach,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import {
-  createTransferEvent,
-  createDelegateChangedEvent,
-  createDelegateVotesChangedEvent,
-} from './utils';
-import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
-import { getOrCreateDelegate, getOrCreateAccount } from '../src/utils/helpers';
+
 import {
   handleDelegateChanged,
   handleDelegateVotesChanged,
   handleTransfer,
 } from '../src/nouns-erc-721';
+import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
+import { getOrCreateDelegate, getOrCreateAccount } from '../src/utils/helpers';
+
+import {
+  createTransferEvent,
+  createDelegateChangedEvent,
+  createDelegateVotesChangedEvent,
+} from './utils';
 
 const someAddress = Address.fromString('0x0000000000000000000000000000000000000001');
 const freshHolderAddress = Address.fromString('0x0000000000000000000000000000000000000002');
