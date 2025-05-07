@@ -136,7 +136,7 @@ const Bid: React.FC<BidProps> = props => {
 
     const value = parseEther(bidInputRef.current.value);
     placeBid({
-      args: [auction.nounId.toBigInt()],
+      args: [BigInt(auction.nounId)],
       value,
     });
   };

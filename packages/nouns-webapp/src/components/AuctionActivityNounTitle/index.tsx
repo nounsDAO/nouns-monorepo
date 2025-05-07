@@ -1,8 +1,15 @@
-import { BigNumber } from 'ethers';
-import classes from './AuctionActivityNounTitle.module.css';
+import React from 'react';
+
 import { Trans } from '@lingui/react/macro';
 
-const AuctionActivityNounTitle: React.FC<{ nounId: BigNumber; isCool?: boolean }> = props => {
+import classes from './AuctionActivityNounTitle.module.css';
+
+interface AuctionActivityNounTitleProps {
+  nounId: bigint;
+  isCool?: boolean;
+}
+
+const AuctionActivityNounTitle: React.FC<AuctionActivityNounTitleProps> = props => {
   const { nounId, isCool } = props;
   return (
     <div className={classes.wrapper}>

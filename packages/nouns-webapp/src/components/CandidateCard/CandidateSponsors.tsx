@@ -1,24 +1,27 @@
 import { useState } from 'react';
-import classes from './CandidateSponsors.module.css';
-import { CandidateSignature } from '../../wrappers/nounsData';
-import CandidateSponsorImage from './CandidateSponsorImage';
+
 import { useQuery } from '@apollo/client';
-import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import clsx from 'clsx';
 
-type Props = {
+import { CandidateSignature } from '../../wrappers/nounsData';
+import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
+
+import CandidateSponsorImage from './CandidateSponsorImage';
+import classes from './CandidateSponsors.module.css';
+
+type CandidateSponsorsProps = {
   signers: CandidateSignature[];
   nounsRequired: number;
   currentBlock?: number;
   isThresholdMetByProposer?: boolean;
 };
 
-function CandidateSponsors({
+const CandidateSponsors = ({
   signers,
   nounsRequired,
   currentBlock,
   isThresholdMetByProposer,
-}: Props) {
+}: CandidateSponsorsProps) => {
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const activeSigners =
@@ -51,7 +54,7 @@ function CandidateSponsors({
         <div className={classes.sponsors}>
           {nounIds.map((nounId, i) => {
             if (i >= maxVisibleSpots) return null;
-            return <CandidateSponsorImage nounId={+nounId} key={i * +nounId} />;
+            return <CandidateSponsorImage nounId={BigInt(+nounId)} key={i * +nounId} />;
           })}
         </div>
       )}
@@ -60,6 +63,6 @@ function CandidateSponsors({
       ))}
     </div>
   );
-}
+};
 
 export default CandidateSponsors;

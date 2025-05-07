@@ -18,9 +18,7 @@ const BidHistory: React.FC<BidHistoryProps> = props => {
   const bidContent =
     bids &&
     bids
-      .toSorted(
-        (bid1: Bid, bid2: Bid) => -1 * (bid1.timestamp.toNumber() - bid2.timestamp.toNumber()),
-      )
+      .toSorted((bid1: Bid, bid2: Bid) => -1 * Number(bid1.timestamp - bid2.timestamp))
       .map((bid: Bid, i: number) => {
         return <BidHistoryItem key={i} bid={bid} classes={classes} isCool={isCool} />;
       })

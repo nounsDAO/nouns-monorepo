@@ -1,21 +1,23 @@
-import classes from './CandidateCard.module.css';
-import clsx from 'clsx';
-import { ProposalCandidate } from '../../wrappers/nounsData';
-import CandidateSponsors from './CandidateSponsors';
-import ShortAddress from '../ShortAddress';
 import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import { Link } from 'react-router';
-import { PartialProposal } from '../../wrappers/nounsDao';
-import { relativeTimestamp } from '../../utils/timeUtils';
 
-type Props = {
+import ShortAddress from '@/components/ShortAddress';
+import { relativeTimestamp } from '@/utils/timeUtils';
+import { PartialProposal } from '@/wrappers/nounsDao';
+import { ProposalCandidate } from '@/wrappers/nounsData';
+
+import classes from './CandidateCard.module.css';
+import CandidateSponsors from './CandidateSponsors';
+
+type CandidateCardProps = {
   candidate: ProposalCandidate;
   nounsRequired: number;
   latestProposal?: PartialProposal;
   currentBlock?: number;
 };
 
-function CandidateCard(props: Props) {
+const CandidateCard = (props: Readonly<CandidateCardProps>) => {
   const signers = props.candidate.version.content.contentSignatures;
   const proposerVoteCount = props.candidate.proposerVotes;
 
@@ -42,9 +44,7 @@ function CandidateCard(props: Props) {
               nounsRequired={props.candidate.requiredVotes}
               currentBlock={props.currentBlock && props.currentBlock - 1}
               isThresholdMetByProposer={
-                proposerVoteCount && proposerVoteCount >= props.candidate.requiredVotes
-                  ? true
-                  : false
+                !!(proposerVoteCount && proposerVoteCount >= props.candidate.requiredVotes)
               }
             />
             <span
@@ -72,6 +72,6 @@ function CandidateCard(props: Props) {
       </div>
     </Link>
   );
-}
+};
 
 export default CandidateCard;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import classes from './ExploreGrid.module.css';
+
 import cx from 'classnames';
-import ExploreGridItem from './ExploreGridItem';
 import Placeholder from 'react-bootstrap/esm/Placeholder';
+
+import classes from './ExploreGrid.module.css';
+import ExploreGridItem from './ExploreGridItem';
 
 interface ExploreGridProps {
   nounCount: number;
@@ -29,7 +31,17 @@ type Noun = {
   imgSrc: string | undefined;
 };
 
-const ExploreGrid: React.FC<ExploreGridProps> = props => {
+const ExploreGrid: React.FC<ExploreGridProps> = ({
+  buttonsRef: { current },
+  handleFocusNoun,
+  isNounHoverDisabled,
+  nounCount,
+  nounsList,
+  selectedNoun,
+  setActiveNoun,
+  setNounsList,
+  sortOrder,
+}) => {
   const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
   const placeholderNoun: Noun = { id: null, imgSrc: undefined };
 
@@ -40,18 +52,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
       .fill(placeholderNoun)
       .map((_x, i): Noun => {
         return {
-          id: i + (props.nounCount - individualCount),
-          imgSrc: `https://noun.pics/${i + (props.nounCount - individualCount)}.svg`,
+          id: i + (nounCount - individualCount),
+          imgSrc: `https://noun.pics/${i + (nounCount - individualCount)}.svg`,
         };
       })
       .reverse();
 
     setIndividualNouns(nouns);
     // After initial nouns are set, run range calls
-    rangeCalls(props.nounCount, nouns);
+    rangeCalls(nounCount, nouns);
 
     // Add initial nouns to end of placeholder array to display them first on load
-    props.setNounsList((arr: Noun[]) => [...nouns, ...arr]);
+    setNounsList((arr: Noun[]) => [...nouns, ...arr]);
   };
 
   // Range calls
@@ -80,8 +92,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
       });
 
-      props.setNounsList((arr: Noun[]) => {
-        let sliced = arr.slice(0, props.nounCount - 1 - end).concat(rangeNouns);
+      setNounsList((arr: Noun[]) => {
+        let sliced = arr.slice(0, nounCount - 1 - end).concat(rangeNouns);
         // if list is only individual nouns + placeholders
         // keep individual nouns, clear others and replace with ranges
         if (arr[individualNouns.length + 1].id === null) {
@@ -104,44 +116,41 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         imgSrc: undefined,
       };
     });
-    props.setNounsList(placeholderNounsData);
+    setNounsList(placeholderNounsData);
 
-    if (props.nounCount >= 0) {
-      getInitialNouns((props.nounCount % initialChunkSize) + 1);
+    if (nounCount >= 0) {
+      getInitialNouns((nounCount % initialChunkSize) + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.nounCount]);
+  }, [nounCount]);
 
   return (
     <div
       className={cx(
         classes.exploreGrid,
-        ((props.selectedNoun !== undefined && props.selectedNoun < 0) ||
-          props.selectedNoun === undefined) &&
-          props.nounCount >= 0 &&
+        ((selectedNoun !== undefined && selectedNoun < 0) || selectedNoun === undefined) &&
+          nounCount >= 0 &&
           classes.sidebarHidden,
       )}
     >
       <ul>
-        {(props.sortOrder === 'date-ascending'
-          ? [...props.nounsList].reverse()
-          : props.nounsList
-        ).map((noun, i) => {
+        {(sortOrder === 'date-ascending' ? [...nounsList].reverse() : nounsList).map((noun, i) => {
           return (
-            <li className={noun.id === props.selectedNoun ? classes.activeNoun : ''} key={i}>
+            <li className={noun.id == selectedNoun ? classes.activeNoun : ''} key={i}>
               <button
-                ref={el => (props.buttonsRef.current[noun.id ? noun.id : -1] = el)}
+                ref={el => (current[noun.id ? noun.id : -1] = el)}
                 key={`${i}${noun.id}`}
-                onClick={() => noun.id !== null && props.handleFocusNoun(noun.id)}
-                onFocus={() => noun.id !== null && props.handleFocusNoun(noun.id)}
+                onClick={() => noun.id !== null && handleFocusNoun(noun.id)}
+                onFocus={() => noun.id !== null && handleFocusNoun(noun.id)}
                 onMouseOver={() =>
-                  !props.isNounHoverDisabled && noun.id !== null && props.setActiveNoun(noun.id)
+                  !isNounHoverDisabled && noun.id !== null && setActiveNoun(noun.id)
                 }
-                onMouseOut={() =>
-                  props.selectedNoun !== undefined && props.setActiveNoun(props.selectedNoun)
-                }
+                onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
               >
-                <ExploreGridItem nounId={noun.id} imgSrc={noun.imgSrc} />
+                <ExploreGridItem
+                  nounId={noun.id !== null ? BigInt(noun.id) : BigInt(0)}
+                  imgSrc={noun.imgSrc}
+                />
                 <p className={classes.nounIdOverlay}>
                   {noun.id != null ? noun.id : <Placeholder xs={12} animation="glow" />}
                 </p>

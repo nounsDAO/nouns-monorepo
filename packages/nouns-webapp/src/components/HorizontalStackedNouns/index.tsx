@@ -1,6 +1,7 @@
-import { BigNumber } from 'ethers';
 import React from 'react';
-import { StandaloneNounCircular } from '../StandaloneNoun';
+
+import { StandaloneNounCircular } from '@/components/StandaloneNoun';
+
 import classes from './HorizontalStackedNouns.module.css';
 
 interface HorizontalStackedNounsProps {
@@ -23,7 +24,7 @@ const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = props => {
               }}
               className={classes.nounWrapper}
             >
-              <StandaloneNounCircular nounId={BigNumber.from(nounId)} border={true} />
+              <StandaloneNounCircular nounId={BigInt(nounId)} border={true} />
             </div>
           );
         })

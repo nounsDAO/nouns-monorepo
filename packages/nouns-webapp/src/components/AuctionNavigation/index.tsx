@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
-import classes from './AuctionNavigation.module.css';
-import { useAppSelector } from '../../hooks';
+
 import { useNavigate } from 'react-router';
-import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
+
+import { useAppSelector } from '@/hooks';
+import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
+
+import classes from './AuctionNavigation.module.css';
 
 interface AuctionNavigationProps {
   isFirstAuction: boolean;
@@ -17,7 +20,7 @@ const AuctionNavigation: React.FC<AuctionNavigationProps> = props => {
   const navigate = useNavigate();
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const onDisplayAuctionNounId = Number(onDisplayAuction?.nounId);
 
   // Page through Nouns via a keyboard
   // handle what happens on key press

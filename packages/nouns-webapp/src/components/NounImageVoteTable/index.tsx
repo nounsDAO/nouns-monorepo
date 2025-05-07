@@ -1,12 +1,13 @@
-import { StandaloneNounCircular } from '../../components/StandaloneNoun';
-import { BigNumber as EthersBN } from 'ethers';
-import classes from './NounImageVoteTable.module.css';
-import { GrayCircle } from '../GrayCircle';
-import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
-import HoverCard from '../HoverCard';
-import NounHoverCard from '../NounHoverCard';
 import React, { useState } from 'react';
-import VoteCardPager from '../VoteCardPager';
+
+import { GrayCircle } from '@/components/GrayCircle';
+import HoverCard from '@/components/HoverCard';
+import NounHoverCard from '@/components/NounHoverCard';
+import { StandaloneNounCircular } from '@/components/StandaloneNoun';
+import VoteCardPager from '@/components/VoteCardPager';
+import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
+
+import classes from './NounImageVoteTable.module.css';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -30,11 +31,12 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
       .map((nounId: string) => {
         return (
           <HoverCard
+            key={nounId}
             hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
             tip={nounId.toString()}
             id="nounHoverCard"
           >
-            <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+            <StandaloneNounCircular nounId={BigInt(nounId)} />
           </HoverCard>
         );
       })

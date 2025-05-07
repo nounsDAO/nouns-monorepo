@@ -16,8 +16,8 @@ interface BidHistoryItemProps {
 
 export const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ bid, classes, isCool }) => {
   const bidAmount = <TruncatedAmount amount={BigInt(bid.value.toString())} />;
-  const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
-    bid.timestamp.toNumber() * 1000,
+  const date = `${dayjs(Number(bid.timestamp) * 1000).format('MMM DD')} at ${dayjs(
+    Number(bid.timestamp) * 1000,
   ).format('hh:mm a')}`;
 
   const txLink = buildEtherscanTxLink(bid.transactionHash);

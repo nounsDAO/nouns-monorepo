@@ -1,17 +1,21 @@
-import classes from './BidHistoryModalRow.module.css';
 import React from 'react';
+
 import { ExternalLinkIcon } from '@heroicons/react/solid';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import TruncatedAmount from '../TruncatedAmount';
-import { Bid } from '../../utils/types';
-import clsx from 'clsx';
-import auctionActivityClasses from '../AuctionActivity/BidHistory.module.css';
-import _trophy from '../../assets/icons/trophy.svg';
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
 import { i18n } from '@lingui/core';
-import { shortENS, useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import { blo } from 'blo';
+import clsx from 'clsx';
+
+import _trophy from '@/assets/icons/trophy.svg';
+import TruncatedAmount from '@/components/TruncatedAmount';
+import { shortENS, useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
+import { Bid } from '@/utils/types';
+
+import classes from './BidHistoryModalRow.module.css';
+
+import auctionActivityClasses from '@/components/AuctionActivity/BidHistory.module.css';
 
 interface BidHistoryModalRowProps {
   bid: Bid;
@@ -55,7 +59,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                   )}
                   <br />
                   <div className={classes.bidDate}>
-                    {i18n.date(new Date(bid.timestamp.toNumber() * 1000), {
+                    {i18n.date(new Date(Number(bid.timestamp) * 1000), {
                       dateStyle: 'medium',
                       timeStyle: 'short',
                     })}
