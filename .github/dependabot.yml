@@ -38,12 +38,12 @@ updates:
     # Allow up to 10 open pull requests for dependencies
     open-pull-requests-limit: 20
     # Allow only direct dependencies to be updated
-    # allow:
-    #  - dependency-type: 'direct'
+    allow:
+      - dependency-type: 'direct'
     # Ignore major version updates to avoid engine incompatibility
-    #    ignore:
-    #      - dependency-name: '*'
-    #        update-types: ['version-update:semver-major']
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     # Optional: safer versioning to prefer patch/minor bumps only
     versioning-strategy: increase
     # Create a group of dependencies to be updated together in one pull request
