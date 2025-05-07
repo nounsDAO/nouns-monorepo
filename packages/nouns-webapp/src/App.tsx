@@ -1,37 +1,42 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './hooks';
 import type { RootState } from './index';
-import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import { setAlertModal } from './state/slices/application';
-import classes from './App.module.css';
-import '../src/css/globals.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AlertModal from './components/Modal';
-import NavBar from './components/NavBar';
-import NetworkAlert from './components/NetworkAlert';
-import Footer from './components/Footer';
-import AuctionPage from './pages/Auction';
-import GovernancePage from './pages/Governance';
-import CreateProposalPage from './pages/CreateProposal';
-import VotePage from './pages/Vote';
-import NoundersPage from './pages/Nounders';
-import ExplorePage from './pages/Explore';
-import NotFoundPage from './pages/NotFound';
-import Playground from './pages/Playground';
-import { CHAIN_ID } from './config';
-import relativeTime from 'dayjs/plugin/relativeTime';
+
+import { useEffect } from 'react';
+
 import dayjs from 'dayjs';
-import DelegatePage from './pages/DelegatePage';
-import CreateCandidatePage from './pages/CreateCandidate';
-import CandidatePage from './pages/Candidate';
-import EditProposalPage from './pages/EditProposal';
-import EditCandidatePage from './pages/EditCandidate';
-import ProposalHistory from './pages/ProposalHistory';
-import CandidateHistoryPage from './pages/CandidateHistoryPage';
-import ForkPage from './pages/Fork';
-import ForksPage from './pages/Forks';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { useAccount } from 'wagmi';
+
+import Footer from '@/components/Footer';
+import AlertModal from '@/components/Modal';
+import NavBar from '@/components/NavBar';
+import NetworkAlert from '@/components/NetworkAlert';
+import { CHAIN_ID } from '@/config';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import AuctionPage from '@/pages/Auction';
+import CandidatePage from '@/pages/Candidate';
+import CandidateHistoryPage from '@/pages/CandidateHistoryPage';
+import CreateCandidatePage from '@/pages/CreateCandidate';
+import CreateProposalPage from '@/pages/CreateProposal';
+import DelegatePage from '@/pages/DelegatePage';
+import EditCandidatePage from '@/pages/EditCandidate';
+import EditProposalPage from '@/pages/EditProposal';
+import ExplorePage from '@/pages/Explore';
+import ForkPage from '@/pages/Fork';
+import ForksPage from '@/pages/Forks';
+import GovernancePage from '@/pages/Governance';
+import NotFoundPage from '@/pages/NotFound';
+import NoundersPage from '@/pages/Nounders';
+import Playground from '@/pages/Playground';
+import ProposalHistory from '@/pages/ProposalHistory';
+import VotePage from '@/pages/Vote';
+import { setActiveAccount } from '@/state/slices/account';
+import { setAlertModal } from '@/state/slices/application';
+
+import classes from './App.module.css';
+
+import '@/css/globals.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const { address: account, chain } = useAccount();
