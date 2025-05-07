@@ -5,8 +5,6 @@ import React from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 
-import classes from './Auction.module.css';
-
 import AuctionActivity from '@/components/AuctionActivity';
 import { LoadingNoun } from '@/components/Noun';
 import NounderNounContent from '@/components/NounderNounContent';
@@ -21,6 +19,8 @@ import { beige, grey } from '@/utils/nounBgColors';
 import { isNounderNoun } from '@/utils/nounderNoun';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
 import { INounSeed } from '@/wrappers/nounToken';
+
+import classes from './Auction.module.css';
 
 interface AuctionProps {
   auction?: IAuction;
