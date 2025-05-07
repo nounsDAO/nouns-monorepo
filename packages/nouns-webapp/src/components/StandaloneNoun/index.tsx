@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { ImageData as data, getNounData } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
@@ -6,13 +6,13 @@ import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import Noun from '../Noun';
-import nounClasses from '../Noun/Noun.module.css';
+import Noun from '@/components/Noun';
+import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
+import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
 
 import classes from './StandaloneNoun.module.css';
 
-import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
-import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
+import nounClasses from '@/components/Noun/Noun.module.css';
 
 interface StandaloneNounProps {
   nounId: bigint;
@@ -139,9 +139,13 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   const seed = useNounSeed(nounId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  useEffect(() => {
+    if (seed && !seedIsInvalid && onLoadSeed) {
+      onLoadSeed(seed);
+    }
+  }, [seed, seedIsInvalid, onLoadSeed]);
 
-  onLoadSeed(seed);
+  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
