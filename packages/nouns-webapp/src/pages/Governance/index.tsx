@@ -1,13 +1,13 @@
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { utils } from 'ethers/lib/ethers';
 import { Col, Row } from 'react-bootstrap';
+import { formatEther } from 'viem';
 
-import Proposals from '../../components/Proposals';
-import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
-import Section from '../../layout/Section';
-import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
+import Proposals from '@/components/Proposals';
+import { useTreasuryBalance, useTreasuryUSDValue } from '@/hooks/useTreasuryBalance';
+import Section from '@/layout/Section';
+import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 
 import classes from './Governance.module.css';
 
@@ -64,13 +64,13 @@ const GovernancePage = () => {
                 <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
                   <h1 className={classes.ethSymbol}>Ξ</h1>
                   <h1>
-                    {treasuryBalance &&
-                      i18n.number(Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)))}
+                    {treasuryBalance != undefined &&
+                      i18n.number(Number(Number(formatEther(treasuryBalance)).toFixed(0)))}
                   </h1>
                 </Col>
                 <Col className={classes.usdTreasuryAmt}>
                   <h1 className={classes.usdBalance}>
-                    {treasuryBalanceUSD &&
+                    {!!treasuryBalanceUSD &&
                       i18n.number(Number(treasuryBalanceUSD.toFixed(0)), {
                         style: 'currency',
                         currency: 'USD',
