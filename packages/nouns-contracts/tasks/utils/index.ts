@@ -1,6 +1,8 @@
+import { deflateRawSync } from 'zlib';
+
 import { ethers } from 'ethers';
 import promptjs from 'prompt';
-import { deflateRawSync } from 'zlib';
+
 import { ContractNamesDAOV3, ContractRow, DeployedContract } from '../types';
 
 promptjs.colors = false;

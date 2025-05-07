@@ -1,11 +1,12 @@
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
+
 import {
   NounsToken,
   NounsDescriptorV3__factory as NounsDescriptorV3Factory,
 } from '../../typechain';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   deployNounsToken,
   getSigners,

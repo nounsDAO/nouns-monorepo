@@ -1,4 +1,5 @@
 import { task } from 'hardhat/config';
+
 import { DeployedContract } from './types';
 
 async function delay(seconds: number) {

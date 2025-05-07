@@ -3,6 +3,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
+
 import {
   NounsDAOLogicV4__factory,
   NounsDescriptorV3__factory,

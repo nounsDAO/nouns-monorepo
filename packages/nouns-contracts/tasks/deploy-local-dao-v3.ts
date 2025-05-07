@@ -1,9 +1,11 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { Contract as EthersContract } from 'ethers';
+import { Interface, parseUnits } from 'ethers/lib/utils';
+import { task, types } from 'hardhat/config';
+
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
-import { task, types } from 'hardhat/config';
-import { Interface, parseUnits } from 'ethers/lib/utils';
-import { Contract as EthersContract } from 'ethers';
+import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+
 import { ContractNamesDAOV3 } from './types';
 
 type LocalContractName = ContractNamesDAOV3 | 'WETH' | 'Multicall2';
