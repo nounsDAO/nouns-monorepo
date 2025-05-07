@@ -80,6 +80,7 @@
       "qs": ">=6.5.3",
       "semver": ">=7.5.2",
       "serialize-javascript": ">=6.0.2",
+      "tar": ">=6.2.1",
       "underscore": ">=1.12.1",
       "ws": ">=7.5.10",
       "yargs-parser": ">=5.0.1"
