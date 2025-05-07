@@ -8,7 +8,7 @@ updates:
     schedule:
       interval: 'daily'
       time: '00:00'
-      timezone: 'UTC'
+      timezone: 'Etc/UTC'
     # Include a list of updated dependencies
     commit-message:
       prefix: 'ci'
@@ -27,7 +27,7 @@ updates:
     schedule:
       interval: 'daily'
       time: '00:00'
-      timezone: 'UTC'
+      timezone: 'Etc/UTC'
     # Include a list of updated dependencies
     commit-message:
       prefix: 'chore'
@@ -75,3 +75,7 @@ updates:
         patterns:
           - 'prettier'
           - 'prettier-*'
+      tailwindcss:
+        patterns:
+          - 'tailwindcss'
+          - '@tailwindcss/*'
