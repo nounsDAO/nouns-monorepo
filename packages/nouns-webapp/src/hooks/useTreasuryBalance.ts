@@ -1,10 +1,10 @@
 import { useCoingeckoPrice } from '@usedapp/coingecko';
-import { useEtherBalance } from '@usedapp/core';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
+import { useBalance } from 'wagmi';
 
-import config from '../config';
+import config from '@/config';
+import { useReadStEthBalanceOf } from '@/contracts';
 
-import useLidoBalance from './useLidoBalance';
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 
 /**
@@ -13,19 +13,37 @@ import useTokenBuyerBalance from './useTokenBuyerBalance';
  * @returns Total balance of treasury (ETH + Lido) as EthersBN
  */
 export const useTreasuryBalance = () => {
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const ethBalanceTreasuryV2 = useEtherBalance(config.addresses.nounsDaoExecutorProxy);
-  const lidoBalanceAsETH = useLidoBalance(config.addresses.nounsDaoExecutor);
-  const lidoBalanceTreasuryV2AsETH = useLidoBalance(config.addresses.nounsDaoExecutorProxy);
+  const { data: ethBalance } = useBalance({
+    address: config.addresses.nounsDaoExecutor as `0x${string}`,
+  });
+
+  const { data: ethBalanceTreasuryV2 } = useBalance({
+    address: config.addresses.nounsDaoExecutorProxy as `0x${string}`,
+  });
+
+  // @ts-expect-error - Type definition for useReadStEthBalanceOf doesn't match actual implementation
+  const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
+    args: config.addresses.nounsDaoExecutor
+      ? [config.addresses.nounsDaoExecutor as `0x${string}`]
+      : undefined,
+    query: { enabled: !!config.addresses.nounsDaoExecutor },
+  });
+
+  const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
+    args: config.addresses.nounsDaoExecutorProxy
+      ? [config.addresses.nounsDaoExecutorProxy as `0x${string}`]
+      : undefined,
+    query: { enabled: !!config.addresses.nounsDaoExecutorProxy },
+  });
+
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
-  const zero = BigNumber.from(0);
   return (
-    ethBalance
-      ?.add(ethBalanceTreasuryV2 ?? zero)
-      .add(lidoBalanceAsETH ?? zero)
-      .add(lidoBalanceTreasuryV2AsETH ?? zero)
-      .add(tokenBuyerBalanceAsETH ?? zero) ?? zero
+    (ethBalance?.value ?? 0n) +
+    (ethBalanceTreasuryV2?.value ?? 0n) +
+    (lidoBalanceAsETH ?? 0n) +
+    (lidoBalanceTreasuryV2AsETH ?? 0n) +
+    (tokenBuyerBalanceAsETH?.toBigInt() ?? 0n)
   );
 };
 
