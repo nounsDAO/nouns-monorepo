@@ -3,6 +3,9 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
+} from 'wagmi/codegen';
+
+import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
