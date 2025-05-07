@@ -151,6 +151,6 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
     "vm-browserify": "^1.1.2",
-    "webpack": "^5.99.7"
+    "webpack": "^5.99.8"
   }
 }
