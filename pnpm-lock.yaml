@@ -27,10 +27,11 @@ overrides:
   postcss: '>=8.4.31'
   qs: '>=6.5.3'
   semver: '>=7.5.2'
-  yargs-parser: '>=5.0.1'
+  ejs: '>=3.1.10'
   serialize-javascript: '>=6.0.2'
   underscore: '>=1.12.1'
   ws: '>=7.5.10'
+  yargs-parser: '>=5.0.1'
 
 importers:
 
@@ -5808,11 +5809,6 @@ packages:
 
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
-    engines: {node: '>=0.10.0'}
-    hasBin: true
-
-  ejs@3.1.8:
-    resolution: {integrity: sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==}
     engines: {node: '>=0.10.0'}
     hasBin: true
 
@@ -20665,10 +20661,6 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
-  ejs@3.1.8:
-    dependencies:
-      jake: 10.9.2
-
   electron-fetch@1.9.1:
     dependencies:
       encoding: 0.1.13
@@ -22659,7 +22651,7 @@ snapshots:
       colors: 1.4.0
       cosmiconfig: 7.0.1
       cross-spawn: 7.0.6
-      ejs: 3.1.8
+      ejs: 3.1.10
       enquirer: 2.3.6
       execa: 5.1.1
       fs-jetpack: 4.3.1
