@@ -1,10 +1,13 @@
-import classes from './CurrentBid.module.css';
-import TruncatedAmount from '../TruncatedAmount';
-import { Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
 import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Row, Col } from 'react-bootstrap';
+
+import { useAppSelector } from '../../hooks';
+import TruncatedAmount from '../TruncatedAmount';
+
+import classes from './CurrentBid.module.css';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that

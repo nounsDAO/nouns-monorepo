@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Col, Spinner } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import classes from './ProfileActivityFeed.module.css';
 
 import { Trans } from '@lingui/react/macro';
-import { useNounActivity } from '../../wrappers/nounActivity';
+import { Col, Spinner } from 'react-bootstrap';
+
+import Section from '../../layout/Section';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
+import { useNounActivity } from '../../wrappers/nounActivity';
 import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
 import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
+import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
+
+import classes from './ProfileActivityFeed.module.css';
 
 interface ProfileActivityFeedProps {
   nounId: number;

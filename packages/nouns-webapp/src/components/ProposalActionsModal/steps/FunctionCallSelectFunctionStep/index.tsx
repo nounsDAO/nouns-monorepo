@@ -1,16 +1,21 @@
 import React, { useEffect, ChangeEvent, useState } from 'react';
-import { ProposalActionModalStepProps } from '../..';
+
 import { utils } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
+
+import { ProposalActionModalStepProps } from '../..';
+
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 import { buildEtherscanApiQuery } from '../../../../utils/etherscan';
+
 import { Trans } from '@lingui/react/macro';
-import ModalTitle from '../../../ModalTitle';
+
+import ABIUpload from '../../../ABIUpload';
+import BrandDropdown from '../../../BrandDropdown';
 import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import BrandDropdown from '../../../BrandDropdown';
-import ABIUpload from '../../../ABIUpload';
+import ModalTitle from '../../../ModalTitle';
 
 const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;

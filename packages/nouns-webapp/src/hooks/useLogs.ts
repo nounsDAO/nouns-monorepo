@@ -1,5 +1,7 @@
-import { useBlockNumber } from '@usedapp/core';
 import { useEffect, useMemo } from 'react';
+
+import { useBlockNumber } from '@usedapp/core';
+
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { addListener, removeListener } from '../state/slices/logs';
 import { EventFilter, filterToKey, Log } from '../utils/logParsing';

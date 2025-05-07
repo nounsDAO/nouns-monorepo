@@ -1,4 +1,5 @@
 import { Modal } from 'react-bootstrap';
+
 import { CHAIN_ID } from '../../config';
 
 const networkName = () => {

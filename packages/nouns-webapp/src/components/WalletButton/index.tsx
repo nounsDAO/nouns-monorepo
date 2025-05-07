@@ -1,12 +1,14 @@
 import { Button } from 'react-bootstrap';
-import classes from './WalletButton.module.css';
-import metamaskLogo from '../../assets/wallet-brand-assets/metamask-fox.svg';
-import fortmaticLogo from '../../assets/wallet-brand-assets/fortmatic.svg';
-import walletconnectLogo from '../../assets/wallet-brand-assets/walletconnect-logo.svg';
+
 import braveLogo from '../../assets/wallet-brand-assets/brave.svg';
-import ledgerLogo from '../../assets/wallet-brand-assets/ledger.svg';
-import trezorLogo from '../../assets/wallet-brand-assets/trezor.svg';
 import coinbaseWalletLogo from '../../assets/wallet-brand-assets/coinbase-wallet-dot.svg';
+import fortmaticLogo from '../../assets/wallet-brand-assets/fortmatic.svg';
+import ledgerLogo from '../../assets/wallet-brand-assets/ledger.svg';
+import metamaskLogo from '../../assets/wallet-brand-assets/metamask-fox.svg';
+import trezorLogo from '../../assets/wallet-brand-assets/trezor.svg';
+import walletconnectLogo from '../../assets/wallet-brand-assets/walletconnect-logo.svg';
+
+import classes from './WalletButton.module.css';
 
 export enum WALLET_TYPE {
   metamask = 'Metamask',

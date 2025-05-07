@@ -1,5 +1,6 @@
-import { utils } from 'ethers';
 import React from 'react';
+
+import { utils } from 'ethers';
 
 const TruncatedAmount: React.FC<{ amount: bigint }> = props => {
   const { amount } = props;

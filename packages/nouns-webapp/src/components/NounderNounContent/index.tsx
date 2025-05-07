@@ -4,6 +4,12 @@ import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 
+import nounContentClasses from './NounderNounContent.module.css';
+
+import auctionActivityClasses from '@/components/AuctionActivity/AuctionActivity.module.css';
+import auctionBidClasses from '@/components/AuctionActivity/BidHistory.module.css';
+import bidBtnClasses from '@/components/BidHistoryBtn/BidHistoryBtn.module.css';
+
 import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
 import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
 import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
@@ -12,12 +18,6 @@ import AuctionTitleAndNavWrapper from '@/components/AuctionTitleAndNavWrapper';
 import CurrentBid, { BID_N_A } from '@/components/CurrentBid';
 import Winner from '@/components/Winner';
 import { useAppSelector } from '@/hooks';
-
-import nounContentClasses from './NounderNounContent.module.css';
-
-import auctionActivityClasses from '@/components/AuctionActivity/AuctionActivity.module.css';
-import auctionBidClasses from '@/components/AuctionActivity/BidHistory.module.css';
-import bidBtnClasses from '@/components/BidHistoryBtn/BidHistoryBtn.module.css';
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;

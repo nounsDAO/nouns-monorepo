@@ -1,6 +1,7 @@
 import nounPointerImg from '../../assets/noun-pointer.png';
-import classes from './MinBid.module.css';
 import TruncatedAmount from '../TruncatedAmount';
+
+import classes from './MinBid.module.css';
 
 const MinBid: React.FC<{ minBid: bigint; onClick: () => void }> = props => {
   const { minBid, onClick } = props;

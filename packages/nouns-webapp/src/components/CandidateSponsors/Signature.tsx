@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
-import classes from './CandidateSponsors.module.css';
-import clsx from 'clsx';
-import { useCancelSignature } from '../../wrappers/nounsDao';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/react/macro';
+
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { useCancelSignature } from '../../wrappers/nounsDao';
+import ShortAddress from '../ShortAddress';
+
+import classes from './CandidateSponsors.module.css';
 
 type CandidateSignatureProps = {
   reason: string;

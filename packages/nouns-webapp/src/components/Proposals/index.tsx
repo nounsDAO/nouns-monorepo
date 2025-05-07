@@ -1,18 +1,3 @@
-import {
-  PartialProposal,
-  ProposalState,
-  useIsDaoGteV3,
-  useProposalThreshold,
-} from '../../wrappers/nounsDao';
-import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import ProposalStatus from '../ProposalStatus';
-import classes from './Proposals.module.css';
-import { useNavigate, useLocation, Link } from 'react-router';
-import { useBlockNumber, useEthers } from '@usedapp/core';
-import { isMobileScreen } from '../../utils/isMobile';
-import clsx from 'clsx';
-import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
-import { Trans } from '@lingui/react/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
@@ -22,13 +7,30 @@ import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/l
 import { useEffect, useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import { useBlockNumber, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import en from 'dayjs/locale/en';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import Section from '../../layout/Section';
-import CandidateCard from '../CandidateCard';
-import { useCandidateProposals } from '../../wrappers/nounsData';
-import { isProposalUpdatable } from '../../utils/proposals';
+import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { useNavigate, useLocation, Link } from 'react-router';
+
 import config from '../../config';
+import Section from '../../layout/Section';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import { isMobileScreen } from '../../utils/isMobile';
+import { isProposalUpdatable } from '../../utils/proposals';
+import {
+  PartialProposal,
+  ProposalState,
+  useIsDaoGteV3,
+  useProposalThreshold,
+} from '../../wrappers/nounsDao';
+import { useCandidateProposals } from '../../wrappers/nounsData';
+import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
+import CandidateCard from '../CandidateCard';
+import ProposalStatus from '../ProposalStatus';
+
+import classes from './Proposals.module.css';
 
 dayjs.extend(relativeTime);
 

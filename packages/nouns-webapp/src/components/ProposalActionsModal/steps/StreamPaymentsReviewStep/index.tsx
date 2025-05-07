@@ -1,20 +1,23 @@
-import { Trans } from '@lingui/react/macro';
 import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
 import { FinalProposalActionStepProps } from '../..';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
+import useStreamPaymentTransactions from '../../../../hooks/useStreamPaymentTransactions';
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
   usePredictStreamAddress,
 } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import { unixToDateString } from '../../../../utils/timeUtils';
+import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalLabel from '../../../ModalLabel';
 import ModalTextPrimary from '../../../ModalTextPrimary';
-import useStreamPaymentTransactions from '../../../../hooks/useStreamPaymentTransactions';
+import ModalTitle from '../../../ModalTitle';
 import ShortAddress from '../../../ShortAddress';
-import ReactTooltip from 'react-tooltip';
+
 import classes from './StreamPaymentsReviewStep.module.css';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {

@@ -1,6 +1,7 @@
+import React, { Component } from 'react';
+
 import { Web3Provider } from '@ethersproject/providers';
 import { blo } from 'blo';
-import React, { Component } from 'react';
 
 interface IdenticonInnerProps {
   address: string;

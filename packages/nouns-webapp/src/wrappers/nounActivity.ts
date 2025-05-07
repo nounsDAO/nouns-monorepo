@@ -1,7 +1,5 @@
 import { useQuery } from '@apollo/client';
 
-import { NounVoteHistory } from '@/components/ProfileActivityFeed';
-
 import { useNounCanVoteTimestamp } from './nounsAuction';
 import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
 import {
@@ -10,6 +8,8 @@ import {
   nounTransferHistoryQuery,
   nounVotingHistoryQuery,
 } from './subgraph';
+
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
 
 export enum NounEventType {
   PROPOSAL_VOTE,

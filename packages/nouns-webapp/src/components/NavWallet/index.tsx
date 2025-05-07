@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
-import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
-import classes from './NavWallet.module.css';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'react-bootstrap';
-import WalletConnectModal from '../WalletConnectModal';
-import { useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import WalletConnectButton from './WalletConnectButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
+
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
+import { blo } from 'blo';
+import clsx from 'clsx';
+import { Dropdown } from 'react-bootstrap';
+import { useDisconnect, useEnsName } from 'wagmi';
+
+import { useAppSelector } from '../../hooks';
 import {
   shortENS,
   useShortAddress,
   veryShortAddress,
   veryShortENS,
 } from '../../utils/addressAndENSDisplayUtils';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
-import { blo } from 'blo';
-import { useDisconnect, useEnsName } from 'wagmi';
+import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import WalletConnectModal from '../WalletConnectModal';
+
+import classes from './NavWallet.module.css';
+import WalletConnectButton from './WalletConnectButton';
 
 interface NavWalletProps {
   address: string;

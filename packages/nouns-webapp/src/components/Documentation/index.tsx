@@ -1,9 +1,11 @@
-import Section from '../../layout/Section';
-import { Col } from 'react-bootstrap';
-import classes from './Documentation.module.css';
-import Accordion from 'react-bootstrap/Accordion';
-import Link from '../Link';
 import { Trans } from '@lingui/react/macro';
+import { Col } from 'react-bootstrap';
+import Accordion from 'react-bootstrap/Accordion';
+
+import Section from '../../layout/Section';
+import Link from '../Link';
+
+import classes from './Documentation.module.css';
 
 interface DocumentationProps {
   backgroundColor?: string;

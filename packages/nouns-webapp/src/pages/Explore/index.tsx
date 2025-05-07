@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BigNumber } from 'ethers';
-import classes from './Explore.module.css';
+
 import cx from 'classnames';
-import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
+import { BigNumber } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
+
+import ExploreGrid from '../../components/ExploreGrid';
+import ExploreNav from '../../components/ExploreGrid/ExploreNav';
+import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
 import { useAppSelector } from '../../hooks';
 import { useKeyPress } from '../../hooks/useKeyPress';
-import ExploreNav from '../../components/ExploreGrid/ExploreNav';
-import ExploreGrid from '../../components/ExploreGrid';
+import { Auction as IAuction } from '../../wrappers/nounsAuction';
+
+import classes from './Explore.module.css';
 
 interface ExplorePageProps {}
 

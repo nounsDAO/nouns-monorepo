@@ -1,14 +1,17 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import classes from './VoteSignals.module.css';
+
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import VoteSignalGroup from './VoteSignalGroup';
-import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useAppDispatch } from '../../hooks';
 import { useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
+
+import { useAppDispatch } from '../../hooks';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
+
+import VoteSignalGroup from './VoteSignalGroup';
+import classes from './VoteSignals.module.css';
 
 type Props = {
   proposalId?: string;

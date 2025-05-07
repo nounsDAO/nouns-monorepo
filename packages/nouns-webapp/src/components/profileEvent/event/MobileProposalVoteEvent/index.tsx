@@ -1,12 +1,15 @@
-import { useNavigate } from 'react-router';
-import { Image } from 'react-bootstrap';
-import classes from './MobileProposalVoteEvent.module.css';
-import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
-import { ProposalVoteEvent } from '../../../../wrappers/nounActivity';
 import React from 'react';
+
+import { Image } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+
 import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalVoteIcon';
-import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
+import { ProposalVoteEvent } from '../../../../wrappers/nounActivity';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
+import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
+
+import classes from './MobileProposalVoteEvent.module.css';
 
 interface MobileProposalVoteEventProps {
   event: ProposalVoteEvent;

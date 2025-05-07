@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+
 import { VoteCardVariant } from '../VoteCard';
+
 import classes from './VoteProgressBar.module.css';
 
 const VoteProgressBar: React.FC<{

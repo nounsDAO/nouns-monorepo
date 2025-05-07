@@ -1,9 +1,12 @@
-import classes from './DelegationModal.module.css';
-import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
+
+import { XIcon } from '@heroicons/react/solid';
+import ReactDOM from 'react-dom';
+
 import ChangeDelegatePannel from '../ChangeDelegatePannel';
 import CurrentDelegatePannel from '../CurrentDelegatePannel';
-import { XIcon } from '@heroicons/react/solid';
+
+import classes from './DelegationModal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;

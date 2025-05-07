@@ -1,14 +1,16 @@
-import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import { utils } from 'ethers';
+
 import { ProposalActionModalStepProps } from '../..';
+import BrandDropdown from '../../../BrandDropdown';
 import BrandNumericEntry from '../../../BrandNumericEntry';
 import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
+import ModalSubTitle from '../../../ModalSubtitle';
 import ModalTitle from '../../../ModalTitle';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
-import { utils } from 'ethers';
-import ModalSubTitle from '../../../ModalSubtitle';
-import BrandDropdown from '../../../BrandDropdown';
 
 const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;

@@ -1,14 +1,5 @@
-import { useAppSelector } from '../../hooks';
-import classes from './NavBar.module.css';
-import NogglesLogo from '../../assets/noggles.svg?react';
-import { useLocation, Link } from 'react-router';
-import { Nav, Navbar, Container, Dropdown } from 'react-bootstrap';
-import testnetNoun from '../../assets/testnet-noun.png';
-import config, { CHAIN_ID } from '../../config';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-import { ExternalURL, externalURL } from '../../utils/externalURL';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+
 import {
   faBookOpen,
   faFile,
@@ -16,20 +7,37 @@ import {
   faUsers,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
-import NavBarTreasury from '../NavBarTreasury';
-import NavWallet from '../NavWallet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { useState } from 'react';
-import NavLocaleSwitcher from '../NavLocaleSwitcher';
+import clsx from 'clsx';
+import { Nav, Navbar, Container, Dropdown } from 'react-bootstrap';
+import { useLocation, Link } from 'react-router';
+
+import NogglesIcon from '../../assets/icons/Noggles.svg?react';
+import NogglesLogo from '../../assets/noggles.svg?react';
+
+import testnetNoun from '../../assets/testnet-noun.png';
+import config, { CHAIN_ID } from '../../config';
+import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
+import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
+import { ExternalURL, externalURL } from '../../utils/externalURL';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+
+import NavBarTreasury from '../NavBarTreasury';
 import NavDropdown from '../NavDropdown';
+import NavLocaleSwitcher from '../NavLocaleSwitcher';
+import NavWallet from '../NavWallet';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import NogglesIcon from '../../assets/icons/Noggles.svg?react';
-import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
-import clsx from 'clsx';
+
 import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
+
 import { formatEther } from 'viem';
+
+import { useAppSelector } from '../../hooks';
+
+import classes from './NavBar.module.css';
 
 const NavBar = () => {
   const isDaoGteV3 = useIsDaoGteV3();

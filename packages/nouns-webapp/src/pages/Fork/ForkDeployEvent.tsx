@@ -1,6 +1,8 @@
-import classes from './Fork.module.css';
-import { Fork } from '../../wrappers/nounsDao';
 import dayjs from 'dayjs';
+
+import { Fork } from '../../wrappers/nounsDao';
+
+import classes from './Fork.module.css';
 
 type Props = {
   forkDetails: Fork;

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import classes from './MobileNounActivityRow.module.css';
 
 interface MobileNounActivityRowProps {

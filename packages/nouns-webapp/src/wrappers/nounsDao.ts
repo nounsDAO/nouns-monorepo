@@ -1,3 +1,6 @@
+import { useMemo } from 'react';
+
+import { useQuery } from '@apollo/client';
 import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
 import {
   ChainId,
@@ -10,11 +13,13 @@ import {
 } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
-import { useMemo } from 'react';
-import { useLogs } from '../hooks/useLogs';
 import * as R from 'remeda';
+import { formatEther } from 'viem';
+
 import config, { CHAIN_ID } from '../config';
-import { useQuery } from '@apollo/client';
+import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
+import { useLogs } from '../hooks/useLogs';
+
 import {
   proposalQuery,
   partialProposalsQuery,
@@ -29,8 +34,6 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
-import { formatEther } from 'viem';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;

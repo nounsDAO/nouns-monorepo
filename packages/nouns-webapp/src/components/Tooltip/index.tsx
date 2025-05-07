@@ -1,5 +1,7 @@
 import React from 'react';
+
 import ReactTooltip from 'react-tooltip';
+
 import classes from './Tooltip.module.css';
 
 interface TooltipProps {

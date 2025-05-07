@@ -1,10 +1,12 @@
-import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { ProposalTransaction } from '../../wrappers/nounsDao';
-import classes from './ProposalTransactions.module.css';
-import xIcon from '../../assets/x-icon.png';
 import { utils } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
+import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap';
+
+import xIcon from '../../assets/x-icon.png';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { ProposalTransaction } from '../../wrappers/nounsDao';
+
+import classes from './ProposalTransactions.module.css';
 
 const ProposalTransactions = ({
   className,

@@ -1,6 +1,9 @@
-import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
+
+import { useEthers } from '@usedapp/core';
+
 import { cache, cacheKey, CHAIN_ID } from '../config';
+
 import { lookupNNSOrENS } from './lookupNNSOrENS';
 
 export const ensCacheKey = (address: string) => {

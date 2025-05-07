@@ -1,18 +1,22 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './AddNounsToForkModal.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
-import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao';
-import clsx from 'clsx';
+
+import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import config from '../../config';
-import { useSetApprovalForAll, useIsApprovedForAll } from '../../wrappers/nounToken';
-import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
+import clsx from 'clsx';
+import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
+
 import link from '../../assets/icons/Link.svg';
+import config from '../../config';
+import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao';
+
+import { useSetApprovalForAll, useIsApprovedForAll } from '../../wrappers/nounToken';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+
+import classes from './AddNounsToForkModal.module.css';
 
 type Props = {
   setIsModalOpen: Function;

@@ -1,12 +1,15 @@
 import React from 'react';
+
+import { CakeIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
 import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import classes from './MobileNounWinEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
-import { CakeIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
-import { Trans } from '@lingui/react/macro';
+
+import classes from './MobileNounWinEvent.module.css';
 
 interface MobileNounWinEventProps {
   event: NounWinEvent;

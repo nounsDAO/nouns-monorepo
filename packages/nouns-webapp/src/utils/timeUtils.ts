@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+
 import { AVERAGE_BLOCK_TIME_IN_SECS } from './constants';
 
 export const currentUnixEpoch = () => {

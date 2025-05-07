@@ -1,21 +1,23 @@
-import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import classes from './Candidate.module.css';
-import { useParams, Link } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { Trans } from '@lingui/react/macro';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { useParams, Link } from 'react-router';
+
 import CandidateSponsors from '../../components/CandidateSponsors';
-import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
+import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
+import VoteSignals from '../../components/VoteSignals/VoteSignals';
+import Section from '../../layout/Section';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
 import {
   ProposalState,
   useProposal,
@@ -28,8 +30,8 @@ import {
   useCandidateProposal,
 } from '../../wrappers/nounsData';
 import { useUserVotes } from '../../wrappers/nounToken';
-import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
+
+import classes from './Candidate.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

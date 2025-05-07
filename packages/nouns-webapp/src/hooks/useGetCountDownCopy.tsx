@@ -1,9 +1,10 @@
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import en from 'dayjs/locale/en';
+
 import { SupportedLocale, SUPPORTED_LOCALE_TO_DAYSJS_LOCALE } from '../i18n/locales';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../utils/constants';
 import { PartialProposal } from '../wrappers/nounsDao';
-import en from 'dayjs/locale/en';
 
 /**
  * A function that takes a proposal and block number and returns the timestamp of the event

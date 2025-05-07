@@ -5,13 +5,13 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Row, Col } from 'react-bootstrap';
 
+import classes from './Holder.module.css';
+
 import ShortAddress from '@/components/ShortAddress';
 import Tooltip from '@/components/Tooltip';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { nounQuery } from '@/wrappers/subgraph';
-
-import classes from './Holder.module.css';
 
 interface HolderProps {
   nounId: bigint;

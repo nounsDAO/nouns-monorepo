@@ -1,16 +1,11 @@
-import { utils } from 'ethers';
+import { useQuery } from '@apollo/client';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction } from '@usedapp/core';
+import { utils } from 'ethers';
+import * as R from 'remeda';
+
 import config from '../config';
-import {
-  Delegates,
-  candidateFeedbacksQuery,
-  candidateProposalQuery,
-  candidateProposalVersionsQuery,
-  candidateProposalsQuery,
-  proposalFeedbacksQuery,
-} from './subgraph';
-import { useQuery } from '@apollo/client';
+
 import {
   ProposalDetail,
   ProposalTransactionDetails,
@@ -22,8 +17,15 @@ import {
   useProposalThreshold,
   useUpdatableProposalIds,
 } from './nounsDao';
-import * as R from 'remeda';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
+import {
+  Delegates,
+  candidateFeedbacksQuery,
+  candidateProposalQuery,
+  candidateProposalVersionsQuery,
+  candidateProposalsQuery,
+  proposalFeedbacksQuery,
+} from './subgraph';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);

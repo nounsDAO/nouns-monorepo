@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-import classes from './Fork.module.css';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { Link } from 'react-router';
+
+import ShortAddress from '../../components/ShortAddress';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import {
   EscrowDeposit,
   EscrowWithdrawal,
   useProposalTitles,
   ForkCycleEvent,
 } from '../../wrappers/nounsDao';
-import { Trans } from '@lingui/react/macro';
-import { Link } from 'react-router';
-import ShortAddress from '../../components/ShortAddress';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
-import clsx from 'clsx';
+
+import classes from './Fork.module.css';
 
 type Props = {
   event: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;

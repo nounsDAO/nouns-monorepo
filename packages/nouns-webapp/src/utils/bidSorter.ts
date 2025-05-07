@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
+
 import { IBid } from '../wrappers/subgraph';
 
 /**

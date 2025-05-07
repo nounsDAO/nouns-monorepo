@@ -1,7 +1,9 @@
-import classes from './VoteSignals.module.css';
-import ShortAddress from '../ShortAddress';
 import { blo } from 'blo';
+
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
+import ShortAddress from '../ShortAddress';
+
+import classes from './VoteSignals.module.css';
 
 type Props = {
   support: number;

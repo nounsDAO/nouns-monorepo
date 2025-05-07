@@ -1,8 +1,10 @@
-import classes from './NavBarTreasury.module.css';
-import { NavBarButtonStyle } from '../NavBarButton';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+
+import { NavBarButtonStyle } from '../NavBarButton';
+
+import classes from './NavBarTreasury.module.css';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;
@@ -30,7 +32,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
     <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
       <div className={classes.button}>
         <div
-          className="d-flex flex-row justify-content-around"
+          className="d-flex justify-content-around flex-row"
           style={{
             paddingTop: '1px',
           }}

@@ -1,7 +1,10 @@
-import classes from './Modal.module.css';
-import ReactDOM from 'react-dom';
-import xIcon from '../../assets/x-icon.png';
 import React from 'react';
+
+import ReactDOM from 'react-dom';
+
+import xIcon from '../../assets/x-icon.png';
+
+import classes from './Modal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;

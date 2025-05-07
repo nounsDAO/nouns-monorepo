@@ -1,7 +1,8 @@
 import { useContractCall } from '@usedapp/core';
-import { Interface } from 'ethers/lib/utils';
-import tokenBuyerABI from './tokenBuyerABI.json';
 import { BigNumber as EthersBN } from 'ethers';
+import { Interface } from 'ethers/lib/utils';
+
+import tokenBuyerABI from './tokenBuyerABI.json';
 
 const abi = new Interface(tokenBuyerABI);
 const BUFFER_BPS = 5_000;

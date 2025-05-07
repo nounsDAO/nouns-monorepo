@@ -1,10 +1,13 @@
+import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Connector, useConnect } from 'wagmi';
+
 import Modal from '../Modal';
 import WalletButton, { WALLET_TYPE } from '../WalletButton';
-import clsx from 'clsx';
+
 import classes from './WalletConnectModal.module.css';
-import { Trans } from '@lingui/react/macro';
-import { Connector, useConnect } from 'wagmi';
-import React from 'react';
 
 interface WalletConnectModalProps {
   onDismiss: () => void;

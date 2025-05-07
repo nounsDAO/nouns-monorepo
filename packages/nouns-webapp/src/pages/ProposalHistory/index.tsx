@@ -1,26 +1,33 @@
+import { useEffect, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { Row, Col } from 'react-bootstrap';
+
+import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
+import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import Section from '../../layout/Section';
 import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
 import classes from './Vote.module.css';
-import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
-import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
-import { useEffect, useState } from 'react';
-import clsx from 'clsx';
 import ProposalContent from '../../components/ProposalContent';
+
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import { Trans } from '@lingui/react/macro';
+
 import VersionTab from './VersionTab';
+
 import remarkBreaks from 'remark-breaks';
+
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
 import ProposalStatus from '../../components/ProposalStatus';
-import { i18n } from '@lingui/core';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+
 import { useParams, Link } from 'react-router';
 dayjs.extend(utc);
 dayjs.extend(timezone);

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Collapse, Table } from 'react-bootstrap';
+
 import {
   DelegationEvent,
   NounEventType,
@@ -13,6 +15,7 @@ import DesktopDelegationEvent from '../profileEvent/event/DesktopDelegationEvent
 import DesktopNounWinEvent from '../profileEvent/event/DesktopNounWinEvent';
 import DesktopProposalVoteEvent from '../profileEvent/event/DesktopProposalVoteEvent';
 import DesktopTransferEvent from '../profileEvent/event/DesktopTransferEvent';
+
 import classes from './DesktopProfileActivityFeed.module.css';
 
 interface DesktopProfileActivityFeedProps {

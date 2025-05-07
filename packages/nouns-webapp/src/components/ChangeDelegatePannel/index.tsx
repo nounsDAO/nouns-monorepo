@@ -1,24 +1,27 @@
+import React, { useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { isAddress } from 'ethers/lib/utils';
-import React, { useEffect, useState } from 'react';
 import { Collapse, FormControl } from 'react-bootstrap';
-import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
-import DelegationCandidateInfo from '../DelegationCandidateInfo';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import classes from './ChangeDelegatePannel.module.css';
+
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
+import { usePickByState } from '../../utils/pickByState';
+import { useProposalThreshold } from '../../wrappers/nounsDao';
 import {
   useAccountVotes,
   useDelegateVotes,
   useNounTokenBalance,
   useUserDelegatee,
 } from '../../wrappers/nounToken';
-import { usePickByState } from '../../utils/pickByState';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
 import BrandSpinner from '../BrandSpinner';
-import { useProposalThreshold } from '../../wrappers/nounsDao';
+import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
+import DelegationCandidateInfo from '../DelegationCandidateInfo';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+
+import classes from './ChangeDelegatePannel.module.css';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;

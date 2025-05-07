@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import classes from './NavDropdown.module.css';
-import { Dropdown } from 'react-bootstrap';
+
 import clsx from 'clsx';
+import { Dropdown } from 'react-bootstrap';
+
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+
+import classes from './NavDropdown.module.css';
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;

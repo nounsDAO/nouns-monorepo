@@ -1,5 +1,7 @@
-import { useBlockNumber } from '@usedapp/core';
 import { useEffect, useMemo } from 'react';
+
+import { useBlockNumber } from '@usedapp/core';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useReadonlyProvider } from '../../hooks/useReadonlyProvider';
 import { EventFilter, keyToFilter } from '../../utils/logParsing';

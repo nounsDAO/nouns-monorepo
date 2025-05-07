@@ -1,12 +1,15 @@
+import React from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers/lib/ethers';
-import React from 'react';
 import { Col, Row } from 'react-bootstrap';
+
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import ShortAddress from '../../../ShortAddress';
+
 import classes from './FunctionCallReviewStep.module.css';
 
 export enum SupportedCurrencies {

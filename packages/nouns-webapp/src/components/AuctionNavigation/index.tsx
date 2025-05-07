@@ -2,10 +2,10 @@ import React, { useCallback, useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
 
+import classes from './AuctionNavigation.module.css';
+
 import { useAppSelector } from '@/hooks';
 import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
-
-import classes from './AuctionNavigation.module.css';
 
 interface AuctionNavigationProps {
   isFirstAuction: boolean;

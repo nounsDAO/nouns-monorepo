@@ -1,10 +1,20 @@
 import React, { useMemo, useEffect } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
 import { useBlockNumber } from '@usedapp/core';
+import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
-import ProposalStatus from '../ProposalStatus';
-import classes from './ProposalHeader.module.css';
-import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
+
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { transactionIconLink } from '../ProposalContent';
+import ShortAddress from '../ShortAddress';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
+import { Locales } from '../../i18n/locales';
+import { isMobileScreen } from '../../utils/isMobile';
+import { relativeTimestamp } from '../../utils/timeUtils';
 import {
   Proposal,
   ProposalVersion,
@@ -12,20 +22,13 @@ import {
   useIsDaoGteV3,
   useProposalVote,
 } from '../../wrappers/nounsDao';
-import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionIconLink } from '../ProposalContent';
-import ShortAddress from '../ShortAddress';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { Locales } from '../../i18n/locales';
-import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
-import { relativeTimestamp } from '../../utils/timeUtils';
+import HoverCard from '../HoverCard';
+import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
+import ProposalStatus from '../ProposalStatus';
+
+import classes from './ProposalHeader.module.css';
 
 interface ProposalHeaderProps {
   title?: string;

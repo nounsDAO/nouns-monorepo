@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
-import classes from './Fork.module.css';
+
 import { Trans } from '@lingui/react/macro';
+import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import Section from '../../layout/Section';
+import dayjs from 'dayjs';
+import { utils } from 'ethers/lib/ethers';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useParams, Link } from 'react-router';
+
 import AddNounsToForkModal from '../../components/AddNounsToForkModal';
 import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
+import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
+import { useScrollToLocation } from '../../hooks/useScrollToLocation';
+import Section from '../../layout/Section';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import {
   useEscrowEvents,
   useForkDetails,
@@ -15,18 +23,15 @@ import {
   useAdjustedTotalSupply,
   useForkThresholdBPS,
 } from '../../wrappers/nounsDao';
-import { useEthers } from '@usedapp/core';
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
-import ForkEvent from './ForkEvent';
-import DeployForkButton from './DeployForkButton';
-import WithdrawNounsButton from './WithdrawNounsButton';
-import { useScrollToLocation } from '../../hooks/useScrollToLocation';
-import { useParams, Link } from 'react-router';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
 import NotFoundPage from '../NotFound';
-import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
-import { utils } from 'ethers/lib/ethers';
+
+import DeployForkButton from './DeployForkButton';
+import classes from './Fork.module.css';
+import ForkEvent from './ForkEvent';
+import WithdrawNounsButton from './WithdrawNounsButton';
+
+
 
 const now = new Date();
 

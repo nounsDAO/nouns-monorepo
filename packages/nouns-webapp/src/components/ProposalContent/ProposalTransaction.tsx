@@ -1,12 +1,16 @@
+import { Fragment } from 'react';
+
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import config from '../../config';
 import { utils } from 'ethers';
-import { Fragment } from 'react';
-import { linkIfAddress } from '.';
+
+import config from '../../config';
 import { ProposalDetail } from '../../wrappers/nounsDao';
 import ShortAddress from '../ShortAddress';
+
 import classes from './ProposalContent.module.css';
+
+import { linkIfAddress } from '.';
 
 type Props = {
   transaction: ProposalDetail;

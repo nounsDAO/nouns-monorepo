@@ -1,7 +1,9 @@
 import { useMemo, useEffect, useState } from 'react';
+
 import { Contract } from '@ethersproject/contracts';
 import { useEthers } from '@usedapp/core';
 import { utils, BigNumber } from 'ethers';
+
 import config from '../config';
 import ERC20 from '../libs/abi/ERC20.json';
 

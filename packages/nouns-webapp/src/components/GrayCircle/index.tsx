@@ -1,6 +1,7 @@
 import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
-import nounClasses from '../Noun/Noun.module.css';
 import Noun from '../Noun';
+import nounClasses from '../Noun/Noun.module.css';
+
 import classes from './GrayCircle.module.css';
 
 interface GrayCircleProps {

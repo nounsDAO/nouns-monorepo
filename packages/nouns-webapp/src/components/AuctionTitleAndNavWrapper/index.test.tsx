@@ -1,8 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import AuctionTitleAndNavWrapper from './index';
+import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
 import classes from './AuctionTitleAndNavWrapper.module.css';
+
+import AuctionTitleAndNavWrapper from './index';
 
 describe('AuctionTitleAndNavWrapper Component', () => {
   it('should render children correctly', () => {

@@ -1,7 +1,10 @@
-import { ScaleIcon } from '@heroicons/react/solid';
 import React from 'react';
+
+import { ScaleIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
+
 import ShortAddress from '../../../../ShortAddress';
+
 import classes from './DelegatePill.module.css';
 
 interface DelegatePillProps {

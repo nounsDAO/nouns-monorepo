@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import classes from './Vote.module.css';
-import clsx from 'clsx';
-import { useBlockNumber } from '@usedapp/core';
-import dayjs from 'dayjs';
+
 import { Trans } from '@lingui/react/macro';
+import { useBlockNumber } from '@usedapp/core';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { Link } from 'react-router';
+
+import classes from './Vote.module.css';
 
 type Props = {
   isActive: boolean;

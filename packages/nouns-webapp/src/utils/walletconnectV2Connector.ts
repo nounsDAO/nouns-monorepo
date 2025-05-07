@@ -1,7 +1,8 @@
-import { ConnectorUpdate } from '@web3-react/types';
-import { AbstractConnector } from '@web3-react/abstract-connector';
 import type WalletConnectProvider from '@walletconnect/ethereum-provider';
+
 import { EthereumProviderOptions } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider';
+import { AbstractConnector } from '@web3-react/abstract-connector';
+import { ConnectorUpdate } from '@web3-react/types';
 
 export class WalletConnectV2Connector extends AbstractConnector {
   provider?: typeof WalletConnectProvider.prototype;

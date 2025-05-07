@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { Auction as IAuction } from '../../wrappers/nounsAuction';
+
 import {
   AuctionCreateEvent,
   AuctionExtendedEvent,
   AuctionSettledEvent,
   BidEvent,
 } from '@/utils/types';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
 
 export interface AuctionState {
   activeAuction?: IAuction;

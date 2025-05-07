@@ -1,11 +1,13 @@
-import Modal from '../Modal';
-import classes from './LanguageSelectionModal.module.css';
-import { setLocale } from '../../i18n/setLocale';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
+
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
+import { setLocale } from '../../i18n/setLocale';
+import Modal from '../Modal';
+
+import classes from './LanguageSelectionModal.module.css';
 
 interface LanguageSelectionModalProps {
   onDismiss: () => void;

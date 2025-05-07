@@ -1,12 +1,13 @@
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
+
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import { ProposalCandidate } from '../../wrappers/nounsData';
-import remarkBreaks from 'remark-breaks';
-import classes from './ProposalContent.module.css';
-import { Trans } from '@lingui/react/macro';
 
-import clsx from 'clsx';
+import classes from './ProposalContent.module.css';
 import ProposalTransactions from './ProposalTransactions';
 
 interface ProposalCandidateContentProps {

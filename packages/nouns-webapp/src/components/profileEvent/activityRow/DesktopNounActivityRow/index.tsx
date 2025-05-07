@@ -1,7 +1,9 @@
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import classes from './DesktopNounActivityRow.module.css';
-import responsiveUiUtilsClasses from '../../../../utils/ResponsiveUIUtils.module.css';
+
 import { useActiveLocale } from '../../../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../../../utils/ResponsiveUIUtils.module.css';
+
+import classes from './DesktopNounActivityRow.module.css';
 
 interface DesktopNounActivityRowProps {
   icon: ReactNode;

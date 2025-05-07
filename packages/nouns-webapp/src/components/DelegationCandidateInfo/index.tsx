@@ -1,14 +1,17 @@
-import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import ShortAddress from '../ShortAddress';
-import { useAccountVotes } from '../../wrappers/nounToken';
-import { ChangeDelegateState } from '../ChangeDelegatePannel';
-import { usePickByState } from '../../utils/pickByState';
-import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
-import BrandSpinner from '../BrandSpinner';
-import classes from './DelegationCandidateInfo.module.css';
+
+import { Trans } from '@lingui/react/macro';
 import { blo } from 'blo';
+
+import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
+import { usePickByState } from '../../utils/pickByState';
+import { useAccountVotes } from '../../wrappers/nounToken';
+import BrandSpinner from '../BrandSpinner';
+import { ChangeDelegateState } from '../ChangeDelegatePannel';
+import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
+import ShortAddress from '../ShortAddress';
+
+import classes from './DelegationCandidateInfo.module.css';
 
 interface DelegationCandidateInfoProps {
   address: string;

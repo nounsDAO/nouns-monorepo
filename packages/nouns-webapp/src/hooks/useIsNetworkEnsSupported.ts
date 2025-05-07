@@ -1,6 +1,7 @@
 // used to determine if the connectd network has ens support
-import { useEthers } from '@usedapp/core';
 import { useState } from 'react';
+
+import { useEthers } from '@usedapp/core';
 
 export const useIsNetworkEnsSupported = () => {
   const { library: provider } = useEthers();

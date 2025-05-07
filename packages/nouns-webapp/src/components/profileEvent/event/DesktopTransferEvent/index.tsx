@@ -1,13 +1,16 @@
 import React from 'react';
+
+import { SwitchHorizontalIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
 import { TransferEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopTransferEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
-import { SwitchHorizontalIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
+import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
-import { Trans } from '@lingui/react/macro';
+
+import classes from './DesktopTransferEvent.module.css';
 
 interface DesktopTransferEventProps {
   event: TransferEvent;

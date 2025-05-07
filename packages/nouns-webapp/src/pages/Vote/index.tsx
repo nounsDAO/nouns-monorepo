@@ -1,27 +1,3 @@
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import {
-  PartialProposal,
-  ProposalState,
-  ProposalVersion,
-  useCancelProposal,
-  useCurrentQuorum,
-  useExecuteProposal,
-  useExecuteProposalOnTimelockV1,
-  useHasVotedOnProposal,
-  useIsDaoGteV3,
-  useProposal,
-  useProposalVersions,
-  useQueueProposal,
-  useIsForkActive,
-} from '../../wrappers/nounsDao';
-import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import classes from './Vote.module.css';
-import { Link, useParams } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
@@ -46,17 +22,43 @@ import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import { SearchIcon } from '@heroicons/react/solid';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
+
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import VoteSignals from '../../components/VoteSignals/VoteSignals';
+import config from '../../config';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import Section from '../../layout/Section';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { isProposalUpdatable } from '../../utils/proposals';
+import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import {
+  PartialProposal,
+  ProposalState,
+  ProposalVersion,
+  useCancelProposal,
+  useCurrentQuorum,
+  useExecuteProposal,
+  useExecuteProposalOnTimelockV1,
+  useHasVotedOnProposal,
+  useIsDaoGteV3,
+  useProposal,
+  useProposalVersions,
+  useQueueProposal,
+  useIsForkActive,
+} from '../../wrappers/nounsDao';
 import { useProposalFeedback } from '../../wrappers/nounsData';
+import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+
+import classes from './Vote.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

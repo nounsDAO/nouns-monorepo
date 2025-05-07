@@ -2,13 +2,13 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Link } from 'react-router';
 
+import classes from './CandidateCard.module.css';
+import CandidateSponsors from './CandidateSponsors';
+
 import ShortAddress from '@/components/ShortAddress';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import { PartialProposal } from '@/wrappers/nounsDao';
 import { ProposalCandidate } from '@/wrappers/nounsData';
-
-import classes from './CandidateCard.module.css';
-import CandidateSponsors from './CandidateSponsors';
 
 type CandidateCardProps = {
   candidate: ProposalCandidate;

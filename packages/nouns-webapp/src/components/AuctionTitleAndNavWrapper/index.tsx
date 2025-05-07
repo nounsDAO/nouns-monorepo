@@ -1,6 +1,8 @@
-import { Col } from 'react-bootstrap';
-import classes from './AuctionTitleAndNavWrapper.module.css';
 import React from 'react';
+
+import { Col } from 'react-bootstrap';
+
+import classes from './AuctionTitleAndNavWrapper.module.css';
 
 interface AuctionTitleAndNavWrapperProps {
   children: React.ReactNode;

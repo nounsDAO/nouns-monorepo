@@ -1,13 +1,15 @@
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { utils } from 'ethers/lib/ethers';
 import { Col, Row } from 'react-bootstrap';
+
+import Proposals from '../../components/Proposals';
+import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import Section from '../../layout/Section';
 import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
-import Proposals from '../../components/Proposals';
+
 import classes from './Governance.module.css';
-import { utils } from 'ethers/lib/ethers';
-import clsx from 'clsx';
-import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();

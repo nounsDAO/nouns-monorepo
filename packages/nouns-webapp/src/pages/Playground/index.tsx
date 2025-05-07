@@ -1,3 +1,10 @@
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import { ImageData, getNounData, getRandomNounSeed } from '@noundry/nouns-assets';
+import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+import { PNG } from 'pngjs';
 import {
   Container,
   Col,
@@ -9,17 +16,13 @@ import {
   OverlayTrigger,
   Popover,
 } from 'react-bootstrap';
-import classes from './Playground.module.css';
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
-import Link from '../../components/Link';
-import { ImageData, getNounData, getRandomNounSeed } from '@noundry/nouns-assets';
-import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+
 import InfoIcon from '../../assets/icons/Info.svg';
+import Link from '../../components/Link';
 import Noun from '../../components/Noun';
+
 import NounModal from './NounModal';
-import { PNG } from 'pngjs';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
+import classes from './Playground.module.css';
 
 interface Trait {
   title: string;

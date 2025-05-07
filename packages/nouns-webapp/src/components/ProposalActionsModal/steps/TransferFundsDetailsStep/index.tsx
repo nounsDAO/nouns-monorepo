@@ -1,10 +1,12 @@
+import React, { useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers';
-import React, { useEffect, useState } from 'react';
+
 import { ProposalActionModalStepProps } from '../..';
 import BrandDropdown from '../../../BrandDropdown';
-import BrandTextEntry from '../../../BrandTextEntry';
 import BrandNumericEntry from '../../../BrandNumericEntry';
+import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 

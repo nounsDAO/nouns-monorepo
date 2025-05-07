@@ -1,11 +1,14 @@
+import { useState, useEffect, useRef } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import classes from './AuctionTimer.module.css';
-import { useState, useEffect, useRef } from 'react';
+
 import { useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
+
+import classes from './AuctionTimer.module.css';
 
 dayjs.extend(duration);
 

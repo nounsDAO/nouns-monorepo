@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import { useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import { Card, Col, Row } from 'react-bootstrap';
+
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { ensCacheKey } from '../../utils/ensLookup';
+import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { Proposal } from '../../wrappers/nounsDao';
+import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
 import NounImageVoteTable from '../NounImageVoteTable';
 import VoteProgressBar from '../VoteProgressBar';
+
 import classes from './VoteCard.module.css';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
-import { useEthers } from '@usedapp/core';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import clsx from 'clsx';
-import { ensCacheKey } from '../../utils/ensLookup';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
 
 export enum VoteCardVariant {
   FOR,
@@ -102,7 +105,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
     <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
         <Card.Body className="p-2">
-          <Card.Text className="py-2 m-0">
+          <Card.Text className="m-0 py-2">
             <span
               className={`${
                 isEnUS ? classes.voteCardHeaderTextEn : classes.voteCardHeaderTextNonEn
@@ -141,7 +144,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             </span>
           </Card.Text>
 
-          <Card.Text className={clsx('py-2 m-0', classes.mobileVoteCountWrapper)}>
+          <Card.Text className={clsx('m-0 py-2', classes.mobileVoteCountWrapper)}>
             <span className={classes.voteCardVoteCount}>
               {delegateView
                 ? i18n.number(filteredDelegateGroupedVoteData.length)

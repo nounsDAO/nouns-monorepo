@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import classes from './BrandNumericEntry.module.css';
 import { NumericFormat, OnValueChange } from 'react-number-format';
+
+import classes from './BrandNumericEntry.module.css';
 
 interface BrandNumericEntryProps {
   onValueChange?: OnValueChange;

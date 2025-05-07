@@ -1,5 +1,7 @@
-import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+
 import { ProposalActionModalStepProps } from '../..';
 import { currentUnixEpoch, toUnixEpoch } from '../../../../utils/timeUtils';
 import BrandDatePicker from '../../../BrandDatePicker';

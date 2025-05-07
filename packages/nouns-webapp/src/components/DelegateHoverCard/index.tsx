@@ -1,11 +1,14 @@
+import React from 'react';
+
 import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import React from 'react';
 import { Spinner } from 'react-bootstrap';
+
 import { delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import HorizontalStackedNouns from '../HorizontalStackedNouns';
 import ShortAddress from '../ShortAddress';
+
 import classes from './DelegateHoverCard.module.css';
 
 interface DelegateHoverCardProps {

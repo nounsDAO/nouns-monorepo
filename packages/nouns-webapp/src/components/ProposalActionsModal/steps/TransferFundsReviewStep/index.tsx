@@ -1,14 +1,17 @@
+import React from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers';
-import React from 'react';
+
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import ShortAddress from '../../../ShortAddress';
-import { SupportedCurrency } from '../TransferFundsDetailsStep';
-import classes from './TransferFundsReviewStep.module.css';
+import config from '../../../../config';
 import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
-import config from '../../../../config';
+import ShortAddress from '../../../ShortAddress';
+import { SupportedCurrency } from '../TransferFundsDetailsStep';
+
+import classes from './TransferFundsReviewStep.module.css';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {

@@ -1,9 +1,9 @@
+import { Auction } from './nounsAuction';
+
 import { useAppSelector } from '@/hooks';
 import { compareBids } from '@/utils/compareBids';
 import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounderNoun';
 import { Bid, BidEvent } from '@/utils/types';
-
-import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
   return {

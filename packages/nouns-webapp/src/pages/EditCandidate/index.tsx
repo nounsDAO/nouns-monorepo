@@ -1,29 +1,35 @@
-import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
-import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
+import { useCallback, useEffect, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
+import clsx from 'clsx';
+import { ethers } from 'ethers';
+import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Link } from 'react-router';
+
 import ProposalEditor from '../../components/ProposalEditor';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import EditProposalButton from '../../components/EditProposalButton/index';
 import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useState } from 'react';
+
+
 import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+
+
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
+import Section from '../../layout/Section';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import {
   useUpdateProposalCandidate,
   useCandidateProposal,
   useGetUpdateCandidateCost,
 } from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
+import { useUserVotes } from '../../wrappers/nounToken';
+import classes from '../CreateProposal/CreateProposal.module.css';
 
 interface EditCandidateProps {
   match: {

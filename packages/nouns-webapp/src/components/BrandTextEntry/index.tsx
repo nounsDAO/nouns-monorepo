@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import classes from './BrandTextEntry.module.css';
 
 interface BrandTextEntryProps {

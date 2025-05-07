@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers';
+
 import { Bid } from './types';
 
 const timestampMultiple = BigNumber.from(1_000_000);

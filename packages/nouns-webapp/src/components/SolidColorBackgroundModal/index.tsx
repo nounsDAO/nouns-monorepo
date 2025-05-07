@@ -1,14 +1,17 @@
-import classes from './SolidColorBackgroundModal.module.css';
-import ReactDOM from 'react-dom';
 import React, { useEffect, useRef } from 'react';
+
 import { XIcon } from '@heroicons/react/solid';
-import { isMobileScreen } from '../../utils/isMobile';
-import NounsTransition from '../NounsTransition';
+import ReactDOM from 'react-dom';
+
 import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
 } from '../../utils/cssTransitionUtils';
+import { isMobileScreen } from '../../utils/isMobile';
+import NounsTransition from '../NounsTransition';
+
+import classes from './SolidColorBackgroundModal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);

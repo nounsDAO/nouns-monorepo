@@ -9,12 +9,12 @@ import Image from 'react-bootstrap/Image';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useSwipeable } from 'react-swipeable';
 
+import classes from './ExploreNounDetail.module.css';
+
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 import NounInfoRowBirthday from '@/components/NounInfoRowBirthday';
 import { StandalonePart } from '@/components/StandalonePart';
 import { useNounSeed } from '@/wrappers/nounToken';
-
-import classes from './ExploreNounDetail.module.css';
 
 type Noun = {
   id: number | null;

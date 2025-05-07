@@ -1,22 +1,25 @@
 import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { utils } from 'ethers';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
+
+import linkIcon from '../../assets/icons/Link.svg';
+import config from '../../config';
 import {
   buildEtherscanAddressLink,
   buildEtherscanHoldingsLink,
   buildEtherscanTxLink,
 } from '../../utils/etherscan';
-import { utils } from 'ethers';
-import classes from './ProposalContent.module.css';
-import { Trans } from '@lingui/react/macro';
+import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+import { ProposalDetail } from '../../wrappers/nounsDao';
 import EnsOrLongAddress from '../EnsOrLongAddress';
-import clsx from 'clsx';
+
+import classes from './ProposalContent.module.css';
 import ProposalTransactions from './ProposalTransactions';
-import linkIcon from '../../assets/icons/Link.svg';
-import config from '../../config';
 
 interface ProposalContentProps {
   description: string;

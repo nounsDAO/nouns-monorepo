@@ -1,10 +1,13 @@
-import classes from './ProposalVoteHeadline.module.css';
+import React from 'react';
+
 import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
+import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
 import { Proposal, ProposalState, Vote } from '../../../../wrappers/nounsDao';
 import ShortAddress from '../../../ShortAddress';
-import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import React from 'react';
-import ReactTooltip from 'react-tooltip';
+
+import classes from './ProposalVoteHeadline.module.css';
 
 interface ProposalVoteHeadlineProps {
   proposal: Proposal;

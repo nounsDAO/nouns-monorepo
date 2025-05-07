@@ -1,13 +1,16 @@
 import React from 'react';
+
+import { ScaleIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
 import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
 import { DelegationEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopDelegationEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
-import { ScaleIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
+import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
-import { Trans } from '@lingui/react/macro';
+
+import classes from './DesktopDelegationEvent.module.css';
 
 interface DesktopDelegationEventProps {
   event: DelegationEvent;

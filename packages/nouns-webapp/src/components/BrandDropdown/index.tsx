@@ -1,5 +1,7 @@
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import React from 'react';
+
+import { ChevronDownIcon } from '@heroicons/react/solid';
+
 import classes from './BrandDropdown.module.css';
 
 interface BrandDropdownProps {

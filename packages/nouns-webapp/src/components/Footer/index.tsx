@@ -1,10 +1,12 @@
-import classes from './Footer.module.css';
+import { Trans } from '@lingui/react/macro';
 import { Container } from 'react-bootstrap';
+
+import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { externalURL, ExternalURL } from '../../utils/externalURL';
-import config from '../../config';
 import Link from '../Link';
-import { Trans } from '@lingui/react/macro';
+
+import classes from './Footer.module.css';
 
 const Footer = () => {
   const twitterURL = externalURL(ExternalURL.twitter);

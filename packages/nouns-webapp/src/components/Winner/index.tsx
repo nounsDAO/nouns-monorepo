@@ -1,14 +1,17 @@
-import { Button, Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
-import classes from './Winner.module.css';
-import ShortAddress from '../ShortAddress';
-import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
-import { Trans } from '@lingui/react/macro';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
 import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Button, Row, Col } from 'react-bootstrap';
+
+import { useAppSelector } from '../../hooks';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { isMobileScreen } from '../../utils/isMobile';
+import ShortAddress from '../ShortAddress';
 import Tooltip from '../Tooltip';
+
+import classes from './Winner.module.css';
 
 interface WinnerProps {
   winner: string;

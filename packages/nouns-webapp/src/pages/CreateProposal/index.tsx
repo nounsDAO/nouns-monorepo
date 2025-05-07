@@ -1,5 +1,22 @@
+import ProposalTransactions from '../../components/ProposalTransactions';
+import { withStepProgress } from 'react-stepz';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { Trans } from '@lingui/react/macro';
+import { TransactionStatus, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import { Col, Alert, Button, Form } from 'react-bootstrap';
+import { Link } from 'react-router';
+import CreateProposalButton from '../../components/CreateProposalButton';
+
+import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '../../components/ProposalActionsModal';
+import ProposalEditor from '../../components/ProposalEditor';
+import config from '../../config';
 import Section from '../../layout/Section';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
+import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalState,
   ProposalTransaction,
@@ -11,23 +28,8 @@ import {
   useProposeOnTimelockV1,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
+
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router';
-import { TransactionStatus, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import CreateProposalButton from '../../components/CreateProposalButton';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { withStepProgress } from 'react-stepz';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

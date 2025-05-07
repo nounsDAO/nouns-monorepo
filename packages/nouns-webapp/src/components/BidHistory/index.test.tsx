@@ -2,9 +2,9 @@ import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useAuctionBids } from '@/wrappers/onDisplayAuction';
-
 import BidHistory from './index';
+
+import { useAuctionBids } from '@/wrappers/onDisplayAuction';
 
 // Mock dependencies
 vi.mock('@/hooks', () => ({

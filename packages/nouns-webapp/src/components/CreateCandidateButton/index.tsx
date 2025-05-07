@@ -1,5 +1,5 @@
-import { Button, Spinner } from 'react-bootstrap';
 import { Trans } from '@lingui/react/macro';
+import { Button, Spinner } from 'react-bootstrap';
 
 const CreateCandidateButton = ({
   className,

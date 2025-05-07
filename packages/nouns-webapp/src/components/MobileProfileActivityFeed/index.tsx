@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Collapse } from 'react-bootstrap';
+
 import {
   DelegationEvent,
   NounEventType,

@@ -1,12 +1,15 @@
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { resolveNounContractAddress } from '../../utils/resolveNounsContractAddress';
-import { useEthers } from '@usedapp/core';
-import classes from './ShortAddress.module.css';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import React from 'react';
-import Identicon from '../Identicon';
+
+import { useEthers } from '@usedapp/core';
+
 import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
+import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
+import { useReverseENSLookUp } from '../../utils/ensLookup';
+import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
+import { resolveNounContractAddress } from '../../utils/resolveNounsContractAddress';
+import Identicon from '../Identicon';
+
+import classes from './ShortAddress.module.css';
 
 const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
   const { address, avatar, size = 24 } = props;

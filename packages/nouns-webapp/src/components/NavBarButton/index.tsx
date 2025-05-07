@@ -1,8 +1,10 @@
-import clsx from 'clsx';
-import classes from './NavBarButton.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
+
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+
+import classes from './NavBarButton.module.css';
 
 export enum NavBarButtonStyle {
   COOL_INFO,

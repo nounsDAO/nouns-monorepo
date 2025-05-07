@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import classes from './StreamWithdrawModal.module.css';
+
+import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Trans } from '@lingui/react/macro';
-import ModalTitle from '../ModalTitle';
-import config from '../../config';
-import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
 import { ethers } from 'ethers';
+
+import config from '../../config';
+import { countDecimals } from '../../utils/numberUtils';
+import { formatTokenAmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
 import {
   useElapsedTime,
   useStreamRemainingBalance,
   useWithdrawTokens,
 } from '../../wrappers/nounsStream';
-import ModalBottomButtonRow from '../ModalBottomButtonRow';
 import BrandSpinner from '../BrandSpinner';
+import ModalBottomButtonRow from '../ModalBottomButtonRow';
+import ModalTitle from '../ModalTitle';
+
 import BrandNumericEntry from '../BrandNumericEntry';
+import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import StartOrEndTime from '../StartOrEndTime';
-import { formatTokenAmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 import ModalLabel from '../ModalLabel';
-import { countDecimals } from '../../utils/numberUtils';
+
+import classes from './StreamWithdrawModal.module.css';
 
 dayjs.extend(relativeTime);
 

@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import classes from './NavLocalSwitcher.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faCheck, faSortDown, faSortUp, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'react-bootstrap';
-import clsx from 'clsx';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import LanguageSelectionModal from '../LanguageSelectionModal';
-import { setLocale } from '../../i18n/setLocale';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
+import clsx from 'clsx';
+import { Dropdown } from 'react-bootstrap';
+
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
+import { setLocale } from '../../i18n/setLocale';
+import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import LanguageSelectionModal from '../LanguageSelectionModal';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+
+import classes from './NavLocalSwitcher.module.css';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;

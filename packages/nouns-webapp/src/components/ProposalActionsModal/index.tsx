@@ -1,16 +1,19 @@
 import React, { SetStateAction, useState } from 'react';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+
+import { Interface } from 'ethers/lib/utils';
+
 import { ProposalTransaction } from '../../wrappers/nounsDao';
-import SelectProposalActionStep from './steps/SelectProposalActionStep';
-import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
-import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
-import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
 import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
-import { Interface } from 'ethers/lib/utils';
-import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
+import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
+import SelectProposalActionStep from './steps/SelectProposalActionStep';
 import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
+import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
 import StreamPaymentsReviewStep from './steps/StreamPaymentsReviewStep';
+import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
+import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,

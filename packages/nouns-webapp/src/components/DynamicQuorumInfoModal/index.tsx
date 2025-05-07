@@ -1,15 +1,18 @@
-import { useQuery } from '@apollo/client';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import config from '../../config';
-import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
-import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
-import { Backdrop } from '../Modal';
-import classes from './DynamicQuorumInfoModal.module.css';
+
+import { useQuery } from '@apollo/client';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import ReactDOM from 'react-dom';
+
+import config from '../../config';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
+import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
+import { Backdrop } from '../Modal';
+
+import classes from './DynamicQuorumInfoModal.module.css';
 
 const PLOTTING_CONSTANTS = {
   width: 950,

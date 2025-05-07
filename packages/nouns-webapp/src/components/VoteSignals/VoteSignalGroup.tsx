@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
-import classes from './VoteSignals.module.css';
-import clsx from 'clsx';
-import VoteSignal from './VoteSignal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
+
 import { VoteSignalDetail } from '../../wrappers/nounsData';
+
+import VoteSignal from './VoteSignal';
+import classes from './VoteSignals.module.css';
 
 type Props = {
   voteSignals: VoteSignalDetail[];

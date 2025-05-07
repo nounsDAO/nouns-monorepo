@@ -1,7 +1,8 @@
-import bidBtnClasses from './BidHistoryBtn.module.css';
+import { Trans } from '@lingui/react/macro';
 
 import { useAppSelector } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
+
+import bidBtnClasses from './BidHistoryBtn.module.css';
 
 const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
   const { onClick } = props;

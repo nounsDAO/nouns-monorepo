@@ -7,6 +7,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { useAccount } from 'wagmi';
 
+import classes from './App.module.css';
+
 import Footer from '@/components/Footer';
 import AlertModal from '@/components/Modal';
 import NavBar from '@/components/NavBar';
@@ -32,8 +34,6 @@ import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
 import { setAlertModal } from '@/state/slices/application';
-
-import classes from './App.module.css';
 
 import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';

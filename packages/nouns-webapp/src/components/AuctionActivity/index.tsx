@@ -7,6 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { Row, Col } from 'react-bootstrap';
 
+import classes from './AuctionActivity.module.css';
+import bidHistoryClasses from './BidHistory.module.css';
+
 import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
 import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
 import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
@@ -25,9 +28,6 @@ import config from '@/config';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { Auction } from '@/wrappers/nounsAuction';
-
-import classes from './AuctionActivity.module.css';
-import bidHistoryClasses from './BidHistory.module.css';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);

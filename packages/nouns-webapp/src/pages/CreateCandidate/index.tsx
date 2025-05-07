@@ -1,24 +1,28 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { ethers } from 'ethers';
 import { Col, Alert, Button } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { withStepProgress } from 'react-stepz';
+
+import CreateCandidateButton from '../../components/CreateCandidateButton';
+import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '../../components/ProposalActionsModal';
+import ProposalEditor from '../../components/ProposalEditor';
 import Section from '../../layout/Section';
 import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { withStepProgress } from 'react-stepz';
-import ProposalEditor from '../../components/ProposalEditor';
+
+
 import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 import { useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
-import CreateCandidateButton from '../../components/CreateCandidateButton';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

@@ -1,18 +1,21 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './SelectSponsorsToPropose.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
+import clsx from 'clsx';
+import { FormControl } from 'react-bootstrap';
+import { Link } from 'react-router';
+
 import link from '../../assets/icons/Link.svg';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 import {
   CandidateSignature,
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '../../wrappers/nounsData';
-import { Link } from 'react-router';
-import { FormControl } from 'react-bootstrap';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+
+import classes from './SelectSponsorsToPropose.module.css';
 
 type Props = {
   isModalOpen: boolean;

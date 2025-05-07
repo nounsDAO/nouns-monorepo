@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+
 import { useConfig } from '@usedapp/core';
 import { providers } from 'ethers';
+
 import { CHAIN_ID } from '../config';
 
 /**

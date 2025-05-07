@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
+
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
-import { ProposalCandidate } from '../../wrappers/nounsData';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router';
+
 import {
   Proposal,
   ProposalState,
   useActivePendingUpdatableProposers,
 } from '../../wrappers/nounsDao';
+import { ProposalCandidate } from '../../wrappers/nounsData';
+import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
+
 import classes from './CandidateSponsors.module.css';
+import OriginalSignature from './OriginalSignature';
+import SelectSponsorsToPropose from './SelectSponsorsToPropose';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
-import SelectSponsorsToPropose from './SelectSponsorsToPropose';
-import clsx from 'clsx';
 import SubmitUpdateProposal from './SubmitUpdateProposal';
-import OriginalSignature from './OriginalSignature';
-import { Link } from 'react-router';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;
