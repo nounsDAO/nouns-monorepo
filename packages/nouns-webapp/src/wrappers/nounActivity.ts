@@ -1,5 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { NounVoteHistory } from '../components/ProfileActivityFeed';
+
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
+
 import { useNounCanVoteTimestamp } from './nounsAuction';
 import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
 import {
@@ -103,22 +105,18 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     );
 
     // Filter props from before the Noun was born
-    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+    if (nounCanVoteTimestamp > proposalCreationTimestamp) {
       return false;
     }
     // Filter props which were cancelled and got 0 votes of any kind
-    if (
-      p.status === ProposalState.CANCELLED &&
-      p.forCount + p.abstainCount + p.againstCount === 0
-    ) {
-      return false;
-    }
-    return true;
+    return !(
+      p.status === ProposalState.CANCELLED && p.forCount + p.abstainCount + p.againstCount === 0
+    );
   });
 
   const events = filteredProposals.map((proposal: PartialProposal) => {
     const vote = nounVotes[proposal.id as string];
-    const didVote = vote !== undefined;
+    const didVote = vote != undefined;
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
@@ -288,10 +286,10 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   // and delegation data to be empty which leads to errors
   try {
     // Parse noun birth + win events into a single event
-    const nounTransferFromAuctionHouse = nounTransferData.sort(
+    const nounTransferFromAuctionHouse = nounTransferData.toSorted(
       (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
     )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
+    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.toSorted(
       (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
     )[nounId % 10 === 0 ? 0 : 1].blockNumber;
 
