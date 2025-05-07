@@ -55,7 +55,7 @@
     "@nouns/contracts": "workspace:*",
     "@nouns/sdk": "workspace:*",
     "@reduxjs/toolkit": "^1.9.7",
-    "@tanstack/react-query": "^5.75.2",
+    "@tanstack/react-query": "^5.75.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@usedapp/coingecko": "0.5.1",
     "@usedapp/core": "npm:usedapp-core-fork",
