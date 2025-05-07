@@ -12,6 +12,7 @@ import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInf
 import ShortAddress from '../ShortAddress';
 
 import classes from './DelegationCandidateInfo.module.css';
+import { Address } from '@/utils/types';
 
 interface DelegationCandidateInfoProps {
   address: string;
@@ -95,7 +96,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
         <div className={classes.avatarWrapper}>
           <img
             alt={address}
-            src={blo(address as `0x${string}`)}
+            src={blo(address as Address)}
             width={45}
             height={45}
             style={{ borderRadius: '50%' }}

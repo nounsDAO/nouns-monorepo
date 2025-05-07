@@ -1,3 +1,5 @@
+export type Address = `0x${string}`;
+
 export type BigNumberish = bigint | boolean | number | string;
 
 export interface BidEvent {

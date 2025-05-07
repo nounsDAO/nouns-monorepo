@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Web3Provider } from '@ethersproject/providers';
 import { blo } from 'blo';
+import { Address } from '@/utils/types';
 
 interface IdenticonInnerProps {
   address: string;
@@ -41,7 +42,7 @@ class IdenticonInner extends Component<IdenticonInnerProps> {
         ) : (
           <img
             alt={this.props.address}
-            src={blo(this.props.address as `0x${string}`)}
+            src={blo(this.props.address as Address)}
             width={this.props.size}
             height={this.props.size}
             style={{ borderRadius: '50%' }}

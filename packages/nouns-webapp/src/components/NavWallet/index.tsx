@@ -26,6 +26,7 @@ import WalletConnectModal from '../WalletConnectModal';
 
 import classes from './NavWallet.module.css';
 import WalletConnectButton from './WalletConnectButton';
+import { Address } from '@/utils/types';
 
 interface NavWalletProps {
   address: string;
@@ -51,7 +52,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const [showConnectModal, setShowConnectModal] = useState(false);
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { disconnect: deactivate } = useDisconnect();
-  const { data: ens } = useEnsName({ address: address as `0x${string}` });
+  const { data: ens } = useEnsName({ address: address as Address });
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
   const hasENS = useIsNetworkEnsSupported();
@@ -122,7 +123,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             {hasENS && (
               <img
                 alt={address}
-                src={blo(address as `0x${string}`)}
+                src={blo(address as Address)}
                 width={21}
                 height={21}
                 style={{ borderRadius: '50%' }}
@@ -214,7 +215,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
                 {' '}
                 <img
                   alt={address}
-                  src={blo(address as `0x${string}`)}
+                  src={blo(address as Address)}
                   width={21}
                   height={21}
                   style={{ borderRadius: '50%' }}

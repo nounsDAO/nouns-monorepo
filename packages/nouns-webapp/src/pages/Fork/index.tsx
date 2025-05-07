@@ -31,6 +31,7 @@ import DeployForkButton from './DeployForkButton';
 import classes from './Fork.module.css';
 import ForkEvent from './ForkEvent';
 import WithdrawNounsButton from './WithdrawNounsButton';
+import { Address } from '@/utils/types';
 
 const now = new Date();
 
@@ -64,7 +65,7 @@ const ForkPage = () => {
   const { account } = useEthers();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
   const forkTreasuryBalance = useForkTreasuryBalance(
-    forkDetails.data.forkTreasury as `0x${string}`,
+    forkDetails.data.forkTreasury as Address,
   );
   useScrollToLocation();
 

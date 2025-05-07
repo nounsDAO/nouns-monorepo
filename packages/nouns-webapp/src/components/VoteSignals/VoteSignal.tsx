@@ -4,6 +4,7 @@ import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
 import ShortAddress from '../ShortAddress';
 
 import classes from './VoteSignals.module.css';
+import { Address } from '@/utils/types';
 
 type Props = {
   support: number;
@@ -22,7 +23,7 @@ const VoteSignal = (props: Props) => {
             <div className={classes.avatar}>
               <img
                 alt={props.address}
-                src={blo(props.address as `0x${string}`)}
+                src={blo(props.address as Address)}
                 width={30}
                 height={30}
                 style={{ borderRadius: '50%' }}

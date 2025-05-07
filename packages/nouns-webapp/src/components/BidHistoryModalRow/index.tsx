@@ -15,7 +15,7 @@ import { shortENS, useShortAddress } from '@/utils/addressAndENSDisplayUtils';
 import { useReverseENSLookUp } from '@/utils/ensLookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
-import { Bid } from '@/utils/types';
+import { Address, Bid } from '@/utils/types';
 
 interface BidHistoryModalRowProps {
   bid: Bid;
@@ -40,7 +40,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
             <div className={classes.bidderInfoWrapper}>
               <img
                 alt={bid.sender}
-                src={blo(bid.sender as `0x${string}`)}
+                src={blo(bid.sender as Address)}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%' }}
