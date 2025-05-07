@@ -1,13 +1,39 @@
 import React, { useEffect } from 'react';
+
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { ApolloProvider, useQuery } from '@apollo/client';
+import { Web3Provider } from '@ethersproject/providers';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
-import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { Log, parseAbiItem } from 'viem';
+import { hardhat } from 'viem/chains';
+import { usePublicClient, WagmiProvider } from 'wagmi';
+
+import App from './App';
+import config, {
+  CHAIN_ID,
+  ChainId_Sepolia,
+  createNetworkHttpUrl,
+  multicallOnLocalhost,
+} from './config';
+import {
+  nounsAuctionHouseAddress,
+  useReadNounsAuctionHouseAuction,
+  useWatchNounsAuctionHouseAuctionBidEvent,
+  useWatchNounsAuctionHouseAuctionCreatedEvent,
+  useWatchNounsAuctionHouseAuctionExtendedEvent,
+  useWatchNounsAuctionHouseAuctionSettledEvent,
+} from './contracts';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { LanguageProvider } from './i18n/LanguageProvider';
+import reportWebVitals from './reportWebVitals';
 import account from './state/slices/account';
 import application from './state/slices/application';
-import logs from './state/slices/logs';
 import auction, {
   appendBid,
   reduxSafeAuction,
@@ -18,34 +44,16 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
+import logs from './state/slices/logs';
 import onDisplayAuction, {
   setLastAuctionNounId,
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
-import { ApolloProvider, useQuery } from '@apollo/client';
-import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, {
-  CHAIN_ID,
-  ChainId_Sepolia,
-  createNetworkHttpUrl,
-  multicallOnLocalhost,
-} from './config';
-import { BigNumber, BigNumberish, Event } from 'ethers';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
-import { createRoot } from 'react-dom/client';
-
-import { useAppDispatch, useAppSelector } from './hooks';
-import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
-import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
-import { LanguageProvider } from './i18n/LanguageProvider';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
 import { config as wagmiConfig } from './wagmi';
+import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
 
@@ -60,7 +68,7 @@ const createRootReducer = () =>
   });
 
 export default function configureStore(preloadedState: PreloadedState<any>) {
-  const store = createStore(
+  return createStore(
     createRootReducer(), // root reducer without router state
     preloadedState,
     composeWithDevTools(
@@ -68,8 +76,6 @@ export default function configureStore(preloadedState: PreloadedState<any>) {
       // ... other middlewares ...
     ),
   );
-
-  return store;
 }
 
 const store = configureStore({});
@@ -117,91 +123,129 @@ const Updaters = () => {
   );
 };
 
-const BLOCKS_PER_DAY = 7_200;
-
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
+  const publicClient = usePublicClient();
 
-  const loadState = async () => {
-    const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
-      config.addresses.nounsAuctionHouseProxy,
-      wsProvider,
-    );
+  const processBidFilter = async (
+    nounId: bigint,
+    sender: string,
+    value: bigint,
+    extended: boolean,
+    event: Log,
+  ) => {
+    const block = await publicClient.getBlock({
+      blockNumber: event.blockNumber ?? undefined,
+    });
 
-    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
-    const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
-    const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
-    const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);
-    const processBidFilter = async (
-      nounId: BigNumberish,
-      sender: string,
-      value: BigNumberish,
-      extended: boolean,
-      event: Event,
-    ) => {
-      const timestamp = (await event.getBlock()).timestamp;
-      const { transactionHash, transactionIndex } = event;
-      dispatch(
-        appendBid(
-          reduxSafeBid({
-            nounId,
-            sender,
-            value,
-            extended,
-            transactionHash,
-            transactionIndex,
-            timestamp,
-          }),
-        ),
-      );
-    };
-    const processAuctionCreated = (
-      nounId: BigNumberish,
-      startTime: BigNumberish,
-      endTime: BigNumberish,
-    ) => {
-      dispatch(
-        setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
-      );
-      const nounIdNumber = BigNumber.from(nounId).toNumber();
-      window.location.href = nounPath(nounIdNumber);
-      dispatch(setOnDisplayAuctionNounId(nounIdNumber));
-      dispatch(setLastAuctionNounId(nounIdNumber));
-    };
-    const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
-      dispatch(setAuctionExtended({ nounId, endTime }));
-    };
-    const processAuctionSettled = (nounId: BigNumberish, winner: string, amount: BigNumberish) => {
-      dispatch(setAuctionSettled({ nounId, amount, winner }));
-    };
-
-    // Fetch the current auction
-    const currentAuction = await nounsAuctionHouseContract.auction();
-    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
-
-    // Fetch the previous 24 hours of bids
-    const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
-    for (const event of previousBids) {
-      if (event.args == undefined) return;
-      processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
-    }
-
-    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
-      processBidFilter(nounId, sender, value, extended, event),
-    );
-    nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
-      processAuctionCreated(nounId, startTime, endTime),
-    );
-    nounsAuctionHouseContract.on(extendedFilter, (nounId, endTime) =>
-      processAuctionExtended(nounId, endTime),
-    );
-    nounsAuctionHouseContract.on(settledFilter, (nounId, winner, amount) =>
-      processAuctionSettled(nounId, winner, amount),
+    const timestamp = block.timestamp;
+    const { transactionHash, transactionIndex } = event;
+    dispatch(
+      appendBid(
+        reduxSafeBid({
+          nounId,
+          sender,
+          value,
+          extended,
+          transactionHash: transactionHash ?? '',
+          transactionIndex: transactionIndex ?? 0,
+          timestamp,
+        }),
+      ),
     );
   };
-  loadState();
+  const processAuctionCreated = (nounId: bigint, startTime: bigint, endTime: bigint) => {
+    dispatch(setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })));
+    const nounIdNumber = Number(BigInt(nounId));
+    window.location.href = nounPath(nounIdNumber);
+    dispatch(setOnDisplayAuctionNounId(nounIdNumber));
+    dispatch(setLastAuctionNounId(nounIdNumber));
+  };
+  const processAuctionExtended = (nounId: bigint, endTime: bigint) => {
+    dispatch(setAuctionExtended({ nounId, endTime }));
+  };
+  const processAuctionSettled = (nounId: bigint, winner: string, amount: bigint) => {
+    dispatch(setAuctionSettled({ nounId, amount, winner }));
+  };
+
+  // Fetch the current auction
+  const { data: currentAuction } = useReadNounsAuctionHouseAuction();
+  useEffect(() => {
+    if (currentAuction) {
+      dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+      dispatch(setLastAuctionNounId(Number(currentAuction.nounId)));
+    }
+  }, [currentAuction, dispatch]);
+
+  // Fetch the previous 24 hours of bids
+  useEffect(() => {
+    if (CHAIN_ID === hardhat.id) {
+      return;
+    }
+    (async () => {
+      const latestBlock = await publicClient.getBlock();
+      const fromBlock = latestBlock.number > 7200n ? latestBlock.number - 7200n : 0n;
+
+      const logs = await publicClient.getLogs({
+        address: nounsAuctionHouseAddress[1],
+        event: parseAbiItem(
+          'event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended)',
+        ),
+        fromBlock,
+        toBlock: latestBlock.number,
+      });
+
+      for (const log of logs) {
+        if (log.args == undefined) return;
+
+        const { nounId, sender, value, extended } = log.args as {
+          nounId: bigint;
+          sender: string;
+          value: bigint;
+          extended: boolean;
+        };
+
+        processBidFilter(nounId, sender, value, extended, log);
+      }
+    })();
+  }, [processBidFilter, publicClient]);
+
+  // Watch for new bids
+  useWatchNounsAuctionHouseAuctionBidEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        if (log.args == undefined) return;
+        processBidFilter(...(log.args as [bigint, string, bigint, boolean]), log);
+      }
+    },
+  });
+
+  // Watch for new auction creation events
+  useWatchNounsAuctionHouseAuctionCreatedEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        processAuctionCreated(...(log.args as [bigint, bigint, bigint]));
+      }
+    },
+  });
+
+  // Watch for new auction extended events
+  useWatchNounsAuctionHouseAuctionExtendedEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        processAuctionExtended(...(log.args as [bigint, bigint]));
+      }
+    },
+  });
+
+  // Watch for auction settlement events
+  useWatchNounsAuctionHouseAuctionSettledEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        processAuctionSettled(...(log.args as [bigint, string, bigint]));
+      }
+    },
+  });
 
   return <></>;
 };
@@ -222,30 +266,28 @@ const PastAuctions: React.FC = () => {
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    {/*<ConnectedRouter history={history}>*/}
-    <ChainSubscriber />
     <React.StrictMode>
-      <Web3ReactProvider
-        getLibrary={
-          provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-        }
-      >
-        <ApolloProvider client={client}>
-          <PastAuctions />
-          <DAppProvider config={useDappConfig}>
-            <LanguageProvider>
-              <WagmiProvider config={wagmiConfig}>
-                <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          <ChainSubscriber />
+          <Web3ReactProvider
+            getLibrary={
+              provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+            }
+          >
+            <ApolloProvider client={client}>
+              <PastAuctions />
+              <DAppProvider config={useDappConfig}>
+                <LanguageProvider>
                   <App />
-                </QueryClientProvider>
-              </WagmiProvider>
-            </LanguageProvider>
-            <Updaters />
-          </DAppProvider>
-        </ApolloProvider>
-      </Web3ReactProvider>
+                </LanguageProvider>
+                <Updaters />
+              </DAppProvider>
+            </ApolloProvider>
+          </Web3ReactProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </React.StrictMode>
-    {/*</ConnectedRouter>*/}
   </Provider>,
 );
 
