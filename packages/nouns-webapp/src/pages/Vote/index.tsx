@@ -1,13 +1,13 @@
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
-import VoteModal from '../../components/VoteModal';
+import VoteModal from '@/components/VoteModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
-import ProposalContent from '../../components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
+import ProposalHeader from '@/components/ProposalHeader';
+import ProposalContent from '@/components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
 import { useQuery } from '@apollo/client';
 import {
   proposalVotesQuery,
@@ -15,12 +15,12 @@ import {
   ProposalVotes,
   Delegates,
   propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
+} from '@/wrappers/subgraph';
+import { getNounVotes } from '@/utils/getNounsVotes';
 import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { SearchIcon } from '@heroicons/react/solid';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
@@ -29,17 +29,17 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
-import config from '../../config';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import Section from '../../layout/Section';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { isProposalUpdatable } from '../../utils/proposals';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
+import ShortAddress from '@/components/ShortAddress';
+import StreamWithdrawModal from '@/components/StreamWithdrawModal';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import config from '@/config';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { isProposalUpdatable } from '@/utils/proposals';
+import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import {
   PartialProposal,
   ProposalState,
@@ -54,9 +54,9 @@ import {
   useProposalVersions,
   useQueueProposal,
   useIsForkActive,
-} from '../../wrappers/nounsDao';
-import { useProposalFeedback } from '../../wrappers/nounsData';
-import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsDao';
+import { useProposalFeedback } from '@/wrappers/nounsData';
+import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
 import classes from './Vote.module.css';
 
@@ -189,27 +189,25 @@ const VotePage = () => {
     ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
-  const isProposalSigner =
-    account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const isProposalSigner = !!(
+    account &&
+    proposal &&
+    signers &&
+    signers.includes(account?.toLowerCase())
+  );
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
   const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isUpdateable = () => {
     if (!isDaoGteV3) return false;
-    if (
+    return !!(
       proposal &&
       currentBlock &&
       isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
 
   const isCancellable = () => {
-    if (isInNonFinalState && (isProposalSigner || isProposer())) {
-      return true;
-    }
-    return false;
+    return isInNonFinalState && (isProposalSigner || isProposer());
   };
 
   const isAwaitingStateChange = () => {
@@ -223,10 +221,7 @@ const VotePage = () => {
   };
 
   const isAwaitingDestructiveStateChange = () => {
-    if (isCancellable()) {
-      return true;
-    }
-    return false;
+    return isCancellable();
   };
 
   const isActionable = () => {
@@ -236,11 +231,7 @@ const VotePage = () => {
       return true;
     } else if (isAwaitingDestructiveStateChange()) {
       return true;
-    } else if (isUpdateable()) {
-      return true;
-    } else {
-      return false;
-    }
+    } else return isUpdateable();
   };
 
   const startOrEndTimeCopy = () => {
@@ -721,7 +712,7 @@ const VotePage = () => {
                   <div
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
-                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
+                    onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
                     className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
                     <span>
