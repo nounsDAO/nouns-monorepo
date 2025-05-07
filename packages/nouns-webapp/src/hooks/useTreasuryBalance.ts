@@ -4,35 +4,36 @@ import { useBalance } from 'wagmi';
 
 import config from '@/config';
 import { useReadStEthBalanceOf } from '@/contracts';
+import { Address } from '@/utils/types';
 
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 
 /**
- * Computes treasury balance (ETH + Lido)
+ * Computes treasury balance (ETH and Lido)
  *
- * @returns Total balance of treasury (ETH + Lido) as EthersBN
+ * @returns Total balance of treasury (ETH and Lido) as EthersBN
  */
 export const useTreasuryBalance = () => {
   const { data: ethBalance } = useBalance({
-    address: config.addresses.nounsDaoExecutor as `0x${string}`,
+    address: config.addresses.nounsDaoExecutor as Address,
   });
 
   const { data: ethBalanceTreasuryV2 } = useBalance({
-    address: config.addresses.nounsDaoExecutorProxy as `0x${string}`,
+    address: config.addresses.nounsDaoExecutorProxy as Address,
   });
 
-  // @ts-expect-error - Type definition for useReadStEthBalanceOf doesn't match actual implementation
+  // @ts-expect-error - useReadStEthBalanceOf has an incompatible return type
   const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
     args: config.addresses.nounsDaoExecutor
-      ? [config.addresses.nounsDaoExecutor as `0x${string}`]
-      : undefined,
+      ? [config.addresses.nounsDaoExecutor as Address]
+      : (undefined as unknown as [Address]),
     query: { enabled: !!config.addresses.nounsDaoExecutor },
   });
 
   const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
     args: config.addresses.nounsDaoExecutorProxy
-      ? [config.addresses.nounsDaoExecutorProxy as `0x${string}`]
-      : undefined,
+      ? [config.addresses.nounsDaoExecutorProxy as Address]
+      : (undefined as unknown as [Address]),
     query: { enabled: !!config.addresses.nounsDaoExecutorProxy },
   });
 
@@ -48,9 +49,9 @@ export const useTreasuryBalance = () => {
 };
 
 /**
- * Computes treasury usd value of treasury assets (ETH + Lido) at current ETH-USD exchange rate
+ * Computes treasury usd value of treasury assets (ETH and Lido) at current ETH-USD exchange rate
  *
- * @returns USD value of treasury assets (ETH + Lido) at current exchange rate
+ * @returns USD value of treasury assets (ETH and Lido) at current exchange rate
  */
 export const useTreasuryUSDValue = () => {
   const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));
