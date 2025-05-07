@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.8.0",
@@ -29,9 +29,11 @@
   },
   "devDependencies": {
     "@types/pngjs": "^6.0.1",
+    "glob": "^11.0.2",
     "pngjs": "^6.0.0",
     "terser": "^5.39.0",
-    "tsup": "^8.4.0"
+    "tsup": "^8.4.0",
+    "vitest": "^3.1.2"
   },
   "peerDependencies": {
     "ethers": ">=5.0.0"

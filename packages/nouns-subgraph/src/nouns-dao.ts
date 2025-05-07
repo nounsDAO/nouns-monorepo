@@ -1,4 +1,6 @@
 import { Bytes, log, ethereum, store, BigInt, Address } from '@graphprotocol/graph-ts';
+
+import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
 import {
   NounsDAO,
   ProposalCreated,
@@ -29,16 +31,15 @@ import {
   ProposalCreatedWithRequirements1 as ProposalCreatedWithRequirementsV4,
 } from './types/NounsDAOV4/NounsDAOV4';
 import {
-  getOrCreateDelegate,
-  getOrCreateProposal,
-  getOrCreateVote,
-  getGovernanceEntity,
-  getOrCreateDelegateWithNullOption,
-  getOrCreateDynamicQuorumParams,
-  getOrCreateProposalVersion,
-  getOrCreateFork,
-  calcEncodedProposalHash,
-} from './utils/helpers';
+  Proposal,
+  ProposalCandidateSignature,
+  EscrowDeposit,
+  EscrowWithdrawal,
+  ForkJoin,
+  ForkJoinedNoun,
+  EscrowedNoun,
+  ProposalCandidateContent,
+} from './types/schema';
 import {
   BIGINT_ONE,
   STATUS_ACTIVE,
@@ -50,21 +51,21 @@ import {
   BIGINT_ZERO,
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
-import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
 import {
-  Proposal,
-  ProposalCandidateSignature,
-  EscrowDeposit,
-  EscrowWithdrawal,
-  ForkJoin,
-  ForkJoinedNoun,
-  EscrowedNoun,
-  ProposalCandidateContent,
-} from './types/schema';
+  getOrCreateDelegate,
+  getOrCreateProposal,
+  getOrCreateVote,
+  getGovernanceEntity,
+  getOrCreateDelegateWithNullOption,
+  getOrCreateDynamicQuorumParams,
+  getOrCreateProposalVersion,
+  getOrCreateFork,
+  calcEncodedProposalHash,
+} from './utils/helpers';
 
 export function handleProposalCreated(event: ProposalCreated): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
-  let proposerResult = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
+  const proposerResult = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString());
 
   proposal.proposer = proposerResult.entity!.id;
   proposal.targets = changetype<Bytes[]>(event.params.targets);
@@ -82,7 +83,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
   proposal.abstainVotes = BIGINT_ZERO;
-  let desc = event.params.description.split('\\n').join('\n');
+  const desc = event.params.description.split('\\n').join('\n');
   proposal.description = desc;
   proposal.title = extractTitle(desc);
   proposal.status = event.block.number >= proposal.startBlock! ? STATUS_ACTIVE : STATUS_PENDING;
@@ -91,7 +92,7 @@ export function handleProposalCreated(event: ProposalCreated): void {
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
   const nounsDAO = NounsDAO.bind(event.address);
-  let adjustedSupplyResult = nounsDAO.try_adjustedTotalSupply();
+  const adjustedSupplyResult = nounsDAO.try_adjustedTotalSupply();
 
   if (!adjustedSupplyResult.reverted) {
     proposal.adjustedTotalSupply = adjustedSupplyResult.value;
@@ -143,7 +144,7 @@ export function handleProposalCreatedWithRequirementsV4(
 }
 
 export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void {
-  let proposal = getOrCreateProposal(parsedProposal.id);
+  const proposal = getOrCreateProposal(parsedProposal.id);
 
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
@@ -172,7 +173,7 @@ export function saveProposalExtraDetails(parsedProposal: ParsedProposalV3): void
 }
 
 export function handleProposalCreatedOnTimelockV1(event: ProposalCreatedOnTimelockV1): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
   proposal.onTimelockV1 = true;
   proposal.save();
 }
@@ -240,7 +241,7 @@ export function handleProposalTransactionsUpdated(event: ProposalTransactionsUpd
 }
 
 export function handleProposalCanceled(event: ProposalCanceled): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_CANCELLED;
   proposal.canceledBlock = event.block.number;
@@ -250,7 +251,7 @@ export function handleProposalCanceled(event: ProposalCanceled): void {
 }
 
 export function handleProposalVetoed(event: ProposalVetoed): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_VETOED;
   proposal.vetoedBlock = event.block.number;
@@ -260,8 +261,8 @@ export function handleProposalVetoed(event: ProposalVetoed): void {
 }
 
 export function handleProposalQueued(event: ProposalQueued): void {
-  let governance = getGovernanceEntity();
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const governance = getGovernanceEntity();
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_QUEUED;
   proposal.executionETA = event.params.eta;
@@ -275,8 +276,8 @@ export function handleProposalQueued(event: ProposalQueued): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let governance = getGovernanceEntity();
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const governance = getGovernanceEntity();
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_EXECUTED;
   proposal.executionETA = null;
@@ -290,12 +291,12 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 }
 
 export function handleVoteCast(event: VoteCast): void {
-  let proposal = getOrCreateProposal(event.params.proposalId.toString());
-  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
-  let vote = getOrCreateVote(voteId);
+  const proposal = getOrCreateProposal(event.params.proposalId.toString());
+  const voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  const vote = getOrCreateVote(voteId);
 
   // Voter can be created here and not earlier because we support zero-voting-balance votes.
-  let voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
+  const voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
   const voter = voterResult.entity!;
 
   vote.proposal = proposal.id;
@@ -345,8 +346,8 @@ export function handleVoteCast(event: VoteCast): void {
 }
 
 export function handleVoteCastWithClientId(event: VoteCastWithClientId): void {
-  let voteId = generateVoteId(event.params.voter, event.params.proposalId);
-  let vote = getOrCreateVote(voteId);
+  const voteId = generateVoteId(event.params.voter, event.params.proposalId);
+  const vote = getOrCreateVote(voteId);
   vote.clientId = event.params.clientId.toI32();
   vote.save();
 }

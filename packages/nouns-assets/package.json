@@ -5,6 +5,7 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "author": "Nounders",
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -23,7 +24,7 @@
     "clean": "rimraf dist",
     "encode": "ts-node scripts/encode.ts",
     "encode-more": "ts-node scripts/encode-more.ts",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
@@ -32,10 +33,9 @@
   "devDependencies": {
     "@nouns/sdk": "workspace:*",
     "@types/pngjs": "^6.0.1",
-    "chai": "^4.5.0",
-    "mocha": "^8.4.0",
     "pngjs": "^6.0.0",
     "terser": "^5.39.0",
-    "tsup": "^8.4.0"
+    "tsup": "^8.4.0",
+    "vitest": "^3.1.2"
   }
 }

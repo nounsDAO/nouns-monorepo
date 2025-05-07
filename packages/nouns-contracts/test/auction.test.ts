@@ -3,6 +3,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
+
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
@@ -10,6 +11,7 @@ import {
   NounsToken,
   WETH,
 } from '../typechain';
+
 import { deployNounsToken, deployWeth, populateDescriptorV2 } from './utils';
 
 chai.use(solidity);

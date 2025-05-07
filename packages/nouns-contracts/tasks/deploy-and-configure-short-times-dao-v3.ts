@@ -1,4 +1,5 @@
 import { task, types } from 'hardhat/config';
+
 import { printContractsTable } from './utils';
 
 task(

@@ -1,5 +1,12 @@
-import { ethers, network } from 'hardhat';
+import { deflateRawSync } from 'zlib';
+
+import { Block } from '@ethersproject/abstract-provider';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { BigNumber } from 'ethers';
+import { ethers, network } from 'hardhat';
+
+import ImageData from '../files/image-data-v1.json';
+import ImageDataV2 from '../files/image-data-v2.json';
 import {
   NounsDescriptor,
   NounsDescriptor__factory as NounsDescriptorFactory,
@@ -34,14 +41,10 @@ import {
   INounsDAOLogic__factory,
   INounsDAOLogic,
 } from '../typechain';
-import ImageData from '../files/image-data-v1.json';
-import ImageDataV2 from '../files/image-data-v2.json';
-import { Block } from '@ethersproject/abstract-provider';
-import { deflateRawSync } from 'zlib';
 import { chunkArray } from '../utils';
+
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from './constants';
 import { DynamicQuorumParams } from './types';
-import { BigNumber } from 'ethers';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -179,7 +182,9 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
   ]);
 };
 
-export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2 | NounsDescriptorV3): Promise<void> => {
+export const populateDescriptorV2 = async (
+  nounsDescriptor: NounsDescriptorV2 | NounsDescriptorV3,
+): Promise<void> => {
   const { bgcolors, palette, images } = ImageDataV2;
   const { bodies, accessories, heads, glasses } = images;
 
@@ -540,13 +545,9 @@ export const propose = async (
 
   await gov
     .connect(proposer)
-    ['propose(address[],uint256[],string[],bytes[],string)'](
-      targets,
-      values,
-      signatures,
-      callDatas,
-      'do nothing',
-    );
+    [
+      'propose(address[],uint256[],string[],bytes[],string)'
+    ](targets, values, signatures, callDatas, 'do nothing');
   return await gov.latestProposalIds(proposer.address);
 };
 

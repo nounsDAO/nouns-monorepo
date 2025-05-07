@@ -25,6 +25,7 @@
     "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:sepolia": "mustache config/sepolia.json subgraph.yaml.mustache > subgraph.yaml",
+    "pretest": "pnpm clean && pnpm prepare:sepolia && pnpm codegen && pnpm graph build",
     "test": "graph test",
     "test:configgen": "echo libsFolder: $(pwd)/node_modules > matchstick.yaml"
   },

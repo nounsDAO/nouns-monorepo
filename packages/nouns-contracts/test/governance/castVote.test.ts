@@ -7,6 +7,11 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
+  NounsToken,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
+  NounsDAOLogicV4,
+} from '../../typechain';
+import {
   deployNounsToken,
   getSigners,
   TestSigners,
@@ -14,15 +19,10 @@ import {
   propose,
   deployGovernorV3WithV3Proxy,
   populateDescriptorV2,
+  mineBlock,
 } from '../utils';
 
-import { mineBlock } from '../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import {
-  NounsToken,
-  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
-  NounsDAOLogicV4,
-} from '../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;

@@ -1,3 +1,4 @@
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   assert,
   clearStore,
@@ -7,17 +8,18 @@ import {
   afterEach,
   log,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+
+import { handleProposalCandidateCreated, handleSignatureAdded } from '../src/nouns-dao-data';
 import {
   ProposalCandidate,
   ProposalCandidateContent,
   ProposalCandidateSignature,
   ProposalCandidateVersion,
 } from '../src/types/schema';
-import { handleProposalCandidateCreated, handleSignatureAdded } from '../src/nouns-dao-data';
-import { createProposalCandidateCreatedEvent, createSignatureAddedEvent } from './utils';
 import { BIGINT_ONE } from '../src/utils/constants';
 import { getOrCreateDelegate } from '../src/utils/helpers';
+
+import { createProposalCandidateCreatedEvent, createSignatureAddedEvent } from './utils';
 
 const SOME_ADDRESS = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 const proposerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000001');
