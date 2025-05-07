@@ -1,14 +1,16 @@
-import Auction from '../../components/Auction';
-import Documentation from '../../components/Documentation';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
-import { useNavigate } from 'react-router-dom';
-import { nounPath } from '../../utils/history';
-import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import React, { useEffect } from 'react';
-import ProfileActivityFeed from '../../components/ProfileActivityFeed';
-import NounsIntroSection from '../../components/NounsIntroSection';
+
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+
+import Auction from '@/components/Auction';
+import Documentation from '@/components/Documentation';
+import NounsIntroSection from '@/components/NounsIntroSection';
+import ProfileActivityFeed from '@/components/ProfileActivityFeed';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
+import { nounPath } from '@/utils/history';
+import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
 
 type AuctionPageProps = object;
 
@@ -16,7 +18,7 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
   const { id: initialAuctionId } = useParams<{ id: string }>();
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const onDisplayAuctionNounId = Number(onDisplayAuction?.nounId);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -51,14 +53,14 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
+      {onDisplayAuctionNounId != undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : (
         <NounsIntroSection />
       )}
       <Documentation
         backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
+          onDisplayAuctionNounId == undefined || onDisplayAuctionNounId === lastAuctionNounId
             ? backgroundColor
             : undefined
         }
