@@ -53,6 +53,55 @@ export default defineConfig({
             [sepolia.id]: '0x79e04ebcdf1ac2661697b23844149b43acc002d5',
           },
         },
+        {
+          name: 'NounsStreamFactory',
+          address: {
+            [mainnet.id]: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
+            [sepolia.id]: '0xb78ccF3BD015f209fb9B2d3d132FD8784Df78DF5',
+          },
+        },
+        {
+          name: 'NounsPayer',
+          address: {
+            [mainnet.id]: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
+            [sepolia.id]: '0x5a2A0951C6b3479DBEe1D5909Aac7B325d300D94',
+          },
+        },
+        {
+          name: 'NounsTokenBuyer',
+          address: {
+            [mainnet.id]: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
+            [sepolia.id]: '0x821176470cFeF1dB78F1e2dbae136f73c36ddd48',
+          },
+        },
+        {
+          name: 'USDC',
+          address: {
+            [mainnet.id]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+            [sepolia.id]: '0xEbCC972B6B3eB15C0592BE1871838963d0B94278',
+          },
+        },
+        {
+          name: 'WETH',
+          address: {
+            [mainnet.id]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            [sepolia.id]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
+          },
+        },
+        {
+          name: 'stETH',
+          address: {
+            [mainnet.id]: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+            [sepolia.id]: '0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af',
+          },
+        },
+        {
+          name: 'ETHToUSDPriceOracle',
+          address: {
+            [mainnet.id]: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
+            [sepolia.id]: '0x694AA1769357215DE4FAC081bf1f309aDC325306',
+          },
+        },
       ],
       tryFetchProxyImplementation: true,
     }),
