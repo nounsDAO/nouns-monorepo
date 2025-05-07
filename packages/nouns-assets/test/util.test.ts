@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
+import { describe, expect, it } from 'vitest';
+
 import { shiftRightAndCast, getPseudorandomPart, getNounSeedFromBlockHash } from '../src';
 import { images } from '../src/image-data.json';
 import { NounSeed } from '../src/types';
