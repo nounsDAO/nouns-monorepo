@@ -2,10 +2,10 @@ import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import { useEffect, useState } from 'react';
-import DelegationModal from '../DelegationModal';
+import DelegationModal from '@/components/DelegationModal';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
@@ -14,21 +14,21 @@ import en from 'dayjs/locale/en';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate, useLocation, Link } from 'react-router';
 
-import config from '../../config';
-import Section from '../../layout/Section';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { isMobileScreen } from '../../utils/isMobile';
-import { isProposalUpdatable } from '../../utils/proposals';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import { isMobileScreen } from '@/utils/isMobile';
+import { isProposalUpdatable } from '@/utils/proposals';
 import {
   PartialProposal,
   ProposalState,
   useIsDaoGteV3,
   useProposalThreshold,
-} from '../../wrappers/nounsDao';
-import { useCandidateProposals } from '../../wrappers/nounsData';
-import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
-import CandidateCard from '../CandidateCard';
-import ProposalStatus from '../ProposalStatus';
+} from '@/wrappers/nounsDao';
+import { useCandidateProposals } from '@/wrappers/nounsData';
+import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
+import CandidateCard from '@/components/CandidateCard';
+import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './Proposals.module.css';
 

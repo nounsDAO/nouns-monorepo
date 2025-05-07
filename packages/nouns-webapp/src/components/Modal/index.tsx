@@ -2,7 +2,7 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-import xIcon from '../../assets/x-icon.png';
+import xIcon from '@/assets/x-icon.png';
 
 import classes from './Modal.module.css';
 

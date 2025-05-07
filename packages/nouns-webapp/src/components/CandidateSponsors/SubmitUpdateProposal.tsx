@@ -6,13 +6,13 @@ import clsx from 'clsx';
 import { FormControl } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import link from '../../assets/icons/Link.svg';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
+import link from '@/assets/icons/Link.svg';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
 import {
   CandidateSignature,
   ProposalCandidate,
   useUpdateProposalBySigs,
-} from '../../wrappers/nounsData';
+} from '@/wrappers/nounsData';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 
 import classes from './SelectSponsorsToPropose.module.css';

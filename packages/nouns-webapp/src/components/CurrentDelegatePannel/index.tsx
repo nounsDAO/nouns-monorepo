@@ -3,10 +3,10 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import { useUserDelegatee } from '../../wrappers/nounToken';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import ShortAddress from '../ShortAddress';
+import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { useUserDelegatee } from '@/wrappers/nounToken';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './CurrentDelegatePannel.module.css';
 

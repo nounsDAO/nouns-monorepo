@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { EventFilter, filterToKey, Log } from '../../utils/logParsing';
+import { EventFilter, filterToKey, Log } from '@/utils/logParsing';
 
 export interface LogsState {
   [filterKey: string]: {

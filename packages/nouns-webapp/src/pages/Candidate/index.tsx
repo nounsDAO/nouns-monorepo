@@ -11,13 +11,13 @@ import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { useParams, Link } from 'react-router';
 
-import CandidateSponsors from '../../components/CandidateSponsors';
-import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
-import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
-import Section from '../../layout/Section';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
+import CandidateSponsors from '@/components/CandidateSponsors';
+import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
+import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,
   useProposal,

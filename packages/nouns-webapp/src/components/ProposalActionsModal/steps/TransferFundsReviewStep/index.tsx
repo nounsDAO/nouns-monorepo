@@ -4,11 +4,11 @@ import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import config from '../../../../config';
-import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
-import ShortAddress from '../../../ShortAddress';
+import config from '@/config';
+import payerABI from '@/utils/payerContractUtils/payerABI.json';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
 import classes from './TransferFundsReviewStep.module.css';

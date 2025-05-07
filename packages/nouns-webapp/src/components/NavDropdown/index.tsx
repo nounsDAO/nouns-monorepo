@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
 
 import classes from './NavDropdown.module.css';
 

@@ -5,24 +5,24 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ethers } from 'ethers';
 
-import config from '../../config';
-import { countDecimals } from '../../utils/numberUtils';
-import { formatTokenAmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
+import config from '@/config';
+import { countDecimals } from '@/utils/numberUtils';
+import { formatTokenAmount } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+import { contract2humanUSDCFormat } from '@/utils/usdcUtils';
 import {
   useElapsedTime,
   useStreamRemainingBalance,
   useWithdrawTokens,
-} from '../../wrappers/nounsStream';
-import BrandSpinner from '../BrandSpinner';
-import ModalBottomButtonRow from '../ModalBottomButtonRow';
-import ModalTitle from '../ModalTitle';
+} from '@/wrappers/nounsStream';
+import BrandSpinner from '@/components/BrandSpinner';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
 
-import BrandNumericEntry from '../BrandNumericEntry';
-import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import StartOrEndTime from '../StartOrEndTime';
-import ModalLabel from '../ModalLabel';
+import BrandNumericEntry from '@/components/BrandNumericEntry';
+import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import StartOrEndTime from '@/components/StartOrEndTime';
+import ModalLabel from '@/components/ModalLabel';
 
 import classes from './StreamWithdrawModal.module.css';
 

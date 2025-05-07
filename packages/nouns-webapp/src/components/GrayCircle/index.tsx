@@ -1,6 +1,6 @@
-import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
-import Noun from '../Noun';
-import nounClasses from '../Noun/Noun.module.css';
+import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
+import Noun from '@/components/Noun';
+import nounClasses from '@/components/Noun/Noun.module.css';
 
 import classes from './GrayCircle.module.css';
 

@@ -4,9 +4,9 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers';
 
-import config from '../../config';
-import { ProposalDetail } from '../../wrappers/nounsDao';
-import ShortAddress from '../ShortAddress';
+import config from '@/config';
+import { ProposalDetail } from '@/wrappers/nounsDao';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './ProposalContent.module.css';
 

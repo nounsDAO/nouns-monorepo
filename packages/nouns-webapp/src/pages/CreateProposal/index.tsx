@@ -7,16 +7,16 @@ import { TransactionStatus, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Col, Alert, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
-import CreateProposalButton from '../../components/CreateProposalButton';
+import CreateProposalButton from '@/components/CreateProposalButton';
 
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import ProposalEditor from '../../components/ProposalEditor';
-import config from '../../config';
-import Section from '../../layout/Section';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalState,
   ProposalTransaction,

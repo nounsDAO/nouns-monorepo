@@ -7,15 +7,15 @@ import { ProposalActionModalStepProps } from '../..';
 
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
-import { buildEtherscanApiQuery } from '../../../../utils/etherscan';
+import { buildEtherscanApiQuery } from '@/utils/etherscan';
 
 import { Trans } from '@lingui/react/macro';
 
-import ABIUpload from '../../../ABIUpload';
-import BrandDropdown from '../../../BrandDropdown';
-import BrandTextEntry from '../../../BrandTextEntry';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
+import ABIUpload from '@/components/ABIUpload';
+import BrandDropdown from '@/components/BrandDropdown';
+import BrandTextEntry from '@/components/BrandTextEntry';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
 
 const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;

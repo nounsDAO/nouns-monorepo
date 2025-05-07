@@ -3,10 +3,10 @@ import React from 'react';
 import clsx from 'clsx';
 import { Container, Row } from 'react-bootstrap';
 
-import config from '../../config';
-import Section from '../../layout/Section';
-import { LoadingNoun } from '../Noun';
-import StandaloneNoun from '../StandaloneNoun';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { LoadingNoun } from '@/components/Noun';
+import StandaloneNoun from '@/components/StandaloneNoun';
 
 import classes from './HistoryCollection.module.css';
 

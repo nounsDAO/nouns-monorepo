@@ -2,7 +2,7 @@ import React, { SetStateAction, useState } from 'react';
 
 import { Interface } from 'ethers/lib/utils';
 
-import { ProposalTransaction } from '../../wrappers/nounsDao';
+import { ProposalTransaction } from '@/wrappers/nounsDao';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';

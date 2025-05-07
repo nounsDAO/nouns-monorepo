@@ -4,11 +4,11 @@ import { CakeIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
 
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import ShortAddress from '../../../ShortAddress';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '@/utils/etherscan';
+import { NounWinEvent } from '@/wrappers/nounActivity';
+import ShortAddress from '@/components/ShortAddress';
+import DesktopNounActivityRow from '@/components/profileEvent/activityRow/DesktopNounActivityRow';
+import TransactionHashPill from '@/components/profileEvent/eventData/infoPills/TransactionHashPill';
 
 import classes from './DesktopNounWinEvent.module.css';
 

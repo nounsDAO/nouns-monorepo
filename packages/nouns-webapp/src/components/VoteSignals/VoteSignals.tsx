@@ -6,9 +6,9 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
 
-import { useAppDispatch } from '../../hooks';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
+import { useAppDispatch } from '@/hooks';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { VoteSignalDetail, useSendFeedback } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
 import classes from './VoteSignals.module.css';

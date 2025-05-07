@@ -3,7 +3,7 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { Nav } from 'react-bootstrap';
 
-import NavBarButton, { NavBarButtonStyle } from '../../NavBarButton';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 
 interface WalletConnectButtonProps {
   className: string;

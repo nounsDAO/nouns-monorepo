@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { Col, Spinner } from 'react-bootstrap';
 
-import Section from '../../layout/Section';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { useNounActivity } from '../../wrappers/nounActivity';
-import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
-import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
-import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
+import Section from '@/layout/Section';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import { useNounActivity } from '@/wrappers/nounActivity';
+import DesktopProfileActivityFeed from '@/components/DesktopProfileActivityFeed';
+import MobileProfileActivityFeed from '@/components/MobileProfileActivityFeed';
+import ProfileActivityFeedToggle from '@/components/ProfileActivityFeedToggle';
 
 import classes from './ProfileActivityFeed.module.css';
 

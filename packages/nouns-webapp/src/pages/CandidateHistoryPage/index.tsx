@@ -12,16 +12,16 @@ import { Row, Col } from 'react-bootstrap';
 import { useParams, Link } from 'react-router';
 import remarkBreaks from 'remark-breaks';
 
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
-import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
-import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
-import Section from '../../layout/Section';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
+import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
+import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
+import Section from '@/layout/Section';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import {
   ProposalCandidateVersionContent,
   useCandidateProposalVersions,
-} from '../../wrappers/nounsData';
+} from '@/wrappers/nounsData';
 import VersionTab from '../ProposalHistory/VersionTab';
 import classes from '../ProposalHistory/Vote.module.css';
 

@@ -5,14 +5,14 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { Link } from 'react-router';
 
-import ShortAddress from '../../components/ShortAddress';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import {
   EscrowDeposit,
   EscrowWithdrawal,
   useProposalTitles,
   ForkCycleEvent,
-} from '../../wrappers/nounsDao';
+} from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
 

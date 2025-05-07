@@ -9,12 +9,12 @@ import {
   NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
-} from '../../wrappers/nounActivity';
-import BrandSpinner from '../BrandSpinner';
-import DesktopDelegationEvent from '../profileEvent/event/DesktopDelegationEvent';
-import DesktopNounWinEvent from '../profileEvent/event/DesktopNounWinEvent';
-import DesktopProposalVoteEvent from '../profileEvent/event/DesktopProposalVoteEvent';
-import DesktopTransferEvent from '../profileEvent/event/DesktopTransferEvent';
+} from '@/wrappers/nounActivity';
+import BrandSpinner from '@/components/BrandSpinner';
+import DesktopDelegationEvent from '@/components/profileEvent/event/DesktopDelegationEvent';
+import DesktopNounWinEvent from '@/components/profileEvent/event/DesktopNounWinEvent';
+import DesktopProposalVoteEvent from '@/components/profileEvent/event/DesktopProposalVoteEvent';
+import DesktopTransferEvent from '@/components/profileEvent/event/DesktopTransferEvent';
 
 import classes from './DesktopProfileActivityFeed.module.css';
 

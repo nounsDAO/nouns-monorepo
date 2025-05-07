@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import AuctionNavigation from './index';
 
 // Mock the hooks used in the component
-vi.mock('../../hooks', () => ({
+vi.mock('@/hooks', () => ({
   useAppSelector: () => '#d5d7e1', // Mock isCool to be true
 }));
 

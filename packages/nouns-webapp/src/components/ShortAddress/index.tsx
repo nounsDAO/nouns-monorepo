@@ -2,12 +2,12 @@ import React from 'react';
 
 import { useEthers } from '@usedapp/core';
 
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
-import { resolveNounContractAddress } from '../../utils/resolveNounsContractAddress';
-import Identicon from '../Identicon';
+import { useIsNetworkEnsSupported } from '@/hooks/useIsNetworkEnsSupported';
+import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
+import { resolveNounContractAddress } from '@/utils/resolveNounsContractAddress';
+import Identicon from '@/components/Identicon';
 
 import classes from './ShortAddress.module.css';
 

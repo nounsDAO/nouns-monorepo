@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 
-import { CandidateSignature } from '../../wrappers/nounsData';
-import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
+import { CandidateSignature } from '@/wrappers/nounsData';
+import { Delegates, delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
 import CandidateSponsorImage from './CandidateSponsorImage';
 import classes from './CandidateSponsors.module.css';

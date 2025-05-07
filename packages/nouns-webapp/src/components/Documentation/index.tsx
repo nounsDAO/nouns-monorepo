@@ -2,8 +2,8 @@ import { Trans } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
-import Section from '../../layout/Section';
-import Link from '../Link';
+import Section from '@/layout/Section';
+import Link from '@/components/Link';
 
 import classes from './Documentation.module.css';
 

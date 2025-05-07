@@ -6,13 +6,9 @@ import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 
-import {
-  useCastRefundableVote,
-  useCastRefundableVoteWithReason,
-  Vote,
-} from '../../wrappers/nounsDao';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 
 import classes from './VoteModal.module.css';
 

@@ -7,9 +7,9 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { useCancelSignature } from '../../wrappers/nounsDao';
-import ShortAddress from '../ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { useCancelSignature } from '@/wrappers/nounsDao';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './CandidateSponsors.module.css';
 

@@ -7,26 +7,26 @@ import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionIconLink } from '../ProposalContent';
-import ShortAddress from '../ShortAddress';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
-import { Locales } from '../../i18n/locales';
-import { isMobileScreen } from '../../utils/isMobile';
-import { relativeTimestamp } from '../../utils/timeUtils';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { transactionIconLink } from '@/components/ProposalContent';
+import ShortAddress from '@/components/ShortAddress';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { Locales } from '@/i18n/locales';
+import { isMobileScreen } from '@/utils/isMobile';
+import { relativeTimestamp } from '@/utils/timeUtils';
 import {
   Proposal,
   ProposalVersion,
   useHasVotedOnProposal,
   useIsDaoGteV3,
   useProposalVote,
-} from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import ByLineHoverCard from '../ByLineHoverCard';
-import HoverCard from '../HoverCard';
-import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import ProposalStatus from '../ProposalStatus';
+} from '@/wrappers/nounsDao';
+import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import ByLineHoverCard from '@/components/ByLineHoverCard';
+import HoverCard from '@/components/HoverCard';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './ProposalHeader.module.css';
 

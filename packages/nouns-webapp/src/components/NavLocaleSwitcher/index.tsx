@@ -6,14 +6,14 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
-import { setLocale } from '../../i18n/setLocale';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import LanguageSelectionModal from '../LanguageSelectionModal';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '@/i18n/locales';
+import { setLocale } from '@/i18n/setLocale';
+import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import LanguageSelectionModal from '@/components/LanguageSelectionModal';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
 
 import classes from './NavLocalSwitcher.module.css';
 

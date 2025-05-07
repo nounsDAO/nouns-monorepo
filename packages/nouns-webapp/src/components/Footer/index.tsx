@@ -1,10 +1,10 @@
 import { Trans } from '@lingui/react/macro';
 import { Container } from 'react-bootstrap';
 
-import config from '../../config';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { externalURL, ExternalURL } from '../../utils/externalURL';
-import Link from '../Link';
+import config from '@/config';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { externalURL, ExternalURL } from '@/utils/externalURL';
+import Link from '@/components/Link';
 
 import classes from './Footer.module.css';
 

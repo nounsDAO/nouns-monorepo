@@ -2,9 +2,9 @@ import { useEffect, useMemo } from 'react';
 
 import { useBlockNumber } from '@usedapp/core';
 
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useReadonlyProvider } from '../../hooks/useReadonlyProvider';
-import { EventFilter, keyToFilter } from '../../utils/logParsing';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useReadonlyProvider } from '@/hooks/useReadonlyProvider';
+import { EventFilter, keyToFilter } from '@/utils/logParsing';
 import { fetchedLogs, fetchedLogsError, fetchingLogs } from '../slices/logs';
 
 const MAX_BLOCKS_PER_CALL = 1_000_000;

@@ -6,11 +6,11 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 
-import config from '../../config';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
-import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
-import { Backdrop } from '../Modal';
+import config from '@/config';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import { Proposal, useDynamicQuorumProps } from '@/wrappers/nounsDao';
+import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
+import { Backdrop } from '@/components/Modal';
 
 import classes from './DynamicQuorumInfoModal.module.css';
 

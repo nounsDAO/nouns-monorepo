@@ -3,9 +3,9 @@ import React from 'react';
 import { CakeIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 
-import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import ShortAddress from '../../../ShortAddress';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { NounWinEvent } from '@/wrappers/nounActivity';
+import ShortAddress from '@/components/ShortAddress';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 

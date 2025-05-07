@@ -6,20 +6,20 @@ import clsx from 'clsx';
 import { isAddress } from 'ethers/lib/utils';
 import { Collapse, FormControl } from 'react-bootstrap';
 
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { usePickByState } from '../../utils/pickByState';
-import { useProposalThreshold } from '../../wrappers/nounsDao';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { usePickByState } from '@/utils/pickByState';
+import { useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useAccountVotes,
   useDelegateVotes,
   useNounTokenBalance,
   useUserDelegatee,
-} from '../../wrappers/nounToken';
-import BrandSpinner from '../BrandSpinner';
-import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
-import DelegationCandidateInfo from '../DelegationCandidateInfo';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+} from '@/wrappers/nounToken';
+import BrandSpinner from '@/components/BrandSpinner';
+import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
+import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 
 import classes from './ChangeDelegatePannel.module.css';
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Image } from 'react-bootstrap';
 
-import { useAppSelector } from '../../hooks';
+import { useAppSelector } from '@/hooks';
 
 import classes from './NounInfoRowButton.module.css';
 

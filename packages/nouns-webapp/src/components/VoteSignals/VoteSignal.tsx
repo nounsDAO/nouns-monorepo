@@ -1,7 +1,7 @@
 import { blo } from 'blo';
 
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
-import ShortAddress from '../ShortAddress';
+import { useIsNetworkEnsSupported } from '@/hooks/useIsNetworkEnsSupported';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './VoteSignals.module.css';
 import { Address } from '@/utils/types';

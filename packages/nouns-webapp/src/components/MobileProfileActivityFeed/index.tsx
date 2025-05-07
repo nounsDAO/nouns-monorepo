@@ -9,11 +9,11 @@ import {
   NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
-} from '../../wrappers/nounActivity';
-import MobileDelegationEvent from '../profileEvent/event/MobileDelegationEvent';
-import MobileNounWinEvent from '../profileEvent/event/MobileNounWinEvent';
-import MobileProposalVoteEvent from '../profileEvent/event/MobileProposalVoteEvent';
-import MobileTransferEvent from '../profileEvent/event/MobileTransferEvent';
+} from '@/wrappers/nounActivity';
+import MobileDelegationEvent from '@/components/profileEvent/event/MobileDelegationEvent';
+import MobileNounWinEvent from '@/components/profileEvent/event/MobileNounWinEvent';
+import MobileProposalVoteEvent from '@/components/profileEvent/event/MobileProposalVoteEvent';
+import MobileTransferEvent from '@/components/profileEvent/event/MobileTransferEvent';
 
 interface MobileProfileActivityFeedProps {
   events: NounProfileEvent[];

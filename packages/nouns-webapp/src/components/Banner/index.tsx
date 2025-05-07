@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 
-import calendar_noun from '../../assets/calendar_noun.png';
-import Section from '../../layout/Section';
-import Noun from '../Noun';
+import calendar_noun from '@/assets/calendar_noun.png';
+import Section from '@/layout/Section';
+import Noun from '@/components/Noun';
 
 import classes from './Banner.module.css';
 

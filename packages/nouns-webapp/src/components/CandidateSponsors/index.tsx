@@ -8,13 +8,9 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router';
 
-import {
-  Proposal,
-  ProposalState,
-  useActivePendingUpdatableProposers,
-} from '../../wrappers/nounsDao';
-import { ProposalCandidate } from '../../wrappers/nounsData';
-import { useDelegateNounsAtBlockQuery, useUserVotes } from '../../wrappers/nounToken';
+import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '@/wrappers/nounsDao';
+import { ProposalCandidate } from '@/wrappers/nounsData';
+import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CandidateSponsors.module.css';
 import OriginalSignature from './OriginalSignature';

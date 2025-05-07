@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '@/hooks';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router';
-import EditProposalButton from '../../components/EditProposalButton/index';
+import EditProposalButton from '@/components/EditProposalButton/index';
 
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import ProposalEditor from '../../components/ProposalEditor';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import config from '../../config';
-import Section from '../../layout/Section';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalTransaction,
   ProposalDetail,
@@ -23,9 +23,9 @@ import {
   useUpdateProposal,
   useUpdateProposalDescription,
   useUpdateProposalTransactions,
-} from '../../wrappers/nounsDao';
-import { useCreateProposalCandidate, useGetCreateCandidateCost } from '../../wrappers/nounsData';
-import { useUserVotes } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsDao';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 interface EditProposalProps {

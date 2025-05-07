@@ -6,12 +6,12 @@ import clsx from 'clsx';
 import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import link from '../../assets/icons/Link.svg';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { usePropose } from '../../wrappers/nounsDao';
-import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
-import ShortAddress from '../ShortAddress';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import link from '@/assets/icons/Link.svg';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { usePropose } from '@/wrappers/nounsDao';
+import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
+import ShortAddress from '@/components/ShortAddress';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 
 import classes from './SelectSponsorsToPropose.module.css';
 

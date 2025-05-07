@@ -5,17 +5,17 @@ import { useBlockNumber } from '@usedapp/core';
 import clsx from 'clsx';
 import { Link } from 'react-router';
 
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { Locales } from '../../i18n/locales';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { isMobileScreen } from '../../utils/isMobile';
-import { relativeTimestamp } from '../../utils/timeUtils';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import ByLineHoverCard from '../ByLineHoverCard';
-import HoverCard from '../HoverCard';
-import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import { transactionIconLink } from '../ProposalContent';
-import ShortAddress from '../ShortAddress';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { Locales } from '@/i18n/locales';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { isMobileScreen } from '@/utils/isMobile';
+import { relativeTimestamp } from '@/utils/timeUtils';
+import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import ByLineHoverCard from '@/components/ByLineHoverCard';
+import HoverCard from '@/components/HoverCard';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { transactionIconLink } from '@/components/ProposalContent';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './ProposalHeader.module.css';
 

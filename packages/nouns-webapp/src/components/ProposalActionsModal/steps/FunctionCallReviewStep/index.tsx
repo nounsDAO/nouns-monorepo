@@ -5,10 +5,10 @@ import { utils } from 'ethers/lib/ethers';
 import { Col, Row } from 'react-bootstrap';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
-import ShortAddress from '../../../ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
 
 import classes from './FunctionCallReviewStep.module.css';
 

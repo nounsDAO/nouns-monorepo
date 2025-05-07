@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
-import { useAppSelector } from '../../hooks';
+import { useAppSelector } from '@/hooks';
 
 import classes from './AuctionTimer.module.css';
 

@@ -5,9 +5,9 @@ import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
 
-import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { useExecuteFork } from '../../wrappers/nounsDao';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useExecuteFork } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
 

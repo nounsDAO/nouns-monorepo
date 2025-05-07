@@ -5,21 +5,21 @@ import { Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 
-import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
-import _AbstainVoteIcon from '../../assets/icons/Abstain.svg';
-import _NoVoteIcon from '../../assets/icons/NoVote.svg';
-import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
-import _YesVoteIcon from '../../assets/icons/YesVote.svg';
-import { Proposal, ProposalState } from '../../wrappers/nounsDao';
-import { NounVoteHistory } from '../ProfileActivityFeed';
-import ShortAddress from '../ShortAddress';
-import VoteStatusPill from '../VoteStatusPill';
+import _AbsentVoteIcon from '@/assets/icons/AbsentVote.svg';
+import _AbstainVoteIcon from '@/assets/icons/Abstain.svg';
+import _NoVoteIcon from '@/assets/icons/NoVote.svg';
+import _PendingVoteIcon from '@/assets/icons/PendingVote.svg';
+import _YesVoteIcon from '@/assets/icons/YesVote.svg';
+import { Proposal, ProposalState } from '@/wrappers/nounsDao';
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
+import ShortAddress from '@/components/ShortAddress';
+import VoteStatusPill from '@/components/VoteStatusPill';
 
 import classes from './NounProfileVoteRow.module.css';
 
-import { Vote } from '../../utils/vote';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { Vote } from '@/utils/vote';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;

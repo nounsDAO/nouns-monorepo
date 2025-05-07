@@ -4,12 +4,12 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Button, Row, Col } from 'react-bootstrap';
 
-import { useAppSelector } from '../../hooks';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { isMobileScreen } from '../../utils/isMobile';
-import ShortAddress from '../ShortAddress';
-import Tooltip from '../Tooltip';
+import { useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { isMobileScreen } from '@/utils/isMobile';
+import ShortAddress from '@/components/ShortAddress';
+import Tooltip from '@/components/Tooltip';
 
 import classes from './Winner.module.css';
 

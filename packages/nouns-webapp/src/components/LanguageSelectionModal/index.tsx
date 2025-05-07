@@ -2,10 +2,10 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
-import { setLocale } from '../../i18n/setLocale';
-import Modal from '../Modal';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '@/i18n/locales';
+import { setLocale } from '@/i18n/setLocale';
+import Modal from '@/components/Modal';
 
 import classes from './LanguageSelectionModal.module.css';
 

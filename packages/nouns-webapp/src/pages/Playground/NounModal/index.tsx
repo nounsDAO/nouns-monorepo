@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 
-import { Backdrop } from '../../../components/Modal';
-import Noun from '../../../components/Noun';
-import { svg2png } from '../../../utils/svg2png';
+import { Backdrop } from '@/components/Modal';
+import Noun from '@/components/Noun';
+import { svg2png } from '@/utils/svg2png';
 
 import classes from './NounModal.module.css';
 

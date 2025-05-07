@@ -4,9 +4,9 @@ import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 
-import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useWithdrawFromForkEscrow } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
 

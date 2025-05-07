@@ -6,14 +6,14 @@ import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Card, Col, Row } from 'react-bootstrap';
 
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { ensCacheKey } from '../../utils/ensLookup';
-import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { Proposal } from '../../wrappers/nounsDao';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { ensCacheKey } from '@/utils/ensLookup';
+import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import { Proposal } from '@/wrappers/nounsDao';
 import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
-import NounImageVoteTable from '../NounImageVoteTable';
-import VoteProgressBar from '../VoteProgressBar';
+import NounImageVoteTable from '@/components/NounImageVoteTable';
+import VoteProgressBar from '@/components/VoteProgressBar';
 
 import classes from './VoteCard.module.css';
 

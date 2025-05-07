@@ -7,9 +7,9 @@ import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
-} from '../../utils/cssTransitionUtils';
-import { isMobileScreen } from '../../utils/isMobile';
-import NounsTransition from '../NounsTransition';
+} from '@/utils/cssTransitionUtils';
+import { isMobileScreen } from '@/utils/isMobile';
+import NounsTransition from '@/components/NounsTransition';
 
 import classes from './SolidColorBackgroundModal.module.css';
 

@@ -1,5 +1,5 @@
-import nounPointerImg from '../../assets/noun-pointer.png';
-import TruncatedAmount from '../TruncatedAmount';
+import nounPointerImg from '@/assets/noun-pointer.png';
+import TruncatedAmount from '@/components/TruncatedAmount';
 
 import classes from './MinBid.module.css';
 

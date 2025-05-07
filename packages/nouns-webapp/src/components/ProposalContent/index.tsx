@@ -7,16 +7,16 @@ import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
-import linkIcon from '../../assets/icons/Link.svg';
-import config from '../../config';
+import linkIcon from '@/assets/icons/Link.svg';
+import config from '@/config';
 import {
   buildEtherscanAddressLink,
   buildEtherscanHoldingsLink,
   buildEtherscanTxLink,
-} from '../../utils/etherscan';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail } from '../../wrappers/nounsDao';
-import EnsOrLongAddress from '../EnsOrLongAddress';
+} from '@/utils/etherscan';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { ProposalDetail } from '@/wrappers/nounsDao';
+import EnsOrLongAddress from '@/components/EnsOrLongAddress';
 
 import classes from './ProposalContent.module.css';
 import ProposalTransactions from './ProposalTransactions';

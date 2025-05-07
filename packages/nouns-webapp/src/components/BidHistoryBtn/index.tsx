@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 
-import { useAppSelector } from '../../hooks';
+import { useAppSelector } from '@/hooks';
 
 import bidBtnClasses from './BidHistoryBtn.module.css';
 
