@@ -80,7 +80,8 @@
       "semver": ">=7.5.2",
       "serialize-javascript": ">=6.0.2",
       "underscore": ">=1.12.1",
-      "ws": ">=7.5.10"
+      "ws": ">=7.5.10",
+      "yargs-parser": ">=5.0.1"
     }
   }
 }
