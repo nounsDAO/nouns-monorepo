@@ -29,7 +29,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  // Common ignores
+  // Commonly ignores
   {
     ignores: [
       '**/node_modules/*',
