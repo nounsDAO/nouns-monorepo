@@ -73,9 +73,13 @@ export const useTreasuryUSDValue = (): number | undefined => {
     return undefined;
   }
 
-  // Convert from bigint to number for easier display
-  // Using Number() and formatEther would be another approach if needed
-  const usdValue = Number(ethUsdcPrice * treasuryBalance) / 10 ** 8; // Chainlink price feeds typically use 8 decimals
+  // Convert ETH price from bigint to number with proper scaling
+  // The oracle returns price with 8 decimal places (1e8)
+  const ethPriceInUsd = Number(ethUsdcPrice) / 1e8;
 
-  return usdValue;
+  // Convert treasury balance from wei to ETH (1 ETH = 1e18 wei)
+  const treasuryBalanceInEth = Number(treasuryBalance) / 1e18;
+
+  // Calculate USD value
+  return ethPriceInUsd * treasuryBalanceInEth;
 };
