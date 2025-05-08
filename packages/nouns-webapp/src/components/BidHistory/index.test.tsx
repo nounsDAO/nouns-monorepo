@@ -1,10 +1,12 @@
+import type { Address } from '@/utils/types';
+
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import BidHistory from './index';
-
 import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+
+import BidHistory from './index';
 
 // Mock dependencies
 vi.mock('@/hooks', () => ({
@@ -39,7 +41,15 @@ describe('BidHistory Component', () => {
     otherClass: 'otherClass',
   };
 
-  const mockBids = [
+  const mockBids: {
+    extended: boolean;
+    nounId: bigint;
+    sender: Address;
+    timestamp: bigint;
+    transactionHash: string;
+    transactionIndex: number;
+    value: bigint;
+  }[] = [
     {
       nounId: BigInt('1'),
       sender: '0x123456789abcdef123456789abcdef123456789a',

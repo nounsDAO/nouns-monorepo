@@ -1,3 +1,5 @@
+import type { Address } from '@/utils/types';
+
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import dayjs from 'dayjs';
@@ -43,7 +45,7 @@ describe('BidHistoryItem Component', () => {
 
   const mockBid = {
     nounId: 1n,
-    sender: '0x123456789abcdef123456789abcdef123456789a',
+    sender: '0x123456789abcdef123456789abcdef123456789a' as Address,
     value: 1000000000000000000n,
     extended: false,
     transactionHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
