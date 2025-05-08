@@ -272,8 +272,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0
       solidity-coverage:
-        specifier: 0.8.15
-        version: 0.8.15(hardhat@2.24.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.15)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
+        specifier: 0.8.16
+        version: 0.8.16(hardhat@2.24.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.15)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7))
       terser:
         specifier: ^5.39.0
         version: 5.39.0
@@ -3417,6 +3417,10 @@ packages:
     resolution: {integrity: sha512-vnI7V6lFNe0tLAuJMu+2sX+FcL14TaCWy1qiczg1VwRmPrpQCdq5ESXQMqUc2tluRNf6irBXrWbl1mGN8uaU/g==}
     engines: {node: ^14.21.3 || >=16}
 
+  '@noble/curves@1.9.0':
+    resolution: {integrity: sha512-7YDlXiNMdO1YZeH6t/kvopHHbIZzlxrCV9WLqCY6QhcXOoXiNCMDqJIglZ9Yjx5+w7Dz30TITFrlTjnRg7sKEg==}
+    engines: {node: ^14.21.3 || >=16}
+
   '@noble/hashes@1.0.0':
     resolution: {integrity: sha512-DZVbtY62kc3kkBtMHqwCOfXrT/hnoORy5BJ4+HU1IR59X0KWAOqsfzQPcUl/lQLlG7qXbe/fZ3r/emxtAl+sqg==}
 
@@ -4146,9 +4150,6 @@ packages:
 
   '@solidity-parser/parser@0.14.5':
     resolution: {integrity: sha512-6dKnHZn7fg/iQATVEzqyUOyEidbn05q7YA2mQ9hC0MMXhhV3/JrsxmFSYZAcr7j1yUP700LLhTruvJ3MiQmjJg==}
-
-  '@solidity-parser/parser@0.19.0':
-    resolution: {integrity: sha512-RV16k/qIxW/wWc+mLzV3ARyKUaMUTBy9tOLMzFhtNSKYeTAanQ3a5MudJKf/8arIFnA2L27SNjarQKmFg0w/jA==}
 
   '@solidity-parser/parser@0.20.1':
     resolution: {integrity: sha512-58I2sRpzaQUN+jJmWbHfbWf9AKfzqCI8JAdFB0vbyY+u8tBRcuTt9LxzasvR0LGQpcRv97eyV7l61FQ3Ib7zVw==}
@@ -7420,6 +7421,15 @@ packages:
 
   debug@4.3.6:
     resolution: {integrity: sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
+  debug@4.3.7:
+    resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -14396,8 +14406,8 @@ packages:
   solidity-ast@0.4.60:
     resolution: {integrity: sha512-UwhasmQ37ji1ul8cIp0XlrQ/+SVQhy09gGqJH4jnwdo2TgI6YIByzi0PI5QvIGcIdFOs1pbSmJW1pnWB7AVh2w==}
 
-  solidity-coverage@0.8.15:
-    resolution: {integrity: sha512-qH7290NKww4/t/qFvnSEePEzON0k025IGVlwc8wo8Q6p+h1Tt6fV2M0k3yfsps3TomZYTROsfPXjx7MSnwD5uA==}
+  solidity-coverage@0.8.16:
+    resolution: {integrity: sha512-qKqgm8TPpcnCK0HCDLJrjbOA2tQNEJY4dHX/LSSQ9iwYFS973MwjtgYn2Iv3vfCEQJTj5xtm4cuUMzlJsJSMbg==}
     hasBin: true
     peerDependencies:
       hardhat: ^2.11.0
@@ -20669,6 +20679,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.7.2
 
+  '@noble/curves@1.9.0':
+    dependencies:
+      '@noble/hashes': 1.8.0
+
   '@noble/hashes@1.0.0': {}
 
   '@noble/hashes@1.4.0': {}
@@ -21632,8 +21646,6 @@ snapshots:
   '@solidity-parser/parser@0.14.5':
     dependencies:
       antlr4ts: 0.5.0-alpha.4
-
-  '@solidity-parser/parser@0.19.0': {}
 
   '@solidity-parser/parser@0.20.1': {}
 
@@ -26344,6 +26356,10 @@ snapshots:
     dependencies:
       ms: 2.1.2
 
+  debug@4.3.7:
+    dependencies:
+      ms: 2.1.3
+
   debug@4.4.0(supports-color@8.1.1):
     dependencies:
       ms: 2.1.3
@@ -26740,7 +26756,7 @@ snapshots:
     dependencies:
       '@ecies/ciphers': 0.2.3(@noble/ciphers@1.2.1)
       '@noble/ciphers': 1.2.1
-      '@noble/curves': 1.8.2
+      '@noble/curves': 1.9.0
       '@noble/hashes': 1.8.0
 
   ee-first@1.1.1: {}
@@ -26817,7 +26833,7 @@ snapshots:
   engine.io-client@6.6.3(bufferutil@4.0.9)(utf-8-validate@5.0.7):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.6
+      debug: 4.3.7
       engine.io-parser: 5.2.3
       ws: 8.18.2(bufferutil@4.0.9)(utf-8-validate@5.0.7)
       xmlhttprequest-ssl: 2.1.2
@@ -32550,7 +32566,7 @@ snapshots:
   ox@0.6.7(typescript@5.8.3)(zod@3.24.3):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
-      '@noble/curves': 1.8.2
+      '@noble/curves': 1.8.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
@@ -35060,7 +35076,7 @@ snapshots:
   socket.io-client@4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.7):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.6
+      debug: 4.3.7
       engine.io-client: 6.6.3(bufferutil@4.0.9)(utf-8-validate@5.0.7)
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
@@ -35071,7 +35087,7 @@ snapshots:
   socket.io-parser@4.2.4:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.6
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -35114,10 +35130,10 @@ snapshots:
 
   solidity-ast@0.4.60: {}
 
-  solidity-coverage@0.8.15(hardhat@2.24.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.15)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)):
+  solidity-coverage@0.8.16(hardhat@2.24.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.15)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.7)):
     dependencies:
       '@ethersproject/abi': 5.8.0
-      '@solidity-parser/parser': 0.19.0
+      '@solidity-parser/parser': 0.20.1
       chalk: 2.4.2
       death: 1.1.0
       difflib: 0.2.4
