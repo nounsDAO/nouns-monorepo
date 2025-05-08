@@ -38,6 +38,7 @@ export default defineConfig([
       '**/*.setup.ts',
       '**/.netlify',
       'packages/nouns-subgraph/src/types/*',
+      'packages/nouns-webapp/src/contracts/*',
     ],
   },
 
