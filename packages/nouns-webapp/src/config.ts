@@ -4,15 +4,17 @@ import {
 } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
 
+import { Address } from '@/utils/types';
+
 interface ExternalContractAddresses {
-  lidoToken: string | undefined;
-  usdcToken: string | undefined;
-  chainlinkEthUsdc: string | undefined;
-  payerContract: string | undefined;
-  tokenBuyer: string | undefined;
-  nounsStreamFactory: string | undefined;
-  weth: string | undefined;
-  steth: string | undefined;
+  lidoToken: Address | undefined;
+  usdcToken: Address | undefined;
+  chainlinkEthUsdc: Address | undefined;
+  payerContract: Address | undefined;
+  tokenBuyer: Address | undefined;
+  nounsStreamFactory: Address | undefined;
+  weth: Address | undefined;
+  steth: Address | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
