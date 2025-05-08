@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import ProposalHeader from '@/components/ProposalHeader';
 import ProposalContent from '@/components/ProposalContent';
 import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+
 import { useQuery } from '@apollo/client';
 import {
   proposalVotesQuery,
@@ -180,14 +181,16 @@ const VotePage = () => {
     return versionDetails?.createdAt;
   };
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
-  const isInNonFinalState = [
-    ProposalState.UPDATABLE,
-    ProposalState.PENDING,
-    ProposalState.ACTIVE,
-    ProposalState.SUCCEEDED,
-    ProposalState.QUEUED,
-    ProposalState.OBJECTION_PERIOD,
-  ].includes(proposal?.status!);
+  const isInNonFinalState =
+    proposal?.status !== undefined &&
+    [
+      ProposalState.UPDATABLE,
+      ProposalState.PENDING,
+      ProposalState.ACTIVE,
+      ProposalState.SUCCEEDED,
+      ProposalState.QUEUED,
+      ProposalState.OBJECTION_PERIOD,
+    ].includes(proposal.status);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
   const isProposalSigner = !!(
     account &&
@@ -529,7 +532,10 @@ const VotePage = () => {
                 return <></>;
               }
               return (
-                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                <Row
+                  key={parsedCallData.streamAddress}
+                  className={clsx(classes.section, classes.transitionStateButtonSection)}
+                >
                   <span className={classes.boldedLabel}>
                     <Trans>Only visible to you</Trans>
                   </span>
