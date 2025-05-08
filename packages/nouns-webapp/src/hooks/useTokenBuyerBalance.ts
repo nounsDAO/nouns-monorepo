@@ -34,7 +34,8 @@ function useTokenBuyerBalance(): bigint | undefined {
   const ethValue = ethBalance?.value ?? 0n;
 
   // Convert USDC to ETH equivalent if available
-  const usdcValueInEth = usdcBalance && ethUsdcPrice ? usdcBalance * ethUsdcPrice : 0n;
+  const usdcValueInEth =
+    usdcBalance && ethUsdcPrice ? (usdcBalance * 10n ** 20n) / ethUsdcPrice : 0n;
 
   // Return combined balance
   return ethValue + usdcValueInEth;
