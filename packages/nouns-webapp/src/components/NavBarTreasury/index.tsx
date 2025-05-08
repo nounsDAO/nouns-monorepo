@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -11,9 +13,7 @@ interface NavBarTreasuryProps {
   treasuryStyle: NavBarButtonStyle;
 }
 
-const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
-  const { treasuryBalance, treasuryStyle } = props;
-
+const NavBarTreasury: React.FC<NavBarTreasuryProps> = ({ treasuryBalance, treasuryStyle }) => {
   let treasuryStyleClass;
   switch (treasuryStyle) {
     case NavBarButtonStyle.WARM_INFO:
