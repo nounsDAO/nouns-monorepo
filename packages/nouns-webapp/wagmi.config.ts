@@ -110,7 +110,7 @@ const contractConfigs = [
   },
 ];
 
-export default defineConfig(
+export default defineConfig(() =>
   contractConfigs.map(({ name, fileName, address }) => ({
     out: `src/contracts/${fileName}.gen.ts`,
     plugins: [
