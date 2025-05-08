@@ -47,18 +47,18 @@ const updateProposalTypes = {
   ],
 };
 
-type Props = {
+type SignatureFormProps = {
   id: string;
   transactionState: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception';
-  setTransactionState: Function;
-  setIsFormDisplayed: Function;
+  setTransactionState: (state: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception') => void;
+  setIsFormDisplayed: (displayed: boolean) => void;
   candidate: ProposalCandidate;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   proposalIdToUpdate: number;
 };
 
-function SignatureForm(props: Props) {
+const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   const [reasonText, setReasonText] = useState('');
   const [expirationDate, setExpirationDate] = useState<number>();
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -434,6 +434,6 @@ function SignatureForm(props: Props) {
       </p>
     </div>
   );
-}
+};
 
 export default SignatureForm;

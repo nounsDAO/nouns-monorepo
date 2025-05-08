@@ -24,8 +24,8 @@ interface CandidateSponsorsProps {
   slug: string;
   isProposer: boolean;
   id: string;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   currentBlock: number;
   requiredVotes: number;
   userVotes: number;
@@ -53,8 +53,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   );
   const signatures = props.candidate.version.content.contentSignatures;
   const signers = signatures?.map(signature => signature.signer.id.toLowerCase());
-  const isParentProposalUpdatable =
-    props.originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  const isParentProposalUpdatable = props.originalProposal?.status === ProposalState.UPDATABLE;
 
   useEffect(() => {
     // set relevant vars from fetched candidate data
@@ -66,10 +65,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     } else {
       setIsThresholdMet(false);
     }
-    props.originalProposal?.signers &&
-      setIsThresholdMet(
-        signatures.length >= props.originalProposal?.signers?.length ? true : false,
-      );
+    if (props.originalProposal?.signers) {
+      setIsThresholdMet(signatures.length >= props.originalProposal?.signers?.length);
+    }
   }, [props.candidate, props.originalProposal?.signers, signatures]);
 
   useEffect(() => {
@@ -160,13 +158,15 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             <>
                               {props.candidate.voteCount >= 0 ? props.candidate.voteCount : '...'}{' '}
                               of{' '}
-                              {props.candidate.proposerVotes > props.candidate.requiredVotes ? (
-                                <em className={classes.naVotesLabel}>n/a</em>
-                              ) : props.candidate.requiredVotes !== undefined ? (
-                                props.candidate.requiredVotes
-                              ) : (
-                                '...'
-                              )}{' '}
+                              {(() => {
+                                if (props.candidate.proposerVotes > props.candidate.requiredVotes) {
+                                  return <em className={classes.naVotesLabel}>n/a</em>;
+                                } else if (props.candidate.requiredVotes != undefined) {
+                                  return <>{props.candidate.requiredVotes}</>;
+                                } else {
+                                  return <>...</>;
+                                }
+                              })()}{' '}
                               sponsored votes
                             </>
                           )}
@@ -278,9 +278,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             <button
                               className={classes.button}
                               onClick={() => {
-                                props.isUpdateToProposal
-                                  ? setIsUpdateModalOpen(true)
-                                  : setIsModalOpen(true);
+                                if (props.isUpdateToProposal) {
+                                  setIsUpdateModalOpen(true);
+                                } else {
+                                  setIsModalOpen(true);
+                                }
                               }}
                             >
                               Submit onchain

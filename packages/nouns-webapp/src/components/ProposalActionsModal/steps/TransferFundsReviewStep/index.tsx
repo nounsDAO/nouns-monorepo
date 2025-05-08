@@ -2,13 +2,15 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { utils } from 'ethers';
+import { parseEther } from 'viem';
 
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import config from '@/config';
-import payerABI from '@/utils/payerContractUtils/payerABI.json';
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
 import ShortAddress from '@/components/ShortAddress';
+import config from '@/config';
+import payerABI from '@/utils/payerContractUtils/payerABI.json';
+
+import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
 import classes from './TransferFundsReviewStep.module.css';
@@ -17,12 +19,12 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
       signature: '',
       calldata: '0x',
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
-    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()];
+    const values = [state.address, parseEther((state.amount ?? 0).toString()).toString()];
     onActionAdd({
       address: config.addresses.steth,
       value: '0',

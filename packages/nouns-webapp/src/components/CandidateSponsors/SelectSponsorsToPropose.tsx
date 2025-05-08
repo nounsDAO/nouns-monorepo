@@ -7,11 +7,11 @@ import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import link from '@/assets/icons/Link.svg';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePropose } from '@/wrappers/nounsDao';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
 import ShortAddress from '@/components/ShortAddress';
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 
 import classes from './SelectSponsorsToPropose.module.css';
 
@@ -26,7 +26,7 @@ type Props = {
   setDataFetchPollInterval: Function;
 };
 
-export default function SelectSponsorsToPropose(props: Props) {
+const SelectSponsorsToPropose = (props: Props) => {
   const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
@@ -291,4 +291,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       />
     </>
   );
-}
+};
+
+export default SelectSponsorsToPropose;

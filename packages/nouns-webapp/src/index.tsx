@@ -1,3 +1,5 @@
+import type { Address } from './utils/types';
+
 import React, { useEffect } from 'react';
 
 import './index.css';
@@ -129,7 +131,7 @@ const ChainSubscriber: React.FC = () => {
 
   const processBidFilter = async (
     nounId: bigint,
-    sender: string,
+    sender: Address,
     value: bigint,
     extended: boolean,
     event: Log,
@@ -164,7 +166,7 @@ const ChainSubscriber: React.FC = () => {
   const processAuctionExtended = (nounId: bigint, endTime: bigint) => {
     dispatch(setAuctionExtended({ nounId, endTime }));
   };
-  const processAuctionSettled = (nounId: bigint, winner: string, amount: bigint) => {
+  const processAuctionSettled = (nounId: bigint, winner: Address, amount: bigint) => {
     dispatch(setAuctionSettled({ nounId, amount, winner }));
   };
 
@@ -200,7 +202,7 @@ const ChainSubscriber: React.FC = () => {
 
         const { nounId, sender, value, extended } = log.args as {
           nounId: bigint;
-          sender: string;
+          sender: Address;
           value: bigint;
           extended: boolean;
         };
@@ -215,7 +217,7 @@ const ChainSubscriber: React.FC = () => {
     onLogs: logs => {
       for (const log of logs) {
         if (log.args == undefined) return;
-        processBidFilter(...(log.args as [bigint, string, bigint, boolean]), log);
+        processBidFilter(...(log.args as [bigint, Address, bigint, boolean]), log);
       }
     },
   });
@@ -242,7 +244,7 @@ const ChainSubscriber: React.FC = () => {
   useWatchNounsAuctionHouseAuctionSettledEvent({
     onLogs: logs => {
       for (const log of logs) {
-        processAuctionSettled(...(log.args as [bigint, string, bigint]));
+        processAuctionSettled(...(log.args as [bigint, Address, bigint]));
       }
     },
   });

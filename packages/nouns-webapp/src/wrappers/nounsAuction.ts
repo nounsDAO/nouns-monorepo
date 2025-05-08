@@ -1,11 +1,11 @@
 import { useAppSelector } from '@/hooks';
 import { AuctionState } from '@/state/slices/auction';
 import { isNounderNoun } from '@/utils/nounderNoun';
-import { BigNumberish } from '@/utils/types';
+import { Address, BigNumberish } from '@/utils/types';
 
 export interface Auction {
   amount: BigNumberish;
-  bidder: string;
+  bidder: Address;
   endTime: BigNumberish;
   startTime: BigNumberish;
   nounId: BigNumberish;

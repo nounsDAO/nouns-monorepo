@@ -8,7 +8,7 @@ export const isNounderNoun = (nounId: bigint) => {
 const emptyNounderAuction = (onDisplayAuctionId: number): Auction => {
   return {
     amount: 0n,
-    bidder: '',
+    bidder: '0x0000000000000000000000000000000000000000',
     startTime: 0n,
     endTime: 0n,
     nounId: BigInt(onDisplayAuctionId),

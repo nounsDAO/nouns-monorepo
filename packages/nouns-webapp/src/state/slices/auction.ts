@@ -21,7 +21,7 @@ const initialState: AuctionState = {
 
 export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
   amount: BigInt(0).toString(),
-  bidder: '',
+  bidder: '0x' as `0x${string}`,
   startTime: BigInt(auction.startTime).toString(),
   endTime: BigInt(auction.endTime).toString(),
   nounId: BigInt(auction.nounId).toString(),

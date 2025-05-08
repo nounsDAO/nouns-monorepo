@@ -6,6 +6,9 @@ import clsx from 'clsx';
 import { isAddress } from 'ethers/lib/utils';
 import { Collapse, FormControl } from 'react-bootstrap';
 
+import BrandSpinner from '@/components/BrandSpinner';
+import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePickByState } from '@/utils/pickByState';
@@ -16,12 +19,10 @@ import {
   useNounTokenBalance,
   useUserDelegatee,
 } from '@/wrappers/nounToken';
-import BrandSpinner from '@/components/BrandSpinner';
-import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
-import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 
 import classes from './ChangeDelegatePannel.module.css';
+
+import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;
@@ -122,6 +123,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
     [
       <NavBarButton
+        key="enter-delegate-address"
         buttonText={
           <div className={classes.delegateKVotesBtn}>
             {locale === 'en-US ' ? (
@@ -155,6 +157,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       />,
       <NavBarButton
+        key="changing"
         buttonText={<Trans>View on Etherscan</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
         onClick={() => {
@@ -163,11 +166,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         disabled={false}
       />,
       <NavBarButton
+        key="change-success"
         buttonText={<Trans>Close</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
         onClick={onDismiss}
       />,
-      <></>,
+      <React.Fragment key="change-failure"></React.Fragment>,
     ],
   );
 
@@ -181,19 +185,19 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
 
     [
-      <Trans>
+      <Trans key="enter-address">
         Enter the Ethereum address or ENS name of the account you would like to delegate your votes
         to.
       </Trans>,
-      <Trans>
+      <Trans key="votes-delegating">
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes are being delegated
         to a new account.
       </Trans>,
-      <Trans>
+      <Trans key="votes-delegated">
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
         to a new account.
       </Trans>,
-      <>{delegateState.errorMessage}</>,
+      <React.Fragment key="delegate-error">{delegateState.errorMessage}</React.Fragment>,
     ],
   );
 
@@ -214,25 +218,25 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
               {proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'} after
-              this delegation. Unexecuted props you've created will now be cancelable by anyone.
+              this delegation. Unexecuted props you&apos;ve created will now be cancelable by
+              anyone.
             </Trans>
           </div>
         )}
       </div>
 
-      {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) &&
-        delegateTo === undefined && (
-          <FormControl
-            className={clsx(classes.delegateInput, delegateInputClass)}
-            type="string"
-            onChange={e => {
-              setDelegateAddress(e.target.value);
-              setDelegateInputText(e.target.value);
-            }}
-            value={delegateInputText}
-            placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
-          />
-        )}
+      {changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE && delegateTo === undefined && (
+        <FormControl
+          className={clsx(classes.delegateInput, delegateInputClass)}
+          type="string"
+          onChange={e => {
+            setDelegateAddress(e.target.value);
+            setDelegateInputText(e.target.value);
+          }}
+          value={delegateInputText}
+          placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
+        />
+      )}
 
       {delegateTo !== undefined && !isAddress(delegateAddress) && (
         <div className={classes.delegteDeepLinkSpinner}>
@@ -242,21 +246,20 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
       <Collapse
         in={
-          isAddress(delegateAddress) &&
-          !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)
+          isAddress(delegateAddress) && changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE
         }
       >
         <div className={classes.delegateCandidateInfoWrapper}>
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           delegateAddress === currentDelegate ? (
             <span className={classes.alreadyDelegatedCopy}>
-              <Trans>You've already delegated to this address</Trans>
+              <Trans>You&apos;ve already delegated to this address</Trans>
             </span>
           ) : (
             <>
               {isAddress(delegateAddress) && (
                 <DelegationCandidateInfo
-                  address={delegateAddress || ''}
+                  address={delegateAddress as `0x${string}`}
                   votesToAdd={availableVotes}
                   changeModalState={changeDelegateState}
                 />

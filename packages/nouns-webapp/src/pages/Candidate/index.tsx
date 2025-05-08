@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -15,6 +15,7 @@ import CandidateSponsors from '@/components/CandidateSponsors';
 import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
 import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
 import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
@@ -23,13 +24,13 @@ import {
   useProposal,
   useProposalCount,
   useProposalThreshold,
-} from '../../wrappers/nounsDao';
+} from '@/wrappers/nounsDao';
 import {
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
-} from '../../wrappers/nounsData';
-import { useUserVotes } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './Candidate.module.css';
 
@@ -48,7 +49,7 @@ const CandidatePage = () => {
   >(undefined);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const isWalletConnected = !(activeAccount === undefined);
+  const isWalletConnected = activeAccount !== undefined;
   const blockNumber = useBlockNumber();
   const candidate = useCandidateProposal(
     Number(id).toString(),
@@ -278,7 +279,11 @@ const CandidatePage = () => {
                   id={candidate.data.id}
                   isProposer={isProposer}
                   handleRefetchCandidateData={handleRefetchCandidateData}
-                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  setDataFetchPollInterval={(interval: number | null) =>
+                    interval !== null
+                      ? setDataFetchPollInterval(interval)
+                      : setDataFetchPollInterval(0)
+                  }
                   currentBlock={currentBlock - 1}
                   requiredVotes={threshold + 1}
                   userVotes={userVotes}

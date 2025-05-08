@@ -28,6 +28,7 @@ import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { ExternalURL, externalURL } from '@/utils/externalURL';
+import { Address } from '@/utils/types';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
 import classes from './NavBar.module.css';
@@ -245,7 +246,7 @@ const NavBar = () => {
               </NavDropdown>
             </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
-            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+            <NavWallet address={activeAccount as Address} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>
       </Navbar>

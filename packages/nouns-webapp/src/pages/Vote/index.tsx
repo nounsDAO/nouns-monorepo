@@ -550,7 +550,9 @@ const VotePage = () => {
                     >
                       <Trans>
                         Withdraw from Stream{' '}
-                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                        <ShortAddress
+                          address={(parsedCallData.streamAddress as `0x${string}`) ?? '0x'}
+                        />
                       </Trans>
                     </Button>
                   </Col>

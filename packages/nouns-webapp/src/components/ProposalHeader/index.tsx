@@ -122,7 +122,10 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       rel="noreferrer"
       className={classes.proposerLinkJp}
     >
-      <ShortAddress address={proposal.proposer || ''} avatar={false} />
+      <ShortAddress
+        address={proposal.proposer || '0x0000000000000000000000000000000000000000'}
+        avatar={false}
+      />
     </a>
   );
 
@@ -134,7 +137,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         rel="noreferrer"
         className={classes.proposerLinkJp}
       >
-        <ShortAddress address={sponsor} avatar={false} />
+        <ShortAddress address={sponsor as `0x${string}`} avatar={false} />
       </a>
     );
   };

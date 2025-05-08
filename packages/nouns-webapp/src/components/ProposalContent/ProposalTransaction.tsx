@@ -2,21 +2,21 @@ import { Fragment } from 'react';
 
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import { utils } from 'ethers';
+import { formatUnits } from 'viem';
 
+import ShortAddress from '@/components/ShortAddress';
 import config from '@/config';
 import { ProposalDetail } from '@/wrappers/nounsDao';
-import ShortAddress from '@/components/ShortAddress';
 
 import classes from './ProposalContent.module.css';
 
 import { linkIfAddress } from '.';
 
-type Props = {
+type ProposalTransactionProps = {
   transaction: ProposalDetail;
 };
 
-export default function ProposalTransaction({ transaction }: Props) {
+export default function ProposalTransaction({ transaction }: Readonly<ProposalTransactionProps>) {
   return (
     <li className="m-0">
       {linkIfAddress(transaction.target)}.{transaction.functionSig}
@@ -65,10 +65,11 @@ export default function ProposalTransaction({ transaction }: Props) {
               <Trans>
                 This transaction sends{' '}
                 {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
-                  Number(utils.formatUnits(transaction.callData.split(',')[1], 6)),
+                  Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)),
                 )}{' '}
-                USDC to <ShortAddress address={transaction.callData.split(',')[0]} /> via the DAO's
-                PayerContract.
+                USDC to{' '}
+                <ShortAddress address={transaction.callData.split(',')[0] as `0x${string}`} /> via
+                the DAO&apos;s PayerContract.
               </Trans>
             </div>
           </div>

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import ReactDOM from 'react-dom';
 
-import ChangeDelegatePannel from '../ChangeDelegatePannel';
+import ChangeDelegatePanel from '../ChangeDelegatePannel';
 import CurrentDelegatePannel from '../CurrentDelegatePannel';
 
 import classes from './DelegationModal.module.css';
@@ -30,7 +30,7 @@ const DelegationModalOverlay: React.FC<{
 
       <div className={classes.modal}>
         {isChangingDelegation ? (
-          <ChangeDelegatePannel onDismiss={onDismiss} delegateTo={delegateTo} />
+          <ChangeDelegatePanel onDismiss={onDismiss} delegateTo={delegateTo} />
         ) : (
           <CurrentDelegatePannel
             onPrimaryBtnClick={() => setIsChangingDelegation(true)}

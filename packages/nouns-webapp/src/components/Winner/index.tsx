@@ -1,20 +1,22 @@
+import type { Address } from '@/utils/types';
+
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Button, Row, Col } from 'react-bootstrap';
 
+import ShortAddress from '@/components/ShortAddress';
+import Tooltip from '@/components/Tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/isMobile';
-import ShortAddress from '@/components/ShortAddress';
-import Tooltip from '@/components/Tooltip';
 
 import classes from './Winner.module.css';
 
 interface WinnerProps {
-  winner: string;
+  winner: Address;
   isNounders?: boolean;
 }
 

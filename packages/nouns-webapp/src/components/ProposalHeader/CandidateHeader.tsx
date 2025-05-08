@@ -75,7 +75,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       rel="noreferrer"
       className={classes.proposerLinkJp}
     >
-      <ShortAddress address={proposer || ''} avatar={false} />
+      <ShortAddress address={(proposer as `0x${string}`) || '0x'} avatar={false} />
     </a>
   );
 

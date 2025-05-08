@@ -1,11 +1,13 @@
 import React from 'react';
 
-import { utils } from 'ethers';
+import { formatEther } from 'viem';
 
-const TruncatedAmount: React.FC<{ amount: bigint }> = props => {
-  const { amount } = props;
+interface TruncatedAmountProps {
+  amount: bigint;
+}
 
-  const eth = utils.formatEther(amount.toString());
+const TruncatedAmount: React.FC<TruncatedAmountProps> = ({ amount }) => {
+  const eth = formatEther(BigInt(amount.toString()));
   // Format to 2 decimal places
   const formattedEth = parseFloat(eth).toFixed(2);
   return <>Ξ {formattedEth}</>;

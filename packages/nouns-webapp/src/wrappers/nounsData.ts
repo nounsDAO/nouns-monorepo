@@ -1,3 +1,5 @@
+import type { Address } from '@/utils/types';
+
 import { useQuery } from '@apollo/client';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction } from '@usedapp/core';
@@ -36,7 +38,7 @@ export interface VoteSignalDetail {
   votes: number;
   createdTimestamp: number;
   voter: {
-    id: string;
+    id: Address;
   };
 }
 
@@ -142,9 +144,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const allSigners = unmatchedCandidates
     ?.map((candidate: ProposalCandidateSubgraphEntity) =>
-      candidate.latestVersion.content.contentSignatures?.map(
-        (sig: CandidateSignature) => sig.signer.id,
-      ),
+      candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id),
     )
     .flat();
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
@@ -457,7 +457,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
         sig: string;
         canceled: boolean;
         signer: {
-          id: string;
+          id: Address;
           proposals: {
             id: string;
           }[];
@@ -511,7 +511,7 @@ export interface CandidateSignature {
   sig: string;
   canceled: boolean;
   signer: {
-    id: string;
+    id: Address;
     proposals: {
       id: string;
     }[];
@@ -523,7 +523,7 @@ export interface CandidateSignature {
 export interface ProposalCandidateInfo {
   id: string;
   slug: string;
-  proposer: string;
+  proposer: Address;
   lastUpdatedTimestamp: number;
   canceled: boolean;
   versionsCount: number;

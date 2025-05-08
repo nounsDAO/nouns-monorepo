@@ -3,16 +3,15 @@ import React, { useState } from 'react';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-
-import { useActiveLocale } from '@/hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
-import { useIsNetworkEnsSupported } from '@/hooks/useIsNetworkEnsSupported';
 import { blo } from 'blo';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 import { useDisconnect, useEnsName } from 'wagmi';
 
+import { getNavBarButtonVariant, NavBarButtonStyle } from '@/components/NavBarButton';
+import WalletConnectModal from '@/components/WalletConnectModal';
 import { useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
 import {
   shortENS,
   useShortAddress,
@@ -20,16 +19,16 @@ import {
   veryShortENS,
 } from '@/utils/addressAndENSDisplayUtils';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
-import { getNavBarButtonVariant, NavBarButtonStyle } from '@/components/NavBarButton';
-import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
-import WalletConnectModal from '@/components/WalletConnectModal';
+import { Address } from '@/utils/types';
 
 import classes from './NavWallet.module.css';
 import WalletConnectButton from './WalletConnectButton';
-import { Address } from '@/utils/types';
+
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NavWalletProps {
-  address: string;
+  address: Address;
   buttonStyle?: NavBarButtonStyle;
 }
 
@@ -52,10 +51,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const [showConnectModal, setShowConnectModal] = useState(false);
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { disconnect: deactivate } = useDisconnect();
-  const { data: ens } = useEnsName({ address: address as Address });
+  const { data: ens } = useEnsName({ address });
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
-  const hasENS = useIsNetworkEnsSupported();
+  const hasENS = !!ens;
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
   };
@@ -193,7 +192,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     return shortENS(ens);
   };
 
-  const renderAddress = (address: string) => {
+  const renderAddress = (address: Address) => {
     if (activeLocale === 'ja-JP') {
       return veryShortAddress(address);
     }
@@ -215,7 +214,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
                 {' '}
                 <img
                   alt={address}
-                  src={blo(address as Address)}
+                  src={address ? blo(address as Address) : ''}
                   width={21}
                   height={21}
                   style={{ borderRadius: '50%' }}

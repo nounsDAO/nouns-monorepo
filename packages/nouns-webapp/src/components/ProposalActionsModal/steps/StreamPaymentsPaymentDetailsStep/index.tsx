@@ -1,15 +1,18 @@
+import type { Address } from '@/utils/types';
+
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { utils } from 'ethers';
+import { isAddress } from 'viem';
+
+import BrandDropdown from '@/components/BrandDropdown';
+import BrandNumericEntry from '@/components/BrandNumericEntry';
+import BrandTextEntry from '@/components/BrandTextEntry';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalSubTitle from '@/components/ModalSubtitle';
+import ModalTitle from '@/components/ModalTitle';
 
 import { ProposalActionModalStepProps } from '../..';
-import BrandDropdown from '../../../BrandDropdown';
-import BrandNumericEntry from '../../../BrandNumericEntry';
-import BrandTextEntry from '../../../BrandTextEntry';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalSubTitle from '../../../ModalSubtitle';
-import ModalTitle from '../../../ModalTitle';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
 const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
@@ -20,12 +23,12 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
     SupportedCurrency.USDC,
   );
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
-  const [address, setAddress] = useState(state.address ?? '');
+  const [address, setAddress] = useState<Address>((state.address as Address) ?? ('0x' as Address));
 
   const [isValidForNextStage, setIsValidForNextStage] = useState(false);
 
   useEffect(() => {
-    if (utils.isAddress(address) && parseFloat(amount) > 0 && !isValidForNextStage) {
+    if (isAddress(address) && parseFloat(amount) > 0 && !isValidForNextStage) {
       setIsValidForNextStage(true);
     }
   }, [amount, address, isValidForNextStage]);
@@ -77,11 +80,11 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
 
       <BrandTextEntry
         label={'Recipient'}
-        onChange={e => setAddress(e.target.value)}
+        onChange={e => setAddress(e.target.value as Address)}
         value={address}
         type="string"
         placeholder="0x..."
-        isInvalid={address.length === 0 ? false : !utils.isAddress(address)}
+        isInvalid={address.length === 0 ? false : !isAddress(address)}
       />
 
       <ModalBottomButtonRow

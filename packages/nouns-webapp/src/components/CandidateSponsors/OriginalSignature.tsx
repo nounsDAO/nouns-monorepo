@@ -1,35 +1,42 @@
+import type { Address } from '@/utils/types';
+
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
+
 import ShortAddress from '../ShortAddress';
 
 import classes from './CandidateSponsors.module.css';
 
 type OriginalSignatureProps = {
   voteCount: number;
-  signer: string;
+  signer: Address;
   isParentProposalUpdatable: boolean;
 };
 
-const OriginalSignature: React.FC<OriginalSignatureProps> = props => {
+const OriginalSignature: React.FC<OriginalSignatureProps> = ({
+  isParentProposalUpdatable,
+  signer,
+  voteCount,
+}) => {
   return (
     <li className={classes.placeholder}>
       <div className={classes.details}>
         <div className={classes.sponsorInfo}>
           <p className={classes.sponsorName}>
-            <a href={buildEtherscanAddressLink(props.signer)} target={'_blank'} rel="noreferrer">
-              <ShortAddress address={props.signer} />
+            <a href={buildEtherscanAddressLink(signer)} target={'_blank'} rel="noreferrer">
+              <ShortAddress address={signer} />
             </a>
           </p>
         </div>
         <p className={classes.voteCount}>
-          {props.voteCount} vote{props.voteCount !== 1 && 's'}
+          {voteCount} vote{voteCount !== 1 && 's'}
         </p>
       </div>
       <p className={classes.sigStatus}>
-        {props.isParentProposalUpdatable ? (
+        {isParentProposalUpdatable ? (
           <Trans>Awaiting signature</Trans>
         ) : (
           <Trans>Did not re-sign</Trans>

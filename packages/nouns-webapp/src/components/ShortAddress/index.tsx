@@ -1,30 +1,39 @@
 import React from 'react';
 
-import { useEthers } from '@usedapp/core';
+import { blo } from 'blo';
+import { useEnsName } from 'wagmi';
 
-import { useIsNetworkEnsSupported } from '@/hooks/useIsNetworkEnsSupported';
 import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
-import { useReverseENSLookUp } from '@/utils/ensLookup';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { resolveNounContractAddress } from '@/utils/resolveNounsContractAddress';
-import Identicon from '@/components/Identicon';
+import { Address } from '@/utils/types';
 
 import classes from './ShortAddress.module.css';
 
-const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
-  const { address, avatar, size = 24 } = props;
-  const { library: provider } = useEthers();
-  const hasENS = useIsNetworkEnsSupported();
-  const ens = useReverseENSLookUp(address) || resolveNounContractAddress(address);
+interface ShortAddressProps {
+  address: Address;
+  avatar?: boolean;
+  size?: number;
+}
+
+const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar, size = 24 }) => {
+  const { data: ensName } = useEnsName({ address });
+  const ens = ensName ?? resolveNounContractAddress(address);
   const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
   const shortAddress = useShortAddress(address);
 
   if (avatar) {
     return (
       <div className={classes.shortAddress}>
-        {hasENS && avatar && (
+        {!!ens && (
           <div key={address}>
-            <Identicon size={size} address={address} provider={provider} />
+            <img
+              alt={address}
+              src={blo(address)}
+              width={size}
+              height={size}
+              style={{ borderRadius: '50%' }}
+            />
           </div>
         )}
         <span>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</span>

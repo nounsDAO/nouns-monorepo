@@ -22,12 +22,8 @@ const VoteSignalGroup = (props: Props) => {
     if (props.isExpanded) {
       setIsExpanded(true);
     } else {
-      // expand on render if there's any feedback in For, then try Against, then Abstain
-      if (props.support === 1 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 0 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 2 && props.voteSignals.length > 0) {
+      // expand on render if there are any vote signals (for For, Against, or Abstain)
+      if (props.voteSignals.length > 0) {
         setIsExpanded(true);
       }
     }

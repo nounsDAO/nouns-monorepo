@@ -1,3 +1,5 @@
+import type { Address } from '@/utils/types';
+
 import { useMemo } from 'react';
 
 import { useQuery } from '@apollo/client';
@@ -112,11 +114,11 @@ export interface Proposal extends PartialProposal {
   description: string;
   createdBlock: number;
   createdTimestamp: number;
-  proposer: string | undefined;
+  proposer: Address | undefined;
   proposalThreshold: number;
   details: ProposalDetail[];
   transactionHash: string;
-  signers: { id: string }[];
+  signers: { id: Address }[];
   onTimelockV1: boolean;
   voteSnapshotBlock: number;
 }
@@ -160,7 +162,7 @@ export interface PartialProposalSubgraphEntity {
   objectionPeriodEndBlock: string;
   updatePeriodEndBlock: string;
   onTimelockV1: boolean | null;
-  signers: { id: string }[];
+  signers: { id: Address }[];
 }
 
 export interface ProposalSubgraphEntity
@@ -170,7 +172,7 @@ export interface ProposalSubgraphEntity
   createdBlock: string;
   createdTransactionHash: string;
   createdTimestamp: string;
-  proposer: { id: string };
+  proposer: { id: Address };
   proposalThreshold: string;
   onTimelockV1: boolean;
   voteSnapshotBlock: string;
@@ -205,7 +207,7 @@ export interface EscrowDeposit {
   eventType: 'EscrowDeposit' | 'ForkJoin';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   reason: string;
   tokenIDs: string[];
   proposalIDs: number[];
@@ -215,7 +217,7 @@ export interface EscrowWithdrawal {
   eventType: 'EscrowWithdrawal';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   tokenIDs: string[];
 }
 
@@ -775,13 +777,8 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
-  return parseSubgraphProposal(
-    useQuery(proposalQuery(id)).data?.proposal,
-    blockNumber,
-    timestamp,
-    toUpdate,
-    isDaoGteV3,
-  );
+  const proposal = useQuery(proposalQuery(id)).data?.proposal;
+  return parseSubgraphProposal(proposal, blockNumber, timestamp, toUpdate, isDaoGteV3);
 };
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {

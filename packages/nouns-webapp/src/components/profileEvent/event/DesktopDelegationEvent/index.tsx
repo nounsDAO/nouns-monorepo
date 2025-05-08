@@ -1,14 +1,16 @@
+import type { Address } from '@/utils/types';
+
 import React from 'react';
 
 import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
 
-import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { DelegationEvent } from '@/wrappers/nounActivity';
-import ShortAddress from '@/components/ShortAddress';
 import DesktopNounActivityRow from '@/components/profileEvent/activityRow/DesktopNounActivityRow';
 import TransactionHashPill from '@/components/profileEvent/eventData/infoPills/TransactionHashPill';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { DelegationEvent } from '@/wrappers/nounActivity';
 
 import classes from './DesktopDelegationEvent.module.css';
 
@@ -44,7 +46,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             className={classes.address}
           >
             {' '}
-            <ShortAddress address={event.previousDelegate} />
+            <ShortAddress address={event.previousDelegate as Address} />
           </span>{' '}
           to{' '}
           <span
@@ -53,7 +55,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             onClick={() => window.open(buildEtherscanAddressLink(event.newDelegate), '_blank')}
             className={classes.address}
           >
-            <ShortAddress address={event.newDelegate} />
+            <ShortAddress address={event.newDelegate as Address} />
           </span>
         </>
       }

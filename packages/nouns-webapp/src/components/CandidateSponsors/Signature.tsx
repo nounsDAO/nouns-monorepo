@@ -1,3 +1,5 @@
+import type { Address } from '@/utils/types';
+
 import React, { useEffect } from 'react';
 
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -7,16 +9,16 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+import ShortAddress from '@/components/ShortAddress';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { useCancelSignature } from '@/wrappers/nounsDao';
-import ShortAddress from '@/components/ShortAddress';
 
 import classes from './CandidateSponsors.module.css';
 
 type CandidateSignatureProps = {
   reason: string;
   expirationTimestamp: number;
-  signer: string;
+  signer: Address;
   voteCount: number;
   isAccountSigner: boolean;
   sig: string;

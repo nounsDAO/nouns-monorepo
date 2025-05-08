@@ -4,7 +4,7 @@ export type BigNumberish = bigint | boolean | number | string;
 
 export interface BidEvent {
   nounId: BigNumberish;
-  sender: string;
+  sender: Address;
   value: BigNumberish;
   extended: boolean;
   transactionHash: string;
@@ -21,7 +21,7 @@ export interface AuctionCreateEvent {
 
 export interface AuctionSettledEvent {
   nounId: BigNumberish;
-  winner: string;
+  winner: Address;
   amount: BigNumberish;
 }
 
@@ -32,7 +32,7 @@ export interface AuctionExtendedEvent {
 
 export interface Bid {
   nounId: bigint;
-  sender: string;
+  sender: Address;
   value: bigint;
   extended: boolean;
   transactionHash: string;

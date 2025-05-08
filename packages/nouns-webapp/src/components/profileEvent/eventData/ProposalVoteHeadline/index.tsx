@@ -3,21 +3,24 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
 
-import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import { Proposal, ProposalState, Vote } from '../../../../wrappers/nounsDao';
-import ShortAddress from '../../../ShortAddress';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { Address } from '@/utils/types';
+import { Proposal, ProposalState, Vote } from '@/wrappers/nounsDao';
 
 import classes from './ProposalVoteHeadline.module.css';
 
 interface ProposalVoteHeadlineProps {
   proposal: Proposal;
   supportDetailed: Vote | undefined;
-  voter: string | undefined;
+  voter: Address | undefined;
 }
 
-const ProposalVoteHeadline: React.FC<ProposalVoteHeadlineProps> = props => {
-  const { proposal, supportDetailed, voter } = props;
-
+const ProposalVoteHeadline: React.FC<ProposalVoteHeadlineProps> = ({
+  proposal,
+  supportDetailed,
+  voter,
+}) => {
   if (supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Trans>Waiting for</Trans>;
@@ -45,7 +48,7 @@ const ProposalVoteHeadline: React.FC<ProposalVoteHeadlineProps> = props => {
           window.open(buildEtherscanAddressLink(voter ?? ''), '_blank');
         }}
       >
-        <ShortAddress address={voter ?? ''} />
+        <ShortAddress address={voter ?? '0x'} />
       </span>
     </>
   );

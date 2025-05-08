@@ -1,6 +1,6 @@
-import { utils } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap';
+import { formatEther } from 'viem';
 
 import xIcon from '@/assets/x-icon.png';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
@@ -20,8 +20,14 @@ const ProposalTransactions = ({
   isProposalUpdate?: boolean;
 }) => {
   const getPopover = (tx: ProposalTransaction) => {
-    let calldata =
-      tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata;
+    let calldata;
+    if (tx.calldata === '0x') {
+      calldata = 'None';
+    } else if (tx.decodedCalldata) {
+      calldata = tx.decodedCalldata;
+    } else {
+      calldata = tx.calldata;
+    }
 
     const [, types] = tx.signature.substring(0, tx.signature.length - 1).split(/\((.*)/s);
     if (isProposalUpdate && types) {
@@ -47,7 +53,7 @@ const ProposalTransactions = ({
             <Col sm="3">
               <b>Value</b>
             </Col>
-            <Col sm="9">{tx.value ? `${utils.formatEther(tx.value)} ETH` : 'None'}</Col>
+            <Col sm="9">{tx.value ? `${formatEther(BigInt(tx.value))} ETH` : 'None'}</Col>
           </Row>
           <Row>
             <Col sm="3">

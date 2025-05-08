@@ -1,6 +1,7 @@
 import { ChainId } from '@usedapp/core';
 
-import { CHAIN_ID, ChainId_Sepolia, ETHERSCAN_API_KEY } from '../config';
+import { CHAIN_ID, ETHERSCAN_API_KEY } from '@/config';
+import { sepolia } from 'viem/chains';
 
 const getBaseURL = (network: ChainId) => {
   switch (network) {
@@ -37,9 +38,7 @@ export const buildEtherscanHoldingsLink = (address: string): string => {
 
 const getApiBaseURL = (network: number) => {
   switch (network) {
-    case ChainId.Goerli:
-      return 'https://api-goerli.etherscan.io/';
-    case ChainId_Sepolia:
+    case sepolia.id:
       return 'https://api-sepolia.etherscan.io/';
     default:
       return 'https://api.etherscan.io/';

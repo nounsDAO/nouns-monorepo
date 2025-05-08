@@ -3,7 +3,13 @@ import { useBalance } from 'wagmi';
 import { useReadStEthBalanceOf } from '@/contracts';
 import { Address } from '@/utils/types';
 
-function useForkTreasuryBalance(treasuryContractAddress?: Address) {
+/**
+ * Hook to get the combined ETH and stETH balance of a fork treasury
+ *
+ * @param treasuryContractAddress The treasury contract address to check balances for
+ * @returns The combined balance of ETH and stETH as a bigint
+ */
+function useForkTreasuryBalance(treasuryContractAddress?: Address): bigint {
   const { data: ethBalanceData } = useBalance({
     address: treasuryContractAddress,
   });
@@ -13,10 +19,11 @@ function useForkTreasuryBalance(treasuryContractAddress?: Address) {
     query: { enabled: !!treasuryContractAddress },
   });
 
-  const eth = (ethBalanceData as bigint | undefined) ?? 0n;
-  const stEth = (stEthBalanceData as bigint | undefined) ?? 0n;
+  // Use nullish coalescing to provide a default value of 0n for undefined balances
+  const ethBalance = ethBalanceData?.value ?? 0n;
+  const stEthBalance = stEthBalanceData ?? 0n;
 
-  return eth + stEth;
+  return ethBalance + stEthBalance;
 }
 
 export default useForkTreasuryBalance;

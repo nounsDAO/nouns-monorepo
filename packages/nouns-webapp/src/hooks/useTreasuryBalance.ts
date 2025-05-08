@@ -1,9 +1,7 @@
-import { useCoingeckoPrice } from '@usedapp/coingecko';
-import { ethers } from 'ethers';
 import { useBalance } from 'wagmi';
 
 import config from '@/config';
-import { useReadStEthBalanceOf } from '@/contracts';
+import { useReadEthToUsdPriceOracleLatestAnswer, useReadStEthBalanceOf } from '@/contracts';
 import { Address } from '@/utils/types';
 
 import useTokenBuyerBalance from './useTokenBuyerBalance';
@@ -11,52 +9,73 @@ import useTokenBuyerBalance from './useTokenBuyerBalance';
 /**
  * Computes treasury balance (ETH and Lido)
  *
- * @returns Total balance of treasury (ETH and Lido) as EthersBN
+ * @returns Total balance of treasury (ETH and Lido) as bigint
  */
-export const useTreasuryBalance = () => {
+export const useTreasuryBalance = (): bigint => {
+  // Get ETH balance for main treasury
   const { data: ethBalance } = useBalance({
     address: config.addresses.nounsDaoExecutor as Address,
   });
 
+  // Get ETH balance for treasury v2
   const { data: ethBalanceTreasuryV2 } = useBalance({
     address: config.addresses.nounsDaoExecutorProxy as Address,
   });
 
-  // @ts-expect-error - useReadStEthBalanceOf has an incompatible return type
+  // Get Lido (stETH) balance for the main treasury
+  // @ts-expect-error - Return type from contract call needs manual casting
   const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
     args: config.addresses.nounsDaoExecutor
       ? [config.addresses.nounsDaoExecutor as Address]
-      : (undefined as unknown as [Address]),
-    query: { enabled: !!config.addresses.nounsDaoExecutor },
-  });
+      : undefined,
+    query: {
+      enabled: Boolean(config.addresses.nounsDaoExecutor),
+    },
+  }) as { data: bigint | undefined };
 
+  // Get Lido (stETH) balance for treasury v2
   const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
     args: config.addresses.nounsDaoExecutorProxy
       ? [config.addresses.nounsDaoExecutorProxy as Address]
-      : (undefined as unknown as [Address]),
-    query: { enabled: !!config.addresses.nounsDaoExecutorProxy },
-  });
+      : undefined,
+    query: {
+      enabled: Boolean(config.addresses.nounsDaoExecutorProxy),
+    },
+  }) as { data: bigint | undefined };
 
+  // Get token buyer balance
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
+  // Sum all balances, using 0n for any undefined values
   return (
     (ethBalance?.value ?? 0n) +
     (ethBalanceTreasuryV2?.value ?? 0n) +
     (lidoBalanceAsETH ?? 0n) +
     (lidoBalanceTreasuryV2AsETH ?? 0n) +
-    (tokenBuyerBalanceAsETH?.toBigInt() ?? 0n)
+    (tokenBuyerBalanceAsETH ?? 0n)
   );
 };
 
 /**
- * Computes treasury usd value of treasury assets (ETH and Lido) at current ETH-USD exchange rate
+ * Computes treasury USD value of treasury assets (ETH and Lido) at current ETH-USD exchange rate
  *
- * @returns USD value of treasury assets (ETH and Lido) at current exchange rate
+ * @returns USD value of treasury assets as a number or undefined if data is not available
  */
-export const useTreasuryUSDValue = () => {
-  const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));
-  const treasuryBalanceETH = Number(
-    ethers.utils.formatEther(useTreasuryBalance()?.toString() || '0'),
-  );
-  return etherPrice * treasuryBalanceETH;
+export const useTreasuryUSDValue = (): number | undefined => {
+  // Fetch ETH/USD price for conversion
+  const { data: ethUsdcPrice } = useReadEthToUsdPriceOracleLatestAnswer({});
+
+  // Get total treasury balance (ETH and Lido)
+  const treasuryBalance = useTreasuryBalance();
+
+  // If either price or balance is not available, return undefined
+  if (!ethUsdcPrice || ethUsdcPrice === 0n) {
+    return undefined;
+  }
+
+  // Convert from bigint to number for easier display
+  // Using Number() and formatEther would be another approach if needed
+  const usdValue = Number(ethUsdcPrice * treasuryBalance) / 10 ** 8; // Chainlink price feeds typically use 8 decimals
+
+  return usdValue;
 };

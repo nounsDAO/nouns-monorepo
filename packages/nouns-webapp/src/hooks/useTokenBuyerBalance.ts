@@ -1,54 +1,43 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useBalance } from 'wagmi';
 
-import { Contract } from '@ethersproject/contracts';
-import { useEthers } from '@usedapp/core';
-import { utils, BigNumber } from 'ethers';
+import { useReadEthToUsdPriceOracleLatestAnswer, useReadUsdcBalanceOf } from '@/contracts';
 
 import config from '../config';
-import ERC20 from '../libs/abi/ERC20.json';
 
 const { addresses } = config;
 
-const erc20Interface = new utils.Interface(ERC20);
-const chainlinkInterface = ['function latestAnswer() external view returns (int256)'];
+/**
+ * Hook to calculate the total token buyer balance in ETH equivalent
+ * Combines ETH balance and USDC balance (converted to ETH using price oracle)
+ * @returns Total balance as bigint, or undefined if data is not yet available
+ */
+function useTokenBuyerBalance(): bigint | undefined {
+  // Fetch ETH balance directly
+  const { data: ethBalance } = useBalance({
+    address: addresses.tokenBuyer,
+  });
 
-function useTokenBuyerBalance(): BigNumber | undefined {
-  const { library } = useEthers();
+  // Fetch USDC balance of the payer contract
+  const { data: usdcBalance } = useReadUsdcBalanceOf({
+    args: addresses.payerContract ? [addresses.payerContract] : undefined,
+  });
 
-  const [ethBalance, setETHBalance] = useState<BigNumber | undefined>();
-  const [usdcBalance, setUSDCBalance] = useState<BigNumber | undefined>();
-  const [ethUsdcPrice, setETHUSDCPrice] = useState<BigNumber | undefined>();
+  // Fetch ETH/USD price for conversion
+  const { data: ethUsdcPrice } = useReadEthToUsdPriceOracleLatestAnswer({});
 
-  const usdcContract = useMemo((): Contract | undefined => {
-    if (!library || !addresses.usdcToken) return;
-    return new Contract(addresses.usdcToken, erc20Interface, library);
-  }, [library]);
-  const chainlinkEthUsdcContract = useMemo((): Contract | undefined => {
-    if (!library || !addresses.chainlinkEthUsdc) return;
-    return new Contract(addresses.chainlinkEthUsdc, chainlinkInterface, library);
-  }, [library]);
-
-  useEffect(() => {
-    if (!library || !addresses.tokenBuyer) return;
-    library.getBalance(addresses.tokenBuyer).then(setETHBalance);
-  }, [library]);
-
-  useEffect(() => {
-    if (!usdcContract || !addresses.payerContract) return;
-    usdcContract.balanceOf(addresses.payerContract).then(setUSDCBalance);
-  }, [usdcContract]);
-
-  useEffect(() => {
-    if (!chainlinkEthUsdcContract) return;
-    chainlinkEthUsdcContract.latestAnswer().then(setETHUSDCPrice);
-  }, [chainlinkEthUsdcContract]);
-
+  // If we don't have price data, just return ETH balance without USDC conversion
   if (!ethUsdcPrice) {
-    return ethBalance;
+    return ethBalance?.value;
   }
-  return ethBalance?.add(
-    usdcBalance?.mul(BigNumber.from(10).pow(20)).div(ethUsdcPrice) ?? BigNumber.from(0),
-  );
+
+  // Default to 0n for any undefined values
+  const ethValue = ethBalance?.value ?? 0n;
+
+  // Convert USDC to ETH equivalent if available
+  const usdcValueInEth = usdcBalance && ethUsdcPrice ? usdcBalance * ethUsdcPrice : 0n;
+
+  // Return combined balance
+  return ethValue + usdcValueInEth;
 }
 
 export default useTokenBuyerBalance;

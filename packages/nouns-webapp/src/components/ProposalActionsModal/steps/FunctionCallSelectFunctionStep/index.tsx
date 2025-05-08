@@ -1,26 +1,28 @@
 import React, { useEffect, ChangeEvent, useState } from 'react';
 
-import { utils } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
-
-import { ProposalActionModalStepProps } from '../..';
-
-import 'bs-custom-file-input';
-import 'react-stepz/dist/index.css';
-import { buildEtherscanApiQuery } from '@/utils/etherscan';
-
-import { Trans } from '@lingui/react/macro';
+import { isAddress } from 'viem';
 
 import ABIUpload from '@/components/ABIUpload';
 import BrandDropdown from '@/components/BrandDropdown';
 import BrandTextEntry from '@/components/BrandTextEntry';
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
+import { buildEtherscanApiQuery } from '@/utils/etherscan';
+
+import { ProposalActionModalStepProps } from '../..';
+
+import 'bs-custom-file-input';
+import 'react-stepz/dist/index.css';
+
+import { Trans } from '@lingui/react/macro';
+
+import type { Address } from '@/utils/types';
 
 const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
 
-  const [address, setAddress] = useState(state.address ?? '');
+  const [address, setAddress] = useState<Address>(state.address ?? ('' as Address));
   const [abi, setABI] = useState<Interface>();
   const [value, setValue] = useState(state.amount ? state.amount.toString() : '');
   const [func, setFunction] = useState(state.function ?? '');
@@ -35,23 +37,13 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
       setABIFileName('etherscan-abi-download.json');
     }
 
-    if (
-      state.address.length > 0 &&
-      utils.isAddress(state.address) &&
-      state.abi &&
-      !isValidForNextStage
-    ) {
+    if (state.address.length > 0 && isAddress(state.address) && state.abi && !isValidForNextStage) {
       setIsValidForNextStage(true);
     }
   }, [isValidForNextStage, state]);
 
   useEffect(() => {
-    if (
-      address.length > 0 &&
-      utils.isAddress(address) &&
-      isABIUploadValid &&
-      !isValidForNextStage
-    ) {
+    if (address.length > 0 && isAddress(address) && isABIUploadValid && !isValidForNextStage) {
       setIsValidForNextStage(true);
     }
   }, [address, isABIUploadValid, isValidForNextStage]);
@@ -101,7 +93,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
 
   const getABI = async (address: string) => {
     let info = await getContractInformation(address);
-    if (info?.Proxy === '1' && utils.isAddress(info?.Implementation)) {
+    if (info?.Proxy === '1' && isAddress(info?.Implementation)) {
       info = await getContractInformation(info.Implementation);
     }
     return info.ABI;
@@ -123,7 +115,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     }
   };
   const addressValidator = (s: string) => {
-    if (!utils.isAddress(s)) {
+    if (!isAddress(s)) {
       return false;
     }
     // To avoid blocking stepper progress, do not `await`
@@ -140,7 +132,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
       <BrandTextEntry
         label={'Contract Address'}
         onChange={e => {
-          setAddress(e.target.value);
+          setAddress(e.target.value as Address);
           addressValidator(e.target.value);
         }}
         value={address}
@@ -163,7 +155,12 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
         label={'Select Contract Function'}
         chevronTop={35}
       >
-        {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
+        {abi &&
+          Object.keys(abi.functions).map(func => (
+            <option key={func} value={func}>
+              {func}
+            </option>
+          ))}
       </BrandDropdown>
 
       <ABIUpload

@@ -1,4 +1,8 @@
+import type { Address } from '@/utils/types';
+
 import { useQuery } from '@apollo/client';
+
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
 
 import { useNounCanVoteTimestamp } from './nounsAuction';
 import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
@@ -8,8 +12,6 @@ import {
   nounTransferHistoryQuery,
   nounVotingHistoryQuery,
 } from './subgraph';
-
-import { NounVoteHistory } from '@/components/ProfileActivityFeed';
 
 export enum NounEventType {
   PROPOSAL_VOTE,
@@ -22,20 +24,20 @@ export type ProposalVoteEvent = {
   proposal: Proposal;
   vote: {
     // Delegate (possibly holder in case of self-delegation) ETH address (undefined in the case of no vote cast)
-    voter: string | undefined;
+    voter: Address | undefined;
     supportDetailed: 0 | 1 | 2 | undefined;
   };
 };
 
 export type TransferEvent = {
-  from: string;
-  to: string;
+  from: Address;
+  to: Address;
   transactionHash: string;
 };
 
 export type DelegationEvent = {
-  previousDelegate: string;
-  newDelegate: string;
+  previousDelegate: Address;
+  newDelegate: Address;
   transactionHash: string;
 };
 
@@ -49,7 +51,7 @@ export type NounProfileEvent = {
 
 export type NounWinEvent = {
   nounId: string | number;
-  winner: string;
+  winner: Address;
   transactionHash: string;
 };
 
@@ -165,8 +167,8 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
     data: data.transferEvents.map(
       (event: {
         blockNumber: string;
-        previousHolder: { id: any };
-        newHolder: { id: any };
+        previousHolder: { id: Address };
+        newHolder: { id: Address };
         id: any;
       }) => {
         return {
@@ -209,8 +211,8 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
     data: data.delegationEvents.map(
       (event: {
         blockNumber: string;
-        previousDelegate: { id: any };
-        newDelegate: { id: any };
+        previousDelegate: { id: Address };
+        newDelegate: { id: Address };
         id: string;
       }) => {
         return {

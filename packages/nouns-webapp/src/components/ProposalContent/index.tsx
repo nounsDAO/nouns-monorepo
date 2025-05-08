@@ -2,12 +2,13 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { utils } from 'ethers';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import { isAddress } from 'viem';
 
 import linkIcon from '@/assets/icons/Link.svg';
+import EnsOrLongAddress from '@/components/EnsOrLongAddress';
 import config from '@/config';
 import {
   buildEtherscanAddressLink,
@@ -16,7 +17,6 @@ import {
 } from '@/utils/etherscan';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { ProposalDetail } from '@/wrappers/nounsDao';
-import EnsOrLongAddress from '@/components/EnsOrLongAddress';
 
 import classes from './ProposalContent.module.css';
 import ProposalTransactions from './ProposalTransactions';
@@ -30,7 +30,7 @@ interface ProposalContentProps {
 }
 
 export const linkIfAddress = (content: string) => {
-  if (utils.isAddress(content)) {
+  if (isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
         <EnsOrLongAddress address={content} />
@@ -69,11 +69,9 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <Trans>Description</Trans>
           </h5>
           {description && (
-            <ReactMarkdown
-              className={classes.markdown}
-              children={processProposalDescriptionText(description, title)}
-              remarkPlugins={[remarkBreaks]}
-            />
+            <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
+              {processProposalDescriptionText(description, title)}
+            </ReactMarkdown>
           )}
         </Col>
       </Row>
