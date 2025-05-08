@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { blo } from 'blo';
-import { useEnsName } from 'wagmi';
+import { useEnsAvatar, useEnsName } from 'wagmi';
 
 import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
@@ -16,32 +16,33 @@ interface ShortAddressProps {
   size?: number;
 }
 
-const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar, size = 24 }) => {
+const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, size = 24 }) => {
   const { data: ensName } = useEnsName({ address });
-  const ens = ensName ?? resolveNounContractAddress(address);
-  const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
+  const resolvedName = ensName ?? resolveNounContractAddress(address);
+  const isBlocklisted = resolvedName ? containsBlockedText(resolvedName, 'en') : false;
   const shortAddress = useShortAddress(address);
+  const { data: ensAvatar } = useEnsAvatar({ name: resolvedName });
 
-  if (avatar) {
-    return (
-      <div className={classes.shortAddress}>
-        {!!ens && (
-          <div key={address}>
-            <img
-              alt={address}
-              src={blo(address)}
-              width={size}
-              height={size}
-              style={{ borderRadius: '50%' }}
-            />
-          </div>
-        )}
-        <span>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</span>
-      </div>
-    );
+  const displayName = resolvedName && !isBlocklisted ? resolvedName : shortAddress;
+
+  if (!avatar) {
+    return <>{displayName}</>;
   }
 
-  return <>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</>;
+  return (
+    <div className={classes.shortAddress}>
+      <div>
+        <img
+          alt={address}
+          src={ensAvatar ?? blo(address)}
+          width={size}
+          height={size}
+          style={{ borderRadius: '50%' }}
+        />
+      </div>
+      <span>{displayName}</span>
+    </div>
+  );
 };
 
 export default ShortAddress;
