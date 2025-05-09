@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
 /// @title A library used to convert multi-part RLE compressed images to SVG
+/// @dev Used in NFTDescriptor.sol. V2 uses SVGRenderer.sol.
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *

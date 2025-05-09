@@ -1,0 +1,13 @@
+.aboveTheFoldEventsTable {
+  margin-bottom: 0rem;
+}
+
+.aboveTheFoldEventsTable td {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 12px;
+}
+
+.nounInfoPadding {
+  padding-bottom: 1rem;
+  font-size: 18px;
+}

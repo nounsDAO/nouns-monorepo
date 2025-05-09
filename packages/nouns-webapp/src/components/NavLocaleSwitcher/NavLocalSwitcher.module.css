@@ -1,0 +1,69 @@
+.desktopLanguageButton {
+  justify-content: space-between;
+}
+.dropdownActive {
+  background-color: white;
+  color: black;
+}
+
+.dropDownTop {
+  border-radius: 10px 10px 0px 0px;
+  padding-top: 0.65rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  margin-left: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.125s ease-in-out;
+}
+
+.dropDownTop:hover {
+  color: black;
+}
+
+.dropDownBottom {
+  border-radius: 0px 0px 10px 10px;
+  padding-bottom: 0.65rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  margin-left: 4px;
+}
+
+.dropDownBottom:hover {
+  color: black;
+}
+
+.dropDownInterior {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 0.65rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  margin-left: 4px;
+}
+
+.dropDownInterior:hover {
+  color: black;
+}
+
+.languageButton {
+  border: none;
+  margin: 5px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  background-color: rgba(211, 211, 211, 0.664);
+  color: var(--brand-black);
+  border: none;
+}
+.languageButton img {
+  margin-right: 10px;
+  border-radius: 5px;
+}
+.languageButton:hover,
+.languageButton:active,
+.languageButton:focus,
+.languageButton:disabled {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: lightgray !important;
+  color: var(--brand-dark-green);
+  color: white;
+}

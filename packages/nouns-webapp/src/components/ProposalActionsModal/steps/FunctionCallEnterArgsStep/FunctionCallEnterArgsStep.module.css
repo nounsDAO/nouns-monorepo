@@ -1,0 +1,32 @@
+.inputGroupText {
+  border-radius: 15px 0 0 15px;
+  border-right: none;
+  height: 3rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.label {
+  opacity: 0.5;
+}
+
+.inputGroup {
+  margin-bottom: 1rem;
+  border-radius: 15px;
+  width: 100%;
+  height: 3rem;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--brand-cool-dark-text);
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+
+.invalid {
+  color: var(--brand-color-rd);
+}

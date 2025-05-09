@@ -3,14 +3,16 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
+
 import {
-  MaliciousBidderFactory,
+  MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
-  NounsDescriptorFactory,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
   NounsToken,
-  Weth,
+  WETH,
 } from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+
+import { deployNounsToken, deployWeth, populateDescriptorV2 } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -18,7 +20,7 @@ const { expect } = chai;
 describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsToken: NounsToken;
-  let weth: Weth;
+  let weth: WETH;
   let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
@@ -51,7 +53,7 @@ describe('NounsAuctionHouse', () => {
 
     const descriptor = await nounsToken.descriptor();
 
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
+    await populateDescriptorV2(NounsDescriptorV3Factory.connect(descriptor, deployer));
 
     await nounsToken.setMinter(nounsAuctionHouse.address);
   });

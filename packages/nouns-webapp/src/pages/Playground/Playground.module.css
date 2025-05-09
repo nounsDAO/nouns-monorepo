@@ -15,7 +15,7 @@
   color: #14161b;
 }
 
-.generateBtn {
+.primaryBtn {
   width: 100%;
   height: 4rem;
   font-weight: bold;
@@ -24,12 +24,12 @@
   background-color: var(--brand-dark-red);
   border: var(--brand-dark-red);
 }
-.generateBtn:focus,
-.generateBtn:hover {
+.primaryBtn:focus,
+.primaryBtn:hover {
   background-color: var(--brand-dark-red) !important;
   box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
 }
-.generateBtn:active {
+.primaryBtn:active {
   background-color: var(--brand-dark-red) !important;
 }
 .traitForm {
@@ -52,7 +52,8 @@
   background-color: #f4f4f8 !important;
   box-shadow: none !important;
 }
-.floatingLabel {
+.floatingLabel,
+.fileUpload {
   font-size: 15px;
   color: #8c8d92;
 }

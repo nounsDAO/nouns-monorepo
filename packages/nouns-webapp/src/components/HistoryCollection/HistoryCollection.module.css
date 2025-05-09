@@ -10,6 +10,10 @@
   overflow: hidden;
   max-width: 1700px;
 }
+.historyCollection img:hover {
+  cursor: pointer;
+  transform: scale(1.025);
+}
 
 .rtl {
   direction: ltr;

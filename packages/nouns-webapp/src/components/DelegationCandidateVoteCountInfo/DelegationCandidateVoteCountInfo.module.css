@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+}
+
+.spinner {
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.voteInfoWrapper {
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  color: var(--brand-gray-light-text);
+  text-align: right;
+}
+
+.voteCount {
+  color: black;
+  font-weight: bold;
+}

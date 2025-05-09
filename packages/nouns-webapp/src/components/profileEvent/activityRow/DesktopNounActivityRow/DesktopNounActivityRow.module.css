@@ -1,0 +1,46 @@
+.wrapper {
+  transition: all 0.2s ease-in-out;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.wrapper:hover {
+  --bs-table-hover-bg: rgba(0, 0, 0, 0.03);
+}
+
+.icon {
+  width: 38px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 6px;
+}
+
+.activityTableCell {
+  max-width: 50vw;
+}
+
+.infoContainer {
+  display: inline-block;
+  margin-top: 4px;
+  width: 100%;
+}
+@media (max-width: 992px) {
+  .infoContainer {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.secondaryContentWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.secondaryContentContainer {
+  text-align: right;
+  width: max-content;
+}

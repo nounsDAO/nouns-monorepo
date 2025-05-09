@@ -1,10 +1,12 @@
 import { ChainId } from '@usedapp/core';
-import { CHAIN_ID, ETHERSCAN_API_KEY } from '../config';
+import { CHAIN_ID, ChainId_Sepolia, ETHERSCAN_API_KEY } from '../config';
 
 const getBaseURL = (network: ChainId) => {
   switch (network) {
-    case ChainId.Rinkeby:
-      return 'https://rinkeby.etherscan.io/';
+    case ChainId.Goerli:
+      return 'https://goerli.etherscan.io/';
+    case ChainId.Sepolia:
+      return 'https://sepolia.etherscan.io/';
     default:
       return 'https://etherscan.io/';
   }
@@ -22,10 +24,22 @@ export const buildEtherscanAddressLink = (address: string): string => {
   return new URL(path, BASE_URL).toString();
 };
 
-const getApiBaseURL = (network: ChainId) => {
+export const buildEtherscanTokenLink = (tokenContractAddress: string, tokenId: number): string => {
+  const path = `token/${tokenContractAddress}?a=${tokenId}`;
+  return new URL(path, BASE_URL).toString();
+};
+
+export const buildEtherscanHoldingsLink = (address: string): string => {
+  const path = `tokenholdings?a=${address}`;
+  return new URL(path, BASE_URL).toString();
+};
+
+const getApiBaseURL = (network: number) => {
   switch (network) {
-    case ChainId.Rinkeby:
-      return `https://api-rinkeby.etherscan.io/`;
+    case ChainId.Goerli:
+      return 'https://api-goerli.etherscan.io/';
+    case ChainId_Sepolia:
+      return 'https://api-sepolia.etherscan.io/';
     default:
       return 'https://api.etherscan.io/';
   }

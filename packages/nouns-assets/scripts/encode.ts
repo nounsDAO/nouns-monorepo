@@ -1,7 +1,7 @@
-import { PNGCollectionEncoder } from '@nouns/sdk';
-import { readPngFile } from 'node-libpng';
+import { PNGCollectionEncoder, PngImage } from '@nouns/sdk';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { readPngImage } from './utils';
 
 const DESTINATION = path.join(__dirname, '../src/image-data.json');
 
@@ -10,10 +10,10 @@ const encode = async () => {
 
   const partfolders = ['1-bodies', '2-accessories', '3-heads', '4-glasses'];
   for (const folder of partfolders) {
-    const folderpath = path.join(__dirname, '../images', folder);
+    const folderpath = path.join(__dirname, '../images/v0', folder);
     const files = await fs.readdir(folderpath);
     for (const file of files) {
-      const image = await readPngFile(path.join(folderpath, file));
+      const image = await readPngImage(path.join(folderpath, file));
       encoder.encodeImage(file.replace(/\.png$/, ''), image, folder.replace(/^\d-/, ''));
     }
   }

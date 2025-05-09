@@ -1,0 +1,40 @@
+.wrapper {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  padding: 0;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none;
+}
+
+.menu {
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  left: 5px !important;
+}
+
+.menu a {
+  color: rgb(95, 95, 95);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  /* background-color: #f4f4f8; */
+  border: 0;
+  border-bottom: 1.5px solid #e2e3e8;
+  border-radius: 0;
+}
+.menu a:last-child {
+  border: none;
+}
+
+.menu a:hover {
+  /* color: var(--brand-black); */
+  background-color: #fff;
+}

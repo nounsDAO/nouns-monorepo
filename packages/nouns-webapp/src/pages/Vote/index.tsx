@@ -1,60 +1,134 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
+  PartialProposal,
   ProposalState,
-  useCastVote,
+  ProposalVersion,
+  useCancelProposal,
+  useCurrentQuorum,
   useExecuteProposal,
+  useExecuteProposalOnTimelockV1,
   useHasVotedOnProposal,
+  useIsDaoGteV3,
   useProposal,
+  useProposalVersions,
   useQueueProposal,
-  Vote,
+  useIsForkActive,
 } from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { TransactionStatus, useBlockNumber } from '@usedapp/core';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
+import { Link } from 'react-router';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalStatus from '../../components/ProposalStatus';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
+import en from 'dayjs/locale/en';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import { utils } from 'ethers';
-import { useAppDispatch } from '../../hooks';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import clsx from 'clsx';
+import ProposalHeader from '../../components/ProposalHeader';
+import ProposalContent from '../../components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
+import { useQuery } from '@apollo/client';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+  propUsingDynamicQuorum,
+} from '../../wrappers/subgraph';
+import { getNounVotes } from '../../utils/getNounsVotes';
+import { Trans } from '@lingui/react/macro';
+import { i18n } from '@lingui/core';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import { SearchIcon } from '@heroicons/react/solid';
+import ReactTooltip from 'react-tooltip';
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
+import config from '../../config';
+import ShortAddress from '../../components/ShortAddress';
+import StreamWithdrawModal from '../../components/StreamWithdrawModal';
+import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import VoteSignals from '../../components/VoteSignals/VoteSignals';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import { isProposalUpdatable } from '../../utils/proposals';
+import { useProposalFeedback } from '../../wrappers/nounsData';
+import { useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+const getUpdatableCountdownCopy = (
+  proposal: PartialProposal,
+  currentBlock: number,
+  locale: SupportedLocale,
+) => {
+  const timestamp = Date.now();
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
 
-const VotePage = ({
-  match: {
-    params: { id },
-  },
-}: RouteComponentProps<{ id: string }>) => {
-  const proposal = useProposal(id);
+  return (
+    <>
+      {dayjs(endDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow(true)}
+    </>
+  );
+};
 
-  const [vote, setVote] = useState<Vote>();
-
+const VotePage = () => {
+  const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  const [isVotePending, setVotePending] = useState<boolean>(false);
-
+  const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
+  // Toggle between Noun centric view and delegate view
+  const [isDelegateView, setIsDelegateView] = useState(false);
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
-
+  const [isCancelPending, setCancelPending] = useState<boolean>(false);
+  const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
+  const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
+  const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
+    streamAddress: string;
+    startTime: number;
+    endTime: number;
+    streamAmount: number;
+    tokenAddress: string;
+  } | null>(null);
+  // if objection period is active, then we are in objection period, unless the current block is greater than the end block
+  const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
+  const [forkPeriodMessage, setForkPeriodMessage] = useState<ReactNode>(<></>);
+  const [isExecutable, setIsExecutable] = useState<boolean>(true);
+  const proposal = useProposal(Number(id));
+  const proposalVersions = useProposalVersions(Number(id));
+  const activeLocale = useActiveLocale();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
-  const { castVote, castVoteState } = useCastVote();
+  const { account } = useEthers();
+  const {
+    data: dqInfo,
+    loading: loadingDQInfo,
+    error: dqError,
+  } = useQuery(propUsingDynamicQuorum(id ?? '0'));
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
-
+  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } =
+    useExecuteProposalOnTimelockV1();
+  const { cancelProposal, cancelProposalState } = useCancelProposal();
+  const isDaoGteV3 = useIsDaoGteV3();
+  const proposalFeedback = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
+  const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const forkActiveState = useIsForkActive();
+  const [isForkActive, setIsForkActive] = useState<boolean>(false);
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
@@ -66,12 +140,13 @@ const VotePage = ({
         )
       : undefined;
 
+  const endBlock =
+    currentBlock && proposal?.endBlock && isObjectionPeriod && currentBlock > proposal?.endBlock
+      ? proposal?.objectionPeriodEndBlock
+      : proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
       : undefined;
   const now = dayjs();
 
@@ -83,42 +158,59 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Only count available votes as of the proposal created block
-  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
+  // Use user votes as of the current or proposal snapshot block
+  const currentOrSnapshotBlock = useMemo(
+    () =>
+      Math.min(proposal?.voteSnapshotBlock ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
+    [proposal, currentBlock],
+  );
+  const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
+  // Get user votes as of current block to use in vote signals
+  const userVotesNow = useUserVotes() || 0;
+  const currentQuorum = useCurrentQuorum(
+    config.addresses.nounsDAOProxy,
+    proposal && proposal.id ? parseInt(proposal.id) : 0,
+    dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
+  );
 
-  // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons =
-    availableVotes && !hasVoted && proposal?.status === ProposalState.ACTIVE;
-
-  const linkIfAddress = (content: string) => {
-    if (utils.isAddress(content)) {
-      return (
-        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-          {content}
-        </a>
-      );
-    }
-    return <span>{content}</span>;
+  const getVersionTimestamp = (proposalVersions: ProposalVersion[]) => {
+    const versionDetails = proposalVersions[proposalVersions.length - 1];
+    return versionDetails?.createdAt;
   };
-
-  const transactionLink = (content: string) => {
-    return (
-      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
-        {content.substring(0, 7)}
-      </a>
-    );
-  };
-
-  const getVoteErrorMessage = (error: string | undefined) => {
-    if (error?.match(/voter already voted/)) {
-      return 'User Already Voted';
-    }
-    return error;
-  };
-
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
+  const isInNonFinalState = [
+    ProposalState.UPDATABLE,
+    ProposalState.PENDING,
+    ProposalState.ACTIVE,
+    ProposalState.SUCCEEDED,
+    ProposalState.QUEUED,
+    ProposalState.OBJECTION_PERIOD,
+  ].includes(proposal?.status!);
+  const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
+  const isProposalSigner =
+    account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const hasManyVersions = proposalVersions && proposalVersions.length > 1;
+  const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+  const isUpdateable = () => {
+    if (!isDaoGteV3) return false;
+    if (
+      proposal &&
+      currentBlock &&
+      isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const isCancellable = () => {
+    if (isInNonFinalState && (isProposalSigner || isProposer())) {
+      return true;
+    }
+    return false;
+  };
+
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
       return true;
@@ -129,23 +221,108 @@ const VotePage = ({
     return false;
   };
 
-  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
-  const quorumReached = forCount > againstCount && forCount >= quorumVotes;
+  const isAwaitingDestructiveStateChange = () => {
+    if (isCancellable()) {
+      return true;
+    }
+    return false;
+  };
 
-  const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
+  const isActionable = () => {
+    if (isUpdateable() && !(isProposer() || isProposalSigner)) {
+      return false;
+    } else if (isAwaitingStateChange()) {
+      return true;
+    } else if (isAwaitingDestructiveStateChange()) {
+      return true;
+    } else if (isUpdateable()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const startOrEndTimeCopy = () => {
+    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+      return <Trans>Ends</Trans>;
+    }
+    if (endDate?.isBefore(now)) {
+      return <Trans>Ended</Trans>;
+    }
+    return <Trans>Starts</Trans>;
+  };
+
+  const startOrEndTimeTime = () => {
+    if (!startDate?.isBefore(now)) {
+      return startDate;
+    }
+    return endDate;
+  };
+  const objectionEnd = () => {
+    const time =
+      proposal && timestamp && currentBlock
+        ? dayjs(timestamp).add(
+            AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
+            'seconds',
+          )
+        : undefined;
+    return time;
+  };
+
+  const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  });
+  const objectionEndDate = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
+    dateStyle: 'long',
+  });
+  const objectionNoteCopy = (
+    <>
+      Voters will have until {objectionEndTime} on {objectionEndDate} to vote against this proposal.
+    </>
+  );
+  const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
-      return () => queueProposal(proposal?.id);
+      return () => {
+        if (proposal?.id) {
+          return queueProposal(proposal.id);
+        }
+      };
     }
-    return () => executeProposal(proposal?.id);
+    return () => {
+      if (proposal?.id) {
+        if (proposal?.onTimelockV1) {
+          return executeProposalOnTimelockV1(proposal.id);
+        } else {
+          return executeProposal(proposal.id);
+        }
+      }
+    };
   })();
+
+  const destructiveStateButtonAction = isCancellable() ? 'Cancel' : '';
+  const destructiveStateAction = (() => {
+    if (isCancellable()) {
+      return () => {
+        if (proposal?.id) {
+          return cancelProposal(proposal.id);
+        }
+      };
+    }
+  })();
+
+  const handleRefetchData = () => {
+    proposalFeedback.refetch();
+  };
 
   const onTransactionStateChange = useCallback(
     (
       tx: TransactionStatus,
-      successMessage?: string,
+      successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => string | undefined,
+      getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
       switch (tx.status) {
@@ -157,8 +334,8 @@ const VotePage = ({
           break;
         case 'Success':
           setModal({
-            title: 'Success',
-            message: successMessage || 'Transaction Successful!',
+            title: <Trans>Success</Trans>,
+            message: successMessage || <Trans>Transaction Successful!</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -166,8 +343,8 @@ const VotePage = ({
           break;
         case 'Fail':
           setModal({
-            title: 'Transaction Failed',
-            message: tx?.errorMessage || 'Please try again.',
+            title: <Trans>Transaction Failed</Trans>,
+            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -175,8 +352,8 @@ const VotePage = ({
           break;
         case 'Exception':
           setModal({
-            title: 'Error',
-            message: getErrorMessage?.(tx?.errorMessage) || 'Please try again.',
+            title: <Trans>Error</Trans>,
+            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -190,216 +367,469 @@ const VotePage = ({
   useEffect(
     () =>
       onTransactionStateChange(
-        castVoteState,
-        'Vote Successful!',
-        setVotePending,
-        getVoteErrorMessage,
-        () => setShowVoteModal(false),
+        queueProposalState,
+        <Trans>Proposal Queued!</Trans>,
+        setQueuePending,
       ),
-    [castVoteState, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
-    () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
     [queueProposalState, onTransactionStateChange, setModal],
   );
 
   useEffect(
-    () => onTransactionStateChange(executeProposalState, 'Proposal Executed!', setExecutePending),
+    () =>
+      onTransactionStateChange(
+        executeProposalState,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
+  useEffect(
+    () =>
+      onTransactionStateChange(
+        executeProposalOnTimelockV1State,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
+    [executeProposalOnTimelockV1State, onTransactionStateChange, setModal],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
+    [cancelProposalState, onTransactionStateChange, setModal],
+  );
+
+  useEffect(() => {
+    if (forkActiveState.data) {
+      setIsForkActive(forkActiveState.data);
+    }
+  }, [forkActiveState.data, setIsForkActive]);
+
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const {
+    loading,
+    error,
+    data: voters,
+  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
+    skip: !proposal,
+  });
+
+  const voterIds = voters?.votes?.map(v => v.voter.id);
+  const { data: delegateSnapshot } = useQuery<Delegates>(
+    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.voteSnapshotBlock ?? 0),
+    {
+      skip: !voters?.votes?.length,
+    },
+  );
+
+  const { delegates } = delegateSnapshot || {};
+  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+    return acc;
+  }, {});
+
+  const data = voters?.votes?.map(v => ({
+    delegate: v.voter.id,
+    supportDetailed: v.supportDetailed,
+    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+  }));
+
+  const [showToast, setShowToast] = useState(true);
+  useEffect(() => {
+    if (showToast) {
+      setTimeout(() => {
+        setShowToast(false);
+      }, 5000);
+    }
+  }, [showToast]);
+
+  const isWalletConnected = !(activeAccount === undefined);
+  const isActiveForVoting =
+    proposal?.status === ProposalState.ACTIVE ||
+    proposal?.status === ProposalState.OBJECTION_PERIOD;
+
+  useEffect(() => {
+    if (
+      isDaoGteV3 &&
+      proposal &&
+      currentBlock &&
+      proposal?.objectionPeriodEndBlock > 0 &&
+      currentBlock > proposal?.endBlock &&
+      currentBlock <= proposal?.objectionPeriodEndBlock
+    ) {
+      setIsObjectionPeriod(true);
+    } else {
+      setIsObjectionPeriod(false);
+    }
+  }, [currentBlock, proposal?.status, proposal, isDaoGteV3]);
+
+  useEffect(() => {
+    if (proposal?.status === ProposalState.QUEUED && isForkActive) {
+      setForkPeriodMessage(
+        <p>
+          <Trans>Proposals cannot be executed during a forking period</Trans>
+        </p>,
+      );
+      setIsExecutable(false);
+    } else if (proposal?.status === ProposalState.QUEUED && !isForkActive) {
+      setIsExecutable(true);
+    }
+  }, [proposal?.status, isForkActive, setForkPeriodMessage, setIsExecutable]);
+
+  if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
+    return (
+      <div className={classes.spinner}>
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  if (error || dqError) {
+    return <Trans>Failed to fetch</Trans>;
+  }
+  const forNouns = getNounVotes(data, 1);
+  const againstNouns = getNounVotes(data, 0);
+  const abstainNouns = getNounVotes(data, 2);
+  const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {showDynamicQuorumInfoModal && (
+        <DynamicQuorumInfoModal
+          proposal={proposal}
+          againstVotesAbsolute={againstNouns.length}
+          onDismiss={() => setShowDynamicQuorumInfoModal(false)}
+          currentQuorum={currentQuorum}
+        />
+      )}
+      <StreamWithdrawModal
+        show={showStreamWithdrawModal}
+        onDismiss={() => setShowStreamWithdrawModal(false)}
+        {...streamWithdrawInfo}
+      />
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
-        onVote={() => castVote(proposal?.id, vote)}
-        isLoading={isVotePending}
         proposalId={proposal?.id}
-        availableVotes={availableVotes}
-        vote={vote}
+        availableVotes={userVotes || 0}
+        isObjectionPeriod={isObjectionPeriod}
       />
-      <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">← All Proposals</Link>
+      <Col lg={isUpdateable() ? 12 : 10} className={classes.wrapper}>
+        {proposal && (
+          <ProposalHeader
+            proposal={proposal}
+            proposalVersions={proposalVersions}
+            isActiveForVoting={isActiveForVoting}
+            isWalletConnected={isWalletConnected}
+            submitButtonClickHandler={() => setShowVoteModal(true)}
+            versionNumber={hasManyVersions ? proposalVersions?.length : undefined}
+            isObjectionPeriod={isObjectionPeriod}
+          />
+        )}
       </Col>
-      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
-        </div>
-        <div>
-          {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}</span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          {endDate && endDate.isBefore(now) ? (
-            <>
-              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
-              <div>
-                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
-                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
-              </div>
-            </>
-          ) : proposal ? (
-            <>
-              <div>Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}</div>
-              {proposal?.quorumVotes !== undefined && (
-                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
-              )}
-            </>
-          ) : (
-            ''
-          )}
-        </div>
-        {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert
-            variant={hasVoted ? 'success' : 'secondary'}
-            className={classes.voterIneligibleAlert}
-          >
-            {hasVoted
-              ? 'Thank you for your vote!'
-              : `Only NOUN votes that were self delegated or delegated to another address before block ${proposal.createdBlock} are eligible for voting.`}
-          </Alert>
-        )}
-        {showVotingButtons ? (
-          <Row>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.FOR);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote For
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.AGAINST);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote Against
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.ABSTAIN);
-                  setShowVoteModal(true);
-                }}
-              >
-                Abstain
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          ''
-        )}
-        {isAwaitingStateChange() && (
-          <Row className={classes.section}>
-            <Col className="d-grid">
-              <Button
-                onClick={moveStateAction}
-                disabled={isQueuePending || isExecutePending}
-                variant="dark"
-              >
-                {isQueuePending || isExecutePending ? (
-                  <Spinner animation="border" />
-                ) : (
-                  `${moveStateButtonAction} Proposal`
-                )}
-              </Button>
-            </Col>
-          </Row>
-        )}
-        <Row>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>For</span>
-                  <span>{proposal?.forCount}</span>
-                </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Against</span>
-                  <span>{proposal?.againstCount}</span>
-                </Card.Text>
-                <ProgressBar variant="danger" now={againstPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Abstain</span>
-                  <span>{proposal?.abstainCount}</span>
-                </Card.Text>
-                <ProgressBar variant="info" now={abstainPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Description</h5>
-            {proposal?.description && (
-              <ReactMarkdown
-                className={classes.markdown}
-                children={proposal.description}
-                remarkPlugins={[remarkBreaks]}
-              />
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposed Transactions</h5>
-            {proposal?.details?.map((d, i) => {
+      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
+        {proposal.status === ProposalState.EXECUTED &&
+          proposal.details
+            .filter(txn => txn?.functionSig?.includes('createStream'))
+            .map(txn => {
+              const parsedCallData = parseStreamCreationCallData(txn.callData);
+              if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
+                return <></>;
+              }
               return (
-                <p key={i} className="m-0">
-                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <span key={i}>
-                        {linkIfAddress(content)}
-                        {d.callData.split(',').length - 1 === i ? '' : ','}
-                      </span>
-                    );
-                  })}
-                  )
-                </p>
+                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                  <span className={classes.boldedLabel}>
+                    <Trans>Only visible to you</Trans>
+                  </span>
+                  <Col className="d-grid gap-4">
+                    <Button
+                      onClick={() => {
+                        setShowStreamWithdrawModal(true);
+                        setStreamWithdrawInfo({
+                          streamAddress: parsedCallData.streamAddress,
+                          startTime: parsedCallData.startTime,
+                          endTime: parsedCallData.endTime,
+                          streamAmount: parsedCallData.streamAmount,
+                          tokenAddress: parsedCallData.tokenAddress,
+                        });
+                      }}
+                      variant="primary"
+                      className={classes.transitionStateButton}
+                    >
+                      <Trans>
+                        Withdraw from Stream{' '}
+                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                      </Trans>
+                    </Button>
+                  </Col>
+                </Row>
               );
             })}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && (
-              <>
-                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-              </>
+        <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+          <Col className="d-grid gap-4">
+            {userVotes && !hasVoted && isObjectionPeriod ? (
+              <div className={classes.objectionWrapper}>
+                <div className={classes.objection}>
+                  <div className={classes.objectionHeader}>
+                    <p>
+                      <strong className="d-block">
+                        <Trans>Objection only period</Trans>
+                      </strong>
+                      Voting is now limited to against votes. This objection-only period protects
+                      the DAO from last-minute vote swings.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowVoteModal(true)}
+                    className={clsx(
+                      classes.destructiveTransitionStateButton,
+                      classes.button,
+                      classes.voteAgainst,
+                    )}
+                  >
+                    Vote against
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {isActionable() && (
+              <div className={classes.proposerOptionsWrapper}>
+                <div className={classes.proposerOptions}>
+                  <p>
+                    <span className={classes.proposerOptionsHeader}>
+                      <Trans>Proposal functions</Trans>
+                    </span>
+                    {isProposer() && isUpdateable() && (
+                      <>
+                        <Trans>This proposal can be edited for </Trans>{' '}
+                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}{' '}
+                      </>
+                    )}
+                  </p>
+
+                  <div className="d-flex gap-3">
+                    <>
+                      {isAwaitingStateChange() && (
+                        <div className={clsx(classes.awaitingStateChangeButton)}>
+                          <Button
+                            onClick={moveStateAction}
+                            disabled={isQueuePending || isExecutePending || !isExecutable}
+                            variant="dark"
+                            className={clsx(classes.transitionStateButton, classes.button)}
+                          >
+                            {isQueuePending || isExecutePending ? (
+                              <Spinner animation="border" />
+                            ) : (
+                              <>{moveStateButtonAction} Proposal ⌐◧-◧</>
+                            )}
+                          </Button>
+                          {forkPeriodMessage}
+                        </div>
+                      )}
+
+                      {isAwaitingDestructiveStateChange() && (
+                        <Button
+                          onClick={destructiveStateAction}
+                          disabled={isCancelPending}
+                          className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+                        >
+                          {isCancelPending ? (
+                            <Spinner animation="border" />
+                          ) : (
+                            <>{destructiveStateButtonAction} Proposal </>
+                          )}
+                        </Button>
+                      )}
+                    </>
+                    {isProposer() && isUpdateable() && (
+                      <Link
+                        to={`/vote/${id}/edit`}
+                        className={clsx(classes.primaryButton, classes.button)}
+                      >
+                        Edit
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
             )}
           </Col>
         </Row>
+        {!isUpdateable() && (
+          <>
+            <p
+              onClick={() => setIsDelegateView(!isDelegateView)}
+              className={classes.toggleDelegateVoteView}
+            >
+              {isDelegateView ? (
+                <Trans>Switch to Noun view</Trans>
+              ) : (
+                <Trans>Switch to delegate view</Trans>
+              )}
+            </p>
+            <Row>
+              <VoteCard
+                proposal={proposal}
+                percentage={forPercentage}
+                nounIds={forNouns}
+                variant={VoteCardVariant.FOR}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+              <VoteCard
+                proposal={proposal}
+                percentage={againstPercentage}
+                nounIds={againstNouns}
+                variant={VoteCardVariant.AGAINST}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+              <VoteCard
+                proposal={proposal}
+                percentage={abstainPercentage}
+                nounIds={abstainNouns}
+                variant={VoteCardVariant.ABSTAIN}
+                delegateView={isDelegateView}
+                delegateGroupedVoteData={data}
+              />
+            </Row>
+          </>
+        )}
+
+        {/* TODO abstract this into a component  */}
+        <Row>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
+                    <h1>
+                      <Trans>Threshold</Trans>
+                    </h1>
+                  </div>
+                  {isV2Prop && (
+                    <ReactTooltip
+                      id={'view-dq-info'}
+                      className={classes.delegateHover}
+                      getContent={dataTip => {
+                        return <Trans>View Threshold Info</Trans>;
+                      }}
+                    />
+                  )}
+                  <div
+                    data-for="view-dq-info"
+                    data-tip="View Dynamic Quorum Info"
+                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
+                    className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
+                  >
+                    <span>
+                      {isV2Prop ? <Trans>Current Threshold</Trans> : <Trans>Threshold</Trans>}
+                    </span>
+                    <h3>
+                      <Trans>
+                        {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
+                      </Trans>
+                      {isV2Prop && <SearchIcon className={classes.dqIcon} />}
+                    </h3>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
+                    <h1>{startOrEndTimeCopy()}</h1>
+                  </div>
+                  <div className={classes.voteMetadataTime}>
+                    <span>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          timeZoneName: 'short',
+                        })}
+                    </span>
+                    <h3>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          dateStyle: 'long',
+                        })}
+                    </h3>
+                  </div>
+                </div>
+                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && (
+                  <div className={classes.objectionPeriodActive}>
+                    <p>
+                      <strong>
+                        <Trans>Objection period triggered</Trans>
+                      </strong>
+                    </p>
+                    {currentBlock < proposal?.endBlock && <p>{objectionNoteCopy}</p>}
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
+                    <h1>Snapshot</h1>
+                  </div>
+                  <div className={classes.snapshotBlock}>
+                    <span>Taken at block</span>
+                    <h3>{proposal?.voteSnapshotBlock}</h3>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Col>
+
+      {isUpdateable() ? (
+        <div className={classes.v3ProposalWrapper}>
+          <Row>
+            <Col xl={8} lg={12}>
+              <ProposalContent
+                description={proposal.description}
+                title={proposal.title}
+                details={proposal.details}
+                hasSidebar={true}
+                proposeOnV1={proposal.onTimelockV1}
+              />
+            </Col>
+            <Col xl={4} lg={12} className={classes.sidebar}>
+              {proposalVersions && (
+                <VoteSignals
+                  feedback={proposalFeedback.data?.proposalFeedbacks}
+                  proposalId={proposal.id}
+                  versionTimestamp={getVersionTimestamp(proposalVersions)}
+                  userVotes={userVotesNow}
+                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  handleRefetch={handleRefetchData}
+                />
+              )}
+            </Col>
+          </Row>
+        </div>
+      ) : (
+        <Row>
+          <Col xl={10} lg={12} className="m-auto">
+            <ProposalContent
+              description={proposal.description}
+              title={proposal.title}
+              details={proposal.details}
+              proposeOnV1={proposal.onTimelockV1}
+            />
+          </Col>
+        </Row>
+      )}
     </Section>
   );
 };

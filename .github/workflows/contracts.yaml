@@ -1,38 +1,89 @@
 name: Contracts CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+      - 'feature/*'
   pull_request:
     paths:
-      - "packages/nouns-contracts/**"
-      - "packages/nouns-subgraph/**"
+      - 'packages/nouns-contracts/**'
+      - 'packages/nouns-subgraph/**'
     branches:
-      - "**"
+      - '**'
+
+env:
+  NODE_OPTIONS: --max_old_space_size=5120
 
 jobs:
   build_and_test:
     name: Build and Test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
         with:
-          node-version: 14.x
-      - name: Install Yarn
-        run: npm install -g yarn
-      - run: yarn 
-      - run: yarn build
+          submodules: recursive
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build packages
+        run: pnpm build
+
       - name: Run contract tests
         run: |
           cd packages/nouns-contracts
-          yarn test
-      - name: Run contract coverage
+          pnpm test
+
+      - name: Cache Foundry build
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages/nouns-contracts/out
+            packages/nouns-contracts/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**') }}
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Run Forge build
         run: |
           cd packages/nouns-contracts
-          yarn coverage
-      - name: Uninstall Yarn
-        if: always()
-        run: npm uninstall -g yarn
+          forge --version
+          forge build --optimize --optimizer-runs 1 --sizes --skip test
+
+      - name: Cache Foundry test data
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages/nouns-contracts/out 
+            packages/nouns-contracts/cache
+            ~/.foundry/cache
+          key: ${{ runner.os }}-foundry-${{ hashFiles('packages/nouns-contracts/foundry.toml', 'packages/nouns-contracts/src/**', 'packages/nouns-contracts/test/**', '~/.foundry/cache/**') }}
+
+      - name: Run Forge tests
+        env:
+          RPC_MAINNET: ${{ secrets.RPC_MAINNET != '' && secrets.RPC_MAINNET || 'https://eth.llamarpc.com' }}
+        run: |
+          cd packages/nouns-contracts
+          forge test -vvv --ffi

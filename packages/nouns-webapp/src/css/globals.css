@@ -6,3 +6,10 @@
     max-width: 1140px !important;
   }
 }
+
+body {
+  overflow-x: hidden;
+}
+#root {
+  width: 100%;
+}

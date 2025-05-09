@@ -1,0 +1,31 @@
+.wrapper {
+  max-height: 40vh;
+  overflow-y: scroll;
+}
+
+.languageButton {
+  border: none;
+  margin: 5px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  background-color: rgba(211, 211, 211, 0.664);
+  color: var(--brand-black);
+  border: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.languageButton:hover,
+.languageButton:active,
+.languageButton:focus,
+.languageButton:disabled {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: lightgray !important;
+  color: var(--brand-dark-green);
+  color: white;
+}
+
+.icon {
+  margin-top: 0.25rem;
+}

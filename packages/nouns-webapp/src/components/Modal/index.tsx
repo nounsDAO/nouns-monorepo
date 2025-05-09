@@ -8,7 +8,7 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
 };
 
 const ModalOverlay: React.FC<{
-  title?: string;
+  title?: React.ReactNode;
   content?: React.ReactNode;
   onDismiss: () => void;
 }> = props => {
@@ -24,21 +24,24 @@ const ModalOverlay: React.FC<{
   );
 };
 
-const Modal: React.FC<{ title?: string; content?: React.ReactNode; onDismiss: () => void }> =
-  props => {
-    const { title, content, onDismiss } = props;
-    return (
-      <>
-        {ReactDOM.createPortal(
-          <Backdrop onDismiss={onDismiss} />,
-          document.getElementById('backdrop-root')!,
-        )}
-        {ReactDOM.createPortal(
-          <ModalOverlay title={title} content={content} onDismiss={onDismiss} />,
-          document.getElementById('overlay-root')!,
-        )}
-      </>
-    );
-  };
+const Modal: React.FC<{
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  onDismiss: () => void;
+}> = props => {
+  const { title, content, onDismiss } = props;
+  return (
+    <>
+      {ReactDOM.createPortal(
+        <Backdrop onDismiss={onDismiss} />,
+        document.getElementById('backdrop-root')!,
+      )}
+      {ReactDOM.createPortal(
+        <ModalOverlay title={title} content={content} onDismiss={onDismiss} />,
+        document.getElementById('overlay-root')!,
+      )}
+    </>
+  );
+};
 
 export default Modal;

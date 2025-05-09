@@ -15,3 +15,39 @@
   width: 100%;
   height: 0;
 }
+
+.circular {
+  border-radius: 50%;
+}
+
+.delegateViewCircular {
+  border-radius: 50%;
+  margin-top: 13px;
+}
+
+.circleWithBorder {
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.rounded {
+  border-radius: 15px;
+}
+
+.circularNounWrapper {
+  width: 42px;
+  height: 42px;
+}
+
+.delegateViewCircularNounWrapper {
+  width: 42px;
+  height: 42px;
+  margin-left: 12px;
+}
+
+@media (max-width: 1200px) {
+  .circularNounWrapper {
+    height: 70%;
+    width: 70%;
+  }
+}

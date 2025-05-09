@@ -3,17 +3,19 @@
   font-size: 5rem;
 }
 
-.bannerSection {
-}
-
 @media (max-width: 992px) {
   .wrapper {
     padding: 2rem;
+  }
+
+  .wrapper h1 {
+    font-size: 3.75rem;
   }
 }
 
 @media (min-width: 992px) {
   .wrapper h1 {
-    font-size: 7rem;
+    font-size: 6rem;
+    margin-left: 2rem;
   }
 }

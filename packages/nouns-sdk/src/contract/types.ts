@@ -3,7 +3,7 @@ import {
   NounsAuctionHouseFactory,
   NounsDescriptorFactory,
   NounsSeederFactory,
-  NounsDaoLogicV1Factory,
+  NounsDaoLogicFactory,
 } from '@nouns/contracts';
 
 export interface ContractAddresses {
@@ -15,8 +15,13 @@ export interface ContractAddresses {
   nounsAuctionHouseProxy: string;
   nounsAuctionHouseProxyAdmin: string;
   nounsDaoExecutor: string;
+  nounsDaoExecutorV2?: string;
+  nounsDaoExecutorProxy?: string;
   nounsDAOProxy: string;
-  nounsDAOLogicV1: string;
+  nounsDAOLogicV1?: string;
+  nounsDAOLogicV2?: string;
+  NounsDAOLogicV4?: string;
+  nounsDAOData?: string;
 }
 
 export interface Contracts {
@@ -24,7 +29,7 @@ export interface Contracts {
   nounsAuctionHouseContract: ReturnType<typeof NounsAuctionHouseFactory.connect>;
   nounsDescriptorContract: ReturnType<typeof NounsDescriptorFactory.connect>;
   nounsSeederContract: ReturnType<typeof NounsSeederFactory.connect>;
-  nounsDaoContract: ReturnType<typeof NounsDaoLogicV1Factory.connect>;
+  nounsDaoContract: ReturnType<typeof NounsDaoLogicFactory.connect>;
 }
 
 export enum ChainId {
@@ -33,4 +38,5 @@ export enum ChainId {
   Rinkeby = 4,
   Kovan = 42,
   Local = 31337,
+  Sepolia = 11155111,
 }

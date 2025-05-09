@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect } from 'react';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ChainId, DAppProvider } from '@usedapp/core';
+import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
+import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
 import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
 import auction, {
+  appendBid,
   reduxSafeAuction,
-  reduxSafeNewAuction,
   reduxSafeBid,
+  reduxSafeNewAuction,
   setActiveAuction,
   setAuctionExtended,
   setAuctionSettled,
@@ -24,26 +24,26 @@ import onDisplayAuction, {
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
-import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
-import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from 'ethers';
+import config, {
+  CHAIN_ID,
+  ChainId_Sepolia,
+  createNetworkHttpUrl,
+  multicallOnLocalhost,
+} from './config';
+import { BigNumber, BigNumberish, Event } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
-import dotenv from 'dotenv';
+import { createRoot } from 'react-dom/client';
+
 import { useAppDispatch, useAppSelector } from './hooks';
-import { appendBid } from './state/slices/auction';
-import { ConnectedRouter, connectRouter } from 'connected-react-router';
+import { ConnectedRouter, connectRouter, push, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'redux';
-import { routerMiddleware } from 'connected-react-router';
+import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
-import { push } from 'connected-react-router';
-
-dotenv.config();
+import { LanguageProvider } from './i18n/LanguageProvider';
 
 export const history = createBrowserHistory();
 
@@ -78,14 +78,34 @@ const store = configureStore({});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const supportedChainURLs = {
+  [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+  [ChainId.Hardhat]: 'http://localhost:8545',
+  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
+  [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
+};
+
+export const Sepolia: Chain = {
+  chainId: ChainId_Sepolia,
+  chainName: 'Sepolia',
+  isTestChain: true,
+  isLocalChain: false,
+  multicallAddress: '0x6a19Dbfc67233760E0fF235b29158bE45Cc53765',
+  getExplorerAddressLink: (address: string) => `https://sepolia.etherscan.io/address/${address}`,
+  getExplorerTransactionLink: (transactionHash: string) =>
+    `https://sepolia.etherscan.io/tx/${transactionHash}`,
+};
+
 // prettier-ignore
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
-    [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
-    [ChainId.Hardhat]: 'http://localhost:8545',
+    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
   },
+  multicallAddresses: {
+    [ChainId.Hardhat]: multicallOnLocalhost,
+  },
+  networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
 };
 
 const client = clientFactory(config.app.subgraphApiUri);
@@ -98,7 +118,7 @@ const Updaters = () => {
   );
 };
 
-const BLOCKS_PER_DAY = 6_500;
+const BLOCKS_PER_DAY = 7_200;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -119,12 +139,22 @@ const ChainSubscriber: React.FC = () => {
       sender: string,
       value: BigNumberish,
       extended: boolean,
-      event: any,
+      event: Event,
     ) => {
       const timestamp = (await event.getBlock()).timestamp;
-      const transactionHash = event.transactionHash;
+      const { transactionHash, transactionIndex } = event;
       dispatch(
-        appendBid(reduxSafeBid({ nounId, sender, value, extended, transactionHash, timestamp })),
+        appendBid(
+          reduxSafeBid({
+            nounId,
+            sender,
+            value,
+            extended,
+            transactionHash,
+            transactionIndex,
+            timestamp,
+          }),
+        ),
       );
     };
     const processAuctionCreated = (
@@ -152,7 +182,7 @@ const ChainSubscriber: React.FC = () => {
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
     dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
-    // Fetch the previous 24hours of  bids
+    // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
       if (event.args === undefined) return;
@@ -189,9 +219,9 @@ const PastAuctions: React.FC = () => {
   return <></>;
 };
 
-ReactDOM.render(
+createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    {/*<ConnectedRouter history={history}>*/}
       <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
@@ -202,15 +232,16 @@ ReactDOM.render(
           <ApolloProvider client={client}>
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
-              <App />
+              <LanguageProvider>
+                <App />
+              </LanguageProvider>
               <Updaters />
             </DAppProvider>
           </ApolloProvider>
         </Web3ReactProvider>
       </React.StrictMode>
-    </ConnectedRouter>
+    {/*</ConnectedRouter>*/}
   </Provider>,
-  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

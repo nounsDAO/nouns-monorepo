@@ -1,0 +1,10 @@
+.label {
+  opacity: 0.5;
+}
+
+.text {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--brand-cool-dark-text);
+  margin-bottom: 0.5rem;
+}

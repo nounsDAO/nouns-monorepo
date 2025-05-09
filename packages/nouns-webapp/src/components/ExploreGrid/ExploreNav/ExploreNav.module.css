@@ -1,0 +1,143 @@
+.nav {
+  justify-content: space-between;
+  display: flex;
+  grid-gap: 10px;
+  padding: 15px;
+  border-bottom: rgba(0, 0, 0, 0.1) 1px solid;
+  width: 100%;
+}
+
+.nav .buttons,
+.nav .sizing {
+  display: flex;
+  gap: 1em;
+}
+
+.nav svg {
+  width: 24px;
+  opacity: 0.8;
+}
+
+.nav .iconTextButton svg {
+  margin-right: 0.4rem;
+}
+
+.nav .iconTextButton:hover {
+  color: black;
+  background-color: var(--brand-cool-accent);
+}
+
+.nav .sort {
+  display: flex;
+  grid-gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav .selectWrap {
+  color: var(--brand-cool-light-text);
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  font-size: 16px;
+  line-height: 1;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  position: relative;
+  display: grid;
+  grid-template-areas: 'select';
+  align-items: center;
+}
+
+.nav select,
+.nav .selectWrap:after {
+  grid-area: select;
+}
+
+.nav .selectWrap:hover {
+  background-color: #e2e3e8;
+  color: black;
+  cursor: crosshair !important;
+}
+
+.nav .selectWrap span {
+  position: absolute;
+  right: 10px;
+  margin-top: -5px;
+  pointer-events: none;
+}
+
+.nav .selectWrap select:hover {
+  cursor: pointer;
+}
+
+.nav .selectWrap select {
+  background: transparent;
+  border: 0;
+  padding: 0.8rem 1.8rem 0.8rem 0.8rem;
+  color: rgb(95, 95, 95);
+  font-weight: bold;
+  position: relative;
+  appearance: none;
+}
+
+.nav button {
+  color: var(--brand-cool-light-text);
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  font-family: 'PT Root UI';
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.nav button .icon {
+  margin-right: 0.4rem;
+}
+
+.nav button:hover svg {
+  opacity: 0.5;
+}
+
+.nav button:hover {
+  background-color: #e2e3e8;
+  color: black;
+}
+
+.nav button:hover svg {
+  opacity: 0.8;
+}
+
+.nav button.activeLayout {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.nav button.activeLayout svg {
+  opacity: 0.8;
+}
+
+.nav button.activeLayout svg path {
+  fill: rgba(0, 0, 0, 0.8);
+}
+
+.nav h3 {
+  font-size: 13px;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  align-self: center;
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .nav {
+    border: 0;
+    padding: 15px 0.5rem;
+  }
+}

@@ -1,12 +1,27 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDirs": ["src", "test"],
-    "outDir": "dist"
+    /* → Basic ESM setup */
+    "module": "ESNext",
+    "target": "ES2020",
+
+    /* → Tell TS how to resolve “./foo” imports */
+    "moduleResolution": "node",
+
+    /* → If you have your sources under src/, helps TS know where to look */
+    "rootDir": "src",
+    "baseUrl": "./",
+    "paths": {
+      /* → only needed if you use `import x from "foo"` aliases */
+    },
+
+    /* → We let tsup generate declarations, so turn these off */
+    "declaration": false,
+    "emitDeclarationOnly": false,
+
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "references": [
-    {
-      "path": "../nouns-contracts/tsconfig.build.json"
-    }
-  ]
+  "include": ["src", "test"],
+  "exclude": ["node_modules"]
 }

@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsDescriptor } from './INounsDescriptor.sol';
+import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
 interface INounsSeeder {
     struct Seed {
@@ -28,5 +28,5 @@ interface INounsSeeder {
         uint48 glasses;
     }
 
-    function generateSeed(uint256 nounId, INounsDescriptor descriptor) external view returns (Seed memory);
+    function generateSeed(uint256 nounId, INounsDescriptorMinimal descriptor) external view returns (Seed memory);
 }

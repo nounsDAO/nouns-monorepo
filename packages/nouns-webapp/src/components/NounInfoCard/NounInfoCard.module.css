@@ -23,12 +23,16 @@
 }
 
 .nounInfoRow {
-  padding-bottom: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
   font-size: 18px;
   display: flex;
 }
 
 .nounInfoRowText {
   padding-left: 4;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-family: bold;
 }

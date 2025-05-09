@@ -15,10 +15,3 @@
     align-items: center;
   }
 }
-/* Safari 7.1+ */
-/* Fix safari navigation arrow display issues */
-_::-webkit-full-page-media,
-_:future,
-:root .auctionTitleAndNavContainer button {
-  padding-bottom: 4rem;
-}

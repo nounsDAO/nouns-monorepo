@@ -1,12 +1,14 @@
+import type { Provider } from '@ethersproject/providers';
+import type { Signer } from 'ethers';
+
 import {
   NounsTokenFactory,
   NounsAuctionHouseFactory,
   NounsDescriptorFactory,
   NounsSeederFactory,
-  NounsDaoLogicV1Factory,
+  NounsDaoLogicFactory,
 } from '@nouns/contracts';
-import type { Signer } from 'ethers';
-import type { Provider } from '@ethersproject/providers';
+
 import { getContractAddressesForChainOrThrow } from './addresses';
 import { Contracts } from './types';
 
@@ -40,7 +42,7 @@ export const getContractsForChainOrThrow = (
       addresses.nounsSeeder,
       signerOrProvider as Signer | Provider,
     ),
-    nounsDaoContract: NounsDaoLogicV1Factory.connect(
+    nounsDaoContract: NounsDaoLogicFactory.connect(
       addresses.nounsDAOProxy,
       signerOrProvider as Signer | Provider,
     ),

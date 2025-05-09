@@ -1,0 +1,101 @@
+.wrapper {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  padding: 0px 10px 0px 10px;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.treasuryHeader {
+  font-size: 16px;
+  margin-left: 0.25rem;
+  margin-right: 0.4rem;
+  margin-top: 1px;
+}
+
+.warmInfo .icon {
+  color: #b6a9a7;
+  border-left: 1px solid #e1d7d5;
+}
+
+.treasuryBalance {
+  font-size: 16.5px;
+  letter-spacing: 0.3px;
+  margin-left: 0.4rem;
+  margin-right: 0.25rem;
+}
+
+@media (max-width: 400px) {
+  .wrapper {
+    margin-left: -0.5rem;
+    padding: 0px 7px 0px 6px;
+  }
+
+  .treasuryHeader {
+    display: none;
+  }
+}
+
+.warmInfo .treasuryBalance {
+  color: var(--brand-warm-dark-text);
+}
+
+.coolInfo .treasuryBalance {
+  color: var(--brand-cool-dark-text);
+}
+
+.treasuryHeader {
+  opacity: 0.5;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.coolInfo {
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  color: var(--brand-cool-dark-text);
+}
+
+.coolInfo:hover {
+  background-color: var(--brand-cool-accent);
+  color: black;
+}
+
+.warmInfo {
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-light-text);
+}
+
+.warmInfo:hover {
+  background-color: var(--brand-warm-accent);
+  color: var(--brand-warm-dark-text);
+  color: black;
+}
+
+.whiteInfo {
+  background: white;
+}
+
+.whiteTreasuryHeader {
+  opacity: 0.5;
+}
+
+.whiteInfo:hover {
+  background-color: #e2e3e8;
+}

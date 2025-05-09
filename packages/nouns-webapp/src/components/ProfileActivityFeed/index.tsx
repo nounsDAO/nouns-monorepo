@@ -1,13 +1,14 @@
-import React from 'react';
-import { Col, Table } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Col, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
-import { useQuery } from '@apollo/client';
-import { Proposal, useAllProposals } from '../../wrappers/nounsDao';
-import { nounVotingHistoryQuery } from '../../wrappers/subgraph';
-import NounProfileVoteRow from '../NounProfileVoteRow';
-import { LoadingNoun } from '../Noun';
+import { Trans } from '@lingui/react/macro';
+import { useNounActivity } from '../../wrappers/nounActivity';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
+import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
+import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
 
 interface ProfileActivityFeedProps {
   nounId: number;
@@ -17,64 +18,86 @@ interface ProposalInfo {
   id: number;
 }
 
-interface NounVoteHistory {
+export interface NounVoteHistory {
+  blockNumber: number | string;
   proposal: ProposalInfo;
   support: boolean;
+  supportDetailed: number;
+  voter: { id: string };
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   const { nounId } = props;
 
-  const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
-  const { data: proposals } = useAllProposals();
+  const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
-  if (loading) {
-    return <></>;
-  } else if (error) {
-    return <div>Failed to fetch noun activity history</div>;
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const { loading, error, data } = useNounActivity(nounId);
+
+  if (loading || !data || data === undefined) {
+    return (
+      <Section fullWidth={false}>
+        <Col lg={{ span: 10, offset: 1 }}>
+          <div className={classes.headerWrapper}>
+            <h1>
+              <Trans>Activity</Trans>
+            </h1>
+            <div className={classes.spinner}>
+              <Spinner animation="border" />
+            </div>
+          </div>
+        </Col>
+      </Section>
+    );
   }
 
-  const proposalsVotedOn = data.noun.votes
-    .slice(0)
-    .map((h: NounVoteHistory, i: number) => h.proposal.id);
-
-  const supportedProposals = data.noun.votes
-    .slice(0)
-    .filter((h: NounVoteHistory, i: number) => h.support)
-    .map((h: NounVoteHistory, i: number) => h.proposal.id);
-
-  const latestProposalId = proposals?.length;
+  if (error) {
+    return (
+      <div>
+        <Trans>Failed to fetch Noun activity history</Trans>
+      </div>
+    );
+  }
 
   return (
     <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
-          <h1>Activity</h1>
+          <h1>
+            <Trans>Activity</Trans>
+          </h1>
         </div>
+        {data && data.length === 0 ? (
+          <div className={classes.nullStateCopy}>
+            <Trans>This Noun has no activity, since it was just created. Check back soon!</Trans>
+          </div>
+        ) : (
+          <>
+            <div className={responsiveUiUtilsClasses.desktopOnly}>
+              <DesktopProfileActivityFeed
+                events={data}
+                isExpanded={isExpanded}
+                aboveFoldEventCount={MAX_EVENTS_SHOW_ABOVE_FOLD}
+              />
+            </div>
+            <div className={responsiveUiUtilsClasses.mobileOnly}>
+              <MobileProfileActivityFeed
+                events={data}
+                isExpanded={isExpanded}
+                aboveFoldEventCount={MAX_EVENTS_SHOW_ABOVE_FOLD}
+              />
+            </div>
 
-        <Table responsive hover>
-          <tbody className={classes.nounInfoPadding}>
-            {proposals?.length ? (
-              proposals
-                .slice(0)
-                .reverse()
-                .map((p: Proposal, i: number) => {
-                  return (
-                    <NounProfileVoteRow
-                      proposal={p}
-                      nounVoted={proposalsVotedOn.includes(p.id)}
-                      nounSupported={supportedProposals.includes(p.id)}
-                      latestProposalId={latestProposalId}
-                      nounId={nounId}
-                      key={i}
-                    />
-                  );
-                })
-            ) : (
-              <LoadingNoun />
+            {data.length > MAX_EVENTS_SHOW_ABOVE_FOLD && (
+              <ProfileActivityFeedToggle
+                numEvents={data.length}
+                isExpanded={isExpanded}
+                toggleCallback={() => setIsExpanded(!isExpanded)}
+              />
             )}
-          </tbody>
-        </Table>
+          </>
+        )}
       </Col>
     </Section>
   );
