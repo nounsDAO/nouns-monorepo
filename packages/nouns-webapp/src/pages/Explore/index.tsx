@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import cx from 'classnames';
-import { BigNumber } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import ExploreGrid from '../../components/ExploreGrid';
-import ExploreNav from '../../components/ExploreGrid/ExploreNav';
-import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
-import { useAppSelector } from '../../hooks';
-import { useKeyPress } from '../../hooks/useKeyPress';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import ExploreGrid from '@/components/ExploreGrid';
+import ExploreNav from '@/components/ExploreGrid/ExploreNav';
+import ExploreNounDetail from '@/components/ExploreGrid/ExploreNounDetail';
+import { useAppSelector } from '@/hooks';
+import { useKeyPress } from '@/hooks/useKeyPress';
+import { Auction as IAuction } from '@/wrappers/nounsAuction';
 
 import classes from './Explore.module.css';
 
-interface ExplorePageProps {}
+type ExplorePageProps = object;
 
 type Noun = {
   id: number | null;
@@ -30,7 +29,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
 
   // Get number of nouns in existence
   const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
-  const nounCount = currentAuction ? BigNumber.from(currentAuction?.nounId).toNumber() + 1 : -1;
+  const nounCount = currentAuction ? Number(BigInt(currentAuction?.nounId)) + 1 : -1;
 
   // Set state
   const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
@@ -66,11 +65,15 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   const handleSortOrderChange = (orderValue: string) => {
     setSortOrder(orderValue);
     if (sortOrder === 'date-ascending') {
-      !isMobile && isSidebarVisible && setActiveNoun(nounCount - 1);
-      !isMobile && isSidebarVisible && setSelectedNoun(nounCount - 1);
+      if (!isMobile && isSidebarVisible) {
+        setActiveNoun(nounCount - 1);
+        setSelectedNoun(nounCount - 1);
+      }
     } else {
-      !isMobile && isSidebarVisible && setActiveNoun(0);
-      !isMobile && isSidebarVisible && setSelectedNoun(0);
+      if (!isMobile && isSidebarVisible) {
+        setActiveNoun(0);
+        setSelectedNoun(0);
+      }
     }
   };
 
@@ -78,7 +81,9 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
     setIsSidebarVisible(false);
     setActiveNoun(-1);
     setSelectedNoun(undefined);
-    !isMobile && window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    if (!isMobile) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
     if (isMobile) {
       const body = document.body;
       body.style.position = '';
@@ -93,7 +98,9 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
 
   const handleScrollTo = (nounId: number) => {
     setIsNounHoverDisabled(true);
-    nounId && buttonsRef.current[nounId]?.scrollIntoView({ behavior: 'smooth' });
+    if (nounId) {
+      buttonsRef.current[nounId]?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleFocusNoun = (nounId: number) => {
@@ -161,8 +168,14 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   useEffect(() => {
     if (nounCount >= 0) {
       // get latest noun id, then replace loading sidebar state with latest noun
-      !isMobile && setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
-      !isMobile && setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+      if (!isMobile) {
+        setSelectedNoun(
+          currentAuction?.nounId !== undefined ? Number(BigInt(currentAuction.nounId)) : undefined,
+        );
+        setActiveNoun(
+          currentAuction?.nounId !== undefined ? Number(BigInt(currentAuction.nounId)) : 0,
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nounCount]);
@@ -231,14 +244,10 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
               disablePrev={
                 (sortOrder === 'date-ascending' && activeNoun === 0) ||
                 (sortOrder === 'date-descending' && activeNoun === nounCount - 1)
-                  ? true
-                  : false
               }
               disableNext={
                 (sortOrder === 'date-ascending' && activeNoun === nounCount - 1) ||
                 (sortOrder === 'date-descending' && activeNoun === 0)
-                  ? true
-                  : false
               }
               handleFocusNoun={handleFocusNoun}
             />
