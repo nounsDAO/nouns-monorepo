@@ -5,10 +5,6 @@ import { i18n } from '@lingui/core';
 import { blo } from 'blo';
 import clsx from 'clsx';
 
-import classes from './BidHistoryModalRow.module.css';
-
-import auctionActivityClasses from '@/components/AuctionActivity/BidHistory.module.css';
-
 import _trophy from '@/assets/icons/trophy.svg';
 import TruncatedAmount from '@/components/TruncatedAmount';
 import { shortENS, useShortAddress } from '@/utils/addressAndENSDisplayUtils';
@@ -16,6 +12,10 @@ import { useReverseENSLookUp } from '@/utils/ensLookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { Address, Bid } from '@/utils/types';
+
+import classes from './BidHistoryModalRow.module.css';
+
+import auctionActivityClasses from '@/components/AuctionActivity/BidHistory.module.css';
 
 interface BidHistoryModalRowProps {
   bid: Bid;

@@ -3,7 +3,11 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
 
-import { FinalProposalActionStepProps } from '../..';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalLabel from '@/components/ModalLabel';
+import ModalTextPrimary from '@/components/ModalTextPrimary';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
 import config from '@/config';
 import useStreamPaymentTransactions from '@/hooks/useStreamPaymentTransactions';
 import {
@@ -12,11 +16,8 @@ import {
   usePredictStreamAddress,
 } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { unixToDateString } from '@/utils/timeUtils';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalLabel from '@/components/ModalLabel';
-import ModalTextPrimary from '@/components/ModalTextPrimary';
-import ModalTitle from '@/components/ModalTitle';
-import ShortAddress from '@/components/ShortAddress';
+
+import { FinalProposalActionStepProps } from '../..';
 
 import classes from './StreamPaymentsReviewStep.module.css';
 

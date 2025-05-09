@@ -5,23 +5,24 @@ import clsx from 'clsx';
 import { Col, Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
+import { formatEther } from 'viem';
 
 import CreateCandidateButton from '@/components/CreateCandidateButton';
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
-import Section from '@/layout/Section';
-import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
-import { useUserVotes } from '@/wrappers/nounToken';
-import classes from '../CreateProposal/CreateProposal.module.css';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
-
 import ProposalTransactions from '@/components/ProposalTransactions';
-import { useAppDispatch } from '@/hooks';
 import config from '@/config';
+import { useAppDispatch } from '@/hooks';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import { useGetCreateCandidateCost, useCreateProposalCandidate } from '@/wrappers/nounsData';
-import { formatEther } from 'viem';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from '../CreateProposal/CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

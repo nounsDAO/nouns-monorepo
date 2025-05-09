@@ -476,7 +476,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
 
       return {
         target,
-        functionSig: name === '' ? 'transfer' : name == undefined ? 'unknown' : name,
+        functionSig: name === '' ? 'transfer' : (name == undefined ? 'unknown' : name),
         callData: determineCallData(types, value),
       };
     }
@@ -492,6 +492,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
+      console.error('Failed to decode calldata:', error);
       return {
         target,
         callData: concatSelectorToCalldata(signature, callData),
@@ -667,7 +668,7 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const onTimelockV1 = proposal.onTimelockV1 !== null;
+  const onTimelockV1 = proposal.onTimelockV1 != null;
   return {
     id: proposal.id,
     title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
@@ -1065,9 +1066,12 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
   };
 };
 
+// Define a type alias for the events union type
+type EscrowEvent = EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
+
 // helper function to add fork cycle events to escrow events
 const eventsWithforkCycleEvents = (
-  events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[],
+  events: EscrowEvent[],
   forkDetails: Fork,
 ) => {
   const endTimestamp =
@@ -1085,10 +1089,7 @@ const eventsWithforkCycleEvents = (
   const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
   const sortedEvents = [...events, ...forkEvents].sort(
-    (
-      a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-      b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-    ) => {
+    (a: EscrowEvent, b: EscrowEvent) => {
       return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
     },
   );
@@ -1272,7 +1273,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
     error: Error;
   };
   const data: string[] = [];
-  proposals?.proposals.length > 0 &&
+  if (proposals?.proposals.length > 0) {
     proposals.proposals.map(proposal => {
       data.push(proposal.proposer.id);
       proposal.signers.map((signer: { id: string }) => {
@@ -1281,6 +1282,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
       });
       return proposal.proposer.id;
     });
+  }
 
   return {
     loading,
@@ -1294,17 +1296,14 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (
+  return !!(
     account &&
     latestProposalProposer &&
     (latestProposalStatus === ProposalState.ACTIVE ||
       latestProposalStatus === ProposalState.PENDING ||
       latestProposalStatus === ProposalState.UPDATABLE) &&
     latestProposalProposer.toLowerCase() === account?.toLowerCase()
-  ) {
-    return true;
-  }
-  return false;
+  );
 };
 
 export const useIsDaoGteV3 = (): boolean => {

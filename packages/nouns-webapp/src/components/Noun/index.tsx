@@ -2,9 +2,9 @@ import React from 'react';
 
 import Image from 'react-bootstrap/Image';
 
-import classes from './Noun.module.css';
-
 import loadingNoun from '@/assets/loading-skull-noun.gif';
+
+import classes from './Noun.module.css';
 
 export const LoadingNoun = () => {
   return (

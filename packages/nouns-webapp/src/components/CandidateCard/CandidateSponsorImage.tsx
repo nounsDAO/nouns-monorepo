@@ -1,6 +1,6 @@
-import classes from './CandidateSponsors.module.css';
-
 import { StandaloneNounImage } from '@/components/StandaloneNoun';
+
+import classes from './CandidateSponsors.module.css';
 
 type CandidateSponsorImageProps = {
   nounId: bigint;

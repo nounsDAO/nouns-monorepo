@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import classes from './NounImageVoteTable.module.css';
-
 import { GrayCircle } from '@/components/GrayCircle';
 import HoverCard from '@/components/HoverCard';
 import NounHoverCard from '@/components/NounHoverCard';
 import { StandaloneNounCircular } from '@/components/StandaloneNoun';
 import VoteCardPager from '@/components/VoteCardPager';
 import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
+
+import classes from './NounImageVoteTable.module.css';
 
 interface NounImageVoteTableProps {
   nounIds: string[];

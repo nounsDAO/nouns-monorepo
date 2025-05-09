@@ -4,12 +4,12 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import { Image } from 'react-bootstrap';
 
-import classes from './NounInfoRowBirthday.module.css';
-
 import _BirthdayIcon from '@/assets/icons/Birthday.svg';
 import { useAppSelector } from '@/hooks';
 import { AuctionState } from '@/state/slices/auction';
 import { isNounderNoun } from '@/utils/nounderNoun';
+
+import classes from './NounInfoRowBirthday.module.css';
 
 interface NounInfoRowBirthdayProps {
   nounId: bigint;

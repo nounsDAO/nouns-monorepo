@@ -1,8 +1,8 @@
 import React from 'react';
 
-import classes from './HorizontalStackedNouns.module.css';
-
 import { StandaloneNounCircular } from '@/components/StandaloneNoun';
+
+import classes from './HorizontalStackedNouns.module.css';
 
 interface HorizontalStackedNounsProps {
   nounIds: string[];

@@ -4,13 +4,13 @@ import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import ReactDOM from 'react-dom';
 
-import classes from './BidHistoryModal.module.css';
-
 import BidHistoryModalRow from '@/components/BidHistoryModalRow';
 import { StandaloneNounRoundedCorners } from '@/components/StandaloneNoun';
 import { Bid } from '@/utils/types';
 import { Auction } from '@/wrappers/nounsAuction';
 import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+
+import classes from './BidHistoryModal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;

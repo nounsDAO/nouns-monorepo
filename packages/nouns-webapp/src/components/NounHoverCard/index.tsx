@@ -7,14 +7,14 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
 
-import classes from './NounHoverCard.module.css';
-
 import { getNounBirthday } from '@/components/NounInfoRowBirthday';
 import ShortAddress from '@/components/ShortAddress';
 import { StandaloneNounCircular } from '@/components/StandaloneNoun';
 import { useAppSelector } from '@/hooks';
 import { isNounderNoun } from '@/utils/nounderNoun';
 import { nounQuery } from '@/wrappers/subgraph';
+
+import classes from './NounHoverCard.module.css';
 
 interface NounHoverCardProps {
   nounId: string;

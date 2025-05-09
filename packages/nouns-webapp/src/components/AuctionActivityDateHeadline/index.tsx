@@ -4,9 +4,9 @@ import { i18n } from '@lingui/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import classes from './AuctionActivityDateHeadline.module.css';
-
 import { useAppSelector } from '@/hooks';
+
+import classes from './AuctionActivityDateHeadline.module.css';
 
 dayjs.extend(utc);
 

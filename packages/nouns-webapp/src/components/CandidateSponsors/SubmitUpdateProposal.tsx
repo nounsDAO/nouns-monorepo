@@ -13,6 +13,7 @@ import {
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '@/wrappers/nounsData';
+
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 
 import classes from './SelectSponsorsToPropose.module.css';

@@ -6,13 +6,14 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 
+import { Backdrop } from '@/components/Modal';
 import config from '@/config';
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nounsDao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
-import { Backdrop } from '@/components/Modal';
 
 import classes from './DynamicQuorumInfoModal.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const PLOTTING_CONSTANTS = {
   width: 950,

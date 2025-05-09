@@ -3,9 +3,10 @@ import React from 'react';
 import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 
-import { buildEtherscanTxLink } from '@/utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
 import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+
+import { DelegationEvent } from '../../../../wrappers/nounActivity';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 

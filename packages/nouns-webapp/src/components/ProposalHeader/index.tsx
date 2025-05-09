@@ -7,12 +7,15 @@ import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import ByLineHoverCard from '@/components/ByLineHoverCard';
+import HoverCard from '@/components/HoverCard';
 import { transactionIconLink } from '@/components/ProposalContent';
+import ProposalStatus from '@/components/ProposalStatus';
 import ShortAddress from '@/components/ShortAddress';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
 import { Locales } from '@/i18n/locales';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/isMobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import {
@@ -23,12 +26,10 @@ import {
   useProposalVote,
 } from '@/wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
-import ByLineHoverCard from '@/components/ByLineHoverCard';
-import HoverCard from '@/components/HoverCard';
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './ProposalHeader.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 interface ProposalHeaderProps {
   title?: string;

@@ -4,8 +4,8 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Row, Col } from 'react-bootstrap';
 
-import { useAppSelector } from '@/hooks';
 import TruncatedAmount from '@/components/TruncatedAmount';
+import { useAppSelector } from '@/hooks';
 
 import classes from './CurrentBid.module.css';
 

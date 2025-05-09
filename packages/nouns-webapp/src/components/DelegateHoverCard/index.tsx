@@ -5,9 +5,9 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { Spinner } from 'react-bootstrap';
 
-import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
 import ShortAddress from '@/components/ShortAddress';
+import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
 import classes from './DelegateHoverCard.module.css';
 

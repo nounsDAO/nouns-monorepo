@@ -3,8 +3,6 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 
-import classes from './NounInfoCard.module.css';
-
 import _AddressIcon from '@/assets/icons/Address.svg';
 import _BidsIcon from '@/assets/icons/Bids.svg';
 import NounInfoRowBirthday from '@/components/NounInfoRowBirthday';
@@ -13,6 +11,8 @@ import NounInfoRowHolder from '@/components/NounInfoRowHolder';
 import config from '@/config';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanTokenLink } from '@/utils/etherscan';
+
+import classes from './NounInfoCard.module.css';
 
 interface NounInfoCardProps {
   nounId: bigint;

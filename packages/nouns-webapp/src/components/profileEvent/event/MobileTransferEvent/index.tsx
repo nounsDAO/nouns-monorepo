@@ -3,9 +3,10 @@ import React from 'react';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 
+import ShortAddress from '@/components/ShortAddress';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { TransferEvent } from '@/wrappers/nounActivity';
-import ShortAddress from '@/components/ShortAddress';
+
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 

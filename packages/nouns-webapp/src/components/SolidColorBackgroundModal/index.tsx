@@ -3,13 +3,13 @@ import React, { useEffect, useRef } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import ReactDOM from 'react-dom';
 
+import NounsTransition from '@/components/NounsTransition';
 import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
 } from '@/utils/cssTransitionUtils';
 import { isMobileScreen } from '@/utils/isMobile';
-import NounsTransition from '@/components/NounsTransition';
 
 import classes from './SolidColorBackgroundModal.module.css';
 

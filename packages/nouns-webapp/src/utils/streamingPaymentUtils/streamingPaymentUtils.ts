@@ -1,8 +1,8 @@
 import { useContractCall } from '@usedapp/core';
 import { utils } from 'ethers';
 
-import { SupportedCurrency } from '../../components/ProposalActionsModal/steps/TransferFundsDetailsStep';
-import config from '../../config';
+import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import config from '@/config';
 
 import StreamFactoryABI from './streamFactory.abi.json';
 

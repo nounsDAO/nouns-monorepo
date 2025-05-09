@@ -4,8 +4,6 @@ import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/react/macro';
 import { Image } from 'react-bootstrap';
 
-import classes from './NounInfoRowHolder.module.css';
-
 import _HeartIcon from '@/assets/icons/Heart.svg';
 import _LinkIcon from '@/assets/icons/Link.svg';
 import ShortAddress from '@/components/ShortAddress';
@@ -14,6 +12,8 @@ import config from '@/config';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { auctionQuery } from '@/wrappers/subgraph';
+
+import classes from './NounInfoRowHolder.module.css';
 
 interface NounInfoRowHolderProps {
   nounId: bigint;

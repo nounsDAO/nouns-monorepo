@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Web3Provider } from '@ethersproject/providers';
 import { blo } from 'blo';
+
 import { Address } from '@/utils/types';
 
 interface IdenticonInnerProps {

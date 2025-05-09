@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
-import { ProposalActionModalStepProps } from '../..';
-import { currentUnixEpoch, toUnixEpoch } from '@/utils/timeUtils';
 import BrandDatePicker from '@/components/BrandDatePicker';
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalSubTitle from '@/components/ModalSubtitle';
 import ModalTitle from '@/components/ModalTitle';
+import { currentUnixEpoch, toUnixEpoch } from '@/utils/timeUtils';
+
+import { ProposalActionModalStepProps } from '../..';
 
 const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, setState } = props;

@@ -1,8 +1,9 @@
-import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
 import Noun from '@/components/Noun';
-import nounClasses from '@/components/Noun/Noun.module.css';
+import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
 
 import classes from './GrayCircle.module.css';
+
+import nounClasses from '@/components/Noun/Noun.module.css';
 
 interface GrayCircleProps {
   isDelegateView?: boolean;
