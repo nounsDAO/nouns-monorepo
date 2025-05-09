@@ -64,9 +64,7 @@ const ForkPage = () => {
   const forks = useForks(dataFetchPollInterval);
   const { account } = useEthers();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
-  const forkTreasuryBalance = useForkTreasuryBalance(
-    forkDetails.data.forkTreasury as Address,
-  );
+  const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury as Address);
   useScrollToLocation();
 
   // Data fetching
