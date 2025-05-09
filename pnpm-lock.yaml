@@ -21667,7 +21667,7 @@ snapshots:
 
   docker-compose@1.1.1:
     dependencies:
-      yaml: 2.7.1
+      yaml: 2.7.0
 
   doctrine@2.1.0:
     dependencies:
