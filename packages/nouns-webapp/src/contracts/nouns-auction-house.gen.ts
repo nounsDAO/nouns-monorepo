@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsAuctionHouse
@@ -454,7 +454,7 @@ export const nounsAuctionHouseAbi = [
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x830bd73e4184cef73443c15111a1df14e495c706)
@@ -463,7 +463,7 @@ export const nounsAuctionHouseAbi = [
 export const nounsAuctionHouseAddress = {
   1: '0x830BD73E4184ceF73443C15111a1DF14e495C706',
   11155111: '0x488609b7113FCf3B761A05956300d605E8f6BcAf',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x830bd73e4184cef73443c15111a1df14e495c706)
@@ -472,7 +472,7 @@ export const nounsAuctionHouseAddress = {
 export const nounsAuctionHouseConfig = {
   address: nounsAuctionHouseAddress,
   abi: nounsAuctionHouseAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -487,7 +487,7 @@ export const nounsAuctionHouseConfig = {
 export const useReadNounsAuctionHouse = /*#__PURE__*/ createUseReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"MAX_TIME_BUFFER"`
@@ -499,7 +499,7 @@ export const useReadNounsAuctionHouseMaxTimeBuffer = /*#__PURE__*/ createUseRead
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'MAX_TIME_BUFFER',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"auction"`
@@ -511,7 +511,7 @@ export const useReadNounsAuctionHouseAuction = /*#__PURE__*/ createUseReadContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'auction',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"auctionStorage"`
@@ -523,7 +523,7 @@ export const useReadNounsAuctionHouseAuctionStorage = /*#__PURE__*/ createUseRea
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'auctionStorage',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"biddingClient"`
@@ -535,7 +535,7 @@ export const useReadNounsAuctionHouseBiddingClient = /*#__PURE__*/ createUseRead
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'biddingClient',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"duration"`
@@ -547,7 +547,7 @@ export const useReadNounsAuctionHouseDuration = /*#__PURE__*/ createUseReadContr
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'duration',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getPrices"`
@@ -559,7 +559,7 @@ export const useReadNounsAuctionHouseGetPrices = /*#__PURE__*/ createUseReadCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'getPrices',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getSettlements"`
@@ -571,7 +571,7 @@ export const useReadNounsAuctionHouseGetSettlements = /*#__PURE__*/ createUseRea
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'getSettlements',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getSettlementsFromIdtoTimestamp"`
@@ -584,7 +584,7 @@ export const useReadNounsAuctionHouseGetSettlementsFromIdtoTimestamp =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'getSettlementsFromIdtoTimestamp',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"minBidIncrementPercentage"`
@@ -597,7 +597,7 @@ export const useReadNounsAuctionHouseMinBidIncrementPercentage =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'minBidIncrementPercentage',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"nouns"`
@@ -609,7 +609,7 @@ export const useReadNounsAuctionHouseNouns = /*#__PURE__*/ createUseReadContract
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'nouns',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"owner"`
@@ -621,7 +621,7 @@ export const useReadNounsAuctionHouseOwner = /*#__PURE__*/ createUseReadContract
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"paused"`
@@ -633,7 +633,7 @@ export const useReadNounsAuctionHousePaused = /*#__PURE__*/ createUseReadContrac
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"reservePrice"`
@@ -645,7 +645,7 @@ export const useReadNounsAuctionHouseReservePrice = /*#__PURE__*/ createUseReadC
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'reservePrice',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"sanctionsOracle"`
@@ -657,7 +657,7 @@ export const useReadNounsAuctionHouseSanctionsOracle = /*#__PURE__*/ createUseRe
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'sanctionsOracle',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"timeBuffer"`
@@ -669,7 +669,7 @@ export const useReadNounsAuctionHouseTimeBuffer = /*#__PURE__*/ createUseReadCon
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'timeBuffer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"weth"`
@@ -681,7 +681,7 @@ export const useReadNounsAuctionHouseWeth = /*#__PURE__*/ createUseReadContract(
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'weth',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -692,7 +692,7 @@ export const useReadNounsAuctionHouseWeth = /*#__PURE__*/ createUseReadContract(
 export const useWriteNounsAuctionHouse = /*#__PURE__*/ createUseWriteContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"createBid"`
@@ -704,7 +704,7 @@ export const useWriteNounsAuctionHouseCreateBid = /*#__PURE__*/ createUseWriteCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'createBid',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"initialize"`
@@ -716,7 +716,7 @@ export const useWriteNounsAuctionHouseInitialize = /*#__PURE__*/ createUseWriteC
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"pause"`
@@ -728,7 +728,7 @@ export const useWriteNounsAuctionHousePause = /*#__PURE__*/ createUseWriteContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -740,7 +740,7 @@ export const useWriteNounsAuctionHouseRenounceOwnership = /*#__PURE__*/ createUs
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setMinBidIncrementPercentage"`
@@ -753,7 +753,7 @@ export const useWriteNounsAuctionHouseSetMinBidIncrementPercentage =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'setMinBidIncrementPercentage',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setPrices"`
@@ -765,7 +765,7 @@ export const useWriteNounsAuctionHouseSetPrices = /*#__PURE__*/ createUseWriteCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setPrices',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setReservePrice"`
@@ -777,7 +777,7 @@ export const useWriteNounsAuctionHouseSetReservePrice = /*#__PURE__*/ createUseW
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setReservePrice',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setSanctionsOracle"`
@@ -789,7 +789,7 @@ export const useWriteNounsAuctionHouseSetSanctionsOracle = /*#__PURE__*/ createU
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setSanctionsOracle',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setTimeBuffer"`
@@ -801,7 +801,7 @@ export const useWriteNounsAuctionHouseSetTimeBuffer = /*#__PURE__*/ createUseWri
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setTimeBuffer',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleAuction"`
@@ -813,7 +813,7 @@ export const useWriteNounsAuctionHouseSettleAuction = /*#__PURE__*/ createUseWri
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'settleAuction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleCurrentAndCreateNewAuction"`
@@ -826,7 +826,7 @@ export const useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'settleCurrentAndCreateNewAuction',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"transferOwnership"`
@@ -838,7 +838,7 @@ export const useWriteNounsAuctionHouseTransferOwnership = /*#__PURE__*/ createUs
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"unpause"`
@@ -850,7 +850,7 @@ export const useWriteNounsAuctionHouseUnpause = /*#__PURE__*/ createUseWriteCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"warmUpSettlementState"`
@@ -862,7 +862,7 @@ export const useWriteNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ crea
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'warmUpSettlementState',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -873,7 +873,7 @@ export const useWriteNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ crea
 export const useSimulateNounsAuctionHouse = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"createBid"`
@@ -885,7 +885,7 @@ export const useSimulateNounsAuctionHouseCreateBid = /*#__PURE__*/ createUseSimu
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'createBid',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"initialize"`
@@ -897,7 +897,7 @@ export const useSimulateNounsAuctionHouseInitialize = /*#__PURE__*/ createUseSim
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"pause"`
@@ -909,7 +909,7 @@ export const useSimulateNounsAuctionHousePause = /*#__PURE__*/ createUseSimulate
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -922,7 +922,7 @@ export const useSimulateNounsAuctionHouseRenounceOwnership =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'renounceOwnership',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setMinBidIncrementPercentage"`
@@ -935,7 +935,7 @@ export const useSimulateNounsAuctionHouseSetMinBidIncrementPercentage =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'setMinBidIncrementPercentage',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setPrices"`
@@ -947,7 +947,7 @@ export const useSimulateNounsAuctionHouseSetPrices = /*#__PURE__*/ createUseSimu
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setPrices',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setReservePrice"`
@@ -959,7 +959,7 @@ export const useSimulateNounsAuctionHouseSetReservePrice = /*#__PURE__*/ createU
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setReservePrice',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setSanctionsOracle"`
@@ -972,7 +972,7 @@ export const useSimulateNounsAuctionHouseSetSanctionsOracle =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'setSanctionsOracle',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setTimeBuffer"`
@@ -984,7 +984,7 @@ export const useSimulateNounsAuctionHouseSetTimeBuffer = /*#__PURE__*/ createUse
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setTimeBuffer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleAuction"`
@@ -996,7 +996,7 @@ export const useSimulateNounsAuctionHouseSettleAuction = /*#__PURE__*/ createUse
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'settleAuction',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleCurrentAndCreateNewAuction"`
@@ -1009,7 +1009,7 @@ export const useSimulateNounsAuctionHouseSettleCurrentAndCreateNewAuction =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'settleCurrentAndCreateNewAuction',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1022,7 +1022,7 @@ export const useSimulateNounsAuctionHouseTransferOwnership =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'transferOwnership',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"unpause"`
@@ -1034,7 +1034,7 @@ export const useSimulateNounsAuctionHouseUnpause = /*#__PURE__*/ createUseSimula
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"warmUpSettlementState"`
@@ -1047,7 +1047,7 @@ export const useSimulateNounsAuctionHouseWarmUpSettlementState =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'warmUpSettlementState',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -1058,7 +1058,7 @@ export const useSimulateNounsAuctionHouseWarmUpSettlementState =
 export const useWatchNounsAuctionHouseEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionBid"`
@@ -1070,7 +1070,7 @@ export const useWatchNounsAuctionHouseAuctionBidEvent = /*#__PURE__*/ createUseW
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'AuctionBid',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionBidWithClientId"`
@@ -1083,7 +1083,7 @@ export const useWatchNounsAuctionHouseAuctionBidWithClientIdEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionBidWithClientId',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionCreated"`
@@ -1096,7 +1096,7 @@ export const useWatchNounsAuctionHouseAuctionCreatedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionCreated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionExtended"`
@@ -1109,7 +1109,7 @@ export const useWatchNounsAuctionHouseAuctionExtendedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionExtended',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionMinBidIncrementPercentageUpdated"`
@@ -1122,7 +1122,7 @@ export const useWatchNounsAuctionHouseAuctionMinBidIncrementPercentageUpdatedEve
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionMinBidIncrementPercentageUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionReservePriceUpdated"`
@@ -1135,7 +1135,7 @@ export const useWatchNounsAuctionHouseAuctionReservePriceUpdatedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionReservePriceUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionSettled"`
@@ -1148,7 +1148,7 @@ export const useWatchNounsAuctionHouseAuctionSettledEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionSettled',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionSettledWithClientId"`
@@ -1161,7 +1161,7 @@ export const useWatchNounsAuctionHouseAuctionSettledWithClientIdEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionSettledWithClientId',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionTimeBufferUpdated"`
@@ -1174,7 +1174,7 @@ export const useWatchNounsAuctionHouseAuctionTimeBufferUpdatedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionTimeBufferUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1187,7 +1187,7 @@ export const useWatchNounsAuctionHouseOwnershipTransferredEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"Paused"`
@@ -1199,7 +1199,7 @@ export const useWatchNounsAuctionHousePausedEvent = /*#__PURE__*/ createUseWatch
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'Paused',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"SanctionsOracleSet"`
@@ -1212,7 +1212,7 @@ export const useWatchNounsAuctionHouseSanctionsOracleSetEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'SanctionsOracleSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"Unpaused"`
@@ -1224,7 +1224,7 @@ export const useWatchNounsAuctionHouseUnpausedEvent = /*#__PURE__*/ createUseWat
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'Unpaused',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -1239,7 +1239,7 @@ export const useWatchNounsAuctionHouseUnpausedEvent = /*#__PURE__*/ createUseWat
 export const readNounsAuctionHouse = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"MAX_TIME_BUFFER"`
@@ -1251,7 +1251,7 @@ export const readNounsAuctionHouseMaxTimeBuffer = /*#__PURE__*/ createReadContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'MAX_TIME_BUFFER',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"auction"`
@@ -1263,7 +1263,7 @@ export const readNounsAuctionHouseAuction = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'auction',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"auctionStorage"`
@@ -1275,7 +1275,7 @@ export const readNounsAuctionHouseAuctionStorage = /*#__PURE__*/ createReadContr
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'auctionStorage',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"biddingClient"`
@@ -1287,7 +1287,7 @@ export const readNounsAuctionHouseBiddingClient = /*#__PURE__*/ createReadContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'biddingClient',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"duration"`
@@ -1299,7 +1299,7 @@ export const readNounsAuctionHouseDuration = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'duration',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getPrices"`
@@ -1311,7 +1311,7 @@ export const readNounsAuctionHouseGetPrices = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'getPrices',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getSettlements"`
@@ -1323,7 +1323,7 @@ export const readNounsAuctionHouseGetSettlements = /*#__PURE__*/ createReadContr
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'getSettlements',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"getSettlementsFromIdtoTimestamp"`
@@ -1336,7 +1336,7 @@ export const readNounsAuctionHouseGetSettlementsFromIdtoTimestamp =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'getSettlementsFromIdtoTimestamp',
-  });
+  })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"minBidIncrementPercentage"`
@@ -1348,7 +1348,7 @@ export const readNounsAuctionHouseMinBidIncrementPercentage = /*#__PURE__*/ crea
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'minBidIncrementPercentage',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"nouns"`
@@ -1360,7 +1360,7 @@ export const readNounsAuctionHouseNouns = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'nouns',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"owner"`
@@ -1372,7 +1372,7 @@ export const readNounsAuctionHouseOwner = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"paused"`
@@ -1384,7 +1384,7 @@ export const readNounsAuctionHousePaused = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"reservePrice"`
@@ -1396,7 +1396,7 @@ export const readNounsAuctionHouseReservePrice = /*#__PURE__*/ createReadContrac
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'reservePrice',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"sanctionsOracle"`
@@ -1408,7 +1408,7 @@ export const readNounsAuctionHouseSanctionsOracle = /*#__PURE__*/ createReadCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'sanctionsOracle',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"timeBuffer"`
@@ -1420,7 +1420,7 @@ export const readNounsAuctionHouseTimeBuffer = /*#__PURE__*/ createReadContract(
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'timeBuffer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"weth"`
@@ -1432,7 +1432,7 @@ export const readNounsAuctionHouseWeth = /*#__PURE__*/ createReadContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'weth',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -1443,7 +1443,7 @@ export const readNounsAuctionHouseWeth = /*#__PURE__*/ createReadContract({
 export const writeNounsAuctionHouse = /*#__PURE__*/ createWriteContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"createBid"`
@@ -1455,7 +1455,7 @@ export const writeNounsAuctionHouseCreateBid = /*#__PURE__*/ createWriteContract
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'createBid',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"initialize"`
@@ -1467,7 +1467,7 @@ export const writeNounsAuctionHouseInitialize = /*#__PURE__*/ createWriteContrac
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"pause"`
@@ -1479,7 +1479,7 @@ export const writeNounsAuctionHousePause = /*#__PURE__*/ createWriteContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1491,7 +1491,7 @@ export const writeNounsAuctionHouseRenounceOwnership = /*#__PURE__*/ createWrite
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setMinBidIncrementPercentage"`
@@ -1505,7 +1505,7 @@ export const writeNounsAuctionHouseSetMinBidIncrementPercentage = /*#__PURE__*/ 
     address: nounsAuctionHouseAddress,
     functionName: 'setMinBidIncrementPercentage',
   },
-);
+)
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setPrices"`
@@ -1517,7 +1517,7 @@ export const writeNounsAuctionHouseSetPrices = /*#__PURE__*/ createWriteContract
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setPrices',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setReservePrice"`
@@ -1529,7 +1529,7 @@ export const writeNounsAuctionHouseSetReservePrice = /*#__PURE__*/ createWriteCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setReservePrice',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setSanctionsOracle"`
@@ -1541,7 +1541,7 @@ export const writeNounsAuctionHouseSetSanctionsOracle = /*#__PURE__*/ createWrit
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setSanctionsOracle',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setTimeBuffer"`
@@ -1553,7 +1553,7 @@ export const writeNounsAuctionHouseSetTimeBuffer = /*#__PURE__*/ createWriteCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setTimeBuffer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleAuction"`
@@ -1565,7 +1565,7 @@ export const writeNounsAuctionHouseSettleAuction = /*#__PURE__*/ createWriteCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'settleAuction',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleCurrentAndCreateNewAuction"`
@@ -1578,7 +1578,7 @@ export const writeNounsAuctionHouseSettleCurrentAndCreateNewAuction =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'settleCurrentAndCreateNewAuction',
-  });
+  })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1590,7 +1590,7 @@ export const writeNounsAuctionHouseTransferOwnership = /*#__PURE__*/ createWrite
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"unpause"`
@@ -1602,7 +1602,7 @@ export const writeNounsAuctionHouseUnpause = /*#__PURE__*/ createWriteContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"warmUpSettlementState"`
@@ -1614,7 +1614,7 @@ export const writeNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ createW
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'warmUpSettlementState',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -1625,7 +1625,7 @@ export const writeNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ createW
 export const simulateNounsAuctionHouse = /*#__PURE__*/ createSimulateContract({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"createBid"`
@@ -1637,7 +1637,7 @@ export const simulateNounsAuctionHouseCreateBid = /*#__PURE__*/ createSimulateCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'createBid',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"initialize"`
@@ -1649,7 +1649,7 @@ export const simulateNounsAuctionHouseInitialize = /*#__PURE__*/ createSimulateC
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"pause"`
@@ -1661,7 +1661,7 @@ export const simulateNounsAuctionHousePause = /*#__PURE__*/ createSimulateContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1673,7 +1673,7 @@ export const simulateNounsAuctionHouseRenounceOwnership = /*#__PURE__*/ createSi
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setMinBidIncrementPercentage"`
@@ -1686,7 +1686,7 @@ export const simulateNounsAuctionHouseSetMinBidIncrementPercentage =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'setMinBidIncrementPercentage',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setPrices"`
@@ -1698,7 +1698,7 @@ export const simulateNounsAuctionHouseSetPrices = /*#__PURE__*/ createSimulateCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setPrices',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setReservePrice"`
@@ -1710,7 +1710,7 @@ export const simulateNounsAuctionHouseSetReservePrice = /*#__PURE__*/ createSimu
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setReservePrice',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setSanctionsOracle"`
@@ -1722,7 +1722,7 @@ export const simulateNounsAuctionHouseSetSanctionsOracle = /*#__PURE__*/ createS
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setSanctionsOracle',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"setTimeBuffer"`
@@ -1734,7 +1734,7 @@ export const simulateNounsAuctionHouseSetTimeBuffer = /*#__PURE__*/ createSimula
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'setTimeBuffer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleAuction"`
@@ -1746,7 +1746,7 @@ export const simulateNounsAuctionHouseSettleAuction = /*#__PURE__*/ createSimula
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'settleAuction',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"settleCurrentAndCreateNewAuction"`
@@ -1759,7 +1759,7 @@ export const simulateNounsAuctionHouseSettleCurrentAndCreateNewAuction =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     functionName: 'settleCurrentAndCreateNewAuction',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1771,7 +1771,7 @@ export const simulateNounsAuctionHouseTransferOwnership = /*#__PURE__*/ createSi
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"unpause"`
@@ -1783,7 +1783,7 @@ export const simulateNounsAuctionHouseUnpause = /*#__PURE__*/ createSimulateCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `functionName` set to `"warmUpSettlementState"`
@@ -1795,7 +1795,7 @@ export const simulateNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ crea
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   functionName: 'warmUpSettlementState',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__
@@ -1806,7 +1806,7 @@ export const simulateNounsAuctionHouseWarmUpSettlementState = /*#__PURE__*/ crea
 export const watchNounsAuctionHouseEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionBid"`
@@ -1818,7 +1818,7 @@ export const watchNounsAuctionHouseAuctionBidEvent = /*#__PURE__*/ createWatchCo
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'AuctionBid',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionBidWithClientId"`
@@ -1831,7 +1831,7 @@ export const watchNounsAuctionHouseAuctionBidWithClientIdEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionBidWithClientId',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionCreated"`
@@ -1843,7 +1843,7 @@ export const watchNounsAuctionHouseAuctionCreatedEvent = /*#__PURE__*/ createWat
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'AuctionCreated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionExtended"`
@@ -1855,7 +1855,7 @@ export const watchNounsAuctionHouseAuctionExtendedEvent = /*#__PURE__*/ createWa
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'AuctionExtended',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionMinBidIncrementPercentageUpdated"`
@@ -1868,7 +1868,7 @@ export const watchNounsAuctionHouseAuctionMinBidIncrementPercentageUpdatedEvent 
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionMinBidIncrementPercentageUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionReservePriceUpdated"`
@@ -1881,7 +1881,7 @@ export const watchNounsAuctionHouseAuctionReservePriceUpdatedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionReservePriceUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionSettled"`
@@ -1893,7 +1893,7 @@ export const watchNounsAuctionHouseAuctionSettledEvent = /*#__PURE__*/ createWat
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'AuctionSettled',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionSettledWithClientId"`
@@ -1906,7 +1906,7 @@ export const watchNounsAuctionHouseAuctionSettledWithClientIdEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionSettledWithClientId',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"AuctionTimeBufferUpdated"`
@@ -1919,7 +1919,7 @@ export const watchNounsAuctionHouseAuctionTimeBufferUpdatedEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'AuctionTimeBufferUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1932,7 +1932,7 @@ export const watchNounsAuctionHouseOwnershipTransferredEvent =
     abi: nounsAuctionHouseAbi,
     address: nounsAuctionHouseAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"Paused"`
@@ -1944,7 +1944,7 @@ export const watchNounsAuctionHousePausedEvent = /*#__PURE__*/ createWatchContra
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'Paused',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"SanctionsOracleSet"`
@@ -1954,7 +1954,7 @@ export const watchNounsAuctionHousePausedEvent = /*#__PURE__*/ createWatchContra
  */
 export const watchNounsAuctionHouseSanctionsOracleSetEvent = /*#__PURE__*/ createWatchContractEvent(
   { abi: nounsAuctionHouseAbi, address: nounsAuctionHouseAddress, eventName: 'SanctionsOracleSet' },
-);
+)
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsAuctionHouseAbi}__ and `eventName` set to `"Unpaused"`
@@ -1966,4 +1966,4 @@ export const watchNounsAuctionHouseUnpausedEvent = /*#__PURE__*/ createWatchCont
   abi: nounsAuctionHouseAbi,
   address: nounsAuctionHouseAddress,
   eventName: 'Unpaused',
-});
+})

@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsGovernor
@@ -1334,7 +1334,7 @@ export const nounsGovernorAbi = [
     stateMutability: 'nonpayable',
   },
   { type: 'receive', stateMutability: 'payable' },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x6f3e6272a167e8accb32072d08e0957f9c79223d)
@@ -1343,16 +1343,13 @@ export const nounsGovernorAbi = [
 export const nounsGovernorAddress = {
   1: '0x6f3E6272A167e8AcCb32072d08E0957F9c79223d',
   11155111: '0x35d2670d7C8931AACdd37C89Ddcb0638c3c44A57',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x6f3e6272a167e8accb32072d08e0957f9c79223d)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x35d2670d7c8931aacdd37c89ddcb0638c3c44a57)
  */
-export const nounsGovernorConfig = {
-  address: nounsGovernorAddress,
-  abi: nounsGovernorAbi,
-} as const;
+export const nounsGovernorConfig = { address: nounsGovernorAddress, abi: nounsGovernorAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -1367,7 +1364,7 @@ export const nounsGovernorConfig = {
 export const useReadNounsGovernor = /*#__PURE__*/ createUseReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_PROPOSAL_THRESHOLD_BPS"`
@@ -1379,7 +1376,7 @@ export const useReadNounsGovernorMaxProposalThresholdBps = /*#__PURE__*/ createU
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_PROPOSAL_THRESHOLD_BPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_VOTING_DELAY"`
@@ -1391,7 +1388,7 @@ export const useReadNounsGovernorMaxVotingDelay = /*#__PURE__*/ createUseReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_VOTING_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_VOTING_PERIOD"`
@@ -1403,7 +1400,7 @@ export const useReadNounsGovernorMaxVotingPeriod = /*#__PURE__*/ createUseReadCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_VOTING_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_PROPOSAL_THRESHOLD_BPS"`
@@ -1415,7 +1412,7 @@ export const useReadNounsGovernorMinProposalThresholdBps = /*#__PURE__*/ createU
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_PROPOSAL_THRESHOLD_BPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_VOTING_DELAY"`
@@ -1427,7 +1424,7 @@ export const useReadNounsGovernorMinVotingDelay = /*#__PURE__*/ createUseReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_VOTING_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_VOTING_PERIOD"`
@@ -1439,7 +1436,7 @@ export const useReadNounsGovernorMinVotingPeriod = /*#__PURE__*/ createUseReadCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_VOTING_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"adjustedTotalSupply"`
@@ -1451,7 +1448,7 @@ export const useReadNounsGovernorAdjustedTotalSupply = /*#__PURE__*/ createUseRe
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'adjustedTotalSupply',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"admin"`
@@ -1463,7 +1460,7 @@ export const useReadNounsGovernorAdmin = /*#__PURE__*/ createUseReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"dynamicQuorumVotes"`
@@ -1475,7 +1472,7 @@ export const useReadNounsGovernorDynamicQuorumVotes = /*#__PURE__*/ createUseRea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'dynamicQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"erc20TokensToIncludeInFork"`
@@ -1487,7 +1484,7 @@ export const useReadNounsGovernorErc20TokensToIncludeInFork = /*#__PURE__*/ crea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'erc20TokensToIncludeInFork',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkDAODeployer"`
@@ -1499,7 +1496,7 @@ export const useReadNounsGovernorForkDaoDeployer = /*#__PURE__*/ createUseReadCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkDAODeployer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkEndTimestamp"`
@@ -1511,7 +1508,7 @@ export const useReadNounsGovernorForkEndTimestamp = /*#__PURE__*/ createUseReadC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkEndTimestamp',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkEscrow"`
@@ -1523,7 +1520,7 @@ export const useReadNounsGovernorForkEscrow = /*#__PURE__*/ createUseReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkEscrow',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkPeriod"`
@@ -1535,7 +1532,7 @@ export const useReadNounsGovernorForkPeriod = /*#__PURE__*/ createUseReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkPeriod',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkThreshold"`
@@ -1547,7 +1544,7 @@ export const useReadNounsGovernorForkThreshold = /*#__PURE__*/ createUseReadCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkThreshold',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkThresholdBPS"`
@@ -1559,7 +1556,7 @@ export const useReadNounsGovernorForkThresholdBps = /*#__PURE__*/ createUseReadC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkThresholdBPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getActions"`
@@ -1571,7 +1568,7 @@ export const useReadNounsGovernorGetActions = /*#__PURE__*/ createUseReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getActions',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getDynamicQuorumParamsAt"`
@@ -1583,7 +1580,7 @@ export const useReadNounsGovernorGetDynamicQuorumParamsAt = /*#__PURE__*/ create
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getDynamicQuorumParamsAt',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getReceipt"`
@@ -1595,7 +1592,7 @@ export const useReadNounsGovernorGetReceipt = /*#__PURE__*/ createUseReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getReceipt',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"lastMinuteWindowInBlocks"`
@@ -1607,7 +1604,7 @@ export const useReadNounsGovernorLastMinuteWindowInBlocks = /*#__PURE__*/ create
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'lastMinuteWindowInBlocks',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"latestProposalIds"`
@@ -1619,7 +1616,7 @@ export const useReadNounsGovernorLatestProposalIds = /*#__PURE__*/ createUseRead
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'latestProposalIds',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"maxQuorumVotes"`
@@ -1631,7 +1628,7 @@ export const useReadNounsGovernorMaxQuorumVotes = /*#__PURE__*/ createUseReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'maxQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"minQuorumVotes"`
@@ -1643,7 +1640,7 @@ export const useReadNounsGovernorMinQuorumVotes = /*#__PURE__*/ createUseReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'minQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"nouns"`
@@ -1655,7 +1652,7 @@ export const useReadNounsGovernorNouns = /*#__PURE__*/ createUseReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'nouns',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"numTokensInForkEscrow"`
@@ -1667,7 +1664,7 @@ export const useReadNounsGovernorNumTokensInForkEscrow = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'numTokensInForkEscrow',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"objectionPeriodDurationInBlocks"`
@@ -1680,7 +1677,7 @@ export const useReadNounsGovernorObjectionPeriodDurationInBlocks =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'objectionPeriodDurationInBlocks',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"pendingVetoer"`
@@ -1692,7 +1689,7 @@ export const useReadNounsGovernorPendingVetoer = /*#__PURE__*/ createUseReadCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'pendingVetoer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalCount"`
@@ -1704,7 +1701,7 @@ export const useReadNounsGovernorProposalCount = /*#__PURE__*/ createUseReadCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalCount',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalDataForRewards"`
@@ -1716,7 +1713,7 @@ export const useReadNounsGovernorProposalDataForRewards = /*#__PURE__*/ createUs
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalDataForRewards',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalMaxOperations"`
@@ -1728,7 +1725,7 @@ export const useReadNounsGovernorProposalMaxOperations = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalMaxOperations',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalThreshold"`
@@ -1740,7 +1737,7 @@ export const useReadNounsGovernorProposalThreshold = /*#__PURE__*/ createUseRead
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalThreshold',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalThresholdBPS"`
@@ -1752,7 +1749,7 @@ export const useReadNounsGovernorProposalThresholdBps = /*#__PURE__*/ createUseR
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalThresholdBPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalUpdatablePeriodInBlocks"`
@@ -1765,7 +1762,7 @@ export const useReadNounsGovernorProposalUpdatablePeriodInBlocks =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'proposalUpdatablePeriodInBlocks',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposals"`
@@ -1777,7 +1774,7 @@ export const useReadNounsGovernorProposals = /*#__PURE__*/ createUseReadContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposals',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalsV3"`
@@ -1789,7 +1786,7 @@ export const useReadNounsGovernorProposalsV3 = /*#__PURE__*/ createUseReadContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalsV3',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumParamsCheckpoints"`
@@ -1801,7 +1798,7 @@ export const useReadNounsGovernorQuorumParamsCheckpoints = /*#__PURE__*/ createU
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumParamsCheckpoints',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumVotes"`
@@ -1813,7 +1810,7 @@ export const useReadNounsGovernorQuorumVotes = /*#__PURE__*/ createUseReadContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumVotes',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumVotesBPS"`
@@ -1825,7 +1822,7 @@ export const useReadNounsGovernorQuorumVotesBps = /*#__PURE__*/ createUseReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumVotesBPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"state"`
@@ -1837,7 +1834,7 @@ export const useReadNounsGovernorState = /*#__PURE__*/ createUseReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'state',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"timelock"`
@@ -1849,7 +1846,7 @@ export const useReadNounsGovernorTimelock = /*#__PURE__*/ createUseReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'timelock',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"timelockV1"`
@@ -1861,7 +1858,7 @@ export const useReadNounsGovernorTimelockV1 = /*#__PURE__*/ createUseReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'timelockV1',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"vetoer"`
@@ -1873,7 +1870,7 @@ export const useReadNounsGovernorVetoer = /*#__PURE__*/ createUseReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'vetoer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"voteSnapshotBlockSwitchProposalId"`
@@ -1886,7 +1883,7 @@ export const useReadNounsGovernorVoteSnapshotBlockSwitchProposalId =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'voteSnapshotBlockSwitchProposalId',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"votingDelay"`
@@ -1898,7 +1895,7 @@ export const useReadNounsGovernorVotingDelay = /*#__PURE__*/ createUseReadContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'votingDelay',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"votingPeriod"`
@@ -1910,7 +1907,7 @@ export const useReadNounsGovernorVotingPeriod = /*#__PURE__*/ createUseReadContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'votingPeriod',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -1921,7 +1918,7 @@ export const useReadNounsGovernorVotingPeriod = /*#__PURE__*/ createUseReadContr
 export const useWriteNounsGovernor = /*#__PURE__*/ createUseWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancel"`
@@ -1933,7 +1930,7 @@ export const useWriteNounsGovernorCancel = /*#__PURE__*/ createUseWriteContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancel',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancelSig"`
@@ -1945,7 +1942,7 @@ export const useWriteNounsGovernorCancelSig = /*#__PURE__*/ createUseWriteContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancelSig',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVote"`
@@ -1957,7 +1954,7 @@ export const useWriteNounsGovernorCastRefundableVote = /*#__PURE__*/ createUseWr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castRefundableVote',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVoteWithReason"`
@@ -1970,7 +1967,7 @@ export const useWriteNounsGovernorCastRefundableVoteWithReason =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'castRefundableVoteWithReason',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVote"`
@@ -1982,7 +1979,7 @@ export const useWriteNounsGovernorCastVote = /*#__PURE__*/ createUseWriteContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVote',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteBySig"`
@@ -1994,7 +1991,7 @@ export const useWriteNounsGovernorCastVoteBySig = /*#__PURE__*/ createUseWriteCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteBySig',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteWithReason"`
@@ -2006,7 +2003,7 @@ export const useWriteNounsGovernorCastVoteWithReason = /*#__PURE__*/ createUseWr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteWithReason',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"escrowToFork"`
@@ -2018,7 +2015,7 @@ export const useWriteNounsGovernorEscrowToFork = /*#__PURE__*/ createUseWriteCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'escrowToFork',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"execute"`
@@ -2030,7 +2027,7 @@ export const useWriteNounsGovernorExecute = /*#__PURE__*/ createUseWriteContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'execute',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"executeFork"`
@@ -2042,7 +2039,7 @@ export const useWriteNounsGovernorExecuteFork = /*#__PURE__*/ createUseWriteCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'executeFork',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"initialize"`
@@ -2054,7 +2051,7 @@ export const useWriteNounsGovernorInitialize = /*#__PURE__*/ createUseWriteContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"joinFork"`
@@ -2066,7 +2063,7 @@ export const useWriteNounsGovernorJoinFork = /*#__PURE__*/ createUseWriteContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'joinFork',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"propose"`
@@ -2078,7 +2075,7 @@ export const useWriteNounsGovernorPropose = /*#__PURE__*/ createUseWriteContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'propose',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeBySigs"`
@@ -2090,7 +2087,7 @@ export const useWriteNounsGovernorProposeBySigs = /*#__PURE__*/ createUseWriteCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeBySigs',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeOnTimelockV1"`
@@ -2102,7 +2099,7 @@ export const useWriteNounsGovernorProposeOnTimelockV1 = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeOnTimelockV1',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"queue"`
@@ -2114,7 +2111,7 @@ export const useWriteNounsGovernorQueue = /*#__PURE__*/ createUseWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposal"`
@@ -2126,7 +2123,7 @@ export const useWriteNounsGovernorUpdateProposal = /*#__PURE__*/ createUseWriteC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposal',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalBySigs"`
@@ -2138,7 +2135,7 @@ export const useWriteNounsGovernorUpdateProposalBySigs = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalBySigs',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalDescription"`
@@ -2150,7 +2147,7 @@ export const useWriteNounsGovernorUpdateProposalDescription = /*#__PURE__*/ crea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalDescription',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalTransactions"`
@@ -2164,7 +2161,7 @@ export const useWriteNounsGovernorUpdateProposalTransactions = /*#__PURE__*/ cre
     address: nounsGovernorAddress,
     functionName: 'updateProposalTransactions',
   },
-);
+)
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"veto"`
@@ -2176,7 +2173,7 @@ export const useWriteNounsGovernorVeto = /*#__PURE__*/ createUseWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'veto',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowIncreasingTotalSupply"`
@@ -2189,7 +2186,7 @@ export const useWriteNounsGovernorWithdrawDaoNounsFromEscrowIncreasingTotalSuppl
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowIncreasingTotalSupply',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowToTreasury"`
@@ -2202,7 +2199,7 @@ export const useWriteNounsGovernorWithdrawDaoNounsFromEscrowToTreasury =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowToTreasury',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawFromForkEscrow"`
@@ -2214,7 +2211,7 @@ export const useWriteNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createU
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'withdrawFromForkEscrow',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -2225,7 +2222,7 @@ export const useWriteNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createU
 export const useSimulateNounsGovernor = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancel"`
@@ -2237,7 +2234,7 @@ export const useSimulateNounsGovernorCancel = /*#__PURE__*/ createUseSimulateCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancel',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancelSig"`
@@ -2249,7 +2246,7 @@ export const useSimulateNounsGovernorCancelSig = /*#__PURE__*/ createUseSimulate
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancelSig',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVote"`
@@ -2261,7 +2258,7 @@ export const useSimulateNounsGovernorCastRefundableVote = /*#__PURE__*/ createUs
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castRefundableVote',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVoteWithReason"`
@@ -2274,7 +2271,7 @@ export const useSimulateNounsGovernorCastRefundableVoteWithReason =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'castRefundableVoteWithReason',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVote"`
@@ -2286,7 +2283,7 @@ export const useSimulateNounsGovernorCastVote = /*#__PURE__*/ createUseSimulateC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVote',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteBySig"`
@@ -2298,7 +2295,7 @@ export const useSimulateNounsGovernorCastVoteBySig = /*#__PURE__*/ createUseSimu
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteBySig',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteWithReason"`
@@ -2310,7 +2307,7 @@ export const useSimulateNounsGovernorCastVoteWithReason = /*#__PURE__*/ createUs
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteWithReason',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"escrowToFork"`
@@ -2322,7 +2319,7 @@ export const useSimulateNounsGovernorEscrowToFork = /*#__PURE__*/ createUseSimul
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'escrowToFork',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"execute"`
@@ -2334,7 +2331,7 @@ export const useSimulateNounsGovernorExecute = /*#__PURE__*/ createUseSimulateCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'execute',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"executeFork"`
@@ -2346,7 +2343,7 @@ export const useSimulateNounsGovernorExecuteFork = /*#__PURE__*/ createUseSimula
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'executeFork',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"initialize"`
@@ -2358,7 +2355,7 @@ export const useSimulateNounsGovernorInitialize = /*#__PURE__*/ createUseSimulat
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"joinFork"`
@@ -2370,7 +2367,7 @@ export const useSimulateNounsGovernorJoinFork = /*#__PURE__*/ createUseSimulateC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'joinFork',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"propose"`
@@ -2382,7 +2379,7 @@ export const useSimulateNounsGovernorPropose = /*#__PURE__*/ createUseSimulateCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'propose',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeBySigs"`
@@ -2394,7 +2391,7 @@ export const useSimulateNounsGovernorProposeBySigs = /*#__PURE__*/ createUseSimu
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeBySigs',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeOnTimelockV1"`
@@ -2406,7 +2403,7 @@ export const useSimulateNounsGovernorProposeOnTimelockV1 = /*#__PURE__*/ createU
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeOnTimelockV1',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"queue"`
@@ -2418,7 +2415,7 @@ export const useSimulateNounsGovernorQueue = /*#__PURE__*/ createUseSimulateCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposal"`
@@ -2430,7 +2427,7 @@ export const useSimulateNounsGovernorUpdateProposal = /*#__PURE__*/ createUseSim
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposal',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalBySigs"`
@@ -2440,7 +2437,7 @@ export const useSimulateNounsGovernorUpdateProposal = /*#__PURE__*/ createUseSim
  */
 export const useSimulateNounsGovernorUpdateProposalBySigs = /*#__PURE__*/ createUseSimulateContract(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, functionName: 'updateProposalBySigs' },
-);
+)
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalDescription"`
@@ -2453,7 +2450,7 @@ export const useSimulateNounsGovernorUpdateProposalDescription =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'updateProposalDescription',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalTransactions"`
@@ -2466,7 +2463,7 @@ export const useSimulateNounsGovernorUpdateProposalTransactions =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'updateProposalTransactions',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"veto"`
@@ -2478,7 +2475,7 @@ export const useSimulateNounsGovernorVeto = /*#__PURE__*/ createUseSimulateContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'veto',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowIncreasingTotalSupply"`
@@ -2491,7 +2488,7 @@ export const useSimulateNounsGovernorWithdrawDaoNounsFromEscrowIncreasingTotalSu
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowIncreasingTotalSupply',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowToTreasury"`
@@ -2504,7 +2501,7 @@ export const useSimulateNounsGovernorWithdrawDaoNounsFromEscrowToTreasury =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowToTreasury',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawFromForkEscrow"`
@@ -2517,7 +2514,7 @@ export const useSimulateNounsGovernorWithdrawFromForkEscrow =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawFromForkEscrow',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -2528,7 +2525,7 @@ export const useSimulateNounsGovernorWithdrawFromForkEscrow =
 export const useWatchNounsGovernorEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"DAONounsSupplyIncreasedFromEscrow"`
@@ -2541,7 +2538,7 @@ export const useWatchNounsGovernorDaoNounsSupplyIncreasedFromEscrowEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'DAONounsSupplyIncreasedFromEscrow',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"DAOWithdrawNounsFromEscrow"`
@@ -2554,7 +2551,7 @@ export const useWatchNounsGovernorDaoWithdrawNounsFromEscrowEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'DAOWithdrawNounsFromEscrow',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ERC20TokensToIncludeInForkSet"`
@@ -2567,7 +2564,7 @@ export const useWatchNounsGovernorErc20TokensToIncludeInForkSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ERC20TokensToIncludeInForkSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"EscrowedToFork"`
@@ -2579,7 +2576,7 @@ export const useWatchNounsGovernorEscrowedToForkEvent = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'EscrowedToFork',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ExecuteFork"`
@@ -2591,7 +2588,7 @@ export const useWatchNounsGovernorExecuteForkEvent = /*#__PURE__*/ createUseWatc
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ExecuteFork',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkDAODeployerSet"`
@@ -2604,7 +2601,7 @@ export const useWatchNounsGovernorForkDaoDeployerSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ForkDAODeployerSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkPeriodSet"`
@@ -2616,7 +2613,7 @@ export const useWatchNounsGovernorForkPeriodSetEvent = /*#__PURE__*/ createUseWa
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ForkPeriodSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkThresholdSet"`
@@ -2626,7 +2623,7 @@ export const useWatchNounsGovernorForkPeriodSetEvent = /*#__PURE__*/ createUseWa
  */
 export const useWatchNounsGovernorForkThresholdSetEvent = /*#__PURE__*/ createUseWatchContractEvent(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, eventName: 'ForkThresholdSet' },
-);
+)
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"JoinFork"`
@@ -2638,7 +2635,7 @@ export const useWatchNounsGovernorJoinForkEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'JoinFork',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"LastMinuteWindowSet"`
@@ -2651,7 +2648,7 @@ export const useWatchNounsGovernorLastMinuteWindowSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'LastMinuteWindowSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"MaxQuorumVotesBPSSet"`
@@ -2664,7 +2661,7 @@ export const useWatchNounsGovernorMaxQuorumVotesBpsSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'MaxQuorumVotesBPSSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"MinQuorumVotesBPSSet"`
@@ -2677,7 +2674,7 @@ export const useWatchNounsGovernorMinQuorumVotesBpsSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'MinQuorumVotesBPSSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewAdmin"`
@@ -2689,7 +2686,7 @@ export const useWatchNounsGovernorNewAdminEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewPendingAdmin"`
@@ -2701,7 +2698,7 @@ export const useWatchNounsGovernorNewPendingAdminEvent = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewPendingVetoer"`
@@ -2711,7 +2708,7 @@ export const useWatchNounsGovernorNewPendingAdminEvent = /*#__PURE__*/ createUse
  */
 export const useWatchNounsGovernorNewPendingVetoerEvent = /*#__PURE__*/ createUseWatchContractEvent(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, eventName: 'NewPendingVetoer' },
-);
+)
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewVetoer"`
@@ -2723,7 +2720,7 @@ export const useWatchNounsGovernorNewVetoerEvent = /*#__PURE__*/ createUseWatchC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewVetoer',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ObjectionPeriodDurationSet"`
@@ -2736,7 +2733,7 @@ export const useWatchNounsGovernorObjectionPeriodDurationSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ObjectionPeriodDurationSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCanceled"`
@@ -2746,7 +2743,7 @@ export const useWatchNounsGovernorObjectionPeriodDurationSetEvent =
  */
 export const useWatchNounsGovernorProposalCanceledEvent = /*#__PURE__*/ createUseWatchContractEvent(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, eventName: 'ProposalCanceled' },
-);
+)
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreated"`
@@ -2758,7 +2755,7 @@ export const useWatchNounsGovernorProposalCreatedEvent = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalCreated',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreatedOnTimelockV1"`
@@ -2771,7 +2768,7 @@ export const useWatchNounsGovernorProposalCreatedOnTimelockV1Event =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalCreatedOnTimelockV1',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreatedWithRequirements"`
@@ -2784,7 +2781,7 @@ export const useWatchNounsGovernorProposalCreatedWithRequirementsEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalCreatedWithRequirements',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalDescriptionUpdated"`
@@ -2797,7 +2794,7 @@ export const useWatchNounsGovernorProposalDescriptionUpdatedEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalDescriptionUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalExecuted"`
@@ -2807,7 +2804,7 @@ export const useWatchNounsGovernorProposalDescriptionUpdatedEvent =
  */
 export const useWatchNounsGovernorProposalExecutedEvent = /*#__PURE__*/ createUseWatchContractEvent(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, eventName: 'ProposalExecuted' },
-);
+)
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalObjectionPeriodSet"`
@@ -2820,7 +2817,7 @@ export const useWatchNounsGovernorProposalObjectionPeriodSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalObjectionPeriodSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalQueued"`
@@ -2832,7 +2829,7 @@ export const useWatchNounsGovernorProposalQueuedEvent = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalQueued',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalThresholdBPSSet"`
@@ -2845,7 +2842,7 @@ export const useWatchNounsGovernorProposalThresholdBpsSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalThresholdBPSSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalTransactionsUpdated"`
@@ -2858,7 +2855,7 @@ export const useWatchNounsGovernorProposalTransactionsUpdatedEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalTransactionsUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalUpdatablePeriodSet"`
@@ -2871,7 +2868,7 @@ export const useWatchNounsGovernorProposalUpdatablePeriodSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalUpdatablePeriodSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalUpdated"`
@@ -2883,7 +2880,7 @@ export const useWatchNounsGovernorProposalUpdatedEvent = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalUpdated',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalVetoed"`
@@ -2895,7 +2892,7 @@ export const useWatchNounsGovernorProposalVetoedEvent = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalVetoed',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"QuorumCoefficientSet"`
@@ -2908,7 +2905,7 @@ export const useWatchNounsGovernorQuorumCoefficientSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'QuorumCoefficientSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"QuorumVotesBPSSet"`
@@ -2921,7 +2918,7 @@ export const useWatchNounsGovernorQuorumVotesBpsSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'QuorumVotesBPSSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"RefundableVote"`
@@ -2933,7 +2930,7 @@ export const useWatchNounsGovernorRefundableVoteEvent = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'RefundableVote',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"SignatureCancelled"`
@@ -2946,7 +2943,7 @@ export const useWatchNounsGovernorSignatureCancelledEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'SignatureCancelled',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"TimelocksAndAdminSet"`
@@ -2959,7 +2956,7 @@ export const useWatchNounsGovernorTimelocksAndAdminSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'TimelocksAndAdminSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VoteCast"`
@@ -2971,7 +2968,7 @@ export const useWatchNounsGovernorVoteCastEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VoteCast',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VoteCastWithClientId"`
@@ -2984,7 +2981,7 @@ export const useWatchNounsGovernorVoteCastWithClientIdEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'VoteCastWithClientId',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VotingDelaySet"`
@@ -2996,7 +2993,7 @@ export const useWatchNounsGovernorVotingDelaySetEvent = /*#__PURE__*/ createUseW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VotingDelaySet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VotingPeriodSet"`
@@ -3008,7 +3005,7 @@ export const useWatchNounsGovernorVotingPeriodSetEvent = /*#__PURE__*/ createUse
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VotingPeriodSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"Withdraw"`
@@ -3020,7 +3017,7 @@ export const useWatchNounsGovernorWithdrawEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'Withdraw',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"WithdrawFromForkEscrow"`
@@ -3033,7 +3030,7 @@ export const useWatchNounsGovernorWithdrawFromForkEscrowEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'WithdrawFromForkEscrow',
-  });
+  })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -3048,7 +3045,7 @@ export const useWatchNounsGovernorWithdrawFromForkEscrowEvent =
 export const readNounsGovernor = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_PROPOSAL_THRESHOLD_BPS"`
@@ -3060,7 +3057,7 @@ export const readNounsGovernorMaxProposalThresholdBps = /*#__PURE__*/ createRead
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_PROPOSAL_THRESHOLD_BPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_VOTING_DELAY"`
@@ -3072,7 +3069,7 @@ export const readNounsGovernorMaxVotingDelay = /*#__PURE__*/ createReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_VOTING_DELAY',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MAX_VOTING_PERIOD"`
@@ -3084,7 +3081,7 @@ export const readNounsGovernorMaxVotingPeriod = /*#__PURE__*/ createReadContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MAX_VOTING_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_PROPOSAL_THRESHOLD_BPS"`
@@ -3096,7 +3093,7 @@ export const readNounsGovernorMinProposalThresholdBps = /*#__PURE__*/ createRead
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_PROPOSAL_THRESHOLD_BPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_VOTING_DELAY"`
@@ -3108,7 +3105,7 @@ export const readNounsGovernorMinVotingDelay = /*#__PURE__*/ createReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_VOTING_DELAY',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"MIN_VOTING_PERIOD"`
@@ -3120,7 +3117,7 @@ export const readNounsGovernorMinVotingPeriod = /*#__PURE__*/ createReadContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'MIN_VOTING_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"adjustedTotalSupply"`
@@ -3132,7 +3129,7 @@ export const readNounsGovernorAdjustedTotalSupply = /*#__PURE__*/ createReadCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'adjustedTotalSupply',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"admin"`
@@ -3144,7 +3141,7 @@ export const readNounsGovernorAdmin = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"dynamicQuorumVotes"`
@@ -3156,7 +3153,7 @@ export const readNounsGovernorDynamicQuorumVotes = /*#__PURE__*/ createReadContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'dynamicQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"erc20TokensToIncludeInFork"`
@@ -3168,7 +3165,7 @@ export const readNounsGovernorErc20TokensToIncludeInFork = /*#__PURE__*/ createR
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'erc20TokensToIncludeInFork',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkDAODeployer"`
@@ -3180,7 +3177,7 @@ export const readNounsGovernorForkDaoDeployer = /*#__PURE__*/ createReadContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkDAODeployer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkEndTimestamp"`
@@ -3192,7 +3189,7 @@ export const readNounsGovernorForkEndTimestamp = /*#__PURE__*/ createReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkEndTimestamp',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkEscrow"`
@@ -3204,7 +3201,7 @@ export const readNounsGovernorForkEscrow = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkEscrow',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkPeriod"`
@@ -3216,7 +3213,7 @@ export const readNounsGovernorForkPeriod = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkPeriod',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkThreshold"`
@@ -3228,7 +3225,7 @@ export const readNounsGovernorForkThreshold = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkThreshold',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"forkThresholdBPS"`
@@ -3240,7 +3237,7 @@ export const readNounsGovernorForkThresholdBps = /*#__PURE__*/ createReadContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'forkThresholdBPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getActions"`
@@ -3252,7 +3249,7 @@ export const readNounsGovernorGetActions = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getActions',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getDynamicQuorumParamsAt"`
@@ -3264,7 +3261,7 @@ export const readNounsGovernorGetDynamicQuorumParamsAt = /*#__PURE__*/ createRea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getDynamicQuorumParamsAt',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"getReceipt"`
@@ -3276,7 +3273,7 @@ export const readNounsGovernorGetReceipt = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'getReceipt',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"lastMinuteWindowInBlocks"`
@@ -3288,7 +3285,7 @@ export const readNounsGovernorLastMinuteWindowInBlocks = /*#__PURE__*/ createRea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'lastMinuteWindowInBlocks',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"latestProposalIds"`
@@ -3300,7 +3297,7 @@ export const readNounsGovernorLatestProposalIds = /*#__PURE__*/ createReadContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'latestProposalIds',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"maxQuorumVotes"`
@@ -3312,7 +3309,7 @@ export const readNounsGovernorMaxQuorumVotes = /*#__PURE__*/ createReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'maxQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"minQuorumVotes"`
@@ -3324,7 +3321,7 @@ export const readNounsGovernorMinQuorumVotes = /*#__PURE__*/ createReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'minQuorumVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"nouns"`
@@ -3336,7 +3333,7 @@ export const readNounsGovernorNouns = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'nouns',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"numTokensInForkEscrow"`
@@ -3348,7 +3345,7 @@ export const readNounsGovernorNumTokensInForkEscrow = /*#__PURE__*/ createReadCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'numTokensInForkEscrow',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"objectionPeriodDurationInBlocks"`
@@ -3360,7 +3357,7 @@ export const readNounsGovernorObjectionPeriodDurationInBlocks = /*#__PURE__*/ cr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'objectionPeriodDurationInBlocks',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"pendingVetoer"`
@@ -3372,7 +3369,7 @@ export const readNounsGovernorPendingVetoer = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'pendingVetoer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalCount"`
@@ -3384,7 +3381,7 @@ export const readNounsGovernorProposalCount = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalDataForRewards"`
@@ -3396,7 +3393,7 @@ export const readNounsGovernorProposalDataForRewards = /*#__PURE__*/ createReadC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalDataForRewards',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalMaxOperations"`
@@ -3408,7 +3405,7 @@ export const readNounsGovernorProposalMaxOperations = /*#__PURE__*/ createReadCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalMaxOperations',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalThreshold"`
@@ -3420,7 +3417,7 @@ export const readNounsGovernorProposalThreshold = /*#__PURE__*/ createReadContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalThreshold',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalThresholdBPS"`
@@ -3432,7 +3429,7 @@ export const readNounsGovernorProposalThresholdBps = /*#__PURE__*/ createReadCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalThresholdBPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalUpdatablePeriodInBlocks"`
@@ -3444,7 +3441,7 @@ export const readNounsGovernorProposalUpdatablePeriodInBlocks = /*#__PURE__*/ cr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalUpdatablePeriodInBlocks',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposals"`
@@ -3456,7 +3453,7 @@ export const readNounsGovernorProposals = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposalsV3"`
@@ -3468,7 +3465,7 @@ export const readNounsGovernorProposalsV3 = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposalsV3',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumParamsCheckpoints"`
@@ -3480,7 +3477,7 @@ export const readNounsGovernorQuorumParamsCheckpoints = /*#__PURE__*/ createRead
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumParamsCheckpoints',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumVotes"`
@@ -3492,7 +3489,7 @@ export const readNounsGovernorQuorumVotes = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"quorumVotesBPS"`
@@ -3504,7 +3501,7 @@ export const readNounsGovernorQuorumVotesBps = /*#__PURE__*/ createReadContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'quorumVotesBPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"state"`
@@ -3516,7 +3513,7 @@ export const readNounsGovernorState = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'state',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"timelock"`
@@ -3528,7 +3525,7 @@ export const readNounsGovernorTimelock = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'timelock',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"timelockV1"`
@@ -3540,7 +3537,7 @@ export const readNounsGovernorTimelockV1 = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'timelockV1',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"vetoer"`
@@ -3552,7 +3549,7 @@ export const readNounsGovernorVetoer = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'vetoer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"voteSnapshotBlockSwitchProposalId"`
@@ -3564,7 +3561,7 @@ export const readNounsGovernorVoteSnapshotBlockSwitchProposalId = /*#__PURE__*/ 
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'voteSnapshotBlockSwitchProposalId',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"votingDelay"`
@@ -3576,7 +3573,7 @@ export const readNounsGovernorVotingDelay = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'votingDelay',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"votingPeriod"`
@@ -3588,7 +3585,7 @@ export const readNounsGovernorVotingPeriod = /*#__PURE__*/ createReadContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'votingPeriod',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -3599,7 +3596,7 @@ export const readNounsGovernorVotingPeriod = /*#__PURE__*/ createReadContract({
 export const writeNounsGovernor = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancel"`
@@ -3611,7 +3608,7 @@ export const writeNounsGovernorCancel = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancel',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancelSig"`
@@ -3623,7 +3620,7 @@ export const writeNounsGovernorCancelSig = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancelSig',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVote"`
@@ -3635,7 +3632,7 @@ export const writeNounsGovernorCastRefundableVote = /*#__PURE__*/ createWriteCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castRefundableVote',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVoteWithReason"`
@@ -3647,7 +3644,7 @@ export const writeNounsGovernorCastRefundableVoteWithReason = /*#__PURE__*/ crea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castRefundableVoteWithReason',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVote"`
@@ -3659,7 +3656,7 @@ export const writeNounsGovernorCastVote = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVote',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteBySig"`
@@ -3671,7 +3668,7 @@ export const writeNounsGovernorCastVoteBySig = /*#__PURE__*/ createWriteContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteBySig',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteWithReason"`
@@ -3683,7 +3680,7 @@ export const writeNounsGovernorCastVoteWithReason = /*#__PURE__*/ createWriteCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteWithReason',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"escrowToFork"`
@@ -3695,7 +3692,7 @@ export const writeNounsGovernorEscrowToFork = /*#__PURE__*/ createWriteContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'escrowToFork',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"execute"`
@@ -3707,7 +3704,7 @@ export const writeNounsGovernorExecute = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'execute',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"executeFork"`
@@ -3719,7 +3716,7 @@ export const writeNounsGovernorExecuteFork = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'executeFork',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"initialize"`
@@ -3731,7 +3728,7 @@ export const writeNounsGovernorInitialize = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"joinFork"`
@@ -3743,7 +3740,7 @@ export const writeNounsGovernorJoinFork = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'joinFork',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"propose"`
@@ -3755,7 +3752,7 @@ export const writeNounsGovernorPropose = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'propose',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeBySigs"`
@@ -3767,7 +3764,7 @@ export const writeNounsGovernorProposeBySigs = /*#__PURE__*/ createWriteContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeBySigs',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeOnTimelockV1"`
@@ -3779,7 +3776,7 @@ export const writeNounsGovernorProposeOnTimelockV1 = /*#__PURE__*/ createWriteCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeOnTimelockV1',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"queue"`
@@ -3791,7 +3788,7 @@ export const writeNounsGovernorQueue = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposal"`
@@ -3803,7 +3800,7 @@ export const writeNounsGovernorUpdateProposal = /*#__PURE__*/ createWriteContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposal',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalBySigs"`
@@ -3815,7 +3812,7 @@ export const writeNounsGovernorUpdateProposalBySigs = /*#__PURE__*/ createWriteC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalBySigs',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalDescription"`
@@ -3827,7 +3824,7 @@ export const writeNounsGovernorUpdateProposalDescription = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalDescription',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalTransactions"`
@@ -3839,7 +3836,7 @@ export const writeNounsGovernorUpdateProposalTransactions = /*#__PURE__*/ create
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalTransactions',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"veto"`
@@ -3851,7 +3848,7 @@ export const writeNounsGovernorVeto = /*#__PURE__*/ createWriteContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'veto',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowIncreasingTotalSupply"`
@@ -3864,7 +3861,7 @@ export const writeNounsGovernorWithdrawDaoNounsFromEscrowIncreasingTotalSupply =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowIncreasingTotalSupply',
-  });
+  })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowToTreasury"`
@@ -3877,7 +3874,7 @@ export const writeNounsGovernorWithdrawDaoNounsFromEscrowToTreasury =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowToTreasury',
-  });
+  })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawFromForkEscrow"`
@@ -3889,7 +3886,7 @@ export const writeNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createWrit
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'withdrawFromForkEscrow',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -3900,7 +3897,7 @@ export const writeNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createWrit
 export const simulateNounsGovernor = /*#__PURE__*/ createSimulateContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancel"`
@@ -3912,7 +3909,7 @@ export const simulateNounsGovernorCancel = /*#__PURE__*/ createSimulateContract(
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancel',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"cancelSig"`
@@ -3924,7 +3921,7 @@ export const simulateNounsGovernorCancelSig = /*#__PURE__*/ createSimulateContra
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'cancelSig',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVote"`
@@ -3936,7 +3933,7 @@ export const simulateNounsGovernorCastRefundableVote = /*#__PURE__*/ createSimul
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castRefundableVote',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castRefundableVoteWithReason"`
@@ -3949,7 +3946,7 @@ export const simulateNounsGovernorCastRefundableVoteWithReason =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'castRefundableVoteWithReason',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVote"`
@@ -3961,7 +3958,7 @@ export const simulateNounsGovernorCastVote = /*#__PURE__*/ createSimulateContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVote',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteBySig"`
@@ -3973,7 +3970,7 @@ export const simulateNounsGovernorCastVoteBySig = /*#__PURE__*/ createSimulateCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteBySig',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"castVoteWithReason"`
@@ -3985,7 +3982,7 @@ export const simulateNounsGovernorCastVoteWithReason = /*#__PURE__*/ createSimul
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'castVoteWithReason',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"escrowToFork"`
@@ -3997,7 +3994,7 @@ export const simulateNounsGovernorEscrowToFork = /*#__PURE__*/ createSimulateCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'escrowToFork',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"execute"`
@@ -4009,7 +4006,7 @@ export const simulateNounsGovernorExecute = /*#__PURE__*/ createSimulateContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'execute',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"executeFork"`
@@ -4021,7 +4018,7 @@ export const simulateNounsGovernorExecuteFork = /*#__PURE__*/ createSimulateCont
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'executeFork',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"initialize"`
@@ -4033,7 +4030,7 @@ export const simulateNounsGovernorInitialize = /*#__PURE__*/ createSimulateContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"joinFork"`
@@ -4045,7 +4042,7 @@ export const simulateNounsGovernorJoinFork = /*#__PURE__*/ createSimulateContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'joinFork',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"propose"`
@@ -4057,7 +4054,7 @@ export const simulateNounsGovernorPropose = /*#__PURE__*/ createSimulateContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'propose',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeBySigs"`
@@ -4069,7 +4066,7 @@ export const simulateNounsGovernorProposeBySigs = /*#__PURE__*/ createSimulateCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeBySigs',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"proposeOnTimelockV1"`
@@ -4081,7 +4078,7 @@ export const simulateNounsGovernorProposeOnTimelockV1 = /*#__PURE__*/ createSimu
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'proposeOnTimelockV1',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"queue"`
@@ -4093,7 +4090,7 @@ export const simulateNounsGovernorQueue = /*#__PURE__*/ createSimulateContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposal"`
@@ -4105,7 +4102,7 @@ export const simulateNounsGovernorUpdateProposal = /*#__PURE__*/ createSimulateC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposal',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalBySigs"`
@@ -4117,7 +4114,7 @@ export const simulateNounsGovernorUpdateProposalBySigs = /*#__PURE__*/ createSim
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalBySigs',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalDescription"`
@@ -4129,7 +4126,7 @@ export const simulateNounsGovernorUpdateProposalDescription = /*#__PURE__*/ crea
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'updateProposalDescription',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"updateProposalTransactions"`
@@ -4143,7 +4140,7 @@ export const simulateNounsGovernorUpdateProposalTransactions = /*#__PURE__*/ cre
     address: nounsGovernorAddress,
     functionName: 'updateProposalTransactions',
   },
-);
+)
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"veto"`
@@ -4155,7 +4152,7 @@ export const simulateNounsGovernorVeto = /*#__PURE__*/ createSimulateContract({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'veto',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowIncreasingTotalSupply"`
@@ -4168,7 +4165,7 @@ export const simulateNounsGovernorWithdrawDaoNounsFromEscrowIncreasingTotalSuppl
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowIncreasingTotalSupply',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawDAONounsFromEscrowToTreasury"`
@@ -4181,7 +4178,7 @@ export const simulateNounsGovernorWithdrawDaoNounsFromEscrowToTreasury =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     functionName: 'withdrawDAONounsFromEscrowToTreasury',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsGovernorAbi}__ and `functionName` set to `"withdrawFromForkEscrow"`
@@ -4193,7 +4190,7 @@ export const simulateNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createS
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   functionName: 'withdrawFromForkEscrow',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__
@@ -4204,7 +4201,7 @@ export const simulateNounsGovernorWithdrawFromForkEscrow = /*#__PURE__*/ createS
 export const watchNounsGovernorEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"DAONounsSupplyIncreasedFromEscrow"`
@@ -4217,7 +4214,7 @@ export const watchNounsGovernorDaoNounsSupplyIncreasedFromEscrowEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'DAONounsSupplyIncreasedFromEscrow',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"DAOWithdrawNounsFromEscrow"`
@@ -4230,7 +4227,7 @@ export const watchNounsGovernorDaoWithdrawNounsFromEscrowEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'DAOWithdrawNounsFromEscrow',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ERC20TokensToIncludeInForkSet"`
@@ -4243,7 +4240,7 @@ export const watchNounsGovernorErc20TokensToIncludeInForkSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ERC20TokensToIncludeInForkSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"EscrowedToFork"`
@@ -4255,7 +4252,7 @@ export const watchNounsGovernorEscrowedToForkEvent = /*#__PURE__*/ createWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'EscrowedToFork',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ExecuteFork"`
@@ -4267,7 +4264,7 @@ export const watchNounsGovernorExecuteForkEvent = /*#__PURE__*/ createWatchContr
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ExecuteFork',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkDAODeployerSet"`
@@ -4279,7 +4276,7 @@ export const watchNounsGovernorForkDaoDeployerSetEvent = /*#__PURE__*/ createWat
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ForkDAODeployerSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkPeriodSet"`
@@ -4291,7 +4288,7 @@ export const watchNounsGovernorForkPeriodSetEvent = /*#__PURE__*/ createWatchCon
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ForkPeriodSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ForkThresholdSet"`
@@ -4303,7 +4300,7 @@ export const watchNounsGovernorForkThresholdSetEvent = /*#__PURE__*/ createWatch
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ForkThresholdSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"JoinFork"`
@@ -4315,7 +4312,7 @@ export const watchNounsGovernorJoinForkEvent = /*#__PURE__*/ createWatchContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'JoinFork',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"LastMinuteWindowSet"`
@@ -4327,7 +4324,7 @@ export const watchNounsGovernorLastMinuteWindowSetEvent = /*#__PURE__*/ createWa
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'LastMinuteWindowSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"MaxQuorumVotesBPSSet"`
@@ -4339,7 +4336,7 @@ export const watchNounsGovernorMaxQuorumVotesBpsSetEvent = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'MaxQuorumVotesBPSSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"MinQuorumVotesBPSSet"`
@@ -4351,7 +4348,7 @@ export const watchNounsGovernorMinQuorumVotesBpsSetEvent = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'MinQuorumVotesBPSSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewAdmin"`
@@ -4363,7 +4360,7 @@ export const watchNounsGovernorNewAdminEvent = /*#__PURE__*/ createWatchContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewAdmin',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewPendingAdmin"`
@@ -4375,7 +4372,7 @@ export const watchNounsGovernorNewPendingAdminEvent = /*#__PURE__*/ createWatchC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewPendingVetoer"`
@@ -4387,7 +4384,7 @@ export const watchNounsGovernorNewPendingVetoerEvent = /*#__PURE__*/ createWatch
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewPendingVetoer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"NewVetoer"`
@@ -4399,7 +4396,7 @@ export const watchNounsGovernorNewVetoerEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'NewVetoer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ObjectionPeriodDurationSet"`
@@ -4412,7 +4409,7 @@ export const watchNounsGovernorObjectionPeriodDurationSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ObjectionPeriodDurationSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCanceled"`
@@ -4424,7 +4421,7 @@ export const watchNounsGovernorProposalCanceledEvent = /*#__PURE__*/ createWatch
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalCanceled',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreated"`
@@ -4436,7 +4433,7 @@ export const watchNounsGovernorProposalCreatedEvent = /*#__PURE__*/ createWatchC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalCreated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreatedOnTimelockV1"`
@@ -4449,7 +4446,7 @@ export const watchNounsGovernorProposalCreatedOnTimelockV1Event =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalCreatedOnTimelockV1',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalCreatedWithRequirements"`
@@ -4462,7 +4459,7 @@ export const watchNounsGovernorProposalCreatedWithRequirementsEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalCreatedWithRequirements',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalDescriptionUpdated"`
@@ -4475,7 +4472,7 @@ export const watchNounsGovernorProposalDescriptionUpdatedEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalDescriptionUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalExecuted"`
@@ -4487,7 +4484,7 @@ export const watchNounsGovernorProposalExecutedEvent = /*#__PURE__*/ createWatch
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalExecuted',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalObjectionPeriodSet"`
@@ -4500,7 +4497,7 @@ export const watchNounsGovernorProposalObjectionPeriodSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalObjectionPeriodSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalQueued"`
@@ -4512,7 +4509,7 @@ export const watchNounsGovernorProposalQueuedEvent = /*#__PURE__*/ createWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalQueued',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalThresholdBPSSet"`
@@ -4525,7 +4522,7 @@ export const watchNounsGovernorProposalThresholdBpsSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalThresholdBPSSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalTransactionsUpdated"`
@@ -4538,7 +4535,7 @@ export const watchNounsGovernorProposalTransactionsUpdatedEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalTransactionsUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalUpdatablePeriodSet"`
@@ -4551,7 +4548,7 @@ export const watchNounsGovernorProposalUpdatablePeriodSetEvent =
     abi: nounsGovernorAbi,
     address: nounsGovernorAddress,
     eventName: 'ProposalUpdatablePeriodSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalUpdated"`
@@ -4563,7 +4560,7 @@ export const watchNounsGovernorProposalUpdatedEvent = /*#__PURE__*/ createWatchC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"ProposalVetoed"`
@@ -4575,7 +4572,7 @@ export const watchNounsGovernorProposalVetoedEvent = /*#__PURE__*/ createWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'ProposalVetoed',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"QuorumCoefficientSet"`
@@ -4587,7 +4584,7 @@ export const watchNounsGovernorQuorumCoefficientSetEvent = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'QuorumCoefficientSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"QuorumVotesBPSSet"`
@@ -4599,7 +4596,7 @@ export const watchNounsGovernorQuorumVotesBpsSetEvent = /*#__PURE__*/ createWatc
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'QuorumVotesBPSSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"RefundableVote"`
@@ -4611,7 +4608,7 @@ export const watchNounsGovernorRefundableVoteEvent = /*#__PURE__*/ createWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'RefundableVote',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"SignatureCancelled"`
@@ -4623,7 +4620,7 @@ export const watchNounsGovernorSignatureCancelledEvent = /*#__PURE__*/ createWat
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'SignatureCancelled',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"TimelocksAndAdminSet"`
@@ -4635,7 +4632,7 @@ export const watchNounsGovernorTimelocksAndAdminSetEvent = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'TimelocksAndAdminSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VoteCast"`
@@ -4647,7 +4644,7 @@ export const watchNounsGovernorVoteCastEvent = /*#__PURE__*/ createWatchContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VoteCast',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VoteCastWithClientId"`
@@ -4659,7 +4656,7 @@ export const watchNounsGovernorVoteCastWithClientIdEvent = /*#__PURE__*/ createW
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VoteCastWithClientId',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VotingDelaySet"`
@@ -4671,7 +4668,7 @@ export const watchNounsGovernorVotingDelaySetEvent = /*#__PURE__*/ createWatchCo
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VotingDelaySet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"VotingPeriodSet"`
@@ -4683,7 +4680,7 @@ export const watchNounsGovernorVotingPeriodSetEvent = /*#__PURE__*/ createWatchC
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'VotingPeriodSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"Withdraw"`
@@ -4695,7 +4692,7 @@ export const watchNounsGovernorWithdrawEvent = /*#__PURE__*/ createWatchContract
   abi: nounsGovernorAbi,
   address: nounsGovernorAddress,
   eventName: 'Withdraw',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsGovernorAbi}__ and `eventName` set to `"WithdrawFromForkEscrow"`
@@ -4705,4 +4702,4 @@ export const watchNounsGovernorWithdrawEvent = /*#__PURE__*/ createWatchContract
  */
 export const watchNounsGovernorWithdrawFromForkEscrowEvent = /*#__PURE__*/ createWatchContractEvent(
   { abi: nounsGovernorAbi, address: nounsGovernorAddress, eventName: 'WithdrawFromForkEscrow' },
-);
+)

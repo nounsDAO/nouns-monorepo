@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsTreasury
@@ -279,7 +279,7 @@ export const nounsTreasuryAbi = [
     stateMutability: 'payable',
   },
   { type: 'receive', stateMutability: 'payable' },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb1a32fc9f9d8b2cf86c068cae13108809547ef71)
@@ -288,16 +288,13 @@ export const nounsTreasuryAbi = [
 export const nounsTreasuryAddress = {
   1: '0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71',
   11155111: '0x07e5D6a1550aD5E597A9b0698A474AA080A2fB28',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb1a32fc9f9d8b2cf86c068cae13108809547ef71)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x07e5d6a1550ad5e597a9b0698a474aa080a2fb28)
  */
-export const nounsTreasuryConfig = {
-  address: nounsTreasuryAddress,
-  abi: nounsTreasuryAbi,
-} as const;
+export const nounsTreasuryConfig = { address: nounsTreasuryAddress, abi: nounsTreasuryAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -312,7 +309,7 @@ export const nounsTreasuryConfig = {
 export const useReadNounsTreasury = /*#__PURE__*/ createUseReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"GRACE_PERIOD"`
@@ -324,7 +321,7 @@ export const useReadNounsTreasuryGracePeriod = /*#__PURE__*/ createUseReadContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'GRACE_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"MAXIMUM_DELAY"`
@@ -336,7 +333,7 @@ export const useReadNounsTreasuryMaximumDelay = /*#__PURE__*/ createUseReadContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'MAXIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"MINIMUM_DELAY"`
@@ -348,7 +345,7 @@ export const useReadNounsTreasuryMinimumDelay = /*#__PURE__*/ createUseReadContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'MINIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"NAME"`
@@ -360,7 +357,7 @@ export const useReadNounsTreasuryName = /*#__PURE__*/ createUseReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'NAME',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"admin"`
@@ -372,7 +369,7 @@ export const useReadNounsTreasuryAdmin = /*#__PURE__*/ createUseReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"delay"`
@@ -384,7 +381,7 @@ export const useReadNounsTreasuryDelay = /*#__PURE__*/ createUseReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'delay',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"pendingAdmin"`
@@ -396,7 +393,7 @@ export const useReadNounsTreasuryPendingAdmin = /*#__PURE__*/ createUseReadContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'pendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queuedTransactions"`
@@ -408,7 +405,7 @@ export const useReadNounsTreasuryQueuedTransactions = /*#__PURE__*/ createUseRea
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queuedTransactions',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -419,7 +416,7 @@ export const useReadNounsTreasuryQueuedTransactions = /*#__PURE__*/ createUseRea
 export const useWriteNounsTreasury = /*#__PURE__*/ createUseWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -431,7 +428,7 @@ export const useWriteNounsTreasuryAcceptAdmin = /*#__PURE__*/ createUseWriteCont
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -443,7 +440,7 @@ export const useWriteNounsTreasuryCancelTransaction = /*#__PURE__*/ createUseWri
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'cancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -455,7 +452,7 @@ export const useWriteNounsTreasuryExecuteTransaction = /*#__PURE__*/ createUseWr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'executeTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"initialize"`
@@ -467,7 +464,7 @@ export const useWriteNounsTreasuryInitialize = /*#__PURE__*/ createUseWriteContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -479,7 +476,7 @@ export const useWriteNounsTreasuryQueueTransaction = /*#__PURE__*/ createUseWrit
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queueTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendERC20"`
@@ -491,7 +488,7 @@ export const useWriteNounsTreasurySendErc20 = /*#__PURE__*/ createUseWriteContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendERC20',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendETH"`
@@ -503,7 +500,7 @@ export const useWriteNounsTreasurySendEth = /*#__PURE__*/ createUseWriteContract
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendETH',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -515,7 +512,7 @@ export const useWriteNounsTreasurySetDelay = /*#__PURE__*/ createUseWriteContrac
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -527,7 +524,7 @@ export const useWriteNounsTreasurySetPendingAdmin = /*#__PURE__*/ createUseWrite
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeTo"`
@@ -539,7 +536,7 @@ export const useWriteNounsTreasuryUpgradeTo = /*#__PURE__*/ createUseWriteContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeTo',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeToAndCall"`
@@ -551,7 +548,7 @@ export const useWriteNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createUseWrit
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeToAndCall',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -562,7 +559,7 @@ export const useWriteNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createUseWrit
 export const useSimulateNounsTreasury = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -574,7 +571,7 @@ export const useSimulateNounsTreasuryAcceptAdmin = /*#__PURE__*/ createUseSimula
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -586,7 +583,7 @@ export const useSimulateNounsTreasuryCancelTransaction = /*#__PURE__*/ createUse
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'cancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -598,7 +595,7 @@ export const useSimulateNounsTreasuryExecuteTransaction = /*#__PURE__*/ createUs
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'executeTransaction',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"initialize"`
@@ -610,7 +607,7 @@ export const useSimulateNounsTreasuryInitialize = /*#__PURE__*/ createUseSimulat
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -622,7 +619,7 @@ export const useSimulateNounsTreasuryQueueTransaction = /*#__PURE__*/ createUseS
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queueTransaction',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendERC20"`
@@ -634,7 +631,7 @@ export const useSimulateNounsTreasurySendErc20 = /*#__PURE__*/ createUseSimulate
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendERC20',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendETH"`
@@ -646,7 +643,7 @@ export const useSimulateNounsTreasurySendEth = /*#__PURE__*/ createUseSimulateCo
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendETH',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -658,7 +655,7 @@ export const useSimulateNounsTreasurySetDelay = /*#__PURE__*/ createUseSimulateC
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -670,7 +667,7 @@ export const useSimulateNounsTreasurySetPendingAdmin = /*#__PURE__*/ createUseSi
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeTo"`
@@ -682,7 +679,7 @@ export const useSimulateNounsTreasuryUpgradeTo = /*#__PURE__*/ createUseSimulate
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeTo',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeToAndCall"`
@@ -694,7 +691,7 @@ export const useSimulateNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createUseS
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeToAndCall',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -705,7 +702,7 @@ export const useSimulateNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createUseS
 export const useWatchNounsTreasuryEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"AdminChanged"`
@@ -717,7 +714,7 @@ export const useWatchNounsTreasuryAdminChangedEvent = /*#__PURE__*/ createUseWat
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'AdminChanged',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"BeaconUpgraded"`
@@ -729,7 +726,7 @@ export const useWatchNounsTreasuryBeaconUpgradedEvent = /*#__PURE__*/ createUseW
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'BeaconUpgraded',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"CancelTransaction"`
@@ -742,7 +739,7 @@ export const useWatchNounsTreasuryCancelTransactionEvent =
     abi: nounsTreasuryAbi,
     address: nounsTreasuryAddress,
     eventName: 'CancelTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ERC20Sent"`
@@ -754,7 +751,7 @@ export const useWatchNounsTreasuryErc20SentEvent = /*#__PURE__*/ createUseWatchC
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'ERC20Sent',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ETHSent"`
@@ -766,7 +763,7 @@ export const useWatchNounsTreasuryEthSentEvent = /*#__PURE__*/ createUseWatchCon
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'ETHSent',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ExecuteTransaction"`
@@ -779,7 +776,7 @@ export const useWatchNounsTreasuryExecuteTransactionEvent =
     abi: nounsTreasuryAbi,
     address: nounsTreasuryAddress,
     eventName: 'ExecuteTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewAdmin"`
@@ -791,7 +788,7 @@ export const useWatchNounsTreasuryNewAdminEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewDelay"`
@@ -803,7 +800,7 @@ export const useWatchNounsTreasuryNewDelayEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewDelay',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewPendingAdmin"`
@@ -815,7 +812,7 @@ export const useWatchNounsTreasuryNewPendingAdminEvent = /*#__PURE__*/ createUse
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"QueueTransaction"`
@@ -825,7 +822,7 @@ export const useWatchNounsTreasuryNewPendingAdminEvent = /*#__PURE__*/ createUse
  */
 export const useWatchNounsTreasuryQueueTransactionEvent = /*#__PURE__*/ createUseWatchContractEvent(
   { abi: nounsTreasuryAbi, address: nounsTreasuryAddress, eventName: 'QueueTransaction' },
-);
+)
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"Upgraded"`
@@ -837,7 +834,7 @@ export const useWatchNounsTreasuryUpgradedEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'Upgraded',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -852,7 +849,7 @@ export const useWatchNounsTreasuryUpgradedEvent = /*#__PURE__*/ createUseWatchCo
 export const readNounsTreasury = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"GRACE_PERIOD"`
@@ -864,7 +861,7 @@ export const readNounsTreasuryGracePeriod = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'GRACE_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"MAXIMUM_DELAY"`
@@ -876,7 +873,7 @@ export const readNounsTreasuryMaximumDelay = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'MAXIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"MINIMUM_DELAY"`
@@ -888,7 +885,7 @@ export const readNounsTreasuryMinimumDelay = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'MINIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"NAME"`
@@ -900,7 +897,7 @@ export const readNounsTreasuryName = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'NAME',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"admin"`
@@ -912,7 +909,7 @@ export const readNounsTreasuryAdmin = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"delay"`
@@ -924,7 +921,7 @@ export const readNounsTreasuryDelay = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'delay',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"pendingAdmin"`
@@ -936,7 +933,7 @@ export const readNounsTreasuryPendingAdmin = /*#__PURE__*/ createReadContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'pendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queuedTransactions"`
@@ -948,7 +945,7 @@ export const readNounsTreasuryQueuedTransactions = /*#__PURE__*/ createReadContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queuedTransactions',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -959,7 +956,7 @@ export const readNounsTreasuryQueuedTransactions = /*#__PURE__*/ createReadContr
 export const writeNounsTreasury = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -971,7 +968,7 @@ export const writeNounsTreasuryAcceptAdmin = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -983,7 +980,7 @@ export const writeNounsTreasuryCancelTransaction = /*#__PURE__*/ createWriteCont
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'cancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -995,7 +992,7 @@ export const writeNounsTreasuryExecuteTransaction = /*#__PURE__*/ createWriteCon
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'executeTransaction',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"initialize"`
@@ -1007,7 +1004,7 @@ export const writeNounsTreasuryInitialize = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -1019,7 +1016,7 @@ export const writeNounsTreasuryQueueTransaction = /*#__PURE__*/ createWriteContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queueTransaction',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendERC20"`
@@ -1031,7 +1028,7 @@ export const writeNounsTreasurySendErc20 = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendERC20',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendETH"`
@@ -1043,7 +1040,7 @@ export const writeNounsTreasurySendEth = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendETH',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -1055,7 +1052,7 @@ export const writeNounsTreasurySetDelay = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -1067,7 +1064,7 @@ export const writeNounsTreasurySetPendingAdmin = /*#__PURE__*/ createWriteContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeTo"`
@@ -1079,7 +1076,7 @@ export const writeNounsTreasuryUpgradeTo = /*#__PURE__*/ createWriteContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeTo',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeToAndCall"`
@@ -1091,7 +1088,7 @@ export const writeNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createWriteContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeToAndCall',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -1102,7 +1099,7 @@ export const writeNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createWriteContr
 export const simulateNounsTreasury = /*#__PURE__*/ createSimulateContract({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -1114,7 +1111,7 @@ export const simulateNounsTreasuryAcceptAdmin = /*#__PURE__*/ createSimulateCont
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -1126,7 +1123,7 @@ export const simulateNounsTreasuryCancelTransaction = /*#__PURE__*/ createSimula
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'cancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -1138,7 +1135,7 @@ export const simulateNounsTreasuryExecuteTransaction = /*#__PURE__*/ createSimul
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'executeTransaction',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"initialize"`
@@ -1150,7 +1147,7 @@ export const simulateNounsTreasuryInitialize = /*#__PURE__*/ createSimulateContr
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -1162,7 +1159,7 @@ export const simulateNounsTreasuryQueueTransaction = /*#__PURE__*/ createSimulat
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'queueTransaction',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendERC20"`
@@ -1174,7 +1171,7 @@ export const simulateNounsTreasurySendErc20 = /*#__PURE__*/ createSimulateContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendERC20',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"sendETH"`
@@ -1186,7 +1183,7 @@ export const simulateNounsTreasurySendEth = /*#__PURE__*/ createSimulateContract
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'sendETH',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -1198,7 +1195,7 @@ export const simulateNounsTreasurySetDelay = /*#__PURE__*/ createSimulateContrac
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -1210,7 +1207,7 @@ export const simulateNounsTreasurySetPendingAdmin = /*#__PURE__*/ createSimulate
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'setPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeTo"`
@@ -1222,7 +1219,7 @@ export const simulateNounsTreasuryUpgradeTo = /*#__PURE__*/ createSimulateContra
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeTo',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `functionName` set to `"upgradeToAndCall"`
@@ -1234,7 +1231,7 @@ export const simulateNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createSimulat
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   functionName: 'upgradeToAndCall',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__
@@ -1245,7 +1242,7 @@ export const simulateNounsTreasuryUpgradeToAndCall = /*#__PURE__*/ createSimulat
 export const watchNounsTreasuryEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"AdminChanged"`
@@ -1257,7 +1254,7 @@ export const watchNounsTreasuryAdminChangedEvent = /*#__PURE__*/ createWatchCont
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'AdminChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"BeaconUpgraded"`
@@ -1269,7 +1266,7 @@ export const watchNounsTreasuryBeaconUpgradedEvent = /*#__PURE__*/ createWatchCo
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'BeaconUpgraded',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"CancelTransaction"`
@@ -1281,7 +1278,7 @@ export const watchNounsTreasuryCancelTransactionEvent = /*#__PURE__*/ createWatc
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'CancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ERC20Sent"`
@@ -1293,7 +1290,7 @@ export const watchNounsTreasuryErc20SentEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'ERC20Sent',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ETHSent"`
@@ -1305,7 +1302,7 @@ export const watchNounsTreasuryEthSentEvent = /*#__PURE__*/ createWatchContractE
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'ETHSent',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"ExecuteTransaction"`
@@ -1317,7 +1314,7 @@ export const watchNounsTreasuryExecuteTransactionEvent = /*#__PURE__*/ createWat
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'ExecuteTransaction',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewAdmin"`
@@ -1329,7 +1326,7 @@ export const watchNounsTreasuryNewAdminEvent = /*#__PURE__*/ createWatchContract
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewAdmin',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewDelay"`
@@ -1341,7 +1338,7 @@ export const watchNounsTreasuryNewDelayEvent = /*#__PURE__*/ createWatchContract
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewDelay',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"NewPendingAdmin"`
@@ -1353,7 +1350,7 @@ export const watchNounsTreasuryNewPendingAdminEvent = /*#__PURE__*/ createWatchC
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'NewPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"QueueTransaction"`
@@ -1365,7 +1362,7 @@ export const watchNounsTreasuryQueueTransactionEvent = /*#__PURE__*/ createWatch
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'QueueTransaction',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTreasuryAbi}__ and `eventName` set to `"Upgraded"`
@@ -1377,4 +1374,4 @@ export const watchNounsTreasuryUpgradedEvent = /*#__PURE__*/ createWatchContract
   abi: nounsTreasuryAbi,
   address: nounsTreasuryAddress,
   eventName: 'Upgraded',
-});
+})

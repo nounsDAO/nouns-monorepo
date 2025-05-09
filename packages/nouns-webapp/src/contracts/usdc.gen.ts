@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // USDC
@@ -617,7 +617,7 @@ export const usdcAbi = [
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
     stateMutability: 'pure',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)
@@ -626,13 +626,13 @@ export const usdcAbi = [
 export const usdcAddress = {
   1: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   11155111: '0xEbCC972B6B3eB15C0592BE1871838963d0B94278',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xEbCC972B6B3eB15C0592BE1871838963d0B94278)
  */
-export const usdcConfig = { address: usdcAddress, abi: usdcAbi } as const;
+export const usdcConfig = { address: usdcAddress, abi: usdcAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -647,7 +647,7 @@ export const usdcConfig = { address: usdcAddress, abi: usdcAbi } as const;
 export const useReadUsdc = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"CANCEL_AUTHORIZATION_TYPEHASH"`
@@ -659,7 +659,7 @@ export const useReadUsdcCancelAuthorizationTypehash = /*#__PURE__*/ createUseRea
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'CANCEL_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
@@ -671,7 +671,7 @@ export const useReadUsdcDomainSeparator = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'DOMAIN_SEPARATOR',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"PERMIT_TYPEHASH"`
@@ -683,7 +683,7 @@ export const useReadUsdcPermitTypehash = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'PERMIT_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"RECEIVE_WITH_AUTHORIZATION_TYPEHASH"`
@@ -695,7 +695,7 @@ export const useReadUsdcReceiveWithAuthorizationTypehash = /*#__PURE__*/ createU
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'RECEIVE_WITH_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"TRANSFER_WITH_AUTHORIZATION_TYPEHASH"`
@@ -707,7 +707,7 @@ export const useReadUsdcTransferWithAuthorizationTypehash = /*#__PURE__*/ create
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'TRANSFER_WITH_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"allowance"`
@@ -719,7 +719,7 @@ export const useReadUsdcAllowance = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"authorizationState"`
@@ -731,7 +731,7 @@ export const useReadUsdcAuthorizationState = /*#__PURE__*/ createUseReadContract
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'authorizationState',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"balanceOf"`
@@ -743,7 +743,7 @@ export const useReadUsdcBalanceOf = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklister"`
@@ -755,7 +755,7 @@ export const useReadUsdcBlacklister = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklister',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"currency"`
@@ -767,7 +767,7 @@ export const useReadUsdcCurrency = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'currency',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decimals"`
@@ -779,7 +779,7 @@ export const useReadUsdcDecimals = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"isBlacklisted"`
@@ -791,7 +791,7 @@ export const useReadUsdcIsBlacklisted = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'isBlacklisted',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"isMinter"`
@@ -803,7 +803,7 @@ export const useReadUsdcIsMinter = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'isMinter',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"masterMinter"`
@@ -815,7 +815,7 @@ export const useReadUsdcMasterMinter = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'masterMinter',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"minterAllowance"`
@@ -827,7 +827,7 @@ export const useReadUsdcMinterAllowance = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'minterAllowance',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"name"`
@@ -839,7 +839,7 @@ export const useReadUsdcName = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"nonces"`
@@ -851,7 +851,7 @@ export const useReadUsdcNonces = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'nonces',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"owner"`
@@ -863,7 +863,7 @@ export const useReadUsdcOwner = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"paused"`
@@ -875,7 +875,7 @@ export const useReadUsdcPaused = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pauser"`
@@ -887,7 +887,7 @@ export const useReadUsdcPauser = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pauser',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescuer"`
@@ -899,7 +899,7 @@ export const useReadUsdcRescuer = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescuer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"symbol"`
@@ -911,7 +911,7 @@ export const useReadUsdcSymbol = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"totalSupply"`
@@ -923,7 +923,7 @@ export const useReadUsdcTotalSupply = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"version"`
@@ -935,7 +935,7 @@ export const useReadUsdcVersion = /*#__PURE__*/ createUseReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'version',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__
@@ -946,7 +946,7 @@ export const useReadUsdcVersion = /*#__PURE__*/ createUseReadContract({
 export const useWriteUsdc = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"approve"`
@@ -958,7 +958,7 @@ export const useWriteUsdcApprove = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklist"`
@@ -970,7 +970,7 @@ export const useWriteUsdcBlacklist = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklist',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"burn"`
@@ -982,7 +982,7 @@ export const useWriteUsdcBurn = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"cancelAuthorization"`
@@ -994,7 +994,7 @@ export const useWriteUsdcCancelAuthorization = /*#__PURE__*/ createUseWriteContr
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'cancelAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"configureMinter"`
@@ -1006,7 +1006,7 @@ export const useWriteUsdcConfigureMinter = /*#__PURE__*/ createUseWriteContract(
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'configureMinter',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -1018,7 +1018,7 @@ export const useWriteUsdcDecreaseAllowance = /*#__PURE__*/ createUseWriteContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -1030,7 +1030,7 @@ export const useWriteUsdcIncreaseAllowance = /*#__PURE__*/ createUseWriteContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initialize"`
@@ -1042,7 +1042,7 @@ export const useWriteUsdcInitialize = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2"`
@@ -1054,7 +1054,7 @@ export const useWriteUsdcInitializeV2 = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_1"`
@@ -1066,7 +1066,7 @@ export const useWriteUsdcInitializeV2_1 = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_1',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_2"`
@@ -1078,7 +1078,7 @@ export const useWriteUsdcInitializeV2_2 = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_2',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"mint"`
@@ -1090,7 +1090,7 @@ export const useWriteUsdcMint = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pause"`
@@ -1102,7 +1102,7 @@ export const useWriteUsdcPause = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"permit"`
@@ -1114,7 +1114,7 @@ export const useWriteUsdcPermit = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"receiveWithAuthorization"`
@@ -1126,7 +1126,7 @@ export const useWriteUsdcReceiveWithAuthorization = /*#__PURE__*/ createUseWrite
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'receiveWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"removeMinter"`
@@ -1138,7 +1138,7 @@ export const useWriteUsdcRemoveMinter = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'removeMinter',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescueERC20"`
@@ -1150,7 +1150,7 @@ export const useWriteUsdcRescueErc20 = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescueERC20',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transfer"`
@@ -1162,7 +1162,7 @@ export const useWriteUsdcTransfer = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferFrom"`
@@ -1174,7 +1174,7 @@ export const useWriteUsdcTransferFrom = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1186,7 +1186,7 @@ export const useWriteUsdcTransferOwnership = /*#__PURE__*/ createUseWriteContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferWithAuthorization"`
@@ -1198,7 +1198,7 @@ export const useWriteUsdcTransferWithAuthorization = /*#__PURE__*/ createUseWrit
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unBlacklist"`
@@ -1210,7 +1210,7 @@ export const useWriteUsdcUnBlacklist = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unBlacklist',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unpause"`
@@ -1222,7 +1222,7 @@ export const useWriteUsdcUnpause = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateBlacklister"`
@@ -1234,7 +1234,7 @@ export const useWriteUsdcUpdateBlacklister = /*#__PURE__*/ createUseWriteContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateBlacklister',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateMasterMinter"`
@@ -1246,7 +1246,7 @@ export const useWriteUsdcUpdateMasterMinter = /*#__PURE__*/ createUseWriteContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateMasterMinter',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updatePauser"`
@@ -1258,7 +1258,7 @@ export const useWriteUsdcUpdatePauser = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updatePauser',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateRescuer"`
@@ -1270,7 +1270,7 @@ export const useWriteUsdcUpdateRescuer = /*#__PURE__*/ createUseWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateRescuer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__
@@ -1281,7 +1281,7 @@ export const useWriteUsdcUpdateRescuer = /*#__PURE__*/ createUseWriteContract({
 export const useSimulateUsdc = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"approve"`
@@ -1293,7 +1293,7 @@ export const useSimulateUsdcApprove = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklist"`
@@ -1305,7 +1305,7 @@ export const useSimulateUsdcBlacklist = /*#__PURE__*/ createUseSimulateContract(
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklist',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"burn"`
@@ -1317,7 +1317,7 @@ export const useSimulateUsdcBurn = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"cancelAuthorization"`
@@ -1329,7 +1329,7 @@ export const useSimulateUsdcCancelAuthorization = /*#__PURE__*/ createUseSimulat
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'cancelAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"configureMinter"`
@@ -1341,7 +1341,7 @@ export const useSimulateUsdcConfigureMinter = /*#__PURE__*/ createUseSimulateCon
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'configureMinter',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -1353,7 +1353,7 @@ export const useSimulateUsdcDecreaseAllowance = /*#__PURE__*/ createUseSimulateC
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -1365,7 +1365,7 @@ export const useSimulateUsdcIncreaseAllowance = /*#__PURE__*/ createUseSimulateC
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initialize"`
@@ -1377,7 +1377,7 @@ export const useSimulateUsdcInitialize = /*#__PURE__*/ createUseSimulateContract
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2"`
@@ -1389,7 +1389,7 @@ export const useSimulateUsdcInitializeV2 = /*#__PURE__*/ createUseSimulateContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_1"`
@@ -1401,7 +1401,7 @@ export const useSimulateUsdcInitializeV2_1 = /*#__PURE__*/ createUseSimulateCont
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_1',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_2"`
@@ -1413,7 +1413,7 @@ export const useSimulateUsdcInitializeV2_2 = /*#__PURE__*/ createUseSimulateCont
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_2',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"mint"`
@@ -1425,7 +1425,7 @@ export const useSimulateUsdcMint = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pause"`
@@ -1437,7 +1437,7 @@ export const useSimulateUsdcPause = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"permit"`
@@ -1449,7 +1449,7 @@ export const useSimulateUsdcPermit = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"receiveWithAuthorization"`
@@ -1461,7 +1461,7 @@ export const useSimulateUsdcReceiveWithAuthorization = /*#__PURE__*/ createUseSi
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'receiveWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"removeMinter"`
@@ -1473,7 +1473,7 @@ export const useSimulateUsdcRemoveMinter = /*#__PURE__*/ createUseSimulateContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'removeMinter',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescueERC20"`
@@ -1485,7 +1485,7 @@ export const useSimulateUsdcRescueErc20 = /*#__PURE__*/ createUseSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescueERC20',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transfer"`
@@ -1497,7 +1497,7 @@ export const useSimulateUsdcTransfer = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferFrom"`
@@ -1509,7 +1509,7 @@ export const useSimulateUsdcTransferFrom = /*#__PURE__*/ createUseSimulateContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1521,7 +1521,7 @@ export const useSimulateUsdcTransferOwnership = /*#__PURE__*/ createUseSimulateC
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferWithAuthorization"`
@@ -1533,7 +1533,7 @@ export const useSimulateUsdcTransferWithAuthorization = /*#__PURE__*/ createUseS
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unBlacklist"`
@@ -1545,7 +1545,7 @@ export const useSimulateUsdcUnBlacklist = /*#__PURE__*/ createUseSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unBlacklist',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unpause"`
@@ -1557,7 +1557,7 @@ export const useSimulateUsdcUnpause = /*#__PURE__*/ createUseSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateBlacklister"`
@@ -1569,7 +1569,7 @@ export const useSimulateUsdcUpdateBlacklister = /*#__PURE__*/ createUseSimulateC
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateBlacklister',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateMasterMinter"`
@@ -1581,7 +1581,7 @@ export const useSimulateUsdcUpdateMasterMinter = /*#__PURE__*/ createUseSimulate
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateMasterMinter',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updatePauser"`
@@ -1593,7 +1593,7 @@ export const useSimulateUsdcUpdatePauser = /*#__PURE__*/ createUseSimulateContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updatePauser',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateRescuer"`
@@ -1605,7 +1605,7 @@ export const useSimulateUsdcUpdateRescuer = /*#__PURE__*/ createUseSimulateContr
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateRescuer',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__
@@ -1616,7 +1616,7 @@ export const useSimulateUsdcUpdateRescuer = /*#__PURE__*/ createUseSimulateContr
 export const useWatchUsdcEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Approval"`
@@ -1628,7 +1628,7 @@ export const useWatchUsdcApprovalEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"AuthorizationCanceled"`
@@ -1640,7 +1640,7 @@ export const useWatchUsdcAuthorizationCanceledEvent = /*#__PURE__*/ createUseWat
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'AuthorizationCanceled',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"AuthorizationUsed"`
@@ -1652,7 +1652,7 @@ export const useWatchUsdcAuthorizationUsedEvent = /*#__PURE__*/ createUseWatchCo
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'AuthorizationUsed',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Blacklisted"`
@@ -1664,7 +1664,7 @@ export const useWatchUsdcBlacklistedEvent = /*#__PURE__*/ createUseWatchContract
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Blacklisted',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"BlacklisterChanged"`
@@ -1676,7 +1676,7 @@ export const useWatchUsdcBlacklisterChangedEvent = /*#__PURE__*/ createUseWatchC
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'BlacklisterChanged',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Burn"`
@@ -1688,7 +1688,7 @@ export const useWatchUsdcBurnEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Burn',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MasterMinterChanged"`
@@ -1700,7 +1700,7 @@ export const useWatchUsdcMasterMinterChangedEvent = /*#__PURE__*/ createUseWatch
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MasterMinterChanged',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Mint"`
@@ -1712,7 +1712,7 @@ export const useWatchUsdcMintEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Mint',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MinterConfigured"`
@@ -1724,7 +1724,7 @@ export const useWatchUsdcMinterConfiguredEvent = /*#__PURE__*/ createUseWatchCon
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MinterConfigured',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MinterRemoved"`
@@ -1736,7 +1736,7 @@ export const useWatchUsdcMinterRemovedEvent = /*#__PURE__*/ createUseWatchContra
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MinterRemoved',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1748,7 +1748,7 @@ export const useWatchUsdcOwnershipTransferredEvent = /*#__PURE__*/ createUseWatc
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'OwnershipTransferred',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Pause"`
@@ -1760,7 +1760,7 @@ export const useWatchUsdcPauseEvent = /*#__PURE__*/ createUseWatchContractEvent(
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Pause',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"PauserChanged"`
@@ -1772,7 +1772,7 @@ export const useWatchUsdcPauserChangedEvent = /*#__PURE__*/ createUseWatchContra
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'PauserChanged',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"RescuerChanged"`
@@ -1784,7 +1784,7 @@ export const useWatchUsdcRescuerChangedEvent = /*#__PURE__*/ createUseWatchContr
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'RescuerChanged',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Transfer"`
@@ -1796,7 +1796,7 @@ export const useWatchUsdcTransferEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"UnBlacklisted"`
@@ -1808,7 +1808,7 @@ export const useWatchUsdcUnBlacklistedEvent = /*#__PURE__*/ createUseWatchContra
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'UnBlacklisted',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Unpause"`
@@ -1820,7 +1820,7 @@ export const useWatchUsdcUnpauseEvent = /*#__PURE__*/ createUseWatchContractEven
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Unpause',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -1832,7 +1832,7 @@ export const useWatchUsdcUnpauseEvent = /*#__PURE__*/ createUseWatchContractEven
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xEbCC972B6B3eB15C0592BE1871838963d0B94278)
  */
-export const readUsdc = /*#__PURE__*/ createReadContract({ abi: usdcAbi, address: usdcAddress });
+export const readUsdc = /*#__PURE__*/ createReadContract({ abi: usdcAbi, address: usdcAddress })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"CANCEL_AUTHORIZATION_TYPEHASH"`
@@ -1844,7 +1844,7 @@ export const readUsdcCancelAuthorizationTypehash = /*#__PURE__*/ createReadContr
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'CANCEL_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
@@ -1856,7 +1856,7 @@ export const readUsdcDomainSeparator = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'DOMAIN_SEPARATOR',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"PERMIT_TYPEHASH"`
@@ -1868,7 +1868,7 @@ export const readUsdcPermitTypehash = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'PERMIT_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"RECEIVE_WITH_AUTHORIZATION_TYPEHASH"`
@@ -1880,7 +1880,7 @@ export const readUsdcReceiveWithAuthorizationTypehash = /*#__PURE__*/ createRead
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'RECEIVE_WITH_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"TRANSFER_WITH_AUTHORIZATION_TYPEHASH"`
@@ -1892,7 +1892,7 @@ export const readUsdcTransferWithAuthorizationTypehash = /*#__PURE__*/ createRea
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'TRANSFER_WITH_AUTHORIZATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"allowance"`
@@ -1904,7 +1904,7 @@ export const readUsdcAllowance = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"authorizationState"`
@@ -1916,7 +1916,7 @@ export const readUsdcAuthorizationState = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'authorizationState',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"balanceOf"`
@@ -1928,7 +1928,7 @@ export const readUsdcBalanceOf = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklister"`
@@ -1940,7 +1940,7 @@ export const readUsdcBlacklister = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklister',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"currency"`
@@ -1952,7 +1952,7 @@ export const readUsdcCurrency = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'currency',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decimals"`
@@ -1964,7 +1964,7 @@ export const readUsdcDecimals = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"isBlacklisted"`
@@ -1976,7 +1976,7 @@ export const readUsdcIsBlacklisted = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'isBlacklisted',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"isMinter"`
@@ -1988,7 +1988,7 @@ export const readUsdcIsMinter = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'isMinter',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"masterMinter"`
@@ -2000,7 +2000,7 @@ export const readUsdcMasterMinter = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'masterMinter',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"minterAllowance"`
@@ -2012,7 +2012,7 @@ export const readUsdcMinterAllowance = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'minterAllowance',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"name"`
@@ -2024,7 +2024,7 @@ export const readUsdcName = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"nonces"`
@@ -2036,7 +2036,7 @@ export const readUsdcNonces = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'nonces',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"owner"`
@@ -2048,7 +2048,7 @@ export const readUsdcOwner = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"paused"`
@@ -2060,7 +2060,7 @@ export const readUsdcPaused = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pauser"`
@@ -2072,7 +2072,7 @@ export const readUsdcPauser = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pauser',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescuer"`
@@ -2084,7 +2084,7 @@ export const readUsdcRescuer = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescuer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"symbol"`
@@ -2096,7 +2096,7 @@ export const readUsdcSymbol = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"totalSupply"`
@@ -2108,7 +2108,7 @@ export const readUsdcTotalSupply = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"version"`
@@ -2120,7 +2120,7 @@ export const readUsdcVersion = /*#__PURE__*/ createReadContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'version',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__
@@ -2128,7 +2128,7 @@ export const readUsdcVersion = /*#__PURE__*/ createReadContract({
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xEbCC972B6B3eB15C0592BE1871838963d0B94278)
  */
-export const writeUsdc = /*#__PURE__*/ createWriteContract({ abi: usdcAbi, address: usdcAddress });
+export const writeUsdc = /*#__PURE__*/ createWriteContract({ abi: usdcAbi, address: usdcAddress })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"approve"`
@@ -2140,7 +2140,7 @@ export const writeUsdcApprove = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklist"`
@@ -2152,7 +2152,7 @@ export const writeUsdcBlacklist = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklist',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"burn"`
@@ -2164,7 +2164,7 @@ export const writeUsdcBurn = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"cancelAuthorization"`
@@ -2176,7 +2176,7 @@ export const writeUsdcCancelAuthorization = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'cancelAuthorization',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"configureMinter"`
@@ -2188,7 +2188,7 @@ export const writeUsdcConfigureMinter = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'configureMinter',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -2200,7 +2200,7 @@ export const writeUsdcDecreaseAllowance = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -2212,7 +2212,7 @@ export const writeUsdcIncreaseAllowance = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initialize"`
@@ -2224,7 +2224,7 @@ export const writeUsdcInitialize = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2"`
@@ -2236,7 +2236,7 @@ export const writeUsdcInitializeV2 = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_1"`
@@ -2248,7 +2248,7 @@ export const writeUsdcInitializeV2_1 = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_1',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_2"`
@@ -2260,7 +2260,7 @@ export const writeUsdcInitializeV2_2 = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_2',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"mint"`
@@ -2272,7 +2272,7 @@ export const writeUsdcMint = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pause"`
@@ -2284,7 +2284,7 @@ export const writeUsdcPause = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"permit"`
@@ -2296,7 +2296,7 @@ export const writeUsdcPermit = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"receiveWithAuthorization"`
@@ -2308,7 +2308,7 @@ export const writeUsdcReceiveWithAuthorization = /*#__PURE__*/ createWriteContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'receiveWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"removeMinter"`
@@ -2320,7 +2320,7 @@ export const writeUsdcRemoveMinter = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'removeMinter',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescueERC20"`
@@ -2332,7 +2332,7 @@ export const writeUsdcRescueErc20 = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescueERC20',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transfer"`
@@ -2344,7 +2344,7 @@ export const writeUsdcTransfer = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferFrom"`
@@ -2356,7 +2356,7 @@ export const writeUsdcTransferFrom = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferOwnership"`
@@ -2368,7 +2368,7 @@ export const writeUsdcTransferOwnership = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferWithAuthorization"`
@@ -2380,7 +2380,7 @@ export const writeUsdcTransferWithAuthorization = /*#__PURE__*/ createWriteContr
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unBlacklist"`
@@ -2392,7 +2392,7 @@ export const writeUsdcUnBlacklist = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unBlacklist',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unpause"`
@@ -2404,7 +2404,7 @@ export const writeUsdcUnpause = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateBlacklister"`
@@ -2416,7 +2416,7 @@ export const writeUsdcUpdateBlacklister = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateBlacklister',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateMasterMinter"`
@@ -2428,7 +2428,7 @@ export const writeUsdcUpdateMasterMinter = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateMasterMinter',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updatePauser"`
@@ -2440,7 +2440,7 @@ export const writeUsdcUpdatePauser = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updatePauser',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateRescuer"`
@@ -2452,7 +2452,7 @@ export const writeUsdcUpdateRescuer = /*#__PURE__*/ createWriteContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateRescuer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__
@@ -2463,7 +2463,7 @@ export const writeUsdcUpdateRescuer = /*#__PURE__*/ createWriteContract({
 export const simulateUsdc = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"approve"`
@@ -2475,7 +2475,7 @@ export const simulateUsdcApprove = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"blacklist"`
@@ -2487,7 +2487,7 @@ export const simulateUsdcBlacklist = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'blacklist',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"burn"`
@@ -2499,7 +2499,7 @@ export const simulateUsdcBurn = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"cancelAuthorization"`
@@ -2511,7 +2511,7 @@ export const simulateUsdcCancelAuthorization = /*#__PURE__*/ createSimulateContr
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'cancelAuthorization',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"configureMinter"`
@@ -2523,7 +2523,7 @@ export const simulateUsdcConfigureMinter = /*#__PURE__*/ createSimulateContract(
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'configureMinter',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -2535,7 +2535,7 @@ export const simulateUsdcDecreaseAllowance = /*#__PURE__*/ createSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -2547,7 +2547,7 @@ export const simulateUsdcIncreaseAllowance = /*#__PURE__*/ createSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initialize"`
@@ -2559,7 +2559,7 @@ export const simulateUsdcInitialize = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2"`
@@ -2571,7 +2571,7 @@ export const simulateUsdcInitializeV2 = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_1"`
@@ -2583,7 +2583,7 @@ export const simulateUsdcInitializeV2_1 = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_1',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"initializeV2_2"`
@@ -2595,7 +2595,7 @@ export const simulateUsdcInitializeV2_2 = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'initializeV2_2',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"mint"`
@@ -2607,7 +2607,7 @@ export const simulateUsdcMint = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"pause"`
@@ -2619,7 +2619,7 @@ export const simulateUsdcPause = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"permit"`
@@ -2631,7 +2631,7 @@ export const simulateUsdcPermit = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"receiveWithAuthorization"`
@@ -2643,7 +2643,7 @@ export const simulateUsdcReceiveWithAuthorization = /*#__PURE__*/ createSimulate
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'receiveWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"removeMinter"`
@@ -2655,7 +2655,7 @@ export const simulateUsdcRemoveMinter = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'removeMinter',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"rescueERC20"`
@@ -2667,7 +2667,7 @@ export const simulateUsdcRescueErc20 = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'rescueERC20',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transfer"`
@@ -2679,7 +2679,7 @@ export const simulateUsdcTransfer = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferFrom"`
@@ -2691,7 +2691,7 @@ export const simulateUsdcTransferFrom = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferOwnership"`
@@ -2703,7 +2703,7 @@ export const simulateUsdcTransferOwnership = /*#__PURE__*/ createSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"transferWithAuthorization"`
@@ -2715,7 +2715,7 @@ export const simulateUsdcTransferWithAuthorization = /*#__PURE__*/ createSimulat
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'transferWithAuthorization',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unBlacklist"`
@@ -2727,7 +2727,7 @@ export const simulateUsdcUnBlacklist = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unBlacklist',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"unpause"`
@@ -2739,7 +2739,7 @@ export const simulateUsdcUnpause = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateBlacklister"`
@@ -2751,7 +2751,7 @@ export const simulateUsdcUpdateBlacklister = /*#__PURE__*/ createSimulateContrac
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateBlacklister',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateMasterMinter"`
@@ -2763,7 +2763,7 @@ export const simulateUsdcUpdateMasterMinter = /*#__PURE__*/ createSimulateContra
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateMasterMinter',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updatePauser"`
@@ -2775,7 +2775,7 @@ export const simulateUsdcUpdatePauser = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updatePauser',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link usdcAbi}__ and `functionName` set to `"updateRescuer"`
@@ -2787,7 +2787,7 @@ export const simulateUsdcUpdateRescuer = /*#__PURE__*/ createSimulateContract({
   abi: usdcAbi,
   address: usdcAddress,
   functionName: 'updateRescuer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__
@@ -2798,7 +2798,7 @@ export const simulateUsdcUpdateRescuer = /*#__PURE__*/ createSimulateContract({
 export const watchUsdcEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Approval"`
@@ -2810,7 +2810,7 @@ export const watchUsdcApprovalEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"AuthorizationCanceled"`
@@ -2822,7 +2822,7 @@ export const watchUsdcAuthorizationCanceledEvent = /*#__PURE__*/ createWatchCont
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'AuthorizationCanceled',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"AuthorizationUsed"`
@@ -2834,7 +2834,7 @@ export const watchUsdcAuthorizationUsedEvent = /*#__PURE__*/ createWatchContract
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'AuthorizationUsed',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Blacklisted"`
@@ -2846,7 +2846,7 @@ export const watchUsdcBlacklistedEvent = /*#__PURE__*/ createWatchContractEvent(
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Blacklisted',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"BlacklisterChanged"`
@@ -2858,7 +2858,7 @@ export const watchUsdcBlacklisterChangedEvent = /*#__PURE__*/ createWatchContrac
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'BlacklisterChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Burn"`
@@ -2870,7 +2870,7 @@ export const watchUsdcBurnEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Burn',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MasterMinterChanged"`
@@ -2882,7 +2882,7 @@ export const watchUsdcMasterMinterChangedEvent = /*#__PURE__*/ createWatchContra
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MasterMinterChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Mint"`
@@ -2894,7 +2894,7 @@ export const watchUsdcMintEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Mint',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MinterConfigured"`
@@ -2906,7 +2906,7 @@ export const watchUsdcMinterConfiguredEvent = /*#__PURE__*/ createWatchContractE
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MinterConfigured',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"MinterRemoved"`
@@ -2918,7 +2918,7 @@ export const watchUsdcMinterRemovedEvent = /*#__PURE__*/ createWatchContractEven
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'MinterRemoved',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -2930,7 +2930,7 @@ export const watchUsdcOwnershipTransferredEvent = /*#__PURE__*/ createWatchContr
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'OwnershipTransferred',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Pause"`
@@ -2942,7 +2942,7 @@ export const watchUsdcPauseEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Pause',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"PauserChanged"`
@@ -2954,7 +2954,7 @@ export const watchUsdcPauserChangedEvent = /*#__PURE__*/ createWatchContractEven
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'PauserChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"RescuerChanged"`
@@ -2966,7 +2966,7 @@ export const watchUsdcRescuerChangedEvent = /*#__PURE__*/ createWatchContractEve
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'RescuerChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Transfer"`
@@ -2978,7 +2978,7 @@ export const watchUsdcTransferEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"UnBlacklisted"`
@@ -2990,7 +2990,7 @@ export const watchUsdcUnBlacklistedEvent = /*#__PURE__*/ createWatchContractEven
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'UnBlacklisted',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link usdcAbi}__ and `eventName` set to `"Unpause"`
@@ -3002,4 +3002,4 @@ export const watchUsdcUnpauseEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: usdcAbi,
   address: usdcAddress,
   eventName: 'Unpause',
-});
+})

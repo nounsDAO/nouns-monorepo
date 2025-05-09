@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsStreamFactory
@@ -155,7 +155,7 @@ export const nounsStreamFactoryAbi = [
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff)
@@ -164,7 +164,7 @@ export const nounsStreamFactoryAbi = [
 export const nounsStreamFactoryAddress = {
   1: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
   11155111: '0xb78ccF3BD015f209fb9B2d3d132FD8784Df78DF5',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff)
@@ -173,7 +173,7 @@ export const nounsStreamFactoryAddress = {
 export const nounsStreamFactoryConfig = {
   address: nounsStreamFactoryAddress,
   abi: nounsStreamFactoryAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -188,7 +188,7 @@ export const nounsStreamFactoryConfig = {
 export const useReadNounsStreamFactory = /*#__PURE__*/ createUseReadContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"predictStreamAddress"`
@@ -200,7 +200,7 @@ export const useReadNounsStreamFactoryPredictStreamAddress = /*#__PURE__*/ creat
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'predictStreamAddress',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"streamImplementation"`
@@ -212,7 +212,7 @@ export const useReadNounsStreamFactoryStreamImplementation = /*#__PURE__*/ creat
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'streamImplementation',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -223,7 +223,7 @@ export const useReadNounsStreamFactoryStreamImplementation = /*#__PURE__*/ creat
 export const useWriteNounsStreamFactory = /*#__PURE__*/ createUseWriteContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createAndFundStream"`
@@ -235,7 +235,7 @@ export const useWriteNounsStreamFactoryCreateAndFundStream = /*#__PURE__*/ creat
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createAndFundStream',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createStream"`
@@ -247,7 +247,7 @@ export const useWriteNounsStreamFactoryCreateStream = /*#__PURE__*/ createUseWri
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createStream',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -258,7 +258,7 @@ export const useWriteNounsStreamFactoryCreateStream = /*#__PURE__*/ createUseWri
 export const useSimulateNounsStreamFactory = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createAndFundStream"`
@@ -271,7 +271,7 @@ export const useSimulateNounsStreamFactoryCreateAndFundStream =
     abi: nounsStreamFactoryAbi,
     address: nounsStreamFactoryAddress,
     functionName: 'createAndFundStream',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createStream"`
@@ -283,7 +283,7 @@ export const useSimulateNounsStreamFactoryCreateStream = /*#__PURE__*/ createUse
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createStream',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -294,7 +294,7 @@ export const useSimulateNounsStreamFactoryCreateStream = /*#__PURE__*/ createUse
 export const useWatchNounsStreamFactoryEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `eventName` set to `"StreamCreated"`
@@ -307,7 +307,7 @@ export const useWatchNounsStreamFactoryStreamCreatedEvent =
     abi: nounsStreamFactoryAbi,
     address: nounsStreamFactoryAddress,
     eventName: 'StreamCreated',
-  });
+  })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -322,7 +322,7 @@ export const useWatchNounsStreamFactoryStreamCreatedEvent =
 export const readNounsStreamFactory = /*#__PURE__*/ createReadContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"predictStreamAddress"`
@@ -334,7 +334,7 @@ export const readNounsStreamFactoryPredictStreamAddress = /*#__PURE__*/ createRe
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'predictStreamAddress',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"streamImplementation"`
@@ -346,7 +346,7 @@ export const readNounsStreamFactoryStreamImplementation = /*#__PURE__*/ createRe
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'streamImplementation',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -357,7 +357,7 @@ export const readNounsStreamFactoryStreamImplementation = /*#__PURE__*/ createRe
 export const writeNounsStreamFactory = /*#__PURE__*/ createWriteContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createAndFundStream"`
@@ -369,7 +369,7 @@ export const writeNounsStreamFactoryCreateAndFundStream = /*#__PURE__*/ createWr
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createAndFundStream',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createStream"`
@@ -381,7 +381,7 @@ export const writeNounsStreamFactoryCreateStream = /*#__PURE__*/ createWriteCont
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createStream',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -392,7 +392,7 @@ export const writeNounsStreamFactoryCreateStream = /*#__PURE__*/ createWriteCont
 export const simulateNounsStreamFactory = /*#__PURE__*/ createSimulateContract({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createAndFundStream"`
@@ -404,7 +404,7 @@ export const simulateNounsStreamFactoryCreateAndFundStream = /*#__PURE__*/ creat
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createAndFundStream',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `functionName` set to `"createStream"`
@@ -416,7 +416,7 @@ export const simulateNounsStreamFactoryCreateStream = /*#__PURE__*/ createSimula
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   functionName: 'createStream',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsStreamFactoryAbi}__
@@ -427,7 +427,7 @@ export const simulateNounsStreamFactoryCreateStream = /*#__PURE__*/ createSimula
 export const watchNounsStreamFactoryEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsStreamFactoryAbi}__ and `eventName` set to `"StreamCreated"`
@@ -439,4 +439,4 @@ export const watchNounsStreamFactoryStreamCreatedEvent = /*#__PURE__*/ createWat
   abi: nounsStreamFactoryAbi,
   address: nounsStreamFactoryAddress,
   eventName: 'StreamCreated',
-});
+})

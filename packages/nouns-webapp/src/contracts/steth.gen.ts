@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // stETH
@@ -890,7 +890,7 @@ export const stEthAbi = [
     inputs: [{ name: 'version', type: 'uint256', indexed: false }],
     name: 'ContractVersionSet',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84)
@@ -899,13 +899,13 @@ export const stEthAbi = [
 export const stEthAddress = {
   1: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
   11155111: '0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af)
  */
-export const stEthConfig = { address: stEthAddress, abi: stEthAbi } as const;
+export const stEthConfig = { address: stEthAddress, abi: stEthAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -920,7 +920,7 @@ export const stEthConfig = { address: stEthAddress, abi: stEthAbi } as const;
 export const useReadStEth = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"name"`
@@ -932,7 +932,7 @@ export const useReadStEthName = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"hasInitialized"`
@@ -944,7 +944,7 @@ export const useReadStEthHasInitialized = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'hasInitialized',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"STAKING_CONTROL_ROLE"`
@@ -956,7 +956,7 @@ export const useReadStEthStakingControlRole = /*#__PURE__*/ createUseReadContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'STAKING_CONTROL_ROLE',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"totalSupply"`
@@ -968,7 +968,7 @@ export const useReadStEthTotalSupply = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getSharesByPooledEth"`
@@ -980,7 +980,7 @@ export const useReadStEthGetSharesByPooledEth = /*#__PURE__*/ createUseReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getSharesByPooledEth',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isStakingPaused"`
@@ -992,7 +992,7 @@ export const useReadStEthIsStakingPaused = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isStakingPaused',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEVMScriptExecutor"`
@@ -1004,7 +1004,7 @@ export const useReadStEthGetEvmScriptExecutor = /*#__PURE__*/ createUseReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEVMScriptExecutor',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"RESUME_ROLE"`
@@ -1016,7 +1016,7 @@ export const useReadStEthResumeRole = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'RESUME_ROLE',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decimals"`
@@ -1028,7 +1028,7 @@ export const useReadStEthDecimals = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getRecoveryVault"`
@@ -1040,7 +1040,7 @@ export const useReadStEthGetRecoveryVault = /*#__PURE__*/ createUseReadContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getRecoveryVault',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
@@ -1052,7 +1052,7 @@ export const useReadStEthDomainSeparator = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'DOMAIN_SEPARATOR',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalPooledEther"`
@@ -1064,7 +1064,7 @@ export const useReadStEthGetTotalPooledEther = /*#__PURE__*/ createUseReadContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalPooledEther',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"PAUSE_ROLE"`
@@ -1076,7 +1076,7 @@ export const useReadStEthPauseRole = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'PAUSE_ROLE',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTreasury"`
@@ -1088,7 +1088,7 @@ export const useReadStEthGetTreasury = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTreasury',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isStopped"`
@@ -1100,7 +1100,7 @@ export const useReadStEthIsStopped = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isStopped',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getBufferedEther"`
@@ -1112,7 +1112,7 @@ export const useReadStEthGetBufferedEther = /*#__PURE__*/ createUseReadContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getBufferedEther',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getWithdrawalCredentials"`
@@ -1124,7 +1124,7 @@ export const useReadStEthGetWithdrawalCredentials = /*#__PURE__*/ createUseReadC
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getWithdrawalCredentials',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getCurrentStakeLimit"`
@@ -1136,7 +1136,7 @@ export const useReadStEthGetCurrentStakeLimit = /*#__PURE__*/ createUseReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getCurrentStakeLimit',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getStakeLimitFullInfo"`
@@ -1148,7 +1148,7 @@ export const useReadStEthGetStakeLimitFullInfo = /*#__PURE__*/ createUseReadCont
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getStakeLimitFullInfo',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"balanceOf"`
@@ -1160,7 +1160,7 @@ export const useReadStEthBalanceOf = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getFeeDistribution"`
@@ -1172,7 +1172,7 @@ export const useReadStEthGetFeeDistribution = /*#__PURE__*/ createUseReadContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getFeeDistribution',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getPooledEthByShares"`
@@ -1184,7 +1184,7 @@ export const useReadStEthGetPooledEthByShares = /*#__PURE__*/ createUseReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getPooledEthByShares',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"allowRecoverability"`
@@ -1196,7 +1196,7 @@ export const useReadStEthAllowRecoverability = /*#__PURE__*/ createUseReadContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'allowRecoverability',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"nonces"`
@@ -1208,7 +1208,7 @@ export const useReadStEthNonces = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'nonces',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"appId"`
@@ -1220,7 +1220,7 @@ export const useReadStEthAppId = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'appId',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getOracle"`
@@ -1232,7 +1232,7 @@ export const useReadStEthGetOracle = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getOracle',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"eip712Domain"`
@@ -1244,7 +1244,7 @@ export const useReadStEthEip712Domain = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'eip712Domain',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getContractVersion"`
@@ -1256,7 +1256,7 @@ export const useReadStEthGetContractVersion = /*#__PURE__*/ createUseReadContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getContractVersion',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getInitializationBlock"`
@@ -1268,7 +1268,7 @@ export const useReadStEthGetInitializationBlock = /*#__PURE__*/ createUseReadCon
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getInitializationBlock',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"symbol"`
@@ -1280,7 +1280,7 @@ export const useReadStEthSymbol = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEIP712StETH"`
@@ -1292,7 +1292,7 @@ export const useReadStEthGetEip712StEth = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEIP712StETH',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"canPerform"`
@@ -1304,7 +1304,7 @@ export const useReadStEthCanPerform = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'canPerform',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEVMScriptRegistry"`
@@ -1316,7 +1316,7 @@ export const useReadStEthGetEvmScriptRegistry = /*#__PURE__*/ createUseReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEVMScriptRegistry',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE"`
@@ -1328,7 +1328,7 @@ export const useReadStEthUnsafeChangeDepositedValidatorsRole = /*#__PURE__*/ cre
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getBeaconStat"`
@@ -1340,7 +1340,7 @@ export const useReadStEthGetBeaconStat = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getBeaconStat',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getFee"`
@@ -1352,7 +1352,7 @@ export const useReadStEthGetFee = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getFee',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"kernel"`
@@ -1364,7 +1364,7 @@ export const useReadStEthKernel = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'kernel',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalShares"`
@@ -1376,7 +1376,7 @@ export const useReadStEthGetTotalShares = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalShares',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"allowance"`
@@ -1388,7 +1388,7 @@ export const useReadStEthAllowance = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isPetrified"`
@@ -1400,7 +1400,7 @@ export const useReadStEthIsPetrified = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isPetrified',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getLidoLocator"`
@@ -1412,7 +1412,7 @@ export const useReadStEthGetLidoLocator = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getLidoLocator',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"canDeposit"`
@@ -1424,7 +1424,7 @@ export const useReadStEthCanDeposit = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'canDeposit',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"STAKING_PAUSE_ROLE"`
@@ -1436,7 +1436,7 @@ export const useReadStEthStakingPauseRole = /*#__PURE__*/ createUseReadContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'STAKING_PAUSE_ROLE',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getDepositableEther"`
@@ -1448,7 +1448,7 @@ export const useReadStEthGetDepositableEther = /*#__PURE__*/ createUseReadContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getDepositableEther',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"sharesOf"`
@@ -1460,7 +1460,7 @@ export const useReadStEthSharesOf = /*#__PURE__*/ createUseReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'sharesOf',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalELRewardsCollected"`
@@ -1472,7 +1472,7 @@ export const useReadStEthGetTotalElRewardsCollected = /*#__PURE__*/ createUseRea
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalELRewardsCollected',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__
@@ -1483,7 +1483,7 @@ export const useReadStEthGetTotalElRewardsCollected = /*#__PURE__*/ createUseRea
 export const useWriteStEth = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resume"`
@@ -1495,7 +1495,7 @@ export const useWriteStEthResume = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resume',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"stop"`
@@ -1507,7 +1507,7 @@ export const useWriteStEthStop = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'stop',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"approve"`
@@ -1519,7 +1519,7 @@ export const useWriteStEthApprove = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferFrom"`
@@ -1531,7 +1531,7 @@ export const useWriteStEthTransferFrom = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"setStakingLimit"`
@@ -1543,7 +1543,7 @@ export const useWriteStEthSetStakingLimit = /*#__PURE__*/ createUseWriteContract
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'setStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"finalizeUpgrade_v2"`
@@ -1555,7 +1555,7 @@ export const useWriteStEthFinalizeUpgradeV2 = /*#__PURE__*/ createUseWriteContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'finalizeUpgrade_v2',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"unsafeChangeDepositedValidators"`
@@ -1567,7 +1567,7 @@ export const useWriteStEthUnsafeChangeDepositedValidators = /*#__PURE__*/ create
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'unsafeChangeDepositedValidators',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -1579,7 +1579,7 @@ export const useWriteStEthIncreaseAllowance = /*#__PURE__*/ createUseWriteContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"initialize"`
@@ -1591,7 +1591,7 @@ export const useWriteStEthInitialize = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveELRewards"`
@@ -1603,7 +1603,7 @@ export const useWriteStEthReceiveElRewards = /*#__PURE__*/ createUseWriteContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveELRewards',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferSharesFrom"`
@@ -1615,7 +1615,7 @@ export const useWriteStEthTransferSharesFrom = /*#__PURE__*/ createUseWriteContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferSharesFrom',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resumeStaking"`
@@ -1627,7 +1627,7 @@ export const useWriteStEthResumeStaking = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resumeStaking',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveWithdrawals"`
@@ -1639,7 +1639,7 @@ export const useWriteStEthReceiveWithdrawals = /*#__PURE__*/ createUseWriteContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveWithdrawals',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferShares"`
@@ -1651,7 +1651,7 @@ export const useWriteStEthTransferShares = /*#__PURE__*/ createUseWriteContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferShares',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferToVault"`
@@ -1663,7 +1663,7 @@ export const useWriteStEthTransferToVault = /*#__PURE__*/ createUseWriteContract
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferToVault',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"submit"`
@@ -1675,7 +1675,7 @@ export const useWriteStEthSubmit = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'submit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -1687,7 +1687,7 @@ export const useWriteStEthDecreaseAllowance = /*#__PURE__*/ createUseWriteContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transfer"`
@@ -1699,7 +1699,7 @@ export const useWriteStEthTransfer = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"deposit"`
@@ -1711,7 +1711,7 @@ export const useWriteStEthDeposit = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"removeStakingLimit"`
@@ -1723,7 +1723,7 @@ export const useWriteStEthRemoveStakingLimit = /*#__PURE__*/ createUseWriteContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'removeStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"handleOracleReport"`
@@ -1735,7 +1735,7 @@ export const useWriteStEthHandleOracleReport = /*#__PURE__*/ createUseWriteContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'handleOracleReport',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"permit"`
@@ -1747,7 +1747,7 @@ export const useWriteStEthPermit = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"pauseStaking"`
@@ -1759,7 +1759,7 @@ export const useWriteStEthPauseStaking = /*#__PURE__*/ createUseWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'pauseStaking',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__
@@ -1770,7 +1770,7 @@ export const useWriteStEthPauseStaking = /*#__PURE__*/ createUseWriteContract({
 export const useSimulateStEth = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resume"`
@@ -1782,7 +1782,7 @@ export const useSimulateStEthResume = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resume',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"stop"`
@@ -1794,7 +1794,7 @@ export const useSimulateStEthStop = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'stop',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"approve"`
@@ -1806,7 +1806,7 @@ export const useSimulateStEthApprove = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferFrom"`
@@ -1818,7 +1818,7 @@ export const useSimulateStEthTransferFrom = /*#__PURE__*/ createUseSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"setStakingLimit"`
@@ -1830,7 +1830,7 @@ export const useSimulateStEthSetStakingLimit = /*#__PURE__*/ createUseSimulateCo
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'setStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"finalizeUpgrade_v2"`
@@ -1842,7 +1842,7 @@ export const useSimulateStEthFinalizeUpgradeV2 = /*#__PURE__*/ createUseSimulate
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'finalizeUpgrade_v2',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"unsafeChangeDepositedValidators"`
@@ -1855,7 +1855,7 @@ export const useSimulateStEthUnsafeChangeDepositedValidators =
     abi: stEthAbi,
     address: stEthAddress,
     functionName: 'unsafeChangeDepositedValidators',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -1867,7 +1867,7 @@ export const useSimulateStEthIncreaseAllowance = /*#__PURE__*/ createUseSimulate
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"initialize"`
@@ -1879,7 +1879,7 @@ export const useSimulateStEthInitialize = /*#__PURE__*/ createUseSimulateContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveELRewards"`
@@ -1891,7 +1891,7 @@ export const useSimulateStEthReceiveElRewards = /*#__PURE__*/ createUseSimulateC
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveELRewards',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferSharesFrom"`
@@ -1903,7 +1903,7 @@ export const useSimulateStEthTransferSharesFrom = /*#__PURE__*/ createUseSimulat
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferSharesFrom',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resumeStaking"`
@@ -1915,7 +1915,7 @@ export const useSimulateStEthResumeStaking = /*#__PURE__*/ createUseSimulateCont
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resumeStaking',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveWithdrawals"`
@@ -1927,7 +1927,7 @@ export const useSimulateStEthReceiveWithdrawals = /*#__PURE__*/ createUseSimulat
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveWithdrawals',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferShares"`
@@ -1939,7 +1939,7 @@ export const useSimulateStEthTransferShares = /*#__PURE__*/ createUseSimulateCon
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferShares',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferToVault"`
@@ -1951,7 +1951,7 @@ export const useSimulateStEthTransferToVault = /*#__PURE__*/ createUseSimulateCo
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferToVault',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"submit"`
@@ -1963,7 +1963,7 @@ export const useSimulateStEthSubmit = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'submit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -1975,7 +1975,7 @@ export const useSimulateStEthDecreaseAllowance = /*#__PURE__*/ createUseSimulate
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transfer"`
@@ -1987,7 +1987,7 @@ export const useSimulateStEthTransfer = /*#__PURE__*/ createUseSimulateContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"deposit"`
@@ -1999,7 +1999,7 @@ export const useSimulateStEthDeposit = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"removeStakingLimit"`
@@ -2011,7 +2011,7 @@ export const useSimulateStEthRemoveStakingLimit = /*#__PURE__*/ createUseSimulat
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'removeStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"handleOracleReport"`
@@ -2023,7 +2023,7 @@ export const useSimulateStEthHandleOracleReport = /*#__PURE__*/ createUseSimulat
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'handleOracleReport',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"permit"`
@@ -2035,7 +2035,7 @@ export const useSimulateStEthPermit = /*#__PURE__*/ createUseSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"pauseStaking"`
@@ -2047,7 +2047,7 @@ export const useSimulateStEthPauseStaking = /*#__PURE__*/ createUseSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'pauseStaking',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__
@@ -2058,7 +2058,7 @@ export const useSimulateStEthPauseStaking = /*#__PURE__*/ createUseSimulateContr
 export const useWatchStEthEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingPaused"`
@@ -2070,7 +2070,7 @@ export const useWatchStEthStakingPausedEvent = /*#__PURE__*/ createUseWatchContr
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingPaused',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingResumed"`
@@ -2082,7 +2082,7 @@ export const useWatchStEthStakingResumedEvent = /*#__PURE__*/ createUseWatchCont
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingResumed',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingLimitSet"`
@@ -2094,7 +2094,7 @@ export const useWatchStEthStakingLimitSetEvent = /*#__PURE__*/ createUseWatchCon
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingLimitSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingLimitRemoved"`
@@ -2106,7 +2106,7 @@ export const useWatchStEthStakingLimitRemovedEvent = /*#__PURE__*/ createUseWatc
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingLimitRemoved',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"CLValidatorsUpdated"`
@@ -2118,7 +2118,7 @@ export const useWatchStEthClValidatorsUpdatedEvent = /*#__PURE__*/ createUseWatc
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'CLValidatorsUpdated',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"DepositedValidatorsChanged"`
@@ -2131,7 +2131,7 @@ export const useWatchStEthDepositedValidatorsChangedEvent =
     abi: stEthAbi,
     address: stEthAddress,
     eventName: 'DepositedValidatorsChanged',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ETHDistributed"`
@@ -2143,7 +2143,7 @@ export const useWatchStEthEthDistributedEvent = /*#__PURE__*/ createUseWatchCont
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ETHDistributed',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"TokenRebased"`
@@ -2155,7 +2155,7 @@ export const useWatchStEthTokenRebasedEvent = /*#__PURE__*/ createUseWatchContra
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'TokenRebased',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"LidoLocatorSet"`
@@ -2167,7 +2167,7 @@ export const useWatchStEthLidoLocatorSetEvent = /*#__PURE__*/ createUseWatchCont
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'LidoLocatorSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ELRewardsReceived"`
@@ -2179,7 +2179,7 @@ export const useWatchStEthElRewardsReceivedEvent = /*#__PURE__*/ createUseWatchC
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ELRewardsReceived',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"WithdrawalsReceived"`
@@ -2191,7 +2191,7 @@ export const useWatchStEthWithdrawalsReceivedEvent = /*#__PURE__*/ createUseWatc
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'WithdrawalsReceived',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Submitted"`
@@ -2203,7 +2203,7 @@ export const useWatchStEthSubmittedEvent = /*#__PURE__*/ createUseWatchContractE
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Submitted',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Unbuffered"`
@@ -2215,7 +2215,7 @@ export const useWatchStEthUnbufferedEvent = /*#__PURE__*/ createUseWatchContract
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Unbuffered',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ScriptResult"`
@@ -2227,7 +2227,7 @@ export const useWatchStEthScriptResultEvent = /*#__PURE__*/ createUseWatchContra
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ScriptResult',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"RecoverToVault"`
@@ -2239,7 +2239,7 @@ export const useWatchStEthRecoverToVaultEvent = /*#__PURE__*/ createUseWatchCont
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'RecoverToVault',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"EIP712StETHInitialized"`
@@ -2251,7 +2251,7 @@ export const useWatchStEthEip712StEthInitializedEvent = /*#__PURE__*/ createUseW
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'EIP712StETHInitialized',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"TransferShares"`
@@ -2263,7 +2263,7 @@ export const useWatchStEthTransferSharesEvent = /*#__PURE__*/ createUseWatchCont
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'TransferShares',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"SharesBurnt"`
@@ -2275,7 +2275,7 @@ export const useWatchStEthSharesBurntEvent = /*#__PURE__*/ createUseWatchContrac
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'SharesBurnt',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Stopped"`
@@ -2287,7 +2287,7 @@ export const useWatchStEthStoppedEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Stopped',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Resumed"`
@@ -2299,7 +2299,7 @@ export const useWatchStEthResumedEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Resumed',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Transfer"`
@@ -2311,7 +2311,7 @@ export const useWatchStEthTransferEvent = /*#__PURE__*/ createUseWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Approval"`
@@ -2323,7 +2323,7 @@ export const useWatchStEthApprovalEvent = /*#__PURE__*/ createUseWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ContractVersionSet"`
@@ -2335,7 +2335,7 @@ export const useWatchStEthContractVersionSetEvent = /*#__PURE__*/ createUseWatch
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ContractVersionSet',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -2347,7 +2347,7 @@ export const useWatchStEthContractVersionSetEvent = /*#__PURE__*/ createUseWatch
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af)
  */
-export const readStEth = /*#__PURE__*/ createReadContract({ abi: stEthAbi, address: stEthAddress });
+export const readStEth = /*#__PURE__*/ createReadContract({ abi: stEthAbi, address: stEthAddress })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"name"`
@@ -2359,7 +2359,7 @@ export const readStEthName = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"hasInitialized"`
@@ -2371,7 +2371,7 @@ export const readStEthHasInitialized = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'hasInitialized',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"STAKING_CONTROL_ROLE"`
@@ -2383,7 +2383,7 @@ export const readStEthStakingControlRole = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'STAKING_CONTROL_ROLE',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"totalSupply"`
@@ -2395,7 +2395,7 @@ export const readStEthTotalSupply = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getSharesByPooledEth"`
@@ -2407,7 +2407,7 @@ export const readStEthGetSharesByPooledEth = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getSharesByPooledEth',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isStakingPaused"`
@@ -2419,7 +2419,7 @@ export const readStEthIsStakingPaused = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isStakingPaused',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEVMScriptExecutor"`
@@ -2431,7 +2431,7 @@ export const readStEthGetEvmScriptExecutor = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEVMScriptExecutor',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"RESUME_ROLE"`
@@ -2443,7 +2443,7 @@ export const readStEthResumeRole = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'RESUME_ROLE',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decimals"`
@@ -2455,7 +2455,7 @@ export const readStEthDecimals = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getRecoveryVault"`
@@ -2467,7 +2467,7 @@ export const readStEthGetRecoveryVault = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getRecoveryVault',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
@@ -2479,7 +2479,7 @@ export const readStEthDomainSeparator = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'DOMAIN_SEPARATOR',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalPooledEther"`
@@ -2491,7 +2491,7 @@ export const readStEthGetTotalPooledEther = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalPooledEther',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"PAUSE_ROLE"`
@@ -2503,7 +2503,7 @@ export const readStEthPauseRole = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'PAUSE_ROLE',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTreasury"`
@@ -2515,7 +2515,7 @@ export const readStEthGetTreasury = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTreasury',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isStopped"`
@@ -2527,7 +2527,7 @@ export const readStEthIsStopped = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isStopped',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getBufferedEther"`
@@ -2539,7 +2539,7 @@ export const readStEthGetBufferedEther = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getBufferedEther',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getWithdrawalCredentials"`
@@ -2551,7 +2551,7 @@ export const readStEthGetWithdrawalCredentials = /*#__PURE__*/ createReadContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getWithdrawalCredentials',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getCurrentStakeLimit"`
@@ -2563,7 +2563,7 @@ export const readStEthGetCurrentStakeLimit = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getCurrentStakeLimit',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getStakeLimitFullInfo"`
@@ -2575,7 +2575,7 @@ export const readStEthGetStakeLimitFullInfo = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getStakeLimitFullInfo',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"balanceOf"`
@@ -2587,7 +2587,7 @@ export const readStEthBalanceOf = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getFeeDistribution"`
@@ -2599,7 +2599,7 @@ export const readStEthGetFeeDistribution = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getFeeDistribution',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getPooledEthByShares"`
@@ -2611,7 +2611,7 @@ export const readStEthGetPooledEthByShares = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getPooledEthByShares',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"allowRecoverability"`
@@ -2623,7 +2623,7 @@ export const readStEthAllowRecoverability = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'allowRecoverability',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"nonces"`
@@ -2635,7 +2635,7 @@ export const readStEthNonces = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'nonces',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"appId"`
@@ -2647,7 +2647,7 @@ export const readStEthAppId = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'appId',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getOracle"`
@@ -2659,7 +2659,7 @@ export const readStEthGetOracle = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getOracle',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"eip712Domain"`
@@ -2671,7 +2671,7 @@ export const readStEthEip712Domain = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'eip712Domain',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getContractVersion"`
@@ -2683,7 +2683,7 @@ export const readStEthGetContractVersion = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getContractVersion',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getInitializationBlock"`
@@ -2695,7 +2695,7 @@ export const readStEthGetInitializationBlock = /*#__PURE__*/ createReadContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getInitializationBlock',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"symbol"`
@@ -2707,7 +2707,7 @@ export const readStEthSymbol = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEIP712StETH"`
@@ -2719,7 +2719,7 @@ export const readStEthGetEip712StEth = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEIP712StETH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"canPerform"`
@@ -2731,7 +2731,7 @@ export const readStEthCanPerform = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'canPerform',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getEVMScriptRegistry"`
@@ -2743,7 +2743,7 @@ export const readStEthGetEvmScriptRegistry = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getEVMScriptRegistry',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE"`
@@ -2755,7 +2755,7 @@ export const readStEthUnsafeChangeDepositedValidatorsRole = /*#__PURE__*/ create
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getBeaconStat"`
@@ -2767,7 +2767,7 @@ export const readStEthGetBeaconStat = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getBeaconStat',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getFee"`
@@ -2779,7 +2779,7 @@ export const readStEthGetFee = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getFee',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"kernel"`
@@ -2791,7 +2791,7 @@ export const readStEthKernel = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'kernel',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalShares"`
@@ -2803,7 +2803,7 @@ export const readStEthGetTotalShares = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalShares',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"allowance"`
@@ -2815,7 +2815,7 @@ export const readStEthAllowance = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"isPetrified"`
@@ -2827,7 +2827,7 @@ export const readStEthIsPetrified = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'isPetrified',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getLidoLocator"`
@@ -2839,7 +2839,7 @@ export const readStEthGetLidoLocator = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getLidoLocator',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"canDeposit"`
@@ -2851,7 +2851,7 @@ export const readStEthCanDeposit = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'canDeposit',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"STAKING_PAUSE_ROLE"`
@@ -2863,7 +2863,7 @@ export const readStEthStakingPauseRole = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'STAKING_PAUSE_ROLE',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getDepositableEther"`
@@ -2875,7 +2875,7 @@ export const readStEthGetDepositableEther = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getDepositableEther',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"sharesOf"`
@@ -2887,7 +2887,7 @@ export const readStEthSharesOf = /*#__PURE__*/ createReadContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'sharesOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"getTotalELRewardsCollected"`
@@ -2899,7 +2899,7 @@ export const readStEthGetTotalElRewardsCollected = /*#__PURE__*/ createReadContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'getTotalELRewardsCollected',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__
@@ -2910,7 +2910,7 @@ export const readStEthGetTotalElRewardsCollected = /*#__PURE__*/ createReadContr
 export const writeStEth = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resume"`
@@ -2922,7 +2922,7 @@ export const writeStEthResume = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resume',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"stop"`
@@ -2934,7 +2934,7 @@ export const writeStEthStop = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'stop',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"approve"`
@@ -2946,7 +2946,7 @@ export const writeStEthApprove = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferFrom"`
@@ -2958,7 +2958,7 @@ export const writeStEthTransferFrom = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"setStakingLimit"`
@@ -2970,7 +2970,7 @@ export const writeStEthSetStakingLimit = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'setStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"finalizeUpgrade_v2"`
@@ -2982,7 +2982,7 @@ export const writeStEthFinalizeUpgradeV2 = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'finalizeUpgrade_v2',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"unsafeChangeDepositedValidators"`
@@ -2994,7 +2994,7 @@ export const writeStEthUnsafeChangeDepositedValidators = /*#__PURE__*/ createWri
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'unsafeChangeDepositedValidators',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -3006,7 +3006,7 @@ export const writeStEthIncreaseAllowance = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"initialize"`
@@ -3018,7 +3018,7 @@ export const writeStEthInitialize = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveELRewards"`
@@ -3030,7 +3030,7 @@ export const writeStEthReceiveElRewards = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveELRewards',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferSharesFrom"`
@@ -3042,7 +3042,7 @@ export const writeStEthTransferSharesFrom = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferSharesFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resumeStaking"`
@@ -3054,7 +3054,7 @@ export const writeStEthResumeStaking = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resumeStaking',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveWithdrawals"`
@@ -3066,7 +3066,7 @@ export const writeStEthReceiveWithdrawals = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveWithdrawals',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferShares"`
@@ -3078,7 +3078,7 @@ export const writeStEthTransferShares = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferShares',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferToVault"`
@@ -3090,7 +3090,7 @@ export const writeStEthTransferToVault = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferToVault',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"submit"`
@@ -3102,7 +3102,7 @@ export const writeStEthSubmit = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'submit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -3114,7 +3114,7 @@ export const writeStEthDecreaseAllowance = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transfer"`
@@ -3126,7 +3126,7 @@ export const writeStEthTransfer = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"deposit"`
@@ -3138,7 +3138,7 @@ export const writeStEthDeposit = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"removeStakingLimit"`
@@ -3150,7 +3150,7 @@ export const writeStEthRemoveStakingLimit = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'removeStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"handleOracleReport"`
@@ -3162,7 +3162,7 @@ export const writeStEthHandleOracleReport = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'handleOracleReport',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"permit"`
@@ -3174,7 +3174,7 @@ export const writeStEthPermit = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"pauseStaking"`
@@ -3186,7 +3186,7 @@ export const writeStEthPauseStaking = /*#__PURE__*/ createWriteContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'pauseStaking',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__
@@ -3197,7 +3197,7 @@ export const writeStEthPauseStaking = /*#__PURE__*/ createWriteContract({
 export const simulateStEth = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resume"`
@@ -3209,7 +3209,7 @@ export const simulateStEthResume = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resume',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"stop"`
@@ -3221,7 +3221,7 @@ export const simulateStEthStop = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'stop',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"approve"`
@@ -3233,7 +3233,7 @@ export const simulateStEthApprove = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferFrom"`
@@ -3245,7 +3245,7 @@ export const simulateStEthTransferFrom = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"setStakingLimit"`
@@ -3257,7 +3257,7 @@ export const simulateStEthSetStakingLimit = /*#__PURE__*/ createSimulateContract
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'setStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"finalizeUpgrade_v2"`
@@ -3269,7 +3269,7 @@ export const simulateStEthFinalizeUpgradeV2 = /*#__PURE__*/ createSimulateContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'finalizeUpgrade_v2',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"unsafeChangeDepositedValidators"`
@@ -3281,7 +3281,7 @@ export const simulateStEthUnsafeChangeDepositedValidators = /*#__PURE__*/ create
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'unsafeChangeDepositedValidators',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"increaseAllowance"`
@@ -3293,7 +3293,7 @@ export const simulateStEthIncreaseAllowance = /*#__PURE__*/ createSimulateContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'increaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"initialize"`
@@ -3305,7 +3305,7 @@ export const simulateStEthInitialize = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'initialize',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveELRewards"`
@@ -3317,7 +3317,7 @@ export const simulateStEthReceiveElRewards = /*#__PURE__*/ createSimulateContrac
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveELRewards',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferSharesFrom"`
@@ -3329,7 +3329,7 @@ export const simulateStEthTransferSharesFrom = /*#__PURE__*/ createSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferSharesFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"resumeStaking"`
@@ -3341,7 +3341,7 @@ export const simulateStEthResumeStaking = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'resumeStaking',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"receiveWithdrawals"`
@@ -3353,7 +3353,7 @@ export const simulateStEthReceiveWithdrawals = /*#__PURE__*/ createSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'receiveWithdrawals',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferShares"`
@@ -3365,7 +3365,7 @@ export const simulateStEthTransferShares = /*#__PURE__*/ createSimulateContract(
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferShares',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transferToVault"`
@@ -3377,7 +3377,7 @@ export const simulateStEthTransferToVault = /*#__PURE__*/ createSimulateContract
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transferToVault',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"submit"`
@@ -3389,7 +3389,7 @@ export const simulateStEthSubmit = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'submit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"decreaseAllowance"`
@@ -3401,7 +3401,7 @@ export const simulateStEthDecreaseAllowance = /*#__PURE__*/ createSimulateContra
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'decreaseAllowance',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"transfer"`
@@ -3413,7 +3413,7 @@ export const simulateStEthTransfer = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"deposit"`
@@ -3425,7 +3425,7 @@ export const simulateStEthDeposit = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"removeStakingLimit"`
@@ -3437,7 +3437,7 @@ export const simulateStEthRemoveStakingLimit = /*#__PURE__*/ createSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'removeStakingLimit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"handleOracleReport"`
@@ -3449,7 +3449,7 @@ export const simulateStEthHandleOracleReport = /*#__PURE__*/ createSimulateContr
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'handleOracleReport',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"permit"`
@@ -3461,7 +3461,7 @@ export const simulateStEthPermit = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'permit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link stEthAbi}__ and `functionName` set to `"pauseStaking"`
@@ -3473,7 +3473,7 @@ export const simulateStEthPauseStaking = /*#__PURE__*/ createSimulateContract({
   abi: stEthAbi,
   address: stEthAddress,
   functionName: 'pauseStaking',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__
@@ -3484,7 +3484,7 @@ export const simulateStEthPauseStaking = /*#__PURE__*/ createSimulateContract({
 export const watchStEthEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingPaused"`
@@ -3496,7 +3496,7 @@ export const watchStEthStakingPausedEvent = /*#__PURE__*/ createWatchContractEve
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingPaused',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingResumed"`
@@ -3508,7 +3508,7 @@ export const watchStEthStakingResumedEvent = /*#__PURE__*/ createWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingResumed',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingLimitSet"`
@@ -3520,7 +3520,7 @@ export const watchStEthStakingLimitSetEvent = /*#__PURE__*/ createWatchContractE
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingLimitSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"StakingLimitRemoved"`
@@ -3532,7 +3532,7 @@ export const watchStEthStakingLimitRemovedEvent = /*#__PURE__*/ createWatchContr
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'StakingLimitRemoved',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"CLValidatorsUpdated"`
@@ -3544,7 +3544,7 @@ export const watchStEthClValidatorsUpdatedEvent = /*#__PURE__*/ createWatchContr
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'CLValidatorsUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"DepositedValidatorsChanged"`
@@ -3556,7 +3556,7 @@ export const watchStEthDepositedValidatorsChangedEvent = /*#__PURE__*/ createWat
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'DepositedValidatorsChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ETHDistributed"`
@@ -3568,7 +3568,7 @@ export const watchStEthEthDistributedEvent = /*#__PURE__*/ createWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ETHDistributed',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"TokenRebased"`
@@ -3580,7 +3580,7 @@ export const watchStEthTokenRebasedEvent = /*#__PURE__*/ createWatchContractEven
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'TokenRebased',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"LidoLocatorSet"`
@@ -3592,7 +3592,7 @@ export const watchStEthLidoLocatorSetEvent = /*#__PURE__*/ createWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'LidoLocatorSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ELRewardsReceived"`
@@ -3604,7 +3604,7 @@ export const watchStEthElRewardsReceivedEvent = /*#__PURE__*/ createWatchContrac
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ELRewardsReceived',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"WithdrawalsReceived"`
@@ -3616,7 +3616,7 @@ export const watchStEthWithdrawalsReceivedEvent = /*#__PURE__*/ createWatchContr
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'WithdrawalsReceived',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Submitted"`
@@ -3628,7 +3628,7 @@ export const watchStEthSubmittedEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Submitted',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Unbuffered"`
@@ -3640,7 +3640,7 @@ export const watchStEthUnbufferedEvent = /*#__PURE__*/ createWatchContractEvent(
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Unbuffered',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ScriptResult"`
@@ -3652,7 +3652,7 @@ export const watchStEthScriptResultEvent = /*#__PURE__*/ createWatchContractEven
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ScriptResult',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"RecoverToVault"`
@@ -3664,7 +3664,7 @@ export const watchStEthRecoverToVaultEvent = /*#__PURE__*/ createWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'RecoverToVault',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"EIP712StETHInitialized"`
@@ -3676,7 +3676,7 @@ export const watchStEthEip712StEthInitializedEvent = /*#__PURE__*/ createWatchCo
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'EIP712StETHInitialized',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"TransferShares"`
@@ -3688,7 +3688,7 @@ export const watchStEthTransferSharesEvent = /*#__PURE__*/ createWatchContractEv
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'TransferShares',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"SharesBurnt"`
@@ -3700,7 +3700,7 @@ export const watchStEthSharesBurntEvent = /*#__PURE__*/ createWatchContractEvent
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'SharesBurnt',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Stopped"`
@@ -3712,7 +3712,7 @@ export const watchStEthStoppedEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Stopped',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Resumed"`
@@ -3724,7 +3724,7 @@ export const watchStEthResumedEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Resumed',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Transfer"`
@@ -3736,7 +3736,7 @@ export const watchStEthTransferEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"Approval"`
@@ -3748,7 +3748,7 @@ export const watchStEthApprovalEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link stEthAbi}__ and `eventName` set to `"ContractVersionSet"`
@@ -3760,4 +3760,4 @@ export const watchStEthContractVersionSetEvent = /*#__PURE__*/ createWatchContra
   abi: stEthAbi,
   address: stEthAddress,
   eventName: 'ContractVersionSet',
-});
+})

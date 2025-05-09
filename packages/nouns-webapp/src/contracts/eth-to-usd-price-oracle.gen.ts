@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ETHToUSDPriceOracle
@@ -252,7 +252,7 @@ export const ethToUsdPriceOracleAbi = [
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419)
@@ -261,7 +261,7 @@ export const ethToUsdPriceOracleAbi = [
 export const ethToUsdPriceOracleAddress = {
   1: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
   11155111: '0x694AA1769357215DE4FAC081bf1f309aDC325306',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419)
@@ -270,7 +270,7 @@ export const ethToUsdPriceOracleAddress = {
 export const ethToUsdPriceOracleConfig = {
   address: ethToUsdPriceOracleAddress,
   abi: ethToUsdPriceOracleAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -285,7 +285,7 @@ export const ethToUsdPriceOracleConfig = {
 export const useReadEthToUsdPriceOracle = /*#__PURE__*/ createUseReadContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"accessController"`
@@ -297,7 +297,7 @@ export const useReadEthToUsdPriceOracleAccessController = /*#__PURE__*/ createUs
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'accessController',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"aggregator"`
@@ -309,7 +309,7 @@ export const useReadEthToUsdPriceOracleAggregator = /*#__PURE__*/ createUseReadC
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'aggregator',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"decimals"`
@@ -321,7 +321,7 @@ export const useReadEthToUsdPriceOracleDecimals = /*#__PURE__*/ createUseReadCon
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"description"`
@@ -333,7 +333,7 @@ export const useReadEthToUsdPriceOracleDescription = /*#__PURE__*/ createUseRead
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'description',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getAnswer"`
@@ -345,7 +345,7 @@ export const useReadEthToUsdPriceOracleGetAnswer = /*#__PURE__*/ createUseReadCo
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getAnswer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getRoundData"`
@@ -357,7 +357,7 @@ export const useReadEthToUsdPriceOracleGetRoundData = /*#__PURE__*/ createUseRea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getRoundData',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getTimestamp"`
@@ -369,7 +369,7 @@ export const useReadEthToUsdPriceOracleGetTimestamp = /*#__PURE__*/ createUseRea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getTimestamp',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestAnswer"`
@@ -381,7 +381,7 @@ export const useReadEthToUsdPriceOracleLatestAnswer = /*#__PURE__*/ createUseRea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestAnswer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestRound"`
@@ -393,7 +393,7 @@ export const useReadEthToUsdPriceOracleLatestRound = /*#__PURE__*/ createUseRead
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestRound',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestRoundData"`
@@ -405,7 +405,7 @@ export const useReadEthToUsdPriceOracleLatestRoundData = /*#__PURE__*/ createUse
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestRoundData',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestTimestamp"`
@@ -417,7 +417,7 @@ export const useReadEthToUsdPriceOracleLatestTimestamp = /*#__PURE__*/ createUse
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestTimestamp',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"owner"`
@@ -429,7 +429,7 @@ export const useReadEthToUsdPriceOracleOwner = /*#__PURE__*/ createUseReadContra
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"phaseAggregators"`
@@ -441,7 +441,7 @@ export const useReadEthToUsdPriceOraclePhaseAggregators = /*#__PURE__*/ createUs
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'phaseAggregators',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"phaseId"`
@@ -453,7 +453,7 @@ export const useReadEthToUsdPriceOraclePhaseId = /*#__PURE__*/ createUseReadCont
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'phaseId',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedAggregator"`
@@ -465,7 +465,7 @@ export const useReadEthToUsdPriceOracleProposedAggregator = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposedAggregator',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedGetRoundData"`
@@ -477,7 +477,7 @@ export const useReadEthToUsdPriceOracleProposedGetRoundData = /*#__PURE__*/ crea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposedGetRoundData',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedLatestRoundData"`
@@ -490,7 +490,7 @@ export const useReadEthToUsdPriceOracleProposedLatestRoundData =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     functionName: 'proposedLatestRoundData',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"version"`
@@ -502,7 +502,7 @@ export const useReadEthToUsdPriceOracleVersion = /*#__PURE__*/ createUseReadCont
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'version',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -513,7 +513,7 @@ export const useReadEthToUsdPriceOracleVersion = /*#__PURE__*/ createUseReadCont
 export const useWriteEthToUsdPriceOracle = /*#__PURE__*/ createUseWriteContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"acceptOwnership"`
@@ -525,7 +525,7 @@ export const useWriteEthToUsdPriceOracleAcceptOwnership = /*#__PURE__*/ createUs
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'acceptOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"confirmAggregator"`
@@ -537,7 +537,7 @@ export const useWriteEthToUsdPriceOracleConfirmAggregator = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'confirmAggregator',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposeAggregator"`
@@ -549,7 +549,7 @@ export const useWriteEthToUsdPriceOracleProposeAggregator = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposeAggregator',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"setController"`
@@ -561,7 +561,7 @@ export const useWriteEthToUsdPriceOracleSetController = /*#__PURE__*/ createUseW
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'setController',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"transferOwnership"`
@@ -573,7 +573,7 @@ export const useWriteEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -584,7 +584,7 @@ export const useWriteEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ create
 export const useSimulateEthToUsdPriceOracle = /*#__PURE__*/ createUseSimulateContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"acceptOwnership"`
@@ -597,7 +597,7 @@ export const useSimulateEthToUsdPriceOracleAcceptOwnership =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     functionName: 'acceptOwnership',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"confirmAggregator"`
@@ -610,7 +610,7 @@ export const useSimulateEthToUsdPriceOracleConfirmAggregator =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     functionName: 'confirmAggregator',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposeAggregator"`
@@ -623,7 +623,7 @@ export const useSimulateEthToUsdPriceOracleProposeAggregator =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     functionName: 'proposeAggregator',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"setController"`
@@ -635,7 +635,7 @@ export const useSimulateEthToUsdPriceOracleSetController = /*#__PURE__*/ createU
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'setController',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"transferOwnership"`
@@ -648,7 +648,7 @@ export const useSimulateEthToUsdPriceOracleTransferOwnership =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     functionName: 'transferOwnership',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -659,7 +659,7 @@ export const useSimulateEthToUsdPriceOracleTransferOwnership =
 export const useWatchEthToUsdPriceOracleEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"AnswerUpdated"`
@@ -672,7 +672,7 @@ export const useWatchEthToUsdPriceOracleAnswerUpdatedEvent =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     eventName: 'AnswerUpdated',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"NewRound"`
@@ -684,7 +684,7 @@ export const useWatchEthToUsdPriceOracleNewRoundEvent = /*#__PURE__*/ createUseW
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   eventName: 'NewRound',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"OwnershipTransferRequested"`
@@ -697,7 +697,7 @@ export const useWatchEthToUsdPriceOracleOwnershipTransferRequestedEvent =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     eventName: 'OwnershipTransferRequested',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -710,7 +710,7 @@ export const useWatchEthToUsdPriceOracleOwnershipTransferredEvent =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -725,7 +725,7 @@ export const useWatchEthToUsdPriceOracleOwnershipTransferredEvent =
 export const readEthToUsdPriceOracle = /*#__PURE__*/ createReadContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"accessController"`
@@ -737,7 +737,7 @@ export const readEthToUsdPriceOracleAccessController = /*#__PURE__*/ createReadC
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'accessController',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"aggregator"`
@@ -749,7 +749,7 @@ export const readEthToUsdPriceOracleAggregator = /*#__PURE__*/ createReadContrac
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'aggregator',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"decimals"`
@@ -761,7 +761,7 @@ export const readEthToUsdPriceOracleDecimals = /*#__PURE__*/ createReadContract(
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"description"`
@@ -773,7 +773,7 @@ export const readEthToUsdPriceOracleDescription = /*#__PURE__*/ createReadContra
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'description',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getAnswer"`
@@ -785,7 +785,7 @@ export const readEthToUsdPriceOracleGetAnswer = /*#__PURE__*/ createReadContract
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getAnswer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getRoundData"`
@@ -797,7 +797,7 @@ export const readEthToUsdPriceOracleGetRoundData = /*#__PURE__*/ createReadContr
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getRoundData',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"getTimestamp"`
@@ -809,7 +809,7 @@ export const readEthToUsdPriceOracleGetTimestamp = /*#__PURE__*/ createReadContr
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'getTimestamp',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestAnswer"`
@@ -821,7 +821,7 @@ export const readEthToUsdPriceOracleLatestAnswer = /*#__PURE__*/ createReadContr
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestAnswer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestRound"`
@@ -833,7 +833,7 @@ export const readEthToUsdPriceOracleLatestRound = /*#__PURE__*/ createReadContra
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestRound',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestRoundData"`
@@ -845,7 +845,7 @@ export const readEthToUsdPriceOracleLatestRoundData = /*#__PURE__*/ createReadCo
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestRoundData',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"latestTimestamp"`
@@ -857,7 +857,7 @@ export const readEthToUsdPriceOracleLatestTimestamp = /*#__PURE__*/ createReadCo
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'latestTimestamp',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"owner"`
@@ -869,7 +869,7 @@ export const readEthToUsdPriceOracleOwner = /*#__PURE__*/ createReadContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"phaseAggregators"`
@@ -881,7 +881,7 @@ export const readEthToUsdPriceOraclePhaseAggregators = /*#__PURE__*/ createReadC
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'phaseAggregators',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"phaseId"`
@@ -893,7 +893,7 @@ export const readEthToUsdPriceOraclePhaseId = /*#__PURE__*/ createReadContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'phaseId',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedAggregator"`
@@ -905,7 +905,7 @@ export const readEthToUsdPriceOracleProposedAggregator = /*#__PURE__*/ createRea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposedAggregator',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedGetRoundData"`
@@ -917,7 +917,7 @@ export const readEthToUsdPriceOracleProposedGetRoundData = /*#__PURE__*/ createR
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposedGetRoundData',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposedLatestRoundData"`
@@ -929,7 +929,7 @@ export const readEthToUsdPriceOracleProposedLatestRoundData = /*#__PURE__*/ crea
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposedLatestRoundData',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"version"`
@@ -941,7 +941,7 @@ export const readEthToUsdPriceOracleVersion = /*#__PURE__*/ createReadContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'version',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -952,7 +952,7 @@ export const readEthToUsdPriceOracleVersion = /*#__PURE__*/ createReadContract({
 export const writeEthToUsdPriceOracle = /*#__PURE__*/ createWriteContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"acceptOwnership"`
@@ -964,7 +964,7 @@ export const writeEthToUsdPriceOracleAcceptOwnership = /*#__PURE__*/ createWrite
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'acceptOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"confirmAggregator"`
@@ -976,7 +976,7 @@ export const writeEthToUsdPriceOracleConfirmAggregator = /*#__PURE__*/ createWri
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'confirmAggregator',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposeAggregator"`
@@ -988,7 +988,7 @@ export const writeEthToUsdPriceOracleProposeAggregator = /*#__PURE__*/ createWri
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposeAggregator',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"setController"`
@@ -1000,7 +1000,7 @@ export const writeEthToUsdPriceOracleSetController = /*#__PURE__*/ createWriteCo
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'setController',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1012,7 +1012,7 @@ export const writeEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ createWri
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -1023,7 +1023,7 @@ export const writeEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ createWri
 export const simulateEthToUsdPriceOracle = /*#__PURE__*/ createSimulateContract({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"acceptOwnership"`
@@ -1035,7 +1035,7 @@ export const simulateEthToUsdPriceOracleAcceptOwnership = /*#__PURE__*/ createSi
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'acceptOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"confirmAggregator"`
@@ -1047,7 +1047,7 @@ export const simulateEthToUsdPriceOracleConfirmAggregator = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'confirmAggregator',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"proposeAggregator"`
@@ -1059,7 +1059,7 @@ export const simulateEthToUsdPriceOracleProposeAggregator = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'proposeAggregator',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"setController"`
@@ -1071,7 +1071,7 @@ export const simulateEthToUsdPriceOracleSetController = /*#__PURE__*/ createSimu
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'setController',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1083,7 +1083,7 @@ export const simulateEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ create
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__
@@ -1094,7 +1094,7 @@ export const simulateEthToUsdPriceOracleTransferOwnership = /*#__PURE__*/ create
 export const watchEthToUsdPriceOracleEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"AnswerUpdated"`
@@ -1106,7 +1106,7 @@ export const watchEthToUsdPriceOracleAnswerUpdatedEvent = /*#__PURE__*/ createWa
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   eventName: 'AnswerUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"NewRound"`
@@ -1118,7 +1118,7 @@ export const watchEthToUsdPriceOracleNewRoundEvent = /*#__PURE__*/ createWatchCo
   abi: ethToUsdPriceOracleAbi,
   address: ethToUsdPriceOracleAddress,
   eventName: 'NewRound',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"OwnershipTransferRequested"`
@@ -1131,7 +1131,7 @@ export const watchEthToUsdPriceOracleOwnershipTransferRequestedEvent =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     eventName: 'OwnershipTransferRequested',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link ethToUsdPriceOracleAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1144,4 +1144,4 @@ export const watchEthToUsdPriceOracleOwnershipTransferredEvent =
     abi: ethToUsdPriceOracleAbi,
     address: ethToUsdPriceOracleAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })

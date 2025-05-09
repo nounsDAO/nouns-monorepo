@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // WETH
@@ -172,7 +172,7 @@ export const wethAbi = [
     ],
     name: 'Withdrawal',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)
@@ -181,13 +181,13 @@ export const wethAbi = [
 export const wethAddress = {
   1: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   11155111: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14)
  */
-export const wethConfig = { address: wethAddress, abi: wethAbi } as const;
+export const wethConfig = { address: wethAddress, abi: wethAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -202,7 +202,7 @@ export const wethConfig = { address: wethAddress, abi: wethAbi } as const;
 export const useReadWeth = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"name"`
@@ -214,7 +214,7 @@ export const useReadWethName = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"totalSupply"`
@@ -226,7 +226,7 @@ export const useReadWethTotalSupply = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"decimals"`
@@ -238,7 +238,7 @@ export const useReadWethDecimals = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"balanceOf"`
@@ -250,7 +250,7 @@ export const useReadWethBalanceOf = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"symbol"`
@@ -262,7 +262,7 @@ export const useReadWethSymbol = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"allowance"`
@@ -274,7 +274,7 @@ export const useReadWethAllowance = /*#__PURE__*/ createUseReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__
@@ -285,7 +285,7 @@ export const useReadWethAllowance = /*#__PURE__*/ createUseReadContract({
 export const useWriteWeth = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"approve"`
@@ -297,7 +297,7 @@ export const useWriteWethApprove = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transferFrom"`
@@ -309,7 +309,7 @@ export const useWriteWethTransferFrom = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"withdraw"`
@@ -321,7 +321,7 @@ export const useWriteWethWithdraw = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'withdraw',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transfer"`
@@ -333,7 +333,7 @@ export const useWriteWethTransfer = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"deposit"`
@@ -345,7 +345,7 @@ export const useWriteWethDeposit = /*#__PURE__*/ createUseWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__
@@ -356,7 +356,7 @@ export const useWriteWethDeposit = /*#__PURE__*/ createUseWriteContract({
 export const useSimulateWeth = /*#__PURE__*/ createUseSimulateContract({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"approve"`
@@ -368,7 +368,7 @@ export const useSimulateWethApprove = /*#__PURE__*/ createUseSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transferFrom"`
@@ -380,7 +380,7 @@ export const useSimulateWethTransferFrom = /*#__PURE__*/ createUseSimulateContra
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"withdraw"`
@@ -392,7 +392,7 @@ export const useSimulateWethWithdraw = /*#__PURE__*/ createUseSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'withdraw',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transfer"`
@@ -404,7 +404,7 @@ export const useSimulateWethTransfer = /*#__PURE__*/ createUseSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"deposit"`
@@ -416,7 +416,7 @@ export const useSimulateWethDeposit = /*#__PURE__*/ createUseSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link wethAbi}__
@@ -427,7 +427,7 @@ export const useSimulateWethDeposit = /*#__PURE__*/ createUseSimulateContract({
 export const useWatchWethEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Approval"`
@@ -439,7 +439,7 @@ export const useWatchWethApprovalEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Transfer"`
@@ -451,7 +451,7 @@ export const useWatchWethTransferEvent = /*#__PURE__*/ createUseWatchContractEve
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Deposit"`
@@ -463,7 +463,7 @@ export const useWatchWethDepositEvent = /*#__PURE__*/ createUseWatchContractEven
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Deposit',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Withdrawal"`
@@ -475,7 +475,7 @@ export const useWatchWethWithdrawalEvent = /*#__PURE__*/ createUseWatchContractE
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Withdrawal',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -487,7 +487,7 @@ export const useWatchWethWithdrawalEvent = /*#__PURE__*/ createUseWatchContractE
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14)
  */
-export const readWeth = /*#__PURE__*/ createReadContract({ abi: wethAbi, address: wethAddress });
+export const readWeth = /*#__PURE__*/ createReadContract({ abi: wethAbi, address: wethAddress })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"name"`
@@ -499,7 +499,7 @@ export const readWethName = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"totalSupply"`
@@ -511,7 +511,7 @@ export const readWethTotalSupply = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"decimals"`
@@ -523,7 +523,7 @@ export const readWethDecimals = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"balanceOf"`
@@ -535,7 +535,7 @@ export const readWethBalanceOf = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"symbol"`
@@ -547,7 +547,7 @@ export const readWethSymbol = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"allowance"`
@@ -559,7 +559,7 @@ export const readWethAllowance = /*#__PURE__*/ createReadContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'allowance',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__
@@ -567,7 +567,7 @@ export const readWethAllowance = /*#__PURE__*/ createReadContract({
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14)
  */
-export const writeWeth = /*#__PURE__*/ createWriteContract({ abi: wethAbi, address: wethAddress });
+export const writeWeth = /*#__PURE__*/ createWriteContract({ abi: wethAbi, address: wethAddress })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"approve"`
@@ -579,7 +579,7 @@ export const writeWethApprove = /*#__PURE__*/ createWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transferFrom"`
@@ -591,7 +591,7 @@ export const writeWethTransferFrom = /*#__PURE__*/ createWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"withdraw"`
@@ -603,7 +603,7 @@ export const writeWethWithdraw = /*#__PURE__*/ createWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'withdraw',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transfer"`
@@ -615,7 +615,7 @@ export const writeWethTransfer = /*#__PURE__*/ createWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"deposit"`
@@ -627,7 +627,7 @@ export const writeWethDeposit = /*#__PURE__*/ createWriteContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__
@@ -638,7 +638,7 @@ export const writeWethDeposit = /*#__PURE__*/ createWriteContract({
 export const simulateWeth = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"approve"`
@@ -650,7 +650,7 @@ export const simulateWethApprove = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transferFrom"`
@@ -662,7 +662,7 @@ export const simulateWethTransferFrom = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"withdraw"`
@@ -674,7 +674,7 @@ export const simulateWethWithdraw = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'withdraw',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"transfer"`
@@ -686,7 +686,7 @@ export const simulateWethTransfer = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'transfer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link wethAbi}__ and `functionName` set to `"deposit"`
@@ -698,7 +698,7 @@ export const simulateWethDeposit = /*#__PURE__*/ createSimulateContract({
   abi: wethAbi,
   address: wethAddress,
   functionName: 'deposit',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link wethAbi}__
@@ -709,7 +709,7 @@ export const simulateWethDeposit = /*#__PURE__*/ createSimulateContract({
 export const watchWethEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Approval"`
@@ -721,7 +721,7 @@ export const watchWethApprovalEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Transfer"`
@@ -733,7 +733,7 @@ export const watchWethTransferEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Transfer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Deposit"`
@@ -745,7 +745,7 @@ export const watchWethDepositEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Deposit',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link wethAbi}__ and `eventName` set to `"Withdrawal"`
@@ -757,4 +757,4 @@ export const watchWethWithdrawalEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: wethAbi,
   address: wethAddress,
   eventName: 'Withdrawal',
-});
+})

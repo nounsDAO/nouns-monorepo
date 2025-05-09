@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsTokenBuyer
@@ -428,7 +428,7 @@ export const nounsTokenBuyerAbi = [
   { type: 'function', inputs: [], name: 'unpause', outputs: [], stateMutability: 'nonpayable' },
   { type: 'function', inputs: [], name: 'withdrawETH', outputs: [], stateMutability: 'nonpayable' },
   { type: 'receive', stateMutability: 'payable' },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
@@ -437,7 +437,7 @@ export const nounsTokenBuyerAbi = [
 export const nounsTokenBuyerAddress = {
   1: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
   11155111: '0x821176470cFeF1dB78F1e2dbae136f73c36ddd48',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
@@ -446,7 +446,7 @@ export const nounsTokenBuyerAddress = {
 export const nounsTokenBuyerConfig = {
   address: nounsTokenBuyerAddress,
   abi: nounsTokenBuyerAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -461,7 +461,7 @@ export const nounsTokenBuyerConfig = {
 export const useReadNounsTokenBuyer = /*#__PURE__*/ createUseReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"MAX_BPS"`
@@ -473,7 +473,7 @@ export const useReadNounsTokenBuyerMaxBps = /*#__PURE__*/ createUseReadContract(
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'MAX_BPS',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"admin"`
@@ -485,7 +485,7 @@ export const useReadNounsTokenBuyerAdmin = /*#__PURE__*/ createUseReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"baselinePaymentTokenAmount"`
@@ -499,7 +499,7 @@ export const useReadNounsTokenBuyerBaselinePaymentTokenAmount = /*#__PURE__*/ cr
     address: nounsTokenBuyerAddress,
     functionName: 'baselinePaymentTokenAmount',
   },
-);
+)
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"botDiscountBPs"`
@@ -511,7 +511,7 @@ export const useReadNounsTokenBuyerBotDiscountBPs = /*#__PURE__*/ createUseReadC
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'botDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"ethAmountPerTokenAmount"`
@@ -523,7 +523,7 @@ export const useReadNounsTokenBuyerEthAmountPerTokenAmount = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'ethAmountPerTokenAmount',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"ethNeeded"`
@@ -535,7 +535,7 @@ export const useReadNounsTokenBuyerEthNeeded = /*#__PURE__*/ createUseReadContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'ethNeeded',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"maxAdminBaselinePaymentTokenAmount"`
@@ -548,7 +548,7 @@ export const useReadNounsTokenBuyerMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'maxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"maxAdminBotDiscountBPs"`
@@ -560,7 +560,7 @@ export const useReadNounsTokenBuyerMaxAdminBotDiscountBPs = /*#__PURE__*/ create
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'maxAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"minAdminBaselinePaymentTokenAmount"`
@@ -573,7 +573,7 @@ export const useReadNounsTokenBuyerMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'minAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"minAdminBotDiscountBPs"`
@@ -585,7 +585,7 @@ export const useReadNounsTokenBuyerMinAdminBotDiscountBPs = /*#__PURE__*/ create
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'minAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"owner"`
@@ -597,7 +597,7 @@ export const useReadNounsTokenBuyerOwner = /*#__PURE__*/ createUseReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paused"`
@@ -609,7 +609,7 @@ export const useReadNounsTokenBuyerPaused = /*#__PURE__*/ createUseReadContract(
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"payer"`
@@ -621,7 +621,7 @@ export const useReadNounsTokenBuyerPayer = /*#__PURE__*/ createUseReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'payer',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paymentToken"`
@@ -633,7 +633,7 @@ export const useReadNounsTokenBuyerPaymentToken = /*#__PURE__*/ createUseReadCon
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'paymentToken',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paymentTokenDecimalsDigits"`
@@ -647,7 +647,7 @@ export const useReadNounsTokenBuyerPaymentTokenDecimalsDigits = /*#__PURE__*/ cr
     address: nounsTokenBuyerAddress,
     functionName: 'paymentTokenDecimalsDigits',
   },
-);
+)
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"price"`
@@ -659,7 +659,7 @@ export const useReadNounsTokenBuyerPrice = /*#__PURE__*/ createUseReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'price',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"priceFeed"`
@@ -671,7 +671,7 @@ export const useReadNounsTokenBuyerPriceFeed = /*#__PURE__*/ createUseReadContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'priceFeed',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeeded"`
@@ -683,7 +683,7 @@ export const useReadNounsTokenBuyerTokenAmountNeeded = /*#__PURE__*/ createUseRe
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'tokenAmountNeeded',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeededAndETHPayout"`
@@ -696,7 +696,7 @@ export const useReadNounsTokenBuyerTokenAmountNeededAndEthPayout =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'tokenAmountNeededAndETHPayout',
-  });
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountPerEthAmount"`
@@ -708,7 +708,7 @@ export const useReadNounsTokenBuyerTokenAmountPerEthAmount = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'tokenAmountPerEthAmount',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -719,7 +719,7 @@ export const useReadNounsTokenBuyerTokenAmountPerEthAmount = /*#__PURE__*/ creat
 export const useWriteNounsTokenBuyer = /*#__PURE__*/ createUseWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
@@ -731,7 +731,7 @@ export const useWriteNounsTokenBuyerBuyEth = /*#__PURE__*/ createUseWriteContrac
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'buyETH',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"pause"`
@@ -743,7 +743,7 @@ export const useWriteNounsTokenBuyerPause = /*#__PURE__*/ createUseWriteContract
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -755,7 +755,7 @@ export const useWriteNounsTokenBuyerRenounceOwnership = /*#__PURE__*/ createUseW
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
@@ -767,7 +767,7 @@ export const useWriteNounsTokenBuyerSetAdmin = /*#__PURE__*/ createUseWriteContr
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
@@ -780,7 +780,7 @@ export const useWriteNounsTokenBuyerSetBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
@@ -792,7 +792,7 @@ export const useWriteNounsTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createUseW
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
@@ -805,7 +805,7 @@ export const useWriteNounsTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
@@ -818,7 +818,7 @@ export const useWriteNounsTokenBuyerSetMaxAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
@@ -831,7 +831,7 @@ export const useWriteNounsTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
@@ -844,7 +844,7 @@ export const useWriteNounsTokenBuyerSetMinAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
@@ -856,7 +856,7 @@ export const useWriteNounsTokenBuyerSetPayer = /*#__PURE__*/ createUseWriteContr
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPayer',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
@@ -868,7 +868,7 @@ export const useWriteNounsTokenBuyerSetPriceFeed = /*#__PURE__*/ createUseWriteC
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPriceFeed',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -880,7 +880,7 @@ export const useWriteNounsTokenBuyerTransferOwnership = /*#__PURE__*/ createUseW
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"unpause"`
@@ -892,7 +892,7 @@ export const useWriteNounsTokenBuyerUnpause = /*#__PURE__*/ createUseWriteContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
@@ -904,7 +904,7 @@ export const useWriteNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createUseWriteCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'withdrawETH',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -915,7 +915,7 @@ export const useWriteNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createUseWriteCo
 export const useSimulateNounsTokenBuyer = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
@@ -927,7 +927,7 @@ export const useSimulateNounsTokenBuyerBuyEth = /*#__PURE__*/ createUseSimulateC
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'buyETH',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"pause"`
@@ -939,7 +939,7 @@ export const useSimulateNounsTokenBuyerPause = /*#__PURE__*/ createUseSimulateCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -951,7 +951,7 @@ export const useSimulateNounsTokenBuyerRenounceOwnership = /*#__PURE__*/ createU
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
@@ -963,7 +963,7 @@ export const useSimulateNounsTokenBuyerSetAdmin = /*#__PURE__*/ createUseSimulat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setAdmin',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
@@ -976,7 +976,7 @@ export const useSimulateNounsTokenBuyerSetBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
@@ -988,7 +988,7 @@ export const useSimulateNounsTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createU
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
@@ -1001,7 +1001,7 @@ export const useSimulateNounsTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
@@ -1014,7 +1014,7 @@ export const useSimulateNounsTokenBuyerSetMaxAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
@@ -1027,7 +1027,7 @@ export const useSimulateNounsTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
@@ -1040,7 +1040,7 @@ export const useSimulateNounsTokenBuyerSetMinAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
@@ -1052,7 +1052,7 @@ export const useSimulateNounsTokenBuyerSetPayer = /*#__PURE__*/ createUseSimulat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPayer',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
@@ -1064,7 +1064,7 @@ export const useSimulateNounsTokenBuyerSetPriceFeed = /*#__PURE__*/ createUseSim
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPriceFeed',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1076,7 +1076,7 @@ export const useSimulateNounsTokenBuyerTransferOwnership = /*#__PURE__*/ createU
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"unpause"`
@@ -1088,7 +1088,7 @@ export const useSimulateNounsTokenBuyerUnpause = /*#__PURE__*/ createUseSimulate
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
@@ -1100,7 +1100,7 @@ export const useSimulateNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createUseSimu
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'withdrawETH',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -1111,7 +1111,7 @@ export const useSimulateNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createUseSimu
 export const useWatchNounsTokenBuyerEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"AdminSet"`
@@ -1123,7 +1123,7 @@ export const useWatchNounsTokenBuyerAdminSetEvent = /*#__PURE__*/ createUseWatch
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'AdminSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"BaselinePaymentTokenAmountSet"`
@@ -1136,7 +1136,7 @@ export const useWatchNounsTokenBuyerBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'BaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"BotDiscountBPsSet"`
@@ -1149,7 +1149,7 @@ export const useWatchNounsTokenBuyerBotDiscountBPsSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'BotDiscountBPsSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"ETHWithdrawn"`
@@ -1161,7 +1161,7 @@ export const useWatchNounsTokenBuyerEthWithdrawnEvent = /*#__PURE__*/ createUseW
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'ETHWithdrawn',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBaselinePaymentTokenAmountSet"`
@@ -1174,7 +1174,7 @@ export const useWatchNounsTokenBuyerMaxAdminBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MaxAdminBaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBotDiscountBPsSet"`
@@ -1187,7 +1187,7 @@ export const useWatchNounsTokenBuyerMaxAdminBotDiscountBPsSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MaxAdminBotDiscountBPsSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MinAdminBaselinePaymentTokenAmountSet"`
@@ -1200,7 +1200,7 @@ export const useWatchNounsTokenBuyerMinAdminBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MinAdminBaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MinAdminBotDiscountBPsSet"`
@@ -1213,7 +1213,7 @@ export const useWatchNounsTokenBuyerMinAdminBotDiscountBPsSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MinAdminBotDiscountBPsSet',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1226,7 +1226,7 @@ export const useWatchNounsTokenBuyerOwnershipTransferredEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"Paused"`
@@ -1238,7 +1238,7 @@ export const useWatchNounsTokenBuyerPausedEvent = /*#__PURE__*/ createUseWatchCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'Paused',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"PayerSet"`
@@ -1250,7 +1250,7 @@ export const useWatchNounsTokenBuyerPayerSetEvent = /*#__PURE__*/ createUseWatch
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'PayerSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"PriceFeedSet"`
@@ -1262,7 +1262,7 @@ export const useWatchNounsTokenBuyerPriceFeedSetEvent = /*#__PURE__*/ createUseW
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'PriceFeedSet',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"SoldETH"`
@@ -1274,7 +1274,7 @@ export const useWatchNounsTokenBuyerSoldEthEvent = /*#__PURE__*/ createUseWatchC
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'SoldETH',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"Unpaused"`
@@ -1286,7 +1286,7 @@ export const useWatchNounsTokenBuyerUnpausedEvent = /*#__PURE__*/ createUseWatch
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'Unpaused',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -1301,7 +1301,7 @@ export const useWatchNounsTokenBuyerUnpausedEvent = /*#__PURE__*/ createUseWatch
 export const readNounsTokenBuyer = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"MAX_BPS"`
@@ -1313,7 +1313,7 @@ export const readNounsTokenBuyerMaxBps = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'MAX_BPS',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"admin"`
@@ -1325,7 +1325,7 @@ export const readNounsTokenBuyerAdmin = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"baselinePaymentTokenAmount"`
@@ -1337,7 +1337,7 @@ export const readNounsTokenBuyerBaselinePaymentTokenAmount = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'baselinePaymentTokenAmount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"botDiscountBPs"`
@@ -1349,7 +1349,7 @@ export const readNounsTokenBuyerBotDiscountBPs = /*#__PURE__*/ createReadContrac
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'botDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"ethAmountPerTokenAmount"`
@@ -1361,7 +1361,7 @@ export const readNounsTokenBuyerEthAmountPerTokenAmount = /*#__PURE__*/ createRe
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'ethAmountPerTokenAmount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"ethNeeded"`
@@ -1373,7 +1373,7 @@ export const readNounsTokenBuyerEthNeeded = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'ethNeeded',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"maxAdminBaselinePaymentTokenAmount"`
@@ -1386,7 +1386,7 @@ export const readNounsTokenBuyerMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'maxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"maxAdminBotDiscountBPs"`
@@ -1398,7 +1398,7 @@ export const readNounsTokenBuyerMaxAdminBotDiscountBPs = /*#__PURE__*/ createRea
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'maxAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"minAdminBaselinePaymentTokenAmount"`
@@ -1411,7 +1411,7 @@ export const readNounsTokenBuyerMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'minAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"minAdminBotDiscountBPs"`
@@ -1423,7 +1423,7 @@ export const readNounsTokenBuyerMinAdminBotDiscountBPs = /*#__PURE__*/ createRea
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'minAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"owner"`
@@ -1435,7 +1435,7 @@ export const readNounsTokenBuyerOwner = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paused"`
@@ -1447,7 +1447,7 @@ export const readNounsTokenBuyerPaused = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'paused',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"payer"`
@@ -1459,7 +1459,7 @@ export const readNounsTokenBuyerPayer = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'payer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paymentToken"`
@@ -1471,7 +1471,7 @@ export const readNounsTokenBuyerPaymentToken = /*#__PURE__*/ createReadContract(
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'paymentToken',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"paymentTokenDecimalsDigits"`
@@ -1483,7 +1483,7 @@ export const readNounsTokenBuyerPaymentTokenDecimalsDigits = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'paymentTokenDecimalsDigits',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"price"`
@@ -1495,7 +1495,7 @@ export const readNounsTokenBuyerPrice = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'price',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"priceFeed"`
@@ -1507,7 +1507,7 @@ export const readNounsTokenBuyerPriceFeed = /*#__PURE__*/ createReadContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'priceFeed',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeeded"`
@@ -1519,7 +1519,7 @@ export const readNounsTokenBuyerTokenAmountNeeded = /*#__PURE__*/ createReadCont
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'tokenAmountNeeded',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeededAndETHPayout"`
@@ -1531,7 +1531,7 @@ export const readNounsTokenBuyerTokenAmountNeededAndEthPayout = /*#__PURE__*/ cr
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'tokenAmountNeededAndETHPayout',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"tokenAmountPerEthAmount"`
@@ -1543,7 +1543,7 @@ export const readNounsTokenBuyerTokenAmountPerEthAmount = /*#__PURE__*/ createRe
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'tokenAmountPerEthAmount',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -1554,7 +1554,7 @@ export const readNounsTokenBuyerTokenAmountPerEthAmount = /*#__PURE__*/ createRe
 export const writeNounsTokenBuyer = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
@@ -1566,7 +1566,7 @@ export const writeNounsTokenBuyerBuyEth = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'buyETH',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"pause"`
@@ -1578,7 +1578,7 @@ export const writeNounsTokenBuyerPause = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1590,7 +1590,7 @@ export const writeNounsTokenBuyerRenounceOwnership = /*#__PURE__*/ createWriteCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
@@ -1602,7 +1602,7 @@ export const writeNounsTokenBuyerSetAdmin = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setAdmin',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
@@ -1614,7 +1614,7 @@ export const writeNounsTokenBuyerSetBaselinePaymentTokenAmount = /*#__PURE__*/ c
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setBaselinePaymentTokenAmount',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
@@ -1626,7 +1626,7 @@ export const writeNounsTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createWriteCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
@@ -1639,7 +1639,7 @@ export const writeNounsTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
@@ -1651,7 +1651,7 @@ export const writeNounsTokenBuyerSetMaxAdminBotDiscountBPs = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setMaxAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
@@ -1664,7 +1664,7 @@ export const writeNounsTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
@@ -1676,7 +1676,7 @@ export const writeNounsTokenBuyerSetMinAdminBotDiscountBPs = /*#__PURE__*/ creat
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setMinAdminBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
@@ -1688,7 +1688,7 @@ export const writeNounsTokenBuyerSetPayer = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPayer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
@@ -1700,7 +1700,7 @@ export const writeNounsTokenBuyerSetPriceFeed = /*#__PURE__*/ createWriteContrac
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPriceFeed',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1712,7 +1712,7 @@ export const writeNounsTokenBuyerTransferOwnership = /*#__PURE__*/ createWriteCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"unpause"`
@@ -1724,7 +1724,7 @@ export const writeNounsTokenBuyerUnpause = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
@@ -1736,7 +1736,7 @@ export const writeNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createWriteContract
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'withdrawETH',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -1747,7 +1747,7 @@ export const writeNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createWriteContract
 export const simulateNounsTokenBuyer = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
@@ -1759,7 +1759,7 @@ export const simulateNounsTokenBuyerBuyEth = /*#__PURE__*/ createSimulateContrac
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'buyETH',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"pause"`
@@ -1771,7 +1771,7 @@ export const simulateNounsTokenBuyerPause = /*#__PURE__*/ createSimulateContract
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'pause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1783,7 +1783,7 @@ export const simulateNounsTokenBuyerRenounceOwnership = /*#__PURE__*/ createSimu
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
@@ -1795,7 +1795,7 @@ export const simulateNounsTokenBuyerSetAdmin = /*#__PURE__*/ createSimulateContr
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setAdmin',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
@@ -1808,7 +1808,7 @@ export const simulateNounsTokenBuyerSetBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
@@ -1820,7 +1820,7 @@ export const simulateNounsTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createSimu
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setBotDiscountBPs',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
@@ -1833,7 +1833,7 @@ export const simulateNounsTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
@@ -1846,7 +1846,7 @@ export const simulateNounsTokenBuyerSetMaxAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMaxAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
@@ -1859,7 +1859,7 @@ export const simulateNounsTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
@@ -1872,7 +1872,7 @@ export const simulateNounsTokenBuyerSetMinAdminBotDiscountBPs =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     functionName: 'setMinAdminBotDiscountBPs',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
@@ -1884,7 +1884,7 @@ export const simulateNounsTokenBuyerSetPayer = /*#__PURE__*/ createSimulateContr
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPayer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
@@ -1896,7 +1896,7 @@ export const simulateNounsTokenBuyerSetPriceFeed = /*#__PURE__*/ createSimulateC
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'setPriceFeed',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1908,7 +1908,7 @@ export const simulateNounsTokenBuyerTransferOwnership = /*#__PURE__*/ createSimu
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"unpause"`
@@ -1920,7 +1920,7 @@ export const simulateNounsTokenBuyerUnpause = /*#__PURE__*/ createSimulateContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'unpause',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
@@ -1932,7 +1932,7 @@ export const simulateNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createSimulateCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   functionName: 'withdrawETH',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__
@@ -1943,7 +1943,7 @@ export const simulateNounsTokenBuyerWithdrawEth = /*#__PURE__*/ createSimulateCo
 export const watchNounsTokenBuyerEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"AdminSet"`
@@ -1955,7 +1955,7 @@ export const watchNounsTokenBuyerAdminSetEvent = /*#__PURE__*/ createWatchContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'AdminSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"BaselinePaymentTokenAmountSet"`
@@ -1968,7 +1968,7 @@ export const watchNounsTokenBuyerBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'BaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"BotDiscountBPsSet"`
@@ -1980,7 +1980,7 @@ export const watchNounsTokenBuyerBotDiscountBPsSetEvent = /*#__PURE__*/ createWa
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'BotDiscountBPsSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"ETHWithdrawn"`
@@ -1992,7 +1992,7 @@ export const watchNounsTokenBuyerEthWithdrawnEvent = /*#__PURE__*/ createWatchCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'ETHWithdrawn',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBaselinePaymentTokenAmountSet"`
@@ -2005,7 +2005,7 @@ export const watchNounsTokenBuyerMaxAdminBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MaxAdminBaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBotDiscountBPsSet"`
@@ -2018,7 +2018,7 @@ export const watchNounsTokenBuyerMaxAdminBotDiscountBPsSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MaxAdminBotDiscountBPsSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MinAdminBaselinePaymentTokenAmountSet"`
@@ -2031,7 +2031,7 @@ export const watchNounsTokenBuyerMinAdminBaselinePaymentTokenAmountSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MinAdminBaselinePaymentTokenAmountSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"MinAdminBotDiscountBPsSet"`
@@ -2044,7 +2044,7 @@ export const watchNounsTokenBuyerMinAdminBotDiscountBPsSetEvent =
     abi: nounsTokenBuyerAbi,
     address: nounsTokenBuyerAddress,
     eventName: 'MinAdminBotDiscountBPsSet',
-  });
+  })
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -2054,7 +2054,7 @@ export const watchNounsTokenBuyerMinAdminBotDiscountBPsSetEvent =
  */
 export const watchNounsTokenBuyerOwnershipTransferredEvent = /*#__PURE__*/ createWatchContractEvent(
   { abi: nounsTokenBuyerAbi, address: nounsTokenBuyerAddress, eventName: 'OwnershipTransferred' },
-);
+)
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"Paused"`
@@ -2066,7 +2066,7 @@ export const watchNounsTokenBuyerPausedEvent = /*#__PURE__*/ createWatchContract
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'Paused',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"PayerSet"`
@@ -2078,7 +2078,7 @@ export const watchNounsTokenBuyerPayerSetEvent = /*#__PURE__*/ createWatchContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'PayerSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"PriceFeedSet"`
@@ -2090,7 +2090,7 @@ export const watchNounsTokenBuyerPriceFeedSetEvent = /*#__PURE__*/ createWatchCo
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'PriceFeedSet',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"SoldETH"`
@@ -2102,7 +2102,7 @@ export const watchNounsTokenBuyerSoldEthEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'SoldETH',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenBuyerAbi}__ and `eventName` set to `"Unpaused"`
@@ -2114,4 +2114,4 @@ export const watchNounsTokenBuyerUnpausedEvent = /*#__PURE__*/ createWatchContra
   abi: nounsTokenBuyerAbi,
   address: nounsTokenBuyerAddress,
   eventName: 'Unpaused',
-});
+})

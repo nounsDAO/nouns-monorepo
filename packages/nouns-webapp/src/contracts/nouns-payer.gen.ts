@@ -3,14 +3,14 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 import {
   createReadContract,
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsPayer
@@ -155,7 +155,7 @@ export const nounsPayerAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D)
@@ -164,13 +164,13 @@ export const nounsPayerAbi = [
 export const nounsPayerAddress = {
   1: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
   11155111: '0x5a2A0951C6b3479DBEe1D5909Aac7B325d300D94',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x5a2A0951C6b3479DBEe1D5909Aac7B325d300D94)
  */
-export const nounsPayerConfig = { address: nounsPayerAddress, abi: nounsPayerAbi } as const;
+export const nounsPayerConfig = { address: nounsPayerAddress, abi: nounsPayerAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -185,7 +185,7 @@ export const nounsPayerConfig = { address: nounsPayerAddress, abi: nounsPayerAbi
 export const useReadNounsPayer = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"debtOf"`
@@ -197,7 +197,7 @@ export const useReadNounsPayerDebtOf = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'debtOf',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"owner"`
@@ -209,7 +209,7 @@ export const useReadNounsPayerOwner = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"paymentToken"`
@@ -221,7 +221,7 @@ export const useReadNounsPayerPaymentToken = /*#__PURE__*/ createUseReadContract
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'paymentToken',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"queue"`
@@ -233,7 +233,7 @@ export const useReadNounsPayerQueue = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"queueAt"`
@@ -245,7 +245,7 @@ export const useReadNounsPayerQueueAt = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'queueAt',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"totalDebt"`
@@ -257,7 +257,7 @@ export const useReadNounsPayerTotalDebt = /*#__PURE__*/ createUseReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'totalDebt',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -268,7 +268,7 @@ export const useReadNounsPayerTotalDebt = /*#__PURE__*/ createUseReadContract({
 export const useWriteNounsPayer = /*#__PURE__*/ createUseWriteContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"payBackDebt"`
@@ -280,7 +280,7 @@ export const useWriteNounsPayerPayBackDebt = /*#__PURE__*/ createUseWriteContrac
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'payBackDebt',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -292,7 +292,7 @@ export const useWriteNounsPayerRenounceOwnership = /*#__PURE__*/ createUseWriteC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"sendOrRegisterDebt"`
@@ -304,7 +304,7 @@ export const useWriteNounsPayerSendOrRegisterDebt = /*#__PURE__*/ createUseWrite
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'sendOrRegisterDebt',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -316,7 +316,7 @@ export const useWriteNounsPayerTransferOwnership = /*#__PURE__*/ createUseWriteC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"withdrawPaymentToken"`
@@ -328,7 +328,7 @@ export const useWriteNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createUseWri
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'withdrawPaymentToken',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -339,7 +339,7 @@ export const useWriteNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createUseWri
 export const useSimulateNounsPayer = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"payBackDebt"`
@@ -351,7 +351,7 @@ export const useSimulateNounsPayerPayBackDebt = /*#__PURE__*/ createUseSimulateC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'payBackDebt',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -363,7 +363,7 @@ export const useSimulateNounsPayerRenounceOwnership = /*#__PURE__*/ createUseSim
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"sendOrRegisterDebt"`
@@ -375,7 +375,7 @@ export const useSimulateNounsPayerSendOrRegisterDebt = /*#__PURE__*/ createUseSi
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'sendOrRegisterDebt',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -387,7 +387,7 @@ export const useSimulateNounsPayerTransferOwnership = /*#__PURE__*/ createUseSim
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"withdrawPaymentToken"`
@@ -399,7 +399,7 @@ export const useSimulateNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createUse
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'withdrawPaymentToken',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -410,7 +410,7 @@ export const useSimulateNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createUse
 export const useWatchNounsPayerEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -423,7 +423,7 @@ export const useWatchNounsPayerOwnershipTransferredEvent =
     abi: nounsPayerAbi,
     address: nounsPayerAddress,
     eventName: 'OwnershipTransferred',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"PaidBackDebt"`
@@ -435,7 +435,7 @@ export const useWatchNounsPayerPaidBackDebtEvent = /*#__PURE__*/ createUseWatchC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'PaidBackDebt',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"RegisteredDebt"`
@@ -447,7 +447,7 @@ export const useWatchNounsPayerRegisteredDebtEvent = /*#__PURE__*/ createUseWatc
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'RegisteredDebt',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"TokensWithdrawn"`
@@ -459,7 +459,7 @@ export const useWatchNounsPayerTokensWithdrawnEvent = /*#__PURE__*/ createUseWat
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'TokensWithdrawn',
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -474,7 +474,7 @@ export const useWatchNounsPayerTokensWithdrawnEvent = /*#__PURE__*/ createUseWat
 export const readNounsPayer = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"debtOf"`
@@ -486,7 +486,7 @@ export const readNounsPayerDebtOf = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'debtOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"owner"`
@@ -498,7 +498,7 @@ export const readNounsPayerOwner = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"paymentToken"`
@@ -510,7 +510,7 @@ export const readNounsPayerPaymentToken = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'paymentToken',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"queue"`
@@ -522,7 +522,7 @@ export const readNounsPayerQueue = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'queue',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"queueAt"`
@@ -534,7 +534,7 @@ export const readNounsPayerQueueAt = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'queueAt',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"totalDebt"`
@@ -546,7 +546,7 @@ export const readNounsPayerTotalDebt = /*#__PURE__*/ createReadContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'totalDebt',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -557,7 +557,7 @@ export const readNounsPayerTotalDebt = /*#__PURE__*/ createReadContract({
 export const writeNounsPayer = /*#__PURE__*/ createWriteContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"payBackDebt"`
@@ -569,7 +569,7 @@ export const writeNounsPayerPayBackDebt = /*#__PURE__*/ createWriteContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'payBackDebt',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -581,7 +581,7 @@ export const writeNounsPayerRenounceOwnership = /*#__PURE__*/ createWriteContrac
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"sendOrRegisterDebt"`
@@ -593,7 +593,7 @@ export const writeNounsPayerSendOrRegisterDebt = /*#__PURE__*/ createWriteContra
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'sendOrRegisterDebt',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -605,7 +605,7 @@ export const writeNounsPayerTransferOwnership = /*#__PURE__*/ createWriteContrac
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"withdrawPaymentToken"`
@@ -617,7 +617,7 @@ export const writeNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createWriteCont
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'withdrawPaymentToken',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -628,7 +628,7 @@ export const writeNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createWriteCont
 export const simulateNounsPayer = /*#__PURE__*/ createSimulateContract({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"payBackDebt"`
@@ -640,7 +640,7 @@ export const simulateNounsPayerPayBackDebt = /*#__PURE__*/ createSimulateContrac
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'payBackDebt',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -652,7 +652,7 @@ export const simulateNounsPayerRenounceOwnership = /*#__PURE__*/ createSimulateC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"sendOrRegisterDebt"`
@@ -664,7 +664,7 @@ export const simulateNounsPayerSendOrRegisterDebt = /*#__PURE__*/ createSimulate
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'sendOrRegisterDebt',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"transferOwnership"`
@@ -676,7 +676,7 @@ export const simulateNounsPayerTransferOwnership = /*#__PURE__*/ createSimulateC
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsPayerAbi}__ and `functionName` set to `"withdrawPaymentToken"`
@@ -688,7 +688,7 @@ export const simulateNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createSimula
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   functionName: 'withdrawPaymentToken',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__
@@ -699,7 +699,7 @@ export const simulateNounsPayerWithdrawPaymentToken = /*#__PURE__*/ createSimula
 export const watchNounsPayerEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -711,7 +711,7 @@ export const watchNounsPayerOwnershipTransferredEvent = /*#__PURE__*/ createWatc
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'OwnershipTransferred',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"PaidBackDebt"`
@@ -723,7 +723,7 @@ export const watchNounsPayerPaidBackDebtEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'PaidBackDebt',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"RegisteredDebt"`
@@ -735,7 +735,7 @@ export const watchNounsPayerRegisteredDebtEvent = /*#__PURE__*/ createWatchContr
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'RegisteredDebt',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsPayerAbi}__ and `eventName` set to `"TokensWithdrawn"`
@@ -747,4 +747,4 @@ export const watchNounsPayerTokensWithdrawnEvent = /*#__PURE__*/ createWatchCont
   abi: nounsPayerAbi,
   address: nounsPayerAddress,
   eventName: 'TokensWithdrawn',
-});
+})
