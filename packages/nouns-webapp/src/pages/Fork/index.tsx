@@ -4,7 +4,6 @@ import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { utils } from 'ethers/lib/ethers';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useParams, Link } from 'react-router';
 
@@ -32,6 +31,7 @@ import classes from './Fork.module.css';
 import ForkEvent from './ForkEvent';
 import WithdrawNounsButton from './WithdrawNounsButton';
 import { Address } from '@/utils/types';
+import { formatEther } from 'viem';
 
 const now = new Date();
 
@@ -335,10 +335,7 @@ const ForkPage = () => {
                     </>
                   )}
                 </p>
-                <p>
-                  Fork treasury balance: Ξ
-                  {Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
-                </p>
+                <p>Fork treasury balance: Ξ{Number(formatEther(forkTreasuryBalance)).toFixed(2)}</p>
               </div>
             </div>
           </Col>

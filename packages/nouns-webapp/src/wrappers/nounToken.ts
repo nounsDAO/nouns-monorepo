@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
-import { ethers, utils } from 'ethers';
+import { utils } from 'ethers';
+import { zeroAddress } from 'viem';
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 
@@ -135,7 +136,7 @@ export const useNounSeed = (nounId: bigint): INounSeed => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
-  return useAccountVotes(account ?? ethers.constants.AddressZero);
+  return useAccountVotes(account ?? zeroAddress);
 };
 
 export const useAccountVotes = (account?: string): number | undefined => {

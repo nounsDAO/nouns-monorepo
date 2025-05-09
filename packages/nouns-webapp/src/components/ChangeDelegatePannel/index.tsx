@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { isAddress } from 'ethers/lib/utils';
 import { Collapse, FormControl } from 'react-bootstrap';
+import { isAddress } from 'viem';
 
 import BrandSpinner from '@/components/BrandSpinner';
 import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';

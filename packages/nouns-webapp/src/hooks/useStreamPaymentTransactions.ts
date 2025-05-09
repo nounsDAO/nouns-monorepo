@@ -1,15 +1,16 @@
 import { utils } from 'ethers';
 
-import { ProposalActionModalState } from '../components/ProposalActionsModal';
-import { SupportedCurrency } from '../components/ProposalActionsModal/steps/TransferFundsDetailsStep';
-import config from '../config';
-import payerABIJSON from '../utils/payerContractUtils/payerABI.json';
-import StreamFactoryABI from '../utils/streamingPaymentUtils/streamFactory.abi.json';
+import { ProposalActionModalState } from '@/components/ProposalActionsModal';
+import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import config from '@/config';
+import payerABIJSON from '@/utils/payerContractUtils/payerABI.json';
+import StreamFactoryABI from '@/utils/streamingPaymentUtils/streamFactory.abi.json';
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
-} from '../utils/streamingPaymentUtils/streamingPaymentUtils';
-import { human2ContractUSDCFormat } from '../utils/usdcUtils';
+} from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+import { human2ContractUSDCFormat } from '@/utils/usdcUtils';
+
 import wethABIJSON from '../utils/wethUtils/weth.abi.json';
 
 const abi = new utils.Interface(StreamFactoryABI);

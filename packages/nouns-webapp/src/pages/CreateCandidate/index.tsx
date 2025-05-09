@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { ethers } from 'ethers';
 import { Col, Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
@@ -22,6 +21,7 @@ import { useAppDispatch } from '@/hooks';
 import config from '@/config';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { useGetCreateCandidateCost, useCreateProposalCandidate } from '@/wrappers/nounsData';
+import { formatEther } from 'viem';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -218,7 +218,7 @@ const CreateCandidatePage = () => {
           <strong>
             <Trans>
               Submissions are free for Nouns voters. Non-voters can submit for a{' '}
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee.
+              {createCandidateCost && formatEther(createCandidateCost)} ETH fee.
             </Trans>
           </strong>
         </Alert>
@@ -266,8 +266,7 @@ const CreateCandidatePage = () => {
         <p className={classes.feeNotice}>
           {!hasVotes && (
             <Trans>
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
-              submission
+              {createCandidateCost && formatEther(createCandidateCost)} ETH fee upon submission
             </Trans>
           )}
         </p>
