@@ -51,12 +51,7 @@ const CandidatePage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
   const blockNumber = useBlockNumber();
-  const candidate = useCandidateProposal(
-    Number(id).toString(),
-    dataFetchPollInterval,
-    false,
-    currentBlock,
-  );
+  const candidate = useCandidateProposal(id ?? '', dataFetchPollInterval, false, currentBlock);
   const { account } = useEthers();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -66,8 +61,7 @@ const CandidatePage = () => {
   const [isProposal, setIsProposal] = useState<boolean>(false);
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
-  const isParentProposalUpdatable =
-    originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
   const handleRefetchData = () => {
     feedback.refetch();
   };

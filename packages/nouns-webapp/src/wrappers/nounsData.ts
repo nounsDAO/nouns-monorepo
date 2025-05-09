@@ -191,10 +191,10 @@ export const useCandidateProposal = (
   });
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
-  const versionSignatures = data?.proposalCandidate.latestVersion.content.contentSignatures;
+  const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
   const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
   const proposerDelegates = useDelegateNounsAtBlockQuery(
-    [data?.proposalCandidate.proposer],
+    [data?.proposalCandidate?.proposer],
     blockNumber || 0,
   );
   const proposerNounVotes =
