@@ -6,14 +6,14 @@ import { useContractCall, useContractFunction } from '@usedapp/core';
 import { utils } from 'ethers';
 import * as R from 'remeda';
 
-import config from '../config';
+import config from '@/config';
 
 import {
-  ProposalDetail,
-  ProposalTransactionDetails,
   extractTitle,
   formatProposalTransactionDetails,
   formatProposalTransactionDetailsToUpdate,
+  ProposalDetail,
+  ProposalTransactionDetails,
   removeMarkdownStyle,
   useActivePendingUpdatableProposers,
   useProposalThreshold,
@@ -21,11 +21,11 @@ import {
 } from './nounsDao';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
 import {
-  Delegates,
   candidateFeedbacksQuery,
   candidateProposalQuery,
-  candidateProposalVersionsQuery,
   candidateProposalsQuery,
+  candidateProposalVersionsQuery,
+  Delegates,
   proposalFeedbacksQuery,
 } from './subgraph';
 
@@ -85,7 +85,7 @@ const filterSigners = (
   updatableProposalIds?: number[],
 ) => {
   const sigsFiltered = signers?.filter(
-    sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
+    sig => !sig.canceled && sig.expirationTimestamp > timestampNow,
   );
   let voteCount = 0;
   const activeSigs: CandidateSignature[] = [];
@@ -115,7 +115,7 @@ const filterSigners = (
   });
 
   const filteredSignatures = activeSigs.filter((signature: CandidateSignature) => {
-    return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
+    return !signature.canceled && signature.expirationTimestamp > timestampNow / 1000;
   });
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
@@ -130,8 +130,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
   const unmatchedCandidates: ProposalCandidateSubgraphEntity[] =
     candidates?.proposalCandidates?.filter(
       (candidate: ProposalCandidateSubgraphEntity) =>
-        candidate.latestVersion.content.matchingProposalIds.length === 0 &&
-        candidate.canceled === false,
+        candidate.latestVersion.content.matchingProposalIds.length === 0 && !candidate.canceled,
     );
   const activeCandidateProposers = unmatchedCandidates?.map(
     (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
@@ -158,7 +157,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
       const proposerVotes =
         proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
           ?.nounsRepresented?.length || 0;
-      const parsedData = parseSubgraphCandidate(
+      return parseSubgraphCandidate(
         candidate,
         proposerVotes,
         threshold,
@@ -168,7 +167,6 @@ export const useCandidateProposals = (blockNumber?: number) => {
         signersDelegateSnapshot.data,
         updatableProposalIds.data,
       );
-      return parsedData;
     });
 
   if (candidatesData) {

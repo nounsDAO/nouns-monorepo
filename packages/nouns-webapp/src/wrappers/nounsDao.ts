@@ -18,9 +18,9 @@ import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/util
 import * as R from 'remeda';
 import { formatEther } from 'viem';
 
-import config, { CHAIN_ID } from '../config';
-import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
-import { useLogs } from '../hooks/useLogs';
+import config, { CHAIN_ID } from '@/config';
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { useLogs } from '@/hooks/useLogs';
 
 import {
   proposalQuery,
