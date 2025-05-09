@@ -29,7 +29,11 @@ import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
-type EditCandidateProps = object;
+interface EditCandidateProps {
+  match: {
+    params: { id: string };
+  };
+};
 
 const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const { id } = useParams<{ id: string }>();
