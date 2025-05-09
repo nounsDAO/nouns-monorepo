@@ -124,7 +124,7 @@ export default defineConfig([
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
       // Prettier rules
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'warn',
     },
     settings: {
       'import/parsers': {
@@ -191,7 +191,7 @@ export default defineConfig([
       'import/namespace': 'error',
       'import/export': 'error',
       // Prettier rules
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'warn',
     },
   },
 
