@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.38.0",
+    "@graphql-codegen/cli": "^5.0.5",
     "@graphql-codegen/typescript-operations": "^4.6.0",
     "@apollo/client": "^3.3.21",
     "@ethersproject/abi": "^5.8.0",
