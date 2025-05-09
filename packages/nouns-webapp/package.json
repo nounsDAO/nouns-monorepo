@@ -21,10 +21,6 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@graphprotocol/graph-ts": "^0.38.0",
-    "@graphql-codegen/cli": "^5.0.5",
-    "@graphql-codegen/schema-ast": "^4.1.0",
-    "@graphql-codegen/typescript-operations": "^4.6.0",
     "@apollo/client": "^3.3.21",
     "@ethersproject/providers": "^5.8.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
@@ -33,7 +29,6 @@
     "@heroicons/react": "^1.0.6",
     "@lingui/core": "5.3.1",
     "@lingui/detect-locale": "5.3.1",
-    "graphql-scalars": "^1.24.2",
     "@lingui/loader": "5.3.1",
     "@lingui/macro": "5.3.1",
     "@lingui/react": "5.3.1",
@@ -94,6 +89,10 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@graphprotocol/graph-ts": "^0.38.0",
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typescript-operations": "^4.6.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
     "@lingui/cli": "5.3.1",
     "@lingui/vite-plugin": "5.3.1",
@@ -118,6 +117,7 @@
     "autoprefixer": "^10.4.21",
     "dotenv": "^16.5.0",
     "globals": "^16.1.0",
+    "graphql-scalars": "^1.24.2",
     "is-ci": "^4.1.0",
     "jsdom": "^26.1.0",
     "playwright": "^1.44.1",
