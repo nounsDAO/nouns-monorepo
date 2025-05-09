@@ -21,6 +21,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@graphql-codegen/typescript-operations": "^4.6.0",
     "@apollo/client": "^3.3.21",
     "@ethersproject/abi": "^5.8.0",
     "@ethersproject/abstract-provider": "^5.8.0",
