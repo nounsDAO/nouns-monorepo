@@ -22,7 +22,7 @@ const builtProposalVote = (noun: NormalizedNoun, vote: NormalizedVote): Proposal
 
 const reduceProposalVotes = (nouns: NormalizedNoun[]) =>
   nouns.reduce((acc: ProposalVotes, noun: NormalizedNoun) => {
-    for (let i in noun.votes) {
+    for (const i in noun.votes) {
       const vote = noun.votes[i];
       if (!acc[vote.proposalId]) acc[vote.proposalId] = [];
       acc[vote.proposalId].push(builtProposalVote(noun, vote));

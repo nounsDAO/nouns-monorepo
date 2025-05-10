@@ -1,12 +1,16 @@
 import React from 'react';
-import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { TransferEvent } from '../../../../wrappers/nounActivity';
-import classes from './MobileTransferEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { TransferEvent } from '@/wrappers/nounActivity';
+
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+
+import classes from './MobileTransferEvent.module.css';
 
 interface MobileTransferEventProps {
   event: TransferEvent;

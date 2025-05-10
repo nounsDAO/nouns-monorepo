@@ -1,5 +1,46 @@
+import timezone from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
+import en from 'dayjs/locale/en';
+import VoteModal from '@/components/VoteModal';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import clsx from 'clsx';
+import ProposalHeader from '@/components/ProposalHeader';
+import ProposalContent from '@/components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+
+import { useQuery } from '@apollo/client';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+  propUsingDynamicQuorum,
+} from '@/wrappers/subgraph';
+import { getNounVotes } from '@/utils/getNounsVotes';
+import { Trans } from '@lingui/react/macro';
+import { i18n } from '@lingui/core';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import { SearchIcon } from '@heroicons/react/solid';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import { Link, useParams } from 'react-router';
+import ReactTooltip from 'react-tooltip';
+
+import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
+import ShortAddress from '@/components/ShortAddress';
+import StreamWithdrawModal from '@/components/StreamWithdrawModal';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import config from '@/config';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { isProposalUpdatable } from '@/utils/proposals';
+import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import {
   PartialProposal,
   ProposalState,
@@ -14,50 +55,11 @@ import {
   useProposalVersions,
   useQueueProposal,
   useIsForkActive,
-} from '../../wrappers/nounsDao';
-import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsDao';
+import { useProposalFeedback } from '@/wrappers/nounsData';
+import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+
 import classes from './Vote.module.css';
-import { Link } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
-import en from 'dayjs/locale/en';
-import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
-import ProposalContent from '../../components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
-import { useQuery } from '@apollo/client';
-import {
-  proposalVotesQuery,
-  delegateNounsAtBlockQuery,
-  ProposalVotes,
-  Delegates,
-  propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { SearchIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import { isProposalUpdatable } from '../../utils/proposals';
-import { useProposalFeedback } from '../../wrappers/nounsData';
-import { useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -179,36 +181,36 @@ const VotePage = () => {
     return versionDetails?.createdAt;
   };
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
-  const isInNonFinalState = [
-    ProposalState.UPDATABLE,
-    ProposalState.PENDING,
-    ProposalState.ACTIVE,
-    ProposalState.SUCCEEDED,
-    ProposalState.QUEUED,
-    ProposalState.OBJECTION_PERIOD,
-  ].includes(proposal?.status!);
+  const isInNonFinalState =
+    proposal?.status !== undefined &&
+    [
+      ProposalState.UPDATABLE,
+      ProposalState.PENDING,
+      ProposalState.ACTIVE,
+      ProposalState.SUCCEEDED,
+      ProposalState.QUEUED,
+      ProposalState.OBJECTION_PERIOD,
+    ].includes(proposal.status);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
-  const isProposalSigner =
-    account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const isProposalSigner = !!(
+    account &&
+    proposal &&
+    signers &&
+    signers.includes(account?.toLowerCase())
+  );
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
   const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isUpdateable = () => {
     if (!isDaoGteV3) return false;
-    if (
+    return !!(
       proposal &&
       currentBlock &&
       isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
 
   const isCancellable = () => {
-    if (isInNonFinalState && (isProposalSigner || isProposer())) {
-      return true;
-    }
-    return false;
+    return isInNonFinalState && (isProposalSigner || isProposer());
   };
 
   const isAwaitingStateChange = () => {
@@ -222,10 +224,7 @@ const VotePage = () => {
   };
 
   const isAwaitingDestructiveStateChange = () => {
-    if (isCancellable()) {
-      return true;
-    }
-    return false;
+    return isCancellable();
   };
 
   const isActionable = () => {
@@ -235,11 +234,7 @@ const VotePage = () => {
       return true;
     } else if (isAwaitingDestructiveStateChange()) {
       return true;
-    } else if (isUpdateable()) {
-      return true;
-    } else {
-      return false;
-    }
+    } else return isUpdateable();
   };
 
   const startOrEndTimeCopy = () => {
@@ -537,7 +532,10 @@ const VotePage = () => {
                 return <></>;
               }
               return (
-                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                <Row
+                  key={parsedCallData.streamAddress}
+                  className={clsx(classes.section, classes.transitionStateButtonSection)}
+                >
                   <span className={classes.boldedLabel}>
                     <Trans>Only visible to you</Trans>
                   </span>
@@ -558,7 +556,9 @@ const VotePage = () => {
                     >
                       <Trans>
                         Withdraw from Stream{' '}
-                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                        <ShortAddress
+                          address={(parsedCallData.streamAddress as `0x${string}`) ?? '0x'}
+                        />
                       </Trans>
                     </Button>
                   </Col>
@@ -712,7 +712,7 @@ const VotePage = () => {
                     <ReactTooltip
                       id={'view-dq-info'}
                       className={classes.delegateHover}
-                      getContent={dataTip => {
+                      getContent={() => {
                         return <Trans>View Threshold Info</Trans>;
                       }}
                     />
@@ -720,7 +720,7 @@ const VotePage = () => {
                   <div
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
-                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
+                    onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
                     className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
                     <span>

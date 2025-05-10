@@ -1,16 +1,19 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './SelectSponsorsToPropose.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
-import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
-import ShortAddress from '../ShortAddress';
-import { usePropose } from '../../wrappers/nounsDao';
-import { Link } from 'react-router';
+import clsx from 'clsx';
 import { Alert } from 'react-bootstrap';
+import { Link } from 'react-router';
+
+import link from '@/assets/icons/Link.svg';
+import ShortAddress from '@/components/ShortAddress';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { usePropose } from '@/wrappers/nounsDao';
+import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
+
+import classes from './SelectSponsorsToPropose.module.css';
 
 type Props = {
   isModalOpen: boolean;
@@ -23,7 +26,7 @@ type Props = {
   setDataFetchPollInterval: Function;
 };
 
-export default function SelectSponsorsToPropose(props: Props) {
+const SelectSponsorsToPropose = (props: Props) => {
   const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
@@ -38,7 +41,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       return acc + votes;
     }, 0);
     setSelectedVoteCount(voteCount);
-
   }, [selectedSignatures]);
 
   const clearTransactionState = () => {
@@ -174,8 +176,8 @@ export default function SelectSponsorsToPropose(props: Props) {
                 onClick={() => {
                   selectedSignatures.includes(signature)
                     ? setSelectedSignatures(
-                      selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                    )
+                        selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                      )
                     : setSelectedSignatures([...selectedSignatures, signature]);
                 }}
                 disabled={
@@ -212,8 +214,17 @@ export default function SelectSponsorsToPropose(props: Props) {
               handleSubmission(selectedSignatures);
             }}
           >
-
-            {!isWaiting && !isLoading && <>{selectedSignatures.length === 0 ? <>Submit with no sponsors</> : <>Submit {selectedVoteCount} vote{selectedVoteCount > 1 && "s"}</>}</>}
+            {!isWaiting && !isLoading && (
+              <>
+                {selectedSignatures.length === 0 ? (
+                  <>Submit with no sponsors</>
+                ) : (
+                  <>
+                    Submit {selectedVoteCount} vote{selectedVoteCount > 1 && 's'}
+                  </>
+                )}
+              </>
+            )}
             <span>
               {(isWaiting || isLoading) && (
                 <img
@@ -280,4 +291,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       />
     </>
   );
-}
+};
+
+export default SelectSponsorsToPropose;

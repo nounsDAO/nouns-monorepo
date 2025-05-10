@@ -1,5 +1,7 @@
 import React from 'react';
+
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+
 import classes from './ModalBottomButtonRow.module.css';
 
 export interface ModalBottomButtonRowProps {

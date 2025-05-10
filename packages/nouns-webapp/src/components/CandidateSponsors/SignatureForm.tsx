@@ -1,17 +1,20 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './CandidateSponsors.module.css';
-import dayjs from 'dayjs';
-import { Trans } from '@lingui/react/macro';
-import { TransactionStatus, useEthers } from '@usedapp/core';
-import { ethers } from 'ethers';
-import config, { CHAIN_ID } from '../../config';
-import { useAddSignature, ProposalCandidate } from '../../wrappers/nounsData';
-import clsx from 'clsx';
+
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
+import { TransactionStatus, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { ethers } from 'ethers';
 import { Spinner } from 'react-bootstrap';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
+
+import link from '@/assets/icons/Link.svg';
+import config, { CHAIN_ID } from '@/config';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useAddSignature, ProposalCandidate } from '@/wrappers/nounsData';
+
+import classes from './CandidateSponsors.module.css';
 
 const domain = {
   name: 'Nouns DAO',
@@ -44,18 +47,18 @@ const updateProposalTypes = {
   ],
 };
 
-type Props = {
+type SignatureFormProps = {
   id: string;
   transactionState: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception';
-  setTransactionState: Function;
-  setIsFormDisplayed: Function;
+  setTransactionState: (state: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception') => void;
+  setIsFormDisplayed: (displayed: boolean) => void;
   candidate: ProposalCandidate;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   proposalIdToUpdate: number;
 };
 
-function SignatureForm(props: Props) {
+const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   const [reasonText, setReasonText] = useState('');
   const [expirationDate, setExpirationDate] = useState<number>();
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -318,7 +321,7 @@ function SignatureForm(props: Props) {
             <span
               className={clsx(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                classes.loadingButton,
+                  classes.loadingButton,
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
@@ -431,6 +434,6 @@ function SignatureForm(props: Props) {
       </p>
     </div>
   );
-}
+};
 
 export default SignatureForm;

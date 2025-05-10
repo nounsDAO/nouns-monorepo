@@ -1,13 +1,18 @@
+import type { Address } from '@/utils/types';
+
 import React from 'react';
-import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopDelegationEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+
 import { ScaleIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
+import DesktopNounActivityRow from '@/components/profileEvent/activityRow/DesktopNounActivityRow';
+import TransactionHashPill from '@/components/profileEvent/eventData/infoPills/TransactionHashPill';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { DelegationEvent } from '@/wrappers/nounActivity';
+
+import classes from './DesktopDelegationEvent.module.css';
 
 interface DesktopDelegationEventProps {
   event: DelegationEvent;
@@ -29,7 +34,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             id={'view-on-etherscan-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
@@ -41,7 +46,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             className={classes.address}
           >
             {' '}
-            <ShortAddress address={event.previousDelegate} />
+            <ShortAddress address={event.previousDelegate as Address} />
           </span>{' '}
           to{' '}
           <span
@@ -50,7 +55,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             onClick={() => window.open(buildEtherscanAddressLink(event.newDelegate), '_blank')}
             className={classes.address}
           >
-            <ShortAddress address={event.newDelegate} />
+            <ShortAddress address={event.newDelegate as Address} />
           </span>
         </>
       }
@@ -60,7 +65,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             id={'view-on-etherscan-txn-delegate-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />

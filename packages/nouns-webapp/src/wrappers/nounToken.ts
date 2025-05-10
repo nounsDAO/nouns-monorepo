@@ -1,8 +1,13 @@
-import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
-import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
-import config, { cache, cacheKey, CHAIN_ID } from '../config';
+import { useEffect } from 'react';
+
 import { useQuery } from '@apollo/client';
+import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
+import { utils } from 'ethers';
+import { zeroAddress } from 'viem';
+
+import config, { cache, cacheKey, CHAIN_ID } from '../config';
+
 import {
   Delegates,
   accountEscrowedNounsQuery,
@@ -10,7 +15,6 @@ import {
   ownedNounsQuery,
   seedsQuery,
 } from './subgraph';
-import { useEffect } from 'react';
 
 interface NounToken {
   name: string;
@@ -44,14 +48,14 @@ export enum NounsTokenContractFunction {
 const abi = new utils.Interface(NounsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 const nounsTokenContract = NounsTokenFactory.connect(config.addresses.nounsToken, undefined!);
-const isSeedValid = (seed: Record<string, any> | undefined) => {
+const isSeedValid = (seed: INounSeed | Record<string, never> | undefined) => {
   const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
   const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));
   const hasValidValues = Object.values(seed || {}).some(v => v !== 0);
   return hasExpectedKeys && hasValidValues;
 };
 
-export const useNounToken = (nounId: EthersBN) => {
+export const useNounToken = (nounId: bigint) => {
   const [noun] =
     useContractCall<[string]>({
       abi,
@@ -99,7 +103,7 @@ const useNounSeeds = () => {
   return cachedSeeds;
 };
 
-export const useNounSeed = (nounId: EthersBN): INounSeed => {
+export const useNounSeed = (nounId: bigint): INounSeed => {
   const seeds = useNounSeeds();
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
@@ -132,18 +136,18 @@ export const useNounSeed = (nounId: EthersBN): INounSeed => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
-  return useAccountVotes(account ?? ethers.constants.AddressZero);
+  return useAccountVotes(account ?? zeroAddress);
 };
 
 export const useAccountVotes = (account?: string): number | undefined => {
   const [votes] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[bigint]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'getCurrentVotes',
       args: [account],
     }) || [];
-  return votes?.toNumber();
+  return Number(votes);
 };
 
 export const useUserDelegatee = (): string | undefined => {
@@ -162,13 +166,13 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
   const { account } = useEthers();
   // Check for available votes
   const [votes] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[bigint]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'getPriorVotes',
       args: [account, block],
     }) || [];
-  return votes?.toNumber();
+  return Number(votes);
 };
 
 export const useDelegateVotes = () => {
@@ -179,36 +183,36 @@ export const useDelegateVotes = () => {
 
 export const useNounTokenBalance = (address: string): number | undefined => {
   const [tokenBalance] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[bigint]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'balanceOf',
       args: [address],
     }) || [];
-  return tokenBalance?.toNumber();
+  return Number(tokenBalance);
 };
 
 export const useUserNounTokenBalance = (): number | undefined => {
   const { account } = useEthers();
 
   const [tokenBalance] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[bigint]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'balanceOf',
       args: [account],
     }) || [];
-  return tokenBalance?.toNumber();
+  return Number(tokenBalance);
 };
 
 export const useTotalSupply = (): number | undefined => {
   const [totalSupply] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[bigint]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'totalSupply',
     }) || [];
-  return totalSupply?.toNumber();
+  return Number(totalSupply);
 };
 
 export const useUserOwnedNounIds = (pollInterval: number) => {
@@ -226,7 +230,7 @@ export const useUserOwnedNounIds = (pollInterval: number) => {
 export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { account } = useEthers();
   const { loading, data, error, refetch } = useQuery(
-    accountEscrowedNounsQuery(account?.toLowerCase() ?? '', forkId),
+    accountEscrowedNounsQuery(account?.toLowerCase() ?? ''),
     {
       pollInterval: pollInterval,
     },
@@ -260,7 +264,7 @@ export const useSetApprovalForAll = () => {
 export const useIsApprovedForAll = () => {
   const { account } = useEthers();
   const [isApprovedForAll] =
-    useContractCall<[EthersBN]>({
+    useContractCall<[boolean]>({
       abi,
       address: config.addresses.nounsToken,
       method: 'isApprovedForAll',

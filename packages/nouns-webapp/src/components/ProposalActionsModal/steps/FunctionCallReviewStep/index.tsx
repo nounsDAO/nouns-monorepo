@@ -1,23 +1,22 @@
-import { Trans } from '@lingui/react/macro';
-import { utils } from 'ethers/lib/ethers';
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
-import ShortAddress from '../../../ShortAddress';
-import classes from './FunctionCallReviewStep.module.css';
 
-export enum SupportedCurrencies {
-  ETH = 'ETH',
-  USDC = 'USDC',
-}
+import { Trans } from '@lingui/react/macro';
+import { Col, Row } from 'react-bootstrap';
+import { parseEther } from 'viem';
+
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+
+import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
+
+import classes from './FunctionCallReviewStep.module.css';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
   onActionAdd({
     address: state.address,
-    value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+    value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
     signature: state.function,
     decodedCalldata: JSON.stringify(state.args ?? []),
     calldata: state.abi?._encodeParams(

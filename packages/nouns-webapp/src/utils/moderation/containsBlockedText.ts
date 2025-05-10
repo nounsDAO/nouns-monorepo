@@ -1,5 +1,6 @@
-import moderationRegexes from './moderationRegexes.json';
 import Filter from 'bad-words';
+
+import moderationRegexes from './moderationRegexes.json';
 
 /**
  * Check if text matches a blocked phrase in a given langugae

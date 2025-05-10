@@ -1,5 +1,6 @@
-import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
+
+import { useEthers } from '@usedapp/core';
 
 export const useEnsAvatarLookup = (address: string) => {
   const { library } = useEthers();

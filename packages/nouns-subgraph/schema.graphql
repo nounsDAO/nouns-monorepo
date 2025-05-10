@@ -1,3 +1,7 @@
+scalar BigInt
+scalar Bytes
+scalar Timestamp
+
 type DelegationEvent @entity(immutable: true) {
   "The txn hash of this event + nounId"
   id: ID!

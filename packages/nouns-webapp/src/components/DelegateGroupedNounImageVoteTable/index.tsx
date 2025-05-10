@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
-import DelegateHoverCard from '../DelegateHoverCard';
-import { GrayCircle } from '../GrayCircle';
-import HoverCard from '../HoverCard';
-import TightStackedCircleNouns from '../TightStackedCircleNouns';
+
+import DelegateHoverCard from '@/components/DelegateHoverCard';
+import { GrayCircle } from '@/components/GrayCircle';
+import HoverCard from '@/components/HoverCard';
+import TightStackedCircleNouns from '@/components/TightStackedCircleNouns';
+import VoteCardPager from '@/components/VoteCardPager';
+import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
+
 import classes from './DelegateGroupedNounImageVoteTable.module.css';
-import VoteCardPager from '../VoteCardPager';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:

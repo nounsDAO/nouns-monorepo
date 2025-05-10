@@ -1,36 +1,38 @@
-import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import classes from './Candidate.module.css';
-import {  useParams } from 'react-router';
-import { Link } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
 import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import CandidateSponsors from '../../components/CandidateSponsors';
-import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
-import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
+import { useParams, Link } from 'react-router';
+
+import CandidateSponsors from '@/components/CandidateSponsors';
+import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
+import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,
   useProposal,
   useProposalCount,
   useProposalThreshold,
-} from '../../wrappers/nounsDao';
+} from '@/wrappers/nounsDao';
 import {
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
-} from '../../wrappers/nounsData';
-import { useUserVotes } from '../../wrappers/nounToken';
-import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
+} from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from './Candidate.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -47,14 +49,9 @@ const CandidatePage = () => {
   >(undefined);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const isWalletConnected = !(activeAccount === undefined);
+  const isWalletConnected = activeAccount !== undefined;
   const blockNumber = useBlockNumber();
-  const candidate = useCandidateProposal(
-    Number(id).toString(),
-    dataFetchPollInterval,
-    false,
-    currentBlock,
-  );
+  const candidate = useCandidateProposal(id ?? '', dataFetchPollInterval, false, currentBlock);
   const { account } = useEthers();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -64,8 +61,7 @@ const CandidatePage = () => {
   const [isProposal, setIsProposal] = useState<boolean>(false);
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
-  const isParentProposalUpdatable =
-    originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
   const handleRefetchData = () => {
     feedback.refetch();
   };
@@ -277,7 +273,11 @@ const CandidatePage = () => {
                   id={candidate.data.id}
                   isProposer={isProposer}
                   handleRefetchCandidateData={handleRefetchCandidateData}
-                  setDataFetchPollInterval={setDataFetchPollInterval}
+                  setDataFetchPollInterval={(interval: number | null) =>
+                    interval !== null
+                      ? setDataFetchPollInterval(interval)
+                      : setDataFetchPollInterval(0)
+                  }
                   currentBlock={currentBlock - 1}
                   requiredVotes={threshold + 1}
                   userVotes={userVotes}

@@ -1,16 +1,19 @@
 import React from 'react';
-import { Fork, ForkState, useForks } from '../../wrappers/nounsDao';
-import { Link } from 'react-router';
-import Section from '../../layout/Section';
-import { Col, Row } from 'react-bootstrap';
+
 import { Trans } from '@lingui/react/macro';
-import classes from './Forks.module.css';
 import clsx from 'clsx';
+import { Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router';
+
 import ForkStatus from '../../components/ForkStatus';
+import Section from '../../layout/Section';
+import { Fork, ForkState, useForks } from '../../wrappers/nounsDao';
+
+import classes from './Forks.module.css';
 
 type Props = {};
 
-const ForksPage: React.FC<Props> = props => {
+const ForksPage: React.FC<Props> = () => {
   const forks = useForks();
   const now = new Date();
   const currentTime = now.getTime() / 1000;

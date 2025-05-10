@@ -1,5 +1,22 @@
+import ProposalTransactions from '../../components/ProposalTransactions';
+import { withStepProgress } from 'react-stepz';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { Trans } from '@lingui/react/macro';
+import { TransactionStatus, useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import { Col, Alert, Button, Form } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import { Link } from 'react-router';
+import CreateProposalButton from '@/components/CreateProposalButton';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalState,
   ProposalTransaction,
@@ -11,23 +28,8 @@ import {
   useProposeOnTimelockV1,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
+
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router';
-import { TransactionStatus, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import CreateProposalButton from '../../components/CreateProposalButton';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { withStepProgress } from 'react-stepz';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -185,56 +187,53 @@ const CreateProposalPage = () => {
     }
   };
 
-  const handleAddProposalState = useCallback(
-    (proposeState: TransactionStatus, previousProposalId?: number) => {
-      switch (proposeState.status) {
-        case 'None':
-          setProposePending(false);
-          break;
-        case 'Mining':
-          setProposePending(true);
-          break;
-        case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: (
-              <Trans>
-                Proposal Created!
-                <br />
-              </Trans>
-            ),
-            show: true,
-          });
-          setProposePending(false);
-          break;
-        case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
-          setProposePending(false);
-          break;
-        case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
-          setProposePending(false);
-          break;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [],
-  );
+  const handleAddProposalState = useCallback((proposeState: TransactionStatus) => {
+    switch (proposeState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: (
+            <Trans>
+              Proposal Created!
+              <br />
+            </Trans>
+          ),
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isProposeOnV1) {
-      handleAddProposalState(proposeOnTimelockV1State, previousProposalId);
+      handleAddProposalState(proposeOnTimelockV1State);
     } else {
-      handleAddProposalState(proposeState, previousProposalId);
+      handleAddProposalState(proposeState);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     propose,
     proposeState,
@@ -311,12 +310,17 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <p className='m-0 p-0'>Looking for treasury v1?</p>
+        <p className="m-0 p-0">Looking for treasury v1?</p>
         <p className={classes.note}>
-          If you're not sure what this means, you probably don't need it. Otherwise, you can interact with the original treasury <button
+          If you're not sure what this means, you probably don't need it. Otherwise, you can
+          interact with the original treasury{' '}
+          <button
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
-          >here</button>.
+          >
+            here
+          </button>
+          .
         </p>
 
         {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
@@ -333,7 +337,8 @@ const CreateProposalPage = () => {
               Used to interact with any assets owned by the{' '}
               <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
                 original treasury
-              </a>. Most proposers can ignore this.
+              </a>
+              . Most proposers can ignore this.
             </p>
           </div>
         )}

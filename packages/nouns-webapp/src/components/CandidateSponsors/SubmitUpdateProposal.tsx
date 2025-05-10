@@ -1,30 +1,34 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './SelectSponsorsToPropose.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
+import clsx from 'clsx';
+import { FormControl } from 'react-bootstrap';
+import { Link } from 'react-router';
+
+import link from '@/assets/icons/Link.svg';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
 import {
   CandidateSignature,
   ProposalCandidate,
   useUpdateProposalBySigs,
-} from '../../wrappers/nounsData';
-import { Link } from 'react-router';
-import { FormControl } from 'react-bootstrap';
+} from '@/wrappers/nounsData';
+
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+
+import classes from './SelectSponsorsToPropose.module.css';
 
 type Props = {
   isModalOpen: boolean;
   signatures: CandidateSignature[];
   candidate: ProposalCandidate;
-  setIsModalOpen: Function;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  setIsModalOpen: (isOpen: boolean) => void;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   proposalIdToUpdate: string;
 };
 
-export default function SubmitUpdateProposal(props: Props) {
+const SubmitUpdateProposal = (props: Readonly<Props>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
@@ -185,4 +189,5 @@ export default function SubmitUpdateProposal(props: Props) {
       />
     </>
   );
-}
+};
+export default SubmitUpdateProposal;

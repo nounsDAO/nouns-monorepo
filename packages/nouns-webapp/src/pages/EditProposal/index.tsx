@@ -1,5 +1,20 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch } from '@/hooks';
+import { Trans } from '@lingui/react/macro';
+import { useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import { Link } from 'react-router';
+import EditProposalButton from '@/components/EditProposalButton/index';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalTransaction,
   ProposalDetail,
@@ -8,24 +23,10 @@ import {
   useUpdateProposal,
   useUpdateProposalDescription,
   useUpdateProposalTransactions,
-} from '../../wrappers/nounsDao';
+} from '@/wrappers/nounsDao';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
-import { useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import EditProposalButton from '../../components/EditProposalButton/index';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useUserVotes } from '../../wrappers/nounToken';
-import { useCreateProposalCandidate, useGetCreateCandidateCost } from '../../wrappers/nounsData';
 
 interface EditProposalProps {
   match: {
@@ -85,7 +86,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     // add random string to slug to make it unique
     const randomString = Math.random().toString(36).substring(7);
     return `${slug}-update-${randomString}`;
-  }
+  };
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -369,8 +370,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   };
 
-
-
   // set initial values on page load
   useEffect(() => {
     if (
@@ -390,7 +389,10 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           signature: txn.functionSig ?? '',
         };
       });
-      const slugValue = proposal.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+      const slugValue = proposal.title
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
       setTitleValue(proposal.title);
       if (isProposedBySigners) {
         // new candidate will need to be created, which needs a unique slug, so add a random string to the slug here
@@ -408,12 +410,14 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }, [proposal]);
 
   const handleCreateNewCandidate = async () => {
-    if (!proposalTransactions?.length ||
+    if (
+      !proposalTransactions?.length ||
       !titleValue ||
       !bodyValue ||
       !slug ||
       !props.match.params.id
-    ) return;
+    )
+      return;
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
       proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -480,7 +484,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       return true;
     }
     return false;
-  }
+  };
   if (!isProposer()) {
     return null;
   }
@@ -566,9 +570,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={isProposer() ? true : hasEnoughVote}
-          isFormInvalid={
-            isFormInvalid()
-          }
+          isFormInvalid={isFormInvalid()}
           handleCreateProposal={
             isProposedBySigners ? handleCreateNewCandidate : handleUpdateProposal
           }

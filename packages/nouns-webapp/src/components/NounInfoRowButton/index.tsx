@@ -1,7 +1,10 @@
 import React from 'react';
+
 import { Image } from 'react-bootstrap';
+
+import { useAppSelector } from '@/hooks';
+
 import classes from './NounInfoRowButton.module.css';
-import { useAppSelector } from '../../hooks';
 
 interface NounInfoRowButtonProps {
   iconImgSource: string;

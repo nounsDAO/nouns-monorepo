@@ -1,32 +1,35 @@
-import React, { useMemo } from 'react';
-import { useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
 import { useBlockNumber } from '@usedapp/core';
+import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
-import ProposalStatus from '../ProposalStatus';
-import classes from './ProposalHeader.module.css';
-import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
+
+import ByLineHoverCard from '@/components/ByLineHoverCard';
+import HoverCard from '@/components/HoverCard';
+import { transactionIconLink } from '@/components/ProposalContent';
+import ProposalStatus from '@/components/ProposalStatus';
+import ShortAddress from '@/components/ShortAddress';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { Locales } from '@/i18n/locales';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { isMobileScreen } from '@/utils/isMobile';
+import { relativeTimestamp } from '@/utils/timeUtils';
 import {
   Proposal,
   ProposalVersion,
   useHasVotedOnProposal,
   useIsDaoGteV3,
   useProposalVote,
-} from '../../wrappers/nounsDao';
-import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionIconLink } from '../ProposalContent';
-import ShortAddress from '../ShortAddress';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { Locales } from '../../i18n/locales';
-import HoverCard from '../HoverCard';
-import ByLineHoverCard from '../ByLineHoverCard';
-import { relativeTimestamp } from '../../utils/timeUtils';
+} from '@/wrappers/nounsDao';
+import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+
+import classes from './ProposalHeader.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 interface ProposalHeaderProps {
   title?: string;
@@ -67,9 +70,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
-  const currentOrSnapshotBlock = useMemo(() =>
-    Math.min(proposal?.voteSnapshotBlock, (currentBlock ? currentBlock - 1 : 0)) || undefined,
-    [proposal, currentBlock]
+  const currentOrSnapshotBlock = useMemo(
+    () => Math.min(proposal?.voteSnapshotBlock, currentBlock ? currentBlock - 1 : 0) || undefined,
+    [proposal, currentBlock],
   );
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
@@ -120,7 +123,10 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       rel="noreferrer"
       className={classes.proposerLinkJp}
     >
-      <ShortAddress address={proposal.proposer || ''} avatar={false} />
+      <ShortAddress
+        address={proposal.proposer || '0x0000000000000000000000000000000000000000'}
+        avatar={false}
+      />
     </a>
   );
 
@@ -132,7 +138,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         rel="noreferrer"
         className={classes.proposerLinkJp}
       >
-        <ShortAddress address={sponsor} avatar={false} />
+        <ShortAddress address={sponsor as `0x${string}`} avatar={false} />
       </a>
     );
   };
@@ -154,10 +160,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                   <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
                 </div>
                 <div>
-                  <ProposalStatus
-                    status={proposal?.status}
-                    className={classes.proposalStatus}
-                  />
+                  <ProposalStatus status={proposal?.status} className={classes.proposalStatus} />
                 </div>
               </div>
             </span>
@@ -198,7 +201,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                     <Trans>Sponsored by</Trans>
                   </span>
                 </h3>{' '}
-                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                {props.proposal.signers.map((signer: { id: string }) => {
                   return (
                     <>
                       <HoverCard
@@ -235,7 +238,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 <h3>
                   <span className={classes.proposedByJp}>Sponsored by</span>
                 </h3>{' '}
-                {props.proposal.signers.map((signer: { id: string }, i: number) => {
+                {props.proposal.signers.map((signer: { id: string }) => {
                   return (
                     <>
                       <HoverCard
@@ -283,18 +286,22 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
-        <Alert variant="success" className={classes.voterIneligibleAlert}>
-          <Trans>
-            Only Nouns you owned or were delegated to you before{' '}
-            {i18n.date(new Date(proposalCreationTimestamp * 1000), {
-              dateStyle: 'long',
-              timeStyle: 'long',
-            })}{' '}
-            are eligible to vote.
-          </Trans>
-        </Alert>
-      )}
+      {proposal &&
+        isActiveForVoting &&
+        proposalCreationTimestamp &&
+        !!availableVotes &&
+        !hasVoted && (
+          <Alert variant="success" className={classes.voterIneligibleAlert}>
+            <Trans>
+              Only Nouns you owned or were delegated to you before{' '}
+              {i18n.date(new Date(proposalCreationTimestamp * 1000), {
+                dateStyle: 'long',
+                timeStyle: 'long',
+              })}{' '}
+              are eligible to vote.
+            </Trans>
+          </Alert>
+        )}
     </>
   );
 };

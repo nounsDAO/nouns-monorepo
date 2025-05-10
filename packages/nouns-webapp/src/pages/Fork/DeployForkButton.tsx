@@ -1,12 +1,15 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import clsx from 'clsx';
-import classes from './Fork.module.css';
-import { useExecuteFork } from '../../wrappers/nounsDao';
+
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
+import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
+
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useExecuteFork } from '@/wrappers/nounsDao';
+
+import classes from './Fork.module.css';
 
 type Props = {
   isDeployModalOpen: boolean;

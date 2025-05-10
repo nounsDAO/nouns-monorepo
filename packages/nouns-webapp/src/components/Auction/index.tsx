@@ -1,22 +1,26 @@
-import { Col } from 'react-bootstrap';
-import { StandaloneNounWithSeed } from '../StandaloneNoun';
-import AuctionActivity from '../AuctionActivity';
-import { Row, Container } from 'react-bootstrap';
-import { setStateBackgroundColor } from '../../state/slices/application';
-import { LoadingNoun } from '../Noun';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
-import classes from './Auction.module.css';
-import { INounSeed } from '../../wrappers/nounToken';
-import NounderNounContent from '../NounderNounContent';
+import type { RootState } from '@/index';
+
+import React from 'react';
+
+import { Col, Row, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import type { RootState } from '../../index';
-import { isNounderNoun } from '../../utils/nounderNoun';
+
+import AuctionActivity from '@/components/AuctionActivity';
+import { LoadingNoun } from '@/components/Noun';
+import NounderNounContent from '@/components/NounderNounContent';
+import { StandaloneNounWithSeed } from '@/components/StandaloneNoun';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setStateBackgroundColor } from '@/state/slices/application';
 import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
-} from '../../state/slices/onDisplayAuction';
-import { beige, grey } from '../../utils/nounBgColors';
+} from '@/state/slices/onDisplayAuction';
+import { beige, grey } from '@/utils/nounBgColors';
+import { isNounderNoun } from '@/utils/nounderNoun';
+import { Auction as IAuction } from '@/wrappers/nounsAuction';
+import { INounSeed } from '@/wrappers/nounToken';
+
+import classes from './Auction.module.css';
 
 interface AuctionProps {
   auction?: IAuction;
@@ -36,17 +40,21 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    if (currentAuction) {
+      navigate(`/noun/${Number(currentAuction.nounId) - 1}`);
+    }
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    currentAuction && navigate(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    if (currentAuction) {
+      navigate(`/noun/${Number(currentAuction.nounId) + 1}`);
+    }
   };
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
       <StandaloneNounWithSeed
-        nounId={currentAuction.nounId}
+        nounId={BigInt(currentAuction.nounId)}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}
       />
@@ -62,8 +70,8 @@ const Auction: React.FC<AuctionProps> = props => {
   const currentAuctionActivityContent = currentAuction && lastNounId && (
     <AuctionActivity
       auction={currentAuction}
-      isFirstAuction={currentAuction.nounId.eq(0)}
-      isLastAuction={currentAuction.nounId.eq(lastNounId)}
+      isFirstAuction={currentAuction.nounId === 0n}
+      isLastAuction={currentAuction.nounId === BigInt(lastNounId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
       displayGraphDepComps={true}
@@ -71,10 +79,10 @@ const Auction: React.FC<AuctionProps> = props => {
   );
   const nounderNounContent = currentAuction && lastNounId && (
     <NounderNounContent
-      mintTimestamp={currentAuction.startTime}
-      nounId={currentAuction.nounId}
-      isFirstAuction={currentAuction.nounId.eq(0)}
-      isLastAuction={currentAuction.nounId.eq(lastNounId)}
+      mintTimestamp={BigInt(currentAuction.startTime)}
+      nounId={BigInt(currentAuction.nounId)}
+      isFirstAuction={currentAuction.nounId === 0n}
+      isLastAuction={currentAuction.nounId === BigInt(lastNounId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
     />
@@ -89,7 +97,7 @@ const Auction: React.FC<AuctionProps> = props => {
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {currentAuction &&
-              (isNounderNoun(currentAuction.nounId)
+              (isNounderNoun(BigInt(currentAuction.nounId))
                 ? nounderNounContent
                 : currentAuctionActivityContent)}
           </Col>

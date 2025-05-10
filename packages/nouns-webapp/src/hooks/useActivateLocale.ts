@@ -2,6 +2,7 @@
  * useActiveLocale.ts is a modified version of https://github.com/Uniswap/interface/blob/main/src/hooks/useActiveLocale.ts
  */
 import { fromNavigator } from '@lingui/detect-locale';
+
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SupportedLocale } from '../i18n/locales';
 
 /**

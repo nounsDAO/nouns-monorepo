@@ -1,3 +1,8 @@
+import type { Address } from '@/utils/types';
+
+import { useMemo } from 'react';
+
+import { useQuery } from '@apollo/client';
 import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
 import {
   ChainId,
@@ -10,11 +15,13 @@ import {
 } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
-import { useMemo } from 'react';
-import { useLogs } from '../hooks/useLogs';
-import * as R from 'ramda';
-import config, { CHAIN_ID } from '../config';
-import { useQuery } from '@apollo/client';
+import * as R from 'remeda';
+import { formatEther } from 'viem';
+
+import config, { CHAIN_ID } from '@/config';
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { useLogs } from '@/hooks/useLogs';
+
 import {
   proposalQuery,
   partialProposalsQuery,
@@ -29,8 +36,6 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import BigNumber from 'bignumber.js';
-import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -109,11 +114,11 @@ export interface Proposal extends PartialProposal {
   description: string;
   createdBlock: number;
   createdTimestamp: number;
-  proposer: string | undefined;
+  proposer: Address | undefined;
   proposalThreshold: number;
   details: ProposalDetail[];
   transactionHash: string;
-  signers: { id: string }[];
+  signers: { id: Address }[];
   onTimelockV1: boolean;
   voteSnapshotBlock: number;
 }
@@ -157,7 +162,7 @@ export interface PartialProposalSubgraphEntity {
   objectionPeriodEndBlock: string;
   updatePeriodEndBlock: string;
   onTimelockV1: boolean | null;
-  signers: { id: string }[];
+  signers: { id: Address }[];
 }
 
 export interface ProposalSubgraphEntity
@@ -167,7 +172,7 @@ export interface ProposalSubgraphEntity
   createdBlock: string;
   createdTransactionHash: string;
   createdTimestamp: string;
-  proposer: { id: string };
+  proposer: { id: Address };
   proposalThreshold: string;
   onTimelockV1: boolean;
   voteSnapshotBlock: string;
@@ -202,7 +207,7 @@ export interface EscrowDeposit {
   eventType: 'EscrowDeposit' | 'ForkJoin';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   reason: string;
   tokenIDs: string[];
   proposalIDs: number[];
@@ -212,7 +217,7 @@ export interface EscrowWithdrawal {
   eventType: 'EscrowWithdrawal';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   tokenIDs: string[];
 }
 
@@ -288,12 +293,12 @@ const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
  * Extract a markdown title from a proposal body that uses the `# Title` format
  * Returns null if no title found.
  */
-const extractHashTitle = (body: string) => body.match(hashRegex);
+const extractHashTitle = (body: string) => RegExp(hashRegex).exec(body);
 /**
  * Extract a markdown title from a proposal body that uses the `Title\n===` format.
  * Returns null if no title found.
  */
-const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
+const extractEqualTitle = (body: string) => RegExp(equalTitleRegex).exec(body);
 
 /**
  * Extract title from a proposal's body/description. Returns null if no title found in the first line.
@@ -306,12 +311,11 @@ export const extractTitle = (body: string | undefined): string | null => {
   return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
 };
 
-const removeBold = (text: string | null): string | null =>
-  text ? text.replace(/\*\*/g, '') : text;
-const removeItalics = (text: string | null): string | null =>
-  text ? text.replace(/__/g, '') : text;
+const removeBold = (text: string): string => text.replace(/\*\*/g, '');
+const removeItalics = (text: string): string => text.replace(/__/g, '');
 
-export const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+export const removeMarkdownStyle = (text: string | null): string | null =>
+  text === null ? null : R.pipe(text, removeBold, removeItalics);
 /**
  * Add missing schemes to markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
@@ -439,6 +443,16 @@ export const concatSelectorToCalldata = (signature: string, callData: string) =>
   return callData;
 };
 
+const determineCallData = (types: string | undefined, value: EthersBN | undefined): string => {
+  if (types) {
+    return types;
+  }
+  if (value) {
+    return `${formatEther(value.toBigInt())} ETH`;
+  }
+  return '';
+};
+
 export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details?.targets?.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
@@ -462,8 +476,8 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
 
       return {
         target,
-        functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-        callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+        functionSig: name === '' ? 'transfer' : (name == undefined ? 'unknown' : name),
+        callData: determineCallData(types, value),
       };
     }
 
@@ -478,6 +492,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
+      console.error('Failed to decode calldata:', error);
       return {
         target,
         callData: concatSelectorToCalldata(signature, callData),
@@ -566,8 +581,8 @@ const getProposalState = (
       blockNumber > parseInt(proposal.endBlock) &&
       blockNumber > parseInt(proposal.objectionPeriodEndBlock)
     ) {
-      const forVotes = new BigNumber(proposal.forVotes);
-      if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
+      const forVotes = BigInt(proposal.forVotes);
+      if (forVotes <= BigInt(proposal.againstVotes) || forVotes < BigInt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
       }
       if (!proposal.executionETA) {
@@ -582,7 +597,7 @@ const getProposalState = (
     if (!blockTimestamp || !proposal.executionETA) {
       return ProposalState.UNDETERMINED;
     }
-    // if v3+ and not on timelock v1, grace period is 21 days, otherwise 14 days
+    // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
     const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
     if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
       return ProposalState.EXPIRED;
@@ -602,7 +617,7 @@ const parsePartialSubgraphProposal = (
   if (!proposal) {
     return;
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+  const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
@@ -653,10 +668,10 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+  const onTimelockV1 = proposal.onTimelockV1 != null;
   return {
     id: proposal.id,
-    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
     status: getProposalState(
@@ -735,7 +750,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
         const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
-          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+          title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
@@ -763,13 +778,8 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
-  return parseSubgraphProposal(
-    useQuery(proposalQuery(id)).data?.proposal,
-    blockNumber,
-    timestamp,
-    toUpdate,
-    isDaoGteV3,
-  );
+  const proposal = useQuery(proposalQuery(id)).data?.proposal;
+  return parseSubgraphProposal(proposal, blockNumber, timestamp, toUpdate, isDaoGteV3);
 };
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
@@ -845,7 +855,7 @@ export const useCastRefundableVote = () => {
   const functionSig = 'castRefundableVote(uint256,uint8)';
   const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
     nounsDaoContract,
-    functionSig
+    functionSig,
   );
 
   return {
@@ -1056,9 +1066,12 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
   };
 };
 
+// Define a type alias for the events union type
+type EscrowEvent = EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
+
 // helper function to add fork cycle events to escrow events
 const eventsWithforkCycleEvents = (
-  events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[],
+  events: EscrowEvent[],
   forkDetails: Fork,
 ) => {
   const endTimestamp =
@@ -1076,10 +1089,7 @@ const eventsWithforkCycleEvents = (
   const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
   const sortedEvents = [...events, ...forkEvents].sort(
-    (
-      a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-      b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-    ) => {
+    (a: EscrowEvent, b: EscrowEvent) => {
       return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
     },
   );
@@ -1263,7 +1273,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
     error: Error;
   };
   const data: string[] = [];
-  proposals?.proposals.length > 0 &&
+  if (proposals?.proposals.length > 0) {
     proposals.proposals.map(proposal => {
       data.push(proposal.proposer.id);
       proposal.signers.map((signer: { id: string }) => {
@@ -1272,6 +1282,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
       });
       return proposal.proposer.id;
     });
+  }
 
   return {
     loading,
@@ -1285,17 +1296,14 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (
+  return !!(
     account &&
     latestProposalProposer &&
     (latestProposalStatus === ProposalState.ACTIVE ||
       latestProposalStatus === ProposalState.PENDING ||
       latestProposalStatus === ProposalState.UPDATABLE) &&
     latestProposalProposer.toLowerCase() === account?.toLowerCase()
-  ) {
-    return true;
-  }
-  return false;
+  );
 };
 
 export const useIsDaoGteV3 = (): boolean => {

@@ -1,18 +1,21 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './AddNounsToForkModal.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
-import { useAllProposals, useEscrowToFork, useJoinFork } from '../../wrappers/nounsDao';
-import clsx from 'clsx';
+
+import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { TransactionStatus } from '@usedapp/core';
-import config from '../../config';
-import { useSetApprovalForAll, useIsApprovedForAll } from '../../wrappers/nounToken';
-import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
+import clsx from 'clsx';
+import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
+
+import link from '@/assets/icons/Link.svg';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import config from '@/config';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nounsDao';
+import { useSetApprovalForAll, useIsApprovedForAll } from '@/wrappers/nounToken';
+
+import classes from './AddNounsToForkModal.module.css';
 
 type Props = {
   setIsModalOpen: Function;
@@ -59,7 +62,7 @@ export default function AddNounsToForkModal(props: Props) {
         <option
           key={i}
           value={proposal.id}
-          disabled={proposal.id && selectedProposals.includes(+proposal.id) ? true : false}
+          disabled={!!(proposal.id && selectedProposals.includes(+proposal.id))}
         >
           {proposal.id} - {proposal.title}
         </option>
@@ -148,8 +151,8 @@ export default function AddNounsToForkModal(props: Props) {
           setIsApprovalWaiting(false);
           break;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [],
+    },
+    [],
   );
 
   const handleAddToForkStateChange = useCallback((state: TransactionStatus) => {
@@ -383,7 +386,7 @@ export default function AddNounsToForkModal(props: Props) {
               classes.button,
               classes.primaryButton,
               (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) &&
-              classes.loadingButton,
+                classes.loadingButton,
             )}
             disabled={
               selectedNouns.length === 0 ||

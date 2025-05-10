@@ -1,11 +1,8 @@
-import React from 'react';
-import classes from './Fork.module.css';
-import { EscrowDeposit, EscrowWithdrawal, Fork, useProposalTitles } from '../../wrappers/nounsDao';
-import { Trans } from '@lingui/react/macro';
-import { Link } from 'react-router';
-import ShortAddress from '../../components/ShortAddress';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import dayjs from 'dayjs';
+
+import { Fork } from '../../wrappers/nounsDao';
+
+import classes from './Fork.module.css';
 
 type Props = {
   forkDetails: Fork;

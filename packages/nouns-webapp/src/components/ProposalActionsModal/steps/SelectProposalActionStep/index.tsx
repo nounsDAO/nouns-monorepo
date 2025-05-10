@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
+
 import {
   ProposalActionCreationStep,
   ProposalActionModalStepProps,
   ProposalActionType,
 } from '../..';
 import BrandDropdown from '../../../BrandDropdown';
-import ModalSubTitle from '../../../ModalSubtitle';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
+import ModalSubTitle from '../../../ModalSubtitle';
 import ModalTitle from '../../../ModalTitle';
 
 const proposalActionTypeToProposalActionCreationStep = (actionTypeString: string) => {

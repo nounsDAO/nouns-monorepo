@@ -1,29 +1,33 @@
-import { utils } from 'ethers';
+import type { Address } from '@/utils/types';
+
+import { useQuery } from '@apollo/client';
 import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction } from '@usedapp/core';
-import config from '../config';
+import { utils } from 'ethers';
+import * as R from 'remeda';
+
+import config from '@/config';
+
 import {
-  Delegates,
-  candidateFeedbacksQuery,
-  candidateProposalQuery,
-  candidateProposalVersionsQuery,
-  candidateProposalsQuery,
-  proposalFeedbacksQuery,
-} from './subgraph';
-import { useQuery } from '@apollo/client';
-import {
-  ProposalDetail,
-  ProposalTransactionDetails,
   extractTitle,
   formatProposalTransactionDetails,
   formatProposalTransactionDetailsToUpdate,
+  ProposalDetail,
+  ProposalTransactionDetails,
   removeMarkdownStyle,
   useActivePendingUpdatableProposers,
   useProposalThreshold,
   useUpdatableProposalIds,
 } from './nounsDao';
-import * as R from 'ramda';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
+import {
+  candidateFeedbacksQuery,
+  candidateProposalQuery,
+  candidateProposalsQuery,
+  candidateProposalVersionsQuery,
+  Delegates,
+  proposalFeedbacksQuery,
+} from './subgraph';
 
 const abi = new utils.Interface(NounsDAODataABI);
 const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
@@ -34,7 +38,7 @@ export interface VoteSignalDetail {
   votes: number;
   createdTimestamp: number;
   voter: {
-    id: string;
+    id: Address;
   };
 }
 
@@ -81,7 +85,7 @@ const filterSigners = (
   updatableProposalIds?: number[],
 ) => {
   const sigsFiltered = signers?.filter(
-    sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
+    sig => !sig.canceled && sig.expirationTimestamp > timestampNow,
   );
   let voteCount = 0;
   const activeSigs: CandidateSignature[] = [];
@@ -111,7 +115,7 @@ const filterSigners = (
   });
 
   const filteredSignatures = activeSigs.filter((signature: CandidateSignature) => {
-    return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
+    return !signature.canceled && signature.expirationTimestamp > timestampNow / 1000;
   });
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
@@ -126,8 +130,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
   const unmatchedCandidates: ProposalCandidateSubgraphEntity[] =
     candidates?.proposalCandidates?.filter(
       (candidate: ProposalCandidateSubgraphEntity) =>
-        candidate.latestVersion.content.matchingProposalIds.length === 0 &&
-        candidate.canceled === false,
+        candidate.latestVersion.content.matchingProposalIds.length === 0 && !candidate.canceled,
     );
   const activeCandidateProposers = unmatchedCandidates?.map(
     (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
@@ -140,9 +143,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const allSigners = unmatchedCandidates
     ?.map((candidate: ProposalCandidateSubgraphEntity) =>
-      candidate.latestVersion.content.contentSignatures?.map(
-        (sig: CandidateSignature) => sig.signer.id,
-      ),
+      candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id),
     )
     .flat();
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
@@ -156,7 +157,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
       const proposerVotes =
         proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
           ?.nounsRepresented?.length || 0;
-      const parsedData = parseSubgraphCandidate(
+      return parseSubgraphCandidate(
         candidate,
         proposerVotes,
         threshold,
@@ -166,13 +167,13 @@ export const useCandidateProposals = (blockNumber?: number) => {
         signersDelegateSnapshot.data,
         updatableProposalIds.data,
       );
-      return parsedData;
     });
 
-  candidatesData &&
-    candidatesData?.sort((a, b) => {
+  if (candidatesData) {
+    candidatesData.sort((a, b) => {
       return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
     });
+  }
   return { loading, data: candidatesData, error };
 };
 
@@ -188,10 +189,10 @@ export const useCandidateProposal = (
   });
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
-  const versionSignatures = data?.proposalCandidate.latestVersion.content.contentSignatures;
+  const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
   const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
   const proposerDelegates = useDelegateNounsAtBlockQuery(
-    [data?.proposalCandidate.proposer],
+    [data?.proposalCandidate?.proposer],
     blockNumber || 0,
   );
   const proposerNounVotes =
@@ -369,7 +370,7 @@ const parseSubgraphCandidate = (
     voteCount: voteCount,
     version: {
       content: {
-        title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+        title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
         transactionHash: details.encodedProposalHash,
@@ -391,7 +392,7 @@ const parseSubgraphCandidateVersions = (
     return;
   }
   const versionsList = candidateVersions.versions.map(version => version);
-  const versionsByDate = versionsList.sort((a, b) => {
+  const versionsByDate = versionsList.toSorted((a, b) => {
     return b.createdTimestamp - a.createdTimestamp;
   });
   const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
@@ -407,7 +408,7 @@ const parseSubgraphCandidateVersions = (
     };
     const details = formatProposalTransactionDetails(transactionDetails);
     return {
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
       description: description ?? 'No description.',
       details: details,
       createdAt: version.createdTimestamp,
@@ -425,7 +426,7 @@ const parseSubgraphCandidateVersions = (
     versionsCount: candidateVersions.versions.length,
     createdTransactionHash: candidateVersions.createdTransactionHash,
     title:
-      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
+      R.pipe(candidateVersions.latestVersion.description, extractTitle, removeMarkdownStyle) ??
       'Untitled',
     description: candidateVersions.latestVersion.description ?? 'No description.',
     versions: versions,
@@ -454,7 +455,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
         sig: string;
         canceled: boolean;
         signer: {
-          id: string;
+          id: Address;
           proposals: {
             id: string;
           }[];
@@ -508,7 +509,7 @@ export interface CandidateSignature {
   sig: string;
   canceled: boolean;
   signer: {
-    id: string;
+    id: Address;
     proposals: {
       id: string;
     }[];
@@ -520,7 +521,7 @@ export interface CandidateSignature {
 export interface ProposalCandidateInfo {
   id: string;
   slug: string;
-  proposer: string;
+  proposer: Address;
   lastUpdatedTimestamp: number;
   canceled: boolean;
   versionsCount: number;

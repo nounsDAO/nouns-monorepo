@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
+
 import { useConfig } from '@usedapp/core';
 import { providers } from 'ethers';
-import { CHAIN_ID } from '../config';
+
+import { CHAIN_ID } from '@/config';
 
 /**
  * Returns a provider that's constructed using the readonly RPC URL.

@@ -1,25 +1,25 @@
-import { Proposal } from '../../wrappers/nounsDao';
+import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
 import { Image } from 'react-bootstrap';
-import _YesVoteIcon from '../../assets/icons/YesVote.svg';
-import _NoVoteIcon from '../../assets/icons/NoVote.svg';
-import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
-import _AbstainVoteIcon from '../../assets/icons/Abstain.svg';
-import { ProposalState } from '../../wrappers/nounsDao';
+import { useNavigate } from 'react-router';
+import ReactTooltip from 'react-tooltip';
+
+import _AbsentVoteIcon from '@/assets/icons/AbsentVote.svg';
+import _AbstainVoteIcon from '@/assets/icons/Abstain.svg';
+import _NoVoteIcon from '@/assets/icons/NoVote.svg';
+import _PendingVoteIcon from '@/assets/icons/PendingVote.svg';
+import _YesVoteIcon from '@/assets/icons/YesVote.svg';
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
+import ShortAddress from '@/components/ShortAddress';
+import VoteStatusPill from '@/components/VoteStatusPill';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { Vote } from '@/utils/vote';
+import { Proposal, ProposalState } from '@/wrappers/nounsDao';
 
 import classes from './NounProfileVoteRow.module.css';
 
-import { useNavigate } from 'react-router';
-import VoteStatusPill from '../VoteStatusPill';
-
-import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
-import { Vote } from '../../utils/vote';
-import { NounVoteHistory } from '../ProfileActivityFeed';
-import { Trans } from '@lingui/react/macro';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import ShortAddress from '../ShortAddress';
-import React from 'react';
-import ReactTooltip from 'react-tooltip';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -112,7 +112,7 @@ const selectProposalText = (proposal: Proposal) => {
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { proposal, vote } = props;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const proposalOnClickHandler = () => navigate(proposal.id ? `/vote/${proposal.id}` : '/vote');
   const activeLocale = useActiveLocale();
 

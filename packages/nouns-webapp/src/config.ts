@@ -4,15 +4,17 @@ import {
 } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
 
+import { Address } from '@/utils/types';
+
 interface ExternalContractAddresses {
-  lidoToken: string | undefined;
-  usdcToken: string | undefined;
-  chainlinkEthUsdc: string | undefined;
-  payerContract: string | undefined;
-  tokenBuyer: string | undefined;
-  nounsStreamFactory: string | undefined;
-  weth: string | undefined;
-  steth: string | undefined;
+  lidoToken: Address | undefined;
+  usdcToken: Address | undefined;
+  chainlinkEthUsdc: Address | undefined;
+  payerContract: Address | undefined;
+  tokenBuyer: Address | undefined;
+  nounsStreamFactory: Address | undefined;
+  weth: Address | undefined;
+  steth: Address | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -51,8 +53,7 @@ export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_CHAIN_ID 
 
 export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
 
-export const WALLET_CONNECT_V2_PROJECT_ID =
-  import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
+export const WALLET_CONNECT_V2_PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
@@ -143,7 +144,9 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch { /* empty */ }
+  } catch {
+    /* empty */
+  }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 

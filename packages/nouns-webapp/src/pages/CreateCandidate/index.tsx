@@ -1,24 +1,28 @@
-import { Col, Alert, Button } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
-import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { withStepProgress } from 'react-stepz';
-import ProposalEditor from '../../components/ProposalEditor';
-import ProposalTransactions from '../../components/ProposalTransactions';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
-import CreateCandidateButton from '../../components/CreateCandidateButton';
+import { Col, Alert, Button } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { withStepProgress } from 'react-stepz';
+import { formatEther } from 'viem';
+
+import CreateCandidateButton from '@/components/CreateCandidateButton';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import config from '@/config';
+import { useAppDispatch } from '@/hooks';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
+import { useGetCreateCandidateCost, useCreateProposalCandidate } from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from '../CreateProposal/CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -184,7 +188,6 @@ const CreateCandidatePage = () => {
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProposalCandidateState, setModal]);
 
   return (
@@ -216,7 +219,7 @@ const CreateCandidatePage = () => {
           <strong>
             <Trans>
               Submissions are free for Nouns voters. Non-voters can submit for a{' '}
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee.
+              {createCandidateCost && formatEther(createCandidateCost)} ETH fee.
             </Trans>
           </strong>
         </Alert>
@@ -264,8 +267,7 @@ const CreateCandidatePage = () => {
         <p className={classes.feeNotice}>
           {!hasVotes && (
             <Trans>
-              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
-              submission
+              {createCandidateCost && formatEther(createCandidateCost)} ETH fee upon submission
             </Trans>
           )}
         </p>

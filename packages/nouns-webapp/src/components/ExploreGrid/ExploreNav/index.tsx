@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import classes from './ExploreNav.module.css';
+
+import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+
+import classes from './ExploreNav.module.css';
 
 interface ExploreNavProps {
   nounCount: number;

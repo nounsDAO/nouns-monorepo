@@ -1,17 +1,16 @@
-import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
-import classes from './VoteModal.module.css';
-import {
-  useCastRefundableVote,
-  useCastRefundableVoteWithReason,
-  Vote,
-} from '../../wrappers/nounsDao';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { TransactionStatus } from '@usedapp/core';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
+
 import { i18n } from '@lingui/core';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import { Trans } from '@lingui/react/macro';
+import { TransactionStatus } from '@usedapp/core';
+import clsx from 'clsx';
+import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
+
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
+
+import classes from './VoteModal.module.css';
 
 interface VoteModalProps {
   show: boolean;
@@ -155,8 +154,8 @@ const VoteModal = ({
                     vote === Vote.FOR
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>
@@ -172,8 +171,8 @@ const VoteModal = ({
                 vote === Vote.AGAINST
                   ? ''
                   : vote === undefined
-                  ? classes.inactive
-                  : classes.unselected
+                    ? classes.inactive
+                    : classes.unselected
               }
             />
           </div>
@@ -189,8 +188,8 @@ const VoteModal = ({
                     vote === Vote.ABSTAIN
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>

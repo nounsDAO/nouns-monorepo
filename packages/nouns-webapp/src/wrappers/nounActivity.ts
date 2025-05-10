@@ -1,5 +1,9 @@
+import type { Address } from '@/utils/types';
+
 import { useQuery } from '@apollo/client';
-import { NounVoteHistory } from '../components/ProfileActivityFeed';
+
+import { NounVoteHistory } from '@/components/ProfileActivityFeed';
+
 import { useNounCanVoteTimestamp } from './nounsAuction';
 import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
 import {
@@ -20,20 +24,20 @@ export type ProposalVoteEvent = {
   proposal: Proposal;
   vote: {
     // Delegate (possibly holder in case of self-delegation) ETH address (undefined in the case of no vote cast)
-    voter: string | undefined;
+    voter: Address | undefined;
     supportDetailed: 0 | 1 | 2 | undefined;
   };
 };
 
 export type TransferEvent = {
-  from: string;
-  to: string;
+  from: Address;
+  to: Address;
   transactionHash: string;
 };
 
 export type DelegationEvent = {
-  previousDelegate: string;
-  newDelegate: string;
+  previousDelegate: Address;
+  newDelegate: Address;
   transactionHash: string;
 };
 
@@ -47,7 +51,7 @@ export type NounProfileEvent = {
 
 export type NounWinEvent = {
   nounId: string | number;
-  winner: string;
+  winner: Address;
   transactionHash: string;
 };
 
@@ -88,7 +92,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
 
   const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
     .slice(0)
-    .reduce((acc: any, h: NounVoteHistory, i: number) => {
+    .reduce((acc: any, h: NounVoteHistory) => {
       acc[h.proposal.id] = h;
       return acc;
     }, {});
@@ -103,22 +107,18 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     );
 
     // Filter props from before the Noun was born
-    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+    if (nounCanVoteTimestamp > proposalCreationTimestamp) {
       return false;
     }
     // Filter props which were cancelled and got 0 votes of any kind
-    if (
-      p.status === ProposalState.CANCELLED &&
-      p.forCount + p.abstainCount + p.againstCount === 0
-    ) {
-      return false;
-    }
-    return true;
+    return !(
+      p.status === ProposalState.CANCELLED && p.forCount + p.abstainCount + p.againstCount === 0
+    );
   });
 
   const events = filteredProposals.map((proposal: PartialProposal) => {
     const vote = nounVotes[proposal.id as string];
-    const didVote = vote !== undefined;
+    const didVote = vote != undefined;
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
@@ -167,8 +167,8 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
     data: data.transferEvents.map(
       (event: {
         blockNumber: string;
-        previousHolder: { id: any };
-        newHolder: { id: any };
+        previousHolder: { id: Address };
+        newHolder: { id: Address };
         id: any;
       }) => {
         return {
@@ -211,8 +211,8 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
     data: data.delegationEvents.map(
       (event: {
         blockNumber: string;
-        previousDelegate: { id: any };
-        newDelegate: { id: any };
+        previousDelegate: { id: Address };
+        newDelegate: { id: Address };
         id: string;
       }) => {
         return {
@@ -288,10 +288,10 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   // and delegation data to be empty which leads to errors
   try {
     // Parse noun birth + win events into a single event
-    const nounTransferFromAuctionHouse = nounTransferData.sort(
+    const nounTransferFromAuctionHouse = nounTransferData.toSorted(
       (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
     )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
+    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.toSorted(
       (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
     )[nounId % 10 === 0 ? 0 : 1].blockNumber;
 

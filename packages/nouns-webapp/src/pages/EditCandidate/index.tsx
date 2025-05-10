@@ -1,37 +1,42 @@
-import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
-import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
-import { useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import EditProposalButton from '../../components/EditProposalButton/index';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
+import { useBlockNumber, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Link, useParams } from 'react-router';
+import { formatEther } from 'viem';
+
+import EditProposalButton from '@/components/EditProposalButton/index';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import config from '@/config';
+import { useAppDispatch } from '@/hooks';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useUpdateProposalCandidate,
   useCandidateProposal,
   useGetUpdateCandidateCost,
-} from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
+} from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from '../CreateProposal/CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 interface EditCandidateProps {
   match: {
     params: { id: string };
   };
-}
+};
 
-const EditCandidatePage: React.FC<EditCandidateProps> = props => {
+const EditCandidatePage: React.FC<EditCandidateProps> = () => {
+  const { id } = useParams<{ id: string }>();
   const [isProposalEdited, setIsProposalEdited] = useState(false);
   const [isTitleEdited, setIsTitleEdited] = useState(false);
   const [isBodyEdited, setIsBodyEdited] = useState(false);
@@ -44,7 +49,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [currentBlock, setCurrentBlock] = useState<number>();
   const { account } = useEthers();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const candidate = useCandidateProposal(props.match.params.id, 0, true, currentBlock); // get updatable transaction details
+  const candidate = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -83,7 +88,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -93,7 +98,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -214,7 +219,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProposalCandidateState, setModal]);
 
   // set initial values on page load
@@ -245,7 +249,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
   const handleUpdateProposal = async () => {
     if (!proposalTransactions?.length) return;
-    if (candidate === undefined) return;
+    if (candidate == undefined) return;
 
     await updateProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
@@ -256,7 +260,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       candidate.data?.slug, // Slug
       candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
       commitMessage,
-      { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
+      { value: hasVotes ? 0 : (updateCandidateCost ?? 0) }, // Fee for non-nouners
     );
   };
 
@@ -269,7 +273,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       />
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
-          <Link to={`/candidates/${props.match.params.id}`}>
+          <Link to={`/candidates/${id}`}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
@@ -304,7 +308,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an additional
               ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
               continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
@@ -331,15 +335,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
-          isFormInvalid={isProposalEdited ? false : true}
+          isFormInvalid={!isProposalEdited}
           handleCreateProposal={handleUpdateProposal}
           isCandidate={true}
         />
 
-        {!hasVotes && updateCandidateCost && +ethers.utils.formatEther(updateCandidateCost) > 0 && (
+        {!hasVotes && updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
           <p className={classes.feeNotice}>
-            {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
-            submission
+            {updateCandidateCost && formatEther(updateCandidateCost)} ETH fee upon submission
           </p>
         )}
 

@@ -1,10 +1,12 @@
 /**
  * NounsI18nProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
  */
+import { ReactNode, useEffect } from 'react';
+
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
+
 import { DEFAULT_LOCALE, SupportedLocale } from './locales';
-import { ReactNode, useEffect } from 'react';
 
 export async function dynamicActivate(locale: SupportedLocale) {
   console.log(`Starting locale activation for: ${locale}`);

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { ProposalActionModalStepProps } from '../..';
-import classes from './FunctionCallEnterArgsStep.module.css';
+
 import { Col, FormControl, FormGroup, InputGroup, Row } from 'react-bootstrap';
+
+import { ProposalActionModalStepProps } from '../..';
+
+import classes from './FunctionCallEnterArgsStep.module.css';
+
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 import { Trans } from '@lingui/react/macro';
+
 import ModalTitle from '../../../ModalTitle';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
+
 import { Interface } from 'ethers/lib/utils';
 
 export enum SupportedCurrencies {

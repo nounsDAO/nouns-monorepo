@@ -1,8 +1,11 @@
-import classes from './ForkStatus.module.css';
-import { ForkState } from '../../wrappers/nounsDao';
 import React from 'react';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+
+import { ForkState } from '@/wrappers/nounsDao';
+
+import classes from './ForkStatus.module.css';
 
 const statusVariant = (status: ForkState | undefined) => {
   switch (status) {

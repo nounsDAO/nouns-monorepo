@@ -1,5 +1,6 @@
-import { useAppSelector } from '../hooks';
 import { useLocation } from 'react-router';
+
+import { useAppSelector } from '../hooks';
 
 export const shouldUseStateBg = (location: { pathname: string }) => {
   return (
