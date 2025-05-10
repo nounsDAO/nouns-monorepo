@@ -58,7 +58,7 @@ export default defineConfig([
         ...globals.node,
       },
       parserOptions: {
-        project: true,
+        project: 'packages/*/{ts,js}config.json',
       },
     },
     plugins: {
