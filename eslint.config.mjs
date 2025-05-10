@@ -32,14 +32,18 @@ export default defineConfig([
   // Commonly ignores
   {
     ignores: [
+      // Build and dependency directories
       '**/node_modules/*',
       '**/dist',
-      '**/*.config.{js,mjs,ts,mts}',
-      '**/*.setup.ts',
       '**/.netlify',
-      'packages/nouns-subgraph/src/types/*',
-      'packages/nouns-webapp/src/contracts/*',
-      'packages/nouns-webapp/src/subgraphs/*',
+
+      // Configuration files
+      '**/*.config.{js,mjs,ts,mts}',
+      '**/*.setup.{js,mjs,ts,mts}',
+
+      // Generated code (use a more consistent pattern)
+      '**/typechain/**',
+      '**/src/{types,contracts,subgraphs}/**',
     ],
   },
 
