@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
@@ -14,12 +14,12 @@ import classes from './AuctionTimer.module.css';
 
 dayjs.extend(duration);
 
-const AuctionTimer: React.FC<{
+interface AuctionTimerProps {
   auction: Auction;
   auctionEnded: boolean;
-}> = props => {
-  const { auction, auctionEnded } = props;
+}
 
+const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) => {
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
 

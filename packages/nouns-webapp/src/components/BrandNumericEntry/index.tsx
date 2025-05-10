@@ -1,3 +1,5 @@
+import React from 'react';
+
 import clsx from 'clsx';
 import { NumericFormat, OnValueChange } from 'react-number-format';
 

@@ -12,10 +12,12 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const DelegationModalOverlay: React.FC<{
+interface DelegationModalOverlayProps {
   onDismiss: () => void;
   delegateTo?: string;
-}> = props => {
+}
+
+const DelegationModalOverlay: React.FC<DelegationModalOverlayProps> = props => {
   const { onDismiss, delegateTo } = props;
 
   const [isChangingDelegation, setIsChangingDelegation] = useState(delegateTo !== undefined);

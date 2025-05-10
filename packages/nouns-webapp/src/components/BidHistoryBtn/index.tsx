@@ -1,12 +1,16 @@
+import React from 'react';
+
 import { Trans } from '@lingui/react/macro';
 
 import { useAppSelector } from '@/hooks';
 
 import bidBtnClasses from './BidHistoryBtn.module.css';
 
-const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
-  const { onClick } = props;
+interface BidHistoryBtnProps {
+  onClick: () => void;
+}
 
+const BidHistoryBtn: React.FC<BidHistoryBtnProps> = ({ onClick }) => {
   const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
 
   return (

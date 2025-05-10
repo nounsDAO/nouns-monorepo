@@ -5,17 +5,22 @@ import { ChevronDownIcon } from '@heroicons/react/solid';
 import classes from './BrandDropdown.module.css';
 
 interface BrandDropdownProps {
-  onChange: (e: any) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   label?: string;
-  value: any;
+  value: string | number;
   chevonRight?: number;
   chevronTop?: number;
   children: React.ReactNode;
 }
 
-const BrandDropdown: React.FC<BrandDropdownProps> = props => {
-  const { children, onChange, value, label, chevonRight = 10, chevronTop = 10 } = props;
-
+const BrandDropdown: React.FC<BrandDropdownProps> = ({
+  children,
+  onChange,
+  value,
+  label,
+  chevonRight = 10,
+  chevronTop = 10,
+}) => {
   return (
     <div className={classes.dropdownContainer}>
       {label && <span className={classes.label}>{label}</span>}

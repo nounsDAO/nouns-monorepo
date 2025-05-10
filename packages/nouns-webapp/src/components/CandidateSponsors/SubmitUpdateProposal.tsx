@@ -22,13 +22,13 @@ type Props = {
   isModalOpen: boolean;
   signatures: CandidateSignature[];
   candidate: ProposalCandidate;
-  setIsModalOpen: Function;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  setIsModalOpen: (isOpen: boolean) => void;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   proposalIdToUpdate: string;
 };
 
-export default function SubmitUpdateProposal(props: Props) {
+const SubmitUpdateProposal = (props: Readonly<Props>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
@@ -189,4 +189,5 @@ export default function SubmitUpdateProposal(props: Props) {
       />
     </>
   );
-}
+};
+export default SubmitUpdateProposal;

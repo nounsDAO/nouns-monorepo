@@ -2,6 +2,16 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import { Button, Spinner } from 'react-bootstrap';
 
+interface CreateProposalButtonProps {
+  className?: string;
+  isLoading: boolean;
+  proposalThreshold?: number;
+  hasActiveOrPendingProposal: boolean;
+  hasEnoughVote: boolean;
+  isFormInvalid: boolean;
+  handleCreateProposal: () => void;
+}
+
 const CreateProposalButton = ({
   className,
   isLoading,
@@ -10,15 +20,7 @@ const CreateProposalButton = ({
   hasEnoughVote,
   isFormInvalid,
   handleCreateProposal,
-}: {
-  className?: string;
-  isLoading: boolean;
-  proposalThreshold?: number;
-  hasActiveOrPendingProposal: boolean;
-  hasEnoughVote: boolean;
-  isFormInvalid: boolean;
-  handleCreateProposal: () => void;
-}) => {
+}: CreateProposalButtonProps) => {
   const buttonText = () => {
     if (hasActiveOrPendingProposal) {
       return <Trans>You already have an active or pending proposal</Trans>;
