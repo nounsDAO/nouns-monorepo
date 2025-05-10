@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router';
+import { useAccount } from 'wagmi';
 
 import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '@/wrappers/nounsDao';
 import { ProposalCandidate } from '@/wrappers/nounsData';
@@ -43,7 +43,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
   const [isOriginalSigner, setIsOriginalSigner] = useState<boolean>(false);
   const [isThresholdMet, setIsThresholdMet] = React.useState<boolean>(false);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber ?? 0);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const originalSigners = props.originalProposal?.signers.map(signer => signer.id.toLowerCase());
@@ -57,27 +57,31 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
 
   useEffect(() => {
     // set relevant vars from fetched candidate data
-    if (
-      props.candidate.proposerVotes + props.candidate.voteCount >=
-      props.candidate.requiredVotes
-    ) {
-      setIsThresholdMet(true);
-    } else {
-      setIsThresholdMet(false);
-    }
-    if (props.originalProposal?.signers) {
-      setIsThresholdMet(signatures.length >= props.originalProposal?.signers?.length);
-    }
+    (() => {
+      if (
+        props.candidate.proposerVotes + props.candidate.voteCount >=
+        props.candidate.requiredVotes
+      ) {
+        setIsThresholdMet(true);
+      } else {
+        setIsThresholdMet(false);
+      }
+      if (props.originalProposal?.signers) {
+        setIsThresholdMet(signatures.length >= props.originalProposal?.signers?.length);
+      }
+    })();
   }, [props.candidate, props.originalProposal?.signers, signatures]);
 
   useEffect(() => {
-    if (props.originalProposal && props.originalProposal.signers && account) {
-      if (originalSigners && originalSigners.includes(account.toLowerCase())) {
-        setIsOriginalSigner(true);
-      } else {
-        setIsOriginalSigner(false);
+    (() => {
+      if (props.originalProposal && props.originalProposal.signers && account) {
+        if (originalSigners && originalSigners.includes(account.toLowerCase())) {
+          setIsOriginalSigner(true);
+        } else {
+          setIsOriginalSigner(false);
+        }
       }
-    }
+    })();
   }, [props.originalProposal, account, originalSigners]);
 
   useEffect(() => {
