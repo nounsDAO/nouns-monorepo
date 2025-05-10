@@ -1,11 +1,16 @@
+import React from 'react';
+
 import nounPointerImg from '@/assets/noun-pointer.png';
 import TruncatedAmount from '@/components/TruncatedAmount';
 
 import classes from './MinBid.module.css';
 
-const MinBid: React.FC<{ minBid: bigint; onClick: () => void }> = props => {
-  const { minBid, onClick } = props;
+interface MinBidProps {
+  minBid: bigint;
+  onClick: () => void;
+}
 
+const MinBid: React.FC<MinBidProps> = ({ minBid, onClick }) => {
   return (
     <div className={classes.minBidWrapper} onClick={onClick}>
       <img src={nounPointerImg} alt="Pointer noun" />
