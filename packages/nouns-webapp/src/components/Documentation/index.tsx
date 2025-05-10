@@ -214,9 +214,9 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             <Accordion.Body>
               <p>
                 <Trans>
-                  Nouns are generated randomly based Ethereum block hashes. There are no 'if'
-                  statements or other rules governing Noun trait scarcity, which makes all Nouns
-                  equally rare. As of this writing, Nouns are made up of:
+                  Nouns are generated randomly based Ethereum block hashes. There are no
+                  &apos;if&apos; statements or other rules governing Noun trait scarcity, which
+                  makes all Nouns equally rare. As of this writing, Nouns are made up of:
                 </Trans>
               </p>
               <ul>
@@ -293,13 +293,13 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nounder's Reward</Trans>
+              <Trans>Nounder&apos;s Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Nounders' are the group of ten builders that initiated Nouns. Here are the
-                  Nounders:
+                  &apos;Nounders&apos; are the group of ten builders that initiated Nouns. Here are
+                  the Nounders:
                 </Trans>
               </p>
               <ul>
@@ -351,15 +351,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen
                   to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the
                   project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  Nounder's multisig to be vested and shared among the founding members of the
+                  Nounder&apos;s multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
-                  are sent directly to the Nounder's Multisig, and auctions continue on schedule
-                  with the next available Noun ID.
+                  Nounder distributions don&apos;t interfere with the cadence of 24 hour auctions.
+                  Nouns are sent directly to the Nounder&apos;s Multisig, and auctions continue on
+                  schedule with the next available Noun ID.
                 </Trans>
               </p>
             </Accordion.Body>

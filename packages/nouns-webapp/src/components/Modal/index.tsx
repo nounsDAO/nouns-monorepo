@@ -10,12 +10,13 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const ModalOverlay: React.FC<{
+interface ModalOverlayProps {
   title?: React.ReactNode;
   content?: React.ReactNode;
   onDismiss: () => void;
-}> = props => {
-  const { title, content, onDismiss } = props;
+}
+
+const ModalOverlay: React.FC<ModalOverlayProps> = ({ content, onDismiss, title }) => {
   return (
     <div className={classes.modal}>
       <button className={classes.closeButton} onClick={onDismiss}>
@@ -27,12 +28,7 @@ const ModalOverlay: React.FC<{
   );
 };
 
-const Modal: React.FC<{
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  onDismiss: () => void;
-}> = props => {
-  const { title, content, onDismiss } = props;
+const Modal: React.FC<ModalOverlayProps> = ({ content, onDismiss, title }) => {
   return (
     <>
       {ReactDOM.createPortal(

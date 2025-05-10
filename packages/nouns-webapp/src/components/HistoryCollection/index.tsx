@@ -15,9 +15,10 @@ interface HistoryCollectionProps {
   latestNounId: bigint | boolean | number | string;
 }
 
-const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryCollectionProps) => {
-  const { historyCount, latestNounId } = props;
-
+const HistoryCollection: React.FC<HistoryCollectionProps> = ({
+  historyCount,
+  latestNounId,
+}: HistoryCollectionProps) => {
   if (!latestNounId) return null;
 
   const startAtZero = BigInt(latestNounId) - BigInt(historyCount) < 0n;

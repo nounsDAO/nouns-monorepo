@@ -25,7 +25,7 @@ const PLOTTING_CONSTANTS = {
   mobileScreenCutoffWidthPixels: 1200,
 };
 
-const DynamicQuorumInfoModalOverlay: React.FC<{
+interface DynamicQuorumInfoModalOverlayProps {
   proposal: Proposal;
   againstVotesBps: number;
   againstVotesAbs: number;
@@ -35,19 +35,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   totalNounSupply: number;
   onDismiss: () => void;
   currentQuorum?: number;
-}> = props => {
-  const {
-    onDismiss,
-    proposal,
-    againstVotesAbs,
-    againstVotesBps,
-    quorumCoefficent,
-    minQuorumBps,
-    maxQuorumBps,
-    totalNounSupply,
-    currentQuorum,
-  } = props;
+}
 
+const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps> = ({
+  onDismiss,
+  proposal,
+  againstVotesAbs,
+  againstVotesBps,
+  quorumCoefficent,
+  minQuorumBps,
+  maxQuorumBps,
+  totalNounSupply,
+  currentQuorum,
+}) => {
   const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent;
 
   const dqmFunction = (bps: number) => {

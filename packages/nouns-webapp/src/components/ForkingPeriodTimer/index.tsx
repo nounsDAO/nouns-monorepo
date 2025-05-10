@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
@@ -12,10 +12,12 @@ import classes from './AuctionTimer.module.css';
 
 dayjs.extend(duration);
 
-const ForkingPeriodTimer: React.FC<{
+interface ForkingPeriodTimerProps {
   endTime: number;
   isPeriodEnded: boolean;
-}> = props => {
+}
+
+const ForkingPeriodTimer: React.FC<ForkingPeriodTimerProps> = props => {
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout

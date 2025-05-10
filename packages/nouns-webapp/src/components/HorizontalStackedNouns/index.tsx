@@ -8,8 +8,7 @@ interface HorizontalStackedNounsProps {
   nounIds: string[];
 }
 
-const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = props => {
-  const { nounIds } = props;
+const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = ({ nounIds }) => {
   return (
     <div className={classes.wrapper}>
       {nounIds
