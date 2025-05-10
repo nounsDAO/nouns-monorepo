@@ -127,6 +127,9 @@ export default defineConfig([
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
+      // Unicorn plugin rules
+      'unicorn/better-regex': 'error',
+      'unicorn/no-nested-ternary': 'error',
       // Prettier rules
       'prettier/prettier': 'warn',
     },
