@@ -2,6 +2,17 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import { Button, Spinner } from 'react-bootstrap';
 
+interface EditProposalButtonProps {
+  className?: string;
+  isLoading: boolean;
+  proposalThreshold?: number;
+  hasActiveOrPendingProposal: boolean;
+  hasEnoughVote: boolean;
+  isFormInvalid: boolean;
+  isCandidate?: boolean;
+  handleCreateProposal: () => void;
+}
+
 const EditProposalButton = ({
   className,
   isLoading,
@@ -11,16 +22,7 @@ const EditProposalButton = ({
   isFormInvalid,
   isCandidate = false,
   handleCreateProposal,
-}: {
-  className?: string;
-  isLoading: boolean;
-  proposalThreshold?: number;
-  hasActiveOrPendingProposal: boolean;
-  hasEnoughVote: boolean;
-  isFormInvalid: boolean;
-  isCandidate?: boolean;
-  handleCreateProposal: () => void;
-}) => {
+}: EditProposalButtonProps) => {
   const buttonText = () => {
     if (hasActiveOrPendingProposal) {
       return <Trans>You already have an active or pending proposal</Trans>;
