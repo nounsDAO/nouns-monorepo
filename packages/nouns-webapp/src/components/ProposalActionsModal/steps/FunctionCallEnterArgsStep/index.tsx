@@ -10,15 +10,10 @@ import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 import { Trans } from '@lingui/react/macro';
 
-import ModalTitle from '../../../ModalTitle';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 
 import { Interface } from 'ethers/lib/utils';
-
-export enum SupportedCurrencies {
-  ETH = 'ETH',
-  USDC = 'USDC',
-}
 
 const parseArguments = (abi: Interface | undefined, func: string, args: string[]) => {
   return args.map((a, i) => {
@@ -85,7 +80,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
       {abi?.functions[func]?.inputs?.length ? (
         <FormGroup as={Row}>
           {abi?.functions[func]?.inputs.map((input, i) => (
-            <>
+            <React.Fragment key={i}>
               <span className={classes.label}>{input.name}</span>
               <Col sm="12">
                 <InputGroup className="mb-1">
@@ -97,7 +92,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
                   />
                 </InputGroup>
               </Col>
-            </>
+            </React.Fragment>
           ))}
         </FormGroup>
       ) : (
