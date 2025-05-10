@@ -12,6 +12,7 @@ import tsParser from '@typescript-eslint/parser';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import eslintReactPlugin from '@eslint-react/eslint-plugin';
 
 // Other plugins
 import importPlugin from 'eslint-plugin-import';
@@ -58,7 +59,9 @@ export default defineConfig([
         ...globals.node,
       },
       parserOptions: {
-        project: 'packages/*/{ts,js}config.json',
+        // Enable project service for better TypeScript integration
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
@@ -160,7 +163,13 @@ export default defineConfig([
       'react-refresh': reactRefreshPlugin,
       prettier: prettierPlugin,
     },
-    extends: [...compat.extends('plugin:react/recommended', 'plugin:prettier/recommended')],
+    extends: [
+      ...compat.extends(
+        'plugin:react/recommended',
+        'plugin:prettier/recommended',
+      ),
+      eslintReactPlugin.configs['recommended-typescript'],
+    ],
     rules: {
       // React hooks rules
       'react-hooks/rules-of-hooks': 'error',
@@ -171,6 +180,8 @@ export default defineConfig([
       'react/jsx-uses-vars': 'error',
       'react/prop-types': 'error',
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
+      // ESLint React rules
+      '@eslint-react/no-class-component': 'error',
       // Prettier rules
       'prettier/prettier': 'error',
     },
