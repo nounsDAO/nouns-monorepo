@@ -6,7 +6,7 @@ import { Trans } from '@lingui/react/macro';
 import { blo } from 'blo';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
-import { useDisconnect, useEnsName } from 'wagmi';
+import { useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
 
 import { getNavBarButtonVariant, NavBarButtonStyle } from '@/components/NavBarButton';
 import WalletConnectModal from '@/components/WalletConnectModal';
@@ -51,10 +51,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const [showConnectModal, setShowConnectModal] = useState(false);
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { disconnect: deactivate } = useDisconnect();
-  const { data: ens } = useEnsName({ address });
+  const { data: ensName } = useEnsName({ address });
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
-  const hasENS = !!ens;
+  const { data: ensAvatar } = useEnsAvatar({ name: ensName?.toString() });
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
   };
@@ -118,18 +118,17 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       >
         <div className={navDropdownClasses.button}>
           <div className={classes.icon}>
-            {' '}
-            {hasENS && (
-              <img
-                alt={address}
-                src={blo(address as Address)}
-                width={21}
-                height={21}
-                style={{ borderRadius: '50%' }}
-              />
-            )}
+            <img
+              alt={address}
+              src={ensAvatar ?? blo(address)}
+              width={21}
+              height={21}
+              style={{ borderRadius: '50%' }}
+            />
           </div>
-          <div className={navDropdownClasses.dropdownBtnContent}>{ens ? ens : shortAddress}</div>
+          <div className={navDropdownClasses.dropdownBtnContent}>
+            {ensName ? ensName : shortAddress}
+          </div>
           <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
@@ -221,7 +220,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
                 />
               </div>
               <div className={navDropdownClasses.dropdownBtnContent}>
-                {ens ? renderENS(ens) : renderAddress(address)}
+                {ensName ? renderENS(ensName) : renderAddress(address)}
               </div>
             </div>
           </div>
