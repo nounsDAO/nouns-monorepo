@@ -62,7 +62,7 @@ export default function AddNounsToForkModal(props: Props) {
         <option
           key={i}
           value={proposal.id}
-          disabled={proposal.id && selectedProposals.includes(+proposal.id) ? true : false}
+          disabled={!!(proposal.id && selectedProposals.includes(+proposal.id))}
         >
           {proposal.id} - {proposal.title}
         </option>
