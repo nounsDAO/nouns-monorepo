@@ -1,8 +1,10 @@
+import type { AbiFunction } from 'viem';
+
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
-import { parseEther } from 'viem';
+import { parseEther, encodeFunctionData, getAbiItem } from 'viem';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
@@ -14,15 +16,28 @@ import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import classes from './FunctionCallReviewStep.module.css';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
+  const functionName = state.function ?? '';
+  let calldata = '0x';
+
+  if (state.abi && functionName) {
+    try {
+      const abiItem = getAbiItem({ abi: state.abi, name: functionName }) as AbiFunction;
+      calldata = encodeFunctionData({
+        abi: [abiItem],
+        functionName,
+        args: state.args ?? [],
+      });
+    } catch (error) {
+      console.error('Error encoding function data:', error);
+    }
+  }
+
   onActionAdd({
     address: state.address,
     value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
-    signature: state.function,
+    signature: functionName,
     decodedCalldata: JSON.stringify(state.args ?? []),
-    calldata: state.abi?._encodeParams(
-      state.abi?.functions[state.function ?? '']?.inputs ?? [],
-      state.args ?? [],
-    ),
+    calldata,
   });
 };
 
@@ -87,17 +102,35 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
           <hr />
         </Col>
         <Col sm="9">
-          {state.abi?.functions[state.function ?? '']?.inputs?.length ? '' : <Trans>None</Trans>}
+          {(() => {
+            if (!state.abi || !state.function) {
+              return <Trans>None</Trans>;
+            }
+
+            const functionInputs = (
+              getAbiItem({ abi: state.abi, name: state.function }) as AbiFunction
+            )?.inputs;
+
+            if (!functionInputs?.length) {
+              return <Trans>None</Trans>;
+            }
+
+            return <></>;
+          })()}
         </Col>
       </Row>
-      {state.abi?.functions[state.function ?? '']?.inputs.map((input, i) => (
-        <Row key={i}>
-          <div className={classes.argument}>
-            <div className={classes.argValue}>{input.name}</div>
-            <div className={classes.argValue}>{args[i]}</div>
-          </div>
-        </Row>
-      ))}
+      {state.abi &&
+        state.function &&
+        ((getAbiItem({ abi: state.abi, name: state.function }) as AbiFunction)?.inputs || []).map(
+          (input, i) => (
+            <Row key={i}>
+              <div className={classes.argument}>
+                <div className={classes.argValue}>{input.name}</div>
+                <div className={classes.argValue}>{args[i]}</div>
+              </div>
+            </Row>
+          ),
+        )}
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}

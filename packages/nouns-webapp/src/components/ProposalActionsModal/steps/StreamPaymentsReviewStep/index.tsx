@@ -1,3 +1,6 @@
+import type { FinalProposalActionStepProps } from '@/components/ProposalActionsModal';
+import type { ProposalTransaction } from '@/wrappers/nounsDao';
+
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
@@ -16,8 +19,6 @@ import {
   usePredictStreamAddress,
 } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { unixToDateString } from '@/utils/timeUtils';
-
-import { FinalProposalActionStepProps } from '../..';
 
 import classes from './StreamPaymentsReviewStep.module.css';
 
@@ -87,7 +88,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Streaming Payment Action</Trans>}
         onNextBtnClick={() => {
-          onNextBtnClick(actionTransactions);
+          onNextBtnClick(actionTransactions as unknown as ProposalTransaction);
           onDismiss();
         }}
       />

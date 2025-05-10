@@ -1,7 +1,10 @@
-import React, { useEffect, ChangeEvent, useState } from 'react';
+import type { Address } from '@/utils/types';
+import type { AbiFunction } from 'viem';
 
-import { Interface } from 'ethers/lib/utils';
-import { isAddress } from 'viem';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import { Abi, isAddress } from 'viem';
 
 import ABIUpload from '@/components/ABIUpload';
 import BrandDropdown from '@/components/BrandDropdown';
@@ -15,15 +18,11 @@ import { ProposalActionModalStepProps } from '../..';
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 
-import { Trans } from '@lingui/react/macro';
-
-import type { Address } from '@/utils/types';
-
 const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
 
   const [address, setAddress] = useState<Address>(state.address ?? ('' as Address));
-  const [abi, setABI] = useState<Interface>();
+  const [abi, setABI] = useState<Abi>();
   const [value, setValue] = useState(state.amount ? state.amount.toString() : '');
   const [func, setFunction] = useState(state.function ?? '');
 
@@ -50,7 +49,14 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
 
   useEffect(() => {
     if (abi) {
-      setFunction(Object.keys(abi.functions)?.[0]);
+      // Find first function in the ABI
+      const functions = (abi as Abi).filter(
+        item => item.type === 'function' && item.name,
+      ) as AbiFunction[];
+
+      if (functions.length > 0) {
+        setFunction(functions[0].name);
+      }
     }
   }, [abi]);
 
@@ -74,8 +80,12 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     const reader = new FileReader();
     reader.onload = async e => {
       try {
-        const abi = e?.target?.result?.toString() ?? '';
-        setABI(new Interface(JSON.parse(abi)));
+        const abiString = e?.target?.result?.toString() ?? '';
+        const parsedAbi = JSON.parse(abiString);
+        // Handle both raw ABI array and ABI wrapped in 'abi' property
+        const abiArray = Array.isArray(parsedAbi) ? parsedAbi : parsedAbi.abi;
+
+        setABI(abiArray as Abi);
         setABIUploadValid(true);
         setABIFileName(file.name);
       } catch {
@@ -106,7 +116,8 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
 
     try {
       const result = await getABI(address);
-      setABI(new Interface(JSON.parse(result)));
+      const parsedAbi = JSON.parse(result);
+      setABI(parsedAbi as Abi);
       setABIUploadValid(true);
       setABIFileName('etherscan-abi-download.json');
     } catch {
@@ -156,11 +167,13 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
         chevronTop={35}
       >
         {abi &&
-          Object.keys(abi.functions).map(func => (
-            <option key={func} value={func}>
-              {func}
-            </option>
-          ))}
+          (abi as Abi)
+            .filter(item => item.type === 'function' && item.name)
+            .map(item => (
+              <option key={(item as AbiFunction).name} value={(item as AbiFunction).name}>
+                {(item as AbiFunction).name}
+              </option>
+            ))}
       </BrandDropdown>
 
       <ABIUpload
