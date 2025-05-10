@@ -78,7 +78,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
   return (
     <>
       <div className={classes.closeBtnWrapper}>
-        <button onClick={onDismiss} className={classes.closeBtn}>
+        <button type="button" onClick={onDismiss} className={classes.closeBtn}>
           <XIcon className={classes.icon} />
         </button>
       </div>
