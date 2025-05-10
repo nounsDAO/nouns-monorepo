@@ -22,8 +22,7 @@ interface BidHistoryModalRowProps {
   index: number;
 }
 
-const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
-  const { bid, index } = props;
+const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) => {
   const txLink = buildEtherscanTxLink(bid.transactionHash);
 
   const bidAmount = <TruncatedAmount amount={BigInt(bid.value.toString())} />;

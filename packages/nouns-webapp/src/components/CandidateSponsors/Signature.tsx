@@ -25,10 +25,10 @@ type CandidateSignatureProps = {
   signerHasActiveOrPendingProposal?: boolean;
   isUpdateToProposal?: boolean;
   isParentProposalUpdatable?: boolean;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
-  setIsAccountSigner: Function;
-  handleSignatureRemoved: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number) => void;
+  setIsAccountSigner: (isAccountSigner: boolean) => void;
+  handleSignatureRemoved: (voteCount: number) => void;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -181,7 +181,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               onClick={() => {
                 props.handleRefetchCandidateData();
                 setCancelStatusOverlay(undefined);
-                cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
+                if (cancelSigState.status === 'Success') {
+                  props.setIsAccountSigner(false);
+                }
               }}
             >
               &times;

@@ -1,20 +1,22 @@
 import { Trans } from '@lingui/react/macro';
 import { Button, Spinner } from 'react-bootstrap';
 
-const CreateCandidateButton = ({
-  className,
-  isLoading,
-  hasActiveOrPendingProposal,
-  isFormInvalid,
-  handleCreateProposal,
-}: {
+interface CreateCandidateButtonProps {
   className?: string;
   isLoading: boolean;
   proposalThreshold?: number;
   hasActiveOrPendingProposal: boolean;
   isFormInvalid: boolean;
   handleCreateProposal: () => void;
-}) => {
+}
+
+const CreateCandidateButton = ({
+  className,
+  isLoading,
+  hasActiveOrPendingProposal,
+  isFormInvalid,
+  handleCreateProposal,
+}: CreateCandidateButtonProps) => {
   const buttonText = () => {
     if (hasActiveOrPendingProposal) {
       return <Trans>You already have an active or pending proposal</Trans>;

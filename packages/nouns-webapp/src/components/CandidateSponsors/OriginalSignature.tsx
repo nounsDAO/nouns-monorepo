@@ -4,9 +4,8 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
+import ShortAddress from '@/components/ShortAddress';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-
-import ShortAddress from '../ShortAddress';
 
 import classes from './CandidateSponsors.module.css';
 
