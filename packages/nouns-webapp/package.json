@@ -6,6 +6,7 @@
   "scripts": {
     "prebuild": "is-ci || wagmi generate && graphql-codegen --config codegen.config.ts",
     "build": "tsc -b && vite build",
+    "clean": "rimraf dist .netlify",
     "dev": "vite",
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",

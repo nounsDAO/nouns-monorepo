@@ -21,7 +21,7 @@
     "build": "pnpm build:sol && pnpm build:ts",
     "build:sol": "hardhat compile",
     "build:ts": "tsup",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist .openzeppelin artifacts cache foundry-cache foundry-out typechain",
     "coverage": "hardhat coverage",
     "dev": "pnpm task:run-local",
     "hardhat": "hardhat",
