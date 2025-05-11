@@ -10,6 +10,7 @@
     "src": "src"
   },
   "scripts": {
+    "prebuild": "test -f subgraph.yaml || pnpm prepare:sepolia",
     "build": "pnpm codegen && pnpm graph build",
     "clean": "rimraf ./src/types ./build subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
