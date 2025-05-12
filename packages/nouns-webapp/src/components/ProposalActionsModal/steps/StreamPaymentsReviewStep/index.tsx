@@ -5,13 +5,14 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
+import { useChainId } from 'wagmi';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalLabel from '@/components/ModalLabel';
 import ModalTextPrimary from '@/components/ModalTextPrimary';
 import ModalTitle from '@/components/ModalTitle';
 import ShortAddress from '@/components/ShortAddress';
-import config from '@/config';
+import { nounsGovernorAddress } from '@/contracts';
 import useStreamPaymentTransactions from '@/hooks/useStreamPaymentTransactions';
 import {
   formatTokenAmount,
@@ -25,14 +26,16 @@ import classes from './StreamPaymentsReviewStep.module.css';
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
+  const chainId = useChainId();
+
   const predictedAddress = usePredictStreamAddress({
-    msgSender: config.addresses.nounsDaoExecutorProxy,
-    payer: config.addresses.nounsDaoExecutorProxy,
+    msgSender: nounsGovernorAddress[chainId],
+    payer: nounsGovernorAddress[chainId],
     recipient: state.address,
-    tokenAmount: formatTokenAmount(state.amount, state.TransferFundsCurrency),
+    tokenAmount: formatTokenAmount(Number(state.amount), state.TransferFundsCurrency),
     tokenAddress: getTokenAddressForCurrency(state.TransferFundsCurrency),
-    startTime: state.streamStartTimestamp,
-    endTime: state.streamEndTimestamp,
+    startTime: BigInt(state.streamStartTimestamp ?? 0),
+    endTime: BigInt(state.streamEndTimestamp ?? 0),
   });
 
   const actionTransactions = useStreamPaymentTransactions({
