@@ -5,14 +5,14 @@ import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import nounContentClasses from './NounderNounContent.module.css';
 import auctionBidClasses from '../AuctionActivity/BidHistory.module.css';
 import bidBtnClasses from '../BidHistoryBtn/BidHistoryBtn.module.css';
 import auctionActivityClasses from '../AuctionActivity/AuctionActivity.module.css';
 import CurrentBid, { BID_N_A } from '../CurrentBid';
 import Winner from '../Winner';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 import { useAppSelector } from '../../hooks';
 import { useCallback, useEffect } from 'react';
@@ -39,7 +39,7 @@ const NounderNounContent: React.FC<{
   // Page through Nouns via keyboard
   // handle what happens on key press
   const handleKeyPress = useCallback(
-    event => {
+    (event: { key: string; }) => {
       if (event.key === 'ArrowLeft') {
         onPrevAuctionClick();
       }

@@ -10,11 +10,11 @@ In the first shell:
 
 ```sh
 # Install all dependencies and build contract artifacts
-yarn
+pnpm install
 # Switch to nouns-contracts
 cd packages/nouns-contracts
 # Start local simnet
-yarn task:run-local
+pnpm task:run-local
 ```
 
 In the second shell:
@@ -25,7 +25,7 @@ cd packages/nouns-webapp
 # Copy local example environment file
 cp .env.example.local .env
 # Start local development
-yarn start
+pnpm start
 ```
 
 ### MetaMask

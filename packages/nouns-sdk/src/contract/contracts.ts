@@ -1,3 +1,6 @@
+import type { Provider } from '@ethersproject/providers';
+import type { Signer } from 'ethers';
+
 import {
   NounsTokenFactory,
   NounsAuctionHouseFactory,
@@ -5,8 +8,7 @@ import {
   NounsSeederFactory,
   NounsDaoLogicFactory,
 } from '@nouns/contracts';
-import type { Signer } from 'ethers';
-import type { Provider } from '@ethersproject/providers';
+
 import { getContractAddressesForChainOrThrow } from './addresses';
 import { Contracts } from './types';
 

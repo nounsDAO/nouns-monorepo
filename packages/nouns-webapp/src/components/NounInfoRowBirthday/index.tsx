@@ -8,7 +8,7 @@ import _BirthdayIcon from '../../assets/icons/Birthday.svg';
 import { Image } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { AuctionState } from '../../state/slices/auction';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 interface NounInfoRowBirthdayProps {

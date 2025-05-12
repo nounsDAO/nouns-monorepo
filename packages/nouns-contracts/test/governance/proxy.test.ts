@@ -1,5 +1,13 @@
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+
+import {
+  NounsToken,
+  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
+  NounsDAOLogicV4,
+} from '../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../constants';
 import {
   deployNounsToken,
   getSigners,
@@ -9,14 +17,6 @@ import {
   populateDescriptorV2,
   deployGovernorV3WithV3Proxy,
 } from '../utils';
-
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import {
-  NounsToken,
-  NounsDescriptorV3__factory as NounsDescriptorV3Factory,
-  NounsDAOLogicV4,
-} from '../../typechain';
-import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../constants';
 
 chai.use(solidity);
 const { expect } = chai;

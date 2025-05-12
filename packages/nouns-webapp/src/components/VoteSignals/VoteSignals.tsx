@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import classes from './VoteSignals.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import VoteSignalGroup from './VoteSignalGroup';
 import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { currentlyDelegatedNouns } from '../../wrappers/subgraph';

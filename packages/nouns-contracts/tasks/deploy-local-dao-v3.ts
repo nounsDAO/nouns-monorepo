@@ -1,9 +1,11 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { Contract as EthersContract } from 'ethers';
+import { Interface, parseUnits } from 'ethers/lib/utils';
+import { task, types } from 'hardhat/config';
+
 import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
-import { task, types } from 'hardhat/config';
-import { Interface, parseUnits } from 'ethers/lib/utils';
-import { Contract as EthersContract } from 'ethers';
+import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+
 import { ContractNamesDAOV3 } from './types';
 
 type LocalContractName = ContractNamesDAOV3 | 'WETH' | 'Multicall2';
@@ -135,13 +137,13 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         ],
       },
       NounsDAODynamicQuorum: {},
-      NounsDAOV3Admin: {},
+      NounsDAOAdmin: {},
       NounsDAOProposals: {},
       NounsDAOVotes: {},
       NounsDAOFork: {},
       NounsDAOLogicV4: {
         libraries: () => ({
-          NounsDAOV3Admin: contracts.NounsDAOV3Admin.instance?.address as string,
+          NounsDAOAdmin: contracts.NounsDAOAdmin.instance?.address as string,
           NounsDAODynamicQuorum: contracts.NounsDAODynamicQuorum.instance?.address as string,
           NounsDAOProposals: contracts.NounsDAOProposals.instance?.address as string,
           NounsDAOVotes: contracts.NounsDAOVotes.instance?.address as string,

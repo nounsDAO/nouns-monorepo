@@ -1,9 +1,9 @@
 import React from 'react';
 import { Fork, ForkState, useForks } from '../../wrappers/nounsDao';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Section from '../../layout/Section';
 import { Col, Row } from 'react-bootstrap';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import classes from './Forks.module.css';
 import clsx from 'clsx';
 import ForkStatus from '../../components/ForkStatus';

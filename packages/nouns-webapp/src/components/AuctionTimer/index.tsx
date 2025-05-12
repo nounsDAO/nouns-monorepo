@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 dayjs.extend(duration);

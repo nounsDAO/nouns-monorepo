@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import classes from './CandidateSponsors.module.css';
 import dayjs from 'dayjs';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { TransactionStatus, useEthers } from '@usedapp/core';
 import { ethers } from 'ethers';
 import config, { CHAIN_ID } from '../../config';

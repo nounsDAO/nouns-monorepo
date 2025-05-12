@@ -4,8 +4,8 @@ import classes from './Vote.module.css';
 import clsx from 'clsx';
 import { useBlockNumber } from '@usedapp/core';
 import dayjs from 'dayjs';
-import { Trans } from '@lingui/macro';
-import { Link } from 'react-router-dom';
+import { Trans } from '@lingui/react/macro';
+import { Link } from 'react-router';
 
 type Props = {
   isActive: boolean;

@@ -1,11 +1,13 @@
 [profile.default]
+allow_internal_expect_revert = true
 src = 'contracts'
-libs = ['lib', '../../node_modules']
+libs = ['lib', 'node_modules']
 cache_path = 'foundry-cache'
 out = 'foundry-out'
 solc_version = '0.8.23'
 fs_permissions = [{ access = "read", path = "./" }]
 ignored_warnings_from = ["contracts/test/Multicall2.sol"]
+ignored_error_codes = [9302]
 evm_version = 'shanghai'
 
 [profile.lite]

@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Image } from 'react-bootstrap';
 import classes from './DesktopProposalVoteEvent.module.css';
 import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
@@ -8,7 +8,7 @@ import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalV
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import ReactTooltip from 'react-tooltip';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface DesktopProposalVoteEventProps {
   event: ProposalVoteEvent;
@@ -16,9 +16,9 @@ interface DesktopProposalVoteEventProps {
 
 const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props => {
   const { event } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const proposalOnClickHandler = () =>
-    history.push(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
+    navigate(event.proposal.id ? `/vote/${event.proposal.id}` : '/vote');
 
   return (
     <DesktopNounActivityRow

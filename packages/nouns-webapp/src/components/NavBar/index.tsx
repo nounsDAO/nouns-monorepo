@@ -1,8 +1,8 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import noggles from '../../assets/noggles.svg';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import NogglesLogo from '../../assets/noggles.svg?react';
+import { useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
@@ -16,7 +16,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
 import NavDropdown from '../NavDropdown';
@@ -24,7 +24,7 @@ import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
+import NogglesIcon from '../../assets/icons/Noggles.svg?react';
 import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 import clsx from 'clsx';
 import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
@@ -34,7 +34,7 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const history = useHistory();
+  const location = useLocation();
   const treasuryBalance = useTreasuryBalance();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
@@ -42,9 +42,9 @@ const NavBar = () => {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
-    history.location.pathname.includes('/auction/');
+    location.pathname === '/' ||
+    location.pathname.includes('/noun/') ||
+    location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
@@ -57,7 +57,6 @@ const NavBar = () => {
     navDropdownClasses.whiteInfoSelectedBottom,
     navDropdownClasses.coolInfoSelected,
     navDropdownClasses.warmInfoSelected,
-    history,
   );
   const candidatesNavItem = config.featureToggles.candidates ? (
     <Dropdown.Item className={buttonClasses} href="/vote#candidates">
@@ -77,7 +76,6 @@ const NavBar = () => {
             navDropdownClasses.whiteInfoSelectedBottom,
             navDropdownClasses.coolInfoSelected,
             navDropdownClasses.warmInfoSelected,
-            history,
           ),
         )}
         href="/vote"
@@ -99,7 +97,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={noggles} className={classes.navBarLogo} alt="Nouns DAO noggles" />
+              <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -203,7 +201,7 @@ const NavBar = () => {
               >
                 <NavBarButton
                   buttonText={<Trans>Nouns &amp; Traits</Trans>}
-                  buttonIcon={<Noggles />}
+                  buttonIcon={<NogglesIcon />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
@@ -211,7 +209,7 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
                 buttonText="Explore"
-                buttonIcon={<Noggles />}
+                buttonIcon={<NogglesIcon />}
                 buttonStyle={nonWalletButtonStyle}
               >
                 <Dropdown.Item
@@ -220,7 +218,6 @@ const NavBar = () => {
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
                       navDropdownClasses.warmInfoSelected,
-                      history,
                     ),
                   )}
                   href="/explore"
@@ -233,7 +230,6 @@ const NavBar = () => {
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
                       navDropdownClasses.warmInfoSelected,
-                      history,
                     ),
                   )}
                   href="/playground"

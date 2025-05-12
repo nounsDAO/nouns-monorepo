@@ -3,7 +3,7 @@ import { Col, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useNounActivity } from '../../wrappers/nounActivity';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';

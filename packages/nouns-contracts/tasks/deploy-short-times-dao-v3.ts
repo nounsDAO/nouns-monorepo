@@ -1,11 +1,13 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
-import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
-import { ChainId, ContractDeployment, ContractNamesDAOV3, DeployedContract } from './types';
+import { constants } from 'ethers';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
-import { constants } from 'ethers';
 import promptjs from 'prompt';
+
+import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
+import { default as NounsDAOExecutorV2ABI } from '../abi/contracts/governance/NounsDAOExecutorV2.sol/NounsDAOExecutorV2.json';
+import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+
+import { ChainId, ContractDeployment, ContractNamesDAOV3, DeployedContract } from './types';
 
 promptjs.colors = false;
 promptjs.message = '> ';
@@ -288,7 +290,7 @@ task('deploy-short-times-dao-v3', 'Deploy all Nouns contracts with short gov tim
 
     for (const [name, contract] of Object.entries(contracts)) {
       let gasOptions;
-      let feeData = await ethers.provider.getFeeData();
+      const feeData = await ethers.provider.getFeeData();
       if (args.autoDeploy) {
         gasOptions = {
           maxFeePerGas: feeData.maxFeePerGas,

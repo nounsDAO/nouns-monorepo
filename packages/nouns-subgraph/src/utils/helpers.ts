@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
 import { Address, BigInt, Bytes, crypto, ethereum } from '@graphprotocol/graph-ts';
+
 import {
   Account,
   Delegate,
@@ -15,6 +18,7 @@ import {
   ProposalCandidateContent,
   CandidateFeedback,
 } from '../types/schema';
+
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
 export class GetOrCreateResult<T> {
@@ -71,7 +75,7 @@ export function getOrCreateDelegateWithNullOption(
     delegate.tokenHoldersRepresentedAmount = 0;
     delegate.nounsRepresented = [];
     if (id != ZERO_ADDRESS) {
-      let governance = getGovernanceEntity();
+      const governance = getGovernanceEntity();
       governance.totalDelegates = governance.totalDelegates.plus(BIGINT_ONE);
       governance.save();
     }
@@ -112,7 +116,7 @@ export function getOrCreateProposal(
   if (proposal == null && createIfNotFound) {
     proposal = new Proposal(id);
 
-    let governance = getGovernanceEntity();
+    const governance = getGovernanceEntity();
 
     governance.proposals = governance.proposals.plus(BIGINT_ONE);
     governance.save();
@@ -281,7 +285,7 @@ export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): 
     );
   }
 
-  let params = new ethereum.Tuple();
+  const params = new ethereum.Tuple();
   params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer!)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(targetsConcat)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(valuesConcat)));

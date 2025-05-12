@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "VITE_CHAIN_ID",
+    "VITE_ENABLE_HISTORY",
+    "VITE_ETHERSCAN_API_KEY",
+    "VITE_INFURA_PROJECT_ID",
+    "VITE_MAINNET_JSONRPC",
+    "VITE_MAINNET_WSRPC",
+    "VITE_WALLET_CONNECT_V2_PROJECT_ID"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"]
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    },
+    "format": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "ui": "tui"
+}

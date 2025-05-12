@@ -10,7 +10,7 @@ import {
   useUpdateProposalTransactions,
 } from '../../wrappers/nounsDao';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
@@ -18,7 +18,7 @@ import EditProposalButton from '../../components/EditProposalButton/index';
 import ProposalTransactions from '../../components/ProposalTransactions';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';

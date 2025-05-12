@@ -1,7 +1,8 @@
-import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { NounSeed, NounData } from './types';
+import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
+
 import { images, bgcolors } from './image-data.json';
+import { NounSeed, NounData } from './types';
 
 const { bodies, accessories, heads, glasses } = images;
 

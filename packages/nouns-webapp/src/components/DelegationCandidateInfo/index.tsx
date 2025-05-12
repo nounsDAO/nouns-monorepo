@@ -1,5 +1,5 @@
 import Avatar from '@davatar/react';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React, { useEffect, useState } from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';

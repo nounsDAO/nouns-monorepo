@@ -1,3 +1,4 @@
+import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import {
   assert,
   clearStore,
@@ -8,8 +9,8 @@ import {
   afterEach,
   createMockedFunction,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
-import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
+
+import { extractTitle, ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
 import {
   handleVoteCast,
   handleMinQuorumVotesBPSSet,
@@ -28,6 +29,24 @@ import {
   handleProposalQueued,
   saveProposalExtraDetails,
 } from '../src/nouns-dao';
+import { EscrowDeposit, EscrowedNoun, Proposal, ProposalVersion } from '../src/types/schema';
+import {
+  BIGINT_10K,
+  BIGINT_ONE,
+  BIGINT_ZERO,
+  STATUS_CANCELLED,
+  STATUS_EXECUTED,
+  STATUS_PENDING,
+  STATUS_QUEUED,
+  STATUS_VETOED,
+} from '../src/utils/constants';
+import {
+  getOrCreateDynamicQuorumParams,
+  getGovernanceEntity,
+  getOrCreateDelegate,
+  getOrCreateFork,
+} from '../src/utils/helpers';
+
 import {
   createProposalCreatedWithRequirementsEventV1,
   createProposalCreatedWithRequirementsEventV3,
@@ -50,23 +69,6 @@ import {
   createProposalCreatedEvent,
   ProposalCreatedData,
 } from './utils';
-import {
-  BIGINT_10K,
-  BIGINT_ONE,
-  BIGINT_ZERO,
-  STATUS_CANCELLED,
-  STATUS_EXECUTED,
-  STATUS_PENDING,
-  STATUS_QUEUED,
-  STATUS_VETOED,
-} from '../src/utils/constants';
-import {
-  getOrCreateDynamicQuorumParams,
-  getGovernanceEntity,
-  getOrCreateDelegate,
-  getOrCreateFork,
-} from '../src/utils/helpers';
-import { extractTitle, ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
 
 const SOME_ADDRESS = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 const proposerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000001');
@@ -656,14 +658,14 @@ describe('forking', () => {
       assert.i32Equals(fork.tokensInEscrowCount, 2);
       assert.i32Equals(fork.escrowedNouns.load().length, 2);
 
-      let escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
-      let escrowDespositId = txHash.toHexString().concat('-0');
+      const escrowedNoun = EscrowedNoun.load(forkId.toString().concat('-4'))!;
+      const escrowDespositId = txHash.toHexString().concat('-0');
       assert.stringEquals(escrowedNoun.fork, forkId.toString());
       assert.stringEquals(escrowedNoun.noun, '4');
       assert.stringEquals(escrowedNoun.owner, nouner.toHexString());
       assert.stringEquals(escrowedNoun.escrowDeposit, escrowDespositId);
 
-      let escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
+      const escrowDeposit = EscrowDeposit.load(escrowDespositId)!;
       assert.stringEquals(escrowDeposit.fork, forkId.toString());
       assert.bigIntEquals(escrowDeposit.createdAt, escrowBlockTimestamp);
       assert.stringEquals(escrowDeposit.owner, nouner.toHexString());

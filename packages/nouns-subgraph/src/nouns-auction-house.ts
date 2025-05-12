@@ -1,4 +1,5 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
+
 import {
   AuctionBid,
   AuctionCreated,
@@ -13,9 +14,9 @@ import { Auction, Noun, Bid } from './types/schema';
 import { getOrCreateAccount } from './utils/helpers';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
-  let nounId = event.params.nounId.toString();
+  const nounId = event.params.nounId.toString();
 
-  let noun = Noun.load(nounId);
+  const noun = Noun.load(nounId);
   if (noun == null) {
     log.error('[handleAuctionCreated] Noun #{} not found. Hash: {}', [
       nounId,
@@ -24,7 +25,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
     return;
   }
 
-  let auction = new Auction(nounId);
+  const auction = new Auction(nounId);
   auction.noun = noun.id;
   auction.amount = BigInt.fromI32(0);
   auction.startTime = event.params.startTime;
@@ -35,8 +36,8 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 }
 
 export function handleAuctionBid(event: AuctionBid): void {
-  let bidder = getOrCreateAccount(event.params.sender.toHex());
-  let auction = Auction.load(event.params.nounId.toString());
+  const bidder = getOrCreateAccount(event.params.sender.toHex());
+  const auction = Auction.load(event.params.nounId.toString());
   if (auction == null) {
     log.error('[handleAuctionBid] Auction not found for Noun #{}. Hash: {}', [
       event.params.nounId.toString(),
@@ -51,7 +52,7 @@ export function handleAuctionBid(event: AuctionBid): void {
 
   // Save Bid
   const bidId = event.params.nounId.toString().concat('-').concat(event.params.value.toString());
-  let bid = new Bid(bidId);
+  const bid = new Bid(bidId);
   bid.bidder = bidder.id;
   bid.amount = auction.amount;
   bid.noun = auction.noun;
@@ -79,9 +80,9 @@ export function handleAuctionBidWithClientId(event: AuctionBidWithClientId): voi
 }
 
 export function handleAuctionExtended(event: AuctionExtended): void {
-  let nounId = event.params.nounId.toString();
+  const nounId = event.params.nounId.toString();
 
-  let auction = Auction.load(nounId);
+  const auction = Auction.load(nounId);
   if (auction == null) {
     log.error('[handleAuctionExtended] Auction not found for Noun #{}. Hash: {}', [
       nounId,
@@ -95,8 +96,8 @@ export function handleAuctionExtended(event: AuctionExtended): void {
 }
 
 export function handleAuctionSettled(event: AuctionSettled): void {
-  let nounId = event.params.nounId.toString();
-  let auction = Auction.load(nounId);
+  const nounId = event.params.nounId.toString();
+  const auction = Auction.load(nounId);
   if (auction == null) {
     log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
       nounId,
@@ -110,8 +111,8 @@ export function handleAuctionSettled(event: AuctionSettled): void {
 }
 
 export function handleAuctionSettledWithClientId(event: AuctionSettledWithClientId): void {
-  let nounId = event.params.nounId.toString();
-  let auction = Auction.load(nounId);
+  const nounId = event.params.nounId.toString();
+  const auction = Auction.load(nounId);
   if (auction == null) {
     log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
       nounId,

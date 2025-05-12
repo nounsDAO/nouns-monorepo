@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import NavBarButton, { NavBarButtonStyle } from '../../NavBarButton';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface WalletConnectButtonProps {
   className: string;

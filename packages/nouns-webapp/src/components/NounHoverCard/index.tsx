@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { BigNumber } from '@ethersproject/bignumber';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { nounQuery } from '../../wrappers/subgraph';

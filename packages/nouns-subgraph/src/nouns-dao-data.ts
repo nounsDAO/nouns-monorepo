@@ -1,4 +1,5 @@
 import { Bytes, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
+
 import { extractTitle } from './custom-types/ParsedProposalV3';
 import {
   CandidateFeedbackSent,

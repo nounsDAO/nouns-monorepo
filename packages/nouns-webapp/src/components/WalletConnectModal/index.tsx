@@ -10,7 +10,7 @@ import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID, WALLET_CONNECT_V2_PROJECT_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;

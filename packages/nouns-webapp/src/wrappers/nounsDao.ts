@@ -337,7 +337,7 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
 export const useCurrentQuorum = (
   nounsDao: string,
   proposalId: number,
-  skip: boolean = false,
+  skip = false,
 ): number | undefined => {
   const request = () => {
     if (skip) return false;
@@ -449,7 +449,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
     const callData = details.calldatas[i];
 
     // Split at first occurrence of '('
-    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
+    const [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
     if (!name || !types) {
       // If there's no signature and calldata is present, display the raw calldata
       if (callData && callData !== '0x') {
@@ -1262,7 +1262,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
   };
-  let data: string[] = [];
+  const data: string[] = [];
   proposals?.proposals.length > 0 &&
     proposals.proposals.map(proposal => {
       data.push(proposal.proposer.id);

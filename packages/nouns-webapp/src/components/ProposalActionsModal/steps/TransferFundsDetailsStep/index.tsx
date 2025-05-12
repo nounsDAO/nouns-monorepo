@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
 import React, { useEffect, useState } from 'react';

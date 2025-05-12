@@ -4,7 +4,7 @@ import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 
 dayjs.extend(duration);

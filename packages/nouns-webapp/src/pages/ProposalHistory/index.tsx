@@ -5,7 +5,6 @@ import classes from './Vote.module.css';
 import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
 import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import { RouteComponentProps } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -15,29 +14,26 @@ import clsx from 'clsx';
 import ProposalContent from '../../components/ProposalContent';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import VersionTab from './VersionTab';
 import remarkBreaks from 'remark-breaks';
 import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
 import ProposalStatus from '../../components/ProposalStatus';
 import { i18n } from '@lingui/core';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { Link } from 'react-router-dom';
-
+import { useParams } from 'react-router';
+import { Link } from 'react-router';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const ProposalHistory = ({
-  match: {
-    params: { id, versionNumber },
-  },
-}: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
+const ProposalHistory = () => {
+  const { id, versionNumber } = useParams<{ id: string; versionNumber?: string }>();
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
-  const proposal = useProposal(id);
-  const proposalVersions = useProposalVersions(id);
+  const proposal = useProposal(Number(id));
+  const proposalVersions = useProposalVersions(Number(id));
 
   useEffect(() => {
     if (versionNumber) {
@@ -111,7 +107,11 @@ const ProposalHistory = ({
                       />
                     </div>
                   ) : (
-                    <h1>{proposalVersions && activeVersion && proposalVersions[activeVersion - 1].title} </h1>
+                    <h1>
+                      {proposalVersions &&
+                        activeVersion &&
+                        proposalVersions[activeVersion - 1].title}{' '}
+                    </h1>
                   )}
                 </div>
               </div>
@@ -124,13 +124,13 @@ const ProposalHistory = ({
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
-                <ProposalContent
-                  description={proposalVersions[activeVersion - 1].description}
-                  title={proposalVersions[activeVersion - 1].title}
-                  details={proposalVersions[activeVersion - 1].details}
-                  hasSidebar={true}
-                />
-              )}
+              <ProposalContent
+                description={proposalVersions[activeVersion - 1].description}
+                title={proposalVersions[activeVersion - 1].title}
+                details={proposalVersions[activeVersion - 1].details}
+                hasSidebar={true}
+              />
+            )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
                 <Col className={clsx(classes.section, 'm-0 p-0')}>
@@ -181,7 +181,7 @@ const ProposalHistory = ({
                       return (
                         <VersionTab
                           key={i}
-                          id={id}
+                          id={Number(id).toString()}
                           createdAt={version.createdAt}
                           updateMessage={version.updateMessage}
                           versionNumber={version.versionNumber}

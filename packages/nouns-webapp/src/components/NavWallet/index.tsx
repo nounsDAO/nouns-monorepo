@@ -12,10 +12,9 @@ import { Dropdown } from 'react-bootstrap';
 import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import {
   shortENS,
   useShortAddress,
@@ -50,7 +49,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const [buttonUp, setButtonUp] = useState(false);
   const [showConnectModal, setShowConnectModal] = useState(false);
-  const history = useHistory();
   const { library: provider } = useEthers();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
@@ -80,35 +78,30 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     navDropdownClasses.whiteInfo,
     navDropdownClasses.coolInfo,
     navDropdownClasses.warmInfo,
-    history,
   );
 
   const stateSelectedDropdownClass = usePickByState(
     navDropdownClasses.whiteInfoSelected,
     navDropdownClasses.dropdownActive,
     navDropdownClasses.dropdownActive,
-    history,
   );
 
   const mobileTextColor = usePickByState(
     'rgba(140, 141, 146, 1)',
     'rgba(121, 128, 156, 1)',
     'rgba(142, 129, 127, 1)',
-    history,
   );
 
   const mobileBorderColor = usePickByState(
     'rgba(140, 141, 146, .5)',
     'rgba(121, 128, 156, .5)',
     'rgba(142, 129, 127, .5)',
-    history,
   );
 
   const connectWalletButtonStyle = usePickByState(
     NavBarButtonStyle.WHITE_WALLET,
     NavBarButtonStyle.COOL_WALLET,
     NavBarButtonStyle.WARM_WALLET,
-    history,
   );
 
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
@@ -156,7 +149,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
                 navDropdownClasses.whiteInfoSelectedTop,
                 navDropdownClasses.coolInfoSelected,
                 navDropdownClasses.warmInfoSelected,
-                history,
               ),
             )}
           >
@@ -172,7 +164,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
                 navDropdownClasses.whiteInfoSelectedBottom,
                 navDropdownClasses.coolInfoSelected,
                 navDropdownClasses.warmInfoSelected,
-                history,
               ),
               classes.disconnectText,
             )}

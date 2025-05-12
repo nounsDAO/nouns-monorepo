@@ -1,6 +1,8 @@
-import { task } from 'hardhat/config';
-import { dataToDescriptorInput } from './utils';
 import { readFileSync } from 'fs';
+
+import { task } from 'hardhat/config';
+
+import { dataToDescriptorInput } from './utils';
 
 // see image-data-example-for-populate-via-proposal.json for an example input file
 task(

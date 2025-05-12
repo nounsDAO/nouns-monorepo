@@ -3,7 +3,7 @@ import { InputGroup, FormControl, FormText } from 'react-bootstrap';
 import remarkBreaks from 'remark-breaks';
 import ReactMarkdown from 'react-markdown';
 import { useState, useEffect } from 'react';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 const ProposalEditor = ({
   title,

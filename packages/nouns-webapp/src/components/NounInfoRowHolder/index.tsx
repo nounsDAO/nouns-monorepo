@@ -11,7 +11,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import ShortAddress from '../ShortAddress';
 
 import { useAppSelector } from '../../hooks';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import Tooltip from '../Tooltip';
 
 interface NounInfoRowHolderProps {

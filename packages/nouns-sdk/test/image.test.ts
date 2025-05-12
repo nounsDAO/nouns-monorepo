@@ -1,11 +1,14 @@
-import { expect } from 'chai';
 import { join } from 'path';
+
+import { glob } from 'glob';
+import { expect, describe, it, beforeEach } from 'vitest';
+
+import { buildSVG, RGBAColor } from '../src';
 import { Image } from '../src/image/image';
+import { decodeImage } from '../src/image/svg-builder';
+
 import { Image as Image1 } from './image';
 import { readPngImage } from './lib';
-import { buildSVG, RGBAColor } from '../src';
-import { glob } from 'glob';
-import { decodeImage } from '../src/image/svg-builder';
 
 async function encodeSingleLineRLE(filepath: string) {
   const transparent: [string, number] = ['', 0];
@@ -39,8 +42,6 @@ describe('Image', () => {
     });
 
     it('builds the same svg for all images', async () => {
-      const transparent: [string, number] = ['', 0];
-
       const filepaths = glob.sync(join(__dirname, '../../nouns-assets/images/+(1|2|3|4)*/*.png'));
 
       for (const filepath of filepaths) {
@@ -126,7 +127,7 @@ describe('Image', () => {
         [T, T, T, T, T],
       ];
 
-      const { decoded, colorsArray } = encodePixels(pixels, colors);
+      const { decoded } = encodePixels(pixels, colors);
 
       expect(decoded.bounds).to.eql({ top: 2, bottom: 3, left: 2, right: 4 });
       expect(decoded.rects).to.eql([
@@ -142,7 +143,7 @@ describe('Image', () => {
         [R, R, B, B],
       ];
 
-      const { decoded, colorsArray } = encodePixels(pixels, colors);
+      const { decoded } = encodePixels(pixels, colors);
 
       expect(decoded.bounds).to.eql({ top: 0, bottom: 1, left: 0, right: 4 });
       expect(decoded.rects).to.eql([
@@ -157,7 +158,7 @@ describe('Image', () => {
         Array(100).fill(R).concat(Array(100).fill(B)),
       ];
 
-      const { decoded, colorsArray } = encodePixels(pixels, colors);
+      const { decoded } = encodePixels(pixels, colors);
 
       expect(decoded.bounds).to.eql({ top: 0, bottom: 1, left: 0, right: 200 });
       expect(decoded.rects).to.eql([

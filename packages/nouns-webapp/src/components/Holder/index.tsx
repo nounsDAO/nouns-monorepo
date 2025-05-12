@@ -3,7 +3,7 @@ import { useAppSelector } from '../../hooks';
 import classes from './Holder.module.css';
 import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { useQuery } from '@apollo/client';
 import { nounQuery } from '../../wrappers/subgraph';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';

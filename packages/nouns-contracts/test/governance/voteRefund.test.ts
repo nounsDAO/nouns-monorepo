@@ -3,9 +3,9 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
+
 import {
   NounsDAOLogicV4__factory,
-  NounsDAOLogicV4,
   NounsDescriptorV3__factory,
   NounsToken,
   Voter__factory,
@@ -86,7 +86,7 @@ describe('V3 Vote Refund', () => {
       expect(r.gasUsed).to.be.gt(0);
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
+      const govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, '');
@@ -177,12 +177,9 @@ describe('V3 Vote Refund', () => {
       const balanceBefore = await user.getBalance();
       const tx = await gov
         .connect(user)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          'some reason',
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
       const balanceDiff = balanceBefore.sub(await user.getBalance());
 
@@ -190,7 +187,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
+      const govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
@@ -202,12 +199,9 @@ describe('V3 Vote Refund', () => {
 
       const tx = await gov
         .connect(user2)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          'some reason',
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
 
       expect(r.gasUsed).to.be.gt(0);
@@ -240,12 +234,9 @@ describe('V3 Vote Refund', () => {
       const balanceBefore = await user.getBalance();
       const tx = await gov
         .connect(user)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          LONG_REASON,
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, LONG_REASON, DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
       const balanceDiff = balanceBefore.sub(await user.getBalance());
 
@@ -253,7 +244,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(await expectedGasUsedCappedDiff(r), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, MAX_REFUND_GAS_USED.mul(await latestBasePlusMaxPriority()));
-      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
+      const govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, LONG_REASON);
@@ -265,12 +256,9 @@ describe('V3 Vote Refund', () => {
       const balanceBefore = await user.getBalance();
       const tx = await gov
         .connect(user)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          'some reason',
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
       const balanceDiff = balanceBefore.sub(await user.getBalance());
 
@@ -278,7 +266,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(await expectedBaseFeeCappedDiff(r), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, r.gasUsed.mul(MAX_REFUND_BASE_FEE.add(MAX_PRIORITY_FEE_CAP)));
-      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
+      const govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
@@ -289,12 +277,9 @@ describe('V3 Vote Refund', () => {
       const balanceBefore = await user.getBalance();
       const tx = await gov
         .connect(user)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          'some reason',
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
 
       expect(r.gasUsed).to.be.gt(0);
@@ -310,12 +295,9 @@ describe('V3 Vote Refund', () => {
 
       const tx = await gov
         .connect(user)
-        ['castRefundableVoteWithReason(uint256,uint8,string)'](
-          1,
-          1,
-          'some reason',
-          DEFAULT_GAS_OPTIONS,
-        );
+        [
+          'castRefundableVoteWithReason(uint256,uint8,string)'
+        ](1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
       const r = await tx.wait();
 
       expect(r.gasUsed).to.be.gt(0);
@@ -358,7 +340,7 @@ describe('V3 Vote Refund', () => {
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
 
       expectRefundEvent(r, user, await txCostInEth(r));
-      let govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
+      const govWithEvents = NounsDAOLogicV4__factory.connect(gov.address, gov.signer);
       await expect(tx)
         .to.emit(govWithEvents, 'VoteCast')
         .withArgs(voter.address, BigNumber.from(2), 1, 1, 'some reason');
@@ -410,22 +392,18 @@ describe('V3 Vote Refund', () => {
 
     expect(parsed.length).to.equal(1);
     const refundEvent = parsed[0];
-    expect(refundEvent).to.not.be.undefined;
+    expect(refundEvent).to.not.equal(undefined);
     expect(refundEvent!.args!.voter).to.equal(u.address);
-    expect(refundEvent!.args!.refundSent).to.be.true;
+    expect(refundEvent!.args!.refundSent).to.equal(true);
     expect(refundEvent!.args!.refundAmount).to.be.closeTo(expectedCost, REFUND_ERROR_MARGIN);
   }
 
   async function submitProposal(u: SignerWithAddress) {
     await gov
       .connect(u)
-      ['propose(address[],uint256[],string[],bytes[],string)'](
-        [address(0)],
-        ['0'],
-        ['getBalanceOf(address)'],
-        [encodeParameters(['address'], [address(0)])],
-        '',
-      );
+      [
+        'propose(address[],uint256[],string[],bytes[],string)'
+      ]([address(0)], ['0'], ['getBalanceOf(address)'], [encodeParameters(['address'], [address(0)])], '');
 
     await advanceBlocks(2);
   }

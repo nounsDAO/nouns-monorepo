@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
+import type { RootState } from './index';
 import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import '../src/css/globals.css';
@@ -43,7 +44,7 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  const alertModal = useAppSelector(state => state.application.alertModal);
+  const alertModal = useAppSelector((state: RootState) => state.application.alertModal);
 
   return (
     <div className={`${classes.wrapper}`}>
@@ -61,37 +62,38 @@ function App() {
           batchLookups={true}
         >
           <NavBar />
-          <Switch>
-            <Route exact path="/" component={AuctionPage} />
-            <Redirect from="/auction/:id" to="/noun/:id" />
+          <Routes>
+            <Route path="/" element={<AuctionPage />} />
+            <Route path="/auction/:id" element={<Navigate to="/noun/:id" replace />} />
+            <Route path="/noun/:id" element={<AuctionPage />} />
+            <Route path="/nounders" element={<NoundersPage />} />
+            <Route path="/create-proposal" element={<CreateProposalPage />} />
+            <Route path="/create-candidate" element={<CreateCandidatePage />} />
+            <Route path="/vote" element={<GovernancePage />} />
+            <Route path="/vote/:id" element={<VotePage />} />
+            <Route path="/vote/:id/history" element={<ProposalHistory />} />
+            <Route path="/vote/:id/history/:versionNumber" element={<ProposalHistory />} />
             <Route
-              exact
-              path="/noun/:id"
-              render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
+              path="/vote/:id/edit"
+              element={<EditProposalPage match={{ params: { id: ':id' } }} />}
             />
-            <Route exact path="/nounders" component={NoundersPage} />
-            <Route exact path="/create-proposal" component={CreateProposalPage} />
-            <Route exact path="/create-candidate" component={CreateCandidatePage} />
-            <Route exact path="/vote" component={GovernancePage} />
-            <Route exact path="/vote/:id" component={VotePage} />
-            <Route exact path="/vote/:id/history" component={ProposalHistory} />
-            <Route exact path="/vote/:id/history/:versionNumber?" component={ProposalHistory} />
-            <Route exact path="/vote/:id/edit" component={EditProposalPage} />
-            <Route exact path="/candidates/:id" component={CandidatePage} />
-            <Route exact path="/candidates/:id/edit" component={EditCandidatePage} />
-            <Route exact path="/candidates/:id/history" component={CandidateHistoryPage} />
+            <Route path="/candidates/:id" element={<CandidatePage />} />
             <Route
-              exact
-              path="/candidates/:id/history/:versionNumber?"
-              component={CandidateHistoryPage}
+              path="/candidates/:id/edit"
+              element={<EditCandidatePage match={{ params: { id: ':id' } }} />}
             />
-            <Route exact path="/playground" component={Playground} />
-            <Route exact path="/delegate" component={DelegatePage} />
-            <Route exact path="/explore" component={ExplorePage} />
-            <Route exact path="/fork/:id" component={ForkPage} />
-            <Route exact path="/fork" component={ForksPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
+            <Route path="/candidates/:id/history" element={<CandidateHistoryPage />} />
+            <Route
+              path="/candidates/:id/history/:versionNumber"
+              element={<CandidateHistoryPage />}
+            />
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/delegate" element={<DelegatePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/fork/:id" element={<ForkPage />} />
+            <Route path="/fork" element={<ForksPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
           <Footer />
         </AvatarProvider>
       </BrowserRouter>
