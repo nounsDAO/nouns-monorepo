@@ -1,3 +1,5 @@
+import type { Address } from '@/utils/types';
+
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
@@ -29,7 +31,7 @@ dayjs.extend(relativeTime);
 
 interface StreamWithdrawModalOverlayProps {
   onDismiss: () => void;
-  streamAddress?: string;
+  streamAddress: Address;
   endTime?: number;
   startTime?: number;
   streamAmount?: number;
@@ -39,7 +41,7 @@ interface StreamWithdrawModalOverlayProps {
 const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = props => {
   const {
     onDismiss,
-    streamAddress = '',
+    streamAddress,
     streamAmount = 0,
     endTime = 0,
     startTime = 0,
@@ -49,18 +51,18 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
   const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
 
-  const withdrawableBalance = useStreamRemainingBalance(streamAddress ?? '') ?? 0;
-  const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
+  const withdrawableBalance = useStreamRemainingBalance(streamAddress) ?? 0n;
+  const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress);
   const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const elapsedTime = useElapsedTime(streamAddress ?? '');
+  const elapsedTime = useElapsedTime(streamAddress);
 
   const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
 
   useEffect(() => {
     if (elapsedTime) {
       setPercentStreamedSoFar(
-        100.0 * Math.max(0, Math.min(1, elapsedTime / (endTime - startTime))),
+        100.0 * Math.max(0, Math.min(1, Number(elapsedTime) / (endTime - startTime))),
       );
     }
   }, [elapsedTime, endTime, percentStreamedSoFar, startTime]);
@@ -183,14 +185,14 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
         nextBtnText={<Trans>Withdraw</Trans>}
         onNextBtnClick={async () => {
           setIsLoading(true);
-          await withdrawTokens(
+          withdrawTokens(
             formatTokenAmount(
               Number(withdrawAmount),
               isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
             ),
           );
         }}
-        isNextBtnDisabled={withdrawableBalance !== 0 && humanUnitsStreamRemainingBalance === 0}
+        isNextBtnDisabled={withdrawableBalance !== 0n && humanUnitsStreamRemainingBalance === 0}
       />
       <div className={classes.streamTimeWrapper}>
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
@@ -199,15 +201,17 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
   );
 };
 
-const StreamWithdrawModal: React.FC<{
+interface StreamWithdrawModalProps {
   show: boolean;
   onDismiss: () => void;
-  streamAddress?: string;
-  startTime?: number;
+  streamAddress: Address;
   endTime?: number;
+  startTime?: number;
   streamAmount?: number;
   tokenAddress?: string;
-}> = props => {
+}
+
+const StreamWithdrawModal: React.FC<StreamWithdrawModalProps> = props => {
   const { onDismiss, show } = props;
   return (
     <>
