@@ -1700,7 +1700,7 @@ msgstr "当前委托"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."
-msgstr "一 每天一个 Noun，直至永远。"
+msgstr "每天一个Noun，直至永远。"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
