@@ -89,7 +89,7 @@ msgstr "推特"
 msgid "Playground"
 msgstr "游乐场"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "You've already delegated to this address"
 msgstr "您已将投票委托给此地址"
 
@@ -109,7 +109,6 @@ msgstr "每日拍卖"
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr "此金库供 <0>Nouns DAO</0> 参与者分配资源，以推动 Nouns 项目的长期增长与繁荣。"
 
-#: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
 msgstr "出价"
@@ -200,7 +199,7 @@ msgstr "版本历史"
 msgid "Compound Governance"
 msgstr "Compound 治理"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Votes"
 msgstr "委托 {availableVotes} 票"
 
@@ -245,14 +244,11 @@ msgstr "{voterComponent} 投了反对票"
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5 位艺术家，6.5 位技术专家"
 
-#: src/components/Documentation/index.tsx
-#~ msgid "accessories (140)"
-#~ msgstr ""
-
 #: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show fewer"
 msgstr "显示更少"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "Proposals"
 msgstr "提案列表"
@@ -328,11 +324,6 @@ msgstr "赞助提案至少需要一个 Noun 投票"
 msgid "Help mint the next Noun"
 msgstr "帮助铸造下一个 Noun"
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#~ msgid "<0> Noun {0} </0> sent to <1><2/></1>"
-#~ msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by Nouns via governance."
 msgstr "金库完全由 Nouns 通过治理控制。"
@@ -388,7 +379,6 @@ msgid "You can settle manually in {0} minutes"
 msgstr "您可在 {0} 分钟内手动结算"
 
 #. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "结束于 {0}"
@@ -398,7 +388,7 @@ msgid "glasses (23)"
 msgstr "眼镜（23）"
 
 #: src/components/CurrentDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Update Delegate"
 msgstr "更新委托"
 
@@ -409,10 +399,6 @@ msgstr "<0>已委托 Noun：</0>"
 #: src/components/AuctionTimer/index.tsx
 msgid "Time left"
 msgstr "剩余时间"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "This proposal can be edited for"
-#~ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is equal to one vote."
@@ -441,6 +427,7 @@ msgstr "Nouns"
 msgid "You already have an active or pending proposal"
 msgstr "您已有正在进行或待处理的提案"
 
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
@@ -577,13 +564,6 @@ msgstr "所有 Nouns 都是 Nouns DAO 的成员。"
 msgid "days"
 msgstr "天"
 
-#. placeholder {0}: props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'
-#. placeholder {0}: isDaoGteV3 ? 'Proposals' : 'DAO'
-#: src/components/VoteSignals/VoteSignals.tsx
-#: src/components/NavBar/index.tsx
-msgid "{0}"
-msgstr "{0}"
-
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Get Involved"
@@ -692,10 +672,10 @@ msgstr "选择语言"
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 msgid "Settle Auction"
 msgstr "结算拍卖"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "DAO"
 msgstr "DAO"
@@ -769,10 +749,6 @@ msgstr "出价成功！"
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
 msgstr "压缩的部件在链上高效地转换为单个 base64 编码的 SVG 图像。为实现此目的，先将每个部件解码为中间格式，然后通过批量链上字符串连接将其转换为一系列 SVG 矩形。生成整个 SVG 后，将其进行 base64 编码。"
 
-#: src/components/NounderNounContent/index.tsx
-#~ msgid "For this reason, we, the project's founders ('Nounders') have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-#~ msgstr "基于此原因，我们这些项目创始人（'Nounders'）选择用 Nouns 来补偿自己。项目前 5 年的每第 10 个 Noun 将被发送到我们的多签钱包（5/10），在那里它将被锁定并分配给各个 Nounders。"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Arguments"
 msgstr "参数"
@@ -811,7 +787,6 @@ msgid "Will have"
 msgstr "将拥有"
 
 #. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "{0}开始"
@@ -837,7 +812,7 @@ msgstr "Nouns 艺术作品处于{publicDomainLink}。"
 msgid "... and {0} more"
 msgstr "...以及其他 {0} 个"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Updating..."
 msgstr "更新中..."
 
@@ -845,7 +820,7 @@ msgstr "更新中..."
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 msgstr ""
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "您的 <0>{availableVotes}</0> 票已委托给一个新账户。"
 
@@ -885,10 +860,6 @@ msgstr "使用<0>{numVotesForProp}</0>个 Nouns 进行投票"
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "添加一个或多个提案操作，并为社区描述您的提案。提交后无法修改提案，因此请在提交前验证所有信息。投票期将在 5 天后开始，持续 5 天。"
 
-#: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "每 24 小时无需信任地拍卖一个 Noun，永远如此。"
@@ -904,8 +875,6 @@ msgstr "每 24 小时无需信任地拍卖一个 Noun，永远如此。"
 #: src/pages/Candidate/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 msgid "Error"
 msgstr "错误"
 
@@ -917,7 +886,7 @@ msgstr "添加流支付日期详情"
 msgid "Docs"
 msgstr "文档"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "委托 {availableVotes} 票"
 
@@ -1032,7 +1001,7 @@ msgstr "活动"
 msgid "Delegate"
 msgstr "委托"
 
-#. placeholder {0}: createCandidateCost && ethers.utils.formatEther(createCandidateCost)
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
 msgid "{0} ETH fee upon submission"
 msgstr "提交时需支付 {0} ETH 费用"
@@ -1191,7 +1160,7 @@ msgstr "理由（可选）"
 msgid "Settlement of one auction kicks off the next."
 msgstr "一次拍卖结算后，下一次拍卖随即开始。"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
 msgstr "委托更新失败"
 
@@ -1308,10 +1277,6 @@ msgstr "未重新签名"
 msgid "The Nounders"
 msgstr "Nounders"
 
-#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
-#~ msgid "No arguments required"
-#~ msgstr ""
-
 #: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 #: src/pages/Fork/WithdrawNounsButton.tsx
@@ -1346,8 +1311,6 @@ msgstr "Nounders"
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/AddNounsToForkModal/index.tsx
@@ -1396,10 +1359,6 @@ msgstr "委托"
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
 msgstr "Nouns DAO 使用 {compoundGovLink} 的一个分叉。"
-
-#: src/components/Documentation/index.tsx
-#~ msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives ('rage quit' etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
-#~ msgstr "Nouns 社区已经初步探索了提案否决的替代方案（如\"愤怒退出\"等），但现在很明显，这是一个困难的问题，在实施令人满意的解决方案之前需要进行更多的研究、开发和测试。"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Failed to fetch Noun activity history"
@@ -1555,13 +1514,17 @@ msgstr "弃权于"
 msgid "Now has"
 msgstr "现在拥有"
 
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "Pre-proposal feedback"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "Nouns 直接存储在以太坊上，不使用指向 IPFS 等其他网络的指针。之所以能够实现这一点，是因为 Noun 的各个部件通过自定义的游程编码 (RLE) 进行压缩并存储在链上，而 RLE 是一种无损压缩技术。"
 
 #. placeholder {0}: (proposalThreshold ?? 0) + 1
 #. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 msgstr "此次委托后，您的账户余额将低于 {0} {1}。您创建的未执行提案，现在任何人都有权取消。"
 
@@ -1584,7 +1547,7 @@ msgstr "Nouns 管理<0>Nouns DAO</0>。Nouns 可以对提案进行投票或将�
 msgid "Deploying Nouns fork and beginning the forking period"
 msgstr "正在部署 Nouns 分叉并开始分叉期"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "您的 <0>{availableVotes}</0> 票正在委托给新账户。"
 
@@ -1638,7 +1601,7 @@ msgstr "Nounder 的分发不会干扰 24 小时拍卖的节奏。Nouns 直接发
 msgid "Bids"
 msgstr "出价"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Change"
 msgstr "更改"
 
@@ -1647,7 +1610,6 @@ msgid "You <0>Abstained</0> from this proposal"
 msgstr "您对此提案<0>弃权</0>"
 
 #. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
 msgstr "过期于 {0}"
@@ -1675,7 +1637,7 @@ msgstr "从流中提取 <0/>"
 msgid "Threshold"
 msgstr "门槛"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Updated!"
 msgstr "委托已更新！"
 
@@ -1683,8 +1645,8 @@ msgstr "委托已更新！"
 msgid "Auction ends in"
 msgstr "拍卖剩余时间"
 
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(utils.formatUnits(d.callData.split(',')[1], 6)), )
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(utils.formatUnits(transaction.callData.split(',')[1], 6)), )
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(d.callData.split(',')[1]), 6)), )
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)), )
 #: src/components/ProposalContent/ProposalTransactions.tsx
 #: src/components/ProposalContent/ProposalTransaction.tsx
 msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
@@ -1693,6 +1655,10 @@ msgstr "此交易通过 DAO 的支付合约向 <0/> 发送 {0} USDC。"
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
 msgstr "提案"
+
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "Pre-voting feedback"
+msgstr ""
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
@@ -1740,7 +1706,7 @@ msgstr "开始于"
 #: src/components/Winner/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "View on Etherscan"
 msgstr "在 Etherscan 上查看"
 
@@ -1767,9 +1733,13 @@ msgstr "提示"
 msgid "Forking"
 msgstr "分叉中"
 
-#. placeholder {0}: createCandidateCost && ethers.utils.formatEther(createCandidateCost)
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
 msgid "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
+msgstr ""
+
+#: src/components/NounderNounContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 msgstr ""
 
 #: src/pages/Governance/index.tsx
@@ -1799,7 +1769,7 @@ msgstr ""
 msgid "Proposal Updated!"
 msgstr ""
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr ""
 
@@ -1878,8 +1848,8 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Close"
 msgstr "关闭"
 
