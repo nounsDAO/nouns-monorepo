@@ -1,24 +1,25 @@
-import { useContractCall } from '@usedapp/core';
-import { utils } from 'ethers';
+import { parseEther, zeroAddress } from 'viem';
 
 import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
-import config from '@/config';
-
-import StreamFactoryABI from './streamFactory.abi.json';
+import {
+  stEthAddress,
+  usdcAddress,
+  useReadNounsStreamFactoryPredictStreamAddress,
+  wethAddress,
+} from '@/contracts';
+import { Address } from '@/utils/types';
 
 interface UsePredictStreamAddressProps {
-  msgSender?: string;
-  payer?: string;
-  recipient?: string;
-  tokenAmount?: string;
-  tokenAddress?: string;
-  startTime?: number;
-  endTime?: number;
+  msgSender: Address;
+  payer: Address;
+  recipient: Address;
+  tokenAmount: bigint;
+  tokenAddress: Address;
+  startTime: bigint;
+  endTime: bigint;
 }
 
-const abi = new utils.Interface(StreamFactoryABI);
-
-export function usePredictStreamAddress({
+export const usePredictStreamAddress = ({
   msgSender,
   payer,
   recipient,
@@ -26,40 +27,36 @@ export function usePredictStreamAddress({
   tokenAddress,
   startTime,
   endTime,
-}: UsePredictStreamAddressProps) {
-  const [predictedAddress] =
-    useContractCall<[string]>({
-      abi,
-      address: config.addresses.nounsStreamFactory ?? '',
-      method: 'predictStreamAddress',
-      args: [msgSender, payer, recipient, tokenAmount, tokenAddress, startTime, endTime],
-    }) || [];
-  return predictedAddress?.toString();
-}
+}: UsePredictStreamAddressProps) => {
+  const { data: predictedAddress } = useReadNounsStreamFactoryPredictStreamAddress({
+    args: [msgSender, payer, recipient, tokenAmount, tokenAddress, startTime, endTime],
+  });
 
-export function formatTokenAmount(amount?: string, currency?: SupportedCurrency) {
-  const amt = amount ?? '0';
+  return predictedAddress;
+};
+
+export function formatTokenAmount(amount?: number, currency?: SupportedCurrency) {
   switch (currency) {
     case SupportedCurrency.USDC:
-      return Math.round(parseFloat(amt) * 1_000_000).toString();
+      return amount ? BigInt(Math.round(amount * 1_000_000)) : 0n;
     case SupportedCurrency.WETH:
     case SupportedCurrency.STETH:
-      return utils.parseEther(amt).toString();
+      return amount ? parseEther(amount.toString()) : 0n;
     default:
-      return amt;
+      return amount ? BigInt(amount) : 0n;
   }
 }
 
-export function getTokenAddressForCurrency(currency?: SupportedCurrency) {
+export function getTokenAddressForCurrency(currency?: SupportedCurrency, chainId = 1) {
   switch (currency) {
     case SupportedCurrency.USDC:
-      return config.addresses.usdcToken;
+      return usdcAddress[chainId as keyof typeof usdcAddress] ?? zeroAddress;
     case SupportedCurrency.WETH:
-      return config.addresses.weth;
+      return wethAddress[chainId as keyof typeof wethAddress] ?? zeroAddress;
     case SupportedCurrency.STETH:
-      return config.addresses.steth;
+      return stEthAddress[chainId as keyof typeof stEthAddress] ?? zeroAddress;
     default:
-      return '';
+      return zeroAddress;
   }
 }
 

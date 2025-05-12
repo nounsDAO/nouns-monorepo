@@ -1,102 +1,122 @@
-import { utils } from 'ethers';
+import type { Address } from '@/utils/types';
+
+import { parseEther, encodeFunctionData } from 'viem';
+import { useChainId } from 'wagmi';
 
 import { ProposalActionModalState } from '@/components/ProposalActionsModal';
 import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
-import config from '@/config';
-import payerABIJSON from '@/utils/payerContractUtils/payerABI.json';
-import StreamFactoryABI from '@/utils/streamingPaymentUtils/streamFactory.abi.json';
+import {
+  nounsPayerAbi,
+  nounsPayerAddress,
+  nounsStreamFactoryAbi,
+  nounsStreamFactoryAddress,
+  usdcAddress,
+  wethAbi,
+  wethAddress,
+} from '@/contracts';
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
 } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { human2ContractUSDCFormat } from '@/utils/usdcUtils';
 
-import wethABIJSON from '../utils/wethUtils/weth.abi.json';
-
-const abi = new utils.Interface(StreamFactoryABI);
-const wethABI = new utils.Interface(wethABIJSON);
-
 interface UseStreamPaymentTransactionsProps {
   state: ProposalActionModalState;
-  predictedAddress?: string;
+  predictedAddress?: Address;
+}
+
+interface Action {
+  address: Address;
+  calldata: `0x${string}`;
+  decodedCalldata: string;
+  signature: string;
+  usdcValue: number;
+  value: string;
 }
 
 export default function useStreamPaymentTransactions({
   state,
   predictedAddress,
 }: UseStreamPaymentTransactionsProps) {
+  const chainId = useChainId();
+
   if (!predictedAddress) {
     return [];
   }
 
-  const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,uint8,address)';
+  const fundStreamFunction = 'createStream';
   const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
   const amount = state.amount ?? '0';
 
-  const actions = [
+  const actions: Action[] = [
     {
-      address: config.addresses.nounsStreamFactory ?? '',
+      address: nounsStreamFactoryAddress[chainId],
       signature: fundStreamFunction,
       value: '0',
       usdcValue: isUSDC ? parseInt(human2ContractUSDCFormat(amount)) : 0,
       decodedCalldata: JSON.stringify([
         state.address,
-        isUSDC ? human2ContractUSDCFormat(amount) : utils.parseEther(amount.toString()).toString(),
-        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
+        isUSDC ? human2ContractUSDCFormat(amount) : parseEther(amount.toString()).toString(),
+        isUSDC ? usdcAddress[chainId] : wethAddress[chainId],
         state.streamStartTimestamp,
         state.streamEndTimestamp,
         0,
         predictedAddress,
       ]),
-      calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
-        state.address,
-        formatTokenAmount(state.amount, state.TransferFundsCurrency),
-        getTokenAddressForCurrency(state.TransferFundsCurrency),
-        state.streamStartTimestamp,
-        state.streamEndTimestamp,
-        0,
-        predictedAddress,
-      ]),
+      calldata: encodeFunctionData({
+        abi: nounsStreamFactoryAbi,
+        functionName: fundStreamFunction,
+        args: [
+          state.address,
+          formatTokenAmount(Number(amount), state.TransferFundsCurrency),
+          getTokenAddressForCurrency(state.TransferFundsCurrency),
+          BigInt(state.streamStartTimestamp ? state.streamStartTimestamp : 0),
+          BigInt(state.streamEndTimestamp ? state.streamEndTimestamp : 0),
+          0,
+          predictedAddress,
+        ],
+      }),
     },
   ];
 
   if (!isUSDC) {
     actions.push({
-      address: config.addresses.weth ?? '',
+      address: wethAddress[chainId],
       signature: 'deposit()',
       usdcValue: 0,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      value: amount ? parseEther(amount.toString()).toString() : '0',
       decodedCalldata: JSON.stringify([]),
       calldata: '0x',
     });
-    const wethTransfer = 'transfer(address,uint256)';
+    const wethTransfer = 'transfer';
     actions.push({
-      address: config.addresses.weth ?? '',
+      address: wethAddress[chainId],
       signature: wethTransfer,
       usdcValue: 0,
       value: '0',
       decodedCalldata: JSON.stringify([
         predictedAddress,
-        utils.parseEther((state.amount ?? 0).toString()).toString(),
+        parseEther((amount ?? 0).toString()).toString(),
       ]),
-      calldata: wethABI._encodeParams(wethABI.functions[wethTransfer ?? '']?.inputs ?? [], [
-        predictedAddress,
-        utils.parseEther(amount.toString()).toString(),
-      ]),
+      calldata: encodeFunctionData({
+        abi: wethAbi,
+        functionName: wethTransfer,
+        args: [predictedAddress, parseEther(amount.toString())],
+      }),
     });
   } else {
-    const signature = 'sendOrRegisterDebt(address,uint256)';
-    const payerABI = new utils.Interface(payerABIJSON);
+    const signature = 'sendOrRegisterDebt';
     actions.push({
-      address: config.addresses.payerContract ?? '',
+      address: nounsPayerAddress[chainId],
       value: '0',
       usdcValue: parseInt(human2ContractUSDCFormat(amount)),
       signature: signature,
       decodedCalldata: JSON.stringify([predictedAddress, human2ContractUSDCFormat(amount)]),
-      calldata: payerABI?._encodeParams(payerABI?.functions[signature]?.inputs, [
-        predictedAddress,
-        human2ContractUSDCFormat(amount),
-      ]),
+      calldata: encodeFunctionData({
+        abi: nounsPayerAbi,
+        functionName: signature,
+        args: [predictedAddress, BigInt(human2ContractUSDCFormat(amount))],
+      }),
     });
   }
 
