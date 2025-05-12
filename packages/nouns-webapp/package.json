@@ -52,6 +52,7 @@
     "@web3-react/trezor-connector": "^6.1.9",
     "@web3-react/types": "^6.0.7",
     "@web3-react/walletlink-connector": "^6.2.14",
+    "abitype": "^1.0.8",
     "axios": "^0.30.0",
     "bad-words": "^3.0.4",
     "blo": "^2.0.0",
