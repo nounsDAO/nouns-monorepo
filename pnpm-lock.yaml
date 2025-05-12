@@ -17,6 +17,7 @@ overrides:
   cross-spawn: '>=7.0.5'
   ejs: '>=3.1.10'
   elliptic: '>=6.6.1'
+  json5: '>=1.0.2'
   esbuild: '>=0.25.0'
   flat: '>=5.0.1'
   got: '>=11.8.5'
@@ -30,8 +31,8 @@ overrides:
   semver: '>=7.5.2'
   serialize-javascript: '>=6.0.2'
   tar: '>=6.2.1'
-  underscore: '>=1.12.1'
   tough-cookie: '>=4.1.3'
+  underscore: '>=1.12.1'
   ws: '>=7.5.10'
   yargs-parser: '>=5.0.1'
 
@@ -8589,10 +8590,6 @@ packages:
   json-to-pretty-yaml@1.2.2:
     resolution: {integrity: sha512-rvm6hunfCcqegwYaG5T4yKJWxc9FXFgBVrcTZ4XfSVRwa5HA/Xs+vB/Eo9treYYHCeNM0nrSUr82V/M31Urc7A==}
     engines: {node: '>= 0.2.0'}
-
-  json5@0.5.1:
-    resolution: {integrity: sha512-4xrs1aW+6N5DalkqSVA8fxh458CXvR99WU8WLKmq4v8eWAL86Xo3BVqyd3SkA9wEVjCMqyvvRRkshAdOnBp5rw==}
-    hasBin: true
 
   json5@1.0.2:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
@@ -19865,7 +19862,7 @@ snapshots:
       babylon: 6.18.0
       convert-source-map: 1.9.0
       debug: 2.6.9
-      json5: 0.5.1
+      json5: 2.2.3
       lodash: 4.17.21
       minimatch: 3.1.2
       path-is-absolute: 1.0.1
@@ -25181,8 +25178,6 @@ snapshots:
     dependencies:
       remedial: 1.0.8
       remove-trailing-spaces: 1.0.9
-
-  json5@0.5.1: {}
 
   json5@1.0.2:
     dependencies:
