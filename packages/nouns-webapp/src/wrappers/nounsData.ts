@@ -1,12 +1,21 @@
 import type { Address } from '@/utils/types';
 
 import { useQuery } from '@apollo/client';
-import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
-import { useContractCall, useContractFunction } from '@usedapp/core';
-import { utils } from 'ethers';
 import * as R from 'remeda';
 
-import config from '@/config';
+import {
+  useReadNounsDataCreateCandidateCost,
+  useReadNounsDataUpdateCandidateCost,
+  useWriteNounsDataAddSignature,
+  useWriteNounsDataCancelProposalCandidate,
+  useWriteNounsDataCreateProposalCandidate,
+  useWriteNounsDataSendCandidateFeedback,
+  useWriteNounsDataSendFeedback,
+  useWriteNounsDataUpdateProposalCandidate,
+  useWriteNounsGovernorCancelSig,
+  useWriteNounsGovernorProposeBySigs,
+  useWriteNounsGovernorUpdateProposalBySigs,
+} from '@/contracts';
 
 import {
   extractTitle,
@@ -29,9 +38,6 @@ import {
   proposalFeedbacksQuery,
 } from './subgraph';
 
-const abi = new utils.Interface(NounsDAODataABI);
-const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
-
 export interface VoteSignalDetail {
   supportDetailed: number;
   reason: string;
@@ -42,28 +48,94 @@ export interface VoteSignalDetail {
   };
 }
 
-const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
-
 export const useCreateProposalCandidate = () => {
-  const { send: createProposalCandidate, state: createProposalCandidateState } =
-    useContractFunction(nounsDAOData, 'createProposalCandidate');
-  return { createProposalCandidate, createProposalCandidateState };
+  const {
+    data: hash,
+    writeContractAsync: createProposalCandidate,
+    isPending: isCreatePending,
+    isSuccess: isCreateSuccess,
+    error: createError,
+  } = useWriteNounsDataCreateProposalCandidate();
+
+  let status = 'None';
+  if (isCreatePending) {
+    status = 'Mining';
+  } else if (isCreateSuccess) {
+    status = 'Success';
+  } else if (createError) {
+    status = 'Fail';
+  }
+
+  const createProposalCandidateState = {
+    status,
+    errorMessage: createError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    createProposalCandidate,
+    createProposalCandidateState,
+  };
 };
 
 export const useCancelCandidate = () => {
-  const { send: cancelCandidate, state: cancelCandidateState } = useContractFunction(
-    nounsDAOData,
-    'cancelProposalCandidate',
-  );
-  return { cancelCandidate, cancelCandidateState };
+  const {
+    data: hash,
+    writeContract: cancelCandidate,
+    isPending: isCancelPending,
+    isSuccess: isCancelSuccess,
+    error: cancelError,
+  } = useWriteNounsDataCancelProposalCandidate();
+
+  let status = 'None';
+  if (isCancelPending) {
+    status = 'Mining';
+  } else if (isCancelSuccess) {
+    status = 'Success';
+  } else if (cancelError) {
+    status = 'Fail';
+  }
+
+  const cancelCandidateState = {
+    status,
+    errorMessage: cancelError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    cancelCandidate,
+    cancelCandidateState,
+  };
 };
 
 export const useAddSignature = () => {
-  const { send: addSignature, state: addSignatureState } = useContractFunction(
-    nounsDAOData,
-    'addSignature',
-  );
-  return { addSignature, addSignatureState };
+  const {
+    data: hash,
+    writeContractAsync: addSignature,
+    isPending: isAddPending,
+    isSuccess: isAddSuccess,
+    error: addError,
+  } = useWriteNounsDataAddSignature();
+
+  let status = 'None';
+  if (isAddPending) {
+    status = 'Mining';
+  } else if (isAddSuccess) {
+    status = 'Success';
+  } else if (addError) {
+    status = 'Fail';
+  }
+
+  const addSignatureState = {
+    status,
+    errorMessage: addError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    addSignature,
+    addSignatureState,
+  };
 };
 
 const deDupeSigners = (signers: string[]) => {
@@ -226,53 +298,140 @@ export const useCandidateProposalVersions = (id: string) => {
 };
 
 export const useGetCreateCandidateCost = () => {
-  const createCandidateCost = useContractCall({
-    abi,
-    address: config.addresses.nounsDAOData,
-    method: 'createCandidateCost',
-    args: [],
-  });
+  const { data: createCandidateCost } = useReadNounsDataCreateCandidateCost();
 
   if (!createCandidateCost) {
     return;
   }
 
-  return createCandidateCost[0];
+  return createCandidateCost;
 };
 
 export const useGetUpdateCandidateCost = () => {
-  const updateCandidateCost = useContractCall({
-    abi,
-    address: config.addresses.nounsDAOData,
-    method: 'updateCandidateCost',
-    args: [],
-  });
+  const { data: updateCandidateCost } = useReadNounsDataUpdateCandidateCost();
 
   if (!updateCandidateCost) {
     return;
   }
 
-  return updateCandidateCost[0];
+  return updateCandidateCost;
 };
 
 export const useUpdateProposalCandidate = () => {
-  const { send: updateProposalCandidate, state: updateProposalCandidateState } =
-    useContractFunction(nounsDAOData, 'updateProposalCandidate');
-  return { updateProposalCandidate, updateProposalCandidateState };
+  const {
+    data: hash,
+    writeContractAsync: updateProposalCandidate,
+    isPending: isUpdatePending,
+    isSuccess: isUpdateSuccess,
+    error: updateError,
+  } = useWriteNounsDataUpdateProposalCandidate();
+
+  let status = 'None';
+  if (isUpdatePending) {
+    status = 'Mining';
+  } else if (isUpdateSuccess) {
+    status = 'Success';
+  } else if (updateError) {
+    status = 'Fail';
+  }
+
+  const updateProposalCandidateState = {
+    status,
+    errorMessage: updateError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    updateProposalCandidate,
+    updateProposalCandidateState,
+  };
 };
 
 export const useCancelSignature = () => {
-  const cancelSignature = useContractFunction(nounsDAOData, 'cancelSig');
+  const {
+    data: hash,
+    writeContractAsync: cancelSig,
+    isPending: isCancelSigPending,
+    isSuccess: isCancelSigSuccess,
+    error: cancelSigError,
+  } = useWriteNounsGovernorCancelSig();
+
+  let status = 'None';
+  if (isCancelSigPending) {
+    status = 'Mining';
+  } else if (isCancelSigSuccess) {
+    status = 'Success';
+  } else if (cancelSigError) {
+    status = 'Fail';
+  }
+
+  const cancelSignatureState = {
+    status,
+    errorMessage: cancelSigError?.message,
+    transaction: { hash },
+  };
+
+  const cancelSignature = {
+    send: cancelSig,
+    state: cancelSignatureState,
+  };
 
   return { cancelSignature };
 };
 
-export const useSendFeedback = (proposalType?: 'proposal' | 'candidate') => {
-  const { send: sendFeedback, state: sendFeedbackState } = useContractFunction(
-    nounsDAOData,
-    proposalType === 'candidate' ? 'sendCandidateFeedback' : 'sendFeedback',
-  );
-  return { sendFeedback, sendFeedbackState };
+export const useSendFeedback = () => {
+  const {
+    data: proposalFeedbackHash,
+    writeContractAsync: sendProposalFeedback,
+    isPending: isSendProposalFeedbackPending,
+    isSuccess: isSendProposalFeedbackSuccess,
+    error: sendProposalFeedbackError,
+  } = useWriteNounsDataSendFeedback();
+
+  let proposalFeedbackStatus = 'None';
+  if (isSendProposalFeedbackPending) {
+    proposalFeedbackStatus = 'Mining';
+  } else if (isSendProposalFeedbackSuccess) {
+    proposalFeedbackStatus = 'Success';
+  } else if (sendProposalFeedbackError) {
+    proposalFeedbackStatus = 'Fail';
+  }
+
+  const sendProposalFeedbackState = {
+    status: proposalFeedbackStatus,
+    errorMessage: sendProposalFeedbackError?.message,
+    transaction: { hash: proposalFeedbackHash },
+  };
+
+  const {
+    data: candidateFeedbackHash,
+    writeContractAsync: sendCandidateFeedback,
+    isPending: isSendCandidateFeedbackPending,
+    isSuccess: isSendCandidateFeedbackSuccess,
+    error: sendCandidateFeedbackError,
+  } = useWriteNounsDataSendCandidateFeedback();
+
+  let candidateFeedbackStatus = 'None';
+  if (isSendCandidateFeedbackPending) {
+    candidateFeedbackStatus = 'Mining';
+  } else if (isSendCandidateFeedbackSuccess) {
+    candidateFeedbackStatus = 'Success';
+  } else if (sendCandidateFeedbackError) {
+    candidateFeedbackStatus = 'Fail';
+  }
+
+  const sendCandidateFeedbackState = {
+    status: candidateFeedbackStatus,
+    errorMessage: sendCandidateFeedbackError?.message,
+    transaction: { hash: candidateFeedbackHash },
+  };
+
+  return {
+    sendProposalFeedback,
+    sendProposalFeedbackState,
+    sendCandidateFeedback,
+    sendCandidateFeedbackState,
+  };
 };
 
 export const useProposalFeedback = (id: string, pollInterval?: number) => {
@@ -300,19 +459,63 @@ export const useCandidateFeedback = (id: string, pollInterval?: number) => {
 };
 
 export const useProposeBySigs = () => {
-  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
-    nounsDaoContract,
-    'proposeBySigs',
-  );
-  return { proposeBySigs, proposeBySigsState };
+  const {
+    data: hash,
+    writeContractAsync: proposeBySigs,
+    isPending: isProposePending,
+    isSuccess: isProposeSuccess,
+    error: proposeError,
+  } = useWriteNounsGovernorProposeBySigs();
+
+  let status = 'None';
+  if (isProposePending) {
+    status = 'Mining';
+  } else if (isProposeSuccess) {
+    status = 'Success';
+  } else if (proposeError) {
+    status = 'Fail';
+  }
+
+  const proposeBySigsState = {
+    status,
+    errorMessage: proposeError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    proposeBySigs,
+    proposeBySigsState,
+  };
 };
 
 export const useUpdateProposalBySigs = () => {
-  const { send: updateProposalBySigs, state: updateProposalBySigsState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposalBySigs',
-  );
-  return { updateProposalBySigs, updateProposalBySigsState };
+  const {
+    data: hash,
+    writeContractAsync: updateProposalBySigs,
+    isPending: isUpdatePending,
+    isSuccess: isUpdateSuccess,
+    error: updateError,
+  } = useWriteNounsGovernorUpdateProposalBySigs();
+
+  let status = 'None';
+  if (isUpdatePending) {
+    status = 'Mining';
+  } else if (isUpdateSuccess) {
+    status = 'Success';
+  } else if (updateError) {
+    status = 'Fail';
+  }
+
+  const updateProposalBySigsState = {
+    status,
+    errorMessage: updateError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    updateProposalBySigs,
+    updateProposalBySigsState,
+  };
 };
 
 const parseSubgraphCandidate = (
@@ -327,7 +530,7 @@ const parseSubgraphCandidate = (
 ) => {
   const description = candidate.latestVersion.content.description
     ?.replace(/\\n/g, '\n')
-    .replace(/(^['"]|['"]$)/g, '');
+    .replace(/(^["']|["']$)/g, '');
   const transactionDetails: ProposalTransactionDetails = {
     targets: candidate.latestVersion.content.targets,
     values: candidate.latestVersion.content.values,
@@ -398,7 +601,7 @@ const parseSubgraphCandidateVersions = (
   const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
     const description = version.content.description
       ?.replace(/\\n/g, '\n')
-      .replace(/(^['"]|['"]$)/g, '');
+      .replace(/(^["']|["']$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
       targets: version.content.targets,
       values: version.content.values,

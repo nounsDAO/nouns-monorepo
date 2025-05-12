@@ -12,6 +12,7 @@ import {
   nounTransferHistoryQuery,
   nounVotingHistoryQuery,
 } from './subgraph';
+import { Maybe, Noun } from '@/subgraphs';
 
 export enum NounEventType {
   PROPOSAL_VOTE,
@@ -66,13 +67,13 @@ export type NounProfileEventFetcherResponse = {
  * @param nounId Id of Noun who's voting history will be fetched
  */
 const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
+  const { loading, error, data } = useQuery<{ noun: Maybe<Noun> }>(nounVotingHistoryQuery(nounId));
 
   const {
     loading: proposalTimestampLoading,
     error: proposalTimestampError,
     data: proposalCreatedTimestamps,
-  } = useQuery(createTimestampAllProposals());
+  } = useQuery<{ proposals: Maybe<Proposal[]> }>(createTimestampAllProposals());
 
   const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
 
@@ -90,20 +91,32 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     };
   }
 
-  const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
-    .slice(0)
-    .reduce((acc: any, h: NounVoteHistory) => {
-      acc[h.proposal.id] = h;
-      return acc;
-    }, {});
+  const nounVotes: { [key: string]: NounVoteHistory } = data?.noun?.votes
+    ? data.noun.votes.slice(0).reduce((acc: { [key: string]: NounVoteHistory }, h) => {
+        // Convert the proposal vote to NounVoteHistory and ensure proposal.id is a number
+        acc[h.proposal.id] = {
+          ...h,
+          proposal: {
+            ...h.proposal,
+            id: parseInt(h.proposal.id),
+          },
+          voter: {
+            id: h.voter.id as `0x${string}`,
+          },
+        };
+        return acc;
+      }, {})
+    : {};
 
   const filteredProposals = proposals.filter((p: PartialProposal, id: number) => {
     if (!p.id) {
       return false;
     }
 
-    const proposalCreationTimestamp = parseInt(
-      proposalCreatedTimestamps.proposals[id].createdTimestamp,
+    const proposalCreationTimestamp = Number(
+      proposalCreatedTimestamps?.proposals
+        ? proposalCreatedTimestamps?.proposals[id].createdTimestamp
+        : 0,
     );
 
     // Filter props from before the Noun was born

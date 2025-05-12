@@ -17,8 +17,8 @@ import {
   useReadNounsTokenSeeds,
   useReadNounsTokenTotalSupply,
   useSimulateNounsTokenApprove,
-  useSimulateNounsTokenDelegate,
   useSimulateNounsTokenSetApprovalForAll,
+  useWriteNounsTokenDelegate,
 } from '@/contracts';
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
@@ -115,7 +115,8 @@ export const useNounSeed = (nounId: bigint): INounSeed => {
   });
 
   if (response) {
-    const seedData = response as unknown as INounSeed;
+    const [background, body, accessory, head, glasses] = response;
+    const seedData = { background, body, accessory, head, glasses };
     const seedCache = localStorage.getItem(seedCacheKey);
     if (seedCache && isSeedValid(seedData)) {
       const updatedSeedCache = JSON.stringify({
@@ -170,15 +171,14 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 };
 
 export const useDelegateVotes = () => {
-  const { data: simulateData } = useSimulateNounsTokenDelegate();
-
   const {
-    writeContract: send,
-    data,
+    writeContract: delegateVotes,
+    data: hash,
     isPending: isLoading,
     isSuccess,
     isError,
-  } = useWriteContract();
+    error: errorMessage,
+  } = useWriteNounsTokenDelegate();
 
   let status = 'None';
   if (isLoading) {
@@ -189,14 +189,15 @@ export const useDelegateVotes = () => {
     status = 'Fail';
   }
 
-  const state = {
+  const delegateState = {
     status,
-    transaction: data,
+    errorMessage,
+    transaction: { hash },
   };
 
   return {
-    send: simulateData ? () => send(simulateData.request) : undefined,
-    state,
+    delegateVotes,
+    delegateState,
   };
 };
 
