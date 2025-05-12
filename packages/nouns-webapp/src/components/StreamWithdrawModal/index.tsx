@@ -185,7 +185,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
           setIsLoading(true);
           await withdrawTokens(
             formatTokenAmount(
-              withdrawAmount.toString(),
+              Number(withdrawAmount),
               isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
             ),
           );
