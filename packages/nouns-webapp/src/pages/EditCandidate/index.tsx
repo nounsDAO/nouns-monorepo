@@ -33,7 +33,7 @@ interface EditCandidateProps {
   match: {
     params: { id: string };
   };
-};
+}
 
 const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const { id } = useParams<{ id: string }>();
@@ -252,15 +252,19 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
     if (candidate == undefined) return;
 
     await updateProposalCandidate(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-      candidate.data?.slug, // Slug
-      candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
-      commitMessage,
-      { value: hasVotes ? 0 : (updateCandidateCost ?? 0) }, // Fee for non-nouners
+      {
+        args: [
+          proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+          proposalTransactions.map(({ value }) => BigInt(value ?? '0')), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+          candidate.data?.slug, // Slug
+          candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
+          commitMessage,
+        ],
+        value: hasVotes ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),
+      }, // Fee for non-nouners
     );
   };
 
@@ -308,9 +312,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we&apos;ve added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional ETH transaction to refill the TokenBuyer contract. This action allows to
+              DAO to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
@@ -340,9 +344,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           isCandidate={true}
         />
 
-        {!hasVotes && updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
+        {!hasVotes && !!updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
           <p className={classes.feeNotice}>
-            {updateCandidateCost && formatEther(updateCandidateCost)} ETH fee upon submission
+            {updateCandidateCost ? formatEther(updateCandidateCost) : '0'} ETH fee upon submission
           </p>
         )}
 

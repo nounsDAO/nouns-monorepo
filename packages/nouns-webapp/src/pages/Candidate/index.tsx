@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
@@ -33,6 +32,7 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './Candidate.module.css';
+import { useAccount, useBlockNumber } from 'wagmi';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -50,9 +50,9 @@ const CandidatePage = () => {
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
-  const blockNumber = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber();
   const candidate = useCandidateProposal(id ?? '', dataFetchPollInterval, false, currentBlock);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
   const latestProposalId = useProposalCount();
@@ -69,7 +69,7 @@ const CandidatePage = () => {
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number
     if (blockNumber && !currentBlock) {
-      setCurrentBlock(blockNumber);
+      setCurrentBlock(Number(blockNumber));
     }
   }, [blockNumber, currentBlock]);
 
@@ -104,13 +104,13 @@ const CandidatePage = () => {
 
   const onTransactionStateChange = useCallback(
     (
-      tx: TransactionStatus,
+      { errorMessage, status }: { errorMessage?: string; status: string },
       successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
       getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
-      switch (tx.status) {
+      switch (status) {
         case 'None':
           setPending?.(false);
           break;
@@ -129,7 +129,7 @@ const CandidatePage = () => {
         case 'Fail':
           setModal({
             title: <Trans>Transaction Failed</Trans>,
-            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -138,7 +138,7 @@ const CandidatePage = () => {
         case 'Exception':
           setModal({
             title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
+            message: getErrorMessage?.(errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -285,7 +285,7 @@ const CandidatePage = () => {
                   latestProposal={latestProposal}
                   isUpdateToProposal={isUpdateToProposal}
                   originalProposal={originalProposal}
-                  blockNumber={blockNumber}
+                  blockNumber={Number(blockNumber)}
                 />
               )}
             <VoteSignals

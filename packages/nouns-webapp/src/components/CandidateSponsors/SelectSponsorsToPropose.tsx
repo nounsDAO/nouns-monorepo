@@ -1,7 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -21,9 +20,9 @@ type Props = {
   requiredVotes: number;
   candidate: ProposalCandidate;
   blockNumber?: number;
-  setIsModalOpen: Function;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  setIsModalOpen: (isOpen: boolean) => void;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number) => void;
 };
 
 const SelectSponsorsToPropose = (props: Props) => {
@@ -58,13 +57,15 @@ const SelectSponsorsToPropose = (props: Props) => {
 
   const handleSubmission = async (selectedSignatures: CandidateSignature[]) => {
     clearTransactionState();
-    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => [
-      s.sig,
-      s.signer.id,
-      s.expirationTimestamp,
-    ]);
+    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => ({
+      sig: s.sig as `0x${string}`,
+      signer: s.signer.id,
+      expirationTimestamp: BigInt(s.expirationTimestamp),
+    }));
     // sort sigs by address to ensure order matches update proposal sigs
-    const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
+    const sortedSigs = proposalSigs.toSorted((a, b) =>
+      a.signer.toString().localeCompare(b.signer.toString()),
+    );
     if (selectedSignatures.length === 0) {
       await propose(
         props.candidate.version.content.targets,
@@ -74,50 +75,54 @@ const SelectSponsorsToPropose = (props: Props) => {
         props.candidate.version.content.description,
       );
     } else {
-      await proposeBySigs(
-        sortedSigs,
-        props.candidate.version.content.targets,
-        props.candidate.version.content.values,
-        props.candidate.version.content.signatures,
-        props.candidate.version.content.calldatas,
-        props.candidate.version.content.description,
-      );
+      await proposeBySigs({
+        args: [
+          sortedSigs,
+          props.candidate.version.content.targets as readonly `0x${string}`[],
+          props.candidate.version.content.values.map(value => BigInt(value)),
+          props.candidate.version.content.signatures,
+          props.candidate.version.content.calldatas as readonly `0x${string}`[],
+          props.candidate.version.content.description,
+        ],
+      });
     }
   };
 
-  const handleProposeStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        props.setDataFetchPollInterval(50);
-        setIsWaiting(false);
-        setIsLoading(true);
-        break;
-      case 'Success':
-        props.handleRefetchCandidateData();
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        setSelectedSignatures([]);
-        break;
-      case 'Fail':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        break;
-      case 'Exception':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleProposeStateChange = useCallback(
+    ({ errorMessage, status }: { errorMessage?: string; status: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          props.setDataFetchPollInterval(50);
+          setIsWaiting(false);
+          setIsLoading(true);
+          break;
+        case 'Success':
+          props.handleRefetchCandidateData();
+          setIsLoading(false);
+          setIsTxSuccessful(true);
+          setSelectedSignatures([]);
+          break;
+        case 'Fail':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          break;
+        case 'Exception':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [props],
+  );
 
   useEffect(() => {
     if (selectedSignatures.length === 0) {
@@ -156,10 +161,13 @@ const SelectSponsorsToPropose = (props: Props) => {
         )}
         {props.signatures && !isTxSuccessful && selectedSignatures.length > 0 && (
           <button
+            type="button"
             onClick={() => {
-              props.signatures && selectedSignatures.length === props.signatures.length
-                ? setSelectedSignatures([])
-                : setSelectedSignatures(props.signatures || []);
+              if (props.signatures && selectedSignatures.length === props.signatures.length) {
+                setSelectedSignatures([]);
+              } else {
+                setSelectedSignatures(props.signatures || []);
+              }
             }}
             disabled={isWaiting || isLoading}
           >
@@ -172,13 +180,16 @@ const SelectSponsorsToPropose = (props: Props) => {
           props.signatures.map((signature: CandidateSignature) => {
             return (
               <button
+                type="button"
                 key={signature.sig}
                 onClick={() => {
-                  selectedSignatures.includes(signature)
-                    ? setSelectedSignatures(
-                        selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                      )
-                    : setSelectedSignatures([...selectedSignatures, signature]);
+                  if (selectedSignatures.includes(signature)) {
+                    setSelectedSignatures(
+                      selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                    );
+                  } else {
+                    setSelectedSignatures([...selectedSignatures, signature]);
+                  }
                 }}
                 disabled={
                   isWaiting ||
@@ -204,6 +215,7 @@ const SelectSponsorsToPropose = (props: Props) => {
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
+            type="button"
             className={clsx(
               classes.button,
               classes.primaryButton,
@@ -242,6 +254,7 @@ const SelectSponsorsToPropose = (props: Props) => {
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
+              type="button"
               onClick={() => {
                 clearTransactionState();
               }}
@@ -256,8 +269,9 @@ const SelectSponsorsToPropose = (props: Props) => {
               <strong>Success!</strong> <br />
               <a
                 href={
-                  proposeBySigsState.transaction &&
-                  `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`
+                  proposeBySigsState.transaction?.hash
+                    ? `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`
+                    : undefined
                 }
                 target="_blank"
                 rel="noreferrer"

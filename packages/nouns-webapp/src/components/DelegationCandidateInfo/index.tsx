@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro';
 import { blo } from 'blo';
 
 import BrandSpinner from '@/components/BrandSpinner';
-import { ChangeDelegateState } from '@/components/ChangeDelegatePannel';
+import { ChangeDelegateState } from '../ChangeDelegatePanel';
 import DelegationCandidateVoteCountInfo from '@/components/DelegationCandidateVoteCountInfo';
 import ShortAddress from '@/components/ShortAddress';
 import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';

@@ -130,11 +130,11 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   );
 };
 
-export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
-  props: StandaloneNounWithSeedProps,
-) => {
-  const { nounId, onLoadSeed, shouldLinkToProfile } = props;
-
+export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
+  nounId,
+  onLoadSeed,
+  shouldLinkToProfile,
+}: StandaloneNounWithSeedProps) => {
   const dispatch = useDispatch();
   const seed = useNounSeed(nounId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);

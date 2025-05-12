@@ -1,14 +1,14 @@
 import { ClockIcon } from '@heroicons/react/solid';
-import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
+import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import { useEffect, useState } from 'react';
 import DelegationModal from '@/components/DelegationModal';
+
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { useBlockNumber, useEthers } from '@usedapp/core';
+import { useBlockNumber } from '@usedapp/core';
 import clsx from 'clsx';
 import en from 'dayjs/locale/en';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
@@ -31,6 +31,8 @@ import CandidateCard from '@/components/CandidateCard';
 import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './Proposals.module.css';
+import { useAccount } from 'wagmi';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
 
 dayjs.extend(relativeTime);
 
@@ -95,7 +97,7 @@ const Proposals = ({
   const [activeTab, setActiveTab] = useState(0);
   const [blockNumber, setBlockNumber] = useState<number>(0);
   const currentBlock = useBlockNumber();
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const navigate = useNavigate();
   const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
   const connectedAccountNounVotes = useUserVotes() || 0;
@@ -103,7 +105,7 @@ const Proposals = ({
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
+  const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
   const { hash } = useLocation();
@@ -129,7 +131,7 @@ const Proposals = ({
   }, [activeTab, navigate]);
 
   const nullStateCopy = () => {
-    if (account !== null) {
+    if (!!account) {
       if (connectedAccountNounVotes > 0) {
         return <Trans>Making a proposal requires {threshold} votes</Trans>;
       }
@@ -333,12 +335,11 @@ const Proposals = ({
                         const prop = proposals.find(
                           p => p.id === c.version.content.proposalIdToUpdate,
                         );
-                        const isOriginalPropUpdatable =
+                        const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
                           isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
-                            ? true
-                            : false;
+                        );
                         if (!isOriginalPropUpdatable) return null;
                       }
                       return (

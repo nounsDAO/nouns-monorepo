@@ -1,7 +1,6 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { FormControl } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -50,48 +49,60 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
   };
   const handleSubmitUpdateToProposal = async () => {
     clearTransactionState();
-    const proposalSigs = props.signatures?.map(s => [s.sig, s.signer.id, s.expirationTimestamp]);
+    // Create properly formatted signature objects
+    const proposalSigs = props.signatures?.map(s => ({
+      sig: s.sig as `0x${string}`,
+      signer: s.signer.id as `0x${string}`,
+      expirationTimestamp: BigInt(s.expirationTimestamp),
+    }));
     // sort sigs by address to ensure order matches original candidate sigs
-    const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
-    await updateProposalBySigs(
-      props.proposalIdToUpdate,
-      sortedSigs,
-      props.candidate.version.content.targets,
-      props.candidate.version.content.values,
-      props.candidate.version.content.signatures,
-      props.candidate.version.content.calldatas,
-      props.candidate.version.content.description,
-      reason,
+    const sortedSigs = proposalSigs.toSorted((a, b) =>
+      a.signer.toString().localeCompare(b.signer.toString()),
     );
+    await updateProposalBySigs({
+      args: [
+        BigInt(props.proposalIdToUpdate),
+        sortedSigs,
+        props.candidate.version.content.targets.map(target => target as `0x${string}`),
+        props.candidate.version.content.values.map(value => BigInt(value)),
+        props.candidate.version.content.signatures,
+        props.candidate.version.content.calldatas.map(calldata => calldata as `0x${string}`),
+        props.candidate.version.content.description,
+        reason,
+      ],
+    });
   };
 
-  const handleUpdateProposalStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        setIsWaiting(false);
-        setIsLoading(true);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        break;
-      case 'Fail':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        break;
-      case 'Exception':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-  }, []);
+  const handleUpdateProposalStateChange = useCallback(
+    ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          setIsWaiting(false);
+          setIsLoading(true);
+          break;
+        case 'Success':
+          setIsLoading(false);
+          setIsTxSuccessful(true);
+          break;
+        case 'Fail':
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          break;
+        case 'Exception':
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     handleUpdateProposalStateChange(updateProposalBySigsState);
@@ -114,6 +125,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
+            type="button"
             className={clsx(
               classes.button,
               classes.primaryButton,
@@ -143,6 +155,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
+              type="button"
               onClick={() => {
                 clearTransactionState();
               }}
@@ -157,7 +170,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
               <strong>Success!</strong> <br />
               <a
                 href={
-                  updateProposalBySigsState.transaction &&
+                  updateProposalBySigsState.transaction?.hash &&
                   `${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`
                 }
                 target="_blank"

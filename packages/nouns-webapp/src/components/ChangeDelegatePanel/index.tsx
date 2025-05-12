@@ -5,6 +5,7 @@ import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Collapse, FormControl } from 'react-bootstrap';
 import { isAddress } from 'viem';
+import { useAccount } from 'wagmi';
 
 import BrandSpinner from '@/components/BrandSpinner';
 import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
@@ -12,6 +13,7 @@ import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePickByState } from '@/utils/pickByState';
+import { Address } from '@/utils/types';
 import { useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useAccountVotes,
@@ -20,11 +22,11 @@ import {
   useUserDelegatee,
 } from '@/wrappers/nounToken';
 
-import classes from './ChangeDelegatePannel.module.css';
+import classes from './ChangeDelegatePanel.module.css';
 
 import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
 
-interface ChangeDelegatePannelProps {
+interface ChangeDelegatePanelProps {
   onDismiss: () => void;
   delegateTo?: string;
 }
@@ -53,25 +55,26 @@ const getTitleFromState = (state: ChangeDelegateState) => {
   }
 };
 
-const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
+const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   const { onDismiss, delegateTo } = props;
 
   const [changeDelegateState, setChangeDelegateState] = useState<ChangeDelegateState>(
     ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
   );
 
-  const { library, account } = useEthers();
+  const { library } = useEthers();
+  const { address: account } = useAccount();
 
   const [delegateAddress, setDelegateAddress] = useState(delegateTo ?? '');
   const [delegateInputText, setDelegateInputText] = useState(delegateTo ?? '');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const [hasResolvedDeepLinkedENS, setHasResolvedDeepLinkedENS] = useState(false);
-  const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
-  const { send: delegateVotes, state: delegateState } = useDelegateVotes();
+  const availableVotes = useNounTokenBalance(account as Address) ?? 0;
+  const { delegateVotes, delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
   const proposalThreshold = useProposalThreshold();
-  const accountVotes = useAccountVotes(account ?? '') ?? 0;
+  const accountVotes = useAccountVotes(account || undefined) ?? 0;
 
   useEffect(() => {
     if (delegateState.status === 'Success') {
@@ -148,7 +151,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
         onClick={() => {
-          delegateVotes(delegateAddress);
+          delegateVotes({ args: [delegateAddress as Address] });
         }}
         disabled={
           (changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
@@ -197,7 +200,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
         to a new account.
       </Trans>,
-      <React.Fragment key="delegate-error">{delegateState.errorMessage}</React.Fragment>,
+      <React.Fragment key="delegate-error">
+        {delegateState.errorMessage?.message || String(delegateState.errorMessage || '')}
+      </React.Fragment>,
     ],
   );
 
@@ -303,4 +308,4 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   );
 };
 
-export default ChangeDelegatePannel;
+export default ChangeDelegatePanel;

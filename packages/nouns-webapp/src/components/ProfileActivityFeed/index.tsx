@@ -31,9 +31,7 @@ export interface NounVoteHistory {
   voter: { id: Address };
 }
 
-const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId } = props;
-
+const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({ nounId }) => {
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
   const [isExpanded, setIsExpanded] = useState(false);

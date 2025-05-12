@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { ethers } from 'ethers';
@@ -74,11 +74,11 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   async function calcProposalEncodeData(
-    proposer: any,
-    targets: any,
-    values: any,
-    signatures: any[],
-    calldatas: any[],
+    proposer: string,
+    targets: string[],
+    values: ethers.BigNumberish[],
+    signatures: string[],
+    calldatas: ethers.utils.BytesLike[],
     description: string,
   ) {
     const signatureHashes = signatures.map((sig: string) =>
@@ -120,12 +120,12 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       };
       signature = await signer!
         ._signTypedData(domain, updateProposalTypes, value)
-        .then((sig: any) => {
+        .then((sig: string) => {
           setIsGetSignatureWaiting(false);
           setIsGetSignatureTxSuccessful(true);
           return sig;
         })
-        .catch((err: any) => {
+        .catch((err: Error) => {
           setGetSignatureErrorMessage(err.message);
           setIsGetSignatureWaiting(false);
         });
@@ -142,12 +142,12 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       };
       signature = await signer!
         ._signTypedData(domain, createProposalTypes, value)
-        .then((sig: any) => {
+        .then((sig: string) => {
           setIsGetSignatureWaiting(false);
           setIsGetSignatureTxSuccessful(true);
           return sig;
         })
-        .catch((err: any) => {
+        .catch((err: Error) => {
           setGetSignatureErrorMessage(err.message);
           setIsGetSignatureWaiting(false);
         });
@@ -174,15 +174,19 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
         [props.proposalIdToUpdate, encodedProp],
       );
       // signature set, submit signature
-      await addSignature(
-        signature,
-        expirationDate,
-        props.candidate.proposer,
-        props.candidate.slug,
-        props.proposalIdToUpdate, // proposalIdToUpdate
-        props.proposalIdToUpdate > 0 ? encodedPropUpdate : encodedProp,
-        reasonText,
-      );
+      await addSignature({
+        args: [
+          signature as `0x${string}`,
+          expirationDate ? BigInt(expirationDate) : BigInt(0),
+          props.candidate.proposer,
+          props.candidate.slug,
+          BigInt(props.proposalIdToUpdate), // proposalIdToUpdate
+          props.proposalIdToUpdate > 0
+            ? (encodedPropUpdate as `0x${string}`)
+            : (encodedProp as `0x${string}`),
+          reasonText,
+        ],
+      });
     }
   }
 
@@ -200,40 +204,37 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
     props.setDataFetchPollInterval(0);
   };
 
-  const handleAddSignatureState = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        setIsWaiting(false);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        props.handleRefetchCandidateData();
-        setIsTxSuccessful(true);
-        setIsLoading(false);
-        break;
-      case 'Fail':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state.errorMessage);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'Exception':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state.errorMessage);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddSignatureState = useCallback(
+    ({ errorMessage, status }: { errorMessage?: string; status: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          setIsLoading(true);
+          setIsWaiting(false);
+          props.setDataFetchPollInterval(50);
+          break;
+        case 'Success':
+          props.handleRefetchCandidateData();
+          setIsTxSuccessful(true);
+          setIsLoading(false);
+          break;
+        case 'Fail':
+        case 'Exception':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage);
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     handleAddSignatureState(addSignatureState);
@@ -301,6 +302,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
           ) : (
             <button
+              type="button"
               className={classes.button}
               onClick={() => {
                 sign();
@@ -340,6 +342,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               <p className={clsx(classes.statusMessage, classes.errorMessage)}>
                 {getSignatureErrorMessage || errorMessage}
                 <button
+                  type="button"
                   onClick={() => {
                     clearTransactionState();
                   }}
@@ -353,7 +356,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                 <p className={clsx(classes.statusMessage, classes.successMessage)}>
                   <a
                     href={
-                      addSignatureState.transaction &&
+                      addSignatureState.transaction?.hash &&
                       `${buildEtherscanTxLink(addSignatureState.transaction.hash)}`
                     }
                     target="_blank"
@@ -414,6 +417,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             {/* close overlay */}
             {isTxSuccessful && (
               <button
+                type="button"
                 className={classes.closeButton}
                 onClick={() => {
                   props.setIsFormDisplayed(false);

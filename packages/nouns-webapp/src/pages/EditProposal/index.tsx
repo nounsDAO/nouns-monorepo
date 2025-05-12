@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '@/hooks';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
-import { Link } from 'react-router';
-import EditProposalButton from '@/components/EditProposalButton/index';
+import { Link, useParams } from 'react-router';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import EditProposalButton from '@/components/EditProposalButton/index';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
+import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
@@ -26,7 +26,10 @@ import {
 } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
+
 import classes from '../CreateProposal/CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 interface EditProposalProps {
   match: {
@@ -34,7 +37,8 @@ interface EditProposalProps {
   };
 }
 
-const EditProposalPage: React.FC<EditProposalProps> = props => {
+const EditProposalPage: React.FC<EditProposalProps> = () => {
+  const { id } = useParams<{ id: string }>();
   const [isProposalEdited, setIsProposalEdited] = useState(false);
   const [isTitleEdited, setIsTitleEdited] = useState(false);
   const [isBodyEdited, setIsBodyEdited] = useState(false);
@@ -52,7 +56,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
     ProposalDetail[]
   >([]);
-  const proposal = useProposal(props.match.params.id, true);
+  const proposal = useProposal(id ?? '', true);
   const proposalThreshold = useProposalThreshold();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -80,12 +84,15 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   };
   const isolatedDescription =
     proposal?.description && removeTitleFromDescription(proposal?.description, titleValue);
-  const isProposedBySigners = proposal?.signers && proposal?.signers?.length > 0 ? true : false;
+  const isProposedBySigners = !!(proposal?.signers && proposal?.signers?.length > 0);
 
   const candidateUpdateSlug = (slug: string) => {
     // add random string to slug to make it unique
-    const randomString = Math.random().toString(36).substring(7);
-    return `${slug}-update-${randomString}`;
+    const timestamp = Date.now().toString(36);
+    const randomPart = crypto
+      .getRandomValues(new Uint8Array(4))
+      .reduce((acc, val) => acc + val.toString(36).padStart(2, '0'), '');
+    return `${slug}-update-${timestamp}-${randomPart}`;
   };
 
   const handleAddProposalAction = useCallback(
@@ -198,7 +205,11 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   );
 
   useEffect(() => {
-    isTitleEdited || isBodyEdited ? setIsProposalEdited(true) : setIsProposalEdited(false);
+    if (isTitleEdited || isBodyEdited) {
+      setIsProposalEdited(true);
+    } else {
+      setIsProposalEdited(false);
+    }
   }, [isTitleEdited, isBodyEdited]);
 
   useEffect(() => {
@@ -307,10 +318,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }, [updateProposaTransactionsState, setModal, updateProposaTransactionsState?.errorMessage]);
 
   const isProposer = () => {
-    if (proposal?.proposer?.toLowerCase() === account?.toLowerCase()) {
-      return true;
-    }
-    return false;
+    return proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   };
 
   const isTransactionsEdited = () => {
@@ -349,7 +357,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       // only update transactions
       await updateProposalTransactions(
         proposal.id,
-        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
         proposalTransactions.map(({ value }) => value ?? '0'), // Values
         proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
         proposalTransactions.map(({ calldata }) => calldata), // Calldatas
@@ -360,7 +368,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       // update all
       await updateProposal(
         proposal.id, // proposalId
-        proposalTransactions.map(({ address }) => address), // Targets
+        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
         proposalTransactions.map(({ value }) => value ?? '0'), // Values
         proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
         proposalTransactions.map(({ calldata }) => calldata), // Calldatas
@@ -410,24 +418,19 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }, [proposal]);
 
   const handleCreateNewCandidate = async () => {
-    if (
-      !proposalTransactions?.length ||
-      !titleValue ||
-      !bodyValue ||
-      !slug ||
-      !props.match.params.id
-    )
-      return;
-    await createProposalCandidate(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-      slug, // Slug
-      props.match.params.id, // use 0 for new proposals
-      { value: availableVotes! > 0 ? 0 : createCandidateCost },
-    );
+    if (!proposalTransactions?.length || !titleValue || !bodyValue || !slug || !id) return;
+    await createProposalCandidate({
+      args: [
+        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+        proposalTransactions.map(({ value }) => BigInt(value ?? '0')), // Values
+        proposalTransactions.map(({ signature }) => signature), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
+        `# ${titleValue}\n\n${bodyValue}`, // Description
+        slug, // Slug
+        BigInt(id), // use 0 for new proposals
+      ],
+      value: availableVotes! > 0 ? BigInt(0) : createCandidateCost,
+    });
   };
 
   // used if updating a proposal that was created by signers
@@ -474,16 +477,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }, [createProposalCandidateState, setModal]);
 
   const isFormInvalid = () => {
-    if (
+    return (
       !(isProposalEdited || isTransactionsEdited() || isDescriptionEdited()) ||
       !proposalTransactions.length ||
       titleValue === '' ||
       bodyValue === '' ||
       slug === ''
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
   if (!isProposer()) {
     return null;
@@ -498,8 +498,13 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       />
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
-          <Link to={`/vote/${props.match.params.id}`}>
-            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+          <Link to={`/vote/${id}`}>
+            <button
+              type="button"
+              className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}
+            >
+              ←
+            </button>
           </Link>
           <h3 className={classes.heading}>
             <Trans>Edit Proposal</Trans>
@@ -542,9 +547,9 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional ETH transaction to refill the TokenBuyer contract. This action allows to
+              DAO to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}

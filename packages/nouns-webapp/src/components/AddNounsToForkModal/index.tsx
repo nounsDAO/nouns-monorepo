@@ -4,21 +4,19 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
-import config from '@/config';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nounsDao';
 import { useSetApprovalForAll, useIsApprovedForAll } from '@/wrappers/nounToken';
 
 import classes from './AddNounsToForkModal.module.css';
 
-type Props = {
-  setIsModalOpen: Function;
+type AddNounsToForkModalProps = {
+  setIsModalOpen: (isOpen: boolean) => void;
   isModalOpen: boolean;
   isConfirmModalOpen: boolean;
   isForkingPeriod: boolean;
@@ -29,12 +27,12 @@ type Props = {
   account: string;
   ownedNouns: number[] | undefined;
   userEscrowedNouns: number[] | undefined;
-  refetchData: Function;
-  setDataFetchPollInterval: Function;
-  setIsConfirmModalOpen: Function;
+  refetchData: () => void;
+  setDataFetchPollInterval: (interval: number) => void;
+  setIsConfirmModalOpen: (isOpen: boolean) => void;
 };
 
-export default function AddNounsToForkModal(props: Props) {
+const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
   const [reasonText, setReasonText] = React.useState('');
   const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
@@ -74,7 +72,7 @@ export default function AddNounsToForkModal(props: Props) {
     let nounIds = props.ownedNouns || [];
     if (props.ownedNouns && props.userEscrowedNouns) {
       const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
-      nounIds = nouns.sort((a, b) => a - b);
+      nounIds = [...nouns].sort((a, b) => a - b);
     }
     setOwnedNouns(nounIds);
   }, [props.ownedNouns, props.userEscrowedNouns]);
@@ -108,7 +106,9 @@ export default function AddNounsToForkModal(props: Props) {
       addNounsToEscrow(selectedNouns);
     } else {
       setIsTwoStepProcess(true);
-      setApproval(config.addresses.nounsDAOProxy, true);
+      if (setApproval) {
+        setApproval();
+      }
     }
   };
 
@@ -123,8 +123,11 @@ export default function AddNounsToForkModal(props: Props) {
   };
 
   const handleSetApprovalForAllAndAddToEscrowStateChange = useCallback(
-    (state: TransactionStatus, selectedNouns: number[]) => {
-      switch (state.status) {
+    (
+      { errorMessage, status }: { errorMessage?: string; status: string },
+      selectedNouns: number[],
+    ) => {
+      switch (status) {
         case 'None':
           setIsApprovalLoading(false);
           break;
@@ -142,11 +145,11 @@ export default function AddNounsToForkModal(props: Props) {
           addNounsToEscrow(selectedNouns);
           break;
         case 'Fail':
-          setApprovalErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+          setApprovalErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
           setIsApprovalLoading(false);
           break;
         case 'Exception':
-          setApprovalErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
+          setApprovalErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
           setIsApprovalLoading(false);
           setIsApprovalWaiting(false);
           break;
@@ -155,41 +158,43 @@ export default function AddNounsToForkModal(props: Props) {
     [],
   );
 
-  const handleAddToForkStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        setIsWaiting(false);
-        setIsLoading(true);
-        // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
-        props.setDataFetchPollInterval(20);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        // if successful, disable nouns in list from being added to escrow again
-        props.refetchData();
-        setSelectedNouns([]);
-        break;
-      case 'Fail':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        props.setDataFetchPollInterval(0);
-        break;
-      case 'Exception':
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsWaiting(false);
-        props.setDataFetchPollInterval(0);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddToForkStateChange = useCallback(
+    ({ errorMessage: errorMessage1, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          setIsWaiting(false);
+          setIsLoading(true);
+          // poll for data to catch when nouns have been added to escrow, fallback if refresh doesn't catch it
+          props.setDataFetchPollInterval(20);
+          break;
+        case 'Success':
+          setIsLoading(false);
+          setIsTxSuccessful(true);
+          // if successful, disable nouns in list from being added to escrow again
+          props.refetchData();
+          setSelectedNouns([]);
+          break;
+        case 'Fail':
+          setErrorMessage(errorMessage1 || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          props.setDataFetchPollInterval(0);
+          break;
+        case 'Exception':
+          setErrorMessage(errorMessage1 || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsWaiting(false);
+          props.setDataFetchPollInterval(0);
+          break;
+      }
+    },
+    [props],
+  );
 
   useEffect(() => {
     if (props.isForkingPeriod) {
@@ -213,6 +218,7 @@ export default function AddNounsToForkModal(props: Props) {
         cannot be undone.
       </p>
       <button
+        type="button"
         className={clsx(classes.button, classes.primaryButton)}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
@@ -222,6 +228,7 @@ export default function AddNounsToForkModal(props: Props) {
         Join
       </button>
       <button
+        type="button"
         className={clsx(classes.button, classes.secondaryButton)}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
@@ -241,7 +248,7 @@ export default function AddNounsToForkModal(props: Props) {
       <p className={classes.modalDescription}>
         {!props.isForkingPeriod ? (
           <>
-            Nouners can withdraw their tokens from escrow as long as the forking period hasn't
+            Nouners can withdraw their tokens from escrow as long as the forking period hasn&apos;t
             started. Nouns in escrow are not eligible to vote or submit proposals.
           </>
         ) : (
@@ -296,6 +303,7 @@ export default function AddNounsToForkModal(props: Props) {
                 </a>
               </span>
               <button
+                type="button"
                 onClick={() => {
                   const newSelectedProposals = selectedProposals.filter(id => id !== proposalId);
                   setSelectedProposals(newSelectedProposals);
@@ -324,11 +332,16 @@ export default function AddNounsToForkModal(props: Props) {
           ownedNouns &&
           ownedNouns?.length > props.userEscrowedNouns.length && (
             <button
+              type="button"
               onClick={() => {
-                approvalErrorMessage && clearTransactionState();
-                props.ownedNouns && selectedNouns.length === props.ownedNouns.length
-                  ? setSelectedNouns([])
-                  : setSelectedNouns(props.ownedNouns || []);
+                if (approvalErrorMessage) {
+                  clearTransactionState();
+                }
+                if (props.ownedNouns && selectedNouns.length === props.ownedNouns.length) {
+                  setSelectedNouns([]);
+                } else {
+                  setSelectedNouns(props.ownedNouns || []);
+                }
               }}
               disabled={isWaiting || isLoading || isApprovalWaiting || isApprovalLoading}
             >
@@ -341,12 +354,16 @@ export default function AddNounsToForkModal(props: Props) {
           ownedNouns.map((nounId: number) => {
             return (
               <button
+                type="button"
                 onClick={() => {
-                  (approvalErrorMessage || errorMessage || isTxSuccessful) &&
+                  if (approvalErrorMessage || errorMessage || isTxSuccessful) {
                     clearTransactionState();
-                  selectedNouns.includes(nounId)
-                    ? setSelectedNouns(selectedNouns.filter(id => id !== nounId))
-                    : setSelectedNouns([...selectedNouns, nounId]);
+                  }
+                  if (selectedNouns.includes(nounId)) {
+                    setSelectedNouns(selectedNouns.filter(id => id !== nounId));
+                  } else {
+                    setSelectedNouns([...selectedNouns, nounId]);
+                  }
                 }}
                 disabled={
                   isWaiting ||
@@ -382,6 +399,7 @@ export default function AddNounsToForkModal(props: Props) {
       <div className={classes.modalActions}>
         {!(approvalErrorMessage || errorMessage || isTxSuccessful || isApprovalTxSuccessful) && (
           <button
+            type="button"
             className={clsx(
               classes.button,
               classes.primaryButton,
@@ -425,6 +443,7 @@ export default function AddNounsToForkModal(props: Props) {
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {approvalErrorMessage || errorMessage}
             <button
+              type="button"
               onClick={() => {
                 clearTransactionState();
               }}
@@ -451,6 +470,7 @@ export default function AddNounsToForkModal(props: Props) {
                 ownedNouns &&
                 ownedNouns?.length > props.userEscrowedNouns.length && (
                   <button
+                    type="button"
                     onClick={() => {
                       clearTransactionState();
                     }}
@@ -507,7 +527,7 @@ export default function AddNounsToForkModal(props: Props) {
           </>
         )}
         {!isApprovedForAll && (!isApprovalWaiting || !isApprovalLoading) && (
-          <p className={classes.approvalNote}>You'll be asked to approve access</p>
+          <p className={classes.approvalNote}>You&apos;ll be asked to approve access</p>
         )}
         {selectedNouns.length > 0 && !isTxSuccessful && (
           <>
@@ -537,4 +557,5 @@ export default function AddNounsToForkModal(props: Props) {
       />
     </>
   );
-}
+};
+export default AddNounsToForkModal

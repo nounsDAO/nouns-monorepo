@@ -143,16 +143,18 @@ const CreateCandidatePage = () => {
   );
 
   const handleCreateProposal = async () => {
-    await createProposalCandidate(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-      slug, // Slug
-      0, // proposalIdToUpdate - use 0 for new proposals
-      { value: hasVotes ? 0 : createCandidateCost }, // Fee for non-nouners
-    );
+    await createProposalCandidate({
+      args: [
+        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+        proposalTransactions.map(({ value }) => BigInt(value ?? '0')), // Values
+        proposalTransactions.map(({ signature }) => signature), // Signatures
+        proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
+        `# ${titleValue}\n\n${bodyValue}`, // Description
+        slug, // Slug
+        0n, // proposalIdToUpdate - use 0 for new proposals
+      ],
+      value: hasVotes ? 0n : createCandidateCost, // Fee for non-nouners
+    });
   };
 
   useEffect(() => {
@@ -219,7 +221,7 @@ const CreateCandidatePage = () => {
           <strong>
             <Trans>
               Submissions are free for Nouns voters. Non-voters can submit for a{' '}
-              {createCandidateCost && formatEther(createCandidateCost)} ETH fee.
+              {createCandidateCost ? formatEther(createCandidateCost) : '0'} ETH fee.
             </Trans>
           </strong>
         </Alert>
@@ -243,9 +245,9 @@ const CreateCandidatePage = () => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional ETH transaction to refill the TokenBuyer contract. This action allows to
+              DAO to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
@@ -267,7 +269,7 @@ const CreateCandidatePage = () => {
         <p className={classes.feeNotice}>
           {!hasVotes && (
             <Trans>
-              {createCandidateCost && formatEther(createCandidateCost)} ETH fee upon submission
+              {createCandidateCost ? formatEther(createCandidateCost) : '0'} ETH fee upon submission
             </Trans>
           )}
         </p>
