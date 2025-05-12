@@ -35,7 +35,7 @@ interface StreamWithdrawModalOverlayProps {
   endTime?: number;
   startTime?: number;
   streamAmount?: number;
-  tokenAddress?: string;
+  tokenAddress: Address;
 }
 
 const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = props => {
@@ -208,7 +208,7 @@ interface StreamWithdrawModalProps {
   endTime?: number;
   startTime?: number;
   streamAmount?: number;
-  tokenAddress?: string;
+  tokenAddress: Address;
 }
 
 const StreamWithdrawModal: React.FC<StreamWithdrawModalProps> = props => {

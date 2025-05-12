@@ -1,23 +1,13 @@
+import type { Address } from '@/utils/types';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { useQuery } from '@apollo/client';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import en from 'dayjs/locale/en';
-import VoteModal from '@/components/VoteModal';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import clsx from 'clsx';
-import ProposalHeader from '@/components/ProposalHeader';
-import ProposalContent from '@/components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
-
-import { useQuery } from '@apollo/client';
-import {
-  proposalVotesQuery,
-  delegateNounsAtBlockQuery,
-  ProposalVotes,
-  Delegates,
-  propUsingDynamicQuorum,
-} from '@/wrappers/subgraph';
-import { getNounVotes } from '@/utils/getNounsVotes';
 import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
@@ -30,6 +20,18 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 
+import ProposalHeader from '@/components/ProposalHeader';
+import ProposalContent from '@/components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+import VoteModal from '@/components/VoteModal';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+  propUsingDynamicQuorum,
+} from '@/wrappers/subgraph';
+import { getNounVotes } from '@/utils/getNounsVotes';
 import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
 import ShortAddress from '@/components/ShortAddress';
 import StreamWithdrawModal from '@/components/StreamWithdrawModal';
@@ -60,6 +62,7 @@ import { useProposalFeedback } from '@/wrappers/nounsData';
 import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
 import classes from './Vote.module.css';
+import { zeroAddress } from 'viem';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -100,11 +103,11 @@ const VotePage = () => {
   const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
   const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
-    streamAddress: string;
+    streamAddress: Address;
     startTime: number;
     endTime: number;
     streamAmount: number;
-    tokenAddress: string;
+    tokenAddress: Address;
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
@@ -438,7 +441,7 @@ const VotePage = () => {
     }
   }, [showToast]);
 
-  const isWalletConnected = !(activeAccount === undefined);
+  const isWalletConnected = activeAccount !== undefined;
   const isActiveForVoting =
     proposal?.status === ProposalState.ACTIVE ||
     proposal?.status === ProposalState.OBJECTION_PERIOD;
@@ -500,7 +503,11 @@ const VotePage = () => {
       <StreamWithdrawModal
         show={showStreamWithdrawModal}
         onDismiss={() => setShowStreamWithdrawModal(false)}
-        {...streamWithdrawInfo}
+        streamAddress={streamWithdrawInfo?.streamAddress ?? zeroAddress}
+        startTime={streamWithdrawInfo?.startTime}
+        endTime={streamWithdrawInfo?.endTime}
+        streamAmount={streamWithdrawInfo?.streamAmount}
+        tokenAddress={streamWithdrawInfo?.tokenAddress ?? zeroAddress}
       />
       <VoteModal
         show={showVoteModal}
@@ -542,14 +549,14 @@ const VotePage = () => {
                   <Col className="d-grid gap-4">
                     <Button
                       onClick={() => {
-                        setShowStreamWithdrawModal(true);
                         setStreamWithdrawInfo({
-                          streamAddress: parsedCallData.streamAddress,
+                          streamAddress: parsedCallData.streamAddress as Address,
                           startTime: parsedCallData.startTime,
                           endTime: parsedCallData.endTime,
                           streamAmount: parsedCallData.streamAmount,
-                          tokenAddress: parsedCallData.tokenAddress,
+                          tokenAddress: parsedCallData.tokenAddress as Address,
                         });
+                        setShowStreamWithdrawModal(true);
                       }}
                       variant="primary"
                       className={classes.transitionStateButton}
