@@ -1,13 +1,28 @@
-import React, { useEffect } from 'react';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { ApolloProvider, useQuery } from '@apollo/client';
+import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
+import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
-import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
+import { BigNumber, BigNumberish, Event } from 'ethers';
+import React, { useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { combineReducers, createStore, PreloadedState } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import App from './App';
+import config, {
+  CHAIN_ID,
+  ChainId_Sepolia,
+  createNetworkHttpUrl,
+  multicallOnLocalhost,
+} from './config';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { LanguageProvider } from './i18n/LanguageProvider';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 import account from './state/slices/account';
 import application from './state/slices/application';
-import logs from './state/slices/logs';
 import auction, {
   appendBid,
   reduxSafeAuction,
@@ -18,38 +33,18 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
+import logs from './state/slices/logs';
 import onDisplayAuction, {
   setLastAuctionNounId,
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
-import { ApolloProvider, useQuery } from '@apollo/client';
-import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, {
-  CHAIN_ID,
-  ChainId_Sepolia,
-  createNetworkHttpUrl,
-  multicallOnLocalhost,
-} from './config';
-import { BigNumber, BigNumberish, Event } from 'ethers';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
-import { createRoot } from 'react-dom/client';
-
-import { useAppDispatch, useAppSelector } from './hooks';
-import { ConnectedRouter, connectRouter, push, routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
-import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
-import { LanguageProvider } from './i18n/LanguageProvider';
+import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
-export const history = createBrowserHistory();
-
-const createRootReducer = (history: History) =>
+const createRootReducer = () =>
   combineReducers({
-    router: connectRouter(history),
     account,
     application,
     auction,
@@ -58,18 +53,8 @@ const createRootReducer = (history: History) =>
     onDisplayAuction,
   });
 
-export default function configureStore(preloadedState: PreloadedState<any>) {
-  const store = createStore(
-    createRootReducer(history), // root reducer with router state
-    preloadedState,
-    composeWithDevTools(
-      applyMiddleware(
-        routerMiddleware(history), // for dispatching history actions
-        // ... other middlewares ...
-      ),
-    ),
-  );
-
+export default function configureStore(preloadedState: PreloadedState<Record<string, unknown>>) {
+  const store = createStore(createRootReducer(), preloadedState, composeWithDevTools());
   return store;
 }
 
@@ -122,6 +107,7 @@ const BLOCKS_PER_DAY = 7_200;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
@@ -166,7 +152,7 @@ const ChainSubscriber: React.FC = () => {
         setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
       );
       const nounIdNumber = BigNumber.from(nounId).toNumber();
-      dispatch(push(nounPath(nounIdNumber)));
+      navigate(nounPath(nounIdNumber));
       dispatch(setOnDisplayAuctionNounId(nounIdNumber));
       dispatch(setLastAuctionNounId(nounIdNumber));
     };
@@ -184,8 +170,8 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the previous 24 hours of bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
-    for (let event of previousBids) {
-      if (event.args === undefined) return;
+    for (const event of previousBids) {
+      if (event.args === undefined) continue;
       processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
@@ -213,7 +199,9 @@ const PastAuctions: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    data && dispatch(addPastAuctions({ data }));
+    if (data) {
+      dispatch(addPastAuctions({ data }));
+    }
   }, [data, latestAuctionId, dispatch]);
 
   return <></>;
@@ -221,7 +209,7 @@ const PastAuctions: React.FC = () => {
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    {/*<ConnectedRouter history={history}>*/}
+    <BrowserRouter>
       <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
@@ -240,7 +228,7 @@ createRoot(document.getElementById('root')!).render(
           </ApolloProvider>
         </Web3ReactProvider>
       </React.StrictMode>
-    {/*</ConnectedRouter>*/}
+    </BrowserRouter>
   </Provider>,
 );
 
