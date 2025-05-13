@@ -2,17 +2,15 @@ import type { Address } from '@/utils/types';
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
+import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
   useContractCall,
   useContractCalls,
   useContractFunction,
-  connectContractToSigner,
-  useEthers,
 } from '@usedapp/core';
-import { utils, BigNumber as EthersBN } from 'ethers';
+import { BigNumber as EthersBN, utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -22,17 +20,17 @@ import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
 import { useLogs } from '@/hooks/useLogs';
 
 import {
-  proposalQuery,
-  partialProposalsQuery,
-  proposalVersionsQuery,
+  activePendingUpdatableProposersQuery,
   escrowDepositEventsQuery,
   escrowWithdrawEventsQuery,
-  proposalTitlesQuery,
-  forksQuery,
   forkDetailsQuery,
-  activePendingUpdatableProposersQuery,
   forkJoinsQuery,
+  forksQuery,
   isForkActiveQuery,
+  partialProposalsQuery,
+  proposalQuery,
+  proposalTitlesQuery,
+  proposalVersionsQuery,
   updatableProposalsQuery,
 } from './subgraph';
 import {
@@ -41,6 +39,7 @@ import {
   useReadNounsGovernorProposalThreshold,
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
+  useWriteNounsGovernorCastRefundableVoteWithReason,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -878,24 +877,28 @@ export function useCastRefundableVote() {
   return { castRefundableVote, castRefundableVoteState };
 }
 
-export const useCastRefundableVoteWithReason = () => {
-  const { library } = useEthers();
-  // prettier-ignore
-  const functionSig = 'castRefundableVoteWithReason(uint256,uint8,string)';
-  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } =
-    useContractFunction(nounsDaoContract, functionSig);
+export function useCastRefundableVoteWithReason() {
+  const {
+    data: hash,
+    writeContractAsync: castRefundableVoteWithReason,
+    isPending: isCastRefundableVoteWithReasonPending,
+    isSuccess: isCastRefundableVoteWithReasonSuccess,
+    error: castRefundableVoteWithReasonError,
+  } = useWriteNounsGovernorCastRefundableVoteWithReason();
 
-  return {
-    castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas[functionSig](...args);
-      return castRefundableVoteWithReason(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
-    },
-    castRefundableVoteWithReasonState,
+  let status = 'None';
+  if (isCastRefundableVoteWithReasonPending) status = 'Mining';
+  else if (isCastRefundableVoteWithReasonSuccess) status = 'Success';
+  else if (castRefundableVoteWithReasonError) status = 'Fail';
+
+  const castRefundableVoteWithReasonState = {
+    status,
+    errorMessage: castRefundableVoteWithReasonError?.message,
+    transaction: { hash },
   };
-};
+
+  return { castRefundableVoteWithReason, castRefundableVoteWithReasonState };
+}
 
 export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
