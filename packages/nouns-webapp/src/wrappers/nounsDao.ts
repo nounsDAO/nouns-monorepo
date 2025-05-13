@@ -45,6 +45,7 @@ import {
   useWriteNounsGovernorCastRefundableVoteWithReason,
   useWriteNounsGovernorEscrowToFork,
   useWriteNounsGovernorExecute,
+  useWriteNounsGovernorExecuteFork,
   useWriteNounsGovernorJoinFork,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
@@ -1417,13 +1418,28 @@ export const useIsForkActive = () => {
   };
 };
 
-export const useExecuteFork = () => {
-  const { send: executeFork, state: executeForkState } = useContractFunction(
-    nounsDaoContract,
-    'executeFork',
-  );
+export function useExecuteFork() {
+  const {
+    data: hash,
+    writeContractAsync: executeFork,
+    isPending: isExecuteForkPending,
+    isSuccess: isExecuteForkSuccess,
+    error: executeForkError,
+  } = useWriteNounsGovernorExecuteFork();
+
+  let status = 'None';
+  if (isExecuteForkPending) status = 'Mining';
+  else if (isExecuteForkSuccess) status = 'Success';
+  else if (executeForkError) status = 'Fail';
+
+  const executeForkState = {
+    status,
+    errorMessage: executeForkError?.message,
+    transaction: { hash },
+  };
+
   return { executeFork, executeForkState };
-};
+}
 
 export const useAdjustedTotalSupply = (): number | undefined => {
   const [totalSupply] =
