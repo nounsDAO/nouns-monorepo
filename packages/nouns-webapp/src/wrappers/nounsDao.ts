@@ -3,7 +3,13 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import {
+  ChainId,
+  useBlockNumber,
+  useContractCall,
+  useContractCalls,
+  useContractFunction,
+} from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
@@ -35,6 +41,7 @@ import {
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
   useWriteNounsGovernorCastRefundableVoteWithReason,
+  useWriteNounsGovernorExecute,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
   useWriteNounsGovernorQueue,
@@ -1064,13 +1071,29 @@ export function useCancelProposal() {
   return { cancelProposal, cancelProposalState };
 }
 
-export const useExecuteProposal = () => {
-  const { send: executeProposal, state: executeProposalState } = useContractFunction(
-    nounsDaoContract,
-    'execute',
-  );
+export function useExecuteProposal() {
+  const {
+    data: hash,
+    writeContractAsync: executeProposal,
+    isPending: isExecuteProposalPending,
+    isSuccess: isExecuteProposalSuccess,
+    error: executeProposalError,
+  } = useWriteNounsGovernorExecute();
+
+  let status = 'None';
+  if (isExecuteProposalPending) status = 'Mining';
+  else if (isExecuteProposalSuccess) status = 'Success';
+  else if (executeProposalError) status = 'Fail';
+
+  const executeProposalState = {
+    status,
+    errorMessage: executeProposalError?.message,
+    transaction: { hash },
+  };
+
   return { executeProposal, executeProposalState };
-};
+}
+
 export const useExecuteProposalOnTimelockV1 = () => {
   const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } =
     useContractFunction(nounsDaoContract, 'executeOnTimelockV1');
