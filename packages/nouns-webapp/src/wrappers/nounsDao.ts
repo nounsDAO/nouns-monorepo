@@ -34,6 +34,7 @@ import {
   updatableProposalsQuery,
 } from './subgraph';
 import {
+  useReadNounsGovernorAdjustedTotalSupply,
   useReadNounsGovernorForkThreshold,
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorNumTokensInForkEscrow,
@@ -1441,15 +1442,11 @@ export function useExecuteFork() {
   return { executeFork, executeForkState };
 }
 
-export const useAdjustedTotalSupply = (): number | undefined => {
-  const [totalSupply] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'adjustedTotalSupply',
-    }) || [];
-  return totalSupply?.toNumber();
-};
+export function useAdjustedTotalSupply(): number | undefined {
+  const { data } = useReadNounsGovernorAdjustedTotalSupply();
+
+  return data ? Number(data) : undefined;
+}
 
 export const useForkThresholdBPS = (): number | undefined => {
   const [forkThresholdBPS] =
