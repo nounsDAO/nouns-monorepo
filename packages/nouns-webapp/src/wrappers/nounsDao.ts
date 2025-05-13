@@ -372,19 +372,16 @@ export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | unde
   };
 }
 
-export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
-  const { account } = useEthers();
+export function useHasVotedOnProposal(proposalId: bigint): boolean {
+  const { address } = useAccount();
+  // @ts-ignore
+  const { data: receipt } = useReadNounsGovernorGetReceipt({
+    args: [proposalId, address!],
+    query: { enabled: Boolean(proposalId && address) },
+  });
 
-  // Fetch a voting receipt for the passed proposal id
-  const [receipt] =
-    useContractCall<[any]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'getReceipt',
-      args: [proposalId, account],
-    }) || [];
   return receipt?.hasVoted ?? false;
-};
+}
 
 export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstain' | '' {
   const { address } = useAccount();
