@@ -3,14 +3,8 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import {
-  ChainId,
-  useBlockNumber,
-  useContractCall,
-  useContractCalls,
-  useContractFunction,
-} from '@usedapp/core';
-import { BigNumber as EthersBN, utils } from 'ethers';
+import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import { utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -94,21 +88,21 @@ export enum ForkState {
 }
 
 interface ProposalCallResult {
-  id: EthersBN;
-  abstainVotes: EthersBN;
-  againstVotes: EthersBN;
-  forVotes: EthersBN;
+  id: bigint;
+  abstainVotes: bigint;
+  againstVotes: bigint;
+  forVotes: bigint;
   canceled: boolean;
   vetoed: boolean;
   executed: boolean;
-  startBlock: EthersBN;
-  endBlock: EthersBN;
-  eta: EthersBN;
-  proposalThreshold: EthersBN;
+  startBlock: bigint;
+  endBlock: bigint;
+  eta: bigint;
+  proposalThreshold: bigint;
   proposer: string;
-  quorumVotes: EthersBN;
-  objectionPeriodEndBlock: EthersBN;
-  updatePeriodEndBlock: EthersBN;
+  quorumVotes: bigint;
+  objectionPeriodEndBlock: bigint;
+  updatePeriodEndBlock: bigint;
 }
 
 export interface ProposalDetail {
@@ -362,24 +356,6 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
   return descriptionText?.replace(regex, replacement);
 };
 
-export const useCurrentQuorum = (
-  nounsDao: string,
-  proposalId: number,
-  skip = false,
-): number | undefined => {
-  const request = () => {
-    if (skip) return false;
-    return {
-      abi,
-      address: nounsDao,
-      method: 'quorumVotes',
-      args: [proposalId],
-    };
-  };
-  const [quorum] = useContractCall<[EthersBN]>(request()) || [];
-  return quorum?.toNumber();
-};
-
 export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | undefined {
   // @ts-ignore
   const { data } = useReadNounsGovernorGetDynamicQuorumParamsAt({
@@ -447,12 +423,12 @@ export const concatSelectorToCalldata = (signature: string, callData: string) =>
   return callData;
 };
 
-const determineCallData = (types: string | undefined, value: EthersBN | undefined): string => {
+const determineCallData = (types: string | undefined, value: bigint | undefined): string => {
   if (types) {
     return types;
   }
   if (value) {
-    return `${formatEther(value.toBigInt())} ETH`;
+    return `${formatEther(BigInt(value))} ETH`;
   }
   return '';
 };
@@ -460,7 +436,7 @@ const determineCallData = (types: string | undefined, value: EthersBN | undefine
 export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details?.targets?.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
-    const value = EthersBN.from(
+    const value = BigInt(
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
     );
@@ -474,7 +450,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         return {
           target,
           callData: concatSelectorToCalldata(signature, callData),
-          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+          value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
         };
       }
 
@@ -492,7 +468,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         target,
         functionSig: name,
         callData: decoded.join(),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+        value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH }` : '',
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
@@ -500,7 +476,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
       return {
         target,
         callData: concatSelectorToCalldata(signature, callData),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+        value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
       };
     }
   });
@@ -511,7 +487,7 @@ export const formatProposalTransactionDetailsToUpdate = (
 ) => {
   return details?.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
-    const value = EthersBN.from(
+    const value = BigInt(
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i],
     );
@@ -763,7 +739,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
-          eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
+          eta: proposal?.eta ? new Date(Number(proposal?.eta) * 1000) : undefined,
           updatePeriodEndBlock: parseInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
         };
       }),
