@@ -7,7 +7,7 @@ import { usePublicClient } from 'wagmi';
  * @param blockNumber target block number to retrieve the timestamp for
  * @returns unix timestamp of block number
  */
-export function useBlockTimestamp(blockNumber: number | undefined): number | undefined {
+export function useBlockTimestamp(blockNumber?: bigint): number | undefined {
   const publicClient = usePublicClient();
   const [blockTimestamp, setBlockTimestamp] = useState<number | undefined>();
 
