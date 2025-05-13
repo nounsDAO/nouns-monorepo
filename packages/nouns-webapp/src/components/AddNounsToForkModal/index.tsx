@@ -116,9 +116,21 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
     setIsWaiting(true);
     setIsLoading(false);
     if (props.isForkingPeriod) {
-      joinFork(selectedNouns, selectedProposals, reasonText);
+      joinFork({
+        args: [
+          map(selectedNouns, (n: number) => BigInt(n)),
+          map(selectedProposals, (n: number) => BigInt(n)),
+          reasonText,
+        ],
+      });
     } else {
-      escrowToFork(selectedNouns, selectedProposals, reasonText);
+      escrowToFork({
+        args: [
+          map(selectedNouns, n => BigInt(n)),
+          map(selectedProposals, (n: number) => BigInt(n)),
+          reasonText,
+        ],
+      });
     }
   };
 
