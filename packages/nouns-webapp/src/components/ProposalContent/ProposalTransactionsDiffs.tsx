@@ -4,6 +4,8 @@ import { ProposalDetail } from '@/wrappers/nounsDao';
 
 import classes from './ProposalContent.module.css';
 import ProposalTransaction from './ProposalTransaction';
+import { Address } from '@/utils/types';
+import { Hex } from 'viem';
 
 type Props = {
   oldTransactions: ProposalDetail[];
@@ -15,10 +17,10 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
   const buildTxObject = (tx: ProposalDetail) => {
     if (!tx) {
       return {
-        target: '',
+        target: '' as Address,
         functionSig: '',
-        value: '',
-        callData: '',
+        value: 0n,
+        callData: '' as Hex,
       };
     }
     return {
