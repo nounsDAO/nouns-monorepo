@@ -3,21 +3,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
-import config from '@/config';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
-  ProposalTransaction,
   ProposalDetail,
+  ProposalTransaction,
   useProposal,
   useProposalThreshold,
   useUpdateProposal,
@@ -30,6 +29,9 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useChainId } from 'wagmi';
+import { Address, Hex } from '@/utils/types';
 
 interface EditProposalProps {
   match: {
@@ -64,7 +66,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const { updateProposal, updateProposalState } = useUpdateProposal();
   const { updateProposalDescription, updateProposalDescriptionState } =
     useUpdateProposalDescription();
-  const { updateProposalTransactions, updateProposaTransactionsState } =
+  const { updateProposalTransactions, updateProposalTransactionsState } =
     useUpdateProposalTransactions();
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
@@ -73,9 +75,9 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
   const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
+    nounsTokenBuyerAddress[useChainId()],
     totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[useChainId()] === undefined || totalUSDCPayment === 0,
   );
 
   const removeTitleFromDescription = (description: string, title: string) => {
@@ -129,14 +131,15 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[useChainId()])
+          .length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
-          calldata: '0x',
+          address: nounsTokenBuyerAddress[useChainId()],
+          value: BigInt(ethNeeded ?? 0),
+          calldata: '0x' as Hex,
           signature: '',
         });
       } else {
@@ -144,7 +147,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[useChainId()]) {
                   return index;
                 } else {
                   return -1;
@@ -153,7 +156,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
               .filter(n => n >= 0) ?? new Array<number>();
           const txns = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            txns[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
             setProposalTransactions(txns);
           }
         }
@@ -189,7 +192,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setIsTitleEdited(true);
       }
     },
-    [setTitleValue, setSlug, proposal?.title, isProposedBySigners],
+    [setTitleValue, setSlug, proposal?.title],
   );
 
   const handleBodyInput = useCallback(
@@ -201,7 +204,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setIsBodyEdited(true);
       }
     },
-    [setBodyValue, isolatedDescription],
+    [setBodyValue],
   );
 
   useEffect(() => {
@@ -283,7 +286,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   }, [updateProposalDescriptionState, setModal, updateProposalDescriptionState?.errorMessage]);
 
   useEffect(() => {
-    switch (updateProposaTransactionsState.status) {
+    switch (updateProposalTransactionsState.status) {
       case 'None':
         setProposePending(false);
         break;
@@ -301,7 +304,9 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       case 'Fail':
         setModal({
           title: <Trans>Transaction Failed</Trans>,
-          message: updateProposaTransactionsState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: updateProposalTransactionsState?.errorMessage || (
+            <Trans>Please try again.</Trans>
+          ),
           show: true,
         });
         setProposePending(false);
@@ -309,13 +314,15 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       case 'Exception':
         setModal({
           title: <Trans>Error</Trans>,
-          message: updateProposaTransactionsState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: updateProposalTransactionsState?.errorMessage || (
+            <Trans>Please try again.</Trans>
+          ),
           show: true,
         });
         setProposePending(false);
         break;
     }
-  }, [updateProposaTransactionsState, setModal, updateProposaTransactionsState?.errorMessage]);
+  }, [updateProposalTransactionsState, setModal, updateProposalTransactionsState?.errorMessage]);
 
   const isProposer = () => {
     return proposal?.proposer?.toLowerCase() === account?.toLowerCase();
@@ -337,7 +344,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   };
 
   const isDescriptionEdited = () => {
-    return originalTitleValue !== titleValue || originalBodyValue !== bodyValue ? true : false;
+    return originalTitleValue !== titleValue || originalBodyValue !== bodyValue;
   };
 
   const handleUpdateProposal = async () => {
@@ -347,34 +354,36 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     // check to see if only description or only transactions are edited
     if (isDescriptionEdited() && !isTransactionsEdited()) {
       // only update description
-      await updateProposalDescription(
-        proposal.id,
-        `# ${titleValue}\n\n${bodyValue}`,
-        commitMessage,
-      );
+      await updateProposalDescription({
+        args: [BigInt(proposal?.id ?? 0), `# ${titleValue}\n\n${bodyValue}`, commitMessage],
+      });
     }
     if (!isDescriptionEdited() && isTransactionsEdited()) {
       // only update transactions
-      await updateProposalTransactions(
-        proposal.id,
-        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        commitMessage,
-      );
+      await updateProposalTransactions({
+        args: [
+          BigInt(proposal?.id ?? 0),
+          proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          commitMessage,
+        ],
+      });
     }
     if (isDescriptionEdited() && isTransactionsEdited()) {
       // update all
-      await updateProposal(
-        proposal.id, // proposalId
-        proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        `# ${titleValue}\n\n${bodyValue}`, // Description
-        commitMessage,
-      );
+      await updateProposal({
+        args: [
+          BigInt(proposal?.id ?? 0), // proposalId
+          proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+          commitMessage,
+        ],
+      });
     }
   };
 
@@ -391,9 +400,9 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     ) {
       const transactions = proposal.details.map(txn => {
         return {
-          address: txn.target,
-          value: txn.value ?? '0',
-          calldata: txn.callData,
+          address: txn.target as Address,
+          value: BigInt(txn.value ?? '0'),
+          calldata: txn.callData as Hex,
           signature: txn.functionSig ?? '',
         };
       });
