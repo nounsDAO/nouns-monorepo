@@ -1177,33 +1177,23 @@ export function useNumTokensInForkEscrow(): number | undefined {
 }
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId), {
+  const { loading, data, error, refetch } = useQuery<{
+    escrowDeposits: Maybe<GraphQLEscrowDeposit[]>;
+  }>(escrowDepositEventsQuery(forkId), {
     pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { escrowDeposits: EscrowDeposit[] };
-    error: Error;
-    refetch: () => void;
-  };
-  const escrowDeposits = data?.escrowDeposits?.map(escrowDeposit => {
-    const proposalIDs = escrowDeposit.proposalIDs.map(id => id);
+  });
+  const escrowDeposits: EscrowDeposit[] = map(data?.escrowDeposits ?? [], escrowDeposit => {
+    const proposalIDs = escrowDeposit.proposalIDs.map(id => Number(id));
     return {
-      eventType: 'EscrowDeposit',
-      id: escrowDeposit.id,
-      createdAt: escrowDeposit.createdAt,
-      owner: { id: escrowDeposit.owner.id },
-      reason: escrowDeposit.reason,
-      tokenIDs: escrowDeposit.tokenIDs,
-      proposalIDs: proposalIDs,
+      ...escrowDeposit,
+      eventType: 'EscrowDeposit' as const,
+      owner: { id: escrowDeposit.owner.id as Address },
+      reason: String(escrowDeposit.reason),
+      proposalIDs,
     };
   });
 
-  return {
-    loading,
-    error,
-    data: (escrowDeposits as EscrowDeposit[]) ?? [],
-    refetch,
-  };
+  return { loading, error, data: escrowDeposits, refetch };
 };
 
 export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) => {
