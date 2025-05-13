@@ -36,6 +36,7 @@ import {
 import {
   useReadNounsGovernorAdjustedTotalSupply,
   useReadNounsGovernorForkThreshold,
+  useReadNounsGovernorForkThresholdBps,
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorNumTokensInForkEscrow,
   useReadNounsGovernorProposalCount,
@@ -1448,15 +1449,11 @@ export function useAdjustedTotalSupply(): number | undefined {
   return data ? Number(data) : undefined;
 }
 
-export const useForkThresholdBPS = (): number | undefined => {
-  const [forkThresholdBPS] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'forkThresholdBPS',
-    }) || [];
-  return forkThresholdBPS?.toNumber();
-};
+export function useForkThresholdBPS(): number | undefined {
+  const { data } = useReadNounsGovernorForkThresholdBps();
+
+  return data ? Number(data) : undefined;
+}
 
 export const useActivePendingUpdatableProposers = (blockNumber: number) => {
   const {
