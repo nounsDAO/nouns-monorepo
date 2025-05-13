@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
@@ -35,7 +35,7 @@ interface ProposalHeaderProps {
   title?: string;
   proposal: Proposal;
   proposalVersions?: ProposalVersion[];
-  versionNumber?: number;
+  versionNumber?: bigint;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isObjectionPeriod?: boolean;
@@ -66,14 +66,14 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
-  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<number | null>(null);
-  const [createdTimestamp, setCreatedTimestamp] = React.useState<number | null>(null);
+  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<bigint | null>(null);
+  const [createdTimestamp, setCreatedTimestamp] = React.useState<bigint | null>(null);
   const isMobile = isMobileScreen();
   const currentBlock = useBlockNumber();
-  const currentOrSnapshotBlock = useMemo(
-    () => Math.min(proposal?.voteSnapshotBlock, currentBlock ? currentBlock - 1 : 0) || undefined,
-    [proposal, currentBlock],
-  );
+  const currentOrSnapshotBlock = useMemo(() => {
+    const blockNumber = currentBlock ? Number(currentBlock) - 1 : 0;
+    return Math.min(Number(proposal?.voteSnapshotBlock || 0n), blockNumber) || undefined;
+  }, [currentBlock, proposal?.voteSnapshotBlock]);
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const proposalVote = useProposalVote(BigInt(proposal?.id ?? 0n));
@@ -85,7 +85,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   useEffect(() => {
     if (hasManyVersions) {
       const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
-      latestProposalVersion && setUpdatedTimestamp(+latestProposalVersion.createdAt);
+      latestProposalVersion && setUpdatedTimestamp(latestProposalVersion?.createdAt);
     } else {
       setCreatedTimestamp(props.proposal.createdTimestamp);
     }
@@ -262,13 +262,17 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         <p className={classes.versionHistory}>
           {hasManyVersions ? (
             <Link to={`/vote/${proposal.id}/history/`}>
-              <strong>Version {hasManyVersions ? props.versionNumber : '1'}</strong>{' '}
-              <span>updated {updatedTimestamp && relativeTimestamp(updatedTimestamp)}</span>
+              <strong>Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}</strong>{' '}
+              <span>
+                updated {updatedTimestamp ? relativeTimestamp(Number(updatedTimestamp)) : null}
+              </span>
             </Link>
           ) : (
             <>
-              <strong>Version {hasManyVersions ? props.versionNumber : '1'}</strong>{' '}
-              <span>created {createdTimestamp && relativeTimestamp(createdTimestamp)}</span>
+              <strong>Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}</strong>{' '}
+              <span>
+                created {createdTimestamp ? relativeTimestamp(Number(createdTimestamp)) : null}
+              </span>
             </>
           )}
         </p>
