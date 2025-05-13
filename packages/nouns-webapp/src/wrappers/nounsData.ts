@@ -1,8 +1,7 @@
 import type { Address, Hash, Hex } from '@/utils/types';
 
 import { useQuery } from '@apollo/client';
-import * as R from 'remeda';
-import { map } from 'remeda';
+import { filter, map, pipe, sort } from 'remeda';
 
 import {
   useReadNounsDataCreateCandidateCost,
@@ -23,6 +22,7 @@ import {
   ProposalCandidate as GraphQLProposalCandidate,
   ProposalCandidateSignature as GraphQLProposalCandidateSignature,
   ProposalCandidateVersion as GraphQLProposalCandidateVersion,
+  ProposalCandidateContent as GraphQLProposalCandidateContent,
   ProposalFeedback as GraphQLProposalFeedback,
 } from '@/subgraphs';
 
@@ -452,19 +452,24 @@ export const useProposalFeedback = (id: string, pollInterval?: number) => {
 };
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {
-  const {
-    loading,
-    data: results,
-    error,
-    refetch,
-  } = useQuery(candidateFeedbacksQuery(id), {
-    pollInterval: pollInterval || 0,
+  const { loading, data, error, refetch } = useQuery<{
+    candidateFeedbacks: Maybe<GraphQLCandidateFeedback[]>;
+  }>(candidateFeedbacksQuery(id), {
+    pollInterval,
   });
-  const data: VoteSignalDetail[] = results?.candidateFeedbacks.map(
-    (feedback: VoteSignalDetail) => feedback,
-  );
+  const feedbacks: VoteSignalDetail[] = map(data?.candidateFeedbacks ?? [], feedback => ({
+    ...feedback,
+    reason: feedback.reason || '',
+    votes: Number(feedback.votes),
+    createdTimestamp: Number(feedback.createdTimestamp),
+    createdBlock: Number(feedback.createdBlock),
+    voter: {
+      ...feedback.voter,
+      id: feedback.voter.id as `0x${string}`
+    }
+  }));
 
-  return { loading, data, error, refetch };
+  return { loading, data: feedbacks, error, refetch };
 };
 
 export const useProposeBySigs = () => {
