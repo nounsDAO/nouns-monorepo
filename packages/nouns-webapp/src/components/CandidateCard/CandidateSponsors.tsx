@@ -12,7 +12,7 @@ import classes from './CandidateSponsors.module.css';
 type CandidateSponsorsProps = {
   signers: CandidateSignature[];
   nounsRequired: number;
-  currentBlock?: number;
+  currentBlock?: bigint;
   isThresholdMetByProposer?: boolean;
 };
 
@@ -28,7 +28,7 @@ const CandidateSponsors = ({
     signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0),
+    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0n),
   );
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {

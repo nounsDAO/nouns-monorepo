@@ -16,7 +16,7 @@ type CandidateCardProps = {
   candidate: ProposalCandidate;
   nounsRequired: number;
   latestProposal?: PartialProposal;
-  currentBlock?: number;
+  currentBlock?: bigint;
 };
 
 const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
@@ -48,7 +48,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
             <CandidateSponsors
               signers={signers}
               nounsRequired={candidate.requiredVotes}
-              currentBlock={currentBlock && currentBlock - 1}
+              currentBlock={currentBlock && currentBlock - 1n}
               isThresholdMetByProposer={
                 !!(proposerVoteCount && proposerVoteCount >= candidate.requiredVotes)
               }
