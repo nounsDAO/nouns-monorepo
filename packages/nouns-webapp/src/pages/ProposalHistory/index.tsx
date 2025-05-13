@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
 import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
@@ -28,7 +28,8 @@ import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTran
 import ProposalStatus from '@/components/ProposalStatus';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 
-import { useParams, Link } from 'react-router';
+import { Link, useParams } from 'react-router';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);

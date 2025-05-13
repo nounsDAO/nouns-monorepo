@@ -13,10 +13,10 @@ import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { SearchIcon } from '@heroicons/react/solid';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
+import { useBlockNumber, useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 
@@ -25,10 +25,10 @@ import ProposalContent from '@/components/ProposalContent';
 import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
 import VoteModal from '@/components/VoteModal';
 import {
-  proposalVotesQuery,
   delegateNounsAtBlockQuery,
-  ProposalVotes,
   Delegates,
+  ProposalVotes,
+  proposalVotesQuery,
   propUsingDynamicQuorum,
 } from '@/wrappers/subgraph';
 import { getNounVotes } from '@/utils/getNounsVotes';
@@ -36,7 +36,6 @@ import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
 import ShortAddress from '@/components/ShortAddress';
 import StreamWithdrawModal from '@/components/StreamWithdrawModal';
 import VoteSignals from '@/components/VoteSignals/VoteSignals';
-import config from '@/config';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
@@ -46,23 +45,21 @@ import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/strea
 import {
   PartialProposal,
   ProposalState,
-  ProposalVersion,
   useCancelProposal,
-  useCurrentQuorum,
   useExecuteProposal,
-  useExecuteProposalOnTimelockV1,
   useHasVotedOnProposal,
   useIsDaoGteV3,
+  useIsForkActive,
   useProposal,
   useProposalVersions,
   useQueueProposal,
-  useIsForkActive,
 } from '@/wrappers/nounsDao';
 import { useProposalFeedback } from '@/wrappers/nounsData';
 import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
 import classes from './Vote.module.css';
 import { zeroAddress } from 'viem';
+import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
