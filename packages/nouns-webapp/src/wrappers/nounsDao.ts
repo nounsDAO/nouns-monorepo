@@ -43,6 +43,7 @@ import {
   useWriteNounsGovernorCastRefundableVoteWithReason,
   useWriteNounsGovernorEscrowToFork,
   useWriteNounsGovernorExecute,
+  useWriteNounsGovernorJoinFork,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
   useWriteNounsGovernorQueue,
@@ -1148,13 +1149,28 @@ export function useWithdrawFromForkEscrow() {
   return { withdrawFromForkEscrow, withdrawFromForkEscrowState };
 }
 
-export const useJoinFork = () => {
-  const { send: joinFork, state: joinForkState } = useContractFunction(
-    nounsDaoContract,
-    'joinFork',
-  );
+export function useJoinFork() {
+  const {
+    data: hash,
+    writeContractAsync: joinFork,
+    isPending: isJoinForkPending,
+    isSuccess: isJoinForkSuccess,
+    error: joinForkError,
+  } = useWriteNounsGovernorJoinFork();
+
+  let status = 'None';
+  if (isJoinForkPending) status = 'Mining';
+  else if (isJoinForkSuccess) status = 'Success';
+  else if (joinForkError) status = 'Fail';
+
+  const joinForkState = {
+    status,
+    errorMessage: joinForkError?.message,
+    transaction: { hash },
+  };
+
   return { joinFork, joinForkState };
-};
+}
 
 export const useIsForkPeriodActive = (): boolean => {
   const [isForkPeriodActive] =
