@@ -189,10 +189,10 @@ const ProposalHistory = () => {
                         <VersionTab
                           key={i}
                           id={Number(id).toString()}
-                          createdAt={version.createdAt}
+                          createdAt={Number(version.createdAt)}
                           updateMessage={version.updateMessage}
                           versionNumber={version.versionNumber}
-                          isActive={i + 1 === activeVersion ? true : false}
+                          isActive={i + 1 === activeVersion}
                           setActiveVersion={setActiveVersion}
                         />
                       );
