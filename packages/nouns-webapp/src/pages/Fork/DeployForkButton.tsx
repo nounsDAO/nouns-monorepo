@@ -1,7 +1,6 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
 import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
 
@@ -10,6 +9,7 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useExecuteFork } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
+import { Hash } from '@/utils/types';
 
 type Props = {
   isDeployModalOpen: boolean;
@@ -28,55 +28,58 @@ function DeployForkButton(props: Props) {
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
 
-  const handleExecuteForkStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        setErrorMessage('');
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        setIsWaiting(false);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        props.refetchData();
-        break;
-      case 'Fail':
-        setErrorMessage(
-          (
-            <>
-              {state?.errorMessage}
-              <br />
-              <Trans>Please try again.</Trans>
-            </>
-          ) || <Trans>Please try again.</Trans>,
-        );
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'Exception':
-        setErrorMessage(
-          (
-            <>
-              {state?.errorMessage}
-              <br />
-              <Trans>Please try again.</Trans>
-            </>
-          ) || <Trans>Please try again.</Trans>,
-        );
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleExecuteForkStateChange = useCallback(
+    ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          setErrorMessage('');
+          break;
+        case 'Mining':
+          setIsLoading(true);
+          setIsWaiting(false);
+          props.setDataFetchPollInterval(50);
+          break;
+        case 'Success':
+          setIsLoading(false);
+          setIsTxSuccessful(true);
+          props.refetchData();
+          break;
+        case 'Fail':
+          setErrorMessage(
+            (
+              <>
+                {errorMessage}
+                <br />
+                <Trans>Please try again.</Trans>
+              </>
+            ) || <Trans>Please try again.</Trans>,
+          );
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+        case 'Exception':
+          setErrorMessage(
+            (
+              <>
+                {errorMessage}
+                <br />
+                <Trans>Please try again.</Trans>
+              </>
+            ) || <Trans>Please try again.</Trans>,
+          );
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [props],
+  );
 
   useEffect(() => {
     handleExecuteForkStateChange(executeForkState);
@@ -124,7 +127,7 @@ function DeployForkButton(props: Props) {
             <br />
             {executeForkState.transaction && (
               <a
-                href={`${buildEtherscanTxLink(executeForkState.transaction.hash)}`}
+                href={`${buildEtherscanTxLink(executeForkState.transaction.hash as Hash)}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -143,9 +146,9 @@ function DeployForkButton(props: Props) {
       {!props.isForkPeriodActive && props.isThresholdMet && (
         <button
           className={clsx(classes.button, classes.primaryButton, classes.deployButton)}
-          onClick={() => {
+          onClick={async () => {
             props.setIsDeployModalOpen(true);
-            executeFork();
+            await executeFork({});
           }}
           disabled={!props.isUserConnected || isLoading || isWaiting}
         >
