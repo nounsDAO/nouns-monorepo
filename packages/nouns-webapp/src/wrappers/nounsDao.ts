@@ -3,7 +3,6 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { useContractCalls } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { pipe } from 'remeda';
 import { formatEther } from 'viem';
@@ -27,6 +26,8 @@ import {
   updatableProposalsQuery,
 } from './subgraph';
 import {
+  nounsGovernorAbi,
+  nounsGovernorAddress,
   useReadNounsGovernorAdjustedTotalSupply,
   useReadNounsGovernorForkThreshold,
   useReadNounsGovernorForkThresholdBps,
@@ -50,7 +51,7 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount, useBlockNumber } from 'wagmi';
+import { useAccount, useBlockNumber, useChainId, useReadContracts } from 'wagmi';
 import { utils } from 'ethers';
 import { mainnet } from 'viem/chains';
 
@@ -700,28 +701,51 @@ export const useAllProposalsViaSubgraph = (): PartialProposalData => {
 
 export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
   const proposalCount = useProposalCount();
-  const govProposalIndexes = useMemo(() => {
-    return countToIndices(proposalCount);
-  }, [proposalCount]);
+  const govProposalIndexes = useMemo(() => countToIndices(proposalCount), [proposalCount]);
+  const chainId = useChainId();
 
-  const requests = (method: string) => {
-    if (skip) return [false];
-    return govProposalIndexes.map(index => ({
-      abi,
-      method,
-      address: nounsDaoContract.address,
-      args: [index],
-    }));
-  };
+  const proposalCalls = useMemo(
+    () =>
+      govProposalIndexes.map(idx => ({
+        abi: nounsGovernorAbi,
+        address: nounsGovernorAddress[chainId],
+        functionName: 'proposals',
+        args: [idx],
+      })),
+    [govProposalIndexes],
+  );
 
-  const proposals = useContractCalls<[ProposalCallResult]>(requests('proposals'));
-  const proposalStates = useContractCalls<[ProposalState]>(requests('state'));
+  const stateCalls = useMemo(
+    () =>
+      govProposalIndexes.map(idx => ({
+        abi: nounsGovernorAbi,
+        address: nounsGovernorAddress[chainId],
+        functionName: 'state',
+        args: [idx],
+      })),
+    [govProposalIndexes],
+  );
+
+  const { data: proposals = [], isLoading: loadingProposals } = useReadContracts<
+    ProposalCallResult[]
+  >({
+    contracts: proposalCalls,
+    query: { enabled: !skip && proposalCalls.length > 0 },
+  });
+
+  const { data: proposalStates = [], isLoading: loadingStates } = useReadContracts<ProposalState[]>(
+    {
+      contracts: stateCalls,
+      query: { enabled: !skip && stateCalls.length > 0 },
+    },
+  );
+
   const formattedLogs = useFormattedProposalCreatedLogs(skip);
 
   // Early return until events are fetched
   return useMemo(() => {
     const logs = formattedLogs ?? [];
-    if (proposals.length && !logs.length) {
+    if (!skip && proposals.length > 0 && formattedLogs?.length === 0) {
       return { data: [], loading: true };
     }
 
@@ -744,7 +768,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           updatePeriodEndBlock: parseInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
         };
       }),
-      loading: false,
+      loading: loadingProposals || loadingStates,
     };
   }, [formattedLogs, proposalStates, proposals]);
 };
