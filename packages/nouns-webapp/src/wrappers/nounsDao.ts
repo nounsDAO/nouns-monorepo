@@ -49,6 +49,7 @@ import {
   useWriteNounsGovernorUpdateProposal,
   useWriteNounsGovernorUpdateProposalDescription,
   useWriteNounsGovernorUpdateProposalTransactions,
+  useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -1124,13 +1125,28 @@ export function useEscrowToFork() {
   return { escrowToFork, escrowToForkState };
 }
 
-export const useWithdrawFromForkEscrow = () => {
-  const { send: withdrawFromForkEscrow, state: withdrawFromForkEscrowState } = useContractFunction(
-    nounsDaoContract,
-    'withdrawFromForkEscrow',
-  );
+export function useWithdrawFromForkEscrow() {
+  const {
+    data: hash,
+    writeContractAsync: withdrawFromForkEscrow,
+    isPending: isWithdrawFromForkEscrowPending,
+    isSuccess: isWithdrawFromForkEscrowSuccess,
+    error: withdrawFromForkEscrowError,
+  } = useWriteNounsGovernorWithdrawFromForkEscrow();
+
+  let status = 'None';
+  if (isWithdrawFromForkEscrowPending) status = 'Mining';
+  else if (isWithdrawFromForkEscrowSuccess) status = 'Success';
+  else if (withdrawFromForkEscrowError) status = 'Fail';
+
+  const withdrawFromForkEscrowState = {
+    status,
+    errorMessage: withdrawFromForkEscrowError?.message,
+    transaction: { hash },
+  };
+
   return { withdrawFromForkEscrow, withdrawFromForkEscrowState };
-};
+}
 
 export const useJoinFork = () => {
   const { send: joinFork, state: joinForkState } = useContractFunction(
