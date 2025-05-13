@@ -43,6 +43,7 @@ import {
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
   useWriteNounsGovernorUpdateProposal,
+  useWriteNounsGovernorUpdateProposalDescription,
   useWriteNounsGovernorUpdateProposalTransactions,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
@@ -998,11 +999,28 @@ export function useUpdateProposalTransactions() {
   return { updateProposalTransactions, updateProposalTransactionsState };
 }
 
-export const useUpdateProposalDescription = () => {
-  const { send: updateProposalDescription, state: updateProposalDescriptionState } =
-    useContractFunction(nounsDaoContract, 'updateProposalDescription');
+export function useUpdateProposalDescription() {
+  const {
+    data: hash,
+    writeContractAsync: updateProposalDescription,
+    isPending: isUpdateProposalDescriptionPending,
+    isSuccess: isUpdateProposalDescriptionSuccess,
+    error: updateProposalDescriptionError,
+  } = useWriteNounsGovernorUpdateProposalDescription();
+
+  let status = 'None';
+  if (isUpdateProposalDescriptionPending) status = 'Mining';
+  else if (isUpdateProposalDescriptionSuccess) status = 'Success';
+  else if (updateProposalDescriptionError) status = 'Fail';
+
+  const updateProposalDescriptionState = {
+    status,
+    errorMessage: updateProposalDescriptionError?.message,
+    transaction: { hash },
+  };
+
   return { updateProposalDescription, updateProposalDescriptionState };
-};
+}
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(
