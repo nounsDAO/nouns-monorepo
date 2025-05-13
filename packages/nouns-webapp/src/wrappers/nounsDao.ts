@@ -3,7 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useContractCalls } from '@usedapp/core';
+import { useContractCalls } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -52,6 +52,7 @@ import {
 } from '@/contracts';
 import { useAccount, useBlockNumber } from 'wagmi';
 import { utils } from 'ethers';
+import { mainnet } from 'viem/chains';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -288,7 +289,7 @@ const abi = new utils.Interface(NounsDAOV3ABI);
 const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
 
 // Start the log search at the mainnet deployment block to speed up log queries
-const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
+const fromBlock = CHAIN_ID === mainnet.id ? 12985453 : 0;
 const proposalCreatedFilter = {
   ...nounsDaoContract.filters?.ProposalCreated(
     null,
