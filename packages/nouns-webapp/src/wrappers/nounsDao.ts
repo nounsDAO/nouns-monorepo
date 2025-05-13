@@ -42,6 +42,7 @@ import {
   useWriteNounsGovernorCastRefundableVoteWithReason,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
+  useWriteNounsGovernorQueue,
   useWriteNounsGovernorUpdateProposal,
   useWriteNounsGovernorUpdateProposalDescription,
   useWriteNounsGovernorUpdateProposalTransactions,
@@ -1022,13 +1023,28 @@ export function useUpdateProposalDescription() {
   return { updateProposalDescription, updateProposalDescriptionState };
 }
 
-export const useQueueProposal = () => {
-  const { send: queueProposal, state: queueProposalState } = useContractFunction(
-    nounsDaoContract,
-    'queue',
-  );
+export function useQueueProposal() {
+  const {
+    data: hash,
+    writeContractAsync: queueProposal,
+    isPending: isQueueProposalPending,
+    isSuccess: isQueueProposalSuccess,
+    error: queueProposalError,
+  } = useWriteNounsGovernorQueue();
+
+  let status = 'None';
+  if (isQueueProposalPending) status = 'Mining';
+  else if (isQueueProposalSuccess) status = 'Success';
+  else if (queueProposalError) status = 'Fail';
+
+  const queueProposalState = {
+    status,
+    errorMessage: queueProposalError?.message,
+    transaction: { hash },
+  };
+
   return { queueProposal, queueProposalState };
-};
+}
 
 export const useCancelProposal = () => {
   const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
