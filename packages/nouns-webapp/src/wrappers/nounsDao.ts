@@ -35,6 +35,8 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
+import { useReadNounsGovernorGetReceipt } from '@/contracts';
+import { useAccount } from 'wagmi';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -384,30 +386,23 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
   return receipt?.hasVoted ?? false;
 };
 
-export const useProposalVote = (proposalId: string | undefined): string => {
-  const { account } = useEthers();
+export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstain' | '' {
+  const { address } = useAccount();
+  const enabled = Boolean(proposalId) && Boolean(address);
 
-  // Fetch a voting receipt for the passed proposal id
-  const [receipt] =
-    useContractCall<[any]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'getReceipt',
-      args: [proposalId, account],
-    }) || [];
-  const voteStatus = receipt?.support ?? -1;
-  if (voteStatus === 0) {
-    return 'Against';
-  }
-  if (voteStatus === 1) {
-    return 'For';
-  }
-  if (voteStatus === 2) {
-    return 'Abstain';
-  }
+  // @ts-ignore
+  const { data: receipt } = useReadNounsGovernorGetReceipt({
+    args: [proposalId, address!],
+    query: { enabled },
+  });
 
+  const voteStatus = receipt ? Number(receipt.support) : -1;
+
+  if (voteStatus === 0) return 'Against';
+  if (voteStatus === 1) return 'For';
+  if (voteStatus === 2) return 'Abstain';
   return '';
-};
+}
 
 export const useProposalCount = (): number | undefined => {
   const [count] =
