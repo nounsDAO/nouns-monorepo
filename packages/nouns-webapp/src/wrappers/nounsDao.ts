@@ -3,13 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import {
-  ChainId,
-  useBlockNumber,
-  useContractCall,
-  useContractCalls,
-  useContractFunction,
-} from '@usedapp/core';
+import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
@@ -37,6 +31,7 @@ import {
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
+  useWriteNounsGovernorCancel,
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
   useWriteNounsGovernorCastRefundableVoteWithReason,
@@ -1046,13 +1041,28 @@ export function useQueueProposal() {
   return { queueProposal, queueProposalState };
 }
 
-export const useCancelProposal = () => {
-  const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
-    nounsDaoContract,
-    'cancel',
-  );
+export function useCancelProposal() {
+  const {
+    data: hash,
+    writeContractAsync: cancelProposal,
+    isPending: isCancelProposalPending,
+    isSuccess: isCancelProposalSuccess,
+    error: cancelProposalError,
+  } = useWriteNounsGovernorCancel();
+
+  let status = 'None';
+  if (isCancelProposalPending) status = 'Mining';
+  else if (isCancelProposalSuccess) status = 'Success';
+  else if (cancelProposalError) status = 'Fail';
+
+  const cancelProposalState = {
+    status,
+    errorMessage: cancelProposalError?.message,
+    transaction: { hash },
+  };
+
   return { cancelProposal, cancelProposalState };
-};
+}
 
 export const useExecuteProposal = () => {
   const { send: executeProposal, state: executeProposalState } = useContractFunction(
