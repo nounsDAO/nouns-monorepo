@@ -176,7 +176,10 @@ const ForkPage = () => {
     );
   }
 
-  if (forks.data.length > 0 && +Number(id) > +forks.data[forks.data.length - 1].id + 1) {
+  if (
+    Number(forks?.data?.length) > 0 &&
+    Number(id) > Number(forks?.data?.[Number(forks?.data?.length) - 1].id) + 1
+  ) {
     // fork doesn't exist
     return <NotFoundPage />;
   }
