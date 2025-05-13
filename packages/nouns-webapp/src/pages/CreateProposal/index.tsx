@@ -1,5 +1,3 @@
-import type { Address, Hex } from '@/utils/types';
-
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,7 +8,6 @@ import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
 import CreateProposalButton from '@/components/CreateProposalButton';
-import { map } from 'remeda';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
@@ -33,6 +30,9 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useChainId } from 'wagmi';
+import { Hex } from '@/utils/types';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -109,9 +109,9 @@ const CreateProposalPage = () => {
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
-          calldata: '0x',
+          address: nounsTokenBuyerAddress[useChainId()],
+          value: BigInt(ethNeeded ?? 0),
+          calldata: '0x' as Hex,
           signature: '',
         });
       } else {
@@ -129,7 +129,7 @@ const CreateProposalPage = () => {
 
           const txns = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            txns[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
             setProposalTransactions(txns);
           }
         }
@@ -172,21 +172,25 @@ const CreateProposalPage = () => {
   const handleCreateProposal = async () => {
     if (!proposalTransactions?.length) return;
     if (isProposeOnV1) {
-      await proposeOnTimelockV1(
-        proposalTransactions.map(({ address }) => address), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        `# ${titleValue}\n\n${bodyValue}`, // Description
-      );
+      await proposeOnTimelockV1({
+        args: [
+          proposalTransactions.map(({ address }) => address), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+        ],
+      });
     } else {
-      await propose(
-        proposalTransactions.map(({ address }) => address), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        `# ${titleValue}\n\n${bodyValue}`, // Description
-      );
+      await propose({
+        args: [
+          proposalTransactions.map(({ address }) => address), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+        ],
+      });
     }
   };
 
