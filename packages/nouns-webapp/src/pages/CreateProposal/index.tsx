@@ -1,13 +1,16 @@
-import ProposalTransactions from '../../components/ProposalTransactions';
+import type { Address, Hex } from '@/utils/types';
+
+import ProposalTransactions from '@/components/ProposalTransactions';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '@/hooks';
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { Col, Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
 import CreateProposalButton from '@/components/CreateProposalButton';
+import { map } from 'remeda';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
@@ -26,8 +29,8 @@ import {
   useProposalThreshold,
   usePropose,
   useProposeOnTimelockV1,
-} from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsDao';
+import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
 
@@ -187,46 +190,49 @@ const CreateProposalPage = () => {
     }
   };
 
-  const handleAddProposalState = useCallback((proposeState: TransactionStatus) => {
-    switch (proposeState.status) {
-      case 'None':
-        setProposePending(false);
-        break;
-      case 'Mining':
-        setProposePending(true);
-        break;
-      case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: (
-            <Trans>
-              Proposal Created!
-              <br />
-            </Trans>
-          ),
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddProposalState = useCallback(
+    ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
+        case 'None':
+          setProposePending(false);
+          break;
+        case 'Mining':
+          setProposePending(true);
+          break;
+        case 'Success':
+          setModal({
+            title: <Trans>Success</Trans>,
+            message: (
+              <Trans>
+                Proposal Created!
+                <br />
+              </Trans>
+            ),
+            show: true,
+          });
+          setProposePending(false);
+          break;
+        case 'Fail':
+          setModal({
+            title: <Trans>Transaction Failed</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setProposePending(false);
+          break;
+        case 'Exception':
+          setModal({
+            title: <Trans>Error</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setProposePending(false);
+          break;
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [],
+  );
 
   useEffect(() => {
     if (isProposeOnV1) {
