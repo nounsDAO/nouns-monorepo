@@ -14,7 +14,7 @@ interface DelegateGruopedNounImageVoteTableProps {
     | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
     | undefined;
   propId: number;
-  proposalCreationBlock: number;
+  proposalCreationBlock: bigint;
 }
 
 const NOUNS_PER_VOTE_CARD_DESKTOP = 12;

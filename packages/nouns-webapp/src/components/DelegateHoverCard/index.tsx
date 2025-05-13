@@ -13,7 +13,7 @@ import classes from './DelegateHoverCard.module.css';
 
 interface DelegateHoverCardProps {
   delegateId: string;
-  proposalCreationBlock: number;
+  proposalCreationBlock: bigint;
 }
 
 const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
