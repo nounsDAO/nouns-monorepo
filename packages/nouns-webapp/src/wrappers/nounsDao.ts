@@ -35,7 +35,7 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import { useReadNounsGovernorGetReceipt } from '@/contracts';
+import { useReadNounsGovernorGetReceipt, useReadNounsGovernorProposalCount } from '@/contracts';
 import { useAccount } from 'wagmi';
 
 export interface DynamicQuorumParams {
@@ -401,16 +401,11 @@ export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstai
   return '';
 }
 
-export const useProposalCount = (): number | undefined => {
-  const [count] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'proposalCount',
-      args: [],
-    }) || [];
-  return count?.toNumber();
-};
+export function useProposalCount(): number | undefined {
+  const { data: count } = useReadNounsGovernorProposalCount();
+
+  return count != null ? Number(count) : undefined;
+}
 
 export const useProposalThreshold = (): number | undefined => {
   const [count] =
