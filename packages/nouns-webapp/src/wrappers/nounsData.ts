@@ -520,7 +520,7 @@ export const useUpdateProposalBySigs = () => {
 };
 
 const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity,
+  candidate: GraphQLProposalCandidate,
   proposerVotes: number,
   threshold: number,
   timestamp: number,
@@ -565,7 +565,7 @@ const parseSubgraphCandidate = (
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
     createdTransactionHash: candidate.createdTransactionHash,
-    isProposal: candidate.latestVersion.content.matchingProposalIds.length > 0,
+    isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
     proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
     matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
     requiredVotes: requiredVotes,
@@ -579,10 +579,10 @@ const parseSubgraphCandidate = (
         details: details,
         transactionHash: transactionDetails.encodedProposalHash,
         contentSignatures: activeSigs,
-        targets: map(candidate.latestVersion.content.targets, v => v as Address),
-        values: map(candidate.latestVersion.content.values, v => BigInt(v)),
-        signatures: map(candidate.latestVersion.content.signatures, v => v),
-        calldatas: map(candidate.latestVersion.content.calldatas, v => v as Hex),
+        targets: map(candidate.latestVersion.content.targets ?? [], v => v as Address),
+        values: map(candidate.latestVersion.content.values ?? [], v => BigInt(v)),
+        signatures: map(candidate.latestVersion.content.signatures ?? [], v => v),
+        calldatas: map(candidate.latestVersion.content.calldatas ?? [], v => v as Hex),
         proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
       },
     },
