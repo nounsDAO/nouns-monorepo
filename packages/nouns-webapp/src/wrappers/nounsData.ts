@@ -1,7 +1,8 @@
-import type { Address } from '@/utils/types';
+import type { Address, Hash, Hex } from '@/utils/types';
 
 import { useQuery } from '@apollo/client';
 import * as R from 'remeda';
+import { map } from 'remeda';
 
 import {
   useReadNounsDataCreateCandidateCost,
@@ -532,11 +533,11 @@ const parseSubgraphCandidate = (
     ?.replace(/\\n/g, '\n')
     .replace(/(^["']|["']$)/g, '');
   const transactionDetails: ProposalTransactionDetails = {
-    targets: candidate.latestVersion.content.targets,
-    values: candidate.latestVersion.content.values,
-    signatures: candidate.latestVersion.content.signatures,
-    calldatas: candidate.latestVersion.content.calldatas,
-    encodedProposalHash: candidate.latestVersion.content.encodedProposalHash,
+    targets: map(candidate.latestVersion.content.targets ?? [], t => t as Address),
+    values: map(candidate.latestVersion.content.values ?? [], v => BigInt(v)),
+    signatures: map(candidate.latestVersion.content.signatures ?? [], s => s),
+    calldatas: map(candidate.latestVersion.content.calldatas ?? [], t => t as Hex),
+    encodedProposalHash: candidate.latestVersion.content.encodedProposalHash as Hash,
   };
   let details;
   if (toUpdate) {
@@ -576,12 +577,12 @@ const parseSubgraphCandidate = (
         title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
-        transactionHash: details.encodedProposalHash,
+        transactionHash: transactionDetails.encodedProposalHash,
         contentSignatures: activeSigs,
-        targets: candidate.latestVersion.content.targets,
-        values: candidate.latestVersion.content.values,
-        signatures: candidate.latestVersion.content.signatures,
-        calldatas: candidate.latestVersion.content.calldatas,
+        targets: map(candidate.latestVersion.content.targets, v => v as Address),
+        values: map(candidate.latestVersion.content.values, v => BigInt(v)),
+        signatures: map(candidate.latestVersion.content.signatures, v => v),
+        calldatas: map(candidate.latestVersion.content.calldatas, v => v as Hex),
         proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
       },
     },
@@ -603,11 +604,11 @@ const parseSubgraphCandidateVersions = (
       ?.replace(/\\n/g, '\n')
       .replace(/(^["']|["']$)/g, '');
     const transactionDetails: ProposalTransactionDetails = {
-      targets: version.content.targets,
-      values: version.content.values,
-      signatures: version.content.signatures,
-      calldatas: version.content.calldatas,
-      encodedProposalHash: version.content.encodedProposalHash,
+      targets: map(version.content.targets ?? [], t => t as Address),
+      values: map(version.content.values ?? [], v => BigInt(v)),
+      signatures: map(version.content.signatures ?? [], s => s),
+      calldatas: map(version.content.calldatas ?? [], t => t as Hex),
+      encodedProposalHash: version.content.encodedProposalHash as Hash,
     };
     const details = formatProposalTransactionDetails(transactionDetails);
     return {
@@ -752,10 +753,10 @@ export interface ProposalCandidateVersion {
     title: string;
     description: string;
     details: ProposalDetail[];
-    targets: string[];
-    values: string[];
+    targets: Address[];
+    values: bigint[];
     signatures: string[];
-    calldatas: string[];
+    calldatas: Hex[];
     contentSignatures: CandidateSignature[];
   };
 }
