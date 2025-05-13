@@ -3,7 +3,13 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import {
+  ChainId,
+  useBlockNumber,
+  useContractCall,
+  useContractCalls,
+  useContractFunction,
+} from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
@@ -30,6 +36,7 @@ import {
 import {
   useReadNounsGovernorForkThreshold,
   useReadNounsGovernorGetReceipt,
+  useReadNounsGovernorNumTokensInForkEscrow,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
   useWriteNounsGovernorCancel,
@@ -1184,16 +1191,11 @@ export function useForkThreshold(): number | undefined {
   return threshold ? Number(threshold) : undefined;
 }
 
-export const useNumTokensInForkEscrow = (): number | undefined => {
-  const [numTokensInForkEscrow] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'numTokensInForkEscrow',
-      args: [],
-    }) || [];
-  return numTokensInForkEscrow?.toNumber();
-};
+export function useNumTokensInForkEscrow(): number | undefined {
+  const { data: count } = useReadNounsGovernorNumTokensInForkEscrow();
+
+  return count ? Number(count) : undefined;
+}
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
   const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId), {
