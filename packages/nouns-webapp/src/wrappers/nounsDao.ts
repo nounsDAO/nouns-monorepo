@@ -3,7 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import { ChainId, useBlockNumber, useContractCalls, useContractFunction } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -1153,17 +1153,6 @@ export function useJoinFork() {
   return { joinFork, joinForkState };
 }
 
-export const useIsForkPeriodActive = (): boolean => {
-  const [isForkPeriodActive] =
-    useContractCall<[boolean]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'isForkPeriodActive',
-      args: [],
-    }) || [];
-  return isForkPeriodActive ?? false;
-};
-
 export function useForkThreshold(): number | undefined {
   const { data: threshold } = useReadNounsGovernorForkThreshold();
 
@@ -1477,16 +1466,6 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
 
 export const useIsDaoGteV3 = (): boolean => {
   return true;
-};
-
-export const useLastMinuteWindowInBlocks = (): number | undefined => {
-  const [lastMinuteWindowInBlocks] =
-    useContractCall({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'lastMinuteWindowInBlocks',
-    }) || [];
-  return lastMinuteWindowInBlocks?.toNumber();
 };
 
 export const useUpdatableProposalIds = (blockNumber: number) => {
