@@ -24,7 +24,7 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
         return (
           <li key={i} className="m-0">
             {linkIfAddress(d.target)}.{d.functionSig}
-            {d.value}
+            {d.value ? d.value.toString() : null}
             {d.functionSig ? (
               <>
                 (<br />
