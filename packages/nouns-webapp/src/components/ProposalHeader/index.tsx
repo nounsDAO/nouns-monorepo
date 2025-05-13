@@ -75,8 +75,8 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     [proposal, currentBlock],
   );
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
-  const proposalVote = useProposalVote(proposal?.id);
+  const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
+  const proposalVote = useProposalVote(BigInt(proposal?.id ?? 0n));
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
