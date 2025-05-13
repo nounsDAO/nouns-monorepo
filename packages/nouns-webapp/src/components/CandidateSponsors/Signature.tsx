@@ -43,7 +43,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   const expiration = dayjs(dayjs.unix(props.expirationTimestamp)).fromNow();
   const { cancelSig, cancelSigState } = useCancelSignature();
   async function cancel() {
-    await cancelSig(props.sig);
+    await cancelSig({ args: [`0x${props.sig.replace(/^0x/, '')}`] });
   }
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
 
