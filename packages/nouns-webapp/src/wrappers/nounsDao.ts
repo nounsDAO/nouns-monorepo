@@ -1,11 +1,19 @@
-import type { Address } from '@/utils/types';
+import type { Address, Hash, Hex } from '@/utils/types';
+import type {
+  EscrowDeposit as GraphQLEscrowDeposit,
+  EscrowWithdrawal as GraphQLEscrowWithdrawal,
+  Fork as GraphQLFork,
+  ForkJoin as GraphQLForkJoin,
+  Maybe,
+  Proposal as GraphQLProposal,
+  ProposalVersion as GraphQLProposalVersion,
+} from '@/subgraphs';
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
-import { pipe } from 'remeda';
-import { formatEther } from 'viem';
+import { isNonNullish, isNullish, isTruthy, map, pipe } from 'remeda';
+import { AbiParameter, decodeAbiParameters, formatEther, keccak256, stringToBytes } from 'viem';
 
 import config, { CHAIN_ID } from '@/config';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
@@ -108,10 +116,10 @@ interface ProposalCallResult {
 }
 
 export interface ProposalDetail {
-  target: string;
-  value?: string;
+  target: Address;
+  value?: bigint;
   functionSig: string;
-  callData: string;
+  callData: Hex;
 }
 
 export interface PartialProposal {
@@ -131,26 +139,26 @@ export interface PartialProposal {
 
 export interface Proposal extends PartialProposal {
   description: string;
-  createdBlock: number;
-  createdTimestamp: number;
+  createdBlock: bigint;
+  createdTimestamp: bigint;
   proposer: Address | undefined;
-  proposalThreshold: number;
+  proposalThreshold: bigint;
   details: ProposalDetail[];
-  transactionHash: string;
+  transactionHash: Hash;
   signers: { id: Address }[];
   onTimelockV1: boolean;
-  voteSnapshotBlock: number;
+  voteSnapshotBlock: bigint;
 }
 
 export interface ProposalVersion {
   id: string;
-  createdAt: number;
+  createdAt: bigint;
   updateMessage: string;
   description: string;
-  targets: string[];
-  values: string[];
+  targets: Address[];
+  values: bigint[];
   signatures: string[];
-  calldatas: string[];
+  calldatas: Hex[];
   title: string;
   details: ProposalDetail[];
   proposal: {
@@ -160,26 +168,26 @@ export interface ProposalVersion {
 }
 
 export interface ProposalTransactionDetails {
-  targets: string[];
-  values: string[];
+  targets: Address[];
+  values: bigint[];
   signatures: string[];
-  calldatas: string[];
-  encodedProposalHash: string;
+  calldatas: Hex[];
+  encodedProposalHash: Hash;
 }
 
 export interface PartialProposalSubgraphEntity {
   id: string;
   title: string;
   status: keyof typeof ProposalState;
-  forVotes: string;
-  againstVotes: string;
-  abstainVotes: string;
-  startBlock: string;
-  endBlock: string;
-  executionETA: string | null;
-  quorumVotes: string;
-  objectionPeriodEndBlock: string;
-  updatePeriodEndBlock: string;
+  forVotes: bigint;
+  againstVotes: bigint;
+  abstainVotes: bigint;
+  startBlock: bigint;
+  endBlock: bigint;
+  executionETA: bigint | null;
+  quorumVotes: bigint;
+  objectionPeriodEndBlock: bigint;
+  updatePeriodEndBlock: bigint;
   onTimelockV1: boolean | null;
   signers: { id: Address }[];
 }
@@ -188,13 +196,13 @@ export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
     PartialProposalSubgraphEntity {
   description: string;
-  createdBlock: string;
-  createdTransactionHash: string;
-  createdTimestamp: string;
+  createdBlock: bigint;
+  createdTransactionHash: Hash;
+  createdTimestamp: bigint;
   proposer: { id: Address };
-  proposalThreshold: string;
+  proposalThreshold: bigint;
   onTimelockV1: boolean;
-  voteSnapshotBlock: string;
+  voteSnapshotBlock: bigint;
 }
 
 interface PartialProposalData {
@@ -214,10 +222,10 @@ export interface ProposalProposerAndSigners {
 }
 
 export interface ProposalTransaction {
-  address: string;
-  value: string;
+  address: Address;
+  value: bigint;
   signature: string;
-  calldata: string;
+  calldata: Hex;
   decodedCalldata?: string;
   usdcValue?: number;
 }
