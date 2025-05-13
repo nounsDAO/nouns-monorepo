@@ -41,6 +41,7 @@ import {
   useWriteNounsGovernorCastRefundableVote,
   useWriteNounsGovernorCastRefundableVoteWithReason,
   useWriteNounsGovernorPropose,
+  useWriteNounsGovernorProposeOnTimelockV1,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -924,13 +925,28 @@ export function usePropose() {
   return { propose, proposeState };
 }
 
-export const useProposeOnTimelockV1 = () => {
-  const { send: proposeOnTimelockV1, state: proposeOnTimelockV1State } = useContractFunction(
-    nounsDaoContract,
-    'proposeOnTimelockV1',
-  );
+export function useProposeOnTimelockV1() {
+  const {
+    data: hash,
+    writeContractAsync: proposeOnTimelockV1,
+    isPending: isProposeOnTimelockV1Pending,
+    isSuccess: isProposeOnTimelockV1Success,
+    error: proposeOnTimelockV1Error,
+  } = useWriteNounsGovernorProposeOnTimelockV1();
+
+  let status = 'None';
+  if (isProposeOnTimelockV1Pending) status = 'Mining';
+  else if (isProposeOnTimelockV1Success) status = 'Success';
+  else if (proposeOnTimelockV1Error) status = 'Fail';
+
+  const proposeOnTimelockV1State = {
+    status,
+    errorMessage: proposeOnTimelockV1Error?.message,
+    transaction: { hash },
+  };
+
   return { proposeOnTimelockV1, proposeOnTimelockV1State };
-};
+}
 
 export const useUpdateProposal = () => {
   const { send: updateProposal, state: updateProposalState } = useContractFunction(
