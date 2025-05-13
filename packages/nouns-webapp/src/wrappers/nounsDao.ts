@@ -3,7 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useContractCalls, useContractFunction } from '@usedapp/core';
+import { ChainId, useContractCalls } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -339,7 +339,7 @@ export const removeMarkdownStyle = (text: string | null): string | null =>
  * @param descriptionText The description text of a proposal
  */
 const addMissingSchemes = (descriptionText: string | undefined) => {
-  const regex = /\[(.*?)\]\(((?!https?:\/\/|#)[^)]+)\)/g;
+  const regex = /\[(.*?)]\(((?!https?:\/\/|#)[^)]+)\)/g;
   const replacement = '[$1](https://$2)';
 
   return descriptionText?.replace(regex, replacement);
@@ -832,22 +832,6 @@ export function useCancelSignature() {
   };
 }
 
-export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(
-    nounsDaoContract,
-    'castVote',
-  );
-  return { castVote, castVoteState };
-};
-
-export const useCastVoteWithReason = () => {
-  const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
-    nounsDaoContract,
-    'castVoteWithReason',
-  );
-  return { castVoteWithReason, castVoteWithReasonState };
-};
-
 export function useCastRefundableVote() {
   const {
     data: hash,
@@ -1077,12 +1061,6 @@ export function useExecuteProposal() {
 
   return { executeProposal, executeProposalState };
 }
-
-export const useExecuteProposalOnTimelockV1 = () => {
-  const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } =
-    useContractFunction(nounsDaoContract, 'executeOnTimelockV1');
-  return { executeProposalOnTimelockV1, executeProposalOnTimelockV1State };
-};
 
 export function useEscrowToFork() {
   const {
@@ -1377,7 +1355,7 @@ export const useIsForkActive = () => {
     data: { forks: Fork[] };
     error: Error;
   };
-  const data = forksData?.forks.length > 0 ? true : false;
+  const data = forksData?.forks.length > 0;
   return {
     loading,
     data,
@@ -1447,21 +1425,6 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
     data,
     error,
   };
-};
-
-export const checkHasActiveOrPendingProposalOrCandidate = (
-  latestProposalStatus: ProposalState,
-  latestProposalProposer: string | undefined,
-  account: string | null | undefined,
-) => {
-  return !!(
-    account &&
-    latestProposalProposer &&
-    (latestProposalStatus === ProposalState.ACTIVE ||
-      latestProposalStatus === ProposalState.PENDING ||
-      latestProposalStatus === ProposalState.UPDATABLE) &&
-    latestProposalProposer.toLowerCase() === account?.toLowerCase()
-  );
 };
 
 export const useIsDaoGteV3 = (): boolean => {
