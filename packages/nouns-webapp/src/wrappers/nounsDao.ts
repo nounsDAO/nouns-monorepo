@@ -41,6 +41,7 @@ import {
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
   useWriteNounsGovernorCastRefundableVoteWithReason,
+  useWriteNounsGovernorEscrowToFork,
   useWriteNounsGovernorExecute,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
@@ -1100,14 +1101,28 @@ export const useExecuteProposalOnTimelockV1 = () => {
   return { executeProposalOnTimelockV1, executeProposalOnTimelockV1State };
 };
 
-// fork functions
-export const useEscrowToFork = () => {
-  const { send: escrowToFork, state: escrowToForkState } = useContractFunction(
-    nounsDaoContract,
-    'escrowToFork',
-  );
+export function useEscrowToFork() {
+  const {
+    data: hash,
+    writeContractAsync: escrowToFork,
+    isPending: isEscrowToForkPending,
+    isSuccess: isEscrowToForkSuccess,
+    error: escrowToForkError,
+  } = useWriteNounsGovernorEscrowToFork();
+
+  let status = 'None';
+  if (isEscrowToForkPending) status = 'Mining';
+  else if (isEscrowToForkSuccess) status = 'Success';
+  else if (escrowToForkError) status = 'Fail';
+
+  const escrowToForkState = {
+    status,
+    errorMessage: escrowToForkError?.message,
+    transaction: { hash },
+  };
+
   return { escrowToFork, escrowToForkState };
-};
+}
 
 export const useWithdrawFromForkEscrow = () => {
   const { send: withdrawFromForkEscrow, state: withdrawFromForkEscrowState } = useContractFunction(
