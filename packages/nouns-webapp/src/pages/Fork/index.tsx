@@ -5,7 +5,7 @@ import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useParams, Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 import AddNounsToForkModal from '@/components/AddNounsToForkModal';
 import ForkingPeriodTimer from '@/components/ForkingPeriodTimer';
@@ -14,13 +14,13 @@ import { useScrollToLocation } from '@/hooks/useScrollToLocation';
 import Section from '@/layout/Section';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import {
+  useAdjustedTotalSupply,
   useEscrowEvents,
   useForkDetails,
-  useForkThreshold,
   useForks,
-  useNumTokensInForkEscrow,
-  useAdjustedTotalSupply,
+  useForkThreshold,
   useForkThresholdBPS,
+  useNumTokensInForkEscrow,
 } from '@/wrappers/nounsDao';
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
 
