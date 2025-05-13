@@ -13,6 +13,7 @@ import { usePropose } from '@/wrappers/nounsDao';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
 
 import classes from './SelectSponsorsToPropose.module.css';
+import { Address, Hex } from '@/utils/types';
 
 type Props = {
   isModalOpen: boolean;
@@ -66,23 +67,26 @@ const SelectSponsorsToPropose = (props: Props) => {
     const sortedSigs = proposalSigs.toSorted((a, b) =>
       a.signer.toString().localeCompare(b.signer.toString()),
     );
+    const { signatures, targets, values, description, calldatas } = props.candidate.version.content;
     if (selectedSignatures.length === 0) {
-      await propose(
-        props.candidate.version.content.targets,
-        props.candidate.version.content.values,
-        props.candidate.version.content.signatures,
-        props.candidate.version.content.calldatas,
-        props.candidate.version.content.description,
-      );
+      await propose({
+        args: [
+          targets.map(v => v as Address),
+          values.map(value => BigInt(value)),
+          signatures,
+          calldatas.map(v => v as Hex),
+          description,
+        ],
+      });
     } else {
       await proposeBySigs({
         args: [
           sortedSigs,
-          props.candidate.version.content.targets as readonly `0x${string}`[],
-          props.candidate.version.content.values.map(value => BigInt(value)),
-          props.candidate.version.content.signatures,
-          props.candidate.version.content.calldatas as readonly `0x${string}`[],
-          props.candidate.version.content.description,
+          targets.map(v => v as Address),
+          values.map(value => BigInt(value)),
+          signatures,
+          calldatas.map(v => v as Hex),
+          description,
         ],
       });
     }
