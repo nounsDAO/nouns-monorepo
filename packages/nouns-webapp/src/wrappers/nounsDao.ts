@@ -3,13 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import {
-  ChainId,
-  useBlockNumber,
-  useContractCall,
-  useContractCalls,
-  useContractFunction,
-} from '@usedapp/core';
+import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
@@ -34,6 +28,7 @@ import {
   updatableProposalsQuery,
 } from './subgraph';
 import {
+  useReadNounsGovernorForkThreshold,
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
@@ -1183,16 +1178,11 @@ export const useIsForkPeriodActive = (): boolean => {
   return isForkPeriodActive ?? false;
 };
 
-export const useForkThreshold = () => {
-  const [forkThreshold] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: config.addresses.nounsDAOProxy,
-      method: 'forkThreshold',
-      args: [],
-    }) || [];
-  return forkThreshold?.toNumber();
-};
+export function useForkThreshold(): number | undefined {
+  const { data: threshold } = useReadNounsGovernorForkThreshold();
+
+  return threshold ? Number(threshold) : undefined;
+}
 
 export const useNumTokensInForkEscrow = (): number | undefined => {
   const [numTokensInForkEscrow] =
