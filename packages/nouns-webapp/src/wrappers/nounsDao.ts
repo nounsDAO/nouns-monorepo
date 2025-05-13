@@ -3,7 +3,7 @@ import type { Address } from '@/utils/types';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { ChainId, useBlockNumber, useContractCalls, useContractFunction } from '@usedapp/core';
+import { ChainId, useContractCalls, useContractFunction } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -50,7 +50,7 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount } from 'wagmi';
+import { useAccount, useBlockNumber } from 'wagmi';
 import { utils } from 'ethers';
 
 export interface DynamicQuorumParams {
@@ -684,10 +684,10 @@ const parseSubgraphProposal = (
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
   const { loading, data, error } = useQuery(partialProposalsQuery());
   const isDaoGteV3 = useIsDaoGteV3();
-  const blockNumber = useBlockNumber();
-  const timestamp = useBlockTimestamp(blockNumber);
+  const { data: blockNumber } = useBlockNumber();
+  const timestamp = useBlockTimestamp(Number(blockNumber));
   const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
-    parsePartialSubgraphProposal(proposal, blockNumber, timestamp, isDaoGteV3),
+    parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3),
   );
 
   return {
@@ -755,11 +755,11 @@ export const useAllProposals = (): PartialProposalData => {
 };
 
 export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
-  const blockNumber = useBlockNumber();
-  const timestamp = useBlockTimestamp(blockNumber);
+  const { data: blockNumber } = useBlockNumber();
+  const timestamp = useBlockTimestamp(Number(blockNumber));
   const isDaoGteV3 = useIsDaoGteV3();
   const proposal = useQuery(proposalQuery(id)).data?.proposal;
-  return parseSubgraphProposal(proposal, blockNumber, timestamp, toUpdate, isDaoGteV3);
+  return parseSubgraphProposal(proposal, Number(blockNumber), timestamp, toUpdate, isDaoGteV3);
 };
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
