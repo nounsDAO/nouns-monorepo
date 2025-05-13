@@ -39,6 +39,7 @@ import {
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
+  useWriteNounsGovernorCancelSig,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -811,13 +812,31 @@ export const useProposalVersions = (id: string | number): ProposalVersion[] | un
   return sortedNumberedVersions;
 };
 
-export const useCancelSignature = () => {
-  const { send: cancelSig, state: cancelSigState } = useContractFunction(
-    nounsDaoContract,
-    'cancelSig',
-  );
-  return { cancelSig, cancelSigState };
-};
+export function useCancelSignature() {
+  const {
+    data: hash,
+    writeContractAsync: cancelSig,
+    isPending: isCancelPending,
+    isSuccess: isCancelSuccess,
+    error: cancelError,
+  } = useWriteNounsGovernorCancelSig();
+
+  let status = 'None';
+  if (isCancelPending) status = 'Mining';
+  else if (isCancelSuccess) status = 'Success';
+  else if (cancelError) status = 'Fail';
+
+  const cancelSigState = {
+    status,
+    errorMessage: cancelError?.message,
+    transaction: { hash },
+  };
+
+  return {
+    cancelSig,
+    cancelSigState,
+  };
+}
 
 export const useCastVote = () => {
   const { send: castVote, state: castVoteState } = useContractFunction(
