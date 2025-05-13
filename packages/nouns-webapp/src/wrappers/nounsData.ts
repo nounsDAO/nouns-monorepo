@@ -17,6 +17,14 @@ import {
   useWriteNounsGovernorProposeBySigs,
   useWriteNounsGovernorUpdateProposalBySigs,
 } from '@/contracts';
+import {
+  CandidateFeedback as GraphQLCandidateFeedback,
+  Maybe,
+  ProposalCandidate as GraphQLProposalCandidate,
+  ProposalCandidateSignature as GraphQLProposalCandidateSignature,
+  ProposalCandidateVersion as GraphQLProposalCandidateVersion,
+  ProposalFeedback as GraphQLProposalFeedback,
+} from '@/subgraphs';
 
 import {
   extractTitle,
