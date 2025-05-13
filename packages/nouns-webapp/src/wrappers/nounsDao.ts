@@ -40,6 +40,7 @@ import {
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
   useWriteNounsGovernorCancelSig,
+  useWriteNounsGovernorCastRefundableVote,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -854,25 +855,28 @@ export const useCastVoteWithReason = () => {
   return { castVoteWithReason, castVoteWithReasonState };
 };
 
-export const useCastRefundableVote = () => {
-  const { library } = useEthers();
-  const functionSig = 'castRefundableVote(uint256,uint8)';
-  const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
-    nounsDaoContract,
-    functionSig,
-  );
+export function useCastRefundableVote() {
+  const {
+    data: hash,
+    writeContractAsync: castRefundableVote,
+    isPending: isCastRefundableVotePending,
+    isSuccess: isCastRefundableVoteSuccess,
+    error: castRefundableVoteError,
+  } = useWriteNounsGovernorCastRefundableVote();
 
-  return {
-    castRefundableVote: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas[functionSig](...args);
-      return castRefundableVote(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
-    },
-    castRefundableVoteState,
+  let status = 'None';
+  if (isCastRefundableVotePending) status = 'Mining';
+  else if (isCastRefundableVoteSuccess) status = 'Success';
+  else if (castRefundableVoteError) status = 'Fail';
+
+  const castRefundableVoteState = {
+    status,
+    errorMessage: castRefundableVoteError?.message,
+    transaction: { hash },
   };
-};
+
+  return { castRefundableVote, castRefundableVoteState };
+}
 
 export const useCastRefundableVoteWithReason = () => {
   const { library } = useEthers();
