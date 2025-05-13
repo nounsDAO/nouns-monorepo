@@ -1,5 +1,4 @@
-import { Hex, hexToString } from 'viem';
-import { type PublicClient } from 'viem';
+import { Hex, hexToString, type PublicClient } from 'viem';
 
 /**
  * Look up either NNS or ENS (using NNS contract to resolve NNS with ENS fallback)

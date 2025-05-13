@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { useEthers } from '@usedapp/core';
@@ -8,7 +8,7 @@ import { FormControl, Spinner } from 'react-bootstrap';
 
 import { useAppDispatch } from '@/hooks';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
-import { VoteSignalDetail, useSendFeedback } from '@/wrappers/nounsData';
+import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
 import classes from './VoteSignals.module.css';

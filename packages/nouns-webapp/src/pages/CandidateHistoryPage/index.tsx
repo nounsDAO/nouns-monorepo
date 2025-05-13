@@ -8,8 +8,8 @@ import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Row, Col } from 'react-bootstrap';
-import { useParams, Link } from 'react-router';
+import { Col, Row } from 'react-bootstrap';
+import { Link, useParams } from 'react-router';
 import remarkBreaks from 'remark-breaks';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';

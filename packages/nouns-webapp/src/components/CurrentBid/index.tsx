@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import TruncatedAmount from '@/components/TruncatedAmount';
 import { useAppSelector } from '@/hooks';

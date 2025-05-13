@@ -1,4 +1,4 @@
-import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 

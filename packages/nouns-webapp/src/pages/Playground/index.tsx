@@ -2,19 +2,19 @@ import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'reac
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { ImageData, getNounData, getRandomNounSeed } from '@noundry/nouns-assets';
+import { getNounData, getRandomNounSeed, ImageData } from '@noundry/nouns-assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
 import { PNG } from 'pngjs';
 import {
-  Container,
-  Col,
   Button,
-  Image,
-  Row,
+  Col,
+  Container,
   FloatingLabel,
   Form,
+  Image,
   OverlayTrigger,
   Popover,
+  Row,
 } from 'react-bootstrap';
 
 import InfoIcon from '../../assets/icons/Info.svg';

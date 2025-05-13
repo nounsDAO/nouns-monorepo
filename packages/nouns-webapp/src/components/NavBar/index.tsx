@@ -4,14 +4,14 @@ import {
   faBookOpen,
   faFile,
   faPenToSquare,
-  faUsers,
   faPlay,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Nav, Navbar, Container, Dropdown } from 'react-bootstrap';
-import { useLocation, Link } from 'react-router';
+import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router';
 import { formatEther } from 'viem';
 
 import NogglesIcon from '@/assets/icons/Noggles.svg?react';

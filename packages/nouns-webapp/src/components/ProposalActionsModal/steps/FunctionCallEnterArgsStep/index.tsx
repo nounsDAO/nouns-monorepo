@@ -1,11 +1,11 @@
 import type { ProposalActionModalStepProps } from '@/components/ProposalActionsModal';
 import type { Abi, AbiFunction } from 'viem';
+import { encodeFunctionData, getAbiItem } from 'viem';
 
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Col, FormControl, FormGroup, InputGroup, Row } from 'react-bootstrap';
-import { encodeFunctionData, getAbiItem } from 'viem';
 
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';

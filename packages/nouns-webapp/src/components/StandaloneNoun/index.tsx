@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { ImageData as data, getNounData } from '@noundry/nouns-assets';
+import { getNounData, ImageData as data } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
 import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';

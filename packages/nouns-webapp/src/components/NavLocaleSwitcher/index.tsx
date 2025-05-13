@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { faCheck, faSortDown, faSortUp, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -9,7 +9,7 @@ import { Dropdown } from 'react-bootstrap';
 import LanguageSelectionModal from '@/components/LanguageSelectionModal';
 import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '@/i18n/locales';
+import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 import { setLocale } from '@/i18n/setLocale';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 

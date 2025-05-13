@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { useAccount } from 'wagmi';
 
 import '@/css/globals.css';

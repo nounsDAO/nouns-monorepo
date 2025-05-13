@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/ShortAddress';
 import Tooltip from '@/components/Tooltip';

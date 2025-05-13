@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { InputGroup, FormControl, FormText } from 'react-bootstrap';
+import { FormControl, FormText, InputGroup } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 

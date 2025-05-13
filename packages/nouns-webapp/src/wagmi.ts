@@ -1,7 +1,7 @@
 import { find, pipe } from 'remeda';
-import { http, createConfig } from 'wagmi';
+import { createConfig, http } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
-import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors';
+import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors';
 
 import { CHAIN_ID, WALLET_CONNECT_V2_PROJECT_ID } from './config';
 

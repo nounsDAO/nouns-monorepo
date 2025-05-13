@@ -2,7 +2,7 @@ import type { RootState } from '@/index';
 
 import React from 'react';
 
-import { Col, Row, Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 
 import AuctionActivity from '@/components/AuctionActivity';

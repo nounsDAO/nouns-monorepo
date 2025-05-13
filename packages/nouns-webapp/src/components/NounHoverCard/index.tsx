@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useQuery } from '@apollo/client';
-import { HeartIcon, CakeIcon } from '@heroicons/react/solid';
+import { CakeIcon, HeartIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';

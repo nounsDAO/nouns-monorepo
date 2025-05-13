@@ -1,4 +1,4 @@
-import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap';
+import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 
 import xIcon from '@/assets/x-icon.png';

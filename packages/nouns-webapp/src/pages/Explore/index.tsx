@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import ExploreGrid from '@/components/ExploreGrid';
 import ExploreNav from '@/components/ExploreGrid/ExploreNav';

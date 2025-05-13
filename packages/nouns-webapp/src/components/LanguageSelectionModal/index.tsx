@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro';
 
 import Modal from '@/components/Modal';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '@/i18n/locales';
+import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 import { setLocale } from '@/i18n/setLocale';
 
 import classes from './LanguageSelectionModal.module.css';

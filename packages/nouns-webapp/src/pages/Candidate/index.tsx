@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
+import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { useParams, Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 import CandidateSponsors from '@/components/CandidateSponsors';
 import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';

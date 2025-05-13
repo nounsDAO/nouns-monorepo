@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
-import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import { formatEther } from 'viem';
 
@@ -19,9 +19,9 @@ import { processProposalDescriptionText } from '@/utils/processProposalDescripti
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
-  useUpdateProposalCandidate,
   useCandidateProposal,
   useGetUpdateCandidateCost,
+  useUpdateProposalCandidate,
 } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 

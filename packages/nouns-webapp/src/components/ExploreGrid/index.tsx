@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import cx from 'classnames';
 import Placeholder from 'react-bootstrap/esm/Placeholder';

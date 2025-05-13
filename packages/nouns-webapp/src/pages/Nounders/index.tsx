@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row, Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 
 import pfp4156 from '../../assets/nounder-pfps/4156.png';
 import pfp9999 from '../../assets/nounder-pfps/9999.png';

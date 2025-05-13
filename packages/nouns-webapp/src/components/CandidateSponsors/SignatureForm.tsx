@@ -12,7 +12,7 @@ import { Spinner } from 'react-bootstrap';
 import link from '@/assets/icons/Link.svg';
 import config, { CHAIN_ID } from '@/config';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
-import { useAddSignature, ProposalCandidate } from '@/wrappers/nounsData';
+import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
 
 import classes from './CandidateSponsors.module.css';
 

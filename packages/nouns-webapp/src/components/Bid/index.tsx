@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState, ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
+import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
 import { formatEther, parseEther } from 'viem';
 
 import classes from './Bid.module.css';
@@ -15,7 +15,7 @@ import {
   useWriteNounsAuctionHouseCreateBid,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
 } from '@/contracts';
-import { useAppSelector, useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { Auction } from '@/wrappers/nounsAuction';

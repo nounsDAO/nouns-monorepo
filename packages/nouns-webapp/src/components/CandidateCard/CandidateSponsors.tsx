@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 
 import { CandidateSignature } from '@/wrappers/nounsData';
-import { Delegates, delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
+import { delegateNounsAtBlockQuery, Delegates } from '@/wrappers/subgraph';
 
 import CandidateSponsorImage from './CandidateSponsorImage';
 import classes from './CandidateSponsors.module.css';

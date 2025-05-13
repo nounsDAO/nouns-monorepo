@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Col, Alert, Button } from 'react-bootstrap';
+import { Alert, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
 import { formatEther } from 'viem';
@@ -17,7 +17,7 @@ import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
-import { useGetCreateCandidateCost, useCreateProposalCandidate } from '@/wrappers/nounsData';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from '../CreateProposal/CreateProposal.module.css';

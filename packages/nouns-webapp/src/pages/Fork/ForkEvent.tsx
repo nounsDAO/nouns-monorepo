@@ -10,8 +10,8 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import {
   EscrowDeposit,
   EscrowWithdrawal,
-  useProposalTitles,
   ForkCycleEvent,
+  useProposalTitles,
 } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';

@@ -1,10 +1,10 @@
 import type { AbiFunction } from 'viem';
+import { encodeFunctionData, getAbiItem, parseEther } from 'viem';
 
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
-import { parseEther, encodeFunctionData, getAbiItem } from 'viem';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';

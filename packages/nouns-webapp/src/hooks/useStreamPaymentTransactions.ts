@@ -1,6 +1,6 @@
 import type { Address } from '@/utils/types';
 
-import { parseEther, encodeFunctionData } from 'viem';
+import { encodeFunctionData, parseEther } from 'viem';
 import { useChainId } from 'wagmi';
 
 import { ProposalActionModalState } from '@/components/ProposalActionsModal';
