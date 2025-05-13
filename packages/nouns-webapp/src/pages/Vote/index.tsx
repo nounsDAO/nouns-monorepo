@@ -128,7 +128,7 @@ const VotePage = () => {
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
   const proposalFeedback = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const forkActiveState = useIsForkActive();
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
   // Get and format date from data
@@ -282,7 +282,7 @@ const VotePage = () => {
     if (hasSucceeded) {
       return () => {
         if (proposal?.id) {
-          return queueProposal(proposal.id);
+          return queueProposal({ args: [BigInt(proposal.id)] });
         }
       };
     }
@@ -291,7 +291,7 @@ const VotePage = () => {
         if (proposal?.onTimelockV1) {
           return executeProposalOnTimelockV1(proposal.id);
         } else {
-          return executeProposal(proposal.id);
+          return executeProposal({ args: [BigInt(proposal.id)] });
         }
       }
     };
@@ -302,7 +302,7 @@ const VotePage = () => {
     if (isCancellable()) {
       return () => {
         if (proposal?.id) {
-          return cancelProposal(proposal.id);
+          return cancelProposal({ args: [BigInt(proposal.id)] });
         }
       };
     }
@@ -314,13 +314,13 @@ const VotePage = () => {
 
   const onTransactionStateChange = useCallback(
     (
-      tx: TransactionStatus,
+      { errorMessage, status }: { status: string; errorMessage?: string },
       successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
       getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
-      switch (tx.status) {
+      switch (status) {
         case 'None':
           setPending?.(false);
           break;
@@ -339,7 +339,7 @@ const VotePage = () => {
         case 'Fail':
           setModal({
             title: <Trans>Transaction Failed</Trans>,
-            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -348,7 +348,7 @@ const VotePage = () => {
         case 'Exception':
           setModal({
             title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
+            message: getErrorMessage?.(errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
