@@ -35,7 +35,11 @@ import {
   isForkActiveQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import { useReadNounsGovernorGetReceipt, useReadNounsGovernorProposalCount } from '@/contracts';
+import {
+  useReadNounsGovernorGetReceipt,
+  useReadNounsGovernorProposalCount,
+  useReadNounsGovernorProposalThreshold,
+} from '@/contracts';
 import { useAccount } from 'wagmi';
 
 export interface DynamicQuorumParams {
@@ -407,16 +411,11 @@ export function useProposalCount(): number | undefined {
   return count != null ? Number(count) : undefined;
 }
 
-export const useProposalThreshold = (): number | undefined => {
-  const [count] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'proposalThreshold',
-      args: [],
-    }) || [];
-  return count?.toNumber();
-};
+export function useProposalThreshold(): number | undefined {
+  const { data: threshold } = useReadNounsGovernorProposalThreshold();
+
+  return threshold != null ? Number(threshold) : undefined;
+}
 
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
