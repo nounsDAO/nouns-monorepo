@@ -42,6 +42,7 @@ import {
   useWriteNounsGovernorCastRefundableVoteWithReason,
   useWriteNounsGovernorPropose,
   useWriteNounsGovernorProposeOnTimelockV1,
+  useWriteNounsGovernorUpdateProposal,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
 
@@ -71,6 +72,7 @@ export enum ProposalState {
   OBJECTION_PERIOD,
   UPDATABLE,
 }
+
 export enum ForkState {
   UNDETERMINED = -1,
   ESCROW,
@@ -252,6 +254,7 @@ export interface Fork {
   forkingPeriodEndTimestamp: string | null;
   addedNouns: string[];
 }
+
 export interface ForkSubgraphEntity {
   id: string;
   forkID: string;
@@ -948,13 +951,28 @@ export function useProposeOnTimelockV1() {
   return { proposeOnTimelockV1, proposeOnTimelockV1State };
 }
 
-export const useUpdateProposal = () => {
-  const { send: updateProposal, state: updateProposalState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposal',
-  );
+export function useUpdateProposal() {
+  const {
+    data: hash,
+    writeContractAsync: updateProposal,
+    isPending: isUpdateProposalPending,
+    isSuccess: isUpdateProposalSuccess,
+    error: updateProposalError,
+  } = useWriteNounsGovernorUpdateProposal();
+
+  let status = 'None';
+  if (isUpdateProposalPending) status = 'Mining';
+  else if (isUpdateProposalSuccess) status = 'Success';
+  else if (updateProposalError) status = 'Fail';
+
+  const updateProposalState = {
+    status,
+    errorMessage: updateProposalError?.message,
+    transaction: { hash },
+  };
+
   return { updateProposal, updateProposalState };
-};
+}
 
 export const useUpdateProposalTransactions = () => {
   const { send: updateProposalTransactions, state: updateProposaTransactionsState } =
