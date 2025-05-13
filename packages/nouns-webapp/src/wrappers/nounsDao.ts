@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
 import { useContractCalls } from '@usedapp/core';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
-import * as R from 'remeda';
+import { pipe } from 'remeda';
 import { formatEther } from 'viem';
 
 import config, { CHAIN_ID } from '@/config';
@@ -334,7 +334,7 @@ const removeBold = (text: string): string => text.replace(/\*\*/g, '');
 const removeItalics = (text: string): string => text.replace(/__/g, '');
 
 export const removeMarkdownStyle = (text: string | null): string | null =>
-  text === null ? null : R.pipe(text, removeBold, removeItalics);
+  text === null ? null : pipe(text, removeBold, removeItalics);
 /**
  * Add missing schemes to markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
@@ -652,7 +652,7 @@ const parseSubgraphProposal = (
   const onTimelockV1 = proposal.onTimelockV1 != null;
   return {
     id: proposal.id,
-    title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+    title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
     description: description ?? 'No description.',
     proposer: proposal.proposer?.id,
     status: getProposalState(
@@ -731,7 +731,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
         const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
-          title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+          title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
