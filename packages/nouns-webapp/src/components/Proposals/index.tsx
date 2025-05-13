@@ -8,11 +8,10 @@ import DelegationModal from '@/components/DelegationModal';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { useBlockNumber } from '@usedapp/core';
 import clsx from 'clsx';
 import en from 'dayjs/locale/en';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { useNavigate, useLocation, Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 import config from '@/config';
 import Section from '@/layout/Section';
@@ -31,7 +30,7 @@ import CandidateCard from '@/components/CandidateCard';
 import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './Proposals.module.css';
-import { useAccount } from 'wagmi';
+import { useAccount, useBlockNumber } from 'wagmi';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 
 dayjs.extend(relativeTime);
@@ -95,8 +94,8 @@ const Proposals = ({
 }) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [blockNumber, setBlockNumber] = useState<number>(0);
-  const currentBlock = useBlockNumber();
+  const [blockNumber, setBlockNumber] = useState<bigint>(0n);
+  const { data: currentBlock } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
   const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
@@ -112,7 +111,7 @@ const Proposals = ({
 
   useEffect(() => {
     // prevent blockNumber from triggering a re-render when it's already set
-    if (blockNumber === 0) {
+    if (blockNumber === 0n) {
       setBlockNumber(currentBlock || blockNumber);
     }
   }, [currentBlock, blockNumber]);
@@ -273,7 +272,7 @@ const Proposals = ({
                             <ClockIcon height={16} width={16} />
                           </span>{' '}
                           <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, blockNumber || 0, activeLocale)}
+                            {getCountdownCopy(p, Number(blockNumber) || 0, activeLocale)}
                           </span>
                         </div>
                       </div>
@@ -338,7 +337,11 @@ const Proposals = ({
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
-                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
+                          isProposalUpdatable(
+                            prop?.status,
+                            prop?.updatePeriodEndBlock,
+                            Number(blockNumber),
+                          )
                         );
                         if (!isOriginalPropUpdatable) return null;
                       }
@@ -349,7 +352,7 @@ const Proposals = ({
                             candidate={c}
                             key={c.id}
                             nounsRequired={threshold}
-                            currentBlock={blockNumber ? blockNumber - 1 : 0}
+                            currentBlock={blockNumber ? blockNumber - 1n : 0n}
                           />
                         </div>
                       );
