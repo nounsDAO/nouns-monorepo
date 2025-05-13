@@ -1,17 +1,18 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { map } from 'remeda';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { InputGroup, FormText, FormControl, FormSelect, Spinner } from 'react-bootstrap';
+import { FormControl, FormSelect, FormText, InputGroup, Spinner } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nounsDao';
-import { useSetApprovalForAll, useIsApprovedForAll } from '@/wrappers/nounToken';
+import { useIsApprovedForAll, useSetApprovalForAll } from '@/wrappers/nounToken';
 
 import classes from './AddNounsToForkModal.module.css';
 
@@ -55,15 +56,18 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
   const { data: proposals } = useAllProposals();
   const isApprovedForAll = useIsApprovedForAll();
   const proposalsList = proposals
+    ?.filter(proposal => proposal?.id)
     ?.map((proposal, i) => {
       return (
-        <option
-          key={i}
-          value={proposal.id}
-          disabled={!!(proposal.id && selectedProposals.includes(+proposal.id))}
-        >
-          {proposal.id} - {proposal.title}
-        </option>
+        proposal && (
+          <option
+            key={i}
+            value={proposal.id}
+            disabled={!!(proposal.id && selectedProposals.includes(+proposal.id))}
+          >
+            {proposal.id} - {proposal.title}
+          </option>
+        )
       );
     })
     .reverse();
@@ -299,14 +303,16 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
               <option selected={true} disabled={true}>
                 Select proposal(s)
               </option>
-              {proposalsList}
+              {proposalsList.map(item => (
+                <>{item}</>
+              ))}
             </FormSelect>
           </div>
         </InputGroup>
       </div>
       <div className={classes.selectedProposals}>
         {selectedProposals.map((proposalId, i) => {
-          const prop = proposals.find(proposal => proposal.id && +proposal.id === proposalId);
+          const prop = proposals.find(proposal => proposal?.id && +proposal.id === proposalId);
           return (
             <div className={classes.selectedProposal} key={i}>
               <span>
@@ -469,7 +475,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <a
                 href={
-                  escrowToForkState.transaction &&
+                  escrowToForkState.transaction?.hash &&
                   `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`
                 }
                 target="_blank"
@@ -570,4 +576,4 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
     </>
   );
 };
-export default AddNounsToForkModal
+export default AddNounsToForkModal;
