@@ -599,7 +599,7 @@ const getProposalState = (
 };
 
 const parsePartialSubgraphProposal = (
-  proposal: PartialProposalSubgraphEntity | undefined,
+  proposal: Maybe<GraphQLProposal>,
   blockNumber: number | undefined,
   timestamp: number | undefined,
   isDaoGteV3?: boolean,
@@ -618,13 +618,13 @@ const parsePartialSubgraphProposal = (
       isDaoGteV3,
       onTimelockV1,
     ),
-    startBlock: parseInt(proposal.startBlock),
-    endBlock: parseInt(proposal.endBlock),
-    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
-    forCount: parseInt(proposal.forVotes),
-    againstCount: parseInt(proposal.againstVotes),
-    abstainCount: parseInt(proposal.abstainVotes),
-    quorumVotes: parseInt(proposal.quorumVotes),
+    startBlock: BigInt(proposal.startBlock),
+    endBlock: BigInt(proposal.endBlock),
+    updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock ?? 0),
+    forCount: BigInt(proposal.forVotes),
+    againstCount: BigInt(proposal.againstVotes),
+    abstainCount: BigInt(proposal.abstainVotes),
+    quorumVotes: BigInt(proposal?.quorumVotes ?? 0),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
   };
 };
