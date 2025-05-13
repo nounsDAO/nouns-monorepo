@@ -28,6 +28,8 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useChainId } from 'wagmi';
 
 interface EditCandidateProps {
   match: {
@@ -117,8 +119,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
+          address: nounsTokenBuyerAddress[useChainId()],
+          value: BigInt(ethNeeded ?? 0),
           calldata: '0x',
           signature: '',
         });
@@ -137,7 +139,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
           const txns = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            txns[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
             setProposalTransactions(txns);
           }
         }
@@ -174,7 +176,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         setIsBodyEdited(true);
       }
     },
-    [setBodyValue, isolatedDescription],
+    [setBodyValue],
   );
 
   useEffect(() => {
