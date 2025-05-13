@@ -23,12 +23,7 @@ import {
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 
-import {
-  accountEscrowedNounsQuery,
-  delegateNounsAtBlockQuery,
-  ownedNounsQuery,
-  seedsQuery,
-} from './subgraph';
+import { accountEscrowedNounsQuery, delegateNounsAtBlockQuery, ownedNounsQuery, seedsQuery } from './subgraph';
 
 interface NounToken {
   name: string;
@@ -311,7 +306,7 @@ export const useSetApprovalForTokenId = () => {
   return { approveTokenId, approveTokenIdState };
 };
 
-export const useDelegateNounsAtBlockQuery = (signers: string[], block: number) => {
+export const useDelegateNounsAtBlockQuery = (signers: string[], block: bigint) => {
   const { loading, data, error } = useQuery<{ delegates: Delegate[] }>(
     delegateNounsAtBlockQuery(signers, block),
   );
