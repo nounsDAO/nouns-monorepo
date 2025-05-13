@@ -49,7 +49,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const originalSigners = props.originalProposal?.signers.map(signer => signer.id.toLowerCase());
   const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(
     originalSigners ?? [],
-    props.blockNumber ?? 0,
+    BigInt(props.blockNumber ?? 0),
   );
   const signatures = props.candidate.version.content.contentSignatures;
   const signers = signatures?.map(signature => signature.signer.id.toLowerCase());
