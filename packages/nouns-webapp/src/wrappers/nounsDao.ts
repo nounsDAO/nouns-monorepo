@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
 import { ChainId, useBlockNumber, useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
-import { utils } from 'ethers';
 import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import * as R from 'remeda';
 import { formatEther } from 'viem';
@@ -52,6 +51,7 @@ import {
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
 import { useAccount } from 'wagmi';
+import { utils } from 'ethers';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -450,7 +450,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         return {
           target,
           callData: concatSelectorToCalldata(signature, callData),
-          value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+          value: value > 0n ? `{ value: ${formatEther(value)} ETH } ` : '',
         };
       }
 
@@ -468,7 +468,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         target,
         functionSig: name,
         callData: decoded.join(),
-        value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+        value: value > 0n ? `{ value: ${formatEther(value)} ETH }` : '',
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
@@ -476,7 +476,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
       return {
         target,
         callData: concatSelectorToCalldata(signature, callData),
-        value: value > 0n ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+        value: value > 0n ? `{ value: ${formatEther(value)} ETH } ` : '',
       };
     }
   });
