@@ -1,7 +1,6 @@
 import type { Address } from '@/utils/types';
 
 import { useMemo } from 'react';
-
 import { useQuery } from '@apollo/client';
 import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
 import {
@@ -356,20 +355,20 @@ export const useCurrentQuorum = (
   return quorum?.toNumber();
 };
 
-export const useDynamicQuorumProps = (
-  nounsDao: string,
-  block: number,
-): DynamicQuorumParams | undefined => {
-  const [params] =
-    useContractCall<[DynamicQuorumParams]>({
-      abi,
-      address: nounsDao,
-      method: 'getDynamicQuorumParamsAt',
-      args: [block],
-    }) || [];
+export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | undefined {
+  // @ts-ignore
+  const { data } = useReadNounsGovernorGetDynamicQuorumParamsAt({
+    args: [block],
+  });
 
-  return params;
-};
+  if (!data) return undefined;
+
+  return {
+    minQuorumVotesBPS: Number(data.minQuorumVotesBPS),
+    maxQuorumVotesBPS: Number(data.maxQuorumVotesBPS),
+    quorumCoefficient: Number(data.quorumCoefficient),
+  };
+}
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
   const { account } = useEthers();
@@ -476,7 +475,7 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
 
       return {
         target,
-        functionSig: name === '' ? 'transfer' : (name == undefined ? 'unknown' : name),
+        functionSig: name === '' ? 'transfer' : name == undefined ? 'unknown' : name,
         callData: determineCallData(types, value),
       };
     }
@@ -1070,10 +1069,7 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
 type EscrowEvent = EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
 
 // helper function to add fork cycle events to escrow events
-const eventsWithforkCycleEvents = (
-  events: EscrowEvent[],
-  forkDetails: Fork,
-) => {
+const eventsWithforkCycleEvents = (events: EscrowEvent[], forkDetails: Fork) => {
   const endTimestamp =
     forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
   const executed: ForkCycleEvent = {
@@ -1088,11 +1084,9 @@ const eventsWithforkCycleEvents = (
   };
   const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
-  const sortedEvents = [...events, ...forkEvents].sort(
-    (a: EscrowEvent, b: EscrowEvent) => {
-      return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
-    },
-  );
+  const sortedEvents = [...events, ...forkEvents].sort((a: EscrowEvent, b: EscrowEvent) => {
+    return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
+  });
   return sortedEvents;
 };
 
