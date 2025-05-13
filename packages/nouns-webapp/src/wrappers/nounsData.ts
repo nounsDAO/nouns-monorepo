@@ -21,8 +21,6 @@ import {
   Maybe,
   ProposalCandidate as GraphQLProposalCandidate,
   ProposalCandidateSignature as GraphQLProposalCandidateSignature,
-  ProposalCandidateVersion as GraphQLProposalCandidateVersion,
-  ProposalCandidateContent as GraphQLProposalCandidateContent,
   ProposalFeedback as GraphQLProposalFeedback,
 } from '@/subgraphs';
 
@@ -161,12 +159,12 @@ const filterSigners = (
   timestampNow: number,
   delegateSnapshot: Delegates | undefined,
   activePendingProposers: string[],
-  signers?: CandidateSignature[],
+  signers?: GraphQLProposalCandidateSignature[],
   proposalIdToUpdate?: number,
   updatableProposalIds?: number[],
 ) => {
   const sigsFiltered = signers?.filter(
-    sig => !sig.canceled && sig.expirationTimestamp > timestampNow,
+    sig => !sig.canceled && BigInt(sig.expirationTimestamp) > timestampNow,
   );
   let voteCount = 0;
   const activeSigs: CandidateSignature[] = [];
@@ -188,9 +186,11 @@ const filterSigners = (
       ...signature,
       signer: {
         ...signature.signer,
+        id: signature.signer.id as Address,
         voteCount: delegateVoteCount,
         activeOrPendingProposal: activeOrPendingProposal,
       },
+      expirationTimestamp: Number(signature.expirationTimestamp),
     };
     activeSigs.push(sigWithVotes);
   });
@@ -205,36 +205,42 @@ const filterSigners = (
   return { activeSigs: sortedSignatures, voteCount };
 };
 
-export const useCandidateProposals = (blockNumber?: number) => {
+export const useCandidateProposals = (blockNumber?: bigint) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: ProposalCandidateSubgraphEntity[] =
-    candidates?.proposalCandidates?.filter(
-      (candidate: ProposalCandidateSubgraphEntity) =>
-        candidate.latestVersion.content.matchingProposalIds.length === 0 && !candidate.canceled,
-    );
-  const activeCandidateProposers = unmatchedCandidates?.map(
-    (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
+  const { loading, data, error } = useQuery<{
+    proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
+  }>(candidateProposalsQuery());
+
+  const unmatchedCandidates = pipe(
+    data?.proposalCandidates ?? [],
+    filter(
+      candidate =>
+        candidate?.latestVersion?.content?.matchingProposalIds?.length === 0 && !candidate.canceled,
+    ),
+    map(candidate => ({
+      ...candidate,
+    })),
   );
+
+  const activeCandidateProposers = unmatchedCandidates?.map(candidate => candidate.proposer);
+
   const proposerDelegates = useDelegateNounsAtBlockQuery(
     activeCandidateProposers,
-    blockNumber ?? 0,
+    blockNumber ?? 0n,
   );
   const threshold = useProposalThreshold() || 0;
-  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
+  const activePendingProposers = useActivePendingUpdatableProposers(Number(blockNumber) ?? 0);
   const allSigners = unmatchedCandidates
-    ?.map((candidate: ProposalCandidateSubgraphEntity) =>
-      candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id),
-    )
+    ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
     .flat();
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
     allSigners ? deDupeSigners(allSigners) : [],
-    blockNumber ?? 0,
+    blockNumber ?? 0n,
   );
-  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(Number(blockNumber) ?? 0);
   const candidatesData =
     proposerDelegates.data &&
-    unmatchedCandidates?.map((candidate: ProposalCandidateSubgraphEntity) => {
+    unmatchedCandidates?.map(candidate => {
       const proposerVotes =
         proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
           ?.nounsRepresented?.length || 0;
@@ -252,7 +258,7 @@ export const useCandidateProposals = (blockNumber?: number) => {
 
   if (candidatesData) {
     candidatesData.sort((a, b) => {
-      return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
+      return Number(a.lastUpdatedTimestamp) - Number(b.lastUpdatedTimestamp);
     });
   }
   return { loading, data: candidatesData, error };
@@ -265,22 +271,26 @@ export const useCandidateProposal = (
   blockNumber?: number,
 ) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
+  const { loading, data, error, refetch } = useQuery<{
+    proposalCandidate: Maybe<GraphQLProposalCandidate>;
+  }>(candidateProposalQuery(id), {
     pollInterval: pollInterval || 0,
   });
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
   const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
-  const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
+  const allSigners = versionSignatures?.map(
+    (sig: GraphQLProposalCandidateSignature) => sig.signer.id,
+  );
   const proposerDelegates = useDelegateNounsAtBlockQuery(
-    [data?.proposalCandidate?.proposer],
-    blockNumber || 0,
+    data?.proposalCandidate?.proposer ? [data?.proposalCandidate?.proposer] : [],
+    BigInt(blockNumber ?? 0n),
   );
   const proposerNounVotes =
     (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
     allSigners ? deDupeSigners(allSigners) : [],
-    blockNumber ?? 0,
+    BigInt(blockNumber ?? 0),
   );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
   const parsedData =
@@ -300,9 +310,14 @@ export const useCandidateProposal = (
 };
 
 export const useCandidateProposalVersions = (id: string) => {
-  const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
-  const versions: ProposalCandidateVersions =
-    data && parseSubgraphCandidateVersions(data.proposalCandidate);
+  const { loading, data, error } = useQuery<{
+    proposalCandidate: Maybe<GraphQLProposalCandidate>;
+  }>(candidateProposalVersionsQuery(id));
+
+  const versions: ProposalCandidateVersions | undefined = data?.proposalCandidate
+    ? parseSubgraphCandidateVersions(data?.proposalCandidate)
+    : undefined;
+
   return { loading, data: versions, error };
 };
 
@@ -444,7 +459,9 @@ export const useSendFeedback = () => {
 };
 
 export const useProposalFeedback = (id: string, pollInterval?: number) => {
-  const { loading, data, error, refetch } = useQuery(proposalFeedbacksQuery(id), {
+  const { loading, data, error, refetch } = useQuery<{
+    proposalFeedbacks: Maybe<GraphQLProposalFeedback[]>;
+  }>(proposalFeedbacksQuery(id), {
     pollInterval: pollInterval || 0,
   });
 
@@ -465,8 +482,8 @@ export const useCandidateFeedback = (id: string, pollInterval?: number) => {
     createdBlock: Number(feedback.createdBlock),
     voter: {
       ...feedback.voter,
-      id: feedback.voter.id as `0x${string}`
-    }
+      id: feedback.voter.id as Address,
+    },
   }));
 
   return { loading, data: feedbacks, error, refetch };
@@ -587,7 +604,7 @@ const parseSubgraphCandidate = (
     voteCount: voteCount,
     version: {
       content: {
-        title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+        title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
         transactionHash: transactionDetails.encodedProposalHash,
@@ -602,20 +619,21 @@ const parseSubgraphCandidate = (
   };
 };
 
-const parseSubgraphCandidateVersions = (
-  candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined,
-) => {
-  if (!candidateVersions) {
+const parseSubgraphCandidateVersions = (candidate: GraphQLProposalCandidate | undefined) => {
+  if (!candidate) {
     return;
   }
-  const versionsList = candidateVersions.versions.map(version => version);
-  const versionsByDate = versionsList.toSorted((a, b) => {
-    return b.createdTimestamp - a.createdTimestamp;
+
+  const versionsList = map(candidate?.versions ?? [], version => version);
+  const versionsByDate = sort(versionsList, (a, b) => {
+    return Number(b.createdTimestamp) - Number(a.createdTimestamp);
   });
-  const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
+
+  const versions: ProposalCandidateVersionContent[] = map(versionsByDate, (version, i) => {
     const description = version.content.description
       ?.replace(/\\n/g, '\n')
       .replace(/(^["']|["']$)/g, '');
+
     const transactionDetails: ProposalTransactionDetails = {
       targets: map(version.content.targets ?? [], t => t as Address),
       values: map(version.content.values ?? [], v => BigInt(v)),
@@ -623,29 +641,31 @@ const parseSubgraphCandidateVersions = (
       calldatas: map(version.content.calldatas ?? [], t => t as Hex),
       encodedProposalHash: version.content.encodedProposalHash as Hash,
     };
+
     const details = formatProposalTransactionDetails(transactionDetails);
+
     return {
-      title: R.pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+      title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
       description: description ?? 'No description.',
-      details: details,
+      details,
       createdAt: version.createdTimestamp,
       updateMessage: version.updateMessage,
-      versionNumber: candidateVersions.versions.length - i,
+      versionNumber: candidate.versions.length - i,
     };
   });
 
   return {
-    id: candidateVersions.id,
-    slug: candidateVersions.slug,
-    proposer: candidateVersions.proposer,
-    lastUpdatedTimestamp: candidateVersions.lastUpdatedTimestamp,
-    canceled: candidateVersions.canceled,
-    versionsCount: candidateVersions.versions.length,
-    createdTransactionHash: candidateVersions.createdTransactionHash,
+    id: candidate.id,
+    slug: candidate.slug,
+    proposer: candidate.proposer,
+    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    canceled: candidate.canceled,
+    versionsCount: candidate.versions.length,
+    createdTransactionHash: candidate.createdTransactionHash,
     title:
-      R.pipe(candidateVersions.latestVersion.description, extractTitle, removeMarkdownStyle) ??
+      pipe(candidate.latestVersion.content.description, extractTitle, removeMarkdownStyle) ??
       'Untitled',
-    description: candidateVersions.latestVersion.description ?? 'No description.',
+    description: candidate.latestVersion.content.description ?? 'No description.',
     versions: versions,
   };
 };
