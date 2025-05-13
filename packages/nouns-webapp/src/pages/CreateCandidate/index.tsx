@@ -11,7 +11,6 @@ import CreateCandidateButton from '@/components/CreateCandidateButton';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
-import config from '@/config';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
@@ -23,6 +22,9 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { Hex } from '@/utils/types';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useChainId } from 'wagmi';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -34,7 +36,7 @@ const CreateCandidatePage = () => {
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-  const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
+  const ethNeeded = useEthNeeded(nounsTokenBuyerAddress[useChainId()], totalUSDCPayment);
   const createCandidateCost = useGetCreateCandidateCost();
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
@@ -74,15 +76,16 @@ const CreateCandidatePage = () => {
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
-      const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+      const hasTokenBuyerTopTop =
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[useChainId()])
+          .length > 0;
 
-      // Add a new top up txn if one isn't there already, else add to the existing one
-      if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      // Add a new top-up txn if one isn't there already, else add to the existing one
+      if (parseInt(ethNeeded) > 0 && !hasTokenBuyerTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
-          calldata: '0x',
+          address: nounsTokenBuyerAddress[useChainId()],
+          value: BigInt(ethNeeded ?? 0),
+          calldata: '0x' as Hex,
           signature: '',
         });
       } else {
@@ -90,7 +93,7 @@ const CreateCandidatePage = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[useChainId()]) {
                   return index;
                 } else {
                   return -1;
@@ -98,10 +101,10 @@ const CreateCandidatePage = () => {
               })
               .filter(n => n >= 0) ?? new Array<number>();
 
-          const txns = proposalTransactions;
+          const transactionsList = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
-            setProposalTransactions(txns);
+            transactionsList[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
+            setProposalTransactions(transactionsList);
           }
         }
       }
@@ -139,7 +142,7 @@ const CreateCandidatePage = () => {
 
   const isFormInvalid = useMemo(
     () => !proposalTransactions.length || titleValue === '' || bodyValue === '',
-    [proposalTransactions, titleValue, bodyValue],
+    [titleValue, bodyValue, proposalTransactions.length],
   );
 
   const handleCreateProposal = async () => {
