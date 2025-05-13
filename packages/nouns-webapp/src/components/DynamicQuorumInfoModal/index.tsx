@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 
 import { Backdrop } from '@/components/Modal';
-import config from '@/config';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nounsDao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 
@@ -298,10 +297,7 @@ const DynamicQuorumInfoModal: React.FC<{
     adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
   );
 
-  const dynamicQuorumProps = useDynamicQuorumProps(
-    config.addresses.nounsDAOProxy,
-    proposal.startBlock,
-  );
+  const dynamicQuorumProps = useDynamicQuorumProps(BigInt(proposal.startBlock));
 
   if (error) {
     return <>Failed to fetch dynamic threshold info</>;
