@@ -1207,30 +1207,22 @@ export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => 
 };
 
 export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery(forkId), {
-    pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { escrowWithdrawals: EscrowWithdrawal[] };
-    error: Error;
-    refetch: () => void;
-  };
-  const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
-    return {
-      eventType: 'EscrowWithdrawal',
-      id: escrowWithdrawal.id,
-      createdAt: escrowWithdrawal.createdAt,
-      owner: { id: escrowWithdrawal.owner.id },
-      tokenIDs: escrowWithdrawal.tokenIDs,
-    };
+  const { loading, data, error, refetch } = useQuery<{
+    escrowWithdrawals: Maybe<GraphQLEscrowWithdrawal[]>;
+  }>(escrowWithdrawEventsQuery(forkId), {
+    pollInterval,
   });
 
-  return {
-    loading,
-    error,
-    data: (escrowWithdrawals as EscrowWithdrawal[]) ?? [],
-    refetch,
-  };
+  const escrowWithdrawals: EscrowWithdrawal[] = map(
+    data?.escrowWithdrawals ?? [],
+    escrowWithdrawal => ({
+      ...escrowWithdrawal,
+      eventType: 'EscrowWithdrawal' as const,
+      owner: { id: escrowWithdrawal.id as Address },
+    }),
+  );
+
+  return { loading, error, data: escrowWithdrawals, refetch };
 };
 
 // Define a type alias for the events union type
