@@ -137,13 +137,11 @@ export default defineConfig([
       'prettier/prettier': 'warn',
     },
     settings: {
-      'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx'],
-      },
+      ...importPlugin.configs.typescript.settings,
       'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
         typescript: {
-          alwaysTryTypes: true,
-          project: 'packages/*/{ts,js}config.json',
+          project: './tsconfig.json',
         },
       },
     },
@@ -164,10 +162,7 @@ export default defineConfig([
       prettier: prettierPlugin,
     },
     extends: [
-      ...compat.extends(
-        'plugin:react/recommended',
-        'plugin:prettier/recommended',
-      ),
+      ...compat.extends('plugin:react/recommended', 'plugin:prettier/recommended'),
       eslintReactPlugin.configs['recommended-typescript'],
     ],
     rules: {
