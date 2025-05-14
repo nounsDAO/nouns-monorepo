@@ -634,7 +634,7 @@ const parseSubgraphProposal = (
   timestamp: number | undefined,
   toUpdate?: boolean,
   isDaoGteV3?: boolean,
-) => {
+): Proposal | undefined => {
   if (isNullish(proposal)) {
     return;
   }
@@ -672,20 +672,20 @@ const parseSubgraphProposal = (
       onTimelockV1,
     ),
     proposalThreshold: BigInt(proposal.proposalThreshold ?? 0),
-    quorumVotes: BigInt(proposal.quorumVotes ?? 0),
-    forCount: BigInt(proposal.forVotes),
-    againstCount: BigInt(proposal.againstVotes),
-    abstainCount: BigInt(proposal.abstainVotes),
+    quorumVotes: Number(proposal.quorumVotes ?? 0),
+    forCount: Number(proposal.forVotes),
+    againstCount: Number(proposal.againstVotes),
+    abstainCount: Number(proposal.abstainVotes),
     createdBlock: BigInt(proposal.createdBlock),
     startBlock: BigInt(proposal.startBlock),
     endBlock: BigInt(proposal.endBlock),
     createdTimestamp: BigInt(proposal.createdTimestamp),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: details,
-    transactionHash: proposal.createdTransactionHash,
+    transactionHash: proposal.createdTransactionHash as Hash,
     objectionPeriodEndBlock: BigInt(proposal.objectionPeriodEndBlock),
     updatePeriodEndBlock: BigInt(proposal.updatePeriodEndBlock ?? 0),
-    signers: proposal.signers,
+    signers: map(proposal.signers ?? [], v => ({ id: v.id as Address })),
     onTimelockV1: onTimelockV1,
     voteSnapshotBlock: BigInt(proposal.voteSnapshotBlock),
   };
@@ -793,7 +793,7 @@ export const useAllProposals = (): PartialProposalData => {
   return subgraph?.error ? onchain : subgraph;
 };
 
-export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
+export const useProposal = (id: string | number, toUpdate?: boolean) => {
   const { data: blockNumber } = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
