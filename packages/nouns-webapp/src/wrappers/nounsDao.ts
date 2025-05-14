@@ -428,72 +428,59 @@ const determineCallData = (types: string | undefined, value: bigint | undefined)
   return '';
 };
 
-export const formatProposalTransactionDetails = (details: ProposalTransactionDetails) => {
-  return details?.targets?.map((target: Address, i: number) => {
-    const signature: string = details.signatures[i];
-    const value = BigInt(
-      // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? details?.[3]?.[i] ?? 0,
-    );
-    const callData = details.calldatas[i] as Hex;
+export const formatProposalTransactionDetails = (details: {
+  readonly targets: readonly Address[];
+  readonly signatures: readonly string[];
+  readonly values: readonly bigint[];
+  readonly calldatas: readonly Hex[];
+}) =>
+  details.targets.map((target, i) => {
+    const signature = details.signatures[i];
+    const value = details.values[i] ?? 0n;
+    const callData = details.calldatas[i];
 
-    // Split at first occurrence of '('
-    const [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
-    if (!name || !types) {
-      // If there's no signature and calldata is present, display the raw calldata
+    const [name = 'unknown', types] = signature.slice(0, -1).split(/\((.*)/s);
+
+    if (!types) {
+      // no types to decode, show raw calldata or fallback
       if (callData && callData !== '0x') {
-        return {
-          target,
-          callData: concatSelectorToCalldata(signature, callData),
-          value,
-        };
+        return { target, callData: concatSelectorToCalldata(signature, callData), value };
       }
-
       return {
         target,
-        functionSig: name === '' ? 'transfer' : name == undefined ? 'unknown' : name,
-        callData: determineCallData(types, value) as Hex,
+        functionSig: name || 'unknown',
+        callData: determineCallData('', value) as Hex,
+        value,
       };
     }
 
     try {
-      // Split using comma as separator, unless comma is between parentheses (tuple).
       const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
-      const decoded = decodeAbiParameters(abiParams, callData as Hex);
+      const decoded = decodeAbiParameters(abiParams, callData);
       return {
         target,
         functionSig: name,
-        callData: decoded.join() as Hex,
+        callData: (decoded as string[]).join() as Hex,
         value,
       };
-    } catch (error) {
-      // We failed to decode. Display the raw calldata, appending function selectors if they exist.
-      console.error('Failed to decode calldata:', error);
-      return {
-        target,
-        callData: concatSelectorToCalldata(signature, callData) as Hex,
-        value,
-      };
+    } catch (err) {
+      console.error('decodeAbiParameters failed:', err);
+      return { target, callData: concatSelectorToCalldata(signature, callData), value };
     }
   });
-};
 
-export const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails) => {
-  return details?.targets.map((target: string, i: number) => {
-    const signature: string = details.signatures[i];
-    const value = BigInt(
-      // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? details?.[3]?.[i],
-    );
-    const callData = details.calldatas[i];
-    return {
-      target,
-      functionSig: signature,
-      callData: callData,
-      value: value,
-    };
-  });
-};
+export const formatProposalTransactionDetailsToUpdate = (details: {
+  targets: Address[];
+  signatures: string[];
+  values?: bigint[];
+  calldatas: Hex[];
+}) =>
+  details.targets.map((target, i) => ({
+    target,
+    functionSig: details.signatures[i],
+    callData: details.calldatas[i],
+    value: details.values?.[i] ?? 0n,
+  }));
 
 export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride?: number) {
   const publicClient = usePublicClient(); // wagmi v2 public client :contentReference[oaicite:0]{index=0}
