@@ -16,19 +16,7 @@ import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
 import classes from './TransferFundsReviewStep.module.css';
 
-interface ActionAddEvent {
-  address: Address;
-  value: string;
-  signature: string;
-  calldata: string;
-  usdcValue?: number;
-  decodedCalldata?: string;
-}
-
-const handleActionAdd = (
-  state: ProposalActionModalState,
-  onActionAdd: (e?: ActionAddEvent) => void,
-) => {
+const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function) => {
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
