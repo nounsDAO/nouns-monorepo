@@ -11,7 +11,7 @@ import type {
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { filter, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
+import { filter, flatMap, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
 import {
   AbiParameter,
   decodeAbiParameters,
@@ -103,21 +103,23 @@ export enum ForkState {
 }
 
 interface ProposalCallResult {
-  id: bigint;
   abstainVotes: bigint;
   againstVotes: bigint;
-  forVotes: bigint;
   canceled: boolean;
-  vetoed: boolean;
-  executed: boolean;
-  startBlock: bigint;
+  creationBlock: bigint;
   endBlock: bigint;
   eta: bigint;
+  executed: boolean;
+  forVotes: bigint;
+  id: bigint;
   proposalThreshold: bigint;
-  proposer: string;
+  proposer: `0x${string}`;
   quorumVotes: bigint;
-  objectionPeriodEndBlock: bigint;
-  updatePeriodEndBlock: bigint;
+  startBlock: bigint;
+  totalSupply: bigint;
+  vetoed: boolean;
+  objectionPeriodEndBlock?: bigint;
+  updatePeriodEndBlock?: bigint;
 }
 
 export interface ProposalDetail {
@@ -740,19 +742,25 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
     [govProposalIndexes],
   );
 
-  const { data: proposals = [], isLoading: loadingProposals } = useReadContracts<
-    ProposalCallResult[]
+  const { data: proposalResults, isLoading: loadingProposals } = useReadContracts<
+    { result?: ProposalCallResult }[]
   >({
     contracts: proposalCalls,
     query: { enabled: !skip && proposalCalls.length > 0 },
   });
+  const proposals = pipe(
+    proposalResults ?? [],
+    flatMap(item => (isNullish(item.result) ? [] : [item.result])),
+  ) as ProposalCallResult[];
 
-  const { data: proposalStates = [], isLoading: loadingStates } = useReadContracts<ProposalState[]>(
-    {
-      contracts: stateCalls,
-      query: { enabled: !skip && stateCalls.length > 0 },
-    },
-  );
+  const { data: stateResults, isLoading: loadingStates } = useReadContracts<{ result?: number }[]>({
+    contracts: stateCalls,
+    query: { enabled: !skip && stateCalls.length > 0 },
+  });
+  const proposalStates = pipe(
+    stateResults ?? [],
+    flatMap(item => (isNullish(item.result) ? [] : [item.result])),
+  ) as number[];
 
   const formattedLogs = useFormattedProposalCreatedLogs(skip);
 
@@ -764,22 +772,21 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
     }
 
     return {
-      data: proposals.map((p, i) => {
-        const proposal = p?.[0];
+      data: proposals.map((proposal, i) => {
         const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
           title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
-          status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
+          status: proposalStates[i] ?? ProposalState.UNDETERMINED,
           startBlock: BigInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: BigInt(proposal?.endBlock?.toString() ?? ''),
-          objectionPeriodEndBlock: BigInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
+          objectionPeriodEndBlock: BigInt(proposal?.objectionPeriodEndBlock?.toString() ?? 0),
           forCount: Number(proposal?.forVotes?.toString() ?? '0'),
           againstCount: Number(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: Number(proposal?.abstainVotes?.toString() ?? '0'),
           quorumVotes: Number(proposal?.quorumVotes?.toString() ?? '0'),
           eta: proposal?.eta ? new Date(Number(proposal?.eta) * 1000) : undefined,
-          updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
+          updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock?.toString() ?? 0),
         };
       }),
       loading: loadingProposals || loadingStates,
