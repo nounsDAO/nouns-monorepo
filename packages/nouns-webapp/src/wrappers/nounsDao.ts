@@ -12,7 +12,7 @@ import type {
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
-import { isNonNullish, isNullish, isTruthy, map, pipe } from 'remeda';
+import { isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
 import { AbiParameter, decodeAbiParameters, formatEther, keccak256, stringToBytes } from 'viem';
 
 import config, { CHAIN_ID } from '@/config';
