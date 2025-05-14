@@ -50,7 +50,6 @@ import onDisplayAuction, {
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
-import LogsUpdater from './state/updaters/logs';
 import { nounPath } from './utils/history';
 import { config as wagmiConfig } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
@@ -114,14 +113,6 @@ const useDappConfig = {
 };
 
 const client = clientFactory(config.app.subgraphApiUri);
-
-const Updaters = () => {
-  return (
-    <>
-      <LogsUpdater />
-    </>
-  );
-};
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -276,7 +267,6 @@ createRoot(document.getElementById('root')!).render(
               <LanguageProvider>
                 <App />
               </LanguageProvider>
-              <Updaters />
             </DAppProvider>
           </ApolloProvider>
         </QueryClientProvider>
