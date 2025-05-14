@@ -4,10 +4,8 @@ import React, { useEffect } from 'react';
 
 import './index.css';
 import { ApolloProvider, useQuery } from '@apollo/client';
-import { Web3Provider } from '@ethersproject/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
-import { Web3ReactProvider } from '@web3-react/core';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
@@ -272,21 +270,15 @@ createRoot(document.getElementById('root')!).render(
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <ChainSubscriber />
-          <Web3ReactProvider
-            getLibrary={
-              provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-            }
-          >
-            <ApolloProvider client={client}>
-              <PastAuctions />
-              <DAppProvider config={useDappConfig}>
-                <LanguageProvider>
-                  <App />
-                </LanguageProvider>
-                <Updaters />
-              </DAppProvider>
-            </ApolloProvider>
-          </Web3ReactProvider>
+          <ApolloProvider client={client}>
+            <PastAuctions />
+            <DAppProvider config={useDappConfig}>
+              <LanguageProvider>
+                <App />
+              </LanguageProvider>
+              <Updaters />
+            </DAppProvider>
+          </ApolloProvider>
         </QueryClientProvider>
       </WagmiProvider>
     </React.StrictMode>
@@ -294,6 +286,6 @@ createRoot(document.getElementById('root')!).render(
 );
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
+// to log results (for example, reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
