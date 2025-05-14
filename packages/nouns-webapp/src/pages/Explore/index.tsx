@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import cx from 'classnames';
+import cx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import ExploreGrid from '@/components/ExploreGrid';

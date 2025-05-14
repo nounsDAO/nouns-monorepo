@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { ImageData } from '@noundry/nouns-assets';
-import cx from 'classnames';
+import cx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'react-bootstrap/Image';
 import Placeholder from 'react-bootstrap/Placeholder';

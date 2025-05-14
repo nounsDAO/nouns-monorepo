@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import cx from 'classnames';
+import cx from 'clsx';
 import Placeholder from 'react-bootstrap/esm/Placeholder';
 
 import classes from './ExploreGrid.module.css';
