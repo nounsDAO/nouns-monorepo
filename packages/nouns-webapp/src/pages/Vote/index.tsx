@@ -12,7 +12,7 @@ import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { SearchIcon } from '@heroicons/react/solid';
-import { useBlockNumber, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
@@ -61,6 +61,8 @@ import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import classes from './Vote.module.css';
 import { zeroAddress } from 'viem';
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
+import { useBlockNumber } from 'wagmi';
+import { isNonNullish } from 'remeda';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -68,14 +70,14 @@ dayjs.extend(advanced);
 
 const getUpdatableCountdownCopy = (
   proposal: PartialProposal,
-  currentBlock: number,
+  currentBlock: bigint,
   locale: SupportedLocale,
 ) => {
   const timestamp = Date.now();
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.updatePeriodEndBlock - BigInt(currentBlock)),
           'seconds',
         )
       : undefined;
@@ -126,7 +128,7 @@ const VotePage = () => {
   const { executeProposal, executeProposalState } = useExecuteProposal();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
-  const { data: proposalFeedback, refetch:proposalFeedbackRefetch } = useProposalFeedback(
+  const { data: proposalFeedback, refetch: proposalFeedbackRefetch } = useProposalFeedback(
     Number(id).toString(),
     dataFetchPollInterval,
   );
@@ -135,11 +137,11 @@ const VotePage = () => {
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
   // Get and format date from data
   const timestamp = Date.now();
-  const currentBlock = useBlockNumber();
+  const { data: currentBlock } = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.startBlock - BigInt(currentBlock)),
           'seconds',
         )
       : undefined;
@@ -150,7 +152,10 @@ const VotePage = () => {
       : proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(endBlock! - BigInt(currentBlock)),
+          'seconds',
+        )
       : undefined;
   const now = dayjs();
 
@@ -165,8 +170,11 @@ const VotePage = () => {
   // Use user votes as of the current or proposal snapshot block
   const currentOrSnapshotBlock = useMemo(
     () =>
-      Math.min(Number(proposal?.voteSnapshotBlock) ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
-    [proposal, currentBlock],
+      Math.min(
+        Number(proposal?.voteSnapshotBlock) ?? 0,
+        currentBlock ? Number(currentBlock - 1n) : 0,
+      ) || undefined,
+    [currentBlock, proposal?.voteSnapshotBlock],
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
@@ -258,14 +266,12 @@ const VotePage = () => {
     return endDate;
   };
   const objectionEnd = () => {
-    const time =
-      proposal && timestamp && currentBlock
-        ? dayjs(timestamp).add(
-            AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
-            'seconds',
-          )
-        : undefined;
-    return time;
+    return proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.objectionPeriodEndBlock! - currentBlock),
+          'seconds',
+        )
+      : undefined;
   };
 
   const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
@@ -312,8 +318,8 @@ const VotePage = () => {
     }
   })();
 
-  const handleRefetchData = () => {
-    proposalFeedbackRefetch();
+  const handleRefetchData = async () => {
+    await proposalFeedbackRefetch();
   };
 
   const onTransactionStateChange = useCallback(
@@ -607,7 +613,7 @@ const VotePage = () => {
                     {isProposer() && isUpdateable() && (
                       <>
                         <Trans>This proposal can be edited for </Trans>{' '}
-                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}{' '}
+                        {getUpdatableCountdownCopy(proposal, currentBlock ?? 0n, activeLocale)}{' '}
                       </>
                     )}
                   </p>
@@ -732,7 +738,8 @@ const VotePage = () => {
                     </span>
                     <h3>
                       <Trans>
-                        {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes} votes
+                        {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes}{' '}
+                        votes
                       </Trans>
                       {isV2Prop && <SearchIcon className={classes.dqIcon} />}
                     </h3>
@@ -765,7 +772,7 @@ const VotePage = () => {
                     </h3>
                   </div>
                 </div>
-                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && (
+                {isNonNullish(currentBlock) && proposal?.objectionPeriodEndBlock > 0n && (
                   <div className={classes.objectionPeriodActive}>
                     <p>
                       <strong>
