@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useBlockNumber, useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
@@ -29,7 +28,7 @@ import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useChainId } from 'wagmi';
+import { useAccount, useBlockNumber, useChainId } from 'wagmi';
 
 interface EditCandidateProps {
   match: {
@@ -48,10 +47,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
-  const [currentBlock, setCurrentBlock] = useState<number>();
-  const { account } = useEthers();
+  const [currentBlock, setCurrentBlock] = useState<bigint>();
+  const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
+  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, Number(currentBlock)); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -62,7 +61,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
-  const blockNumber = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber();
 
   useEffect(() => {
     // prevent live-updating the block resulting in undefined block number

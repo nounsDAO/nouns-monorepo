@@ -3,7 +3,6 @@ import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '@/hooks';
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -31,7 +30,7 @@ import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { Hex } from '@/utils/types';
 
 const CreateProposalPage = () => {
@@ -49,7 +48,7 @@ const CreateProposalPage = () => {
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const { propose, proposeState } = usePropose();
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();

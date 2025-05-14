@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
@@ -30,7 +29,7 @@ import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { Address, Hex } from '@/utils/types';
 
 interface EditProposalProps {
@@ -62,7 +61,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const proposalThreshold = useProposalThreshold();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const { updateProposal, updateProposalState } = useUpdateProposal();
   const { updateProposalDescription, updateProposalDescriptionState } =
     useUpdateProposalDescription();
@@ -442,7 +441,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     });
   };
 
-  // used if updating a proposal that was created by signers
+  // used if updating a proposal created by signers
   useEffect(() => {
     switch (createProposalCandidateState.status) {
       case 'None':

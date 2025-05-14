@@ -12,7 +12,6 @@ import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { SearchIcon } from '@heroicons/react/solid';
-import { useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
@@ -61,7 +60,7 @@ import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import classes from './Vote.module.css';
 import { zeroAddress } from 'viem';
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
-import { useBlockNumber } from 'wagmi';
+import { useAccount, useBlockNumber } from 'wagmi';
 import { isNonNullish } from 'remeda';
 
 dayjs.extend(utc);
@@ -118,7 +117,7 @@ const VotePage = () => {
   const activeLocale = useActiveLocale();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const {
     data: dqInfo,
     loading: loadingDQInfo,

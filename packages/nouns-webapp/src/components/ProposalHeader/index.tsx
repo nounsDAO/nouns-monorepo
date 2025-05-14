@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { useBlockNumber } from '@usedapp/core';
 import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -30,6 +29,7 @@ import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import classes from './ProposalHeader.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { useBlockNumber } from 'wagmi';
 
 interface ProposalHeaderProps {
   title?: string;
@@ -69,7 +69,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<bigint | null>(null);
   const [createdTimestamp, setCreatedTimestamp] = React.useState<bigint | null>(null);
   const isMobile = isMobileScreen();
-  const currentBlock = useBlockNumber();
+  const { data: currentBlock } = useBlockNumber();
   const currentOrSnapshotBlock = useMemo(() => {
     const blockNumber = currentBlock ? Number(currentBlock) - 1 : 0;
     return Math.min(Number(proposal?.voteSnapshotBlock || 0n), blockNumber) || undefined;

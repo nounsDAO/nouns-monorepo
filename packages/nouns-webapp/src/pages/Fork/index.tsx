@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -32,6 +31,7 @@ import ForkEvent from './ForkEvent';
 import WithdrawNounsButton from './WithdrawNounsButton';
 import { Address } from '@/utils/types';
 import { formatEther } from 'viem';
+import { useAccount } from 'wagmi';
 
 const now = new Date();
 
@@ -62,7 +62,7 @@ const ForkPage = () => {
   const escrowEvents = useEscrowEvents(dataFetchPollInterval, Number(id).toString());
   const forkDetails = useForkDetails(dataFetchPollInterval, id || '');
   const forks = useForks(dataFetchPollInterval);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
   const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury as Address);
   useScrollToLocation();

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { Collapse, FormControl } from 'react-bootstrap';
 import { isAddress } from 'viem';
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsAddress } from 'wagmi';
 
 import BrandSpinner from '@/components/BrandSpinner';
 import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
@@ -62,7 +61,6 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
     ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
   );
 
-  const { library } = useEthers();
   const { address: account } = useAccount();
 
   const [delegateAddress, setDelegateAddress] = useState(delegateTo ?? '');
@@ -90,17 +88,19 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
     }
   }, [delegateState]);
 
-  useEffect(() => {
-    const checkIsValidENS = async () => {
-      const reverseENSResult = await library?.resolveName(delegateAddress);
-      if (reverseENSResult) {
-        setDelegateAddress(reverseENSResult);
-      }
-      setHasResolvedDeepLinkedENS(true);
-    };
+  const { data: resolvedAddress, isFetched } = useEnsAddress({
+    name: delegateAddress,
+    query: { enabled: Boolean(delegateAddress) },
+  });
 
-    checkIsValidENS();
-  }, [delegateAddress, delegateTo, library]);
+  useEffect(() => {
+    if (!isFetched) return;
+
+    if (resolvedAddress) {
+      setDelegateAddress(resolvedAddress);
+    }
+    setHasResolvedDeepLinkedENS(true);
+  }, [resolvedAddress, isFetched, setDelegateAddress, setHasResolvedDeepLinkedENS]);
 
   useEffect(() => {
     if (delegateAddress.length === 0) {

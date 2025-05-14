@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
@@ -12,6 +11,7 @@ import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
 import classes from './VoteSignals.module.css';
+import { useAccount } from 'wagmi';
 
 type VoteSignalsProps = {
   proposalId?: string;
@@ -56,7 +56,7 @@ function VoteSignals({
     sendCandidateFeedbackState,
   } = useSendFeedback();
 
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
@@ -135,7 +135,7 @@ function VoteSignals({
       setIsTransactionPending(true);
       setDataFetchPollInterval(50);
     } else if (status === 'Success') {
-      // don't show modal. just update feedback
+      // don't show modal. update feedback
       handleRefetch();
       setIsTransactionPending(false);
       setHasUserVoted(true);

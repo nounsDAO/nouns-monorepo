@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import './index.css';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
@@ -15,12 +14,7 @@ import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
 
 import App from './App';
-import config, {
-  CHAIN_ID,
-  ChainId_Sepolia,
-  createNetworkHttpUrl,
-  multicallOnLocalhost,
-} from './config';
+import config, { CHAIN_ID } from './config';
 import {
   nounsAuctionHouseAddress,
   useReadNounsAuctionHouseAuction,
@@ -81,36 +75,6 @@ const store = configureStore({});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-const supportedChainURLs = {
-  [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
-  [ChainId.Hardhat]: 'http://localhost:8545',
-  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
-  [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
-};
-
-export const Sepolia: Chain = {
-  chainId: ChainId_Sepolia,
-  chainName: 'Sepolia',
-  isTestChain: true,
-  isLocalChain: false,
-  multicallAddress: '0x6a19Dbfc67233760E0fF235b29158bE45Cc53765',
-  getExplorerAddressLink: (address: string) => `https://sepolia.etherscan.io/address/${address}`,
-  getExplorerTransactionLink: (transactionHash: string) =>
-    `https://sepolia.etherscan.io/tx/${transactionHash}`,
-};
-
-// prettier-ignore
-const useDappConfig = {
-  readOnlyChainId: CHAIN_ID,
-  readOnlyUrls: {
-    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
-  },
-  multicallAddresses: {
-    [ChainId.Hardhat]: multicallOnLocalhost,
-  },
-  networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
-};
 
 const client = clientFactory(config.app.subgraphApiUri);
 
@@ -263,11 +227,9 @@ createRoot(document.getElementById('root')!).render(
           <ChainSubscriber />
           <ApolloProvider client={client}>
             <PastAuctions />
-            <DAppProvider config={useDappConfig}>
-              <LanguageProvider>
-                <App />
-              </LanguageProvider>
-            </DAppProvider>
+            <LanguageProvider>
+              <App />
+            </LanguageProvider>
           </ApolloProvider>
         </QueryClientProvider>
       </WagmiProvider>
