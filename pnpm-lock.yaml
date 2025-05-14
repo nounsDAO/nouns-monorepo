@@ -445,9 +445,6 @@ importers:
       graphql:
         specifier: ^16.11.0
         version: 16.11.0
-      history:
-        specifier: ^5.3.0
-        version: 5.3.0
       make-plural:
         specifier: ^7.2.0
         version: 7.4.0
@@ -7403,9 +7400,6 @@ packages:
 
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
-
-  history@5.3.0:
-    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
@@ -22922,10 +22916,6 @@ snapshots:
   heap@0.2.7: {}
 
   hey-listen@1.0.8: {}
-
-  history@5.3.0:
-    dependencies:
-      '@babel/runtime': 7.27.1
 
   hmac-drbg@1.0.1:
     dependencies:
