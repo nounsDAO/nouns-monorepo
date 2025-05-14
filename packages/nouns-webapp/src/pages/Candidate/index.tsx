@@ -163,7 +163,7 @@ const CandidatePage = () => {
   const destructiveStateAction = (() => {
     return () => {
       if (candidate?.data?.id) {
-        return cancelCandidate(candidate.data.slug);
+        return cancelCandidate({ args: [candidate.data.slug] });
       }
     };
   })();
