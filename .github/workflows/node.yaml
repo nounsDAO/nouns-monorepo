@@ -1,123 +1,57 @@
-name: Node.js CI
+name: Node.js CI Pipeline
 
 on:
   push:
     branches:
       - master
+      - develop
       - 'feature/*'
-  pull_request:
-    branches:
-      - '**'
+      - 'bugfix/*'
+      - 'release/*'
+      - 'hotfix/*'
+  pull_request:    # run on every PR
 
 jobs:
-  build:
-    name: Build
+  ci-pipeline:
+    name: CI Pipeline
     runs-on: ubuntu-latest
+    concurrency:
+      group: ci-pipeline-${{ github.ref }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
         node-version: [22.x]
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js & cache pnpm
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
-      - name: Setup pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/node_modules
-            ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
         run: pnpm build
 
-      - name: Build Netlify
+      - name: Build webapp for Netlify
         run: pnpm netlify build --offline --filter packages/nouns-webapp
 
-  lint:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Lint
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [ 22.x ]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+      - name: Run test suite
+        run: pnpm test
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/node_modules
-            ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Add ESLint matcher
-        run: echo "::add-matcher::.github/eslint-matcher.json"
-
-      - name: Run linting
+      - name: Lint changed files
+        if: github.event_name == 'pull_request'
         run: |
           BASE=${{ github.event.pull_request.base.ref }}
-          FILES=$(git diff --name-only origin/$BASE...HEAD -- '*.js' '*.jsx' '*.ts' '*.tsx')
-          [ -z "$FILES" ] && echo "no JS/TS changes" && exit 0
+          FILES=$(git diff --name-only origin/$BASE...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx')
+          [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
           pnpm lint $FILES
-
-  test:
-    name: Test
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [ 22.x ]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/node_modules
-            ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run tests
-        run: pnpm test
