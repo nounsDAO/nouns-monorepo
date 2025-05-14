@@ -11,7 +11,6 @@ import clsx from 'clsx';
 import { Trans } from '@lingui/react/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { SearchIcon } from '@heroicons/react/solid';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
@@ -20,6 +19,7 @@ import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import ProposalHeader from '@/components/ProposalHeader';
 import ProposalContent from '@/components/ProposalContent';
 import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
@@ -45,6 +45,7 @@ import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/strea
 import {
   PartialProposal,
   ProposalState,
+  ProposalVersion,
   useCancelProposal,
   useExecuteProposal,
   useHasVotedOnProposal,
@@ -123,11 +124,12 @@ const VotePage = () => {
   } = useQuery(propUsingDynamicQuorum(id ?? '0'));
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
-  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } =
-    useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
-  const { data: proposalFeedback } = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
+  const { data: proposalFeedback, refetch:proposalFeedbackRefetch } = useProposalFeedback(
+    Number(id).toString(),
+    dataFetchPollInterval,
+  );
   const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const forkActiveState = useIsForkActive();
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
@@ -163,18 +165,20 @@ const VotePage = () => {
   // Use user votes as of the current or proposal snapshot block
   const currentOrSnapshotBlock = useMemo(
     () =>
-      Math.min(proposal?.voteSnapshotBlock ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
+      Math.min(Number(proposal?.voteSnapshotBlock) ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
     [proposal, currentBlock],
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
-  const currentQuorum = useCurrentQuorum(
-    config.addresses.nounsDAOProxy,
-    proposal && proposal.id ? parseInt(proposal.id) : 0,
-    dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
-  );
+  // @ts-ignore
+  const { data: currentQuorum } = useReadNounsGovernorQuorumVotes({
+    args: [proposal && proposal.id ? BigInt(proposal.id) : 0n],
+    query: {
+      enabled: dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
+    },
+  });
 
   const getVersionTimestamp = (proposalVersions: ProposalVersion[]) => {
     const versionDetails = proposalVersions[proposalVersions.length - 1];
@@ -289,7 +293,7 @@ const VotePage = () => {
     return () => {
       if (proposal?.id) {
         if (proposal?.onTimelockV1) {
-          return executeProposalOnTimelockV1(proposal.id);
+          return true;
         } else {
           return executeProposal({ args: [BigInt(proposal.id)] });
         }
@@ -309,12 +313,18 @@ const VotePage = () => {
   })();
 
   const handleRefetchData = () => {
-    proposalFeedback.refetch();
+    proposalFeedbackRefetch();
   };
 
   const onTransactionStateChange = useCallback(
     (
-      { errorMessage, status }: { status: string; errorMessage?: string },
+      {
+        errorMessage,
+        status,
+      }: {
+        status: string;
+        errorMessage?: string;
+      },
       successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
       getErrorMessage?: (error?: string) => ReactNode | undefined,
@@ -380,16 +390,6 @@ const VotePage = () => {
   );
 
   useEffect(
-    () =>
-      onTransactionStateChange(
-        executeProposalOnTimelockV1State,
-        <Trans>Proposal Executed!</Trans>,
-        setExecutePending,
-      ),
-    [executeProposalOnTimelockV1State, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
     () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
     [cancelProposalState, onTransactionStateChange, setModal],
   );
@@ -411,7 +411,7 @@ const VotePage = () => {
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.voteSnapshotBlock ?? 0),
+    delegateNounsAtBlockQuery(voterIds ?? [], BigInt(proposal?.voteSnapshotBlock ?? 0)),
     {
       skip: !voters?.votes?.length,
     },
@@ -494,7 +494,7 @@ const VotePage = () => {
           proposal={proposal}
           againstVotesAbsolute={againstNouns.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
-          currentQuorum={currentQuorum}
+          currentQuorum={Number(currentQuorum)}
         />
       )}
       <StreamWithdrawModal
@@ -521,7 +521,7 @@ const VotePage = () => {
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => setShowVoteModal(true)}
-            versionNumber={hasManyVersions ? proposalVersions?.length : undefined}
+            versionNumber={hasManyVersions ? BigInt(proposalVersions?.length) : undefined}
             isObjectionPeriod={isObjectionPeriod}
           />
         )}
@@ -732,7 +732,7 @@ const VotePage = () => {
                     </span>
                     <h3>
                       <Trans>
-                        {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
+                        {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes} votes
                       </Trans>
                       {isV2Prop && <SearchIcon className={classes.dqIcon} />}
                     </h3>
@@ -787,7 +787,7 @@ const VotePage = () => {
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>Taken at block</span>
-                    <h3>{proposal?.voteSnapshotBlock}</h3>
+                    <h3>{String(proposal?.voteSnapshotBlock)}</h3>
                   </div>
                 </div>
               </Card.Body>
