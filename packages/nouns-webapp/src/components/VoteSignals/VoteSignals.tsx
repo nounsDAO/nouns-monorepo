@@ -16,7 +16,7 @@ import classes from './VoteSignals.module.css';
 type VoteSignalsProps = {
   proposalId?: string;
   proposer?: string;
-  versionTimestamp: number;
+  versionTimestamp: bigint;
   feedback?: VoteSignalDetail[];
   userVotes?: number;
   isCandidate?: boolean;
@@ -68,7 +68,7 @@ function VoteSignals({
       // filter feedback to this version
       if (versionTimestamp) {
         feedbackList = feedbackList.filter(
-          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= +versionTimestamp,
+          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= versionTimestamp,
         );
       }
       // sort feedback

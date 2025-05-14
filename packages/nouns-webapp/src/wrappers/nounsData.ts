@@ -465,7 +465,19 @@ export const useProposalFeedback = (id: string, pollInterval?: number) => {
     pollInterval: pollInterval || 0,
   });
 
-  return { loading, data, error, refetch };
+  const feedbacks: VoteSignalDetail[] = map(data?.proposalFeedbacks ?? [], feedback => ({
+    ...feedback,
+    reason: feedback.reason || '',
+    votes: Number(feedback.votes),
+    createdTimestamp: Number(feedback.createdTimestamp),
+    createdBlock: Number(feedback.createdBlock),
+    voter: {
+      ...feedback.voter,
+      id: feedback.voter.id as Address,
+    },
+  }));
+
+  return { loading, data: feedbacks, error, refetch };
 };
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {

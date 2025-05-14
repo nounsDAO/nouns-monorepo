@@ -127,7 +127,7 @@ const VotePage = () => {
     useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
-  const proposalFeedback = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
+  const { data: proposalFeedback } = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
   const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const forkActiveState = useIsForkActive();
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
@@ -811,7 +811,7 @@ const VotePage = () => {
             <Col xl={4} lg={12} className={classes.sidebar}>
               {proposalVersions && (
                 <VoteSignals
-                  feedback={proposalFeedback.data?.proposalFeedbacks}
+                  feedback={proposalFeedback}
                   proposalId={proposal.id}
                   versionTimestamp={getVersionTimestamp(proposalVersions)}
                   userVotes={userVotesNow}
