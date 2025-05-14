@@ -26,6 +26,7 @@ import {
   useProposalThreshold,
 } from '@/wrappers/nounsDao';
 import {
+  ProposalCandidate,
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
@@ -56,7 +57,7 @@ const CandidatePage = () => {
     dataFetchPollInterval,
     false,
     currentBlock,
-  );
+  ) as { data: ProposalCandidate & { proposalIdToUpdate?: number }; refetch: any };
   const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
