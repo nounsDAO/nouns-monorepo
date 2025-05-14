@@ -11,13 +11,19 @@ import type {
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { NounsDaoLogicFactory, NounsDAOV3ABI } from '@nouns/sdk';
 import { isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
-import { AbiParameter, decodeAbiParameters, formatEther, keccak256, stringToBytes } from 'viem';
+import {
+  AbiParameter,
+  decodeAbiParameters,
+  decodeEventLog,
+  formatEther,
+  keccak256,
+  parseAbiItem,
+  stringToBytes,
+} from 'viem';
+import { useQuery as useReactQuery } from '@tanstack/react-query';
 
-import config, { CHAIN_ID } from '@/config';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
-import { useLogs } from '@/hooks/useLogs';
 
 import {
   activePendingUpdatableProposersQuery,
@@ -59,8 +65,7 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount, useBlockNumber, useChainId, useReadContracts } from 'wagmi';
-import { utils } from 'ethers';
+import { useAccount, useBlockNumber, useChainId, usePublicClient, useReadContracts } from 'wagmi';
 import { mainnet } from 'viem/chains';
 
 export interface DynamicQuorumParams {
@@ -294,26 +299,6 @@ export interface ForkSubgraphEntity {
   }[];
 }
 
-const abi = new utils.Interface(NounsDAOV3ABI);
-const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
-
-// Start the log search at the mainnet deployment block to speed up log queries
-const fromBlock = CHAIN_ID === mainnet.id ? 12985453 : 0;
-const proposalCreatedFilter = {
-  ...nounsDaoContract.filters?.ProposalCreated(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ),
-  fromBlock,
-};
-
 const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
 const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
 
@@ -510,27 +495,47 @@ export const formatProposalTransactionDetailsToUpdate = (details: ProposalTransa
   });
 };
 
-const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
-  const filter = useMemo(
-    () => ({
-      ...proposalCreatedFilter,
-      ...(fromBlock ? { fromBlock } : {}),
-    }),
-    [fromBlock],
-  );
-  const useLogsResult = useLogs(!skip ? filter : undefined);
+export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride?: number) {
+  const publicClient = usePublicClient(); // wagmi v2 public client :contentReference[oaicite:0]{index=0}
+  const chainId = useChainId();
 
+  const proposalCreatedEvent = parseAbiItem(
+    'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
+  );
+
+  // pick the right starting block
+  const fromBlock =
+    fromBlockOverride != null ? BigInt(fromBlockOverride) : chainId === mainnet.id ? 12985453n : 0n;
+
+  const { data: logs } = useReactQuery({
+    queryKey: ['proposalCreatedLogs', fromBlock],
+    queryFn: () =>
+      publicClient.getLogs({
+        address: nounsGovernorAddress[chainId],
+        event: proposalCreatedEvent,
+        fromBlock,
+      }),
+    enabled: !skip,
+  });
+
+  // decode and massage the results
   return useMemo(() => {
-    return useLogsResult?.logs?.map(log => {
-      const { args: parsed } = abi.parseLog(log);
+    if (!logs) return [];
+    return logs.map(log => {
+      const parsed = decodeEventLog({
+        abi: nounsGovernorAbi,
+        eventName: 'ProposalCreated',
+        data: log.data,
+        topics: log.topics,
+      });
       return {
-        description: parsed.description,
+        description: parsed.args.description,
         transactionHash: log.transactionHash,
-        details: formatProposalTransactionDetails(parsed),
+        details: formatProposalTransactionDetails(parsed.args),
       };
     });
-  }, [useLogsResult]);
-};
+  }, [logs]);
+}
 
 const getProposalState = (
   blockNumber: number | undefined,
