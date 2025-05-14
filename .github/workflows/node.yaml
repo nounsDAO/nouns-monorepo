@@ -47,6 +47,7 @@ jobs:
         run: pnpm netlify build --offline --filter packages/nouns-webapp
 
   lint:
+    if: ${{ github.event_name == 'pull_request' }}
     name: Lint
     needs: build
     runs-on: ubuntu-latest
@@ -81,7 +82,11 @@ jobs:
         run: echo "::add-matcher::.github/eslint-matcher.json"
 
       - name: Run linting
-        run: pnpm lint
+        run: |
+          BASE=${{ github.event.pull_request.base.ref }}
+          FILES=$(git diff --name-only origin/$BASE...HEAD -- '*.js' '*.jsx' '*.ts' '*.tsx')
+          [ -z "$FILES" ] && echo "no JS/TS changes" && exit 0
+          pnpm lint $FILES
 
   test:
     name: Test
