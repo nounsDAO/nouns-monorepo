@@ -191,7 +191,7 @@ const CandidatePage = () => {
             <strong>Note: </strong>
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
-          {candidate.data?.matchingProposalIds[0] && (
+          {candidate.data?.matchingProposalIds?.[0] && (
             <Link to={`/vote/${candidate.data?.matchingProposalIds[0]}`}>
               View the proposal here
             </Link>
@@ -206,7 +206,7 @@ const CandidatePage = () => {
             proposer={candidate.data.proposer}
             versionsCount={candidate.data.versionsCount}
             createdTransactionHash={candidate.data.createdTransactionHash}
-            lastUpdatedTimestamp={candidate.data.lastUpdatedTimestamp}
+            lastUpdatedTimestamp={Number(candidate.data.lastUpdatedTimestamp)}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             isUpdateToProposal={isUpdateToProposal}
