@@ -16,7 +16,7 @@ jobs:
     name: CI Pipeline
     runs-on: ubuntu-latest
     concurrency:
-      group: ci-pipeline-${{ github.ref }}
+      group: ci-pipeline-${{ github.ref }}-node-${{ matrix.node-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
