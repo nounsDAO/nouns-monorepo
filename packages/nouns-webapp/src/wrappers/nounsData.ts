@@ -318,8 +318,28 @@ export const useCandidateProposalVersions = (id: string) => {
     proposalCandidate: Maybe<GraphQLProposalCandidate>;
   }>(candidateProposalVersionsQuery(id));
 
+  const candidateVersions = parseSubgraphCandidateVersions(data?.proposalCandidate || undefined);
   const versions: ProposalCandidateVersions | undefined = data?.proposalCandidate
-    ? parseSubgraphCandidateVersions(data?.proposalCandidate)
+    ? {
+        ...candidateVersions,
+        id: candidateVersions?.id || '',
+        isProposal: false,
+        requiredVotes: 0,
+        proposerVotes: 0,
+        voteCount: 0,
+        matchingProposalIds: [],
+        title: candidateVersions?.title || '',
+        description: candidateVersions?.description || '',
+        versions: candidateVersions?.versions || [],
+        slug: candidateVersions?.slug || '',
+        proposer: (data.proposalCandidate.proposer || '') as `0x${string}`,
+        canceled: !!candidateVersions?.canceled,
+        versionsCount: candidateVersions?.versionsCount || 0,
+        lastUpdatedTimestamp: candidateVersions?.lastUpdatedTimestamp
+          ? Number(candidateVersions.lastUpdatedTimestamp)
+          : 0,
+        createdTransactionHash: data.proposalCandidate.createdTransactionHash || '',
+      }
     : undefined;
 
   return { loading, data: versions, error };
@@ -668,7 +688,7 @@ const parseSubgraphCandidateVersions = (candidate: GraphQLProposalCandidate | un
       title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
       description: description ?? 'No description.',
       details,
-      createdAt: version.createdTimestamp,
+      createdAt: Number(version.createdTimestamp),
       updateMessage: version.updateMessage,
       versionNumber: candidate.versions.length - i,
     };
