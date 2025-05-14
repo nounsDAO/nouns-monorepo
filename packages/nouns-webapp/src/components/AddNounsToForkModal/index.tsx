@@ -303,16 +303,14 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
               <option selected={true} disabled={true}>
                 Select proposal(s)
               </option>
-              {proposalsList.map(item => (
-                <>{item}</>
-              ))}
+              {proposalsList?.map(item => <>{item}</>)}
             </FormSelect>
           </div>
         </InputGroup>
       </div>
       <div className={classes.selectedProposals}>
         {selectedProposals.map((proposalId, i) => {
-          const prop = proposals.find(proposal => proposal?.id && +proposal.id === proposalId);
+          const prop = proposals?.find(proposal => proposal?.id && +proposal.id === proposalId);
           return (
             <div className={classes.selectedProposal} key={i}>
               <span>
