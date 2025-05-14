@@ -125,7 +125,7 @@ const SelectSponsorsToPropose = (props: Props) => {
           break;
       }
     },
-    [props],
+    [props, setSelectedSignatures],
   );
 
   useEffect(() => {
@@ -284,7 +284,7 @@ const SelectSponsorsToPropose = (props: Props) => {
                 {proposeBySigsState.transaction && <img src={link} width={16} alt="link symbol" />}
               </a>
               <br />
-              {props.candidate.matchingProposalIds[0] && (
+              {props.candidate.matchingProposalIds && props.candidate.matchingProposalIds[0] && (
                 <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>
                   View the proposal
                 </Link>

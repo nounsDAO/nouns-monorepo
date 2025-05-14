@@ -90,7 +90,7 @@ const GovernancePage = () => {
         </Col>
       </Section>
 
-      <Proposals proposals={proposals} nounsRequired={nounsRequired} />
+      <Proposals proposals={proposals || []} nounsRequired={nounsRequired} />
     </>
   );
 };

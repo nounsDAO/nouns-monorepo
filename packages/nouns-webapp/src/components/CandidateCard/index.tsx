@@ -70,7 +70,9 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
               <Trans>sponsored votes</Trans>
             </span>
           </div>
-          <p className={classes.timestamp}>{relativeTimestamp(candidate.lastUpdatedTimestamp)}</p>
+          <p className={classes.timestamp}>
+            {relativeTimestamp(Number(candidate.lastUpdatedTimestamp))}
+          </p>
         </div>
       </div>
     </Link>
