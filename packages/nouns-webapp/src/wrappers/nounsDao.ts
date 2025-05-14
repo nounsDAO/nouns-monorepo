@@ -11,7 +11,7 @@ import type {
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
+import { filter, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
 import {
   AbiParameter,
   decodeAbiParameters,
@@ -134,12 +134,12 @@ export interface PartialProposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
-  startBlock: number;
-  endBlock: number;
+  startBlock: bigint;
+  endBlock: bigint;
   eta: Date | undefined;
   quorumVotes: number;
-  objectionPeriodEndBlock: number;
-  updatePeriodEndBlock: number;
+  objectionPeriodEndBlock: bigint;
+  updatePeriodEndBlock: bigint;
 }
 
 export interface Proposal extends PartialProposal {
@@ -211,7 +211,7 @@ export interface ProposalSubgraphEntity
 }
 
 interface PartialProposalData {
-  data: PartialProposal[];
+  data: PartialProposal[] | undefined;
   error?: Error;
   loading: boolean;
 }
@@ -596,20 +596,21 @@ const getProposalState = (
 };
 
 const parsePartialSubgraphProposal = (
-  proposal: GraphQLProposal,
-  blockNumber: number | undefined,
+  proposal: GraphQLProposal | undefined,
+  blockNumber: bigint | number | undefined,
   timestamp: number | undefined,
   isDaoGteV3?: boolean,
-) => {
-  if (!proposal) {
-    return;
+): PartialProposal | undefined => {
+  if (isNullish(proposal)) {
+    return undefined;
   }
+
   const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
     status: getProposalState(
-      blockNumber,
+      Number(blockNumber),
       new Date((timestamp ?? 0) * 1000),
       proposal,
       isDaoGteV3,
@@ -618,11 +619,12 @@ const parsePartialSubgraphProposal = (
     startBlock: BigInt(proposal.startBlock),
     endBlock: BigInt(proposal.endBlock),
     updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock ?? 0),
-    forCount: BigInt(proposal.forVotes),
-    againstCount: BigInt(proposal.againstVotes),
-    abstainCount: BigInt(proposal.abstainVotes),
-    quorumVotes: BigInt(proposal?.quorumVotes ?? 0),
+    forCount: Number(proposal.forVotes),
+    againstCount: Number(proposal.againstVotes),
+    abstainCount: Number(proposal.abstainVotes),
+    quorumVotes: Number(proposal?.quorumVotes ?? 0),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    objectionPeriodEndBlock: 0n,
   };
 };
 
@@ -696,9 +698,13 @@ export const useAllProposalsViaSubgraph = (): PartialProposalData => {
   const isDaoGteV3 = useIsDaoGteV3();
   const { data: blockNumber } = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
-  const proposals = map(data?.proposals ?? [], proposal => {
-    return parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3);
-  });
+  const proposals = pipe(
+    data?.proposals ?? [],
+    map(proposal => {
+      return parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3);
+    }),
+    filter((x): x is PartialProposal => x !== undefined),
+  );
 
   return {
     loading,
