@@ -258,7 +258,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
 
   if (candidatesData) {
     candidatesData.sort((a, b) => {
-      return Number(a.lastUpdatedTimestamp) - Number(b.lastUpdatedTimestamp);
+      return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
     });
   }
   return { loading, data: candidatesData, error };
@@ -293,11 +293,14 @@ export const useCandidateProposal = (
     BigInt(blockNumber ?? 0),
   );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
-  const parsedData =
+
+  const candidate = data?.proposalCandidate ?? undefined;
+
+  const parsedData: ProposalCandidate =
     proposerDelegates.data &&
     data?.proposalCandidate &&
     parseSubgraphCandidate(
-      data.proposalCandidate,
+      candidate,
       proposerNounVotes,
       threshold,
       timestampNow,
@@ -306,6 +309,7 @@ export const useCandidateProposal = (
       signersDelegateSnapshot.data,
       updatableProposalIds.data,
     );
+
   return { loading, data: parsedData, error, refetch };
 };
 
@@ -562,7 +566,7 @@ export const useUpdateProposalBySigs = () => {
 };
 
 const parseSubgraphCandidate = (
-  candidate: GraphQLProposalCandidate,
+  candidate: GraphQLProposalCandidate | undefined,
   proposerVotes: number,
   threshold: number,
   timestamp: number,
@@ -571,6 +575,10 @@ const parseSubgraphCandidate = (
   delegateSnapshot?: Delegates,
   updatableProposalIds?: number[],
 ) => {
+  if (!candidate) {
+    return;
+  }
+
   const description = candidate.latestVersion.content.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^["']|["']$)/g, '');
