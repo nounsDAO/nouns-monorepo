@@ -18,12 +18,7 @@ import Section from '@/layout/Section';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/isMobile';
 import { isProposalUpdatable } from '@/utils/proposals';
-import {
-  PartialProposal,
-  ProposalState,
-  useIsDaoGteV3,
-  useProposalThreshold,
-} from '@/wrappers/nounsDao';
+import { PartialProposal, ProposalState, useIsDaoGteV3, useProposalThreshold } from '@/wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
 import CandidateCard from '@/components/CandidateCard';
@@ -37,14 +32,14 @@ dayjs.extend(relativeTime);
 
 const getCountdownCopy = (
   proposal: PartialProposal,
-  currentBlock: number,
+  currentBlock: bigint,
   locale: SupportedLocale,
 ) => {
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.startBlock - currentBlock),
           'seconds',
         )
       : undefined;
@@ -52,7 +47,7 @@ const getCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.endBlock - currentBlock),
           'seconds',
         )
       : undefined;
@@ -272,7 +267,7 @@ const Proposals = ({
                             <ClockIcon height={16} width={16} />
                           </span>{' '}
                           <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, Number(blockNumber) || 0, activeLocale)}
+                            {getCountdownCopy(p, blockNumber ?? 0n, activeLocale)}
                           </span>
                         </div>
                       </div>
@@ -337,11 +332,7 @@ const Proposals = ({
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
-                          isProposalUpdatable(
-                            prop?.status,
-                            prop?.updatePeriodEndBlock,
-                            Number(blockNumber),
-                          )
+                          isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
                         );
                         if (!isOriginalPropUpdatable) return null;
                       }
