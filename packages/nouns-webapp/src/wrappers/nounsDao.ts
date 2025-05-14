@@ -801,40 +801,40 @@ export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined =>
 };
 
 export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
-  const proposalVersions: ProposalVersion[] = useQuery(proposalVersionsQuery(id)).data
-    ?.proposalVersions;
-  const sortedProposalVersions =
-    proposalVersions &&
-    [...proposalVersions].sort((a: ProposalVersion, b: ProposalVersion) =>
-      a.createdAt > b.createdAt ? 1 : -1,
-    );
-  const sortedNumberedVersions = sortedProposalVersions?.map(
-    (proposalVersion: ProposalVersion, i: number) => {
-      const details: ProposalTransactionDetails = {
-        targets: proposalVersion.targets,
-        values: proposalVersion.values,
-        signatures: proposalVersion.signatures,
-        calldatas: proposalVersion.calldatas,
-        encodedProposalHash: '',
-      };
-      return {
-        id: proposalVersion.id,
-        versionNumber: i + 1,
-        createdAt: proposalVersion.createdAt,
-        updateMessage: proposalVersion.updateMessage,
-        description: proposalVersion.description,
-        targets: proposalVersion.targets,
-        values: proposalVersion.values,
-        signatures: proposalVersion.signatures,
-        calldatas: proposalVersion.calldatas,
-        title: proposalVersion.title,
-        details: formatProposalTransactionDetails(details),
-        proposal: {
-          id: proposalVersion.proposal.id,
-        },
-      };
-    },
+  const { data } = useQuery<{
+    proposalVersions: Maybe<GraphQLProposalVersion[]>;
+  }>(proposalVersionsQuery(id));
+
+  const sortedProposalVersions = sort(data?.proposalVersions ?? [], (a, b) =>
+    a.createdAt > b.createdAt ? 1 : -1,
   );
+
+  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion, i: number) => {
+    const details: ProposalTransactionDetails = {
+      targets: map(proposalVersion.targets ?? [], t => t as Address),
+      values: map(proposalVersion.values ?? [], v => BigInt(v)),
+      signatures: map(proposalVersion.signatures ?? [], s => s),
+      calldatas: map(proposalVersion.calldatas ?? [], t => t as Hex),
+      encodedProposalHash: '' as Hash,
+    };
+
+    return {
+      id: proposalVersion.id,
+      versionNumber: i + 1,
+      createdAt: BigInt(proposalVersion.createdAt),
+      updateMessage: proposalVersion.updateMessage,
+      description: proposalVersion.description,
+      targets: proposalVersion.targets,
+      values: proposalVersion.values,
+      signatures: proposalVersion.signatures,
+      calldatas: proposalVersion.calldatas,
+      title: proposalVersion.title,
+      details: formatProposalTransactionDetails(details),
+      proposal: {
+        id: proposalVersion.proposal.id,
+      },
+    };
+  });
 
   return sortedNumberedVersions;
 };
