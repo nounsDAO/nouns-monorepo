@@ -118,7 +118,7 @@ interface ProposalCallResult {
 export interface ProposalDetail {
   target: Address;
   value?: bigint;
-  functionSig: string;
+  functionSig?: string;
   callData: Hex;
 }
 
@@ -426,9 +426,9 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
-export const concatSelectorToCalldata = (signature: string, callData: string) => {
+export const concatSelectorToCalldata = (signature: string, callData: Hex): Hex => {
   if (signature) {
-    return `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}`;
+    return `0x${keccak256(stringToBytes(signature)).substring(2, 10)}${callData.substring(2)}` as Hex;
   }
   return callData;
 };
@@ -443,14 +443,14 @@ const determineCallData = (types: string | undefined, value: bigint | undefined)
   return '';
 };
 
-export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
-  return details?.targets?.map((target: string, i: number) => {
+export const formatProposalTransactionDetails = (details: ProposalTransactionDetails) => {
+  return details?.targets?.map((target: Address, i: number) => {
     const signature: string = details.signatures[i];
     const value = BigInt(
       // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
+      (details as ProposalTransactionDetails).values?.[i] ?? details?.[3]?.[i] ?? 0,
     );
-    const callData = details.calldatas[i];
+    const callData = details.calldatas[i] as Hex;
 
     // Split at first occurrence of '('
     const [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
@@ -460,46 +460,45 @@ export const formatProposalTransactionDetails = (details: ProposalTransactionDet
         return {
           target,
           callData: concatSelectorToCalldata(signature, callData),
-          value: value > 0n ? `{ value: ${formatEther(value)} ETH } ` : '',
+          value,
         };
       }
 
       return {
         target,
         functionSig: name === '' ? 'transfer' : name == undefined ? 'unknown' : name,
-        callData: determineCallData(types, value),
+        callData: determineCallData(types, value) as Hex,
       };
     }
 
     try {
       // Split using comma as separator, unless comma is between parentheses (tuple).
-      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
+      const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
+      const decoded = decodeAbiParameters(abiParams, callData as Hex);
       return {
         target,
         functionSig: name,
-        callData: decoded.join(),
-        value: value > 0n ? `{ value: ${formatEther(value)} ETH }` : '',
+        callData: decoded.join() as Hex,
+        value,
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
       console.error('Failed to decode calldata:', error);
       return {
         target,
-        callData: concatSelectorToCalldata(signature, callData),
-        value: value > 0n ? `{ value: ${formatEther(value)} ETH } ` : '',
+        callData: concatSelectorToCalldata(signature, callData) as Hex,
+        value,
       };
     }
   });
 };
 
-export const formatProposalTransactionDetailsToUpdate = (
-  details: ProposalTransactionDetails | Result,
-) => {
+export const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails) => {
   return details?.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = BigInt(
       // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i],
+      (details as ProposalTransactionDetails).values?.[i] ?? details?.[3]?.[i],
     );
     const callData = details.calldatas[i];
     return {
@@ -536,11 +535,14 @@ const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
 const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
-  proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
+  proposal: GraphQLProposal,
   isDaoGteV3?: boolean,
   onTimelockV1?: boolean,
 ) => {
-  const status = ProposalState[proposal.status];
+  const status = isNonNullish(proposal.status)
+    ? ProposalState[proposal.status]
+    : ProposalState.UNDETERMINED;
+
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
@@ -548,31 +550,34 @@ const getProposalState = (
     if (
       isDaoGteV3 &&
       proposal.updatePeriodEndBlock &&
-      blockNumber <= parseInt(proposal.updatePeriodEndBlock)
+      blockNumber <= BigInt(proposal.updatePeriodEndBlock)
     ) {
       return ProposalState.UPDATABLE;
     }
 
-    if (blockNumber <= parseInt(proposal.startBlock)) {
+    if (blockNumber <= BigInt(proposal.startBlock)) {
       return ProposalState.PENDING;
     }
 
     if (
       isDaoGteV3 &&
-      blockNumber > +proposal.endBlock &&
-      parseInt(proposal.objectionPeriodEndBlock) > 0 &&
-      blockNumber <= parseInt(proposal.objectionPeriodEndBlock)
+      blockNumber > BigInt(proposal.endBlock) &&
+      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
+      blockNumber <= BigInt(proposal.objectionPeriodEndBlock)
     ) {
       return ProposalState.OBJECTION_PERIOD;
     }
 
     // if past endblock, but onchain status hasn't been changed
     if (
-      blockNumber > parseInt(proposal.endBlock) &&
-      blockNumber > parseInt(proposal.objectionPeriodEndBlock)
+      blockNumber > BigInt(proposal.endBlock) &&
+      blockNumber > BigInt(proposal.objectionPeriodEndBlock)
     ) {
       const forVotes = BigInt(proposal.forVotes);
-      if (forVotes <= BigInt(proposal.againstVotes) || forVotes < BigInt(proposal.quorumVotes)) {
+      if (
+        forVotes <= BigInt(proposal.againstVotes) ||
+        forVotes < BigInt(proposal.quorumVotes ?? 0)
+      ) {
         return ProposalState.DEFEATED;
       }
       if (!proposal.executionETA) {
@@ -589,7 +594,7 @@ const getProposalState = (
     }
     // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
     const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
-    if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
+    if (blockTimestamp.getTime() / 1_000 >= BigInt(proposal.executionETA) + BigInt(GRACE_PERIOD)) {
       return ProposalState.EXPIRED;
     }
     return status;
@@ -599,7 +604,7 @@ const getProposalState = (
 };
 
 const parsePartialSubgraphProposal = (
-  proposal: Maybe<GraphQLProposal>,
+  proposal: GraphQLProposal,
   blockNumber: number | undefined,
   timestamp: number | undefined,
   isDaoGteV3?: boolean,
@@ -630,26 +635,27 @@ const parsePartialSubgraphProposal = (
 };
 
 const parseSubgraphProposal = (
-  proposal: ProposalSubgraphEntity | undefined,
+  proposal: GraphQLProposal | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
   toUpdate?: boolean,
   isDaoGteV3?: boolean,
 ) => {
-  if (!proposal) {
+  if (isNullish(proposal)) {
     return;
   }
+
   const description = addMissingSchemes(
     replaceInvalidDropboxImageLinks(
       proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
     ),
   );
   const transactionDetails: ProposalTransactionDetails = {
-    targets: proposal.targets,
-    values: proposal.values,
-    signatures: proposal.signatures,
-    calldatas: proposal.calldatas,
-    encodedProposalHash: proposal.encodedProposalHash,
+    targets: map(proposal.targets ?? [], t => t as Address),
+    values: map(proposal.values ?? [], v => BigInt(v)),
+    signatures: map(proposal.signatures ?? [], s => s),
+    calldatas: map(proposal.calldatas ?? [], t => t as Hex),
+    encodedProposalHash: '' as Hash,
   };
 
   let details;
@@ -663,7 +669,7 @@ const parseSubgraphProposal = (
     id: proposal.id,
     title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
     description: description ?? 'No description.',
-    proposer: proposal.proposer?.id,
+    proposer: proposal.proposer?.id as Address,
     status: getProposalState(
       blockNumber,
       new Date((timestamp ?? 0) * 1000),
@@ -671,39 +677,41 @@ const parseSubgraphProposal = (
       isDaoGteV3,
       onTimelockV1,
     ),
-    proposalThreshold: parseInt(proposal.proposalThreshold),
-    quorumVotes: parseInt(proposal.quorumVotes),
-    forCount: parseInt(proposal.forVotes),
-    againstCount: parseInt(proposal.againstVotes),
-    abstainCount: parseInt(proposal.abstainVotes),
-    createdBlock: parseInt(proposal.createdBlock),
-    startBlock: parseInt(proposal.startBlock),
-    endBlock: parseInt(proposal.endBlock),
-    createdTimestamp: parseInt(proposal.createdTimestamp),
+    proposalThreshold: BigInt(proposal.proposalThreshold ?? 0),
+    quorumVotes: BigInt(proposal.quorumVotes ?? 0),
+    forCount: BigInt(proposal.forVotes),
+    againstCount: BigInt(proposal.againstVotes),
+    abstainCount: BigInt(proposal.abstainVotes),
+    createdBlock: BigInt(proposal.createdBlock),
+    startBlock: BigInt(proposal.startBlock),
+    endBlock: BigInt(proposal.endBlock),
+    createdTimestamp: BigInt(proposal.createdTimestamp),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: details,
     transactionHash: proposal.createdTransactionHash,
-    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
-    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
+    objectionPeriodEndBlock: BigInt(proposal.objectionPeriodEndBlock),
+    updatePeriodEndBlock: BigInt(proposal.updatePeriodEndBlock ?? 0),
     signers: proposal.signers,
     onTimelockV1: onTimelockV1,
-    voteSnapshotBlock: parseInt(proposal.voteSnapshotBlock),
+    voteSnapshotBlock: BigInt(proposal.voteSnapshotBlock),
   };
 };
 
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
-  const { loading, data, error } = useQuery(partialProposalsQuery());
+  const { loading, data, error } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(
+    partialProposalsQuery(),
+  );
   const isDaoGteV3 = useIsDaoGteV3();
   const { data: blockNumber } = useBlockNumber();
-  const timestamp = useBlockTimestamp(Number(blockNumber));
-  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
-    parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3),
-  );
+  const timestamp = useBlockTimestamp(blockNumber);
+  const proposals = map(data?.proposals ?? [], proposal => {
+    return parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3);
+  });
 
   return {
     loading,
     error,
-    data: proposals ?? [],
+    data: proposals,
   };
 };
 
@@ -765,15 +773,15 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           id: proposal?.id.toString(),
           title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
-          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
-          endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
-          objectionPeriodEndBlock: parseInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
-          forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
-          againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
-          quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
+          startBlock: BigInt(proposal?.startBlock?.toString() ?? ''),
+          endBlock: BigInt(proposal?.endBlock?.toString() ?? ''),
+          objectionPeriodEndBlock: BigInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
+          forCount: BigInt(proposal?.forVotes?.toString() ?? '0'),
+          againstCount: BigInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: BigInt(proposal?.abstainVotes?.toString() ?? '0'),
+          quorumVotes: BigInt(proposal?.quorumVotes?.toString() ?? '0'),
           eta: proposal?.eta ? new Date(Number(proposal?.eta) * 1000) : undefined,
-          updatePeriodEndBlock: parseInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
+          updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
         };
       }),
       loading: loadingProposals || loadingStates,
@@ -789,9 +797,12 @@ export const useAllProposals = (): PartialProposalData => {
 
 export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
   const { data: blockNumber } = useBlockNumber();
-  const timestamp = useBlockTimestamp(Number(blockNumber));
+  const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
-  const proposal = useQuery(proposalQuery(id)).data?.proposal;
+
+  const { data } = useQuery<{ proposal: Maybe<GraphQLProposal> }>(proposalQuery(id));
+  const proposal = data?.proposal ?? undefined;
+
   return parseSubgraphProposal(proposal, Number(blockNumber), timestamp, toUpdate, isDaoGteV3);
 };
 
@@ -830,10 +841,10 @@ export const useProposalVersions = (id: string | number): ProposalVersion[] | un
       createdAt: BigInt(proposalVersion.createdAt),
       updateMessage: proposalVersion.updateMessage,
       description: proposalVersion.description,
-      targets: proposalVersion.targets,
-      values: proposalVersion.values,
-      signatures: proposalVersion.signatures,
-      calldatas: proposalVersion.calldatas,
+      targets: map(proposalVersion.targets ?? [], t => t as Address),
+      values: map(proposalVersion.values ?? [], v => BigInt(v)),
+      signatures: map(proposalVersion.signatures ?? [], s => s),
+      calldatas: map(proposalVersion.calldatas ?? [], t => t as Hex),
       title: proposalVersion.title,
       details: formatProposalTransactionDetails(details),
       proposal: {
@@ -1247,21 +1258,19 @@ const eventsWithforkCycleEvents = (events: EscrowEvent[], forkDetails: Fork) => 
 };
 
 export const useForkJoins = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(forkJoinsQuery(forkId), {
-    pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { forkJoins: EscrowDeposit[] };
-    error: Error;
-    refetch: () => void;
-  };
+  const { loading, data, error, refetch } = useQuery<{ forkJoins: Maybe<GraphQLForkJoin[]> }>(
+    forkJoinsQuery(forkId),
+    {
+      pollInterval,
+    },
+  );
   const forkJoins = data?.forkJoins?.map(forkJoin => {
     const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
-      eventType: 'ForkJoin',
+      eventType: 'ForkJoin' as const,
       id: forkJoin.id,
       createdAt: forkJoin.createdAt,
-      owner: { id: forkJoin.owner.id },
+      owner: { id: forkJoin.owner.id as Address },
       fork: { id: forkId },
       reason: forkJoin.reason,
       tokenIDs: forkJoin.tokenIDs,
@@ -1269,10 +1278,18 @@ export const useForkJoins = (pollInterval: number, forkId: string) => {
     };
   });
 
+  const escrowDeposits: EscrowDeposit[] = map(forkJoins ?? [], forkJoin => {
+    return {
+      ...forkJoin,
+      reason: '',
+      proposalIDs: [],
+    };
+  });
+
   return {
     loading,
     error,
-    data: (forkJoins as EscrowDeposit[]) ?? [],
+    data: escrowDeposits,
     refetch,
   };
 };
@@ -1329,7 +1346,7 @@ export const useForkDetails = (pollInterval: number, id: string) => {
     data: forkData,
     error,
     refetch,
-  } = useQuery(forkDetailsQuery(id.toString()), {
+  } = useQuery<{ fork: Maybe<GraphQLFork> }>(forkDetailsQuery(id.toString()), {
     pollInterval: pollInterval,
   }) as { loading: boolean; data: { fork: ForkSubgraphEntity }; error: Error; refetch: () => void };
   const joined = forkData?.fork?.joinedNouns?.map(item => item.noun.id) ?? [];
@@ -1379,12 +1396,8 @@ export const useIsForkActive = () => {
     loading,
     data: forksData,
     error,
-  } = useQuery(isForkActiveQuery(timestamp)) as {
-    loading: boolean;
-    data: { forks: Fork[] };
-    error: Error;
-  };
-  const data = forksData?.forks.length > 0;
+  } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(isForkActiveQuery(timestamp));
+  const data = isTruthy(forksData?.forks?.length);
   return {
     loading,
     data,
@@ -1432,7 +1445,9 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
     loading,
     data: proposals,
     error,
-  } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(
+    activePendingUpdatableProposersQuery(1000, blockNumber),
+  ) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
@@ -1456,16 +1471,18 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
   };
 };
 
-export const useIsDaoGteV3 = (): boolean => {
+export function useIsDaoGteV3(): boolean {
   return true;
-};
+}
 
-export const useUpdatableProposalIds = (blockNumber: number) => {
+export function useUpdatableProposalIds(blockNumber: number) {
   const {
     loading,
     data: proposals,
     error,
-  } = useQuery(updatableProposalsQuery(1000, blockNumber)) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(
+    updatableProposalsQuery(1000, blockNumber),
+  ) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
@@ -1478,4 +1495,4 @@ export const useUpdatableProposalIds = (blockNumber: number) => {
     data,
     error,
   };
-};
+}
