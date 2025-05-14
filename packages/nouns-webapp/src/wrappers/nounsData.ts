@@ -1,7 +1,7 @@
 import type { Address, Hash, Hex } from '@/utils/types';
 
 import { useQuery } from '@apollo/client';
-import { filter, map, pipe, sort } from 'remeda';
+import { filter, isNonNullish, isNullish, map, pipe, sort } from 'remeda';
 
 import {
   useReadNounsDataCreateCandidateCost,
@@ -296,7 +296,7 @@ export const useCandidateProposal = (
 
   const candidate = data?.proposalCandidate ?? undefined;
 
-  const parsedData: ProposalCandidate =
+  const parsedData =
     proposerDelegates.data &&
     data?.proposalCandidate &&
     parseSubgraphCandidate(
@@ -319,7 +319,7 @@ export const useCandidateProposalVersions = (id: string) => {
   }>(candidateProposalVersionsQuery(id));
 
   const candidateVersions = parseSubgraphCandidateVersions(data?.proposalCandidate || undefined);
-  const versions: ProposalCandidateVersions | undefined = data?.proposalCandidate
+  const versions = data?.proposalCandidate
     ? {
         ...candidateVersions,
         id: candidateVersions?.id || '',
@@ -594,20 +594,22 @@ const parseSubgraphCandidate = (
   toUpdate?: boolean,
   delegateSnapshot?: Delegates,
   updatableProposalIds?: number[],
-) => {
-  if (!candidate) {
-    return;
+): ProposalCandidate | undefined => {
+  if (isNullish(candidate)) {
+    return undefined;
   }
 
-  const description = candidate.latestVersion.content.description
+  const latestVersion = candidate.latestVersion;
+
+  const description = latestVersion.content.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^["']|["']$)/g, '');
   const transactionDetails: ProposalTransactionDetails = {
-    targets: map(candidate.latestVersion.content.targets ?? [], t => t as Address),
-    values: map(candidate.latestVersion.content.values ?? [], v => BigInt(v)),
-    signatures: map(candidate.latestVersion.content.signatures ?? [], s => s),
-    calldatas: map(candidate.latestVersion.content.calldatas ?? [], t => t as Hex),
-    encodedProposalHash: candidate.latestVersion.content.encodedProposalHash as Hash,
+    targets: map(latestVersion.content.targets ?? [], t => t as Address),
+    values: map(latestVersion.content.values ?? [], v => BigInt(v)),
+    signatures: map(latestVersion.content.signatures ?? [], s => s),
+    calldatas: map(latestVersion.content.calldatas ?? [], t => t as Hex),
+    encodedProposalHash: latestVersion.content.encodedProposalHash as Hash,
   };
   let details;
   if (toUpdate) {
@@ -620,9 +622,9 @@ const parseSubgraphCandidate = (
     timestamp,
     delegateSnapshot,
     activePendingProposers,
-    candidate.latestVersion.content.contentSignatures,
-    candidate.latestVersion.content.proposalIdToUpdate
-      ? parseInt(candidate.latestVersion.content.proposalIdToUpdate)
+    latestVersion.content.contentSignatures,
+    latestVersion.content.proposalIdToUpdate
+      ? parseInt(latestVersion.content.proposalIdToUpdate)
       : undefined,
     updatableProposalIds,
   );
@@ -630,15 +632,19 @@ const parseSubgraphCandidate = (
   return {
     id: candidate.id,
     slug: candidate.slug,
-    proposer: candidate.proposer,
-    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    proposer: candidate.proposer as Address,
+    lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
-    createdTransactionHash: candidate.createdTransactionHash,
+    createdTransactionHash: candidate.createdTransactionHash as Hash,
     isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
-    proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
-    matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
+    matchingProposalIds: isNonNullish(latestVersion.content.matchingProposalIds)
+      ? map(latestVersion.content.matchingProposalIds, v => ({
+          id: Number(v),
+        }))
+      : undefined,
     requiredVotes: requiredVotes,
+    proposalIdToUpdate: Number(latestVersion.content.proposalIdToUpdate),
     neededVotes: requiredVotes,
     proposerVotes: proposerVotes,
     voteCount: voteCount,
@@ -647,21 +653,22 @@ const parseSubgraphCandidate = (
         title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
-        transactionHash: transactionDetails.encodedProposalHash,
+        transactionHash: transactionDetails.encodedProposalHash as Hash,
         contentSignatures: activeSigs,
-        targets: map(candidate.latestVersion.content.targets ?? [], v => v as Address),
-        values: map(candidate.latestVersion.content.values ?? [], v => BigInt(v)),
-        signatures: map(candidate.latestVersion.content.signatures ?? [], v => v),
-        calldatas: map(candidate.latestVersion.content.calldatas ?? [], v => v as Hex),
-        proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
+        targets: map(latestVersion.content.targets ?? [], v => v as Address),
+        values: map(latestVersion.content.values ?? [], v => BigInt(v)),
+        signatures: map(latestVersion.content.signatures ?? [], v => v),
+        calldatas: map(latestVersion.content.calldatas ?? [], v => v as Hex),
       },
     },
   };
 };
 
-const parseSubgraphCandidateVersions = (candidate: GraphQLProposalCandidate | undefined) => {
-  if (!candidate) {
-    return;
+const parseSubgraphCandidateVersions = (
+  candidate: GraphQLProposalCandidate | undefined,
+): ProposalCandidateVersions | undefined => {
+  if (isNullish(candidate)) {
+    return undefined;
   }
 
   const versionsList = map(candidate?.versions ?? [], version => version);
@@ -697,16 +704,20 @@ const parseSubgraphCandidateVersions = (candidate: GraphQLProposalCandidate | un
   return {
     id: candidate.id,
     slug: candidate.slug,
-    proposer: candidate.proposer,
-    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    proposer: candidate.proposer as Address,
+    lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
-    createdTransactionHash: candidate.createdTransactionHash,
+    createdTransactionHash: candidate.createdTransactionHash as Hash,
     title:
       pipe(candidate.latestVersion.content.description, extractTitle, removeMarkdownStyle) ??
       'Untitled',
     description: candidate.latestVersion.content.description ?? 'No description.',
     versions: versions,
+    isProposal: false,
+    requiredVotes: 0,
+    proposerVotes: 0,
+    voteCount: 0,
   };
 };
 
@@ -799,16 +810,18 @@ export interface ProposalCandidateInfo {
   id: string;
   slug: string;
   proposer: Address;
-  lastUpdatedTimestamp: number;
+  lastUpdatedTimestamp: bigint;
   canceled: boolean;
   versionsCount: number;
-  createdTransactionHash: string;
+  createdTransactionHash: Hash;
   isProposal: boolean;
   requiredVotes: number;
+  proposalIdToUpdate?: number;
   proposerVotes: number;
+  neededVotes?: number;
   voteCount: number;
-  matchingProposalIds: {
-    id: string;
+  matchingProposalIds?: {
+    id: number;
   }[];
 }
 
@@ -831,6 +844,7 @@ export interface ProposalCandidateVersion {
     signatures: string[];
     calldatas: Hex[];
     contentSignatures: CandidateSignature[];
+    transactionHash?: Hash;
   };
 }
 
@@ -839,7 +853,7 @@ export interface ProposalCandidate extends ProposalCandidateInfo {
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {
-  lastUpdatedTimestamp: number;
+  lastUpdatedTimestamp: bigint;
   latestVersion: {
     content: {
       title: string;

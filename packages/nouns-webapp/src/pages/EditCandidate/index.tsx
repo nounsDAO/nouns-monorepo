@@ -51,7 +51,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [currentBlock, setCurrentBlock] = useState<number>();
   const { account } = useEthers();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const { data:candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
+  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -241,7 +241,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       setProposalTransactions(
         transactions.map(txn => ({
           ...txn,
-          value: typeof txn.value === 'string' ? BigInt(txn.value) : txn.value,
+          value: txn.value,
+          signature: txn.signature || '',
         })),
       );
     }
@@ -265,7 +266,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
           `# ${titleValue}\n\n${bodyValue}`, // Description
           candidate?.slug, // Slug
-          candidate?.proposalIdToUpdate ? candidate?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
+          candidate?.proposalIdToUpdate ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
           commitMessage,
         ],
         value: hasVotes ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),

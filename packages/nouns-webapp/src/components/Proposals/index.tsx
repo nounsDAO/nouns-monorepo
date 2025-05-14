@@ -18,7 +18,12 @@ import Section from '@/layout/Section';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/isMobile';
 import { isProposalUpdatable } from '@/utils/proposals';
-import { PartialProposal, ProposalState, useIsDaoGteV3, useProposalThreshold } from '@/wrappers/nounsDao';
+import {
+  PartialProposal,
+  ProposalState,
+  useIsDaoGteV3,
+  useProposalThreshold,
+} from '@/wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
 import CandidateCard from '@/components/CandidateCard';
@@ -325,10 +330,8 @@ const Proposals = ({
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
-                      if (c && +c.version.content.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(
-                          p => p.id === c.version.content.proposalIdToUpdate,
-                        );
+                      if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
+                        const prop = proposals.find(p => p.id === c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
