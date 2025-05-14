@@ -9,7 +9,7 @@ on:
       - 'bugfix/*'
       - 'release/*'
       - 'hotfix/*'
-  pull_request:    # run on every PR
+  pull_request: # run on every PR
 
 jobs:
   ci-pipeline:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22.x]
+        node-version: [ 22.x, 24.x ]
 
     steps:
       - name: Checkout repository
