@@ -24,7 +24,7 @@ import {
   useIsDaoGteV3,
   useProposalThreshold,
 } from '@/wrappers/nounsDao';
-import { useCandidateProposals } from '@/wrappers/nounsData';
+import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
 import CandidateCard from '@/components/CandidateCard';
 import ProposalStatus from '@/components/ProposalStatus';
@@ -330,7 +330,7 @@ const Proposals = ({
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
-                      if (+c.version.content.proposalIdToUpdate > 0) {
+                      if (c && +c.version.content.proposalIdToUpdate > 0) {
                         const prop = proposals.find(
                           p => p.id === c.version.content.proposalIdToUpdate,
                         );
@@ -349,8 +349,8 @@ const Proposals = ({
                         <div key={i}>
                           <CandidateCard
                             latestProposal={proposals[proposals.length - 1]}
-                            candidate={c}
-                            key={c.id}
+                            candidate={c as unknown as ProposalCandidate}
+                            key={c?.id}
                             nounsRequired={threshold}
                             currentBlock={blockNumber ? blockNumber - 1n : 0n}
                           />
