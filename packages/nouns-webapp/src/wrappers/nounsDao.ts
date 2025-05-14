@@ -1348,21 +1348,29 @@ export const useForkDetails = (pollInterval: number, id: string) => {
 };
 
 export const useForks = (pollInterval?: number) => {
-  const {
-    loading,
-    data: forksData,
-    error,
-    refetch,
-  } = useQuery(forksQuery(), {
-    pollInterval: pollInterval || 0,
-  }) as { loading: boolean; data: { forks: Fork[] }; error: Error; refetch: () => void };
-  const data = forksData?.forks;
-  return {
-    loading,
-    data,
-    error,
-    refetch,
-  };
+  const { loading, data, error, refetch } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(
+    forksQuery(),
+    {
+      pollInterval: pollInterval || 0,
+    },
+  );
+
+  const forks: Fork[] = map(data?.forks ?? [], fork => {
+    const joined = fork?.joinedNouns?.map(item => item.noun.id) ?? [];
+    const escrowed = fork?.escrowedNouns?.map(item => item.noun.id) ?? [];
+    const addedNouns = [...escrowed, ...joined];
+    return {
+      ...fork,
+      addedNouns,
+      executed: fork.executed ?? null,
+      executedAt: fork.executedAt ?? null,
+      forkTreasury: fork.forkTreasury ?? null,
+      forkToken: fork.forkToken ?? null,
+      forkingPeriodEndTimestamp: fork.forkingPeriodEndTimestamp?.toString() ?? null,
+    };
+  });
+
+  return { loading, data: forks, error, refetch };
 };
 
 export const useIsForkActive = () => {
