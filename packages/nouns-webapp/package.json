@@ -41,7 +41,6 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@tanstack/react-query": "^5.75.5",
     "@testing-library/jest-dom": "^6.6.3",
-    "@usedapp/core": "npm:usedapp-core-fork",
     "@walletconnect/ethereum-provider": "^2.20.2",
     "@walletconnect/modal": "^2.4.5",
     "@web3-react/abstract-connector": "^6.0.7",
