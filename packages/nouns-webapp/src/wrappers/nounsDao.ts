@@ -495,7 +495,7 @@ export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride
     fromBlockOverride != null ? BigInt(fromBlockOverride) : chainId === mainnet.id ? 12985453n : 0n;
 
   const { data: logs } = useReactQuery({
-    queryKey: ['proposalCreatedLogs', fromBlock],
+    queryKey: ['proposalCreatedLogs', fromBlock.toString()],
     queryFn: () =>
       publicClient.getLogs({
         address: nounsGovernorAddress[chainId],
