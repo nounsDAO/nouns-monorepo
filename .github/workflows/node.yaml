@@ -51,6 +51,7 @@ jobs:
       - name: Lint changed files
         if: github.event_name == 'pull_request'
         run: |
+          echo "::add-matcher::.github/eslint-matcher.json"
           BASE=${{ github.event.pull_request.base.ref }}
           FILES=$(git diff --name-only origin/$BASE...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx')
           [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
