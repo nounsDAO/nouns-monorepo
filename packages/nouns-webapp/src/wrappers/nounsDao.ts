@@ -796,8 +796,14 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
 };
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
-  const proposals: ProposalTitle[] | undefined = useQuery(proposalTitlesQuery(ids)).data?.proposals;
-  return proposals;
+  const { data } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(proposalTitlesQuery(ids));
+
+  return (
+    data?.proposals?.map(proposal => ({
+      id: proposal.id,
+      title: proposal.title,
+    })) ?? undefined
+  );
 };
 
 export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
