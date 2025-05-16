@@ -209,7 +209,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           break;
       }
     },
-    [props],
+    [props, setSelectedNouns],
   );
 
   useEffect(() => {
