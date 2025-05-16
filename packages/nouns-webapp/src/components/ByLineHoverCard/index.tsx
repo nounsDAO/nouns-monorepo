@@ -37,7 +37,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
   const sortedNounIds = data.delegates[0].nounsRepresented
     .map((noun: { id: string }) => {
-      return parseInt(noun.id);
+      return Number(noun.id);
     })
     .sort((a: number, b: number) => {
       return a - b;

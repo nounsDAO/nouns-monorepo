@@ -105,7 +105,7 @@ const VoteModal = ({
   const voteModalContent = (
     <>
       <div className={classes.voteModalTitle}>
-        <Trans>Vote on Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>
+        <Trans>Vote on Prop {i18n.number(Number(proposalId || '0'))}</Trans>
       </div>
       <div className={classes.voteModalSubtitle}>
         {availableVotes === 1 ? (
@@ -122,7 +122,7 @@ const VoteModal = ({
         <div className={classes.transactionStatus}>
           <p>
             <Trans>
-              You've successfully voted on on prop {i18n.number(parseInt(proposalId || '0'))}
+              You've successfully voted on on prop {i18n.number(Number(proposalId || '0'))}
             </Trans>
           </p>
 

@@ -381,7 +381,7 @@ const Playground: React.FC = () => {
             <p className={classes.nounYearsFooter}>
               <Trans>
                 You've generated{' '}
-                {i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
+                {i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
                 worth of Nouns
               </Trans>
             </p>

@@ -90,7 +90,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
       body.style.top = '';
       document.documentElement.style.scrollBehavior = 'auto';
       window.scrollTo({
-        top: parseInt(scrollY),
+        top: Number(scrollY),
         behavior: 'auto',
       });
     }

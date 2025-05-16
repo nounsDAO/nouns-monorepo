@@ -167,11 +167,11 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             {delegateView ? (
               <DelegateGroupedNounImageVoteTable
                 filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
-                propId={parseInt(proposal.id || '0')}
+                propId={Number(proposal.id || '0')}
                 proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
-              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              <NounImageVoteTable nounIds={nounIds} propId={Number(proposal.id || '0')} />
             )}
           </Row>
         </Card.Body>

@@ -19,7 +19,7 @@ interface MobileNounWinEventProps {
 const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderNoun = Number(event.nounId as string) % 10 === 0;
   return (
     <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}

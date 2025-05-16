@@ -39,7 +39,7 @@ const CandidateHistoryPage = () => {
 
   useEffect(() => {
     if (versionNumber) {
-      setActiveVersion(parseInt(versionNumber));
+      setActiveVersion(Number(versionNumber));
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);

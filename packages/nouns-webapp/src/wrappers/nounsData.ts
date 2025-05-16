@@ -624,7 +624,7 @@ const parseSubgraphCandidate = (
     activePendingProposers,
     latestVersion.content.contentSignatures,
     latestVersion.content.proposalIdToUpdate
-      ? parseInt(latestVersion.content.proposalIdToUpdate)
+      ? Number(latestVersion.content.proposalIdToUpdate)
       : undefined,
     updatableProposalIds,
   );

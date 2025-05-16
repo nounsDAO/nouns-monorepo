@@ -50,7 +50,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
       const scrollY = document.body.style.top;
       root.style.position = '';
       root.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      window.scrollTo(0, Number(scrollY || '0') * -1);
     }
   }, [show, root]);
 

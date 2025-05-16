@@ -44,7 +44,7 @@ const ProposalHistory = () => {
 
   useEffect(() => {
     if (versionNumber) {
-      setActiveVersion(parseInt(versionNumber));
+      setActiveVersion(Number(versionNumber));
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);
@@ -88,7 +88,7 @@ const ProposalHistory = () => {
               <span>
                 <div className="d-flex">
                   <div>
-                    <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                    <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
                   </div>
                   <div>
                     <ProposalStatus

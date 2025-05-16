@@ -157,7 +157,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             <span>
               <div className="d-flex">
                 <div>
-                  <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                  <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
                 </div>
                 <div>
                   <ProposalStatus status={proposal?.status} className={classes.proposalStatus} />

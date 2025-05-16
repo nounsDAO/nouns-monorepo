@@ -46,7 +46,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
             id="delegateVoteHoverCard"
           >
             <TightStackedCircleNouns
-              nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
+              nounIds={data.nounsRepresented.map((nounId: string) => Number(nounId))}
             />
           </HoverCard>
         );

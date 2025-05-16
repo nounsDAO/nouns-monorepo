@@ -1396,7 +1396,7 @@ export const useForks = (pollInterval?: number) => {
 };
 
 export const useIsForkActive = () => {
-  const timestamp = parseInt((new Date().getTime() / 1000).toFixed(0));
+  const timestamp = Number((new Date().getTime() / 1000).toFixed(0));
   const {
     loading,
     data: forksData,

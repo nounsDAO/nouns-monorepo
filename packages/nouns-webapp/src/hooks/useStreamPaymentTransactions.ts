@@ -53,7 +53,7 @@ export default function useStreamPaymentTransactions({
       address: nounsStreamFactoryAddress[chainId],
       signature: fundStreamFunction,
       value: '0',
-      usdcValue: isUSDC ? parseInt(human2ContractUSDCFormat(amount)) : 0,
+      usdcValue: isUSDC ? Number(human2ContractUSDCFormat(amount)) : 0,
       decodedCalldata: JSON.stringify([
         state.address,
         isUSDC ? human2ContractUSDCFormat(amount) : parseEther(amount.toString()).toString(),
@@ -109,7 +109,7 @@ export default function useStreamPaymentTransactions({
     actions.push({
       address: nounsPayerAddress[chainId],
       value: '0',
-      usdcValue: parseInt(human2ContractUSDCFormat(amount)),
+      usdcValue: Number(human2ContractUSDCFormat(amount)),
       signature: signature,
       decodedCalldata: JSON.stringify([predictedAddress, human2ContractUSDCFormat(amount)]),
       calldata: encodeFunctionData({

@@ -288,7 +288,7 @@ const Proposals = ({
                       <div className={classes.proposalInfoWrapper}>
                         <span className={classes.proposalTitle}>
                           <span className={classes.proposalId}>
-                            {i18n.number(parseInt(p.id || '0'))}
+                            {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
                           <span>{p.title}</span>
                         </span>

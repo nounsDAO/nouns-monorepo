@@ -21,7 +21,7 @@ export const useReverseENSLookUp = (address: string) => {
       const maybeCachedENSResultRaw = localStorage.getItem(ensCacheKey(address));
       if (maybeCachedENSResultRaw) {
         const maybeCachedENSResult = JSON.parse(maybeCachedENSResultRaw);
-        if (parseInt(maybeCachedENSResult.expires) > Date.now() / 1000) {
+        if (Number(maybeCachedENSResult.expires) > Date.now() / 1000) {
           setEns(maybeCachedENSResult.name);
         } else {
           localStorage.removeItem(ensCacheKey(address));

@@ -76,9 +76,9 @@ export function parseStreamCreationCallData(callData: string) {
 
   const streamAddress = callDataArray[6];
   const nonce = callDataArray[5];
-  const startTime = parseInt(callDataArray[3]);
-  const endTime = parseInt(callDataArray[4]);
-  const streamAmount = parseInt(callDataArray[1]);
+  const startTime = Number(callDataArray[3]);
+  const endTime = Number(callDataArray[4]);
+  const streamAmount = Number(callDataArray[1]);
   const recipient = callDataArray[0];
   const tokenAddress = callDataArray[2];
   return {

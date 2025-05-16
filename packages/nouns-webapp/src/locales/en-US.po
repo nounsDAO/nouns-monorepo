@@ -538,7 +538,7 @@ msgstr "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing
 msgid "Winning bid"
 msgstr "Winning bid"
 
-#. placeholder {0}: i18n.number(parseInt(proposal.id || '0'))
+#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 #: src/pages/ProposalHistory/index.tsx
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -656,7 +656,7 @@ msgstr "Expired"
 msgid "Error fetching Noun birthday"
 msgstr "Error fetching Noun birthday"
 
-#. placeholder {0}: i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
+#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr "You've generated {0} years worth of Nouns"
@@ -1091,7 +1091,7 @@ msgstr "CryptoPunks"
 msgid "Available to withdraw"
 msgstr "Available to withdraw"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
 msgstr "You've successfully voted on on prop {0}"
@@ -1574,7 +1574,7 @@ msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to
 msgid "Proposals cannot be executed during a forking period"
 msgstr "Proposals cannot be executed during a forking period"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
 msgstr "Vote on Prop {0}"

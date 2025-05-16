@@ -543,7 +543,7 @@ msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、No
 msgid "Winning bid"
 msgstr "落札"
 
-#. placeholder {0}: i18n.number(parseInt(proposal.id || '0'))
+#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 #: src/pages/ProposalHistory/index.tsx
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -661,7 +661,7 @@ msgstr "期限切れです"
 msgid "Error fetching Noun birthday"
 msgstr "Nounの誕生日を取得できませんでした"
 
-#. placeholder {0}: i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
+#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr "{0} 年分のナウンを生成しました"
@@ -1096,7 +1096,7 @@ msgstr "クリプトパンクス"
 msgid "Available to withdraw"
 msgstr ""
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
 msgstr "あなたは提案 {0} に投票することに成功しました。"
@@ -1579,7 +1579,7 @@ msgstr "投票できるのは {0} 以前に所有していた、または委任�
 msgid "Proposals cannot be executed during a forking period"
 msgstr ""
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"

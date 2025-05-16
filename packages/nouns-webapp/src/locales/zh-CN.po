@@ -538,7 +538,7 @@ msgstr "Nouns DAO 利用 {compoundGovLink} 的一个分叉，是 Nouns 生态系
 msgid "Winning bid"
 msgstr "最高出价"
 
-#. placeholder {0}: i18n.number(parseInt(proposal.id || '0'))
+#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 #: src/pages/ProposalHistory/index.tsx
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -656,7 +656,7 @@ msgstr "已过期"
 msgid "Error fetching Noun birthday"
 msgstr "获取 Noun 生日时出错"
 
-#. placeholder {0}: i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
+#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr "您已生成价值 {0} 年的 Nouns"
@@ -1096,7 +1096,7 @@ msgstr "CryptoPunks"
 msgid "Available to withdraw"
 msgstr "可提取"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
 msgstr "您已成功对提案 {0} 进行投票"
@@ -1583,7 +1583,7 @@ msgstr "只有您在 {0} 之前拥有或被委托的 Nouns 才可投票。"
 msgid "Proposals cannot be executed during a forking period"
 msgstr "在分叉期间无法执行提案"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
 msgstr "在提案 {0} 上投票"

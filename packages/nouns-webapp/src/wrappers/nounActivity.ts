@@ -98,7 +98,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
           ...h,
           proposal: {
             ...h.proposal,
-            id: parseInt(h.proposal.id),
+            id: Number(h.proposal.id),
           },
           voter: {
             id: h.voter.id as `0x${string}`,
@@ -123,7 +123,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     if (nounCanVoteTimestamp > proposalCreationTimestamp) {
       return false;
     }
-    // Filter props which were cancelled and got 0 votes of any kind
+    // Filter props which were canceled and got 0 votes of any kind
     return !(
       p.status === ProposalState.CANCELLED && p.forCount + p.abstainCount + p.againstCount === 0
     );
@@ -135,7 +135,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
-      blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
+      blockNumber: didVote ? Number(vote.blockNumber.toString()) : proposal.endBlock,
       eventType: NounEventType.PROPOSAL_VOTE,
       payload: {
         proposal,
@@ -185,7 +185,7 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
         id: any;
       }) => {
         return {
-          blockNumber: parseInt(event.blockNumber),
+          blockNumber: Number(event.blockNumber),
           eventType: NounEventType.TRANSFER,
           payload: {
             from: event.previousHolder.id,
@@ -229,7 +229,7 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
         id: string;
       }) => {
         return {
-          blockNumber: parseInt(event.blockNumber),
+          blockNumber: Number(event.blockNumber),
           eventType: NounEventType.DELEGATION,
           payload: {
             previousDelegate: event.previousDelegate.id,

@@ -81,7 +81,7 @@ const CreateCandidatePage = () => {
           .length > 0;
 
       // Add a new top-up txn if one isn't there already, else add to the existing one
-      if (parseInt(ethNeeded) > 0 && !hasTokenBuyerTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyerTopTop) {
         handleAddProposalAction({
           address: nounsTokenBuyerAddress[useChainId()],
           value: BigInt(ethNeeded ?? 0),
@@ -89,7 +89,7 @@ const CreateCandidatePage = () => {
           signature: '',
         });
       } else {
-        if (parseInt(ethNeeded) > 0) {
+        if (Number(ethNeeded) > 0) {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
