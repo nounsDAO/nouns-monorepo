@@ -70,15 +70,13 @@ const app: Record<SupportedChains, AppConfig> = {
   [sepolia.id]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
+    subgraphApiUri: import.meta.env.VITE_SEPOLIA_SUBGRAPH ?? '',
     enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
   [mainnet.id]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
+    subgraphApiUri: import.meta.env.VITE_MAINNET_SUBGRAPH ?? '',
     enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
   [hardhat.id]: {
