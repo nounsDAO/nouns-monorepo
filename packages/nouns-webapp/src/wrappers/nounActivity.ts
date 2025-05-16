@@ -12,7 +12,13 @@ import {
   nounTransferHistoryQuery,
   nounVotingHistoryQuery,
 } from './subgraph';
-import { Maybe, Noun } from '@/subgraphs';
+import {
+  DelegationEvent as GraphQLDelegationEvent,
+  Maybe,
+  Noun,
+  TransferEvent as GraphQLTransferEvent,
+} from '@/subgraphs';
+import { map } from 'remeda';
 
 export enum NounEventType {
   PROPOSAL_VOTE,
@@ -159,7 +165,9 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounTransferHistoryQuery(nounId));
+  const { loading, error, data } = useQuery<{ transferEvents: Maybe<GraphQLTransferEvent[]> }>(
+    nounTransferHistoryQuery(nounId),
+  );
   if (loading) {
     return {
       loading,
@@ -177,24 +185,17 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
   return {
     loading: false,
     error: false,
-    data: data.transferEvents.map(
-      (event: {
-        blockNumber: string;
-        previousHolder: { id: Address };
-        newHolder: { id: Address };
-        id: any;
-      }) => {
-        return {
-          blockNumber: Number(event.blockNumber),
-          eventType: NounEventType.TRANSFER,
-          payload: {
-            from: event.previousHolder.id,
-            to: event.newHolder.id,
-            transactionHash: event.id.substring(0, event.id.indexOf('_')),
-          } as TransferEvent,
-        } as NounProfileEvent;
-      },
-    ),
+    data: map(data?.transferEvents ?? [], event => {
+      return {
+        blockNumber: BigInt(event.blockNumber),
+        eventType: NounEventType.TRANSFER,
+        payload: {
+          from: event.previousHolder.id as Address,
+          to: event.newHolder.id as Address,
+          transactionHash: event.id.substring(0, event.id.indexOf('_')),
+        },
+      } as NounProfileEvent;
+    }),
   };
 };
 
@@ -203,7 +204,9 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounDelegationHistoryQuery(nounId));
+  const { loading, error, data } = useQuery<{ delegationEvents: Maybe<GraphQLDelegationEvent[]> }>(
+    nounDelegationHistoryQuery(nounId),
+  );
   if (loading) {
     return {
       loading,
@@ -221,24 +224,17 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
   return {
     loading: false,
     error: false,
-    data: data.delegationEvents.map(
-      (event: {
-        blockNumber: string;
-        previousDelegate: { id: Address };
-        newDelegate: { id: Address };
-        id: string;
-      }) => {
-        return {
-          blockNumber: Number(event.blockNumber),
-          eventType: NounEventType.DELEGATION,
-          payload: {
-            previousDelegate: event.previousDelegate.id,
-            newDelegate: event.newDelegate.id,
-            transactionHash: event.id.substring(0, event.id.indexOf('_')),
-          } as DelegationEvent,
-        } as NounProfileEvent;
-      },
-    ),
+    data: map(data?.delegationEvents ?? [], event => {
+      return {
+        blockNumber: BigInt(event.blockNumber),
+        eventType: NounEventType.DELEGATION,
+        payload: {
+          previousDelegate: event.previousDelegate.id as Address,
+          newDelegate: event.newDelegate.id as Address,
+          transactionHash: event.id.substring(0, event.id.indexOf('_')),
+        },
+      };
+    }),
   };
 };
 
