@@ -18,7 +18,7 @@ import {
   Noun,
   TransferEvent as GraphQLTransferEvent,
 } from '@/subgraphs';
-import { map } from 'remeda';
+import { map, sort } from 'remeda';
 
 export enum NounEventType {
   PROPOSAL_VOTE,
@@ -51,7 +51,7 @@ export type DelegationEvent = {
 // Wrapper type around Noun events.
 // All events are keyed by blockNumber to allow sorting.
 export type NounProfileEvent = {
-  blockNumber: number;
+  blockNumber: bigint;
   eventType: NounEventType;
   payload: ProposalVoteEvent | DelegationEvent | TransferEvent | NounWinEvent;
 };
@@ -287,7 +287,9 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   const events = votesData
     ?.concat(nounTransferData)
     .concat(delegationEventsData)
-    .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
+    .sort((a: NounProfileEvent, b: NounProfileEvent) => {
+      return Number(b.blockNumber) - Number(a.blockNumber);
+    })
     .reverse();
 
   const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
@@ -297,11 +299,13 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   // and delegation data to be empty which leads to errors
   try {
     // Parse noun birth + win events into a single event
-    const nounTransferFromAuctionHouse = nounTransferData.toSorted(
-      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+    const nounTransferFromAuctionHouse = sort(
+      nounTransferData,
+      (a: NounProfileEvent, b: NounProfileEvent) => Number(b.blockNumber) - Number(a.blockNumber),
     )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.toSorted(
-      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+    const nounTransferFromAuctionHouseBlockNumber = sort(
+      nounTransferData,
+      (a: NounProfileEvent, b: NounProfileEvent) => Number(b.blockNumber) - Number(a.blockNumber),
     )[nounId % 10 === 0 ? 0 : 1].blockNumber;
 
     const nounWinEvent = {
