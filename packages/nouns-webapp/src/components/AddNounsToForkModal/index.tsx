@@ -300,7 +300,7 @@ const ownedNouns = useMemo(() => {
               <option selected={true} disabled={true}>
                 Select proposal(s)
               </option>
-              {proposalsList?.map(item => <>{item}</>)}
+              {proposalsList?.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)}
             </FormSelect>
           </div>
         </InputGroup>
