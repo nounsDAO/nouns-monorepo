@@ -23,13 +23,6 @@ import {
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 
-import { accountEscrowedNounsQuery, delegateNounsAtBlockQuery, ownedNounsQuery, seedsQuery } from './subgraph';
-
-interface NounToken {
-  name: string;
-  description: string;
-  image: string;
-}
 
 export interface INounSeed {
   accessory: number;
@@ -46,22 +39,6 @@ const isSeedValid = (seed: INounSeed | Record<string, never> | undefined) => {
   const hasValidValues = Object.values(seed || {}).some(v => v !== 0);
   return hasExpectedKeys && hasValidValues;
 };
-
-export const useNounToken = (nounId: bigint) => {
-  const { data: noun } = useReadNounsTokenDataUri({
-    args: [nounId],
-  });
-
-  if (!noun) {
-    return;
-  }
-
-  const nounImgData = (noun as string).split(';base64,').pop() as string;
-  const json: NounToken = JSON.parse(atob(nounImgData));
-
-  return json;
-};
-
 const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
   return seeds.reduce<Record<string, INounSeed>>((acc, seed) => {
     acc[seed.id] = {
@@ -203,24 +180,6 @@ export const useNounTokenBalance = (address: Address): number | undefined => {
 
   return tokenBalance ? Number(tokenBalance as bigint) : undefined;
 };
-
-export const useUserNounTokenBalance = (): number | undefined => {
-  const { address } = useAccount();
-
-  const { data: tokenBalance } = useReadNounsTokenBalanceOf({
-    args: address ? [address] : undefined,
-    query: { enabled: !!address },
-  });
-
-  return tokenBalance ? Number(tokenBalance as bigint) : undefined;
-};
-
-export const useTotalSupply = (): number | undefined => {
-  const { data: totalSupply } = useReadNounsTokenTotalSupply();
-
-  return totalSupply ? Number(totalSupply as bigint) : undefined;
-};
-
 export const useUserOwnedNounIds = (pollInterval: number) => {
   const { address } = useAccount();
   const { loading, data, error, refetch } = useQuery<{ nouns: Noun[] }>(
@@ -283,29 +242,6 @@ export const useIsApprovedForAll = () => {
 
   return (data as boolean) || false;
 };
-
-export const useSetApprovalForTokenId = () => {
-  const { data: simulateData } = useSimulateNounsTokenApprove();
-
-  const { writeContract, data, isPending: isLoading, isSuccess, isError } = useWriteContract();
-
-  const getApprovalStatus = () => {
-    if (isLoading) return 'Mining';
-    if (isSuccess) return 'Success';
-    if (isError) return 'Fail';
-    return 'None';
-  };
-
-  const approveTokenIdState = {
-    status: getApprovalStatus(),
-    transaction: data,
-  };
-
-  const approveTokenId = simulateData ? () => writeContract(simulateData.request) : undefined;
-
-  return { approveTokenId, approveTokenIdState };
-};
-
 export const useDelegateNounsAtBlockQuery = (signers: string[], block: bigint) => {
   const { loading, data, error } = useQuery<{ delegates: Delegate[] }>(
     delegateNounsAtBlockQuery(signers, block),
