@@ -5,24 +5,28 @@ import { useEffect } from 'react';
 
 import { useQuery } from '@apollo/client';
 import { zeroAddress } from 'viem';
-import { useAccount, useWriteContract } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 import {
+  nounsGovernorAddress,
   useReadNounsTokenBalanceOf,
-  useReadNounsTokenDataUri,
   useReadNounsTokenDelegates,
   useReadNounsTokenGetCurrentVotes,
   useReadNounsTokenGetPriorVotes,
   useReadNounsTokenIsApprovedForAll,
   useReadNounsTokenSeeds,
-  useReadNounsTokenTotalSupply,
-  useSimulateNounsTokenApprove,
-  useSimulateNounsTokenSetApprovalForAll,
   useWriteNounsTokenDelegate,
+  useWriteNounsTokenSetApprovalForAll,
 } from '@/contracts';
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 
+import {
+  accountEscrowedNounsQuery,
+  delegateNounsAtBlockQuery,
+  ownedNounsQuery,
+  seedsQuery,
+} from './subgraph';
 
 export interface INounSeed {
   accessory: number;
@@ -211,9 +215,15 @@ export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => 
 };
 
 export const useSetApprovalForAll = () => {
-  const { data: simulateData } = useSimulateNounsTokenSetApprovalForAll();
-
-  const { writeContract, data, isPending: isLoading, isSuccess, isError } = useWriteContract();
+  const chainId = useChainId();
+  const {
+    writeContractAsync,
+    data,
+    isPending: isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useWriteNounsTokenSetApprovalForAll();
 
   const getApprovalStatus = () => {
     if (isLoading) return 'Mining';
@@ -225,12 +235,15 @@ export const useSetApprovalForAll = () => {
   const setApprovalState = {
     status: getApprovalStatus(),
     transaction: data,
+    errorMessage: error?.message,
   };
 
-  const isApprovedForAll = isSuccess;
-  const setApproval = simulateData ? () => writeContract(simulateData.request) : undefined;
-
-  return { setApproval, setApprovalState, isApprovedForAll };
+  return {
+    setApproval: async () => {
+      await writeContractAsync({ args: [nounsGovernorAddress[chainId], true] });
+    },
+    setApprovalState,
+  };
 };
 
 export const useIsApprovedForAll = () => {
