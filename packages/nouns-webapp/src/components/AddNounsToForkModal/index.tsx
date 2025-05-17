@@ -293,11 +293,12 @@ const ownedNouns = useMemo(() => {
             <FormSelect
               aria-label="Select proposal(s)"
               className={classes.selectMenu}
+              defaultValue="default"
               onChange={e => {
                 setSelectedProposals([+e.target.value, ...selectedProposals]);
               }}
             >
-              <option selected={true} disabled={true}>
+              <option value="default" disabled={true}>
                 Select proposal(s)
               </option>
               {proposalsList?.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)}
