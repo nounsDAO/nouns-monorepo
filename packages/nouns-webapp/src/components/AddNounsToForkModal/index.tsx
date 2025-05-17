@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
 import { map } from 'remeda';
 
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -38,7 +38,6 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
   const [selectedProposals, setSelectedProposals] = React.useState<number[]>([]);
   const [selectedNouns, setSelectedNouns] = React.useState<number[]>([]);
   const [isTwoStepProcess, setIsTwoStepProcess] = React.useState(false);
-  const [ownedNouns, setOwnedNouns] = useState<number[]>([]);
   // approval transactions
   const [isApprovalWaiting, setIsApprovalWaiting] = useState(false);
   const [isApprovalLoading, setIsApprovalLoading] = useState(false);
@@ -72,14 +71,14 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
     })
     .reverse();
 
-  useEffect(() => {
-    let nounIds = props.ownedNouns || [];
-    if (props.ownedNouns && props.userEscrowedNouns) {
-      const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
-      nounIds = [...nouns].sort((a, b) => a - b);
-    }
-    setOwnedNouns(nounIds);
-  }, [props.ownedNouns, props.userEscrowedNouns]);
+const ownedNouns = useMemo(() => {
+  let nounIds = props.ownedNouns || [];
+  if (props.ownedNouns && props.userEscrowedNouns) {
+    const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
+    nounIds = [...nouns].sort((a, b) => a - b);
+  }
+  return nounIds;
+}, [props.ownedNouns, props.userEscrowedNouns]);
 
   const clearTransactionState = () => {
     // clear all transaction states
