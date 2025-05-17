@@ -110,9 +110,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       addNounsToEscrow(selectedNouns);
     } else {
       setIsTwoStepProcess(true);
-      if (setApproval) {
-        setApproval();
-      }
+      setApproval();
     }
   };
 
