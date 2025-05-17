@@ -71,14 +71,14 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
     })
     .reverse();
 
-const ownedNouns = useMemo(() => {
-  let nounIds = props.ownedNouns || [];
-  if (props.ownedNouns && props.userEscrowedNouns) {
-    const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
-    nounIds = [...nouns].sort((a, b) => a - b);
-  }
-  return nounIds;
-}, [props.ownedNouns, props.userEscrowedNouns]);
+  const ownedNouns = useMemo(() => {
+    let nounIds = props.ownedNouns || [];
+    if (props.ownedNouns && props.userEscrowedNouns) {
+      const nouns = [...props.ownedNouns, ...props.userEscrowedNouns];
+      nounIds = [...nouns].sort((a, b) => a - b);
+    }
+    return nounIds;
+  }, [props.ownedNouns, props.userEscrowedNouns]);
 
   const clearTransactionState = () => {
     // clear all transaction states
@@ -168,7 +168,7 @@ const ownedNouns = useMemo(() => {
           break;
       }
     },
-    [],
+    [setIsApprovalLoading, setIsApprovalWaiting, setIsApprovalTxSuccessful, setApprovalErrorMessage],
   );
 
   const handleAddToForkStateChange = useCallback(
@@ -206,22 +206,22 @@ const ownedNouns = useMemo(() => {
           break;
       }
     },
-    [props, setSelectedNouns],
+    [setIsLoading, setIsWaiting, setIsTxSuccessful, setErrorMessage, setSelectedNouns, props],
   );
 
+  useEffect(() => {
+    handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setApprovalState, handleSetApprovalForAllAndAddToEscrowStateChange]);
+
+  // Update your useEffect with complete dependency arrays
   useEffect(() => {
     if (props.isForkingPeriod) {
       handleAddToForkStateChange(joinForkState);
     } else {
       handleAddToForkStateChange(escrowToForkState);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [escrowToForkState, joinForkState, handleAddToForkStateChange]);
-
-  useEffect(() => {
-    handleSetApprovalForAllAndAddToEscrowStateChange(setApprovalState, selectedNouns);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setApprovalState, handleSetApprovalForAllAndAddToEscrowStateChange]);
+  }, [props.isForkingPeriod, escrowToForkState, joinForkState, handleAddToForkStateChange]);
 
   const confirmModalContent = (
     <div className={classes.confirmModalContent}>
@@ -301,7 +301,9 @@ const ownedNouns = useMemo(() => {
               <option value="default" disabled={true}>
                 Select proposal(s)
               </option>
-              {proposalsList?.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)}
+              {proposalsList?.map((item, index) => (
+                <React.Fragment key={index}>{item}</React.Fragment>
+              ))}
             </FormSelect>
           </div>
         </InputGroup>
