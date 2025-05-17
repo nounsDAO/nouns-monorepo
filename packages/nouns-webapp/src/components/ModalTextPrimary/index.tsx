@@ -4,6 +4,7 @@ interface ModalTextPrimaryProps {
   children?: React.ReactNode;
 }
 
-export default function ModalTextPrimary({ children }: ModalTextPrimaryProps) {
-  return <div className={classes.text}>{children}</div>;
-}
+const ModalTextPrimary = ({ children }: Readonly<ModalTextPrimaryProps>) => (
+  <div className={classes.text}>{children}</div>
+);
+export default ModalTextPrimary;

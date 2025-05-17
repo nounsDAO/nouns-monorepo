@@ -1,23 +1,12 @@
-import { useContractCall } from '@usedapp/core';
-import { Interface } from 'ethers/lib/utils';
-import tokenBuyerABI from './tokenBuyerABI.json';
-import { BigNumber as EthersBN } from 'ethers';
+import { useReadNounsTokenBuyerEthNeeded } from '@/contracts';
 
-const abi = new Interface(tokenBuyerABI);
-const BUFFER_BPS = 5_000;
+const BUFFER_BPS = 5_000n;
 
 export const useEthNeeded = (address: string, additionalTokens: number, skip?: boolean) => {
-  const request = () => {
-    if (skip) return false;
-    return {
-      abi,
-      address,
-      method: 'ethNeeded',
-      args: [additionalTokens, BUFFER_BPS],
-    };
-  };
+  const { data: ethNeeded } = useReadNounsTokenBuyerEthNeeded({
+    args: [BigInt(additionalTokens), BUFFER_BPS],
+    query: { enabled: !skip && !!address },
+  });
 
-  const [ethNeeded] = useContractCall<[EthersBN]>(request()) || [];
-
-  return ethNeeded?.toString();
+  return ethNeeded ? ethNeeded.toString() : undefined;
 };

@@ -1,14 +1,17 @@
-import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
-import nounClasses from '../Noun/Noun.module.css';
-import Noun from '../Noun';
+import React from 'react';
+
+import Noun from '@/components/Noun';
+import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
+
 import classes from './GrayCircle.module.css';
+
+import nounClasses from '@/components/Noun/Noun.module.css';
 
 interface GrayCircleProps {
   isDelegateView?: boolean;
 }
 
-export const GrayCircle: React.FC<GrayCircleProps> = props => {
-  const { isDelegateView } = props;
+export const GrayCircle: React.FC<GrayCircleProps> = ({ isDelegateView }) => {
   return (
     <div className={isDelegateView ? classes.wrapper : ''}>
       <Noun

@@ -1,16 +1,21 @@
+import type { Abi } from 'viem';
+
 import React, { SetStateAction, useState } from 'react';
+
+import { Address } from '@/utils/types';
+import { ProposalTransaction } from '@/wrappers/nounsDao';
+
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import { ProposalTransaction } from '../../wrappers/nounsDao';
-import SelectProposalActionStep from './steps/SelectProposalActionStep';
-import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
-import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
-import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
+
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
 import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
-import { Interface } from 'ethers/lib/utils';
-import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
+import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
+import SelectProposalActionStep from './steps/SelectProposalActionStep';
 import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
+import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
 import StreamPaymentsReviewStep from './steps/StreamPaymentsReviewStep';
+import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
+import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,
@@ -32,18 +37,18 @@ export enum ProposalActionType {
 
 export interface ProposalActionModalState {
   actionType: ProposalActionType;
-  address: string;
+  address: Address;
   amount?: string;
   TransferFundsCurrency?: SupportedCurrency;
   streamStartTimestamp?: number;
   streamEndTimestamp?: number;
   function?: string;
-  abi?: Interface;
+  abi?: Abi;
   args?: string[];
 }
 export interface ProposalActionModalStepProps {
-  onPrevBtnClick: (e?: any) => void;
-  onNextBtnClick: (e?: any) => void;
+  onPrevBtnClick: (e?: React.MouseEvent | ProposalActionCreationStep) => void;
+  onNextBtnClick: (e?: React.MouseEvent | ProposalActionCreationStep | ProposalTransaction) => void;
   state: ProposalActionModalState;
   setState: (e: SetStateAction<ProposalActionModalState>) => void;
 }
@@ -70,14 +75,20 @@ const ModalContent: React.FC<{
 
   const [state, setState] = useState<ProposalActionModalState>({
     actionType: ProposalActionType.LUMP_SUM,
-    address: '',
+    address: '0x',
   });
 
   switch (step) {
     case ProposalActionCreationStep.SELECT_ACTION_TYPE:
       return (
         <SelectProposalActionStep
-          onNextBtnClick={(s: ProposalActionCreationStep) => setStep(s)}
+          onNextBtnClick={(
+            e?: React.MouseEvent | ProposalActionCreationStep | ProposalTransaction,
+          ) => {
+            if (e && typeof e !== 'object') {
+              setStep(e);
+            }
+          }}
           onPrevBtnClick={onDismiss}
           state={state}
           setState={setState}
@@ -95,7 +106,15 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.LUMP_SUM_REVIEW:
       return (
         <TransferFundsReviewStep
-          onNextBtnClick={onActionAdd}
+          onNextBtnClick={e => {
+            if (e && typeof e !== 'object') {
+              return;
+            }
+            if (e && 'target' in e) {
+              return;
+            }
+            onActionAdd(e as ProposalTransaction);
+          }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.LUMP_SUM_DETAILS)}
           state={state}
           setState={setState}
@@ -123,7 +142,15 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.FUNCTION_CALL_REVIEW:
       return (
         <FunctionCallReviewStep
-          onNextBtnClick={onActionAdd}
+          onNextBtnClick={e => {
+            if (e && typeof e !== 'object') {
+              return;
+            }
+            if (e && 'target' in e) {
+              return;
+            }
+            onActionAdd(e as ProposalTransaction);
+          }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.FUNCTION_CALL_ADD_ARGUMENTS)}
           state={state}
           setState={setState}
@@ -151,7 +178,15 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.STREAM_PAYMENT_REVIEW:
       return (
         <StreamPaymentsReviewStep
-          onNextBtnClick={onActionAdd}
+          onNextBtnClick={e => {
+            if (e && typeof e !== 'object') {
+              return;
+            }
+            if (e && 'target' in e) {
+              return;
+            }
+            onActionAdd(e as ProposalTransaction);
+          }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_DATE_DETAILS)}
           state={state}
           setState={setState}

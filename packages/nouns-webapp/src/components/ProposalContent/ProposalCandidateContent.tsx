@@ -1,41 +1,18 @@
-import React, { Fragment } from 'react';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalCandidate } from '../../wrappers/nounsData';
 import remarkBreaks from 'remark-breaks';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
-import { utils } from 'ethers';
-import classes from './ProposalContent.module.css';
-import { Trans } from '@lingui/react/macro';
-import EnsOrLongAddress from '../EnsOrLongAddress';
 
-import clsx from 'clsx';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { ProposalCandidate } from '@/wrappers/nounsData';
+
+import classes from './ProposalContent.module.css';
 import ProposalTransactions from './ProposalTransactions';
 
 interface ProposalCandidateContentProps {
   proposal?: ProposalCandidate;
 }
-
-export const linkIfAddress = (content: string) => {
-  if (utils.isAddress(content)) {
-    return (
-      <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-        <EnsOrLongAddress address={content} />
-      </a>
-    );
-  }
-  return <span>{content}</span>;
-};
-
-export const transactionLink = (content: string) => {
-  return (
-    <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
-      {content.substring(0, 7)}
-    </a>
-  );
-};
-
 const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props => {
   const { proposal } = props;
   return (

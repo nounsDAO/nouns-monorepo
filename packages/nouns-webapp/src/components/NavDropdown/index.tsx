@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import classes from './NavDropdown.module.css';
-import { Dropdown } from 'react-bootstrap';
+
 import clsx from 'clsx';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { Dropdown } from 'react-bootstrap';
+
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+
+import classes from './NavDropdown.module.css';
+
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
@@ -38,6 +42,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
     navDropdownClasses.dropdownActive,
   );
 
+  // @ts-ignore
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div

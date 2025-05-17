@@ -1,4 +1,7 @@
+import React from 'react';
+
 import clsx from 'clsx';
+
 import classes from './BrandDatePicker.module.css';
 
 interface BrandDatePickerProps {
@@ -9,9 +12,12 @@ interface BrandDatePickerProps {
   isInvalid?: boolean;
 }
 
-const BrandDatePicker: React.FC<BrandDatePickerProps> = props => {
-  const { onChange, value, label, isInvalid = false } = props;
-
+const BrandDatePicker: React.FC<BrandDatePickerProps> = ({
+  onChange,
+  value,
+  label,
+  isInvalid = false,
+}) => {
   return (
     <div className={classes.container}>
       {label && <span className={classes.label}>{label}</span>}

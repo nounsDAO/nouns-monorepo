@@ -1,12 +1,14 @@
-import React from 'react';
-import { useEffect } from 'react';
-import classes from './VoteSignals.module.css';
-import clsx from 'clsx';
-import VoteSignal from './VoteSignal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect } from 'react';
+
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { VoteSignalDetail } from '../../wrappers/nounsData';
+
+import { VoteSignalDetail } from '@/wrappers/nounsData';
+
+import VoteSignal from './VoteSignal';
+import classes from './VoteSignals.module.css';
 
 type Props = {
   voteSignals: VoteSignalDetail[];
@@ -20,12 +22,8 @@ const VoteSignalGroup = (props: Props) => {
     if (props.isExpanded) {
       setIsExpanded(true);
     } else {
-      // expand on render if there's any feedback in For, then try Against, then Abstain
-      if (props.support === 1 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 0 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 2 && props.voteSignals.length > 0) {
+      // expand on render if there are any vote signals (for For, Against, or Abstain)
+      if (props.voteSignals.length > 0) {
         setIsExpanded(true);
       }
     }

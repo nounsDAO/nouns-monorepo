@@ -1,12 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { Trans } from '@lingui/react/macro';
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
-import { currentlyDelegatedNouns } from '../../wrappers/subgraph';
-import HorizontalStackedNouns from '../HorizontalStackedNouns';
-import ShortAddress from '../ShortAddress';
-import classes from './ByLineHoverCard.module.css';
+
+import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+import { Spinner } from 'react-bootstrap';
+
+import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
+import ShortAddress from '@/components/ShortAddress';
+import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
+
+import classes from './ByLineHoverCard.module.css';
 
 interface ByLineHoverCardProps {
   proposerAddress: string;
@@ -34,7 +37,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
   const sortedNounIds = data.delegates[0].nounsRepresented
     .map((noun: { id: string }) => {
-      return parseInt(noun.id);
+      return Number(noun.id);
     })
     .sort((a: number, b: number) => {
       return a - b;

@@ -1,13 +1,16 @@
 import React from 'react';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopNounWinEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+
 import { CakeIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
+import DesktopNounActivityRow from '@/components/profileEvent/activityRow/DesktopNounActivityRow';
+import TransactionHashPill from '@/components/profileEvent/eventData/infoPills/TransactionHashPill';
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '@/utils/etherscan';
+import { NounWinEvent } from '@/wrappers/nounActivity';
+
+import classes from './DesktopNounWinEvent.module.css';
 
 interface DesktopNounWinEventProps {
   event: NounWinEvent;
@@ -16,7 +19,7 @@ interface DesktopNounWinEventProps {
 const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderNoun = Number(event.nounId as string) % 10 === 0;
   return (
     <DesktopNounActivityRow
       icon={
@@ -30,7 +33,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             id={'view-on-etherscan-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
@@ -69,7 +72,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             id={'view-on-etherscan-txn-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />

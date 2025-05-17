@@ -1,60 +1,78 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import classes from './VoteSignals.module.css';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import VoteSignalGroup from './VoteSignalGroup';
-import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useAppDispatch } from '../../hooks';
-import { useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
 
-type Props = {
+import { useAppDispatch } from '@/hooks';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
+
+import VoteSignalGroup from './VoteSignalGroup';
+import classes from './VoteSignals.module.css';
+import { useAccount } from 'wagmi';
+
+type VoteSignalsProps = {
   proposalId?: string;
   proposer?: string;
-  versionTimestamp: number;
+  versionTimestamp: bigint;
   feedback?: VoteSignalDetail[];
   userVotes?: number;
   isCandidate?: boolean;
   candidateSlug?: string;
   setDataFetchPollInterval: (interval: number) => void;
-  handleRefetch: Function;
+  handleRefetch: () => void;
   isFeedbackClosed?: boolean;
 };
 
-function VoteSignals(props: Props) {
+function VoteSignals({
+  candidateSlug,
+  feedback: feedbackList,
+  handleRefetch,
+  isCandidate,
+  isFeedbackClosed,
+  proposalId,
+  proposer,
+  setDataFetchPollInterval,
+  userVotes,
+  versionTimestamp,
+}: Readonly<VoteSignalsProps>) {
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
   const [isTransactionWaiting, setIsTransactionWaiting] = useState(false);
   const [isTransactionPending, setIsTransactionPending] = useState(false);
-  const [forFeedback, setForFeedback] = useState<any[]>([]);
-  const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
-  const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
+  const [forFeedback, setForFeedback] = useState<VoteSignalDetail[]>([]);
+  const [againstFeedback, setAgainstFeedback] = useState<VoteSignalDetail[]>([]);
+  const [abstainFeedback, setAbstainFeedback] = useState<VoteSignalDetail[]>([]);
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
   const [expandedGroup, setExpandedGroup] = useState<number | undefined>(undefined);
-  const { sendFeedback, sendFeedbackState } = useSendFeedback(
-    props.isCandidate === true ? 'candidate' : 'proposal',
-  );
-  const { account } = useEthers();
+
+  const {
+    sendProposalFeedback,
+    sendProposalFeedbackState,
+    sendCandidateFeedback,
+    sendCandidateFeedbackState,
+  } = useSendFeedback();
+
+  const { address: account } = useAccount();
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
-    let forIt: VoteSignalDetail[] = [];
-    let againstIt: VoteSignalDetail[] = [];
-    let abstainIt: VoteSignalDetail[] = [];
+    const forIt: VoteSignalDetail[] = [];
+    const againstIt: VoteSignalDetail[] = [];
+    const abstainIt: VoteSignalDetail[] = [];
 
-    if (props.feedback) {
+    if (feedbackList) {
       // filter feedback to this version
-      let versionFeedback = props.feedback;
-      if (props.versionTimestamp) {
-        versionFeedback = props.feedback.filter(
-          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= +props.versionTimestamp,
+      if (versionTimestamp) {
+        feedbackList = feedbackList.filter(
+          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= versionTimestamp,
         );
       }
       // sort feedback
-      versionFeedback.map((feedback: VoteSignalDetail) => {
+      feedbackList.forEach((feedback: VoteSignalDetail) => {
         if (feedback.supportDetailed === 1) {
           forIt.push(feedback);
         }
@@ -64,22 +82,20 @@ function VoteSignals(props: Props) {
         if (feedback.supportDetailed === 2) {
           abstainIt.push(feedback);
         }
-        return feedback;
       });
       setForFeedback(forIt);
       setAgainstFeedback(againstIt);
       setAbstainFeedback(abstainIt);
 
       // check if user has voted for this proposal or version
-      versionFeedback.map((feedback: any) => {
+      feedbackList.forEach((feedback: VoteSignalDetail) => {
         if (account && account.toUpperCase() === feedback.voter.id.toUpperCase()) {
           setHasUserVoted(true);
           setUserVoteSupport(feedback);
         }
-        return feedback;
       });
     }
-  }, [props.feedback, props.versionTimestamp, account]);
+  }, [feedbackList, versionTimestamp, account]);
 
   async function handleFeedbackSubmit(
     proposalId: number,
@@ -91,58 +107,60 @@ function VoteSignals(props: Props) {
     if (supportNum > 2) {
       return;
     }
-    if (props.isCandidate === true && candidateSlug && proposer) {
-      await sendFeedback(proposer, candidateSlug, supportNum, reason);
+    if (isCandidate === true && candidateSlug && proposer) {
+      await sendCandidateFeedback({
+        args: [proposer as `0x${string}`, candidateSlug, supportNum, reason || ''],
+      });
     } else {
-      await sendFeedback(proposalId, supportNum, reason);
+      await sendProposalFeedback({ args: [BigInt(proposalId), supportNum, reason || ''] });
     }
   }
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   useEffect(() => {
-    switch (sendFeedbackState.status) {
-      case 'None':
-        setIsTransactionPending(false);
-        break;
-      case 'PendingSignature':
-        setIsTransactionWaiting(true);
-        break;
-      case 'Mining':
-        setIsTransactionWaiting(false);
-        setIsTransactionPending(true);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        // don't show modal. just update feedback
-        props.handleRefetch();
-        setIsTransactionPending(false);
-        setHasUserVoted(true);
-        setExpandedGroup(support);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: sendFeedbackState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setIsTransactionPending(false);
-        setIsTransactionWaiting(false);
-        props.setDataFetchPollInterval(0);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: sendFeedbackState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setIsTransactionPending(false);
-        setIsTransactionWaiting(false);
-        props.setDataFetchPollInterval(0);
-        break;
+    const status =
+      isCandidate === true ? sendCandidateFeedbackState?.status : sendProposalFeedbackState?.status;
+    const errorMessage =
+      isCandidate === true
+        ? sendCandidateFeedbackState?.errorMessage
+        : sendProposalFeedbackState?.errorMessage;
+
+    if (status === 'None') {
+      setIsTransactionPending(false);
+    } else if (status === 'PendingSignature') {
+      setIsTransactionWaiting(true);
+    } else if (status === 'Mining') {
+      setIsTransactionWaiting(false);
+      setIsTransactionPending(true);
+      setDataFetchPollInterval(50);
+    } else if (status === 'Success') {
+      // don't show modal. update feedback
+      handleRefetch();
+      setIsTransactionPending(false);
+      setHasUserVoted(true);
+      setExpandedGroup(support);
+    } else if (status === 'Fail') {
+      setModal({
+        title: <Trans>Transaction Failed</Trans>,
+        message: errorMessage || <Trans>Please try again.</Trans>,
+        show: true,
+      });
+      setIsTransactionPending(false);
+      setIsTransactionWaiting(false);
+      setDataFetchPollInterval(0);
+    } else if (status === 'Exception') {
+      setModal({
+        title: <Trans>Error</Trans>,
+        message: errorMessage || <Trans>Please try again.</Trans>,
+        show: true,
+      });
+      setIsTransactionPending(false);
+      setIsTransactionWaiting(false);
+      setDataFetchPollInterval(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sendFeedbackState, setModal]);
+  }, [sendCandidateFeedbackState, sendProposalFeedbackState, setModal]);
 
   const userFeedbackAdded = (
     <Trans>
@@ -161,17 +179,19 @@ function VoteSignals(props: Props) {
         dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
     </Trans>
   );
-  const title = (
-    <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
+  const title = isCandidate ? (
+    <Trans>Pre-proposal feedback</Trans>
+  ) : (
+    <Trans>Pre-voting feedback</Trans>
   );
 
   return (
     <>
-      {props.proposalId && (
-        <div className={clsx(classes.voteSignals, props.isCandidate && classes.isCandidate)}>
+      {proposalId && (
+        <div className={clsx(classes.voteSignals, isCandidate && classes.isCandidate)}>
           <div className={classes.header}>
             <h2>{title}</h2>
-            {!props.isCandidate && (
+            {!isCandidate && (
               <p>
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
@@ -182,7 +202,7 @@ function VoteSignals(props: Props) {
             )}
           </div>
           <div className={classes.wrapper}>
-            {!props.feedback ? (
+            {!feedbackList ? (
               <div className={classes.spinner}>
                 <Spinner animation="border" />
               </div>
@@ -205,7 +225,7 @@ function VoteSignals(props: Props) {
                     isExpanded={expandedGroup === 2}
                   />
                 </div>
-                {!props.isFeedbackClosed && props.userVotes !== undefined && props.userVotes > 0 && (
+                {!isFeedbackClosed && userVotes !== undefined && userVotes > 0 && (
                   <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                     {!hasUserVoted ? (
                       <>
@@ -269,7 +289,11 @@ function VoteSignals(props: Props) {
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
-                                  support === 2 ? setSupport(undefined) : setSupport(2);
+                                  if (support === 2) {
+                                    setSupport(undefined);
+                                  } else {
+                                    setSupport(2);
+                                  }
                                 }}
                               >
                                 <Trans>Abstain</Trans>
@@ -293,15 +317,15 @@ function VoteSignals(props: Props) {
                                 }
                                 onClick={() => {
                                   setIsTransactionWaiting(true);
-                                  props.proposalId &&
-                                    support !== undefined &&
+                                  if (proposalId && support !== undefined) {
                                     handleFeedbackSubmit(
-                                      +props.proposalId,
+                                      +proposalId,
                                       support,
                                       reasonText,
-                                      props.candidateSlug,
-                                      props.proposer,
+                                      candidateSlug,
+                                      proposer,
                                     );
+                                  }
                                 }}
                               >
                                 <Trans>Submit</Trans>
@@ -325,7 +349,7 @@ function VoteSignals(props: Props) {
               </>
             )}
           </div>
-          {props.isCandidate && (
+          {isCandidate && (
             <p className={classes.descriptionBelow}>
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea

@@ -1,12 +1,16 @@
 import React from 'react';
-import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import classes from './MobileNounWinEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+
 import { CakeIcon } from '@heroicons/react/solid';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { NounWinEvent } from '@/wrappers/nounActivity';
+
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+
+import classes from './MobileNounWinEvent.module.css';
 
 interface MobileNounWinEventProps {
   event: NounWinEvent;
@@ -15,7 +19,7 @@ interface MobileNounWinEventProps {
 const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderNoun = Number(event.nounId as string) % 10 === 0;
   return (
     <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}

@@ -1,33 +1,37 @@
 import { useEffect, useState } from 'react';
-import classes from './Fork.module.css';
+
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import Section from '../../layout/Section';
+import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
-import AddNounsToForkModal from '../../components/AddNounsToForkModal';
-import ForkingPeriodTimer from '../../components/ForkingPeriodTimer';
+import { Link, useParams } from 'react-router';
+
+import AddNounsToForkModal from '@/components/AddNounsToForkModal';
+import ForkingPeriodTimer from '@/components/ForkingPeriodTimer';
+import useForkTreasuryBalance from '@/hooks/useForkTreasuryBalance';
+import { useScrollToLocation } from '@/hooks/useScrollToLocation';
+import Section from '@/layout/Section';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import {
+  useAdjustedTotalSupply,
   useEscrowEvents,
   useForkDetails,
-  useForkThreshold,
   useForks,
-  useNumTokensInForkEscrow,
-  useAdjustedTotalSupply,
+  useForkThreshold,
   useForkThresholdBPS,
-} from '../../wrappers/nounsDao';
-import { useEthers } from '@usedapp/core';
-import { useUserEscrowedNounIds, useUserOwnedNounIds } from '../../wrappers/nounToken';
-import ForkEvent from './ForkEvent';
-import DeployForkButton from './DeployForkButton';
-import WithdrawNounsButton from './WithdrawNounsButton';
-import { useScrollToLocation } from '../../hooks/useScrollToLocation';
-import { useParams } from 'react-router';
-import { Link } from 'react-router';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
+  useNumTokensInForkEscrow,
+} from '@/wrappers/nounsDao';
+import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
+
 import NotFoundPage from '../NotFound';
-import useForkTreasuryBalance from '../../hooks/useForkTreasuryBalance';
-import { utils } from 'ethers/lib/ethers';
+
+import DeployForkButton from './DeployForkButton';
+import classes from './Fork.module.css';
+import ForkEvent from './ForkEvent';
+import WithdrawNounsButton from './WithdrawNounsButton';
+import { Address } from '@/utils/types';
+import { formatEther } from 'viem';
+import { useAccount } from 'wagmi';
 
 const now = new Date();
 
@@ -47,6 +51,8 @@ const ForkPage = () => {
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState(0);
   const [forkStatusLabel, setForkStatusLabel] = useState('Escrow');
   const [addNounsButtonLabel, setAddNounsButtonLabel] = useState('Add Nouns to escrow');
+
+  // Hooks
   const adjustedTotalSupply = useAdjustedTotalSupply();
   const forkThreshold = useForkThreshold();
   const forkThresholdBPS = useForkThresholdBPS();
@@ -56,10 +62,12 @@ const ForkPage = () => {
   const escrowEvents = useEscrowEvents(dataFetchPollInterval, Number(id).toString());
   const forkDetails = useForkDetails(dataFetchPollInterval, id || '');
   const forks = useForks(dataFetchPollInterval);
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const phantomListItems = new Array(4 - (forkDetails.data.addedNouns.length! % 4)).fill(0);
-  const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury || '');
+  const forkTreasuryBalance = useForkTreasuryBalance(forkDetails.data.forkTreasury as Address);
   useScrollToLocation();
+
+  // Data fetching
   const refetchForkData = () => {
     userOwnedNounIds.refetch();
     userEscrowedNounIds.refetch();
@@ -68,44 +76,48 @@ const ForkPage = () => {
     forks.refetch();
   };
 
-  const handlePercentageToThreshold = () => {
+  // Calculate percentage to threshold
+  const updateEscrowPercentage = () => {
     if (forkThreshold !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
-      if (isForkPeriodActive || isForked) {
-        const currentPercentage = (forkDetails.data.tokensForkingCount / (forkThreshold + 1)) * 100;
-        setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
-      } else {
-        const currentPercentage = (numTokensInForkEscrow / (forkThreshold + 1)) * 100;
-        setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
-      }
+      const baseValue = forkThreshold + 1;
+      const numerator =
+        isForkPeriodActive || isForked
+          ? forkDetails.data.tokensForkingCount
+          : numTokensInForkEscrow;
+      const currentPercentage = (numerator / baseValue) * 100;
+      setCurrentEscrowPercentage(+currentPercentage.toFixed(2));
     }
   };
 
-  useEffect(() => {
-    // trigger data updates on modal close
-    refetchForkData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen, isWithdrawModalOpen, isDeployModalOpen, isForkPeriodActive]);
+  // Update threshold status
+  const updateThresholdStatus = () => {
+    const isThresholdReached =
+      numTokensInForkEscrow !== undefined &&
+      forkThreshold !== undefined &&
+      numTokensInForkEscrow > forkThreshold;
+    setIsThresholdMet(isThresholdReached);
 
-  useEffect(() => {
-    if (
-      forkDetails?.data?.forkingPeriodEndTimestamp &&
-      +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000
-    ) {
+    if (forkThresholdBPS !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
+      const percentage = forkThresholdBPS / 100;
+      setThresholdPercentage(+percentage.toFixed());
+    }
+  };
+
+  // Update fork status labels
+  const updateForkStatus = () => {
+    const timestamp = forkDetails?.data?.forkingPeriodEndTimestamp;
+    const currentTime = now.getTime() / 1000;
+
+    if (timestamp && +timestamp > currentTime) {
       // 'forking'
       setForkStatusLabel('Forking');
       setAddNounsButtonLabel('Join fork');
       setIsForkPeriodActive(true);
-    } else if (
-      forkDetails?.data?.forkingPeriodEndTimestamp &&
-      +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
-    ) {
-      // 'forked' === executed and forking period ended
+    } else if (timestamp && +timestamp < currentTime) {
+      // 'forked'
       setIsForked(true);
       setForkStatusLabel('Forked');
-    } else if (
-      !forkDetails?.data?.forkingPeriodEndTimestamp &&
-      forkDetails?.data?.tokensInEscrowCount
-    ) {
+    } else if (!timestamp && forkDetails?.data?.tokensInEscrowCount) {
       // 'escrow'
       setForkStatusLabel('Escrow');
       setAddNounsButtonLabel('Add Nouns to escrow');
@@ -114,29 +126,28 @@ const ForkPage = () => {
       setForkStatusLabel('Pre-escrow');
       setAddNounsButtonLabel('Add Nouns to Start Escrow Period');
     }
-    // threshold
-    if (
-      numTokensInForkEscrow &&
-      forkThreshold !== undefined &&
-      numTokensInForkEscrow > forkThreshold
-    ) {
-      setIsThresholdMet(true);
-    } else {
-      setIsThresholdMet(false);
-    }
-    if (forkThresholdBPS !== undefined && adjustedTotalSupply && numTokensInForkEscrow) {
-      const percentage = forkThresholdBPS / 100;
-      setThresholdPercentage(+percentage.toFixed());
-      handlePercentageToThreshold();
-    }
+  };
+
+  // Refresh data on modal state changes
+  useEffect(() => {
+    refetchForkData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, isWithdrawModalOpen, isDeployModalOpen, isForkPeriodActive]);
+
+  // Update fork status, threshold status, and percentages
+  useEffect(() => {
+    updateForkStatus();
+    updateThresholdStatus();
+    updateEscrowPercentage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    isModalOpen,
-    isForkPeriodActive,
-    numTokensInForkEscrow,
     forkDetails,
     forkThreshold,
+    numTokensInForkEscrow,
     adjustedTotalSupply,
+    forkThresholdBPS,
+    isModalOpen,
+    isForkPeriodActive,
     forks.data,
     id,
   ]);
@@ -165,7 +176,10 @@ const ForkPage = () => {
     );
   }
 
-  if (forks.data.length > 0 && +Number(id) > +forks.data[forks.data.length - 1].id + 1) {
+  if (
+    Number(forks?.data?.length) > 0 &&
+    Number(id) > Number(forks?.data?.[Number(forks?.data?.length) - 1].id) + 1
+  ) {
     // fork doesn't exist
     return <NotFoundPage />;
   }
@@ -281,10 +295,10 @@ const ForkPage = () => {
                     <ForkingPeriodTimer
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={
-                        forkDetails?.data?.executed &&
-                        +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
-                          ? true
-                          : false
+                        !!(
+                          forkDetails?.data?.executed &&
+                          +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000
+                        )
                       }
                     />
                   </div>
@@ -324,10 +338,7 @@ const ForkPage = () => {
                     </>
                   )}
                 </p>
-                <p>
-                  Fork treasury balance: Ξ
-                  {Number(utils.formatEther(forkTreasuryBalance)).toFixed(2)}
-                </p>
+                <p>Fork treasury balance: Ξ{Number(formatEther(forkTreasuryBalance)).toFixed(2)}</p>
               </div>
             </div>
           </Col>
@@ -350,7 +361,7 @@ const ForkPage = () => {
                   <strong>
                     {isForkPeriodActive || isForked ? (
                       <>
-                        {forkDetails.data?.tokensForkingCount !== undefined
+                        {forkDetails.data?.tokensForkingCount != undefined
                           ? forkDetails.data?.tokensForkingCount
                           : '...'}
                       </>
@@ -358,13 +369,13 @@ const ForkPage = () => {
                       <>{numTokensInForkEscrow !== undefined ? numTokensInForkEscrow : '...'}</>
                     )}{' '}
                     Noun
-                    {isForkPeriodActive || isForked
-                      ? forkDetails.data?.tokensForkingCount === 1
-                        ? ''
-                        : 's'
-                      : numTokensInForkEscrow === 1
-                      ? ''
-                      : 's'}
+                    {(() => {
+                      if (isForkPeriodActive || isForked) {
+                        return forkDetails.data?.tokensForkingCount === 1 ? '' : 's';
+                      } else {
+                        return numTokensInForkEscrow === 1 ? '' : 's';
+                      }
+                    })()}
                   </strong>
                   {isForkPeriodActive || isForked ? null : (
                     <span className={classes.thresholdCount}>
@@ -382,7 +393,7 @@ const ForkPage = () => {
                   setIsDeployModalOpen={setIsDeployModalOpen}
                   isForkPeriodActive={isForkPeriodActive}
                   isThresholdMet={isThresholdMet}
-                  isUserConnected={account ? true : false}
+                  isUserConnected={!!account}
                 />
 
                 {(isForkPeriodActive || isForked) && (
@@ -415,7 +426,7 @@ const ForkPage = () => {
                   </div>
                 )}
                 {escrowEvents.data &&
-                  escrowEvents.data.map((event, i) => {
+                  escrowEvents.data.map(event => {
                     if (event?.eventType === 'ForkingEnded') {
                       if (
                         event.createdAt &&
@@ -427,8 +438,9 @@ const ForkPage = () => {
                     }
                     return (
                       <ForkEvent
+                        key={event.id}
                         event={event}
-                        isOnlyEvent={escrowEvents.data.length > 1 ? false : true}
+                        isOnlyEvent={escrowEvents.data.length <= 1}
                       />
                     );
                   })}

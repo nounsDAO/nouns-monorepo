@@ -1,8 +1,10 @@
-import clsx from 'clsx';
-import classes from './NavBarButton.module.css';
+import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import clsx from 'clsx';
+
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+
+import classes from './NavBarButton.module.css';
 
 export enum NavBarButtonStyle {
   COOL_INFO,
@@ -89,7 +91,7 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
   const { buttonText, buttonIcon, buttonStyle, onClick, disabled, className = '' } = props;
 
-  let isDisabled = disabled ?? false;
+  const isDisabled = disabled ?? false;
 
   return (
     <>

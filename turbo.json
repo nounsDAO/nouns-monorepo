@@ -30,6 +30,11 @@
       "outputs": []
     },
     "dev": {
+      "dependsOn": [
+        "@nouns/assets#build",
+        "@nouns/contracts#build",
+        "@nouns/sdk#build"
+      ],
       "cache": false,
       "persistent": true
     }

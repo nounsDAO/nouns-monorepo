@@ -1,28 +1,35 @@
-import { Row, Col } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import { useProposal, useProposalVersions } from '../../wrappers/nounsDao';
-import classes from './Vote.module.css';
-import headerClasses from '../../components/ProposalHeader/ProposalHeader.module.css';
-import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
 import { useEffect, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import ProposalContent from '../../components/ProposalContent';
+import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { Col, Row } from 'react-bootstrap';
+
+import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
+import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
+import Section from '@/layout/Section';
+import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
+import classes from './Vote.module.css';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalContent from '@/components/ProposalContent';
+
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-import { Trans } from '@lingui/react/macro';
+
 import VersionTab from './VersionTab';
+
 import remarkBreaks from 'remark-breaks';
-import ProposalTransactionsDiffs from '../../components/ProposalContent/ProposalTransactionsDiffs';
-import ProposalStatus from '../../components/ProposalStatus';
-import { i18n } from '@lingui/core';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { useParams } from 'react-router';
-import { Link } from 'react-router';
+
+import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
+import ProposalStatus from '@/components/ProposalStatus';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+
+import { Link, useParams } from 'react-router';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
@@ -37,7 +44,7 @@ const ProposalHistory = () => {
 
   useEffect(() => {
     if (versionNumber) {
-      setActiveVersion(parseInt(versionNumber));
+      setActiveVersion(Number(versionNumber));
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);
@@ -81,7 +88,7 @@ const ProposalHistory = () => {
               <span>
                 <div className="d-flex">
                   <div>
-                    <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                    <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
                   </div>
                   <div>
                     <ProposalStatus
@@ -182,10 +189,10 @@ const ProposalHistory = () => {
                         <VersionTab
                           key={i}
                           id={Number(id).toString()}
-                          createdAt={version.createdAt}
+                          createdAt={Number(version.createdAt)}
                           updateMessage={version.updateMessage}
                           versionNumber={version.versionNumber}
-                          isActive={i + 1 === activeVersion ? true : false}
+                          isActive={i + 1 === activeVersion}
                           setActiveVersion={setActiveVersion}
                         />
                       );

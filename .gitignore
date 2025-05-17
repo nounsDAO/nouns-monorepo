@@ -14,4 +14,4 @@ dist
 .netlify
 
 .turbo
-.eslintcache
+.cache

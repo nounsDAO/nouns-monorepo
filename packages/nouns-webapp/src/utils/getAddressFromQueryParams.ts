@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { isAddress } from 'viem';
 
 /**
  * Get address from query param
@@ -26,5 +26,5 @@ export const getAddressFromQueryParams = (
     return decodeURIComponent(maybeAddress);
   }
 
-  return ethers.utils.isAddress(maybeAddress) ? maybeAddress : undefined;
+  return isAddress(maybeAddress) ? maybeAddress : undefined;
 };

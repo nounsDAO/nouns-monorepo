@@ -1,6 +1,9 @@
-import { ExternalLinkIcon } from '@heroicons/react/solid';
 import React from 'react';
+
+import { ExternalLinkIcon } from '@heroicons/react/solid';
+
 import { buildEtherscanTxLink } from '../../../../../utils/etherscan';
+
 import classes from './TransactionHashPill.module.css';
 
 interface TransactionHashPillProps {

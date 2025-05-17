@@ -1,23 +1,29 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './CandidateSponsors.module.css';
-import dayjs from 'dayjs';
-import { Trans } from '@lingui/react/macro';
-import { TransactionStatus, useEthers } from '@usedapp/core';
-import { ethers } from 'ethers';
-import config, { CHAIN_ID } from '../../config';
-import { useAddSignature, ProposalCandidate } from '../../wrappers/nounsData';
-import clsx from 'clsx';
+
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
+import {
+  encodeAbiParameters,
+  encodePacked,
+  getAddress,
+  hexToBytes,
+  keccak256,
+  toBytes,
+} from 'viem';
+import { useChainId, useSignTypedData } from 'wagmi';
 
-const domain = {
-  name: 'Nouns DAO',
-  chainId: CHAIN_ID,
-  verifyingContract: config.addresses.nounsDAOProxy,
-};
+import link from '@/assets/icons/Link.svg';
+import { CHAIN_ID } from '@/config';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { Address } from '@/utils/types';
+import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
+
+import classes from './CandidateSponsors.module.css';
+import { nounsGovernorAddress } from '@/contracts';
 
 const createProposalTypes = {
   Proposal: [
@@ -29,7 +35,7 @@ const createProposalTypes = {
     { name: 'description', type: 'string' },
     { name: 'expiry', type: 'uint256' },
   ],
-};
+} as const;
 
 const updateProposalTypes = {
   UpdateProposal: [
@@ -42,25 +48,23 @@ const updateProposalTypes = {
     { name: 'description', type: 'string' },
     { name: 'expiry', type: 'uint256' },
   ],
-};
+} as const;
 
-type Props = {
+type SignatureFormProps = {
   id: string;
   transactionState: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception';
-  setTransactionState: Function;
-  setIsFormDisplayed: Function;
+  setTransactionState: (state: 'None' | 'Success' | 'Mining' | 'Fail' | 'Exception') => void;
+  setIsFormDisplayed: (displayed: boolean) => void;
   candidate: ProposalCandidate;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number | null) => void;
   proposalIdToUpdate: number;
 };
 
-function SignatureForm(props: Props) {
+const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   const [reasonText, setReasonText] = useState('');
   const [expirationDate, setExpirationDate] = useState<number>();
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-  const { library } = useEthers();
-  const signer = library?.getSigner();
   const { addSignature, addSignatureState } = useAddSignature();
   const [isGetSignatureWaiting, setIsGetSignatureWaiting] = useState(false);
   const [isGetSignaturePending, setIsGetSignaturePending] = useState(false);
@@ -70,31 +74,56 @@ function SignatureForm(props: Props) {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
+
+  const chainId = useChainId();
+  const [domain, setDomain] = useState({
+    name: 'Nouns DAO',
+    chainId: CHAIN_ID,
+    verifyingContract: nounsGovernorAddress[chainId],
+  });
+
+  useEffect(() => {
+    setDomain(prev => ({
+      ...prev,
+      verifyingContract: nounsGovernorAddress[chainId],
+    }));
+  }, []);
+
+  // Hook for EIP-712 typed data signing
+  const { data, signTypedData, isPending: isSignPending } = useSignTypedData();
   async function calcProposalEncodeData(
-    proposer: any,
-    targets: any,
-    values: any,
-    signatures: any[],
-    calldatas: any[],
+    proposer: string,
+    targets: string[],
+    values: bigint[],
+    signatures: string[],
+    calldatas: `0x${string}`[],
     description: string,
   ) {
-    const signatureHashes = signatures.map((sig: string) =>
-      ethers.utils.keccak256(ethers.utils.toUtf8Bytes(sig)),
+    // Convert each signature to a hash
+    const signatureHashes = signatures.map((sig: string) => keccak256(toBytes(sig)));
+
+    // Convert each calldata to a hash
+    const calldatasHashes = calldatas.map((calldata: `0x${string}`) =>
+      keccak256(hexToBytes(calldata)),
     );
 
-    const calldatasHashes = calldatas.map((calldata: ethers.utils.BytesLike) =>
-      ethers.utils.keccak256(calldata),
-    );
-
-    const encodedData = ethers.utils.defaultAbiCoder.encode(
-      ['address', 'bytes32', 'bytes32', 'bytes32', 'bytes32', 'bytes32'],
+    // Encode the data using viem's encodeAbiParameters
+    const encodedData = encodeAbiParameters(
       [
-        proposer,
-        ethers.utils.keccak256(ethers.utils.solidityPack(['address[]'], [targets])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['uint256[]'], [values])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [signatureHashes])),
-        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [calldatasHashes])),
-        ethers.utils.keccak256(ethers.utils.toUtf8Bytes(description)),
+        { name: 'proposer', type: 'address' },
+        { name: 'targetsHash', type: 'bytes32' },
+        { name: 'valuesHash', type: 'bytes32' },
+        { name: 'signaturesHash', type: 'bytes32' },
+        { name: 'calldatasHash', type: 'bytes32' },
+        { name: 'descriptionHash', type: 'bytes32' },
+      ],
+      [
+        getAddress(proposer),
+        keccak256(encodePacked(['address[]'], [targets.map(v => v as Address)])),
+        keccak256(encodePacked(['uint256[]'], [values])),
+        keccak256(encodePacked(['bytes32[]'], [signatureHashes])),
+        keccak256(encodePacked(['bytes32[]'], [calldatasHashes])),
+        keccak256(toBytes(description)),
       ],
     );
 
@@ -103,53 +132,59 @@ function SignatureForm(props: Props) {
 
   const getSignature = async () => {
     setIsGetSignatureWaiting(true);
-    let signature;
-    if (props.proposalIdToUpdate > 0) {
-      const value = {
-        proposalId: props.proposalIdToUpdate,
-        proposer: props.candidate.proposer,
-        targets: props.candidate.version.content.targets,
-        values: props.candidate.version.content.values,
-        signatures: props.candidate.version.content.signatures,
-        calldatas: props.candidate.version.content.calldatas,
-        description: props.candidate.version.content.description,
-        expiry: expirationDate,
-      };
-      signature = await signer!
-        ._signTypedData(domain, updateProposalTypes, value)
-        .then((sig: any) => {
-          setIsGetSignatureWaiting(false);
-          setIsGetSignatureTxSuccessful(true);
-          return sig;
-        })
-        .catch((err: any) => {
-          setGetSignatureErrorMessage(err.message);
-          setIsGetSignatureWaiting(false);
+
+    try {
+      if (props.proposalIdToUpdate > 0) {
+        // Create the value for an update proposal
+        const value = {
+          proposalId: BigInt(props.proposalIdToUpdate),
+          proposer: getAddress(props.candidate.proposer),
+          targets: props.candidate.version.content.targets.map(target => getAddress(target)),
+          values: props.candidate.version.content.values.map(value => BigInt(value)),
+          signatures: props.candidate.version.content.signatures,
+          calldatas: props.candidate.version.content.calldatas,
+          description: props.candidate.version.content.description,
+          expiry: BigInt(expirationDate || 0),
+        };
+
+        // Trigger the signature request
+        signTypedData({
+          domain,
+          types: updateProposalTypes,
+          primaryType: 'UpdateProposal',
+          message: value,
         });
-    } else {
-      if (!props.candidate) return;
-      const value = {
-        proposer: props.candidate.proposer,
-        targets: props.candidate.version.content.targets,
-        values: props.candidate.version.content.values,
-        signatures: props.candidate.version.content.signatures,
-        calldatas: props.candidate.version.content.calldatas,
-        description: props.candidate.version.content.description,
-        expiry: expirationDate,
-      };
-      signature = await signer!
-        ._signTypedData(domain, createProposalTypes, value)
-        .then((sig: any) => {
-          setIsGetSignatureWaiting(false);
-          setIsGetSignatureTxSuccessful(true);
-          return sig;
-        })
-        .catch((err: any) => {
-          setGetSignatureErrorMessage(err.message);
-          setIsGetSignatureWaiting(false);
+      } else {
+        if (!props.candidate) return;
+
+        // Create the value for a new proposal
+        const value = {
+          proposer: getAddress(props.candidate.proposer),
+          targets: props.candidate.version.content.targets.map(target => getAddress(target)),
+          values: props.candidate.version.content.values.map(value => BigInt(value)),
+          signatures: props.candidate.version.content.signatures,
+          calldatas: props.candidate.version.content.calldatas,
+          description: props.candidate.version.content.description,
+          expiry: BigInt(expirationDate || 0),
+        };
+
+        // Trigger the signature request
+        signTypedData({
+          domain,
+          types: createProposalTypes,
+          primaryType: 'Proposal',
+          message: value,
         });
+      }
+
+      setIsGetSignatureWaiting(false);
+      setIsGetSignatureTxSuccessful(true);
+      return data;
+    } catch (err: any) {
+      setGetSignatureErrorMessage(err.message);
+      setIsGetSignatureWaiting(false);
+      return undefined;
     }
-    return signature;
   };
 
   async function sign() {
@@ -157,29 +192,35 @@ function SignatureForm(props: Props) {
     if (signature) {
       setIsGetSignatureWaiting(false);
       setIsWaiting(true);
+
+      // Calculate encoded proposal data
       const encodedProp = await calcProposalEncodeData(
         props.candidate.proposer,
         props.candidate.version.content.targets,
-        props.candidate.version.content.values,
+        props.candidate.version.content.values.map(value => BigInt(value)),
         props.candidate.version.content.signatures,
         props.candidate.version.content.calldatas,
         props.candidate.version.content.description,
       );
 
-      const encodedPropUpdate = ethers.utils.solidityPack(
-        ['uint256', 'bytes'],
-        [props.proposalIdToUpdate, encodedProp],
-      );
-      // signature set, submit signature
-      await addSignature(
-        signature,
-        expirationDate,
-        props.candidate.proposer,
-        props.candidate.slug,
-        props.proposalIdToUpdate, // proposalIdToUpdate
-        props.proposalIdToUpdate > 0 ? encodedPropUpdate : encodedProp,
-        reasonText,
-      );
+      // If this is a proposal update, pack the proposal ID with the encoded data
+      const encodedPropUpdate =
+        props.proposalIdToUpdate > 0
+          ? encodePacked(['uint256', 'bytes'], [BigInt(props.proposalIdToUpdate), encodedProp])
+          : encodedProp;
+
+      // Submit the signature
+      await addSignature({
+        args: [
+          signature as `0x${string}`,
+          expirationDate ? BigInt(expirationDate) : BigInt(0),
+          props.candidate.proposer as `0x${string}`,
+          props.candidate.slug,
+          BigInt(props.proposalIdToUpdate), // proposalIdToUpdate
+          props.proposalIdToUpdate > 0 ? encodedPropUpdate : encodedProp,
+          reasonText,
+        ],
+      });
     }
   }
 
@@ -197,45 +238,43 @@ function SignatureForm(props: Props) {
     props.setDataFetchPollInterval(0);
   };
 
-  const handleAddSignatureState = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        setIsWaiting(false);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        props.handleRefetchCandidateData();
-        setIsTxSuccessful(true);
-        setIsLoading(false);
-        break;
-      case 'Fail':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state.errorMessage);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'Exception':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state.errorMessage);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddSignatureState = useCallback(
+    ({ errorMessage, status }: { errorMessage?: string; status: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          setIsLoading(true);
+          setIsWaiting(false);
+          props.setDataFetchPollInterval(50);
+          break;
+        case 'Success':
+          props.handleRefetchCandidateData();
+          setIsTxSuccessful(true);
+          setIsLoading(false);
+          break;
+        case 'Fail':
+        case 'Exception':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage);
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     handleAddSignatureState(addSignatureState);
   }, [addSignatureState, handleAddSignatureState]);
 
+  // Update overlay visibility when signing states change
   useEffect(() => {
     if (
       isWaiting ||
@@ -243,7 +282,7 @@ function SignatureForm(props: Props) {
       isTxSuccessful ||
       errorMessage ||
       isGetSignatureWaiting ||
-      isGetSignaturePending ||
+      isSignPending || // Using wagmi's isPending instead of custom state
       isGetSignatureTxSuccessful ||
       getSignatureErrorMessage
     ) {
@@ -255,7 +294,7 @@ function SignatureForm(props: Props) {
     isTxSuccessful,
     errorMessage,
     isGetSignatureWaiting,
-    isGetSignaturePending,
+    isSignPending, // Using wagmi's isPending instead of custom state
     isGetSignatureTxSuccessful,
     getSignatureErrorMessage,
   ]);
@@ -271,6 +310,14 @@ function SignatureForm(props: Props) {
       setDateErrorMessage('Date must be in the future');
     }
   }, [expirationDate]);
+
+  // Effect to handle the signature data changes
+  useEffect(() => {
+    if (data && isGetSignatureWaiting) {
+      setIsGetSignatureWaiting(false);
+      setIsGetSignatureTxSuccessful(true);
+    }
+  }, [data, isGetSignatureWaiting]);
 
   return (
     <div className={classes.formWrapper}>
@@ -298,6 +345,7 @@ function SignatureForm(props: Props) {
             <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
           ) : (
             <button
+              type="button"
               className={classes.button}
               onClick={() => {
                 sign();
@@ -318,7 +366,7 @@ function SignatureForm(props: Props) {
             <span
               className={clsx(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                classes.loadingButton,
+                  classes.loadingButton,
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
@@ -330,13 +378,14 @@ function SignatureForm(props: Props) {
               )}
               {isGetSignatureWaiting && 'Awaiting signature'}
               {isWaiting && 'Awaiting confirmation'}
-              {isGetSignaturePending && 'Confirming'}
+              {isSignPending && 'Confirming signature'}
               {isLoading && 'Submitting signature'}
             </span>
             {(getSignatureErrorMessage || errorMessage) && (
               <p className={clsx(classes.statusMessage, classes.errorMessage)}>
                 {getSignatureErrorMessage || errorMessage}
                 <button
+                  type="button"
                   onClick={() => {
                     clearTransactionState();
                   }}
@@ -350,7 +399,7 @@ function SignatureForm(props: Props) {
                 <p className={clsx(classes.statusMessage, classes.successMessage)}>
                   <a
                     href={
-                      addSignatureState.transaction &&
+                      addSignatureState.transaction?.hash &&
                       `${buildEtherscanTxLink(addSignatureState.transaction.hash)}`
                     }
                     target="_blank"
@@ -368,7 +417,7 @@ function SignatureForm(props: Props) {
               <ul className={classes.steps}>
                 <li>
                   <strong>
-                    {(isGetSignatureWaiting || isGetSignaturePending) && (
+                    {(isGetSignatureWaiting || isSignPending) && (
                       <span className={classes.spinner}>
                         <Spinner animation="border" />
                       </span>
@@ -411,6 +460,7 @@ function SignatureForm(props: Props) {
             {/* close overlay */}
             {isTxSuccessful && (
               <button
+                type="button"
                 className={classes.closeButton}
                 onClick={() => {
                   props.setIsFormDisplayed(false);
@@ -431,6 +481,6 @@ function SignatureForm(props: Props) {
       </p>
     </div>
   );
-}
+};
 
 export default SignatureForm;

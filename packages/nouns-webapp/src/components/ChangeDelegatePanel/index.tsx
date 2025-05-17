@@ -1,26 +1,31 @@
-import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
-import clsx from 'clsx';
-import { isAddress } from 'ethers/lib/utils';
 import React, { useEffect, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import { Collapse, FormControl } from 'react-bootstrap';
-import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
-import DelegationCandidateInfo from '../DelegationCandidateInfo';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import classes from './ChangeDelegatePannel.module.css';
+import { isAddress } from 'viem';
+import { useAccount, useEnsAddress } from 'wagmi';
+
+import BrandSpinner from '@/components/BrandSpinner';
+import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { usePickByState } from '@/utils/pickByState';
+import { Address } from '@/utils/types';
+import { useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useAccountVotes,
   useDelegateVotes,
   useNounTokenBalance,
   useUserDelegatee,
-} from '../../wrappers/nounToken';
-import { usePickByState } from '../../utils/pickByState';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import BrandSpinner from '../BrandSpinner';
-import { useProposalThreshold } from '../../wrappers/nounsDao';
+} from '@/wrappers/nounToken';
 
-interface ChangeDelegatePannelProps {
+import classes from './ChangeDelegatePanel.module.css';
+
+import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
+
+interface ChangeDelegatePanelProps {
   onDismiss: () => void;
   delegateTo?: string;
 }
@@ -49,25 +54,25 @@ const getTitleFromState = (state: ChangeDelegateState) => {
   }
 };
 
-const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
+const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   const { onDismiss, delegateTo } = props;
 
   const [changeDelegateState, setChangeDelegateState] = useState<ChangeDelegateState>(
     ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
   );
 
-  const { library, account } = useEthers();
+  const { address: account } = useAccount();
 
   const [delegateAddress, setDelegateAddress] = useState(delegateTo ?? '');
   const [delegateInputText, setDelegateInputText] = useState(delegateTo ?? '');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const [hasResolvedDeepLinkedENS, setHasResolvedDeepLinkedENS] = useState(false);
-  const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
-  const { send: delegateVotes, state: delegateState } = useDelegateVotes();
+  const availableVotes = useNounTokenBalance(account as Address) ?? 0;
+  const { delegateVotes, delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
   const proposalThreshold = useProposalThreshold();
-  const accountVotes = useAccountVotes(account ?? '') ?? 0;
+  const accountVotes = useAccountVotes(account || undefined) ?? 0;
 
   useEffect(() => {
     if (delegateState.status === 'Success') {
@@ -83,17 +88,19 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     }
   }, [delegateState]);
 
-  useEffect(() => {
-    const checkIsValidENS = async () => {
-      const reverseENSResult = await library?.resolveName(delegateAddress);
-      if (reverseENSResult) {
-        setDelegateAddress(reverseENSResult);
-      }
-      setHasResolvedDeepLinkedENS(true);
-    };
+  const { data: resolvedAddress, isFetched } = useEnsAddress({
+    name: delegateAddress,
+    query: { enabled: Boolean(delegateAddress) },
+  });
 
-    checkIsValidENS();
-  }, [delegateAddress, delegateTo, library]);
+  useEffect(() => {
+    if (!isFetched) return;
+
+    if (resolvedAddress) {
+      setDelegateAddress(resolvedAddress);
+    }
+    setHasResolvedDeepLinkedENS(true);
+  }, [resolvedAddress, isFetched, setDelegateAddress, setHasResolvedDeepLinkedENS]);
 
   useEffect(() => {
     if (delegateAddress.length === 0) {
@@ -119,6 +126,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ],
     [
       <NavBarButton
+        key="enter-delegate-address"
         buttonText={
           <div className={classes.delegateKVotesBtn}>
             {locale === 'en-US ' ? (
@@ -143,7 +151,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
         onClick={() => {
-          delegateVotes(delegateAddress);
+          delegateVotes({ args: [delegateAddress as Address] });
         }}
         disabled={
           (changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
@@ -152,6 +160,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       />,
       <NavBarButton
+        key="changing"
         buttonText={<Trans>View on Etherscan</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
         onClick={() => {
@@ -160,11 +169,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         disabled={false}
       />,
       <NavBarButton
+        key="change-success"
         buttonText={<Trans>Close</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
         onClick={onDismiss}
       />,
-      <></>,
+      <React.Fragment key="change-failure"></React.Fragment>,
     ],
   );
 
@@ -176,21 +186,23 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       ChangeDelegateState.CHANGE_SUCCESS,
       ChangeDelegateState.CHANGE_FAILURE,
     ],
-    // eslint-disable-next-line no-sparse-arrays
+
     [
-      <Trans>
+      <Trans key="enter-address">
         Enter the Ethereum address or ENS name of the account you would like to delegate your votes
         to.
       </Trans>,
-      <Trans>
+      <Trans key="votes-delegating">
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes are being delegated
         to a new account.
       </Trans>,
-      <Trans>
+      <Trans key="votes-delegated">
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
         to a new account.
       </Trans>,
-      <>{delegateState.errorMessage}</>,
+      <React.Fragment key="delegate-error">
+        {delegateState.errorMessage?.message || String(delegateState.errorMessage || '')}
+      </React.Fragment>,
     ],
   );
 
@@ -211,13 +223,14 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
               {proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'} after
-              this delegation. Unexecuted props you've created will now be cancelable by anyone.
+              this delegation. Unexecuted props you&apos;ve created will now be cancelable by
+              anyone.
             </Trans>
           </div>
         )}
       </div>
 
-      {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) && delegateTo === undefined && (
+      {changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE && delegateTo === undefined && (
         <FormControl
           className={clsx(classes.delegateInput, delegateInputClass)}
           type="string"
@@ -238,21 +251,20 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
       <Collapse
         in={
-          isAddress(delegateAddress) &&
-          !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)
+          isAddress(delegateAddress) && changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE
         }
       >
         <div className={classes.delegateCandidateInfoWrapper}>
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           delegateAddress === currentDelegate ? (
             <span className={classes.alreadyDelegatedCopy}>
-              <Trans>You've already delegated to this address</Trans>
+              <Trans>You&apos;ve already delegated to this address</Trans>
             </span>
           ) : (
             <>
               {isAddress(delegateAddress) && (
                 <DelegationCandidateInfo
-                  address={delegateAddress || ''}
+                  address={delegateAddress as `0x${string}`}
                   votesToAdd={availableVotes}
                   changeModalState={changeDelegateState}
                 />
@@ -296,4 +308,4 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   );
 };
 
-export default ChangeDelegatePannel;
+export default ChangeDelegatePanel;

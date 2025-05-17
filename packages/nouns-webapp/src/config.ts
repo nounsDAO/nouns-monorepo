@@ -2,17 +2,19 @@ import {
   ContractAddresses as NounsContractAddresses,
   getContractAddressesForChainOrThrow,
 } from '@nouns/sdk';
-import { ChainId } from '@usedapp/core';
+
+import { Address } from '@/utils/types';
+import { hardhat, mainnet, sepolia } from 'viem/chains';
 
 interface ExternalContractAddresses {
-  lidoToken: string | undefined;
-  usdcToken: string | undefined;
-  chainlinkEthUsdc: string | undefined;
-  payerContract: string | undefined;
-  tokenBuyer: string | undefined;
-  nounsStreamFactory: string | undefined;
-  weth: string | undefined;
-  steth: string | undefined;
+  lidoToken: Address | undefined;
+  usdcToken: Address | undefined;
+  chainlinkEthUsdc: Address | undefined;
+  payerContract: Address | undefined;
+  tokenBuyer: Address | undefined;
+  nounsStreamFactory: Address | undefined;
+  weth: Address | undefined;
+  steth: Address | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -24,8 +26,7 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-export const ChainId_Sepolia = 11155111;
-type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | typeof ChainId_Sepolia;
+type SupportedChains = typeof mainnet.id | typeof hardhat.id | typeof sepolia.id;
 
 interface CacheBucket {
   name: string;
@@ -47,12 +48,11 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt(import.meta.env.VITE_CHAIN_ID ?? '4');
+export const CHAIN_ID: SupportedChains = import.meta.env.VITE_CHAIN_ID ?? sepolia.id;
 
 export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
 
-export const WALLET_CONNECT_V2_PROJECT_ID =
-  import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
+export const WALLET_CONNECT_V2_PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
@@ -67,28 +67,19 @@ export const createNetworkWsUrl = (network: string): string => {
 };
 
 const app: Record<SupportedChains, AppConfig> = {
-  [ChainId.Goerli]: {
-    jsonRpcUri: createNetworkHttpUrl('goerli'),
-    wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn',
-    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
-  },
-  [ChainId_Sepolia]: {
+  [sepolia.id]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-sepolia-the-burn/0.1.0/gn',
+    subgraphApiUri: import.meta.env.VITE_SEPOLIA_SUBGRAPH ?? '',
     enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
-  [ChainId.Mainnet]: {
+  [mainnet.id]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri:
-      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn',
+    subgraphApiUri: import.meta.env.VITE_MAINNET_SUBGRAPH ?? '',
     enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
   },
-  [ChainId.Hardhat]: {
+  [hardhat.id]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
@@ -97,17 +88,7 @@ const app: Record<SupportedChains, AppConfig> = {
 };
 
 const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
-  [ChainId.Goerli]: {
-    lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
-    usdcToken: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
-    weth: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-    steth: '0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F',
-    payerContract: '0x63F8445C4549d17DB181f9ADe1a126EfF8Ee72D6',
-    tokenBuyer: '0x7Ee1fE5973c2F6e42D2D40c93f0FDed078c85770',
-    chainlinkEthUsdc: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
-    nounsStreamFactory: '0xc08a287eCB16CeD801f28Bb011924f7DE5Cc53a3',
-  },
-  [ChainId_Sepolia]: {
+  [sepolia.id]: {
     lidoToken: undefined,
     usdcToken: '0xEbCC972B6B3eB15C0592BE1871838963d0B94278',
     weth: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
@@ -117,7 +98,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     chainlinkEthUsdc: '0x694AA1769357215DE4FAC081bf1f309aDC325306',
     nounsStreamFactory: '0xb78ccF3BD015f209fb9B2d3d132FD8784Df78DF5',
   },
-  [ChainId.Mainnet]: {
+  [mainnet.id]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     usdcToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
     chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
@@ -127,7 +108,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     steth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     nounsStreamFactory: '0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff',
   },
-  [ChainId.Hardhat]: {
+  [hardhat.id]: {
     lidoToken: undefined,
     usdcToken: undefined,
     payerContract: undefined,
@@ -143,7 +124,9 @@ const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch { /* empty */ }
+  } catch {
+    /* empty */
+  }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
@@ -159,5 +142,3 @@ const config = {
 };
 
 export default config;
-
-export const multicallOnLocalhost = '0x4A679253410272dd5232B3Ff7cF5dbB88f295319';

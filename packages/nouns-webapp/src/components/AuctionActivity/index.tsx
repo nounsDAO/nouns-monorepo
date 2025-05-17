@@ -1,30 +1,33 @@
-import { Auction } from '../../wrappers/nounsAuction';
-import React, { useState, useEffect } from 'react';
-import BigNumber from 'bignumber.js';
-import { Row, Col } from 'react-bootstrap';
+import type { RootState } from '@/index';
+
+import React, { useEffect, useState } from 'react';
+
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
+import { Col, Row } from 'react-bootstrap';
+
+import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
+import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
+import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
+import AuctionNavigation from '@/components/AuctionNavigation';
+import AuctionTimer from '@/components/AuctionTimer';
+import AuctionTitleAndNavWrapper from '@/components/AuctionTitleAndNavWrapper';
+import Bid from '@/components/Bid';
+import BidHistory from '@/components/BidHistory';
+import BidHistoryBtn from '@/components/BidHistoryBtn';
+import BidHistoryModal from '@/components/BidHistoryModal';
+import CurrentBid from '@/components/CurrentBid';
+import Holder from '@/components/Holder';
+import NounInfoCard from '@/components/NounInfoCard';
+import Winner from '@/components/Winner';
+import config from '@/config';
+import { useAppSelector } from '@/hooks';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { Auction } from '@/wrappers/nounsAuction';
+
 import classes from './AuctionActivity.module.css';
 import bidHistoryClasses from './BidHistory.module.css';
-import Bid from '../Bid';
-import AuctionTimer from '../AuctionTimer';
-import CurrentBid from '../CurrentBid';
-import Winner from '../Winner';
-import BidHistory from '../BidHistory';
-import AuctionNavigation from '../AuctionNavigation';
-import AuctionActivityWrapper from '../AuctionActivityWrapper';
-import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
-import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
-import BidHistoryBtn from '../BidHistoryBtn';
-import config from '../../config';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import NounInfoCard from '../NounInfoCard';
-import { useAppSelector } from '../../hooks';
-import type { RootState } from '../../index';
-import BidHistoryModal from '../BidHistoryModal';
-import { Trans } from '@lingui/react/macro';
-import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -59,8 +62,15 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
   const showBidModalHandler = () => {
     setShowBidHistoryModal(true);
   };
-  const dismissBidModalHanlder = () => {
+  const dismissBidModalHandler = () => {
     setShowBidHistoryModal(false);
+  };
+
+  const renderAuctionWinner = () => {
+    if (isLastAuction) {
+      return <Winner winner={auction.bidder} />;
+    }
+    return <Holder nounId={BigInt(auction.nounId)} />;
   };
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
@@ -91,7 +101,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
   return (
     <>
       {showBidHistoryModal && (
-        <BidHistoryModal onDismiss={dismissBidModalHanlder} auction={auction} />
+        <BidHistoryModal onDismiss={dismissBidModalHandler} auction={auction} />
       )}
 
       <AuctionActivityWrapper>
@@ -106,26 +116,22 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                   onPrevAuctionClick={onPrevAuctionClick}
                 />
               )}
-              <AuctionActivityDateHeadline startTime={auction.startTime} />
+              <AuctionActivityDateHeadline startTime={BigInt(auction.startTime)} />
             </AuctionTitleAndNavWrapper>
             <Col lg={12}>
-              <AuctionActivityNounTitle isCool={isCool} nounId={auction.nounId} />
+              <AuctionActivityNounTitle isCool={isCool} nounId={BigInt(auction.nounId)} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
             <Col lg={4} className={classes.currentBidCol}>
               <CurrentBid
-                currentBid={new BigNumber(auction.amount.toString())}
+                currentBid={BigInt(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
             </Col>
             <Col lg={6} className={classes.auctionTimerCol}>
               {auctionEnded ? (
-                isLastAuction ? (
-                  <Winner winner={auction.bidder} />
-                ) : (
-                  <Holder nounId={auction.nounId.toNumber()} />
-                )
+                renderAuctionWinner()
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
               )}
@@ -155,7 +161,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Col lg={12}>
             {!isLastAuction ? (
               <NounInfoCard
-                nounId={auction.nounId.toNumber()}
+                nounId={BigInt(auction.nounId)}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (
@@ -167,10 +173,10 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 />
               )
             )}
-            {/* If no bids, show nothing. If bids avail:graph is stable? show bid history modal,
+            {/* If no bids, show nothing. If bids avail:graph is stable? Show bid history modal,
             else show etherscan contract link */}
             {isLastAuction &&
-              !auction.amount.eq(0) &&
+              auction.amount !== 0n &&
               (displayGraphDepComps ? (
                 <BidHistoryBtn onClick={showBidModalHandler} />
               ) : (

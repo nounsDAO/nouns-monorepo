@@ -55,7 +55,12 @@
 
   display: flex;
   align-items: center;
-  font-feature-settings: 'tnum' on, 'lnum' on, 'ss06' on, 'ss01' on, 'liga' off;
+  font-feature-settings:
+    'tnum' on,
+    'lnum' on,
+    'ss06' on,
+    'ss01' on,
+    'liga' off;
 
   color: var(--brand-gray-dark-text);
 }

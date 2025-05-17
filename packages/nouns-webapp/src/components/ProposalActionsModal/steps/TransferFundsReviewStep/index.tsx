@@ -1,51 +1,65 @@
-import { Trans } from '@lingui/react/macro';
-import { utils } from 'ethers';
-import React from 'react';
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import ShortAddress from '../../../ShortAddress';
-import { SupportedCurrency } from '../TransferFundsDetailsStep';
-import classes from './TransferFundsReviewStep.module.css';
-import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
-import config from '../../../../config';
+import type { Address } from '@/utils/types';
 
-const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
+import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import { encodeFunctionData, parseAbi, parseEther } from 'viem';
+
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
+import config from '@/config';
+import { nounsPayerAbi } from '@/contracts';
+
+import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
+import { SupportedCurrency } from '../TransferFundsDetailsStep';
+
+import classes from './TransferFundsReviewStep.module.css';
+
+const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function) => {
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
       signature: '',
       calldata: '0x',
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
-    const values = [state.address, utils.parseEther((state.amount ?? 0).toString()).toString()];
-    onActionAdd({
-      address: config.addresses.steth,
-      value: '0',
-      signature: 'transfer(address,uint256)',
-      decodedCalldata: JSON.stringify(values),
-      calldata: utils.defaultAbiCoder.encode(['address', 'uint256'], values),
+    const value = parseEther((state.amount ?? 0).toString()).toString();
+    const args = [state.address, BigInt(value)] as const;
+
+    // Define the transfer function ABI
+    const transferAbi = parseAbi(['function transfer(address to, uint256 value) returns (bool)']);
+
+    const calldata = encodeFunctionData({
+      abi: transferAbi,
+      functionName: 'transfer',
+      args,
     });
-  } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
-    const signature = 'sendOrRegisterDebt(address,uint256)';
-    const abi = new utils.Interface(payerABI);
 
     onActionAdd({
-      address: config.addresses.payerContract,
+      address: config.addresses.steth as Address,
+      value: '0',
+      signature: 'transfer(address,uint256)',
+      decodedCalldata: JSON.stringify(args),
+      calldata,
+    });
+  } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
+    // Convert USDC amount - USDC has 6 decimals
+    const usdcAmount = Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString();
+    const calldata = encodeFunctionData({
+      abi: nounsPayerAbi,
+      functionName: 'sendOrRegisterDebt',
+      args: [state.address, BigInt(usdcAmount)],
+    });
+
+    onActionAdd({
+      address: config.addresses.payerContract as Address,
       value: '0',
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
-      signature,
-      decodedCalldata: JSON.stringify([
-        state.address,
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
-      ]),
-      calldata: abi?._encodeParams(abi?.functions[signature]?.inputs, [
-        state.address,
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
-      ]),
+      signature: 'sendOrRegisterDebt(address,uint256)',
+      decodedCalldata: JSON.stringify([state.address, usdcAmount]),
+      calldata,
     });
   } else {
     // This should never happen

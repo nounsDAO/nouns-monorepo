@@ -1,7 +1,9 @@
 import { Trans } from '@lingui/react/macro';
 import { Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
-import Section from '../../layout/Section';
+
+import Section from '@/layout/Section';
+
 import classes from './NounsIntroSection.module.css';
 
 const NounsIntroSection = () => {

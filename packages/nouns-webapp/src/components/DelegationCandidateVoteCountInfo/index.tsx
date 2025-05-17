@@ -1,6 +1,8 @@
-import classes from './DelegationCandidateVoteCountInfo.module.css';
 import React from 'react';
+
 import BrandSpinner from '../BrandSpinner';
+
+import classes from './DelegationCandidateVoteCountInfo.module.css';
 
 interface DelegationCandidateVoteCountInfoProps {
   text: React.ReactNode;

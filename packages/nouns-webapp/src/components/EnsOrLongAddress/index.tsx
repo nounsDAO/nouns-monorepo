@@ -1,5 +1,5 @@
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
+import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 
 interface EnsOrLongAddressProps {
   address: string;

@@ -1,12 +1,16 @@
 import React from 'react';
-import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
-import classes from './MobileDelegationEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+
 import { ScaleIcon } from '@heroicons/react/solid';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+
+import { DelegationEvent } from '../../../../wrappers/nounActivity';
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+
+import classes from './MobileDelegationEvent.module.css';
 
 interface MobileDelegationEventProps {
   event: DelegationEvent;

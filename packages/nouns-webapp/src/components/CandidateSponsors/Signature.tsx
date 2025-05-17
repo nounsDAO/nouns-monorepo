@@ -1,29 +1,34 @@
+import type { Address } from '@/utils/types';
+
 import React, { useEffect } from 'react';
-import classes from './CandidateSponsors.module.css';
-import clsx from 'clsx';
-import { useCancelSignature } from '../../wrappers/nounsDao';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/react/macro';
+
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { useCancelSignature } from '@/wrappers/nounsDao';
+
+import classes from './CandidateSponsors.module.css';
 
 type CandidateSignatureProps = {
   reason: string;
   expirationTimestamp: number;
-  signer: string;
+  signer: Address;
   voteCount: number;
   isAccountSigner: boolean;
   sig: string;
   signerHasActiveOrPendingProposal?: boolean;
   isUpdateToProposal?: boolean;
   isParentProposalUpdatable?: boolean;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
-  setIsAccountSigner: Function;
-  handleSignatureRemoved: Function;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number) => void;
+  setIsAccountSigner: (isAccountSigner: boolean) => void;
+  handleSignatureRemoved: (voteCount: number) => void;
 };
 
 const Signature: React.FC<CandidateSignatureProps> = props => {
@@ -38,7 +43,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   const expiration = dayjs(dayjs.unix(props.expirationTimestamp)).fromNow();
   const { cancelSig, cancelSigState } = useCancelSignature();
   async function cancel() {
-    await cancelSig(props.sig);
+    await cancelSig({ args: [`0x${props.sig.replace(/^0x/, '')}`] });
   }
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
 
@@ -107,7 +112,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             </p>
             <p className={classes.expiration}>
               {(props.isUpdateToProposal && !props.isParentProposalUpdatable) ||
-                props.expirationTimestamp < timestampNow
+              props.expirationTimestamp < timestampNow
                 ? 'Expired'
                 : 'Expires'}{' '}
               {expiration}
@@ -128,7 +133,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => { }}>
+              <button className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}
@@ -164,24 +169,26 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           className={clsx(
             classes.cancelStatusOverlay,
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
-            classes.errorMessage,
+              classes.errorMessage,
             cancelSigState.status === 'Success' && classes.successMessage,
           )}
         >
           {(cancelSigState.status === 'Exception' ||
             cancelSigState.status === 'Fail' ||
             cancelSigState.status === 'Success') && (
-              <button
-                className={classes.closeButton}
-                onClick={() => {
-                  props.handleRefetchCandidateData();
-                  setCancelStatusOverlay(undefined);
-                  cancelSigState.status === 'Success' && props.setIsAccountSigner(false);
-                }}
-              >
-                &times;
-              </button>
-            )}
+            <button
+              className={classes.closeButton}
+              onClick={() => {
+                props.handleRefetchCandidateData();
+                setCancelStatusOverlay(undefined);
+                if (cancelSigState.status === 'Success') {
+                  props.setIsAccountSigner(false);
+                }
+              }}
+            >
+              &times;
+            </button>
+          )}
           <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
           <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
         </div>

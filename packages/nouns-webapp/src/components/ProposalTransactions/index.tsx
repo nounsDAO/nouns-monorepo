@@ -1,30 +1,47 @@
-import { Popover, OverlayTrigger, Row, Col } from 'react-bootstrap';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { ProposalTransaction } from '../../wrappers/nounsDao';
+import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
+import { decodeFunctionData, formatEther, parseAbi } from 'viem';
+
+import xIcon from '@/assets/x-icon.png';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { ProposalTransaction } from '@/wrappers/nounsDao';
+
 import classes from './ProposalTransactions.module.css';
-import xIcon from '../../assets/x-icon.png';
-import { utils } from 'ethers';
-import { defaultAbiCoder } from 'ethers/lib/utils';
+
+interface ProposalTransactionsProps {
+  className?: string;
+  proposalTransactions: ProposalTransaction[];
+  onRemoveProposalTransaction: (index: number) => void;
+  isProposalUpdate?: boolean;
+}
 
 const ProposalTransactions = ({
   className,
   proposalTransactions,
   onRemoveProposalTransaction,
   isProposalUpdate,
-}: {
-  className?: string;
-  proposalTransactions: ProposalTransaction[];
-  onRemoveProposalTransaction: (index: number) => void;
-  isProposalUpdate?: boolean;
-}) => {
+}: ProposalTransactionsProps) => {
   const getPopover = (tx: ProposalTransaction) => {
-    let calldata =
-      tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [name, types] = tx.signature.substring(0, tx.signature.length - 1).split(/\((.*)/s);
-    if (isProposalUpdate && types) {
-      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), tx.calldata);
-      calldata = JSON.stringify([decoded.join()]);
+    let calldata;
+    if (tx.calldata === '0x') {
+      calldata = 'None';
+    } else if (tx.decodedCalldata) {
+      calldata = tx.decodedCalldata;
+    } else {
+      calldata = tx.calldata;
+    }
+
+    if (isProposalUpdate && tx.signature && tx.calldata !== '0x') {
+      try {
+        const abi = parseAbi([`function ${tx.signature}` as any]);
+        const { args } = decodeFunctionData({
+          abi,
+          data: tx.calldata as `0x${string}`,
+        });
+        calldata = JSON.stringify(args);
+      } catch (err) {
+        // fallback to raw if decoding fails
+        console.warn('Failed to decode calldata:', err);
+      }
     }
 
     return (
@@ -45,7 +62,7 @@ const ProposalTransactions = ({
             <Col sm="3">
               <b>Value</b>
             </Col>
-            <Col sm="9">{tx.value ? `${utils.formatEther(tx.value)} ETH` : 'None'}</Col>
+            <Col sm="9">{tx.value ? `${formatEther(BigInt(tx.value))} ETH` : 'None'}</Col>
           </Row>
           <Row>
             <Col sm="3">
@@ -57,10 +74,7 @@ const ProposalTransactions = ({
             <Col sm="3">
               <b>Calldata</b>
             </Col>
-            <Col sm="9">
-              {/* {tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata} */}
-              {calldata}
-            </Col>
+            <Col sm="9">{calldata}</Col>
           </Row>
         </Popover.Body>
       </Popover>
@@ -69,34 +83,34 @@ const ProposalTransactions = ({
 
   return (
     <div className={className}>
-      {proposalTransactions.map((tx, i) => {
-        return (
-          <OverlayTrigger
-            key={i}
-            trigger={['hover', 'focus']}
-            placement="top"
-            overlay={getPopover(tx)}
+      {proposalTransactions.map((tx, i) => (
+        <OverlayTrigger
+          key={`${tx.signature}-${tx.calldata}`}
+          trigger={['hover', 'focus']}
+          placement="top"
+          overlay={getPopover(tx)}
+        >
+          <div
+            className={`${classes.transactionDetails} d-flex justify-content-between align-items-center`}
           >
-            <div
-              className={`${classes.transactionDetails} d-flex justify-content-between align-items-center`}
-            >
-              <div>
-                <span>Transaction #{i + 1} - </span>
-                <span>
-                  <b>{tx.signature || 'transfer()'}</b>
-                </span>
-              </div>
-              <button
-                className={classes.removeTransactionButton}
-                onClick={() => onRemoveProposalTransaction(i)}
-              >
-                <img src={xIcon} alt="Remove Transaction" />
-              </button>
+            <div>
+              <span>Transaction #{i + 1} - </span>
+              <span>
+                <b>{tx.signature || 'transfer()'}</b>
+              </span>
             </div>
-          </OverlayTrigger>
-        );
-      })}
+            <button
+              type="button"
+              className={classes.removeTransactionButton}
+              onClick={() => onRemoveProposalTransaction(i)}
+            >
+              <img src={xIcon} alt="Remove Transaction" />
+            </button>
+          </div>
+        </OverlayTrigger>
+      ))}
     </div>
   );
 };
+
 export default ProposalTransactions;

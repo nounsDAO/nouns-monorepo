@@ -1,9 +1,11 @@
-import classes from './ProposalEditor.module.css';
-import { InputGroup, FormControl, FormText } from 'react-bootstrap';
-import remarkBreaks from 'remark-breaks';
-import ReactMarkdown from 'react-markdown';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
+import { FormControl, FormText, InputGroup } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
+
+import classes from './ProposalEditor.module.css';
 
 const ProposalEditor = ({
   title,

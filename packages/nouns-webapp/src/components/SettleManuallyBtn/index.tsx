@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import { Auction } from '../../wrappers/nounsAuction';
-import classes from './SettleManuallyBtn.module.css';
-import dayjs from 'dayjs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from 'react';
+
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { CHAIN_ID } from '../../config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
+import dayjs from 'dayjs';
+
+import { CHAIN_ID } from '@/config';
+import { Auction } from '@/wrappers/nounsAuction';
+
+import classes from './SettleManuallyBtn.module.css';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;

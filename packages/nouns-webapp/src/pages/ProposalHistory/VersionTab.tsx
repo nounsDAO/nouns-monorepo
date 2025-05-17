@@ -1,11 +1,12 @@
-import React from 'react';
-import { useEffect } from 'react';
-import classes from './Vote.module.css';
-import clsx from 'clsx';
-import { useBlockNumber } from '@usedapp/core';
-import dayjs from 'dayjs';
+import React, { useEffect } from 'react';
+
 import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { Link } from 'react-router';
+
+import classes from './Vote.module.css';
+import { useBlockNumber } from 'wagmi';
 
 type Props = {
   isActive: boolean;
@@ -19,7 +20,7 @@ type Props = {
 
 const VersionTab = (props: Props) => {
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
-  const currentBlock = useBlockNumber();
+  const { data: currentBlock } = useBlockNumber();
 
   useEffect(() => {
     if (currentBlock) {

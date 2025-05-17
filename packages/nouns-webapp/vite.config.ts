@@ -5,12 +5,11 @@ import { lingui } from '@lingui/vite-plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
-import tailwindcss from '@tailwindcss/vite'
+import checker from 'vite-plugin-checker';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    tailwindcss(),
     react({
       babel: {
         plugins: ['@lingui/babel-plugin-lingui-macro'],
@@ -30,15 +29,27 @@ export default defineConfig({
       include: '**/*.svg?react',
     }),
     Inspect(),
+    checker({
+      typescript: true,
+      // eslint: {
+      //   lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      //   useFlatConfig: true
+      // },
+      overlay: true,
+    }),
   ],
   server: {
     port: 3000,
+    hmr: {
+      overlay: true,
+    },
   },
   resolve: {
     alias: {
       '@nouns/assets': path.resolve(__dirname, '../../packages/nouns-assets/dist'),
       '@nouns/sdk': path.resolve(__dirname, '../../packages/nouns-sdk/dist'),
       '@nouns/contracts': path.resolve(__dirname, '../../packages/nouns-contracts/dist'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {

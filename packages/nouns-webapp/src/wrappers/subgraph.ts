@@ -1,13 +1,13 @@
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import { BigNumberish } from '@ethersproject/bignumber';
-import BigNumber from 'bignumber.js';
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
+
+import { BigNumberish } from '@/utils/types';
 
 export interface IBid {
   id: string;
   bidder: {
     id: string;
   };
-  amount: BigNumber;
+  amount: bigint;
   blockNumber: number;
   blockTimestamp: number;
   txHash: string;
@@ -116,6 +116,7 @@ export const partialProposalsQuery = (first = 1_000) => gql`
 export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => gql`
 {
   proposals(
+    first: ${first},
     where: {
       or: [{status: PENDING, endBlock_gt: ${currentBlock}}, {status: ACTIVE, endBlock_gt: ${currentBlock}}], 
     }
@@ -133,6 +134,7 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
 export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => gql`
 {
   proposals(
+    first: ${first},
     where: {
     	status: PENDING, endBlock_gt: ${currentBlock}, updatePeriodEndBlock_gt: ${currentBlock},      
     }
@@ -492,7 +494,7 @@ export const proposalVotesQuery = (proposalId: string) => gql`
   }
 `;
 
-export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => {
+export const delegateNounsAtBlockQuery = (delegates: string[], block: bigint) => {
   return gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
@@ -579,7 +581,7 @@ export const ownedNounsQuery = (owner: string) => gql`
   }
 `;
 
-export const accountEscrowedNounsQuery = (owner: string, forkId: string) => gql`
+export const accountEscrowedNounsQuery = (owner: string) => gql`
   {
     escrowedNouns(where: {owner_: {id: "${owner}"}}, first: 1000) {
       noun {

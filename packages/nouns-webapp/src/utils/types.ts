@@ -1,8 +1,12 @@
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+export type Address = `0x${string}`;
+export type Hex = `0x${string}`
+export type Hash = `0x${string}`
+
+export type BigNumberish = bigint | boolean | number | string;
 
 export interface BidEvent {
   nounId: BigNumberish;
-  sender: string;
+  sender: Address;
   value: BigNumberish;
   extended: boolean;
   transactionHash: string;
@@ -19,7 +23,7 @@ export interface AuctionCreateEvent {
 
 export interface AuctionSettledEvent {
   nounId: BigNumberish;
-  winner: string;
+  winner: Address;
   amount: BigNumberish;
 }
 
@@ -29,11 +33,11 @@ export interface AuctionExtendedEvent {
 }
 
 export interface Bid {
-  nounId: BigNumber;
-  sender: string;
-  value: BigNumber;
+  nounId: bigint;
+  sender: Address;
+  value: bigint;
   extended: boolean;
   transactionHash: string;
   transactionIndex: number;
-  timestamp: BigNumber;
+  timestamp: bigint;
 }

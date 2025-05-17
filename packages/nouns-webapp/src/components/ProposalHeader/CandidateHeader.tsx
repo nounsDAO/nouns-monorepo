@@ -1,20 +1,24 @@
 import React from 'react';
-import { useBlockNumber } from '@usedapp/core';
-import { Link } from 'react-router';
-import classes from './ProposalHeader.module.css';
-import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+
 import { Trans } from '@lingui/react/macro';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { transactionIconLink } from '../ProposalContent';
-import ShortAddress from '../ShortAddress';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { Locales } from '../../i18n/locales';
-import HoverCard from '../HoverCard';
-import ByLineHoverCard from '../ByLineHoverCard';
-import { relativeTimestamp } from '../../utils/timeUtils';
+import clsx from 'clsx';
+import { Link } from 'react-router';
+
+import ByLineHoverCard from '@/components/ByLineHoverCard';
+import HoverCard from '@/components/HoverCard';
+import { transactionIconLink } from '@/components/ProposalContent';
+import ShortAddress from '@/components/ShortAddress';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { Locales } from '@/i18n/locales';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { isMobileScreen } from '@/utils/isMobile';
+import { relativeTimestamp } from '@/utils/timeUtils';
+import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+
+import classes from './ProposalHeader.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { useBlockNumber } from 'wagmi';
 
 interface CandidateHeaderProps {
   title: string;
@@ -43,8 +47,8 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     isUpdateToProposal,
   } = props;
   const isMobile = isMobileScreen();
-  const currentBlock = useBlockNumber();
-  const availableVotes = useUserVotesAsOfBlock(currentBlock) ?? 0;
+  const { data: currentBlock } = useBlockNumber();
+  const availableVotes = useUserVotesAsOfBlock(Number(currentBlock)) ?? 0;
   const activeLocale = useActiveLocale();
 
   const voteButton = (
@@ -72,7 +76,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       rel="noreferrer"
       className={classes.proposerLinkJp}
     >
-      <ShortAddress address={proposer || ''} avatar={false} />
+      <ShortAddress address={(proposer as `0x${string}`) || '0x'} avatar={false} />
     </a>
   );
 

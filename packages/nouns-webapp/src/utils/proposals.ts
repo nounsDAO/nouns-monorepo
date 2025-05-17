@@ -1,9 +1,9 @@
-import { Proposal, ProposalState } from '../wrappers/nounsDao';
+import { Proposal, ProposalState } from '@/wrappers/nounsDao';
 
 export const isProposalUpdatable = (
   proposalState: ProposalState,
-  proposalUpdatePeriodEndBlock: number,
-  currentBlock: number,
+  proposalUpdatePeriodEndBlock: bigint,
+  currentBlock: bigint,
 ) => {
   return (
     (proposalState === ProposalState.UPDATABLE || proposalState === ProposalState.PENDING) &&
@@ -15,28 +15,25 @@ export const checkEnoughVotes = (
   availableVotes: number | undefined,
   proposalThreshold: number | undefined,
 ) => {
-  if (availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold) {
-    return true;
-  } else {
-    return false;
-  }
+  return !!(
+    availableVotes &&
+    proposalThreshold !== undefined &&
+    availableVotes > proposalThreshold
+  );
 };
 
 export const checkIsEligibleToPropose = (
   latestProposal: Proposal | undefined,
   account: string | null | undefined,
 ) => {
-  if (
+  return !!(
     latestProposal &&
     account &&
     (latestProposal?.status === ProposalState.ACTIVE ||
       latestProposal?.status === ProposalState.PENDING ||
       latestProposal?.status === ProposalState.UPDATABLE) &&
     latestProposal.proposer?.toLowerCase() === account?.toLowerCase()
-  ) {
-    return true;
-  }
-  return false;
+  );
 };
 
 export const checkHasActiveOrPendingProposalOrCandidate = (
@@ -44,15 +41,12 @@ export const checkHasActiveOrPendingProposalOrCandidate = (
   latestProposalProposer: string | undefined,
   account: string | null | undefined,
 ) => {
-  if (
+  return !!(
     account &&
     latestProposalProposer &&
     (latestProposalStatus === ProposalState.ACTIVE ||
       latestProposalStatus === ProposalState.PENDING ||
       latestProposalStatus === ProposalState.UPDATABLE) &&
     latestProposalProposer.toLowerCase() === account?.toLowerCase()
-  ) {
-    return true;
-  }
-  return false;
+  );
 };

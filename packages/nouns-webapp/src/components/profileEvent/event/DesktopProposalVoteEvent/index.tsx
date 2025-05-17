@@ -1,14 +1,17 @@
-import { useNavigate } from 'react-router';
-import { Image } from 'react-bootstrap';
-import classes from './DesktopProposalVoteEvent.module.css';
-import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
-import { ProposalVoteEvent } from '../../../../wrappers/nounActivity';
 import React from 'react';
-import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalVoteIcon';
-import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
-import ReactTooltip from 'react-tooltip';
+
 import { Trans } from '@lingui/react/macro';
+import { Image } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+import ReactTooltip from 'react-tooltip';
+
+import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalVoteIcon';
+import { ProposalVoteEvent } from '../../../../wrappers/nounActivity';
+import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
+import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
+
+import classes from './DesktopProposalVoteEvent.module.css';
 
 interface DesktopProposalVoteEventProps {
   event: ProposalVoteEvent;
@@ -34,7 +37,7 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
             id={'view-prop-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
