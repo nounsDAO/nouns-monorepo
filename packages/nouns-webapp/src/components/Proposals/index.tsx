@@ -167,7 +167,7 @@ const Proposals = ({
                 <div className={classes.submitProposalButtonWrapper}>
                   <Button
                     className={classes.generateBtn}
-                    onClick={() => navigate('create-proposal')}
+                    onClick={() => navigate('/create-proposal')}
                   >
                     <Trans>Submit Proposal</Trans>
                   </Button>
