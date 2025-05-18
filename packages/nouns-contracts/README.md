@@ -31,7 +31,7 @@ One Noun is generated and auctioned every day, forever. All Noun artwork is stor
 ### Install dependencies
 
 ```sh
-pnpm insttall
+pnpm install
 ```
 
 ### Compile typescript, contracts, and generate typechain wrappers
