@@ -441,7 +441,7 @@ export const formatProposalTransactionDetails = (details: {
     const value = details.values[i] ?? 0n;
     const callData = details.calldatas[i];
 
-    const [name = 'unknown', types] = signature.slice(0, -1).split(/\((.*)/s);
+    const [name = 'unknown', types] = (signature?.slice?.(0, -1) ?? 'unknown()').split(/\((.*)/s);
 
     if (!types) {
       // no types to decode, show raw calldata or fallback
