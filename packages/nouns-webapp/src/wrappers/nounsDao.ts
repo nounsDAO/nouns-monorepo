@@ -456,6 +456,15 @@ export const formatProposalTransactionDetails = (details: {
       };
     }
 
+    if (callData === '0x') {
+      return {
+        target,
+        functionSig: name,
+        callData: callData as Hex,
+        value,
+      };
+    }
+
     try {
       const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
       const decoded = decodeAbiParameters(abiParams, callData);
