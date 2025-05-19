@@ -75,7 +75,7 @@ type Noun @entity(immutable: false) {
   votes: [Vote!]! @derivedFrom(field: "nouns")
 }
 
-type Bid @entity(immutable: true) {
+type Bid @entity(immutable: false) {
   "Noun.id-amount"
   id: ID!
 
@@ -468,7 +468,7 @@ type DynamicQuorumParams @entity(immutable: false) {
   dynamicQuorumStartBlock: BigInt
 }
 
-type ProposalCandidate @entity(immutable: true) {
+type ProposalCandidate @entity(immutable: false) {
   "A concatination of proposer and slug"
   id: ID!
 
@@ -535,7 +535,7 @@ type ProposalCandidateVersion @entity(immutable: true) {
   content: ProposalCandidateContent!
 }
 
-type ProposalCandidateContent @entity(immutable: true) {
+type ProposalCandidateContent @entity(immutable: false) {
   "The encoded proposal hash"
   id: ID!
 
@@ -573,7 +573,7 @@ type ProposalCandidateContent @entity(immutable: true) {
   contentSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "content")
 }
 
-type ProposalCandidateSignature @entity(immutable: true) {
+type ProposalCandidateSignature @entity(immutable: false) {
   "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
   id: ID!
 
