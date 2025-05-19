@@ -79,6 +79,7 @@
     "@graphprotocol/graph-ts": "^0.38.0",
     "@graphql-codegen/cli": "^5.0.5",
     "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typed-document-node": "^5.1.1",
     "@graphql-codegen/typescript-document-nodes": "^4.0.16",
     "@graphql-codegen/typescript-operations": "^4.6.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
