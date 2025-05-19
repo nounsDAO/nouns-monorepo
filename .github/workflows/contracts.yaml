@@ -83,7 +83,7 @@ jobs:
 
       - name: Run Forge tests
         env:
-          RPC_MAINNET: ${{ secrets.RPC_MAINNET != '' && secrets.RPC_MAINNET || 'https://eth.llamarpc.com' }}
+          RPC_MAINNET: ${{ secrets.RPC_MAINNET != '' && secrets.RPC_MAINNET || 'https://ethereum-rpc.publicnode.com' }}
         run: |
           cd packages/nouns-contracts
           forge test -vvv --ffi
