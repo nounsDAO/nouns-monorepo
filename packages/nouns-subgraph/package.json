@@ -18,7 +18,7 @@
     "clean": "rimraf ./src/types ./build subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
     "create:localnode": "graph create --node http://localhost:8020/",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy": "pnpm deploy:sepolia",
     "deploy:hardhat": "pnpm clean && pnpm prepare:hardhat && pnpm build:hardhat && pnpm create:localnode nounsdao/nouns-subgraph && pnpm deploy:localnode nounsdao/nouns-subgraph",
     "deploy:localnode": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
     "deploy:mainnet": "pnpm clean && pnpm prepare:mainnet && pnpm build:mainnet && graph deploy nouns-mainnet --version-label $npm_package_version",
