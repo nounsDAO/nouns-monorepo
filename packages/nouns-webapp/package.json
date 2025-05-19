@@ -76,7 +76,7 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
-    "@graphprotocol/graph-ts": "^0.38.0",
+    "@graphprotocol/graph-ts": "^0.38.1",
     "@graphql-codegen/cli": "^5.0.5",
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@graphql-codegen/typed-document-node": "^5.1.1",
