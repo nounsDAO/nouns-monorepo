@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.97.1",
-    "@graphprotocol/graph-ts": "0.38.0",
+    "@graphprotocol/graph-ts": "0.38.1",
     "assemblyscript": "^0.19.23",
     "matchstick-as": "0.6.0",
     "mustache": "4.2.0"
