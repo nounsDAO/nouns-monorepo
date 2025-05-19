@@ -286,12 +286,12 @@ export function calcEncodedProposalHash(proposal: Proposal, isUpdate: boolean): 
   }
 
   const params = new ethereum.Tuple();
-  params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer!)));
+  params.push(ethereum.Value.fromAddress(Address.fromString(proposal.proposer)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(targetsConcat)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(valuesConcat)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(signatureHashes)));
   params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(calldatasHashes)));
-  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description!))));
+  params.push(ethereum.Value.fromFixedBytes(keccak256Bytes(Bytes.fromUTF8(proposal.description))));
 
   let proposalEncodeData = ethereum.encode(ethereum.Value.fromTuple(params))!;
 
