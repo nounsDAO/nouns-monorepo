@@ -1,8 +1,4 @@
-/**
- * NounsI18nProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
- */
 import { ReactNode, useEffect } from 'react';
-
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 
