@@ -1,6 +1,6 @@
 {
   "name": "@nouns/subgraph",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "A subgraph that indexes nouns events",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
