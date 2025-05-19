@@ -61,7 +61,7 @@ type Seed @entity(immutable: true) {
   glasses: BigInt!
 }
 
-type Noun @entity(immutable: true) {
+type Noun @entity(immutable: false) {
   "The Noun's ERC721 token id"
   id: ID!
 
@@ -107,7 +107,7 @@ type Bid @entity(immutable: true) {
   clientId: Int
 }
 
-type Auction @entity(immutable: true) {
+type Auction @entity(immutable: false) {
   "The Noun's ERC721 token id"
   id: ID!
 
@@ -144,7 +144,7 @@ enum ProposalStatus {
   EXECUTED
 }
 
-type Account @entity(immutable: true) {
+type Account @entity(immutable: false) {
   "An Account is any address that holds any amount of Nouns, the id used is the blockchain address."
   id: ID!
 
@@ -167,7 +167,7 @@ type Account @entity(immutable: true) {
   nouns: [Noun!]!
 }
 
-type Delegate @entity(immutable: true) {
+type Delegate @entity(immutable: false) {
   "A Delegate is any address that has been delegated with voting tokens by a token holder, id is the blockchain address of said delegate"
   id: ID!
 
@@ -192,7 +192,7 @@ type Delegate @entity(immutable: true) {
   proposals: [Proposal!]! @derivedFrom(field: "proposer")
 }
 
-type Proposal @entity(immutable: true) {
+type Proposal @entity(immutable: false) {
   "Internal proposal ID, in this implementation it seems to be a autoincremental id"
   id: ID!
 
@@ -416,7 +416,7 @@ type Vote @entity(immutable: true) {
   clientId: Int!
 }
 
-type Governance @entity(immutable: true) {
+type Governance @entity(immutable: false) {
   "Unique entity used to keep track of common aggregated data"
   id: ID!
 
@@ -451,7 +451,7 @@ type Governance @entity(immutable: true) {
   candidates: BigInt!
 }
 
-type DynamicQuorumParams @entity(immutable: true) {
+type DynamicQuorumParams @entity(immutable: false) {
   "Unique entity used to store the latest dymanic quorum params"
   id: ID!
 
@@ -663,7 +663,7 @@ type CandidateFeedback @entity(immutable: true) {
   reason: String
 }
 
-type Fork @entity(immutable: true) {
+type Fork @entity(immutable: false) {
   "The fork ID given by the escrow contract"
   id: ID!
 
@@ -737,7 +737,7 @@ type ForkJoin @entity(immutable: true) {
   reason: String
 }
 
-type EscrowedNoun @entity(immutable: true) {
+type EscrowedNoun @entity(immutable: false) {
   id: ID!
 
   fork: Fork!
