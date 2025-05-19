@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "is-ci || wagmi generate && graphql-codegen --config codegen.config.ts",
+    "prebuild": "is-ci && exit 0 || (wagmi generate && graphql-codegen --config codegen.config.ts)",
     "build": "tsc -b && vite build",
     "clean": "rimraf dist .netlify",
     "dev": "vite",
