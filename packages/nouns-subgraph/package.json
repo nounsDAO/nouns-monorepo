@@ -19,8 +19,6 @@
     "codegen": "graph codegen --output-dir src/types/",
     "create:localnode": "graph create --node http://localhost:8020/",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy-studio:mainnet": "pnpm clean && pnpm prepare:mainnet && pnpm build:mainnet && graph deploy --studio nouns-mainnet --version-label $npm_package_version",
-    "deploy-studio:sepolia": "pnpm clean && pnpm prepare:sepolia && pnpm build:sepolia && graph deploy --studio nouns-sepolia --version-label $npm_package_version",
     "deploy:hardhat": "pnpm clean && pnpm prepare:hardhat && pnpm build:hardhat && pnpm create:localnode nounsdao/nouns-subgraph && pnpm deploy:localnode nounsdao/nouns-subgraph",
     "deploy:localnode": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001/",
     "deploy:mainnet": "pnpm clean && pnpm prepare:mainnet && pnpm build:mainnet && graph deploy nouns-mainnet --version-label $npm_package_version",
