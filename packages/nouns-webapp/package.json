@@ -72,7 +72,7 @@
     "remeda": "^2.21.6",
     "type-fest": "^4.41.0",
     "viem": "^2.29.1",
-    "wagmi": "^2.15.2",
+    "wagmi": "^2.15.4",
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
