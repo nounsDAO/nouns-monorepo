@@ -24,7 +24,6 @@
     "deploy:mainnet": "pnpm clean && pnpm prepare:mainnet && pnpm build:mainnet && graph deploy nouns-mainnet --version-label $npm_package_version",
     "deploy:sepolia": "pnpm clean && pnpm prepare:sepolia && pnpm build:sepolia && graph deploy nouns-sepolia --version-label $npm_package_version",
     "graph-node": "docker-compose up",
-    "mustache": "mustache",
     "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:sepolia": "mustache config/sepolia.json subgraph.yaml.mustache > subgraph.yaml",
