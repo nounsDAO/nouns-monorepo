@@ -6,7 +6,7 @@ const config: CodegenConfig = {
   emitLegacyCommonJSImports: false,
   generates: {
     './src/subgraphs/index.ts': {
-      schema: process.env.VITE_MAINNET_SUBGRAPH,
+      schema: process.env.VITE_SEPOLIA_SUBGRAPH,
       plugins: [
         'typescript',
         'typescript-operations',
