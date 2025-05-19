@@ -1,6 +1,3 @@
-/**
- * NounsI18nProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/packages/uniswap/src/i18n/i18n-setup.tsx
- */
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { DEFAULT_LOCALE, SupportedLocale } from './locales';
