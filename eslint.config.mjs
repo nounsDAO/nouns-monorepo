@@ -21,6 +21,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
+import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 import vitestPlugin from 'eslint-plugin-vitest';
 
 // Compatibility layer for traditional configs
@@ -72,6 +73,7 @@ export default defineConfig([
       sonarjs: sonarjsPlugin,
       turbo: turboPlugin,
       unicorn: unicornPlugin,
+      'unused-imports': unusedImportsPlugin,
       vitest: vitestPlugin,
     },
     extends: [
@@ -133,17 +135,27 @@ export default defineConfig([
       // Unicorn plugin rules
       'unicorn/better-regex': 'error',
       'unicorn/no-nested-ternary': 'error',
+      // Unused imports plugin rules
+      'no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
       // Prettier rules
       'prettier/prettier': 'warn',
     },
     settings: {
-      'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx'],
-      },
+      ...importPlugin.configs.typescript.settings,
       'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
         typescript: {
-          alwaysTryTypes: true,
-          project: 'packages/*/{ts,js}config.json',
+          project: './tsconfig.json',
         },
       },
     },
@@ -164,10 +176,7 @@ export default defineConfig([
       prettier: prettierPlugin,
     },
     extends: [
-      ...compat.extends(
-        'plugin:react/recommended',
-        'plugin:prettier/recommended',
-      ),
+      ...compat.extends('plugin:react/recommended', 'plugin:prettier/recommended'),
       eslintReactPlugin.configs['recommended-typescript'],
     ],
     rules: {

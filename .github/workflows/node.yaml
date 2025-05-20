@@ -1,47 +1,110 @@
-name: Node.js CI
+name: Node.js CI Pipeline
 
 on:
   push:
     branches:
       - master
+      - develop
       - 'feature/*'
+      - 'bugfix/*'
+      - 'release/*'
+      - 'hotfix/*'
   pull_request:
-    branches:
-      - '**'
 
 jobs:
   build:
-    name: Build and Test
+    name: Build
     runs-on: ubuntu-latest
+    concurrency:
+      group: ci-pipeline-${{ github.ref }}-node-${{ matrix.node-version }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22.x]
+        node-version: [22.x, 24.x]
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Restore turbo cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            .turbo
+            packages/**/.turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm build
+      - name: Netlify build
+        run: pnpm netlify build --offline --filter packages/nouns-webapp
+
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x, 24.x]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Restore turbo cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            .turbo
+            packages/**/.turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: pnpm test
+
+  lint:
+    name: Lint
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+      - name: Restore turbo cache
+        uses: actions/cache@v3
         with:
           path: |
-            **/node_modules
-            ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build packages
-        run: pnpm build
-
-      - name: Build Netlify
-        run: pnpm netlify build --offline --filter packages/nouns-webapp
+            .turbo
+            packages/**/.turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
+      - name: Lint changed files
+        run: |
+          echo "::add-matcher::.github/eslint-matcher.json"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- '*.ts' '*.tsx' '*.js' '*.jsx')
+          [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
+          pnpm lint $FILES
