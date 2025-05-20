@@ -1,17 +1,20 @@
-import { Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
-import classes from './Holder.module.css';
-import ShortAddress from '../ShortAddress';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
-import { useQuery } from '@apollo/client';
-import { nounQuery } from '../../wrappers/subgraph';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import React from 'react';
-import Tooltip from '../Tooltip';
+
+import { useQuery } from '@apollo/client';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Col, Row } from 'react-bootstrap';
+
+import ShortAddress from '@/components/ShortAddress';
+import Tooltip from '@/components/Tooltip';
+import { useAppSelector } from '@/hooks';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { nounQuery } from '@/wrappers/subgraph';
+
+import classes from './Holder.module.css';
 
 interface HolderProps {
-  nounId: number;
+  nounId: bigint;
   isNounders?: boolean;
 }
 
@@ -20,7 +23,8 @@ const Holder: React.FC<HolderProps> = props => {
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
+  const { query,variables } = nounQuery(nounId.toString());
+  const { loading, error, data } = useQuery(query,{variables});
 
   if (loading) {
     return <></>;
@@ -43,7 +47,7 @@ const Holder: React.FC<HolderProps> = props => {
     >
       <Tooltip
         tip="View on Etherscan"
-        tooltipContent={(tip: string) => {
+        tooltipContent={() => {
           return <Trans>View on Etherscan</Trans>;
         }}
         id="holder-etherscan-tooltip"

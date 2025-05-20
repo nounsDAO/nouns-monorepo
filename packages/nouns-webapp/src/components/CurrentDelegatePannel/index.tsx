@@ -1,23 +1,27 @@
-import { Trans } from '@lingui/react/macro';
-import { useEthers } from '@usedapp/core';
 import React from 'react';
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import { useUserDelegatee } from '../../wrappers/nounToken';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import ShortAddress from '../ShortAddress';
+
+import { Trans } from '@lingui/react/macro';
+import { useAccount } from 'wagmi';
+
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import ShortAddress from '@/components/ShortAddress';
+import { useReadNounsTokenDelegates } from '@/contracts';
+import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+
 import classes from './CurrentDelegatePannel.module.css';
 
 interface CurrentDelegatePannelProps {
-  onPrimaryBtnClick: (e: any) => void;
-  onSecondaryBtnClick: (e: any) => void;
+  onPrimaryBtnClick: (e: React.MouseEvent<HTMLElement>) => void;
+  onSecondaryBtnClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
-  const { onPrimaryBtnClick, onSecondaryBtnClick } = props;
-
-  const { account: maybeAccount } = useEthers();
-  const delegate = useUserDelegatee();
-  const account = delegate ?? maybeAccount ?? '';
+const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = ({
+  onPrimaryBtnClick,
+  onSecondaryBtnClick,
+}) => {
+  const { address: maybeAccount } = useAccount();
+  const { data: delegate } = useReadNounsTokenDelegates();
+  const account = delegate ?? maybeAccount ?? '0x';
   const shortAccount = useShortAddress(account);
 
   return (

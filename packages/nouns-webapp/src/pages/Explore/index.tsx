@@ -1,23 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { BigNumber } from 'ethers';
-import classes from './Explore.module.css';
-import cx from 'classnames';
-import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
-import { useAppSelector } from '../../hooks';
-import { useKeyPress } from '../../hooks/useKeyPress';
-import ExploreNav from '../../components/ExploreGrid/ExploreNav';
-import ExploreGrid from '../../components/ExploreGrid';
+import React, { useEffect, useRef, useState } from 'react';
 
-interface ExplorePageProps {}
+import cx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import ExploreGrid from '@/components/ExploreGrid';
+import ExploreNav from '@/components/ExploreGrid/ExploreNav';
+import ExploreNounDetail from '@/components/ExploreGrid/ExploreNounDetail';
+import { useAppSelector } from '@/hooks';
+import { useKeyPress } from '@/hooks/useKeyPress';
+import { Auction as IAuction } from '@/wrappers/nounsAuction';
+
+import classes from './Explore.module.css';
+
+type ExplorePageProps = object;
 
 type Noun = {
   id: number | null;
   imgSrc: string | undefined;
 };
 
-const ExplorePage: React.FC<ExplorePageProps> = props => {
+const ExplorePage: React.FC<ExplorePageProps> = () => {
   // Borrowed from /src/pages/Playground/NounModal/index.tsx
   const [width, setWidth] = useState<number>(window.innerWidth);
   const isMobile: boolean = width <= 991;
@@ -27,7 +29,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
   // Get number of nouns in existence
   const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
-  const nounCount = currentAuction ? BigNumber.from(currentAuction?.nounId).toNumber() + 1 : -1;
+  const nounCount = currentAuction ? Number(BigInt(currentAuction?.nounId)) + 1 : -1;
 
   // Set state
   const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
@@ -63,11 +65,15 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const handleSortOrderChange = (orderValue: string) => {
     setSortOrder(orderValue);
     if (sortOrder === 'date-ascending') {
-      !isMobile && isSidebarVisible && setActiveNoun(nounCount - 1);
-      !isMobile && isSidebarVisible && setSelectedNoun(nounCount - 1);
+      if (!isMobile && isSidebarVisible) {
+        setActiveNoun(nounCount - 1);
+        setSelectedNoun(nounCount - 1);
+      }
     } else {
-      !isMobile && isSidebarVisible && setActiveNoun(0);
-      !isMobile && isSidebarVisible && setSelectedNoun(0);
+      if (!isMobile && isSidebarVisible) {
+        setActiveNoun(0);
+        setSelectedNoun(0);
+      }
     }
   };
 
@@ -75,14 +81,16 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setIsSidebarVisible(false);
     setActiveNoun(-1);
     setSelectedNoun(undefined);
-    !isMobile && window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    if (!isMobile) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
     if (isMobile) {
       const body = document.body;
       body.style.position = '';
       body.style.top = '';
       document.documentElement.style.scrollBehavior = 'auto';
       window.scrollTo({
-        top: parseInt(scrollY),
+        top: Number(scrollY),
         behavior: 'auto',
       });
     }
@@ -90,7 +98,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
   const handleScrollTo = (nounId: number) => {
     setIsNounHoverDisabled(true);
-    nounId && buttonsRef.current[nounId]?.scrollIntoView({ behavior: 'smooth' });
+    if (nounId) {
+      buttonsRef.current[nounId]?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleFocusNoun = (nounId: number) => {
@@ -158,8 +168,14 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   useEffect(() => {
     if (nounCount >= 0) {
       // get latest noun id, then replace loading sidebar state with latest noun
-      !isMobile && setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
-      !isMobile && setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+      if (!isMobile) {
+        setSelectedNoun(
+          currentAuction?.nounId !== undefined ? Number(BigInt(currentAuction.nounId)) : undefined,
+        );
+        setActiveNoun(
+          currentAuction?.nounId !== undefined ? Number(BigInt(currentAuction.nounId)) : 0,
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nounCount]);
@@ -171,7 +187,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     });
 
     // Remove block on hover over noun
-    window.addEventListener('mousemove', event => {});
+    window.addEventListener('mousemove', () => {});
     onmousemove = () => {
       setIsNounHoverDisabled(false);
     };
@@ -228,14 +244,10 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
               disablePrev={
                 (sortOrder === 'date-ascending' && activeNoun === 0) ||
                 (sortOrder === 'date-descending' && activeNoun === nounCount - 1)
-                  ? true
-                  : false
               }
               disableNext={
                 (sortOrder === 'date-ascending' && activeNoun === nounCount - 1) ||
                 (sortOrder === 'date-descending' && activeNoun === 0)
-                  ? true
-                  : false
               }
               handleFocusNoun={handleFocusNoun}
             />

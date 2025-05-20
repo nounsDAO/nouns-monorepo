@@ -1,25 +1,32 @@
-import classes from './BidHistoryModal.module.css';
-import ReactDOM from 'react-dom';
 import React from 'react';
-import { XIcon } from '@heroicons/react/solid';
-import { Auction } from '../../wrappers/nounsAuction';
-import { StandaloneNounRoundedCorners } from '../StandaloneNoun';
-import { useAuctionBids } from '../../wrappers/onDisplayAuction';
-import { Bid } from '../../utils/types';
-import BidHistoryModalRow from '../BidHistoryModalRow';
-import { Trans } from '@lingui/react/macro';
 
-export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
+import { XIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+import ReactDOM from 'react-dom';
+
+import BidHistoryModalRow from '@/components/BidHistoryModalRow';
+import { StandaloneNounRoundedCorners } from '@/components/StandaloneNoun';
+import { Bid } from '@/utils/types';
+import { Auction } from '@/wrappers/nounsAuction';
+import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+
+import classes from './BidHistoryModal.module.css';
+
+interface BackdropProps {
+  onDismiss: () => void;
+}
+
+export const Backdrop: React.FC<BackdropProps> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const BidHistoryModalOverlay: React.FC<{
+interface BidHistoryModalOverlayProps {
   auction: Auction;
   onDismiss: () => void;
-}> = props => {
-  const { onDismiss, auction } = props;
+}
 
-  const bids = useAuctionBids(auction.nounId);
+const BidHistoryModalOverlay: React.FC<BidHistoryModalOverlayProps> = ({ auction, onDismiss }) => {
+  const bids = useAuctionBids(BigInt(auction.nounId));
 
   return (
     <>
@@ -33,7 +40,7 @@ const BidHistoryModalOverlay: React.FC<{
         <div className={classes.content}>
           <div className={classes.header}>
             <div className={classes.nounWrapper}>
-              <StandaloneNounRoundedCorners nounId={auction && auction.nounId} />
+              <StandaloneNounRoundedCorners nounId={BigInt(auction && auction.nounId)} />
             </div>
 
             <div className={classes.title}>
@@ -47,7 +54,7 @@ const BidHistoryModalOverlay: React.FC<{
             {bids && bids.length > 0 ? (
               <ul>
                 {bids?.map((bid: Bid, i: number) => {
-                  return <BidHistoryModalRow index={i} bid={bid} />;
+                  return <BidHistoryModalRow key={i} index={i} bid={bid} />;
                 })}
               </ul>
             ) : (

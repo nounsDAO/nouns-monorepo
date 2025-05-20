@@ -1,7 +1,6 @@
 import { Handler } from '@netlify/functions';
-import { verifyMessage } from '@ethersproject/wallet';
-import { has } from 'ramda';
-import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
+import { verifyMessage } from 'viem';
+import { sharedResponseHeaders } from '../utils';
 import { isNounDelegate, isNounOwner, nounsQuery } from '../theGraph';
 
 interface ErrorReason {
@@ -17,9 +16,11 @@ const invalidBodyCheck = (body: string | undefined | null): false | ErrorReason 
       error: 'empty_body',
       message: 'Request body is missing or empty',
     };
-  if (!has('msg')) return errorBuilder('missing_msg', 'Request is missing msg');
-  if (!has('sig')) return errorBuilder('missing_sig', 'Request is missing signature');
-  if (!has('signer')) return errorBuilder('missing_signer', 'Request is missing signer');
+  const { message, signature, signer } = JSON.parse(body);
+
+  if (!message) return errorBuilder('missing_msg', 'Request is missing msg');
+  if (!signature) return errorBuilder('missing_sig', 'Request is missing signature');
+  if (!signer) return errorBuilder('missing_signer', 'Request is missing signer');
   return false;
 };
 
@@ -31,35 +32,55 @@ const handler: Handler = async (event, context) => {
       body: JSON.stringify(checkResult),
     };
   }
-  const { message, signature, signer } = JSON.parse(event.body);
-  const recoveredAddress = verifyMessage(message, signature);
-  const validSignature = bigNumbersEqual(signer, recoveredAddress);
 
-  // check for ownership and delegation
-  let participantData = {};
-  if (event.queryStringParameters.fetchParticipation && validSignature) {
-    const normalizedNouns = await nounsQuery();
-    participantData = {
-      isNounDelegate: isNounDelegate(signer, normalizedNouns),
-      isNounOwner: isNounOwner(signer, normalizedNouns),
-    };
-  }
+  try {
+    const { message, signature, signer } = JSON.parse(event.body);
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      ...sharedResponseHeaders,
-    },
-    body: JSON.stringify({
+    // Verify message using viem
+    const validSignature = await verifyMessage({
+      address: signer,
       message,
       signature,
-      providedSigner: signer,
-      recoveredAddress,
-      validSignature,
-      ...participantData,
-    }),
-  };
+    });
+
+    // check for ownership and delegation
+    let participantData = {};
+    if (event.queryStringParameters.fetchParticipation && validSignature) {
+      const normalizedNouns = await nounsQuery();
+      participantData = {
+        isNounDelegate: isNounDelegate(signer, normalizedNouns),
+        isNounOwner: isNounOwner(signer, normalizedNouns),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        ...sharedResponseHeaders,
+      },
+      body: JSON.stringify({
+        message,
+        signature,
+        providedSigner: signer,
+        signer,
+        validSignature,
+        ...participantData,
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+        ...sharedResponseHeaders,
+      },
+      body: JSON.stringify({
+        error: 'signature_verification_failed',
+        message: error.message || 'Failed to verify signature',
+      }),
+    };
+  }
 };
 
 export { handler };

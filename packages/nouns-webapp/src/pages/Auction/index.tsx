@@ -1,21 +1,24 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Auction from '../../components/Auction';
-import Documentation from '../../components/Documentation';
-import NounsIntroSection from '../../components/NounsIntroSection';
-import ProfileActivityFeed from '../../components/ProfileActivityFeed';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
-import { nounPath } from '../../utils/history';
-import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
+import React, { useEffect } from 'react';
 
-const AuctionPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
-  const initialAuctionId = id ? parseInt(id) : undefined;
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
+import Auction from '@/components/Auction';
+import Documentation from '@/components/Documentation';
+import NounsIntroSection from '@/components/NounsIntroSection';
+import ProfileActivityFeed from '@/components/ProfileActivityFeed';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
+import { nounPath } from '@/utils/history';
+import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
+
+type AuctionPageProps = object;
+
+const AuctionPage: React.FC<AuctionPageProps> = () => {
+  const { id: initialAuctionId } = useParams<{ id: string }>();
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const onDisplayAuctionNounId = Number(onDisplayAuction?.nounId);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -24,17 +27,14 @@ const AuctionPage: React.FC = () => {
     if (!lastAuctionNounId) return;
 
     if (initialAuctionId !== undefined) {
-      // handle out of bounds noun path ids
-      if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
+      // handle out-of-bounds noun path ids
+      if (Number(initialAuctionId) > lastAuctionNounId || Number(initialAuctionId) < 0) {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
         navigate(nounPath(lastAuctionNounId));
       } else {
-        if (
-          onDisplayAuction === undefined ||
-          onDisplayAuction.nounId.toNumber() !== initialAuctionId
-        ) {
-          // handle regular noun path ids on first load or when URL changes
-          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+        if (onDisplayAuction === undefined) {
+          // handle regular noun path ids on the first load
+          dispatch(setOnDisplayAuctionNounId(Number(initialAuctionId)));
         }
       }
     } else {
@@ -43,7 +43,7 @@ const AuctionPage: React.FC = () => {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
       }
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction, navigate, id]);
+  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction, navigate]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
   const backgroundColor = isCoolBackground
@@ -53,14 +53,14 @@ const AuctionPage: React.FC = () => {
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
+      {onDisplayAuctionNounId > 0 && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : (
         <NounsIntroSection />
       )}
       <Documentation
         backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
+          onDisplayAuctionNounId == undefined || onDisplayAuctionNounId === lastAuctionNounId
             ? backgroundColor
             : undefined
         }

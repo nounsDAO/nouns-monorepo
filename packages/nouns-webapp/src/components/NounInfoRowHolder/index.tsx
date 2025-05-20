@@ -1,27 +1,29 @@
-import { useQuery } from '@apollo/client';
 import React from 'react';
+
+import { useQuery } from '@apollo/client';
+import { Trans } from '@lingui/react/macro';
 import { Image } from 'react-bootstrap';
-import _LinkIcon from '../../assets/icons/Link.svg';
-import { auctionQuery } from '../../wrappers/subgraph';
-import _HeartIcon from '../../assets/icons/Heart.svg';
+
+import _HeartIcon from '@/assets/icons/Heart.svg';
+import _LinkIcon from '@/assets/icons/Link.svg';
+import ShortAddress from '@/components/ShortAddress';
+import Tooltip from '@/components/Tooltip';
+import config from '@/config';
+import { useAppSelector } from '@/hooks';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { auctionQuery } from '@/wrappers/subgraph';
+
 import classes from './NounInfoRowHolder.module.css';
 
-import config from '../../config';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import ShortAddress from '../ShortAddress';
-
-import { useAppSelector } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import Tooltip from '../Tooltip';
-
 interface NounInfoRowHolderProps {
-  nounId: number;
+  nounId: bigint;
 }
 
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { loading, error, data } = useQuery(auctionQuery(nounId));
+  const { query,variables } = auctionQuery(Number(nounId));
+  const { loading, error, data } = useQuery(query,{variables});
 
   const winner = data && data.auction.bidder?.id;
 
@@ -47,7 +49,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   return (
     <Tooltip
       tip="View on Etherscan"
-      tooltipContent={(tip: string) => {
+      tooltipContent={() => {
         return <Trans>View on Etherscan</Trans>;
       }}
       id="holder-etherscan-tooltip"

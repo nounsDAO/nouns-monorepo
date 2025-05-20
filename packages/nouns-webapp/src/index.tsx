@@ -1,25 +1,30 @@
-import { ApolloProvider, useQuery } from '@apollo/client';
-import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
-import { Chain, ChainId, DAppProvider, DEFAULT_SUPPORTED_CHAINS } from '@usedapp/core';
-import { Web3ReactProvider } from '@web3-react/core';
-import { BigNumber, BigNumberish, Event } from 'ethers';
+import type { Address } from './utils/types';
+
 import React, { useEffect } from 'react';
+
+import './index.css';
+import { ApolloProvider, useQuery } from '@apollo/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, useNavigate } from 'react-router-dom';
-import { combineReducers, createStore, PreloadedState } from 'redux';
+import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { parseAbiItem } from 'viem';
+import { hardhat } from 'viem/chains';
+import { useChainId, usePublicClient, WagmiProvider } from 'wagmi';
+
 import App from './App';
-import config, {
-  CHAIN_ID,
-  ChainId_Sepolia,
-  createNetworkHttpUrl,
-  multicallOnLocalhost,
-} from './config';
+import config, { CHAIN_ID } from './config';
+import {
+  nounsAuctionHouseAddress,
+  useReadNounsAuctionHouseAuction,
+  useWatchNounsAuctionHouseAuctionBidEvent,
+  useWatchNounsAuctionHouseAuctionCreatedEvent,
+  useWatchNounsAuctionHouseAuctionExtendedEvent,
+  useWatchNounsAuctionHouseAuctionSettledEvent,
+} from './contracts';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { LanguageProvider } from './i18n/LanguageProvider';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 import account from './state/slices/account';
 import application from './state/slices/application';
@@ -39,9 +44,11 @@ import onDisplayAuction, {
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
-import LogsUpdater from './state/updaters/logs';
 import { nounPath } from './utils/history';
+import { config as wagmiConfig } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
+
+const queryClient = new QueryClient();
 
 const createRootReducer = () =>
   combineReducers({
@@ -53,9 +60,15 @@ const createRootReducer = () =>
     onDisplayAuction,
   });
 
-export default function configureStore(preloadedState: PreloadedState<Record<string, unknown>>) {
-  const store = createStore(createRootReducer(), preloadedState, composeWithDevTools());
-  return store;
+export function configureStore(preloadedState: PreloadedState<any>) {
+  return createStore(
+    createRootReducer(), // root reducer without router state
+    preloadedState,
+    composeWithDevTools(
+      applyMiddleware(),
+      // ... other middlewares ...
+    ),
+  );
 }
 
 const store = configureStore({});
@@ -63,139 +76,162 @@ const store = configureStore({});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-const supportedChainURLs = {
-  [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
-  [ChainId.Hardhat]: 'http://localhost:8545',
-  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
-  [ChainId_Sepolia]: createNetworkHttpUrl('sepolia'),
-};
-
-export const Sepolia: Chain = {
-  chainId: ChainId_Sepolia,
-  chainName: 'Sepolia',
-  isTestChain: true,
-  isLocalChain: false,
-  multicallAddress: '0x6a19Dbfc67233760E0fF235b29158bE45Cc53765',
-  getExplorerAddressLink: (address: string) => `https://sepolia.etherscan.io/address/${address}`,
-  getExplorerTransactionLink: (transactionHash: string) =>
-    `https://sepolia.etherscan.io/tx/${transactionHash}`,
-};
-
-// prettier-ignore
-const useDappConfig = {
-  readOnlyChainId: CHAIN_ID,
-  readOnlyUrls: {
-    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
-  },
-  multicallAddresses: {
-    [ChainId.Hardhat]: multicallOnLocalhost,
-  },
-  networks: [...DEFAULT_SUPPORTED_CHAINS, Sepolia],
-};
-
 const client = clientFactory(config.app.subgraphApiUri);
-
-const Updaters = () => {
-  return (
-    <>
-      <LogsUpdater />
-    </>
-  );
-};
-
-const BLOCKS_PER_DAY = 7_200;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const publicClient = usePublicClient();
+  const chainId = useChainId();
 
-  const loadState = async () => {
-    const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
-      config.addresses.nounsAuctionHouseProxy,
-      wsProvider,
-    );
-
-    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
-    const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
-    const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
-    const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);
-    const processBidFilter = async (
-      nounId: BigNumberish,
-      sender: string,
-      value: BigNumberish,
-      extended: boolean,
-      event: Event,
-    ) => {
-      const timestamp = (await event.getBlock()).timestamp;
-      const { transactionHash, transactionIndex } = event;
-      dispatch(
-        appendBid(
-          reduxSafeBid({
-            nounId,
-            sender,
-            value,
-            extended,
-            transactionHash,
-            transactionIndex,
-            timestamp,
-          }),
-        ),
-      );
-    };
-    const processAuctionCreated = (
-      nounId: BigNumberish,
-      startTime: BigNumberish,
-      endTime: BigNumberish,
-    ) => {
-      dispatch(
-        setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
-      );
-      const nounIdNumber = BigNumber.from(nounId).toNumber();
-      navigate(nounPath(nounIdNumber));
-      dispatch(setOnDisplayAuctionNounId(nounIdNumber));
-      dispatch(setLastAuctionNounId(nounIdNumber));
-    };
-    const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
-      dispatch(setAuctionExtended({ nounId, endTime }));
-    };
-    const processAuctionSettled = (nounId: BigNumberish, winner: string, amount: BigNumberish) => {
-      dispatch(setAuctionSettled({ nounId, amount, winner }));
-    };
-
-    // Fetch the current auction
-    const currentAuction = await nounsAuctionHouseContract.auction();
-    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
-
-    // Fetch the previous 24 hours of bids
-    const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
-    for (const event of previousBids) {
-      if (event.args === undefined) continue;
-      processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
+  // Fetch the current auction
+  const { data: currentAuction } = useReadNounsAuctionHouseAuction();
+  useEffect(() => {
+    if (currentAuction) {
+      dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+      dispatch(setLastAuctionNounId(Number(currentAuction.nounId)));
     }
+  }, [currentAuction, dispatch]);
 
-    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
-      processBidFilter(nounId, sender, value, extended, event),
-    );
-    nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
-      processAuctionCreated(nounId, startTime, endTime),
-    );
-    nounsAuctionHouseContract.on(extendedFilter, (nounId, endTime) =>
-      processAuctionExtended(nounId, endTime),
-    );
-    nounsAuctionHouseContract.on(settledFilter, (nounId, winner, amount) =>
-      processAuctionSettled(nounId, winner, amount),
-    );
-  };
-  loadState();
+  // Fetch the previous 24 hours of bids
+  useEffect(() => {
+    if (CHAIN_ID === hardhat.id) {
+      return;
+    }
+    (async () => {
+      const latestBlock = await publicClient.getBlock();
+      const fromBlock = latestBlock.number > 7200n ? latestBlock.number - 7200n : 0n;
+
+      const logs = await publicClient.getLogs({
+        address: nounsAuctionHouseAddress[chainId],
+        event: parseAbiItem(
+          'event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended)',
+        ),
+        fromBlock,
+        toBlock: latestBlock.number,
+      });
+
+      for (const {
+        args: { extended, nounId, sender, value },
+        blockNumber,
+        transactionHash,
+        transactionIndex,
+      } of logs) {
+        const block = await publicClient.getBlock({
+          blockNumber: blockNumber ?? undefined,
+        });
+        const timestamp = block.timestamp;
+
+        dispatch(
+          appendBid(
+            reduxSafeBid({
+              nounId: Number(nounId),
+              sender: sender as Address,
+              value: Number(value),
+              extended: !!extended,
+              transactionHash: transactionHash ?? '',
+              transactionIndex: transactionIndex ?? 0,
+              timestamp,
+            }),
+          ),
+        );
+      }
+    })();
+  }, [chainId, dispatch, publicClient]);
+
+  // Watch for new bids
+  useWatchNounsAuctionHouseAuctionBidEvent({
+    onLogs: async logs => {
+      for (const {
+        args: { extended, nounId, sender, value },
+        blockNumber,
+        transactionHash,
+        transactionIndex,
+      } of logs) {
+        const block = await publicClient.getBlock({
+          blockNumber: blockNumber ?? undefined,
+        });
+        const timestamp = block.timestamp;
+
+        dispatch(
+          appendBid(
+            reduxSafeBid({
+              nounId: Number(nounId),
+              sender: sender as Address,
+              value: Number(value),
+              extended: !!extended,
+              transactionHash: transactionHash ?? '',
+              transactionIndex: transactionIndex ?? 0,
+              timestamp,
+            }),
+          ),
+        );
+      }
+    },
+  });
+
+  // Watch for new auction creation events
+  useWatchNounsAuctionHouseAuctionCreatedEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        const { startTime, endTime, nounId } = log.args;
+        dispatch(
+          setActiveAuction(
+            reduxSafeNewAuction({
+              nounId: Number(nounId),
+              startTime: Number(startTime),
+              endTime: Number(endTime),
+              settled: false,
+            }),
+          ),
+        );
+        const nounIdNumber = Number(nounId);
+        window.location.href = nounPath(nounIdNumber);
+        dispatch(setOnDisplayAuctionNounId(nounIdNumber));
+        dispatch(setLastAuctionNounId(nounIdNumber));
+      }
+    },
+  });
+
+  // Watch for new auction extended events
+  useWatchNounsAuctionHouseAuctionExtendedEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        const { endTime, nounId } = log.args;
+        dispatch(
+          setAuctionExtended({
+            nounId: Number(nounId),
+            endTime: Number(endTime),
+          }),
+        );
+      }
+    },
+  });
+
+  // Watch for auction settlement events
+  useWatchNounsAuctionHouseAuctionSettledEvent({
+    onLogs: logs => {
+      for (const log of logs) {
+        const { amount, winner, nounId } = log.args;
+        dispatch(
+          setAuctionSettled({
+            nounId: Number(nounId),
+            amount: Number(amount),
+            winner: winner as Address,
+          }),
+        );
+      }
+    },
+  });
 
   return <></>;
 };
 
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const { data } = useQuery(latestAuctionsQuery());
+
+  const { query, variables } = latestAuctionsQuery();
+  const { data } = useQuery(query, { variables });
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -209,30 +245,23 @@ const PastAuctions: React.FC = () => {
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ChainSubscriber />
-      <React.StrictMode>
-        <Web3ReactProvider
-          getLibrary={
-            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-          }
-        >
+    <React.StrictMode>
+      <WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          <ChainSubscriber />
           <ApolloProvider client={client}>
             <PastAuctions />
-            <DAppProvider config={useDappConfig}>
-              <LanguageProvider>
-                <App />
-              </LanguageProvider>
-              <Updaters />
-            </DAppProvider>
+            <LanguageProvider>
+              <App />
+            </LanguageProvider>
           </ApolloProvider>
-        </Web3ReactProvider>
-      </React.StrictMode>
-    </BrowserRouter>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </React.StrictMode>
   </Provider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
+// to log results (for example, reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

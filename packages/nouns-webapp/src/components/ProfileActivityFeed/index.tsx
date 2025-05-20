@@ -1,14 +1,19 @@
+import type { Address } from '@/utils/types';
+
 import React, { useState } from 'react';
-import { Col, Spinner } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import classes from './ProfileActivityFeed.module.css';
 
 import { Trans } from '@lingui/react/macro';
-import { useNounActivity } from '../../wrappers/nounActivity';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
-import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
-import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
+import { Col, Spinner } from 'react-bootstrap';
+
+import DesktopProfileActivityFeed from '@/components/DesktopProfileActivityFeed';
+import MobileProfileActivityFeed from '@/components/MobileProfileActivityFeed';
+import ProfileActivityFeedToggle from '@/components/ProfileActivityFeedToggle';
+import Section from '@/layout/Section';
+import { useNounActivity } from '@/wrappers/nounActivity';
+
+import classes from './ProfileActivityFeed.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface ProfileActivityFeedProps {
   nounId: number;
@@ -23,19 +28,17 @@ export interface NounVoteHistory {
   proposal: ProposalInfo;
   support: boolean;
   supportDetailed: number;
-  voter: { id: string };
+  voter: { id: Address };
 }
 
-const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId } = props;
-
+const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({ nounId }) => {
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { loading, error, data } = useNounActivity(nounId);
 
-  if (loading || !data || data === undefined) {
+  if (loading || !data) {
     return (
       <Section fullWidth={false}>
         <Col lg={{ span: 10, offset: 1 }}>

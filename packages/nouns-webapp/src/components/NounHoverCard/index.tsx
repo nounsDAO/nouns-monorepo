@@ -1,18 +1,20 @@
-import { useQuery } from '@apollo/client';
-import { BigNumber } from '@ethersproject/bignumber';
-import { Trans } from '@lingui/react/macro';
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
-import { nounQuery } from '../../wrappers/subgraph';
-import ShortAddress from '../ShortAddress';
-import { StandaloneNounCircular } from '../StandaloneNoun';
-import classes from './NounHoverCard.module.css';
-import { HeartIcon, CakeIcon } from '@heroicons/react/solid';
-import { isNounderNoun } from '../../utils/nounderNoun';
-import { useAppSelector } from '../../hooks';
+
+import { useQuery } from '@apollo/client';
+import { CakeIcon, HeartIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
-import { getNounBirthday } from '../NounInfoRowBirthday';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import { Spinner } from 'react-bootstrap';
+
+import { getNounBirthday } from '@/components/NounInfoRowBirthday';
+import ShortAddress from '@/components/ShortAddress';
+import { StandaloneNounCircular } from '@/components/StandaloneNoun';
+import { useAppSelector } from '@/hooks';
+import { isNounderNoun } from '@/utils/nounderNoun';
+import { nounQuery } from '@/wrappers/subgraph';
+
+import classes from './NounHoverCard.module.css';
 
 interface NounHoverCardProps {
   nounId: string;
@@ -21,8 +23,10 @@ interface NounHoverCardProps {
 const NounHoverCard: React.FC<NounHoverCardProps> = props => {
   const { nounId } = props;
 
-  const { loading, error, data } = useQuery(nounQuery(nounId), {
-    skip: nounId === null,
+  const { query, variables } = nounQuery(nounId);
+  const { loading, error, data } = useQuery(query, {
+    skip: nounId == null,
+    variables,
   });
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
@@ -39,21 +43,21 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
       </div>
     );
   }
-  const numericNounId = parseInt(nounId);
-  const nounIdForQuery = isNounderNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId;
-  const startTime = getNounBirthday(nounIdForQuery, pastAuctions);
+  const numericNounId = Number(nounId);
+  const nounIdForQuery = isNounderNoun(BigInt(nounId)) ? numericNounId + 1 : numericNounId;
+  const startTime = getNounBirthday(BigInt(nounIdForQuery), pastAuctions);
 
   if (error || !startTime) {
     return <>Failed to fetch</>;
   }
-  const birthday = new Date(Number(startTime._hex) * 1000);
+  const birthday = new Date(Number(startTime) * 1000);
 
   return (
     <div className={classes.wrapper}>
       {/* First Row */}
       <div className={classes.titleWrapper}>
         <div className={classes.nounWrapper}>
-          <StandaloneNounCircular nounId={BigNumber.from(nounId)} />
+          <StandaloneNounCircular nounId={BigInt(nounId)} />
         </div>
         <div>
           <h1>Noun {nounId}</h1>

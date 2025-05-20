@@ -1,6 +1,9 @@
-import Davatar, { Image } from '@davatar/react';
+import React, { Component } from 'react';
+
 import { Web3Provider } from '@ethersproject/providers';
-import { Component } from 'react';
+import { blo } from 'blo';
+
+import { Address } from '@/utils/types';
 
 interface IdenticonInnerProps {
   address: string;
@@ -22,24 +25,30 @@ class IdenticonInner extends Component<IdenticonInnerProps> {
     return { fallback: true };
   }
 
-  componentDidCatch(error: any, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.log(error, errorInfo);
   }
-
-  renderDavatar(address: string, provider: Web3Provider, size: number) {
-    return <Davatar address={address} size={size} provider={provider} />;
-  }
-
-  renderJazzicon(address: string, size: number) {
-    return <Image address={address} size={size} />;
-  }
-
   render() {
     return (
       <>
-        {this.state.fallback
-          ? this.renderJazzicon(this.props.address, this.props.size)
-          : this.renderDavatar(this.props.address, this.props.provider, this.props.size)}
+        {this.state.fallback ? (
+          <div
+            style={{
+              width: this.props.size,
+              height: this.props.size,
+              borderRadius: '50%',
+              backgroundColor: '#' + this.props.address.slice(2, 8), // Simple visualization based on address
+            }}
+          />
+        ) : (
+          <img
+            alt={this.props.address}
+            src={blo(this.props.address as Address)}
+            width={this.props.size}
+            height={this.props.size}
+            style={{ borderRadius: '50%' }}
+          />
+        )}
       </>
     );
   }

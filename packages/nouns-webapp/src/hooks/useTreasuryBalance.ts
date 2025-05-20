@@ -1,41 +1,85 @@
-import { useEtherBalance } from '@usedapp/core';
-import useLidoBalance from './useLidoBalance';
+import { useBalance } from 'wagmi';
+
+import config from '@/config';
+import { useReadEthToUsdPriceOracleLatestAnswer, useReadStEthBalanceOf } from '@/contracts';
+import { Address } from '@/utils/types';
+
 import useTokenBuyerBalance from './useTokenBuyerBalance';
-import { useCoingeckoPrice } from '@usedapp/coingecko';
-import config from '../config';
-import { BigNumber, ethers } from 'ethers';
 
 /**
- * Computes treasury balance (ETH + Lido)
+ * Computes treasury balance (ETH and Lido)
  *
- * @returns Total balance of treasury (ETH + Lido) as EthersBN
+ * @returns Total balance of treasury (ETH and Lido) as bigint
  */
-export const useTreasuryBalance = () => {
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const ethBalanceTreasuryV2 = useEtherBalance(config.addresses.nounsDaoExecutorProxy);
-  const lidoBalanceAsETH = useLidoBalance(config.addresses.nounsDaoExecutor);
-  const lidoBalanceTreasuryV2AsETH = useLidoBalance(config.addresses.nounsDaoExecutorProxy);
+export const useTreasuryBalance = (): bigint => {
+  // Get ETH balance for main treasury
+  const { data: ethBalance } = useBalance({
+    address: config.addresses.nounsDaoExecutor as Address,
+  });
+
+  // Get ETH balance for treasury v2
+  const { data: ethBalanceTreasuryV2 } = useBalance({
+    address: config.addresses.nounsDaoExecutorProxy as Address,
+  });
+
+  // Get Lido (stETH) balance for the main treasury
+  // @ts-expect-error - Return type from contract call needs manual casting
+  const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
+    args: config.addresses.nounsDaoExecutor
+      ? [config.addresses.nounsDaoExecutor as Address]
+      : undefined,
+    query: {
+      enabled: Boolean(config.addresses.nounsDaoExecutor),
+    },
+  }) as { data: bigint | undefined };
+
+  // Get Lido (stETH) balance for treasury v2
+  const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
+    args: config.addresses.nounsDaoExecutorProxy
+      ? [config.addresses.nounsDaoExecutorProxy as Address]
+      : undefined,
+    query: {
+      enabled: Boolean(config.addresses.nounsDaoExecutorProxy),
+    },
+  }) as { data: bigint | undefined };
+
+  // Get token buyer balance
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
-  const zero = BigNumber.from(0);
+  // Sum all balances, using 0n for any undefined values
   return (
-    ethBalance
-      ?.add(ethBalanceTreasuryV2 ?? zero)
-      .add(lidoBalanceAsETH ?? zero)
-      .add(lidoBalanceTreasuryV2AsETH ?? zero)
-      .add(tokenBuyerBalanceAsETH ?? zero) ?? zero
+    (ethBalance?.value ?? 0n) +
+    (ethBalanceTreasuryV2?.value ?? 0n) +
+    (lidoBalanceAsETH ?? 0n) +
+    (lidoBalanceTreasuryV2AsETH ?? 0n) +
+    (tokenBuyerBalanceAsETH ?? 0n)
   );
 };
 
 /**
- * Computes treasury usd value of treasury assets (ETH + Lido) at current ETH-USD exchange rate
+ * Computes treasury USD value of treasury assets (ETH and Lido) at current ETH-USD exchange rate
  *
- * @returns USD value of treasury assets (ETH + Lido) at current exchange rate
+ * @returns USD value of treasury assets as a number or undefined if data is not available
  */
-export const useTreasuryUSDValue = () => {
-  const etherPrice = Number(useCoingeckoPrice('ethereum', 'usd'));
-  const treasuryBalanceETH = Number(
-    ethers.utils.formatEther(useTreasuryBalance()?.toString() || '0'),
-  );
-  return etherPrice * treasuryBalanceETH;
+export const useTreasuryUSDValue = (): number | undefined => {
+  // Fetch ETH/USD price for conversion
+  const { data: ethUsdcPrice } = useReadEthToUsdPriceOracleLatestAnswer({});
+
+  // Get total treasury balance (ETH and Lido)
+  const treasuryBalance = useTreasuryBalance();
+
+  // If either price or balance is not available, return undefined
+  if (!ethUsdcPrice || ethUsdcPrice === 0n) {
+    return undefined;
+  }
+
+  // Convert ETH price from bigint to number with proper scaling
+  // The oracle returns price with 8 decimal places (1e8)
+  const ethPriceInUsd = Number(ethUsdcPrice) / 1e8;
+
+  // Convert treasury balance from wei to ETH (1 ETH = 1e18 wei)
+  const treasuryBalanceInEth = Number(treasuryBalance) / 1e18;
+
+  // Calculate USD value
+  return ethPriceInUsd * treasuryBalanceInEth;
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import TightStackedCircleNoun from '../TightStackedCircleNoun';
 
 interface StackedCircleNounsProps {

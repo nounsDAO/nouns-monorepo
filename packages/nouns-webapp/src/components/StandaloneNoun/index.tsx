@@ -1,30 +1,34 @@
-import { ImageData as data, getNounData } from '@noundry/nouns-assets';
+import React, { useEffect } from 'react';
+
+import { getNounData, ImageData as data } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
-import { BigNumber as EthersBN } from 'ethers';
-import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
-import Noun from '../Noun';
-import { Link } from 'react-router';
-import classes from './StandaloneNoun.module.css';
-import { useDispatch } from 'react-redux';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
-import nounClasses from '../Noun/Noun.module.css';
 import Image from 'react-bootstrap/Image';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router';
+
+import Noun from '@/components/Noun';
+import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
+import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
+
+import classes from './StandaloneNoun.module.css';
+
+import nounClasses from '@/components/Noun/Noun.module.css';
 
 interface StandaloneNounProps {
-  nounId: EthersBN;
+  nounId: bigint;
 }
 interface StandaloneCircularNounProps {
-  nounId: EthersBN;
+  nounId: bigint;
   border?: boolean;
 }
 
 interface StandaloneNounWithSeedProps {
-  nounId: EthersBN;
+  nounId: bigint;
   onLoadSeed?: (seed: INounSeed) => void;
   shouldLinkToProfile: boolean;
 }
 
-export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
+export const getNoun = (nounId: string | bigint, seed: INounSeed) => {
   const id = nounId.toString();
   const name = `Noun ${id}`;
   const description = `Noun ${id} is a member of the Nouns DAO`;
@@ -54,7 +58,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   const dispatch = useDispatch();
 
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
   return (
@@ -77,10 +81,11 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
 
   const dispatch = useDispatch();
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
-  if (!seed || !nounId) return <Noun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
+  if (!seed || !nounId)
+    return <Noun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
     <Link
@@ -107,7 +112,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
 
   const dispatch = useDispatch();
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
   return (
@@ -125,21 +130,25 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   );
 };
 
-export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
-  props: StandaloneNounWithSeedProps,
-) => {
-  const { nounId, onLoadSeed, shouldLinkToProfile } = props;
-
+export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
+  nounId,
+  onLoadSeed,
+  shouldLinkToProfile,
+}: StandaloneNounWithSeedProps) => {
   const dispatch = useDispatch();
   const seed = useNounSeed(nounId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
+  useEffect(() => {
+    if (seed && !seedIsInvalid && onLoadSeed) {
+      onLoadSeed(seed);
+    }
+  }, [seed, seedIsInvalid, onLoadSeed]);
+
   if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
-  onLoadSeed(seed);
-
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
   const { image, description } = getNoun(nounId, seed);

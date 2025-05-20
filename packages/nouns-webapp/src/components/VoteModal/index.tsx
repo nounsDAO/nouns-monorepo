@@ -1,17 +1,15 @@
-import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
-import classes from './VoteModal.module.css';
-import {
-  useCastRefundableVote,
-  useCastRefundableVoteWithReason,
-  Vote,
-} from '../../wrappers/nounsDao';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { TransactionStatus } from '@usedapp/core';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
+
 import { i18n } from '@lingui/core';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
+
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
+
+import classes from './VoteModal.module.css';
 
 interface VoteModalProps {
   show: boolean;
@@ -48,34 +46,35 @@ const VoteModal = ({
     return error;
   };
 
-  const handleVoteStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsVoteSuccessful(true);
-        break;
-      case 'Fail':
-        setFailureCopy(<Trans>Transaction Failed</Trans>);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsVoteFailed(true);
-        break;
-      case 'Exception':
-        setFailureCopy(<Trans>Error</Trans>);
-        setErrorMessage(
-          getVoteErrorMessage(state?.errorMessage) || <Trans>Please try again.</Trans>,
-        );
-        setIsLoading(false);
-        setIsVoteFailed(true);
-        break;
-    }
-  }, []);
+  const handleVoteStateChange = useCallback(
+    ({ errorMessage, status }: { errorMessage?: string; status: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'Mining':
+          setIsLoading(true);
+          break;
+        case 'Success':
+          setIsLoading(false);
+          setIsVoteSuccessful(true);
+          break;
+        case 'Fail':
+          setFailureCopy(<Trans>Transaction Failed</Trans>);
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsVoteFailed(true);
+          break;
+        case 'Exception':
+          setFailureCopy(<Trans>Error</Trans>);
+          setErrorMessage(getVoteErrorMessage(errorMessage) || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsVoteFailed(true);
+          break;
+      }
+    },
+    [],
+  );
 
   // Cast refundable vote transaction state hook
   useEffect(() => {
@@ -106,7 +105,7 @@ const VoteModal = ({
   const voteModalContent = (
     <>
       <div className={classes.voteModalTitle}>
-        <Trans>Vote on Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>
+        <Trans>Vote on Prop {i18n.number(Number(proposalId || '0'))}</Trans>
       </div>
       <div className={classes.voteModalSubtitle}>
         {availableVotes === 1 ? (
@@ -123,7 +122,7 @@ const VoteModal = ({
         <div className={classes.transactionStatus}>
           <p>
             <Trans>
-              You've successfully voted on on prop {i18n.number(parseInt(proposalId || '0'))}
+              You've successfully voted on on prop {i18n.number(Number(proposalId || '0'))}
             </Trans>
           </p>
 
@@ -155,8 +154,8 @@ const VoteModal = ({
                     vote === Vote.FOR
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>
@@ -172,8 +171,8 @@ const VoteModal = ({
                 vote === Vote.AGAINST
                   ? ''
                   : vote === undefined
-                  ? classes.inactive
-                  : classes.unselected
+                    ? classes.inactive
+                    : classes.unselected
               }
             />
           </div>
@@ -189,8 +188,8 @@ const VoteModal = ({
                     vote === Vote.ABSTAIN
                       ? ''
                       : vote === undefined
-                      ? classes.inactive
-                      : classes.unselected
+                        ? classes.inactive
+                        : classes.unselected
                   }
                 />
               </div>
@@ -217,9 +216,9 @@ const VoteModal = ({
               setIsLoading(true);
               const isReasonEmpty = voteReason.trim() === '';
               if (isReasonEmpty) {
-                castRefundableVote(proposalId, vote);
+                castRefundableVote({ args: [BigInt(proposalId), vote] });
               } else {
-                castRefundableVoteWithReason(proposalId, vote, voteReason);
+                castRefundableVoteWithReason({ args: [BigInt(proposalId), vote, voteReason] });
               }
             }}
             className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}

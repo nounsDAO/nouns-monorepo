@@ -1,31 +1,34 @@
 import { useState } from 'react';
-import classes from './CandidateSponsors.module.css';
-import { CandidateSignature } from '../../wrappers/nounsData';
-import CandidateSponsorImage from './CandidateSponsorImage';
+
 import { useQuery } from '@apollo/client';
-import { Delegates, delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import clsx from 'clsx';
 
-type Props = {
+import { CandidateSignature } from '@/wrappers/nounsData';
+import { delegateNounsAtBlockQuery, Delegates } from '@/wrappers/subgraph';
+
+import CandidateSponsorImage from './CandidateSponsorImage';
+import classes from './CandidateSponsors.module.css';
+
+type CandidateSponsorsProps = {
   signers: CandidateSignature[];
   nounsRequired: number;
-  currentBlock?: number;
+  currentBlock?: bigint;
   isThresholdMetByProposer?: boolean;
 };
 
-function CandidateSponsors({
+const CandidateSponsors = ({
   signers,
   nounsRequired,
   currentBlock,
-  isThresholdMetByProposer
-}: Props) {
+  isThresholdMetByProposer,
+}: CandidateSponsorsProps) => {
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
-  const activeSigners = signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
+  const activeSigners =
+    signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0),
-  );
+  const { query, variables } = delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0n);
+  const { data: delegateSnapshot } = useQuery<Delegates>(query, { variables });
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
     acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
@@ -50,7 +53,7 @@ function CandidateSponsors({
         <div className={classes.sponsors}>
           {nounIds.map((nounId, i) => {
             if (i >= maxVisibleSpots) return null;
-            return <CandidateSponsorImage nounId={+nounId} key={i * +nounId} />;
+            return <CandidateSponsorImage nounId={BigInt(+nounId)} key={i * +nounId} />;
           })}
         </div>
       )}
@@ -59,6 +62,6 @@ function CandidateSponsors({
       ))}
     </div>
   );
-}
+};
 
 export default CandidateSponsors;

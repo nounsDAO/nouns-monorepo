@@ -1,12 +1,18 @@
-import { useQuery } from '@apollo/client';
-import { Trans } from '@lingui/react/macro';
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
-import { currentlyDelegatedNouns } from '../../wrappers/subgraph';
-import HorizontalStackedNouns from '../HorizontalStackedNouns';
-import ShortAddress from '../ShortAddress';
-import classes from './ByLineHoverCard.module.css';
+
+import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/react/macro';
+import { Spinner } from 'react-bootstrap';
+
+import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
+import ShortAddress from '@/components/ShortAddress';
+import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
+
+import classes from './ByLineHoverCard.module.css';
+import { Delegate, Maybe } from '@/subgraphs';
+import { map } from 'remeda';
+import { Address } from '@/utils/types';
 
 interface ByLineHoverCardProps {
   proposerAddress: string;
@@ -17,9 +23,10 @@ const MAX_NOUN_IDS_SHOWN = 12;
 const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
   const { proposerAddress } = props;
 
-  const { data, loading, error } = useQuery(currentlyDelegatedNouns(proposerAddress));
+  const { query, variables } = currentlyDelegatedNouns(proposerAddress);
+  const { data, loading, error } = useQuery<{ delegates: Maybe<Delegate[]> }>(query, { variables });
 
-  if (loading || (data && data.delegates.length === 0)) {
+  if (loading || (data && data?.delegates?.length === 0)) {
     return (
       <div className={classes.spinnerWrapper}>
         <div className={classes.spinner}>
@@ -32,9 +39,9 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     return <>Error fetching Vote info</>;
   }
 
-  const sortedNounIds = data.delegates[0].nounsRepresented
+  const sortedNounIds = data?.delegates?.[0]?.nounsRepresented
     .map((noun: { id: string }) => {
-      return parseInt(noun.id);
+      return Number(noun.id);
     })
     .sort((a: number, b: number) => {
       return a - b;
@@ -44,18 +51,21 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     <div className={classes.wrapper}>
       <div className={classes.stackedNounWrapper}>
         <HorizontalStackedNouns
-          nounIds={data.delegates[0].nounsRepresented.map((noun: { id: string }) => noun.id)}
+          nounIds={map(
+            data?.delegates?.[0]?.nounsRepresented ?? [],
+            (noun: { id: string }) => noun.id,
+          )}
         />
       </div>
 
       <div className={classes.address}>
-        <ShortAddress address={data ? data.delegates[0].id : ''} />
+        <ShortAddress address={data?.delegates?.[0]?.id as Address} />
       </div>
 
       <div className={classes.nounsRepresented}>
         <div>
           <ScaleIcon height={15} width={15} className={classes.icon} />
-          {sortedNounIds.length === 1 ? (
+          {sortedNounIds?.length === 1 ? (
             <Trans>
               <span>Delegated Noun: </span>
             </Trans>
@@ -65,17 +75,17 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
             </Trans>
           )}
 
-          {sortedNounIds.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
+          {sortedNounIds?.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
             return (
               <span className={classes.bold} key={nounId.toString()}>
                 {nounId}
-                {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds.length) - 1 && ', '}{' '}
+                {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds?.length) - 1 && ', '}{' '}
               </span>
             );
           })}
-          {sortedNounIds.length > MAX_NOUN_IDS_SHOWN && (
+          {Number(sortedNounIds?.length ?? 0) > MAX_NOUN_IDS_SHOWN && (
             <span>
-              <Trans>... and {sortedNounIds.length - MAX_NOUN_IDS_SHOWN} more</Trans>
+              <Trans>... and {Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN} more</Trans>
             </span>
           )}
         </div>

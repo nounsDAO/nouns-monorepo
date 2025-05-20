@@ -1,13 +1,29 @@
-import { useEtherBalance } from '@usedapp/core';
-import { BigNumber } from 'ethers';
-import useLidoBalance from './useLidoBalance';
+import { useBalance } from 'wagmi';
 
-function useForkTreasuryBalance(treasuryContractAddress?: string) {
-  const ethBalance = useEtherBalance(treasuryContractAddress);
-  const lidoBalanceAsETH = useLidoBalance(treasuryContractAddress);
+import { useReadStEthBalanceOf } from '@/contracts';
+import { Address } from '@/utils/types';
 
-  const zero = BigNumber.from(0);
-  return ethBalance?.add(lidoBalanceAsETH ?? zero) ?? zero;
+/**
+ * Hook to get the combined ETH and stETH balance of a fork treasury
+ *
+ * @param treasuryContractAddress The treasury contract address to check balances for
+ * @returns The combined balance of ETH and stETH as a bigint
+ */
+function useForkTreasuryBalance(treasuryContractAddress?: Address): bigint {
+  const { data: ethBalanceData } = useBalance({
+    address: treasuryContractAddress,
+  });
+
+  const { data: stEthBalanceData } = useReadStEthBalanceOf({
+    args: treasuryContractAddress ? [treasuryContractAddress] : undefined,
+    query: { enabled: !!treasuryContractAddress },
+  });
+
+  // Use nullish coalescing to provide a default value of 0n for undefined balances
+  const ethBalance = ethBalanceData?.value ?? 0n;
+  const stEthBalance = stEthBalanceData ?? 0n;
+
+  return ethBalance + stEthBalance;
 }
 
 export default useForkTreasuryBalance;

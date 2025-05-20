@@ -1,18 +1,23 @@
+import React, { useEffect, useRef, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+
+import { useAppSelector } from '@/hooks';
+
 import classes from './AuctionTimer.module.css';
-import { useState, useEffect, useRef } from 'react';
-import { useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
 
 dayjs.extend(duration);
 
-const ForkingPeriodTimer: React.FC<{
+interface ForkingPeriodTimerProps {
   endTime: number;
   isPeriodEnded: boolean;
-}> = props => {
+}
+
+const ForkingPeriodTimer: React.FC<ForkingPeriodTimerProps> = props => {
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
@@ -109,7 +114,7 @@ const ForkingPeriodTimer: React.FC<{
             }}
           >
             <div className={clsx(classes.timerSection, classes.clockSection)}>
-              <span>{i18n.date(new Date(endTimeUnix * 1000))}</span> {" "}
+              <span>{i18n.date(new Date(endTimeUnix * 1000))}</span>{' '}
               <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
             </div>
           </h2>

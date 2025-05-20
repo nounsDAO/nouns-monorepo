@@ -29,10 +29,6 @@ msgstr "Voted against"
 msgid "You voted <0>Against</0> this proposal"
 msgstr "You voted <0>Against</0> this proposal"
 
-#: src/components/VoteModal/index.tsx
-#~ msgid "Cast 1 vote for Prop {0}"
-#~ msgstr "Cast 1 vote for Prop {0}"
-
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "This will clear all previous sponsors and feedback votes"
@@ -40,10 +36,6 @@ msgstr "This will clear all previous sponsors and feedback votes"
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-
-#: src/pages/Vote/index.tsx
-#~ msgid "View Dynamic Quorum Info"
-#~ msgstr "View Dynamic Quorum Info"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "At this time only USDC and WETH streams are supported"
@@ -97,17 +89,9 @@ msgstr "Twitter"
 msgid "Playground"
 msgstr "Playground"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "You've already delegated to this address"
 msgstr "You've already delegated to this address"
-
-#: src/components/ProfileActivityFeed/index.tsx
-#~ msgid "Show all {0} events"
-#~ msgstr "Show all {0} events"
-
-#: src/components/Documentation/index.tsx
-#~ msgid "backgrounds (2)"
-#~ msgstr "backgrounds (2)"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal functions"
@@ -117,10 +101,6 @@ msgstr "Proposal functions"
 msgid "Proposal candidates must meet the required Nouns vote threshold."
 msgstr "Proposal candidates must meet the required Nouns vote threshold."
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Tip:"
-#~ msgstr "Tip:"
-
 #: src/components/Documentation/index.tsx
 msgid "Daily Auctions"
 msgstr "Daily Auctions"
@@ -129,7 +109,6 @@ msgstr "Daily Auctions"
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 
-#: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
 msgstr "Bid"
@@ -157,10 +136,6 @@ msgstr "Voting with <0>{0}</0> Nouns"
 msgid "Bids will appear here"
 msgstr "Bids will appear here"
 
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
-#~ msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
-
 #: src/pages/Vote/index.tsx
 msgid "Ended"
 msgstr "Ended"
@@ -168,10 +143,6 @@ msgstr "Ended"
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "Select signatures"
 msgstr "Select signatures"
-
-#: src/components/NavBar/index.tsx
-#~ msgid "Discourse"
-#~ msgstr "Discourse"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 #: src/components/NounHoverCard/index.tsx
@@ -187,18 +158,10 @@ msgstr "Invalid Arguments"
 msgid "Winner"
 msgstr "Winner"
 
-#: src/pages/Governance/index.tsx
-#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-#~ msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "Candidates"
 msgstr "Candidates"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Taken at block"
-#~ msgstr "Taken at block"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
@@ -220,10 +183,6 @@ msgstr "Delegate changed from<0> <1/></0> to <2><3/></2>"
 msgid "Prop House"
 msgstr "Prop House"
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#~ msgid "<0> Noun {0} </0>  won by <1><2/></1>"
-#~ msgstr "<0> Noun {0} </0>  won by <1><2/></1>"
-
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
 msgstr "h"
@@ -240,7 +199,7 @@ msgstr "Version History"
 msgid "Compound Governance"
 msgstr "Compound Governance"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Votes"
 msgstr "Delegate {availableVotes} Votes"
 
@@ -256,10 +215,6 @@ msgstr "Awaiting signature"
 msgid "Streamed so far"
 msgstr "Streamed so far"
 
-#: src/pages/CreateCandidate/index.tsx
-#~ msgid "Proposal Candidate Created! <0/> <1>View the candidate</1>"
-#~ msgstr "Proposal Candidate Created! <0/> <1>View the candidate</1>"
-
 #: src/components/NounsIntroSection/index.tsx
 msgid "Build With Nouns. Get Funded."
 msgstr "Build With Nouns. Get Funded."
@@ -272,10 +227,6 @@ msgstr "Making a proposal requires {threshold} votes"
 #: src/pages/Fork/WithdrawNounsButton.tsx
 msgid "Withdraw Nouns from escrow"
 msgstr "Withdraw Nouns from escrow"
-
-#: src/components/AddNounsToForkModal/index.tsx
-#~ msgid "Add {0} Noun{1} to escrow"
-#~ msgstr "Add {0} Noun{1} to escrow"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
@@ -293,14 +244,11 @@ msgstr "{voterComponent} voted against"
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5 artists, 6.5 technologists"
 
-#: src/components/Documentation/index.tsx
-#~ msgid "accessories (140)"
-#~ msgstr "accessories (140)"
-
 #: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show fewer"
 msgstr "Show fewer"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "Proposals"
 msgstr "Proposals"
@@ -309,10 +257,6 @@ msgstr "Proposals"
 #: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
 msgstr "starts {0}"
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
-#~ msgstr "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
 
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
@@ -376,22 +320,9 @@ msgstr "You have no votes."
 msgid "Sponsoring a proposal requires at least one Noun vote"
 msgstr "Sponsoring a proposal requires at least one Noun vote"
 
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
-#~ msgstr "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
-
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
 msgstr "Help mint the next Noun"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Quorum"
-#~ msgstr "Quorum"
-
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#~ msgid "<0> Noun {0} </0> sent to <1><2/></1>"
-#~ msgstr "<0> Noun {0} </0> sent to <1><2/></1>"
 
 #: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by Nouns via governance."
@@ -433,10 +364,6 @@ msgstr "Voted for"
 msgid "s"
 msgstr "s"
 
-#: src/components/Footer/index.tsx
-#~ msgid "Forums"
-#~ msgstr "Forums"
-
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 msgid "Add an optional message for the changes to the proposal"
 msgstr "Add an optional message for the changes to the proposal"
@@ -452,7 +379,6 @@ msgid "You can settle manually in {0} minutes"
 msgstr "You can settle manually in {0} minutes"
 
 #. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "Ends {0}"
@@ -462,7 +388,7 @@ msgid "glasses (23)"
 msgstr "glasses (23)"
 
 #: src/components/CurrentDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Update Delegate"
 msgstr "Update Delegate"
 
@@ -473,10 +399,6 @@ msgstr "<0>Delegated Noun: </0>"
 #: src/components/AuctionTimer/index.tsx
 msgid "Time left"
 msgstr "Time left"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "This proposal can be edited for"
-#~ msgstr "This proposal can be edited for"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is equal to one vote."
@@ -499,10 +421,6 @@ msgstr "Address"
 msgid "Nouns"
 msgstr "Nouns"
 
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "<0>Proposed by: </0><1>{proposer}</1>{transactionLink}"
-#~ msgstr "<0>Proposed by: </0><1>{proposer}</1>{transactionLink}"
-
 #: src/components/EditProposalButton/index.tsx
 #: src/components/CreateProposalButton/index.tsx
 #: src/components/CreateCandidateButton/index.tsx
@@ -512,12 +430,9 @@ msgstr "You already have an active or pending proposal"
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "None"
 msgstr "None"
-
-#: src/components/VoteModal/index.tsx
-#~ msgid "Cast {0} votes against Prop {1}"
-#~ msgstr "Cast {0} votes against Prop {1}"
 
 #: src/pages/Vote/index.tsx
 msgid "View Threshold Info"
@@ -543,10 +458,6 @@ msgstr "Add Transfer Funds Action"
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
 msgstr "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
-
-#: src/pages/Fork/DeployForkButton.tsx
-#~ msgid "Deploying a Nouns fork and beginning the forking period"
-#~ msgstr "Deploying a Nouns fork and beginning the forking period"
 
 #: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show all {numEvents} events "
@@ -584,17 +495,9 @@ msgstr "You provided <0>{0}</0> feedback {1}"
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 
-#: src/components/VoteCard/index.tsx
-#~ msgid "{0} <0>Address </0>"
-#~ msgstr "{0} <0>Address </0>"
-
 #: src/components/Proposals/index.tsx
 msgid "About Proposal Candidates"
 msgstr "About Proposal Candidates"
-
-#: src/components/ProposalEditor/index.tsx
-#~ msgid "Preview:"
-#~ msgstr "Preview:"
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -635,7 +538,7 @@ msgstr "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing
 msgid "Winning bid"
 msgstr "Winning bid"
 
-#. placeholder {0}: i18n.number(parseInt(proposal.id || '0'))
+#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 #: src/pages/ProposalHistory/index.tsx
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -660,13 +563,6 @@ msgstr "All Nouns are members of Nouns DAO."
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "days"
 msgstr "days"
-
-#. placeholder {0}: props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'
-#. placeholder {0}: isDaoGteV3 ? 'Proposals' : 'DAO'
-#: src/components/VoteSignals/VoteSignals.tsx
-#: src/components/NavBar/index.tsx
-msgid "{0}"
-msgstr "{0}"
 
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
@@ -746,10 +642,6 @@ msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are 
 msgid "Auction ended"
 msgstr "Auction ended"
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Add a Proposal Transaction"
-#~ msgstr "Add a Proposal Transaction"
-
 #: src/components/VoteModal/index.tsx
 msgid "Submit Vote"
 msgstr "Submit Vote"
@@ -764,7 +656,7 @@ msgstr "Expired"
 msgid "Error fetching Noun birthday"
 msgstr "Error fetching Noun birthday"
 
-#. placeholder {0}: i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
+#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr "You've generated {0} years worth of Nouns"
@@ -780,10 +672,10 @@ msgstr "Select Language"
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 msgid "Settle Auction"
 msgstr "Settle Auction"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "DAO"
 msgstr "DAO"
@@ -806,10 +698,6 @@ msgstr "Any token holder can signal to fork (exit) in response to a governance p
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Function (Optional)"
-#~ msgstr "Function (Optional)"
-
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
@@ -825,10 +713,6 @@ msgstr "Settled auction successfully!"
 #: src/components/NounsIntroSection/index.tsx
 msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
 msgstr "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-
-#: src/components/VoteModal/index.tsx
-#~ msgid "Cast {0} votes for Prop {1}"
-#~ msgstr "Cast {0} votes for Prop {1}"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
@@ -857,17 +741,9 @@ msgstr "Upload"
 msgid "Update Proposal"
 msgstr "Update Proposal"
 
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-#~ msgstr "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
-
 #: src/components/Bid/index.tsx
 msgid "Bid was placed successfully!"
 msgstr "Bid was placed successfully!"
-
-#: src/components/Footer/index.tsx
-#~ msgid "Discord"
-#~ msgstr "Discord"
 
 #: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
@@ -876,10 +752,6 @@ msgstr "The compressed parts are efficiently converted into a single base64 enco
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Arguments"
 msgstr "Arguments"
-
-#: src/components/CandidateSponsors/Signature.tsx
-#~ msgid "This signature is invalid while the signer has an active or pending proposal."
-#~ msgstr "This signature is invalid while the signer has an active or pending proposal."
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -901,18 +773,10 @@ msgstr "This candidate has met the required threshold, but Nouns voters can stil
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#~ msgid "Holder changed from <0><1/></0> to <2><3/></2>"
-#~ msgstr "Holder changed from <0><1/></0> to <2><3/></2>"
-
 #. placeholder {0}: isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} votes"
-
-#: src/components/VoteModal/index.tsx
-#~ msgid "Abstain from voting on Prop {0}"
-#~ msgstr "Abstain from voting on Prop {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -923,7 +787,6 @@ msgid "Will have"
 msgstr "Will have"
 
 #. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "Starts {0}"
@@ -944,16 +807,12 @@ msgstr "Noun Seeder Contract"
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns artwork is in the {publicDomainLink}."
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-#~ msgstr "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-
 #. placeholder {0}: sortedNounIds.length - MAX_NOUN_IDS_SHOWN
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr "... and {0} more"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Updating..."
 msgstr "Updating..."
 
@@ -961,7 +820,7 @@ msgstr "Updating..."
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 msgstr "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 
@@ -1001,14 +860,6 @@ msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Current Quorum"
-#~ msgstr "Current Quorum"
-
-#: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
@@ -1024,8 +875,6 @@ msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
 #: src/pages/Candidate/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 msgid "Error"
 msgstr "Error"
 
@@ -1037,7 +886,7 @@ msgstr "Add Stream Date Details"
 msgid "Docs"
 msgstr "Docs"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "Delegate {availableVotes} Vote"
 
@@ -1064,10 +913,6 @@ msgstr "ended {0}"
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "More details on how dynamic quorum works can be found <0>here</0>."
-#~ msgstr "More details on how dynamic quorum works can be found <0>here</0>."
-
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
 msgstr "Proposal Candidate Created!<0/><1>View the candidate</1>"
@@ -1087,10 +932,6 @@ msgstr "More details on how the dynamic threshold works can be found <0>here</0>
 #: src/components/ProposalHeader/CandidateHeader.tsx
 msgid "<0>Proposed by: </0><1>{proposerLink}</1>{transactionLink}"
 msgstr "<0>Proposed by: </0><1>{proposerLink}</1>{transactionLink}"
-
-#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
-#~ msgid "Holder changed from<0><1/></0> to <2><3/></2>"
-#~ msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
 
 #: src/components/Documentation/index.tsx
 msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
@@ -1135,14 +976,6 @@ msgstr "No proposals found"
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
-#~ msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
-
-#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
-#~ msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
-#~ msgstr "Delegate changed from<0><1/></0> to <2><3/></2>"
-
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
 msgstr "Only visible to you"
@@ -1164,7 +997,7 @@ msgstr "Activity"
 msgid "Delegate"
 msgstr "Delegate"
 
-#. placeholder {0}: createCandidateCost && ethers.utils.formatEther(createCandidateCost)
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
 msgid "{0} ETH fee upon submission"
 msgstr "{0} ETH fee upon submission"
@@ -1176,14 +1009,6 @@ msgstr "Proposal Candidate"
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Streams start and end at 00:00 UTC on selected dates."
 msgstr "Streams start and end at 00:00 UTC on selected dates."
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "Dynamic Quorum"
-#~ msgstr "Dynamic Quorum"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-#~ msgstr "There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
 
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
@@ -1213,10 +1038,6 @@ msgstr "Loading..."
 msgid "Execute"
 msgstr "Execute"
 
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "at <0>{0}</0>"
-#~ msgstr "at <0>{0}</0>"
-
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Threshold"
 msgstr "Dynamic Threshold"
@@ -1241,10 +1062,6 @@ msgstr "Add Arguments"
 #: src/pages/EditCandidate/index.tsx
 msgid "Edit Proposal Candidate"
 msgstr "Edit Proposal Candidate"
-
-#: src/pages/EditCandidate/index.tsx
-#~ msgid "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
-#~ msgstr "Updating this proposal candidate will clear all previous signers.   This candidate currently has {0} signatures."
 
 #: src/pages/CreateProposal/index.tsx
 msgid "You <0>MUST</0> maintain enough voting power to meet the proposal threshold until your proposal is executed. If you fail to do so, anyone can cancel your proposal."
@@ -1274,7 +1091,7 @@ msgstr "CryptoPunks"
 msgid "Available to withdraw"
 msgstr "Available to withdraw"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
 msgstr "You've successfully voted on on prop {0}"
@@ -1305,10 +1122,6 @@ msgstr "Proposal Created!<0/>"
 msgid "Thank you for voting."
 msgstr "Thank you for voting."
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Taken on start block"
-#~ msgstr "Taken on start block"
-
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr "Switch wallet"
@@ -1338,11 +1151,7 @@ msgstr "Reason (Optional)"
 msgid "Settlement of one auction kicks off the next."
 msgstr "Settlement of one auction kicks off the next."
 
-#: src/components/DelegationCandidateVoteCountInfo/index.tsx
-#~ msgid "{voteCount} Vote"
-#~ msgstr "{voteCount} Vote"
-
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
 msgstr "Delegate Update Failed"
 
@@ -1429,17 +1238,9 @@ msgstr "Candidate Created!"
 msgid "{voterComponent} voted for"
 msgstr "{voterComponent} voted for"
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Proposal Created!"
-#~ msgstr "Proposal Created!"
-
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
-
-#: src/components/Documentation/index.tsx
-#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
@@ -1467,14 +1268,6 @@ msgstr "Did not re-sign"
 msgid "The Nounders"
 msgstr "The Nounders"
 
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Download the Free iOS App"
-#~ msgstr "Download the Free iOS App"
-
-#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
-#~ msgid "No arguments required"
-#~ msgstr "No arguments required"
-
 #: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 #: src/pages/Fork/WithdrawNounsButton.tsx
@@ -1509,8 +1302,6 @@ msgstr "The Nounders"
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/AddNounsToForkModal/index.tsx
@@ -1519,10 +1310,6 @@ msgstr "The Nounders"
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Please try again."
 msgstr "Please try again."
-
-#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-#~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
-#~ msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal Queued!"
@@ -1556,10 +1343,6 @@ msgstr "% of Nouns Currently Against"
 msgid "Failed to fetch"
 msgstr "Failed to fetch"
 
-#: src/pages/Vote/index.tsx
-#~ msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
-#~ msgstr "{moveStateButtonAction} Proposal ⌐◧-◧"
-
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Delegation"
 msgstr "Delegation"
@@ -1588,10 +1371,6 @@ msgstr "Submit"
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
 msgstr "Absent for"
-
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Next"
-#~ msgstr "Next"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
@@ -1706,10 +1485,6 @@ msgstr "Nouns & Traits"
 msgid "Deploy Fork"
 msgstr "Deploy Fork"
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Value in ETH (Optional)"
-#~ msgstr "Value in ETH (Optional)"
-
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
 msgstr "Only 32x32 PNG images are accepted"
@@ -1730,13 +1505,17 @@ msgstr "Abstained on"
 msgid "Now has"
 msgstr "Now has"
 
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "Pre-proposal feedback"
+msgstr "Pre-proposal feedback"
+
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 
 #. placeholder {0}: (proposalThreshold ?? 0) + 1
 #. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 msgstr "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 
@@ -1750,10 +1529,6 @@ msgstr "Submit Proposal"
 msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
 msgstr "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
 
-#: src/components/VoteModal/index.tsx
-#~ msgid "Cast 1 vote against Prop {0}"
-#~ msgstr "Cast 1 vote against Prop {0}"
-
 #. placeholder {0}: nounsRequired ? ( <> {nounsRequired} {threshold === 0 ? nounSingular : nounPlural} </> ) : ( '...' )
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
@@ -1763,15 +1538,7 @@ msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate t
 msgid "Deploying Nouns fork and beginning the forking period"
 msgstr "Deploying Nouns fork and beginning the forking period"
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Taken on created block"
-#~ msgstr "Taken on created block"
-
-#: src/components/CandidateCard/index.tsx
-#~ msgid "sponsors"
-#~ msgstr "sponsors"
-
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 
@@ -1791,20 +1558,12 @@ msgstr "Review Function Call Action"
 msgid "Adding your feedback"
 msgstr "Adding your feedback"
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "All Proposals"
-#~ msgstr "All Proposals"
-
 #: src/pages/ProposalHistory/index.tsx
 #: src/pages/CandidateHistoryPage/index.tsx
 #: src/components/ProposalContent/index.tsx
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 msgid "Proposed Transactions"
 msgstr "Proposed Transactions"
-
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-#~ msgstr "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
 
 #. placeholder {0}: i18n.date(new Date(proposalCreationTimestamp * 1000), { dateStyle: 'long', timeStyle: 'long', })
 #: src/components/ProposalHeader/index.tsx
@@ -1815,7 +1574,7 @@ msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to
 msgid "Proposals cannot be executed during a forking period"
 msgstr "Proposals cannot be executed during a forking period"
 
-#. placeholder {0}: i18n.number(parseInt(proposalId || '0'))
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
 msgstr "Vote on Prop {0}"
@@ -1833,7 +1592,7 @@ msgstr "Nounder distributions don't interfere with the cadence of 24 hour auctio
 msgid "Bids"
 msgstr "Bids"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Change"
 msgstr "Change"
 
@@ -1842,7 +1601,6 @@ msgid "You <0>Abstained</0> from this proposal"
 msgstr "You <0>Abstained</0> from this proposal"
 
 #. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
-#: src/hooks/useGetCountDownCopy.tsx
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
 msgstr "Expires {0}"
@@ -1870,7 +1628,7 @@ msgstr "Withdraw from Stream <0/>"
 msgid "Threshold"
 msgstr "Threshold"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Updated!"
 msgstr "Delegate Updated!"
 
@@ -1878,8 +1636,8 @@ msgstr "Delegate Updated!"
 msgid "Auction ends in"
 msgstr "Auction ends in"
 
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(utils.formatUnits(d.callData.split(',')[1], 6)), )
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(utils.formatUnits(transaction.callData.split(',')[1], 6)), )
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(d.callData.split(',')[1]), 6)), )
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)), )
 #: src/components/ProposalContent/ProposalTransactions.tsx
 #: src/components/ProposalContent/ProposalTransaction.tsx
 msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
@@ -1888,6 +1646,10 @@ msgstr "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
 msgstr "Proposal"
+
+#: src/components/VoteSignals/VoteSignals.tsx
+msgid "Pre-voting feedback"
+msgstr "Pre-voting feedback"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
@@ -1935,7 +1697,7 @@ msgstr "Starting on"
 #: src/components/Winner/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "View on Etherscan"
 msgstr "View on Etherscan"
 
@@ -1958,18 +1720,18 @@ msgstr "Head"
 msgid "Tip"
 msgstr "Tip"
 
-#: src/components/NounProfileVoteRow/index.tsx
-#~ msgid "Voted aginst"
-#~ msgstr "Voted aginst"
-
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
 msgstr "Forking"
 
-#. placeholder {0}: createCandidateCost && ethers.utils.formatEther(createCandidateCost)
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
 msgid "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
 msgstr "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
+
+#: src/components/NounderNounContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
+msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 
 #: src/pages/Governance/index.tsx
 msgid "Noun"
@@ -1979,10 +1741,6 @@ msgstr "Noun"
 #: src/pages/Candidate/index.tsx
 msgid "Transaction Successful!"
 msgstr "Transaction Successful!"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "{destructiveStateButtonAction} Proposal ⌐◧-◧"
-#~ msgstr "{destructiveStateButtonAction} Proposal ⌐◧-◧"
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
@@ -2002,13 +1760,9 @@ msgstr "Each time an auction is settled, the settlement transaction will also ca
 msgid "Proposal Updated!"
 msgstr "Proposal Updated!"
 
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
-
-#: src/components/Documentation/index.tsx
-#~ msgid "heads (242)"
-#~ msgstr "heads (242)"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -2039,10 +1793,6 @@ msgstr "Review Transfer Funds Action"
 msgid "Language"
 msgstr "Language"
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Address (Callee or Recipient)"
-#~ msgstr "Address (Callee or Recipient)"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Value"
 msgstr "Value"
@@ -2064,10 +1814,6 @@ msgstr "Ends"
 msgid "This candidate currently has {0} signatures."
 msgstr "This candidate currently has {0} signatures."
 
-#: src/components/Documentation/index.tsx
-#~ msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
-#~ msgstr "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
-
 #. placeholder {0}: event.nounId
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
@@ -2087,27 +1833,14 @@ msgstr "Glasses"
 msgid "You have no Votes."
 msgstr "You have no Votes."
 
-#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-#~ msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
-#~ msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-#~ msgid "Show all {numEvents} events"
-#~ msgstr "Show all {numEvents} events"
-
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "There was an error withdrawing to your wallet."
 msgstr "There was an error withdrawing to your wallet."
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#~ msgid "<0> Noun {0} </0> won by <1><2/></1>"
-#~ msgstr "<0> Noun {0} </0> won by <1><2/></1>"
-
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
-#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Close"
 msgstr "Close"
 
@@ -2123,10 +1856,6 @@ msgstr "Editing a proposal will clear all previous feedback"
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
 msgstr "Candidate"
-
-#: src/components/DelegationCandidateVoteCountInfo/index.tsx
-#~ msgid "{voteCount} Votes"
-#~ msgstr "{voteCount} Votes"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"

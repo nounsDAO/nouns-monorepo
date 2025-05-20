@@ -1,33 +1,40 @@
-import { useAppSelector } from '../../hooks';
-import classes from './NavBar.module.css';
-import NogglesLogo from '../../assets/noggles.svg?react';
-import { useLocation } from 'react-router';
-import { Link } from 'react-router';
-import { Nav, Navbar, Container } from 'react-bootstrap';
-import testnetNoun from '../../assets/testnet-noun.png';
-import config, { CHAIN_ID } from '../../config';
-import { utils } from 'ethers';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-import { ExternalURL, externalURL } from '../../utils/externalURL';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import NavBarTreasury from '../NavBarTreasury';
-import NavWallet from '../NavWallet';
-import { Trans } from '@lingui/react/macro';
 import { useState } from 'react';
-import NavLocaleSwitcher from '../NavLocaleSwitcher';
-import NavDropdown from '../NavDropdown';
-import { Dropdown } from 'react-bootstrap';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import NogglesIcon from '../../assets/icons/Noggles.svg?react';
-import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
+
+import {
+  faBookOpen,
+  faFile,
+  faPenToSquare,
+  faPlay,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { useIsDaoGteV3 } from '../../wrappers/nounsDao';
+import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router';
+import { formatEther } from 'viem';
+
+import NogglesIcon from '@/assets/icons/Noggles.svg?react';
+import NogglesLogo from '@/assets/noggles.svg?react';
+import testnetNoun from '@/assets/testnet-noun.png';
+import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import NavBarTreasury from '@/components/NavBarTreasury';
+import NavDropdown from '@/components/NavDropdown';
+import NavLocaleSwitcher from '@/components/NavLocaleSwitcher';
+import NavWallet from '@/components/NavWallet';
+import config, { CHAIN_ID } from '@/config';
+import { useAppSelector } from '@/hooks';
+import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
+import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
+import { ExternalURL, externalURL } from '@/utils/externalURL';
+import { Address } from '@/utils/types';
+import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
+
+import classes from './NavBar.module.css';
+
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const NavBar = () => {
   const isDaoGteV3 = useIsDaoGteV3();
@@ -46,11 +53,9 @@ const NavBar = () => {
     location.pathname.includes('/noun/') ||
     location.pathname.includes('/auction/');
 
-  const nonWalletButtonStyle = !useStateBg
-    ? NavBarButtonStyle.WHITE_INFO
-    : isCool
-      ? NavBarButtonStyle.COOL_INFO
-      : NavBarButtonStyle.WARM_INFO;
+  const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
+
+  const nonWalletButtonStyle = !useStateBg ? NavBarButtonStyle.WHITE_INFO : stateBasedButtonStyle;
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
@@ -106,7 +111,7 @@ const NavBar = () => {
               </Nav.Item>
             )}
             <Nav.Item>
-              {treasuryBalance && (
+              {treasuryBalance ? (
                 <Nav.Link
                   href={daoEtherscanLink}
                   className={classes.nounsNavLink}
@@ -114,11 +119,11 @@ const NavBar = () => {
                   rel="noreferrer"
                 >
                   <NavBarTreasury
-                    treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                    treasuryBalance={Number(formatEther(treasuryBalance)).toFixed(0)}
                     treasuryStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
-              )}
+              ) : null}
             </Nav.Item>
           </div>
           <Navbar.Toggle
@@ -130,8 +135,8 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
-                  buttonText={<Trans>{isDaoGteV3 ? 'Proposals' : 'DAO'}</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={isDaoGteV3 ? faFile : faFile} />}
+                  buttonText={isDaoGteV3 ? <Trans>Proposals</Trans> : <Trans>DAO</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faFile} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
@@ -239,7 +244,7 @@ const NavBar = () => {
               </NavDropdown>
             </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
-            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+            <NavWallet address={activeAccount as Address} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>
       </Navbar>

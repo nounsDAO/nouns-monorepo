@@ -1,41 +1,41 @@
-import Davatar from '@davatar/react';
-import { useEthers } from '@usedapp/core';
 import React, { useState } from 'react';
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
-import classes from './NavWallet.module.css';
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+
+import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'react-bootstrap';
-import WalletConnectModal from '../WalletConnectModal';
-import { useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import WalletConnectButton from './WalletConnectButton';
 import { Trans } from '@lingui/react/macro';
+import { blo } from 'blo';
+import clsx from 'clsx';
+import { Dropdown } from 'react-bootstrap';
+import { useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
+
+import { getNavBarButtonVariant, NavBarButtonStyle } from '@/components/NavBarButton';
+import WalletConnectModal from '@/components/WalletConnectModal';
+import { useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
 import {
   shortENS,
   useShortAddress,
   veryShortAddress,
   veryShortENS,
-} from '../../utils/addressAndENSDisplayUtils';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-import { useIsNetworkEnsSupported } from '../../hooks/useIsNetworkEnsSupported';
+} from '@/utils/addressAndENSDisplayUtils';
+import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import { Address } from '@/utils/types';
+
+import classes from './NavWallet.module.css';
+import WalletConnectButton from './WalletConnectButton';
+
+import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NavWalletProps {
-  address: string;
+  address: Address;
   buttonStyle?: NavBarButtonStyle;
 }
 
 type Props = {
-  onClick: (e: any) => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   value: string;
 };
-
-type RefType = number;
 
 type CustomMenuProps = {
   children?: React.ReactNode;
@@ -49,13 +49,12 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const [buttonUp, setButtonUp] = useState(false);
   const [showConnectModal, setShowConnectModal] = useState(false);
-  const { library: provider } = useEthers();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { deactivate } = useEthers();
-  const ens = useReverseENSLookUp(address);
+  const { disconnect: deactivate } = useDisconnect();
+  const { data: ensName } = useEnsName({ address });
   const shortAddress = useShortAddress(address);
   const activeLocale = useActiveLocale();
-  const hasENS = useIsNetworkEnsSupported();
+  const { data: ensAvatar } = useEnsAvatar({ name: ensName?.toString() });
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
   };
@@ -104,6 +103,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     NavBarButtonStyle.WARM_WALLET,
   );
 
+  // @ts-expect-error RefType is not defined but is needed for the forwardRef
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
@@ -118,10 +118,17 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       >
         <div className={navDropdownClasses.button}>
           <div className={classes.icon}>
-            {' '}
-            {hasENS && <Davatar size={21} address={address} provider={provider} />}
+            <img
+              alt={address}
+              src={ensAvatar ?? blo(address)}
+              width={21}
+              height={21}
+              style={{ borderRadius: '50%' }}
+            />
           </div>
-          <div className={navDropdownClasses.dropdownBtnContent}>{ens ? ens : shortAddress}</div>
+          <div className={navDropdownClasses.dropdownBtnContent}>
+            {ensName ? ensName : shortAddress}
+          </div>
           <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
@@ -129,6 +136,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       </div>
     </>
   ));
+  customDropdownToggle.displayName = 'CustomDropdownToggle';
 
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
@@ -174,6 +182,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       </div>
     );
   });
+  CustomMenu.displayName = 'CustomMenu';
 
   const renderENS = (ens: string) => {
     if (activeLocale === 'ja-JP') {
@@ -182,7 +191,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     return shortENS(ens);
   };
 
-  const renderAddress = (address: string) => {
+  const renderAddress = (address: Address) => {
     if (activeLocale === 'ja-JP') {
       return veryShortAddress(address);
     }
@@ -192,7 +201,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const walletConnectedContentMobile = (
     <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
       <div
-        className={'d-flex flex-row justify-content-between'}
+        className={'d-flex justify-content-between flex-row'}
         style={{
           justifyContent: 'space-between',
         }}
@@ -202,16 +211,22 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             <div className={navDropdownClasses.button}>
               <div className={classes.icon}>
                 {' '}
-                <Davatar size={21} address={address} provider={provider} />
+                <img
+                  alt={address}
+                  src={address ? blo(address as Address) : ''}
+                  width={21}
+                  height={21}
+                  style={{ borderRadius: '50%' }}
+                />
               </div>
               <div className={navDropdownClasses.dropdownBtnContent}>
-                {ens ? renderENS(ens) : renderAddress(address)}
+                {ensName ? renderENS(ensName) : renderAddress(address)}
               </div>
             </div>
           </div>
         </div>
 
-        <div className={`d-flex flex-row  ${classes.connectContentMobileText}`}>
+        <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
           <div
             style={{
               borderRight: `1px solid ${mobileBorderColor}`,

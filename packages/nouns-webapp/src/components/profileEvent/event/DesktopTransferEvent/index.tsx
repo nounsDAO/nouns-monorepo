@@ -1,13 +1,17 @@
 import React from 'react';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { TransferEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopTransferEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import ShortAddress from '../../../ShortAddress';
-import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
+import ShortAddress from '@/components/ShortAddress';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '@/utils/etherscan';
+import { TransferEvent } from '@/wrappers/nounActivity';
+
+import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+
+import classes from './DesktopTransferEvent.module.css';
 
 interface DesktopTransferEventProps {
   event: TransferEvent;
@@ -29,7 +33,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             id={'view-on-etherscan-tooltip-primary'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
@@ -61,7 +65,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             id={'view-on-etherscan-txn-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
-            getContent={dataTip => {
+            getContent={() => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />

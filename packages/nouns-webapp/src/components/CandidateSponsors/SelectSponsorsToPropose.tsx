@@ -1,29 +1,32 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import classes from './SelectSponsorsToPropose.module.css';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
-import link from '../../assets/icons/Link.svg';
-import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '../../wrappers/nounsData';
-import ShortAddress from '../ShortAddress';
-import { usePropose } from '../../wrappers/nounsDao';
-import { Link } from 'react-router';
+import clsx from 'clsx';
 import { Alert } from 'react-bootstrap';
+import { Link } from 'react-router';
+
+import link from '@/assets/icons/Link.svg';
+import ShortAddress from '@/components/ShortAddress';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { usePropose } from '@/wrappers/nounsDao';
+import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
+
+import classes from './SelectSponsorsToPropose.module.css';
+import { Address, Hex } from '@/utils/types';
 
 type Props = {
   isModalOpen: boolean;
   signatures: CandidateSignature[];
   requiredVotes: number;
   candidate: ProposalCandidate;
-  blockNumber?: number;
-  setIsModalOpen: Function;
-  handleRefetchCandidateData: Function;
-  setDataFetchPollInterval: Function;
+  blockNumber?: bigint;
+  setIsModalOpen: (isOpen: boolean) => void;
+  handleRefetchCandidateData: () => void;
+  setDataFetchPollInterval: (interval: number) => void;
 };
 
-export default function SelectSponsorsToPropose(props: Props) {
+const SelectSponsorsToPropose = (props: Props) => {
   const [selectedSignatures, setSelectedSignatures] = React.useState<CandidateSignature[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
@@ -38,7 +41,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       return acc + votes;
     }, 0);
     setSelectedVoteCount(voteCount);
-
   }, [selectedSignatures]);
 
   const clearTransactionState = () => {
@@ -56,66 +58,75 @@ export default function SelectSponsorsToPropose(props: Props) {
 
   const handleSubmission = async (selectedSignatures: CandidateSignature[]) => {
     clearTransactionState();
-    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => [
-      s.sig,
-      s.signer.id,
-      s.expirationTimestamp,
-    ]);
+    const proposalSigs = selectedSignatures?.map((s: CandidateSignature) => ({
+      sig: s.sig as `0x${string}`,
+      signer: s.signer.id,
+      expirationTimestamp: BigInt(s.expirationTimestamp),
+    }));
     // sort sigs by address to ensure order matches update proposal sigs
-    const sortedSigs = proposalSigs.sort((a, b) => a[1].toString().localeCompare(b[1].toString()));
+    const sortedSigs = proposalSigs.toSorted((a, b) =>
+      a.signer.toString().localeCompare(b.signer.toString()),
+    );
+    const { signatures, targets, values, description, calldatas } = props.candidate.version.content;
     if (selectedSignatures.length === 0) {
-      await propose(
-        props.candidate.version.content.targets,
-        props.candidate.version.content.values,
-        props.candidate.version.content.signatures,
-        props.candidate.version.content.calldatas,
-        props.candidate.version.content.description,
-      );
+      await propose({
+        args: [
+          targets.map(v => v as Address),
+          values.map(value => BigInt(value)),
+          signatures,
+          calldatas.map(v => v as Hex),
+          description,
+        ],
+      });
     } else {
-      await proposeBySigs(
-        sortedSigs,
-        props.candidate.version.content.targets,
-        props.candidate.version.content.values,
-        props.candidate.version.content.signatures,
-        props.candidate.version.content.calldatas,
-        props.candidate.version.content.description,
-      );
+      await proposeBySigs({
+        args: [
+          sortedSigs,
+          targets.map(v => v as Address),
+          values.map(value => BigInt(value)),
+          signatures,
+          calldatas.map(v => v as Hex),
+          description,
+        ],
+      });
     }
   };
 
-  const handleProposeStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'PendingSignature':
-        setIsWaiting(true);
-        break;
-      case 'Mining':
-        props.setDataFetchPollInterval(50);
-        setIsWaiting(false);
-        setIsLoading(true);
-        break;
-      case 'Success':
-        props.handleRefetchCandidateData();
-        setIsLoading(false);
-        setIsTxSuccessful(true);
-        setSelectedSignatures([]);
-        break;
-      case 'Fail':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        break;
-      case 'Exception':
-        props.setDataFetchPollInterval(0);
-        setErrorMessage(state?.errorMessage || <Trans>Please try again.</Trans>);
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleProposeStateChange = useCallback(
+    ({ errorMessage, status }: { errorMessage?: string; status: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'PendingSignature':
+          setIsWaiting(true);
+          break;
+        case 'Mining':
+          props.setDataFetchPollInterval(50);
+          setIsWaiting(false);
+          setIsLoading(true);
+          break;
+        case 'Success':
+          props.handleRefetchCandidateData();
+          setIsLoading(false);
+          setIsTxSuccessful(true);
+          setSelectedSignatures([]);
+          break;
+        case 'Fail':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          break;
+        case 'Exception':
+          props.setDataFetchPollInterval(0);
+          setErrorMessage(errorMessage || <Trans>Please try again.</Trans>);
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [props, setSelectedSignatures],
+  );
 
   useEffect(() => {
     if (selectedSignatures.length === 0) {
@@ -154,10 +165,13 @@ export default function SelectSponsorsToPropose(props: Props) {
         )}
         {props.signatures && !isTxSuccessful && selectedSignatures.length > 0 && (
           <button
+            type="button"
             onClick={() => {
-              props.signatures && selectedSignatures.length === props.signatures.length
-                ? setSelectedSignatures([])
-                : setSelectedSignatures(props.signatures || []);
+              if (props.signatures && selectedSignatures.length === props.signatures.length) {
+                setSelectedSignatures([]);
+              } else {
+                setSelectedSignatures(props.signatures || []);
+              }
             }}
             disabled={isWaiting || isLoading}
           >
@@ -170,13 +184,16 @@ export default function SelectSponsorsToPropose(props: Props) {
           props.signatures.map((signature: CandidateSignature) => {
             return (
               <button
+                type="button"
                 key={signature.sig}
                 onClick={() => {
-                  selectedSignatures.includes(signature)
-                    ? setSelectedSignatures(
+                  if (selectedSignatures.includes(signature)) {
+                    setSelectedSignatures(
                       selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                    )
-                    : setSelectedSignatures([...selectedSignatures, signature]);
+                    );
+                  } else {
+                    setSelectedSignatures([...selectedSignatures, signature]);
+                  }
                 }}
                 disabled={
                   isWaiting ||
@@ -202,6 +219,7 @@ export default function SelectSponsorsToPropose(props: Props) {
       <div className={classes.modalActions}>
         {!(errorMessage || isTxSuccessful) && (
           <button
+            type="button"
             className={clsx(
               classes.button,
               classes.primaryButton,
@@ -212,8 +230,17 @@ export default function SelectSponsorsToPropose(props: Props) {
               handleSubmission(selectedSignatures);
             }}
           >
-
-            {!isWaiting && !isLoading && <>{selectedSignatures.length === 0 ? <>Submit with no sponsors</> : <>Submit {selectedVoteCount} vote{selectedVoteCount > 1 && "s"}</>}</>}
+            {!isWaiting && !isLoading && (
+              <>
+                {selectedSignatures.length === 0 ? (
+                  <>Submit with no sponsors</>
+                ) : (
+                  <>
+                    Submit {selectedVoteCount} vote{selectedVoteCount > 1 && 's'}
+                  </>
+                )}
+              </>
+            )}
             <span>
               {(isWaiting || isLoading) && (
                 <img
@@ -231,6 +258,7 @@ export default function SelectSponsorsToPropose(props: Props) {
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
+              type="button"
               onClick={() => {
                 clearTransactionState();
               }}
@@ -245,8 +273,9 @@ export default function SelectSponsorsToPropose(props: Props) {
               <strong>Success!</strong> <br />
               <a
                 href={
-                  proposeBySigsState.transaction &&
-                  `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`
+                  proposeBySigsState.transaction?.hash
+                    ? `${buildEtherscanTxLink(proposeBySigsState.transaction.hash)}`
+                    : undefined
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -255,7 +284,7 @@ export default function SelectSponsorsToPropose(props: Props) {
                 {proposeBySigsState.transaction && <img src={link} width={16} alt="link symbol" />}
               </a>
               <br />
-              {props.candidate.matchingProposalIds[0] && (
+              {props.candidate.matchingProposalIds && props.candidate.matchingProposalIds[0] && (
                 <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>
                   View the proposal
                 </Link>
@@ -280,4 +309,6 @@ export default function SelectSponsorsToPropose(props: Props) {
       />
     </>
   );
-}
+};
+
+export default SelectSponsorsToPropose;

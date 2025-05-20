@@ -1,11 +1,16 @@
-import { ScaleIcon } from '@heroicons/react/solid';
+import type { Address } from '@/utils/types';
+
 import React from 'react';
+
+import { ScaleIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
-import ShortAddress from '../../../../ShortAddress';
+
+import ShortAddress from '@/components/ShortAddress';
+
 import classes from './DelegatePill.module.css';
 
 interface DelegatePillProps {
-  address: string;
+  address: Address;
   proposalId: string;
 }
 

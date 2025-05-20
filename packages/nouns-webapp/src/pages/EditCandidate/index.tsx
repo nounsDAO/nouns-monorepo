@@ -1,29 +1,34 @@
-import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import { ProposalTransaction, useProposalThreshold } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
-import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router';
-import { useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import EditProposalButton from '../../components/EditProposalButton/index';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
+import { Link, useParams } from 'react-router';
+import { formatEther } from 'viem';
+
+import EditProposalButton from '@/components/EditProposalButton/index';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import config from '@/config';
+import { useAppDispatch } from '@/hooks';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
-  useUpdateProposalCandidate,
   useCandidateProposal,
   useGetUpdateCandidateCost,
-} from '../../wrappers/nounsData';
-import { ethers } from 'ethers';
+  useUpdateProposalCandidate,
+} from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from '../CreateProposal/CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useAccount, useBlockNumber, useChainId } from 'wagmi';
 
 interface EditCandidateProps {
   match: {
@@ -31,7 +36,8 @@ interface EditCandidateProps {
   };
 }
 
-const EditCandidatePage: React.FC<EditCandidateProps> = props => {
+const EditCandidatePage: React.FC<EditCandidateProps> = () => {
+  const { id } = useParams<{ id: string }>();
   const [isProposalEdited, setIsProposalEdited] = useState(false);
   const [isTitleEdited, setIsTitleEdited] = useState(false);
   const [isBodyEdited, setIsBodyEdited] = useState(false);
@@ -41,10 +47,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
-  const [currentBlock, setCurrentBlock] = useState<number>();
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const candidate = useCandidateProposal(props.match.params.id, 0, true, currentBlock); // get updatable transaction details
+  const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -53,16 +59,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
-  const proposal = candidate.data?.version;
+  const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
-  const blockNumber = useBlockNumber();
-
-  useEffect(() => {
-    // prevent live-updating the block resulting in undefined block number
-    if (blockNumber && !currentBlock) {
-      setCurrentBlock(blockNumber);
-    }
-  }, [blockNumber, currentBlock]);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -83,7 +81,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -93,7 +91,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [proposalTransactions, totalUSDCPayment],
   );
 
@@ -102,23 +100,23 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     return description.replace(titleRegex, '');
   };
   const isolatedDescription =
-    candidate.data?.version.content.description &&
-    removeTitleFromDescription(candidate.data.version.content.description, titleValue);
+    candidate?.version.content.description &&
+    removeTitleFromDescription(candidate.version.content.description, titleValue);
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
         proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
+          address: nounsTokenBuyerAddress[useChainId()],
+          value: BigInt(ethNeeded ?? 0),
           calldata: '0x',
           signature: '',
         });
       } else {
-        if (parseInt(ethNeeded) > 0) {
+        if (Number(ethNeeded) > 0) {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
@@ -132,7 +130,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
 
           const txns = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            txns[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
             setProposalTransactions(txns);
           }
         }
@@ -151,13 +149,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
-      if (title === candidate.data?.version.content.title) {
+      if (title === candidate?.version.content.title) {
         setIsTitleEdited(false);
       } else {
         setIsTitleEdited(true);
       }
     },
-    [setTitleValue, candidate.data?.version.content.title],
+    [setTitleValue, candidate?.version.content.title],
   );
 
   const handleBodyInput = useCallback(
@@ -169,7 +167,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setIsBodyEdited(true);
       }
     },
-    [setBodyValue, isolatedDescription],
+    [setBodyValue],
   );
 
   useEffect(() => {
@@ -214,49 +212,56 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProposalCandidateState, setModal]);
 
   // set initial values on page load
   useEffect(() => {
     if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
-      const transactions = candidate.data?.version.content.details.map(
-        (txn: { target: any; value: any; callData: any; functionSig: any }) => {
-          return {
-            address: txn.target,
-            value: txn.value ?? '0',
-            calldata: txn.callData,
-            signature: txn.functionSig,
-          };
-        },
-      );
+      const transactions = candidate?.version.content.details.map((txn: ProposalDetail) => {
+        return {
+          address: txn.target,
+          value: txn.value ? BigInt(txn.value.toString()) : BigInt(0),
+          calldata: txn.callData,
+          signature: txn.functionSig,
+        };
+      });
       setTitleValue(proposal.content.title);
       setBodyValue(
         removeTitleFromDescription(proposal.content.description, proposal.content.title),
       );
-      setProposalTransactions(transactions);
+      setProposalTransactions(
+        transactions.map(txn => ({
+          ...txn,
+          value: txn.value,
+          signature: txn.signature || '',
+        })),
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal, candidate]);
 
-  if (candidate.data?.proposer.toLowerCase() !== account?.toLowerCase()) {
+  if (candidate?.proposer.toLowerCase() !== account?.toLowerCase()) {
     return null;
   }
 
   const handleUpdateProposal = async () => {
     if (!proposalTransactions?.length) return;
-    if (candidate === undefined) return;
+    if (candidate == undefined) return;
 
     await updateProposalCandidate(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-      candidate.data?.slug, // Slug
-      candidate.data?.proposalIdToUpdate ? candidate.data?.proposalIdToUpdate : 0, // if candidate is an update to a proposal, use the proposalIdToUpdate number
-      commitMessage,
-      { value: hasVotes ? 0 : updateCandidateCost ?? 0 }, // Fee for non-nouners
+      {
+        args: [
+          proposalTransactions.map(({ address }) => address as `0x${string}`), // Targets
+          proposalTransactions.map(({ value }) => BigInt(value ?? '0')), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+          candidate?.slug, // Slug
+          candidate?.proposalIdToUpdate ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
+          commitMessage,
+        ],
+        value: hasVotes ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),
+      }, // Fee for non-nouners
     );
   };
 
@@ -269,7 +274,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       />
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
-          <Link to={`/candidates/${props.match.params.id}`}>
+          <Link to={`/candidates/${id}`}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
@@ -304,9 +309,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional ETH transaction to refill the TokenBuyer contract. This action allows to
+              DAO to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
@@ -331,15 +336,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           proposalThreshold={proposalThreshold}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
-          isFormInvalid={isProposalEdited ? false : true}
+          isFormInvalid={!isProposalEdited}
           handleCreateProposal={handleUpdateProposal}
           isCandidate={true}
         />
 
-        {!hasVotes && updateCandidateCost && +ethers.utils.formatEther(updateCandidateCost) > 0 && (
+        {!hasVotes && !!updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
           <p className={classes.feeNotice}>
-            {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
-            submission
+            {updateCandidateCost ? formatEther(updateCandidateCost) : '0'} ETH fee upon submission
           </p>
         )}
 

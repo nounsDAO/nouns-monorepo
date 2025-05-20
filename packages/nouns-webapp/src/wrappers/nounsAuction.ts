@@ -1,78 +1,61 @@
-import { useContractCall } from '@usedapp/core';
-import { BigNumber as EthersBN, utils } from 'ethers';
-import { NounsAuctionHouseABI } from '@nouns/sdk';
-import config from '../config';
-import BigNumber from 'bignumber.js';
-import { isNounderNoun } from '../utils/nounderNoun';
-import { useAppSelector } from '../hooks';
-import { AuctionState } from '../state/slices/auction';
-
-export enum AuctionHouseContractFunction {
-  auction = 'auction',
-  duration = 'duration',
-  minBidIncrementPercentage = 'minBidIncrementPercentage',
-  nouns = 'nouns',
-  createBid = 'createBid',
-  settleCurrentAndCreateNewAuction = 'settleCurrentAndCreateNewAuction',
-}
+import { useAppSelector } from '@/hooks';
+import { AuctionState } from '@/state/slices/auction';
+import { isNounderNoun } from '@/utils/nounderNoun';
+import { Address, BigNumberish } from '@/utils/types';
 
 export interface Auction {
-  amount: EthersBN;
-  bidder: string;
-  endTime: EthersBN;
-  startTime: EthersBN;
-  nounId: EthersBN;
+  amount: BigNumberish;
+  bidder: Address;
+  endTime: BigNumberish;
+  startTime: BigNumberish;
+  nounId: BigNumberish;
   settled: boolean;
 }
-
-const abi = new utils.Interface(NounsAuctionHouseABI);
-
-export const useAuction = (auctionHouseProxyAddress: string) => {
-  const auction = useContractCall<Auction>({
-    abi,
-    address: auctionHouseProxyAddress,
-    method: 'auction',
-    args: [],
-  });
-  return auction as Auction;
-};
-
-export const useAuctionMinBidIncPercentage = () => {
-  const minBidIncrement = useContractCall({
-    abi,
-    address: config.addresses.nounsAuctionHouseProxy,
-    method: 'minBidIncrementPercentage',
-    args: [],
-  });
-
-  if (!minBidIncrement) {
-    return;
-  }
-
-  return new BigNumber(minBidIncrement[0]);
-};
-
 /**
  * Computes timestamp after which a Noun could vote
  * @param nounId TokenId of Noun
  * @returns Unix timestamp after which Noun could vote
  */
-export const useNounCanVoteTimestamp = (nounId: number) => {
+export const useNounCanVoteTimestamp = (nounId: number): bigint => {
+  const { pastAuctions } = useAppSelector(state => state.pastAuctions);
+
+  // Calculate next noun ID for determining voting eligibility
+  const nextNounIdForQuery = getNextValidNounId(nounId);
+
+  // Find the auction that corresponds to the next valid noun ID
+  const relevantAuction = pastAuctions.find((auction: AuctionState) =>
+    isAuctionForNounId(auction, nextNounIdForQuery),
+  );
+
+  // Get the start time from the auction if found
+  const startTime = relevantAuction?.activeAuction?.startTime;
+
+  // Return 0n during loading states when no auction is found
+  return startTime ? BigInt(startTime) : 0n;
+};
+
+/**
+ * Determines the next valid Noun ID for querying auction data
+ */
+function getNextValidNounId(nounId: number): number {
   const nextNounId = nounId + 1;
 
-  const nextNounIdForQuery = isNounderNoun(EthersBN.from(nextNounId)) ? nextNounId + 1 : nextNounId;
-
-  const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
-
-  const maybeNounCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
-    const maybeNounId = auction.activeAuction?.nounId;
-    return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
-  })?.activeAuction?.startTime;
-
-  if (!maybeNounCanVoteTimestamp) {
-    // This state only occurs during loading flashes
-    return EthersBN.from(0);
+  if (!Number.isInteger(nextNounId)) {
+    return 1;
   }
 
-  return EthersBN.from(maybeNounCanVoteTimestamp);
-};
+  // Check if the next noun is a Nounder noun (which needs to be skipped)
+  if (isNounderNoun(BigInt(nextNounId))) {
+    return nextNounId + 1;
+  }
+
+  return nextNounId;
+}
+
+/**
+ * Checks if an auction corresponds to a specific Noun ID
+ */
+function isAuctionForNounId(auction: AuctionState, nounId: number): boolean {
+  const auctionNounId = auction.activeAuction?.nounId;
+  return auctionNounId ? BigInt(auctionNounId) === BigInt(nounId) : false;
+}

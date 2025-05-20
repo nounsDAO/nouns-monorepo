@@ -1,48 +1,50 @@
+import { ClockIcon } from '@heroicons/react/solid';
+import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
+import { useEffect, useState } from 'react';
+import DelegationModal from '@/components/DelegationModal';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import en from 'dayjs/locale/en';
+import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router';
+
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import { isMobileScreen } from '@/utils/isMobile';
+import { isProposalUpdatable } from '@/utils/proposals';
 import {
   PartialProposal,
   ProposalState,
   useIsDaoGteV3,
   useProposalThreshold,
-} from '../../wrappers/nounsDao';
-import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import ProposalStatus from '../ProposalStatus';
+} from '@/wrappers/nounsDao';
+import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
+import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
+import CandidateCard from '@/components/CandidateCard';
+import ProposalStatus from '@/components/ProposalStatus';
+
 import classes from './Proposals.module.css';
-import { useNavigate, useLocation } from 'react-router';
-import { useBlockNumber, useEthers } from '@usedapp/core';
-import { isMobileScreen } from '../../utils/isMobile';
-import clsx from 'clsx';
-import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
-import { Trans } from '@lingui/react/macro';
-import { ClockIcon } from '@heroicons/react/solid';
-import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import { useEffect, useState } from 'react';
-import DelegationModal from '../DelegationModal';
-import { i18n } from '@lingui/core';
-import en from 'dayjs/locale/en';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import Section from '../../layout/Section';
-import CandidateCard from '../CandidateCard';
-import { Link } from 'react-router';
-import { useCandidateProposals } from '../../wrappers/nounsData';
-import { isProposalUpdatable } from '../../utils/proposals';
-import config from '../../config';
+import { useAccount, useBlockNumber } from 'wagmi';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
 
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (
   proposal: PartialProposal,
-  currentBlock: number,
+  currentBlock: bigint,
   locale: SupportedLocale,
 ) => {
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.startBlock - currentBlock),
           'seconds',
         )
       : undefined;
@@ -50,7 +52,7 @@ const getCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.endBlock - currentBlock),
           'seconds',
         )
       : undefined;
@@ -83,18 +85,17 @@ const getCountdownCopy = (
   );
 };
 
-const Proposals = ({
-  proposals,
-  nounsRequired,
-}: {
+interface ProposalsProps {
   proposals: PartialProposal[];
   nounsRequired?: number;
-}) => {
+}
+
+const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [blockNumber, setBlockNumber] = useState<number>(0);
-  const currentBlock = useBlockNumber();
-  const { account } = useEthers();
+  const [blockNumber, setBlockNumber] = useState<bigint>(0n);
+  const { data: currentBlock } = useBlockNumber();
+  const { address: account } = useAccount();
   const navigate = useNavigate();
   const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
   const connectedAccountNounVotes = useUserVotes() || 0;
@@ -102,14 +103,14 @@ const Proposals = ({
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useNounTokenBalance(account ?? '') ?? 0) > 0;
+  const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
   const { hash } = useLocation();
 
   useEffect(() => {
     // prevent blockNumber from triggering a re-render when it's already set
-    if (blockNumber === 0) {
+    if (blockNumber === 0n) {
       setBlockNumber(currentBlock || blockNumber);
     }
   }, [currentBlock, blockNumber]);
@@ -128,7 +129,7 @@ const Proposals = ({
   }, [activeTab, navigate]);
 
   const nullStateCopy = () => {
-    if (account !== null) {
+    if (!!account) {
       if (connectedAccountNounVotes > 0) {
         return <Trans>Making a proposal requires {threshold} votes</Trans>;
       }
@@ -165,7 +166,7 @@ const Proposals = ({
                 <div className={classes.submitProposalButtonWrapper}>
                   <Button
                     className={classes.generateBtn}
-                    onClick={() => navigate('create-proposal')}
+                    onClick={() => navigate('/create-proposal')}
                   >
                     <Trans>Submit Proposal</Trans>
                   </Button>
@@ -270,7 +271,7 @@ const Proposals = ({
                             <ClockIcon height={16} width={16} />
                           </span>{' '}
                           <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, blockNumber || 0, activeLocale)}
+                            {getCountdownCopy(p, blockNumber ?? 0n, activeLocale)}
                           </span>
                         </div>
                       </div>
@@ -286,7 +287,7 @@ const Proposals = ({
                       <div className={classes.proposalInfoWrapper}>
                         <span className={classes.proposalTitle}>
                           <span className={classes.proposalId}>
-                            {i18n.number(parseInt(p.id || '0'))}
+                            {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
                           <span>{p.title}</span>
                         </span>
@@ -328,26 +329,23 @@ const Proposals = ({
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
-                      if (+c.version.content.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(
-                          p => p.id === c.version.content.proposalIdToUpdate,
-                        );
-                        let isOriginalPropUpdatable =
+                      if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
+                        const prop = proposals.find(p => p.id === c.proposalIdToUpdate);
+                        const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
                           isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
-                            ? true
-                            : false;
+                        );
                         if (!isOriginalPropUpdatable) return null;
                       }
                       return (
                         <div key={i}>
                           <CandidateCard
                             latestProposal={proposals[proposals.length - 1]}
-                            candidate={c}
-                            key={c.id}
+                            candidate={c as unknown as ProposalCandidate}
+                            key={c?.id}
                             nounsRequired={threshold}
-                            currentBlock={blockNumber ? blockNumber - 1 : 0}
+                            currentBlock={blockNumber ? blockNumber - 1n : 0n}
                           />
                         </div>
                       );

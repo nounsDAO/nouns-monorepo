@@ -1,36 +1,73 @@
-import { NounsDAOV3ABI, NounsDaoLogicFactory } from '@nouns/sdk';
-import {
-  ChainId,
-  useBlockNumber,
-  useContractCall,
-  useContractCalls,
-  useContractFunction,
-  connectContractToSigner,
-  useEthers,
-} from '@usedapp/core';
-import { utils, BigNumber as EthersBN } from 'ethers';
-import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
+import type { Address, Hash, Hex } from '@/utils/types';
+import type {
+  EscrowDeposit as GraphQLEscrowDeposit,
+  EscrowWithdrawal as GraphQLEscrowWithdrawal,
+  Fork as GraphQLFork,
+  ForkJoin as GraphQLForkJoin,
+  Maybe,
+  Proposal as GraphQLProposal,
+  ProposalVersion as GraphQLProposalVersion,
+} from '@/subgraphs';
+
 import { useMemo } from 'react';
-import { useLogs } from '../hooks/useLogs';
-import * as R from 'ramda';
-import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
+import { filter, flatMap, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
 import {
-  proposalQuery,
-  partialProposalsQuery,
-  proposalVersionsQuery,
+  AbiParameter,
+  decodeAbiParameters,
+  decodeEventLog,
+  formatEther,
+  keccak256,
+  parseAbiItem,
+  stringToBytes,
+} from 'viem';
+import { useQuery as useReactQuery } from '@tanstack/react-query';
+
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+
+import {
+  activePendingUpdatableProposersQuery,
   escrowDepositEventsQuery,
   escrowWithdrawEventsQuery,
-  proposalTitlesQuery,
-  forksQuery,
   forkDetailsQuery,
-  activePendingUpdatableProposersQuery,
   forkJoinsQuery,
+  forksQuery,
   isForkActiveQuery,
+  partialProposalsQuery,
+  proposalQuery,
+  proposalTitlesQuery,
+  proposalVersionsQuery,
   updatableProposalsQuery,
 } from './subgraph';
-import BigNumber from 'bignumber.js';
-import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
+import {
+  nounsGovernorAbi,
+  nounsGovernorAddress,
+  useReadNounsGovernorAdjustedTotalSupply,
+  useReadNounsGovernorForkThreshold,
+  useReadNounsGovernorForkThresholdBps,
+  useReadNounsGovernorGetReceipt,
+  useReadNounsGovernorNumTokensInForkEscrow,
+  useReadNounsGovernorProposalCount,
+  useReadNounsGovernorProposalThreshold,
+  useReadNounsGovernorGetDynamicQuorumParamsAt,
+  useWriteNounsGovernorCancel,
+  useWriteNounsGovernorCancelSig,
+  useWriteNounsGovernorCastRefundableVote,
+  useWriteNounsGovernorCastRefundableVoteWithReason,
+  useWriteNounsGovernorEscrowToFork,
+  useWriteNounsGovernorExecute,
+  useWriteNounsGovernorExecuteFork,
+  useWriteNounsGovernorJoinFork,
+  useWriteNounsGovernorPropose,
+  useWriteNounsGovernorProposeOnTimelockV1,
+  useWriteNounsGovernorQueue,
+  useWriteNounsGovernorUpdateProposal,
+  useWriteNounsGovernorUpdateProposalDescription,
+  useWriteNounsGovernorUpdateProposalTransactions,
+  useWriteNounsGovernorWithdrawFromForkEscrow,
+} from '@/contracts';
+import { useAccount, useBlockNumber, useChainId, usePublicClient, useReadContracts } from 'wagmi';
+import { mainnet } from 'viem/chains';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -58,6 +95,7 @@ export enum ProposalState {
   OBJECTION_PERIOD,
   UPDATABLE,
 }
+
 export enum ForkState {
   UNDETERMINED = -1,
   ESCROW,
@@ -66,28 +104,30 @@ export enum ForkState {
 }
 
 interface ProposalCallResult {
-  id: EthersBN;
-  abstainVotes: EthersBN;
-  againstVotes: EthersBN;
-  forVotes: EthersBN;
+  abstainVotes: bigint;
+  againstVotes: bigint;
   canceled: boolean;
-  vetoed: boolean;
+  creationBlock: bigint;
+  endBlock: bigint;
+  eta: bigint;
   executed: boolean;
-  startBlock: EthersBN;
-  endBlock: EthersBN;
-  eta: EthersBN;
-  proposalThreshold: EthersBN;
-  proposer: string;
-  quorumVotes: EthersBN;
-  objectionPeriodEndBlock: EthersBN;
-  updatePeriodEndBlock: EthersBN;
+  forVotes: bigint;
+  id: bigint;
+  proposalThreshold: bigint;
+  proposer: `0x${string}`;
+  quorumVotes: bigint;
+  startBlock: bigint;
+  totalSupply: bigint;
+  vetoed: boolean;
+  objectionPeriodEndBlock?: bigint;
+  updatePeriodEndBlock?: bigint;
 }
 
 export interface ProposalDetail {
-  target: string;
-  value?: string;
-  functionSig: string;
-  callData: string;
+  target: Address;
+  value?: bigint;
+  functionSig?: string;
+  callData: Hex;
 }
 
 export interface PartialProposal {
@@ -97,36 +137,36 @@ export interface PartialProposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
-  startBlock: number;
-  endBlock: number;
+  startBlock: bigint;
+  endBlock: bigint;
   eta: Date | undefined;
   quorumVotes: number;
-  objectionPeriodEndBlock: number;
-  updatePeriodEndBlock: number;
+  objectionPeriodEndBlock: bigint;
+  updatePeriodEndBlock: bigint;
 }
 
 export interface Proposal extends PartialProposal {
   description: string;
-  createdBlock: number;
-  createdTimestamp: number;
-  proposer: string | undefined;
-  proposalThreshold: number;
+  createdBlock: bigint;
+  createdTimestamp: bigint;
+  proposer: Address | undefined;
+  proposalThreshold: bigint;
   details: ProposalDetail[];
-  transactionHash: string;
-  signers: { id: string }[];
+  transactionHash: Hash;
+  signers: { id: Address }[];
   onTimelockV1: boolean;
-  voteSnapshotBlock: number;
+  voteSnapshotBlock: bigint;
 }
 
 export interface ProposalVersion {
   id: string;
-  createdAt: number;
+  createdAt: bigint;
   updateMessage: string;
   description: string;
-  targets: string[];
-  values: string[];
+  targets: Address[];
+  values: bigint[];
   signatures: string[];
-  calldatas: string[];
+  calldatas: Hex[];
   title: string;
   details: ProposalDetail[];
   proposal: {
@@ -136,45 +176,45 @@ export interface ProposalVersion {
 }
 
 export interface ProposalTransactionDetails {
-  targets: string[];
-  values: string[];
+  targets: Address[];
+  values: bigint[];
   signatures: string[];
-  calldatas: string[];
-  encodedProposalHash: string;
+  calldatas: Hex[];
+  encodedProposalHash: Hash;
 }
 
 export interface PartialProposalSubgraphEntity {
   id: string;
   title: string;
   status: keyof typeof ProposalState;
-  forVotes: string;
-  againstVotes: string;
-  abstainVotes: string;
-  startBlock: string;
-  endBlock: string;
-  executionETA: string | null;
-  quorumVotes: string;
-  objectionPeriodEndBlock: string;
-  updatePeriodEndBlock: string;
+  forVotes: bigint;
+  againstVotes: bigint;
+  abstainVotes: bigint;
+  startBlock: bigint;
+  endBlock: bigint;
+  executionETA: bigint | null;
+  quorumVotes: bigint;
+  objectionPeriodEndBlock: bigint;
+  updatePeriodEndBlock: bigint;
   onTimelockV1: boolean | null;
-  signers: { id: string }[];
+  signers: { id: Address }[];
 }
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
     PartialProposalSubgraphEntity {
   description: string;
-  createdBlock: string;
-  createdTransactionHash: string;
-  createdTimestamp: string;
-  proposer: { id: string };
-  proposalThreshold: string;
+  createdBlock: bigint;
+  createdTransactionHash: Hash;
+  createdTimestamp: bigint;
+  proposer: { id: Address };
+  proposalThreshold: bigint;
   onTimelockV1: boolean;
-  voteSnapshotBlock: string;
+  voteSnapshotBlock: bigint;
 }
 
 interface PartialProposalData {
-  data: PartialProposal[];
+  data: PartialProposal[] | undefined;
   error?: Error;
   loading: boolean;
 }
@@ -190,10 +230,10 @@ export interface ProposalProposerAndSigners {
 }
 
 export interface ProposalTransaction {
-  address: string;
-  value: string;
+  address: Address;
+  value: bigint;
   signature: string;
-  calldata: string;
+  calldata: Hex;
   decodedCalldata?: string;
   usdcValue?: number;
 }
@@ -202,7 +242,7 @@ export interface EscrowDeposit {
   eventType: 'EscrowDeposit' | 'ForkJoin';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   reason: string;
   tokenIDs: string[];
   proposalIDs: number[];
@@ -212,7 +252,7 @@ export interface EscrowWithdrawal {
   eventType: 'EscrowWithdrawal';
   id: string;
   createdAt: string;
-  owner: { id: string };
+  owner: { id: Address };
   tokenIDs: string[];
 }
 
@@ -239,6 +279,7 @@ export interface Fork {
   forkingPeriodEndTimestamp: string | null;
   addedNouns: string[];
 }
+
 export interface ForkSubgraphEntity {
   id: string;
   forkID: string;
@@ -261,26 +302,6 @@ export interface ForkSubgraphEntity {
   }[];
 }
 
-const abi = new utils.Interface(NounsDAOV3ABI);
-const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
-
-// Start the log search at the mainnet deployment block to speed up log queries
-const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
-const proposalCreatedFilter = {
-  ...nounsDaoContract.filters?.ProposalCreated(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ),
-  fromBlock,
-};
-
 const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
 const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
 
@@ -288,12 +309,12 @@ const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
  * Extract a markdown title from a proposal body that uses the `# Title` format
  * Returns null if no title found.
  */
-const extractHashTitle = (body: string) => body.match(hashRegex);
+const extractHashTitle = (body: string) => RegExp(hashRegex).exec(body);
 /**
  * Extract a markdown title from a proposal body that uses the `Title\n===` format.
  * Returns null if no title found.
  */
-const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
+const extractEqualTitle = (body: string) => RegExp(equalTitleRegex).exec(body);
 
 /**
  * Extract title from a proposal's body/description. Returns null if no title found in the first line.
@@ -306,18 +327,17 @@ export const extractTitle = (body: string | undefined): string | null => {
   return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
 };
 
-const removeBold = (text: string | null): string | null =>
-  text ? text.replace(/\*\*/g, '') : text;
-const removeItalics = (text: string | null): string | null =>
-  text ? text.replace(/__/g, '') : text;
+const removeBold = (text: string): string => text.replace(/\*\*/g, '');
+const removeItalics = (text: string): string => text.replace(/__/g, '');
 
-export const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+export const removeMarkdownStyle = (text: string | null): string | null =>
+  text === null ? null : pipe(text, removeBold, removeItalics);
 /**
  * Add missing schemes to markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
  */
 const addMissingSchemes = (descriptionText: string | undefined) => {
-  const regex = /\[(.*?)\]\(((?!https?:\/\/|#)[^)]+)\)/g;
+  const regex = /\[(.*?)]\(((?!https?:\/\/|#)[^)]+)\)/g;
   const replacement = '[$1](https://$2)';
 
   return descriptionText?.replace(regex, replacement);
@@ -334,208 +354,199 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
   return descriptionText?.replace(regex, replacement);
 };
 
-export const useCurrentQuorum = (
-  nounsDao: string,
-  proposalId: number,
-  skip = false,
-): number | undefined => {
-  const request = () => {
-    if (skip) return false;
-    return {
-      abi,
-      address: nounsDao,
-      method: 'quorumVotes',
-      args: [proposalId],
-    };
+export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | undefined {
+  // @ts-ignore
+  const { data } = useReadNounsGovernorGetDynamicQuorumParamsAt({
+    args: [block],
+  });
+
+  if (!data) return undefined;
+
+  return {
+    minQuorumVotesBPS: Number(data.minQuorumVotesBPS),
+    maxQuorumVotesBPS: Number(data.maxQuorumVotesBPS),
+    quorumCoefficient: Number(data.quorumCoefficient),
   };
-  const [quorum] = useContractCall<[EthersBN]>(request()) || [];
-  return quorum?.toNumber();
-};
+}
 
-export const useDynamicQuorumProps = (
-  nounsDao: string,
-  block: number,
-): DynamicQuorumParams | undefined => {
-  const [params] =
-    useContractCall<[DynamicQuorumParams]>({
-      abi,
-      address: nounsDao,
-      method: 'getDynamicQuorumParamsAt',
-      args: [block],
-    }) || [];
+export function useHasVotedOnProposal(proposalId: bigint): boolean {
+  const { address } = useAccount();
+  // @ts-ignore
+  const { data: receipt } = useReadNounsGovernorGetReceipt({
+    args: [proposalId, address!],
+    query: { enabled: Boolean(proposalId && address) },
+  });
 
-  return params;
-};
-
-export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
-  const { account } = useEthers();
-
-  // Fetch a voting receipt for the passed proposal id
-  const [receipt] =
-    useContractCall<[any]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'getReceipt',
-      args: [proposalId, account],
-    }) || [];
   return receipt?.hasVoted ?? false;
-};
+}
 
-export const useProposalVote = (proposalId: string | undefined): string => {
-  const { account } = useEthers();
+export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstain' | '' {
+  const { address } = useAccount();
+  const enabled = Boolean(proposalId) && Boolean(address);
 
-  // Fetch a voting receipt for the passed proposal id
-  const [receipt] =
-    useContractCall<[any]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'getReceipt',
-      args: [proposalId, account],
-    }) || [];
-  const voteStatus = receipt?.support ?? -1;
-  if (voteStatus === 0) {
-    return 'Against';
-  }
-  if (voteStatus === 1) {
-    return 'For';
-  }
-  if (voteStatus === 2) {
-    return 'Abstain';
-  }
+  // @ts-ignore
+  const { data: receipt } = useReadNounsGovernorGetReceipt({
+    args: [proposalId, address!],
+    query: { enabled },
+  });
 
+  const voteStatus = receipt ? Number(receipt.support) : -1;
+
+  if (voteStatus === 0) return 'Against';
+  if (voteStatus === 1) return 'For';
+  if (voteStatus === 2) return 'Abstain';
   return '';
-};
+}
 
-export const useProposalCount = (): number | undefined => {
-  const [count] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'proposalCount',
-      args: [],
-    }) || [];
-  return count?.toNumber();
-};
+export function useProposalCount(): number | undefined {
+  const { data: count } = useReadNounsGovernorProposalCount();
 
-export const useProposalThreshold = (): number | undefined => {
-  const [count] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'proposalThreshold',
-      args: [],
-    }) || [];
-  return count?.toNumber();
-};
+  return count != null ? Number(count) : undefined;
+}
+
+export function useProposalThreshold(): number | undefined {
+  const { data: threshold } = useReadNounsGovernorProposalThreshold();
+
+  return threshold != null ? Number(threshold) : undefined;
+}
 
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
-export const concatSelectorToCalldata = (signature: string, callData: string) => {
+export const concatSelectorToCalldata = (signature: string, callData: Hex): Hex => {
   if (signature) {
-    return `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}`;
+    return `0x${keccak256(stringToBytes(signature)).substring(2, 10)}${callData.substring(2)}` as Hex;
   }
   return callData;
 };
 
-export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
-  return details?.targets?.map((target: string, i: number) => {
-    const signature: string = details.signatures[i];
-    const value = EthersBN.from(
-      // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
-    );
+const determineCallData = (types: string | undefined, value: bigint | undefined): string => {
+  if (types) {
+    return types;
+  }
+  if (value) {
+    return `${formatEther(BigInt(value))} ETH`;
+  }
+  return '';
+};
+
+export const formatProposalTransactionDetails = (details: {
+  readonly targets: readonly Address[];
+  readonly signatures: readonly string[];
+  readonly values: readonly bigint[];
+  readonly calldatas: readonly Hex[];
+}) =>
+  details.targets.map((target, i) => {
+    const signature = details.signatures[i];
+    const value = details.values[i] ?? 0n;
     const callData = details.calldatas[i];
 
-    // Split at first occurrence of '('
-    const [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
-    if (!name || !types) {
-      // If there's no signature and calldata is present, display the raw calldata
-      if (callData && callData !== '0x') {
-        return {
-          target,
-          callData: concatSelectorToCalldata(signature, callData),
-          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
-        };
-      }
+    const [name = 'unknown', types] = (signature?.slice?.(0, -1) ?? 'unknown()').split(/\((.*)/s);
 
+    if (!types) {
+      // no types to decode, show raw calldata or fallback
+      if (callData && callData !== '0x') {
+        return { target, callData: concatSelectorToCalldata(signature, callData), value };
+      }
       return {
         target,
-        functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-        callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+        functionSig: name || 'unknown',
+        callData: determineCallData('', value) as Hex,
+        value,
+      };
+    }
+
+    if (callData === '0x') {
+      return {
+        target,
+        functionSig: name,
+        callData: callData as Hex,
+        value,
       };
     }
 
     try {
-      // Split using comma as separator, unless comma is between parentheses (tuple).
-      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
+      const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
+      const decoded = decodeAbiParameters(abiParams, callData);
       return {
         target,
         functionSig: name,
-        callData: decoded.join(),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+        callData: (decoded as string[]).join() as Hex,
+        value,
       };
-    } catch (error) {
-      // We failed to decode. Display the raw calldata, appending function selectors if they exist.
-      return {
-        target,
-        callData: concatSelectorToCalldata(signature, callData),
-        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
-      };
+    } catch (err) {
+      console.error('decodeAbiParameters failed:', err);
+      return { target, callData: concatSelectorToCalldata(signature, callData), value };
     }
   });
-};
 
-export const formatProposalTransactionDetailsToUpdate = (
-  details: ProposalTransactionDetails | Result,
-) => {
-  return details?.targets.map((target: string, i: number) => {
-    const signature: string = details.signatures[i];
-    const value = EthersBN.from(
-      // Handle both logs and subgraph responses
-      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i],
-    );
-    const callData = details.calldatas[i];
-    return {
-      target,
-      functionSig: signature,
-      callData: callData,
-      value: value,
-    };
-  });
-};
+export const formatProposalTransactionDetailsToUpdate = (details: {
+  targets: Address[];
+  signatures: string[];
+  values?: bigint[];
+  calldatas: Hex[];
+}) =>
+  details.targets.map((target, i) => ({
+    target,
+    functionSig: details.signatures[i],
+    callData: details.calldatas[i],
+    value: details.values?.[i] ?? 0n,
+  }));
 
-const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
-  const filter = useMemo(
-    () => ({
-      ...proposalCreatedFilter,
-      ...(fromBlock ? { fromBlock } : {}),
-    }),
-    [fromBlock],
+export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride?: number) {
+  const publicClient = usePublicClient(); // wagmi v2 public client :contentReference[oaicite:0]{index=0}
+  const chainId = useChainId();
+
+  const proposalCreatedEvent = parseAbiItem(
+    'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
   );
-  const useLogsResult = useLogs(!skip ? filter : undefined);
 
+  // pick the right starting block
+  const fromBlock =
+    fromBlockOverride != null ? BigInt(fromBlockOverride) : chainId === mainnet.id ? 12985453n : 0n;
+
+  const { data: logs } = useReactQuery({
+    queryKey: ['proposalCreatedLogs', fromBlock.toString()],
+    queryFn: () =>
+      publicClient.getLogs({
+        address: nounsGovernorAddress[chainId],
+        event: proposalCreatedEvent,
+        fromBlock,
+      }),
+    enabled: !skip,
+  });
+
+  // decode and massage the results
   return useMemo(() => {
-    return useLogsResult?.logs?.map(log => {
-      const { args: parsed } = abi.parseLog(log);
+    if (!logs) return [];
+    return logs.map(log => {
+      const parsed = decodeEventLog({
+        abi: nounsGovernorAbi,
+        eventName: 'ProposalCreated',
+        data: log.data,
+        topics: log.topics,
+      });
       return {
-        description: parsed.description,
+        description: parsed.args.description,
         transactionHash: log.transactionHash,
-        details: formatProposalTransactionDetails(parsed),
+        details: formatProposalTransactionDetails(parsed.args),
       };
     });
-  }, [useLogsResult]);
-};
+  }, [logs]);
+}
 
 const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
-  proposal: PartialProposalSubgraphEntity | ProposalSubgraphEntity,
+  proposal: GraphQLProposal,
   isDaoGteV3?: boolean,
   onTimelockV1?: boolean,
 ) => {
-  const status = ProposalState[proposal.status];
+  const status = isNonNullish(proposal.status)
+    ? ProposalState[proposal.status]
+    : ProposalState.UNDETERMINED;
+
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
@@ -543,31 +554,34 @@ const getProposalState = (
     if (
       isDaoGteV3 &&
       proposal.updatePeriodEndBlock &&
-      blockNumber <= parseInt(proposal.updatePeriodEndBlock)
+      blockNumber <= BigInt(proposal.updatePeriodEndBlock)
     ) {
       return ProposalState.UPDATABLE;
     }
 
-    if (blockNumber <= parseInt(proposal.startBlock)) {
+    if (blockNumber <= BigInt(proposal.startBlock)) {
       return ProposalState.PENDING;
     }
 
     if (
       isDaoGteV3 &&
-      blockNumber > +proposal.endBlock &&
-      parseInt(proposal.objectionPeriodEndBlock) > 0 &&
-      blockNumber <= parseInt(proposal.objectionPeriodEndBlock)
+      blockNumber > BigInt(proposal.endBlock) &&
+      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
+      blockNumber <= BigInt(proposal.objectionPeriodEndBlock)
     ) {
       return ProposalState.OBJECTION_PERIOD;
     }
 
     // if past endblock, but onchain status hasn't been changed
     if (
-      blockNumber > parseInt(proposal.endBlock) &&
-      blockNumber > parseInt(proposal.objectionPeriodEndBlock)
+      blockNumber > BigInt(proposal.endBlock) &&
+      blockNumber > BigInt(proposal.objectionPeriodEndBlock)
     ) {
-      const forVotes = new BigNumber(proposal.forVotes);
-      if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
+      const forVotes = BigInt(proposal.forVotes);
+      if (
+        forVotes <= BigInt(proposal.againstVotes) ||
+        forVotes < BigInt(proposal.quorumVotes ?? 0)
+      ) {
         return ProposalState.DEFEATED;
       }
       if (!proposal.executionETA) {
@@ -582,9 +596,9 @@ const getProposalState = (
     if (!blockTimestamp || !proposal.executionETA) {
       return ProposalState.UNDETERMINED;
     }
-    // if v3+ and not on timelock v1, grace period is 21 days, otherwise 14 days
+    // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
     const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
-    if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
+    if (blockTimestamp.getTime() / 1_000 >= BigInt(proposal.executionETA) + BigInt(GRACE_PERIOD)) {
       return ProposalState.EXPIRED;
     }
     return status;
@@ -594,57 +608,60 @@ const getProposalState = (
 };
 
 const parsePartialSubgraphProposal = (
-  proposal: PartialProposalSubgraphEntity | undefined,
-  blockNumber: number | undefined,
+  proposal: GraphQLProposal | undefined,
+  blockNumber: bigint | number | undefined,
   timestamp: number | undefined,
   isDaoGteV3?: boolean,
-) => {
-  if (!proposal) {
-    return;
+): PartialProposal | undefined => {
+  if (isNullish(proposal)) {
+    return undefined;
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+
+  const onTimelockV1 = proposal.onTimelockV1 !== null;
   return {
     id: proposal.id,
     title: proposal.title ?? 'Untitled',
     status: getProposalState(
-      blockNumber,
+      Number(blockNumber),
       new Date((timestamp ?? 0) * 1000),
       proposal,
       isDaoGteV3,
       onTimelockV1,
     ),
-    startBlock: parseInt(proposal.startBlock),
-    endBlock: parseInt(proposal.endBlock),
-    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
-    forCount: parseInt(proposal.forVotes),
-    againstCount: parseInt(proposal.againstVotes),
-    abstainCount: parseInt(proposal.abstainVotes),
-    quorumVotes: parseInt(proposal.quorumVotes),
+    startBlock: BigInt(proposal.startBlock),
+    endBlock: BigInt(proposal.endBlock),
+    updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock ?? 0),
+    forCount: Number(proposal.forVotes),
+    againstCount: Number(proposal.againstVotes),
+    abstainCount: Number(proposal.abstainVotes),
+    quorumVotes: Number(proposal?.quorumVotes ?? 0),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    objectionPeriodEndBlock: 0n,
   };
 };
 
 const parseSubgraphProposal = (
-  proposal: ProposalSubgraphEntity | undefined,
+  proposal: GraphQLProposal | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
   toUpdate?: boolean,
   isDaoGteV3?: boolean,
-) => {
-  if (!proposal) {
+): Proposal | undefined => {
+  if (isNullish(proposal)) {
     return;
   }
+
   const description = addMissingSchemes(
     replaceInvalidDropboxImageLinks(
       proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
     ),
   );
   const transactionDetails: ProposalTransactionDetails = {
-    targets: proposal.targets,
-    values: proposal.values,
-    signatures: proposal.signatures,
-    calldatas: proposal.calldatas,
-    encodedProposalHash: proposal.encodedProposalHash,
+    targets: map(proposal.targets ?? [], t => t as Address),
+    values: map(proposal.values ?? [], v => BigInt(v)),
+    signatures: map(proposal.signatures ?? [], s => s),
+    calldatas: map(proposal.calldatas ?? [], t => t as Hex),
+    encodedProposalHash: '' as Hash,
   };
 
   let details;
@@ -653,12 +670,12 @@ const parseSubgraphProposal = (
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
   }
-  const onTimelockV1 = proposal.onTimelockV1 === null ? false : true;
+  const onTimelockV1 = proposal.onTimelockV1 != null;
   return {
     id: proposal.id,
-    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
     description: description ?? 'No description.',
-    proposer: proposal.proposer?.id,
+    proposer: proposal.proposer?.id as Address,
     status: getProposalState(
       blockNumber,
       new Date((timestamp ?? 0) * 1000),
@@ -666,89 +683,124 @@ const parseSubgraphProposal = (
       isDaoGteV3,
       onTimelockV1,
     ),
-    proposalThreshold: parseInt(proposal.proposalThreshold),
-    quorumVotes: parseInt(proposal.quorumVotes),
-    forCount: parseInt(proposal.forVotes),
-    againstCount: parseInt(proposal.againstVotes),
-    abstainCount: parseInt(proposal.abstainVotes),
-    createdBlock: parseInt(proposal.createdBlock),
-    startBlock: parseInt(proposal.startBlock),
-    endBlock: parseInt(proposal.endBlock),
-    createdTimestamp: parseInt(proposal.createdTimestamp),
+    proposalThreshold: BigInt(proposal.proposalThreshold ?? 0),
+    quorumVotes: Number(proposal.quorumVotes ?? 0),
+    forCount: Number(proposal.forVotes),
+    againstCount: Number(proposal.againstVotes),
+    abstainCount: Number(proposal.abstainVotes),
+    createdBlock: BigInt(proposal.createdBlock),
+    startBlock: BigInt(proposal.startBlock),
+    endBlock: BigInt(proposal.endBlock),
+    createdTimestamp: BigInt(proposal.createdTimestamp),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: details,
-    transactionHash: proposal.createdTransactionHash,
-    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
-    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
-    signers: proposal.signers,
+    transactionHash: proposal.createdTransactionHash as Hash,
+    objectionPeriodEndBlock: BigInt(proposal.objectionPeriodEndBlock),
+    updatePeriodEndBlock: BigInt(proposal.updatePeriodEndBlock ?? 0),
+    signers: map(proposal.signers ?? [], v => ({ id: v.id as Address })),
     onTimelockV1: onTimelockV1,
-    voteSnapshotBlock: parseInt(proposal.voteSnapshotBlock),
+    voteSnapshotBlock: BigInt(proposal.voteSnapshotBlock),
   };
 };
 
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
-  const { loading, data, error } = useQuery(partialProposalsQuery());
+  const { query, variables } = partialProposalsQuery();
+  const { loading, data, error } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, {
+    variables,
+  });
   const isDaoGteV3 = useIsDaoGteV3();
-  const blockNumber = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
-  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
-    parsePartialSubgraphProposal(proposal, blockNumber, timestamp, isDaoGteV3),
+  const proposals = pipe(
+    data?.proposals ?? [],
+    map(proposal => {
+      return parsePartialSubgraphProposal(proposal, Number(blockNumber), timestamp, isDaoGteV3);
+    }),
+    filter((x): x is PartialProposal => x !== undefined),
   );
 
   return {
     loading,
     error,
-    data: proposals ?? [],
+    data: proposals,
   };
 };
 
 export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
   const proposalCount = useProposalCount();
-  const govProposalIndexes = useMemo(() => {
-    return countToIndices(proposalCount);
-  }, [proposalCount]);
+  const govProposalIndexes = useMemo(() => countToIndices(proposalCount), [proposalCount]);
+  const chainId = useChainId();
 
-  const requests = (method: string) => {
-    if (skip) return [false];
-    return govProposalIndexes.map(index => ({
-      abi,
-      method,
-      address: nounsDaoContract.address,
-      args: [index],
-    }));
-  };
+  const proposalCalls = useMemo(
+    () =>
+      govProposalIndexes.map(idx => ({
+        abi: nounsGovernorAbi,
+        address: nounsGovernorAddress[chainId],
+        functionName: 'proposals',
+        args: [idx],
+      })),
+    [govProposalIndexes],
+  );
 
-  const proposals = useContractCalls<[ProposalCallResult]>(requests('proposals'));
-  const proposalStates = useContractCalls<[ProposalState]>(requests('state'));
+  const stateCalls = useMemo(
+    () =>
+      govProposalIndexes.map(idx => ({
+        abi: nounsGovernorAbi,
+        address: nounsGovernorAddress[chainId],
+        functionName: 'state',
+        args: [idx],
+      })),
+    [govProposalIndexes],
+  );
+
+  const { data: proposalResults, isLoading: loadingProposals } = useReadContracts<
+    { result?: ProposalCallResult }[]
+  >({
+    contracts: proposalCalls,
+    query: { enabled: !skip && proposalCalls.length > 0 },
+  });
+  const proposals = pipe(
+    proposalResults ?? [],
+    flatMap(item => (isNullish(item.result) ? [] : [item.result])),
+  ) as ProposalCallResult[];
+
+  const { data: stateResults, isLoading: loadingStates } = useReadContracts<{ result?: number }[]>({
+    contracts: stateCalls,
+    query: { enabled: !skip && stateCalls.length > 0 },
+  });
+  const proposalStates = pipe(
+    stateResults ?? [],
+    flatMap(item => (isNullish(item.result) ? [] : [item.result])),
+  ) as number[];
+
   const formattedLogs = useFormattedProposalCreatedLogs(skip);
 
   // Early return until events are fetched
   return useMemo(() => {
     const logs = formattedLogs ?? [];
-    if (proposals.length && !logs.length) {
+    if (!skip && proposals.length > 0 && formattedLogs?.length === 0) {
       return { data: [], loading: true };
     }
 
     return {
-      data: proposals.map((p, i) => {
-        const proposal = p?.[0];
+      data: proposals.map((proposal, i) => {
         const description = addMissingSchemes(logs[i]?.description?.replace(/\\n/g, '\n'));
         return {
           id: proposal?.id.toString(),
-          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-          status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
-          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
-          endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
-          objectionPeriodEndBlock: parseInt(proposal?.objectionPeriodEndBlock.toString() ?? ''),
-          forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
-          againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
-          quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
-          eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
-          updatePeriodEndBlock: parseInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
+          title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+          status: proposalStates[i] ?? ProposalState.UNDETERMINED,
+          startBlock: BigInt(proposal?.startBlock?.toString() ?? ''),
+          endBlock: BigInt(proposal?.endBlock?.toString() ?? ''),
+          objectionPeriodEndBlock: BigInt(proposal?.objectionPeriodEndBlock?.toString() ?? 0),
+          forCount: Number(proposal?.forVotes?.toString() ?? '0'),
+          againstCount: Number(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: Number(proposal?.abstainVotes?.toString() ?? '0'),
+          quorumVotes: Number(proposal?.quorumVotes?.toString() ?? '0'),
+          eta: proposal?.eta ? new Date(Number(proposal?.eta) * 1000) : undefined,
+          updatePeriodEndBlock: BigInt(proposal?.updatePeriodEndBlock?.toString() ?? 0),
         };
       }),
-      loading: false,
+      loading: loadingProposals || loadingStates,
     };
   }, [formattedLogs, proposalStates, proposals]);
 };
@@ -759,308 +811,455 @@ export const useAllProposals = (): PartialProposalData => {
   return subgraph?.error ? onchain : subgraph;
 };
 
-export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
-  const blockNumber = useBlockNumber();
+export const useProposal = (id: string | number, toUpdate?: boolean) => {
+  const { data: blockNumber } = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
   const isDaoGteV3 = useIsDaoGteV3();
-  return parseSubgraphProposal(
-    useQuery(proposalQuery(id)).data?.proposal,
-    blockNumber,
-    timestamp,
-    toUpdate,
-    isDaoGteV3,
-  );
+
+  const { query, variables } = proposalQuery(id);
+  const { data } = useQuery<{ proposal: Maybe<GraphQLProposal> }>(query, { variables });
+  const proposal = data?.proposal ?? undefined;
+
+  return parseSubgraphProposal(proposal, Number(blockNumber), timestamp, toUpdate, isDaoGteV3);
 };
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
-  const proposals: ProposalTitle[] | undefined = useQuery(proposalTitlesQuery(ids)).data?.proposals;
-  return proposals;
+  const { query, variables } = proposalTitlesQuery(ids);
+  const { data } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables });
+
+  return (
+    data?.proposals?.map(proposal => ({
+      id: proposal.id,
+      title: proposal.title,
+    })) ?? undefined
+  );
 };
 
 export const useProposalVersions = (id: string | number): ProposalVersion[] | undefined => {
-  const proposalVersions: ProposalVersion[] = useQuery(proposalVersionsQuery(id)).data
-    ?.proposalVersions;
-  const sortedProposalVersions =
-    proposalVersions &&
-    [...proposalVersions].sort((a: ProposalVersion, b: ProposalVersion) =>
-      a.createdAt > b.createdAt ? 1 : -1,
-    );
-  const sortedNumberedVersions = sortedProposalVersions?.map(
-    (proposalVersion: ProposalVersion, i: number) => {
-      const details: ProposalTransactionDetails = {
-        targets: proposalVersion.targets,
-        values: proposalVersion.values,
-        signatures: proposalVersion.signatures,
-        calldatas: proposalVersion.calldatas,
-        encodedProposalHash: '',
-      };
-      return {
-        id: proposalVersion.id,
-        versionNumber: i + 1,
-        createdAt: proposalVersion.createdAt,
-        updateMessage: proposalVersion.updateMessage,
-        description: proposalVersion.description,
-        targets: proposalVersion.targets,
-        values: proposalVersion.values,
-        signatures: proposalVersion.signatures,
-        calldatas: proposalVersion.calldatas,
-        title: proposalVersion.title,
-        details: formatProposalTransactionDetails(details),
-        proposal: {
-          id: proposalVersion.proposal.id,
-        },
-      };
-    },
+  const { query, variables } = proposalVersionsQuery(id);
+  const { data } = useQuery<{
+    proposalVersions: Maybe<GraphQLProposalVersion[]>;
+  }>(query, { variables });
+
+  const sortedProposalVersions = sort(data?.proposalVersions ?? [], (a, b) =>
+    a.createdAt > b.createdAt ? 1 : -1,
   );
+
+  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion, i: number) => {
+    const details: ProposalTransactionDetails = {
+      targets: map(proposalVersion.targets ?? [], t => t as Address),
+      values: map(proposalVersion.values ?? [], v => BigInt(v)),
+      signatures: map(proposalVersion.signatures ?? [], s => s),
+      calldatas: map(proposalVersion.calldatas ?? [], t => t as Hex),
+      encodedProposalHash: '' as Hash,
+    };
+
+    return {
+      id: proposalVersion.id,
+      versionNumber: i + 1,
+      createdAt: BigInt(proposalVersion.createdAt),
+      updateMessage: proposalVersion.updateMessage,
+      description: proposalVersion.description,
+      targets: map(proposalVersion.targets ?? [], t => t as Address),
+      values: map(proposalVersion.values ?? [], v => BigInt(v)),
+      signatures: map(proposalVersion.signatures ?? [], s => s),
+      calldatas: map(proposalVersion.calldatas ?? [], t => t as Hex),
+      title: proposalVersion.title,
+      details: formatProposalTransactionDetails(details),
+      proposal: {
+        id: proposalVersion.proposal.id,
+      },
+    };
+  });
 
   return sortedNumberedVersions;
 };
 
-export const useCancelSignature = () => {
-  const { send: cancelSig, state: cancelSigState } = useContractFunction(
-    nounsDaoContract,
-    'cancelSig',
-  );
-  return { cancelSig, cancelSigState };
-};
+export function useCancelSignature() {
+  const {
+    data: hash,
+    writeContractAsync: cancelSig,
+    isPending: isCancelPending,
+    isSuccess: isCancelSuccess,
+    error: cancelError,
+  } = useWriteNounsGovernorCancelSig();
 
-export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(
-    nounsDaoContract,
-    'castVote',
-  );
-  return { castVote, castVoteState };
-};
+  let status = 'None';
+  if (isCancelPending) status = 'Mining';
+  else if (isCancelSuccess) status = 'Success';
+  else if (cancelError) status = 'Fail';
 
-export const useCastVoteWithReason = () => {
-  const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
-    nounsDaoContract,
-    'castVoteWithReason',
-  );
-  return { castVoteWithReason, castVoteWithReasonState };
-};
-
-export const useCastRefundableVote = () => {
-  const { library } = useEthers();
-  const functionSig = 'castRefundableVote(uint256,uint8)';
-  const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
-    nounsDaoContract,
-    functionSig
-  );
+  const cancelSigState = {
+    status,
+    errorMessage: cancelError?.message,
+    transaction: { hash },
+  };
 
   return {
-    castRefundableVote: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas[functionSig](...args);
-      return castRefundableVote(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
-    },
-    castRefundableVoteState,
+    cancelSig,
+    cancelSigState,
   };
-};
+}
 
-export const useCastRefundableVoteWithReason = () => {
-  const { library } = useEthers();
-  // prettier-ignore
-  const functionSig = 'castRefundableVoteWithReason(uint256,uint8,string)';
-  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } =
-    useContractFunction(nounsDaoContract, functionSig);
+export function useCastRefundableVote() {
+  const {
+    data: hash,
+    writeContractAsync: castRefundableVote,
+    isPending: isCastRefundableVotePending,
+    isSuccess: isCastRefundableVoteSuccess,
+    error: castRefundableVoteError,
+  } = useWriteNounsGovernorCastRefundableVote();
 
-  return {
-    castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
-      const gasLimit = await contract.estimateGas[functionSig](...args);
-      return castRefundableVoteWithReason(...args, {
-        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
-      });
-    },
-    castRefundableVoteWithReasonState,
+  let status = 'None';
+  if (isCastRefundableVotePending) status = 'Mining';
+  else if (isCastRefundableVoteSuccess) status = 'Success';
+  else if (castRefundableVoteError) status = 'Fail';
+
+  const castRefundableVoteState = {
+    status,
+    errorMessage: castRefundableVoteError?.message,
+    transaction: { hash },
   };
-};
 
-export const usePropose = () => {
-  const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
+  return { castRefundableVote, castRefundableVoteState };
+}
+
+export function useCastRefundableVoteWithReason() {
+  const {
+    data: hash,
+    writeContractAsync: castRefundableVoteWithReason,
+    isPending: isCastRefundableVoteWithReasonPending,
+    isSuccess: isCastRefundableVoteWithReasonSuccess,
+    error: castRefundableVoteWithReasonError,
+  } = useWriteNounsGovernorCastRefundableVoteWithReason();
+
+  let status = 'None';
+  if (isCastRefundableVoteWithReasonPending) status = 'Mining';
+  else if (isCastRefundableVoteWithReasonSuccess) status = 'Success';
+  else if (castRefundableVoteWithReasonError) status = 'Fail';
+
+  const castRefundableVoteWithReasonState = {
+    status,
+    errorMessage: castRefundableVoteWithReasonError?.message,
+    transaction: { hash },
+  };
+
+  return { castRefundableVoteWithReason, castRefundableVoteWithReasonState };
+}
+
+export function usePropose() {
+  const {
+    data: hash,
+    writeContractAsync: propose,
+    isPending: isProposePending,
+    isSuccess: isProposeSuccess,
+    error: proposeError,
+  } = useWriteNounsGovernorPropose();
+
+  let status = 'None';
+  if (isProposePending) status = 'Mining';
+  else if (isProposeSuccess) status = 'Success';
+  else if (proposeError) status = 'Fail';
+
+  const proposeState = {
+    status,
+    errorMessage: proposeError?.message,
+    transaction: { hash },
+  };
+
   return { propose, proposeState };
-};
+}
 
-export const useProposeOnTimelockV1 = () => {
-  const { send: proposeOnTimelockV1, state: proposeOnTimelockV1State } = useContractFunction(
-    nounsDaoContract,
-    'proposeOnTimelockV1',
-  );
+export function useProposeOnTimelockV1() {
+  const {
+    data: hash,
+    writeContractAsync: proposeOnTimelockV1,
+    isPending: isProposeOnTimelockV1Pending,
+    isSuccess: isProposeOnTimelockV1Success,
+    error: proposeOnTimelockV1Error,
+  } = useWriteNounsGovernorProposeOnTimelockV1();
+
+  let status = 'None';
+  if (isProposeOnTimelockV1Pending) status = 'Mining';
+  else if (isProposeOnTimelockV1Success) status = 'Success';
+  else if (proposeOnTimelockV1Error) status = 'Fail';
+
+  const proposeOnTimelockV1State = {
+    status,
+    errorMessage: proposeOnTimelockV1Error?.message,
+    transaction: { hash },
+  };
+
   return { proposeOnTimelockV1, proposeOnTimelockV1State };
-};
+}
 
-export const useUpdateProposal = () => {
-  const { send: updateProposal, state: updateProposalState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposal',
-  );
+export function useUpdateProposal() {
+  const {
+    data: hash,
+    writeContractAsync: updateProposal,
+    isPending: isUpdateProposalPending,
+    isSuccess: isUpdateProposalSuccess,
+    error: updateProposalError,
+  } = useWriteNounsGovernorUpdateProposal();
+
+  let status = 'None';
+  if (isUpdateProposalPending) status = 'Mining';
+  else if (isUpdateProposalSuccess) status = 'Success';
+  else if (updateProposalError) status = 'Fail';
+
+  const updateProposalState = {
+    status,
+    errorMessage: updateProposalError?.message,
+    transaction: { hash },
+  };
+
   return { updateProposal, updateProposalState };
-};
+}
 
-export const useUpdateProposalTransactions = () => {
-  const { send: updateProposalTransactions, state: updateProposaTransactionsState } =
-    useContractFunction(nounsDaoContract, 'updateProposalTransactions');
-  return { updateProposalTransactions, updateProposaTransactionsState };
-};
+export function useUpdateProposalTransactions() {
+  const {
+    data: hash,
+    writeContractAsync: updateProposalTransactions,
+    isPending: isUpdateProposalTransactionsPending,
+    isSuccess: isUpdateProposalTransactionsSuccess,
+    error: updateProposalTransactionsError,
+  } = useWriteNounsGovernorUpdateProposalTransactions();
 
-export const useUpdateProposalDescription = () => {
-  const { send: updateProposalDescription, state: updateProposalDescriptionState } =
-    useContractFunction(nounsDaoContract, 'updateProposalDescription');
+  let status = 'None';
+  if (isUpdateProposalTransactionsPending) status = 'Mining';
+  else if (isUpdateProposalTransactionsSuccess) status = 'Success';
+  else if (updateProposalTransactionsError) status = 'Fail';
+
+  const updateProposalTransactionsState = {
+    status,
+    errorMessage: updateProposalTransactionsError?.message,
+    transaction: { hash },
+  };
+
+  return { updateProposalTransactions, updateProposalTransactionsState };
+}
+
+export function useUpdateProposalDescription() {
+  const {
+    data: hash,
+    writeContractAsync: updateProposalDescription,
+    isPending: isUpdateProposalDescriptionPending,
+    isSuccess: isUpdateProposalDescriptionSuccess,
+    error: updateProposalDescriptionError,
+  } = useWriteNounsGovernorUpdateProposalDescription();
+
+  let status = 'None';
+  if (isUpdateProposalDescriptionPending) status = 'Mining';
+  else if (isUpdateProposalDescriptionSuccess) status = 'Success';
+  else if (updateProposalDescriptionError) status = 'Fail';
+
+  const updateProposalDescriptionState = {
+    status,
+    errorMessage: updateProposalDescriptionError?.message,
+    transaction: { hash },
+  };
+
   return { updateProposalDescription, updateProposalDescriptionState };
-};
+}
 
-export const useQueueProposal = () => {
-  const { send: queueProposal, state: queueProposalState } = useContractFunction(
-    nounsDaoContract,
-    'queue',
-  );
+export function useQueueProposal() {
+  const {
+    data: hash,
+    writeContractAsync: queueProposal,
+    isPending: isQueueProposalPending,
+    isSuccess: isQueueProposalSuccess,
+    error: queueProposalError,
+  } = useWriteNounsGovernorQueue();
+
+  let status = 'None';
+  if (isQueueProposalPending) status = 'Mining';
+  else if (isQueueProposalSuccess) status = 'Success';
+  else if (queueProposalError) status = 'Fail';
+
+  const queueProposalState = {
+    status,
+    errorMessage: queueProposalError?.message,
+    transaction: { hash },
+  };
+
   return { queueProposal, queueProposalState };
-};
+}
 
-export const useCancelProposal = () => {
-  const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
-    nounsDaoContract,
-    'cancel',
-  );
+export function useCancelProposal() {
+  const {
+    data: hash,
+    writeContractAsync: cancelProposal,
+    isPending: isCancelProposalPending,
+    isSuccess: isCancelProposalSuccess,
+    error: cancelProposalError,
+  } = useWriteNounsGovernorCancel();
+
+  let status = 'None';
+  if (isCancelProposalPending) status = 'Mining';
+  else if (isCancelProposalSuccess) status = 'Success';
+  else if (cancelProposalError) status = 'Fail';
+
+  const cancelProposalState = {
+    status,
+    errorMessage: cancelProposalError?.message,
+    transaction: { hash },
+  };
+
   return { cancelProposal, cancelProposalState };
-};
+}
 
-export const useExecuteProposal = () => {
-  const { send: executeProposal, state: executeProposalState } = useContractFunction(
-    nounsDaoContract,
-    'execute',
-  );
+export function useExecuteProposal() {
+  const {
+    data: hash,
+    writeContractAsync: executeProposal,
+    isPending: isExecuteProposalPending,
+    isSuccess: isExecuteProposalSuccess,
+    error: executeProposalError,
+  } = useWriteNounsGovernorExecute();
+
+  let status = 'None';
+  if (isExecuteProposalPending) status = 'Mining';
+  else if (isExecuteProposalSuccess) status = 'Success';
+  else if (executeProposalError) status = 'Fail';
+
+  const executeProposalState = {
+    status,
+    errorMessage: executeProposalError?.message,
+    transaction: { hash },
+  };
+
   return { executeProposal, executeProposalState };
-};
-export const useExecuteProposalOnTimelockV1 = () => {
-  const { send: executeProposalOnTimelockV1, state: executeProposalOnTimelockV1State } =
-    useContractFunction(nounsDaoContract, 'executeOnTimelockV1');
-  return { executeProposalOnTimelockV1, executeProposalOnTimelockV1State };
-};
+}
 
-// fork functions
-export const useEscrowToFork = () => {
-  const { send: escrowToFork, state: escrowToForkState } = useContractFunction(
-    nounsDaoContract,
-    'escrowToFork',
-  );
+export function useEscrowToFork() {
+  const {
+    data: hash,
+    writeContractAsync: escrowToFork,
+    isPending: isEscrowToForkPending,
+    isSuccess: isEscrowToForkSuccess,
+    error: escrowToForkError,
+  } = useWriteNounsGovernorEscrowToFork();
+
+  let status = 'None';
+  if (isEscrowToForkPending) status = 'Mining';
+  else if (isEscrowToForkSuccess) status = 'Success';
+  else if (escrowToForkError) status = 'Fail';
+
+  const escrowToForkState = {
+    status,
+    errorMessage: escrowToForkError?.message,
+    transaction: { hash },
+  };
+
   return { escrowToFork, escrowToForkState };
-};
+}
 
-export const useWithdrawFromForkEscrow = () => {
-  const { send: withdrawFromForkEscrow, state: withdrawFromForkEscrowState } = useContractFunction(
-    nounsDaoContract,
-    'withdrawFromForkEscrow',
-  );
+export function useWithdrawFromForkEscrow() {
+  const {
+    data: hash,
+    writeContractAsync: withdrawFromForkEscrow,
+    isPending: isWithdrawFromForkEscrowPending,
+    isSuccess: isWithdrawFromForkEscrowSuccess,
+    error: withdrawFromForkEscrowError,
+  } = useWriteNounsGovernorWithdrawFromForkEscrow();
+
+  let status = 'None';
+  if (isWithdrawFromForkEscrowPending) status = 'Mining';
+  else if (isWithdrawFromForkEscrowSuccess) status = 'Success';
+  else if (withdrawFromForkEscrowError) status = 'Fail';
+
+  const withdrawFromForkEscrowState = {
+    status,
+    errorMessage: withdrawFromForkEscrowError?.message,
+    transaction: { hash },
+  };
+
   return { withdrawFromForkEscrow, withdrawFromForkEscrowState };
-};
+}
 
-export const useJoinFork = () => {
-  const { send: joinFork, state: joinForkState } = useContractFunction(
-    nounsDaoContract,
-    'joinFork',
-  );
+export function useJoinFork() {
+  const {
+    data: hash,
+    writeContractAsync: joinFork,
+    isPending: isJoinForkPending,
+    isSuccess: isJoinForkSuccess,
+    error: joinForkError,
+  } = useWriteNounsGovernorJoinFork();
+
+  let status = 'None';
+  if (isJoinForkPending) status = 'Mining';
+  else if (isJoinForkSuccess) status = 'Success';
+  else if (joinForkError) status = 'Fail';
+
+  const joinForkState = {
+    status,
+    errorMessage: joinForkError?.message,
+    transaction: { hash },
+  };
+
   return { joinFork, joinForkState };
-};
+}
 
-export const useIsForkPeriodActive = (): boolean => {
-  const [isForkPeriodActive] =
-    useContractCall<[boolean]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'isForkPeriodActive',
-      args: [],
-    }) || [];
-  return isForkPeriodActive ?? false;
-};
+export function useForkThreshold(): number | undefined {
+  const { data: threshold } = useReadNounsGovernorForkThreshold();
 
-export const useForkThreshold = () => {
-  const [forkThreshold] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: config.addresses.nounsDAOProxy,
-      method: 'forkThreshold',
-      args: [],
-    }) || [];
-  return forkThreshold?.toNumber();
-};
+  return threshold ? Number(threshold) : undefined;
+}
 
-export const useNumTokensInForkEscrow = (): number | undefined => {
-  const [numTokensInForkEscrow] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'numTokensInForkEscrow',
-      args: [],
-    }) || [];
-  return numTokensInForkEscrow?.toNumber();
-};
+export function useNumTokensInForkEscrow(): number | undefined {
+  const { data: count } = useReadNounsGovernorNumTokensInForkEscrow();
+
+  return count ? Number(count) : undefined;
+}
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(escrowDepositEventsQuery(forkId), {
-    pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { escrowDeposits: EscrowDeposit[] };
-    error: Error;
-    refetch: () => void;
-  };
-  const escrowDeposits = data?.escrowDeposits?.map(escrowDeposit => {
-    const proposalIDs = escrowDeposit.proposalIDs.map(id => id);
+  const { query, variables } = escrowDepositEventsQuery(forkId);
+  const { loading, data, error, refetch } = useQuery<{
+    escrowDeposits: Maybe<GraphQLEscrowDeposit[]>;
+  }>(query, {
+    pollInterval,
+    variables,
+  });
+  const escrowDeposits: EscrowDeposit[] = map(data?.escrowDeposits ?? [], escrowDeposit => {
+    const proposalIDs = escrowDeposit.proposalIDs.map(id => Number(id));
     return {
-      eventType: 'EscrowDeposit',
-      id: escrowDeposit.id,
-      createdAt: escrowDeposit.createdAt,
-      owner: { id: escrowDeposit.owner.id },
-      reason: escrowDeposit.reason,
-      tokenIDs: escrowDeposit.tokenIDs,
-      proposalIDs: proposalIDs,
+      ...escrowDeposit,
+      eventType: 'EscrowDeposit' as const,
+      owner: { id: escrowDeposit.owner.id as Address },
+      reason: String(escrowDeposit.reason),
+      proposalIDs,
     };
   });
 
-  return {
-    loading,
-    error,
-    data: (escrowDeposits as EscrowDeposit[]) ?? [],
-    refetch,
-  };
+  return { loading, error, data: escrowDeposits, refetch };
 };
 
 export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(escrowWithdrawEventsQuery(forkId), {
-    pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { escrowWithdrawals: EscrowWithdrawal[] };
-    error: Error;
-    refetch: () => void;
-  };
-  const escrowWithdrawals = data?.escrowWithdrawals?.map((escrowWithdrawal: EscrowWithdrawal) => {
-    return {
-      eventType: 'EscrowWithdrawal',
-      id: escrowWithdrawal.id,
-      createdAt: escrowWithdrawal.createdAt,
-      owner: { id: escrowWithdrawal.owner.id },
-      tokenIDs: escrowWithdrawal.tokenIDs,
-    };
+  const { query, variables } = escrowWithdrawEventsQuery(forkId);
+  const { loading, data, error, refetch } = useQuery<{
+    escrowWithdrawals: Maybe<GraphQLEscrowWithdrawal[]>;
+  }>(query, {
+    pollInterval,
+    variables,
   });
 
-  return {
-    loading,
-    error,
-    data: (escrowWithdrawals as EscrowWithdrawal[]) ?? [],
-    refetch,
-  };
+  const escrowWithdrawals: EscrowWithdrawal[] = map(
+    data?.escrowWithdrawals ?? [],
+    escrowWithdrawal => ({
+      ...escrowWithdrawal,
+      eventType: 'EscrowWithdrawal' as const,
+      owner: { id: escrowWithdrawal.id as Address },
+    }),
+  );
+
+  return { loading, error, data: escrowWithdrawals, refetch };
 };
 
+// Define a type alias for the events union type
+type EscrowEvent = EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
+
 // helper function to add fork cycle events to escrow events
-const eventsWithforkCycleEvents = (
-  events: (EscrowDeposit | EscrowWithdrawal | ForkCycleEvent)[],
-  forkDetails: Fork,
-) => {
+const eventsWithforkCycleEvents = (events: EscrowEvent[], forkDetails: Fork) => {
   const endTimestamp =
     forkDetails.forkingPeriodEndTimestamp && +forkDetails.forkingPeriodEndTimestamp;
   const executed: ForkCycleEvent = {
@@ -1075,33 +1274,28 @@ const eventsWithforkCycleEvents = (
   };
   const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
-  const sortedEvents = [...events, ...forkEvents].sort(
-    (
-      a: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-      b: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent,
-    ) => {
-      return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
-    },
-  );
+  const sortedEvents = [...events, ...forkEvents].sort((a: EscrowEvent, b: EscrowEvent) => {
+    return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
+  });
   return sortedEvents;
 };
 
 export const useForkJoins = (pollInterval: number, forkId: string) => {
-  const { loading, data, error, refetch } = useQuery(forkJoinsQuery(forkId), {
-    pollInterval: pollInterval,
-  }) as {
-    loading: boolean;
-    data: { forkJoins: EscrowDeposit[] };
-    error: Error;
-    refetch: () => void;
-  };
+  const { query, variables } = forkJoinsQuery(forkId);
+  const { loading, data, error, refetch } = useQuery<{ forkJoins: Maybe<GraphQLForkJoin[]> }>(
+    query,
+    {
+      pollInterval,
+      variables,
+    },
+  );
   const forkJoins = data?.forkJoins?.map(forkJoin => {
     const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
-      eventType: 'ForkJoin',
+      eventType: 'ForkJoin' as const,
       id: forkJoin.id,
       createdAt: forkJoin.createdAt,
-      owner: { id: forkJoin.owner.id },
+      owner: { id: forkJoin.owner.id as Address },
       fork: { id: forkId },
       reason: forkJoin.reason,
       tokenIDs: forkJoin.tokenIDs,
@@ -1109,10 +1303,18 @@ export const useForkJoins = (pollInterval: number, forkId: string) => {
     };
   });
 
+  const escrowDeposits: EscrowDeposit[] = map(forkJoins ?? [], forkJoin => {
+    return {
+      ...forkJoin,
+      reason: '',
+      proposalIDs: [],
+    };
+  });
+
   return {
     loading,
     error,
-    data: (forkJoins as EscrowDeposit[]) ?? [],
+    data: escrowDeposits,
     refetch,
   };
 };
@@ -1164,13 +1366,15 @@ export const useEscrowEvents = (pollInterval: number, forkId: string) => {
 };
 
 export const useForkDetails = (pollInterval: number, id: string) => {
+  const { query, variables } = forkDetailsQuery(id.toString());
   const {
     loading,
     data: forkData,
     error,
     refetch,
-  } = useQuery(forkDetailsQuery(id.toString()), {
-    pollInterval: pollInterval,
+  } = useQuery<{ fork: Maybe<GraphQLFork> }>(query, {
+    pollInterval,
+    variables,
   }) as { loading: boolean; data: { fork: ForkSubgraphEntity }; error: Error; refetch: () => void };
   const joined = forkData?.fork?.joinedNouns?.map(item => item.noun.id) ?? [];
   const escrowed = forkData?.fork?.escrowedNouns?.map(item => item.noun.id) ?? [];
@@ -1187,36 +1391,40 @@ export const useForkDetails = (pollInterval: number, id: string) => {
   };
 };
 
-export const useForks = (pollInterval?: number) => {
-  const {
-    loading,
-    data: forksData,
-    error,
-    refetch,
-  } = useQuery(forksQuery(), {
-    pollInterval: pollInterval || 0,
-  }) as { loading: boolean; data: { forks: Fork[] }; error: Error; refetch: () => void };
-  const data = forksData?.forks;
-  return {
-    loading,
-    data,
-    error,
-    refetch,
-  };
+export const useForks = (pollInterval: number = 0) => {
+  const { query, variables } = forksQuery();
+  const { loading, data, error, refetch } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(query, {
+    pollInterval,
+    variables,
+  });
+
+  const forks: Fork[] = map(data?.forks ?? [], fork => {
+    const joined = fork?.joinedNouns?.map(item => item.noun.id) ?? [];
+    const escrowed = fork?.escrowedNouns?.map(item => item.noun.id) ?? [];
+    const addedNouns = [...escrowed, ...joined];
+    return {
+      ...fork,
+      addedNouns,
+      executed: fork.executed ?? null,
+      executedAt: fork.executedAt ?? null,
+      forkTreasury: fork.forkTreasury ?? null,
+      forkToken: fork.forkToken ?? null,
+      forkingPeriodEndTimestamp: fork.forkingPeriodEndTimestamp?.toString() ?? null,
+    };
+  });
+
+  return { loading, data: forks, error, refetch };
 };
 
 export const useIsForkActive = () => {
-  const timestamp = parseInt((new Date().getTime() / 1000).toFixed(0));
+  const timestamp = Number((new Date().getTime() / 1000).toFixed(0));
+  const { query, variables } = isForkActiveQuery(timestamp);
   const {
     loading,
     data: forksData,
     error,
-  } = useQuery(isForkActiveQuery(timestamp)) as {
-    loading: boolean;
-    data: { forks: Fork[] };
-    error: Error;
-  };
-  const data = forksData?.forks.length > 0 ? true : false;
+  } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(query, { variables });
+  const data = isTruthy(forksData?.forks?.length);
   return {
     loading,
     data,
@@ -1224,46 +1432,54 @@ export const useIsForkActive = () => {
   };
 };
 
-export const useExecuteFork = () => {
-  const { send: executeFork, state: executeForkState } = useContractFunction(
-    nounsDaoContract,
-    'executeFork',
-  );
+export function useExecuteFork() {
+  const {
+    data: hash,
+    writeContractAsync: executeFork,
+    isPending: isExecuteForkPending,
+    isSuccess: isExecuteForkSuccess,
+    error: executeForkError,
+  } = useWriteNounsGovernorExecuteFork();
+
+  let status = 'None';
+  if (isExecuteForkPending) status = 'Mining';
+  else if (isExecuteForkSuccess) status = 'Success';
+  else if (executeForkError) status = 'Fail';
+
+  const executeForkState = {
+    status,
+    errorMessage: executeForkError?.message,
+    transaction: { hash },
+  };
+
   return { executeFork, executeForkState };
-};
+}
 
-export const useAdjustedTotalSupply = (): number | undefined => {
-  const [totalSupply] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'adjustedTotalSupply',
-    }) || [];
-  return totalSupply?.toNumber();
-};
+export function useAdjustedTotalSupply(): number | undefined {
+  const { data } = useReadNounsGovernorAdjustedTotalSupply();
 
-export const useForkThresholdBPS = (): number | undefined => {
-  const [forkThresholdBPS] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'forkThresholdBPS',
-    }) || [];
-  return forkThresholdBPS?.toNumber();
-};
+  return data ? Number(data) : undefined;
+}
 
-export const useActivePendingUpdatableProposers = (blockNumber: number) => {
+export function useForkThresholdBPS(): number | undefined {
+  const { data } = useReadNounsGovernorForkThresholdBps();
+
+  return data ? Number(data) : undefined;
+}
+
+export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => {
+  const { query, variables } = activePendingUpdatableProposersQuery(1000, blockNumber);
   const {
     loading,
     data: proposals,
     error,
-  } = useQuery(activePendingUpdatableProposersQuery(1000, blockNumber)) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
   };
   const data: string[] = [];
-  proposals?.proposals.length > 0 &&
+  if (proposals?.proposals.length > 0) {
     proposals.proposals.map(proposal => {
       data.push(proposal.proposer.id);
       proposal.signers.map((signer: { id: string }) => {
@@ -1272,6 +1488,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
       });
       return proposal.proposer.id;
     });
+  }
 
   return {
     loading,
@@ -1280,44 +1497,17 @@ export const useActivePendingUpdatableProposers = (blockNumber: number) => {
   };
 };
 
-export const checkHasActiveOrPendingProposalOrCandidate = (
-  latestProposalStatus: ProposalState,
-  latestProposalProposer: string | undefined,
-  account: string | null | undefined,
-) => {
-  if (
-    account &&
-    latestProposalProposer &&
-    (latestProposalStatus === ProposalState.ACTIVE ||
-      latestProposalStatus === ProposalState.PENDING ||
-      latestProposalStatus === ProposalState.UPDATABLE) &&
-    latestProposalProposer.toLowerCase() === account?.toLowerCase()
-  ) {
-    return true;
-  }
-  return false;
-};
-
-export const useIsDaoGteV3 = (): boolean => {
+export function useIsDaoGteV3(): boolean {
   return true;
-};
+}
 
-export const useLastMinuteWindowInBlocks = (): number | undefined => {
-  const [lastMinuteWindowInBlocks] =
-    useContractCall({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'lastMinuteWindowInBlocks',
-    }) || [];
-  return lastMinuteWindowInBlocks?.toNumber();
-};
-
-export const useUpdatableProposalIds = (blockNumber: number) => {
+export function useUpdatableProposalIds(blockNumber?: bigint) {
+  const { query, variables } = updatableProposalsQuery(1000, blockNumber);
   const {
     loading,
     data: proposals,
     error,
-  } = useQuery(updatableProposalsQuery(1000, blockNumber)) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
@@ -1330,4 +1520,4 @@ export const useUpdatableProposalIds = (blockNumber: number) => {
     data,
     error,
   };
-};
+}

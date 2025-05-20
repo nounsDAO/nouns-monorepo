@@ -1,38 +1,45 @@
-import classes from './CandidateCard.module.css';
-import clsx from 'clsx';
-import { ProposalCandidate } from '../../wrappers/nounsData';
-import CandidateSponsors from './CandidateSponsors';
-import ShortAddress from '../ShortAddress';
-import { Trans } from '@lingui/react/macro';
-import { Link } from 'react-router';
-import { PartialProposal } from '../../wrappers/nounsDao';
-import { relativeTimestamp } from '../../utils/timeUtils';
+import React from 'react';
 
-type Props = {
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Link } from 'react-router';
+
+import ShortAddress from '@/components/ShortAddress';
+import { relativeTimestamp } from '@/utils/timeUtils';
+import { PartialProposal } from '@/wrappers/nounsDao';
+import { ProposalCandidate } from '@/wrappers/nounsData';
+
+import classes from './CandidateCard.module.css';
+import CandidateSponsors from './CandidateSponsors';
+
+type CandidateCardProps = {
   candidate: ProposalCandidate;
   nounsRequired: number;
   latestProposal?: PartialProposal;
-  currentBlock?: number;
+  currentBlock?: bigint;
 };
 
-
-function CandidateCard(props: Props) {
-  const signers = props.candidate.version.content.contentSignatures;
-  const proposerVoteCount = props.candidate.proposerVotes;
+const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
+  candidate,
+  nounsRequired,
+  currentBlock,
+}) => {
+  const signers = candidate.version.content.contentSignatures;
+  const proposerVoteCount = candidate.proposerVotes;
 
   return (
     <Link
       className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
-      to={`/candidates/${props.candidate.id}`}
+      to={`/candidates/${candidate.id}`}
     >
       <div className={classes.title}>
         <span className={classes.candidateTitle}>
-          <span>{props.candidate.version.content.title}</span>
+          <span>{candidate.version.content.title}</span>
         </span>
         <p className={classes.proposer}>
           by{' '}
           <span className={classes.proposerAddress}>
-            <ShortAddress address={props.candidate.proposer || ''} avatar={false} />
+            <ShortAddress address={candidate.proposer || ''} avatar={false} />
           </span>
         </p>
 
@@ -40,39 +47,36 @@ function CandidateCard(props: Props) {
           <div className={classes.candidateSponsors}>
             <CandidateSponsors
               signers={signers}
-              nounsRequired={props.candidate.requiredVotes}
-              currentBlock={props.currentBlock && props.currentBlock - 1}
+              nounsRequired={candidate.requiredVotes}
+              currentBlock={currentBlock && currentBlock - 1n}
               isThresholdMetByProposer={
-                proposerVoteCount && proposerVoteCount >= props.candidate.requiredVotes
-                  ? true
-                  : false
+                !!(proposerVoteCount && proposerVoteCount >= candidate.requiredVotes)
               }
             />
             <span
               className={clsx(
                 classes.sponsorCount,
-                props.candidate.voteCount - props.candidate.requiredVotes > 0 &&
-                classes.sponsorCountOverflow,
+                candidate.voteCount - candidate.requiredVotes > 0 && classes.sponsorCountOverflow,
               )}
             >
               <strong>
-                {props.candidate.voteCount} /{" "}
-                {props.candidate.proposerVotes > props.nounsRequired ? (
+                {candidate.voteCount} /{' '}
+                {candidate.proposerVotes > nounsRequired ? (
                   <em className={classes.naVotesLabel}>n/a</em>
                 ) : (
-                  props.candidate.requiredVotes
+                  candidate.requiredVotes
                 )}
               </strong>{' '}
               <Trans>sponsored votes</Trans>
             </span>
           </div>
           <p className={classes.timestamp}>
-            {relativeTimestamp(props.candidate.lastUpdatedTimestamp)}
+            {relativeTimestamp(Number(candidate.lastUpdatedTimestamp))}
           </p>
         </div>
       </div>
     </Link>
   );
-}
+};
 
 export default CandidateCard;

@@ -1,25 +1,28 @@
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans } from '@lingui/react/macro';
+import { getNounData, getRandomNounSeed, ImageData } from '@noundry/nouns-assets';
+import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+import { PNG } from 'pngjs';
 import {
-  Container,
-  Col,
   Button,
-  Image,
-  Row,
+  Col,
+  Container,
   FloatingLabel,
   Form,
+  Image,
   OverlayTrigger,
   Popover,
+  Row,
 } from 'react-bootstrap';
-import classes from './Playground.module.css';
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
-import Link from '../../components/Link';
-import { ImageData, getNounData, getRandomNounSeed } from '@noundry/nouns-assets';
-import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+
 import InfoIcon from '../../assets/icons/Info.svg';
+import Link from '../../components/Link';
 import Noun from '../../components/Noun';
+
 import NounModal from './NounModal';
-import { PNG } from 'pngjs';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
+import classes from './Playground.module.css';
 
 interface Trait {
   title: string;
@@ -151,7 +154,7 @@ const Playground: React.FC = () => {
     setModSeed(prev => {
       // -1 traitIndex = random
       if (traitIndex < 0) {
-        let state = { ...prev };
+        const state = { ...prev };
         delete state[trait.title];
         return state;
       }
@@ -190,7 +193,7 @@ const Playground: React.FC = () => {
       try {
         const result = e?.target?.result;
         const buffer = Buffer.from(
-          result instanceof ArrayBuffer ? new Uint8Array(result) : new Uint8Array()
+          result instanceof ArrayBuffer ? new Uint8Array(result) : new Uint8Array(),
         );
         const png = PNG.sync.read(buffer);
         if (png.width !== 32 || png.height !== 32) {
@@ -309,7 +312,7 @@ const Playground: React.FC = () => {
                             className={classes.traitFormBtn}
                             value={trait.traitNames[selectIndexes?.[trait.title]] ?? -1}
                             onChange={e => {
-                              let index = e.currentTarget.selectedIndex;
+                              const index = e.currentTarget.selectedIndex;
                               traitButtonHandler(trait, index - 1); // - 1 to account for 'random'
                               setSelectIndexes({
                                 ...selectIndexes,
@@ -378,7 +381,7 @@ const Playground: React.FC = () => {
             <p className={classes.nounYearsFooter}>
               <Trans>
                 You've generated{' '}
-                {i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
+                {i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
                 worth of Nouns
               </Trans>
             </p>

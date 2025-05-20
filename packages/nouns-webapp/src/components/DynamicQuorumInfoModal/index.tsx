@@ -1,15 +1,18 @@
-import { useQuery } from '@apollo/client';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import config from '../../config';
-import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
-import { adjustedNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
-import { Backdrop } from '../Modal';
-import classes from './DynamicQuorumInfoModal.module.css';
+
+import { useQuery } from '@apollo/client';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import ReactDOM from 'react-dom';
+
+import { Backdrop } from '@/components/Modal';
+import { Proposal, useDynamicQuorumProps } from '@/wrappers/nounsDao';
+import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
+
+import classes from './DynamicQuorumInfoModal.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const PLOTTING_CONSTANTS = {
   width: 950,
@@ -21,7 +24,7 @@ const PLOTTING_CONSTANTS = {
   mobileScreenCutoffWidthPixels: 1200,
 };
 
-const DynamicQuorumInfoModalOverlay: React.FC<{
+interface DynamicQuorumInfoModalOverlayProps {
   proposal: Proposal;
   againstVotesBps: number;
   againstVotesAbs: number;
@@ -31,19 +34,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   totalNounSupply: number;
   onDismiss: () => void;
   currentQuorum?: number;
-}> = props => {
-  const {
-    onDismiss,
-    proposal,
-    againstVotesAbs,
-    againstVotesBps,
-    quorumCoefficent,
-    minQuorumBps,
-    maxQuorumBps,
-    totalNounSupply,
-    currentQuorum,
-  } = props;
+}
 
+const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps> = ({
+  onDismiss,
+  proposal,
+  againstVotesAbs,
+  againstVotesBps,
+  quorumCoefficent,
+  minQuorumBps,
+  maxQuorumBps,
+  totalNounSupply,
+  currentQuorum,
+}) => {
   const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent;
 
   const dqmFunction = (bps: number) => {
@@ -74,7 +77,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   return (
     <>
       <div className={classes.closeBtnWrapper}>
-        <button onClick={onDismiss} className={classes.closeBtn}>
+        <button type="button" onClick={onDismiss} className={classes.closeBtn}>
           <XIcon className={classes.icon} />
         </button>
       </div>
@@ -140,8 +143,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2="100%"
                     y2={PLOTTING_CONSTANTS.minQHeightPlotSpace}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <line
                     x1="0"
@@ -149,8 +152,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2="100%"
                     y2={PLOTTING_CONSTANTS.maxQHeightPlotSpace}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <line
                     x1={470}
@@ -158,8 +161,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     x2={470}
                     y2={PLOTTING_CONSTANTS.height}
                     stroke="#151C3B40"
-                    stroke-width="4"
-                    stroke-dasharray="5"
+                    strokeWidth="4"
+                    strokeDasharray="5"
                   />
                   <g fill="#4965F080" stroke="none">
                     <polygon points={`950,288 950,32 470,32 0,288`} />
@@ -181,7 +184,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     y2={y}
                     x2={x}
                     stroke="var(--brand-color-red)"
-                    stroke-width="4"
+                    strokeWidth="4"
                   />
                   {/* Horizontal Line Indicating Required For BPS */}
                   <line
@@ -190,7 +193,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     y2={y}
                     x2={x}
                     stroke="var(--brand-color-green)"
-                    stroke-width="4"
+                    strokeWidth="4"
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
@@ -290,14 +293,12 @@ const DynamicQuorumInfoModal: React.FC<{
 }> = props => {
   const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
+  const { query,variables } = adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0');
   const { data, loading, error } = useQuery(
-    adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
+    query,{variables}
   );
 
-  const dynamicQuorumProps = useDynamicQuorumProps(
-    config.addresses.nounsDAOProxy,
-    proposal.startBlock,
-  );
+  const dynamicQuorumProps = useDynamicQuorumProps(BigInt(proposal.startBlock));
 
   if (error) {
     return <>Failed to fetch dynamic threshold info</>;
@@ -318,7 +319,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesBps={Math.floor(
-            (againstVotesAbsolute / data.proposals[0].adjustedTotalSupply) * 10_000,
+            (againstVotesAbsolute / Number(data?.proposals?.[0]?.adjustedTotalSupply)) * 10_000,
           )}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
@@ -330,7 +331,7 @@ const DynamicQuorumInfoModal: React.FC<{
           }
           onDismiss={onDismiss}
           proposal={proposal}
-          totalNounSupply={data.proposals[0].adjustedTotalSupply}
+          totalNounSupply={Number(data?.proposals?.[0]?.adjustedTotalSupply)}
           currentQuorum={currentQuorum}
         />,
         document.getElementById('overlay-root')!,

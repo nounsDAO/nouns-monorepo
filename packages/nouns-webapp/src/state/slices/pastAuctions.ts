@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { AuctionState } from './auction';
-import { BigNumber } from '@ethersproject/bignumber';
-import { IBid } from '../../wrappers/subgraph';
+
+import { IBid } from '@/wrappers/subgraph';
 
 interface PastAuctionsState {
   pastAuctions: AuctionState[];
@@ -13,31 +14,30 @@ const initialState: PastAuctionsState = {
 
 const reduxSafePastAuctions = (data: any): AuctionState[] => {
   const auctions = data.data.auctions as any[];
-  if (auctions.length < 0) return [];
-  const pastAuctions: AuctionState[] = auctions.map(auction => {
+  if (auctions.length == 0) return [];
+  return auctions.map(auction => {
     return {
       activeAuction: {
-        amount: BigNumber.from(auction.amount).toJSON(),
+        amount: BigInt(auction.amount).toString(),
         bidder: auction.bidder ? auction.bidder.id : '',
-        startTime: BigNumber.from(auction.startTime).toJSON(),
-        endTime: BigNumber.from(auction.endTime).toJSON(),
-        nounId: BigNumber.from(auction.id).toJSON(),
+        startTime: BigInt(auction.startTime).toString(),
+        endTime: BigInt(auction.endTime).toString(),
+        nounId: BigInt(auction.id).toString(),
         settled: false,
       },
       bids: auction.bids.map((bid: IBid) => {
         return {
-          nounId: BigNumber.from(auction.id).toJSON(),
+          nounId: BigInt(auction.id).toString(),
           sender: bid.bidder.id,
-          value: BigNumber.from(bid.amount).toJSON(),
+          value: BigInt(bid.amount).toString(),
           extended: false,
           transactionHash: bid.txHash,
           transactionIndex: Number(bid.txIndex),
-          timestamp: BigNumber.from(bid.blockTimestamp).toJSON(),
+          timestamp: BigInt(bid.blockTimestamp).toString(),
         };
       }),
     };
   });
-  return pastAuctions;
 };
 
 const pastAuctionsSlice = createSlice({

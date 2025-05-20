@@ -7,6 +7,7 @@
     "VITE_ETHERSCAN_API_KEY",
     "VITE_INFURA_PROJECT_ID",
     "VITE_MAINNET_JSONRPC",
+    "VITE_MAINNET_SUBGRAPH",
     "VITE_MAINNET_WSRPC",
     "VITE_WALLET_CONNECT_V2_PROJECT_ID"
   ],
@@ -30,6 +31,11 @@
       "outputs": []
     },
     "dev": {
+      "dependsOn": [
+        "@nouns/assets#build",
+        "@nouns/contracts#build",
+        "@nouns/sdk#build"
+      ],
       "cache": false,
       "persistent": true
     }

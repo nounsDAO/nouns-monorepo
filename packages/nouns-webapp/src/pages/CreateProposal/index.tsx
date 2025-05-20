@@ -1,5 +1,26 @@
-import { Col, Alert, Button, Form } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import type { Hex } from '@/utils/types';
+
+import { withStepProgress } from 'react-stepz';
+import { Link } from 'react-router';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Alert, Button, Col, Form } from 'react-bootstrap';
+import { useAccount, useChainId } from 'wagmi';
+
+import { useAppDispatch } from '@/hooks';
+import CreateProposalButton from '@/components/CreateProposalButton';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalEditor from '@/components/ProposalEditor';
+import config from '@/config';
+import Section from '@/layout/Section';
+import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
+import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import {
   ProposalState,
   ProposalTransaction,
@@ -9,25 +30,10 @@ import {
   useProposalThreshold,
   usePropose,
   useProposeOnTimelockV1,
-} from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
+} from '@/wrappers/nounsDao';
+import { useUserVotes } from '@/wrappers/nounToken';
+
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router';
-import { TransactionStatus, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalEditor from '../../components/ProposalEditor';
-import CreateProposalButton from '../../components/CreateProposalButton';
-import ProposalTransactions from '../../components/ProposalTransactions';
-import { withStepProgress } from 'react-stepz';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
-import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
-import ProposalActionModal from '../../components/ProposalActionsModal';
-import config from '../../config';
-import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -44,7 +50,7 @@ const CreateProposalPage = () => {
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-  const { account } = useEthers();
+  const { address: account } = useAccount();
   const { propose, proposeState } = usePropose();
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
@@ -58,6 +64,7 @@ const CreateProposalPage = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
   );
+  const chainId = useChainId();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -102,15 +109,15 @@ const CreateProposalPage = () => {
         proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: config.addresses.tokenBuyer ?? '',
-          value: ethNeeded ?? '0',
-          calldata: '0x',
+          address: nounsTokenBuyerAddress[chainId],
+          value: BigInt(ethNeeded ?? 0),
+          calldata: '0x' as Hex,
           signature: '',
         });
       } else {
-        if (parseInt(ethNeeded) > 0) {
+        if (Number(ethNeeded) > 0) {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
@@ -124,7 +131,7 @@ const CreateProposalPage = () => {
 
           const txns = proposalTransactions;
           if (indexOfTokenBuyerTopUp.length > 0) {
-            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            txns[indexOfTokenBuyerTopUp[0]].value = BigInt(ethNeeded);
             setProposalTransactions(txns);
           }
         }
@@ -167,27 +174,32 @@ const CreateProposalPage = () => {
   const handleCreateProposal = async () => {
     if (!proposalTransactions?.length) return;
     if (isProposeOnV1) {
-      await proposeOnTimelockV1(
-        proposalTransactions.map(({ address }) => address), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        `# ${titleValue}\n\n${bodyValue}`, // Description
-      );
+      await proposeOnTimelockV1({
+        args: [
+          proposalTransactions.map(({ address }) => address), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+        ],
+      });
     } else {
-      await propose(
-        proposalTransactions.map(({ address }) => address), // Targets
-        proposalTransactions.map(({ value }) => value ?? '0'), // Values
-        proposalTransactions.map(({ signature }) => signature), // Signatures
-        proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-        `# ${titleValue}\n\n${bodyValue}`, // Description
-      );
+      await propose({
+        args: [
+          proposalTransactions.map(({ address }) => address), // Targets
+          proposalTransactions.map(({ value }) => value ?? '0'), // Values
+          proposalTransactions.map(({ signature }) => signature), // Signatures
+          proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+          `# ${titleValue}\n\n${bodyValue}`, // Description
+          0,
+        ],
+      });
     }
   };
 
   const handleAddProposalState = useCallback(
-    (proposeState: TransactionStatus, previousProposalId?: number) => {
-      switch (proposeState.status) {
+    ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
         case 'None':
           setProposePending(false);
           break;
@@ -210,7 +222,7 @@ const CreateProposalPage = () => {
         case 'Fail':
           setModal({
             title: <Trans>Transaction Failed</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setProposePending(false);
@@ -218,23 +230,23 @@ const CreateProposalPage = () => {
         case 'Exception':
           setModal({
             title: <Trans>Error</Trans>,
-            message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+            message: errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setProposePending(false);
           break;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [],
+    },
+    [],
   );
 
   useEffect(() => {
     if (isProposeOnV1) {
-      handleAddProposalState(proposeOnTimelockV1State, previousProposalId);
+      handleAddProposalState(proposeOnTimelockV1State);
     } else {
-      handleAddProposalState(proposeState, previousProposalId);
+      handleAddProposalState(proposeState);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     propose,
     proposeState,
@@ -311,12 +323,17 @@ const CreateProposalPage = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <p className='m-0 p-0'>Looking for treasury v1?</p>
+        <p className="m-0 p-0">Looking for treasury v1?</p>
         <p className={classes.note}>
-          If you're not sure what this means, you probably don't need it. Otherwise, you can interact with the original treasury <button
+          If you're not sure what this means, you probably don't need it. Otherwise, you can
+          interact with the original treasury{' '}
+          <button
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
-          >here</button>.
+          >
+            here
+          </button>
+          .
         </p>
 
         {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
@@ -333,7 +350,8 @@ const CreateProposalPage = () => {
               Used to interact with any assets owned by the{' '}
               <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
                 original treasury
-              </a>. Most proposers can ignore this.
+              </a>
+              . Most proposers can ignore this.
             </p>
           </div>
         )}

@@ -1,5 +1,12 @@
+import React from 'react';
+
 import classes from './ModalSubtitle.module.css';
-const ModalSubTitle = (props: { children: React.ReactNode }) => {
+
+interface ModalSubTitleProps {
+  children: React.ReactNode;
+}
+
+const ModalSubTitle = (props: ModalSubTitleProps) => {
   return <div className={classes.subtitle}>{props.children}</div>;
 };
 

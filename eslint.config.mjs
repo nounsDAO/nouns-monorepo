@@ -1,16 +1,19 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
-
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import globals from 'globals';
+
+// TypeScript plugins and parsers
+import tseslint from 'typescript-eslint';
 import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
 // React plugins
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import eslintReactPlugin from '@eslint-react/eslint-plugin';
+
 // Other plugins
 import importPlugin from 'eslint-plugin-import';
 import linguiPlugin from 'eslint-plugin-lingui';
@@ -19,45 +22,57 @@ import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import vitestPlugin from 'eslint-plugin-vitest';
+
+// Compatibility layer for traditional configs
 const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
 
 export default defineConfig([
+  // Commonly ignores
   {
     ignores: [
+      // Build and dependency directories
       '**/node_modules/*',
       '**/dist',
-      '**/*.config.{js,mjs,ts,mts}',
-      '**/*.setup.ts',
       '**/.netlify',
-      'packages/nouns-subgraph/src/types/*',
+
+      // Configuration files
+      '**/*.config.{js,mjs,ts,mts}',
+      '**/*.setup.{js,mjs,ts,mts}',
+
+      // Generated code (use a more consistent pattern)
+      '**/typechain/**',
+      '**/src/{types,contracts,subgraphs}/**',
     ],
   },
+
+  // Base TypeScript configuration for all TypeScript files
   {
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       sourceType: 'module',
-
-      parserOptions: {
-        project: true,
-      },
-
+      ecmaVersion: 2020,
       globals: {
         ...globals.node,
       },
+      parserOptions: {
+        // Enable project service for better TypeScript integration
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-
     plugins: {
       '@typescript-eslint': typescriptEslintEslintPlugin,
+      import: importPlugin,
+      lingui: linguiPlugin,
+      prettier: prettierPlugin,
+      sonarjs: sonarjsPlugin,
       turbo: turboPlugin,
       unicorn: unicornPlugin,
       vitest: vitestPlugin,
-      import: importPlugin,
-      lingui: linguiPlugin,
-      sonarjs: sonarjsPlugin,
-      prettier: prettierPlugin,
     },
     extends: [
       ...tseslint.configs.recommended,
@@ -115,8 +130,11 @@ export default defineConfig([
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
+      // Unicorn plugin rules
+      'unicorn/better-regex': 'error',
+      'unicorn/no-nested-ternary': 'error',
       // Prettier rules
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'warn',
     },
     settings: {
       'import/parsers': {
@@ -145,7 +163,13 @@ export default defineConfig([
       'react-refresh': reactRefreshPlugin,
       prettier: prettierPlugin,
     },
-    extends: [...compat.extends('plugin:react/recommended', 'plugin:prettier/recommended')],
+    extends: [
+      ...compat.extends(
+        'plugin:react/recommended',
+        'plugin:prettier/recommended',
+      ),
+      eslintReactPlugin.configs['recommended-typescript'],
+    ],
     rules: {
       // React hooks rules
       'react-hooks/rules-of-hooks': 'error',
@@ -156,6 +180,8 @@ export default defineConfig([
       'react/jsx-uses-vars': 'error',
       'react/prop-types': 'error',
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
+      // ESLint React rules
+      '@eslint-react/no-class-component': 'error',
       // Prettier rules
       'prettier/prettier': 'error',
     },
@@ -183,7 +209,7 @@ export default defineConfig([
       'import/namespace': 'error',
       'import/export': 'error',
       // Prettier rules
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'warn',
     },
   },
 
