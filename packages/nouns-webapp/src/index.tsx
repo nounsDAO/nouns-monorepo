@@ -109,10 +109,6 @@ const ChainSubscriber: React.FC = () => {
       ),
     );
   };
-  const processAuctionSettled = (nounId: bigint, winner: Address, amount: bigint) => {
-    dispatch(setAuctionSettled({ nounId, amount, winner }));
-  };
-
   // Fetch the current auction
   const { data: currentAuction } = useReadNounsAuctionHouseAuction();
   useEffect(() => {
@@ -207,7 +203,14 @@ const ChainSubscriber: React.FC = () => {
   useWatchNounsAuctionHouseAuctionSettledEvent({
     onLogs: logs => {
       for (const log of logs) {
-        processAuctionSettled(...(log.args as [bigint, Address, bigint]));
+        const { amount, winner, nounId } = log.args;
+        dispatch(
+          setAuctionSettled({
+            nounId: Number(nounId),
+            amount: Number(amount),
+            winner: winner as Address,
+          }),
+        );
       }
     },
   });
