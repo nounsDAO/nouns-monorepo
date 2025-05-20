@@ -109,9 +109,6 @@ const ChainSubscriber: React.FC = () => {
       ),
     );
   };
-  const processAuctionExtended = (nounId: bigint, endTime: bigint) => {
-    dispatch(setAuctionExtended({ nounId, endTime }));
-  };
   const processAuctionSettled = (nounId: bigint, winner: Address, amount: bigint) => {
     dispatch(setAuctionSettled({ nounId, amount, winner }));
   };
@@ -195,7 +192,13 @@ const ChainSubscriber: React.FC = () => {
   useWatchNounsAuctionHouseAuctionExtendedEvent({
     onLogs: logs => {
       for (const log of logs) {
-        processAuctionExtended(...(log.args as [bigint, bigint]));
+        const { endTime, nounId } = log.args;
+        dispatch(
+          setAuctionExtended({
+            nounId: Number(nounId),
+            endTime: Number(endTime),
+          }),
+        );
       }
     },
   });
