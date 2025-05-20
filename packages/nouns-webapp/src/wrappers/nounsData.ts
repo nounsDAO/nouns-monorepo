@@ -238,7 +238,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     allSigners ? deDupeSigners(allSigners) : [],
     blockNumber ?? 0n,
   );
-  const updatableProposalIds = useUpdatableProposalIds(Number(blockNumber) ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber);
   const candidatesData =
     proposerDelegates.data &&
     unmatchedCandidates?.map(candidate => {

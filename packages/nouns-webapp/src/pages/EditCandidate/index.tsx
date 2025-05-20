@@ -47,10 +47,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const [commitMessage, setCommitMessage] = useState<string>('');
-  const [currentBlock, setCurrentBlock] = useState<bigint>();
   const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, Number(currentBlock)); // get updatable transaction details
+  const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
@@ -61,14 +61,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
-  const { data: blockNumber } = useBlockNumber();
-
-  useEffect(() => {
-    // prevent live-updating the block resulting in undefined block number
-    if (blockNumber && !currentBlock) {
-      setCurrentBlock(blockNumber);
-    }
-  }, [blockNumber, currentBlock]);
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {

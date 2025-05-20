@@ -1501,7 +1501,7 @@ export function useIsDaoGteV3(): boolean {
   return true;
 }
 
-export function useUpdatableProposalIds(blockNumber: bigint) {
+export function useUpdatableProposalIds(blockNumber?: bigint) {
   const { query, variables } = updatableProposalsQuery(1000, blockNumber);
   const {
     loading,
