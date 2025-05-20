@@ -13,8 +13,8 @@ const activeChain =
     find(chain => chain.id === activeChainId),
   ) ?? sepolia;
 
-const mainnetRpcUrl = process.env.VITE_MAINNET_JSONRPC ?? '';
-const sepoliaRpcUrl = process.env.VITE_SEPOLIA_JSONRPC ?? '';
+const mainnetRpcUrl = import.meta.env.VITE_MAINNET_JSONRPC ?? '';
+const sepoliaRpcUrl = import.meta.env.VITE_SEPOLIA_JSONRPC ?? '';
 
 export const config = createConfig({
   chains: [activeChain],
