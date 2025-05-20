@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import { Auction as IAuction } from '@/wrappers/nounsAuction';
 
 import {
   AuctionCreateEvent,
