@@ -430,7 +430,7 @@ const VotePage = () => {
   }, {});
 
   const data = voters?.votes?.map(v => ({
-    delegate: v.voter.id,
+    delegate: v.voter.id as Address,
     supportDetailed: v.supportDetailed,
     nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
   }));

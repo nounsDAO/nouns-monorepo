@@ -4,13 +4,14 @@ import { usePublicClient } from 'wagmi';
 
 import { cache, cacheKey, CHAIN_ID } from '@/config';
 
+import { Address } from '@/utils/types';
 import { lookupNNSOrENS } from './lookupNNSOrENS';
 
 export const ensCacheKey = (address: string) => {
   return cacheKey(cache.ens, CHAIN_ID, address);
 };
 
-export const useReverseENSLookUp = (address: string) => {
+export const useReverseENSLookUp = (address: Address) => {
   const publicClient = usePublicClient();
   const [ens, setEns] = useState<string>();
 

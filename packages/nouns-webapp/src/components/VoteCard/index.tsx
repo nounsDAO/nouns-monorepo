@@ -11,6 +11,7 @@ import VoteProgressBar from '@/components/VoteProgressBar';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { ensCacheKey } from '@/utils/ensLookup';
 import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
+import { Address } from '@/utils/types';
 import { Proposal } from '@/wrappers/nounsDao';
 
 import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
@@ -32,7 +33,7 @@ interface VoteCardProps {
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
-    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | { delegate: Address; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
     | undefined;
 }
 
@@ -78,7 +79,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
       return;
     }
 
-    delegateGroupedVoteData.forEach((delegateInfo: { delegate: string }) => {
+    delegateGroupedVoteData.forEach((delegateInfo: { delegate: Address }) => {
       if (localStorage.getItem(ensCacheKey(delegateInfo.delegate))) {
         return;
       }
