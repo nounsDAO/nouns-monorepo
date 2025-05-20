@@ -189,6 +189,7 @@ const CreateProposalPage = () => {
           proposalTransactions.map(({ signature }) => signature), // Signatures
           proposalTransactions.map(({ calldata }) => calldata), // Calldatas
           `# ${titleValue}\n\n${bodyValue}`, // Description
+          0,
         ],
       });
     }
