@@ -47,7 +47,10 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
       }
 
       try {
-        return !!abi?._encodeParams(abi?.functions[func]?.inputs, parseArguments(abi, func, a));
+        return !!abi?._encodeParams(
+          abi?.functions[func]?.inputs,
+          parseArguments(abi, func, a).map(a => a === 'false' ? false : a) ?? [],
+        );
       } catch {
         setInvalidArgument(true);
         return false;
