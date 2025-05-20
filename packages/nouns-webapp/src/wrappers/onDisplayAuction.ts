@@ -39,13 +39,9 @@ const useOnDisplayAuction = (): Auction | undefined => {
   const currentAuction = useAppSelector(state => state.auction.activeAuction);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  if (
-    onDisplayAuctionNounId === undefined ||
-    lastAuctionNounId === undefined ||
-    currentAuction === undefined ||
-    !pastAuctions
-  )
+  if (!onDisplayAuctionNounId || !lastAuctionNounId || !currentAuction || !pastAuctions) {
     return undefined;
+  }
 
   // current auction
   if (BigInt(onDisplayAuctionNounId) === lastAuctionNounId) {
