@@ -358,7 +358,7 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
 };
 
 export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | undefined {
-  // @ts-ignore
+  // @ts-expect-error wagmi hook's return type might be inferred incorrectly or too broadly
   const { data } = useReadNounsGovernorGetDynamicQuorumParamsAt({
     args: [block],
   });
@@ -374,7 +374,9 @@ export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | unde
 
 export function useHasVotedOnProposal(proposalId: bigint): boolean {
   const { address } = useAccount();
-  // @ts-ignore
+  /**
+   * @ts-expect-error wagmi hook's argument types might be inferred incorrectly
+   */
   const { data: receipt } = useReadNounsGovernorGetReceipt({
     args: [proposalId, address!],
     query: { enabled: Boolean(proposalId && address) },
@@ -387,7 +389,9 @@ export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstai
   const { address } = useAccount();
   const enabled = Boolean(proposalId) && Boolean(address);
 
-  // @ts-ignore
+  /**
+   * @ts-expect-error wagmi hook's return type might be inferred incorrectly or too broadly
+   */
   const { data: receipt } = useReadNounsGovernorGetReceipt({
     args: [proposalId, address!],
     query: { enabled },
