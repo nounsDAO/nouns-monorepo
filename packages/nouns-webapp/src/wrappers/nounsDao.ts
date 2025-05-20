@@ -1467,7 +1467,7 @@ export function useForkThresholdBPS(): number | undefined {
   return data ? Number(data) : undefined;
 }
 
-export const useActivePendingUpdatableProposers = (blockNumber: number) => {
+export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => {
   const { query, variables } = activePendingUpdatableProposersQuery(1000, blockNumber);
   const {
     loading,
@@ -1501,7 +1501,7 @@ export function useIsDaoGteV3(): boolean {
   return true;
 }
 
-export function useUpdatableProposalIds(blockNumber: number) {
+export function useUpdatableProposalIds(blockNumber: bigint) {
   const { query, variables } = updatableProposalsQuery(1000, blockNumber);
   const {
     loading,

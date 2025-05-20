@@ -26,14 +26,14 @@ interface CandidateSponsorsProps {
   id: string;
   handleRefetchCandidateData: () => void;
   setDataFetchPollInterval: (interval: number | null) => void;
-  currentBlock: number;
+  currentBlock: bigint;
   requiredVotes: number;
   userVotes: number;
   isSignerWithActiveOrPendingProposal?: boolean;
   latestProposal?: Proposal;
   isUpdateToProposal?: boolean;
   originalProposal?: Proposal;
-  blockNumber?: number;
+  blockNumber?: bigint;
 }
 
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
@@ -44,7 +44,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [isOriginalSigner, setIsOriginalSigner] = useState<boolean>(false);
   const [isThresholdMet, setIsThresholdMet] = React.useState<boolean>(false);
   const { address: account } = useAccount();
-  const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber ?? 0);
+  const activePendingProposers = useActivePendingUpdatableProposers(props.blockNumber);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const originalSigners = props.originalProposal?.signers.map(signer => signer.id.toLowerCase());
   const originalSignersDelegateSnapshot = useDelegateNounsAtBlockQuery(
@@ -116,7 +116,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         signatures={props.candidate.version.content.contentSignatures}
         requiredVotes={props.candidate.requiredVotes}
         candidate={props.candidate}
-        blockNumber={props.blockNumber ?? 0}
+        blockNumber={props.blockNumber}
         setDataFetchPollInterval={props.setDataFetchPollInterval}
         handleRefetchCandidateData={props.handleRefetchCandidateData}
       />

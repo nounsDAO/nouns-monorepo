@@ -9,6 +9,7 @@ import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { Link, useParams } from 'react-router';
+import { first } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateSponsors from '@/components/CandidateSponsors';
@@ -26,7 +27,6 @@ import {
   useProposalThreshold,
 } from '@/wrappers/nounsDao';
 import {
-  ProposalCandidate,
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
@@ -44,20 +44,19 @@ const CandidatePage = () => {
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
-  const [currentBlock, setCurrentBlock] = useState<number>();
   const [isSignerWithActiveOrPendingProposal, setIsSignerWithActiveOrPendingProposal] = useState<
     boolean | undefined
   >(undefined);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
-  const { data: blockNumber } = useBlockNumber();
+  const { data: currentBlock } = useBlockNumber({ watch: true });
   const { data: candidate, refetch: candidateRefetch } = useCandidateProposal(
     id ?? '',
     dataFetchPollInterval,
     false,
     currentBlock,
-  ) as { data: ProposalCandidate & { proposalIdToUpdate?: number }; refetch: any };
+  );
   const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -71,13 +70,6 @@ const CandidatePage = () => {
   const handleRefetchData = () => {
     feedback.refetch();
   };
-
-  useEffect(() => {
-    // prevent live-updating the block resulting in undefined block number
-    if (blockNumber && !currentBlock) {
-      setCurrentBlock(Number(blockNumber));
-    }
-  }, [blockNumber, currentBlock]);
 
   useEffect(() => {
     if (candidate && account) {
@@ -174,6 +166,8 @@ const CandidatePage = () => {
     };
   })();
 
+  const primaryProposalId = first(candidate?.matchingProposalIds ?? []);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {/* notice for proposal updates */}
@@ -195,8 +189,8 @@ const CandidatePage = () => {
             <strong>Note: </strong>
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
-          {candidate?.matchingProposalIds?.[0] && (
-            <Link to={`/vote/${candidate?.matchingProposalIds[0]}`}>View the proposal here</Link>
+          {primaryProposalId && (
+            <Link to={`/vote/${primaryProposalId}`}>View the proposal here</Link>
           )}
         </Alert>
       )}
@@ -265,31 +259,28 @@ const CandidatePage = () => {
             <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col id="feedback" lg={4} className={classes.sidebar}>
-            {currentBlock &&
-              threshold !== undefined &&
-              userVotes !== undefined &&
-              !candidate.isProposal && (
-                <CandidateSponsors
-                  candidate={candidate}
-                  slug={candidate.slug ?? ''}
-                  id={candidate.id}
-                  isProposer={isProposer}
-                  handleRefetchCandidateData={handleRefetchCandidateData}
-                  setDataFetchPollInterval={(interval: number | null) =>
-                    interval !== null
-                      ? setDataFetchPollInterval(interval)
-                      : setDataFetchPollInterval(0)
-                  }
-                  currentBlock={currentBlock - 1}
-                  requiredVotes={threshold + 1}
-                  userVotes={userVotes}
-                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                  latestProposal={latestProposal}
-                  isUpdateToProposal={isUpdateToProposal}
-                  originalProposal={originalProposal}
-                  blockNumber={Number(blockNumber)}
-                />
-              )}
+            {!!currentBlock && !!threshold && !!userVotes && !candidate.isProposal && (
+              <CandidateSponsors
+                candidate={candidate}
+                slug={candidate.slug ?? ''}
+                id={candidate.id}
+                isProposer={isProposer}
+                handleRefetchCandidateData={handleRefetchCandidateData}
+                setDataFetchPollInterval={(interval: number | null) =>
+                  interval !== null
+                    ? setDataFetchPollInterval(interval)
+                    : setDataFetchPollInterval(0)
+                }
+                currentBlock={currentBlock - 1n}
+                requiredVotes={threshold + 1}
+                userVotes={userVotes}
+                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                latestProposal={latestProposal}
+                isUpdateToProposal={isUpdateToProposal}
+                originalProposal={originalProposal}
+                blockNumber={currentBlock}
+              />
+            )}
             <VoteSignals
               proposalId={candidate.id}
               proposer={candidate.proposer}

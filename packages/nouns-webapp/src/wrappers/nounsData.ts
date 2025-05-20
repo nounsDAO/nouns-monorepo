@@ -230,7 +230,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     blockNumber ?? 0n,
   );
   const threshold = useProposalThreshold() || 0;
-  const activePendingProposers = useActivePendingUpdatableProposers(Number(blockNumber) ?? 0);
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const allSigners = unmatchedCandidates
     ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
     .flat();
@@ -269,7 +269,7 @@ export const useCandidateProposal = (
   id: string,
   pollInterval: number = 0,
   toUpdate?: boolean,
-  blockNumber?: number,
+  blockNumber?: bigint,
 ) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { query, variables } = candidateProposalQuery(id);
@@ -279,7 +279,7 @@ export const useCandidateProposal = (
     pollInterval,
     variables,
   });
-  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const threshold = useProposalThreshold() || 0;
   const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
   const allSigners = versionSignatures?.map(
@@ -295,7 +295,7 @@ export const useCandidateProposal = (
     allSigners ? deDupeSigners(allSigners) : [],
     BigInt(blockNumber ?? 0),
   );
-  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber);
 
   const candidate = data?.proposalCandidate ?? undefined;
 
@@ -647,9 +647,7 @@ const parseSubgraphCandidate = (
     createdTransactionHash: candidate.createdTransactionHash as Hash,
     isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
     matchingProposalIds: isNonNullish(latestVersion.content.matchingProposalIds)
-      ? map(latestVersion.content.matchingProposalIds, v => ({
-          id: Number(v),
-        }))
+      ? map(latestVersion.content.matchingProposalIds, v => Number(v))
       : undefined,
     requiredVotes: requiredVotes,
     proposalIdToUpdate: Number(latestVersion.content.proposalIdToUpdate),
@@ -828,9 +826,7 @@ export interface ProposalCandidateInfo {
   proposerVotes: number;
   neededVotes?: number;
   voteCount: number;
-  matchingProposalIds?: {
-    id: number;
-  }[];
+  matchingProposalIds?: number[];
 }
 
 export interface ProposalCandidateVersionContent {

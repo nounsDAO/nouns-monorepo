@@ -20,7 +20,7 @@ type Props = {
   signatures: CandidateSignature[];
   requiredVotes: number;
   candidate: ProposalCandidate;
-  blockNumber?: number;
+  blockNumber?: bigint;
   setIsModalOpen: (isOpen: boolean) => void;
   handleRefetchCandidateData: () => void;
   setDataFetchPollInterval: (interval: number) => void;

@@ -142,7 +142,7 @@ export const partialProposalsQuery = (first = 1_000) => ({
   variables: { first },
 });
 
-export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => ({
+export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock: bigint = 0n) => ({
   query: gql`
     query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {
       proposals(
@@ -163,10 +163,10 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
       }
     }
   `,
-  variables: { first, currentBlock: currentBlock || 0 },
+  variables: { first, currentBlock },
 });
 
-export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => ({
+export const updatableProposalsQuery = (first = 1_000, currentBlock: bigint = 0n) => ({
   query: gql`
     query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {
       proposals(
