@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,12 +35,13 @@ import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
 import { setAlertModal } from '@/state/slices/application';
+import { defaultChain } from '@/wagmi';
 
 import classes from './App.module.css';
 
 function App() {
   const { address: account } = useAccount();
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);

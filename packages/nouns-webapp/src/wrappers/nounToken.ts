@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { useQuery } from '@apollo/client';
 import { zeroAddress } from 'viem';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import {
   nounsGovernorAddress,
@@ -18,6 +18,7 @@ import {
   useWriteNounsTokenDelegate,
   useWriteNounsTokenSetApprovalForAll,
 } from '@/contracts';
+import { defaultChain } from '@/wagmi';
 
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 
@@ -218,7 +219,7 @@ export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => 
 };
 
 export const useSetApprovalForAll = () => {
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
   const {
     writeContractAsync,
     data,

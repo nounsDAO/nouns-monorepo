@@ -6,7 +6,6 @@ import { Alert, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
 import { formatEther } from 'viem';
-import { useChainId } from 'wagmi';
 
 import CreateCandidateButton from '@/components/CreateCandidateButton';
 import ProposalActionModal from '@/components/ProposalActionsModal';
@@ -18,6 +17,7 @@ import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
@@ -36,14 +36,14 @@ const CreateCandidatePage = () => {
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-  const ethNeeded = useEthNeeded(nounsTokenBuyerAddress[useChainId()], totalUSDCPayment);
+  const chainId = defaultChain.id;
+  const ethNeeded = useEthNeeded(nounsTokenBuyerAddress[chainId], totalUSDCPayment);
   const createCandidateCost = useGetCreateCandidateCost();
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const hasVotes = availableVotes && availableVotes > 0;
-  const chainId = useChainId();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {

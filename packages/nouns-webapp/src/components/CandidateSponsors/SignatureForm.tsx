@@ -14,7 +14,7 @@ import {
   keccak256,
   toBytes,
 } from 'viem';
-import { useChainId, useSignTypedData } from 'wagmi';
+import { useSignTypedData } from 'wagmi';
 
 import link from '@/assets/icons/Link.svg';
 import { CHAIN_ID } from '@/config';
@@ -24,6 +24,7 @@ import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
 
 import classes from './CandidateSponsors.module.css';
 import { nounsGovernorAddress } from '@/contracts';
+import { defaultChain } from '@/wagmi';
 
 const createProposalTypes = {
   Proposal: [
@@ -75,7 +76,8 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
 
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
+
   const [domain, setDomain] = useState({
     name: 'Nouns DAO',
     chainId: CHAIN_ID,

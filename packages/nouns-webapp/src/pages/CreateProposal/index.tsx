@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import { useAppDispatch } from '@/hooks';
 import CreateProposalButton from '@/components/CreateProposalButton';
@@ -34,6 +34,7 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
+import { defaultChain } from '@/wagmi';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -64,7 +65,7 @@ const CreateProposalPage = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
   );
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {

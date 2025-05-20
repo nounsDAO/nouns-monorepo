@@ -28,7 +28,8 @@ import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useBlockNumber, useChainId } from 'wagmi';
+import { useAccount, useBlockNumber } from 'wagmi';
+import { defaultChain } from '@/wagmi';
 
 interface EditCandidateProps {
   match: {
@@ -61,6 +62,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
+  const chainId = defaultChain.id;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -110,7 +112,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: nounsTokenBuyerAddress[useChainId()],
+          address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
           calldata: '0x',
           signature: '',

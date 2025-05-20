@@ -11,7 +11,7 @@ import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'r
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
-import { useChainId, usePublicClient, WagmiProvider } from 'wagmi';
+import { usePublicClient, WagmiProvider } from 'wagmi';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -45,7 +45,7 @@ import onDisplayAuction, {
 } from './state/slices/onDisplayAuction';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import { nounPath } from './utils/history';
-import { config as wagmiConfig } from './wagmi';
+import { config as wagmiConfig, defaultChain } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
@@ -65,8 +65,7 @@ export function configureStore(preloadedState: PreloadedState<any>) {
     createRootReducer(), // root reducer without router state
     preloadedState,
     composeWithDevTools(
-      applyMiddleware(),
-      // ... other middlewares ...
+      applyMiddleware(), // ... other middlewares ...
     ),
   );
 }
@@ -81,7 +80,7 @@ const client = clientFactory(config.app.subgraphApiUri);
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
   const publicClient = usePublicClient();
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   // Fetch the current auction
   const { data: currentAuction } = useReadNounsAuctionHouseAuction();

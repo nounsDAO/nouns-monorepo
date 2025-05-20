@@ -11,7 +11,17 @@ import type {
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { filter, flatMap, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
+import {
+  filter,
+  flatMap,
+  forEach,
+  isNonNullish,
+  isNullish,
+  isTruthy,
+  map,
+  pipe,
+  sort,
+} from 'remeda';
 import {
   AbiParameter,
   decodeAbiParameters,
@@ -45,11 +55,11 @@ import {
   useReadNounsGovernorAdjustedTotalSupply,
   useReadNounsGovernorForkThreshold,
   useReadNounsGovernorForkThresholdBps,
+  useReadNounsGovernorGetDynamicQuorumParamsAt,
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorNumTokensInForkEscrow,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
-  useReadNounsGovernorGetDynamicQuorumParamsAt,
   useWriteNounsGovernorCancel,
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
@@ -66,8 +76,9 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount, useBlockNumber, useChainId, usePublicClient, useReadContracts } from 'wagmi';
+import { useAccount, useBlockNumber, usePublicClient, useReadContracts } from 'wagmi';
 import { mainnet } from 'viem/chains';
+import { defaultChain } from '@/wagmi';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -495,8 +506,8 @@ export const formatProposalTransactionDetailsToUpdate = (details: {
   }));
 
 export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride?: number) {
-  const publicClient = usePublicClient(); // wagmi v2 public client :contentReference[oaicite:0]{index=0}
-  const chainId = useChainId();
+  const publicClient = usePublicClient();
+  const chainId = defaultChain.id;
 
   const proposalCreatedEvent = parseAbiItem(
     'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
@@ -729,7 +740,7 @@ export const useAllProposalsViaSubgraph = (): PartialProposalData => {
 export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
   const proposalCount = useProposalCount();
   const govProposalIndexes = useMemo(() => countToIndices(proposalCount), [proposalCount]);
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   const proposalCalls = useMemo(
     () =>
@@ -1480,9 +1491,9 @@ export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => 
   };
   const data: string[] = [];
   if (proposals?.proposals.length > 0) {
-    proposals.proposals.map(proposal => {
+    forEach(proposals.proposals, proposal => {
       data.push(proposal.proposer.id);
-      proposal.signers.map((signer: { id: string }) => {
+      forEach(proposal.signers, (signer: { id: string }) => {
         data.push(signer.id);
         return signer.id;
       });

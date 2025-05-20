@@ -29,8 +29,9 @@ import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Address, Hex } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 
 interface EditProposalProps {
   match: {
@@ -73,12 +74,12 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[useChainId()],
+    nounsTokenBuyerAddress[chainId],
     totalUSDCPayment,
-    nounsTokenBuyerAddress[useChainId()] === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] === undefined || totalUSDCPayment === 0,
   );
-  const chainId = useChainId();
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
@@ -131,8 +132,8 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId])
-          .length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length >
+        0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
