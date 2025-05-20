@@ -43,6 +43,7 @@ const CreateCandidatePage = () => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const hasVotes = availableVotes && availableVotes > 0;
+  const chainId = useChainId();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -77,13 +78,13 @@ const CreateCandidatePage = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyerTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[useChainId()])
-          .length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length >
+        0;
 
       // Add a new top-up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyerTopTop) {
         handleAddProposalAction({
-          address: nounsTokenBuyerAddress[useChainId()],
+          address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
           calldata: '0x' as Hex,
           signature: '',
@@ -93,7 +94,7 @@ const CreateCandidatePage = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === nounsTokenBuyerAddress[useChainId()]) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;
@@ -112,6 +113,7 @@ const CreateCandidatePage = () => {
       setTokenBuyerTopUpETH(ethNeeded ?? '0');
     }
   }, [
+    chainId,
     ethNeeded,
     handleAddProposalAction,
     handleRemoveProposalAction,
