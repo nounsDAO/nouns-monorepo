@@ -46,7 +46,7 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
           className={classes.currentBid}
           style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
-          {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid as bigint} />}
+          {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid} />}
         </h2>
       </Col>
     </Row>
