@@ -82,7 +82,7 @@
     "solidity-coverage": "0.8.16",
     "terser": "^5.39.0",
     "ts-node": "^10.9.2",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.0",
     "typechain": "^8.0.0"
   }
 }
