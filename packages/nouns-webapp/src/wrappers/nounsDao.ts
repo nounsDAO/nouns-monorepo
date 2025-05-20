@@ -301,7 +301,7 @@ export interface ForkSubgraphEntity {
 }
 
 const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
-const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
+const equalTitleRegex = /^\s*([^\n]{1,256})\r?\n(?:={3,25}|-{3,25})/;
 
 /**
  * Extract a markdown title from a proposal body that uses the `# Title` format
