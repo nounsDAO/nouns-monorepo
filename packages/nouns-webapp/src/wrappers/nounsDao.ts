@@ -211,19 +211,6 @@ export interface PartialProposalSubgraphEntity {
   signers: { id: Address }[];
 }
 
-export interface ProposalSubgraphEntity
-  extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
-  description: string;
-  createdBlock: bigint;
-  createdTransactionHash: Hash;
-  createdTimestamp: bigint;
-  proposer: { id: Address };
-  proposalThreshold: bigint;
-  onTimelockV1: boolean;
-  voteSnapshotBlock: bigint;
-}
-
 interface PartialProposalData {
   data: PartialProposal[] | undefined;
   error?: Error;
