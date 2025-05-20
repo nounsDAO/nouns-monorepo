@@ -319,7 +319,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesBps={Math.floor(
-            (againstVotesAbsolute / data.proposals[0].adjustedTotalSupply) * 10_000,
+            (againstVotesAbsolute / Number(data?.proposals?.[0]?.adjustedTotalSupply)) * 10_000,
           )}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
@@ -331,7 +331,7 @@ const DynamicQuorumInfoModal: React.FC<{
           }
           onDismiss={onDismiss}
           proposal={proposal}
-          totalNounSupply={data.proposals[0].adjustedTotalSupply}
+          totalNounSupply={Number(data?.proposals?.[0]?.adjustedTotalSupply)}
           currentQuorum={currentQuorum}
         />,
         document.getElementById('overlay-root')!,
