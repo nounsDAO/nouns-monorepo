@@ -68,7 +68,7 @@
     "react-swipeable": "^7.0.0",
     "react-tooltip": "^4.5.1",
     "react-transition-group": "^4.4.5",
-    "redux": "^4.1.0",
+    "redux": "^5.0.1",
     "redux-devtools-extension": "^2.13.9",
     "remark-breaks": "^3.0.3",
     "remeda": "^2.21.8",
