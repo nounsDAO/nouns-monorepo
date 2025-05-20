@@ -62,6 +62,7 @@ const CreateProposalPage = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
   );
+  const chainId = useChainId();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -108,7 +109,7 @@ const CreateProposalPage = () => {
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: nounsTokenBuyerAddress[useChainId()],
+          address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
           calldata: '0x' as Hex,
           signature: '',
