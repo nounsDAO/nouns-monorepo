@@ -22,6 +22,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@wagmi/connectors": "^5.8.3",
     "@apollo/client": "^3.3.21",
     "@ethersproject/providers": "^5.8.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
