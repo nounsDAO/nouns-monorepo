@@ -267,7 +267,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
 
 export const useCandidateProposal = (
   id: string,
-  pollInterval?: number = 0,
+  pollInterval: number = 0,
   toUpdate?: boolean,
   blockNumber?: number,
 ) => {
@@ -486,7 +486,7 @@ export const useSendFeedback = () => {
   };
 };
 
-export const useProposalFeedback = (id: string, pollInterval?: number = 0) => {
+export const useProposalFeedback = (id: string, pollInterval: number = 0) => {
   const { query, variables } = proposalFeedbacksQuery(id);
   const { loading, data, error, refetch } = useQuery<{
     proposalFeedbacks: Maybe<GraphQLProposalFeedback[]>;

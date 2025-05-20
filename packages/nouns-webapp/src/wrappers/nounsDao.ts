@@ -1390,7 +1390,7 @@ export const useForkDetails = (pollInterval: number, id: string) => {
   };
 };
 
-export const useForks = (pollInterval?: number = 0) => {
+export const useForks = (pollInterval: number = 0) => {
   const { query, variables } = forksQuery();
   const { loading, data, error, refetch } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(query, {
     pollInterval,
@@ -1467,7 +1467,7 @@ export function useForkThresholdBPS(): number | undefined {
 }
 
 export const useActivePendingUpdatableProposers = (blockNumber: number) => {
-  const { query } = activePendingUpdatableProposersQuery(1000, blockNumber);
+  const { query,variables } = activePendingUpdatableProposersQuery(1000, blockNumber);
   const {
     loading,
     data: proposals,

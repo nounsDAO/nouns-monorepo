@@ -73,13 +73,18 @@ export type NounProfileEventFetcherResponse = {
  * @param nounId Id of Noun who's voting history will be fetched
  */
 const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery<{ noun: Maybe<Noun> }>(nounVotingHistoryQuery(nounId));
+  const { query, variables } = nounVotingHistoryQuery(nounId);
+  const { loading, error, data } = useQuery<{ noun: Maybe<Noun> }>(query, { variables });
 
+  const { query: proposalTimestampQuery, variables: proposalTimestampVariables } =
+    createTimestampAllProposals();
   const {
     loading: proposalTimestampLoading,
     error: proposalTimestampError,
     data: proposalCreatedTimestamps,
-  } = useQuery<{ proposals: Maybe<Proposal[]> }>(createTimestampAllProposals());
+  } = useQuery<{ proposals: Maybe<Proposal[]> }>(proposalTimestampQuery, {
+    variables: proposalTimestampVariables,
+  });
 
   const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
 
@@ -165,9 +170,10 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { query,variables } = nounTransferHistoryQuery(nounId);
+  const { query, variables } = nounTransferHistoryQuery(nounId);
   const { loading, error, data } = useQuery<{ transferEvents: Maybe<GraphQLTransferEvent[]> }>(
-    query,{variables}
+    query,
+    { variables },
   );
   if (loading) {
     return {
@@ -205,9 +211,10 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { query,variables } = nounDelegationHistoryQuery(nounId);
+  const { query, variables } = nounDelegationHistoryQuery(nounId);
   const { loading, error, data } = useQuery<{ delegationEvents: Maybe<GraphQLDelegationEvent[]> }>(
-    query,{variables}
+    query,
+    { variables },
   );
   if (loading) {
     return {
