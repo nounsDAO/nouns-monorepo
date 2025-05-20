@@ -1,6 +1,27 @@
 import { ApolloClient, ApolloLink, gql, HttpLink, InMemoryCache } from '@apollo/client';
 import { BigNumberish } from '@/utils/types';
 
+export const clientFactory = (uri: string) => {
+  // patch BigInt JSON serialization (runs once)
+  if (typeof BigInt !== 'undefined' && !(BigInt.prototype as any).toJSON) {
+    (BigInt.prototype as any).toJSON = function () {
+      return this.toString();
+    };
+  }
+
+  // scrub nested BigInts even before cache
+  const scrubBigIntLink = new ApolloLink((operation, forward) =>
+    forward(operation)!.map(result =>
+      JSON.parse(JSON.stringify(result, (_k, v) => (typeof v === 'bigint' ? v.toString() : v))),
+    ),
+  );
+
+  return new ApolloClient({
+    link: ApolloLink.from([scrubBigIntLink, new HttpLink({ uri })]),
+    cache: new InMemoryCache(),
+  });
+};
+
 export interface IBid {
   id: string;
   bidder: {
@@ -598,13 +619,6 @@ export const propUsingDynamicQuorum = (proposalId: string) => ({
   `,
   variables: { proposalId },
 });
-
-export const clientFactory = (uri: string) => {
-  return new ApolloClient({
-    uri,
-    cache: new InMemoryCache(),
-  });
-};
 
 export const proposalFeedbacksQuery = (proposalId: string) => ({
   query: gql`
