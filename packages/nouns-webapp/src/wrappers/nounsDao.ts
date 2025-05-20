@@ -333,9 +333,14 @@ const extractEqualTitle = (body: string) => RegExp(equalTitleRegex).exec(body);
  */
 export const extractTitle = (body: string | undefined): string | null => {
   if (!body) return null;
+
   const hashResult = extractHashTitle(body);
+  if (hashResult && hashResult[1]) {
+    return hashResult[1];
+  }
+
   const equalResult = extractEqualTitle(body);
-  return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
+  return equalResult && equalResult[1] ? equalResult[1] : null;
 };
 
 const removeBold = (text: string): string => text.replace(/\*\*/g, '');
