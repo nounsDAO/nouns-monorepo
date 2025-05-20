@@ -109,13 +109,6 @@ const ChainSubscriber: React.FC = () => {
       ),
     );
   };
-  const processAuctionCreated = (nounId: bigint, startTime: bigint, endTime: bigint) => {
-    dispatch(setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })));
-    const nounIdNumber = Number(BigInt(nounId));
-    window.location.href = nounPath(nounIdNumber);
-    dispatch(setOnDisplayAuctionNounId(nounIdNumber));
-    dispatch(setLastAuctionNounId(nounIdNumber));
-  };
   const processAuctionExtended = (nounId: bigint, endTime: bigint) => {
     dispatch(setAuctionExtended({ nounId, endTime }));
   };
@@ -179,7 +172,21 @@ const ChainSubscriber: React.FC = () => {
   useWatchNounsAuctionHouseAuctionCreatedEvent({
     onLogs: logs => {
       for (const log of logs) {
-        processAuctionCreated(...(log.args as [bigint, bigint, bigint]));
+        const { startTime, endTime, nounId } = log.args;
+        dispatch(
+          setActiveAuction(
+            reduxSafeNewAuction({
+              nounId: Number(nounId),
+              startTime: Number(startTime),
+              endTime: Number(endTime),
+              settled: false,
+            }),
+          ),
+        );
+        const nounIdNumber = Number(nounId);
+        window.location.href = nounPath(nounIdNumber);
+        dispatch(setOnDisplayAuctionNounId(nounIdNumber));
+        dispatch(setLastAuctionNounId(nounIdNumber));
       }
     },
   });
