@@ -23,8 +23,10 @@ interface NounHoverCardProps {
 const NounHoverCard: React.FC<NounHoverCardProps> = props => {
   const { nounId } = props;
 
-  const { loading, error, data } = useQuery(nounQuery(nounId), {
+  const { query, variables } = nounQuery(nounId);
+  const { loading, error, data } = useQuery(query, {
     skip: nounId == null,
+    variables,
   });
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);

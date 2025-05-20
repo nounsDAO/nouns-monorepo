@@ -22,7 +22,8 @@ interface NounInfoRowHolderProps {
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { loading, error, data } = useQuery(auctionQuery(Number(nounId)));
+  const { query,variables } = auctionQuery(Number(nounId));
+  const { loading, error, data } = useQuery(query,{variables});
 
   const winner = data && data.auction.bidder?.id;
 

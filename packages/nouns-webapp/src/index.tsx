@@ -207,7 +207,10 @@ const ChainSubscriber: React.FC = () => {
 
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const { data } = useQuery(latestAuctionsQuery());
+
+  const { query, variables } = latestAuctionsQuery();
+  const { data } = useQuery(query, { variables });
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {

@@ -59,8 +59,10 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
 const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
-  const { data } = useQuery<{ seeds: Seed[] }>(seedsQuery(), {
+  const { query, variables } = seedsQuery();
+  const { data } = useQuery<{ seeds: Seed[] }>(query, {
     skip: !!cachedSeeds,
+    variables,
   });
 
   useEffect(() => {
@@ -186,22 +188,23 @@ export const useNounTokenBalance = (address: Address): number | undefined => {
 };
 export const useUserOwnedNounIds = (pollInterval: number) => {
   const { address } = useAccount();
-  const { loading, data, error, refetch } = useQuery<{ nouns: Noun[] }>(
-    ownedNounsQuery(address?.toLowerCase() ?? ''),
-    {
-      pollInterval: pollInterval,
-    },
-  );
+  const { query, variables } = ownedNounsQuery(address?.toLowerCase() ?? '');
+  const { loading, data, error, refetch } = useQuery<{ nouns: Noun[] }>(query, {
+    pollInterval,
+    variables,
+  });
   const userOwnedNouns: number[] = data?.nouns?.map(noun => Number(noun.id)) || [];
   return { loading, data: userOwnedNouns, error, refetch };
 };
 
 export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { address } = useAccount();
+  const { query, variables } = accountEscrowedNounsQuery(address?.toLowerCase() ?? '');
   const { loading, data, error, refetch } = useQuery<{
     escrowedNouns: Array<EscrowedNoun>;
-  }>(accountEscrowedNounsQuery(address?.toLowerCase() ?? ''), {
-    pollInterval: pollInterval,
+  }>(query, {
+    pollInterval,
+    variables,
   });
   // filter escrowed nouns to just this fork
   const userEscrowedNounIds: number[] =
@@ -256,8 +259,7 @@ export const useIsApprovedForAll = () => {
   return (data as boolean) || false;
 };
 export const useDelegateNounsAtBlockQuery = (signers: string[], block: bigint) => {
-  const { loading, data, error } = useQuery<{ delegates: Delegate[] }>(
-    delegateNounsAtBlockQuery(signers, block),
-  );
+  const { query, variables } = delegateNounsAtBlockQuery(signers, block);
+  const { loading, data, error } = useQuery<{ delegates: Delegate[] }>(query, { variables });
   return { loading, data, error };
 };

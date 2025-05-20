@@ -293,8 +293,9 @@ const DynamicQuorumInfoModal: React.FC<{
 }> = props => {
   const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
+  const { query,variables } = adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0');
   const { data, loading, error } = useQuery(
-    adjustedNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
+    query,{variables}
   );
 
   const dynamicQuorumProps = useDynamicQuorumProps(BigInt(proposal.startBlock));

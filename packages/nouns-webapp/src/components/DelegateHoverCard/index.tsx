@@ -21,9 +21,11 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
 
   const unwrappedDelegateId = delegateId ? delegateId.replace('delegate-', '') : '';
 
-  const { data, loading, error } = useQuery(
-    delegateNounsAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
+  const { query, variables } = delegateNounsAtBlockQuery(
+    [unwrappedDelegateId],
+    proposalCreationBlock,
   );
+  const { data, loading, error } = useQuery(query, { variables });
 
   if (loading || !data || data === undefined || data.delegates.length === 0) {
     return (

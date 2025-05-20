@@ -165,8 +165,9 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse => {
+  const { query,variables } = nounTransferHistoryQuery(nounId);
   const { loading, error, data } = useQuery<{ transferEvents: Maybe<GraphQLTransferEvent[]> }>(
-    nounTransferHistoryQuery(nounId),
+    query,{variables}
   );
   if (loading) {
     return {
@@ -204,8 +205,9 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
  * @param nounId Id of Noun who's transfer history we will fetch
  */
 const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse => {
+  const { query,variables } = nounDelegationHistoryQuery(nounId);
   const { loading, error, data } = useQuery<{ delegationEvents: Maybe<GraphQLDelegationEvent[]> }>(
-    nounDelegationHistoryQuery(nounId),
+    query,{variables}
   );
   if (loading) {
     return {

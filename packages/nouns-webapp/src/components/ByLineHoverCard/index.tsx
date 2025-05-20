@@ -10,6 +10,7 @@ import ShortAddress from '@/components/ShortAddress';
 import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
 
 import classes from './ByLineHoverCard.module.css';
+import { Delegate, Maybe } from '@/subgraphs';
 
 interface ByLineHoverCardProps {
   proposerAddress: string;
@@ -20,9 +21,10 @@ const MAX_NOUN_IDS_SHOWN = 12;
 const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
   const { proposerAddress } = props;
 
-  const { data, loading, error } = useQuery(currentlyDelegatedNouns(proposerAddress));
+  const { query, variables } = currentlyDelegatedNouns(proposerAddress);
+  const { data, loading, error } = useQuery<{ delegates: Maybe<Delegate[]> }>(query, { variables });
 
-  if (loading || (data && data.delegates.length === 0)) {
+  if (loading || (data && data?.delegates?.length === 0)) {
     return (
       <div className={classes.spinnerWrapper}>
         <div className={classes.spinner}>
@@ -35,7 +37,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     return <>Error fetching Vote info</>;
   }
 
-  const sortedNounIds = data.delegates[0].nounsRepresented
+  const sortedNounIds = data?.delegates?.[0]?.nounsRepresented
     .map((noun: { id: string }) => {
       return Number(noun.id);
     })

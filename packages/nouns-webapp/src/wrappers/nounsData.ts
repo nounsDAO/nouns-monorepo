@@ -207,9 +207,10 @@ const filterSigners = (
 
 export const useCandidateProposals = (blockNumber?: bigint) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
+  const { query, variables } = candidateProposalsQuery();
   const { loading, data, error } = useQuery<{
     proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
-  }>(candidateProposalsQuery());
+  }>(query, { variables });
 
   const unmatchedCandidates = pipe(
     data?.proposalCandidates ?? [],
@@ -266,15 +267,17 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
 
 export const useCandidateProposal = (
   id: string,
-  pollInterval?: number,
+  pollInterval?: number = 0,
   toUpdate?: boolean,
   blockNumber?: number,
 ) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
+  const { query, variables } = candidateProposalQuery(id);
   const { loading, data, error, refetch } = useQuery<{
     proposalCandidate: Maybe<GraphQLProposalCandidate>;
-  }>(candidateProposalQuery(id), {
-    pollInterval: pollInterval || 0,
+  }>(query, {
+    pollInterval,
+    variables,
   });
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
   const threshold = useProposalThreshold() || 0;
@@ -314,9 +317,10 @@ export const useCandidateProposal = (
 };
 
 export const useCandidateProposalVersions = (id: string) => {
+  const { query, variables } = candidateProposalVersionsQuery(id);
   const { loading, data, error } = useQuery<{
     proposalCandidate: Maybe<GraphQLProposalCandidate>;
-  }>(candidateProposalVersionsQuery(id));
+  }>(query, { variables });
 
   const candidateVersions = parseSubgraphCandidateVersions(data?.proposalCandidate || undefined);
   const versions = data?.proposalCandidate
@@ -482,11 +486,13 @@ export const useSendFeedback = () => {
   };
 };
 
-export const useProposalFeedback = (id: string, pollInterval?: number) => {
+export const useProposalFeedback = (id: string, pollInterval?: number = 0) => {
+  const { query, variables } = proposalFeedbacksQuery(id);
   const { loading, data, error, refetch } = useQuery<{
     proposalFeedbacks: Maybe<GraphQLProposalFeedback[]>;
-  }>(proposalFeedbacksQuery(id), {
-    pollInterval: pollInterval || 0,
+  }>(query, {
+    pollInterval,
+    variables,
   });
 
   const feedbacks: VoteSignalDetail[] = map(data?.proposalFeedbacks ?? [], feedback => ({
@@ -505,10 +511,12 @@ export const useProposalFeedback = (id: string, pollInterval?: number) => {
 };
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {
+  const { query, variables } = candidateFeedbacksQuery(id);
   const { loading, data, error, refetch } = useQuery<{
     candidateFeedbacks: Maybe<GraphQLCandidateFeedback[]>;
-  }>(candidateFeedbacksQuery(id), {
+  }>(query, {
     pollInterval,
+    variables,
   });
   const feedbacks: VoteSignalDetail[] = map(data?.candidateFeedbacks ?? [], feedback => ({
     ...feedback,

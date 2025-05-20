@@ -23,7 +23,8 @@ const Holder: React.FC<HolderProps> = props => {
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
+  const { query,variables } = nounQuery(nounId.toString());
+  const { loading, error, data } = useQuery(query,{variables});
 
   if (loading) {
     return <></>;

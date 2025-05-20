@@ -118,11 +118,8 @@ const VotePage = () => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { address: account } = useAccount();
-  const {
-    data: dqInfo,
-    loading: loadingDQInfo,
-    error: dqError,
-  } = useQuery(propUsingDynamicQuorum(id ?? '0'));
+  const { query, variables } = propUsingDynamicQuorum(id ?? '0');
+  const { data: dqInfo, loading: loadingDQInfo, error: dqError } = useQuery(query, { variables });
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
@@ -406,21 +403,25 @@ const VotePage = () => {
   }, [forkActiveState.data, setIsForkActive]);
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const { query: votesQuery, variables: votesVariables } = proposalVotesQuery(proposal?.id ?? '0');
   const {
     loading,
     error,
     data: voters,
-  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
+  } = useQuery<ProposalVotes>(votesQuery, {
     skip: !proposal,
+    variables: votesVariables,
   });
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], BigInt(proposal?.voteSnapshotBlock ?? 0)),
-    {
-      skip: !voters?.votes?.length,
-    },
+  const { query: voteSnapshotQuery, variables: voteSnapshotVariables } = delegateNounsAtBlockQuery(
+    voterIds ?? [],
+    BigInt(proposal?.voteSnapshotBlock ?? 0),
   );
+  const { data: delegateSnapshot } = useQuery<Delegates>(voteSnapshotQuery, {
+    skip: !voters?.votes?.length,
+    variables: voteSnapshotVariables,
+  });
 
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {

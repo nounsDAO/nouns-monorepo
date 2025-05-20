@@ -27,9 +27,8 @@ const CandidateSponsors = ({
   const activeSigners =
     signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0n),
-  );
+  const { query, variables } = delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0n);
+  const { data: delegateSnapshot } = useQuery<Delegates>(query, { variables });
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
     acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
