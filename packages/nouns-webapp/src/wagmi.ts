@@ -26,7 +26,7 @@ export const config = createConfig({
     injected(),
     walletConnect({
       projectId: WALLET_CONNECT_V2_PROJECT_ID,
-      showQrModal: true,
+      showQrModal: false,
     }),
     coinbaseWallet({
       appName: 'Nouns.WTF',
