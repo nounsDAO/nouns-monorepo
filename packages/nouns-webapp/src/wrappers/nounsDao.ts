@@ -510,8 +510,14 @@ export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride
   );
 
   // pick the right starting block
-  const fromBlock =
-    fromBlockOverride != null ? BigInt(fromBlockOverride) : chainId === mainnet.id ? 12985453n : 0n;
+  let fromBlock: bigint;
+  if (fromBlockOverride != null) {
+    fromBlock = BigInt(fromBlockOverride);
+  } else if (chainId === mainnet.id) {
+    fromBlock = 12985453n;
+  } else {
+    fromBlock = 0n;
+  }
 
   const { data: logs } = useReactQuery({
     queryKey: ['proposalCreatedLogs', fromBlock.toString()],
