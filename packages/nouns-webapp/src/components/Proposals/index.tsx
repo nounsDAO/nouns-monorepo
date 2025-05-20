@@ -85,13 +85,12 @@ const getCountdownCopy = (
   );
 };
 
-const Proposals = ({
-  proposals,
-  nounsRequired,
-}: {
+interface ProposalsProps {
   proposals: PartialProposal[];
   nounsRequired?: number;
-}) => {
+}
+
+const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [blockNumber, setBlockNumber] = useState<bigint>(0n);
