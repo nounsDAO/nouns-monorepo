@@ -78,6 +78,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     totalUSDCPayment,
     nounsTokenBuyerAddress[useChainId()] === undefined || totalUSDCPayment === 0,
   );
+  const chainId = useChainId();
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
@@ -130,13 +131,13 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[useChainId()])
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId])
           .length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
-          address: nounsTokenBuyerAddress[useChainId()],
+          address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
           calldata: '0x' as Hex,
           signature: '',
@@ -146,7 +147,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === nounsTokenBuyerAddress[useChainId()]) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;
