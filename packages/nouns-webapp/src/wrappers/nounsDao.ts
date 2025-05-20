@@ -49,6 +49,7 @@ import {
   useReadNounsGovernorNumTokensInForkEscrow,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
+  useReadNounsGovernorGetDynamicQuorumParamsAt,
   useWriteNounsGovernorCancel,
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
@@ -1467,14 +1468,12 @@ export function useForkThresholdBPS(): number | undefined {
 }
 
 export const useActivePendingUpdatableProposers = (blockNumber: number) => {
-  const { query,variables } = activePendingUpdatableProposersQuery(1000, blockNumber);
+  const { query, variables } = activePendingUpdatableProposersQuery(1000, blockNumber);
   const {
     loading,
     data: proposals,
     error,
-  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(
-    query,{variables}
-  ) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
@@ -1503,14 +1502,12 @@ export function useIsDaoGteV3(): boolean {
 }
 
 export function useUpdatableProposalIds(blockNumber: number) {
-  const { query,variables } = updatableProposalsQuery(1000, blockNumber);
+  const { query, variables } = updatableProposalsQuery(1000, blockNumber);
   const {
     loading,
     data: proposals,
     error,
-  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(
-    query,{variables}
-  ) as {
+  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
