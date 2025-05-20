@@ -9,9 +9,9 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { Log, parseAbiItem } from 'viem';
+import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
-import { usePublicClient, WagmiProvider } from 'wagmi';
+import { useChainId, usePublicClient, WagmiProvider } from 'wagmi';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -60,7 +60,7 @@ const createRootReducer = () =>
     onDisplayAuction,
   });
 
-export default function configureStore(preloadedState: PreloadedState<any>) {
+export function configureStore(preloadedState: PreloadedState<any>) {
   return createStore(
     createRootReducer(), // root reducer without router state
     preloadedState,
@@ -83,33 +83,6 @@ const ChainSubscriber: React.FC = () => {
   const publicClient = usePublicClient();
   const chainId = useChainId();
 
-  const processBidFilter = async (
-    nounId: bigint,
-    sender: Address,
-    value: bigint,
-    extended: boolean,
-    event: Log,
-  ) => {
-    const block = await publicClient.getBlock({
-      blockNumber: event.blockNumber ?? undefined,
-    });
-
-    const timestamp = block.timestamp;
-    const { transactionHash, transactionIndex } = event;
-    dispatch(
-      appendBid(
-        reduxSafeBid({
-          nounId,
-          sender,
-          value,
-          extended,
-          transactionHash: transactionHash ?? '',
-          transactionIndex: transactionIndex ?? 0,
-          timestamp,
-        }),
-      ),
-    );
-  };
   // Fetch the current auction
   const { data: currentAuction } = useReadNounsAuctionHouseAuction();
   useEffect(() => {
@@ -137,27 +110,61 @@ const ChainSubscriber: React.FC = () => {
         toBlock: latestBlock.number,
       });
 
-      for (const log of logs) {
-        if (log.args == undefined) return;
+      for (const {
+        args: { extended, nounId, sender, value },
+        blockNumber,
+        transactionHash,
+        transactionIndex,
+      } of logs) {
+        const block = await publicClient.getBlock({
+          blockNumber: blockNumber ?? undefined,
+        });
+        const timestamp = block.timestamp;
 
-        const { nounId, sender, value, extended } = log.args as {
-          nounId: bigint;
-          sender: Address;
-          value: bigint;
-          extended: boolean;
-        };
-
-        processBidFilter(nounId, sender, value, extended, log);
+        dispatch(
+          appendBid(
+            reduxSafeBid({
+              nounId: Number(nounId),
+              sender: sender as Address,
+              value: Number(value),
+              extended: !!extended,
+              transactionHash: transactionHash ?? '',
+              transactionIndex: transactionIndex ?? 0,
+              timestamp,
+            }),
+          ),
+        );
       }
     })();
-  }, [processBidFilter, publicClient]);
+  }, [chainId, dispatch, publicClient]);
 
   // Watch for new bids
   useWatchNounsAuctionHouseAuctionBidEvent({
-    onLogs: logs => {
-      for (const log of logs) {
-        if (log.args == undefined) return;
-        processBidFilter(...(log.args as [bigint, Address, bigint, boolean]), log);
+    onLogs: async logs => {
+      for (const {
+        args: { extended, nounId, sender, value },
+        blockNumber,
+        transactionHash,
+        transactionIndex,
+      } of logs) {
+        const block = await publicClient.getBlock({
+          blockNumber: blockNumber ?? undefined,
+        });
+        const timestamp = block.timestamp;
+
+        dispatch(
+          appendBid(
+            reduxSafeBid({
+              nounId: Number(nounId),
+              sender: sender as Address,
+              value: Number(value),
+              extended: !!extended,
+              transactionHash: transactionHash ?? '',
+              transactionIndex: transactionIndex ?? 0,
+              timestamp,
+            }),
+          ),
+        );
       }
     },
   });
