@@ -1,5 +1,4 @@
-import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
-
+import { ApolloClient, ApolloLink, gql, HttpLink, InMemoryCache } from '@apollo/client';
 import { BigNumberish } from '@/utils/types';
 
 export interface IBid {
@@ -124,7 +123,7 @@ export const partialProposalsQuery = (first = 1_000) => ({
 
 export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock?: number) => ({
   query: gql`
-    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: Int!) {
+    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {
       proposals(
         first: $first
         where: {
@@ -148,7 +147,7 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
 
 export const updatableProposalsQuery = (first = 1_000, currentBlock?: number) => ({
   query: gql`
-    query GetUpdatableProposals($first: Int!, $currentBlock: Int!) {
+    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {
       proposals(
         first: $first
         where: {
@@ -202,9 +201,7 @@ export const candidateProposalsQuery = (first = 1_000) => ({
               canceled
               reason
             }
-            matchingProposalIds {
-              id
-            }
+            matchingProposalIds
           }
         }
       }
@@ -251,9 +248,7 @@ export const candidateProposalQuery = (id: string) => ({
               canceled
               reason
             }
-            matchingProposalIds {
-              id
-            }
+            matchingProposalIds
           }
         }
       }
@@ -357,7 +352,7 @@ export const auctionQuery = (auctionId: number) => ({
 
 export const bidsByAuctionQuery = (auctionId: string) => ({
   query: gql`
-    query GetBidsByAuction($auctionId: ID!) {
+    query GetBidsByAuction($auctionId: String!) {
       bids(where: { auction: $auctionId }) {
         id
         amount
@@ -494,7 +489,7 @@ export const nounVotingHistoryQuery = (nounId: number, first = 1_000) => ({
 
 export const nounTransferHistoryQuery = (nounId: number, first = 1_000) => ({
   query: gql`
-    query GetNounTransferHistory($nounId: ID!, $first: Int!) {
+    query GetNounTransferHistory($nounId: String!, $first: Int!) {
       transferEvents(where: { noun: $nounId }, first: $first) {
         id
         previousHolder {
@@ -512,7 +507,7 @@ export const nounTransferHistoryQuery = (nounId: number, first = 1_000) => ({
 
 export const nounDelegationHistoryQuery = (nounId: number, first = 1_000) => ({
   query: gql`
-    query GetNounDelegationHistory($nounId: ID!, $first: Int!) {
+    query GetNounDelegationHistory($nounId: String!, $first: Int!) {
       delegationEvents(where: { noun: $nounId }, first: $first) {
         id
         previousDelegate {
@@ -542,7 +537,7 @@ export const createTimestampAllProposals = () => ({
 
 export const proposalVotesQuery = (proposalId: string) => ({
   query: gql`
-    query GetProposalVotes($proposalId: ID!) {
+    query GetProposalVotes($proposalId: String!) {
       votes(where: { proposal: $proposalId, votesRaw_gt: 0 }) {
         supportDetailed
         voter {
@@ -556,7 +551,7 @@ export const proposalVotesQuery = (proposalId: string) => ({
 
 export const delegateNounsAtBlockQuery = (delegates: string[], block: bigint) => ({
   query: gql`
-    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: BigInt!) {
+    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!) {
       delegates(where: { id_in: $delegates }, block: { number: $block }) {
         id
         nounsRepresented {
@@ -565,7 +560,7 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: bigint) =>
       }
     }
   `,
-  variables: { delegates, block },
+  variables: { delegates, block: Number(block) },
 });
 
 export const currentlyDelegatedNouns = (delegate: string) => ({
@@ -679,7 +674,7 @@ export const accountEscrowedNounsQuery = (owner: string) => ({
 
 export const escrowDepositEventsQuery = (forkId: string) => ({
   query: gql`
-    query GetEscrowDepositEvents($forkId: ID!) {
+    query GetEscrowDepositEvents($forkId: String!) {
       escrowDeposits(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
         id
         createdAt
@@ -696,7 +691,7 @@ export const escrowDepositEventsQuery = (forkId: string) => ({
 });
 export const forkJoinsQuery = (forkId: string) => ({
   query: gql`
-    query GetForkJoins($forkId: ID!) {
+    query GetForkJoins($forkId: String!) {
       forkJoins(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
         id
         createdAt
@@ -714,7 +709,7 @@ export const forkJoinsQuery = (forkId: string) => ({
 
 export const escrowWithdrawEventsQuery = (forkId: string) => ({
   query: gql`
-    query GetEscrowWithdrawEvents($forkId: ID!) {
+    query GetEscrowWithdrawEvents($forkId: String!) {
       escrowWithdrawals(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
         id
         createdAt
@@ -790,7 +785,7 @@ export const forksQuery = () => ({
 
 export const isForkActiveQuery = (currentTimestamp: number) => ({
   query: gql`
-    query GetIsForkActive($currentTimestamp: Int!) {
+    query GetIsForkActive($currentTimestamp: BigInt!) {
       forks(where: { executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp }) {
         forkID
         forkingPeriodEndTimestamp
