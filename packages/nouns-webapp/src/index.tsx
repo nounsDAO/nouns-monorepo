@@ -4,11 +4,12 @@ import React, { useEffect } from 'react';
 
 import './index.css';
 import { ApolloProvider, useQuery } from '@apollo/client';
+import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { combineReducers } from 'redux';
+import { createLogger } from 'redux-logger';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
@@ -60,19 +61,16 @@ const createRootReducer = () =>
     onDisplayAuction,
   });
 
-export function configureStore(preloadedState: PreloadedState<any>) {
-  return createStore(
-    createRootReducer(), // root reducer without router state
-    preloadedState,
-    composeWithDevTools(
-      applyMiddleware(), // ... other middlewares ...
-    ),
-  );
-}
+const loggerMiddleware = createLogger();
 
-const store = configureStore({});
+export const store = configureStore({
+  reducer: createRootReducer(),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
+  devTools: process.env.NODE_ENV !== 'production',
+  preloadedState: undefined,
+});
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<ReturnType<typeof createRootReducer>>;
 export type AppDispatch = typeof store.dispatch;
 
 const client = clientFactory(config.app.subgraphApiUri);
