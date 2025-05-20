@@ -81,6 +81,7 @@ const client = clientFactory(config.app.subgraphApiUri);
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
   const publicClient = usePublicClient();
+  const chainId = useChainId();
 
   const processBidFilter = async (
     nounId: bigint,
@@ -128,7 +129,7 @@ const ChainSubscriber: React.FC = () => {
       const fromBlock = latestBlock.number > 7200n ? latestBlock.number - 7200n : 0n;
 
       const logs = await publicClient.getLogs({
-        address: nounsAuctionHouseAddress[1],
+        address: nounsAuctionHouseAddress[chainId],
         event: parseAbiItem(
           'event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended)',
         ),
