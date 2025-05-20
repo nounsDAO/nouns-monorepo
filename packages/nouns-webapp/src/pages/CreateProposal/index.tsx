@@ -1,13 +1,18 @@
-import ProposalTransactions from '@/components/ProposalTransactions';
+import type { Hex } from '@/utils/types';
+
 import { withStepProgress } from 'react-stepz';
+import { Link } from 'react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch } from '@/hooks';
+
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
-import { Link } from 'react-router';
-import CreateProposalButton from '@/components/CreateProposalButton';
+import { useAccount, useChainId } from 'wagmi';
 
+import { useAppDispatch } from '@/hooks';
+import CreateProposalButton from '@/components/CreateProposalButton';
+import ProposalTransactions from '@/components/ProposalTransactions';
+import { nounsTokenBuyerAddress } from '@/contracts';
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
@@ -29,9 +34,6 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useChainId } from 'wagmi';
-import { Hex } from '@/utils/types';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
