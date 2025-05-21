@@ -243,7 +243,7 @@ const CreateProposalPage = () => {
           break;
       }
     },
-    [],
+    [setModal],
   );
 
   useEffect(() => {
@@ -333,6 +333,7 @@ const CreateProposalPage = () => {
           If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
           can interact with the original treasury{' '}
           <button
+            type="button"
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
           >
