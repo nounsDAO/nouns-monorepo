@@ -5,17 +5,20 @@ import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import { formatEther } from 'viem';
+import { useAccount, useBlockNumber } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
+import { nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { defaultChain } from '@/wagmi';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useCandidateProposal,
@@ -27,9 +30,6 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useBlockNumber } from 'wagmi';
-import { defaultChain } from '@/wagmi';
 
 interface EditCandidateProps {
   match: {
@@ -173,7 +173,11 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
 
   useEffect(() => {
-    isTitleEdited || isBodyEdited ? setIsProposalEdited(true) : setIsProposalEdited(false);
+    if (isTitleEdited || isBodyEdited) {
+      setIsProposalEdited(true);
+    } else {
+      setIsProposalEdited(false);
+    }
   }, [isTitleEdited, isBodyEdited]);
 
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
