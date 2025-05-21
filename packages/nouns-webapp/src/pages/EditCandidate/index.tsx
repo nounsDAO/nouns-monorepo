@@ -29,6 +29,7 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import { filter } from 'remeda';
 
 interface EditCandidateProps {
   match: {
@@ -106,11 +107,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
-      const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length >
-        0;
+      const hasTokenBuyerTopUp =
+        filter(
+          proposalTransactions,
+          txn => txn.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase(),
+        ).length > 0;
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyerTopUp) {
         handleAddProposalAction({
           address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
