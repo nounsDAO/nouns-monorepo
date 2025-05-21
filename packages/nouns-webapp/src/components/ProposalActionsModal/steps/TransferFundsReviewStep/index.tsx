@@ -7,6 +7,7 @@ import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
 import ShortAddress from '@/components/ShortAddress';
 import { nounsPayerAbi, stEthAddress, nounsPayerAddress } from '@/contracts';
+import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
@@ -14,14 +15,26 @@ import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
 import classes from './TransferFundsReviewStep.module.css';
 
-const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function) => {
+type ProposalAction = {
+  address: Address;
+  value: bigint;
+  signature: string;
+  calldata: Hex;
+  usdcValue?: number;
+  decodedCalldata?: string;
+};
+
+const handleActionAdd = (
+  state: ProposalActionModalState,
+  onActionAdd: (action: ProposalAction) => void,
+) => {
   const chainId = defaultChain.id;
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
-      value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
+      value: BigInt(state.amount ? parseEther(state.amount.toString()).toString() : '0'),
       signature: '',
-      calldata: '0x',
+      calldata: '0x' as Hex,
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.STETH) {
     const value = parseEther((state.amount ?? 0).toString()).toString();
@@ -38,7 +51,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function)
 
     onActionAdd({
       address: stEthAddress[chainId],
-      value: '0',
+      value: 0n,
       signature: 'transfer(address,uint256)',
       decodedCalldata: JSON.stringify(args),
       calldata,
@@ -54,7 +67,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function)
 
     onActionAdd({
       address: nounsPayerAddress[chainId],
-      value: '0',
+      value: 0n,
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
       signature: 'sendOrRegisterDebt(address,uint256)',
       decodedCalldata: JSON.stringify([state.address, usdcAmount]),
