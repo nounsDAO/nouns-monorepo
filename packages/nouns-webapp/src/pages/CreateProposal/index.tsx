@@ -1,26 +1,26 @@
 import type { Hex } from '@/utils/types';
 
-import { withStepProgress } from 'react-stepz';
-import { Link } from 'react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { withStepProgress } from 'react-stepz';
 import { useAccount } from 'wagmi';
 
-import { useAppDispatch } from '@/hooks';
 import CreateProposalButton from '@/components/CreateProposalButton';
-import ProposalTransactions from '@/components/ProposalTransactions';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
+import { nounsTokenBuyerAddress } from '@/contracts';
+import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { defaultChain } from '@/wagmi';
 import {
   ProposalState,
   ProposalTransaction,
@@ -34,7 +34,8 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
-import { defaultChain } from '@/wagmi';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -237,7 +238,6 @@ const CreateProposalPage = () => {
           setProposePending(false);
           break;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );
@@ -312,9 +312,9 @@ const CreateProposalPage = () => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional additional ETH transaction to refill the TokenBuyer contract. This action
+              allows to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
@@ -326,8 +326,8 @@ const CreateProposalPage = () => {
         />
         <p className="m-0 p-0">Looking for treasury v1?</p>
         <p className={classes.note}>
-          If you're not sure what this means, you probably don't need it. Otherwise, you can
-          interact with the original treasury{' '}
+          If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
+          can interact with the original treasury{' '}
           <button
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
