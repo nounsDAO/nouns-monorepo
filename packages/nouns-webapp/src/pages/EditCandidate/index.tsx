@@ -342,7 +342,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
           isFormInvalid={!isProposalEdited}

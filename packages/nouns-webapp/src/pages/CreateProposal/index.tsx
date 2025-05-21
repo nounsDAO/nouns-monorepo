@@ -174,7 +174,7 @@ const CreateProposalPage = () => {
   );
 
   const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
+    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
   );
 
   const handleCreateProposal = async () => {
@@ -363,7 +363,7 @@ const CreateProposalPage = () => {
         <CreateProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={
             (latestProposal?.status === ProposalState.ACTIVE ||
               latestProposal?.status === ProposalState.PENDING) &&
