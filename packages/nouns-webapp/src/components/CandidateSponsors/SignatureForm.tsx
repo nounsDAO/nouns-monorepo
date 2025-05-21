@@ -18,13 +18,13 @@ import { useSignTypedData } from 'wagmi';
 
 import link from '@/assets/icons/Link.svg';
 import { CHAIN_ID } from '@/config';
+import { nounsGovernorAddress } from '@/contracts';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
 
 import classes from './CandidateSponsors.module.css';
-import { nounsGovernorAddress } from '@/contracts';
-import { defaultChain } from '@/wagmi';
 
 const createProposalTypes = {
   Proposal: [
@@ -182,8 +182,12 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       setIsGetSignatureWaiting(false);
       setIsGetSignatureTxSuccessful(true);
       return data;
-    } catch (err: any) {
-      setGetSignatureErrorMessage(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setGetSignatureErrorMessage(err.message);
+      } else {
+        setGetSignatureErrorMessage('Unknown error occurred');
+      }
       setIsGetSignatureWaiting(false);
       return undefined;
     }
