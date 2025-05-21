@@ -1,16 +1,17 @@
-import { CHAIN_ID, ETHERSCAN_API_KEY } from '@/config';
 import { sepolia } from 'viem/chains';
 
+import { ETHERSCAN_API_KEY } from '@/config';
+import { defaultChain } from '@/wagmi';
+
 const getBaseURL = (network: number) => {
-  switch (network) {
-    case sepolia.id:
-      return 'https://sepolia.etherscan.io/';
-    default:
-      return 'https://etherscan.io/';
+  if (network === sepolia.id) {
+    return 'https://sepolia.etherscan.io/';
+  } else {
+    return 'https://etherscan.io/';
   }
 };
 
-const BASE_URL = getBaseURL(CHAIN_ID);
+const BASE_URL = getBaseURL(defaultChain.id);
 
 export const buildEtherscanTxLink = (txHash: string): string => {
   const path = `tx/${txHash}`;
@@ -33,15 +34,14 @@ export const buildEtherscanHoldingsLink = (address: string): string => {
 };
 
 const getApiBaseURL = (network: number) => {
-  switch (network) {
-    case sepolia.id:
-      return 'https://api-sepolia.etherscan.io/';
-    default:
-      return 'https://api.etherscan.io/';
+  if (network === sepolia.id) {
+    return 'https://api-sepolia.etherscan.io/';
+  } else {
+    return 'https://api.etherscan.io/';
   }
 };
 
-const API_BASE_URL = getApiBaseURL(CHAIN_ID);
+const API_BASE_URL = getApiBaseURL(defaultChain.id);
 
 export const buildEtherscanApiQuery = (
   address: string,
