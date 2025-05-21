@@ -4,11 +4,15 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { useAccount } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
+import { Address, Hex } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
+import { nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
@@ -25,13 +29,8 @@ import {
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
-import classes from '../CreateProposal/CreateProposal.module.css';
-
+import classes from '@/pages/CreateProposal/CreateProposal.module.css';
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount } from 'wagmi';
-import { Address, Hex } from '@/utils/types';
-import { defaultChain } from '@/wagmi';
 
 interface EditProposalProps {
   match: {
