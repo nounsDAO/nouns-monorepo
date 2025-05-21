@@ -336,14 +336,23 @@ const removeItalics = (text: string): string => text.replace(/__/g, '');
 export const removeMarkdownStyle = (text: string | null): string | null =>
   text === null ? null : pipe(text, removeBold, removeItalics);
 /**
- * Add missing schemes to markdown links in a proposal's description.
+ * Add missing schemes to Markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
  */
 const addMissingSchemes = (descriptionText: string | undefined) => {
-  const regex = /\[(.*?)]\(((?!https?:\/\/|#)[^)]+)\)/g;
-  const replacement = '[$1](https://$2)';
+  if (!descriptionText) return descriptionText;
 
-  return descriptionText?.replace(regex, replacement);
+  // Match Markdown links: [text](url)
+  const markdownLinkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
+
+  return descriptionText.replace(markdownLinkRegex, (match, text, url) => {
+    // If the URL already has a scheme or starts with #, leave it as is
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('#')) {
+      return match;
+    }
+    // Otherwise, add the https:// scheme
+    return `[${text}](https://${url})`;
+  });
 };
 
 /**
