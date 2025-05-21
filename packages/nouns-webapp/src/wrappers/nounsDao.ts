@@ -556,68 +556,134 @@ const getProposalState = (
   isDaoGteV3?: boolean,
   onTimelockV1?: boolean,
 ) => {
+  // Get the initial status from the proposal
   const status = isNonNullish(proposal.status)
     ? ProposalState[proposal.status]
     : ProposalState.UNDETERMINED;
 
+  // Handle specific status cases with dedicated functions
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
-    if (!blockNumber) {
-      return ProposalState.UNDETERMINED;
-    }
-    if (
-      isDaoGteV3 &&
-      proposal.updatePeriodEndBlock &&
-      blockNumber <= BigInt(proposal.updatePeriodEndBlock)
-    ) {
-      return ProposalState.UPDATABLE;
-    }
-
-    if (blockNumber <= BigInt(proposal.startBlock)) {
-      return ProposalState.PENDING;
-    }
-
-    if (
-      isDaoGteV3 &&
-      blockNumber > BigInt(proposal.endBlock) &&
-      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
-      blockNumber <= BigInt(proposal.objectionPeriodEndBlock)
-    ) {
-      return ProposalState.OBJECTION_PERIOD;
-    }
-
-    // if past endblock, but onchain status hasn't been changed
-    if (
-      blockNumber > BigInt(proposal.endBlock) &&
-      blockNumber > BigInt(proposal.objectionPeriodEndBlock)
-    ) {
-      const forVotes = BigInt(proposal.forVotes);
-      if (
-        forVotes <= BigInt(proposal.againstVotes) ||
-        forVotes < BigInt(proposal.quorumVotes ?? 0)
-      ) {
-        return ProposalState.DEFEATED;
-      }
-      if (!proposal.executionETA) {
-        return ProposalState.SUCCEEDED;
-      }
-    }
-    return ProposalState.ACTIVE;
+    return handlePendingOrActiveState(blockNumber, proposal, isDaoGteV3);
   }
 
-  // if queued, check if expired
   if (status === ProposalState.QUEUED) {
-    if (!blockTimestamp || !proposal.executionETA) {
-      return ProposalState.UNDETERMINED;
-    }
-    // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
-    const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
-    if (blockTimestamp.getTime() / 1_000 >= BigInt(proposal.executionETA) + BigInt(GRACE_PERIOD)) {
-      return ProposalState.EXPIRED;
-    }
-    return status;
+    return handleQueuedState(blockTimestamp, proposal, isDaoGteV3, onTimelockV1);
   }
 
   return status;
+};
+
+// Handle the state for PENDING or ACTIVE proposals
+const handlePendingOrActiveState = (
+  blockNumber: number | undefined,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): ProposalState => {
+  if (!blockNumber) {
+    return ProposalState.UNDETERMINED;
+  }
+
+  // Check if it's in UPDATABLE state
+  if (isUpdatableProposal(blockNumber, proposal, isDaoGteV3)) {
+    return ProposalState.UPDATABLE;
+  }
+
+  // Check if it's in PENDING state
+  if (blockNumber <= BigInt(proposal.startBlock)) {
+    return ProposalState.PENDING;
+  }
+
+  // Check if it's in OBJECTION_PERIOD state
+  if (isInObjectionPeriod(blockNumber, proposal, isDaoGteV3)) {
+    return ProposalState.OBJECTION_PERIOD;
+  }
+
+  // Check if past end block and determine resulting state
+  if (isPastEndBlock(blockNumber, proposal)) {
+    return getPastEndBlockState(proposal);
+  }
+
+  return ProposalState.ACTIVE;
+};
+
+// Check if a proposal is in UPDATABLE state
+const isUpdatableProposal = (
+  blockNumber: number,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): boolean => {
+  return Boolean(
+    isDaoGteV3 &&
+      proposal.updatePeriodEndBlock &&
+      blockNumber <= BigInt(proposal.updatePeriodEndBlock),
+  );
+};
+
+// Check if a proposal is in OBJECTION_PERIOD state
+const isInObjectionPeriod = (
+  blockNumber: number,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): boolean => {
+  return Boolean(
+    isDaoGteV3 &&
+      blockNumber > BigInt(proposal.endBlock) &&
+      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
+      blockNumber <= BigInt(proposal.objectionPeriodEndBlock),
+  );
+};
+
+// Check if a proposal is past its end block
+const isPastEndBlock = (blockNumber: number, proposal: GraphQLProposal): boolean => {
+  return (
+    blockNumber > BigInt(proposal.endBlock) &&
+    blockNumber > BigInt(proposal.objectionPeriodEndBlock)
+  );
+};
+
+// Determine the state for a proposal that is past its end block
+const getPastEndBlockState = (proposal: GraphQLProposal): ProposalState => {
+  const forVotes = BigInt(proposal.forVotes);
+  if (forVotes <= BigInt(proposal.againstVotes) || forVotes < BigInt(proposal.quorumVotes ?? 0)) {
+    return ProposalState.DEFEATED;
+  }
+
+  if (!proposal.executionETA) {
+    return ProposalState.SUCCEEDED;
+  }
+
+  return ProposalState.ACTIVE;
+};
+
+// Handle the state for QUEUED proposals
+const handleQueuedState = (
+  blockTimestamp: Date | undefined,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+  onTimelockV1?: boolean,
+): ProposalState => {
+  if (!blockTimestamp || !proposal.executionETA) {
+    return ProposalState.UNDETERMINED;
+  }
+
+  if (isExpiredProposal(blockTimestamp, proposal, isDaoGteV3, onTimelockV1)) {
+    return ProposalState.EXPIRED;
+  }
+
+  return ProposalState.QUEUED;
+};
+
+// Check if a queued proposal has expired
+const isExpiredProposal = (
+  blockTimestamp: Date,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+  onTimelockV1?: boolean,
+): boolean => {
+  // If v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
+  const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
+
+  return blockTimestamp.getTime() / 1_000 >= Number(proposal.executionETA) + Number(GRACE_PERIOD);
 };
 
 const parsePartialSubgraphProposal = (
