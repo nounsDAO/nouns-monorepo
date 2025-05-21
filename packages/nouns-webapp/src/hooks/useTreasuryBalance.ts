@@ -7,9 +7,9 @@ import {
   useReadStEthBalanceOf,
 } from '@/contracts';
 import { Address } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 
 import useTokenBuyerBalance from './useTokenBuyerBalance';
-import { defaultChain } from '@/wagmi';
 
 /**
  * Computes treasury balance (ETH and Lido)
@@ -42,9 +42,7 @@ export const useTreasuryBalance = (): bigint => {
 
   // Get Lido (stETH) balance for treasury v2
   const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
-    args: nounsTreasuryAddress[chainId]
-      ? [nounsTreasuryAddress[chainId]]
-      : undefined,
+    args: nounsTreasuryAddress[chainId] ? [nounsTreasuryAddress[chainId]] : undefined,
     query: {
       enabled: Boolean(nounsTreasuryAddress[chainId]),
     },
