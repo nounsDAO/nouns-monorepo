@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
+import { filter } from 'remeda';
 import { useAccount } from 'wagmi';
 
 import CreateProposalButton from '@/components/CreateProposalButton';
@@ -61,7 +62,7 @@ const CreateProposalPage = () => {
   const ethNeeded = useEthNeeded(
     nounsTokenBuyerAddress[chainId] ?? '',
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
   const isDaoGteV3 = useIsDaoGteV3();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
@@ -107,11 +108,14 @@ const CreateProposalPage = () => {
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
-      const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length > 0;
+      const hasTokenBuyerTopUp =
+        filter(
+          proposalTransactions,
+          txn => txn.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase(),
+        ).length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyerTopUp) {
         handleAddProposalAction({
           address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
