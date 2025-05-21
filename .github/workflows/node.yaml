@@ -102,6 +102,8 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
       - name: Install deps
         run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm build
       - name: Lint changed files
         run: |
           echo "::add-matcher::.github/eslint-matcher.json"
