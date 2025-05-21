@@ -65,8 +65,18 @@ const loggerMiddleware = createLogger();
 
 export const store = configureStore({
   reducer: createRootReducer(),
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
-  devTools: process.env.NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware => {
+    const middleware = getDefaultMiddleware();
+    // Enable logger in development and when explicitly enabled
+    if (
+      import.meta.env.MODE !== 'production' &&
+      import.meta.env.VITE_ENABLE_REDUX_LOGGER === 'true'
+    ) {
+      return middleware.concat(loggerMiddleware);
+    }
+    return middleware;
+  },
+  devTools: import.meta.env.MODE !== 'production',
   preloadedState: undefined,
 });
 
