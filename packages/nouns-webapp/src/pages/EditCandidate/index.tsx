@@ -55,14 +55,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
+    nounsTokenBuyerAddress[chainId],
     totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
-  const chainId = defaultChain.id;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
