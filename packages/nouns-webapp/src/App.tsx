@@ -35,13 +35,11 @@ import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
 import { setAlertModal } from '@/state/slices/application';
-import { defaultChain } from '@/wagmi';
 
 import classes from './App.module.css';
 
 function App() {
-  const { address: account } = useAccount();
-  const chainId = defaultChain.id;
+  const { address: account, chainId } = useAccount();
 
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
