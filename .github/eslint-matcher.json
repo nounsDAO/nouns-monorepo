@@ -10,7 +10,7 @@
         },
         {
           // Matches the 2nd and 3rd line in the output
-          "regexp": "^\\s+(\\d+):(\\d+)\\s+(error|warning|info)\\s+(.*)$",
+          "regexp": "^\\s+(\\d+):(\\d+)\\s+(error|warning|info)\\s+(.*)\\s\\s+(.*)$",
           // File is carried through from above, so we define the rest of the groups
           "line": 1,
           "column": 2,
