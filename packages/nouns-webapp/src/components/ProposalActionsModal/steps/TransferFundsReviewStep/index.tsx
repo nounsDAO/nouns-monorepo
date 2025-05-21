@@ -1,5 +1,3 @@
-import type { Address } from '@/utils/types';
-
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
@@ -8,8 +6,8 @@ import { encodeFunctionData, parseAbi, parseEther } from 'viem';
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
 import ShortAddress from '@/components/ShortAddress';
-import config from '@/config';
-import { nounsPayerAbi } from '@/contracts';
+import { nounsPayerAbi, stEthAddress, nounsPayerAddress } from '@/contracts';
+import { defaultChain } from '@/wagmi';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
@@ -17,6 +15,7 @@ import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import classes from './TransferFundsReviewStep.module.css';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function) => {
+  const chainId = defaultChain.id;
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
@@ -38,7 +37,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function)
     });
 
     onActionAdd({
-      address: config.addresses.steth as Address,
+      address: stEthAddress[chainId],
       value: '0',
       signature: 'transfer(address,uint256)',
       decodedCalldata: JSON.stringify(args),
@@ -54,7 +53,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: Function)
     });
 
     onActionAdd({
-      address: config.addresses.payerContract as Address,
+      address: nounsPayerAddress[chainId],
       value: '0',
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
       signature: 'sendOrRegisterDebt(address,uint256)',

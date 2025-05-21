@@ -21,16 +21,18 @@ import CurrentBid from '@/components/CurrentBid';
 import Holder from '@/components/Holder';
 import NounInfoCard from '@/components/NounInfoCard';
 import Winner from '@/components/Winner';
-import config from '@/config';
+import { nounsAuctionHouseAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { defaultChain } from '@/wagmi';
 import { Auction } from '@/wrappers/nounsAuction';
 
 import classes from './AuctionActivity.module.css';
 import bidHistoryClasses from './BidHistory.module.css';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
+  const chainId = defaultChain.id;
+  const url = buildEtherscanAddressLink(nounsAuctionHouseAddress[chainId]);
   window.open(url);
 };
 

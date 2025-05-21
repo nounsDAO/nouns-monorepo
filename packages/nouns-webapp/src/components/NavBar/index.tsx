@@ -23,12 +23,14 @@ import NavDropdown from '@/components/NavDropdown';
 import NavLocaleSwitcher from '@/components/NavLocaleSwitcher';
 import NavWallet from '@/components/NavWallet';
 import config, { CHAIN_ID } from '@/config';
+import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { ExternalURL, externalURL } from '@/utils/externalURL';
 import { Address } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
 import classes from './NavBar.module.css';
@@ -37,15 +39,14 @@ import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css
 import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const NavBar = () => {
+  const chainId = defaultChain.id;
   const isDaoGteV3 = useIsDaoGteV3();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const location = useLocation();
   const treasuryBalance = useTreasuryBalance();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutorProxy || config.addresses.nounsDaoExecutor,
-  );
+  const daoEtherscanLink = buildEtherscanHoldingsLink(nounsTreasuryAddress[chainId]);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =

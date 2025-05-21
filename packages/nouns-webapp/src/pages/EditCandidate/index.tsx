@@ -11,7 +11,6 @@ import EditProposalButton from '@/components/EditProposalButton/index';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
-import config from '@/config';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
@@ -108,7 +107,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length >
+        0;
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
         handleAddProposalAction({
@@ -122,7 +122,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;

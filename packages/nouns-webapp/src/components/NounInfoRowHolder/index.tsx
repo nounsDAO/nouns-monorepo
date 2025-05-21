@@ -8,9 +8,10 @@ import _HeartIcon from '@/assets/icons/Heart.svg';
 import _LinkIcon from '@/assets/icons/Link.svg';
 import ShortAddress from '@/components/ShortAddress';
 import Tooltip from '@/components/Tooltip';
-import config from '@/config';
+import { nounsAuctionHouseAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { defaultChain } from '@/wagmi';
 import { auctionQuery } from '@/wrappers/subgraph';
 
 import classes from './NounInfoRowHolder.module.css';
@@ -22,8 +23,8 @@ interface NounInfoRowHolderProps {
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { query,variables } = auctionQuery(Number(nounId));
-  const { loading, error, data } = useQuery(query,{variables});
+  const { query, variables } = auctionQuery(Number(nounId));
+  const { loading, error, data } = useQuery(query, { variables });
 
   const winner = data && data.auction.bidder?.id;
 
@@ -45,6 +46,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
 
   const etherscanURL = buildEtherscanAddressLink(winner);
   const shortAddressComponent = <ShortAddress address={winner} />;
+  const chainId = defaultChain.id;
 
   return (
     <Tooltip
@@ -70,7 +72,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
             target={'_blank'}
             rel="noreferrer"
           >
-            {winner.toLowerCase() === config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
+            {winner.toLowerCase() === nounsAuctionHouseAddress[chainId].toLowerCase() ? (
               <Trans>Nouns Auction House</Trans>
             ) : (
               shortAddressComponent

@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 
 import {
   nounsGovernorAddress,
+  nounsTokenAddress,
   useReadNounsTokenBalanceOf,
   useReadNounsTokenDelegates,
   useReadNounsTokenGetCurrentVotes,
@@ -20,7 +21,7 @@ import {
 } from '@/contracts';
 import { defaultChain } from '@/wagmi';
 
-import config, { cache, cacheKey, CHAIN_ID } from '../config';
+import { cache, cacheKey, CHAIN_ID } from '../config';
 
 import {
   accountEscrowedNounsQuery,
@@ -37,7 +38,9 @@ export interface INounSeed {
   head: number;
 }
 
-const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
+const chainId = defaultChain.id;
+
+const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, nounsTokenAddress[chainId].toLowerCase());
 const isSeedValid = (seed: INounSeed | Record<string, never> | undefined) => {
   const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
   const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));
@@ -219,7 +222,6 @@ export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => 
 };
 
 export const useSetApprovalForAll = () => {
-  const chainId = defaultChain.id;
   const {
     writeContractAsync,
     data,
@@ -253,7 +255,7 @@ export const useSetApprovalForAll = () => {
 export const useIsApprovedForAll = () => {
   const { address } = useAccount();
   const { data } = useReadNounsTokenIsApprovedForAll({
-    args: address ? [address, config.addresses.nounsDAOProxy as Address] : undefined,
+    args: address ? [address, nounsGovernorAddress[chainId]] : undefined,
     query: { enabled: !!address },
   });
 

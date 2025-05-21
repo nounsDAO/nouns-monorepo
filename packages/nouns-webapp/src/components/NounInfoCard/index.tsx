@@ -8,9 +8,10 @@ import _BidsIcon from '@/assets/icons/Bids.svg';
 import NounInfoRowBirthday from '@/components/NounInfoRowBirthday';
 import NounInfoRowButton from '@/components/NounInfoRowButton';
 import NounInfoRowHolder from '@/components/NounInfoRowHolder';
-import config from '@/config';
+import { nounsTokenAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanTokenLink } from '@/utils/etherscan';
+import { defaultChain } from '@/wagmi';
 
 import classes from './NounInfoCard.module.css';
 
@@ -21,9 +22,10 @@ interface NounInfoCardProps {
 
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const { nounId, bidHistoryOnClickHandler } = props;
+  const chainId = defaultChain.id;
 
   const etherscanButtonClickHandler = () =>
-    window.open(buildEtherscanTokenLink(config.addresses.nounsToken, Number(nounId)));
+    window.open(buildEtherscanTokenLink(nounsTokenAddress[chainId], Number(nounId)));
 
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 

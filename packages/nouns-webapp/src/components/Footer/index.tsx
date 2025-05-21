@@ -2,15 +2,18 @@ import { Trans } from '@lingui/react/macro';
 import { Container } from 'react-bootstrap';
 
 import Link from '@/components/Link';
-import config from '@/config';
+import { nounsTokenAddress } from '@/contracts';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { externalURL, ExternalURL } from '@/utils/externalURL';
+import { defaultChain } from '@/wagmi';
 
 import classes from './Footer.module.css';
 
 const Footer = () => {
+  const chainId = defaultChain.id;
+
   const twitterURL = externalURL(ExternalURL.twitter);
-  const etherscanURL = buildEtherscanAddressLink(config.addresses.nounsToken);
+  const etherscanURL = buildEtherscanAddressLink(nounsTokenAddress[chainId]);
   const farcasterURL = externalURL(ExternalURL.farcaster);
 
   return (

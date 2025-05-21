@@ -15,10 +15,11 @@ import ModalTitle from '@/components/ModalTitle';
 import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import StartOrEndTime from '@/components/StartOrEndTime';
-import config from '@/config';
+import { usdcAddress } from '@/contracts';
 import { countDecimals } from '@/utils/numberUtils';
 import { formatTokenAmount } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { contract2humanUSDCFormat } from '@/utils/usdcUtils';
+import { defaultChain } from '@/wagmi';
 import {
   useElapsedTime,
   useStreamRemainingBalance,
@@ -48,7 +49,9 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
     tokenAddress = '',
   } = props;
 
-  const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
+  const chainId = defaultChain.id;
+
+  const isUSDC = tokenAddress.toLowerCase() === usdcAddress[chainId].toLowerCase();
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
 
   const withdrawableBalance = useStreamRemainingBalance(streamAddress) ?? 0n;

@@ -57,16 +57,16 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
+    nounsTokenBuyerAddress[chainId] ?? '',
     totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] === undefined || totalUSDCPayment === 0,
   );
   const isDaoGteV3 = useIsDaoGteV3();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
     config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
   );
-  const chainId = defaultChain.id;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -108,7 +108,7 @@ const CreateProposalPage = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
@@ -123,7 +123,7 @@ const CreateProposalPage = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;

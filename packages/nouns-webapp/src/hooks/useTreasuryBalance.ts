@@ -1,10 +1,15 @@
 import { useBalance } from 'wagmi';
 
 import config from '@/config';
-import { useReadEthToUsdPriceOracleLatestAnswer, useReadStEthBalanceOf } from '@/contracts';
+import {
+  nounsTreasuryAddress,
+  useReadEthToUsdPriceOracleLatestAnswer,
+  useReadStEthBalanceOf,
+} from '@/contracts';
 import { Address } from '@/utils/types';
 
 import useTokenBuyerBalance from './useTokenBuyerBalance';
+import { defaultChain } from '@/wagmi';
 
 /**
  * Computes treasury balance (ETH and Lido)
@@ -12,14 +17,16 @@ import useTokenBuyerBalance from './useTokenBuyerBalance';
  * @returns Total balance of treasury (ETH and Lido) as bigint
  */
 export const useTreasuryBalance = (): bigint => {
+  const chainId = defaultChain.id;
+
   // Get ETH balance for main treasury
   const { data: ethBalance } = useBalance({
-    address: config.addresses.nounsDaoExecutor as Address,
+    address: nounsTreasuryAddress[chainId],
   });
 
   // Get ETH balance for treasury v2
   const { data: ethBalanceTreasuryV2 } = useBalance({
-    address: config.addresses.nounsDaoExecutorProxy as Address,
+    address: nounsTreasuryAddress[chainId],
   });
 
   // Get Lido (stETH) balance for the main treasury
@@ -35,11 +42,11 @@ export const useTreasuryBalance = (): bigint => {
 
   // Get Lido (stETH) balance for treasury v2
   const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
-    args: config.addresses.nounsDaoExecutorProxy
-      ? [config.addresses.nounsDaoExecutorProxy as Address]
+    args: nounsTreasuryAddress[chainId]
+      ? [nounsTreasuryAddress[chainId]]
       : undefined,
     query: {
-      enabled: Boolean(config.addresses.nounsDaoExecutorProxy),
+      enabled: Boolean(nounsTreasuryAddress[chainId]),
     },
   }) as { data: bigint | undefined };
 
