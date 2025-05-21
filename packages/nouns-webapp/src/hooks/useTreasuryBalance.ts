@@ -1,7 +1,7 @@
 import { useBalance } from 'wagmi';
 
-import config from '@/config';
 import {
+  nounsLegacyTreasuryAddress,
   nounsTreasuryAddress,
   useReadEthToUsdPriceOracleLatestAnswer,
   useReadStEthBalanceOf,
@@ -19,7 +19,7 @@ import useTokenBuyerBalance from './useTokenBuyerBalance';
 export const useTreasuryBalance = (): bigint => {
   const chainId = defaultChain.id;
 
-  // Get ETH balance for main treasury
+  // Get ETH balance for the main treasury
   const { data: ethBalance } = useBalance({
     address: nounsTreasuryAddress[chainId],
   });
@@ -32,11 +32,11 @@ export const useTreasuryBalance = (): bigint => {
   // Get Lido (stETH) balance for the main treasury
   // @ts-expect-error - Return type from contract call needs manual casting
   const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
-    args: config.addresses.nounsDaoExecutor
-      ? [config.addresses.nounsDaoExecutor as Address]
+    args: nounsLegacyTreasuryAddress[chainId]
+      ? [nounsLegacyTreasuryAddress[chainId] as Address]
       : undefined,
     query: {
-      enabled: Boolean(config.addresses.nounsDaoExecutor),
+      enabled: Boolean(nounsLegacyTreasuryAddress[chainId]),
     },
   }) as { data: bigint | undefined };
 
