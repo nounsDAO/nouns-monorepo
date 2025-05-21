@@ -9,6 +9,7 @@ import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateCard from '@/components/CandidateCard';
@@ -87,7 +88,7 @@ const getCountdownCopy = (
 };
 
 interface ProposalsProps {
-  proposals: PartialProposal[];
+  proposals?: PartialProposal[];
   nounsRequired?: number;
 }
 
@@ -332,7 +333,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     .reverse()
                     .map((c, i) => {
                       if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(p => p.id == c.proposalIdToUpdate);
+                        const prop = find(proposals ?? [], p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
@@ -343,7 +344,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       return (
                         <div key={i}>
                           <CandidateCard
-                            latestProposal={proposals[proposals.length - 1]}
+                            latestProposal={last<PartialProposal[]>(proposals ?? [])}
                             candidate={c as unknown as ProposalCandidate}
                             key={c?.id}
                             nounsRequired={threshold}
