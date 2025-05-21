@@ -33,7 +33,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - name: Restore turbo cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .turbo
@@ -64,7 +64,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - name: Restore turbo cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .turbo
@@ -94,7 +94,7 @@ jobs:
           node-version: 24.x
           cache: pnpm
       - name: Restore turbo cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .turbo
