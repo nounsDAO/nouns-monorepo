@@ -745,7 +745,7 @@ const parseSubgraphProposal = (
 
   const description = addMissingSchemes(
     replaceInvalidDropboxImageLinks(
-      proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
+      proposal.description?.replace(/\\n/g, '\n').replace(/(^["']|["']$)/g, ''),
     ),
   );
   const transactionDetails: ProposalTransactionDetails = {
