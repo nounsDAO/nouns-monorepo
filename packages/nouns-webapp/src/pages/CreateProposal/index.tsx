@@ -15,7 +15,7 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
-import { nounsTokenBuyerAddress } from '@/contracts';
+import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
@@ -66,7 +66,7 @@ const CreateProposalPage = () => {
   );
   const isDaoGteV3 = useIsDaoGteV3();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
+    nounsLegacyTreasuryAddress[chainId], // This should always point at the V1 executor
   );
 
   const handleAddProposalAction = useCallback(
