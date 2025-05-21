@@ -1,4 +1,5 @@
 export * from './nouns-governor.gen';
+export * from './nouns-legacy-treasury.gen';
 export * from './nouns-treasury.gen';
 export * from './nouns-data.gen';
 export * from './nouns-token.gen';
