@@ -27,7 +27,7 @@ import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
-import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { ExternalURL, externalURL } from '@/utils/externalURL';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -46,7 +46,7 @@ const NavBar = () => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const location = useLocation();
   const treasuryBalance = useTreasuryBalance();
-  const daoEtherscanLink = buildEtherscanHoldingsLink(nounsTreasuryAddress[chainId]);
+  const daoEtherscanLink = buildEtherscanAddressLink(nounsTreasuryAddress[chainId]);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =
