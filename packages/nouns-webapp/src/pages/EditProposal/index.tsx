@@ -77,7 +77,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const ethNeeded = useEthNeeded(
     nounsTokenBuyerAddress[chainId],
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
 
   const removeTitleFromDescription = (description: string, title: string) => {
