@@ -317,8 +317,8 @@ const CreateProposalPage = () => {
             :{' '}
             <Trans>
               Because this proposal contains a USDC fund transfer action we&apos;ve added an
-              additional additional ETH transaction to refill the TokenBuyer contract. This action
-              allows to continue to trustlessly acquire USDC to fund proposals like this.
+              additional additional ETH transaction to refill the TokenBuyer contract. This action allows to
+               continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
