@@ -343,7 +343,6 @@ const addMissingSchemes = (descriptionText: string | undefined) => {
   if (!descriptionText) return descriptionText;
 
   // Match Markdown links: [text](url)
-  // eslint-disable-next-line sonarjs/todo-tag
   // TODO: This regex is not perfect, but it's good enough for now.
   // eslint-disable-next-line sonarjs/slow-regex
   const markdownLinkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
@@ -486,7 +485,6 @@ export const formatProposalTransactionDetails = (details: {
     }
 
     try {
-      // eslint-disable-next-line sonarjs/todo-tag
       // TODO: This regex is not perfect, but it's good enough for now.
       // eslint-disable-next-line sonarjs/slow-regex
       const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
