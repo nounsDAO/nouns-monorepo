@@ -21,7 +21,7 @@ export const useTreasuryBalance = (): bigint => {
 
   // Get ETH balance for the main treasury
   const { data: ethBalance } = useBalance({
-    address: nounsTreasuryAddress[chainId],
+    address: nounsLegacyTreasuryAddress[chainId],
   });
 
   // Get ETH balance for treasury v2
