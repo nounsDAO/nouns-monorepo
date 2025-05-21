@@ -1,19 +1,22 @@
-import { ClockIcon } from '@heroicons/react/solid';
-import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import { useEffect, useState } from 'react';
-import DelegationModal from '@/components/DelegationModal';
 
+import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { useAccount, useBlockNumber } from 'wagmi';
 
+import CandidateCard from '@/components/CandidateCard';
+import DelegationModal from '@/components/DelegationModal';
+import ProposalStatus from '@/components/ProposalStatus';
 import config from '@/config';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/isMobile';
@@ -26,12 +29,10 @@ import {
 } from '@/wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
-import CandidateCard from '@/components/CandidateCard';
-import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './Proposals.module.css';
-import { useAccount, useBlockNumber } from 'wagmi';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+
+import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
 
 dayjs.extend(relativeTime);
 
@@ -153,6 +154,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             <div className={classes.tabs}>
               {tabs.map((tab, index) => (
                 <button
+                  type="button"
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
                   onClick={() => setActiveTab(index)}
                   key={index}
@@ -330,7 +332,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     .reverse()
                     .map((c, i) => {
                       if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(p => p.id === c.proposalIdToUpdate);
+                        const prop = proposals.find(p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
