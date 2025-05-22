@@ -16,9 +16,11 @@ import CandidateCard from '@/components/CandidateCard';
 import DelegationModal from '@/components/DelegationModal';
 import ProposalStatus from '@/components/ProposalStatus';
 import config from '@/config';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
+import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/isMobile';
 import { isProposalUpdatable } from '@/utils/proposals';
@@ -99,7 +101,8 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { address: account } = useAccount();
   const navigate = useNavigate();
   const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
-  const [candidates, setCandidates] = useState<typeof candidatesData>(undefined);
+  const dispatch = useAppDispatch();
+  const candidates = useAppSelector(state => state.candidates.data);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
@@ -115,11 +118,17 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
       if (!candidates) {
         await refetchCandidates();
         if (candidatesData) {
-          setCandidates(candidatesData);
+          dispatch(
+            setCandidates(
+              candidatesData.filter(
+                (candidate): candidate is ProposalCandidate => candidate !== undefined,
+              ),
+            ),
+          );
         }
       }
     })();
-  }, [candidates, candidatesData, refetchCandidates]);
+  }, [candidates, candidatesData, refetchCandidates, dispatch]);
 
   useEffect(() => {
     if (hash === '#candidates') {
