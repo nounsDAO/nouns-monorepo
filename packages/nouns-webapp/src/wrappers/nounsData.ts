@@ -208,7 +208,7 @@ const filterSigners = (
 export const useCandidateProposals = (blockNumber?: bigint) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { query, variables } = candidateProposalsQuery();
-  const { loading, data, error } = useQuery<{
+  const { loading, data, error, refetch } = useQuery<{
     proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
   }>(query, { variables });
 
@@ -262,7 +262,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
       return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
     });
   }
-  return { loading, data: candidatesData, error };
+  return { loading, data: candidatesData, error, refetch };
 };
 
 export const useCandidateProposal = (

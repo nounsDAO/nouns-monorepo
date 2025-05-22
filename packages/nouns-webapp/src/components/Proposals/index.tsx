@@ -95,10 +95,10 @@ interface ProposalsProps {
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const { data: blockNumber, refetch: refetchBlockNumber } = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidatesData } = useCandidateProposals(blockNumber);
+  const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
   const [candidates, setCandidates] = useState<typeof candidatesData>(undefined);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
@@ -112,9 +112,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
 
   useEffect(() => {
     if (!candidates) {
-      refetchBlockNumber().then(() => setCandidates(candidatesData));
+      refetchCandidates().then(() => setCandidates(candidatesData));
     }
-  }, [candidates, candidatesData, refetchBlockNumber]);
+  }, [candidates, candidatesData, refetchCandidates]);
 
   useEffect(() => {
     if (hash === '#candidates') {
