@@ -9,7 +9,7 @@ import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { find, last } from 'remeda';
+import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateCard from '@/components/CandidateCard';
@@ -115,17 +115,16 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
 
   useEffect(() => {
     (async () => {
-      if (!candidates) {
-        await refetchCandidates();
-        if (candidatesData) {
-          dispatch(
-            setCandidates(
-              candidatesData.filter(
-                (candidate): candidate is ProposalCandidate => candidate !== undefined,
-              ),
-            ),
-          );
-        }
+      if (candidates) {
+        return;
+      }
+      await refetchCandidates();
+      const filteredCandidates = filter(
+        candidatesData ?? [],
+        (candidate): candidate is ProposalCandidate => candidate !== undefined,
+      );
+      if (filteredCandidates) {
+        dispatch(setCandidates(filteredCandidates));
       }
     })();
   }, [candidates, candidatesData, refetchCandidates, dispatch]);
