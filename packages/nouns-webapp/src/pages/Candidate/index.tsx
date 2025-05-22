@@ -206,6 +206,7 @@ const CandidatePage = () => {
         </Alert>
       )}
       <Col lg={12} className={classes.wrapper}>
+        {!candidate && <Spinner animation="border" />}
         {candidate && (
           <CandidateHeader
             title={candidate.version.content.title}
