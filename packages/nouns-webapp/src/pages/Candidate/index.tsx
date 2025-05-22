@@ -50,12 +50,13 @@ const CandidatePage = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
   const { data: currentBlock } = useBlockNumber();
-  const { data: candidate, refetch: candidateRefetch } = useCandidateProposal(
+  const { data: candidateData, refetch: candidateRefetch } = useCandidateProposal(
     id ?? '',
     dataFetchPollInterval,
     false,
     currentBlock,
   );
+  const [candidate, setCandidate] = useState<typeof candidateData>(null);
   const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -69,9 +70,9 @@ const CandidatePage = () => {
 
   useEffect(() => {
     if (!candidate) {
-      candidateRefetch();
+      candidateRefetch().then(() => setCandidate(candidateData ?? null));
     }
-  }, [candidate, candidateRefetch]);
+  }, [candidate, candidateData, candidateRefetch]);
 
   const handleRefetchData = () => {
     feedback.refetch();
@@ -102,10 +103,6 @@ const CandidatePage = () => {
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
-  const handleRefetchCandidateData = () => {
-    candidateRefetch();
-  };
 
   const onTransactionStateChange = useCallback(
     (
@@ -272,7 +269,9 @@ const CandidatePage = () => {
                 slug={candidate.slug ?? ''}
                 id={candidate.id}
                 isProposer={isProposer}
-                handleRefetchCandidateData={handleRefetchCandidateData}
+                handleRefetchCandidateData={() => {
+                  candidateRefetch();
+                }}
                 setDataFetchPollInterval={(interval: number | null) =>
                   interval !== null
                     ? setDataFetchPollInterval(interval)
