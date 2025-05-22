@@ -206,7 +206,14 @@ const CandidatePage = () => {
         </Alert>
       )}
       <Col lg={12} className={classes.wrapper}>
-        {!candidate && <Spinner animation="border" />}
+        {!candidate && (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: '100vh' }}
+          >
+            <Spinner animation="border" />
+          </div>
+        )}
         {candidate && (
           <CandidateHeader
             title={candidate.version.content.title}
