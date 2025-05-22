@@ -239,23 +239,21 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     blockNumber ?? 0n,
   );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber);
-  const candidatesData =
-    proposerDelegates.data &&
-    unmatchedCandidates?.map(candidate => {
-      const proposerVotes =
-        proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
-          ?.nounsRepresented?.length || 0;
-      return parseSubgraphCandidate(
-        candidate,
-        proposerVotes,
-        threshold,
-        timestampNow,
-        activePendingProposers.data,
-        false,
-        signersDelegateSnapshot.data,
-        updatableProposalIds.data,
-      );
-    });
+  const candidatesData = map(unmatchedCandidates ?? [], candidate => {
+    const proposerVotes =
+      proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
+        ?.nounsRepresented?.length || 0;
+    return parseSubgraphCandidate(
+      candidate,
+      proposerVotes,
+      threshold,
+      timestampNow,
+      activePendingProposers.data,
+      false,
+      signersDelegateSnapshot.data,
+      updatableProposalIds.data,
+    );
+  });
 
   if (candidatesData) {
     candidatesData.sort((a, b) => {
