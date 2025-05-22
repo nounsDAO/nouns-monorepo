@@ -8,7 +8,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
-import { first } from 'remeda';
+import { first, isNonNullish } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateSponsors from '@/components/CandidateSponsors';
@@ -175,18 +175,20 @@ const CandidatePage = () => {
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {/* notice for proposal updates */}
-      {candidate?.proposalIdToUpdate && +candidate?.proposalIdToUpdate > 0 && !isProposer && (
-        <Alert variant="warning">
-          <Trans>
-            <strong>Note: </strong>
-            This candidate is an update to{' '}
-            <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
-              Proposal {candidate?.proposalIdToUpdate}
-            </Link>
-            .
-          </Trans>
-        </Alert>
-      )}
+      {isNonNullish(candidate?.proposalIdToUpdate) &&
+        candidate?.proposalIdToUpdate > 0 &&
+        !isProposer && (
+          <Alert variant="warning">
+            <Trans>
+              <strong>Note: </strong>
+              This candidate is an update to{' '}
+              <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
+                Proposal {candidate?.proposalIdToUpdate}
+              </Link>
+              .
+            </Trans>
+          </Alert>
+        )}
       {isProposal && (
         <Alert variant="success">
           <Trans>
