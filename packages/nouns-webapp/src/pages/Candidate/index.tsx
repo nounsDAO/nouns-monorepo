@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -7,7 +7,6 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { Link, useParams } from 'react-router';
 import { first } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
@@ -50,7 +49,7 @@ const CandidatePage = () => {
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
-  const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: currentBlock } = useBlockNumber();
   const { data: candidate, refetch: candidateRefetch } = useCandidateProposal(
     id ?? '',
     dataFetchPollInterval,
@@ -67,6 +66,13 @@ const CandidatePage = () => {
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.proposalIdToUpdate ?? 0);
   const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
+
+  useEffect(() => {
+    if (!candidate) {
+      candidateRefetch();
+    }
+  }, [candidate, candidateRefetch]);
+
   const handleRefetchData = () => {
     feedback.refetch();
   };
@@ -96,6 +102,7 @@ const CandidatePage = () => {
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
   const handleRefetchCandidateData = () => {
     candidateRefetch();
   };
