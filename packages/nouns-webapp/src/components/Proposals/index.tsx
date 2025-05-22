@@ -95,11 +95,10 @@ interface ProposalsProps {
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [blockNumber, setBlockNumber] = useState<bigint>(0n);
-  const { data: currentBlock } = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
+  const { data: candidates } = useCandidateProposals(blockNumber);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
@@ -109,13 +108,6 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
   const { hash } = useLocation();
-
-  useEffect(() => {
-    // prevent blockNumber from triggering a re-render when it's already set
-    if (blockNumber === 0n) {
-      setBlockNumber(currentBlock || blockNumber);
-    }
-  }, [currentBlock, blockNumber]);
 
   useEffect(() => {
     if (hash === '#candidates') {
