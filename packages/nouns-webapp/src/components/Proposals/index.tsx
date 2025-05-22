@@ -95,7 +95,7 @@ interface ProposalsProps {
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const { data: blockNumber } = useBlockNumber({ watch: true });
+  const { data: blockNumber, refetch: refetchBlockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
   const { data: candidates } = useCandidateProposals(blockNumber);
@@ -110,10 +110,17 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { hash } = useLocation();
 
   useEffect(() => {
+    if (!candidates) {
+      refetchBlockNumber();
+    }
+  }, [candidates, refetchBlockNumber]);
+
+  useEffect(() => {
     if (hash === '#candidates') {
       setActiveTab(1);
     }
   }, [hash]);
+
   useEffect(() => {
     if (activeTab === 1) {
       navigate('/vote#candidates');

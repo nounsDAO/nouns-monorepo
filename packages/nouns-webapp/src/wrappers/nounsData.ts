@@ -229,7 +229,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     activeCandidateProposers,
     blockNumber ?? 0n,
   );
-  const threshold = useProposalThreshold() || 0;
+  const threshold = useProposalThreshold() ?? 0;
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const allSigners = unmatchedCandidates
     ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
