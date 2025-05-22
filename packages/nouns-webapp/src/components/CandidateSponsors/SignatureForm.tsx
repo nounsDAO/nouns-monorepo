@@ -17,7 +17,6 @@ import {
 import { useSignTypedData } from 'wagmi';
 
 import link from '@/assets/icons/Link.svg';
-import { CHAIN_ID } from '@/config';
 import { nounsGovernorAddress } from '@/contracts';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
@@ -80,7 +79,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
 
   const [domain, setDomain] = useState({
     name: 'Nouns DAO',
-    chainId: CHAIN_ID,
+    chainId,
     verifyingContract: nounsGovernorAddress[chainId],
   });
 
