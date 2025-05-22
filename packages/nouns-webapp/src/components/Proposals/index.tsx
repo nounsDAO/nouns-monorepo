@@ -111,9 +111,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { hash } = useLocation();
 
   useEffect(() => {
-    if (!candidates) {
-      refetchCandidates().then(() => setCandidates(candidatesData));
-    }
+    (async () => {
+      if (!candidates) {
+        await refetchCandidates();
+        if (candidatesData) {
+          setCandidates(candidatesData);
+        }
+      }
+    })();
   }, [candidates, candidatesData, refetchCandidates]);
 
   useEffect(() => {

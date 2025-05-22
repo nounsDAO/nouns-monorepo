@@ -69,9 +69,14 @@ const CandidatePage = () => {
   const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
 
   useEffect(() => {
-    if (!candidate) {
-      candidateRefetch().then(() => setCandidate(candidateData ?? null));
-    }
+    (async () => {
+      if (!candidate) {
+        await candidateRefetch();
+        if (candidateData) {
+          setCandidate(candidateData);
+        }
+      }
+    })();
   }, [candidate, candidateData, candidateRefetch]);
 
   const handleRefetchData = () => {
