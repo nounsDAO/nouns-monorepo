@@ -4,15 +4,14 @@ import React, { useEffect } from 'react';
 
 import './index.css';
 import { ApolloProvider, useQuery } from '@apollo/client';
-import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { combineReducers } from 'redux';
-import { createLogger } from 'redux-logger';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
+
+import { store } from '@/store';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -27,9 +26,7 @@ import {
 import { useAppDispatch, useAppSelector } from './hooks';
 import { LanguageProvider } from './i18n/LanguageProvider';
 import reportWebVitals from './reportWebVitals';
-import account from './state/slices/account';
-import application from './state/slices/application';
-import auction, {
+import {
   appendBid,
   reduxSafeAuction,
   reduxSafeBid,
@@ -39,49 +36,13 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import logs from './state/slices/logs';
-import onDisplayAuction, {
-  setLastAuctionNounId,
-  setOnDisplayAuctionNounId,
-} from './state/slices/onDisplayAuction';
-import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
+import { setLastAuctionNounId, setOnDisplayAuctionNounId } from './state/slices/onDisplayAuction';
+import { addPastAuctions } from './state/slices/pastAuctions';
 import { nounPath } from './utils/history';
 import { config as wagmiConfig, defaultChain } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
-
-const createRootReducer = () =>
-  combineReducers({
-    account,
-    application,
-    auction,
-    logs,
-    pastAuctions,
-    onDisplayAuction,
-  });
-
-const loggerMiddleware = createLogger();
-
-export const store = configureStore({
-  reducer: createRootReducer(),
-  middleware: getDefaultMiddleware => {
-    const middleware = getDefaultMiddleware();
-    // Enable logger in development and when explicitly enabled
-    if (
-      import.meta.env.MODE !== 'production' &&
-      import.meta.env.VITE_ENABLE_REDUX_LOGGER === 'true'
-    ) {
-      return middleware.concat(loggerMiddleware);
-    }
-    return middleware;
-  },
-  devTools: import.meta.env.MODE !== 'production',
-  preloadedState: undefined,
-});
-
-export type RootState = ReturnType<ReturnType<typeof createRootReducer>>;
-export type AppDispatch = typeof store.dispatch;
 
 const client = clientFactory(config.app.subgraphApiUri);
 

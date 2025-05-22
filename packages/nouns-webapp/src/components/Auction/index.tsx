@@ -1,5 +1,3 @@
-import type { RootState } from '@/index';
-
 import React from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
@@ -15,6 +13,7 @@ import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
 } from '@/state/slices/onDisplayAuction';
+import { RootState } from '@/store';
 import { beige, grey } from '@/utils/nounBgColors';
 import { isNounderNoun } from '@/utils/nounderNoun';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
