@@ -5,7 +5,8 @@ import { Trans } from '@lingui/react/macro';
 import { formatUnits } from 'viem';
 
 import ShortAddress from '@/components/ShortAddress';
-import config from '@/config';
+import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
+import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
 import classes from './ProposalContent.module.css';
@@ -17,6 +18,8 @@ type ProposalTransactionProps = {
 };
 
 export default function ProposalTransaction({ transaction }: Readonly<ProposalTransactionProps>) {
+  const chainId = defaultChain.id;
+
   return (
     <li className="m-0">
       {linkIfAddress(transaction.target)}.{transaction.functionSig}
@@ -41,7 +44,7 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
       ) : (
         transaction.callData
       )}
-      {transaction.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() &&
+      {transaction.target.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase() &&
         transaction.functionSig === 'transfer' && (
           <div className={classes.txnInfoText}>
             <div className={classes.txnInfoIconWrapper}>
@@ -55,7 +58,7 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
             </div>
           </div>
         )}
-      {transaction.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() &&
+      {transaction.target.toLowerCase() === nounsPayerAddress[chainId].toLowerCase() &&
         transaction.functionSig === 'sendOrRegisterDebt' && (
           <div className={classes.txnInfoText}>
             <div className={classes.txnInfoIconWrapper}>

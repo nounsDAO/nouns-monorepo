@@ -35,6 +35,8 @@ export const config = createConfig({
   ],
 });
 
+export const defaultChain = activeChain;
+
 declare module 'wagmi' {
   interface Register {
     config: typeof config;

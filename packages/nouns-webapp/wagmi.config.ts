@@ -13,6 +13,14 @@ const contractConfigs = [
     },
   },
   {
+    name: 'NounsLegacyTreasury',
+    fileName: 'nouns-legacy-treasury',
+    address: {
+      [mainnet.id]: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
+      [sepolia.id]: '0x332db58b51393f3a6b28d4DD8964234967e1aD33',
+    },
+  },
+  {
     name: 'NounsTreasury',
     fileName: 'nouns-treasury',
     address: {

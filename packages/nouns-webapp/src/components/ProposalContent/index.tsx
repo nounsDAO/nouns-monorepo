@@ -9,13 +9,14 @@ import { isAddress } from 'viem';
 
 import linkIcon from '@/assets/icons/Link.svg';
 import EnsOrLongAddress from '@/components/EnsOrLongAddress';
-import config from '@/config';
+import { nounsTokenAddress } from '@/contracts';
 import {
   buildEtherscanAddressLink,
   buildEtherscanHoldingsLink,
   buildEtherscanTxLink,
 } from '@/utils/etherscan';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
 import classes from './ProposalContent.module.css';
@@ -57,9 +58,8 @@ export const transactionIconLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { description, title, details } = props;
-  const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
-  );
+  const chainId = defaultChain.id;
+  const daoEtherscanLink = buildEtherscanHoldingsLink(nounsTokenAddress[chainId]);
 
   return (
     <>

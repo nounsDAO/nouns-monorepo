@@ -4304,6 +4304,517 @@ export enum SeedOrderBy {
   Id = 'id'
 }
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  /** Access to subgraph metadata */
+  _meta?: Maybe<Meta>;
+  account?: Maybe<Account>;
+  accounts: Array<Account>;
+  auction?: Maybe<Auction>;
+  auctions: Array<Auction>;
+  bid?: Maybe<Bid>;
+  bids: Array<Bid>;
+  candidateFeedback?: Maybe<CandidateFeedback>;
+  candidateFeedbacks: Array<CandidateFeedback>;
+  delegate?: Maybe<Delegate>;
+  delegates: Array<Delegate>;
+  delegationEvent?: Maybe<DelegationEvent>;
+  delegationEvents: Array<DelegationEvent>;
+  dynamicQuorumParams?: Maybe<DynamicQuorumParams>;
+  dynamicQuorumParams_collection: Array<DynamicQuorumParams>;
+  escrowDeposit?: Maybe<EscrowDeposit>;
+  escrowDeposits: Array<EscrowDeposit>;
+  escrowWithdrawal?: Maybe<EscrowWithdrawal>;
+  escrowWithdrawals: Array<EscrowWithdrawal>;
+  escrowedNoun?: Maybe<EscrowedNoun>;
+  escrowedNouns: Array<EscrowedNoun>;
+  fork?: Maybe<Fork>;
+  forkJoin?: Maybe<ForkJoin>;
+  forkJoinedNoun?: Maybe<ForkJoinedNoun>;
+  forkJoinedNouns: Array<ForkJoinedNoun>;
+  forkJoins: Array<ForkJoin>;
+  forks: Array<Fork>;
+  governance?: Maybe<Governance>;
+  governances: Array<Governance>;
+  noun?: Maybe<Noun>;
+  nouns: Array<Noun>;
+  proposal?: Maybe<Proposal>;
+  proposalCandidate?: Maybe<ProposalCandidate>;
+  proposalCandidateContent?: Maybe<ProposalCandidateContent>;
+  proposalCandidateContents: Array<ProposalCandidateContent>;
+  proposalCandidateSignature?: Maybe<ProposalCandidateSignature>;
+  proposalCandidateSignatures: Array<ProposalCandidateSignature>;
+  proposalCandidateVersion?: Maybe<ProposalCandidateVersion>;
+  proposalCandidateVersions: Array<ProposalCandidateVersion>;
+  proposalCandidates: Array<ProposalCandidate>;
+  proposalFeedback?: Maybe<ProposalFeedback>;
+  proposalFeedbacks: Array<ProposalFeedback>;
+  proposalVersion?: Maybe<ProposalVersion>;
+  proposalVersions: Array<ProposalVersion>;
+  proposals: Array<Proposal>;
+  seed?: Maybe<Seed>;
+  seeds: Array<Seed>;
+  transferEvent?: Maybe<TransferEvent>;
+  transferEvents: Array<TransferEvent>;
+  vote?: Maybe<Vote>;
+  votes: Array<Vote>;
+};
+
+
+export type SubscriptionMetaArgs = {
+  block?: InputMaybe<BlockHeight>;
+};
+
+
+export type SubscriptionAccountArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionAccountsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AccountOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<AccountFilter>;
+};
+
+
+export type SubscriptionAuctionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionAuctionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AuctionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<AuctionFilter>;
+};
+
+
+export type SubscriptionBidArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionBidsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BidOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<BidFilter>;
+};
+
+
+export type SubscriptionCandidateFeedbackArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionCandidateFeedbacksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<CandidateFeedbackOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<CandidateFeedbackFilter>;
+};
+
+
+export type SubscriptionDelegateArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDelegatesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DelegateOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DelegateFilter>;
+};
+
+
+export type SubscriptionDelegationEventArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDelegationEventsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DelegationEventOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DelegationEventFilter>;
+};
+
+
+export type SubscriptionDynamicQuorumParamsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDynamicQuorumParamsCollectionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DynamicQuorumParamsOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DynamicQuorumParamsFilter>;
+};
+
+
+export type SubscriptionEscrowDepositArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowDepositsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowDepositOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowDepositFilter>;
+};
+
+
+export type SubscriptionEscrowWithdrawalArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowWithdrawalsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowWithdrawalOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowWithdrawalFilter>;
+};
+
+
+export type SubscriptionEscrowedNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowedNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowedNounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowedNounFilter>;
+};
+
+
+export type SubscriptionForkArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinedNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinedNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkJoinedNounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkJoinedNounFilter>;
+};
+
+
+export type SubscriptionForkJoinsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkJoinOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkJoinFilter>;
+};
+
+
+export type SubscriptionForksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkFilter>;
+};
+
+
+export type SubscriptionGovernanceArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionGovernancesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<GovernanceOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<GovernanceFilter>;
+};
+
+
+export type SubscriptionNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<NounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<NounFilter>;
+};
+
+
+export type SubscriptionProposalArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateContentArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateContentsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateContentOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateContentFilter>;
+};
+
+
+export type SubscriptionProposalCandidateSignatureArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateSignaturesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateSignatureOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateSignatureFilter>;
+};
+
+
+export type SubscriptionProposalCandidateVersionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateVersionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateVersionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateVersionFilter>;
+};
+
+
+export type SubscriptionProposalCandidatesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateFilter>;
+};
+
+
+export type SubscriptionProposalFeedbackArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalFeedbacksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalFeedbackOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalFeedbackFilter>;
+};
+
+
+export type SubscriptionProposalVersionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalVersionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalVersionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalVersionFilter>;
+};
+
+
+export type SubscriptionProposalsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalFilter>;
+};
+
+
+export type SubscriptionSeedArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionSeedsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<SeedOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<SeedFilter>;
+};
+
+
+export type SubscriptionTransferEventArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionTransferEventsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TransferEventOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<TransferEventFilter>;
+};
+
+
+export type SubscriptionVoteArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionVotesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<VoteOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<VoteFilter>;
+};
+
 export type TransferEvent = {
   __typename?: 'TransferEvent';
   /** Block number of the event */

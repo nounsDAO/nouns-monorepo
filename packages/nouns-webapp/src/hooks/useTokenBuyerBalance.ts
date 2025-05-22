@@ -1,10 +1,12 @@
 import { useBalance } from 'wagmi';
 
-import { useReadEthToUsdPriceOracleLatestAnswer, useReadUsdcBalanceOf } from '@/contracts';
-
-import config from '../config';
-
-const { addresses } = config;
+import {
+  nounsPayerAddress,
+  nounsTokenBuyerAddress,
+  useReadEthToUsdPriceOracleLatestAnswer,
+  useReadUsdcBalanceOf,
+} from '@/contracts';
+import { defaultChain } from '@/wagmi';
 
 /**
  * Hook to calculate the total token buyer balance in ETH equivalent
@@ -12,14 +14,16 @@ const { addresses } = config;
  * @returns Total balance as bigint, or undefined if data is not yet available
  */
 function useTokenBuyerBalance(): bigint | undefined {
+  const chainId = defaultChain.id;
+
   // Fetch ETH balance directly
   const { data: ethBalance } = useBalance({
-    address: addresses.tokenBuyer,
+    address: nounsTokenBuyerAddress[chainId],
   });
 
   // Fetch USDC balance of the payer contract
   const { data: usdcBalance } = useReadUsdcBalanceOf({
-    args: addresses.payerContract ? [addresses.payerContract] : undefined,
+    args: nounsPayerAddress[chainId] ? [nounsPayerAddress[chainId]] : undefined,
   });
 
   // Fetch ETH/USD price for conversion

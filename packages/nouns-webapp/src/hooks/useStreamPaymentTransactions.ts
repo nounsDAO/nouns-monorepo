@@ -1,7 +1,6 @@
 import type { Address } from '@/utils/types';
 
 import { encodeFunctionData, parseEther } from 'viem';
-import { useChainId } from 'wagmi';
 
 import { ProposalActionModalState } from '@/components/ProposalActionsModal';
 import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
@@ -19,6 +18,7 @@ import {
   getTokenAddressForCurrency,
 } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { human2ContractUSDCFormat } from '@/utils/usdcUtils';
+import { defaultChain } from '@/wagmi';
 
 interface UseStreamPaymentTransactionsProps {
   state: ProposalActionModalState;
@@ -38,7 +38,7 @@ export default function useStreamPaymentTransactions({
   state,
   predictedAddress,
 }: UseStreamPaymentTransactionsProps) {
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   if (!predictedAddress) {
     return [];

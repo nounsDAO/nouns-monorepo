@@ -5,7 +5,6 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
-import { useChainId } from 'wagmi';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalLabel from '@/components/ModalLabel';
@@ -20,13 +19,14 @@ import {
   usePredictStreamAddress,
 } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import { unixToDateString } from '@/utils/timeUtils';
+import { defaultChain } from '@/wagmi';
 
 import classes from './StreamPaymentsReviewStep.module.css';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   const predictedAddress = usePredictStreamAddress({
     msgSender: nounsGovernorAddress[chainId],

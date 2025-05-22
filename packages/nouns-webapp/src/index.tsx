@@ -4,14 +4,15 @@ import React, { useEffect } from 'react';
 
 import './index.css';
 import { ApolloProvider, useQuery } from '@apollo/client';
+import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore, PreloadedState } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { combineReducers } from 'redux';
+import { createLogger } from 'redux-logger';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
-import { useChainId, usePublicClient, WagmiProvider } from 'wagmi';
+import { usePublicClient, WagmiProvider } from 'wagmi';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -45,7 +46,7 @@ import onDisplayAuction, {
 } from './state/slices/onDisplayAuction';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import { nounPath } from './utils/history';
-import { config as wagmiConfig } from './wagmi';
+import { config as wagmiConfig, defaultChain } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
@@ -60,20 +61,26 @@ const createRootReducer = () =>
     onDisplayAuction,
   });
 
-export function configureStore(preloadedState: PreloadedState<any>) {
-  return createStore(
-    createRootReducer(), // root reducer without router state
-    preloadedState,
-    composeWithDevTools(
-      applyMiddleware(),
-      // ... other middlewares ...
-    ),
-  );
-}
+const loggerMiddleware = createLogger();
 
-const store = configureStore({});
+export const store = configureStore({
+  reducer: createRootReducer(),
+  middleware: getDefaultMiddleware => {
+    const middleware = getDefaultMiddleware();
+    // Enable logger in development and when explicitly enabled
+    if (
+      import.meta.env.MODE !== 'production' &&
+      import.meta.env.VITE_ENABLE_REDUX_LOGGER === 'true'
+    ) {
+      return middleware.concat(loggerMiddleware);
+    }
+    return middleware;
+  },
+  devTools: import.meta.env.MODE !== 'production',
+  preloadedState: undefined,
+});
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<ReturnType<typeof createRootReducer>>;
 export type AppDispatch = typeof store.dispatch;
 
 const client = clientFactory(config.app.subgraphApiUri);
@@ -81,7 +88,7 @@ const client = clientFactory(config.app.subgraphApiUri);
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
   const publicClient = usePublicClient();
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   // Fetch the current auction
   const { data: currentAuction } = useReadNounsAuctionHouseAuction();

@@ -4,11 +4,15 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { useAccount } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
+import { Address, Hex } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
+import { nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
@@ -25,12 +29,8 @@ import {
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
-import classes from '../CreateProposal/CreateProposal.module.css';
-
+import classes from '@/pages/CreateProposal/CreateProposal.module.css';
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useChainId } from 'wagmi';
-import { Address, Hex } from '@/utils/types';
 
 interface EditProposalProps {
   match: {
@@ -73,12 +73,12 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[useChainId()],
+    nounsTokenBuyerAddress[chainId],
     totalUSDCPayment,
-    nounsTokenBuyerAddress[useChainId()] === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
-  const chainId = useChainId();
 
   const removeTitleFromDescription = (description: string, title: string) => {
     const titleRegex = new RegExp(`# ${title}\n\n`);
@@ -131,8 +131,8 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId])
-          .length > 0;
+        proposalTransactions.filter(txn => txn.address === nounsTokenBuyerAddress[chainId]).length >
+        0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
       if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {

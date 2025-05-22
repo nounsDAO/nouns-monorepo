@@ -2,9 +2,9 @@ import {
   ContractAddresses as NounsContractAddresses,
   getContractAddressesForChainOrThrow,
 } from '@nouns/sdk';
+import { hardhat, mainnet, sepolia } from 'viem/chains';
 
 import { Address } from '@/utils/types';
-import { hardhat, mainnet, sepolia } from 'viem/chains';
 
 interface ExternalContractAddresses {
   lidoToken: Address | undefined;

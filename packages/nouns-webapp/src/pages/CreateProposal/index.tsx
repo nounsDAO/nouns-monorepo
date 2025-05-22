@@ -1,26 +1,27 @@
 import type { Hex } from '@/utils/types';
 
-import { withStepProgress } from 'react-stepz';
-import { Link } from 'react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
-import { useAccount, useChainId } from 'wagmi';
+import { Link } from 'react-router';
+import { withStepProgress } from 'react-stepz';
+import { filter } from 'remeda';
+import { useAccount } from 'wagmi';
 
-import { useAppDispatch } from '@/hooks';
 import CreateProposalButton from '@/components/CreateProposalButton';
-import ProposalTransactions from '@/components/ProposalTransactions';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
+import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
+import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
+import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { defaultChain } from '@/wagmi';
 import {
   ProposalState,
   ProposalTransaction,
@@ -34,6 +35,8 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './CreateProposal.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -55,16 +58,16 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
+    nounsTokenBuyerAddress[chainId] ?? '',
     totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
   const isDaoGteV3 = useIsDaoGteV3();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
+    nounsLegacyTreasuryAddress[chainId], // This should always point at the V1 executor
   );
-  const chainId = useChainId();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -105,11 +108,14 @@ const CreateProposalPage = () => {
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
-      const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+      const hasTokenBuyerTopUp =
+        filter(
+          proposalTransactions,
+          txn => txn.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase(),
+        ).length > 0;
 
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyerTopUp) {
         handleAddProposalAction({
           address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
@@ -121,7 +127,7 @@ const CreateProposalPage = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;
@@ -236,7 +242,6 @@ const CreateProposalPage = () => {
           setProposePending(false);
           break;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );
@@ -311,9 +316,9 @@ const CreateProposalPage = () => {
             </b>
             :{' '}
             <Trans>
-              Because this proposal contains a USDC fund transfer action we've added an additional
-              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
-              continue to trustlessly acquire USDC to fund proposals like this.
+              Because this proposal contains a USDC fund transfer action we&apos;ve added an
+              additional additional ETH transaction to refill the TokenBuyer contract. This action
+              allows to continue to trustlessly acquire USDC to fund proposals like this.
             </Trans>
           </Alert>
         )}
@@ -325,8 +330,8 @@ const CreateProposalPage = () => {
         />
         <p className="m-0 p-0">Looking for treasury v1?</p>
         <p className={classes.note}>
-          If you're not sure what this means, you probably don't need it. Otherwise, you can
-          interact with the original treasury{' '}
+          If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
+          can interact with the original treasury{' '}
           <button
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}

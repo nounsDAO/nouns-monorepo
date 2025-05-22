@@ -1,8 +1,13 @@
 import { useBalance } from 'wagmi';
 
-import config from '@/config';
-import { useReadEthToUsdPriceOracleLatestAnswer, useReadStEthBalanceOf } from '@/contracts';
+import {
+  nounsLegacyTreasuryAddress,
+  nounsTreasuryAddress,
+  useReadEthToUsdPriceOracleLatestAnswer,
+  useReadStEthBalanceOf,
+} from '@/contracts';
 import { Address } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 
 import useTokenBuyerBalance from './useTokenBuyerBalance';
 
@@ -12,34 +17,34 @@ import useTokenBuyerBalance from './useTokenBuyerBalance';
  * @returns Total balance of treasury (ETH and Lido) as bigint
  */
 export const useTreasuryBalance = (): bigint => {
-  // Get ETH balance for main treasury
+  const chainId = defaultChain.id;
+
+  // Get ETH balance for the main treasury
   const { data: ethBalance } = useBalance({
-    address: config.addresses.nounsDaoExecutor as Address,
+    address: nounsLegacyTreasuryAddress[chainId],
   });
 
   // Get ETH balance for treasury v2
   const { data: ethBalanceTreasuryV2 } = useBalance({
-    address: config.addresses.nounsDaoExecutorProxy as Address,
+    address: nounsTreasuryAddress[chainId],
   });
 
   // Get Lido (stETH) balance for the main treasury
   // @ts-expect-error - Return type from contract call needs manual casting
   const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
-    args: config.addresses.nounsDaoExecutor
-      ? [config.addresses.nounsDaoExecutor as Address]
+    args: nounsLegacyTreasuryAddress[chainId]
+      ? [nounsLegacyTreasuryAddress[chainId] as Address]
       : undefined,
     query: {
-      enabled: Boolean(config.addresses.nounsDaoExecutor),
+      enabled: Boolean(nounsLegacyTreasuryAddress[chainId]),
     },
   }) as { data: bigint | undefined };
 
   // Get Lido (stETH) balance for treasury v2
   const { data: lidoBalanceTreasuryV2AsETH } = useReadStEthBalanceOf({
-    args: config.addresses.nounsDaoExecutorProxy
-      ? [config.addresses.nounsDaoExecutorProxy as Address]
-      : undefined,
+    args: nounsTreasuryAddress[chainId] ? [nounsTreasuryAddress[chainId]] : undefined,
     query: {
-      enabled: Boolean(config.addresses.nounsDaoExecutorProxy),
+      enabled: Boolean(nounsTreasuryAddress[chainId]),
     },
   }) as { data: bigint | undefined };
 

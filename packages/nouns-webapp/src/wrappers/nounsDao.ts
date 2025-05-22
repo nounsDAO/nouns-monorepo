@@ -11,7 +11,17 @@ import type {
 
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { filter, flatMap, isNonNullish, isNullish, isTruthy, map, pipe, sort } from 'remeda';
+import {
+  filter,
+  flatMap,
+  forEach,
+  isNonNullish,
+  isNullish,
+  isTruthy,
+  map,
+  pipe,
+  sort,
+} from 'remeda';
 import {
   AbiParameter,
   decodeAbiParameters,
@@ -45,11 +55,11 @@ import {
   useReadNounsGovernorAdjustedTotalSupply,
   useReadNounsGovernorForkThreshold,
   useReadNounsGovernorForkThresholdBps,
+  useReadNounsGovernorGetDynamicQuorumParamsAt,
   useReadNounsGovernorGetReceipt,
   useReadNounsGovernorNumTokensInForkEscrow,
   useReadNounsGovernorProposalCount,
   useReadNounsGovernorProposalThreshold,
-  useReadNounsGovernorGetDynamicQuorumParamsAt,
   useWriteNounsGovernorCancel,
   useWriteNounsGovernorCancelSig,
   useWriteNounsGovernorCastRefundableVote,
@@ -66,8 +76,9 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount, useBlockNumber, useChainId, usePublicClient, useReadContracts } from 'wagmi';
+import { useAccount, useBlockNumber, usePublicClient, useReadContracts } from 'wagmi';
 import { mainnet } from 'viem/chains';
+import { defaultChain } from '@/wagmi';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -200,19 +211,6 @@ export interface PartialProposalSubgraphEntity {
   signers: { id: Address }[];
 }
 
-export interface ProposalSubgraphEntity
-  extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
-  description: string;
-  createdBlock: bigint;
-  createdTransactionHash: Hash;
-  createdTimestamp: bigint;
-  proposer: { id: Address };
-  proposalThreshold: bigint;
-  onTimelockV1: boolean;
-  voteSnapshotBlock: bigint;
-}
-
 interface PartialProposalData {
   data: PartialProposal[] | undefined;
   error?: Error;
@@ -303,7 +301,7 @@ export interface ForkSubgraphEntity {
 }
 
 const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
-const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
+const equalTitleRegex = /^\s*([^\n]{1,256})\r?\n(?:={3,25}|-{3,25})/;
 
 /**
  * Extract a markdown title from a proposal body that uses the `# Title` format
@@ -322,9 +320,14 @@ const extractEqualTitle = (body: string) => RegExp(equalTitleRegex).exec(body);
  */
 export const extractTitle = (body: string | undefined): string | null => {
   if (!body) return null;
+
   const hashResult = extractHashTitle(body);
+  if (hashResult && hashResult[1]) {
+    return hashResult[1];
+  }
+
   const equalResult = extractEqualTitle(body);
-  return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
+  return equalResult && equalResult[1] ? equalResult[1] : null;
 };
 
 const removeBold = (text: string): string => text.replace(/\*\*/g, '');
@@ -333,14 +336,25 @@ const removeItalics = (text: string): string => text.replace(/__/g, '');
 export const removeMarkdownStyle = (text: string | null): string | null =>
   text === null ? null : pipe(text, removeBold, removeItalics);
 /**
- * Add missing schemes to markdown links in a proposal's description.
+ * Add missing schemes to Markdown links in a proposal's description.
  * @param descriptionText The description text of a proposal
  */
 const addMissingSchemes = (descriptionText: string | undefined) => {
-  const regex = /\[(.*?)]\(((?!https?:\/\/|#)[^)]+)\)/g;
-  const replacement = '[$1](https://$2)';
+  if (!descriptionText) return descriptionText;
 
-  return descriptionText?.replace(regex, replacement);
+  // Match Markdown links: [text](url)
+  // TODO: This regex is not perfect, but it's good enough for now.
+  // eslint-disable-next-line sonarjs/slow-regex
+  const markdownLinkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
+
+  return descriptionText.replace(markdownLinkRegex, (match, text, url) => {
+    // If the URL already has a scheme or starts with #, leave it as is
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('#')) {
+      return match;
+    }
+    // Otherwise, add the https:// scheme
+    return `[${text}](https://${url})`;
+  });
 };
 
 /**
@@ -355,7 +369,7 @@ const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) =>
 };
 
 export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | undefined {
-  // @ts-ignore
+  // @ts-expect-error wagmi hook's return type might be inferred incorrectly or too broadly
   const { data } = useReadNounsGovernorGetDynamicQuorumParamsAt({
     args: [block],
   });
@@ -371,7 +385,9 @@ export function useDynamicQuorumProps(block: bigint): DynamicQuorumParams | unde
 
 export function useHasVotedOnProposal(proposalId: bigint): boolean {
   const { address } = useAccount();
-  // @ts-ignore
+  /**
+   * @ts-expect-error wagmi hook's argument types might be inferred incorrectly
+   */
   const { data: receipt } = useReadNounsGovernorGetReceipt({
     args: [proposalId, address!],
     query: { enabled: Boolean(proposalId && address) },
@@ -384,7 +400,9 @@ export function useProposalVote(proposalId: bigint): 'Against' | 'For' | 'Abstai
   const { address } = useAccount();
   const enabled = Boolean(proposalId) && Boolean(address);
 
-  // @ts-ignore
+  /**
+   * @ts-expect-error wagmi hook's return type might be inferred incorrectly or too broadly
+   */
   const { data: receipt } = useReadNounsGovernorGetReceipt({
     args: [proposalId, address!],
     query: { enabled },
@@ -467,6 +485,8 @@ export const formatProposalTransactionDetails = (details: {
     }
 
     try {
+      // TODO: This regex is not perfect, but it's good enough for now.
+      // eslint-disable-next-line sonarjs/slow-regex
       const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
       const decoded = decodeAbiParameters(abiParams, callData);
       return {
@@ -495,16 +515,22 @@ export const formatProposalTransactionDetailsToUpdate = (details: {
   }));
 
 export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride?: number) {
-  const publicClient = usePublicClient(); // wagmi v2 public client :contentReference[oaicite:0]{index=0}
-  const chainId = useChainId();
+  const publicClient = usePublicClient();
+  const chainId = defaultChain.id;
 
   const proposalCreatedEvent = parseAbiItem(
     'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
   );
 
   // pick the right starting block
-  const fromBlock =
-    fromBlockOverride != null ? BigInt(fromBlockOverride) : chainId === mainnet.id ? 12985453n : 0n;
+  let fromBlock: bigint;
+  if (fromBlockOverride != null) {
+    fromBlock = BigInt(fromBlockOverride);
+  } else if (chainId === mainnet.id) {
+    fromBlock = 12985453n;
+  } else {
+    fromBlock = 0n;
+  }
 
   const { data: logs } = useReactQuery({
     queryKey: ['proposalCreatedLogs', fromBlock.toString()],
@@ -543,68 +569,134 @@ const getProposalState = (
   isDaoGteV3?: boolean,
   onTimelockV1?: boolean,
 ) => {
+  // Get the initial status from the proposal
   const status = isNonNullish(proposal.status)
     ? ProposalState[proposal.status]
     : ProposalState.UNDETERMINED;
 
+  // Handle specific status cases with dedicated functions
   if (status === ProposalState.PENDING || status === ProposalState.ACTIVE) {
-    if (!blockNumber) {
-      return ProposalState.UNDETERMINED;
-    }
-    if (
-      isDaoGteV3 &&
-      proposal.updatePeriodEndBlock &&
-      blockNumber <= BigInt(proposal.updatePeriodEndBlock)
-    ) {
-      return ProposalState.UPDATABLE;
-    }
-
-    if (blockNumber <= BigInt(proposal.startBlock)) {
-      return ProposalState.PENDING;
-    }
-
-    if (
-      isDaoGteV3 &&
-      blockNumber > BigInt(proposal.endBlock) &&
-      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
-      blockNumber <= BigInt(proposal.objectionPeriodEndBlock)
-    ) {
-      return ProposalState.OBJECTION_PERIOD;
-    }
-
-    // if past endblock, but onchain status hasn't been changed
-    if (
-      blockNumber > BigInt(proposal.endBlock) &&
-      blockNumber > BigInt(proposal.objectionPeriodEndBlock)
-    ) {
-      const forVotes = BigInt(proposal.forVotes);
-      if (
-        forVotes <= BigInt(proposal.againstVotes) ||
-        forVotes < BigInt(proposal.quorumVotes ?? 0)
-      ) {
-        return ProposalState.DEFEATED;
-      }
-      if (!proposal.executionETA) {
-        return ProposalState.SUCCEEDED;
-      }
-    }
-    return ProposalState.ACTIVE;
+    return handlePendingOrActiveState(blockNumber, proposal, isDaoGteV3);
   }
 
-  // if queued, check if expired
   if (status === ProposalState.QUEUED) {
-    if (!blockTimestamp || !proposal.executionETA) {
-      return ProposalState.UNDETERMINED;
-    }
-    // if v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
-    const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
-    if (blockTimestamp.getTime() / 1_000 >= BigInt(proposal.executionETA) + BigInt(GRACE_PERIOD)) {
-      return ProposalState.EXPIRED;
-    }
-    return status;
+    return handleQueuedState(blockTimestamp, proposal, isDaoGteV3, onTimelockV1);
   }
 
   return status;
+};
+
+// Handle the state for PENDING or ACTIVE proposals
+const handlePendingOrActiveState = (
+  blockNumber: number | undefined,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): ProposalState => {
+  if (!blockNumber) {
+    return ProposalState.UNDETERMINED;
+  }
+
+  // Check if it's in UPDATABLE state
+  if (isUpdatableProposal(blockNumber, proposal, isDaoGteV3)) {
+    return ProposalState.UPDATABLE;
+  }
+
+  // Check if it's in PENDING state
+  if (blockNumber <= BigInt(proposal.startBlock)) {
+    return ProposalState.PENDING;
+  }
+
+  // Check if it's in OBJECTION_PERIOD state
+  if (isInObjectionPeriod(blockNumber, proposal, isDaoGteV3)) {
+    return ProposalState.OBJECTION_PERIOD;
+  }
+
+  // Check if past end block and determine resulting state
+  if (isPastEndBlock(blockNumber, proposal)) {
+    return getPastEndBlockState(proposal);
+  }
+
+  return ProposalState.ACTIVE;
+};
+
+// Check if a proposal is in UPDATABLE state
+const isUpdatableProposal = (
+  blockNumber: number,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): boolean => {
+  return Boolean(
+    isDaoGteV3 &&
+      proposal.updatePeriodEndBlock &&
+      blockNumber <= BigInt(proposal.updatePeriodEndBlock),
+  );
+};
+
+// Check if a proposal is in OBJECTION_PERIOD state
+const isInObjectionPeriod = (
+  blockNumber: number,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+): boolean => {
+  return Boolean(
+    isDaoGteV3 &&
+      blockNumber > BigInt(proposal.endBlock) &&
+      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
+      blockNumber <= BigInt(proposal.objectionPeriodEndBlock),
+  );
+};
+
+// Check if a proposal is past its end block
+const isPastEndBlock = (blockNumber: number, proposal: GraphQLProposal): boolean => {
+  return (
+    blockNumber > BigInt(proposal.endBlock) &&
+    blockNumber > BigInt(proposal.objectionPeriodEndBlock)
+  );
+};
+
+// Determine the state for a proposal that is past its end block
+const getPastEndBlockState = (proposal: GraphQLProposal): ProposalState => {
+  const forVotes = BigInt(proposal.forVotes);
+  if (forVotes <= BigInt(proposal.againstVotes) || forVotes < BigInt(proposal.quorumVotes ?? 0)) {
+    return ProposalState.DEFEATED;
+  }
+
+  if (!proposal.executionETA) {
+    return ProposalState.SUCCEEDED;
+  }
+
+  return ProposalState.ACTIVE;
+};
+
+// Handle the state for QUEUED proposals
+const handleQueuedState = (
+  blockTimestamp: Date | undefined,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+  onTimelockV1?: boolean,
+): ProposalState => {
+  if (!blockTimestamp || !proposal.executionETA) {
+    return ProposalState.UNDETERMINED;
+  }
+
+  if (isExpiredProposal(blockTimestamp, proposal, isDaoGteV3, onTimelockV1)) {
+    return ProposalState.EXPIRED;
+  }
+
+  return ProposalState.QUEUED;
+};
+
+// Check if a queued proposal has expired
+const isExpiredProposal = (
+  blockTimestamp: Date,
+  proposal: GraphQLProposal,
+  isDaoGteV3?: boolean,
+  onTimelockV1?: boolean,
+): boolean => {
+  // If v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
+  const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
+
+  return blockTimestamp.getTime() / 1_000 >= Number(proposal.executionETA) + Number(GRACE_PERIOD);
 };
 
 const parsePartialSubgraphProposal = (
@@ -653,7 +745,7 @@ const parseSubgraphProposal = (
 
   const description = addMissingSchemes(
     replaceInvalidDropboxImageLinks(
-      proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
+      proposal.description?.replace(/\\n/g, '\n').replace(/(^["']|["']$)/g, ''),
     ),
   );
   const transactionDetails: ProposalTransactionDetails = {
@@ -729,7 +821,7 @@ export const useAllProposalsViaSubgraph = (): PartialProposalData => {
 export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
   const proposalCount = useProposalCount();
   const govProposalIndexes = useMemo(() => countToIndices(proposalCount), [proposalCount]);
-  const chainId = useChainId();
+  const chainId = defaultChain.id;
 
   const proposalCalls = useMemo(
     () =>
@@ -1480,9 +1572,9 @@ export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => 
   };
   const data: string[] = [];
   if (proposals?.proposals.length > 0) {
-    proposals.proposals.map(proposal => {
+    forEach(proposals.proposals, proposal => {
       data.push(proposal.proposer.id);
-      proposal.signers.map((signer: { id: string }) => {
+      forEach(proposal.signers, (signer: { id: string }) => {
         data.push(signer.id);
         return signer.id;
       });

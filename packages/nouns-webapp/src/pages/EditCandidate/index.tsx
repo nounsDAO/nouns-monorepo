@@ -5,17 +5,19 @@ import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import { formatEther } from 'viem';
+import { useAccount, useBlockNumber } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
-import config from '@/config';
+import { nounsTokenBuyerAddress } from '@/contracts';
 import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { defaultChain } from '@/wagmi';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
   useCandidateProposal,
@@ -27,8 +29,7 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAccount, useBlockNumber, useChainId } from 'wagmi';
+import { filter } from 'remeda';
 
 interface EditCandidateProps {
   match: {
@@ -54,10 +55,11 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
+  const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
+    nounsTokenBuyerAddress[chainId],
     totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
@@ -105,12 +107,15 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
-      const hasTokenBuyterTopTop =
-        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+      const hasTokenBuyerTopUp =
+        filter(
+          proposalTransactions,
+          txn => txn.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase(),
+        ).length > 0;
       // Add a new top up txn if one isn't there already, else add to the existing one
-      if (Number(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+      if (Number(ethNeeded) > 0 && !hasTokenBuyerTopUp) {
         handleAddProposalAction({
-          address: nounsTokenBuyerAddress[useChainId()],
+          address: nounsTokenBuyerAddress[chainId],
           value: BigInt(ethNeeded ?? 0),
           calldata: '0x',
           signature: '',
@@ -120,7 +125,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           const indexOfTokenBuyerTopUp =
             proposalTransactions
               .map((txn, index: number) => {
-                if (txn.address === config.addresses.tokenBuyer) {
+                if (txn.address === nounsTokenBuyerAddress[chainId]) {
                   return index;
                 } else {
                   return -1;
@@ -171,7 +176,11 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
 
   useEffect(() => {
-    isTitleEdited || isBodyEdited ? setIsProposalEdited(true) : setIsProposalEdited(false);
+    if (isTitleEdited || isBodyEdited) {
+      setIsProposalEdited(true);
+    } else {
+      setIsProposalEdited(false);
+    }
   }, [isTitleEdited, isBodyEdited]);
 
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
