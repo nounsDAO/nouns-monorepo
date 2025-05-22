@@ -98,7 +98,8 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { data: blockNumber, refetch: refetchBlockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidates } = useCandidateProposals(blockNumber);
+  const { data: candidatesData } = useCandidateProposals(blockNumber);
+  const [candidates, setCandidates] = useState<typeof candidatesData>(undefined);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
@@ -111,9 +112,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
 
   useEffect(() => {
     if (!candidates) {
-      refetchBlockNumber();
+      refetchBlockNumber().then(() => setCandidates(candidatesData));
     }
-  }, [candidates, refetchBlockNumber]);
+  }, [candidates, candidatesData, refetchBlockNumber]);
 
   useEffect(() => {
     if (hash === '#candidates') {

@@ -56,7 +56,7 @@ const CandidatePage = () => {
     false,
     currentBlock,
   );
-  const [candidate, setCandidate] = useState<typeof candidateData>(null);
+  const [candidate, setCandidate] = useState<typeof candidateData>(undefined);
   const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
