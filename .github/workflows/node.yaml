@@ -109,6 +109,6 @@ jobs:
           echo "::add-matcher::.github/eslint-matcher.json"
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- '*.ts' '*.tsx' '*.js' '*.jsx')
+          FILES=$(git diff --name-only --diff-filter=d "$BASE_SHA" "$HEAD_SHA" -- '*.ts' '*.tsx' '*.js' '*.jsx')
           [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
           pnpm lint $FILES

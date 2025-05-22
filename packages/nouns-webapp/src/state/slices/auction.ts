@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Auction as IAuction } from '@/wrappers/nounsAuction';
-
 import {
   AuctionCreateEvent,
   AuctionExtendedEvent,
   AuctionSettledEvent,
   BidEvent,
 } from '@/utils/types';
+import { Auction as IAuction } from '@/wrappers/nounsAuction';
 
 export interface AuctionState {
   activeAuction?: IAuction;
@@ -44,7 +43,7 @@ export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
   extended: bid.extended,
   transactionHash: bid.transactionHash,
   transactionIndex: bid.transactionIndex,
-  timestamp: bid.timestamp,
+  timestamp: bid.timestamp.toString(),
 });
 
 const maxBid = (bids: BidEvent[]): BidEvent => {

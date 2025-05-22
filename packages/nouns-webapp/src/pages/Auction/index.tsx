@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Auction from '@/components/Auction';
 import Documentation from '@/components/Documentation';
 import NounsIntroSection from '@/components/NounsIntroSection';
-import ProfileActivityFeed from '@/components/ProfileActivityFeed';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { nounPath } from '@/utils/history';
@@ -53,11 +52,7 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId > 0 && onDisplayAuctionNounId !== lastAuctionNounId ? (
-        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
-      ) : (
-        <NounsIntroSection />
-      )}
+      <NounsIntroSection />
       <Documentation
         backgroundColor={
           onDisplayAuctionNounId == undefined || onDisplayAuctionNounId === lastAuctionNounId
