@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
+  Address,
   AuctionCreateEvent,
   AuctionExtendedEvent,
   AuctionSettledEvent,
@@ -28,8 +29,8 @@ export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
 });
 
 export const reduxSafeAuction = (auction: IAuction): IAuction => ({
-  amount: BigInt(auction.amount).toString(),
-  bidder: auction.bidder,
+  amount: auction.amount ? BigInt(auction.amount).toString() : undefined,
+  bidder: auction.bidder ? (auction.bidder as Address) : undefined,
   startTime: BigInt(auction.startTime).toString(),
   endTime: BigInt(auction.endTime).toString(),
   nounId: BigInt(auction.nounId).toString(),

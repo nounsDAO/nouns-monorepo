@@ -3,9 +3,9 @@ import type { Address } from './utils/types';
 import React, { useEffect } from 'react';
 
 import './index.css';
-import { ApolloProvider, useQuery } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { configureStore } from '@reduxjs/toolkit';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { combineReducers } from 'redux';
@@ -13,6 +13,8 @@ import { createLogger } from 'redux-logger';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
+
+import { execute } from '@/subgraphs/execute';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -236,14 +238,16 @@ const ChainSubscriber: React.FC = () => {
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
-  const { query, variables } = latestAuctionsQuery();
-  const { data } = useQuery(query, { variables });
+  const { data } = useQuery({
+    queryKey: ['latestAuctions'],
+    queryFn: () => execute(latestAuctionsQuery, { first: 1000 }),
+  });
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (data) {
-      dispatch(addPastAuctions({ data }));
+    if (data?.auctions) {
+      dispatch(addPastAuctions({ auctions: data.auctions }));
     }
   }, [data, latestAuctionId, dispatch]);
 

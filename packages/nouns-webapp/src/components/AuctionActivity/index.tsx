@@ -69,7 +69,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
   };
 
   const renderAuctionWinner = () => {
-    if (isLastAuction) {
+    if (isLastAuction && auction.bidder) {
       return <Winner winner={auction.bidder} />;
     }
     return <Holder nounId={BigInt(auction.nounId)} />;
@@ -127,7 +127,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Row className={classes.activityRow}>
             <Col lg={4} className={classes.currentBidCol}>
               <CurrentBid
-                currentBid={BigInt(auction.amount.toString())}
+                currentBid={BigInt(auction.amount?.toString() ?? '0')}
                 auctionEnded={auctionEnded}
               />
             </Col>
