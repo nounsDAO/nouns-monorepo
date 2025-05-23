@@ -174,7 +174,7 @@ const CreateProposalPage = () => {
   );
 
   const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
+    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
   );
 
   const handleCreateProposal = async () => {
@@ -243,7 +243,7 @@ const CreateProposalPage = () => {
           break;
       }
     },
-    [],
+    [setModal],
   );
 
   useEffect(() => {
@@ -333,6 +333,7 @@ const CreateProposalPage = () => {
           If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
           can interact with the original treasury{' '}
           <button
+            type="button"
             className={classes.inlineButton}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
           >
@@ -363,7 +364,7 @@ const CreateProposalPage = () => {
         <CreateProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={
             (latestProposal?.status === ProposalState.ACTIVE ||
               latestProposal?.status === ProposalState.PENDING) &&

@@ -7,8 +7,6 @@ import { Link, useParams } from 'react-router';
 import { useAccount } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
-import { Address, Hex } from '@/utils/types';
-import { defaultChain } from '@/wagmi';
 import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
@@ -17,6 +15,8 @@ import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
 import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { Address, Hex } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import {
   ProposalDetail,
   ProposalTransaction,
@@ -29,8 +29,8 @@ import {
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
-import classes from '@/pages/CreateProposal/CreateProposal.module.css';
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import classes from '@/pages/CreateProposal/CreateProposal.module.css';
 
 interface EditProposalProps {
   match: {
@@ -71,7 +71,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const availableVotes = useUserVotes();
   const createCandidateCost = useGetCreateCandidateCost();
   const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
+    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
   );
   const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
@@ -581,7 +581,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={isProposer() ? true : hasEnoughVote}
           isFormInvalid={isFormInvalid()}

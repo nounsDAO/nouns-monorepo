@@ -266,7 +266,7 @@ const CreateCandidatePage = () => {
         <CreateCandidateButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not needed for candidates
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}

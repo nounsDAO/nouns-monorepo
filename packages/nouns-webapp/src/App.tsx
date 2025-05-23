@@ -1,5 +1,3 @@
-import type { RootState } from './index';
-
 import { useEffect } from 'react';
 
 import dayjs from 'dayjs';
@@ -35,6 +33,7 @@ import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
 import { setAlertModal } from '@/state/slices/application';
+import { RootState } from '@/store';
 
 import classes from './App.module.css';
 

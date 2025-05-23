@@ -208,7 +208,7 @@ const filterSigners = (
 export const useCandidateProposals = (blockNumber?: bigint) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
   const { query, variables } = candidateProposalsQuery();
-  const { loading, data, error } = useQuery<{
+  const { loading, data, error, refetch } = useQuery<{
     proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
   }>(query, { variables });
 
@@ -229,7 +229,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     activeCandidateProposers,
     blockNumber ?? 0n,
   );
-  const threshold = useProposalThreshold() || 0;
+  const threshold = useProposalThreshold() ?? 0;
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const allSigners = unmatchedCandidates
     ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
@@ -239,30 +239,28 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     blockNumber ?? 0n,
   );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber);
-  const candidatesData =
-    proposerDelegates.data &&
-    unmatchedCandidates?.map(candidate => {
-      const proposerVotes =
-        proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
-          ?.nounsRepresented?.length || 0;
-      return parseSubgraphCandidate(
-        candidate,
-        proposerVotes,
-        threshold,
-        timestampNow,
-        activePendingProposers.data,
-        false,
-        signersDelegateSnapshot.data,
-        updatableProposalIds.data,
-      );
-    });
+  const candidatesData = map(unmatchedCandidates ?? [], candidate => {
+    const proposerVotes =
+      proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
+        ?.nounsRepresented?.length || 0;
+    return parseSubgraphCandidate(
+      candidate,
+      proposerVotes,
+      threshold,
+      timestampNow,
+      activePendingProposers.data,
+      false,
+      signersDelegateSnapshot.data,
+      updatableProposalIds.data,
+    );
+  });
 
   if (candidatesData) {
     candidatesData.sort((a, b) => {
       return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
     });
   }
-  return { loading, data: candidatesData, error };
+  return { loading, data: candidatesData, error, refetch };
 };
 
 export const useCandidateProposal = (

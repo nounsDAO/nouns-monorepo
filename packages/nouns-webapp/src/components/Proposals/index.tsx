@@ -1,20 +1,26 @@
-import { ClockIcon } from '@heroicons/react/solid';
-import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import { useEffect, useState } from 'react';
-import DelegationModal from '@/components/DelegationModal';
 
+import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { filter, find, last } from 'remeda';
+import { useAccount, useBlockNumber } from 'wagmi';
 
+import CandidateCard from '@/components/CandidateCard';
+import DelegationModal from '@/components/DelegationModal';
+import ProposalStatus from '@/components/ProposalStatus';
 import config from '@/config';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
+import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/isMobile';
 import { isProposalUpdatable } from '@/utils/proposals';
@@ -26,12 +32,10 @@ import {
 } from '@/wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
-import CandidateCard from '@/components/CandidateCard';
-import ProposalStatus from '@/components/ProposalStatus';
 
 import classes from './Proposals.module.css';
-import { useAccount, useBlockNumber } from 'wagmi';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+
+import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
 
 dayjs.extend(relativeTime);
 
@@ -86,18 +90,19 @@ const getCountdownCopy = (
 };
 
 interface ProposalsProps {
-  proposals: PartialProposal[];
+  proposals?: PartialProposal[];
   nounsRequired?: number;
 }
 
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [blockNumber, setBlockNumber] = useState<bigint>(0n);
-  const { data: currentBlock } = useBlockNumber();
+  const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidates } = useCandidateProposals(blockNumber || currentBlock);
+  const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
+  const dispatch = useAppDispatch();
+  const candidates = useAppSelector(state => state.candidates.data);
   const connectedAccountNounVotes = useUserVotes() || 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
@@ -109,17 +114,27 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { hash } = useLocation();
 
   useEffect(() => {
-    // prevent blockNumber from triggering a re-render when it's already set
-    if (blockNumber === 0n) {
-      setBlockNumber(currentBlock || blockNumber);
-    }
-  }, [currentBlock, blockNumber]);
+    (async () => {
+      if (candidates) {
+        return;
+      }
+      await refetchCandidates();
+      const filteredCandidates = filter(
+        candidatesData ?? [],
+        (candidate): candidate is ProposalCandidate => candidate !== undefined,
+      );
+      if (filteredCandidates) {
+        dispatch(setCandidates(filteredCandidates));
+      }
+    })();
+  }, [candidates, candidatesData, refetchCandidates, dispatch]);
 
   useEffect(() => {
     if (hash === '#candidates') {
       setActiveTab(1);
     }
   }, [hash]);
+
   useEffect(() => {
     if (activeTab === 1) {
       navigate('/vote#candidates');
@@ -153,6 +168,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             <div className={classes.tabs}>
               {tabs.map((tab, index) => (
                 <button
+                  type="button"
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
                   onClick={() => setActiveTab(index)}
                   key={index}
@@ -330,7 +346,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     .reverse()
                     .map((c, i) => {
                       if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
-                        const prop = proposals.find(p => p.id === c.proposalIdToUpdate);
+                        const prop = find(proposals ?? [], p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
                           prop &&
                           blockNumber &&
@@ -341,7 +357,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       return (
                         <div key={i}>
                           <CandidateCard
-                            latestProposal={proposals[proposals.length - 1]}
+                            latestProposal={last<PartialProposal[]>(proposals ?? [])}
                             candidate={c as unknown as ProposalCandidate}
                             key={c?.id}
                             nounsRequired={threshold}
