@@ -4,15 +4,15 @@ import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { Spinner } from 'react-bootstrap';
+import { map } from 'remeda';
 
 import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
 import ShortAddress from '@/components/ShortAddress';
+import { Delegate, Maybe } from '@/subgraphs/graphql';
+import { Address } from '@/utils/types';
 import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
 
 import classes from './ByLineHoverCard.module.css';
-import { Delegate, Maybe } from '@/subgraphs';
-import { map } from 'remeda';
-import { Address } from '@/utils/types';
 
 interface ByLineHoverCardProps {
   proposerAddress: string;

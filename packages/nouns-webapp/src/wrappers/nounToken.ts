@@ -1,4 +1,4 @@
-import type { Delegate, EscrowedNoun, Noun, Seed } from '@/subgraphs';
+import type { Delegate, EscrowedNoun, Noun, Seed } from '@/subgraphs/graphql';
 import type { Address } from '@/utils/types';
 
 import { useEffect } from 'react';
