@@ -151,6 +151,45 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
+              <Trans>Nouns DUNA</Trans>
+            </Accordion.Header>
+            <Accordion.Body>
+              <p>
+                <Trans>
+                  Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit
+                  Association established in Wyoming via{' '}
+                  <Link text="Proposal 727" url="https://nouns.wtf/vote/727" leavesPage={true} />{' '}
+                  designed to provide a robust legal framework that aligns with the decentralized
+                  nature of Nouns DAO. This structure allows Nouns DAO to operate with limited
+                  liability protection and legal clarity without compromising its decentralized
+                  governance ethos.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  Under Wyoming&apos;s DUNA Act, Nouns DAO can hold assets, enter into contracts,
+                  and participate in legal actions in its own name. Governance remains fully
+                  decentralized, with decisions controlled exclusively by Noun holders via on-chain
+                  voting. This enables Nouns DAO to sustainably fund projects, manage its treasury,
+                  and interact confidently within both the digital and physical worlds.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking
+                  to balance decentralized autonomy with legal certainty, further solidifying its
+                  position at the forefront of decentralized governance innovation.
+                </Trans>
+              </p>
+              <Link
+                text="Learn more about the DUNA"
+                url="https://a16zcrypto.com/posts/article/duna-for-daos/"
+                leavesPage={true}
+              />
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="4" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -207,7 +246,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="4" className={classes.accordionItem}>
+          <Accordion.Item eventKey="5" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
@@ -241,7 +280,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="5" className={classes.accordionItem}>
+          <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
@@ -266,7 +305,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="6" className={classes.accordionItem}>
+          <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
@@ -291,7 +330,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="7" className={classes.accordionItem}>
+          <Accordion.Item eventKey="8" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Nounder&apos;s Reward</Trans>
             </Accordion.Header>
