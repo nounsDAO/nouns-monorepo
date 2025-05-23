@@ -72,7 +72,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6",
     "remark-breaks": "^3.0.3",
-    "remeda": "^2.21.8",
+    "remeda": "^2.21.9",
     "type-fest": "^4.41.0",
     "viem": "^2.29.4",
     "wagmi": "^2.15.4",
