@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
+import { isNumber } from 'remeda';
 
 import Auction from '@/components/Auction';
 import Documentation from '@/components/Documentation';
@@ -14,7 +14,7 @@ import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
 type AuctionPageProps = object;
 
 const AuctionPage: React.FC<AuctionPageProps> = () => {
-  const { id: initialAuctionId } = useParams<{ id: string }>();
+  const { id: auctionId } = useParams<{ id: string }>();
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = Number(onDisplayAuction?.nounId);
@@ -24,25 +24,25 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
 
   useEffect(() => {
     if (!lastAuctionNounId) return;
-
-    if (initialAuctionId !== undefined) {
-      // handle out-of-bounds noun path ids
-      if (Number(initialAuctionId) > lastAuctionNounId || Number(initialAuctionId) < 0) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-        navigate(nounPath(lastAuctionNounId));
-      } else {
-        if (onDisplayAuction === undefined) {
-          // handle regular noun path ids on the first load
-          dispatch(setOnDisplayAuctionNounId(Number(initialAuctionId)));
-        }
-      }
-    } else {
-      // no noun path id set
-      if (lastAuctionNounId && !onDisplayAuctionNounId) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-      }
+    if (auctionId === undefined) {
+      if (onDisplayAuctionNounId === Number(lastAuctionNounId)) return;
+      dispatch(setOnDisplayAuctionNounId(Number(lastAuctionNounId)));
+      return;
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction, navigate]);
+
+    if (
+      !isNumber(Number(auctionId)) ||
+      Number(auctionId) > lastAuctionNounId ||
+      Number(auctionId) < 0
+    ) {
+      navigate(nounPath(lastAuctionNounId));
+      return;
+    }
+
+    if (Number(auctionId) !== onDisplayAuctionNounId) {
+      dispatch(setOnDisplayAuctionNounId(Number(auctionId)));
+    }
+  }, [auctionId, lastAuctionNounId, dispatch, navigate, onDisplayAuctionNounId]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
   const backgroundColor = isCoolBackground
