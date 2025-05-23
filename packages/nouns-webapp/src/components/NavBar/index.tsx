@@ -1,12 +1,6 @@
 import { useState } from 'react';
 
-import {
-  faBookOpen,
-  faFile,
-  faPenToSquare,
-  faPlay,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -28,7 +22,6 @@ import { useAppSelector } from '@/hooks';
 import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { ExternalURL, externalURL } from '@/utils/externalURL';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
@@ -173,19 +166,6 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <Nav.Link
-              href={externalURL(ExternalURL.nounsCenter)}
-              className={classes.nounsNavLink}
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Docs</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}

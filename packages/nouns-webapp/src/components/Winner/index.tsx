@@ -4,14 +4,13 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/ShortAddress';
 import Tooltip from '@/components/Tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { isMobileScreen } from '@/utils/isMobile';
 
 import classes from './Winner.module.css';
 
@@ -25,7 +24,6 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const isMobile = isMobileScreen();
 
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
@@ -44,30 +42,6 @@ const Winner: React.FC<WinnerProps> = props => {
           <Trans>You</Trans>
         </h2>
       </Col>
-      {!isMobile && (
-        <Col>
-          <a
-            href="https://nouns.center/groups"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Get Involved</Trans>
-            </Button>
-          </a>
-          <a
-            href="https://www.nounsagora.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Delegate</Trans>
-            </Button>
-          </a>
-        </Col>
-      )}
     </Row>
   ) : (
     <ShortAddress size={40} address={winner} avatar={true} />
@@ -116,30 +90,6 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      {isWinnerYou && isMobile && (
-        <Row>
-          <a
-            href="https://nouns.center/groups"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Get Involved</Trans>
-            </Button>
-          </a>
-          <a
-            href="https://www.nounsagora.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Delegate</Trans>
-            </Button>
-          </a>
-        </Row>
-      )}
     </>
   );
 };
