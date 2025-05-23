@@ -29,6 +29,7 @@ import ForksPage from '@/pages/Forks';
 import GovernancePage from '@/pages/Governance';
 import NotFoundPage from '@/pages/NotFound';
 import NoundersPage from '@/pages/Nounders';
+import { OraclePage } from '@/pages/Oracle';
 import NounsPage from '@/pages/NounsPage';
 import Playground from '@/pages/Playground';
 import ProposalHistory from '@/pages/ProposalHistory';
@@ -83,6 +84,7 @@ function App() {
           <Route path="/nouns" element={<NounsPage />} />
           <Route path="/fork/:id" element={<ForkPage />} />
           <Route path="/fork" element={<ForksPage />} />
+          <Route path="/oracle" element={<OraclePage />} />
           <Route path="/brand" element={<BrandAssetsPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="*" element={<NotFoundPage />} />
