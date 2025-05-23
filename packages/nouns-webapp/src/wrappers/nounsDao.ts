@@ -423,10 +423,10 @@ export function useProposalCount(): number | undefined {
   return count != null ? Number(count) : undefined;
 }
 
-export function useProposalThreshold(): number | undefined {
-  const { data: threshold } = useReadNounsGovernorProposalThreshold();
+export function useProposalThreshold(): number | null {
+  const { data } = useReadNounsGovernorProposalThreshold();
 
-  return threshold != null ? Number(threshold) : undefined;
+  return data == null ? null : Number(data);
 }
 
 const countToIndices = (count: number | undefined) => {

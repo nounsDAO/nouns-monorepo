@@ -4,6 +4,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { filter } from 'remeda';
 import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -29,7 +30,6 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { filter } from 'remeda';
 
 interface EditCandidateProps {
   match: {
@@ -342,7 +342,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
-          proposalThreshold={proposalThreshold}
+          proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
           isFormInvalid={!isProposalEdited}

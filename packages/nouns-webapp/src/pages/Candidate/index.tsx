@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -7,9 +7,8 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { Link, useParams } from 'react-router';
-import { first } from 'remeda';
+import { first, isNonNullish } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateSponsors from '@/components/CandidateSponsors';
@@ -50,13 +49,14 @@ const CandidatePage = () => {
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
-  const { data: currentBlock } = useBlockNumber({ watch: true });
-  const { data: candidate, refetch: candidateRefetch } = useCandidateProposal(
+  const { data: currentBlock } = useBlockNumber();
+  const { data: candidateData, refetch: candidateRefetch } = useCandidateProposal(
     id ?? '',
     dataFetchPollInterval,
     false,
     currentBlock,
   );
+  const [candidate, setCandidate] = useState<typeof candidateData>(undefined);
   const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
@@ -67,6 +67,18 @@ const CandidatePage = () => {
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.proposalIdToUpdate ?? 0);
   const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
+
+  useEffect(() => {
+    (async () => {
+      if (!candidate) {
+        await candidateRefetch();
+        if (candidateData) {
+          setCandidate(candidateData);
+        }
+      }
+    })();
+  }, [candidate, candidateData, candidateRefetch]);
+
   const handleRefetchData = () => {
     feedback.refetch();
   };
@@ -96,9 +108,6 @@ const CandidatePage = () => {
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const handleRefetchCandidateData = () => {
-    candidateRefetch();
-  };
 
   const onTransactionStateChange = useCallback(
     (
@@ -171,18 +180,20 @@ const CandidatePage = () => {
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {/* notice for proposal updates */}
-      {candidate?.proposalIdToUpdate && +candidate?.proposalIdToUpdate > 0 && !isProposer && (
-        <Alert variant="warning">
-          <Trans>
-            <strong>Note: </strong>
-            This candidate is an update to{' '}
-            <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
-              Proposal {candidate?.proposalIdToUpdate}
-            </Link>
-            .
-          </Trans>
-        </Alert>
-      )}
+      {isNonNullish(candidate?.proposalIdToUpdate) &&
+        candidate?.proposalIdToUpdate > 0 &&
+        !isProposer && (
+          <Alert variant="warning">
+            <Trans>
+              <strong>Note: </strong>
+              This candidate is an update to{' '}
+              <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
+                Proposal {candidate?.proposalIdToUpdate}
+              </Link>
+              .
+            </Trans>
+          </Alert>
+        )}
       {isProposal && (
         <Alert variant="success">
           <Trans>
@@ -195,6 +206,14 @@ const CandidatePage = () => {
         </Alert>
       )}
       <Col lg={12} className={classes.wrapper}>
+        {!candidate && (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: '100vh' }}
+          >
+            <Spinner animation="border" />
+          </div>
+        )}
         {candidate && (
           <CandidateHeader
             title={candidate.version.content.title}
@@ -265,7 +284,9 @@ const CandidatePage = () => {
                 slug={candidate.slug ?? ''}
                 id={candidate.id}
                 isProposer={isProposer}
-                handleRefetchCandidateData={handleRefetchCandidateData}
+                handleRefetchCandidateData={() => {
+                  candidateRefetch();
+                }}
                 setDataFetchPollInterval={(interval: number | null) =>
                   interval !== null
                     ? setDataFetchPollInterval(interval)

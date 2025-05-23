@@ -14,7 +14,7 @@ import classes from './Governance.module.css';
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : undefined;
+  const nounsRequired = !threshold ? undefined : threshold + 1;
 
   const treasuryBalance = useTreasuryBalance();
   const treasuryBalanceUSD = useTreasuryUSDValue();
@@ -90,7 +90,7 @@ const GovernancePage = () => {
         </Col>
       </Section>
 
-      <Proposals proposals={proposals || []} nounsRequired={nounsRequired} />
+      <Proposals proposals={proposals ?? []} nounsRequired={nounsRequired} />
     </>
   );
 };

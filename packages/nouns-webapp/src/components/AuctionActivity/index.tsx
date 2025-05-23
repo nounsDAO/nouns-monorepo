@@ -1,5 +1,3 @@
-import type { RootState } from '@/index';
-
 import React, { useEffect, useState } from 'react';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +21,7 @@ import NounInfoCard from '@/components/NounInfoCard';
 import Winner from '@/components/Winner';
 import { nounsAuctionHouseAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
+import { RootState } from '@/store';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { Auction } from '@/wrappers/nounsAuction';
