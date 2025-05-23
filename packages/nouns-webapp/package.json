@@ -7,6 +7,8 @@
     "prebuild": "is-ci && exit 0 || (wagmi generate && graphql-codegen --config codegen.config.ts)",
     "build": "tsc -b && vite build",
     "clean": "rimraf dist .netlify",
+    "graphql-codegen": "graphql-codegen --config codegen.config.ts",
+    "graphql-codegen:watch": "graphql-codegen --config codegen.config.ts --watch",
     "dev": "vite",
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
