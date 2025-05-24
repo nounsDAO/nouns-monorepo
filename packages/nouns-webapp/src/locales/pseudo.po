@@ -196,6 +196,10 @@ msgid "Delegate {availableVotes} Votes"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
+msgid "Learn more about the DUNA"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
 msgstr ""
 

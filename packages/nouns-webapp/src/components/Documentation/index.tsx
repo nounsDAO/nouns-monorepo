@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
@@ -12,6 +12,7 @@ interface DocumentationProps {
 }
 
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
+  const { t } = useLingui();
   const cryptopunksLink = (
     <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
   );
@@ -182,7 +183,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
               <Link
-                text="Learn more about the DUNA"
+                text={t`Learn more about the DUNA`}
                 url="https://a16zcrypto.com/posts/article/duna-for-daos/"
                 leavesPage={true}
               />

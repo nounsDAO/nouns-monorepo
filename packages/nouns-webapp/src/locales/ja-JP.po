@@ -201,6 +201,10 @@ msgid "Delegate {availableVotes} Votes"
 msgstr "{availableVotes}票を委任する"
 
 #: src/components/Documentation/index.tsx
+msgid "Learn more about the DUNA"
+msgstr "DUNAについて詳しく学ぶ"
+
+#: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
 msgstr "Nounsは、イーサリアムのブロックハッシュに基づいてランダムに生成されます。Nounの特徴の希少性を管理する「if」ステートメントやその他のルールは存在しないため、すべてのNounが等しく希少となります。現時点では、Nounsは以下のもので構成されています："
 
