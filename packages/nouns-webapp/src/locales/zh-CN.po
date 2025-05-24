@@ -383,6 +383,10 @@ msgstr "剩余时间"
 msgid "One Noun is equal to one vote."
 msgstr "一个 Noun 等于一票。"
 
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA"
+msgstr "Nouns DUNA"
+
 #. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
 msgid "{0} <0>Address</0>"
@@ -1327,6 +1331,10 @@ msgstr "Nouns DAO 分叉{0}"
 msgid "Voting with <0>{0}</0> Noun"
 msgstr "使用 <0>{0}</0> 个 Noun 投票"
 
+#: src/components/Documentation/index.tsx
+msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
+msgstr "通过采用DUNA模式，Nouns DAO为寻求在去中心化自治与法律确定性之间取得平衡的DAO们树立了先锋榜样，进一步巩固了其在去中心化治理创新前沿的地位。"
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
 msgstr "连接您的钱包"
@@ -1682,6 +1690,10 @@ msgstr ""
 msgid "Proposal Updated!"
 msgstr ""
 
+#: src/components/Documentation/index.tsx
+msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
+msgstr "在怀俄明州DUNA法案下，Nouns DAO可以以自己的名义持有资产、签订合同并参与法律诉讼。治理保持完全去中心化，决策完全由Noun持有者通过链上投票控制。这使Nouns DAO能够可持续地资助项目、管理其国库，并在数字和物理世界中自信地互动。"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr ""
@@ -1762,6 +1774,10 @@ msgstr "编辑提案将清除所有先前的反馈"
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
 msgstr "候选人"
+
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
+msgstr "Nouns DUNA是一个在怀俄明州通过<0/>设立的法律认可的去中心化非注册非营利协会，旨在提供与Nouns DAO去中心化性质相符的强大法律框架。这种结构使Nouns DAO能够在有限责任保护和法律明确性下运营，而不损害其去中心化治理精神。"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"

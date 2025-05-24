@@ -383,6 +383,10 @@ msgstr "Time left"
 msgid "One Noun is equal to one vote."
 msgstr "One Noun is equal to one vote."
 
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA"
+msgstr "Nouns DUNA"
+
 #. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
 msgid "{0} <0>Address</0>"
@@ -1327,6 +1331,10 @@ msgstr "Nouns DAO Fork{0}"
 msgid "Voting with <0>{0}</0> Noun"
 msgstr "Voting with <0>{0}</0> Noun"
 
+#: src/components/Documentation/index.tsx
+msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
+msgstr "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
 msgstr "Connect your wallet"
@@ -1682,6 +1690,10 @@ msgstr "Each time an auction is settled, the settlement transaction will also ca
 msgid "Proposal Updated!"
 msgstr "Proposal Updated!"
 
+#: src/components/Documentation/index.tsx
+msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
+msgstr "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
@@ -1762,6 +1774,10 @@ msgstr "Editing a proposal will clear all previous feedback"
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
 msgstr "Candidate"
+
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
+msgstr "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
