@@ -21,10 +21,6 @@ msgstr "更新提案"
 msgid "Disconnect"
 msgstr "断开连接"
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted against"
-msgstr "投了反对票"
-
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
 msgstr "您对此提案投了<0>反对</0>票"
@@ -175,10 +171,6 @@ msgstr "此提案将与<0>原始金库</0>进行交互"
 msgid "Required % of Nouns to Pass"
 msgstr "通过所需的 Nouns 百分比"
 
-#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
-msgid "Delegate changed from<0> <1/></0> to <2><3/></2>"
-msgstr "委托已从<0> <1/></0>更改为<2><3/></2>"
-
 #: src/components/NounsIntroSection/index.tsx
 msgid "Prop House"
 msgstr "提案之家"
@@ -236,17 +228,9 @@ msgstr "添加提案操作"
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
 msgstr "<0>提案者：</0><1>{proposer}</1><2>{transactionLink}</2>"
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted against"
-msgstr "{voterComponent} 投了反对票"
-
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5 位艺术家，6.5 位技术专家"
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show fewer"
-msgstr "显示更少"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
@@ -307,7 +291,6 @@ msgstr "探索"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Queued"
 msgstr "已排队"
 
@@ -356,10 +339,6 @@ msgstr "很遗憾，没有算法可在事前做出这些判定（即使有，也
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
 msgstr "该试验场使用 {nounsProtocolLink} 构建。Noun 的特征由 Noun Seed 决定。Seed 使用 {nounsAssetsLink} 生成，并通过 {nounsSDKLink} 渲染。"
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted for"
-msgstr "投了赞成票"
-
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "秒"
@@ -404,10 +383,6 @@ msgstr "剩余时间"
 msgid "One Noun is equal to one vote."
 msgstr "一个 Noun 等于一票。"
 
-#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
-msgid "Holder changed from<0> <1/></0> to <2><3/></2>"
-msgstr "持有者已从<0> <1/></0>更改为<2><3/></2>"
-
 #. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
 msgid "{0} <0>Address</0>"
@@ -440,7 +415,6 @@ msgstr "查看门槛信息"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Active"
 msgstr "活跃"
 
@@ -454,14 +428,10 @@ msgstr "{0} <0>地址</0>"
 msgid "Add Transfer Funds Action"
 msgstr "添加转账操作"
 
-#. placeholder {0}: candidate.data?.proposalIdToUpdate
+#. placeholder {0}: candidate?.proposalIdToUpdate
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
 msgstr "<0>注意：</0>此候选项为对 <1>提案 {0}</1> 的更新。"
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show all {numEvents} events "
-msgstr "显示全部 {numEvents} 条事件 "
 
 #: src/components/CreateCandidateButton/index.tsx
 msgid "Create proposal candidate"
@@ -475,7 +445,6 @@ msgstr "反对"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Canceled"
 msgstr "已取消"
 
@@ -592,11 +561,9 @@ msgstr "结算流程虽然主要激励的是中标者，但妙处在于任何人
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Succeeded"
 msgstr "成功"
 
-#: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
 msgstr "提案已执行！"
@@ -616,7 +583,6 @@ msgstr "添加到托管"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Executed"
 msgstr "已执行"
@@ -648,7 +614,6 @@ msgstr "提交投票"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Expired"
 msgstr "已过期"
 
@@ -773,7 +738,7 @@ msgstr "此候选（方案/提案）已满足了必要的支持门槛，但在�
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "了解更多，或使用 {playgroundLink} 开始链下创建 Nouns。"
 
-#. placeholder {0}: isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes
+#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 票"
@@ -791,10 +756,6 @@ msgstr "将拥有"
 msgid "Starts {0}"
 msgstr "{0}开始"
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-msgid "Holder changed from <0> <1/></0> to <2><3/></2>"
-msgstr "持有者已从 <0> <1/></0> 更改为 <2><3/></2>"
-
 #: src/components/VoteModal/index.tsx
 msgid "Gas spent on voting will be refunded to you."
 msgstr "投票所花费的燃料费将退还给您。"
@@ -807,7 +768,7 @@ msgstr "Noun 种子合约"
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns 艺术作品处于{publicDomainLink}。"
 
-#. placeholder {0}: sortedNounIds.length - MAX_NOUN_IDS_SHOWN
+#. placeholder {0}: Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr "...以及其他 {0} 个"
@@ -837,12 +798,6 @@ msgstr "提案者拥有 {0} 票{1}"
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
 msgstr "链上艺术品"
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> sent to <1> <2/></1> "
-msgstr "<0> Noun {0} </0> 已发送至 <1> <2/></1> "
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
@@ -909,7 +864,6 @@ msgstr "{0}结束"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Pending"
 msgstr "待处理"
 
@@ -960,7 +914,6 @@ msgstr "您的账户投票时出现错误。"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Defeated"
 msgstr "不通过"
 
@@ -983,15 +936,6 @@ msgstr "仅对您可见"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Action Details"
 msgstr "添加操作详情"
-
-#: src/components/ProfileActivityFeed/index.tsx
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Activity"
-msgstr "活动"
-
-#: src/components/Documentation/index.tsx
-#~ msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of '51% attacks' on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
-#~ msgstr "提案否决权最初的设想，是作为应对 Nouns DAO 金库面临“51%攻击”风险的临时解决方案。虽然 Nounders 起初认为Nouns的健康分布状况足以保护 DAO，但随着对相关激励机制及潜在风险的理解日渐深入，Nounders、Nouns 基金会以及更广泛的社区达成共识：在这项否决权被废止之前，应先实施更为稳健的、基于博弈论的解决方案。"
 
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
@@ -1052,8 +996,7 @@ msgstr "提案者功能"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
-msgstr "瞩目于此，一件永无止境的艺术杰作正为你呈现！ Nouns 是一个由社区共同拥有的品牌，它通过赋能每一个闪光的创意、促进各方的精诚协作，为世界注入积极的能量。 无论你是收藏家、技术先锋，还是公益组织、知名品牌，Nouns 都为你敞开大门，与每个人共创共享。
-"
+msgstr "瞩目于此，一件永无止境的艺术杰作正为你呈现！ Nouns 是一个由社区共同拥有的品牌，它通过赋能每一个闪光的创意、促进各方的精诚协作，为世界注入积极的能量。 无论你是收藏家、技术先锋，还是公益组织、知名品牌，Nouns 都为你敞开大门，与每个人共创共享。"
 
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
@@ -1131,10 +1074,6 @@ msgstr "感谢您的投票。"
 msgid "Switch wallet"
 msgstr "切换钱包"
 
-#: src/components/AddNounsToForkModal/index.tsx
-#~ msgid "Add as many or as few of your Nouns as you'd like. Additional Nouns can be added during the escrow and forking periods."
-#~ msgstr "您可以添加任意数量的 Nouns。在之后的托管及分叉期间，还可以追加新的 Nouns。"
-
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This proposal candidate has been proposed onchain."
 msgstr "<0>注意：</0>此提案候选已在链上提交。"
@@ -1189,10 +1128,6 @@ msgstr "摘要"
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr "任何人都可创建提案候选。若候选获得足够签名，即可成为正式提案。"
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} abstained on"
-msgstr "{voterComponent} 已弃权"
-
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
 msgstr "切换到委托视图"
@@ -1242,10 +1177,6 @@ msgstr "审核操作详情"
 #: src/pages/CreateCandidate/index.tsx
 msgid "Candidate Created!"
 msgstr "候选已创建！"
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted for"
-msgstr "{voterComponent} 投了赞成票"
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
@@ -1360,10 +1291,6 @@ msgstr "委托"
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
 msgstr "Nouns DAO 使用 {compoundGovLink} 的一个分叉。"
 
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch Noun activity history"
-msgstr "获取 Noun 活动历史失败"
-
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
 msgstr "分钟"
@@ -1376,14 +1303,8 @@ msgstr "一个 NOUN，"
 msgid "Submit"
 msgstr "提交"
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Absent for"
-msgstr "缺席于"
-
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr "由于本提案涉及 USDC 资金转移，我们增加了一笔额外的 ETH 交易来补充 TokenBuyer 合约余额。这项操作旨在确保 DAO 能够继续以无需信任的方式获取 USDC，从而为类似的提案提供资金支持。"
@@ -1505,10 +1426,6 @@ msgstr "秒"
 #: src/components/Winner/index.tsx
 msgid "You"
 msgstr "您"
-
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Abstained on"
-msgstr "弃权于"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -1696,13 +1613,6 @@ msgid "Starting on"
 msgstr "开始于"
 
 #: src/pages/Fork/DeployForkButton.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/Winner/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
@@ -1712,7 +1622,6 @@ msgstr "在 Etherscan 上查看"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Vetoed"
 msgstr "已否决"
 
@@ -1732,6 +1641,10 @@ msgstr "提示"
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
 msgstr "分叉中"
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
+msgstr ""
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
@@ -1775,23 +1688,13 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Undetermined"
-msgstr ""
-
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
 
 #. placeholder {0}: proposalsList.length === 1 ? '' : 's'
 #: src/pages/Fork/ForkEvent.tsx
 msgid "Offending proposal{0}"
-msgstr ""
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Waiting for"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -1821,12 +1724,6 @@ msgstr ""
 #. placeholder {0}: proposal.content.contentSignatures?.length
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
-msgstr ""
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> won by <1> <2/></1> "
 msgstr ""
 
 #: src/components/Documentation/index.tsx
