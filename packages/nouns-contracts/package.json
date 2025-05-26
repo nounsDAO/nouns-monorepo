@@ -75,7 +75,7 @@
     "hardhat": "^2.24.0",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-gas-reporter": "^1.0.8",
-    "mocha": "^11.3.0",
+    "mocha": "^11.5.0",
     "prettier-plugin-solidity": "^2.0.0",
     "prompt": "^1.1.0",
     "shx": "^0.4.0",
