@@ -512,8 +512,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       remeda:
-        specifier: ^2.21.9
-        version: 2.22.2
+        specifier: ^2.22.3
+        version: 2.22.3
       type-fest:
         specifier: ^4.41.0
         version: 4.41.0
@@ -10783,8 +10783,8 @@ packages:
   remark-rehype@9.1.0:
     resolution: {integrity: sha512-oLa6YmgAYg19zb0ZrBACh40hpBLteYROaPLhBXzLgjqyHQrN+gVP9N/FJvfzuNNuzCutktkroXEZBrxAxKhh7Q==}
 
-  remeda@2.22.2:
-    resolution: {integrity: sha512-Ag3CprYtlO5QqIIkBQQIepuOe2ZoXWMHc6AG2yG7PfFo/zAkh5J9aPSGgsvlhECTxuZ2JCVfxfdb1cwMWP81TQ==}
+  remeda@2.22.3:
+    resolution: {integrity: sha512-Ka6965m9Zu9OLsysWxVf3jdJKmp6+PKzDv7HWHinEevf0JOJ9y02YpjiC/sKxRpCqGhVyvm1U+0YIj+E6DMgKw==}
 
   remedial@1.0.8:
     resolution: {integrity: sha512-/62tYiOe6DzS5BqVsNpH/nkGlX45C/Sp6V+NtiN6JQNS1Viay7cWkazmRkrQrdFj2eshDe96SIQNIoMxqhzBOg==}
@@ -26847,7 +26847,7 @@ snapshots:
       mdast-util-to-hast: 11.3.0
       unified: 10.1.2
 
-  remeda@2.22.2:
+  remeda@2.22.3:
     dependencies:
       type-fest: 4.41.0
 
