@@ -74,7 +74,7 @@
     "remark-breaks": "^3.0.3",
     "remeda": "^2.21.9",
     "type-fest": "^4.41.0",
-    "viem": "^2.29.4",
+    "viem": "^2.30.1",
     "wagmi": "^2.15.4",
     "web-vitals": "^1.0.1"
   },
