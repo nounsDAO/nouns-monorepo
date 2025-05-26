@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import AlertModal from '@/components/Modal';
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
+import { Toaster } from '@/components/ui/sonner';
 import { CHAIN_ID } from '@/config';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import AuctionPage from '@/pages/Auction';
@@ -92,6 +93,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
+        <Toaster />
       </BrowserRouter>
     </div>
   );
