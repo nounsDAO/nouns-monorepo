@@ -9,11 +9,8 @@ import NounderNounContent from '@/components/NounderNounContent';
 import { StandaloneNounWithSeed } from '@/components/StandaloneNoun';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setStateBackgroundColor } from '@/state/slices/application';
-import {
-  setNextOnDisplayAuctionNounId,
-  setPrevOnDisplayAuctionNounId,
-} from '@/state/slices/onDisplayAuction';
 import { RootState } from '@/store';
+import { nounPath } from '@/utils/history';
 import { beige, grey } from '@/utils/nounBgColors';
 import { isNounderNoun } from '@/utils/nounderNoun';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
@@ -38,15 +35,13 @@ const Auction: React.FC<AuctionProps> = props => {
   };
 
   const prevAuctionHandler = () => {
-    dispatch(setPrevOnDisplayAuctionNounId());
     if (currentAuction) {
-      navigate(`/noun/${Number(currentAuction.nounId) - 1}`);
+      navigate(nounPath(Number(currentAuction.nounId) - 1));
     }
   };
   const nextAuctionHandler = () => {
-    dispatch(setNextOnDisplayAuctionNounId());
     if (currentAuction) {
-      navigate(`/noun/${Number(currentAuction.nounId) + 1}`);
+      navigate(nounPath(Number(currentAuction.nounId) + 1));
     }
   };
 

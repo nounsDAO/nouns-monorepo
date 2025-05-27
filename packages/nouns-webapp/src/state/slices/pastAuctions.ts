@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AuctionState } from './auction';
+import { GetLatestAuctionsQuery } from '@/subgraphs/graphql';
+import { Address } from '@/utils/types';
 
-import { IBid } from '@/wrappers/subgraph';
+import { AuctionState } from './auction';
 
 interface PastAuctionsState {
   pastAuctions: AuctionState[];
@@ -12,23 +13,23 @@ const initialState: PastAuctionsState = {
   pastAuctions: [],
 };
 
-const reduxSafePastAuctions = (data: any): AuctionState[] => {
-  const auctions = data.data.auctions as any[];
-  if (auctions.length == 0) return [];
+const reduxSafePastAuctions = (data: GetLatestAuctionsQuery): AuctionState[] => {
+  const auctions = data.auctions;
+  if (!auctions) return [];
   return auctions.map(auction => {
     return {
       activeAuction: {
-        amount: BigInt(auction.amount).toString(),
-        bidder: auction.bidder ? auction.bidder.id : '',
+        amount: auction.amount ? BigInt(auction.amount).toString() : undefined,
+        bidder: auction.bidder ? (auction.bidder.id as Address) : undefined,
         startTime: BigInt(auction.startTime).toString(),
         endTime: BigInt(auction.endTime).toString(),
         nounId: BigInt(auction.id).toString(),
         settled: false,
       },
-      bids: auction.bids.map((bid: IBid) => {
+      bids: auction.bids.map(bid => {
         return {
           nounId: BigInt(auction.id).toString(),
-          sender: bid.bidder.id,
+          sender: bid?.bidder?.id as Address,
           value: BigInt(bid.amount).toString(),
           extended: false,
           transactionHash: bid.txHash,
@@ -44,7 +45,7 @@ const pastAuctionsSlice = createSlice({
   name: 'pastAuctions',
   initialState: initialState,
   reducers: {
-    addPastAuctions: (state, action: PayloadAction<any>) => {
+    addPastAuctions: (state, action: PayloadAction<GetLatestAuctionsQuery>) => {
       state.pastAuctions = reduxSafePastAuctions(action.payload);
     },
   },

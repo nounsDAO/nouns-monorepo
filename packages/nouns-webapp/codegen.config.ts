@@ -1,14 +1,17 @@
-import 'dotenv/config';
 import type { CodegenConfig } from '@graphql-codegen/cli';
-import { TimestampResolver, BigIntResolver, ByteResolver } from 'graphql-scalars';
+import 'dotenv/config';
+import { BigIntResolver, ByteResolver, TimestampResolver } from 'graphql-scalars';
 
 const config: CodegenConfig = {
   emitLegacyCommonJSImports: false,
+  schema: process.env.VITE_SEPOLIA_SUBGRAPH,
+  documents: ['./src/**/*.{ts,tsx}', '!./src/subgraphs/*'],
+  ignoreNoDocuments: true,
   generates: {
-    './src/subgraphs/index.ts': {
-      schema: process.env.VITE_SEPOLIA_SUBGRAPH,
-      plugins: ['typescript', 'typescript-operations', 'typed-document-node'],
+    './src/subgraphs/': {
+      preset: 'client',
       config: {
+        documentMode: 'string',
         strictScalars: false,
         scalars: {
           BigInt: BigIntResolver,
@@ -22,6 +25,12 @@ const config: CodegenConfig = {
         },
       },
     },
+    './src/subgraphs/schema.graphql': {
+      plugins: ['schema-ast'],
+      config: {
+        includeDirectives: true
+      }
+    }
   },
 };
 

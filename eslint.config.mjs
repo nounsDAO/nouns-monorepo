@@ -1,18 +1,18 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 
 // TypeScript plugins and parsers
-import tseslint from 'typescript-eslint';
 import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import tseslint from 'typescript-eslint';
 
 // React plugins
+import eslintReactPlugin from '@eslint-react/eslint-plugin';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
-import eslintReactPlugin from '@eslint-react/eslint-plugin';
 
 // Other plugins
 import importPlugin from 'eslint-plugin-import';
@@ -193,6 +193,14 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
       // ESLint React rules
       '@eslint-react/no-class-component': 'error',
+      'no-restricted-imports': [
+        'warn',
+        {
+          name: '@apollo/client',
+          message:
+            'Use @tanstack/react-query instead. ref: https://the-guild.dev/graphql/codegen/docs/guides/react-query#type-safe-graphql-operation-execution',
+        },
+      ],
       // Prettier rules
       'prettier/prettier': 'error',
     },

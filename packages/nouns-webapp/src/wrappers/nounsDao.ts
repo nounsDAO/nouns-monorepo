@@ -1,4 +1,3 @@
-import type { Address, Hash, Hex } from '@/utils/types';
 import type {
   EscrowDeposit as GraphQLEscrowDeposit,
   EscrowWithdrawal as GraphQLEscrowWithdrawal,
@@ -7,10 +6,13 @@ import type {
   Maybe,
   Proposal as GraphQLProposal,
   ProposalVersion as GraphQLProposalVersion,
-} from '@/subgraphs';
+} from '@/subgraphs/graphql';
+import type { Address, Hash, Hex } from '@/utils/types';
 
 import { useMemo } from 'react';
+
 import { useQuery } from '@apollo/client';
+import { useQuery as useReactQuery } from '@tanstack/react-query';
 import {
   filter,
   flatMap,
@@ -31,24 +33,9 @@ import {
   parseAbiItem,
   stringToBytes,
 } from 'viem';
-import { useQuery as useReactQuery } from '@tanstack/react-query';
+import { mainnet } from 'viem/chains';
+import { useAccount, useBlockNumber, usePublicClient, useReadContracts } from 'wagmi';
 
-import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
-
-import {
-  activePendingUpdatableProposersQuery,
-  escrowDepositEventsQuery,
-  escrowWithdrawEventsQuery,
-  forkDetailsQuery,
-  forkJoinsQuery,
-  forksQuery,
-  isForkActiveQuery,
-  partialProposalsQuery,
-  proposalQuery,
-  proposalTitlesQuery,
-  proposalVersionsQuery,
-  updatableProposalsQuery,
-} from './subgraph';
 import {
   nounsGovernorAbi,
   nounsGovernorAddress,
@@ -76,9 +63,23 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useAccount, useBlockNumber, usePublicClient, useReadContracts } from 'wagmi';
-import { mainnet } from 'viem/chains';
+import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
 import { defaultChain } from '@/wagmi';
+
+import {
+  activePendingUpdatableProposersQuery,
+  escrowDepositEventsQuery,
+  escrowWithdrawEventsQuery,
+  forkDetailsQuery,
+  forkJoinsQuery,
+  forksQuery,
+  isForkActiveQuery,
+  partialProposalsQuery,
+  proposalQuery,
+  proposalTitlesQuery,
+  proposalVersionsQuery,
+  updatableProposalsQuery,
+} from './subgraph';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
