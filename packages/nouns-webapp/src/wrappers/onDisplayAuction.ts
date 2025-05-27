@@ -1,14 +1,14 @@
-import { Auction } from './nounsAuction';
-
 import { useAppSelector } from '@/hooks';
 import { compareBids } from '@/utils/compareBids';
 import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounderNoun';
-import { Bid, BidEvent } from '@/utils/types';
+import { Address, Bid, BidEvent } from '@/utils/types';
+
+import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
   return {
-    amount: BigInt(reduxSafeAuction.amount),
-    bidder: reduxSafeAuction.bidder,
+    amount: reduxSafeAuction.amount ? BigInt(reduxSafeAuction.amount) : undefined,
+    bidder: reduxSafeAuction.bidder ? (reduxSafeAuction.bidder as Address) : undefined,
     startTime: BigInt(reduxSafeAuction.startTime),
     endTime: BigInt(reduxSafeAuction.endTime),
     nounId: BigInt(reduxSafeAuction.nounId),
@@ -81,7 +81,7 @@ export const useAuctionBids = (auctionNounId: bigint): Bid[] | undefined => {
     // find bids for past auction requested
     const bidEvents: BidEvent[] | undefined = pastAuctions?.find(auction => {
       const nounId = auction.activeAuction && BigInt(auction.activeAuction.nounId);
-      return nounId && nounId === auctionNounId;
+      return !!nounId && nounId === auctionNounId;
     })?.bids;
 
     return bidEvents ? deserializeBids(bidEvents) : undefined;

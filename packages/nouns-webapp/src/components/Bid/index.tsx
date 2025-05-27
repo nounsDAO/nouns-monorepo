@@ -1,12 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
+import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
-
-import classes from './Bid.module.css';
-
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
 import WalletConnectModal from '@/components/WalletConnectModal';
@@ -17,10 +16,11 @@ import {
 } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
-import { toast } from 'sonner';
-import { t } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
 import { Auction } from '@/wrappers/nounsAuction';
+
+import classes from './Bid.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const computeMinimumNextBid = (
   currentBid: bigint,
@@ -83,7 +83,7 @@ const Bid: React.FC<BidProps> = props => {
 
   const { data: minBidIncPercentage } = useReadNounsAuctionHouseMinBidIncrementPercentage();
   const minBid = computeMinimumNextBid(
-    auction && BigInt(auction.amount.toString()),
+    auction && BigInt(auction.amount?.toString() ?? '0'),
     minBidIncPercentage ? BigInt(minBidIncPercentage.toString()) : undefined,
   );
 
@@ -154,7 +154,7 @@ const Bid: React.FC<BidProps> = props => {
     // tx state is mining
     const isMiningUserTx = isPlacingBid;
     // allows user to rebid against themselves so long as it is different tx
-    const isCorrectTx = currentBid(bidInputRef) === BigInt(auction.amount.toString());
+    const isCorrectTx = currentBid(bidInputRef) === BigInt(auction.amount?.toString() ?? '0');
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
       toast.success(_(t`Bid was placed successfully!`));
       setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });

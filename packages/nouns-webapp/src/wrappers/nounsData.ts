@@ -24,7 +24,7 @@ import {
   ProposalCandidate as GraphQLProposalCandidate,
   ProposalCandidateSignature as GraphQLProposalCandidateSignature,
   ProposalFeedback as GraphQLProposalFeedback,
-} from '@/subgraphs';
+} from '@/subgraphs/graphql';
 
 import {
   extractTitle,
