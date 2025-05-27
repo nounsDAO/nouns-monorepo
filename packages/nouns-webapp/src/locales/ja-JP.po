@@ -26,10 +26,6 @@ msgstr ""
 msgid "Disconnect"
 msgstr "切断する"
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted against"
-msgstr "反対に投票"
-
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
 msgstr "あなたはこの提案に<0>反対</0>を投票しました"
@@ -180,10 +176,6 @@ msgstr ""
 msgid "Required % of Nouns to Pass"
 msgstr ""
 
-#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
-msgid "Delegate changed from<0> <1/></0> to <2><3/></2>"
-msgstr ""
-
 #: src/components/NounsIntroSection/index.tsx
 msgid "Prop House"
 msgstr ""
@@ -207,6 +199,10 @@ msgstr "コンパウンドガバナンス"
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Votes"
 msgstr "{availableVotes}票を委任する"
+
+#: src/components/Documentation/index.tsx
+msgid "Learn more about the DUNA"
+msgstr "DUNAについて詳しく学ぶ"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -241,17 +237,9 @@ msgstr ""
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted against"
-msgstr ""
-
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5アーティスト、6.5技術者"
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show fewer"
-msgstr "少なく表示する"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
@@ -312,7 +300,6 @@ msgstr "探索"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Queued"
 msgstr "キューに入りました"
 
@@ -361,10 +348,6 @@ msgstr ""
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
 msgstr "遊び場は{nounsProtocolLink} を使用して作られており、Nounの特徴は、Nounシードによって決まります。{nounsAssetsLink} でシードを生成し、{nounsSDKLink} でレンダリングされています。"
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted for"
-msgstr "賛成に投票"
-
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "秒"
@@ -409,9 +392,9 @@ msgstr "残り時間"
 msgid "One Noun is equal to one vote."
 msgstr "1体のNounにつき、1票の投票件を得ることができます。"
 
-#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
-msgid "Holder changed from<0> <1/></0> to <2><3/></2>"
-msgstr ""
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA"
+msgstr "Nouns DUNA"
 
 #. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
@@ -445,7 +428,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Active"
 msgstr "実行されました"
 
@@ -459,13 +441,9 @@ msgstr "{0}<0>イーサリアムアドレス</0>"
 msgid "Add Transfer Funds Action"
 msgstr ""
 
-#. placeholder {0}: candidate.data?.proposalIdToUpdate
+#. placeholder {0}: candidate?.proposalIdToUpdate
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
-msgstr ""
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show all {numEvents} events "
 msgstr ""
 
 #: src/components/CreateCandidateButton/index.tsx
@@ -480,7 +458,6 @@ msgstr "反対"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Canceled"
 msgstr "キャンセルしました"
 
@@ -597,11 +574,9 @@ msgstr "決済は落札者に最も大きなインセンティブが与えられ
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Succeeded"
 msgstr "成功しました"
 
-#: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
 msgstr "提案が実行されました！"
@@ -621,7 +596,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Executed"
 msgstr "実行しました"
@@ -653,7 +627,6 @@ msgstr "投票を提出"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Expired"
 msgstr "期限切れです"
 
@@ -778,7 +751,7 @@ msgstr ""
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
-#. placeholder {0}: isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes
+#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 票"
@@ -796,10 +769,6 @@ msgstr "票になります"
 msgid "Starts {0}"
 msgstr "あと{0}で始まります"
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-msgid "Holder changed from <0> <1/></0> to <2><3/></2>"
-msgstr ""
-
 #: src/components/VoteModal/index.tsx
 msgid "Gas spent on voting will be refunded to you."
 msgstr ""
@@ -812,7 +781,7 @@ msgstr "Nounシーダー契約"
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
-#. placeholder {0}: sortedNounIds.length - MAX_NOUN_IDS_SHOWN
+#. placeholder {0}: Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr "...そしてさらに3つ"
@@ -842,12 +811,6 @@ msgstr ""
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
 msgstr "オンチェーンアートワーク"
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> sent to <1> <2/></1> "
-msgstr ""
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
@@ -914,7 +877,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Pending"
 msgstr "保留中"
 
@@ -965,7 +927,6 @@ msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Defeated"
 msgstr "却下"
 
@@ -988,11 +949,6 @@ msgstr ""
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Action Details"
 msgstr ""
-
-#: src/components/ProfileActivityFeed/index.tsx
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Activity"
-msgstr "アクティビティ"
 
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
@@ -1185,10 +1141,6 @@ msgstr "まとめ"
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} abstained on"
-msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
 msgstr "ビューを委任するように切り替えます"
@@ -1237,10 +1189,6 @@ msgstr ""
 
 #: src/pages/CreateCandidate/index.tsx
 msgid "Candidate Created!"
-msgstr ""
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted for"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1356,10 +1304,6 @@ msgstr "デリゲーション"
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
 msgstr "Nouns DAOは {compoundGovLink} のフォークを使用しています。"
 
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch Noun activity history"
-msgstr "Noun の活動履歴の取得に失敗しました。"
-
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
 msgstr "分"
@@ -1372,14 +1316,8 @@ msgstr "1つのNOUNを"
 msgid "Submit"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Absent for"
-msgstr "不参加"
-
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
@@ -1401,6 +1339,10 @@ msgstr ""
 #: src/components/VoteModal/index.tsx
 msgid "Voting with <0>{0}</0> Noun"
 msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
+msgstr "DUNAモデルを採用することで、Nouns DAOは分散型自治と法的確実性のバランスを求めるDAOにとって先駆的な例を示し、分散ガバナンスイノベーションの最前線におけるその地位をさらに強固なものにしています。"
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
@@ -1501,10 +1443,6 @@ msgstr ""
 #: src/components/Winner/index.tsx
 msgid "You"
 msgstr "あなた"
-
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Abstained on"
-msgstr "棄権しました。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -1692,13 +1630,6 @@ msgid "Starting on"
 msgstr ""
 
 #: src/pages/Fork/DeployForkButton.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/Winner/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
@@ -1708,7 +1639,6 @@ msgstr "イーサスキャンで見る"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Vetoed"
 msgstr "拒否"
 
@@ -1727,6 +1657,10 @@ msgstr ""
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
@@ -1765,30 +1699,24 @@ msgstr ""
 msgid "Proposal Updated!"
 msgstr ""
 
+#: src/components/Documentation/index.tsx
+msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
+msgstr "ワイオミング州のDUNA法の下、Nouns DAOは独自の名前で資産を保有し、契約を締結し、法的措置に参加することができます。ガバナンスは完全に分散化されたままで、決定はNoun保有者によるオンチェーン投票によってのみ制御されます。これにより、Nouns DAOはプロジェクトを持続的に資金提供し、トレジャリーを管理し、デジタルと物理の両方の世界で自信を持って相互作用することができます。"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "投票を委任するアカウントのイーサリアムアドレスまたはENS名を入力します。"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Undetermined"
 msgstr "未決定"
-
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "This Noun has no activity, since it was just created. Check back soon!"
-msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
 
 #. placeholder {0}: proposalsList.length === 1 ? '' : 's'
 #: src/pages/Fork/ForkEvent.tsx
 msgid "Offending proposal{0}"
 msgstr ""
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Waiting for"
-msgstr "待機"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Review Transfer Funds Action"
@@ -1817,12 +1745,6 @@ msgstr "終了日"
 #. placeholder {0}: proposal.content.contentSignatures?.length
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
-msgstr ""
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> won by <1> <2/></1> "
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1861,6 +1783,10 @@ msgstr ""
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
 msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
+msgstr "Nouns DUNAは、ワイオミング州で設立された法的に認められた分散型非法人非営利協会で、<0/> を通じて設立され、Nouns DAOの分散型の性質に沿った堅牢な法的枠組みを提供するように設計されています。この構造により、Nouns DAOは分散ガバナンスの精神を損なうことなく、有限責任保護と法的明確性を持って運営することができます。"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
