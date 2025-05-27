@@ -26,14 +26,17 @@ import { useAccount, useBlockNumber } from 'wagmi';
 import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
 import ProposalContent from '@/components/ProposalContent';
 import ProposalHeader from '@/components/ProposalHeader';
+import ShortAddress from '@/components/ShortAddress';
+import StreamWithdrawModal from '@/components/StreamWithdrawModal';
 import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+import VoteModal from '@/components/VoteModal';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
-import VoteModal from '@/components/VoteModal';
 import { getNounVotes } from '@/utils/getNounsVotes';
 import { isProposalUpdatable } from '@/utils/proposals';
 import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
@@ -59,13 +62,8 @@ import {
   proposalVotesQuery,
   propUsingDynamicQuorum,
 } from '@/wrappers/subgraph';
-import ShortAddress from '@/components/ShortAddress';
-import StreamWithdrawModal from '@/components/StreamWithdrawModal';
-import VoteSignals from '@/components/VoteSignals/VoteSignals';
 
 import classes from './Vote.module.css';
-
-import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -180,7 +178,9 @@ const VotePage = () => {
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
-  // @ts-expect-error Type instantiation is excessively deep and possibly infinite.
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore Type instantiation is excessively deep and possibly infinite.
   const { data: currentQuorum } = useReadNounsGovernorQuorumVotes({
     args: [proposal && proposal.id ? BigInt(proposal.id) : 0n],
     query: {
