@@ -9,12 +9,12 @@ import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Footer from '@/components/Footer';
-import AlertModal from '@/components/Modal';
+
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
 import { Toaster } from '@/components/ui/sonner';
 import { CHAIN_ID } from '@/config';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 import AuctionPage from '@/pages/Auction';
 import CandidatePage from '@/pages/Candidate';
 import CandidateHistoryPage from '@/pages/CandidateHistoryPage';
@@ -33,8 +33,6 @@ import Playground from '@/pages/Playground';
 import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
-import { setAlertModal } from '@/state/slices/application';
-import { RootState } from '@/store';
 
 import classes from './App.module.css';
 
@@ -49,18 +47,9 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  const alertModal = useAppSelector((state: RootState) => state.application.alertModal);
-
   return (
     <div className={`${classes.wrapper}`}>
       {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
-      {alertModal.show && (
-        <AlertModal
-          title={alertModal.title}
-          content={<p>{alertModal.message}</p>}
-          onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
-        />
-      )}
       <BrowserRouter>
         <NavBar />
         <Routes>

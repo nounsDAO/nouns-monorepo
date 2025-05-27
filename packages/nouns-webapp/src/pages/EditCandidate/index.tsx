@@ -12,9 +12,11 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAppDispatch } from '@/hooks';
+
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { toast } from 'sonner';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
@@ -185,8 +187,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
 
   useEffect(() => {
     switch (updateProposalCandidateState.status) {
@@ -197,31 +198,19 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Candidate updated!</Trans>,
-          show: true,
-        });
+        toast.success(_(t`Candidate updated!`));
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: updateProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(updateProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: updateProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(updateProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-  }, [updateProposalCandidateState, setModal]);
+  }, [updateProposalCandidateState, _]);
 
   // set initial values on page load
   useEffect(() => {

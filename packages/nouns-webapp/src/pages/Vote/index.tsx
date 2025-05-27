@@ -1,44 +1,40 @@
 import type { Address } from '@/utils/types';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
-import en from 'dayjs/locale/en';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import clsx from 'clsx';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { SearchIcon } from '@heroicons/react/solid';
+import { i18n } from '@lingui/core';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
+import en from 'dayjs/locale/en';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
+import { isNonNullish } from 'remeda';
+import { toast } from 'sonner';
+import { zeroAddress } from 'viem';
+import { useAccount, useBlockNumber } from 'wagmi';
 
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
-import ProposalHeader from '@/components/ProposalHeader';
-import ProposalContent from '@/components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
-import VoteModal from '@/components/VoteModal';
-import {
-  delegateNounsAtBlockQuery,
-  Delegates,
-  ProposalVotes,
-  proposalVotesQuery,
-  propUsingDynamicQuorum,
-} from '@/wrappers/subgraph';
-import { getNounVotes } from '@/utils/getNounsVotes';
 import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
-import ShortAddress from '@/components/ShortAddress';
-import StreamWithdrawModal from '@/components/StreamWithdrawModal';
-import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import ProposalContent from '@/components/ProposalContent';
+import ProposalHeader from '@/components/ProposalHeader';
+import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+import { useAppSelector } from '@/hooks';
+
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import VoteModal from '@/components/VoteModal';
+import { getNounVotes } from '@/utils/getNounsVotes';
 import { isProposalUpdatable } from '@/utils/proposals';
 import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import {
@@ -56,12 +52,20 @@ import {
 } from '@/wrappers/nounsDao';
 import { useProposalFeedback } from '@/wrappers/nounsData';
 import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import {
+  delegateNounsAtBlockQuery,
+  Delegates,
+  ProposalVotes,
+  proposalVotesQuery,
+  propUsingDynamicQuorum,
+} from '@/wrappers/subgraph';
+import ShortAddress from '@/components/ShortAddress';
+import StreamWithdrawModal from '@/components/StreamWithdrawModal';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
 
 import classes from './Vote.module.css';
-import { zeroAddress } from 'viem';
+
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
-import { useAccount, useBlockNumber } from 'wagmi';
-import { isNonNullish } from 'remeda';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -90,6 +94,7 @@ const getUpdatableCountdownCopy = (
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const VotePage = () => {
   const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
@@ -115,8 +120,7 @@ const VotePage = () => {
   const proposal = useProposal(Number(id));
   const proposalVersions = useProposalVersions(Number(id));
   const activeLocale = useActiveLocale();
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
   const { address: account } = useAccount();
   const { query, variables } = propUsingDynamicQuorum(id ?? '0');
   const { data: dqInfo, loading: loadingDQInfo, error: dqError } = useQuery(query, { variables });
@@ -176,7 +180,7 @@ const VotePage = () => {
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
-  // @ts-ignore
+  // @ts-expect-error Type instantiation is excessively deep and possibly infinite.
   const { data: currentQuorum } = useReadNounsGovernorQuorumVotes({
     args: [proposal && proposal.id ? BigInt(proposal.id) : 0n],
     query: {
@@ -292,6 +296,7 @@ const VotePage = () => {
         }
       };
     }
+    // eslint-disable-next-line sonarjs/function-return-type
     return () => {
       if (proposal?.id) {
         if (proposal?.onTimelockV1) {
@@ -327,9 +332,9 @@ const VotePage = () => {
         status: string;
         errorMessage?: string;
       },
-      successMessage?: ReactNode,
+      successMessage?: string,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => ReactNode | undefined,
+      getErrorMessage?: (error?: string) => string | undefined,
       onFinalState?: () => void,
     ) => {
       switch (status) {
@@ -340,60 +345,39 @@ const VotePage = () => {
           setPending?.(true);
           break;
         case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: successMessage || <Trans>Transaction Successful!</Trans>,
-            show: true,
-          });
+          toast.success(successMessage || _(t`Transaction Successful!`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(errorMessage) || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(getErrorMessage?.(errorMessage) || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
       }
     },
-    [setModal],
+    [_],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(queueProposalState, _(t`Proposal Queued!`), setQueuePending),
+    [queueProposalState, onTransactionStateChange, _],
   );
 
   useEffect(
     () =>
-      onTransactionStateChange(
-        queueProposalState,
-        <Trans>Proposal Queued!</Trans>,
-        setQueuePending,
-      ),
-    [queueProposalState, onTransactionStateChange, setModal],
+      onTransactionStateChange(executeProposalState, _(t`Proposal Executed!`), setExecutePending),
+    [executeProposalState, onTransactionStateChange, _],
   );
 
   useEffect(
-    () =>
-      onTransactionStateChange(
-        executeProposalState,
-        <Trans>Proposal Executed!</Trans>,
-        setExecutePending,
-      ),
-    [executeProposalState, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
-    () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
-    [cancelProposalState, onTransactionStateChange, setModal],
+    () => onTransactionStateChange(cancelProposalState, _(t`Proposal Canceled!`), setCancelPending),
+    [cancelProposalState, onTransactionStateChange, _],
   );
 
   useEffect(() => {
@@ -539,7 +523,7 @@ const VotePage = () => {
             .map(txn => {
               const parsedCallData = parseStreamCreationCallData(txn.callData);
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
-                return <></>;
+                return <Fragment key={parsedCallData.streamAddress} />;
               }
               return (
                 <Row

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import clsx from 'clsx';
 import { Alert, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -12,9 +14,9 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAppDispatch } from '@/hooks';
+
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { toast } from 'sonner';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -41,8 +43,8 @@ const CreateCandidatePage = () => {
   const createCandidateCost = useGetCreateCandidateCost();
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
+
   const hasVotes = availableVotes && availableVotes > 0;
 
   const handleAddProposalAction = useCallback(
@@ -171,31 +173,19 @@ const CreateCandidatePage = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Candidate Created!</Trans>,
-          show: true,
-        });
+        toast.success(_(t`Candidate Created!`));
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-  }, [createProposalCandidateState, setModal]);
+  }, [createProposalCandidateState, _]);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>

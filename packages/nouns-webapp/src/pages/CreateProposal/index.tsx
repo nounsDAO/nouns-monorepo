@@ -2,12 +2,15 @@ import type { Hex } from '@/utils/types';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
 import { filter } from 'remeda';
+import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 import CreateProposalButton from '@/components/CreateProposalButton';
@@ -16,9 +19,7 @@ import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import config from '@/config';
 import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
-import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
@@ -56,8 +57,7 @@ const CreateProposalPage = () => {
   const { address: account } = useAccount();
   const { propose, proposeState } = usePropose();
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
   const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
     nounsTokenBuyerAddress[chainId] ?? '',
@@ -213,37 +213,20 @@ const CreateProposalPage = () => {
           setProposePending(true);
           break;
         case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: (
-              <Trans>
-                Proposal Created!
-                <br />
-              </Trans>
-            ),
-            show: true,
-          });
+          toast.success(_(t`Proposal Created!`));
           setProposePending(false);
           break;
         case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(t`Please try again.`));
           setProposePending(false);
           break;
         case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(t`Please try again.`));
           setProposePending(false);
           break;
       }
     },
-    [setModal],
+    [_],
   );
 
   useEffect(() => {

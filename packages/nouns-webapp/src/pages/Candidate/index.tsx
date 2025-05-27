@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -15,9 +15,11 @@ import CandidateSponsors from '@/components/CandidateSponsors';
 import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
 import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
 import VoteSignals from '@/components/VoteSignals/VoteSignals';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/hooks';
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
+import { toast } from 'sonner';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,
@@ -106,15 +108,14 @@ const CandidatePage = () => {
     }
   }, [latestProposal, account]);
 
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
 
   const onTransactionStateChange = useCallback(
     (
       { errorMessage, status }: { errorMessage?: string; status: string },
-      successMessage?: ReactNode,
+      successMessage?: string,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => ReactNode | undefined,
+      getErrorMessage?: (error?: string) => string | undefined,
       onFinalState?: () => void,
     ) => {
       switch (status) {
@@ -125,35 +126,23 @@ const CandidatePage = () => {
           setPending?.(true);
           break;
         case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: successMessage || <Trans>Transaction Successful!</Trans>,
-            show: true,
-          });
+          toast.success(successMessage || _(t`Transaction Successful!`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(errorMessage) || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(getErrorMessage?.(errorMessage) || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
       }
     },
-    [setModal],
+    [_],
   );
 
   // handle cancel candidate
@@ -161,10 +150,10 @@ const CandidatePage = () => {
     () =>
       onTransactionStateChange(
         cancelCandidateState,
-        'Proposal Candidate Canceled!',
+        _(t`Proposal Candidate Canceled!`),
         setCancelPending,
       ),
-    [cancelCandidateState, onTransactionStateChange, setModal],
+    [cancelCandidateState, onTransactionStateChange, _],
   );
 
   const destructiveStateAction = (() => {
