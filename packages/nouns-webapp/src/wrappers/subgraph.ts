@@ -1,10 +1,15 @@
 import { ApolloClient, ApolloLink, gql, HttpLink, InMemoryCache } from '@apollo/client';
+
+import { graphql } from '@/subgraphs';
 import { BigNumberish } from '@/utils/types';
 
 export const clientFactory = (uri: string) => {
   // patch BigInt JSON serialization (runs once)
-  if (typeof BigInt !== 'undefined' && !(BigInt.prototype as any).toJSON) {
-    (BigInt.prototype as any).toJSON = function () {
+  if (
+    typeof BigInt !== 'undefined' &&
+    !(BigInt.prototype as unknown as { toJSON?: () => string }).toJSON
+  ) {
+    (BigInt.prototype as unknown as { toJSON?: () => string }).toJSON = function () {
       return this.toString();
     };
   }
@@ -333,43 +338,40 @@ export const proposalVersionsQuery = (id: string | number) => ({
   variables: { id },
 });
 
-export const auctionQuery = (auctionId: number) => ({
-  query: gql`
-    query GetAuction($id: ID!) {
-      auction(id: $id) {
+export const auctionQuery = graphql(`
+  query GetAuction($id: ID!) {
+    auction(id: $id) {
+      id
+      amount
+      settled
+      bidder {
         id
-        amount
-        settled
-        bidder {
+      }
+      startTime
+      endTime
+      noun {
+        id
+        seed {
           id
+          background
+          body
+          accessory
+          head
+          glasses
         }
-        startTime
-        endTime
-        noun {
+        owner {
           id
-          seed {
-            id
-            background
-            body
-            accessory
-            head
-            glasses
-          }
-          owner {
-            id
-          }
-        }
-        bids {
-          id
-          blockNumber
-          txIndex
-          amount
         }
       }
+      bids {
+        id
+        blockNumber
+        txIndex
+        amount
+      }
     }
-  `,
-  variables: { id: auctionId },
-});
+  }
+`);
 
 export const bidsByAuctionQuery = (auctionId: string) => ({
   query: gql`
@@ -427,40 +429,37 @@ export const nounsIndex = () => ({
   variables: {},
 });
 
-export const latestAuctionsQuery = () => ({
-  query: gql`
-    query GetLatestAuctions {
-      auctions(orderBy: startTime, orderDirection: desc, first: 1000) {
+export const latestAuctionsQuery = graphql(`
+  query GetLatestAuctions($first: Int = 1000) {
+    auctions(orderBy: startTime, orderDirection: desc, first: $first) {
+      id
+      amount
+      settled
+      bidder {
+        id
+      }
+      startTime
+      endTime
+      noun {
+        id
+        owner {
+          id
+        }
+      }
+      bids {
         id
         amount
-        settled
+        blockNumber
+        blockTimestamp
+        txHash
+        txIndex
         bidder {
           id
         }
-        startTime
-        endTime
-        noun {
-          id
-          owner {
-            id
-          }
-        }
-        bids {
-          id
-          amount
-          blockNumber
-          blockTimestamp
-          txHash
-          txIndex
-          bidder {
-            id
-          }
-        }
       }
     }
-  `,
-  variables: {},
-});
+  }
+`);
 
 export const latestBidsQuery = (first = 10) => ({
   query: gql`

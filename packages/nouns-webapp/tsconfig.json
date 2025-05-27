@@ -16,6 +16,13 @@
       "@/*": ["./src/*"]
     },
 
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./src/subgraphs/schema.graphql"
+      }
+    ],
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

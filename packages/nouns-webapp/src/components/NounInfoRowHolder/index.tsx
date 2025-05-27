@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/react/macro';
+import { useQuery } from '@tanstack/react-query';
 import { Image } from 'react-bootstrap';
 
 import _HeartIcon from '@/assets/icons/Heart.svg';
@@ -10,7 +10,9 @@ import ShortAddress from '@/components/ShortAddress';
 import Tooltip from '@/components/Tooltip';
 import { nounsAuctionHouseAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
+import { execute } from '@/subgraphs/execute';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
+import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { auctionQuery } from '@/wrappers/subgraph';
 
@@ -23,12 +25,15 @@ interface NounInfoRowHolderProps {
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { query, variables } = auctionQuery(Number(nounId));
-  const { loading, error, data } = useQuery(query, { variables });
 
-  const winner = data && data.auction.bidder?.id;
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['auction', nounId],
+    queryFn: () => execute(auctionQuery, { id: nounId.toString() }),
+  });
 
-  if (loading || !winner) {
+  const winner = data && data.auction?.bidder?.id;
+
+  if (isLoading || !winner) {
     return (
       <div className={classes.nounHolderInfoContainer}>
         <span className={classes.nounHolderLoading}>
@@ -45,7 +50,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   }
 
   const etherscanURL = buildEtherscanAddressLink(winner);
-  const shortAddressComponent = <ShortAddress address={winner} />;
+  const shortAddressComponent = <ShortAddress address={winner as Address} />;
   const chainId = defaultChain.id;
 
   return (

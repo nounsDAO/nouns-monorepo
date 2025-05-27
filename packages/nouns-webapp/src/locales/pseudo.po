@@ -21,10 +21,6 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted against"
-msgstr ""
-
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
 msgstr ""
@@ -175,10 +171,6 @@ msgstr ""
 msgid "Required % of Nouns to Pass"
 msgstr ""
 
-#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
-msgid "Delegate changed from<0> <1/></0> to <2><3/></2>"
-msgstr ""
-
 #: src/components/NounsIntroSection/index.tsx
 msgid "Prop House"
 msgstr ""
@@ -201,6 +193,10 @@ msgstr ""
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Votes"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Learn more about the DUNA"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -236,16 +232,8 @@ msgstr ""
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted against"
-msgstr ""
-
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
-msgstr ""
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show fewer"
 msgstr ""
 
 #: src/components/NavBar/index.tsx
@@ -307,7 +295,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Queued"
 msgstr ""
 
@@ -356,10 +343,6 @@ msgstr ""
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
 msgstr ""
 
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted for"
-msgstr ""
-
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr ""
@@ -404,8 +387,8 @@ msgstr ""
 msgid "One Noun is equal to one vote."
 msgstr ""
 
-#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
-msgid "Holder changed from<0> <1/></0> to <2><3/></2>"
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA"
 msgstr ""
 
 #. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
@@ -440,7 +423,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Active"
 msgstr ""
 
@@ -454,13 +436,9 @@ msgstr ""
 msgid "Add Transfer Funds Action"
 msgstr ""
 
-#. placeholder {0}: candidate.data?.proposalIdToUpdate
+#. placeholder {0}: candidate?.proposalIdToUpdate
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
-msgstr ""
-
-#: src/components/ProfileActivityFeedToggle/index.tsx
-msgid "Show all {numEvents} events "
 msgstr ""
 
 #: src/components/CreateCandidateButton/index.tsx
@@ -475,7 +453,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Canceled"
 msgstr ""
 
@@ -592,11 +569,9 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Succeeded"
 msgstr ""
 
-#: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
 msgstr ""
@@ -616,7 +591,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Executed"
 msgstr ""
@@ -648,7 +622,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Expired"
 msgstr ""
 
@@ -773,7 +746,7 @@ msgstr ""
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr ""
 
-#. placeholder {0}: isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes
+#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr ""
@@ -791,10 +764,6 @@ msgstr ""
 msgid "Starts {0}"
 msgstr ""
 
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-msgid "Holder changed from <0> <1/></0> to <2><3/></2>"
-msgstr ""
-
 #: src/components/VoteModal/index.tsx
 msgid "Gas spent on voting will be refunded to you."
 msgstr ""
@@ -807,7 +776,7 @@ msgstr ""
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr ""
 
-#. placeholder {0}: sortedNounIds.length - MAX_NOUN_IDS_SHOWN
+#. placeholder {0}: Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr ""
@@ -836,12 +805,6 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
-msgstr ""
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> sent to <1> <2/></1> "
 msgstr ""
 
 #: src/components/SettleManuallyBtn/index.tsx
@@ -909,7 +872,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Pending"
 msgstr ""
 
@@ -960,7 +922,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Defeated"
 msgstr ""
 
@@ -982,11 +943,6 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Action Details"
-msgstr ""
-
-#: src/components/ProfileActivityFeed/index.tsx
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Activity"
 msgstr ""
 
 #: src/components/Winner/index.tsx
@@ -1180,10 +1136,6 @@ msgstr ""
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} abstained on"
-msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
 msgstr ""
@@ -1232,10 +1184,6 @@ msgstr ""
 
 #: src/pages/CreateCandidate/index.tsx
 msgid "Candidate Created!"
-msgstr ""
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} voted for"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1351,10 +1299,6 @@ msgstr ""
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
 msgstr ""
 
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch Noun activity history"
-msgstr ""
-
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
 msgstr ""
@@ -1367,14 +1311,8 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Absent for"
-msgstr ""
-
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
@@ -1395,6 +1333,10 @@ msgstr ""
 #. placeholder {0}: i18n.number(availableVotes)
 #: src/components/VoteModal/index.tsx
 msgid "Voting with <0>{0}</0> Noun"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr ""
 
 #: src/components/WalletConnectModal/index.tsx
@@ -1495,10 +1437,6 @@ msgstr ""
 
 #: src/components/Winner/index.tsx
 msgid "You"
-msgstr ""
-
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Abstained on"
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1687,13 +1625,6 @@ msgid "Starting on"
 msgstr ""
 
 #: src/pages/Fork/DeployForkButton.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/Winner/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
@@ -1703,7 +1634,6 @@ msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 msgid "Vetoed"
 msgstr ""
 
@@ -1722,6 +1652,10 @@ msgstr ""
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
@@ -1760,29 +1694,23 @@ msgstr ""
 msgid "Proposal Updated!"
 msgstr ""
 
+#: src/components/Documentation/index.tsx
+msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
+msgstr ""
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr ""
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ForkStatus/index.tsx
 msgid "Undetermined"
-msgstr ""
-
-#: src/components/ProfileActivityFeed/index.tsx
-msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
 
 #. placeholder {0}: proposalsList.length === 1 ? '' : 's'
 #: src/pages/Fork/ForkEvent.tsx
 msgid "Offending proposal{0}"
-msgstr ""
-
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-#: src/components/NounProfileVoteRow/index.tsx
-msgid "Waiting for"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -1812,12 +1740,6 @@ msgstr ""
 #. placeholder {0}: proposal.content.contentSignatures?.length
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
-msgstr ""
-
-#. placeholder {0}: event.nounId
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> won by <1> <2/></1> "
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1855,6 +1777,10 @@ msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
 msgstr ""
 
 #: src/components/Banner/index.tsx
