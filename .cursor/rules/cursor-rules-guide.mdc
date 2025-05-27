@@ -1,6 +1,6 @@
 ---
 description: Comprehensive guide for writing effective Cursor rules in .mdc format
-globs: [".cursor/rules/*.mdc"]
+globs: .cursor/rules/*.mdc
 alwaysApply: false
 ---
 # Cursor Rules Writing Guide
@@ -14,7 +14,7 @@ Every .mdc rule file must start with YAML frontmatter containing metadata:
 ```yaml
 ---
 description: Brief, clear description of what this rule does
-globs: ["**/*.ts", "**/*.tsx"]  # File patterns this rule applies to (for Auto Attached)
+globs: **/*.ts, **/*.tsx  # File patterns this rule applies to (for Auto Attached)
 alwaysApply: false  # Set to true for Always type rules
 ---
 ```

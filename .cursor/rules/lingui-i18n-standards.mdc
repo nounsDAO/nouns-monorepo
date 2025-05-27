@@ -1,6 +1,6 @@
 ---
 description: Lingui internationalization standards and patterns for the Nouns webapp
-globs: ["packages/nouns-webapp/**/*.ts", "packages/nouns-webapp/**/*.tsx"]
+globs: packages/nouns-webapp/**/*.ts,packages/nouns-webapp/**/*.tsx
 alwaysApply: false
 ---
 
