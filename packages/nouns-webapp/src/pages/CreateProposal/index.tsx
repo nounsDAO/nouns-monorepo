@@ -217,9 +217,6 @@ const CreateProposalPage = () => {
           setProposePending(false);
           break;
         case 'Fail':
-          toast.error(errorMessage || _(t`Please try again.`));
-          setProposePending(false);
-          break;
         case 'Exception':
           toast.error(errorMessage || _(t`Please try again.`));
           setProposePending(false);

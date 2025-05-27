@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Trans } from '@lingui/react/macro';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { withStepProgress } from 'react-stepz';
+import { toast } from 'sonner';
 import { formatEther } from 'viem';
 
 import CreateCandidateButton from '@/components/CreateCandidateButton';
@@ -14,9 +15,7 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-
 import Section from '@/layout/Section';
-import { toast } from 'sonner';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -177,9 +176,6 @@ const CreateCandidatePage = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);

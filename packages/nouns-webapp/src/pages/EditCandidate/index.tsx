@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { filter } from 'remeda';
+import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -12,11 +16,7 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-
 import Section from '@/layout/Section';
-import { toast } from 'sonner';
-import { t } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
@@ -31,7 +31,6 @@ import { useUserVotes } from '@/wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { filter } from 'remeda';
 
 interface EditCandidateProps {
   match: {
@@ -202,9 +201,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(updateProposalCandidateState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(updateProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);

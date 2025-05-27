@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
@@ -11,11 +14,7 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-
 import Section from '@/layout/Section';
-import { toast } from 'sonner';
-import { t } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -230,9 +229,6 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(updateProposalState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(updateProposalState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
@@ -253,9 +249,6 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(updateProposalDescriptionState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(updateProposalDescriptionState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
@@ -276,9 +269,6 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(updateProposalTransactionsState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(updateProposalTransactionsState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
@@ -423,15 +413,11 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(false);
         break;
       case 'Fail':
-        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
-        setProposePending(false);
-        break;
       case 'Exception':
         toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProposalCandidateState, _, slug]);
 
   const isFormInvalid = () => {

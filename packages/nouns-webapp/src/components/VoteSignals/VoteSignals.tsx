@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
-
 import { toast } from 'sonner';
-import { t } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
+import { useAccount } from 'wagmi';
+
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
 import classes from './VoteSignals.module.css';
-import { useAccount } from 'wagmi';
 
 type VoteSignalsProps = {
   proposalId?: string;
@@ -27,6 +27,7 @@ type VoteSignalsProps = {
   isFeedbackClosed?: boolean;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function VoteSignals({
   candidateSlug,
   feedback: feedbackList,
@@ -140,12 +141,7 @@ function VoteSignals({
       setIsTransactionPending(false);
       setHasUserVoted(true);
       setExpandedGroup(support);
-    } else if (status === 'Fail') {
-      toast.error(errorMessage || _(t`Please try again.`));
-      setIsTransactionPending(false);
-      setIsTransactionWaiting(false);
-      setDataFetchPollInterval(0);
-    } else if (status === 'Exception') {
+    } else if (status === 'Fail' || status === 'Exception') {
       toast.error(errorMessage || _(t`Please try again.`));
       setIsTransactionPending(false);
       setIsTransactionWaiting(false);
