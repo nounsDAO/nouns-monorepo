@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col } from 'react-bootstrap';
 
 import _AddressIcon from '@/assets/icons/Address.svg';
 import _BidsIcon from '@/assets/icons/Bids.svg';
@@ -12,8 +11,6 @@ import { nounsTokenAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanTokenLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
-
-import classes from './NounInfoCard.module.css';
 
 interface NounInfoCardProps {
   nounId: bigint;
@@ -31,30 +28,26 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   return (
     <>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowBirthday nounId={nounId} />
-      </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowHolder nounId={nounId} />
-      </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowButton
-          iconImgSource={_BidsIcon}
-          btnText={
-            lastAuctionNounId !== undefined && BigInt(lastAuctionNounId) === nounId ? (
-              <Trans>Bids</Trans>
-            ) : (
-              <Trans>Bid history</Trans>
-            )
-          }
-          onClickHandler={bidHistoryOnClickHandler}
-        />
-        <NounInfoRowButton
-          iconImgSource={_AddressIcon}
-          btnText={<Trans>Etherscan</Trans>}
-          onClickHandler={etherscanButtonClickHandler}
-        />
-      </Col>
+      <NounInfoRowBirthday nounId={nounId} className="mt-2" />
+
+      <NounInfoRowHolder nounId={nounId} className="mb-3" />
+
+      <NounInfoRowButton
+        iconImgSource={_BidsIcon}
+        btnText={
+          lastAuctionNounId !== undefined && BigInt(lastAuctionNounId) === nounId ? (
+            <Trans>Bids</Trans>
+          ) : (
+            <Trans>Bid history</Trans>
+          )
+        }
+        onClickHandler={bidHistoryOnClickHandler}
+      />
+      <NounInfoRowButton
+        iconImgSource={_AddressIcon}
+        btnText={<Trans>Etherscan</Trans>}
+        onClickHandler={etherscanButtonClickHandler}
+      />
     </>
   );
 };
