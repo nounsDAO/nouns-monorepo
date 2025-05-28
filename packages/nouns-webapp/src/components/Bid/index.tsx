@@ -5,6 +5,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
 import { formatEther, parseEther } from 'viem';
 
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
@@ -58,6 +59,7 @@ interface BidProps {
 }
 
 const Bid: React.FC<BidProps> = props => {
+  const navigate = useNavigate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
@@ -207,11 +209,6 @@ const Bid: React.FC<BidProps> = props => {
 
   const isDisabled = isPlacingBid || isSettlingAuction || !activeAccount;
 
-  const fomoNounsBtnOnClickHandler = () => {
-    // Open Fomo Nouns in a new tab
-    window.open('https://fomonouns.wtf', '_blank', 'noopener,noreferrer')?.focus();
-  };
-
   const isWalletConnected = activeAccount !== undefined;
 
   return (
@@ -259,8 +256,8 @@ const Bid: React.FC<BidProps> = props => {
         ) : (
           <>
             <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                <Trans>Vote for the next Noun</Trans> ⌐◧-◧
+              <Button className={classes.bidBtnAuctionEnded} onClick={() => navigate('/oracle')}>
+                <Trans>Settle the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
             {/* Only show the force settles button if the wallet connected */}
