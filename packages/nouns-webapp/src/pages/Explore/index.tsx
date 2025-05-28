@@ -7,7 +7,6 @@ import ExploreGrid from '@/components/ExploreGrid';
 import ExploreNav from '@/components/ExploreGrid/ExploreNav';
 import ExploreNounDetail from '@/components/ExploreGrid/ExploreNounDetail';
 import { useAppSelector } from '@/hooks';
-import { useKeyPress } from '@/hooks/useKeyPress';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
 
 import classes from './Explore.module.css';
@@ -32,7 +31,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   const nounCount = currentAuction ? Number(BigInt(currentAuction?.nounId)) + 1 : -1;
 
   // Set state
-  const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile);
   const [nounsList, setNounsList] = useState<Noun[]>([]);
   const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
   const [activeNoun, setActiveNoun] = useState<number>(-1);
@@ -41,12 +40,6 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   const [scrollY, setScrollY] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
-  // // Keyboard keys to listen for
-  const keyboardPrev: boolean = useKeyPress('ArrowLeft');
-  const keyboardNext: boolean = useKeyPress('ArrowRight');
-  const keyboardUp: boolean = useKeyPress('ArrowUp');
-  const keyboardDown: boolean = useKeyPress('ArrowDown');
-  const keyboardEsc: boolean = useKeyPress('Escape');
 
   // Handle events
   const handleNounNavigation = (direction: string) => {
@@ -96,7 +89,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
     }
   };
 
-  const handleScrollTo = (nounId: number) => {
+  const handleScrollTo = (nounId?: number) => {
     setIsNounHoverDisabled(true);
     if (nounId) {
       buttonsRef.current[nounId]?.scrollIntoView({ behavior: 'smooth' });
@@ -104,7 +97,9 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   };
 
   const handleFocusNoun = (nounId: number) => {
-    nounId >= 0 && buttonsRef.current[nounId]?.focus();
+    if (nounId >= 0) {
+      buttonsRef.current[nounId]?.focus();
+    }
     setActiveNoun(nounId);
     setSelectedNoun(nounId);
     setIsSidebarVisible(true);
@@ -114,55 +109,6 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
       body.style.top = `-${scrollY}`;
     }
   };
-
-  useEffect(() => {
-    setIsNounHoverDisabled(true);
-    let amountToMove = 10;
-    if (width <= 400) {
-      amountToMove = 3;
-    }
-    if (width <= 991) {
-      amountToMove = 5;
-    }
-    if (width <= 1399) {
-      amountToMove = 8;
-    }
-
-    if (selectedNoun !== undefined && selectedNoun >= 0) {
-      if (keyboardEsc) {
-        handleCloseDetail();
-      }
-      if (sortOrder === 'date-descending') {
-        if (keyboardPrev && selectedNoun + 1 < nounCount) {
-          handleFocusNoun(selectedNoun + 1);
-        }
-        if (keyboardNext && selectedNoun - 1 >= 0) {
-          handleFocusNoun(selectedNoun - 1);
-        }
-        if (keyboardUp && selectedNoun + amountToMove < nounCount) {
-          handleFocusNoun(selectedNoun + amountToMove);
-        }
-        if (keyboardDown && selectedNoun - amountToMove >= 0) {
-          handleFocusNoun(selectedNoun - amountToMove);
-        }
-      } else {
-        if (keyboardPrev && selectedNoun - 1 >= 0) {
-          handleFocusNoun(selectedNoun - 1);
-        }
-        if (keyboardNext && selectedNoun + 1 < nounCount) {
-          handleFocusNoun(selectedNoun + 1);
-        }
-        if (keyboardUp && selectedNoun - amountToMove >= 0) {
-          handleFocusNoun(selectedNoun - amountToMove);
-        }
-        if (keyboardDown && selectedNoun + amountToMove < nounCount) {
-          handleFocusNoun(selectedNoun + amountToMove);
-        }
-      }
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
 
   // Once nounCount is known, run dependent functions
   useEffect(() => {
