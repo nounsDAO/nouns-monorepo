@@ -55,6 +55,7 @@ export function OraclePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [nextNoun, setNextNoun] = useState<Noun | null>(null);
   const prevNounIdRef = useRef<number | null>(null); // Add this to track the previous noun ID
+  const [currentBlockTimestamp, setCurrentBlockTimestamp] = useState<number>(0);
 
   const dispatch = useAppDispatch();
   const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
@@ -114,6 +115,8 @@ export function OraclePage() {
     syncConnectedChain: false,
     onBlock: async block => {
       try {
+        setCurrentBlockTimestamp(Number(block.timestamp));
+
         const auctionData = await readNounsAuctionHouseAuction(config, {});
 
         if (isNullish(auctionData)) {
@@ -130,7 +133,7 @@ export function OraclePage() {
         }
 
         const state = determineAuctionState(startTime, settled, Number(block.timestamp), endTime);
-        const nextNounId = currentNounId + 1;
+        const nextNounId = currentNounId % 10 === 9 ? currentNounId + 2 : currentNounId + 1;
 
         setAuction(createAuctionData(auctionData, state));
         setNextNoun(processNextNounData(nextNounId, block.hash));
@@ -182,14 +185,18 @@ export function OraclePage() {
                   <Trans>Auction</Trans>
                 </h1>
                 <p>
-                  {t`Noun ID`}: {auction.nounId.toString()}
+                  {t`Noun ID`}: {nextNoun?.nounId.toString()}
                 </p>
-                {/*<p>End time: {auction.endTime.toString()}</p>*/}
-                {/*<p>Start time: {auction.startTime.toString()}</p>*/}
-                {/*<p>Amount: {auction.amount.toString()}</p>*/}
-                {/*<p>Settled: {auction.settled ? 'yes' : 'no'}</p>*/}
-                {/*<p>Bidder: {auction.bidder}</p>*/}
-                {/*<p>State: {auction.state}</p>*/}
+
+                {currentBlockTimestamp > 0 && (
+                  <div className="my-3">
+                    <p>
+                      <Trans>Next block in:</Trans>
+                    </p>
+                    <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
+                  </div>
+                )}
+
                 <button
                   type="button"
                   className="relative m-0 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
@@ -205,6 +212,48 @@ export function OraclePage() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function BlockTimeCountdown({
+  currentBlockTimestamp,
+}: Readonly<{ currentBlockTimestamp: number }>) {
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const AVERAGE_BLOCK_TIME = 12; // 12 seconds per block on average
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+      const nextBlockTime = currentBlockTimestamp + AVERAGE_BLOCK_TIME;
+      const difference = nextBlockTime - now;
+
+      // Make sure we don't show negative time
+      return Math.max(difference, 0);
+    };
+
+    // Set initial time left
+    setTimeLeft(calculateTimeLeft());
+
+    // Update the countdown every second
+    const timerId = setInterval(() => {
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+
+      // Clear interval when countdown reaches zero
+      if (newTimeLeft <= 0) {
+        clearInterval(timerId);
+      }
+    }, 1000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(timerId);
+  }, [currentBlockTimestamp]);
+
+  return (
+    <div className="block-time-countdown">
+      <span className="font-bold">{timeLeft}</span> {timeLeft === 1 ? 'second' : 'seconds'} until
+      next block
     </div>
   );
 }
