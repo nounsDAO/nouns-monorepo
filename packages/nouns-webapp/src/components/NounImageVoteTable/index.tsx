@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 import { GrayCircle } from '@/components/GrayCircle';
-import HoverCard from '@/components/HoverCard';
-import NounHoverCard from '@/components/NounHoverCard';
 import { StandaloneNounCircular } from '@/components/StandaloneNoun';
 import VoteCardPager from '@/components/VoteCardPager';
 import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
@@ -29,16 +27,7 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
 
     const paddedNounIds = shuffledNounIds
       .map((nounId: string) => {
-        return (
-          <HoverCard
-            key={nounId}
-            hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
-            tip={nounId.toString()}
-            id="nounHoverCard"
-          >
-            <StandaloneNounCircular nounId={BigInt(nounId)} />
-          </HoverCard>
-        );
+        return <StandaloneNounCircular key={nounId} nounId={BigInt(nounId)} />;
       })
       .slice(page * NOUNS_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP)
       .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />));
