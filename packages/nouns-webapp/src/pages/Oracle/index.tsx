@@ -48,68 +48,69 @@ type Noun = {
   image: string;
 };
 
+const determineAuctionState = (
+  startTime: number,
+  settled: boolean,
+  currentTime: number,
+  endTime: number,
+): AuctionState => {
+  if (startTime === 0) return AuctionState.NotStarted;
+  if (settled) return AuctionState.OverAndSettled;
+  if (currentTime < endTime) return AuctionState.Active;
+  return AuctionState.OverNotSettled;
+};
+
+const processNounData = (nounId: number, blockHash: string) => {
+  const nounSeed = getNounSeedFromBlockHash(nounId, blockHash);
+  const { parts, background } = getNounData(nounSeed);
+  const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, imageData.palette, background))}`;
+  return {
+    nounId,
+    seed: nounSeed,
+    image,
+    backgroundColor: nounSeed.background === 0 ? grey : beige,
+  };
+};
+
+const createAuctionData = (
+  auctionData: {
+    nounId: bigint;
+    amount: bigint;
+    startTime: number;
+    endTime: number;
+    bidder: Address;
+    settled: boolean;
+  },
+  state: AuctionState,
+): Auction => ({
+  nounId: Number(auctionData.nounId),
+  endTime: dayjs.unix(auctionData.endTime).toDate(),
+  startTime: dayjs.unix(auctionData.startTime).toDate(),
+  amount: formatEther(auctionData.amount),
+  settled: auctionData.settled,
+  bidder: auctionData.bidder,
+  state,
+});
+
 export function OraclePage() {
   const { t } = useLingui();
+  const dispatch = useAppDispatch();
+  const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
 
   const [auction, setAuction] = useState<Auction | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [nextNoun, setNextNoun] = useState<Noun | null>(null);
-  const prevNounIdRef = useRef<number | null>(null); // Add this to track the previous noun ID
   const [currentBlockTimestamp, setCurrentBlockTimestamp] = useState<number>(0);
+  const prevNounIdRef = useRef<number | null>(null); // Add this to track the previous noun ID
 
-  const dispatch = useAppDispatch();
-  const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  const determineAuctionState = (
-    startTime: number,
-    settled: boolean,
-    currentTime: number,
-    endTime: number,
-  ): AuctionState => {
-    if (startTime === 0) return AuctionState.NotStarted;
-    if (settled) return AuctionState.OverAndSettled;
-    if (currentTime < endTime) return AuctionState.Active;
-    return AuctionState.OverNotSettled;
-  };
-
-  const processNextNounData = (nounId: number, blockHash: string) => {
-    const nextNounSeed = getNounSeedFromBlockHash(nounId, blockHash);
-    const { parts, background } = getNounData(nextNounSeed);
-    const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, imageData.palette, background))}`;
-
-    dispatch(setStateBackgroundColor(nextNounSeed.background === 0 ? grey : beige));
-
-    return {
-      nounId,
-      seed: nextNounSeed,
-      image,
-    };
-  };
-
-  const createAuctionData = (
-    auctionData: {
-      nounId: bigint;
-      amount: bigint;
-      startTime: number;
-      endTime: number;
-      bidder: Address;
-      settled: boolean;
-    },
-    state: AuctionState,
-  ) => {
-    const { nounId, endTime, startTime, amount, settled, bidder } = auctionData;
-
-    return {
-      nounId: Number(nounId),
-      endTime: dayjs.unix(endTime).toDate(),
-      startTime: dayjs.unix(startTime).toDate(),
-      amount: formatEther(amount),
-      settled,
-      bidder,
-      state,
-    };
-  };
+  const {
+    writeContract: settleAuction,
+    isPending: isSettlingAuction,
+    isError: didSettleFail,
+    error: settleAuctionError,
+  } = useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction();
 
   useWatchBlocks({
     syncConnectedChain: false,
@@ -136,7 +137,10 @@ export function OraclePage() {
         const nextNounId = currentNounId % 10 === 9 ? currentNounId + 2 : currentNounId + 1;
 
         setAuction(createAuctionData(auctionData, state));
-        setNextNoun(processNextNounData(nextNounId, block.hash));
+
+        const nounData = processNounData(nextNounId, block.hash);
+        setNextNoun(nounData);
+        dispatch(setStateBackgroundColor(nounData.backgroundColor));
       } catch (error) {
         console.error('Failed to fetch auction data:', error);
       } finally {
@@ -144,15 +148,6 @@ export function OraclePage() {
       }
     },
   });
-
-  const {
-    writeContract: settleAuction,
-    isPending: isSettlingAuction,
-    // isSuccess: didSettleAuction,
-    isError: didSettleFail,
-    // isIdle: isSettleIdle,
-    error: settleAuctionError,
-  } = useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction();
 
   useEffect(() => {
     if (didSettleFail) {
@@ -164,6 +159,10 @@ export function OraclePage() {
     }
   }, [didSettleFail, setModal, settleAuctionError?.message]);
 
+  const handleSettleAuction = useCallback(() => {
+    settleAuction({});
+  }, [settleAuction]);
+
   return (
     <div style={{ backgroundColor: stateBgColor }}>
       <div className={'container'}>
@@ -171,7 +170,7 @@ export function OraclePage() {
           <div className={'mt-0 flex w-full max-w-full flex-shrink-0 px-3 lg:w-1/2 lg:flex-none'}>
             {(loading || isNullish(auction)) && <LoadingNoun />}
             {!loading && isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
-              <Noun imgPath={nextNoun?.image ?? ''} alt={nextNoun?.nounId.toString() ?? 'Noun'} />
+              <Noun imgPath={nextNoun?.image ?? ''} alt={nextNoun?.nounId.toString() ?? t`Noun`} />
             )}
           </div>
           <div
@@ -180,34 +179,12 @@ export function OraclePage() {
             }
           >
             {isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
-              <div>
-                <h1>
-                  <Trans>Auction</Trans>
-                </h1>
-                <p>
-                  {t`Noun ID`}: {nextNoun?.nounId.toString()}
-                </p>
-
-                {currentBlockTimestamp > 0 && (
-                  <div className="my-3">
-                    <p>
-                      <Trans>Next block in:</Trans>
-                    </p>
-                    <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
-                  </div>
-                )}
-
-                <button
-                  type="button"
-                  className="relative m-0 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
-                  onClick={() => {
-                    settleAuction({});
-                  }}
-                  disabled={isSettlingAuction}
-                >
-                  <Trans>Settle Auction</Trans>
-                </button>
-              </div>
+              <AuctionControlPanel
+                nextNoun={nextNoun}
+                currentBlockTimestamp={currentBlockTimestamp}
+                onSettleAuction={handleSettleAuction}
+                isSettlingAuction={isSettlingAuction}
+              />
             )}
           </div>
         </div>
@@ -215,6 +192,47 @@ export function OraclePage() {
     </div>
   );
 }
+
+const AuctionControlPanel = ({
+  nextNoun,
+  currentBlockTimestamp,
+  onSettleAuction,
+  isSettlingAuction,
+}: {
+  nextNoun: Noun | null;
+  currentBlockTimestamp: number;
+  onSettleAuction: () => void;
+  isSettlingAuction: boolean;
+}) => {
+  const { t } = useLingui();
+
+  return (
+    <div>
+      <h1>
+        <Trans>Auction</Trans>
+      </h1>
+      <p>
+        {t`Noun ID`}: {nextNoun?.nounId.toString()}
+      </p>
+      {currentBlockTimestamp > 0 && (
+        <div className="my-3">
+          <p>
+            <Trans>Next block in:</Trans>
+          </p>
+          <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
+        </div>
+      )}
+      <button
+        type="button"
+        className="relative m-0 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
+        onClick={onSettleAuction}
+        disabled={isSettlingAuction}
+      >
+        <Trans>Settle Auction</Trans>
+      </button>
+    </div>
+  );
+};
 
 function BlockTimeCountdown({
   currentBlockTimestamp,
@@ -232,7 +250,7 @@ function BlockTimeCountdown({
       return Math.max(difference, 0);
     };
 
-    // Set initial time left
+    // Set the initial time left
     setTimeLeft(calculateTimeLeft());
 
     // Update the countdown every second
