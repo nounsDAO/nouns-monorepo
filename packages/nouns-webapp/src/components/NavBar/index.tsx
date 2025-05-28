@@ -45,6 +45,7 @@ const NavBar = () => {
   const useStateBg =
     location.pathname === '/' ||
     location.pathname.includes('/noun/') ||
+    location.pathname.includes('/oracle') ||
     location.pathname.includes('/auction/');
 
   const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
