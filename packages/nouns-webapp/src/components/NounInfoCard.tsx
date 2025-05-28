@@ -4,7 +4,6 @@ import { Trans } from '@lingui/react/macro';
 
 import _AddressIcon from '@/assets/icons/Address.svg';
 import _BidsIcon from '@/assets/icons/Bids.svg';
-import NounInfoRowBirthday from '@/components/NounInfoRowBirthday';
 import NounInfoRowButton from '@/components/NounInfoRowButton';
 import NounInfoRowHolder from '@/components/NounInfoRowHolder';
 import { nounsTokenAddress } from '@/contracts';
@@ -28,8 +27,6 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   return (
     <>
-      <NounInfoRowBirthday nounId={nounId} className="mt-2" />
-
       <NounInfoRowHolder nounId={nounId} className="mb-3" />
 
       <NounInfoRowButton
