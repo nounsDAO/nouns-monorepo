@@ -9,7 +9,6 @@ import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Footer from '@/components/Footer';
-
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
 import { Toaster } from '@/components/ui/sonner';
@@ -23,7 +22,7 @@ import CreateProposalPage from '@/pages/CreateProposal';
 import DelegatePage from '@/pages/DelegatePage';
 import EditCandidatePage from '@/pages/EditCandidate';
 import EditProposalPage from '@/pages/EditProposal';
-import ExplorePage from '@/pages/Explore';
+import ExplorePage from '@/pages/ExplorePage';
 import ForkPage from '@/pages/Fork';
 import ForksPage from '@/pages/Forks';
 import GovernancePage from '@/pages/Governance';

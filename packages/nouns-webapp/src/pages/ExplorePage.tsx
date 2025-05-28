@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import cx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import ExploreGrid from '@/components/ExploreGrid';
 import ExploreNav from '@/components/ExploreGrid/ExploreNav';
 import ExploreNounDetail from '@/components/ExploreGrid/ExploreNounDetail';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
-
-import classes from './Explore.module.css';
 
 type ExplorePageProps = object;
 
@@ -143,10 +141,13 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
   }, []);
 
   return (
-    <div className={classes.exploreWrap} ref={containerRef}>
-      <div className={classes.contentWrap}>
+    <div
+      className="mx-[3vw] rounded-[10px] border border-black/10 p-0 max-lg:mx-2 max-lg:border-0"
+      ref={containerRef}
+    >
+      <div className="max-lg:z-2 flex justify-between max-lg:relative">
         <motion.div
-          className={cx(classes.gridWrap, isNounHoverDisabled && classes.nounHoverDisabled)}
+          className={cn('z-2 relative w-full', isNounHoverDisabled && 'nounHoverDisabled')}
           animate={{
             maxWidth: !isMobile && selectedNoun ? '80%' : '100%',
             transition: {
