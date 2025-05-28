@@ -97,8 +97,6 @@ const VotePage = () => {
   const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
-  // Toggle between Noun centric view and delegate view
-  const [isDelegateView, setIsDelegateView] = useState(false);
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
@@ -652,23 +650,13 @@ const VotePage = () => {
         </Row>
         {!isUpdateable() && (
           <>
-            <p
-              onClick={() => setIsDelegateView(!isDelegateView)}
-              className={classes.toggleDelegateVoteView}
-            >
-              {isDelegateView ? (
-                <Trans>Switch to Noun view</Trans>
-              ) : (
-                <Trans>Switch to delegate view</Trans>
-              )}
-            </p>
             <Row>
               <VoteCard
                 proposal={proposal}
                 percentage={forPercentage}
                 nounIds={forNouns}
                 variant={VoteCardVariant.FOR}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
@@ -676,7 +664,7 @@ const VotePage = () => {
                 percentage={againstPercentage}
                 nounIds={againstNouns}
                 variant={VoteCardVariant.AGAINST}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
@@ -684,7 +672,7 @@ const VotePage = () => {
                 percentage={abstainPercentage}
                 nounIds={abstainNouns}
                 variant={VoteCardVariant.ABSTAIN}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
             </Row>
