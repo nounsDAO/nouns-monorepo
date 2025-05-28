@@ -1,6 +1,6 @@
 import type { Address } from '@/utils/types';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
@@ -54,6 +54,7 @@ export function OraclePage() {
   const [auction, setAuction] = useState<Auction | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [nextNoun, setNextNoun] = useState<Noun | null>(null);
+  const prevNounIdRef = useRef<number | null>(null); // Add this to track the previous noun ID
 
   const dispatch = useAppDispatch();
   const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
@@ -112,8 +113,6 @@ export function OraclePage() {
   useWatchBlocks({
     syncConnectedChain: false,
     onBlock: async block => {
-      setLoading(true);
-
       try {
         const auctionData = await readNounsAuctionHouseAuction(config, {});
 
@@ -123,8 +122,15 @@ export function OraclePage() {
         }
 
         const { nounId, endTime, startTime, settled } = auctionData;
+        const currentNounId = Number(nounId);
+
+        if (prevNounIdRef.current !== currentNounId) {
+          setLoading(true);
+          prevNounIdRef.current = currentNounId;
+        }
+
         const state = determineAuctionState(startTime, settled, Number(block.timestamp), endTime);
-        const nextNounId = Number(nounId) + 1;
+        const nextNounId = currentNounId + 1;
 
         setAuction(createAuctionData(auctionData, state));
         setNextNoun(processNextNounData(nextNounId, block.hash));
@@ -153,7 +159,7 @@ export function OraclePage() {
         show: true,
       });
     }
-  }, []);
+  }, [didSettleFail, setModal, settleAuctionError?.message]);
 
   return (
     <div style={{ backgroundColor: stateBgColor }}>
