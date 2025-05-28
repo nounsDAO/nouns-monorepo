@@ -1,6 +1,6 @@
 import type { Address } from '@/utils/types';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
@@ -15,9 +15,12 @@ import { formatEther } from 'viem';
 import { useWatchBlocks } from 'wagmi';
 
 import Noun, { LoadingNoun } from '@/components/Noun';
-import { readNounsAuctionHouseAuction } from '@/contracts';
+import {
+  readNounsAuctionHouseAuction,
+  useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
+} from '@/contracts';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { setStateBackgroundColor } from '@/state/slices/application';
+import { AlertModal, setAlertModal, setStateBackgroundColor } from '@/state/slices/application';
 import { RootState } from '@/store';
 import { beige, grey } from '@/utils/nounBgColors';
 import { config } from '@/wagmi';
@@ -54,6 +57,7 @@ export function OraclePage() {
 
   const dispatch = useAppDispatch();
   const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const determineAuctionState = (
     startTime: number,
@@ -123,7 +127,7 @@ export function OraclePage() {
         const nextNounId = Number(nounId) + 1;
 
         setAuction(createAuctionData(auctionData, state));
-        setNextNoun(processNextNounData(nextNounId, block.parentHash));
+        setNextNoun(processNextNounData(nextNounId, block.hash));
       } catch (error) {
         console.error('Failed to fetch auction data:', error);
       } finally {
@@ -131,6 +135,25 @@ export function OraclePage() {
       }
     },
   });
+
+  const {
+    writeContract: settleAuction,
+    isPending: isSettlingAuction,
+    // isSuccess: didSettleAuction,
+    isError: didSettleFail,
+    // isIdle: isSettleIdle,
+    error: settleAuctionError,
+  } = useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction();
+
+  useEffect(() => {
+    if (didSettleFail) {
+      setModal({
+        title: <Trans>Transaction Failed</Trans>,
+        message: settleAuctionError?.message || <Trans>Please try again.</Trans>,
+        show: true,
+      });
+    }
+  }, []);
 
   return (
     <div style={{ backgroundColor: stateBgColor }}>
@@ -152,7 +175,7 @@ export function OraclePage() {
           </div>
           <div
             className={
-              'mt-0 w-full max-w-full flex-shrink-0 self-end pb-0 pl-3 pr-20 leading-6 text-neutral-800 lg:w-1/2 lg:flex-none'
+              'mt-0 w-full max-w-full flex-shrink-0 pb-0 pl-3 pr-20 leading-6 text-neutral-800 lg:w-1/2 lg:flex-none'
             }
           >
             {isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
@@ -163,12 +186,22 @@ export function OraclePage() {
                 <p>
                   {t`Noun ID`}: {auction.nounId.toString()}
                 </p>
-                <p>End time: {auction.endTime.toString()}</p>
-                <p>Start time: {auction.startTime.toString()}</p>
-                <p>Amount: {auction.amount.toString()}</p>
-                <p>Settled: {auction.settled ? 'yes' : 'no'}</p>
-                <p>Bidder: {auction.bidder}</p>
-                <p>State: {auction.state}</p>
+                {/*<p>End time: {auction.endTime.toString()}</p>*/}
+                {/*<p>Start time: {auction.startTime.toString()}</p>*/}
+                {/*<p>Amount: {auction.amount.toString()}</p>*/}
+                {/*<p>Settled: {auction.settled ? 'yes' : 'no'}</p>*/}
+                {/*<p>Bidder: {auction.bidder}</p>*/}
+                {/*<p>State: {auction.state}</p>*/}
+                <button
+                  type="button"
+                  className="relative m-0 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
+                  onClick={() => {
+                    settleAuction({});
+                  }}
+                  disabled={isSettlingAuction}
+                >
+                  <Trans>Settle Auction</Trans>
+                </button>
               </div>
             )}
           </div>
