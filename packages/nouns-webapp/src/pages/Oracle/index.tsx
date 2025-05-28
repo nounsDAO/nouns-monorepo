@@ -160,17 +160,9 @@ export function OraclePage() {
       <div className={'container'}>
         <div className={'flex w-full flex-col md:flex-row'}>
           <div className={'mt-0 flex w-full max-w-full flex-shrink-0 px-3 lg:w-1/2 lg:flex-none'}>
-            {isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
-              <>
-                {loading ? (
-                  <LoadingNoun />
-                ) : (
-                  <Noun
-                    imgPath={nextNoun?.image ?? ''}
-                    alt={nextNoun?.nounId.toString() ?? 'Noun'}
-                  />
-                )}
-              </>
+            {(loading || isNullish(auction)) && <LoadingNoun />}
+            {!loading && isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
+              <Noun imgPath={nextNoun?.image ?? ''} alt={nextNoun?.nounId.toString() ?? 'Noun'} />
             )}
           </div>
           <div
