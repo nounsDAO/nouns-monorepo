@@ -55,52 +55,80 @@ export function OraclePage() {
   const dispatch = useAppDispatch();
   const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
 
+  const determineAuctionState = (
+    startTime: number,
+    settled: boolean,
+    currentTime: number,
+    endTime: number,
+  ): AuctionState => {
+    if (startTime === 0) return AuctionState.NotStarted;
+    if (settled) return AuctionState.OverAndSettled;
+    if (currentTime < endTime) return AuctionState.Active;
+    return AuctionState.OverNotSettled;
+  };
+
+  const processNextNounData = (nounId: number, blockHash: string) => {
+    const nextNounSeed = getNounSeedFromBlockHash(nounId, blockHash);
+    const { parts, background } = getNounData(nextNounSeed);
+    const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, imageData.palette, background))}`;
+
+    dispatch(setStateBackgroundColor(nextNounSeed.background === 0 ? grey : beige));
+
+    return {
+      nounId,
+      seed: nextNounSeed,
+      image,
+    };
+  };
+
+  const createAuctionData = (
+    auctionData: {
+      nounId: bigint;
+      amount: bigint;
+      startTime: number;
+      endTime: number;
+      bidder: Address;
+      settled: boolean;
+    },
+    state: AuctionState,
+  ) => {
+    const { nounId, endTime, startTime, amount, settled, bidder } = auctionData;
+
+    return {
+      nounId: Number(nounId),
+      endTime: dayjs.unix(endTime).toDate(),
+      startTime: dayjs.unix(startTime).toDate(),
+      amount: formatEther(amount),
+      settled,
+      bidder,
+      state,
+    };
+  };
+
   useWatchBlocks({
     syncConnectedChain: false,
     onBlock: async block => {
       setLoading(true);
-      const auction = await readNounsAuctionHouseAuction(config, {});
-      if (isNullish(auction)) {
+
+      try {
+        const auctionData = await readNounsAuctionHouseAuction(config, {});
+
+        if (isNullish(auctionData)) {
+          setLoading(false);
+          return;
+        }
+
+        const { nounId, endTime, startTime, settled } = auctionData;
+        const state = determineAuctionState(startTime, settled, Number(block.timestamp), endTime);
+        const nextNounId = Number(nounId) + 1;
+
+        setAuction(createAuctionData(auctionData, state));
+        setNextNoun(processNextNounData(nextNounId, block.parentHash));
+      } catch (error) {
+        console.error('Failed to fetch auction data:', error);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const { nounId, endTime, startTime, amount, settled, bidder } = auction;
-
-      let state;
-      if (startTime == 0) {
-        state = AuctionState.NotStarted;
-      } else if (settled) {
-        state = AuctionState.OverAndSettled;
-      } else if (block.timestamp < endTime) {
-        state = AuctionState.Active;
-      } else {
-        state = AuctionState.OverNotSettled;
-      }
-
-      const nextNounId = Number(nounId) + 1;
-      const nextNounSeed = getNounSeedFromBlockHash(nextNounId, block.parentHash);
-
-      const { parts, background } = getNounData(nextNounSeed);
-      const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, imageData.palette, background))}`;
-
-      dispatch(setStateBackgroundColor(nextNounSeed.background === 0 ? grey : beige));
-
-      setAuction({
-        nounId: Number(nounId),
-        endTime: dayjs.unix(endTime).toDate(),
-        startTime: dayjs.unix(startTime).toDate(),
-        amount: formatEther(amount),
-        settled,
-        bidder,
-        state,
-      });
-      setNextNoun({
-        nounId: nextNounId,
-        seed: nextNounSeed,
-        image,
-      });
-      setLoading(false);
     },
   });
 
