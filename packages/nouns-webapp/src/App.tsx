@@ -81,7 +81,16 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
-        <Toaster />
+        <Toaster
+          expand
+          closeButton
+          toastOptions={{
+            classNames: {
+              closeButton:
+                '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
+            },
+          }}
+        />
       </BrowserRouter>
     </div>
   );
