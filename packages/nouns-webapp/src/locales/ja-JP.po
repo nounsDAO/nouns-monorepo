@@ -145,11 +145,6 @@ msgstr "終了しました"
 msgid "Select signatures"
 msgstr "署名を選択"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "Born"
-#~ msgstr "誕生"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Invalid Arguments"
 msgstr "無効な引数"
@@ -175,10 +170,6 @@ msgstr "この提案は<0>元の財務</0>と連携します"
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Required % of Nouns to Pass"
 msgstr "通過に必要なNounsの割合"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Prop House"
-#~ msgstr "プロップハウス"
 
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!"
@@ -558,11 +549,6 @@ msgstr "Nounsは全員Nouns DAOの会員です。"
 msgid "days"
 msgstr "日"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-#~ msgid "Get Involved"
-#~ msgstr "参加する"
-
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
 msgstr "カスタムの特徴をアップロード"
@@ -646,10 +632,6 @@ msgstr "投票を提出"
 msgid "Expired"
 msgstr "期限切れです"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#~ msgid "Error fetching Noun birthday"
-#~ msgstr "Nounの誕生日を取得できませんでした"
-
 #. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -696,17 +678,9 @@ msgstr "最低入札額の {0} ETHと同じかそれ以上の入札額を設定�
 msgid "Vote for the next Noun"
 msgstr "次のNounに投票する"
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to Noun view"
-#~ msgstr "Nounビューに切り替えます"
-
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr "オークションが正常に決済されました！"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-#~ msgstr "Nounsに関わる方法は誰にでもあります。カエルに名前を付けるような気まぐれな試みから、ローズパレードのための巨大なフロートを建設するような野心的なプロジェクト、さらには{prophouseLink}のような暗号インフラストラクチャまで。Nounsはあらゆる規模と分野のプロジェクトに資金を提供します。"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
@@ -856,10 +830,6 @@ msgstr "エラー"
 msgid "Add Stream Date Details"
 msgstr "ストリーム日付の詳細を追加"
 
-#: src/components/NavBar/index.tsx
-#~ msgid "Docs"
-#~ msgstr "ドキュメント"
-
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "{availableVotes}票を委任する"
@@ -885,10 +855,6 @@ msgstr "終了しました {0}"
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr "保留中"
-
-#: src/pages/EditProposal/index.tsx
-#~ msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
-#~ msgstr "提案候補が作成されました！<0/><1>候補者を表示</1>"
 
 #: src/components/Footer/index.tsx
 msgid "Farcaster"
@@ -922,10 +888,6 @@ msgstr "開始"
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
 msgstr "<0>注意：</0>オンチェーン提案のすべての署名者は提案をキャンセルする権限を持っています。"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Insufficient bid amount 🤏"
-#~ msgstr "入札額が不足しています🤏"
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -1078,10 +1040,6 @@ msgstr "Nounsの投票者は、保留中の提案の提案者に対して、ど�
 msgid "Addresses"
 msgstr "イーサリアムアドレス"
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Proposal Created!<0/>"
-#~ msgstr "提案が作成されました！<0/>"
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr "投票ありがとうございます。"
@@ -1143,10 +1101,6 @@ msgstr "まとめ"
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr "提案候補は誰でも作成できます。候補がNounsの投票者から十分な署名を受け取った場合、それは提案に昇格することができます。"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to delegate view"
-#~ msgstr "ビューを委任するように切り替えます"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Signature invalid while signer has an active or pending proposal"
@@ -1674,10 +1628,6 @@ msgstr "取引に成功しました！"
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
-#~ msgid "Vote history"
-#~ msgstr "投票履歴"
-
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
 msgstr "オークションが成立するたびに、決済取引によって新しいNounが発行され、新しい24時間オークションが開始されます。"
@@ -1788,17 +1738,3 @@ msgstr "毎日"
 #: src/components/NounderNounContent/index.tsx
 msgid "Learn more"
 msgstr "詳細はこちら"
-
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#~ msgid "Success"
-#~ msgstr "成功"

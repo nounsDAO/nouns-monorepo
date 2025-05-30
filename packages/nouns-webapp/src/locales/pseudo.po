@@ -140,11 +140,6 @@ msgstr ""
 msgid "Select signatures"
 msgstr ""
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "Born"
-#~ msgstr ""
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Invalid Arguments"
 msgstr ""
@@ -170,10 +165,6 @@ msgstr ""
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Required % of Nouns to Pass"
 msgstr ""
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Prop House"
-#~ msgstr ""
 
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!"
@@ -553,11 +544,6 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-#~ msgid "Get Involved"
-#~ msgstr ""
-
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
 msgstr ""
@@ -641,10 +627,6 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#~ msgid "Error fetching Noun birthday"
-#~ msgstr ""
-
 #. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -691,17 +673,9 @@ msgstr ""
 msgid "Vote for the next Noun"
 msgstr ""
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to Noun view"
-#~ msgstr ""
-
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr ""
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-#~ msgstr ""
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
@@ -851,10 +825,6 @@ msgstr ""
 msgid "Add Stream Date Details"
 msgstr ""
 
-#: src/components/NavBar/index.tsx
-#~ msgid "Docs"
-#~ msgstr ""
-
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr ""
@@ -880,10 +850,6 @@ msgstr ""
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr ""
-
-#: src/pages/EditProposal/index.tsx
-#~ msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
-#~ msgstr ""
 
 #: src/components/Footer/index.tsx
 msgid "Farcaster"
@@ -917,10 +883,6 @@ msgstr ""
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
 msgstr ""
-
-#: src/components/Bid/index.tsx
-#~ msgid "Insufficient bid amount 🤏"
-#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -1073,10 +1035,6 @@ msgstr ""
 msgid "Addresses"
 msgstr ""
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Proposal Created!<0/>"
-#~ msgstr ""
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr ""
@@ -1138,10 +1096,6 @@ msgstr ""
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr ""
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to delegate view"
-#~ msgstr ""
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Signature invalid while signer has an active or pending proposal"
@@ -1669,10 +1623,6 @@ msgstr ""
 msgid "Generate Nouns"
 msgstr ""
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
-#~ msgid "Vote history"
-#~ msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
 msgstr ""
@@ -1783,17 +1733,3 @@ msgstr ""
 #: src/components/NounderNounContent/index.tsx
 msgid "Learn more"
 msgstr ""
-
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#~ msgid "Success"
-#~ msgstr ""

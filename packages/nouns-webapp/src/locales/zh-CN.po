@@ -140,11 +140,6 @@ msgstr "已结束"
 msgid "Select signatures"
 msgstr "选择签名"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "Born"
-#~ msgstr "出生于"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Invalid Arguments"
 msgstr "参数无效"
@@ -170,10 +165,6 @@ msgstr "此提案将与<0>原始金库</0>进行交互"
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Required % of Nouns to Pass"
 msgstr "通过所需的 Nouns 百分比"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Prop House"
-#~ msgstr "提案之家"
 
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!"
@@ -553,11 +544,6 @@ msgstr "所有 Nouns 都是 Nouns DAO 的成员。"
 msgid "days"
 msgstr "天"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-#~ msgid "Get Involved"
-#~ msgstr "参与其中"
-
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
 msgstr "上传自定义特征"
@@ -641,10 +627,6 @@ msgstr "提交投票"
 msgid "Expired"
 msgstr "已过期"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#~ msgid "Error fetching Noun birthday"
-#~ msgstr "获取 Noun 生日时出错"
-
 #. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -691,17 +673,9 @@ msgstr "请出价大于或等于最低竞标金额 {0} ETH"
 msgid "Vote for the next Noun"
 msgstr "为下一个 Noun 投票"
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to Noun view"
-#~ msgstr "切换到 Noun 视图"
-
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr "成功结算拍卖！"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-#~ msgstr "每个人都有办法参与 Nouns。从给青蛙命名这样异想天开的尝试，到为玫瑰花车游行建造巨型花车这样的雄心勃勃的项目，甚至是像 {prophouseLink} 这样的加密基础设施。Nouns 资助各种规模和领域的项目。"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
@@ -851,10 +825,6 @@ msgstr "错误"
 msgid "Add Stream Date Details"
 msgstr "添加流支付日期详情"
 
-#: src/components/NavBar/index.tsx
-#~ msgid "Docs"
-#~ msgstr "文档"
-
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "委托 {availableVotes} 票"
@@ -880,10 +850,6 @@ msgstr "{0}结束"
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr "待处理"
-
-#: src/pages/EditProposal/index.tsx
-#~ msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
-#~ msgstr "提案候选已创建！<0/><1>查看候选</1>"
 
 #: src/components/Footer/index.tsx
 msgid "Farcaster"
@@ -917,10 +883,6 @@ msgstr "开始"
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
 msgstr "<0>注意：</0>链上提案的所有签名者都有权取消该提案。"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Insufficient bid amount 🤏"
-#~ msgstr "出价金额不足 🤏"
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -1073,10 +1035,6 @@ msgstr "Nouns 投票者可以发出投票信号，这既能让待定提案的提
 msgid "Addresses"
 msgstr "地址"
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Proposal Created!<0/>"
-#~ msgstr "提案已创建！<0/>"
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr "感谢您的投票。"
@@ -1138,10 +1096,6 @@ msgstr "摘要"
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr "任何人都可创建提案候选。若候选获得足够签名，即可成为正式提案。"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to delegate view"
-#~ msgstr "切换到委托视图"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Signature invalid while signer has an active or pending proposal"
@@ -1669,10 +1623,6 @@ msgstr "交易成功！"
 msgid "Generate Nouns"
 msgstr "生成 Nouns"
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
-#~ msgid "Vote history"
-#~ msgstr "投票历史"
-
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
 msgstr "每次拍卖结算时，结算交易也会导致一个新的 Noun 被铸造，并开始一个新的 24 小时拍卖。"
@@ -1783,17 +1733,3 @@ msgstr "每一天，"
 #: src/components/NounderNounContent/index.tsx
 msgid "Learn more"
 msgstr "了解更多"
-
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#~ msgid "Success"
-#~ msgstr "成功"

@@ -140,11 +140,6 @@ msgstr "Ended"
 msgid "Select signatures"
 msgstr "Select signatures"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "Born"
-#~ msgstr "Born"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Invalid Arguments"
 msgstr "Invalid Arguments"
@@ -170,10 +165,6 @@ msgstr "This proposal interacts with the <0>original treasury</0>"
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Required % of Nouns to Pass"
 msgstr "Required % of Nouns to Pass"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "Prop House"
-#~ msgstr "Prop House"
 
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Candidate Created!"
@@ -553,11 +544,6 @@ msgstr "All Nouns are members of Nouns DAO."
 msgid "days"
 msgstr "days"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-#~ msgid "Get Involved"
-#~ msgstr "Get Involved"
-
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
 msgstr "Upload Custom Trait"
@@ -641,10 +627,6 @@ msgstr "Submit Vote"
 msgid "Expired"
 msgstr "Expired"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-#~ msgid "Error fetching Noun birthday"
-#~ msgstr "Error fetching Noun birthday"
-
 #. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -691,17 +673,9 @@ msgstr "Please place a bid higher than or equal to the minimum bid amount of {0}
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
 
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to Noun view"
-#~ msgstr "Switch to Noun view"
-
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr "Settled auction successfully!"
-
-#: src/components/NounsIntroSection/index.tsx
-#~ msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-#~ msgstr "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
@@ -851,10 +825,6 @@ msgstr "Error"
 msgid "Add Stream Date Details"
 msgstr "Add Stream Date Details"
 
-#: src/components/NavBar/index.tsx
-#~ msgid "Docs"
-#~ msgstr "Docs"
-
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "Delegate {availableVotes} Vote"
@@ -880,10 +850,6 @@ msgstr "ended {0}"
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr "Pending"
-
-#: src/pages/EditProposal/index.tsx
-#~ msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
-#~ msgstr "Proposal Candidate Created!<0/><1>View the candidate</1>"
 
 #: src/components/Footer/index.tsx
 msgid "Farcaster"
@@ -917,10 +883,6 @@ msgstr "Starts"
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
 msgstr "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
-
-#: src/components/Bid/index.tsx
-#~ msgid "Insufficient bid amount 🤏"
-#~ msgstr "Insufficient bid amount 🤏"
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -1073,10 +1035,6 @@ msgstr "Nouns voters can cast voting signals to give proposers of pending propos
 msgid "Addresses"
 msgstr "Addresses"
 
-#: src/pages/CreateProposal/index.tsx
-#~ msgid "Proposal Created!<0/>"
-#~ msgstr "Proposal Created!<0/>"
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr "Thank you for voting."
@@ -1138,10 +1096,6 @@ msgstr "Summary"
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
 msgstr "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Switch to delegate view"
-#~ msgstr "Switch to delegate view"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Signature invalid while signer has an active or pending proposal"
@@ -1669,10 +1623,6 @@ msgstr "Transaction Successful!"
 msgid "Generate Nouns"
 msgstr "Generate Nouns"
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
-#~ msgid "Vote history"
-#~ msgstr "Vote history"
-
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
 msgstr "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
@@ -1783,17 +1733,3 @@ msgstr "EVERY DAY,"
 #: src/components/NounderNounContent/index.tsx
 msgid "Learn more"
 msgstr "Learn more"
-
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#~ msgid "Success"
-#~ msgstr "Success"
