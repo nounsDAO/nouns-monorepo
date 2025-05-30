@@ -31,14 +31,13 @@ checksums:
     Bids%20will%20appear%20here/singular: f321912cd5364aa92fcec559129477c5
     Ended/singular: eeb8257a43a9ea0ee5a6b214b8699bce
     Select%20signatures/singular: 701de7de05acbd1e58bdf9b4eac0fd85
-    Born/singular: 7d9dedfa3344c25385a5858eb25adad8
     Invalid%20Arguments/singular: e501b71878d549c878e3149829204421
     Winner/singular: 1507d331d6a89398f86eee312186d9ab
     Candidates/singular: 1319a059ac7432b0680a7cd911213847
     Noun%20votes%20are%20not%20transferable%2C%20but%20are%20%3C0%3Edelegatable%3C%2F0%3E%2C%20which%20means%20you%20can%20assign%20your%20vote%20to%20someone%20else%20as%20long%20as%20you%20own%20your%20Noun./singular: 99b0a63c3daafbc61e54aa43eefd6cd8
     This%20proposal%20interacts%20with%20the%20%3C0%3Eoriginal%20treasury%3C%2F0%3E/singular: 1847c422e1abfb7d257dd80205d29338
     Required%20%25%20of%20Nouns%20to%20Pass/singular: 29920457a96619ce197161f1b779808c
-    Prop%20House/singular: 79fada2565f91206627b8eda5e544c89
+    Proposal%20Candidate%20Created!/singular: e62695fa4d23ac128e2eb477066c1475
     h/singular: de15b952a456eadd27095d2ccce23473
     In%20Escrow/singular: cf61b61bfb3f02f8bfed7b6ad4807e57
     Version%20History/singular: 08d7d1526e00d68fc9c8b6a80fc86fad
@@ -92,6 +91,7 @@ checksums:
     Nouns%20DUNA/singular: 07f3ba8c237531dd41c5726a46635d09
     "%7B0%7D%20%3C0%3EAddress%3C%2F0%3E/singular": f386d8d8f7cebd5854e53b98f03391ad
     Address/singular: 5a9a8bc26f90d84c90105690a2eb23a1
+    Proposal%20Canceled!/singular: 8fe6f92970624b443cc4153edb8ec543
     Nouns/singular: a178dd95246465cc3261deccad390d1b
     You%20already%20have%20an%20active%20or%20pending%20proposal/singular: 13bb6404ed7a2253364fe0e83198e3df
     None/singular: d163ad01ba50118a86047c8b73fbe922
@@ -111,6 +111,7 @@ checksums:
     You%20don't%20have%20enough%20votes%20to%20submit%20a%20proposal/singular: 2e64540a04375897316543233899b458
     minutes/singular: 1198ce09f54542a89fbafbf64ef13b93
     Accessory/singular: fbdd854b15ea8710fe5744d39b6faa6a
+    Proposal%20Candidate%20Canceled!/singular: e7aee91795b6b352b7b1447ec89ea33c
     Candidates%20submitted%20by%20community%20members%20will%20appear%20here./singular: f78533b5a0b9295ccf37e41a3967220f
     "%3C0%2F%3E%3C1%3EGuidelines%3C%2F1%3E%3C2%2F%3E%E2%80%A2%20Do%20%3C3%3ENOT%3C%2F3%3E%20request%20ETH%20to%20trade%20into%20USDC.%20Instead%2C%20request%20USDC%20directly.%3C4%2F%3E%E2%80%A2%20Do%20%3C5%3ENOT%3C%2F5%3E%20transfer%20funds%20externally%20to%20create%20an%20ETH%20or%20USDC%20stream.%20Instead%2C%20use%20the%20%22Stream%20Funds%22%20action.%3C6%2F%3E%3C7%3ESupported%20Action%20Types%3C%2F7%3E%3C8%2F%3E%3C9%3E%E2%80%A2%20Transfer%20Funds%3A%20%3C%2F9%3ESend%20USDC%2C%20ETH%2C%20or%20stETH.%3C10%2F%3E%3C11%3E%E2%80%A2%20Stream%20Funds%3A%20%3C%2F11%3EStream%20USDC%20or%20WETH%20over%20time.%3C12%2F%3E%3C13%3E%E2%80%A2%20Function%20Call%3A%20%3C%2F13%3ECall%20a%20contract%20function./singular": 1366de49244a241a644f97066dc1a19b
     Fork/singular: ac679902f58855caa6bd270c5e0a8ba8
@@ -122,12 +123,12 @@ checksums:
     Nouns%20are%20an%20experimental%20attempt%20to%20improve%20the%20formation%20of%20on-chain%20avatar%20communities.%20While%20projects%20such%20as%20%7BcryptopunksLink%7D%20have%20attempted%20to%20bootstrap%20digital%20community%20and%20identity%2C%20Nouns%20attempt%20to%20bootstrap%20identity%2C%20community%2C%20governance%2C%20and%20a%20treasury%20that%20can%20be%20used%20by%20the%20community./singular: a0678ea9c33546d109f0263ceebdd2e1
     All%20Nouns%20are%20members%20of%20Nouns%20DAO./singular: d1c63522b0d8d7241e7c917e5e0e1dc2
     days/singular: c95fe8aedde21a0b5653dbd0b3c58b48
-    Get%20Involved/singular: ae6d8a2a2d8773009b7eb9f3f80f05a2
     Upload%20Custom%20Trait/singular: e7b5fc89ece3530e7c85152cfd996ee4
     We%20suggest%20adding%20a%20buffer%20between%20when%20you%20assume%20the%20proposal%20to%20be%20executed%20and%20when%20the%20stream%20begins./singular: 92b45bd2410aaf86c6795605c1128d81
     Forking%20is%20the%20crypto-native%20way%20for%20groups%20of%20token%20holders%20to%20exit%20together%20into%20a%20new%20instance%20of%20their%20protocol%2C%20resulting%20in%20maximal%20conservation%20of%20momentum%20in%20the%20ecosystem./singular: 9b0cad1afdb622058c5f7cb6154de7ad
     This%20transaction%20was%20automatically%20added%20to%20refill%20the%20TokenBuyer.%20Proposers%20do%20not%20receive%20this%20ETH./singular: e0b7fa188e4dd87ec12caf6d08b85b2f
     While%20settlement%20is%20most%20heavily%20incentivized%20for%20the%20winning%20bidder%2C%20it%20can%20be%20triggered%20by%20anyone%2C%20allowing%20the%20system%20to%20trustlessly%20auction%20Nouns%20as%20long%20as%20Ethereum%20is%20operational%20and%20there%20are%20interested%20bidders./singular: e7d93f13b53f6a4e5978475a8222f035
+    View%20the%20candidate/singular: f6c9304e9a935805823337541e6c1181
     Succeeded/singular: 5a6a378853fa4ad6790e5fcaf8695b7c
     Proposal%20Executed!/singular: b9410b2feda72b687f5f922785e5113e
     Note/singular: e0337f202c911423275f834edeffc54b
@@ -140,7 +141,6 @@ checksums:
     Auction%20ended/singular: c8975f44b6ba5d23d6db43bb726dc4c6
     Submit%20Vote/singular: c4db7ad62a351ec86b41651bee7330bb
     Expired/singular: 63b27cccba4ab2143e0f5f3d46e4168a
-    Error%20fetching%20Noun%20birthday/singular: 0225c205a4b11b96e22cdad2f17fff53
     You've%20generated%20%7B0%7D%20years%20worth%20of%20Nouns/singular: 893726293a2ea1118426308baa78cc91
     Switch/singular: bab779e32d2519152481e180aea26879
     Select%20Language/singular: d75cf5fbce8a4c7a9055e2210af74480
@@ -151,9 +151,7 @@ checksums:
     Any%20token%20holder%20can%20signal%20to%20fork%20(exit)%20in%20response%20to%20a%20governance%20proposal.%20If%20a%20%7B0%7Dquorum%20of%20tokens%20signal%20to%20exit%2C%20the%20fork%20will%20succeed./singular: ca55aa42d623c9211847a48eff1a54cf
     Please%20place%20a%20bid%20higher%20than%20or%20equal%20to%20the%20minimum%20bid%20amount%20of%20%7B0%7D%20ETH/singular: 2e0ecc066271695d322f69255aa1fbd7
     Vote%20for%20the%20next%20Noun/singular: 1020135af637ee4e5ec6673c7bffc205
-    Switch%20to%20Noun%20view/singular: 141f2918062fbeddf69307a7fb453f17
     Settled%20auction%20successfully!/singular: 44f5642746b075447dbed677afa9b6ba
-    There's%20a%20way%20for%20everyone%20to%20get%20involved%20with%20Nouns.%20From%20whimsical%20endeavors%20like%20naming%20a%20frog%2C%20to%20ambitious%20projects%20like%20constructing%20a%20giant%20float%20for%20the%20Rose%20Parade%2C%20or%20even%20crypto%20infrastructure%20like%20%7BprophouseLink%7D.%20Nouns%20funds%20projects%20of%20all%20sizes%20and%20domains./singular: 8d31ae502041c5b727c0a735bc930090
     Submit%20signature/singular: 27a886ba1198712237e8eee7a03d79a1
     Description/singular: e17686a22ffad04cc7bb70524ed4478b
     heads%20(242)%20/singular: 39925532fb6362c5c4b5fa4a521679c0
@@ -189,14 +187,12 @@ checksums:
     One%20Noun%20is%20trustlessly%20auctioned%20every%2024%20hours%2C%20forever./singular: 6971d481ccb76b826faa0d4868e6ddda
     Error/singular: 3c95bcb32c2104b99a46f5b3dd015248
     Add%20Stream%20Date%20Details/singular: 8eddf5efc6069278f28bb8b6b277e322
-    Docs/singular: 55fea190a0c0fb32acd3dc986cd3cc91
     Delegate%20%7BavailableVotes%7D%20Vote/singular: e1e815b2fa9d9a54bbefc94a3af5d142
     Ends%20on/singular: 8aa79cfa75d1b59252328f8263282a1f
     No%20candidates%20found/singular: eb32f25121d3d760218d4abe580c2c6d
     The%20proposal%20veto%20right%20was%20initially%20envisioned%20as%20a%20temporary%20solution%20to%20the%20problem%20of%20%E2%80%9851%25%20attacks%E2%80%99%20on%20the%20Nouns%20DAO%20treasury.%20While%20Nounders%20initially%20believed%20that%20a%20healthy%20distribution%20of%20Nouns%20would%20be%20sufficient%20protection%20for%20the%20DAO%2C%20a%20more%20complete%20understanding%20of%20the%20incentives%20and%20risks%20has%20led%20to%20general%20consensus%20within%20the%20Nounders%2C%20the%20Nouns%20Foundation%2C%20and%20the%20wider%20community%20that%20a%20more%20robust%20game-theoretic%20solution%20should%20be%20implemented%20before%20the%20right%20is%20removed./singular: 62711bf8931abdc48efb57035b4c2b5d
     ended%20%7B0%7D/singular: d86b54ed4c1632f943e14fc9b2a3394b
     Pending/singular: 030a6f3395d5d4efddd3cc67d6009039
-    Proposal%20Candidate%20Created!%3C0%2F%3E%3C1%3EView%20the%20candidate%3C%2F1%3E/singular: 766a38459e69504bb907ed1edf1a71ae
     Farcaster/singular: b09af25fcb497663e8594b9fc514b969
     at/singular: 282cf74a2c63ff46388104f9853bfaf8
     More%20details%20on%20how%20the%20dynamic%20threshold%20works%20can%20be%20found%20%3C0%3Ehere%3C%2F0%3E./singular: 26b30902ccfb3ab951cd976dfe8f46e3
@@ -205,7 +201,6 @@ checksums:
     Review%20and%20Add/singular: 4073af9c738031f0176c8fe16c74421c
     Starts/singular: 3153990a4ade414f501a7e63ab771362
     "%3C0%3ENote%3A%20%3C%2F0%3EAll%20signers%20on%20an%20onchain%20proposal%20have%20permission%20to%20cancel%20the%20proposal./singular": 54331d4e9c30c164f670162a4f244998
-    Insufficient%20bid%20amount%20%F0%9F%A4%8F/singular: ec6b937ee2b1c48d486f9a6af13d9d79
     There%20was%20an%20error%20voting%20for%20your%20account./singular: b0553394f4848c17ecbab68949f0b758
     Defeated/singular: 594723e922acc28b2ab219b060516db5
     hours/singular: abd5b935394c7064aac85b2b3bf503e9
@@ -241,7 +236,6 @@ checksums:
     Body/singular: e88eb1ea71f5ef886aa43ea6ba292d87
     Nouns%20voters%20can%20cast%20voting%20signals%20to%20give%20proposers%20of%20pending%20proposals%20an%20idea%20of%20how%20they%20intend%20to%20vote%20and%20helpful%20guidance%20on%20proposal%20changes%20to%20change%20their%20vote./singular: 00213d58ed8b7cc085d1e59fb8b1dd37
     Addresses/singular: 87b49e2ffcdbe3cc4bfd2d25cc75c096
-    Proposal%20Created!%3C0%2F%3E/singular: cacf285db9d592a70a7cad6d476d57c4
     Thank%20you%20for%20voting./singular: ddd7b2fd75be7769c05cf5e3735fb95b
     Switch%20wallet/singular: fe59d4b3e784e1b077e2ec5e7ea72597
     "%3C0%3ENote%3A%20%3C%2F0%3EThis%20proposal%20candidate%20has%20been%20proposed%20onchain./singular": 9806f5b2148be2cb8808df8b689f3e3b
@@ -257,8 +251,8 @@ checksums:
     Governance%20%E2%80%98Slow%20Start%E2%80%99/singular: 74af386d282ad7595cdf72eb7f19027f
     Summary/singular: 13eb7b8a239fb4702dfdaee69100a220
     Proposal%20candidates%20can%20be%20created%20by%20anyone.%20If%20a%20candidate%20receives%20enough%20signatures%20by%20Nouns%20voters%2C%20it%20can%20be%20promoted%20to%20a%20proposal./singular: 98820654f3510f7100e1dfb5a4e5ac14
-    Switch%20to%20delegate%20view/singular: d3408296d9a76fb3b1fb38aa02e8c1a6
     Signature%20invalid%20while%20signer%20has%20an%20active%20or%20pending%20proposal/singular: 50eaf4210723cd5d77654eea54431bbc
+    There's%20a%20way%20for%20everyone%20to%20get%20involved%20with%20Nouns.%20From%20whimsical%20endeavors%20like%20naming%20a%20frog%2C%20to%20ambitious%20projects%20like%20constructing%20a%20giant%20float%20for%20the%20Rose%20Parade%2C%20or%20even%20crypto%20infrastructure%20like%20Prop%20House.%20Nouns%20funds%20projects%20of%20all%20sizes%20and%20domains./singular: b7b8e3c15e9e6411b517ab98d0a02988
     Withdraw%20from%20Stream/singular: d5e09c1bd2d757cae28b8ebb9491294d
     Remove%20sponsorship/singular: 8a80da33b877d9b0a71dcc58db68ce99
     All%20Noun%20auction%20proceeds%20are%20sent%20to%20the/singular: 747b2764378e7395d6ece7a3d9f76e27
@@ -269,6 +263,7 @@ checksums:
     Nounder's%20Reward/singular: d178bb2f0df0847d6c487a2160ba9e9a
     Review%20Action%20Details/singular: a9de0c30f408fa8e118725fec7a0d6be
     Candidate%20Created!/singular: 05898c3228e2e6fe026771068fe8aa4b
+    Proposal%20Created!/singular: ba55e65a41a0bf0b2b699b60e8aec849
     Trait%20generation%20is%20not%20truly%20random.%20Traits%20can%20be%20predicted%20when%20minting%20a%20Noun%20on%20the%20pending%20block./singular: ec75bbef0fab6bc7d20ede48f3f8823a
     Nounders%20receive%20rewards%20in%20the%20form%20of%20Nouns%20(10%25%20of%20supply%20for%20first%205%20years)./singular: 58b6410416fa637ef1ea0dea8c790d36
     Nouns%20DAO/singular: c3f0366bd3f915dfc504591c79fd661f
@@ -368,11 +363,11 @@ checksums:
     Noun/singular: 0a2a58e7927bb70898f65d9070f235e7
     Transaction%20Successful!/singular: 60d3fe92904759e3e92ea0f8cbc2fcda
     Generate%20Nouns/singular: 37f6a7e2ff086ef8644b89f50be24090
-    Vote%20history/singular: 3121538e57f4081a46528e21ded3671e
     Each%20time%20an%20auction%20is%20settled%2C%20the%20settlement%20transaction%20will%20also%20cause%20a%20new%20Noun%20to%20be%20minted%20and%20a%20new%2024%20hour%20auction%20to%20begin.%20/singular: fcb60aed09f1411e1d202fc07718969a
     Proposal%20Updated!/singular: 3a8bd988e080b13e4daae13532dfa2fb
     Under%20Wyoming's%20DUNA%20Act%2C%20Nouns%20DAO%20can%20hold%20assets%2C%20enter%20into%20contracts%2C%20and%20participate%20in%20legal%20actions%20in%20its%20own%20name.%20Governance%20remains%20fully%20decentralized%2C%20with%20decisions%20controlled%20exclusively%20by%20Noun%20holders%20via%20on-chain%20voting.%20This%20enables%20Nouns%20DAO%20to%20sustainably%20fund%20projects%2C%20manage%20its%20treasury%2C%20and%20interact%20confidently%20within%20both%20the%20digital%20and%20physical%20worlds./singular: 1a7c61d9538f3895cbd3bddfc725485f
     Enter%20the%20Ethereum%20address%20or%20ENS%20name%20of%20the%20account%20you%20would%20like%20to%20delegate%20your%20votes%20to./singular: fdf8f2f9a2f17afac261813b5f4ef76b
+    Go%20to%20auction/singular: 0daea3cbfac53d94a437680a8d290e20
     Undetermined/singular: b289ee3ad8579bd42970f8a0d2986763
     Offending%20proposal%7B0%7D/singular: f2e0b1a73465a44e43c271280a1dd50e
     Review%20Transfer%20Funds%20Action/singular: bbc4af8ce298fd60e53087bf4eba3327
@@ -393,4 +388,3 @@ checksums:
     Nouns%20DUNA%20is%20a%20legally%20recognized%20Decentralized%20Unincorporated%20Nonprofit%20Association%20established%20in%20Wyoming%20via%20%3C0%2F%3E%20designed%20to%20provide%20a%20robust%20legal%20framework%20that%20aligns%20with%20the%20decentralized%20nature%20of%20Nouns%20DAO.%20This%20structure%20allows%20Nouns%20DAO%20to%20operate%20with%20limited%20liability%20protection%20and%20legal%20clarity%20without%20compromising%20its%20decentralized%20governance%20ethos./singular: 26b580f64e8c3731bf7e3c224cee964a
     EVERY%20DAY%2C/singular: bf3dd403df46913fc26285562308d50d
     Learn%20more/singular: e598091d132f890c37a6d4ed94f6d794
-    Success/singular: c43827becada6750f7a25890905f38b9
