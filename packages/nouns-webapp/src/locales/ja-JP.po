@@ -20,7 +20,7 @@ msgstr ""
 
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 msgid "Update proposal"
-msgstr ""
+msgstr "提案を更新"
 
 #: src/components/NavWallet/index.tsx
 msgid "Disconnect"
@@ -32,7 +32,7 @@ msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
-msgstr ""
+msgstr "これにより、以前のすべてのスポンサーとフィードバック投票がクリアされます"
 
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
@@ -40,11 +40,11 @@ msgstr "Nounオークションの収益の100%がNouns DAOに送られるため�
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "At this time only USDC and WETH streams are supported"
-msgstr ""
+msgstr "現時点では、USDCとWETHのストリームのみがサポートされています"
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140) "
-msgstr ""
+msgstr "アクセサリー (140) "
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Has"
@@ -56,29 +56,29 @@ msgstr "現在の入札額"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "To"
-msgstr ""
+msgstr "宛先"
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounInfoRowHolder.tsx
 msgid "Nouns Auction House"
 msgstr "Nounsオークションハウス"
 
 #: src/pages/Candidate/index.tsx
 msgid "Cancel candidate"
-msgstr ""
+msgstr "候補をキャンセル"
 
 #: src/pages/Vote/index.tsx
 msgid "Objection period triggered"
-msgstr ""
+msgstr "異議申し立て期間が開始されました"
 
-#. placeholder {0}: i18n.number((proposalThreshold || 0) + 1)
 #: src/components/EditProposalButton/index.tsx
 #: src/components/CreateProposalButton/index.tsx
+#. placeholder {0}: i18n.number((proposalThreshold || 0) + 1)
 msgid "You must have {0} votes to submit a proposal"
 msgstr "提案を提出するには {0} 票が必要です"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Review Streaming Payment Action"
-msgstr ""
+msgstr "ストリーミング支払いアクションを確認"
 
 #: src/components/Footer/index.tsx
 msgid "Twitter"
@@ -96,11 +96,11 @@ msgstr "あなたはすでにこのアドレスに委任しています"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal functions"
-msgstr ""
+msgstr "提案機能"
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "Proposal candidates must meet the required Nouns vote threshold."
-msgstr ""
+msgstr "提案候補は、必要なNounsの投票閾値を満たす必要があります。"
 
 #: src/components/Documentation/index.tsx
 msgid "Daily Auctions"
@@ -116,22 +116,22 @@ msgstr "入札"
 
 #: src/components/CandidateCard/index.tsx
 msgid "sponsored votes"
-msgstr ""
+msgstr "スポンサー付き投票"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Add Function Call Arguments"
-msgstr ""
+msgstr "関数呼び出し引数を追加"
 
 #: src/pages/Governance/index.tsx
 #: src/components/NavBarTreasury/index.tsx
 msgid "Treasury"
 msgstr "トレジャリー"
 
-#. placeholder {0}: i18n.number(availableVotes)
 #: src/components/VoteModal/index.tsx
+#. placeholder {0}: i18n.number(availableVotes)
 msgid "Voting with <0>{0}</0> Nouns"
-msgstr ""
+msgstr "<0>{0}</0> Nounsで投票"
 
 #: src/components/BidHistoryModal/index.tsx
 msgid "Bids will appear here"
@@ -143,26 +143,21 @@ msgstr "終了しました"
 
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "Select signatures"
-msgstr ""
-
-#: src/components/NounInfoRowBirthday/index.tsx
-#: src/components/NounHoverCard/index.tsx
-msgid "Born"
-msgstr "誕生"
+msgstr "署名を選択"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Invalid Arguments"
-msgstr ""
+msgstr "無効な引数"
 
+#: src/components/NounInfoRowHolder.tsx
 #: src/components/Winner/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
 msgid "Winner"
 msgstr "落札者"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "Candidates"
-msgstr ""
+msgstr "候補者"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
@@ -170,15 +165,15 @@ msgstr "Nounの票は譲渡できませんが (Nounの売却にはそれに応�
 
 #: src/components/ProposalContent/index.tsx
 msgid "This proposal interacts with the <0>original treasury</0>"
-msgstr ""
+msgstr "この提案は<0>元の財務</0>と連携します"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Required % of Nouns to Pass"
-msgstr ""
+msgstr "通過に必要なNounsの割合"
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Prop House"
-msgstr ""
+#: src/pages/EditProposal/index.tsx
+msgid "Proposal Candidate Created!"
+msgstr "提案候補が作成されました！"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
@@ -186,11 +181,11 @@ msgstr "時間"
 
 #: src/components/ForkStatus/index.tsx
 msgid "In Escrow"
-msgstr ""
+msgstr "エスクロー中"
 
 #: src/pages/CandidateHistoryPage/index.tsx
 msgid "Version History"
-msgstr ""
+msgstr "バージョン履歴"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -210,32 +205,32 @@ msgstr "Nounsは、イーサリアムのブロックハッシュに基づいて�
 
 #: src/components/CandidateSponsors/OriginalSignature.tsx
 msgid "Awaiting signature"
-msgstr ""
+msgstr "署名待ち"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Streamed so far"
-msgstr ""
+msgstr "これまでにストリーミングされた"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "Build With Nouns. Get Funded."
-msgstr ""
+msgstr "Nounsで構築。資金を獲得。"
 
 #: src/components/Proposals/index.tsx
 msgid "Making a proposal requires {threshold} votes"
-msgstr ""
+msgstr "提案を行うには{threshold}票が必要です"
 
 #: src/pages/Fork/WithdrawNounsButton.tsx
 #: src/pages/Fork/WithdrawNounsButton.tsx
 msgid "Withdraw Nouns from escrow"
-msgstr ""
+msgstr "エスクローからNounsを引き出す"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
-msgstr ""
+msgstr "提案アクションを追加"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{transactionLink}</2>"
-msgstr ""
+msgstr "<0>提案者: </0><1>{proposer}</1><2>{transactionLink}</2>"
 
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
@@ -246,15 +241,19 @@ msgstr "3.5アーティスト、6.5技術者"
 msgid "Proposals"
 msgstr "提案"
 
+#: src/components/StartOrEndTime/index.tsx
 #. placeholder {0}: endDate.fromNow()
-#: src/components/StartOrEndTime/index.tsx
 msgid "starts {0}"
-msgstr ""
+msgstr "開始 {0}"
 
-#. placeholder {0}: dayjs(endDate).fromNow()
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "個人的な利益のために財務省の引き出しを容易にするために有権者を買収する"
+
 #: src/components/StartOrEndTime/index.tsx
+#. placeholder {0}: dayjs(endDate).fromNow()
 msgid "ends {0}"
-msgstr ""
+msgstr "終了 {0}"
 
 #: src/components/Banner/index.tsx
 msgid "FOREVER."
@@ -262,15 +261,15 @@ msgstr "永遠に。"
 
 #: src/pages/CreateCandidate/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal. "
-msgstr ""
+msgstr "提案候補は誰でも作成できます。候補がNounsの投票者から十分な署名を受け取ると、提案に昇格することができます。"
 
 #: src/pages/Candidate/index.tsx
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
-msgstr ""
+msgstr "提案候補を編集すると、以前のスポンサーがクリアされ、各スポンサーが再署名する必要があります"
 
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
-msgstr ""
+msgstr "アクティブなフォークはありません。"
 
 #: src/components/BidHistoryModal/index.tsx
 msgid "Bids for"
@@ -278,14 +277,14 @@ msgstr "入札"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
-msgstr ""
+msgstr "閾値（提案を通過させるために必要な賛成票の最小数）は、提案が受けた反対票の数に基づいて設定されます。これは、提案に反対するNounsの割合に応じて線形に増加し、最小閾値と最大閾値の間で変動します。"
 
 #: src/components/Bid/index.tsx
 msgid "or more"
 msgstr "かそれ以上"
 
-#. placeholder {0}: nounId.toString()
 #: src/components/AuctionActivityNounTitle/index.tsx
+#. placeholder {0}: nounId.toString()
 msgid "Noun {0}"
 msgstr "Noun {0}"
 
@@ -310,7 +309,7 @@ msgstr "投票がありません。"
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "Sponsoring a proposal requires at least one Noun vote"
-msgstr ""
+msgstr "提案をスポンサーするには、少なくとも1つのNounの投票が必要です"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
@@ -322,11 +321,11 @@ msgstr "トレジャリーは、ガバナンスを通じてNounsが独占的に�
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
-msgstr ""
+msgstr "{withdrawAmount} {unitForDisplay}をウォレットに正常に引き出しました"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Add your feedback"
-msgstr ""
+msgstr "フィードバックを追加"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Submit vote"
@@ -342,7 +341,7 @@ msgstr "生成されたアートワークは直接オンチェーンに保存さ
 
 #: src/components/Documentation/index.tsx
 msgid "There are unfortunately no algorithmic solutions for making these determinations in advance (if there were, the veto would not be required), and proposals must be considered on a case by case basis."
-msgstr ""
+msgstr "残念ながら、これらの決定を事前に行うためのアルゴリズム的な解決策はありません（もしあれば、拒否権は必要ありません）、提案はケースバイケースで考慮する必要があります。"
 
 #: src/pages/Playground/index.tsx
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
@@ -354,20 +353,20 @@ msgstr "秒"
 
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 msgid "Add an optional message for the changes to the proposal"
-msgstr ""
+msgstr "提案の変更に対するオプションのメッセージを追加"
 
-#. placeholder {0}: proposal.id
 #: src/components/DynamicQuorumInfoModal/index.tsx
+#. placeholder {0}: proposal.id
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
-msgstr ""
+msgstr "閾値（提案を通過させるために必要な賛成票の最小数）は、提案が受けた反対票の数に基づいて設定されます。提案{0}を通過させるために必要な賛成票の数は、次の曲線によって示されます。"
 
-#. placeholder {0}: mins + 1
 #: src/components/SettleManuallyBtn/index.tsx
+#. placeholder {0}: mins + 1
 msgid "You can settle manually in {0} minutes"
 msgstr "{0} 分で手動で決済できます"
 
-#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
 #: src/components/Proposals/index.tsx
+#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
 msgid "Ends {0}"
 msgstr "残り{0} で終了します"
 
@@ -396,14 +395,18 @@ msgstr "1体のNounにつき、1票の投票件を得ることができます。
 msgid "Nouns DUNA"
 msgstr "Nouns DUNA"
 
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
+#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 msgid "{0} <0>Address</0>"
 msgstr "{0}<0>イーサリアムアドレス</0>"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Address"
 msgstr "アドレス"
+
+#: src/pages/Vote/index.tsx
+msgid "Proposal Canceled!"
+msgstr "提案がキャンセルされました！"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
@@ -424,31 +427,31 @@ msgstr "なし"
 
 #: src/pages/Vote/index.tsx
 msgid "View Threshold Info"
-msgstr ""
+msgstr "閾値情報を表示"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
 msgstr "実行されました"
 
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 #: src/components/VoteCard/index.tsx
+#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
 msgid "{0} <0>Addresses</0>"
 msgstr "{0}<0>イーサリアムアドレス</0>"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 msgid "Add Transfer Funds Action"
-msgstr ""
+msgstr "資金移動アクションを追加"
 
-#. placeholder {0}: candidate?.proposalIdToUpdate
 #: src/pages/Candidate/index.tsx
+#. placeholder {0}: candidate?.proposalIdToUpdate
 msgid "<0>Note: </0>This candidate is an update to <1>Proposal {0}</1>."
-msgstr ""
+msgstr "<0>注: </0>この候補は<1>提案{0}</1>の更新です。"
 
 #: src/components/CreateCandidateButton/index.tsx
 msgid "Create proposal candidate"
-msgstr ""
+msgstr "提案候補を作成"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
@@ -461,25 +464,29 @@ msgstr "反対"
 msgid "Canceled"
 msgstr "キャンセルしました"
 
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "個人的な利益のために不平等に財務省を引き出す"
+
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Already has"
 msgstr "すでに持っています"
 
+#: src/components/VoteSignals/VoteSignals.tsx
 #. placeholder {0}: userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()
 #. placeholder {1}: userVoteSupport?.createdTimestamp && dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()
-#: src/components/VoteSignals/VoteSignals.tsx
 msgid "You provided <0>{0}</0> feedback {1}"
-msgstr ""
+msgstr "<0>{0}</0>のフィードバックを提供しました {1}"
 
+#: src/pages/Fork/index.tsx
 #. placeholder {0}: forkThreshold === undefined ? '...' : forkThreshold
 #. placeholder {1}: forkThresholdBPS && forkThresholdBPS / 100
-#: src/pages/Fork/index.tsx
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
-msgstr ""
+msgstr "閾値を通過するには、{0}以上のNouns（DAOの{1}%）が必要です"
 
 #: src/components/Proposals/index.tsx
 msgid "About Proposal Candidates"
-msgstr ""
+msgstr "提案候補について"
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -493,24 +500,28 @@ msgstr "提案を提出するのに十分な投票がありません"
 
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "minutes"
-msgstr ""
+msgstr "分"
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Accessory"
 msgstr "付属品"
 
+#: src/pages/Candidate/index.tsx
+msgid "Proposal Candidate Canceled!"
+msgstr "提案候補がキャンセルされました！"
+
 #: src/components/Proposals/index.tsx
 msgid "Candidates submitted by community members will appear here."
-msgstr ""
+msgstr "コミュニティメンバーによって提出された候補者はここに表示されます。"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send USDC, ETH, or stETH.<10/><11>• Stream Funds: </11>Stream USDC or WETH over time.<12/><13>• Function Call: </13>Call a contract function."
-msgstr ""
+msgstr "<0/><1>ガイドライン</1><2/>• <3>ETHをUSDCに交換するために</3>要求しないでください。代わりに、直接USDCを要求してください。<4/>• <5>ETHまたはUSDCのストリームを作成するために</5>外部に資金を転送しないでください。代わりに「ストリームファンド」アクションを使用してください。<6/><7>サポートされているアクションタイプ</7><8/><9>• 資金の転送: </9>USDC、ETH、またはstETHを送信します。<10/><11>• 資金のストリーム: </11>時間をかけてUSDCまたはWETHをストリームします。<12/><13>• 関数呼び出し: </13>契約関数を呼び出します。"
 
 #: src/pages/Forks/index.tsx
 msgid "Fork"
-msgstr ""
+msgstr "フォーク"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
@@ -520,9 +531,9 @@ msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、No
 msgid "Winning bid"
 msgstr "落札"
 
-#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 #: src/pages/ProposalHistory/index.tsx
 #: src/components/ProposalHeader/index.tsx
+#. placeholder {0}: i18n.number(Number(proposal.id || '0'))
 msgid "Proposal {0}"
 msgstr "提案 {0}"
 
@@ -544,12 +555,7 @@ msgstr "Nounsは全員Nouns DAOの会員です。"
 
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "days"
-msgstr ""
-
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "Get Involved"
-msgstr ""
+msgstr "日"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
@@ -557,20 +563,24 @@ msgstr "カスタムの特徴をアップロード"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
-msgstr ""
+msgstr "提案が実行されると想定する時点とストリームが始まる時点の間にバッファを追加することをお勧めします。"
 
 #: src/pages/Forks/index.tsx
 msgid "Forking is the crypto-native way for groups of token holders to exit together into a new instance of their protocol, resulting in maximal conservation of momentum in the ecosystem."
-msgstr ""
+msgstr "フォークは、トークン保有者のグループが一緒にプロトコルの新しいインスタンスに移行するための暗号ネイティブな方法であり、エコシステム内のモメンタムを最大限に維持します。"
 
 #: src/components/ProposalContent/ProposalTransactions.tsx
 #: src/components/ProposalContent/ProposalTransaction.tsx
 msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
-msgstr ""
+msgstr "この取引はTokenBuyerを補充するために自動的に追加されました。提案者はこのETHを受け取りません。"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
+
+#: src/pages/EditProposal/index.tsx
+msgid "View the candidate"
+msgstr "候補者を表示"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -588,11 +598,11 @@ msgstr "提案が実行されました！"
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 msgid "Note"
-msgstr ""
+msgstr "注"
 
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Add to escrow"
-msgstr ""
+msgstr "エスクローに追加"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -602,11 +612,11 @@ msgstr "実行しました"
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
-msgstr ""
+msgstr "Nounsコミュニティは提案拒否の代替案（「レイジクイット」など）の予備的な探求を行いましたが、これは満足のいく解決策を実施する前に、さらに多くの研究、開発、テストが必要な難しい問題であることが明らかになりました。"
 
 #: src/components/ProposalStatus/index.tsx
 msgid "Updatable"
-msgstr ""
+msgstr "更新可能"
 
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
@@ -630,12 +640,8 @@ msgstr "投票を提出"
 msgid "Expired"
 msgstr "期限切れです"
 
-#: src/components/NounInfoRowBirthday/index.tsx
-msgid "Error fetching Noun birthday"
-msgstr "Nounの誕生日を取得できませんでした"
-
-#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 #: src/pages/Playground/index.tsx
+#. placeholder {0}: i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))
 msgid "You've generated {0} years worth of Nouns"
 msgstr "{0} 年分のナウンを生成しました"
 
@@ -660,19 +666,19 @@ msgstr "DAO"
 
 #: src/pages/Vote/index.tsx
 msgid "This proposal can be edited for "
-msgstr ""
+msgstr "この提案は編集可能です "
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
 msgstr "WalletConnect データを消去"
 
-#. placeholder {0}: thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '
 #: src/pages/Fork/index.tsx
+#. placeholder {0}: thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '
 msgid "Any token holder can signal to fork (exit) in response to a governance proposal. If a {0}quorum of tokens signal to exit, the fork will succeed."
-msgstr ""
+msgstr "トークン保有者は、ガバナンス提案に応じてフォーク（退出）を示すことができます。{0}のクォーラムのトークンが退出を示した場合、フォークは成功します。"
 
-#. placeholder {0}: minBidEth(minBid)
 #: src/components/Bid/index.tsx
+#. placeholder {0}: minBidEth(minBid)
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "最低入札額の {0} ETHと同じかそれ以上の入札額を設定してください"
 
@@ -680,21 +686,13 @@ msgstr "最低入札額の {0} ETHと同じかそれ以上の入札額を設定�
 msgid "Vote for the next Noun"
 msgstr "次のNounに投票する"
 
-#: src/pages/Vote/index.tsx
-msgid "Switch to Noun view"
-msgstr "Nounビューに切り替えます"
-
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr "オークションが正常に決済されました！"
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-msgstr ""
-
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
-msgstr ""
+msgstr "署名を提出"
 
 #: src/pages/ProposalHistory/index.tsx
 #: src/pages/CandidateHistoryPage/index.tsx
@@ -705,11 +703,11 @@ msgstr "説明"
 
 #: src/components/Documentation/index.tsx
 msgid "heads (242) "
-msgstr ""
+msgstr "ヘッド (242)"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Sponsored by"
-msgstr ""
+msgstr "スポンサー"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload"
@@ -717,7 +715,7 @@ msgstr "アップロード"
 
 #: src/components/EditProposalButton/index.tsx
 msgid "Update Proposal"
-msgstr ""
+msgstr "提案を更新"
 
 #: src/components/Bid/index.tsx
 msgid "Bid was placed successfully!"
@@ -737,7 +735,7 @@ msgstr "すべての入札を表示"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Withdraw"
-msgstr ""
+msgstr "撤回"
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Traits"
@@ -745,14 +743,14 @@ msgstr "Nounsの特徴"
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "This candidate has met the required threshold, but Nouns voters can still add support until it’s put onchain."
-msgstr ""
+msgstr "この候補者は必要な閾値を満たしていますが、Nounsの投票者はオンチェーンに載るまでサポートを追加できます。"
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
-#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/pages/Vote/index.tsx
+#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 msgid "{0} votes"
 msgstr "{0} 票"
 
@@ -764,14 +762,14 @@ msgstr "WTF?"
 msgid "Will have"
 msgstr "票になります"
 
-#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
 #: src/components/Proposals/index.tsx
+#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
 msgid "Starts {0}"
 msgstr "あと{0}で始まります"
 
 #: src/components/VoteModal/index.tsx
 msgid "Gas spent on voting will be refunded to you."
-msgstr ""
+msgstr "投票に使ったガスは返金されます。"
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Seeder Contract"
@@ -781,8 +779,8 @@ msgstr "Nounシーダー契約"
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
-#. placeholder {0}: Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN
 #: src/components/ByLineHoverCard/index.tsx
+#. placeholder {0}: Number(sortedNounIds?.length ?? 0) - MAX_NOUN_IDS_SHOWN
 msgid "... and {0} more"
 msgstr "...そしてさらに3つ"
 
@@ -792,7 +790,7 @@ msgstr "更新"
 
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
-msgstr ""
+msgstr "お好きなだけ多くまたは少なくNounsを追加してください。追加のNounsはエスクロー期間とフォーク期間中に追加できます。"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
@@ -800,13 +798,13 @@ msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委�
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploy Nouns fork"
-msgstr ""
+msgstr "Nounsフォークを展開"
 
+#: src/components/CandidateSponsors/index.tsx
 #. placeholder {0}: props.candidate.proposerVotes
 #. placeholder {1}: props.candidate.proposerVotes > 1 ? 's' : ''
-#: src/components/CandidateSponsors/index.tsx
 msgid "Proposer has {0} vote{1}"
-msgstr ""
+msgstr "提案者は{0}票を持っています{1}"
 
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
@@ -826,33 +824,19 @@ msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
-msgstr ""
+msgstr "1つ以上の提案アクションを追加し、コミュニティのために提案を説明してください。提案は提出後に変更できないため、提出前にすべての情報を確認してください。投票期間は5日後に始まり、5日間続きます。"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "Nounsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
 
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
 msgid "Error"
 msgstr "エラー"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Add Stream Date Details"
-msgstr ""
-
-#: src/components/NavBar/index.tsx
-msgid "Docs"
-msgstr "ドキュメント"
+msgstr "ストリーム日付の詳細を追加"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -864,29 +848,25 @@ msgstr "終了日時"
 
 #: src/components/Proposals/index.tsx
 msgid "No candidates found"
-msgstr ""
+msgstr "候補者が見つかりません"
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
-msgstr ""
+msgstr "提案の拒否権は、Nouns DAOの財務に対する「51%攻撃」の問題に対する一時的な解決策として最初に考えられました。Noundersは当初、Nounsの健全な分配がDAOに十分な保護を提供すると信じていましたが、インセンティブとリスクのより完全な理解が、Nounders、Nouns Foundation、および広範なコミュニティ内で、権利が削除される前により堅牢なゲーム理論的解決策を実施すべきだという一般的な合意に至りました。"
 
-#. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
+#. placeholder {0}: dayjs(endDate).fromNow()
 msgid "ended {0}"
-msgstr ""
+msgstr "終了しました {0}"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr "保留中"
 
-#: src/pages/EditProposal/index.tsx
-msgid "Proposal Candidate Created!<0/><1>View the candidate</1>"
-msgstr ""
-
 #: src/components/Footer/index.tsx
 msgid "Farcaster"
-msgstr ""
+msgstr "Farcaster"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
@@ -894,11 +874,11 @@ msgstr "の"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "More details on how the dynamic threshold works can be found <0>here</0>."
-msgstr ""
+msgstr "動的閾値の動作についての詳細は<0>こちら</0>で確認できます。"
 
 #: src/components/ProposalHeader/CandidateHeader.tsx
 msgid "<0>Proposed by: </0><1>{proposerLink}</1>{transactionLink}"
-msgstr ""
+msgstr "<0>提案者：</0><1>{proposerLink}</1>{transactionLink}"
 
 #: src/components/Documentation/index.tsx
 msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
@@ -907,7 +887,7 @@ msgstr "Nounシーダー契約は、ミントのプロセスでNounsの特徴を
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Review and Add"
-msgstr ""
+msgstr "レビューして追加"
 
 #: src/pages/Vote/index.tsx
 msgid "Starts"
@@ -915,11 +895,7 @@ msgstr "開始"
 
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "<0>Note: </0>All signers on an onchain proposal have permission to cancel the proposal."
-msgstr ""
-
-#: src/components/Bid/index.tsx
-msgid "Insufficient bid amount 🤏"
-msgstr "入札額が不足しています🤏"
+msgstr "<0>注意：</0>オンチェーン提案のすべての署名者は提案をキャンセルする権限を持っています。"
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -932,7 +908,7 @@ msgstr "却下"
 
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "hours"
-msgstr ""
+msgstr "時間"
 
 #: src/components/Proposals/index.tsx
 msgid "No proposals found"
@@ -940,36 +916,34 @@ msgstr "提案が見つかりません"
 
 #: src/pages/EditProposal/index.tsx
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
-msgstr ""
+msgstr "この提案は候補者の署名によって作成されました。提案を編集すると、新しい提案候補が作成され、元の署名者がオンチェーン提案を更新するために再署名する必要があります。"
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
-msgstr ""
+msgstr "あなたにのみ表示されます"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Action Details"
-msgstr ""
+msgstr "アクションの詳細を追加"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
 
-#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 msgid "{0} ETH fee upon submission"
-msgstr ""
+msgstr "提出時に{0} ETHの手数料"
 
 #: src/pages/CandidateHistoryPage/index.tsx
 msgid "Proposal Candidate"
-msgstr ""
+msgstr "提案候補"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Streams start and end at 00:00 UTC on selected dates."
-msgstr ""
+msgstr "ストリームは選択した日付の00:00 UTCに開始および終了します。"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
@@ -989,9 +963,9 @@ msgstr "入札をする"
 
 #: src/pages/Vote/index.tsx
 msgid "Objection only period"
-msgstr ""
+msgstr "異議のみの期間"
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounInfoRowHolder.tsx
 msgid "Loading..."
 msgstr "ロード中..."
 
@@ -1001,32 +975,31 @@ msgstr "実行する"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Threshold"
-msgstr ""
+msgstr "動的しきい値"
 
 #: src/pages/Candidate/index.tsx
 msgid "Proposer functions"
-msgstr ""
+msgstr "提案者の機能"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
-msgstr ""
+msgstr "見よ、無限の芸術作品！Nounsは、アイデアに資金を提供し、協力を促進することでポジティブな影響を与えるコミュニティ所有のブランドです。コレクターや技術者から非営利団体やブランドまで、Nounsはすべての人のためのものです。"
 
-#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
 msgid "Add Arguments"
-msgstr ""
+msgstr "引数を追加"
 
 #: src/pages/EditCandidate/index.tsx
 msgid "Edit Proposal Candidate"
-msgstr ""
+msgstr "提案候補を編集"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "You <0>MUST</0> maintain enough voting power to meet the proposal threshold until your proposal is executed. If you fail to do so, anyone can cancel your proposal."
-msgstr ""
+msgstr "あなたは<0>必ず</0>提案が実行されるまで、提案のしきい値を満たすのに十分な投票力を維持しなければなりません。そうしない場合、誰でもあなたの提案をキャンセルすることができます。"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "Settle manually"
@@ -1034,11 +1007,11 @@ msgstr "手動で決済する"
 
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Set approval"
-msgstr ""
+msgstr "承認を設定"
 
 #: src/pages/EditCandidate/index.tsx
 msgid "Candidate updated!"
-msgstr ""
+msgstr "候補が更新されました！"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
@@ -1050,10 +1023,10 @@ msgstr "クリプトパンクス"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Available to withdraw"
-msgstr ""
+msgstr "引き出し可能"
 
-#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 msgid "You've successfully voted on on prop {0}"
 msgstr "あなたは提案 {0} に投票することに成功しました。"
 
@@ -1069,15 +1042,11 @@ msgstr "体"
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Nouns voters can cast voting signals to give proposers of pending proposals an idea of how they intend to vote and helpful guidance on proposal changes to change their vote."
-msgstr ""
+msgstr "Nounsの投票者は、保留中の提案の提案者に対して、どのように投票するつもりかのアイデアを提供し、提案の変更に関する有益なガイダンスを提供するために投票シグナルを送ることができます。"
 
 #: src/components/VoteCard/index.tsx
 msgid "Addresses"
 msgstr "イーサリアムアドレス"
-
-#: src/pages/CreateProposal/index.tsx
-msgid "Proposal Created!<0/>"
-msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
@@ -1089,7 +1058,7 @@ msgstr "ウォレットを切り替える"
 
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This proposal candidate has been proposed onchain."
-msgstr ""
+msgstr "<0>注:</0>この提案候補はオンチェーンで提案されました。"
 
 #: src/pages/CreateProposal/index.tsx
 #: src/components/CreateProposalButton/index.tsx
@@ -1098,7 +1067,7 @@ msgstr "提案を作成"
 
 #: src/components/Documentation/index.tsx
 msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
-msgstr ""
+msgstr "したがって、Nouns Foundationは、Nouns DAOが代替案を実施する準備が整うまで、拒否権の管理者であることを予想しており、この権限を行使する条件を明確にしたいと考えています。"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>For</0> this proposal"
@@ -1123,11 +1092,11 @@ msgstr "ガバナンス"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Signature request"
-msgstr ""
+msgstr "署名リクエスト"
 
 #: src/components/Documentation/index.tsx
 msgid "Governance ‘Slow Start’"
@@ -1139,24 +1108,24 @@ msgstr "まとめ"
 
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
-msgstr ""
-
-#: src/pages/Vote/index.tsx
-msgid "Switch to delegate view"
-msgstr "ビューを委任するように切り替えます"
+msgstr "提案候補は誰でも作成できます。候補がNounsの投票者から十分な署名を受け取った場合、それは提案に昇格することができます。"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Signature invalid while signer has an active or pending proposal"
-msgstr ""
+msgstr "署名者がアクティブまたは保留中の提案を持っている間は署名が無効です"
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like Prop House. Nouns funds projects of all sizes and domains."
+msgstr "Nounsには誰もが関与できる方法があります。カエルに名前を付けるような気まぐれな試みから、ローズパレードのための巨大なフロートを作るような野心的なプロジェクト、さらにはProp Houseのような暗号インフラまで。Nounsはあらゆる規模と分野のプロジェクトに資金を提供します。"
 
 #: src/components/StreamWithdrawModal/index.tsx
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "Withdraw from Stream"
-msgstr ""
+msgstr "ストリームから引き出す"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Remove sponsorship"
-msgstr ""
+msgstr "スポンサーシップを削除"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "All Noun auction proceeds are sent to the"
@@ -1164,20 +1133,19 @@ msgstr "すべてのNounオークションの収益は、"
 
 #: src/pages/ProposalHistory/VersionTab.tsx
 msgid "Version"
-msgstr ""
+msgstr "バージョン"
 
-#: src/components/NounHoverCard/index.tsx
 #: src/components/Holder/index.tsx
 msgid "Held by"
 msgstr "主催者"
 
 #: src/pages/Candidate/index.tsx
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: src/components/CandidateSponsors/Signature.tsx
 msgid "Re-signed"
-msgstr ""
+msgstr "再署名済み"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
@@ -1185,11 +1153,15 @@ msgstr "Nounderへの報酬"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Review Action Details"
-msgstr ""
+msgstr "アクション詳細の確認"
 
 #: src/pages/CreateCandidate/index.tsx
 msgid "Candidate Created!"
-msgstr ""
+msgstr "候補が作成されました！"
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Proposal Created!"
+msgstr "提案が作成されました！"
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
@@ -1211,11 +1183,11 @@ msgstr "サインアウト"
 
 #: src/pages/EditProposal/index.tsx
 msgid "Edit Proposal"
-msgstr ""
+msgstr "提案を編集"
 
 #: src/components/CandidateSponsors/OriginalSignature.tsx
 msgid "Did not re-sign"
-msgstr ""
+msgstr "再署名しませんでした"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders"
@@ -1235,19 +1207,11 @@ msgstr "Nounders"
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 #: src/pages/Candidate/index.tsx
 #: src/pages/Candidate/index.tsx
-#: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -1270,15 +1234,15 @@ msgstr "提案が待機されました！"
 
 #: src/pages/Forks/index.tsx
 msgid "Start a new fork"
-msgstr ""
+msgstr "新しいフォークを開始"
 
 #: src/pages/CreateCandidate/index.tsx
 msgid "Create Proposal Candidate"
-msgstr ""
+msgstr "提案候補を作成"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Once a signed proposal is onchain, signers will need to wait until the proposal is queued or defeated before putting another proposal onchain."
-msgstr ""
+msgstr "署名済みの提案がオンチェーンにある場合、署名者はその提案がキューに入るか否決されるまで、別の提案をオンチェーンにするのを待つ必要があります。"
 
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
@@ -1286,11 +1250,11 @@ msgstr "体 (30)"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Ending on"
-msgstr ""
+msgstr "終了日"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "% of Nouns Currently Against"
-msgstr ""
+msgstr "現在反対している名詞の割合"
 
 #: src/pages/Vote/index.tsx
 msgid "Failed to fetch"
@@ -1314,31 +1278,31 @@ msgstr "1つのNOUNを"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Submit"
-msgstr ""
+msgstr "送信"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr ""
+msgstr "この提案にはUSDCの資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、DAOはこのような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
-msgstr ""
+msgstr "ストリーム"
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "Update proposal candidates must be re-signed by the original signers."
-msgstr ""
+msgstr "提案候補の更新は、元の署名者によって再署名される必要があります。"
 
-#. placeholder {0}: isForked ? ` #${id}` : ''
 #: src/pages/Fork/index.tsx
+#. placeholder {0}: isForked ? ` #${id}` : ''
 msgid "Nouns DAO Fork{0}"
-msgstr ""
+msgstr "Nouns DAO フォーク{0}"
 
-#. placeholder {0}: i18n.number(availableVotes)
 #: src/components/VoteModal/index.tsx
+#. placeholder {0}: i18n.number(availableVotes)
 msgid "Voting with <0>{0}</0> Noun"
-msgstr ""
+msgstr "<0>{0}</0> 名詞で投票"
 
 #: src/components/Documentation/index.tsx
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
@@ -1363,25 +1327,13 @@ msgstr "戻る"
 msgid "Connect"
 msgstr "接続する"
 
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
 msgid "Transaction Failed"
 msgstr "取引に失敗しました"
 
 #: src/components/ProposalStatus/index.tsx
 msgid "Objection period"
-msgstr ""
+msgstr "異議申し立て期間"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated Nouns: </0>"
@@ -1389,7 +1341,7 @@ msgstr "委任Noun: "
 
 #: src/components/EditProposalButton/index.tsx
 msgid "Update Proposal Candidate"
-msgstr ""
+msgstr "提案候補を更新"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
@@ -1401,7 +1353,7 @@ msgstr "提案するためにはウォレットに接続してください。"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Success! The fork has been deployed."
-msgstr ""
+msgstr "成功！フォークが展開されました。"
 
 #: src/components/Documentation/index.tsx
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
@@ -1413,24 +1365,24 @@ msgstr "Nounsは全て等しく希少なため、属性の希少性について�
 #: src/pages/CreateCandidate/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Add Action"
-msgstr ""
+msgstr "アクションを追加"
 
 #: src/components/CandidateSponsors/index.tsx
 msgid "No sponsored votes needed"
-msgstr ""
+msgstr "スポンサー付き投票は不要"
 
-#. placeholder {0}: props.requiredVotes
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
+#. placeholder {0}: props.requiredVotes
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
-msgstr ""
+msgstr "提案と共に提出する署名を選択してください。署名の総数は提案の閾値{0}を超える必要があります。"
 
 #: src/components/NavBar/index.tsx
 msgid "Nouns & Traits"
-msgstr ""
+msgstr "名詞と特性"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploy Fork"
-msgstr ""
+msgstr "フォークをデプロイ"
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1438,7 +1390,7 @@ msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "seconds"
-msgstr ""
+msgstr "秒"
 
 #: src/components/Winner/index.tsx
 msgid "You"
@@ -1450,17 +1402,17 @@ msgstr "今持っています"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Pre-proposal feedback"
-msgstr ""
+msgstr "提案前のフィードバック"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "NounはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、Nounのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
 
+#: src/components/ChangeDelegatePanel/index.tsx
 #. placeholder {0}: (proposalThreshold ?? 0) + 1
 #. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr ""
+msgstr "この委任の後、あなたのアカウントには{0}{1}未満になります。作成した未実行の提案は、誰でもキャンセルできるようになります。"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -1470,22 +1422,22 @@ msgstr "提案を提出"
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
-msgstr ""
+msgstr "Nouns Foundationは、拒否権を通常の業務で行使すべきでない緊急権限と考えています。Nouns Foundationは、Nouns DAOまたはNouns Foundationに重大な法的または存在的リスクをもたらす提案を拒否します。これには（必ずしも限定されませんが）以下のような提案が含まれます。"
 
-#. placeholder {0}: nounsRequired ? ( <> {nounsRequired} {threshold === 0 ? nounSingular : nounPlural} </> ) : ( '...' )
 #: src/pages/Governance/index.tsx
+#. placeholder {0}: nounsRequired ? ( <> {nounsRequired} {threshold === 0 ? nounSingular : nounPlural} </> ) : ( '...' )
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
-msgstr ""
+msgstr "Nounsは<0>Nouns DAO</0>を統治します。Nounsは提案に投票するか、第三者に投票を委任することができます。提案を提出するには、最低<1>{0}</1>が必要です。"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploying Nouns fork and beginning the forking period"
-msgstr ""
+msgstr "Nounsフォークをデプロイし、フォーク期間を開始"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "あなたは<0>{availableVotes}</0>アカウントに委任されています"
 
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounInfoCard.tsx
 msgid "Bid history"
 msgstr "入札履歴"
 
@@ -1495,11 +1447,11 @@ msgstr "Nounオークションの収益は全て Nouns DAOに送られます。�
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Review Function Call Action"
-msgstr ""
+msgstr "関数呼び出しアクションのレビュー"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Adding your feedback"
-msgstr ""
+msgstr "フィードバックを追加"
 
 #: src/pages/ProposalHistory/index.tsx
 #: src/pages/CandidateHistoryPage/index.tsx
@@ -1508,21 +1460,21 @@ msgstr ""
 msgid "Proposed Transactions"
 msgstr "提案中のトランザクション"
 
-#. placeholder {0}: i18n.date(new Date(proposalCreationTimestamp * 1000), { dateStyle: 'long', timeStyle: 'long', })
 #: src/components/ProposalHeader/index.tsx
+#. placeholder {0}: i18n.date(new Date(proposalCreationTimestamp * 1000), { dateStyle: 'long', timeStyle: 'long', })
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "投票できるのは {0} 以前に所有していた、または委任されたNounsのみです。"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposals cannot be executed during a forking period"
-msgstr ""
+msgstr "フォーク期間中は提案を実行できません"
 
-#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 #: src/components/VoteModal/index.tsx
+#. placeholder {0}: i18n.number(Number(proposalId || '0'))
 msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounInfoCard.tsx
 #: src/components/Footer/index.tsx
 msgid "Etherscan"
 msgstr "Etherscan"
@@ -1531,7 +1483,7 @@ msgstr "Etherscan"
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
 msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounInfoCard.tsx
 msgid "Bids"
 msgstr "入札"
 
@@ -1543,28 +1495,28 @@ msgstr "代理人を変更する"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "あなたはこの提案から<0>棄権</0>しました"
 
-#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
 #: src/components/Proposals/index.tsx
+#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
 msgid "Expires {0}"
 msgstr "残り {0} で期限切れになります"
 
 #: src/pages/Vote/index.tsx
 msgid "Current Threshold"
-msgstr ""
+msgstr "現在の閾値"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required "
-msgstr ""
+msgstr "引数は不要"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Add Streaming Payment Action"
-msgstr ""
+msgstr "ストリーミング支払いアクションを追加"
 
 #: src/pages/Vote/index.tsx
 msgid "Withdraw from Stream <0/>"
-msgstr ""
+msgstr "ストリームから引き出す<0/>"
 
 #: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
@@ -1579,12 +1531,12 @@ msgstr "デリゲートが更新されました"
 msgid "Auction ends in"
 msgstr "オークション終了まで"
 
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(d.callData.split(',')[1]), 6)), )
-#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)), )
 #: src/components/ProposalContent/ProposalTransactions.tsx
 #: src/components/ProposalContent/ProposalTransaction.tsx
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(d.callData.split(',')[1]), 6)), )
+#. placeholder {0}: Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format( Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)), )
 msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
-msgstr ""
+msgstr "このトランザクションは、DAOのPayerContractを介して{0} USDCを<0/>に送信します。"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -1592,7 +1544,7 @@ msgstr "提案"
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Pre-voting feedback"
-msgstr ""
+msgstr "投票前のフィードバック"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
@@ -1600,7 +1552,7 @@ msgstr "現在の代表者"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."
-msgstr ""
+msgstr "1日1つのNoun、永遠に。"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
@@ -1627,11 +1579,10 @@ msgstr "Nounオークションの売上は、第三者の介入無しで 100％�
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Starting on"
-msgstr ""
+msgstr "開始日"
 
 #: src/pages/Fork/DeployForkButton.tsx
 #: src/components/Winner/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "View on Etherscan"
@@ -1644,7 +1595,7 @@ msgstr "拒否"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Preview"
-msgstr ""
+msgstr "プレビュー"
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -1653,24 +1604,24 @@ msgstr "頭"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Tip"
-msgstr ""
+msgstr "ヒント"
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
-msgstr ""
+msgstr "フォーキング"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr ""
+msgstr "この提案にはUSDC資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、このような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
 
-#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
+#. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 msgid "Submissions are free for Nouns voters. Non-voters can submit for a {0} ETH fee."
-msgstr ""
+msgstr "Nounsの投票者は提出が無料です。非投票者は{0} ETHの手数料で提出できます。"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
-msgstr ""
+msgstr "この理由から、私たちプロジェクトの創設者（「Nounders」）は、自分たちをNounsで補償することを選びました。プロジェクトの最初の5年間、10番目ごとのNounは私たちのマルチシグ（5/10）に送られ、そこで権利確定され、Noundersに分配されます。"
 
 #: src/pages/Governance/index.tsx
 msgid "Noun"
@@ -1685,27 +1636,31 @@ msgstr "取引に成功しました！"
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
-msgid "Vote history"
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin. "
-msgstr ""
+msgstr "オークションが成立するたびに、決済取引によって新しいNounが発行され、新しい24時間オークションが開始されます。"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditProposal/index.tsx
 msgid "Proposal Updated!"
-msgstr ""
+msgstr "提案が更新されました！"
 
 #: src/components/Documentation/index.tsx
 msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 msgstr "ワイオミング州のDUNA法の下、Nouns DAOは独自の名前で資産を保有し、契約を締結し、法的措置に参加することができます。ガバナンスは完全に分散化されたままで、決定はNoun保有者によるオンチェーン投票によってのみ制御されます。これにより、Nouns DAOはプロジェクトを持続的に資金提供し、トレジャリーを管理し、デジタルと物理の両方の世界で自信を持って相互作用することができます。"
 
+#: src/components/Documentation/index.tsx
+msgid "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "投票の過半数を維持または獲得する目的で名詞オークションのリズムを変更しようとする"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "投票を委任するアカウントのイーサリアムアドレスまたはENS名を入力します。"
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Go to auction"
+msgstr "オークションに行く"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -1713,14 +1668,14 @@ msgstr "投票を委任するアカウントのイーサリアムアドレスま
 msgid "Undetermined"
 msgstr "未決定"
 
-#. placeholder {0}: proposalsList.length === 1 ? '' : 's'
 #: src/pages/Fork/ForkEvent.tsx
+#. placeholder {0}: proposalsList.length === 1 ? '' : 's'
 msgid "Offending proposal{0}"
-msgstr ""
+msgstr "問題のある提案{0}"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Review Transfer Funds Action"
-msgstr ""
+msgstr "資金移動のアクションを確認"
 
 #: src/components/NavLocaleSwitcher/index.tsx
 msgid "Language"
@@ -1736,20 +1691,24 @@ msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメ
 
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 msgid "Choose sponsors"
-msgstr ""
+msgstr "スポンサーを選択"
 
 #: src/pages/Vote/index.tsx
 msgid "Ends"
 msgstr "終了日"
 
-#. placeholder {0}: proposal.content.contentSignatures?.length
 #: src/pages/EditCandidate/index.tsx
+#. placeholder {0}: proposal.content.contentSignatures?.length
 msgid "This candidate currently has {0} signatures."
-msgstr ""
+msgstr "この候補者は現在{0}の署名を持っています。"
+
+#: src/components/Documentation/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "監査を受けずに重要なスマートコントラクトをアップグレードする"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "
-msgstr ""
+msgstr "背景 (2) "
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -1762,7 +1721,7 @@ msgstr "投票がありません。"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "There was an error withdrawing to your wallet."
-msgstr ""
+msgstr "ウォレットへの引き出し中にエラーが発生しました。"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
@@ -1773,16 +1732,16 @@ msgstr "近い"
 
 #: src/pages/Fork/index.tsx
 msgid "Fork Nouns DAO"
-msgstr ""
+msgstr "Nouns DAOをフォークする"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
-msgstr ""
+msgstr "提案を編集すると、以前のすべてのフィードバックがクリアされます"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
-msgstr ""
+msgstr "候補者"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit Association established in Wyoming via <0/> designed to provide a robust legal framework that aligns with the decentralized nature of Nouns DAO. This structure allows Nouns DAO to operate with limited liability protection and legal clarity without compromising its decentralized governance ethos."
@@ -1795,17 +1754,3 @@ msgstr "毎日"
 #: src/components/NounderNounContent/index.tsx
 msgid "Learn more"
 msgstr "詳細はこちら"
-
-#: src/pages/Vote/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Success"
-msgstr "成功"

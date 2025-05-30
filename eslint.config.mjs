@@ -200,6 +200,10 @@ export default defineConfig([
           message:
             'Use @tanstack/react-query instead. ref: https://the-guild.dev/graphql/codegen/docs/guides/react-query#type-safe-graphql-operation-execution',
         },
+        {
+          name: 'react-bootstrap',
+          message: 'Use tailwindcss instead',
+        },
       ],
       // Prettier rules
       'prettier/prettier': 'error',

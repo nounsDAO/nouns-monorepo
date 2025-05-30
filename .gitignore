@@ -15,3 +15,4 @@ dist
 
 .turbo
 .cache
+i18n.cache

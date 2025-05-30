@@ -1,0 +1,152 @@
+---
+description: Comprehensive guide for writing effective Cursor rules in .mdc format
+globs: .cursor/rules/*.mdc
+alwaysApply: false
+---
+# Cursor Rules Writing Guide
+
+When creating or editing Cursor rules (.mdc files), follow this comprehensive structure and best practices:
+
+## MDC File Structure
+
+Every .mdc rule file must start with YAML frontmatter containing metadata:
+
+```yaml
+---
+description: Brief, clear description of what this rule does
+globs: **/*.ts, **/*.tsx  # File patterns this rule applies to (for Auto Attached)
+alwaysApply: false  # Set to true for Always type rules
+---
+```
+
+## Rule Types
+
+Choose the appropriate rule type based on your needs:
+
+### Always Rules
+- Set `alwaysApply: true`
+- Always included in model context
+- Use sparingly for critical, universal guidance
+- Keep very concise (under 200 lines)
+
+### Auto Attached Rules
+- Set `alwaysApply: false` with `globs` patterns
+- Automatically included when matching files are referenced
+- Perfect for domain-specific guidance
+- Example: `globs: ["**/components/**/*.tsx"]` for React component rules
+
+### Agent Requested Rules
+- Set `alwaysApply: false` with descriptive `description`
+- AI decides whether to include based on relevance
+- Must have clear, specific description
+- Good for specialized workflows or templates
+
+### Manual Rules
+- Set `alwaysApply: false` without `globs`
+- Only included when explicitly mentioned with @ruleName
+- Use for templates, boilerplate, or rarely-needed guidance
+
+## Content Best Practices
+
+### Structure Your Content
+1. **Clear Purpose**: Start with what the rule accomplishes
+2. **Specific Instructions**: Use bullet points for actionable guidance
+3. **Examples**: Provide concrete code examples when helpful
+4. **Referenced Files**: Use @filename.ts to include template files
+
+### Writing Style
+- Be concise and actionable (target under 500 lines)
+- Use imperative language ("Use", "Follow", "Ensure")
+- Provide specific examples rather than vague guidance
+- Split large concepts into multiple, composable rules
+
+### Good Examples
+```
+When creating API endpoints:
+- Use zod for all input validation
+- Define return types with TypeScript interfaces
+- Include proper error handling with try/catch
+- Follow RESTful naming conventions
+
+Example structure:
+@api-endpoint-template.ts
+```
+
+### Avoid
+- Vague instructions like "write good code"
+- Overly long rules (split into multiple files instead)
+- Duplicate guidance across multiple rules
+- Instructions that conflict with other rules
+
+## File Organization
+
+### Naming Conventions
+- Use kebab-case for rule filenames
+- Be descriptive: `react-component-standards.mdc` not `components.mdc`
+- Group related rules with prefixes: `api-validation.mdc`, `api-endpoints.mdc`
+
+### Directory Structure
+- Place domain-specific rules in nested directories
+- Example: `frontend/.cursor/rules/` for frontend-only rules
+- Use project root `.cursor/rules/` for cross-cutting concerns
+
+## Referenced Files
+
+Include template files or examples using the @ syntax:
+- `@component-template.tsx` - Include a template file
+- `@example-config.json` - Reference configuration examples
+- Files are included as additional context when rule is triggered
+
+## Testing Your Rules
+
+1. **Scope Verification**: Ensure globs match intended files
+2. **Context Size**: Keep total context under reasonable limits
+3. **Clarity Test**: Can another developer understand and follow the rule?
+4. **Conflict Check**: Does this rule contradict existing rules?
+
+## Common Patterns
+
+### Domain-Specific Standards
+```yaml
+---
+description: Frontend component standards and conventions
+globs: ["**/components/**/*.tsx", "**/pages/**/*.tsx"]
+alwaysApply: false
+---
+
+When working with React components:
+- Use TypeScript for all components
+- Follow our naming conventions
+- Include proper prop validation
+```
+
+### Workflow Automation
+```yaml
+---
+description: Automated testing workflow for new features
+globs: ["**/test/**/*.ts", "**/*.test.ts"]
+alwaysApply: false
+---
+
+When creating tests:
+1. Write unit tests first
+2. Include integration tests for API endpoints
+3. Add E2E tests for critical user flows
+```
+
+### Templates and Boilerplate
+```yaml
+---
+description: Express service template and structure
+alwaysApply: false
+---
+
+Use this template when creating new Express services:
+- Follow RESTful principles
+- Include error handling middleware
+- Set up proper logging
+
+@express-service-template.ts
+```
+
+Remember: Good rules are focused, actionable, and scoped. They should feel like having an experienced teammate provide consistent guidance.

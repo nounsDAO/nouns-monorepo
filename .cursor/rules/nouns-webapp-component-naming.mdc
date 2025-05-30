@@ -1,0 +1,155 @@
+---
+description: Nouns Webapp Component Naming Standards
+globs: packages/nouns-webapp/src/components/**/*.tsx
+alwaysApply: false
+---
+# Nouns Webapp Component Naming Standards
+
+The Nouns webapp is migrating away from barrel files and `index.tsx` patterns to more explicit component naming for better discoverability and maintainability.
+
+## Core Principles
+
+- **NO MORE BARREL FILES**: Avoid creating `index.tsx` files unless absolutely unavoidable
+- **EXPLICIT NAMING**: Name files after their primary component export
+- **FLAT STRUCTURE**: Move components out of nested folders when possible
+- **GRADUAL MIGRATION**: When refactoring existing components, migrate to the new naming convention
+
+## File Naming Patterns
+
+### ✅ DO - Use explicit component names
+```
+// Good: Explicit component naming
+src/components/Auction.tsx
+src/components/AuctionActivity.tsx
+src/components/NounderNounContent.tsx
+src/components/StandaloneNoun.tsx
+```
+
+### ✅ DO - Keep related files together with prefixes
+```
+// Good: Related components with clear naming
+src/components/Auction.tsx
+src/components/AuctionActivity.tsx
+src/components/AuctionBidForm.tsx
+src/components/AuctionTimer.tsx
+```
+
+### ❌ DON'T - Use index.tsx files
+```
+// Bad: Barrel file pattern
+src/components/Auction/index.tsx
+src/components/AuctionActivity/index.tsx
+```
+
+### ❌ DON'T - Create unnecessary folder nesting
+```
+// Bad: Unnecessary nesting for single components
+src/components/Auction/Auction.tsx
+src/components/Header/Header.tsx
+```
+
+## Migration Guidelines
+
+### When Refactoring Existing Components
+
+1. **Rename the file**: Change `ComponentName/index.tsx` to `ComponentName.tsx`
+2. **Move to parent directory**: Move the file up one level (out of the component folder)
+3. **Update imports**: Update all import statements to use the new file path
+4. **Remove empty folders**: Delete the now-empty component folder
+5. **Update related files**: Move any component-specific CSS modules or test files alongside
+
+### Migration Example
+
+```tsx
+// Before: Barrel file pattern
+src/components/Auction/index.tsx
+src/components/Auction/Auction.module.css
+
+// After: Explicit naming
+src/components/Auction.tsx
+src/components/Auction.module.css (if not migrated to Tailwind yet)
+```
+
+### Import Statement Updates
+
+```tsx
+// Before: Importing from barrel file
+import Auction from '@/components/Auction';
+import AuctionActivity from '@/components/AuctionActivity';
+
+// After: Explicit imports (no change needed if using proper aliases)
+import Auction from '@/components/Auction';
+import AuctionActivity from '@/components/AuctionActivity';
+```
+
+## Exceptions (Use Sparingly)
+
+Barrel files may still be acceptable in these limited cases:
+
+### Complex Component Systems
+When you have a component with many sub-components that are only used together:
+```
+src/components/ProposalEditor/
+  ├── index.tsx (exports main ProposalEditor + sub-components)
+  ├── ProposalEditor.tsx
+  ├── ProposalEditorToolbar.tsx
+  ├── ProposalEditorPreview.tsx
+  └── ProposalEditorActions.tsx
+```
+
+### Utility Collections
+For utility functions or hooks that are logically grouped:
+```
+src/utils/auction/
+  ├── index.ts (exports all auction utilities)
+  ├── auctionHelpers.ts
+  ├── bidValidation.ts
+  └── auctionFormatting.ts
+```
+
+## Benefits of This Approach
+
+- **Better Discoverability**: Component names are immediately visible in file explorers
+- **Clearer Imports**: Import paths directly reflect the component name
+- **Reduced Cognitive Load**: No need to remember which components use barrel files
+- **Better IDE Support**: Improved autocomplete and navigation
+- **Easier Refactoring**: Moving and renaming components is more straightforward
+
+## Implementation Strategy
+
+### For New Components
+- Always use explicit naming from the start
+- Place components directly in the appropriate directory level
+- Use descriptive, specific names that reflect the component's purpose
+
+### For Existing Components
+- Migrate during regular refactoring work
+- Update imports across the codebase when migrating
+- Test thoroughly to ensure no broken imports
+- Consider migrating related components together for consistency
+
+### File Organization
+```
+src/components/
+├── Auction.tsx
+├── AuctionActivity.tsx
+├── AuctionBidForm.tsx
+├── Header.tsx
+├── Navigation.tsx
+├── Noun.tsx
+├── NounImage.tsx
+├── ProposalCard.tsx
+└── VoteModal.tsx
+```
+
+## Testing Migration
+
+When migrating components:
+
+1. **Check all imports**: Use your IDE's "Find References" to locate all imports
+2. **Update import paths**: Change all references to use the new file location
+3. **Verify builds**: Ensure the application builds without errors
+4. **Test functionality**: Verify the component still works as expected
+5. **Update tests**: Update any test files that import the component
+
+Remember: This migration improves code organization and developer experience. When in doubt, prefer explicit naming over barrel files for better maintainability and discoverability.

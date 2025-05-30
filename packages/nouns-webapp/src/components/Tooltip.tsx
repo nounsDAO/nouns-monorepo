@@ -2,8 +2,6 @@ import React from 'react';
 
 import ReactTooltip from 'react-tooltip';
 
-import classes from './Tooltip.module.css';
-
 interface TooltipProps {
   tooltipContent: (dataTip: string) => React.ReactNode;
   tip: string;
@@ -14,13 +12,7 @@ interface TooltipProps {
 const Tooltip: React.FC<TooltipProps> = ({ children, id, tip, tooltipContent }) => {
   return (
     <>
-      <ReactTooltip
-        id={id}
-        className={classes.hover}
-        getContent={(dataTip): React.ReactNode => {
-          return tooltipContent(dataTip);
-        }}
-      />
+      <ReactTooltip id={id} className="!rounded-lg" getContent={tooltipContent} />
       <div data-tip={tip} data-for={id}>
         {children}
       </div>

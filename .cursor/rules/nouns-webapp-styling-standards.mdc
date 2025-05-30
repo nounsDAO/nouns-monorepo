@@ -1,0 +1,171 @@
+---
+description: Standards for styling the Nouns webapp
+globs: packages/nouns-webapp/**/*.module.css,packages/nouns-webapp/**/*.tsx
+alwaysApply: false
+---
+# Nouns Webapp Styling Standards
+
+The Nouns webapp is transitioning from CSS modules (`*.module.css`) to **Tailwind CSS** for all styling. Follow these standards when working with components and styling.
+
+## Core Principles
+
+- **NO MORE CSS MODULES**: Do not create new `*.module.css` files
+- **Use Tailwind CSS**: All styling should be done with Tailwind utility classes
+- **Gradual Migration**: When editing existing components, migrate away from CSS modules to Tailwind
+- **Consistent Design System**: Leverage Tailwind's design tokens and the configured theme
+
+## Styling Approach
+
+### ✅ DO - Use Tailwind CSS
+```tsx
+// Good: Use Tailwind utility classes
+const MyComponent = () => (
+  <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
+    <h2 className="text-xl font-bold text-gray-900">Title</h2>
+    <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+      Action
+    </button>
+  </div>
+);
+```
+
+### ✅ DO - Use cn() for conditional classes
+```tsx
+import { cn } from '@/lib/utils';
+
+const Button = ({ variant, disabled }: ButtonProps) => (
+  <button 
+    className={cn(
+      'px-4 py-2 rounded font-medium transition-colors',
+      {
+        'bg-blue-500 text-white hover:bg-blue-600': variant === 'primary',
+        'bg-gray-200 text-gray-700 hover:bg-gray-300': variant === 'secondary',
+        'opacity-50 cursor-not-allowed': disabled,
+      }
+    )}
+  >
+    Button
+  </button>
+);
+```
+
+### ✅ DO - Leverage the configured theme
+```tsx
+// Use the configured CSS variables and Tailwind theme
+const Card = () => (
+  <div className="bg-card text-card-foreground border border-border rounded-lg p-6">
+    <h3 className="text-foreground font-semibold">Card Title</h3>
+    <p className="text-muted-foreground">Card description</p>
+  </div>
+);
+```
+
+### ❌ DON'T - Create new CSS modules
+```tsx
+// Bad: Don't create new CSS module files
+import classes from './MyComponent.module.css';
+
+const MyComponent = () => (
+  <div className={classes.container}>
+    <h2 className={classes.title}>Title</h2>
+  </div>
+);
+```
+
+### ❌ DON'T - Import existing CSS modules in new components
+```tsx
+// Bad: Don't import CSS modules in new components
+import classes from '../ExistingComponent/ExistingComponent.module.css';
+```
+
+## Migration Guidelines
+
+### When Editing Existing Components
+
+1. **Gradual Replacement**: Replace CSS module classes with Tailwind equivalents
+2. **Remove Unused Imports**: Remove CSS module imports when no longer needed
+3. **Delete Empty CSS Files**: Remove CSS module files when they're no longer used
+
+### Migration Example
+```tsx
+// Before: Using CSS modules
+import classes from './MyComponent.module.css';
+
+const MyComponent = () => (
+  <div className={classes.container}>
+    <h2 className={classes.title}>Title</h2>
+    <button className={classes.button}>Click me</button>
+  </div>
+);
+
+// After: Using Tailwind CSS
+const MyComponent = () => (
+  <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+    <h2 className="text-2xl font-bold text-gray-900 mb-4">Title</h2>
+    <button className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+      Click me
+    </button>
+  </div>
+);
+```
+
+## Responsive Design
+
+Use Tailwind's responsive prefixes for mobile-first design:
+
+```tsx
+const ResponsiveComponent = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div className="p-4 bg-white rounded-lg shadow-md">
+      <h3 className="text-lg md:text-xl font-semibold">Card</h3>
+      <p className="text-sm md:text-base text-gray-600">Description</p>
+    </div>
+  </div>
+);
+```
+
+## Animation and Transitions
+
+Use Tailwind's built-in animation utilities and the configured `tailwindcss-animate` plugin:
+
+```tsx
+const AnimatedComponent = () => (
+  <div className="transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+    <button className="animate-pulse bg-blue-500 text-white px-4 py-2 rounded">
+      Loading...
+    </button>
+  </div>
+);
+```
+
+## File Cleanup
+
+When migrating components:
+
+1. Remove unused CSS module imports
+2. Delete empty `*.module.css` files
+3. Update any references to the removed CSS classes
+4. Test the component to ensure visual consistency
+
+## Theme Integration
+
+Leverage the configured Tailwind theme colors:
+
+- `bg-background` / `text-foreground` for main content
+- `bg-card` / `text-card-foreground` for card components  
+- `bg-primary` / `text-primary-foreground` for primary actions
+- `bg-secondary` / `text-secondary-foreground` for secondary actions
+- `bg-muted` / `text-muted-foreground` for subdued content
+- `border-border` for borders
+- `ring-ring` for focus rings
+
+## Best Practices
+
+- **Consistency**: Use consistent spacing, colors, and typography scales
+- **Performance**: Tailwind's purging removes unused styles automatically
+- **Maintainability**: Utility classes are self-documenting and easier to maintain
+- **Design System**: Follow the established design tokens in the Tailwind config
+- **Accessibility**: Use appropriate contrast ratios and focus states
+- **All styling achievable**: Every styling need should be met with Tailwind utilities
+
+Remember: The goal is to completely phase out CSS modules in favor of Tailwind CSS for better maintainability, consistency, and developer experience. All styling requirements should be achievable using Tailwind's utility classes.

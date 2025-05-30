@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# pnpm Workspace Standards
+
+This repository uses **pnpm workspaces** for monorepo management. Follow these standards when working with packages and dependencies.
+
+## Workspace Structure
+
+The monorepo is organized as follows:
+- Root workspace contains shared tooling and configuration
+- All packages are located in `packages/*` directory
+- Each package has its own `package.json` with specific dependencies
+
+## Package Management Commands
+
+### Installing Dependencies
+- **Root dependencies**: `pnpm add <package> -w` (workspace root)
+- **Package-specific**: `pnpm add <package> --filter <package-name>`
+- **Dev dependencies**: `pnpm add -D <package> --filter <package-name>`
+
+### Running Scripts
+- **All packages**: `pnpm run <script>` (uses Turbo for orchestration)
+- **Specific package**: `pnpm run <script> --filter <package-name>`
+- **Multiple packages**: `pnpm run <script> --filter <pattern>`
+
+### Common Patterns
+```bash
+# Install dependency in specific package
+pnpm add react --filter nouns-webapp
+
+# Run dev server for webapp only
+pnpm run dev --filter nouns-webapp
+
+# Build all packages
+pnpm run build
+
+# Run tests in all packages
+pnpm run test
+```
+
+Remember: pnpm workspaces provide efficient dependency management and disk usage. Always use pnpm commands instead of npm or yarn in this repository.

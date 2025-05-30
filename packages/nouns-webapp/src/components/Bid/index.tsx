@@ -1,7 +1,10 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
+import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
 
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
@@ -11,9 +14,8 @@ import {
   useWriteNounsAuctionHouseCreateBid,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
 } from '@/contracts';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { Auction } from '@/wrappers/nounsAuction';
 
 import classes from './Bid.module.css';
@@ -77,8 +79,7 @@ const Bid: React.FC<BidProps> = props => {
     setShowConnectModal(false);
   };
 
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
 
   const { data: minBidIncPercentage } = useReadNounsAuctionHouseMinBidIncrementPercentage();
   const minBid = computeMinimumNextBid(
@@ -120,16 +121,11 @@ const Bid: React.FC<BidProps> = props => {
     }
 
     if (currentBid(bidInputRef) < minBid) {
-      setModal({
-        show: true,
-        title: <Trans>Insufficient bid amount 🤏</Trans>,
-        message: (
-          <Trans>
-            Please place a bid higher than or equal to the minimum bid amount of {minBidEth(minBid)}{' '}
-            ETH
-          </Trans>
+      toast.error(
+        _(
+          t`Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(minBid)} ETH`,
         ),
-      });
+      );
       setBidInput(minBidEth(minBid));
       return;
     }
@@ -160,15 +156,11 @@ const Bid: React.FC<BidProps> = props => {
     // allows user to rebid against themselves so long as it is different tx
     const isCorrectTx = currentBid(bidInputRef) === BigInt(auction.amount?.toString() ?? '0');
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
-      setModal({
-        title: <Trans>Success</Trans>,
-        message: <Trans>Bid was placed successfully!</Trans>,
-        show: true,
-      });
+      toast.success(_(t`Bid was placed successfully!`));
       setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });
       clearBidInput();
     }
-  }, [auction, account, setModal, isPlacingBid]);
+  }, [auction, account, _, isPlacingBid]);
 
   // placing bid transaction state hook
   useEffect(() => {
@@ -180,21 +172,10 @@ const Bid: React.FC<BidProps> = props => {
     } else if (!auctionEnded && isPlacingBid) {
       setBidButtonContent({ loading: true, content: <></> });
     } else if (!auctionEnded && didPlaceBidFail) {
-      setModal({
-        title: <Trans>Transaction Failed</Trans>,
-        message: placeBidError?.message || <Trans>Please try again.</Trans>,
-        show: true,
-      });
+      toast.error(placeBidError?.message || _(t`Please try again.`));
       setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
     }
-  }, [
-    auctionEnded,
-    setModal,
-    isPlaceBidIdle,
-    isPlacingBid,
-    didPlaceBidFail,
-    placeBidError?.message,
-  ]);
+  }, [auctionEnded, _, isPlaceBidIdle, isPlacingBid, didPlaceBidFail, placeBidError?.message]);
 
   // settle auction transaction state hook
   useEffect(() => {
@@ -206,23 +187,15 @@ const Bid: React.FC<BidProps> = props => {
     } else if (auctionEnded && isSettlingAuction) {
       setBidButtonContent({ loading: true, content: <></> });
     } else if (auctionEnded && didSettleAuction) {
-      setModal({
-        title: <Trans>Success</Trans>,
-        message: <Trans>Settled auction successfully!</Trans>,
-        show: true,
-      });
+      toast.success(_(t`Settled auction successfully!`));
       setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
     } else if (auctionEnded && didSettleFail) {
-      setModal({
-        title: <Trans>Transaction Failed</Trans>,
-        message: settleAuctionError?.message || <Trans>Please try again.</Trans>,
-        show: true,
-      });
+      toast.error(settleAuctionError?.message || _(t`Please try again.`));
       setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
     }
   }, [
     auctionEnded,
-    setModal,
+    _,
     isSettleIdle,
     isSettlingAuction,
     didSettleAuction,
