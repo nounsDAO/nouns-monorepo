@@ -684,8 +684,8 @@ msgid "Settled auction successfully!"
 msgstr "成功结算拍卖！"
 
 #: src/components/NounsIntroSection/index.tsx
-msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
-msgstr "每个人都有方式参与 Nouns。从为青蛙命名等奇思妙想，到为玫瑰花车游行建造巨型花车等雄心勃勃的项目，甚至像 {prophouseLink} 这样的加密基础设施。Nouns 资助各种规模和领域的项目。"
+msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like Prop House. Nouns funds projects of all sizes and domains."
+msgstr "每个人都有方式参与 Nouns。从为青蛙命名等奇思妙想，到为玫瑰花车游行建造巨型花车等雄心勃勃的项目，甚至像 提案之家 这样的加密基础设施。Nouns 资助各种规模和领域的项目。"
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Submit signature"
