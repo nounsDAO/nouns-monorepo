@@ -246,6 +246,10 @@ msgstr "提案"
 msgid "starts {0}"
 msgstr "開始 {0}"
 
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "個人的な利益のために財務省の引き出しを容易にするために有権者を買収する"
+
 #: src/components/StartOrEndTime/index.tsx
 #. placeholder {0}: dayjs(endDate).fromNow()
 msgid "ends {0}"
@@ -459,6 +463,10 @@ msgstr "反対"
 #: src/components/ProposalStatus/index.tsx
 msgid "Canceled"
 msgstr "キャンセルしました"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "個人的な利益のために不平等に財務省を引き出す"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Already has"
@@ -1642,6 +1650,10 @@ msgstr "提案が更新されました！"
 msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 msgstr "ワイオミング州のDUNA法の下、Nouns DAOは独自の名前で資産を保有し、契約を締結し、法的措置に参加することができます。ガバナンスは完全に分散化されたままで、決定はNoun保有者によるオンチェーン投票によってのみ制御されます。これにより、Nouns DAOはプロジェクトを持続的に資金提供し、トレジャリーを管理し、デジタルと物理の両方の世界で自信を持って相互作用することができます。"
 
+#: src/components/Documentation/index.tsx
+msgid "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "投票の過半数を維持または獲得する目的で名詞オークションのリズムを変更しようとする"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "投票を委任するアカウントのイーサリアムアドレスまたはENS名を入力します。"
@@ -1689,6 +1701,10 @@ msgstr "終了日"
 #. placeholder {0}: proposal.content.contentSignatures?.length
 msgid "This candidate currently has {0} signatures."
 msgstr "この候補者は現在{0}の署名を持っています。"
+
+#: src/components/Documentation/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "監査を受けずに重要なスマートコントラクトをアップグレードする"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "

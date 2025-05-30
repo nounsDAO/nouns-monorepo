@@ -241,6 +241,10 @@ msgstr "Proposals"
 msgid "starts {0}"
 msgstr "starts {0}"
 
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
+
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
 msgid "ends {0}"
@@ -454,6 +458,10 @@ msgstr "Against"
 #: src/components/ProposalStatus/index.tsx
 msgid "Canceled"
 msgstr "Canceled"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "unequally withdraw the treasury for personal gain"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Already has"
@@ -1637,6 +1645,10 @@ msgstr "Proposal Updated!"
 msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 msgstr "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 
+#: src/components/Documentation/index.tsx
+msgid "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
@@ -1684,6 +1696,10 @@ msgstr "Ends"
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
 msgstr "This candidate currently has {0} signatures."
+
+#: src/components/Documentation/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "make upgrades to critical smart contracts without undergoing an audit"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "

@@ -241,6 +241,10 @@ msgstr ""
 msgid "starts {0}"
 msgstr ""
 
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr ""
+
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
 msgid "ends {0}"
@@ -453,6 +457,10 @@ msgstr ""
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Canceled"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1637,6 +1645,10 @@ msgstr ""
 msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 msgstr ""
 
+#: src/components/Documentation/index.tsx
+msgid "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr ""
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr ""
@@ -1683,6 +1695,10 @@ msgstr ""
 #. placeholder {0}: proposal.content.contentSignatures?.length
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr ""
 
 #: src/components/Documentation/index.tsx

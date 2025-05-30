@@ -55,6 +55,7 @@ checksums:
     3.5%20artists%2C%206.5%20technologists/singular: 066bac6e14adab53325690f21c69b29a
     Proposals/singular: 74309a4c285679b0989c1f22148ec275
     starts%20%7B0%7D/singular: 7397618018266575dc73ea2637ea1dfe
+    bribe%20voters%20to%20facilitate%20withdraws%20of%20the%20treasury%20for%20personal%20gain/singular: 3237e28985cda0a6099d0124b0d68451
     ends%20%7B0%7D/singular: 5e58b22a7fd1b59c4fcfded2939c55ea
     FOREVER./singular: a2c9228b04f0fc141f6406a46b140a91
     Proposal%20candidates%20can%20be%20created%20by%20anyone.%20If%20a%20candidate%20receives%20enough%20signatures%20by%20Nouns%20voters%2C%20it%20can%20be%20promoted%20to%20a%20proposal.%20/singular: ded1a2125f2f098a9cf15c4ad92f33a5
@@ -103,6 +104,7 @@ checksums:
     Create%20proposal%20candidate/singular: 30cfd2f267c3d4c8142f099c03382a41
     Against/singular: 6cc95237c1ea612f6935866661656933
     Canceled/singular: 342a409089d71ce45725add1c62b0ade
+    unequally%20withdraw%20the%20treasury%20for%20personal%20gain/singular: 72dea5bcd3b9efad9e24b4e1b9373b16
     Already%20has/singular: 5d18c6d60d583df111923c1c09653293
     You%20provided%20%3C0%3E%7B0%7D%3C%2F0%3E%20feedback%20%7B1%7D/singular: b80d5d1252aaf7f9011adc54fe62d6fb
     More%20than%20%7B0%7D%20Nouns%20(%7B1%7D%25%20of%20the%20DAO)%20are%20required%20to%20pass%20the%20threshold/singular: 5d780ef08d4f457741f944bc896ff2bb
@@ -366,6 +368,7 @@ checksums:
     Each%20time%20an%20auction%20is%20settled%2C%20the%20settlement%20transaction%20will%20also%20cause%20a%20new%20Noun%20to%20be%20minted%20and%20a%20new%2024%20hour%20auction%20to%20begin.%20/singular: fcb60aed09f1411e1d202fc07718969a
     Proposal%20Updated!/singular: 3a8bd988e080b13e4daae13532dfa2fb
     Under%20Wyoming's%20DUNA%20Act%2C%20Nouns%20DAO%20can%20hold%20assets%2C%20enter%20into%20contracts%2C%20and%20participate%20in%20legal%20actions%20in%20its%20own%20name.%20Governance%20remains%20fully%20decentralized%2C%20with%20decisions%20controlled%20exclusively%20by%20Noun%20holders%20via%20on-chain%20voting.%20This%20enables%20Nouns%20DAO%20to%20sustainably%20fund%20projects%2C%20manage%20its%20treasury%2C%20and%20interact%20confidently%20within%20both%20the%20digital%20and%20physical%20worlds./singular: 1a7c61d9538f3895cbd3bddfc725485f
+    attempt%20to%20alter%20Noun%20auction%20cadence%20for%20the%20purpose%20of%20maintaining%20or%20acquiring%20a%20voting%20majority/singular: fe7044bccb6e71d8b0bfeb026fb7812a
     Enter%20the%20Ethereum%20address%20or%20ENS%20name%20of%20the%20account%20you%20would%20like%20to%20delegate%20your%20votes%20to./singular: fdf8f2f9a2f17afac261813b5f4ef76b
     Go%20to%20auction/singular: 0daea3cbfac53d94a437680a8d290e20
     Undetermined/singular: b289ee3ad8579bd42970f8a0d2986763
@@ -377,6 +380,7 @@ checksums:
     Choose%20sponsors/singular: ecd8bbd0b18049d5496486e02f0ca675
     Ends/singular: 89639c1e84d4029174995d4d627d875c
     This%20candidate%20currently%20has%20%7B0%7D%20signatures./singular: 173cd1a5ea4f95ee2c5593b162c33572
+    make%20upgrades%20to%20critical%20smart%20contracts%20without%20undergoing%20an%20audit/singular: e31d54208f12fe69313300fb11aa509f
     backgrounds%20(2)%20/singular: 1b4031724a9128a360e01c8b766d8311
     Glasses/singular: 97b51b50d61937756518ad9798e59b0b
     You%20have%20no%20Votes./singular: 6015d04f6d06fb2b3a63119280d43397

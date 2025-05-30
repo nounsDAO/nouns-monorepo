@@ -241,6 +241,10 @@ msgstr "提案列表"
 msgid "starts {0}"
 msgstr "开始于 {0}"
 
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "贿赂选民以便从国库中提取资金以谋取个人利益"
+
 #: src/components/StartOrEndTime/index.tsx
 #. placeholder {0}: dayjs(endDate).fromNow()
 msgid "ends {0}"
@@ -454,6 +458,10 @@ msgstr "反对"
 #: src/components/ProposalStatus/index.tsx
 msgid "Canceled"
 msgstr "已取消"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "不平等地从国库中提取资金以谋取个人利益"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Already has"
@@ -1637,6 +1645,10 @@ msgstr "提案已更新！"
 msgid "Under Wyoming's DUNA Act, Nouns DAO can hold assets, enter into contracts, and participate in legal actions in its own name. Governance remains fully decentralized, with decisions controlled exclusively by Noun holders via on-chain voting. This enables Nouns DAO to sustainably fund projects, manage its treasury, and interact confidently within both the digital and physical worlds."
 msgstr "在怀俄明州DUNA法案下，Nouns DAO可以以自己的名义持有资产、签订合同并参与法律诉讼。治理保持完全去中心化，决策完全由Noun持有者通过链上投票控制。这使Nouns DAO能够可持续地资助项目、管理其国库，并在数字和物理世界中自信地互动。"
 
+#: src/components/Documentation/index.tsx
+msgid "attempt to alter Noun auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "试图改变名词拍卖节奏以维持或获得投票多数"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "输入您想要委托投票的账户的以太坊地址或 ENS 名称。"
@@ -1684,6 +1696,10 @@ msgstr "结束"
 #. placeholder {0}: proposal.content.contentSignatures?.length
 msgid "This candidate currently has {0} signatures."
 msgstr "该候选人目前有 {0} 个签名。"
+
+#: src/components/Documentation/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "在未经审计的情况下对关键智能合约进行升级"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "
