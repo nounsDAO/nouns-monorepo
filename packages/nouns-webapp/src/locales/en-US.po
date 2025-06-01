@@ -25,6 +25,11 @@ msgstr "Disconnect"
 msgid "You voted <0>Against</0> this proposal"
 msgstr "You voted <0>Against</0> this proposal"
 
+#. placeholder {0}: bodyCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "bodies ({0})"
+msgstr "bodies ({0})"
+
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "This will clear all previous sponsors and feedback votes"
@@ -36,10 +41,6 @@ msgstr "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders ha
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "At this time only USDC and WETH streams are supported"
 msgstr "At this time only USDC and WETH streams are supported"
-
-#: src/components/Documentation/index.tsx
-msgid "accessories (140) "
-msgstr "accessories (140) "
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Has"
@@ -246,6 +247,11 @@ msgstr "Proposals"
 msgid "starts {0}"
 msgstr "starts {0}"
 
+#. placeholder {0}: glassesCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "glasses ({0})"
+msgstr "glasses ({0})"
+
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
 msgid "ends {0}"
@@ -366,10 +372,6 @@ msgstr "You can settle manually in {0} minutes"
 msgid "Ends {0}"
 msgstr "Ends {0}"
 
-#: src/components/Documentation/index.tsx
-msgid "glasses (23)"
-msgstr "glasses (23)"
-
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Update Delegate"
@@ -486,6 +488,11 @@ msgstr "Background"
 msgid "You don't have enough votes to submit a proposal"
 msgstr "You don't have enough votes to submit a proposal"
 
+#. placeholder {0}: headCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "heads ({0}) "
+msgstr "heads ({0}) "
+
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "minutes"
 msgstr "minutes"
@@ -510,6 +517,11 @@ msgstr "Fork"
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+
+#. placeholder {0}: backgroundCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "backgrounds ({0}) "
+msgstr "backgrounds ({0}) "
 
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
@@ -540,11 +552,6 @@ msgstr "All Nouns are members of Nouns DAO."
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "days"
 msgstr "days"
-
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "Get Involved"
-msgstr "Get Involved"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
@@ -698,10 +705,6 @@ msgstr "Submit signature"
 msgid "Description"
 msgstr "Description"
 
-#: src/components/Documentation/index.tsx
-msgid "heads (242) "
-msgstr "heads (242) "
-
 #: src/components/ProposalHeader/index.tsx
 msgid "Sponsored by"
 msgstr "Sponsored by"
@@ -845,10 +848,6 @@ msgstr "Error"
 msgid "Add Stream Date Details"
 msgstr "Add Stream Date Details"
 
-#: src/components/NavBar/index.tsx
-msgid "Docs"
-msgstr "Docs"
-
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "Delegate {availableVotes} Vote"
@@ -945,8 +944,6 @@ msgstr "Only visible to you"
 msgid "Add Action Details"
 msgstr "Add Action Details"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -1190,6 +1187,11 @@ msgstr "Candidate Created!"
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 
+#. placeholder {0}: accessoryCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "accessories ({0}) "
+msgstr "accessories ({0}) "
+
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
@@ -1274,10 +1276,6 @@ msgstr "Create Proposal Candidate"
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Once a signed proposal is onchain, signers will need to wait until the proposal is queued or defeated before putting another proposal onchain."
 msgstr "Once a signed proposal is onchain, signers will need to wait until the proposal is queued or defeated before putting another proposal onchain."
-
-#: src/components/Documentation/index.tsx
-msgid "bodies (30)"
-msgstr "bodies (30)"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Ending on"
@@ -1741,10 +1739,6 @@ msgstr "Ends"
 #: src/pages/EditCandidate/index.tsx
 msgid "This candidate currently has {0} signatures."
 msgstr "This candidate currently has {0} signatures."
-
-#: src/components/Documentation/index.tsx
-msgid "backgrounds (2) "
-msgstr "backgrounds (2) "
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
