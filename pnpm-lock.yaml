@@ -401,8 +401,8 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1
       '@noundry/nouns-assets':
-        specifier: ^1.5.0
-        version: 1.5.0
+        specifier: ^1.14.0
+        version: 1.14.0
       '@nouns/assets':
         specifier: workspace:*
         version: link:../nouns-assets
@@ -2395,8 +2395,8 @@ packages:
       ethers: ^5.0.0
       hardhat: ^2.0.0
 
-  '@noundry/nouns-assets@1.5.0':
-    resolution: {integrity: sha512-zzbG4SLJT3spX+i7n2ljDj4PDHu/VwsZ00uqnJ9gjNwnfPyby+jiiFvxAgEGB0cVrSSW26QnDUgA7Df4eKXLrQ==}
+  '@noundry/nouns-assets@1.14.0':
+    resolution: {integrity: sha512-oNdbTP8tzvYR5ZUiPjqWY1S+ra5PgJW5wfHxuCDUDf4qo3ibtpG4JRQQFJFfzdv8cYq9Jisc3h8M2lEZt8v41g==}
 
   '@oclif/core@4.3.0':
     resolution: {integrity: sha512-lIzHY+JMP6evrS5E/sGijNnwrCoNtGy8703jWXcMuPOYKiFhWoAqnIm1BGgoRgmxczkbSfRsHUL/lwsSgh74Lw==}
@@ -15913,7 +15913,7 @@ snapshots:
       ethers: 5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       hardhat: 2.24.1(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@22.15.23)(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10)
 
-  '@noundry/nouns-assets@1.5.0':
+  '@noundry/nouns-assets@1.14.0':
     dependencies:
       '@ethersproject/bignumber': 5.8.0
       '@ethersproject/solidity': 5.8.0
