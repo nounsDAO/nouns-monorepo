@@ -1,5 +1,5 @@
 import { find, pipe } from 'remeda';
-import { createConfig, http } from 'wagmi';
+import { createConfig, http, fallback, webSocket } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
 import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors';
 
@@ -13,15 +13,20 @@ const activeChain =
     find(chain => chain.id === activeChainId),
   ) ?? sepolia;
 
-const mainnetRpcUrl = import.meta.env.VITE_MAINNET_JSONRPC ?? '';
-const sepoliaRpcUrl = import.meta.env.VITE_SEPOLIA_JSONRPC ?? '';
+const transports = {
+  [mainnet.id]: fallback([
+    webSocket(import.meta.env.VITE_MAINNET_WSRPC ?? ''),
+    http(import.meta.env.VITE_MAINNET_JSONRPC ?? ''),
+  ]),
+  [sepolia.id]: fallback([
+    webSocket(import.meta.env.VITE_SEPOLIA_WSRPC ?? ''),
+    http(import.meta.env.VITE_SEPOLIA_JSONRPC ?? ''),
+  ]),
+};
 
 export const config = createConfig({
   chains: [activeChain],
-  transports: {
-    [mainnet.id]: http(mainnetRpcUrl),
-    [sepolia.id]: http(sepoliaRpcUrl),
-  },
+  transports,
   connectors: [
     injected(),
     walletConnect({
