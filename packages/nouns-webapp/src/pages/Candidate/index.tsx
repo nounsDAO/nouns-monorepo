@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
@@ -9,6 +10,7 @@ import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import { first, isNonNullish } from 'remeda';
+import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateSponsors from '@/components/CandidateSponsors';
@@ -17,9 +19,6 @@ import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
 import VoteSignals from '@/components/VoteSignals/VoteSignals';
 import { useAppSelector } from '@/hooks';
 import Section from '@/layout/Section';
-import { toast } from 'sonner';
-import { t } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,
@@ -126,17 +125,17 @@ const CandidatePage = () => {
           setPending?.(true);
           break;
         case 'Success':
-          toast.success(successMessage || _(t`Transaction Successful!`));
+          toast.success(successMessage || _(`Transaction Successful!`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Fail':
-          toast.error(errorMessage || _(t`Please try again.`));
+          toast.error(errorMessage || _(`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          toast.error(getErrorMessage?.(errorMessage) || _(t`Please try again.`));
+          toast.error(getErrorMessage?.(errorMessage) || _(`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
@@ -150,7 +149,7 @@ const CandidatePage = () => {
     () =>
       onTransactionStateChange(
         cancelCandidateState,
-        _(t`Proposal Candidate Canceled!`),
+        _(`Proposal Candidate Canceled!`),
         setCancelPending,
       ),
     [cancelCandidateState, onTransactionStateChange, _],
