@@ -1,0 +1,231 @@
+---
+description: Lingui internationalization standards and patterns for the Nouns webapp
+globs: packages/nouns-webapp/**/*.ts,packages/nouns-webapp/**/*.tsx
+alwaysApply: false
+---
+
+# Lingui Internationalization Standards
+
+When working with internationalization in the Nouns webapp, follow these patterns and best practices using Lingui.
+
+## Core Principles
+
+- Use Lingui macros for all user-facing text
+- Leverage the existing `NounsI18nProvider` and `LanguageProvider` setup
+- Follow the established locale configuration in `locales.ts`
+- Maintain consistency with the project's i18n architecture
+
+## Import Patterns
+
+### For Components with Text
+```typescript
+import { Trans } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+```
+
+### For Non-React Code
+```typescript
+import { t } from '@lingui/core/macro';
+import { i18n } from '@lingui/core';
+```
+
+## Translation Patterns
+
+### Static Text in JSX
+Use the `Trans` macro for static text that doesn't need variables:
+```tsx
+import { Trans } from '@lingui/react/macro';
+
+const MyComponent = () => (
+  <div>
+    <h1><Trans>Welcome to Nouns</Trans></h1>
+    <p><Trans>Explore the world of Nouns NFTs</Trans></p>
+  </div>
+);
+```
+
+### Dynamic Text with Variables
+Use the `Trans` macro with interpolation for dynamic content:
+```tsx
+import { Trans } from '@lingui/react/macro';
+
+const UserGreeting = ({ userName }: { userName: string }) => (
+  <h2><Trans>Hello {userName}, welcome back!</Trans></h2>
+);
+```
+
+### Text with Components/Links
+Use the `Trans` macro with component interpolation:
+```tsx
+import { Trans } from '@lingui/react/macro';
+
+const InfoText = () => (
+  <p>
+    <Trans>
+      Read the <a href="/docs">documentation</a> for more details.
+    </Trans>
+  </p>
+);
+```
+
+### Programmatic Translations
+Use the `t` macro for strings that need to be translated outside of JSX:
+```tsx
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+
+const MyComponent = () => {
+  const { _ } = useLingui();
+  
+  const handleClick = () => {
+    const message = _(t`Action completed successfully`);
+    alert(message);
+  };
+  
+  const placeholder = _(t`Enter your search term`);
+  
+  return <input placeholder={placeholder} onClick={handleClick} />;
+};
+```
+
+### Pluralization
+Use ICU MessageFormat syntax for plurals:
+```tsx
+import { Trans } from '@lingui/react/macro';
+
+const ItemCount = ({ count }: { count: number }) => (
+  <span>
+    <Trans>
+      {count, plural, =0 {No items} =1 {One item} other {# items}}
+    </Trans>
+  </span>
+);
+```
+
+## Locale Management
+
+### Supported Locales
+The project supports these locales as defined in `locales.ts`:
+- `en-US` (default)
+- `zh-CN` 
+- `ja-JP`
+- `pseudo` (for testing)
+
+### Using Locale Information
+```tsx
+import { useLingui } from '@lingui/react';
+import { LOCALE_LABEL } from '../i18n/locales';
+
+const LanguageSelector = () => {
+  const { i18n } = useLingui();
+  const currentLocale = i18n.locale as SupportedLocale;
+  
+  return (
+    <div>
+      Current language: {LOCALE_LABEL[currentLocale]}
+    </div>
+  );
+};
+```
+
+## Provider Setup
+
+### Application Root
+The app should be wrapped with `LanguageProvider` which handles the `NounsI18nProvider` setup:
+```tsx
+import { LanguageProvider } from './i18n/LanguageProvider';
+
+function App() {
+  return (
+    <LanguageProvider>
+      {/* Your app components */}
+    </LanguageProvider>
+  );
+}
+```
+
+### Custom Provider Usage
+If you need direct access to `NounsI18nProvider`:
+```tsx
+import { NounsI18nProvider } from './i18n/NounsI18nProvider';
+import { SupportedLocale } from './i18n/locales';
+
+const CustomWrapper = ({ locale }: { locale: SupportedLocale }) => (
+  <NounsI18nProvider 
+    locale={locale}
+    onActivate={(locale) => console.log(`Activated: ${locale}`)}
+  >
+    {/* Your components */}
+  </NounsI18nProvider>
+);
+```
+
+## Best Practices
+
+### DO
+- Always use macros (`Trans`, `t`) instead of runtime components when possible
+- Provide meaningful context with comments for translators:
+  ```tsx
+  <Trans comment="Button text for submitting a proposal">Submit Proposal</Trans>
+  ```
+- Use the `useLingui` hook for programmatic translations
+- Keep translation keys descriptive and avoid overly generic terms
+- Test with the `pseudo` locale to identify untranslated strings
+
+### DON'T
+- Don't concatenate translated strings
+- Don't use template literals for translations - use macro interpolation instead
+- Don't hardcode locale-specific formatting - use the dayjs locale mapping from `locales.ts`
+- Don't bypass the provider setup - always use the established `LanguageProvider`
+
+### String Formatting
+For dates and numbers, use the dayjs locale mapping:
+```tsx
+import dayjs from 'dayjs';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE } from '../i18n/locales';
+import { useLingui } from '@lingui/react';
+
+const DateDisplay = ({ date }: { date: Date }) => {
+  const { i18n } = useLingui();
+  const locale = i18n.locale as SupportedLocale;
+  
+  return (
+    <span>
+      {dayjs(date).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).format('LL')}
+    </span>
+  );
+};
+```
+
+## Configuration Reference
+
+The project uses these key configuration files:
+- `lingui.config.js` - Lingui extraction and compilation settings
+- `src/i18n/locales.ts` - Supported locales and dayjs mapping
+- `src/i18n/NounsI18nProvider.tsx` - Core i18n provider with dynamic loading
+- `src/i18n/LanguageProvider.tsx` - Application-level language provider
+
+## Message Extraction
+
+Run these commands to extract and compile messages:
+```bash
+# Extract messages from source code
+npx lingui extract
+
+# Compile messages for runtime
+npx lingui compile
+```
+
+## Testing Translations
+
+Use the `pseudo` locale to identify untranslated strings:
+```tsx
+// In development, switch to pseudo locale to see translation keys
+import { dynamicActivate } from '../i18n/NounsI18nProvider';
+
+// This will show translation keys instead of English text
+dynamicActivate('pseudo');
+```
+
+Remember: Every user-facing string should be wrapped in a Lingui macro to ensure proper internationalization support.

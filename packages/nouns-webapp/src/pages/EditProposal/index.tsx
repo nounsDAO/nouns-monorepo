@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
@@ -11,9 +14,7 @@ import ProposalActionModal from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { useAppDispatch } from '@/hooks';
 import Section from '@/layout/Section';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -59,8 +60,8 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   >([]);
   const proposal = useProposal(id ?? '', true);
   const proposalThreshold = useProposalThreshold();
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  const { _ } = useLingui();
   const { address: account } = useAccount();
   const { updateProposal, updateProposalState } = useUpdateProposal();
   const { updateProposalDescription, updateProposalDescriptionState } =
@@ -224,31 +225,16 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Updated!</Trans>,
-          show: true,
-        });
+        toast.success(_(t`Proposal Updated!`));
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: updateProposalState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: updateProposalState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(updateProposalState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-  }, [updateProposalState, setModal]);
+  }, [updateProposalState, _]);
 
   useEffect(() => {
     switch (updateProposalDescriptionState.status) {
@@ -259,31 +245,16 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Updated!</Trans>,
-          show: true,
-        });
+        toast.success(_(t`Proposal Updated!`));
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: updateProposalDescriptionState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: updateProposalDescriptionState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(updateProposalDescriptionState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-  }, [updateProposalDescriptionState, setModal, updateProposalDescriptionState?.errorMessage]);
+  }, [updateProposalDescriptionState, _, updateProposalDescriptionState?.errorMessage]);
 
   useEffect(() => {
     switch (updateProposalTransactionsState.status) {
@@ -294,35 +265,16 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Updated!</Trans>,
-          show: true,
-        });
+        toast.success(_(t`Proposal Updated!`));
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: updateProposalTransactionsState?.errorMessage || (
-            <Trans>Please try again.</Trans>
-          ),
-          show: true,
-        });
-        setProposePending(false);
-        break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: updateProposalTransactionsState?.errorMessage || (
-            <Trans>Please try again.</Trans>
-          ),
-          show: true,
-        });
+        toast.error(updateProposalTransactionsState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-  }, [updateProposalTransactionsState, setModal, updateProposalTransactionsState?.errorMessage]);
+  }, [updateProposalTransactionsState, _, updateProposalTransactionsState?.errorMessage]);
 
   const isProposer = () => {
     return proposal?.proposer?.toLowerCase() === account?.toLowerCase();
@@ -452,38 +404,21 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         setProposePending(true);
         break;
       case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: (
-            <Trans>
-              Proposal Candidate Created!
-              <br />
-              <Link to={`/candidates/${slug}`}>View the candidate</Link>
-            </Trans>
-          ),
-          show: true,
+        toast.success(_(t`Proposal Candidate Created!`), {
+          action: {
+            label: _(t`View the candidate`),
+            onClick: () => (window.location.href = `/candidates/${slug}`),
+          },
         });
         setProposePending(false);
         break;
       case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
       case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
+        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
         setProposePending(false);
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createProposalCandidateState, setModal]);
+  }, [createProposalCandidateState, _, slug]);
 
   const isFormInvalid = () => {
     return (

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
@@ -10,7 +10,6 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { useSwipeable } from 'react-swipeable';
 
 import loadingNoun from '@/assets/loading-skull-noun.gif';
-import NounInfoRowBirthday from '@/components/NounInfoRowBirthday';
 import { StandalonePart } from '@/components/StandalonePart';
 import { useNounSeed } from '@/wrappers/nounToken';
 
@@ -25,16 +24,37 @@ interface ExploreNounDetailProps {
   nounId: number;
   noun: Noun;
   nounCount: number;
-  handleCloseDetail: Function;
-  handleNounNavigation: Function;
-  handleFocusNoun: Function;
-  handleScrollTo: Function;
+  handleCloseDetail: () => void;
+  handleNounNavigation: (direction: string) => void;
+  handleFocusNoun: (nounId: number) => void;
+  handleScrollTo: (nounId?: number) => void;
   selectedNoun?: number;
   isVisible: boolean;
-  setIsNounHoverDisabled: Function;
+  setIsNounHoverDisabled: (isDisabled: boolean) => void;
   disablePrev: boolean;
   disableNext: boolean;
 }
+
+const parseTraitName = (partName: string): string =>
+  capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1).replace(/-/g, ' '));
+const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (traitType: string) => {
+  switch (traitType) {
+    case 'background':
+      return <Trans key="background">Background</Trans>;
+    case 'body':
+      return <Trans key="body">Body</Trans>;
+    case 'accessory':
+      return <Trans key="accessory">Accessory</Trans>;
+    case 'head':
+      return <Trans key="head">Head</Trans>;
+    case 'glasses':
+      return <Trans key="glasses">Glasses</Trans>;
+    default:
+      throw new Error(`Trait key for ${traitType} not found`);
+  }
+};
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
   disableNext,
@@ -45,6 +65,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
   noun,
   selectedNoun,
   setIsNounHoverDisabled,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   const seedId = noun?.id != null && noun?.id >= 0 ? BigInt(noun.id) : BigInt(0);
@@ -52,7 +73,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
   const bgcolors = ['#d5d7e1', '#e1d7d5'];
   const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
   const nounId = noun && noun.id != null && noun.id >= 0 ? noun.id : null;
-
   const isMobile: boolean = width <= 991;
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -66,35 +86,20 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
     };
   }, []);
 
-  // Modified from playground function to remove dashes in filenames
-  const parseTraitName = (partName: string): string =>
-    capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1).replace(/-/g, ' '));
-  const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-
-  const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode => {
-    const traitMap = new Map([
-      ['background', <Trans key="background">Background</Trans>],
-      ['body', <Trans key="body">Body</Trans>],
-      ['accessory', <Trans key="accessory">Accessory</Trans>],
-      ['head', <Trans key="head">Head</Trans>],
-      ['glasses', <Trans key="glasses">Glasses</Trans>],
-    ]);
-    return traitMap.get(s);
-  };
-
-  const traitTypeKeys = (s: string) => {
-    const traitMap = new Map([
-      ['background', 'backgrounds'],
-      ['body', 'bodies'],
-      ['accessory', 'accessories'],
-      ['head', 'heads'],
-      ['glasses', 'glasses'],
-    ]);
-    const result = traitMap.get(s);
-    if (result) {
-      return result;
-    } else {
-      throw new Error(`Trait key for ${s} not found`);
+  const traitCategory = (traitType: string): string => {
+    switch (traitType) {
+      case 'background':
+        return 'backgrounds';
+      case 'body':
+        return 'bodies';
+      case 'accessory':
+        return 'accessories';
+      case 'head':
+        return 'heads';
+      case 'glasses':
+        return 'glasses';
+      default:
+        throw new Error(`Trait key for ${traitType} not found`);
     }
   };
 
@@ -105,34 +110,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
     }),
   ];
 
-  const getLoadingNounTraits = () => [
-    {
-      partType: 'head',
-      partName: 'Skull',
-      partIndex: -1,
-    },
-    {
-      partType: 'glasses',
-      partName: 'Processing',
-      partIndex: -1,
-    },
-    {
-      partType: 'accessory',
-      partName: 'Loading',
-      partIndex: -1,
-    },
-    {
-      partType: 'body',
-      partName: 'Placeholder',
-      partIndex: -1,
-    },
-    {
-      partType: 'background',
-      partName: 'cool',
-      partIndex: -1,
-    },
-  ];
-
   const getOrderedTraits = (seed: {
     head: number;
     glasses: number;
@@ -140,35 +117,31 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
     body: number;
     background: number;
   }) => {
-    if (!seed) {
-      return getLoadingNounTraits();
-    }
-
     return [
       {
         partType: 'head',
-        partName: parseTraitName(traitNames[3][seed.head]),
-        partIndex: seed.head,
+        partName: seed ? parseTraitName(traitNames[3][seed.head]) : 'Skull',
+        partIndex: seed ? seed.head : -1,
       },
       {
         partType: 'glasses',
-        partName: parseTraitName(traitNames[4][seed.glasses]),
-        partIndex: seed.glasses,
+        partName: seed ? parseTraitName(traitNames[4][seed.glasses]) : 'Processing',
+        partIndex: seed ? seed.glasses : -1,
       },
       {
         partType: 'accessory',
-        partName: parseTraitName(traitNames[2][seed.accessory]),
-        partIndex: seed.accessory,
+        partName: seed ? parseTraitName(traitNames[2][seed.accessory]) : 'Loading',
+        partIndex: seed ? seed.accessory : -1,
       },
       {
         partType: 'body',
-        partName: parseTraitName(traitNames[1][seed.body]),
-        partIndex: seed.body,
+        partName: seed ? parseTraitName(traitNames[1][seed.body]) : 'Placeholder',
+        partIndex: seed ? seed.body : -1,
       },
       {
         partType: 'background',
-        partName: parseTraitName(traitNames[0][seed.background]),
-        partIndex: seed.background,
+        partName: seed ? parseTraitName(traitNames[0][seed.background]) : 'cool',
+        partIndex: seed ? seed.background : -1,
       },
     ];
   };
@@ -228,10 +201,15 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
         exit="exit"
         onAnimationStart={() => handleAnimationStart()}
         onAnimationComplete={definition => {
-          !isMobile && definition === 'animate' && handleAnimationComplete();
-          !isMobile &&
-            definition === 'exit' &&
+          if (isMobile) {
+            return;
+          }
+          if (definition === 'animate') {
+            handleAnimationComplete();
+          }
+          if (definition === 'exit') {
             window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+          }
         }}
         {...handlers}
       >
@@ -277,7 +255,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
                 {nounId !== null && seed ? (
                   <>
                     <h2>Noun {nounId}</h2>
-                    <NounInfoRowBirthday nounId={BigInt(nounId)} />
                   </>
                 ) : (
                   <h2>Loading</h2>
@@ -298,7 +275,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
             <ul className={classes.traitsList}>
               {nounTraitsOrdered &&
                 Object.values(nounTraitsOrdered).map((part, index) => {
-                  const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
+                  const partType = traitCategory(nounTraitsOrdered[index].partType);
                   return (
                     <li key={partType} id={partType}>
                       <div
@@ -351,7 +328,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
             {nounId !== null && seed && (
               <p className={classes.activityLink}>
                 <a href={`/noun/${nounId}`}>
-                  <Trans>Vote history</Trans>
+                  <Trans>Go to auction</Trans>
                 </a>
               </p>
             )}

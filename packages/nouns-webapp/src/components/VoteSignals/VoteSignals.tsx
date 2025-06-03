@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FormControl, Spinner } from 'react-bootstrap';
+import { toast } from 'sonner';
+import { useAccount } from 'wagmi';
 
-import { useAppDispatch } from '@/hooks';
-import { AlertModal, setAlertModal } from '@/state/slices/application';
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
 import classes from './VoteSignals.module.css';
-import { useAccount } from 'wagmi';
 
 type VoteSignalsProps = {
   proposalId?: string;
@@ -26,6 +27,7 @@ type VoteSignalsProps = {
   isFeedbackClosed?: boolean;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function VoteSignals({
   candidateSlug,
   feedback: feedbackList,
@@ -116,8 +118,7 @@ function VoteSignals({
     }
   }
 
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
   useEffect(() => {
     const status =
       isCandidate === true ? sendCandidateFeedbackState?.status : sendProposalFeedbackState?.status;
@@ -140,27 +141,14 @@ function VoteSignals({
       setIsTransactionPending(false);
       setHasUserVoted(true);
       setExpandedGroup(support);
-    } else if (status === 'Fail') {
-      setModal({
-        title: <Trans>Transaction Failed</Trans>,
-        message: errorMessage || <Trans>Please try again.</Trans>,
-        show: true,
-      });
-      setIsTransactionPending(false);
-      setIsTransactionWaiting(false);
-      setDataFetchPollInterval(0);
-    } else if (status === 'Exception') {
-      setModal({
-        title: <Trans>Error</Trans>,
-        message: errorMessage || <Trans>Please try again.</Trans>,
-        show: true,
-      });
+    } else if (status === 'Fail' || status === 'Exception') {
+      toast.error(errorMessage || _(t`Please try again.`));
       setIsTransactionPending(false);
       setIsTransactionWaiting(false);
       setDataFetchPollInterval(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sendCandidateFeedbackState, sendProposalFeedbackState, setModal]);
+  }, [sendCandidateFeedbackState, sendProposalFeedbackState, _]);
 
   const userFeedbackAdded = (
     <Trans>
