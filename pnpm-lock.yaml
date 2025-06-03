@@ -418,6 +418,9 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.8.2
         version: 2.8.2(react-redux@7.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@tanstack/query-core':
+        specifier: ^5.79.2
+        version: 5.79.2
       '@tanstack/react-query':
         specifier: ^5.79.2
         version: 5.79.2(react@18.3.1)
@@ -466,6 +469,9 @@ importers:
       jotai:
         specifier: ^2.12.5
         version: 2.12.5(@types/react@18.3.23)(react@18.3.1)
+      jotai-tanstack-query:
+        specifier: ^0.9.0
+        version: 0.9.0(@tanstack/query-core@5.79.2)(jotai@2.12.5(@types/react@18.3.23)(react@18.3.1))
       lucide-react:
         specifier: ^0.513.0
         version: 0.513.0(react@18.3.1)
@@ -9328,6 +9334,12 @@ packages:
 
   jose@5.10.0:
     resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+
+  jotai-tanstack-query@0.9.0:
+    resolution: {integrity: sha512-8n7/xV14+ZE63dyqngtmqs6aV1bNnQJF9bJN5Bj70USc2cMFRmsVhGGzL1cSvp5E/xXasU37czFFaZ0vavmyfA==}
+    peerDependencies:
+      '@tanstack/query-core': '*'
+      jotai: '>=2.0.0'
 
   jotai@2.12.5:
     resolution: {integrity: sha512-G8m32HW3lSmcz/4mbqx0hgJIQ0ekndKWiYP7kWVKi0p6saLXdSoye+FZiOFyonnd7Q482LCzm8sMDl7Ar1NWDw==}
@@ -27151,6 +27163,11 @@ snapshots:
   jiti@2.4.2: {}
 
   jose@5.10.0: {}
+
+  jotai-tanstack-query@0.9.0(@tanstack/query-core@5.79.2)(jotai@2.12.5(@types/react@18.3.23)(react@18.3.1)):
+    dependencies:
+      '@tanstack/query-core': 5.79.2
+      jotai: 2.12.5(@types/react@18.3.23)(react@18.3.1)
 
   jotai@2.12.5(@types/react@18.3.23)(react@18.3.1):
     optionalDependencies:
