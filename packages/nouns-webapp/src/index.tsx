@@ -11,6 +11,7 @@ import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
 
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { store } from '@/store';
 import { execute } from '@/subgraphs/execute';
 
@@ -216,21 +217,23 @@ const PastAuctions: React.FC = () => {
 
 createRoot(document.getElementById('root')!).render(
   <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
-    <ReduxProvider store={store}>
-      <React.StrictMode>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <ChainSubscriber />
-            <ApolloProvider client={client}>
-              <PastAuctions />
-              <LanguageProvider>
-                <App />
-              </LanguageProvider>
-            </ApolloProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
-      </React.StrictMode>
-    </ReduxProvider>
+    <TooltipProvider delayDuration={0}>
+      <ReduxProvider store={store}>
+        <React.StrictMode>
+          <WagmiProvider config={wagmiConfig}>
+            <QueryClientProvider client={queryClient}>
+              <ChainSubscriber />
+              <ApolloProvider client={client}>
+                <PastAuctions />
+                <LanguageProvider>
+                  <App />
+                </LanguageProvider>
+              </ApolloProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
+        </React.StrictMode>
+      </ReduxProvider>
+    </TooltipProvider>
   </ThemeProvider>,
 );
 
