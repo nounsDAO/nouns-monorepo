@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { useAccount } from 'wagmi';
 
-import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/index.css';
 
