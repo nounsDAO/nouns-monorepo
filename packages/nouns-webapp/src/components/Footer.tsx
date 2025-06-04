@@ -36,16 +36,16 @@ export const Footer = () => {
       items: [
         { label: t`Token`, url: buildEtherscanAddressLink(nounsTokenAddress[defaultChain.id]) },
         {
-          label: t`Descriptor`,
-          url: buildEtherscanAddressLink(nounsDescriptorAddress[defaultChain.id]),
-        },
-        {
-          label: t`Auction House`,
+          label: t`Auction`,
           url: buildEtherscanAddressLink(nounsAuctionHouseAddress[defaultChain.id]),
         },
         {
           label: t`Governor`,
           url: buildEtherscanAddressLink(nounsGovernorAddress[defaultChain.id]),
+        },
+        {
+          label: t`Descriptor`,
+          url: buildEtherscanAddressLink(nounsDescriptorAddress[defaultChain.id]),
         },
         {
           label: t`Treasury`,
