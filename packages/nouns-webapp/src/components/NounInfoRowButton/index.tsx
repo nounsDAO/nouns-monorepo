@@ -21,7 +21,7 @@ const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
       onClick={onClickHandler}
     >
       <div className={classes.nounButtonContents}>
-        <Image src={iconImgSource} className={classes.buttonIcon} />
+        <Image src={iconImgSource} className="my-auto mr-1.5 size-5" />
         {btnText}
       </div>
     </div>
