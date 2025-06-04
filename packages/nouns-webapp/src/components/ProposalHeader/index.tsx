@@ -231,7 +231,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 <h3>{proposer}</h3>
               </HoverCard>
             </div>
-            <span className={classes.linkIcon}>{transactionLink}</span>
+            <span className={'my-auto'}>{transactionLink}</span>
 
             {props.proposal.signers.length > 0 && (
               <div className={classes.proposalSponsors}>
