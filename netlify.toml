@@ -4,3 +4,8 @@
 [build]
   command = "pnpm build"
   publish = "packages/nouns-webapp/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
