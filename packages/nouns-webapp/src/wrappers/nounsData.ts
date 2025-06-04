@@ -1,5 +1,7 @@
 import type { Address, Hash, Hex } from '@/utils/types';
 
+import { useMemo } from 'react';
+
 import { useQuery } from '@apollo/client';
 import { filter, isNonNullish, isNullish, map, pipe, sort } from 'remeda';
 
@@ -73,11 +75,14 @@ export const useCreateProposalCandidate = () => {
     status = 'Fail';
   }
 
-  const createProposalCandidateState = {
-    status,
-    errorMessage: createError?.message,
-    transaction: { hash },
-  };
+  const createProposalCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: createError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, createError],
+  );
 
   return {
     createProposalCandidate,
@@ -103,11 +108,14 @@ export const useCancelCandidate = () => {
     status = 'Fail';
   }
 
-  const cancelCandidateState = {
-    status,
-    errorMessage: cancelError?.message,
-    transaction: { hash },
-  };
+  const cancelCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: cancelError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, cancelError],
+  );
 
   return {
     cancelCandidate,
@@ -133,11 +141,14 @@ export const useAddSignature = () => {
     status = 'Fail';
   }
 
-  const addSignatureState = {
-    status,
-    errorMessage: addError?.message,
-    transaction: { hash },
-  };
+  const addSignatureState = useMemo(
+    () => ({
+      status,
+      errorMessage: addError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, addError],
+  );
 
   return {
     addSignature,
@@ -385,11 +396,14 @@ export const useUpdateProposalCandidate = () => {
     status = 'Fail';
   }
 
-  const updateProposalCandidateState = {
-    status,
-    errorMessage: updateError?.message,
-    transaction: { hash },
-  };
+  const updateProposalCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: updateError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, updateError],
+  );
 
   return {
     updateProposalCandidate,
@@ -415,11 +429,14 @@ export const useCancelSignature = () => {
     status = 'Fail';
   }
 
-  const cancelSignatureState = {
-    status,
-    errorMessage: cancelSigError?.message,
-    transaction: { hash },
-  };
+  const cancelSignatureState = useMemo(
+    () => ({
+      status,
+      errorMessage: cancelSigError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, cancelSigError],
+  );
 
   const cancelSignature = {
     send: cancelSig,
@@ -447,11 +464,14 @@ export const useSendFeedback = () => {
     proposalFeedbackStatus = 'Fail';
   }
 
-  const sendProposalFeedbackState = {
-    status: proposalFeedbackStatus,
-    errorMessage: sendProposalFeedbackError?.message,
-    transaction: { hash: proposalFeedbackHash },
-  };
+  const sendProposalFeedbackState = useMemo(
+    () => ({
+      status: proposalFeedbackStatus,
+      errorMessage: sendProposalFeedbackError?.message,
+      transaction: { hash: proposalFeedbackHash },
+    }),
+    [proposalFeedbackHash, proposalFeedbackStatus, sendProposalFeedbackError],
+  );
 
   const {
     data: candidateFeedbackHash,
@@ -470,11 +490,14 @@ export const useSendFeedback = () => {
     candidateFeedbackStatus = 'Fail';
   }
 
-  const sendCandidateFeedbackState = {
-    status: candidateFeedbackStatus,
-    errorMessage: sendCandidateFeedbackError?.message,
-    transaction: { hash: candidateFeedbackHash },
-  };
+  const sendCandidateFeedbackState = useMemo(
+    () => ({
+      status: candidateFeedbackStatus,
+      errorMessage: sendCandidateFeedbackError?.message,
+      transaction: { hash: candidateFeedbackHash },
+    }),
+    [candidateFeedbackHash, candidateFeedbackStatus, sendCandidateFeedbackError],
+  );
 
   return {
     sendProposalFeedback,
@@ -549,11 +572,14 @@ export const useProposeBySigs = () => {
     status = 'Fail';
   }
 
-  const proposeBySigsState = {
-    status,
-    errorMessage: proposeError?.message,
-    transaction: { hash },
-  };
+  const proposeBySigsState = useMemo(
+    () => ({
+      status,
+      errorMessage: proposeError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, proposeError],
+  );
 
   return {
     proposeBySigs,
@@ -579,11 +605,14 @@ export const useUpdateProposalBySigs = () => {
     status = 'Fail';
   }
 
-  const updateProposalBySigsState = {
-    status,
-    errorMessage: updateError?.message,
-    transaction: { hash },
-  };
+  const updateProposalBySigsState = useMemo(
+    () => ({
+      status,
+      errorMessage: updateError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, updateError],
+  );
 
   return {
     updateProposalBySigs,

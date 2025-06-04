@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/ShortAddress';
-import Tooltip from '@/components/Tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { nounQuery } from '@/wrappers/subgraph';
@@ -23,8 +23,8 @@ const Holder: React.FC<HolderProps> = props => {
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  const { query,variables } = nounQuery(nounId.toString());
-  const { loading, error, data } = useQuery(query,{variables});
+  const { query, variables } = nounQuery(nounId.toString());
+  const { loading, error, data } = useQuery(query, { variables });
 
   if (loading) {
     return <></>;
@@ -45,14 +45,13 @@ const Holder: React.FC<HolderProps> = props => {
       rel="noreferrer"
       className={classes.link}
     >
-      <Tooltip
-        tip="View on Etherscan"
-        tooltipContent={() => {
-          return <Trans>View on Etherscan</Trans>;
-        }}
-        id="holder-etherscan-tooltip"
-      >
-        <ShortAddress size={40} address={holder} avatar={true} />
+      <Tooltip>
+        <TooltipContent id="holder-etherscan-tooltip">
+          <Trans>View on Etherscan</Trans>
+        </TooltipContent>
+        <TooltipTrigger>
+          <ShortAddress size={40} address={holder} avatar={true} />
+        </TooltipTrigger>
       </Tooltip>
     </a>
   );

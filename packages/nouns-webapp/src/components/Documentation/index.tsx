@@ -11,6 +11,7 @@ import {
   useReadNounsDescriptorGlassesCount,
 } from '@/contracts';
 import Section from '@/layout/Section';
+import { cn } from '@/lib/utils';
 
 import classes from './Documentation.module.css';
 
@@ -71,7 +72,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
   return (
     <Section
       fullWidth={false}
-      className={classes.documentationSection}
+      className={cn(classes.documentationSection, '-mb-10 sm:-mb-20')}
       style={{ background: props.backgroundColor }}
     >
       <Col lg={{ span: 10, offset: 1 }}>
@@ -265,13 +266,25 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
               <ul>
-                <li>unequally withdraw the treasury for personal gain</li>
-                <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
                 <li>
-                  attempt to alter Noun auction cadence for the purpose of maintaining or acquiring
-                  a voting majority
+                  <Trans>unequally withdraw the treasury for personal gain</Trans>
                 </li>
-                <li>make upgrades to critical smart contracts without undergoing an audit</li>
+                <li>
+                  <Trans>
+                    bribe voters to facilitate withdraws of the treasury for personal gain
+                  </Trans>
+                </li>
+                <li>
+                  <Trans>
+                    attempt to alter Noun auction cadence for the purpose of maintaining or
+                    acquiring a voting majority
+                  </Trans>
+                </li>
+                <li>
+                  <Trans>
+                    make upgrades to critical smart contracts without undergoing an audit
+                  </Trans>
+                </li>
               </ul>
               <p>
                 <Trans>

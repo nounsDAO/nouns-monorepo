@@ -25,7 +25,9 @@ const loggerMiddleware = createLogger();
 export const store = configureStore({
   reducer: createRootReducer(),
   middleware: getDefaultMiddleware => {
-    const middleware = getDefaultMiddleware();
+    const middleware = getDefaultMiddleware({
+      serializableCheck: false,
+    });
     // Enable logger in development and when explicitly enabled
     if (
       import.meta.env.MODE !== 'production' &&

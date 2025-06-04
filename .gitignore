@@ -9,9 +9,11 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
+.claude
 
 # Local Netlify folder
 .netlify
 
 .turbo
 .cache
+i18n.cache

@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/ShortAddress';
-import Tooltip from '@/components/Tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
@@ -54,14 +54,11 @@ const Winner: React.FC<WinnerProps> = props => {
       rel="noreferrer"
       className={classes.link}
     >
-      <Tooltip
-        tip="View on Etherscan"
-        tooltipContent={() => {
-          return <Trans>View on Etherscan</Trans>;
-        }}
-        id="holder-etherscan-tooltip"
-      >
-        nounders.eth
+      <Tooltip>
+        <TooltipContent id="holder-etherscan-tooltip">
+          <Trans>View on Etherscan</Trans>
+        </TooltipContent>
+        <TooltipTrigger>nounders.eth</TooltipTrigger>
       </Tooltip>
     </a>
   );

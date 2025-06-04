@@ -5,15 +5,15 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { useAccount } from 'wagmi';
 
-import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@/index.css';
 
-import Footer from '@/components/Footer';
-import AlertModal from '@/components/Modal';
+import { Footer } from '@/components/Footer';
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
+import { Toaster } from '@/components/ui/sonner';
 import { CHAIN_ID } from '@/config';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 import AuctionPage from '@/pages/Auction';
 import CandidatePage from '@/pages/Candidate';
 import CandidateHistoryPage from '@/pages/CandidateHistoryPage';
@@ -22,7 +22,7 @@ import CreateProposalPage from '@/pages/CreateProposal';
 import DelegatePage from '@/pages/DelegatePage';
 import EditCandidatePage from '@/pages/EditCandidate';
 import EditProposalPage from '@/pages/EditProposal';
-import ExplorePage from '@/pages/Explore';
+import ExplorePage from '@/pages/ExplorePage';
 import ForkPage from '@/pages/Fork';
 import ForksPage from '@/pages/Forks';
 import GovernancePage from '@/pages/Governance';
@@ -32,8 +32,6 @@ import Playground from '@/pages/Playground';
 import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
-import { setAlertModal } from '@/state/slices/application';
-import { RootState } from '@/store';
 
 import classes from './App.module.css';
 
@@ -48,18 +46,9 @@ function App() {
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  const alertModal = useAppSelector((state: RootState) => state.application.alertModal);
-
   return (
     <div className={`${classes.wrapper}`}>
       {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
-      {alertModal.show && (
-        <AlertModal
-          title={alertModal.title}
-          content={<p>{alertModal.message}</p>}
-          onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
-        />
-      )}
       <BrowserRouter>
         <NavBar />
         <Routes>
@@ -92,6 +81,16 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
+        <Toaster
+          expand
+          closeButton
+          toastOptions={{
+            classNames: {
+              closeButton:
+                '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
+            },
+          }}
+        />
       </BrowserRouter>
     </div>
   );

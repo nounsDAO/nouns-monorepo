@@ -34,7 +34,7 @@
 //
 // NounsDAOExecutor2.sol modifications:
 // - `sendETH` and `sendERC20` functions used for DAO forks
-// - is upgradable via UUPSUpgradeable. uses intializer instead of constructor.
+// - is upgradable via UUPSUpgradeable. uses initializer instead of constructor.
 // - `GRACE_PERIOD` has been increased from 14 days to 21 days to allow more time in case of a forking period
 
 pragma solidity ^0.8.19;

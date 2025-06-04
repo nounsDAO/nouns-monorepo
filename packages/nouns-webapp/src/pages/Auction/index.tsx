@@ -53,13 +53,7 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
     <>
       <Auction auction={onDisplayAuction} />
       <NounsIntroSection />
-      <Documentation
-        backgroundColor={
-          onDisplayAuctionNounId == undefined || onDisplayAuctionNounId === lastAuctionNounId
-            ? backgroundColor
-            : undefined
-        }
-      />
+      <Documentation backgroundColor={backgroundColor} />
     </>
   );
 };
