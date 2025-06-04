@@ -143,7 +143,7 @@ code {
     @apply bg-background text-foreground;
   }
   ul {
-    @apply list-disc;
+    @apply list-inside list-disc;
   }
 
   @media (min-width: 1400px) {
