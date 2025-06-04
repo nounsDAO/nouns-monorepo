@@ -352,9 +352,9 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   generation:
                 </Trans>
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
-              <br />
-              <br />
+              <code className="mb-2 mt-6 block">
+                keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
+              </code>
               <p>
                 <Trans>
                   Trait generation is not truly random. Traits can be predicted when minting a Noun
