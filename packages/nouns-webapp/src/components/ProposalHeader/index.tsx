@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { Fragment, useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
+import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/ByLineHoverCard';
 import HoverCard from '@/components/HoverCard';
@@ -29,7 +30,6 @@ import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import classes from './ProposalHeader.module.css';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import { useBlockNumber } from 'wagmi';
 
 interface ProposalHeaderProps {
   title?: string;
@@ -64,6 +64,7 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<bigint | null>(null);
@@ -83,9 +84,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
   const isDaoGteV3 = useIsDaoGteV3();
   useEffect(() => {
-    if (hasManyVersions) {
-      const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
-      latestProposalVersion && setUpdatedTimestamp(latestProposalVersion?.createdAt);
+    const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
+    if (hasManyVersions && latestProposalVersion) {
+      setUpdatedTimestamp(latestProposalVersion?.createdAt);
     } else {
       setCreatedTimestamp(props.proposal.createdTimestamp);
     }
@@ -203,7 +204,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 </h3>{' '}
                 {props.proposal.signers.map((signer: { id: string }) => {
                   return (
-                    <>
+                    <Fragment key={signer.id}>
                       <HoverCard
                         hoverCardContent={(tip: string) => (
                           <ByLineHoverCard proposerAddress={tip} />
@@ -213,7 +214,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                       >
                         <h3>{sponsorLink(signer.id)}</h3>
                       </HoverCard>
-                    </>
+                    </Fragment>
                   );
                 })}
               </div>
@@ -231,7 +232,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 <h3>{proposer}</h3>
               </HoverCard>
             </div>
-            <span className={classes.linkIcon}>{transactionLink}</span>
+            <span className={'my-auto'}>{transactionLink}</span>
 
             {props.proposal.signers.length > 0 && (
               <div className={classes.proposalSponsors}>
@@ -240,7 +241,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 </h3>{' '}
                 {props.proposal.signers.map((signer: { id: string }) => {
                   return (
-                    <>
+                    <Fragment key={signer.id}>
                       <HoverCard
                         hoverCardContent={(tip: string) => (
                           <ByLineHoverCard proposerAddress={tip} />
@@ -250,7 +251,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                       >
                         <h3>{sponsorLink(signer.id)}</h3>
                       </HoverCard>
-                    </>
+                    </Fragment>
                   );
                 })}
               </div>

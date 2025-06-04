@@ -8,8 +8,6 @@ import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { resolveNounContractAddress } from '@/utils/resolveNounsContractAddress';
 import { Address } from '@/utils/types';
 
-import classes from './ShortAddress.module.css';
-
 interface ShortAddressProps {
   address: Address;
   avatar?: boolean;
@@ -30,17 +28,17 @@ const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, si
   }
 
   return (
-    <div className={classes.shortAddress}>
-      <div>
+    <div className="flex flex-row flex-nowrap items-center gap-1.5">
+      <div className="pt-[-2px]">
         <img
+          className="rounded-full"
           alt={address}
           src={ensAvatar ?? blo(address)}
           width={size}
           height={size}
-          style={{ borderRadius: '50%' }}
         />
       </div>
-      <span>{displayName}</span>
+      <span className="font-[PT_Root_UI] font-bold tracking-[0.2px]">{displayName}</span>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Accordion from 'react-bootstrap/Accordion';
 
 import Link from '@/components/Link';
 import Section from '@/layout/Section';
+import { cn } from '@/lib/utils';
 
 import classes from './Documentation.module.css';
 
@@ -36,7 +37,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
   return (
     <Section
       fullWidth={false}
-      className={classes.documentationSection}
+      className={cn(classes.documentationSection, '-mb-10 sm:-mb-20')}
       style={{ background: props.backgroundColor }}
     >
       <Col lg={{ span: 10, offset: 1 }}>

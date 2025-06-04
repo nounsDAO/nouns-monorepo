@@ -15,8 +15,8 @@ checksums:
     Cancel%20candidate/singular: 4314fe458976f0d48be0f75871b393af
     Objection%20period%20triggered/singular: 0fd830fa22f4f6246c9248d273e2cd95
     You%20must%20have%20%7B0%7D%20votes%20to%20submit%20a%20proposal/singular: c23e23e689ac80eb5172103ac562152f
+    made%20with%20%3C0%2F%3E/singular: abe634b3dcca709c8b83074a6a884f02
     Review%20Streaming%20Payment%20Action/singular: 974b2a29a8ef49124c96eba7e3d0da7c
-    Twitter/singular: ba3d4aed69a50759b53a0b7c319a3ad9
     Playground/singular: 3ba74390f73a6e7c9e601f2ce4dbab54
     You've%20already%20delegated%20to%20this%20address/singular: 26fa014a768defe49332772e12bf0aef
     Proposal%20functions/singular: 01dbd73f70992f2615223e3ad5b002ca
@@ -113,7 +113,6 @@ checksums:
     You%20don't%20have%20enough%20votes%20to%20submit%20a%20proposal/singular: 2e64540a04375897316543233899b458
     minutes/singular: 1198ce09f54542a89fbafbf64ef13b93
     Accessory/singular: fbdd854b15ea8710fe5744d39b6faa6a
-    Proposal%20Candidate%20Canceled!/singular: e7aee91795b6b352b7b1447ec89ea33c
     Candidates%20submitted%20by%20community%20members%20will%20appear%20here./singular: f78533b5a0b9295ccf37e41a3967220f
     "%3C0%2F%3E%3C1%3EGuidelines%3C%2F1%3E%3C2%2F%3E%E2%80%A2%20Do%20%3C3%3ENOT%3C%2F3%3E%20request%20ETH%20to%20trade%20into%20USDC.%20Instead%2C%20request%20USDC%20directly.%3C4%2F%3E%E2%80%A2%20Do%20%3C5%3ENOT%3C%2F5%3E%20transfer%20funds%20externally%20to%20create%20an%20ETH%20or%20USDC%20stream.%20Instead%2C%20use%20the%20%22Stream%20Funds%22%20action.%3C6%2F%3E%3C7%3ESupported%20Action%20Types%3C%2F7%3E%3C8%2F%3E%3C9%3E%E2%80%A2%20Transfer%20Funds%3A%20%3C%2F9%3ESend%20USDC%2C%20ETH%2C%20or%20stETH.%3C10%2F%3E%3C11%3E%E2%80%A2%20Stream%20Funds%3A%20%3C%2F11%3EStream%20USDC%20or%20WETH%20over%20time.%3C12%2F%3E%3C13%3E%E2%80%A2%20Function%20Call%3A%20%3C%2F13%3ECall%20a%20contract%20function./singular": 1366de49244a241a644f97066dc1a19b
     Fork/singular: ac679902f58855caa6bd270c5e0a8ba8
@@ -182,6 +181,7 @@ checksums:
     Deploy%20Nouns%20fork/singular: c570af6a4ce6119f26847141804d654b
     Proposer%20has%20%7B0%7D%20vote%7B1%7D/singular: 5c95c99e03ab776c1669b9efbf48c46c
     On-Chain%20Artwork/singular: 9abebda9940d5986a1aafd307fd6e1fc
+    Descriptor/singular: 8a3aa8880ae88f65a7a02ca675a2b78b
     You%20can%20settle%20manually%20in%201%20minute/singular: 9e471ac375eb2f152be45ee361b27b6f
     Nounders'%20Reward/singular: 620b72f78f4df2ac56477891d6563af5
     Voted%20with%3C0%3E%7BnumVotesForProp%7D%3C%2F0%3ENouns/singular: 6eb01c543f3c225898c362d3be28a7d5
@@ -189,13 +189,14 @@ checksums:
     One%20Noun%20is%20trustlessly%20auctioned%20every%2024%20hours%2C%20forever./singular: 6971d481ccb76b826faa0d4868e6ddda
     Error/singular: 3c95bcb32c2104b99a46f5b3dd015248
     Add%20Stream%20Date%20Details/singular: 8eddf5efc6069278f28bb8b6b277e322
+    Forks/singular: d692bdb4892481b1b4d9adf13b5b7ce0
+    Token/singular: b5c17093add6b79d42d55be14888d800
     Delegate%20%7BavailableVotes%7D%20Vote/singular: e1e815b2fa9d9a54bbefc94a3af5d142
     Ends%20on/singular: 8aa79cfa75d1b59252328f8263282a1f
     No%20candidates%20found/singular: eb32f25121d3d760218d4abe580c2c6d
     The%20proposal%20veto%20right%20was%20initially%20envisioned%20as%20a%20temporary%20solution%20to%20the%20problem%20of%20%E2%80%9851%25%20attacks%E2%80%99%20on%20the%20Nouns%20DAO%20treasury.%20While%20Nounders%20initially%20believed%20that%20a%20healthy%20distribution%20of%20Nouns%20would%20be%20sufficient%20protection%20for%20the%20DAO%2C%20a%20more%20complete%20understanding%20of%20the%20incentives%20and%20risks%20has%20led%20to%20general%20consensus%20within%20the%20Nounders%2C%20the%20Nouns%20Foundation%2C%20and%20the%20wider%20community%20that%20a%20more%20robust%20game-theoretic%20solution%20should%20be%20implemented%20before%20the%20right%20is%20removed./singular: 62711bf8931abdc48efb57035b4c2b5d
     ended%20%7B0%7D/singular: d86b54ed4c1632f943e14fc9b2a3394b
     Pending/singular: 030a6f3395d5d4efddd3cc67d6009039
-    Farcaster/singular: b09af25fcb497663e8594b9fc514b969
     at/singular: 282cf74a2c63ff46388104f9853bfaf8
     More%20details%20on%20how%20the%20dynamic%20threshold%20works%20can%20be%20found%20%3C0%3Ehere%3C%2F0%3E./singular: 26b30902ccfb3ab951cd976dfe8f46e3
     "%3C0%3EProposed%20by%3A%20%3C%2F0%3E%3C1%3E%7BproposerLink%7D%3C%2F1%3E%7BtransactionLink%7D/singular": d14fa2543e348511b140aa2df0715351
@@ -252,6 +253,7 @@ checksums:
     Signature%20request/singular: 48254a8c8dddb9799ab0ad5cde9ab6ff
     Governance%20%E2%80%98Slow%20Start%E2%80%99/singular: 74af386d282ad7595cdf72eb7f19027f
     Summary/singular: 13eb7b8a239fb4702dfdaee69100a220
+    Governor/singular: ef4ebb8563fa00be663c4322f43c09de
     Proposal%20candidates%20can%20be%20created%20by%20anyone.%20If%20a%20candidate%20receives%20enough%20signatures%20by%20Nouns%20voters%2C%20it%20can%20be%20promoted%20to%20a%20proposal./singular: 98820654f3510f7100e1dfb5a4e5ac14
     Signature%20invalid%20while%20signer%20has%20an%20active%20or%20pending%20proposal/singular: 50eaf4210723cd5d77654eea54431bbc
     There's%20a%20way%20for%20everyone%20to%20get%20involved%20with%20Nouns.%20From%20whimsical%20endeavors%20like%20naming%20a%20frog%2C%20to%20ambitious%20projects%20like%20constructing%20a%20giant%20float%20for%20the%20Rose%20Parade%2C%20or%20even%20crypto%20infrastructure%20like%20Prop%20House.%20Nouns%20funds%20projects%20of%20all%20sizes%20and%20domains./singular: b7b8e3c15e9e6411b517ab98d0a02988
@@ -287,6 +289,7 @@ checksums:
     m/singular: fdd6ed7636bb06ed894421209ca874d8
     ONE%20NOUN%2C/singular: cf7ada4d61e0b346461057194fd39901
     Submit/singular: 7c91ef5f747eea9f77a9c4f23e19fb2e
+    Auction/singular: 97b7895e7a7912a3dc308a55ef5944ca
     Because%20this%20proposal%20contains%20a%20USDC%20fund%20transfer%20action%20we've%20added%20an%20additional%20ETH%20transaction%20to%20refill%20the%20TokenBuyer%20contract.%20This%20action%20allows%20to%20DAO%20to%20continue%20to%20trustlessly%20acquire%20USDC%20to%20fund%20proposals%20like%20this./singular: a94d85010ed1f40bf80840bb34660c59
     Stream/singular: 04ec760d358f2647b962f00f1bb96c15
     Update%20proposal%20candidates%20must%20be%20re-signed%20by%20the%20original%20signers./singular: 05d267ebc285a53822595e0a4bf639b8

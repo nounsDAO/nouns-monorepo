@@ -71,15 +71,16 @@ msgstr ""
 msgid "You must have {0} votes to submit a proposal"
 msgstr ""
 
+#: src/components/Footer.tsx
+msgid "made with <0/>"
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Review Streaming Payment Action"
 msgstr ""
 
-#: src/components/Footer/index.tsx
-msgid "Twitter"
-msgstr ""
-
 #: src/pages/Playground/index.tsx
+#: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 #: src/components/Documentation/index.tsx
 msgid "Playground"
@@ -119,6 +120,7 @@ msgid "Add Function Call Arguments"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
+#: src/components/Footer.tsx
 #: src/components/NavBarTreasury/index.tsx
 msgid "Treasury"
 msgstr ""
@@ -502,10 +504,6 @@ msgstr ""
 msgid "Accessory"
 msgstr ""
 
-#: src/pages/Candidate/index.tsx
-msgid "Proposal Candidate Canceled!"
-msgstr ""
-
 #: src/components/Proposals/index.tsx
 msgid "Candidates submitted by community members will appear here."
 msgstr ""
@@ -805,6 +803,10 @@ msgstr ""
 msgid "On-Chain Artwork"
 msgstr ""
 
+#: src/components/Footer.tsx
+msgid "Descriptor"
+msgstr ""
+
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
 msgstr ""
@@ -833,6 +835,14 @@ msgstr ""
 msgid "Add Stream Date Details"
 msgstr ""
 
+#: src/components/Footer.tsx
+msgid "Forks"
+msgstr ""
+
+#: src/components/Footer.tsx
+msgid "Token"
+msgstr ""
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr ""
@@ -857,10 +867,6 @@ msgstr ""
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
-msgstr ""
-
-#: src/components/Footer/index.tsx
-msgid "Farcaster"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
@@ -1082,6 +1088,7 @@ msgstr ""
 
 #: src/pages/Governance/index.tsx
 #: src/pages/Forks/index.tsx
+#: src/components/Footer.tsx
 msgid "Governance"
 msgstr ""
 
@@ -1099,6 +1106,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Summary"
+msgstr ""
+
+#: src/components/Footer.tsx
+msgid "Governor"
 msgstr ""
 
 #: src/components/Proposals/index.tsx
@@ -1205,8 +1216,6 @@ msgstr ""
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/pages/Candidate/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -1273,6 +1282,10 @@ msgstr ""
 
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Submit"
+msgstr ""
+
+#: src/components/Footer.tsx
+msgid "Auction"
 msgstr ""
 
 #: src/pages/EditProposal/index.tsx
@@ -1371,6 +1384,7 @@ msgstr ""
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr ""
 
+#: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 msgid "Nouns & Traits"
 msgstr ""
@@ -1470,7 +1484,6 @@ msgid "Vote on Prop {0}"
 msgstr ""
 
 #: src/components/NounInfoCard.tsx
-#: src/components/Footer/index.tsx
 msgid "Etherscan"
 msgstr ""
 
@@ -1623,7 +1636,6 @@ msgid "Noun"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#: src/pages/Candidate/index.tsx
 msgid "Transaction Successful!"
 msgstr ""
 

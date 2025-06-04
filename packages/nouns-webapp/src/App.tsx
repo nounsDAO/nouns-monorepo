@@ -7,8 +7,9 @@ import { useAccount } from 'wagmi';
 
 import '@/css/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@/index.css';
 
-import Footer from '@/components/Footer';
+import { Footer } from '@/components/Footer';
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
 import { Toaster } from '@/components/ui/sonner';
