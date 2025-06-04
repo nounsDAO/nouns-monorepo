@@ -1,21 +1,12 @@
 import { Trans } from '@lingui/react/macro';
 import { Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
-import Section from '../../layout/Section';
+
+import Section from '@/layout/Section';
+
 import classes from './NounsIntroSection.module.css';
 
 const NounsIntroSection = () => {
-  const prophouseLink = (
-    <a
-      href="https://prop.house/"
-      target="_blank"
-      rel="noreferrer"
-      className={classes.nounsIntroLinks}
-    >
-      <Trans>Prop House</Trans>
-    </a>
-  );
-
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
@@ -37,7 +28,6 @@ const NounsIntroSection = () => {
           <iframe
             src="https://www.youtube.com/embed/lOzCA7bZG_k"
             title="YouTube video player"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
@@ -61,7 +51,6 @@ const NounsIntroSection = () => {
           <iframe
             src="https://www.youtube.com/embed/oa79nN4gMPs"
             title="YouTube video player"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
@@ -81,9 +70,9 @@ const NounsIntroSection = () => {
             </h1>
             <p>
               <Trans>
-                There's a way for everyone to get involved with Nouns. From whimsical endeavors like
-                naming a frog, to ambitious projects like constructing a giant float for the Rose
-                Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of
+                There&apos;s a way for everyone to get involved with Nouns. From whimsical endeavors
+                like naming a frog, to ambitious projects like constructing a giant float for the
+                Rose Parade, or even crypto infrastructure like Prop House. Nouns funds projects of
                 all sizes and domains.
               </Trans>
             </p>

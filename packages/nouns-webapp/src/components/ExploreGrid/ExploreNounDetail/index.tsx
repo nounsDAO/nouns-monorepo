@@ -1,49 +1,78 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useNounSeed } from '../../../wrappers/nounToken';
-import { BigNumber } from 'ethers';
-import { StandalonePart } from '../../StandalonePart';
-import classes from './ExploreNounDetail.module.css';
-import { ImageData } from '@noundry/nouns-assets';
-import { Trans } from '@lingui/react/macro';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+
 import { XIcon } from '@heroicons/react/solid';
-import NounInfoRowBirthday from '../../NounInfoRowBirthday';
-import loadingNoun from '../../../assets/loading-skull-noun.gif';
-import Placeholder from 'react-bootstrap/Placeholder';
+import { Trans } from '@lingui/react/macro';
+import { ImageData } from '@noundry/nouns-assets';
+import cx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'react-bootstrap/Image';
-import cx from 'classnames';
+import Placeholder from 'react-bootstrap/Placeholder';
 import { useSwipeable } from 'react-swipeable';
+
+import loadingNoun from '@/assets/loading-skull-noun.gif';
+import { StandalonePart } from '@/components/StandalonePart';
+import { useNounSeed } from '@/wrappers/nounToken';
+
+import classes from './ExploreNounDetail.module.css';
 
 type Noun = {
   id: number | null;
   imgSrc: string | undefined;
 };
+
 interface ExploreNounDetailProps {
   nounId: number;
   noun: Noun;
   nounCount: number;
-  handleCloseDetail: Function;
-  handleNounNavigation: Function;
-  handleFocusNoun: Function;
-  handleScrollTo: Function;
+  handleCloseDetail: () => void;
+  handleNounNavigation: (direction: string) => void;
+  handleFocusNoun: (nounId: number) => void;
+  handleScrollTo: (nounId?: number) => void;
   selectedNoun?: number;
   isVisible: boolean;
-  setIsNounHoverDisabled: Function;
+  setIsNounHoverDisabled: (isDisabled: boolean) => void;
   disablePrev: boolean;
   disableNext: boolean;
 }
 
-const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
+const parseTraitName = (partName: string): string =>
+  capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1).replace(/-/g, ' '));
+const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (traitType: string) => {
+  switch (traitType) {
+    case 'background':
+      return <Trans key="background">Background</Trans>;
+    case 'body':
+      return <Trans key="body">Body</Trans>;
+    case 'accessory':
+      return <Trans key="accessory">Accessory</Trans>;
+    case 'head':
+      return <Trans key="head">Head</Trans>;
+    case 'glasses':
+      return <Trans key="glasses">Glasses</Trans>;
+    default:
+      throw new Error(`Trait key for ${traitType} not found`);
+  }
+};
+
+const ExploreNounDetail: React.FC<ExploreNounDetailProps> = ({
+  disableNext,
+  disablePrev,
+  handleCloseDetail,
+  handleNounNavigation,
+  handleScrollTo,
+  noun,
+  selectedNoun,
+  setIsNounHoverDisabled,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+}) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const seedId =
-    props.noun?.id != null && props.noun?.id >= 0
-      ? BigNumber.from(props.noun.id)
-      : BigNumber.from(0);
+  const seedId = noun?.id != null && noun?.id >= 0 ? BigInt(noun.id) : BigInt(0);
   const seed = useNounSeed(seedId);
   const bgcolors = ['#d5d7e1', '#e1d7d5'];
   const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
-  const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
-
+  const nounId = noun && noun.id != null && noun.id >= 0 ? noun.id : null;
   const isMobile: boolean = width <= 991;
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -57,35 +86,20 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     };
   }, []);
 
-  // Modified from playground function to remove dashes in filenames
-  const parseTraitName = (partName: string): string =>
-    capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1).replace(/-/g, ' '));
-  const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-
-  const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode => {
-    const traitMap = new Map([
-      ['background', <Trans>Background</Trans>],
-      ['body', <Trans>Body</Trans>],
-      ['accessory', <Trans>Accessory</Trans>],
-      ['head', <Trans>Head</Trans>],
-      ['glasses', <Trans>Glasses</Trans>],
-    ]);
-    return traitMap.get(s);
-  };
-
-  const traitTypeKeys = (s: string) => {
-    const traitMap = new Map([
-      ['background', 'backgrounds'],
-      ['body', 'bodies'],
-      ['accessory', 'accessories'],
-      ['head', 'heads'],
-      ['glasses', 'glasses'],
-    ]);
-    const result = traitMap.get(s);
-    if (result) {
-      return result;
-    } else {
-      throw new Error(`Trait key for ${s} not found`);
+  const traitCategory = (traitType: string): string => {
+    switch (traitType) {
+      case 'background':
+        return 'backgrounds';
+      case 'body':
+        return 'bodies';
+      case 'accessory':
+        return 'accessories';
+      case 'head':
+        return 'heads';
+      case 'glasses':
+        return 'glasses';
+      default:
+        throw new Error(`Trait key for ${traitType} not found`);
     }
   };
 
@@ -103,75 +117,38 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     body: number;
     background: number;
   }) => {
-    let nounTraitsOrdered;
-    const loadingNounTraits = [
+    return [
       {
         partType: 'head',
-        partName: 'Skull',
-        partIndex: -1,
+        partName: seed ? parseTraitName(traitNames[3][seed.head]) : 'Skull',
+        partIndex: seed ? seed.head : -1,
       },
       {
         partType: 'glasses',
-        partName: 'Processing',
-        partIndex: -1,
+        partName: seed ? parseTraitName(traitNames[4][seed.glasses]) : 'Processing',
+        partIndex: seed ? seed.glasses : -1,
       },
       {
         partType: 'accessory',
-        partName: 'Loading',
-        partIndex: -1,
+        partName: seed ? parseTraitName(traitNames[2][seed.accessory]) : 'Loading',
+        partIndex: seed ? seed.accessory : -1,
       },
       {
         partType: 'body',
-        partName: 'Placeholder',
-        partIndex: -1,
+        partName: seed ? parseTraitName(traitNames[1][seed.body]) : 'Placeholder',
+        partIndex: seed ? seed.body : -1,
       },
       {
         partType: 'background',
-        partName: 'cool',
-        partIndex: -1,
+        partName: seed ? parseTraitName(traitNames[0][seed.background]) : 'cool',
+        partIndex: seed ? seed.background : -1,
       },
     ];
-
-    if (seed) {
-      nounTraitsOrdered = [
-        {
-          partType: 'head',
-          partName: parseTraitName(traitNames[3][seed.head]),
-          partIndex: seed.head,
-        },
-        {
-          partType: 'glasses',
-          partName: parseTraitName(traitNames[4][seed.glasses]),
-          partIndex: seed.glasses,
-        },
-        {
-          partType: 'accessory',
-          partName: parseTraitName(traitNames[2][seed.accessory]),
-          partIndex: seed.accessory,
-        },
-        {
-          partType: 'body',
-          partName: parseTraitName(traitNames[1][seed.body]),
-          partIndex: seed.body,
-        },
-        {
-          partType: 'background',
-          partName: parseTraitName(traitNames[0][seed.background]),
-          partIndex: seed.background,
-        },
-      ];
-    }
-
-    if (nounTraitsOrdered) {
-      return nounTraitsOrdered;
-    } else {
-      return loadingNounTraits;
-    }
   };
 
   const handlers = useSwipeable({
-    onSwipedLeft: () => !props.disableNext && props.handleNounNavigation('next'),
-    onSwipedRight: () => !props.disablePrev && props.handleNounNavigation('prev'),
+    onSwipedLeft: () => !disableNext && handleNounNavigation('next'),
+    onSwipedRight: () => !disablePrev && handleNounNavigation('prev'),
     swipeDuration: 500,
     preventScrollOnSwipe: true,
     trackMouse: true,
@@ -179,10 +156,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
   const nounTraitsOrdered = getOrderedTraits(seed);
   const handleAnimationStart = () => {
-    props.setIsNounHoverDisabled(true);
+    setIsNounHoverDisabled(true);
   };
   const handleAnimationComplete = () => {
-    props.handleScrollTo(props.selectedNoun);
+    handleScrollTo(selectedNoun);
   };
   const motionVariants = {
     initial: {
@@ -224,10 +201,15 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         exit="exit"
         onAnimationStart={() => handleAnimationStart()}
         onAnimationComplete={definition => {
-          !isMobile && definition === 'animate' && handleAnimationComplete();
-          !isMobile &&
-            definition === 'exit' &&
+          if (isMobile) {
+            return;
+          }
+          if (definition === 'animate') {
+            handleAnimationComplete();
+          }
+          if (definition === 'exit') {
             window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+          }
         }}
         {...handlers}
       >
@@ -243,16 +225,13 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             },
           }}
         >
-          <button className={classes.close} onClick={() => props.handleCloseDetail()}>
+          <button className={classes.close} onClick={() => handleCloseDetail()}>
             <XIcon className={classes.icon} />
           </button>
-          <div
-            className={classes.detailNounImage}
-            onClick={() => props.handleScrollTo(props.selectedNoun)}
-          >
+          <div className={classes.detailNounImage} onClick={() => handleScrollTo(selectedNoun)}>
             {nounId !== null && seed ? (
               <Image
-                src={props.noun.imgSrc || `https://noun.pics/${nounId}.svg`}
+                src={noun.imgSrc || `https://noun.pics/${nounId}.svg`}
                 alt={`Noun ${nounId}`}
               />
             ) : (
@@ -263,12 +242,12 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
           <div className={classes.nounDetails}>
             <div className={classes.infoWrap}>
               <button
-                onClick={() => props.handleNounNavigation('prev')}
+                onClick={() => handleNounNavigation('prev')}
                 className={cx(
                   classes.arrow,
                   backgroundColor === bgcolors[0] ? classes.arrowCool : classes.arrowWarm,
                 )}
-                disabled={props.disablePrev}
+                disabled={disablePrev}
               >
                 ←
               </button>
@@ -276,19 +255,18 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 {nounId !== null && seed ? (
                   <>
                     <h2>Noun {nounId}</h2>
-                    <NounInfoRowBirthday nounId={nounId} />
                   </>
                 ) : (
                   <h2>Loading</h2>
                 )}
               </div>
               <button
-                onClick={() => props.handleNounNavigation('next')}
+                onClick={() => handleNounNavigation('next')}
                 className={cx(
                   classes.arrow,
                   backgroundColor === bgcolors[0] ? classes.arrowCool : classes.arrowWarm,
                 )}
-                disabled={props.disableNext}
+                disabled={disableNext}
               >
                 →
               </button>
@@ -297,7 +275,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             <ul className={classes.traitsList}>
               {nounTraitsOrdered &&
                 Object.values(nounTraitsOrdered).map((part, index) => {
-                  const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
+                  const partType = traitCategory(nounTraitsOrdered[index].partType);
                   return (
                     <li key={partType} id={partType}>
                       <div
@@ -350,7 +328,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             {nounId !== null && seed && (
               <p className={classes.activityLink}>
                 <a href={`/noun/${nounId}`}>
-                  <Trans>Vote history</Trans>
+                  <Trans>Go to auction</Trans>
                 </a>
               </p>
             )}

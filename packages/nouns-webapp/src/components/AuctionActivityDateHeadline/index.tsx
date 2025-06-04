@@ -1,16 +1,20 @@
-import { BigNumber } from 'ethers';
+import React from 'react';
+
+import { i18n } from '@lingui/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+
+import { useAppSelector } from '@/hooks';
+
 import classes from './AuctionActivityDateHeadline.module.css';
-import { useAppSelector } from '../../hooks';
-import { i18n } from '@lingui/core';
 
 dayjs.extend(utc);
 
-const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props => {
+type AuctionActivityDateHeadlineProps = { startTime: bigint };
+const AuctionActivityDateHeadline: React.FC<AuctionActivityDateHeadlineProps> = props => {
   const { startTime } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const auctionStartTimeUTC = dayjs(startTime.toNumber() * 1000)
+  const auctionStartTimeUTC = dayjs(Number(startTime) * 1000)
     .utc()
     .format('MMMM DD, YYYY');
   return (

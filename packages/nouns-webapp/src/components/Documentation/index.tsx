@@ -1,15 +1,54 @@
-import Section from '../../layout/Section';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
-import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
-import Link from '../Link';
-import { Trans } from '@lingui/react/macro';
+
+import Link from '@/components/Link';
+import {
+  useReadNounsDescriptorAccessoryCount,
+  useReadNounsDescriptorBackgroundCount,
+  useReadNounsDescriptorBodyCount,
+  useReadNounsDescriptorHeadCount,
+  useReadNounsDescriptorGlassesCount,
+} from '@/contracts';
+import Section from '@/layout/Section';
+import { cn } from '@/lib/utils';
+
+import classes from './Documentation.module.css';
 
 interface DocumentationProps {
   backgroundColor?: string;
 }
 
+function NounTraits() {
+  const { data: accessoryCount } = useReadNounsDescriptorAccessoryCount();
+  const { data: backgroundCount } = useReadNounsDescriptorBackgroundCount();
+  const { data: bodyCount } = useReadNounsDescriptorBodyCount();
+  const { data: headCount } = useReadNounsDescriptorHeadCount();
+  const { data: glassesCount } = useReadNounsDescriptorGlassesCount();
+
+  return (
+    <ul>
+      <li>
+        <Trans>backgrounds ({backgroundCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>bodies ({bodyCount?.toString()})</Trans>
+      </li>
+      <li>
+        <Trans>accessories ({accessoryCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>heads ({headCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>glasses ({glassesCount?.toString()})</Trans>
+      </li>
+    </ul>
+  );
+}
+
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
+  const { t } = useLingui();
   const cryptopunksLink = (
     <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
   );
@@ -33,7 +72,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
   return (
     <Section
       fullWidth={false}
-      className={classes.documentationSection}
+      className={cn(classes.documentationSection, '-mb-10 sm:-mb-20')}
       style={{ background: props.backgroundColor }}
     >
       <Col lg={{ span: 10, offset: 1 }}>
@@ -149,6 +188,45 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
+              <Trans>Nouns DUNA</Trans>
+            </Accordion.Header>
+            <Accordion.Body>
+              <p>
+                <Trans>
+                  Nouns DUNA is a legally recognized Decentralized Unincorporated Nonprofit
+                  Association established in Wyoming via{' '}
+                  <Link text="Proposal 727" url="https://nouns.wtf/vote/727" leavesPage={true} />{' '}
+                  designed to provide a robust legal framework that aligns with the decentralized
+                  nature of Nouns DAO. This structure allows Nouns DAO to operate with limited
+                  liability protection and legal clarity without compromising its decentralized
+                  governance ethos.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  Under Wyoming&apos;s DUNA Act, Nouns DAO can hold assets, enter into contracts,
+                  and participate in legal actions in its own name. Governance remains fully
+                  decentralized, with decisions controlled exclusively by Noun holders via on-chain
+                  voting. This enables Nouns DAO to sustainably fund projects, manage its treasury,
+                  and interact confidently within both the digital and physical worlds.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking
+                  to balance decentralized autonomy with legal certainty, further solidifying its
+                  position at the forefront of decentralized governance innovation.
+                </Trans>
+              </p>
+              <Link
+                text={t`Learn more about the DUNA`}
+                url="https://a16zcrypto.com/posts/article/duna-for-daos/"
+                leavesPage={true}
+              />
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="4" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -188,13 +266,25 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                 </Trans>
               </p>
               <ul>
-                <li>unequally withdraw the treasury for personal gain</li>
-                <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
                 <li>
-                  attempt to alter Noun auction cadence for the purpose of maintaining or acquiring
-                  a voting majority
+                  <Trans>unequally withdraw the treasury for personal gain</Trans>
                 </li>
-                <li>make upgrades to critical smart contracts without undergoing an audit</li>
+                <li>
+                  <Trans>
+                    bribe voters to facilitate withdraws of the treasury for personal gain
+                  </Trans>
+                </li>
+                <li>
+                  <Trans>
+                    attempt to alter Noun auction cadence for the purpose of maintaining or
+                    acquiring a voting majority
+                  </Trans>
+                </li>
+                <li>
+                  <Trans>
+                    make upgrades to critical smart contracts without undergoing an audit
+                  </Trans>
+                </li>
               </ul>
               <p>
                 <Trans>
@@ -205,41 +295,25 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="4" className={classes.accordionItem}>
+          <Accordion.Item eventKey="5" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  Nouns are generated randomly based Ethereum block hashes. There are no 'if'
-                  statements or other rules governing Noun trait scarcity, which makes all Nouns
-                  equally rare. As of this writing, Nouns are made up of:
+                  Nouns are generated randomly based Ethereum block hashes. There are no
+                  &apos;if&apos; statements or other rules governing Noun trait scarcity, which
+                  makes all Nouns equally rare. As of this writing, Nouns are made up of:
                 </Trans>
               </p>
-              <ul>
-                <li>
-                  <Trans>backgrounds (2) </Trans>
-                </li>
-                <li>
-                  <Trans>bodies (30)</Trans>
-                </li>
-                <li>
-                  <Trans>accessories (140) </Trans>
-                </li>
-                <li>
-                  <Trans>heads (242) </Trans>
-                </li>
-                <li>
-                  <Trans>glasses (23)</Trans>
-                </li>
-              </ul>
+              <NounTraits />
               <Trans>
                 You can experiment with off-chain Noun generation at the {playgroundLink}.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="5" className={classes.accordionItem}>
+          <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
@@ -264,7 +338,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="6" className={classes.accordionItem}>
+          <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
@@ -278,9 +352,9 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   generation:
                 </Trans>
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
-              <br />
-              <br />
+              <code className="mb-2 mt-6 block">
+                keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
+              </code>
               <p>
                 <Trans>
                   Trait generation is not truly random. Traits can be predicted when minting a Noun
@@ -289,15 +363,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="7" className={classes.accordionItem}>
+          <Accordion.Item eventKey="8" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nounder's Reward</Trans>
+              <Trans>Nounder&apos;s Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Nounders' are the group of ten builders that initiated Nouns. Here are the
-                  Nounders:
+                  &apos;Nounders&apos; are the group of ten builders that initiated Nouns. Here are
+                  the Nounders:
                 </Trans>
               </p>
               <ul>
@@ -349,15 +423,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen
                   to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the
                   project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  Nounder's multisig to be vested and shared among the founding members of the
+                  Nounder&apos;s multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
-                  are sent directly to the Nounder's Multisig, and auctions continue on schedule
-                  with the next available Noun ID.
+                  Nounder distributions don&apos;t interfere with the cadence of 24 hour auctions.
+                  Nouns are sent directly to the Nounder&apos;s Multisig, and auctions continue on
+                  schedule with the next available Noun ID.
                 </Trans>
               </p>
             </Accordion.Body>

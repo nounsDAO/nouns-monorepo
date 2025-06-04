@@ -1,17 +1,21 @@
-import { Button, Row, Col } from 'react-bootstrap';
-import { useAppSelector } from '../../hooks';
-import classes from './Winner.module.css';
-import ShortAddress from '../ShortAddress';
-import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
-import { Trans } from '@lingui/react/macro';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
+import type { Address } from '@/utils/types';
+
 import React from 'react';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import Tooltip from '../Tooltip';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import { Col, Row } from 'react-bootstrap';
+
+import ShortAddress from '@/components/ShortAddress';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { buildEtherscanAddressLink } from '@/utils/etherscan';
+
+import classes from './Winner.module.css';
 
 interface WinnerProps {
-  winner: string;
+  winner: Address;
   isNounders?: boolean;
 }
 
@@ -20,7 +24,6 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const isMobile = isMobileScreen();
 
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
@@ -39,30 +42,6 @@ const Winner: React.FC<WinnerProps> = props => {
           <Trans>You</Trans>
         </h2>
       </Col>
-      {!isMobile && (
-        <Col>
-          <a
-            href="https://nouns.center/groups"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Get Involved</Trans>
-            </Button>
-          </a>
-          <a
-            href="https://www.nounsagora.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Delegate</Trans>
-            </Button>
-          </a>
-        </Col>
-      )}
     </Row>
   ) : (
     <ShortAddress size={40} address={winner} avatar={true} />
@@ -75,14 +54,11 @@ const Winner: React.FC<WinnerProps> = props => {
       rel="noreferrer"
       className={classes.link}
     >
-      <Tooltip
-        tip="View on Etherscan"
-        tooltipContent={(tip: string) => {
-          return <Trans>View on Etherscan</Trans>;
-        }}
-        id="holder-etherscan-tooltip"
-      >
-        nounders.eth
+      <Tooltip>
+        <TooltipContent id="holder-etherscan-tooltip">
+          <Trans>View on Etherscan</Trans>
+        </TooltipContent>
+        <TooltipTrigger>nounders.eth</TooltipTrigger>
       </Tooltip>
     </a>
   );
@@ -111,30 +87,6 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      {isWinnerYou && isMobile && (
-        <Row>
-          <a
-            href="https://nouns.center/groups"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Get Involved</Trans>
-            </Button>
-          </a>
-          <a
-            href="https://www.nounsagora.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>Delegate</Trans>
-            </Button>
-          </a>
-        </Row>
-      )}
     </>
   );
 };

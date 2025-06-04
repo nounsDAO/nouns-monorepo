@@ -1,7 +1,10 @@
 import React from 'react';
+
 import { Image } from 'react-bootstrap';
+
+import { useAppSelector } from '@/hooks';
+
 import classes from './NounInfoRowButton.module.css';
-import { useAppSelector } from '../../hooks';
 
 interface NounInfoRowButtonProps {
   iconImgSource: string;
@@ -18,7 +21,7 @@ const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
       onClick={onClickHandler}
     >
       <div className={classes.nounButtonContents}>
-        <Image src={iconImgSource} className={classes.buttonIcon} />
+        <Image src={iconImgSource} className="my-auto mr-1.5 size-5" />
         {btnText}
       </div>
     </div>

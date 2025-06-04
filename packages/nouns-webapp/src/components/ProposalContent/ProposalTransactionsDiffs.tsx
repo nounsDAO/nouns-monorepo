@@ -1,7 +1,11 @@
-import { ProposalDetail } from '../../wrappers/nounsDao';
-import classes from './ProposalContent.module.css';
 import ReactDiffViewer from 'react-diff-viewer';
+
+import { ProposalDetail } from '@/wrappers/nounsDao';
+
+import classes from './ProposalContent.module.css';
 import ProposalTransaction from './ProposalTransaction';
+import { Address } from '@/utils/types';
+import { Hex } from 'viem';
 
 type Props = {
   oldTransactions: ProposalDetail[];
@@ -9,18 +13,14 @@ type Props = {
   activeVersionNumber: number;
 };
 
-export default function ProposalTransactions({
-  oldTransactions,
-  newTransactions,
-  activeVersionNumber,
-}: Props) {
+export default function ProposalTransactions({ oldTransactions, newTransactions }: Props) {
   const buildTxObject = (tx: ProposalDetail) => {
     if (!tx) {
       return {
-        target: '',
+        target: '' as Address,
         functionSig: '',
-        value: '',
-        callData: '',
+        value: 0n,
+        callData: '' as Hex,
       };
     }
     return {
@@ -42,9 +42,7 @@ export default function ProposalTransactions({
   });
 
   const stringifyTx = (tx: ProposalDetail) => {
-    const item =
-      tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
-    return item;
+    return tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
   };
 
   const isEmptyTx = (tx: ProposalDetail) => {

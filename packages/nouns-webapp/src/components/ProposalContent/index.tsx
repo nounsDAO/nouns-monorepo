@@ -1,22 +1,26 @@
 import React from 'react';
+
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
-import { ProposalDetail } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
+import { isAddress } from 'viem';
+
+import linkIcon from '@/assets/icons/Link.svg';
+import EnsOrLongAddress from '@/components/EnsOrLongAddress';
+import { nounsTokenAddress } from '@/contracts';
 import {
   buildEtherscanAddressLink,
   buildEtherscanHoldingsLink,
   buildEtherscanTxLink,
-} from '../../utils/etherscan';
-import { utils } from 'ethers';
+} from '@/utils/etherscan';
+import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { defaultChain } from '@/wagmi';
+import { ProposalDetail } from '@/wrappers/nounsDao';
+
 import classes from './ProposalContent.module.css';
-import { Trans } from '@lingui/react/macro';
-import EnsOrLongAddress from '../EnsOrLongAddress';
-import clsx from 'clsx';
 import ProposalTransactions from './ProposalTransactions';
-import linkIcon from '../../assets/icons/Link.svg';
-import config from '../../config';
 
 interface ProposalContentProps {
   description: string;
@@ -27,7 +31,7 @@ interface ProposalContentProps {
 }
 
 export const linkIfAddress = (content: string) => {
-  if (utils.isAddress(content)) {
+  if (isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
         <EnsOrLongAddress address={content} />
@@ -54,9 +58,8 @@ export const transactionIconLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { description, title, details } = props;
-  const daoEtherscanLink = buildEtherscanHoldingsLink(
-    config.addresses.nounsDaoExecutor ?? '', // This should always point at the V1 executor
-  );
+  const chainId = defaultChain.id;
+  const daoEtherscanLink = buildEtherscanHoldingsLink(nounsTokenAddress[chainId]);
 
   return (
     <>
@@ -66,11 +69,9 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <Trans>Description</Trans>
           </h5>
           {description && (
-            <ReactMarkdown
-              className={classes.markdown}
-              children={processProposalDescriptionText(description, title)}
-              remarkPlugins={[remarkBreaks]}
-            />
+            <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
+              {processProposalDescriptionText(description, title)}
+            </ReactMarkdown>
           )}
         </Col>
       </Row>

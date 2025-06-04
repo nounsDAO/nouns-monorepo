@@ -1,8 +1,11 @@
-import classes from './ProposalStatus.module.css';
-import { ProposalState } from '../../wrappers/nounsDao';
 import React from 'react';
-import clsx from 'clsx';
+
 import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+
+import { ProposalState } from '@/wrappers/nounsDao';
+
+import classes from './ProposalStatus.module.css';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {

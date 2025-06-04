@@ -1,63 +1,69 @@
-import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import type { Address } from '@/utils/types';
+
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+
+import { useQuery } from '@apollo/client';
+import { SearchIcon } from '@heroicons/react/solid';
+import { i18n } from '@lingui/core';
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import en from 'dayjs/locale/en';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { Link, useParams } from 'react-router';
+import ReactTooltip from 'react-tooltip';
+import { isNonNullish } from 'remeda';
+import { toast } from 'sonner';
+import { zeroAddress } from 'viem';
+import { useAccount, useBlockNumber } from 'wagmi';
+
+import DynamicQuorumInfoModal from '@/components/DynamicQuorumInfoModal';
+import ProposalContent from '@/components/ProposalContent';
+import ProposalHeader from '@/components/ProposalHeader';
+import ShortAddress from '@/components/ShortAddress';
+import StreamWithdrawModal from '@/components/StreamWithdrawModal';
+import VoteCard, { VoteCardVariant } from '@/components/VoteCard';
+import VoteModal from '@/components/VoteModal';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import { useReadNounsGovernorQuorumVotes } from '@/contracts';
+import { useAppSelector } from '@/hooks';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
+import Section from '@/layout/Section';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import { getNounVotes } from '@/utils/getNounsVotes';
+import { isProposalUpdatable } from '@/utils/proposals';
+import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
 import {
   PartialProposal,
   ProposalState,
   ProposalVersion,
   useCancelProposal,
-  useCurrentQuorum,
   useExecuteProposal,
-  useExecuteProposalOnTimelockV1,
   useHasVotedOnProposal,
   useIsDaoGteV3,
+  useIsForkActive,
   useProposal,
   useProposalVersions,
   useQueueProposal,
-  useIsForkActive,
-} from '../../wrappers/nounsDao';
-import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
-import classes from './Vote.module.css';
-import { Link } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
-import en from 'dayjs/locale/en';
-import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import clsx from 'clsx';
-import ProposalHeader from '../../components/ProposalHeader';
-import ProposalContent from '../../components/ProposalContent';
-import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
-import { useQuery } from '@apollo/client';
+} from '@/wrappers/nounsDao';
+import { useProposalFeedback } from '@/wrappers/nounsData';
+import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import {
-  proposalVotesQuery,
   delegateNounsAtBlockQuery,
-  ProposalVotes,
   Delegates,
+  ProposalVotes,
+  proposalVotesQuery,
   propUsingDynamicQuorum,
-} from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
-import { Trans } from '@lingui/react/macro';
-import { i18n } from '@lingui/core';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
-import { SearchIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
-import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
-import config from '../../config';
-import ShortAddress from '../../components/ShortAddress';
-import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import { isProposalUpdatable } from '../../utils/proposals';
-import { useProposalFeedback } from '../../wrappers/nounsData';
-import { useParams } from 'react-router';
+} from '@/wrappers/subgraph';
+
+import classes from './Vote.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -65,14 +71,14 @@ dayjs.extend(advanced);
 
 const getUpdatableCountdownCopy = (
   proposal: PartialProposal,
-  currentBlock: number,
+  currentBlock: bigint,
   locale: SupportedLocale,
 ) => {
   const timestamp = Date.now();
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.updatePeriodEndBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.updatePeriodEndBlock - BigInt(currentBlock)),
           'seconds',
         )
       : undefined;
@@ -86,23 +92,22 @@ const getUpdatableCountdownCopy = (
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const VotePage = () => {
   const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
-  // Toggle between Noun centric view and delegate view
-  const [isDelegateView, setIsDelegateView] = useState(false);
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
   const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
-    streamAddress: string;
+    streamAddress: Address;
     startTime: number;
     endTime: number;
     streamAmount: number;
-    tokenAddress: string;
+    tokenAddress: Address;
   } | null>(null);
   // if objection period is active, then we are in objection period, unless the current block is greater than the end block
   const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
@@ -111,31 +116,28 @@ const VotePage = () => {
   const proposal = useProposal(Number(id));
   const proposalVersions = useProposalVersions(Number(id));
   const activeLocale = useActiveLocale();
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const { account } = useEthers();
-  const {
-    data: dqInfo,
-    loading: loadingDQInfo,
-    error: dqError,
-  } = useQuery(propUsingDynamicQuorum(id ?? '0'));
+  const { _ } = useLingui();
+  const { address: account } = useAccount();
+  const { query, variables } = propUsingDynamicQuorum(id ?? '0');
+  const { data: dqInfo, loading: loadingDQInfo, error: dqError } = useQuery(query, { variables });
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
-  const { executeProposalOnTimelockV1, executeProposalOnTimelockV1State } =
-    useExecuteProposalOnTimelockV1();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
   const isDaoGteV3 = useIsDaoGteV3();
-  const proposalFeedback = useProposalFeedback(Number(id).toString(), dataFetchPollInterval);
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const { data: proposalFeedback, refetch: proposalFeedbackRefetch } = useProposalFeedback(
+    Number(id).toString(),
+    dataFetchPollInterval,
+  );
+  const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const forkActiveState = useIsForkActive();
   const [isForkActive, setIsForkActive] = useState<boolean>(false);
   // Get and format date from data
   const timestamp = Date.now();
-  const currentBlock = useBlockNumber();
+  const { data: currentBlock } = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.startBlock - BigInt(currentBlock)),
           'seconds',
         )
       : undefined;
@@ -146,7 +148,10 @@ const VotePage = () => {
       : proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(endBlock! - BigInt(currentBlock)),
+          'seconds',
+        )
       : undefined;
   const now = dayjs();
 
@@ -161,54 +166,61 @@ const VotePage = () => {
   // Use user votes as of the current or proposal snapshot block
   const currentOrSnapshotBlock = useMemo(
     () =>
-      Math.min(proposal?.voteSnapshotBlock ?? 0, currentBlock ? currentBlock - 1 : 0) || undefined,
-    [proposal, currentBlock],
+      Math.min(
+        Number(proposal?.voteSnapshotBlock) ?? 0,
+        currentBlock ? Number(currentBlock - 1n) : 0,
+      ) || undefined,
+    [currentBlock, proposal?.voteSnapshotBlock],
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
   // Get user votes as of current block to use in vote signals
   const userVotesNow = useUserVotes() || 0;
-  const currentQuorum = useCurrentQuorum(
-    config.addresses.nounsDAOProxy,
-    proposal && proposal.id ? parseInt(proposal.id) : 0,
-    dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
-  );
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore Type instantiation is excessively deep and possibly infinite.
+  const { data: currentQuorum } = useReadNounsGovernorQuorumVotes({
+    args: [proposal && proposal.id ? BigInt(proposal.id) : 0n],
+    query: {
+      enabled: dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
+    },
+  });
 
   const getVersionTimestamp = (proposalVersions: ProposalVersion[]) => {
     const versionDetails = proposalVersions[proposalVersions.length - 1];
     return versionDetails?.createdAt;
   };
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
-  const isInNonFinalState = [
-    ProposalState.UPDATABLE,
-    ProposalState.PENDING,
-    ProposalState.ACTIVE,
-    ProposalState.SUCCEEDED,
-    ProposalState.QUEUED,
-    ProposalState.OBJECTION_PERIOD,
-  ].includes(proposal?.status!);
+  const isInNonFinalState =
+    proposal?.status !== undefined &&
+    [
+      ProposalState.UPDATABLE,
+      ProposalState.PENDING,
+      ProposalState.ACTIVE,
+      ProposalState.SUCCEEDED,
+      ProposalState.QUEUED,
+      ProposalState.OBJECTION_PERIOD,
+    ].includes(proposal.status);
   const signers = proposal && proposal?.signers?.map(signer => signer.id.toLowerCase());
-  const isProposalSigner =
-    account && proposal && signers && signers.includes(account?.toLowerCase()) ? true : false;
+  const isProposalSigner = !!(
+    account &&
+    proposal &&
+    signers &&
+    signers.includes(account?.toLowerCase())
+  );
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
   const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isUpdateable = () => {
     if (!isDaoGteV3) return false;
-    if (
+    return !!(
       proposal &&
       currentBlock &&
       isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
-    ) {
-      return true;
-    }
-    return false;
+    );
   };
 
   const isCancellable = () => {
-    if (isInNonFinalState && (isProposalSigner || isProposer())) {
-      return true;
-    }
-    return false;
+    return isInNonFinalState && (isProposalSigner || isProposer());
   };
 
   const isAwaitingStateChange = () => {
@@ -222,10 +234,7 @@ const VotePage = () => {
   };
 
   const isAwaitingDestructiveStateChange = () => {
-    if (isCancellable()) {
-      return true;
-    }
-    return false;
+    return isCancellable();
   };
 
   const isActionable = () => {
@@ -235,11 +244,7 @@ const VotePage = () => {
       return true;
     } else if (isAwaitingDestructiveStateChange()) {
       return true;
-    } else if (isUpdateable()) {
-      return true;
-    } else {
-      return false;
-    }
+    } else return isUpdateable();
   };
 
   const startOrEndTimeCopy = () => {
@@ -259,14 +264,12 @@ const VotePage = () => {
     return endDate;
   };
   const objectionEnd = () => {
-    const time =
-      proposal && timestamp && currentBlock
-        ? dayjs(timestamp).add(
-            AVERAGE_BLOCK_TIME_IN_SECS * (proposal.objectionPeriodEndBlock! - currentBlock),
-            'seconds',
-          )
-        : undefined;
-    return time;
+    return proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.objectionPeriodEndBlock! - currentBlock),
+          'seconds',
+        )
+      : undefined;
   };
 
   const objectionEndTime = i18n.date(new Date(objectionEnd()?.toISOString() || 0), {
@@ -287,16 +290,17 @@ const VotePage = () => {
     if (hasSucceeded) {
       return () => {
         if (proposal?.id) {
-          return queueProposal(proposal.id);
+          return queueProposal({ args: [BigInt(proposal.id)] });
         }
       };
     }
+    // eslint-disable-next-line sonarjs/function-return-type
     return () => {
       if (proposal?.id) {
         if (proposal?.onTimelockV1) {
-          return executeProposalOnTimelockV1(proposal.id);
+          return true;
         } else {
-          return executeProposal(proposal.id);
+          return executeProposal({ args: [BigInt(proposal.id)] });
         }
       }
     };
@@ -307,25 +311,31 @@ const VotePage = () => {
     if (isCancellable()) {
       return () => {
         if (proposal?.id) {
-          return cancelProposal(proposal.id);
+          return cancelProposal({ args: [BigInt(proposal.id)] });
         }
       };
     }
   })();
 
-  const handleRefetchData = () => {
-    proposalFeedback.refetch();
+  const handleRefetchData = async () => {
+    await proposalFeedbackRefetch();
   };
 
   const onTransactionStateChange = useCallback(
     (
-      tx: TransactionStatus,
-      successMessage?: ReactNode,
+      {
+        errorMessage,
+        status,
+      }: {
+        status: string;
+        errorMessage?: string;
+      },
+      successMessage?: string,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => ReactNode | undefined,
+      getErrorMessage?: (error?: string) => string | undefined,
       onFinalState?: () => void,
     ) => {
-      switch (tx.status) {
+      switch (status) {
         case 'None':
           setPending?.(false);
           break;
@@ -333,70 +343,39 @@ const VotePage = () => {
           setPending?.(true);
           break;
         case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: successMessage || <Trans>Transaction Successful!</Trans>,
-            show: true,
-          });
+          toast.success(successMessage || _(t`Transaction Successful!`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(getErrorMessage?.(errorMessage) || _(t`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
       }
     },
-    [setModal],
+    [_],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(queueProposalState, _(t`Proposal Queued!`), setQueuePending),
+    [queueProposalState, onTransactionStateChange, _],
   );
 
   useEffect(
     () =>
-      onTransactionStateChange(
-        queueProposalState,
-        <Trans>Proposal Queued!</Trans>,
-        setQueuePending,
-      ),
-    [queueProposalState, onTransactionStateChange, setModal],
+      onTransactionStateChange(executeProposalState, _(t`Proposal Executed!`), setExecutePending),
+    [executeProposalState, onTransactionStateChange, _],
   );
 
   useEffect(
-    () =>
-      onTransactionStateChange(
-        executeProposalState,
-        <Trans>Proposal Executed!</Trans>,
-        setExecutePending,
-      ),
-    [executeProposalState, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
-    () =>
-      onTransactionStateChange(
-        executeProposalOnTimelockV1State,
-        <Trans>Proposal Executed!</Trans>,
-        setExecutePending,
-      ),
-    [executeProposalOnTimelockV1State, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
-    () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
-    [cancelProposalState, onTransactionStateChange, setModal],
+    () => onTransactionStateChange(cancelProposalState, _(t`Proposal Canceled!`), setCancelPending),
+    [cancelProposalState, onTransactionStateChange, _],
   );
 
   useEffect(() => {
@@ -406,21 +385,25 @@ const VotePage = () => {
   }, [forkActiveState.data, setIsForkActive]);
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const { query: votesQuery, variables: votesVariables } = proposalVotesQuery(proposal?.id ?? '0');
   const {
     loading,
     error,
     data: voters,
-  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
+  } = useQuery<ProposalVotes>(votesQuery, {
     skip: !proposal,
+    variables: votesVariables,
   });
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.voteSnapshotBlock ?? 0),
-    {
-      skip: !voters?.votes?.length,
-    },
+  const { query: voteSnapshotQuery, variables: voteSnapshotVariables } = delegateNounsAtBlockQuery(
+    voterIds ?? [],
+    BigInt(proposal?.voteSnapshotBlock ?? 0),
   );
+  const { data: delegateSnapshot } = useQuery<Delegates>(voteSnapshotQuery, {
+    skip: !voters?.votes?.length,
+    variables: voteSnapshotVariables,
+  });
 
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
@@ -429,7 +412,7 @@ const VotePage = () => {
   }, {});
 
   const data = voters?.votes?.map(v => ({
-    delegate: v.voter.id,
+    delegate: v.voter.id as Address,
     supportDetailed: v.supportDetailed,
     nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
   }));
@@ -443,7 +426,7 @@ const VotePage = () => {
     }
   }, [showToast]);
 
-  const isWalletConnected = !(activeAccount === undefined);
+  const isWalletConnected = activeAccount !== undefined;
   const isActiveForVoting =
     proposal?.status === ProposalState.ACTIVE ||
     proposal?.status === ProposalState.OBJECTION_PERIOD;
@@ -499,13 +482,17 @@ const VotePage = () => {
           proposal={proposal}
           againstVotesAbsolute={againstNouns.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
-          currentQuorum={currentQuorum}
+          currentQuorum={Number(currentQuorum)}
         />
       )}
       <StreamWithdrawModal
         show={showStreamWithdrawModal}
         onDismiss={() => setShowStreamWithdrawModal(false)}
-        {...streamWithdrawInfo}
+        streamAddress={streamWithdrawInfo?.streamAddress ?? zeroAddress}
+        startTime={streamWithdrawInfo?.startTime}
+        endTime={streamWithdrawInfo?.endTime}
+        streamAmount={streamWithdrawInfo?.streamAmount}
+        tokenAddress={streamWithdrawInfo?.tokenAddress ?? zeroAddress}
       />
       <VoteModal
         show={showVoteModal}
@@ -522,7 +509,7 @@ const VotePage = () => {
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => setShowVoteModal(true)}
-            versionNumber={hasManyVersions ? proposalVersions?.length : undefined}
+            versionNumber={hasManyVersions ? BigInt(proposalVersions?.length) : undefined}
             isObjectionPeriod={isObjectionPeriod}
           />
         )}
@@ -534,31 +521,36 @@ const VotePage = () => {
             .map(txn => {
               const parsedCallData = parseStreamCreationCallData(txn.callData);
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
-                return <></>;
+                return <Fragment key={parsedCallData.streamAddress} />;
               }
               return (
-                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                <Row
+                  key={parsedCallData.streamAddress}
+                  className={clsx(classes.section, classes.transitionStateButtonSection)}
+                >
                   <span className={classes.boldedLabel}>
                     <Trans>Only visible to you</Trans>
                   </span>
                   <Col className="d-grid gap-4">
                     <Button
                       onClick={() => {
-                        setShowStreamWithdrawModal(true);
                         setStreamWithdrawInfo({
-                          streamAddress: parsedCallData.streamAddress,
+                          streamAddress: parsedCallData.streamAddress as Address,
                           startTime: parsedCallData.startTime,
                           endTime: parsedCallData.endTime,
                           streamAmount: parsedCallData.streamAmount,
-                          tokenAddress: parsedCallData.tokenAddress,
+                          tokenAddress: parsedCallData.tokenAddress as Address,
                         });
+                        setShowStreamWithdrawModal(true);
                       }}
                       variant="primary"
                       className={classes.transitionStateButton}
                     >
                       <Trans>
                         Withdraw from Stream{' '}
-                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                        <ShortAddress
+                          address={(parsedCallData.streamAddress as `0x${string}`) ?? '0x'}
+                        />
                       </Trans>
                     </Button>
                   </Col>
@@ -603,7 +595,7 @@ const VotePage = () => {
                     {isProposer() && isUpdateable() && (
                       <>
                         <Trans>This proposal can be edited for </Trans>{' '}
-                        {getUpdatableCountdownCopy(proposal, currentBlock || 0, activeLocale)}{' '}
+                        {getUpdatableCountdownCopy(proposal, currentBlock ?? 0n, activeLocale)}{' '}
                       </>
                     )}
                   </p>
@@ -658,23 +650,13 @@ const VotePage = () => {
         </Row>
         {!isUpdateable() && (
           <>
-            <p
-              onClick={() => setIsDelegateView(!isDelegateView)}
-              className={classes.toggleDelegateVoteView}
-            >
-              {isDelegateView ? (
-                <Trans>Switch to Noun view</Trans>
-              ) : (
-                <Trans>Switch to delegate view</Trans>
-              )}
-            </p>
             <Row>
               <VoteCard
                 proposal={proposal}
                 percentage={forPercentage}
                 nounIds={forNouns}
                 variant={VoteCardVariant.FOR}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
@@ -682,7 +664,7 @@ const VotePage = () => {
                 percentage={againstPercentage}
                 nounIds={againstNouns}
                 variant={VoteCardVariant.AGAINST}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
@@ -690,7 +672,7 @@ const VotePage = () => {
                 percentage={abstainPercentage}
                 nounIds={abstainNouns}
                 variant={VoteCardVariant.ABSTAIN}
-                delegateView={isDelegateView}
+                delegateView={true}
                 delegateGroupedVoteData={data}
               />
             </Row>
@@ -712,7 +694,7 @@ const VotePage = () => {
                     <ReactTooltip
                       id={'view-dq-info'}
                       className={classes.delegateHover}
-                      getContent={dataTip => {
+                      getContent={() => {
                         return <Trans>View Threshold Info</Trans>;
                       }}
                     />
@@ -720,7 +702,7 @@ const VotePage = () => {
                   <div
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
-                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
+                    onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
                     className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
                     <span>
@@ -728,7 +710,8 @@ const VotePage = () => {
                     </span>
                     <h3>
                       <Trans>
-                        {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
+                        {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes}{' '}
+                        votes
                       </Trans>
                       {isV2Prop && <SearchIcon className={classes.dqIcon} />}
                     </h3>
@@ -761,7 +744,7 @@ const VotePage = () => {
                     </h3>
                   </div>
                 </div>
-                {currentBlock && proposal?.objectionPeriodEndBlock > 0 && (
+                {isNonNullish(currentBlock) && proposal?.objectionPeriodEndBlock > 0n && (
                   <div className={classes.objectionPeriodActive}>
                     <p>
                       <strong>
@@ -783,7 +766,7 @@ const VotePage = () => {
                   </div>
                   <div className={classes.snapshotBlock}>
                     <span>Taken at block</span>
-                    <h3>{proposal?.voteSnapshotBlock}</h3>
+                    <h3>{String(proposal?.voteSnapshotBlock)}</h3>
                   </div>
                 </div>
               </Card.Body>
@@ -807,7 +790,7 @@ const VotePage = () => {
             <Col xl={4} lg={12} className={classes.sidebar}>
               {proposalVersions && (
                 <VoteSignals
-                  feedback={proposalFeedback.data?.proposalFeedbacks}
+                  feedback={proposalFeedback}
                   proposalId={proposal.id}
                   versionTimestamp={getVersionTimestamp(proposalVersions)}
                   userVotes={userVotesNow}

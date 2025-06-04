@@ -1,65 +1,71 @@
+import type { Address } from '@/utils/types';
+
 import React, { useEffect, useState } from 'react';
-import classes from './StreamWithdrawModal.module.css';
+
+import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Trans } from '@lingui/react/macro';
-import ModalTitle from '../ModalTitle';
-import config from '../../config';
-import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
-import { ethers } from 'ethers';
+import { formatUnits } from 'viem';
+
+import BrandNumericEntry from '@/components/BrandNumericEntry';
+import BrandSpinner from '@/components/BrandSpinner';
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalLabel from '@/components/ModalLabel';
+import ModalTitle from '@/components/ModalTitle';
+import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import StartOrEndTime from '@/components/StartOrEndTime';
+import { usdcAddress } from '@/contracts';
+import { countDecimals } from '@/utils/numberUtils';
+import { formatTokenAmount } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+import { contract2humanUSDCFormat } from '@/utils/usdcUtils';
+import { defaultChain } from '@/wagmi';
 import {
   useElapsedTime,
   useStreamRemainingBalance,
   useWithdrawTokens,
-} from '../../wrappers/nounsStream';
-import ModalBottomButtonRow from '../ModalBottomButtonRow';
-import BrandSpinner from '../BrandSpinner';
-import BrandNumericEntry from '../BrandNumericEntry';
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
-import StartOrEndTime from '../StartOrEndTime';
-import { formatTokenAmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
-import ModalLabel from '../ModalLabel';
-import { countDecimals } from '../../utils/numberUtils';
+} from '@/wrappers/nounsStream';
+
+import classes from './StreamWithdrawModal.module.css';
 
 dayjs.extend(relativeTime);
 
-export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
-  return <div className={classes.backdrop} onClick={props.onDismiss} />;
-};
-
-const StreamWithdrawModalOverlay: React.FC<{
+interface StreamWithdrawModalOverlayProps {
   onDismiss: () => void;
-  streamAddress?: string;
+  streamAddress: Address;
   endTime?: number;
   startTime?: number;
   streamAmount?: number;
-  tokenAddress?: string;
-}> = props => {
+  tokenAddress: Address;
+}
+
+const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = props => {
   const {
     onDismiss,
-    streamAddress = '',
+    streamAddress,
     streamAmount = 0,
     endTime = 0,
     startTime = 0,
     tokenAddress = '',
   } = props;
 
-  const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
+  const chainId = defaultChain.id;
+
+  const isUSDC = tokenAddress.toLowerCase() === usdcAddress[chainId].toLowerCase();
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
 
-  const withdrawableBalance = useStreamRemainingBalance(streamAddress ?? '') ?? 0;
-  const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
+  const withdrawableBalance = useStreamRemainingBalance(streamAddress) ?? 0n;
+  const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress);
   const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const elapsedTime = useElapsedTime(streamAddress ?? '');
+  const elapsedTime = useElapsedTime(streamAddress);
 
   const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
 
   useEffect(() => {
     if (elapsedTime) {
       setPercentStreamedSoFar(
-        100.0 * Math.max(0, Math.min(1, elapsedTime / (endTime - startTime))),
+        100.0 * Math.max(0, Math.min(1, Number(elapsedTime) / (endTime - startTime))),
       );
     }
   }, [elapsedTime, endTime, percentStreamedSoFar, startTime]);
@@ -67,7 +73,7 @@ const StreamWithdrawModalOverlay: React.FC<{
   const totalStreamValueFormatted = parseFloat(
     isUSDC
       ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
-      : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+      : formatUnits(BigInt(withdrawableBalance?.toString() ?? ''), 18).toString(),
   );
 
   const numDecimalPlaces = Math.max(2, countDecimals(totalStreamValueFormatted));
@@ -86,7 +92,8 @@ const StreamWithdrawModalOverlay: React.FC<{
             <div className={classes.transactionStatus}>
               <p>
                 <Trans>
-                  You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet
+                  You&apos;ve successfully withdrawn {withdrawAmount} {unitForDisplay} to your
+                  wallet
                 </Trans>
               </p>
             </div>
@@ -113,7 +120,7 @@ const StreamWithdrawModalOverlay: React.FC<{
   const humanUnitsStreamRemainingBalance = parseFloat(
     isUSDC
       ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
-      : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+      : formatUnits(BigInt(withdrawableBalance?.toString() ?? ''), 18).toString(),
   );
 
   return (
@@ -129,7 +136,7 @@ const StreamWithdrawModalOverlay: React.FC<{
         {isUSDC
           ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? ''))
           : parseFloat(
-              ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+              formatUnits(BigInt(withdrawableBalance?.toString() ?? ''), 18).toString(),
             ).toFixed(numDecimalPlaces)}{' '}
         {unitForDisplay}
       </h1>
@@ -144,7 +151,7 @@ const StreamWithdrawModalOverlay: React.FC<{
       <h1 className={classes.bold}>
         {isUSDC
           ? contract2humanUSDCFormat(streamAmount)
-          : ethers.utils.formatUnits(streamAmount.toString()).toString()}{' '}
+          : formatUnits(BigInt(streamAmount.toString()), 18).toString()}{' '}
         {unitForDisplay}
       </h1>
 
@@ -166,7 +173,7 @@ const StreamWithdrawModalOverlay: React.FC<{
               parseFloat(
                 isUSDC
                   ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
-                  : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+                  : formatUnits(BigInt(withdrawableBalance?.toString() ?? ''), 18).toString(),
               ),
             )
           }
@@ -183,12 +190,12 @@ const StreamWithdrawModalOverlay: React.FC<{
           setIsLoading(true);
           withdrawTokens(
             formatTokenAmount(
-              withdrawAmount.toString(),
+              Number(withdrawAmount),
               isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
             ),
           );
         }}
-        isNextBtnDisabled={withdrawableBalance !== 0 && humanUnitsStreamRemainingBalance === 0}
+        isNextBtnDisabled={withdrawableBalance !== 0n && humanUnitsStreamRemainingBalance === 0}
       />
       <div className={classes.streamTimeWrapper}>
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
@@ -197,15 +204,17 @@ const StreamWithdrawModalOverlay: React.FC<{
   );
 };
 
-const StreamWithdrawModal: React.FC<{
+interface StreamWithdrawModalProps {
   show: boolean;
   onDismiss: () => void;
-  streamAddress?: string;
-  startTime?: number;
+  streamAddress: Address;
   endTime?: number;
+  startTime?: number;
   streamAmount?: number;
-  tokenAddress?: string;
-}> = props => {
+  tokenAddress: Address;
+}
+
+const StreamWithdrawModal: React.FC<StreamWithdrawModalProps> = props => {
   const { onDismiss, show } = props;
   return (
     <>

@@ -1,8 +1,12 @@
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
+import type { Address } from '@/utils/types';
+
+import React from 'react';
+
+import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 
 interface EnsOrLongAddressProps {
-  address: string;
+  address: Address;
 }
 
 /**

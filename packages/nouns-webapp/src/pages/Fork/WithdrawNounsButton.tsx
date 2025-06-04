@@ -1,17 +1,20 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import clsx from 'clsx';
-import classes from './Fork.module.css';
-import { useWithdrawFromForkEscrow } from '../../wrappers/nounsDao';
+
 import { Trans } from '@lingui/react/macro';
-import { TransactionStatus } from '@usedapp/core';
-import SolidColorBackgroundModal from '../../components/SolidColorBackgroundModal';
-import { buildEtherscanTxLink } from '../../utils/etherscan';
+import clsx from 'clsx';
+
+import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { useWithdrawFromForkEscrow } from '@/wrappers/nounsDao';
+
+import classes from './Fork.module.css';
+import { map } from 'remeda';
 
 type Props = {
   tokenIds: number[];
   isWithdrawModalOpen: boolean;
-  setIsWithdrawModalOpen: Function;
-  setDataFetchPollInterval: Function;
+  setIsWithdrawModalOpen: (isOpen: boolean) => void;
+  setDataFetchPollInterval: (interval: number) => void;
 };
 
 function WithdrawNounsButton(props: Props) {
@@ -21,50 +24,53 @@ function WithdrawNounsButton(props: Props) {
   const [isWaiting, setIsWaiting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
-  const handleWithdrawFromForkEscrowStateChange = useCallback((state: TransactionStatus) => {
-    switch (state.status) {
-      case 'None':
-        setIsLoading(false);
-        break;
-      case 'Mining':
-        setIsLoading(true);
-        setIsWaiting(false);
-        break;
-      case 'Success':
-        setIsLoading(false);
-        setIsWaiting(false);
-        setIsTxSuccessful(true);
-        break;
-      case 'Fail':
-        setIsError(true);
-        setErrorMessage(
-          (
-            <>
-              {state?.errorMessage}
-              <br />
-              <Trans>Please try again.</Trans>
-            </>
-          ) || <Trans>Please try again.</Trans>,
-        );
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-      case 'Exception':
-        setIsError(true);
-        setErrorMessage(
-          (
-            <>
-              {state?.errorMessage}
-              <br />
-              <Trans>Please try again.</Trans>
-            </>
-          ) || <Trans>Please try again.</Trans>,
-        );
-        setIsLoading(false);
-        setIsWaiting(false);
-        break;
-    }
-  }, []);
+  const handleWithdrawFromForkEscrowStateChange = useCallback(
+    ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
+      switch (status) {
+        case 'None':
+          setIsLoading(false);
+          break;
+        case 'Mining':
+          setIsLoading(true);
+          setIsWaiting(false);
+          break;
+        case 'Success':
+          setIsLoading(false);
+          setIsWaiting(false);
+          setIsTxSuccessful(true);
+          break;
+        case 'Fail':
+          setIsError(true);
+          setErrorMessage(
+            (
+              <>
+                {errorMessage}
+                <br />
+                <Trans>Please try again.</Trans>
+              </>
+            ) || <Trans>Please try again.</Trans>,
+          );
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+        case 'Exception':
+          setIsError(true);
+          setErrorMessage(
+            (
+              <>
+                {errorMessage}
+                <br />
+                <Trans>Please try again.</Trans>
+              </>
+            ) || <Trans>Please try again.</Trans>,
+          );
+          setIsLoading(false);
+          setIsWaiting(false);
+          break;
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     handleWithdrawFromForkEscrowStateChange(withdrawFromForkEscrowState);
@@ -108,7 +114,7 @@ function WithdrawNounsButton(props: Props) {
         {isTxSuccessful && (
           <>
             Success! Your Nouns have been withdrawn.
-            {withdrawFromForkEscrowState.transaction && (
+            {withdrawFromForkEscrowState.transaction.hash && (
               <a
                 href={`${buildEtherscanTxLink(withdrawFromForkEscrowState.transaction.hash)}`}
                 target="_blank"
@@ -128,8 +134,10 @@ function WithdrawNounsButton(props: Props) {
     <>
       <button
         className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
-        onClick={() => {
-          withdrawFromForkEscrow(props.tokenIds);
+        onClick={async () => {
+          await withdrawFromForkEscrow({
+            args: [map(props.tokenIds, n => BigInt(n))],
+          });
           // setIsModalOpen(true);
           setIsWaiting(true);
           props.setIsWithdrawModalOpen(true);

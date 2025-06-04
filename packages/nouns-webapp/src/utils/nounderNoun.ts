@@ -1,25 +1,26 @@
-import { Auction } from '../wrappers/nounsAuction';
-import { AuctionState } from '../state/slices/auction';
-import { BigNumber } from '@ethersproject/bignumber';
+import { AuctionState } from '@/state/slices/auction';
+import { Auction } from '@/wrappers/nounsAuction';
 
-export const isNounderNoun = (nounId: BigNumber) => {
-  return nounId.mod(10).eq(0) || nounId.eq(0);
+export const isNounderNoun = (nounId: bigint) => {
+  return nounId % 10n === 0n || nounId === 0n;
 };
 
 const emptyNounderAuction = (onDisplayAuctionId: number): Auction => {
   return {
-    amount: BigNumber.from(0).toJSON(),
-    bidder: '',
-    startTime: BigNumber.from(0).toJSON(),
-    endTime: BigNumber.from(0).toJSON(),
-    nounId: BigNumber.from(onDisplayAuctionId).toJSON(),
+    amount: 0n,
+    bidder: '0x0000000000000000000000000000000000000000',
+    startTime: 0n,
+    endTime: 0n,
+    nounId: BigInt(onDisplayAuctionId),
     settled: false,
   };
 };
 
-const findAuction = (id: BigNumber, auctions: AuctionState[]): Auction | undefined => {
+const findAuction = (id: bigint, auctions: AuctionState[]): Auction | undefined => {
   return auctions.find(auction => {
-    return BigNumber.from(auction.activeAuction?.nounId).eq(id);
+    return (
+      auction.activeAuction?.nounId !== undefined && BigInt(auction.activeAuction.nounId) === id
+    );
   })?.activeAuction;
 };
 
@@ -30,14 +31,14 @@ const findAuction = (id: BigNumber, auctions: AuctionState[]): Auction | undefin
  * @returns empty `Auction` object with `startTime` set to auction after param `nounId`
  */
 export const generateEmptyNounderAuction = (
-  nounId: BigNumber,
+  nounId: bigint,
   pastAuctions: AuctionState[],
 ): Auction => {
-  const nounderAuction = emptyNounderAuction(nounId.toNumber());
+  const nounderAuction = emptyNounderAuction(Number(nounId));
   // use nounderAuction.nounId + 1 to get mint time
-  const auctionAbove = findAuction(nounId.add(1), pastAuctions);
-  const auctionAboveStartTime = auctionAbove && BigNumber.from(auctionAbove.startTime);
-  if (auctionAboveStartTime) nounderAuction.startTime = auctionAboveStartTime.toJSON();
+  const auctionAbove = findAuction(nounId + 1n, pastAuctions);
+  const auctionAboveStartTime = auctionAbove && BigInt(auctionAbove.startTime);
+  if (auctionAboveStartTime) nounderAuction.startTime = auctionAboveStartTime;
 
   return nounderAuction;
 };

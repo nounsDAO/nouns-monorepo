@@ -1,12 +1,13 @@
-import React from 'react';
-import { useEffect } from 'react';
-import classes from './VoteSignals.module.css';
-import clsx from 'clsx';
-import VoteSignal from './VoteSignal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect } from 'react';
+
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { VoteSignalDetail } from '../../wrappers/nounsData';
+
+import { VoteSignalDetail } from '@/wrappers/nounsData';
+
+import VoteSignal from './VoteSignal';
 
 type Props = {
   voteSignals: VoteSignalDetail[];
@@ -20,31 +21,27 @@ const VoteSignalGroup = (props: Props) => {
     if (props.isExpanded) {
       setIsExpanded(true);
     } else {
-      // expand on render if there's any feedback in For, then try Against, then Abstain
-      if (props.support === 1 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 0 && props.voteSignals.length > 0) {
-        setIsExpanded(true);
-      } else if (props.support === 2 && props.voteSignals.length > 0) {
+      // expand on render if there are any vote signals (for For, Against, or Abstain)
+      if (props.voteSignals.length > 0) {
         setIsExpanded(true);
       }
     }
   }, [props.support, props.voteSignals.length, props.isExpanded]);
 
   return (
-    <div className={classes.voteSignalGroup}>
+    <div className="border-b border-[#e6e6e6] py-2.5 last:border-none">
       <button
         className={clsx(
-          classes.voteSignalLabel,
-          props.support === 1 && classes.for,
-          props.support === 0 && classes.against,
-          props.support === 2 && classes.abstain,
+          'flex w-full flex-row items-center justify-between gap-2.5 border-none bg-transparent',
+          props.support === 1 && '[&>p]:text-[var(--brand-color-green)]',
+          props.support === 0 && '[&>p]:text-[var(--brand-color-red)]',
+          props.support === 2 && '[&>p]:text-[var(--brand-gray-light-text)]',
           props.voteSignals.length > 0 && 'cursor-default',
         )}
         onClick={() => props.voteSignals.length > 0 && setIsExpanded(!isExpanded)}
         disabled={props.voteSignals.length === 0}
       >
-        <p>
+        <p className="m-0 w-full p-0 text-left text-lg font-bold leading-none">
           {props.voteSignals.length}{' '}
           {(props.support === 1 && 'For') ||
             (props.support === 0 && 'Against') ||
@@ -52,11 +49,7 @@ const VoteSignalGroup = (props: Props) => {
         </p>
         {props.voteSignals.length > 0 && (
           <motion.div
-            className={clsx(
-              classes.arrowIcon,
-              isExpanded && classes.expanded,
-              props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25',
-            )}
+            className={clsx(props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25')}
             animate={{
               rotate: isExpanded ? 0 : 180,
             }}
@@ -70,7 +63,10 @@ const VoteSignalGroup = (props: Props) => {
         )}
       </button>
       <AnimatePresence>
-        <motion.div key={props.support} className={clsx(isExpanded && classes.voteSignalsList)}>
+        <motion.div
+          key={props.support}
+          className={clsx(isExpanded && 'mt-2.5 flex flex-col gap-2.5')}
+        >
           {isExpanded &&
             props.voteSignals.map((voteSignal, i) => (
               <motion.div

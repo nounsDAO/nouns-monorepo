@@ -65,6 +65,10 @@ updates:
       lingui:
         patterns:
           - '@lingui/*'
+      react-router:
+        patterns:
+          - 'react-router'
+          - 'react-router-dom'
       react:
         patterns:
           - 'react'

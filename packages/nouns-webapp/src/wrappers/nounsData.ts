@@ -1,32 +1,51 @@
-import { utils } from 'ethers';
-import { NounsDAODataABI, NounsDaoDataFactory, NounsDaoLogicFactory } from '@nouns/contracts';
-import { useContractCall, useContractFunction } from '@usedapp/core';
-import config from '../config';
-import {
-  Delegates,
-  candidateFeedbacksQuery,
-  candidateProposalQuery,
-  candidateProposalVersionsQuery,
-  candidateProposalsQuery,
-  proposalFeedbacksQuery,
-} from './subgraph';
+import type { Address, Hash, Hex } from '@/utils/types';
+
+import { useMemo } from 'react';
+
 import { useQuery } from '@apollo/client';
+import { filter, isNonNullish, isNullish, map, pipe, sort } from 'remeda';
+
 import {
-  ProposalDetail,
-  ProposalTransactionDetails,
+  useReadNounsDataCreateCandidateCost,
+  useReadNounsDataUpdateCandidateCost,
+  useWriteNounsDataAddSignature,
+  useWriteNounsDataCancelProposalCandidate,
+  useWriteNounsDataCreateProposalCandidate,
+  useWriteNounsDataSendCandidateFeedback,
+  useWriteNounsDataSendFeedback,
+  useWriteNounsDataUpdateProposalCandidate,
+  useWriteNounsGovernorCancelSig,
+  useWriteNounsGovernorProposeBySigs,
+  useWriteNounsGovernorUpdateProposalBySigs,
+} from '@/contracts';
+import {
+  CandidateFeedback as GraphQLCandidateFeedback,
+  Maybe,
+  ProposalCandidate as GraphQLProposalCandidate,
+  ProposalCandidateSignature as GraphQLProposalCandidateSignature,
+  ProposalFeedback as GraphQLProposalFeedback,
+} from '@/subgraphs/graphql';
+
+import {
   extractTitle,
   formatProposalTransactionDetails,
   formatProposalTransactionDetailsToUpdate,
+  ProposalDetail,
+  ProposalTransactionDetails,
   removeMarkdownStyle,
   useActivePendingUpdatableProposers,
   useProposalThreshold,
   useUpdatableProposalIds,
 } from './nounsDao';
-import * as R from 'ramda';
 import { useDelegateNounsAtBlockQuery } from './nounToken';
-
-const abi = new utils.Interface(NounsDAODataABI);
-const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
+import {
+  candidateFeedbacksQuery,
+  candidateProposalQuery,
+  candidateProposalsQuery,
+  candidateProposalVersionsQuery,
+  Delegates,
+  proposalFeedbacksQuery,
+} from './subgraph';
 
 export interface VoteSignalDetail {
   supportDetailed: number;
@@ -34,32 +53,107 @@ export interface VoteSignalDetail {
   votes: number;
   createdTimestamp: number;
   voter: {
-    id: string;
+    id: Address;
   };
 }
 
-const nounsDaoContract = NounsDaoLogicFactory.connect(config.addresses.nounsDAOProxy, undefined!);
-
 export const useCreateProposalCandidate = () => {
-  const { send: createProposalCandidate, state: createProposalCandidateState } =
-    useContractFunction(nounsDAOData, 'createProposalCandidate');
-  return { createProposalCandidate, createProposalCandidateState };
+  const {
+    data: hash,
+    writeContractAsync: createProposalCandidate,
+    isPending: isCreatePending,
+    isSuccess: isCreateSuccess,
+    error: createError,
+  } = useWriteNounsDataCreateProposalCandidate();
+
+  let status = 'None';
+  if (isCreatePending) {
+    status = 'Mining';
+  } else if (isCreateSuccess) {
+    status = 'Success';
+  } else if (createError) {
+    status = 'Fail';
+  }
+
+  const createProposalCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: createError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, createError],
+  );
+
+  return {
+    createProposalCandidate,
+    createProposalCandidateState,
+  };
 };
 
 export const useCancelCandidate = () => {
-  const { send: cancelCandidate, state: cancelCandidateState } = useContractFunction(
-    nounsDAOData,
-    'cancelProposalCandidate',
+  const {
+    data: hash,
+    writeContract: cancelCandidate,
+    isPending: isCancelPending,
+    isSuccess: isCancelSuccess,
+    error: cancelError,
+  } = useWriteNounsDataCancelProposalCandidate();
+
+  let status = 'None';
+  if (isCancelPending) {
+    status = 'Mining';
+  } else if (isCancelSuccess) {
+    status = 'Success';
+  } else if (cancelError) {
+    status = 'Fail';
+  }
+
+  const cancelCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: cancelError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, cancelError],
   );
-  return { cancelCandidate, cancelCandidateState };
+
+  return {
+    cancelCandidate,
+    cancelCandidateState,
+  };
 };
 
 export const useAddSignature = () => {
-  const { send: addSignature, state: addSignatureState } = useContractFunction(
-    nounsDAOData,
-    'addSignature',
+  const {
+    data: hash,
+    writeContractAsync: addSignature,
+    isPending: isAddPending,
+    isSuccess: isAddSuccess,
+    error: addError,
+  } = useWriteNounsDataAddSignature();
+
+  let status = 'None';
+  if (isAddPending) {
+    status = 'Mining';
+  } else if (isAddSuccess) {
+    status = 'Success';
+  } else if (addError) {
+    status = 'Fail';
+  }
+
+  const addSignatureState = useMemo(
+    () => ({
+      status,
+      errorMessage: addError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, addError],
   );
-  return { addSignature, addSignatureState };
+
+  return {
+    addSignature,
+    addSignatureState,
+  };
 };
 
 const deDupeSigners = (signers: string[]) => {
@@ -76,12 +170,12 @@ const filterSigners = (
   timestampNow: number,
   delegateSnapshot: Delegates | undefined,
   activePendingProposers: string[],
-  signers?: CandidateSignature[],
+  signers?: GraphQLProposalCandidateSignature[],
   proposalIdToUpdate?: number,
   updatableProposalIds?: number[],
 ) => {
   const sigsFiltered = signers?.filter(
-    sig => sig.canceled === false && sig.expirationTimestamp > timestampNow,
+    sig => !sig.canceled && BigInt(sig.expirationTimestamp) > timestampNow,
   );
   let voteCount = 0;
   const activeSigs: CandidateSignature[] = [];
@@ -103,15 +197,17 @@ const filterSigners = (
       ...signature,
       signer: {
         ...signature.signer,
+        id: signature.signer.id as Address,
         voteCount: delegateVoteCount,
         activeOrPendingProposal: activeOrPendingProposal,
       },
+      expirationTimestamp: Number(signature.expirationTimestamp),
     };
     activeSigs.push(sigWithVotes);
   });
 
   const filteredSignatures = activeSigs.filter((signature: CandidateSignature) => {
-    return signature.canceled === false && signature.expirationTimestamp > timestampNow / 1000;
+    return !signature.canceled && signature.expirationTimestamp > timestampNow / 1000;
   });
   const sortedSignatures = [...filteredSignatures].sort((a, b) => {
     return a.expirationTimestamp - b.expirationTimestamp;
@@ -120,92 +216,103 @@ const filterSigners = (
   return { activeSigs: sortedSignatures, voteCount };
 };
 
-export const useCandidateProposals = (blockNumber?: number) => {
+export const useCandidateProposals = (blockNumber?: bigint) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { loading, data: candidates, error } = useQuery(candidateProposalsQuery());
-  const unmatchedCandidates: ProposalCandidateSubgraphEntity[] =
-    candidates?.proposalCandidates?.filter(
-      (candidate: ProposalCandidateSubgraphEntity) =>
-        candidate.latestVersion.content.matchingProposalIds.length === 0 &&
-        candidate.canceled === false,
-    );
-  const activeCandidateProposers = unmatchedCandidates?.map(
-    (candidate: ProposalCandidateSubgraphEntity) => candidate.proposer,
+  const { query, variables } = candidateProposalsQuery();
+  const { loading, data, error, refetch } = useQuery<{
+    proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
+  }>(query, { variables });
+
+  const unmatchedCandidates = pipe(
+    data?.proposalCandidates ?? [],
+    filter(
+      candidate =>
+        candidate?.latestVersion?.content?.matchingProposalIds?.length === 0 && !candidate.canceled,
+    ),
+    map(candidate => ({
+      ...candidate,
+    })),
   );
+
+  const activeCandidateProposers = unmatchedCandidates?.map(candidate => candidate.proposer);
+
   const proposerDelegates = useDelegateNounsAtBlockQuery(
     activeCandidateProposers,
-    blockNumber ?? 0,
+    blockNumber ?? 0n,
   );
-  const threshold = useProposalThreshold() || 0;
-  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
+  const threshold = useProposalThreshold() ?? 0;
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const allSigners = unmatchedCandidates
-    ?.map((candidate: ProposalCandidateSubgraphEntity) =>
-      candidate.latestVersion.content.contentSignatures?.map(
-        (sig: CandidateSignature) => sig.signer.id,
-      ),
-    )
+    ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
     .flat();
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
     allSigners ? deDupeSigners(allSigners) : [],
-    blockNumber ?? 0,
+    blockNumber ?? 0n,
   );
-  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
-  const candidatesData =
-    proposerDelegates.data &&
-    unmatchedCandidates?.map((candidate: ProposalCandidateSubgraphEntity) => {
-      const proposerVotes =
-        proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
-          ?.nounsRepresented?.length || 0;
-      const parsedData = parseSubgraphCandidate(
-        candidate,
-        proposerVotes,
-        threshold,
-        timestampNow,
-        activePendingProposers.data,
-        false,
-        signersDelegateSnapshot.data,
-        updatableProposalIds.data,
-      );
-      return parsedData;
-    });
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber);
+  const candidatesData = map(unmatchedCandidates ?? [], candidate => {
+    const proposerVotes =
+      proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
+        ?.nounsRepresented?.length || 0;
+    return parseSubgraphCandidate(
+      candidate,
+      proposerVotes,
+      threshold,
+      timestampNow,
+      activePendingProposers.data,
+      false,
+      signersDelegateSnapshot.data,
+      updatableProposalIds.data,
+    );
+  });
 
-  candidatesData &&
-    candidatesData?.sort((a, b) => {
-      return a.lastUpdatedTimestamp - b.lastUpdatedTimestamp;
+  if (candidatesData) {
+    candidatesData.sort((a, b) => {
+      return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
     });
-  return { loading, data: candidatesData, error };
+  }
+  return { loading, data: candidatesData, error, refetch };
 };
 
 export const useCandidateProposal = (
   id: string,
-  pollInterval?: number,
+  pollInterval: number = 0,
   toUpdate?: boolean,
-  blockNumber?: number,
+  blockNumber?: bigint,
 ) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { loading, data, error, refetch } = useQuery(candidateProposalQuery(id), {
-    pollInterval: pollInterval || 0,
+  const { query, variables } = candidateProposalQuery(id);
+  const { loading, data, error, refetch } = useQuery<{
+    proposalCandidate: Maybe<GraphQLProposalCandidate>;
+  }>(query, {
+    pollInterval,
+    variables,
   });
-  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber ?? 0);
+  const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
   const threshold = useProposalThreshold() || 0;
-  const versionSignatures = data?.proposalCandidate.latestVersion.content.contentSignatures;
-  const allSigners = versionSignatures?.map((sig: CandidateSignature) => sig.signer.id);
+  const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
+  const allSigners = versionSignatures?.map(
+    (sig: GraphQLProposalCandidateSignature) => sig.signer.id,
+  );
   const proposerDelegates = useDelegateNounsAtBlockQuery(
-    [data?.proposalCandidate.proposer],
-    blockNumber || 0,
+    data?.proposalCandidate?.proposer ? [data?.proposalCandidate?.proposer] : [],
+    BigInt(blockNumber ?? 0n),
   );
   const proposerNounVotes =
     (proposerDelegates.data && proposerDelegates.data.delegates[0]?.nounsRepresented?.length) || 0;
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
     allSigners ? deDupeSigners(allSigners) : [],
-    blockNumber ?? 0,
+    BigInt(blockNumber ?? 0),
   );
-  const updatableProposalIds = useUpdatableProposalIds(blockNumber ?? 0);
+  const updatableProposalIds = useUpdatableProposalIds(blockNumber);
+
+  const candidate = data?.proposalCandidate ?? undefined;
+
   const parsedData =
     proposerDelegates.data &&
     data?.proposalCandidate &&
     parseSubgraphCandidate(
-      data.proposalCandidate,
+      candidate,
       proposerNounVotes,
       threshold,
       timestampNow,
@@ -214,108 +321,307 @@ export const useCandidateProposal = (
       signersDelegateSnapshot.data,
       updatableProposalIds.data,
     );
+
   return { loading, data: parsedData, error, refetch };
 };
 
 export const useCandidateProposalVersions = (id: string) => {
-  const { loading, data, error } = useQuery(candidateProposalVersionsQuery(id));
-  const versions: ProposalCandidateVersions =
-    data && parseSubgraphCandidateVersions(data.proposalCandidate);
+  const { query, variables } = candidateProposalVersionsQuery(id);
+  const { loading, data, error } = useQuery<{
+    proposalCandidate: Maybe<GraphQLProposalCandidate>;
+  }>(query, { variables });
+
+  const candidateVersions = parseSubgraphCandidateVersions(data?.proposalCandidate || undefined);
+  const versions = data?.proposalCandidate
+    ? {
+        ...candidateVersions,
+        id: candidateVersions?.id || '',
+        isProposal: false,
+        requiredVotes: 0,
+        proposerVotes: 0,
+        voteCount: 0,
+        matchingProposalIds: [],
+        title: candidateVersions?.title || '',
+        description: candidateVersions?.description || '',
+        versions: candidateVersions?.versions || [],
+        slug: candidateVersions?.slug || '',
+        proposer: (data.proposalCandidate.proposer || '') as `0x${string}`,
+        canceled: !!candidateVersions?.canceled,
+        versionsCount: candidateVersions?.versionsCount || 0,
+        lastUpdatedTimestamp: candidateVersions?.lastUpdatedTimestamp
+          ? Number(candidateVersions.lastUpdatedTimestamp)
+          : 0,
+        createdTransactionHash: data.proposalCandidate.createdTransactionHash || '',
+      }
+    : undefined;
+
   return { loading, data: versions, error };
 };
 
 export const useGetCreateCandidateCost = () => {
-  const createCandidateCost = useContractCall({
-    abi,
-    address: config.addresses.nounsDAOData,
-    method: 'createCandidateCost',
-    args: [],
-  });
+  const { data: createCandidateCost } = useReadNounsDataCreateCandidateCost();
 
   if (!createCandidateCost) {
     return;
   }
 
-  return createCandidateCost[0];
+  return createCandidateCost;
 };
 
 export const useGetUpdateCandidateCost = () => {
-  const updateCandidateCost = useContractCall({
-    abi,
-    address: config.addresses.nounsDAOData,
-    method: 'updateCandidateCost',
-    args: [],
-  });
+  const { data: updateCandidateCost } = useReadNounsDataUpdateCandidateCost();
 
   if (!updateCandidateCost) {
     return;
   }
 
-  return updateCandidateCost[0];
+  return updateCandidateCost;
 };
 
 export const useUpdateProposalCandidate = () => {
-  const { send: updateProposalCandidate, state: updateProposalCandidateState } =
-    useContractFunction(nounsDAOData, 'updateProposalCandidate');
-  return { updateProposalCandidate, updateProposalCandidateState };
+  const {
+    data: hash,
+    writeContractAsync: updateProposalCandidate,
+    isPending: isUpdatePending,
+    isSuccess: isUpdateSuccess,
+    error: updateError,
+  } = useWriteNounsDataUpdateProposalCandidate();
+
+  let status = 'None';
+  if (isUpdatePending) {
+    status = 'Mining';
+  } else if (isUpdateSuccess) {
+    status = 'Success';
+  } else if (updateError) {
+    status = 'Fail';
+  }
+
+  const updateProposalCandidateState = useMemo(
+    () => ({
+      status,
+      errorMessage: updateError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, updateError],
+  );
+
+  return {
+    updateProposalCandidate,
+    updateProposalCandidateState,
+  };
 };
 
 export const useCancelSignature = () => {
-  const cancelSignature = useContractFunction(nounsDAOData, 'cancelSig');
+  const {
+    data: hash,
+    writeContractAsync: cancelSig,
+    isPending: isCancelSigPending,
+    isSuccess: isCancelSigSuccess,
+    error: cancelSigError,
+  } = useWriteNounsGovernorCancelSig();
+
+  let status = 'None';
+  if (isCancelSigPending) {
+    status = 'Mining';
+  } else if (isCancelSigSuccess) {
+    status = 'Success';
+  } else if (cancelSigError) {
+    status = 'Fail';
+  }
+
+  const cancelSignatureState = useMemo(
+    () => ({
+      status,
+      errorMessage: cancelSigError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, cancelSigError],
+  );
+
+  const cancelSignature = {
+    send: cancelSig,
+    state: cancelSignatureState,
+  };
 
   return { cancelSignature };
 };
 
-export const useSendFeedback = (proposalType?: 'proposal' | 'candidate') => {
-  const { send: sendFeedback, state: sendFeedbackState } = useContractFunction(
-    nounsDAOData,
-    proposalType === 'candidate' ? 'sendCandidateFeedback' : 'sendFeedback',
+export const useSendFeedback = () => {
+  const {
+    data: proposalFeedbackHash,
+    writeContractAsync: sendProposalFeedback,
+    isPending: isSendProposalFeedbackPending,
+    isSuccess: isSendProposalFeedbackSuccess,
+    error: sendProposalFeedbackError,
+  } = useWriteNounsDataSendFeedback();
+
+  let proposalFeedbackStatus = 'None';
+  if (isSendProposalFeedbackPending) {
+    proposalFeedbackStatus = 'Mining';
+  } else if (isSendProposalFeedbackSuccess) {
+    proposalFeedbackStatus = 'Success';
+  } else if (sendProposalFeedbackError) {
+    proposalFeedbackStatus = 'Fail';
+  }
+
+  const sendProposalFeedbackState = useMemo(
+    () => ({
+      status: proposalFeedbackStatus,
+      errorMessage: sendProposalFeedbackError?.message,
+      transaction: { hash: proposalFeedbackHash },
+    }),
+    [proposalFeedbackHash, proposalFeedbackStatus, sendProposalFeedbackError],
   );
-  return { sendFeedback, sendFeedbackState };
+
+  const {
+    data: candidateFeedbackHash,
+    writeContractAsync: sendCandidateFeedback,
+    isPending: isSendCandidateFeedbackPending,
+    isSuccess: isSendCandidateFeedbackSuccess,
+    error: sendCandidateFeedbackError,
+  } = useWriteNounsDataSendCandidateFeedback();
+
+  let candidateFeedbackStatus = 'None';
+  if (isSendCandidateFeedbackPending) {
+    candidateFeedbackStatus = 'Mining';
+  } else if (isSendCandidateFeedbackSuccess) {
+    candidateFeedbackStatus = 'Success';
+  } else if (sendCandidateFeedbackError) {
+    candidateFeedbackStatus = 'Fail';
+  }
+
+  const sendCandidateFeedbackState = useMemo(
+    () => ({
+      status: candidateFeedbackStatus,
+      errorMessage: sendCandidateFeedbackError?.message,
+      transaction: { hash: candidateFeedbackHash },
+    }),
+    [candidateFeedbackHash, candidateFeedbackStatus, sendCandidateFeedbackError],
+  );
+
+  return {
+    sendProposalFeedback,
+    sendProposalFeedbackState,
+    sendCandidateFeedback,
+    sendCandidateFeedbackState,
+  };
 };
 
-export const useProposalFeedback = (id: string, pollInterval?: number) => {
-  const { loading, data, error, refetch } = useQuery(proposalFeedbacksQuery(id), {
-    pollInterval: pollInterval || 0,
+export const useProposalFeedback = (id: string, pollInterval: number = 0) => {
+  const { query, variables } = proposalFeedbacksQuery(id);
+  const { loading, data, error, refetch } = useQuery<{
+    proposalFeedbacks: Maybe<GraphQLProposalFeedback[]>;
+  }>(query, {
+    pollInterval,
+    variables,
   });
 
-  return { loading, data, error, refetch };
+  const feedbacks: VoteSignalDetail[] = map(data?.proposalFeedbacks ?? [], feedback => ({
+    ...feedback,
+    reason: feedback.reason || '',
+    votes: Number(feedback.votes),
+    createdTimestamp: Number(feedback.createdTimestamp),
+    createdBlock: Number(feedback.createdBlock),
+    voter: {
+      ...feedback.voter,
+      id: feedback.voter.id as Address,
+    },
+  }));
+
+  return { loading, data: feedbacks, error, refetch };
 };
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {
-  const {
-    loading,
-    data: results,
-    error,
-    refetch,
-  } = useQuery(candidateFeedbacksQuery(id), {
-    pollInterval: pollInterval || 0,
+  const { query, variables } = candidateFeedbacksQuery(id);
+  const { loading, data, error, refetch } = useQuery<{
+    candidateFeedbacks: Maybe<GraphQLCandidateFeedback[]>;
+  }>(query, {
+    pollInterval,
+    variables,
   });
-  const data: VoteSignalDetail[] = results?.candidateFeedbacks.map(
-    (feedback: VoteSignalDetail) => feedback,
-  );
+  const feedbacks: VoteSignalDetail[] = map(data?.candidateFeedbacks ?? [], feedback => ({
+    ...feedback,
+    reason: feedback.reason || '',
+    votes: Number(feedback.votes),
+    createdTimestamp: Number(feedback.createdTimestamp),
+    createdBlock: Number(feedback.createdBlock),
+    voter: {
+      ...feedback.voter,
+      id: feedback.voter.id as Address,
+    },
+  }));
 
-  return { loading, data, error, refetch };
+  return { loading, data: feedbacks, error, refetch };
 };
 
 export const useProposeBySigs = () => {
-  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
-    nounsDaoContract,
-    'proposeBySigs',
+  const {
+    data: hash,
+    writeContractAsync: proposeBySigs,
+    isPending: isProposePending,
+    isSuccess: isProposeSuccess,
+    error: proposeError,
+  } = useWriteNounsGovernorProposeBySigs();
+
+  let status = 'None';
+  if (isProposePending) {
+    status = 'Mining';
+  } else if (isProposeSuccess) {
+    status = 'Success';
+  } else if (proposeError) {
+    status = 'Fail';
+  }
+
+  const proposeBySigsState = useMemo(
+    () => ({
+      status,
+      errorMessage: proposeError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, proposeError],
   );
-  return { proposeBySigs, proposeBySigsState };
+
+  return {
+    proposeBySigs,
+    proposeBySigsState,
+  };
 };
 
 export const useUpdateProposalBySigs = () => {
-  const { send: updateProposalBySigs, state: updateProposalBySigsState } = useContractFunction(
-    nounsDaoContract,
-    'updateProposalBySigs',
+  const {
+    data: hash,
+    writeContractAsync: updateProposalBySigs,
+    isPending: isUpdatePending,
+    isSuccess: isUpdateSuccess,
+    error: updateError,
+  } = useWriteNounsGovernorUpdateProposalBySigs();
+
+  let status = 'None';
+  if (isUpdatePending) {
+    status = 'Mining';
+  } else if (isUpdateSuccess) {
+    status = 'Success';
+  } else if (updateError) {
+    status = 'Fail';
+  }
+
+  const updateProposalBySigsState = useMemo(
+    () => ({
+      status,
+      errorMessage: updateError?.message,
+      transaction: { hash },
+    }),
+    [hash, status, updateError],
   );
-  return { updateProposalBySigs, updateProposalBySigsState };
+
+  return {
+    updateProposalBySigs,
+    updateProposalBySigsState,
+  };
 };
 
 const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity,
+  candidate: GraphQLProposalCandidate | undefined,
   proposerVotes: number,
   threshold: number,
   timestamp: number,
@@ -323,16 +629,22 @@ const parseSubgraphCandidate = (
   toUpdate?: boolean,
   delegateSnapshot?: Delegates,
   updatableProposalIds?: number[],
-) => {
-  const description = candidate.latestVersion.content.description
+): ProposalCandidate | undefined => {
+  if (isNullish(candidate)) {
+    return undefined;
+  }
+
+  const latestVersion = candidate.latestVersion;
+
+  const description = latestVersion.content.description
     ?.replace(/\\n/g, '\n')
-    .replace(/(^['"]|['"]$)/g, '');
+    .replace(/(^["']|["']$)/g, '');
   const transactionDetails: ProposalTransactionDetails = {
-    targets: candidate.latestVersion.content.targets,
-    values: candidate.latestVersion.content.values,
-    signatures: candidate.latestVersion.content.signatures,
-    calldatas: candidate.latestVersion.content.calldatas,
-    encodedProposalHash: candidate.latestVersion.content.encodedProposalHash,
+    targets: map(latestVersion.content.targets ?? [], t => t as Address),
+    values: map(latestVersion.content.values ?? [], v => BigInt(v)),
+    signatures: map(latestVersion.content.signatures ?? [], s => s),
+    calldatas: map(latestVersion.content.calldatas ?? [], t => t as Hex),
+    encodedProposalHash: latestVersion.content.encodedProposalHash as Hash,
   };
   let details;
   if (toUpdate) {
@@ -345,9 +657,9 @@ const parseSubgraphCandidate = (
     timestamp,
     delegateSnapshot,
     activePendingProposers,
-    candidate.latestVersion.content.contentSignatures,
-    candidate.latestVersion.content.proposalIdToUpdate
-      ? parseInt(candidate.latestVersion.content.proposalIdToUpdate)
+    latestVersion.content.contentSignatures,
+    latestVersion.content.proposalIdToUpdate
+      ? Number(latestVersion.content.proposalIdToUpdate)
       : undefined,
     updatableProposalIds,
   );
@@ -355,80 +667,90 @@ const parseSubgraphCandidate = (
   return {
     id: candidate.id,
     slug: candidate.slug,
-    proposer: candidate.proposer,
-    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    proposer: candidate.proposer as Address,
+    lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
-    createdTransactionHash: candidate.createdTransactionHash,
-    isProposal: candidate.latestVersion.content.matchingProposalIds.length > 0,
-    proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
-    matchingProposalIds: candidate.latestVersion.content.matchingProposalIds,
+    createdTransactionHash: candidate.createdTransactionHash as Hash,
+    isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
+    matchingProposalIds: isNonNullish(latestVersion.content.matchingProposalIds)
+      ? map(latestVersion.content.matchingProposalIds, v => Number(v))
+      : undefined,
     requiredVotes: requiredVotes,
+    proposalIdToUpdate: Number(latestVersion.content.proposalIdToUpdate),
     neededVotes: requiredVotes,
     proposerVotes: proposerVotes,
     voteCount: voteCount,
     version: {
       content: {
-        title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+        title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
         description: description ?? 'No description.',
         details: details,
-        transactionHash: details.encodedProposalHash,
+        transactionHash: transactionDetails.encodedProposalHash as Hash,
         contentSignatures: activeSigs,
-        targets: candidate.latestVersion.content.targets,
-        values: candidate.latestVersion.content.values,
-        signatures: candidate.latestVersion.content.signatures,
-        calldatas: candidate.latestVersion.content.calldatas,
-        proposalIdToUpdate: candidate.latestVersion.content.proposalIdToUpdate,
+        targets: map(latestVersion.content.targets ?? [], v => v as Address),
+        values: map(latestVersion.content.values ?? [], v => BigInt(v)),
+        signatures: map(latestVersion.content.signatures ?? [], v => v),
+        calldatas: map(latestVersion.content.calldatas ?? [], v => v as Hex),
       },
     },
   };
 };
 
 const parseSubgraphCandidateVersions = (
-  candidateVersions: ProposalCandidateVersionsSubgraphEntity | undefined,
-) => {
-  if (!candidateVersions) {
-    return;
+  candidate: GraphQLProposalCandidate | undefined,
+): ProposalCandidateVersions | undefined => {
+  if (isNullish(candidate)) {
+    return undefined;
   }
-  const versionsList = candidateVersions.versions.map(version => version);
-  const versionsByDate = versionsList.sort((a, b) => {
-    return b.createdTimestamp - a.createdTimestamp;
+
+  const versionsList = map(candidate?.versions ?? [], version => version);
+  const versionsByDate = sort(versionsList, (a, b) => {
+    return Number(b.createdTimestamp) - Number(a.createdTimestamp);
   });
-  const versions: ProposalCandidateVersionContent[] = versionsByDate.map((version, i) => {
+
+  const versions: ProposalCandidateVersionContent[] = map(versionsByDate, (version, i) => {
     const description = version.content.description
       ?.replace(/\\n/g, '\n')
-      .replace(/(^['"]|['"]$)/g, '');
+      .replace(/(^["']|["']$)/g, '');
+
     const transactionDetails: ProposalTransactionDetails = {
-      targets: version.content.targets,
-      values: version.content.values,
-      signatures: version.content.signatures,
-      calldatas: version.content.calldatas,
-      encodedProposalHash: version.content.encodedProposalHash,
+      targets: map(version.content.targets ?? [], t => t as Address),
+      values: map(version.content.values ?? [], v => BigInt(v)),
+      signatures: map(version.content.signatures ?? [], s => s),
+      calldatas: map(version.content.calldatas ?? [], t => t as Hex),
+      encodedProposalHash: version.content.encodedProposalHash as Hash,
     };
+
     const details = formatProposalTransactionDetails(transactionDetails);
+
     return {
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
       description: description ?? 'No description.',
-      details: details,
-      createdAt: version.createdTimestamp,
+      details,
+      createdAt: Number(version.createdTimestamp),
       updateMessage: version.updateMessage,
-      versionNumber: candidateVersions.versions.length - i,
+      versionNumber: candidate.versions.length - i,
     };
   });
 
   return {
-    id: candidateVersions.id,
-    slug: candidateVersions.slug,
-    proposer: candidateVersions.proposer,
-    lastUpdatedTimestamp: candidateVersions.lastUpdatedTimestamp,
-    canceled: candidateVersions.canceled,
-    versionsCount: candidateVersions.versions.length,
-    createdTransactionHash: candidateVersions.createdTransactionHash,
+    id: candidate.id,
+    slug: candidate.slug,
+    proposer: candidate.proposer as Address,
+    lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
+    canceled: candidate.canceled,
+    versionsCount: candidate.versions.length,
+    createdTransactionHash: candidate.createdTransactionHash as Hash,
     title:
-      R.pipe(extractTitle, removeMarkdownStyle)(candidateVersions.latestVersion.description) ??
+      pipe(candidate.latestVersion.content.description, extractTitle, removeMarkdownStyle) ??
       'Untitled',
-    description: candidateVersions.latestVersion.description ?? 'No description.',
+    description: candidate.latestVersion.content.description ?? 'No description.',
     versions: versions,
+    isProposal: false,
+    requiredVotes: 0,
+    proposerVotes: 0,
+    voteCount: 0,
   };
 };
 
@@ -454,7 +776,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
         sig: string;
         canceled: boolean;
         signer: {
-          id: string;
+          id: Address;
           proposals: {
             id: string;
           }[];
@@ -508,7 +830,7 @@ export interface CandidateSignature {
   sig: string;
   canceled: boolean;
   signer: {
-    id: string;
+    id: Address;
     proposals: {
       id: string;
     }[];
@@ -520,18 +842,18 @@ export interface CandidateSignature {
 export interface ProposalCandidateInfo {
   id: string;
   slug: string;
-  proposer: string;
-  lastUpdatedTimestamp: number;
+  proposer: Address;
+  lastUpdatedTimestamp: bigint;
   canceled: boolean;
   versionsCount: number;
-  createdTransactionHash: string;
+  createdTransactionHash: Hash;
   isProposal: boolean;
   requiredVotes: number;
+  proposalIdToUpdate?: number;
   proposerVotes: number;
+  neededVotes?: number;
   voteCount: number;
-  matchingProposalIds: {
-    id: string;
-  }[];
+  matchingProposalIds?: number[];
 }
 
 export interface ProposalCandidateVersionContent {
@@ -548,11 +870,12 @@ export interface ProposalCandidateVersion {
     title: string;
     description: string;
     details: ProposalDetail[];
-    targets: string[];
-    values: string[];
+    targets: Address[];
+    values: bigint[];
     signatures: string[];
-    calldatas: string[];
+    calldatas: Hex[];
     contentSignatures: CandidateSignature[];
+    transactionHash?: Hash;
   };
 }
 
@@ -561,7 +884,7 @@ export interface ProposalCandidate extends ProposalCandidateInfo {
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {
-  lastUpdatedTimestamp: number;
+  lastUpdatedTimestamp: bigint;
   latestVersion: {
     content: {
       title: string;

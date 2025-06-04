@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { Proposal } from '../../wrappers/nounsDao';
-import NounImageVoteTable from '../NounImageVoteTable';
-import VoteProgressBar from '../VoteProgressBar';
-import classes from './VoteCard.module.css';
-import { Trans } from '@lingui/react/macro';
+
 import { i18n } from '@lingui/core';
-import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
-import { useEthers } from '@usedapp/core';
-import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { ensCacheKey } from '../../utils/ensLookup';
-import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
+import { Card, Col, Row } from 'react-bootstrap';
+import { usePublicClient } from 'wagmi';
+
+import NounImageVoteTable from '@/components/NounImageVoteTable';
+import VoteProgressBar from '@/components/VoteProgressBar';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { ensCacheKey } from '@/utils/ensLookup';
+import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
+import { Address } from '@/utils/types';
+import { Proposal } from '@/wrappers/nounsDao';
+
+import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
+
+import classes from './VoteCard.module.css';
+
+import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 export enum VoteCardVariant {
   FOR,
@@ -27,7 +33,7 @@ interface VoteCardProps {
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
-    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | { delegate: Address; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
     | undefined;
 }
 
@@ -59,26 +65,26 @@ const VoteCard: React.FC<VoteCardProps> = props => {
       break;
   }
 
-  const { library } = useEthers();
+  const publicClient = usePublicClient();
   const [ensCached, setEnsCached] = useState(false);
   const locale = useActiveLocale();
   const filteredDelegateGroupedVoteData =
     delegateGroupedVoteData?.filter(v => v.supportDetailed === supportDetailedValue) ?? [];
   const isEnUS = locale === 'en-US';
 
-  // Pre-fetch ENS  of delegates (with 30min TTL)
+  // Pre-fetch ENS of delegates (with 30 min TTL)
   // This makes hover cards load more smoothly
   useEffect(() => {
-    if (!delegateGroupedVoteData || !library || ensCached) {
+    if (!delegateGroupedVoteData || !publicClient || ensCached) {
       return;
     }
 
-    delegateGroupedVoteData.forEach((delegateInfo: { delegate: string }) => {
+    delegateGroupedVoteData.forEach((delegateInfo: { delegate: Address }) => {
       if (localStorage.getItem(ensCacheKey(delegateInfo.delegate))) {
         return;
       }
 
-      lookupNNSOrENS(library, delegateInfo.delegate)
+      lookupNNSOrENS(publicClient, delegateInfo.delegate)
         .then(name => {
           // Store data as mapping of address_Expiration => address or ENS
           if (name) {
@@ -96,13 +102,13 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         });
     });
     setEnsCached(true);
-  }, [library, ensCached, delegateGroupedVoteData]);
+  }, [publicClient, ensCached, delegateGroupedVoteData]);
 
   return (
     <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
         <Card.Body className="p-2">
-          <Card.Text className="py-2 m-0">
+          <Card.Text className="m-0 py-2">
             <span
               className={`${
                 isEnUS ? classes.voteCardHeaderTextEn : classes.voteCardHeaderTextNonEn
@@ -141,7 +147,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             </span>
           </Card.Text>
 
-          <Card.Text className={clsx('py-2 m-0', classes.mobileVoteCountWrapper)}>
+          <Card.Text className={clsx('m-0 py-2', classes.mobileVoteCountWrapper)}>
             <span className={classes.voteCardVoteCount}>
               {delegateView
                 ? i18n.number(filteredDelegateGroupedVoteData.length)
@@ -162,11 +168,11 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             {delegateView ? (
               <DelegateGroupedNounImageVoteTable
                 filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
-                propId={parseInt(proposal.id || '0')}
+                propId={Number(proposal.id || '0')}
                 proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
-              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              <NounImageVoteTable nounIds={nounIds} propId={Number(proposal.id || '0')} />
             )}
           </Row>
         </Card.Body>

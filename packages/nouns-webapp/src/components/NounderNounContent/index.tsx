@@ -1,30 +1,34 @@
-import { Col, Row } from 'react-bootstrap';
-import { BigNumber } from 'ethers';
-import AuctionActivityWrapper from '../AuctionActivityWrapper';
-import AuctionNavigation from '../AuctionNavigation';
-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
-import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
-import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import { Link } from 'react-router';
-import nounContentClasses from './NounderNounContent.module.css';
-import auctionBidClasses from '../AuctionActivity/BidHistory.module.css';
-import bidBtnClasses from '../BidHistoryBtn/BidHistoryBtn.module.css';
-import auctionActivityClasses from '../AuctionActivity/AuctionActivity.module.css';
-import CurrentBid, { BID_N_A } from '../CurrentBid';
-import Winner from '../Winner';
+import React, { useCallback, useEffect } from 'react';
+
 import { Trans } from '@lingui/react/macro';
+import { Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router';
 
-import { useAppSelector } from '../../hooks';
-import { useCallback, useEffect } from 'react';
+import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
+import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
+import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
+import AuctionNavigation from '@/components/AuctionNavigation';
+import AuctionTitleAndNavWrapper from '@/components/AuctionTitleAndNavWrapper';
+import CurrentBid, { BID_N_A } from '@/components/CurrentBid';
+import Winner from '@/components/Winner';
+import { useAppSelector } from '@/hooks';
 
-const NounderNounContent: React.FC<{
-  mintTimestamp: BigNumber;
-  nounId: BigNumber;
+import nounContentClasses from './NounderNounContent.module.css';
+
+import auctionActivityClasses from '@/components/AuctionActivity/AuctionActivity.module.css';
+import auctionBidClasses from '@/components/AuctionActivity/BidHistory.module.css';
+import bidBtnClasses from '@/components/BidHistoryBtn/BidHistoryBtn.module.css';
+
+interface NounderNounContentProps {
+  mintTimestamp: bigint;
+  nounId: bigint;
   isFirstAuction: boolean;
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
-}> = props => {
+}
+
+const NounderNounContent: React.FC<NounderNounContentProps> = props => {
   const {
     mintTimestamp,
     nounId,
@@ -36,10 +40,10 @@ const NounderNounContent: React.FC<{
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  // Page through Nouns via keyboard
+  // Page through Nouns via a keyboard
   // handle what happens on key press
   const handleKeyPress = useCallback(
-    (event: { key: string; }) => {
+    (event: { key: string }) => {
       if (event.key === 'ArrowLeft') {
         onPrevAuctionClick();
       }
@@ -86,7 +90,7 @@ const NounderNounContent: React.FC<{
             className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
           >
             <div className={auctionActivityClasses.section}>
-              <Winner winner={''} isNounders={true} />
+              <Winner winner={'0x'} isNounders={true} />
             </div>
           </Col>
         </Row>
@@ -106,10 +110,10 @@ const NounderNounContent: React.FC<{
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
-                ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be
-                sent to our multisig (5/10), where it will be vested and distributed to individual
-                Nounders.
+                For this reason, we, the project&#39;s founders (‘Nounders’) have chosen to
+                compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of
+                the project will be sent to our multisig (5/10), where it will be vested and
+                distributed Nounders.
               </Trans>
             </li>
           </ul>

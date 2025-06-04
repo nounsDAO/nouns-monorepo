@@ -1,10 +1,12 @@
 /**
  * LanguageProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
  */
-import { SupportedLocale } from './locales';
-import { initialLocale, useActiveLocale } from '../hooks/useActivateLocale';
-import { dynamicActivate, NounsI18nProvider } from './NounsI18nProvider';
 import { ReactNode, useCallback } from 'react';
+
+import { initialLocale, useActiveLocale } from '../hooks/useActivateLocale';
+
+import { SupportedLocale } from './locales';
+import { dynamicActivate, NounsI18nProvider } from './NounsI18nProvider';
 
 dynamicActivate(initialLocale);
 

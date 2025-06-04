@@ -1,11 +1,15 @@
-import BigNumber from 'bignumber.js';
-import { utils } from 'ethers';
 import React from 'react';
 
-const TruncatedAmount: React.FC<{ amount: BigNumber }> = props => {
-  const { amount } = props;
+import { formatEther } from 'viem';
 
-  const eth = new BigNumber(utils.formatEther(amount.toString())).toFixed(2);
-  return <>Ξ {`${eth}`}</>;
+interface TruncatedAmountProps {
+  amount: bigint;
+}
+
+const TruncatedAmount: React.FC<TruncatedAmountProps> = ({ amount }) => {
+  const eth = formatEther(BigInt(amount.toString()));
+  // Format to 2 decimal places
+  const formattedEth = parseFloat(eth).toFixed(2);
+  return <>Ξ {formattedEth}</>;
 };
 export default TruncatedAmount;

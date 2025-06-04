@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
-import DelegateHoverCard from '../DelegateHoverCard';
-import { GrayCircle } from '../GrayCircle';
-import HoverCard from '../HoverCard';
-import TightStackedCircleNouns from '../TightStackedCircleNouns';
+
+import DelegateHoverCard from '@/components/DelegateHoverCard';
+import { GrayCircle } from '@/components/GrayCircle';
+import HoverCard from '@/components/HoverCard';
+import TightStackedCircleNouns from '@/components/TightStackedCircleNouns';
+import VoteCardPager from '@/components/VoteCardPager';
+import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
+
 import classes from './DelegateGroupedNounImageVoteTable.module.css';
-import VoteCardPager from '../VoteCardPager';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
     | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
     | undefined;
   propId: number;
-  proposalCreationBlock: number;
+  proposalCreationBlock: bigint;
 }
 
 const NOUNS_PER_VOTE_CARD_DESKTOP = 12;
@@ -44,7 +46,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
             id="delegateVoteHoverCard"
           >
             <TightStackedCircleNouns
-              nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
+              nounIds={data.nounsRepresented.map((nounId: string) => Number(nounId))}
             />
           </HoverCard>
         );

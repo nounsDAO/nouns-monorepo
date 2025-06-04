@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
+
 import Placeholder from 'react-bootstrap/Placeholder';
-import { BigNumber } from 'ethers';
-import { StandaloneNounImage } from '../../StandaloneNoun';
+
+import { StandaloneNounImage } from '@/components/StandaloneNoun';
 
 interface ExploreGridItemProps {
-  nounId: number | null;
+  nounId: bigint | null;
   imgSrc: string | undefined;
 }
 
+// eslint-disable-next-line react/display-name
 const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef(
-  (props, ref: React.Ref<HTMLButtonElement>) => {
+  // eslint-disable-next-line react/prop-types,@typescript-eslint/no-unused-vars
+  ({ imgSrc, nounId }, _ref: React.Ref<HTMLButtonElement>) => {
     const [isImageLoaded, setIsImageLoaded] = useState<boolean | undefined>();
     const [isImageError, setIsImageError] = useState<boolean | undefined>();
 
     return (
       <>
         <img
-          src={props.imgSrc}
+          src={imgSrc}
           style={isImageLoaded ? {} : { display: 'none' }}
           onLoad={() => setIsImageLoaded(true)}
           onError={() => setIsImageError(true)}
-          alt={`Noun #${props.nounId}`}
+          alt={`Noun #${nounId}`}
         />
 
         {/* Show placeholder until image is loaded */}
@@ -35,9 +38,7 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef(
         </div>
 
         {/* If image can't be loaded, fetch Noun image internally */}
-        {isImageError && props.nounId && (
-          <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
-        )}
+        {isImageError && nounId && <StandaloneNounImage nounId={BigInt(nounId)} />}
       </>
     );
   },

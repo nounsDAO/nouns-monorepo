@@ -1,6 +1,10 @@
-import classes from './AuctionActivityWrapper.module.css';
+import React from 'react';
 
-const AuctionActivityWrapper: React.FC<{ children: React.ReactNode }> = props => {
-  return <div className={classes.wrapper}>{props.children}</div>;
+interface AuctionActivityWrapperProps {
+  children: React.ReactNode;
+}
+
+const AuctionActivityWrapper: React.FC<AuctionActivityWrapperProps> = ({ children }) => {
+  return <div className="max-lg:mx-4">{children}</div>;
 };
 export default AuctionActivityWrapper;

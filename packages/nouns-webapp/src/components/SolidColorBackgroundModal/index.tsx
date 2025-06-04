@@ -1,14 +1,17 @@
-import classes from './SolidColorBackgroundModal.module.css';
-import ReactDOM from 'react-dom';
 import React, { useEffect, useRef } from 'react';
+
 import { XIcon } from '@heroicons/react/solid';
-import { isMobileScreen } from '../../utils/isMobile';
-import NounsTransition from '../NounsTransition';
+import ReactDOM from 'react-dom';
+
+import NounsTransition from '@/components/NounsTransition';
 import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
-} from '../../utils/cssTransitionUtils';
+} from '@/utils/cssTransitionUtils';
+import { isMobileScreen } from '@/utils/isMobile';
+
+import classes from './SolidColorBackgroundModal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);
@@ -47,7 +50,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
       const scrollY = document.body.style.top;
       root.style.position = '';
       root.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      window.scrollTo(0, Number(scrollY || '0') * -1);
     }
   }, [show, root]);
 

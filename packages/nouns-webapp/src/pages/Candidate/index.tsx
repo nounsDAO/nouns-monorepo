@@ -1,36 +1,39 @@
-import { Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import Section from '../../layout/Section';
-import classes from './Candidate.module.css';
-import {  useParams } from 'react-router';
-import { Link } from 'react-router';
-import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import advanced from 'dayjs/plugin/advancedFormat';
 import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import clsx from 'clsx';
+
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
-import CandidateSponsors from '../../components/CandidateSponsors';
-import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
-import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
+import { Link, useParams } from 'react-router';
+import { first, isNonNullish } from 'remeda';
+import { toast } from 'sonner';
+import { useAccount, useBlockNumber } from 'wagmi';
+
+import CandidateSponsors from '@/components/CandidateSponsors';
+import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
+import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
+import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import { useAppSelector } from '@/hooks';
+import Section from '@/layout/Section';
+import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,
   useProposal,
   useProposalCount,
   useProposalThreshold,
-} from '../../wrappers/nounsDao';
+} from '@/wrappers/nounsDao';
 import {
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
-} from '../../wrappers/nounsData';
-import { useUserVotes } from '../../wrappers/nounToken';
-import { checkHasActiveOrPendingProposalOrCandidate } from '../../utils/proposals';
-import VoteSignals from '../../components/VoteSignals/VoteSignals';
+} from '@/wrappers/nounsData';
+import { useUserVotes } from '@/wrappers/nounToken';
+
+import classes from './Candidate.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -41,21 +44,21 @@ const CandidatePage = () => {
   const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
-  const [currentBlock, setCurrentBlock] = useState<number>();
   const [isSignerWithActiveOrPendingProposal, setIsSignerWithActiveOrPendingProposal] = useState<
     boolean | undefined
   >(undefined);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const isWalletConnected = !(activeAccount === undefined);
-  const blockNumber = useBlockNumber();
-  const candidate = useCandidateProposal(
-    Number(id).toString(),
+  const isWalletConnected = activeAccount !== undefined;
+  const { data: currentBlock } = useBlockNumber();
+  const { data: candidateData, refetch: candidateRefetch } = useCandidateProposal(
+    id ?? '',
     dataFetchPollInterval,
     false,
     currentBlock,
   );
-  const { account } = useEthers();
+  const [candidate, setCandidate] = useState<typeof candidateData>(undefined);
+  const { address: account } = useAccount();
   const threshold = useProposalThreshold();
   const userVotes = useUserVotes();
   const latestProposalId = useProposalCount();
@@ -63,28 +66,32 @@ const CandidatePage = () => {
   const feedback = useCandidateFeedback(Number(id).toString(), dataFetchPollInterval);
   const [isProposal, setIsProposal] = useState<boolean>(false);
   const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
-  const originalProposal = useProposal(candidate?.data?.proposalIdToUpdate ?? 0);
-  const isParentProposalUpdatable =
-    originalProposal?.status !== ProposalState.UPDATABLE ? false : true;
+  const originalProposal = useProposal(candidate?.proposalIdToUpdate ?? 0);
+  const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
+
+  useEffect(() => {
+    (async () => {
+      if (!candidate) {
+        await candidateRefetch();
+        if (candidateData) {
+          setCandidate(candidateData);
+        }
+      }
+    })();
+  }, [candidate, candidateData, candidateRefetch]);
+
   const handleRefetchData = () => {
     feedback.refetch();
   };
 
   useEffect(() => {
-    // prevent live-updating the block resulting in undefined block number
-    if (blockNumber && !currentBlock) {
-      setCurrentBlock(blockNumber);
+    if (candidate && account) {
+      setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
     }
-  }, [blockNumber, currentBlock]);
-
-  useEffect(() => {
-    if (candidate.data && account) {
-      setIsProposer(candidate.data.proposer.toLowerCase() === account.toLowerCase());
-    }
-    if (candidate.data?.isProposal) {
+    if (candidate?.isProposal) {
       setIsProposal(true);
     }
-    if (candidate.data?.proposalIdToUpdate && +candidate.data?.proposalIdToUpdate > 0) {
+    if (candidate?.proposalIdToUpdate && +candidate?.proposalIdToUpdate > 0) {
       setIsUpdateToProposal(true);
     }
   }, [candidate, account]);
@@ -100,21 +107,17 @@ const CandidatePage = () => {
     }
   }, [latestProposal, account]);
 
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const handleRefetchCandidateData = () => {
-    candidate.refetch();
-  };
+  const { _ } = useLingui();
 
   const onTransactionStateChange = useCallback(
     (
-      tx: TransactionStatus,
-      successMessage?: ReactNode,
+      { errorMessage, status }: { errorMessage?: string; status: string },
+      successMessage?: string,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => ReactNode | undefined,
+      getErrorMessage?: (error?: string) => string | undefined,
       onFinalState?: () => void,
     ) => {
-      switch (tx.status) {
+      switch (status) {
         case 'None':
           setPending?.(false);
           break;
@@ -122,35 +125,23 @@ const CandidatePage = () => {
           setPending?.(true);
           break;
         case 'Success':
-          setModal({
-            title: <Trans>Success</Trans>,
-            message: successMessage || <Trans>Transaction Successful!</Trans>,
-            show: true,
-          });
+          toast.success(successMessage || _(`Transaction Successful!`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Fail':
-          setModal({
-            title: <Trans>Transaction Failed</Trans>,
-            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(errorMessage || _(`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          setModal({
-            title: <Trans>Error</Trans>,
-            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
-            show: true,
-          });
+          toast.error(getErrorMessage?.(errorMessage) || _(`Please try again.`));
           setPending?.(false);
           onFinalState?.();
           break;
       }
     },
-    [setModal],
+    [_],
   );
 
   // handle cancel candidate
@@ -158,32 +149,34 @@ const CandidatePage = () => {
     () =>
       onTransactionStateChange(
         cancelCandidateState,
-        'Proposal Candidate Canceled!',
+        _(`Proposal Candidate Canceled!`),
         setCancelPending,
       ),
-    [cancelCandidateState, onTransactionStateChange, setModal],
+    [cancelCandidateState, onTransactionStateChange, _],
   );
 
   const destructiveStateAction = (() => {
     return () => {
-      if (candidate?.data?.id) {
-        return cancelCandidate(candidate.data.slug);
+      if (candidate?.id) {
+        return cancelCandidate({ args: [candidate.slug] });
       }
     };
   })();
 
+  const primaryProposalId = first(candidate?.matchingProposalIds ?? []);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {/* notice for proposal updates */}
-      {candidate.data?.proposalIdToUpdate &&
-        +candidate.data?.proposalIdToUpdate > 0 &&
+      {isNonNullish(candidate?.proposalIdToUpdate) &&
+        candidate?.proposalIdToUpdate > 0 &&
         !isProposer && (
           <Alert variant="warning">
             <Trans>
               <strong>Note: </strong>
               This candidate is an update to{' '}
-              <Link to={`/vote/${candidate.data?.proposalIdToUpdate}`}>
-                Proposal {candidate.data?.proposalIdToUpdate}
+              <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
+                Proposal {candidate?.proposalIdToUpdate}
               </Link>
               .
             </Trans>
@@ -195,22 +188,28 @@ const CandidatePage = () => {
             <strong>Note: </strong>
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
-          {candidate.data?.matchingProposalIds[0] && (
-            <Link to={`/vote/${candidate.data?.matchingProposalIds[0]}`}>
-              View the proposal here
-            </Link>
+          {primaryProposalId && (
+            <Link to={`/vote/${primaryProposalId}`}>View the proposal here</Link>
           )}
         </Alert>
       )}
       <Col lg={12} className={classes.wrapper}>
-        {candidate.data && (
+        {!candidate && (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: '100vh' }}
+          >
+            <Spinner animation="border" />
+          </div>
+        )}
+        {candidate && (
           <CandidateHeader
-            title={candidate.data.version.content.title}
-            id={candidate.data.id}
-            proposer={candidate.data.proposer}
-            versionsCount={candidate.data.versionsCount}
-            createdTransactionHash={candidate.data.createdTransactionHash}
-            lastUpdatedTimestamp={candidate.data.lastUpdatedTimestamp}
+            title={candidate.version.content.title}
+            id={candidate.id}
+            proposer={candidate.proposer}
+            versionsCount={candidate.versionsCount}
+            createdTransactionHash={candidate.createdTransactionHash}
+            lastUpdatedTimestamp={Number(candidate.lastUpdatedTimestamp)}
             isCandidate={true}
             isWalletConnected={isWalletConnected}
             isUpdateToProposal={isUpdateToProposal}
@@ -256,7 +255,7 @@ const CandidatePage = () => {
         </Row>
       )}
 
-      {candidate.data && (
+      {candidate && (
         <Row>
           <Col lg={12}>
             <a className={classes.jump} href="#feedback">
@@ -264,38 +263,41 @@ const CandidatePage = () => {
             </a>
           </Col>
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
-            <ProposalCandidateContent proposal={candidate.data} />
+            <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col id="feedback" lg={4} className={classes.sidebar}>
-            {currentBlock &&
-              threshold !== undefined &&
-              userVotes !== undefined &&
-              !candidate.data.isProposal && (
-                <CandidateSponsors
-                  candidate={candidate.data}
-                  slug={candidate.data.slug ?? ''}
-                  id={candidate.data.id}
-                  isProposer={isProposer}
-                  handleRefetchCandidateData={handleRefetchCandidateData}
-                  setDataFetchPollInterval={setDataFetchPollInterval}
-                  currentBlock={currentBlock - 1}
-                  requiredVotes={threshold + 1}
-                  userVotes={userVotes}
-                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                  latestProposal={latestProposal}
-                  isUpdateToProposal={isUpdateToProposal}
-                  originalProposal={originalProposal}
-                  blockNumber={blockNumber}
-                />
-              )}
+            {!!currentBlock && !!threshold && !!userVotes && !candidate.isProposal && (
+              <CandidateSponsors
+                candidate={candidate}
+                slug={candidate.slug ?? ''}
+                id={candidate.id}
+                isProposer={isProposer}
+                handleRefetchCandidateData={() => {
+                  candidateRefetch();
+                }}
+                setDataFetchPollInterval={(interval: number | null) =>
+                  interval !== null
+                    ? setDataFetchPollInterval(interval)
+                    : setDataFetchPollInterval(0)
+                }
+                currentBlock={currentBlock - 1n}
+                requiredVotes={threshold + 1}
+                userVotes={userVotes}
+                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                latestProposal={latestProposal}
+                isUpdateToProposal={isUpdateToProposal}
+                originalProposal={originalProposal}
+                blockNumber={currentBlock}
+              />
+            )}
             <VoteSignals
-              proposalId={candidate.data.id}
-              proposer={candidate.data.proposer}
-              versionTimestamp={candidate.data?.lastUpdatedTimestamp}
+              proposalId={candidate.id}
+              proposer={candidate.proposer}
+              versionTimestamp={BigInt(candidate?.lastUpdatedTimestamp)}
               feedback={feedback.data}
               userVotes={userVotes}
               isCandidate={true}
-              candidateSlug={candidate.data.slug}
+              candidateSlug={candidate.slug}
               setDataFetchPollInterval={setDataFetchPollInterval}
               handleRefetch={handleRefetchData}
               isFeedbackClosed={isUpdateToProposal && !isParentProposalUpdatable}

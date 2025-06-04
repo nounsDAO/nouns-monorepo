@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as R from 'ramda';
+import * as R from 'remeda';
 import config from '../src/config';
 import { bigNumbersEqual } from './utils';
 

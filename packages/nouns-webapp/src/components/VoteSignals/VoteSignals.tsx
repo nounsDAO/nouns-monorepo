@@ -1,60 +1,80 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import classes from './VoteSignals.module.css';
+import React, { useEffect, useState } from 'react';
+
+import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import VoteSignalGroup from './VoteSignalGroup';
-import { VoteSignalDetail, useSendFeedback } from '../../wrappers/nounsData';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { useAppDispatch } from '../../hooks';
-import { useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
-import { FormControl, Spinner } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
+import { toast } from 'sonner';
+import { useAccount } from 'wagmi';
 
-type Props = {
+import { Spinner } from '@/components/Spinner';
+import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
+
+import VoteSignalGroup from './VoteSignalGroup';
+
+type VoteSignalsProps = {
   proposalId?: string;
   proposer?: string;
-  versionTimestamp: number;
+  versionTimestamp: bigint;
   feedback?: VoteSignalDetail[];
   userVotes?: number;
   isCandidate?: boolean;
   candidateSlug?: string;
   setDataFetchPollInterval: (interval: number) => void;
-  handleRefetch: Function;
+  handleRefetch: () => void;
   isFeedbackClosed?: boolean;
 };
 
-function VoteSignals(props: Props) {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+function VoteSignals({
+  candidateSlug,
+  feedback: feedbackList,
+  handleRefetch,
+  isCandidate,
+  isFeedbackClosed,
+  proposalId,
+  proposer,
+  setDataFetchPollInterval,
+  userVotes,
+  versionTimestamp,
+}: Readonly<VoteSignalsProps>) {
   const [reasonText, setReasonText] = React.useState('');
   const [support, setSupport] = React.useState<number | undefined>();
   const [isTransactionWaiting, setIsTransactionWaiting] = useState(false);
   const [isTransactionPending, setIsTransactionPending] = useState(false);
-  const [forFeedback, setForFeedback] = useState<any[]>([]);
-  const [againstFeedback, setAgainstFeedback] = useState<any[]>([]);
-  const [abstainFeedback, setAbstainFeedback] = useState<any[]>([]);
+  const [forFeedback, setForFeedback] = useState<VoteSignalDetail[]>([]);
+  const [againstFeedback, setAgainstFeedback] = useState<VoteSignalDetail[]>([]);
+  const [abstainFeedback, setAbstainFeedback] = useState<VoteSignalDetail[]>([]);
   const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVoteSupport, setUserVoteSupport] = useState<VoteSignalDetail>();
   const [expandedGroup, setExpandedGroup] = useState<number | undefined>(undefined);
-  const { sendFeedback, sendFeedbackState } = useSendFeedback(
-    props.isCandidate === true ? 'candidate' : 'proposal',
-  );
-  const { account } = useEthers();
+
+  const {
+    sendProposalFeedback,
+    sendProposalFeedbackState,
+    sendCandidateFeedback,
+    sendCandidateFeedbackState,
+  } = useSendFeedback();
+
+  const { address: account } = useAccount();
   const supportText = ['Against', 'For', 'Abstain'];
 
   useEffect(() => {
-    let forIt: VoteSignalDetail[] = [];
-    let againstIt: VoteSignalDetail[] = [];
-    let abstainIt: VoteSignalDetail[] = [];
+    const forIt: VoteSignalDetail[] = [];
+    const againstIt: VoteSignalDetail[] = [];
+    const abstainIt: VoteSignalDetail[] = [];
 
-    if (props.feedback) {
+    if (feedbackList) {
       // filter feedback to this version
-      let versionFeedback = props.feedback;
-      if (props.versionTimestamp) {
-        versionFeedback = props.feedback.filter(
-          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= +props.versionTimestamp,
+      if (versionTimestamp) {
+        feedbackList = feedbackList.filter(
+          (feedback: VoteSignalDetail) => feedback.createdTimestamp >= versionTimestamp,
         );
       }
       // sort feedback
-      versionFeedback.map((feedback: VoteSignalDetail) => {
+      feedbackList.forEach((feedback: VoteSignalDetail) => {
         if (feedback.supportDetailed === 1) {
           forIt.push(feedback);
         }
@@ -64,22 +84,20 @@ function VoteSignals(props: Props) {
         if (feedback.supportDetailed === 2) {
           abstainIt.push(feedback);
         }
-        return feedback;
       });
       setForFeedback(forIt);
       setAgainstFeedback(againstIt);
       setAbstainFeedback(abstainIt);
 
       // check if user has voted for this proposal or version
-      versionFeedback.map((feedback: any) => {
+      feedbackList.forEach((feedback: VoteSignalDetail) => {
         if (account && account.toUpperCase() === feedback.voter.id.toUpperCase()) {
           setHasUserVoted(true);
           setUserVoteSupport(feedback);
         }
-        return feedback;
       });
     }
-  }, [props.feedback, props.versionTimestamp, account]);
+  }, [feedbackList, versionTimestamp, account]);
 
   async function handleFeedbackSubmit(
     proposalId: number,
@@ -91,67 +109,55 @@ function VoteSignals(props: Props) {
     if (supportNum > 2) {
       return;
     }
-    if (props.isCandidate === true && candidateSlug && proposer) {
-      await sendFeedback(proposer, candidateSlug, supportNum, reason);
+    if (isCandidate === true && candidateSlug && proposer) {
+      await sendCandidateFeedback({
+        args: [proposer as `0x${string}`, candidateSlug, supportNum, reason || ''],
+      });
     } else {
-      await sendFeedback(proposalId, supportNum, reason);
+      await sendProposalFeedback({ args: [BigInt(proposalId), supportNum, reason || ''] });
     }
   }
 
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const { _ } = useLingui();
   useEffect(() => {
-    switch (sendFeedbackState.status) {
-      case 'None':
-        setIsTransactionPending(false);
-        break;
-      case 'PendingSignature':
-        setIsTransactionWaiting(true);
-        break;
-      case 'Mining':
-        setIsTransactionWaiting(false);
-        setIsTransactionPending(true);
-        props.setDataFetchPollInterval(50);
-        break;
-      case 'Success':
-        // don't show modal. just update feedback
-        props.handleRefetch();
-        setIsTransactionPending(false);
-        setHasUserVoted(true);
-        setExpandedGroup(support);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: sendFeedbackState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setIsTransactionPending(false);
-        setIsTransactionWaiting(false);
-        props.setDataFetchPollInterval(0);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: sendFeedbackState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setIsTransactionPending(false);
-        setIsTransactionWaiting(false);
-        props.setDataFetchPollInterval(0);
-        break;
+    const status =
+      isCandidate === true ? sendCandidateFeedbackState?.status : sendProposalFeedbackState?.status;
+    const errorMessage =
+      isCandidate === true
+        ? sendCandidateFeedbackState?.errorMessage
+        : sendProposalFeedbackState?.errorMessage;
+
+    if (status === 'None') {
+      setIsTransactionPending(false);
+    } else if (status === 'PendingSignature') {
+      setIsTransactionWaiting(true);
+    } else if (status === 'Mining') {
+      setIsTransactionWaiting(false);
+      setIsTransactionPending(true);
+      setDataFetchPollInterval(50);
+    } else if (status === 'Success') {
+      // don't show modal. update feedback
+      handleRefetch();
+      setIsTransactionPending(false);
+      setHasUserVoted(true);
+      setExpandedGroup(support);
+    } else if (status === 'Fail' || status === 'Exception') {
+      toast.error(errorMessage || _(t`Please try again.`));
+      setIsTransactionPending(false);
+      setIsTransactionWaiting(false);
+      setDataFetchPollInterval(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sendFeedbackState, setModal]);
+  }, [sendCandidateFeedbackState, sendProposalFeedbackState, _]);
 
   const userFeedbackAdded = (
     <Trans>
       You provided{' '}
       <span
         className={clsx(
-          userVoteSupport?.supportDetailed === 1 && classes.forText,
-          userVoteSupport?.supportDetailed === 0 && classes.againstText,
-          userVoteSupport?.supportDetailed === 2 && classes.abstainText,
+          userVoteSupport?.supportDetailed === 1 && 'text-[var(--brand-color-green)]',
+          userVoteSupport?.supportDetailed === 0 && 'text-[var(--brand-color-red)]',
+          userVoteSupport?.supportDetailed === 2 && 'text-[var(--brand-gray-light-text)]',
         )}
       >
         {userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()}
@@ -161,18 +167,22 @@ function VoteSignals(props: Props) {
         dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
     </Trans>
   );
-  const title = (
-    <Trans>{props.isCandidate ? 'Pre-proposal feedback' : 'Pre-voting feedback'}</Trans>
+  const title = isCandidate ? (
+    <Trans>Pre-proposal feedback</Trans>
+  ) : (
+    <Trans>Pre-voting feedback</Trans>
   );
 
   return (
     <>
-      {props.proposalId && (
-        <div className={clsx(classes.voteSignals, props.isCandidate && classes.isCandidate)}>
-          <div className={classes.header}>
-            <h2>{title}</h2>
-            {!props.isCandidate && (
-              <p>
+      {proposalId && (
+        <div className={clsx(isCandidate && 'relative top-0')}>
+          <div className={clsx('my-4', isCandidate && 'mt-8')}>
+            <h2 className={clsx('m-0 mb-2 text-base font-bold', isCandidate && 'text-xl')}>
+              {title}
+            </h2>
+            {!isCandidate && (
+              <p className="m-0 p-0 text-base font-[PT_Root_UI] text-[var(--brand-gray-light-text)]">
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
                   idea of how they intend to vote and helpful guidance on proposal changes to change
@@ -181,14 +191,19 @@ function VoteSignals(props: Props) {
               </p>
             )}
           </div>
-          <div className={classes.wrapper}>
-            {!props.feedback ? (
-              <div className={classes.spinner}>
-                <Spinner animation="border" />
+          <div
+            className={clsx(
+              'flex flex-col items-center justify-between overflow-hidden rounded-xl border border-[#e6e6e6]',
+              !isCandidate && 'lg:sticky lg:top-5',
+            )}
+          >
+            {!feedbackList ? (
+              <div className="mx-auto flex h-full w-full items-center justify-center p-5 text-center">
+                <Spinner />
               </div>
             ) : (
               <>
-                <div className={classes.voteSignalGroupsList}>
+                <div className="w-full px-4 py-1.5">
                   <VoteSignalGroup
                     voteSignals={forFeedback}
                     support={1}
@@ -205,35 +220,41 @@ function VoteSignals(props: Props) {
                     isExpanded={expandedGroup === 2}
                   />
                 </div>
-                {!props.isFeedbackClosed && props.userVotes !== undefined && props.userVotes > 0 && (
-                  <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
+                {!isFeedbackClosed && userVotes !== undefined && userVotes > 0 && (
+                  <div
+                    className={clsx(
+                      'flex w-full flex-col items-center justify-center gap-2.5 border-t border-[#e6e6e6] bg-[#f4f4f8] p-5',
+                      userVoteSupport && 'block',
+                    )}
+                  >
                     {!hasUserVoted ? (
                       <>
                         {isTransactionWaiting || isTransactionPending ? (
                           <>
-                            <p>
+                            <p className="m-0 p-0 text-base font-bold leading-tight">
                               <Trans>Adding your feedback</Trans>
                             </p>
                             <img
                               src="/loading-noggles.svg"
                               alt="loading"
-                              className={classes.loadingNoggles}
+                              className="mx-auto max-w-[60px] p-2.5"
                             />
                           </>
                         ) : (
                           <>
-                            <p>
+                            <p className="m-0 p-0 text-base font-bold leading-tight">
                               <Trans>Add your feedback</Trans>
                             </p>
-                            <div className={classes.buttons}>
+                            <div className="flex flex-row gap-2.5 md:w-full md:flex-col">
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.for,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support && support === 1
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -244,12 +265,13 @@ function VoteSignals(props: Props) {
                               </button>
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.against,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support !== undefined && support === 0
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -260,16 +282,21 @@ function VoteSignals(props: Props) {
                               </button>
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.abstain,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support && support === 2
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
-                                  support === 2 ? setSupport(undefined) : setSupport(2);
+                                  if (support === 2) {
+                                    setSupport(undefined);
+                                  } else {
+                                    setSupport(2);
+                                  }
                                 }}
                               >
                                 <Trans>Abstain</Trans>
@@ -277,7 +304,7 @@ function VoteSignals(props: Props) {
                             </div>
                             <>
                               <FormControl
-                                className={classes.reasonInput}
+                                className="mb-0 w-full rounded-lg border border-[#aaa] p-2.5 text-sm"
                                 placeholder="Optional reason"
                                 value={reasonText}
                                 disabled={isTransactionPending || isTransactionWaiting}
@@ -285,7 +312,11 @@ function VoteSignals(props: Props) {
                                 as="textarea"
                               />
                               <button
-                                className={clsx(classes.button, classes.submit)}
+                                className={clsx(
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'disabled:cursor-not-allowed disabled:opacity-20',
+                                  'disabled:hover:border-2 disabled:hover:border-transparent disabled:hover:opacity-20 disabled:hover:outline-2 disabled:hover:outline-transparent',
+                                )}
                                 disabled={
                                   support === undefined ||
                                   isTransactionPending ||
@@ -293,15 +324,15 @@ function VoteSignals(props: Props) {
                                 }
                                 onClick={() => {
                                   setIsTransactionWaiting(true);
-                                  props.proposalId &&
-                                    support !== undefined &&
+                                  if (proposalId && support !== undefined) {
                                     handleFeedbackSubmit(
-                                      +props.proposalId,
+                                      +proposalId,
                                       support,
                                       reasonText,
-                                      props.candidateSlug,
-                                      props.proposer,
+                                      candidateSlug,
+                                      proposer,
                                     );
+                                  }
                                 }}
                               >
                                 <Trans>Submit</Trans>
@@ -311,11 +342,13 @@ function VoteSignals(props: Props) {
                         )}
                       </>
                     ) : (
-                      <div className={classes.voted}>
+                      <div className="text-left">
                         <p>{userFeedbackAdded}</p>
                         {userVoteSupport?.reason && (
-                          <div className={classes.userVotedReason}>
-                            <p>&ldquo;{userVoteSupport.reason}&rdquo;</p>
+                          <div className="">
+                            <p className="text-left text-sm font-normal italic text-[var(--brand-gray-light-text)]">
+                              &ldquo;{userVoteSupport.reason}&rdquo;
+                            </p>
                           </div>
                         )}
                       </div>
@@ -325,8 +358,8 @@ function VoteSignals(props: Props) {
               </>
             )}
           </div>
-          {props.isCandidate && (
-            <p className={classes.descriptionBelow}>
+          {isCandidate && (
+            <p className="m-0 mt-2 p-0 text-base text-sm font-[PT_Root_UI] leading-tight text-[var(--brand-gray-light-text)]">
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea
                 of how they intend to vote and helpful guidance on proposal changes to change their

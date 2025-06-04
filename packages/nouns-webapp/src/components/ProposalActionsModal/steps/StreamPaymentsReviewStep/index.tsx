@@ -1,33 +1,41 @@
-import { Trans } from '@lingui/react/macro';
+import type { FinalProposalActionStepProps } from '@/components/ProposalActionsModal';
+import type { ProposalTransaction } from '@/wrappers/nounsDao';
+
 import React from 'react';
-import { FinalProposalActionStepProps } from '../..';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalTitle from '../../../ModalTitle';
-import config from '../../../../config';
+
+import { Trans } from '@lingui/react/macro';
+import ReactTooltip from 'react-tooltip';
+
+import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
+import ModalLabel from '@/components/ModalLabel';
+import ModalTextPrimary from '@/components/ModalTextPrimary';
+import ModalTitle from '@/components/ModalTitle';
+import ShortAddress from '@/components/ShortAddress';
+import { nounsGovernorAddress } from '@/contracts';
+import useStreamPaymentTransactions from '@/hooks/useStreamPaymentTransactions';
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
   usePredictStreamAddress,
-} from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import { unixToDateString } from '../../../../utils/timeUtils';
-import ModalLabel from '../../../ModalLabel';
-import ModalTextPrimary from '../../../ModalTextPrimary';
-import useStreamPaymentTransactions from '../../../../hooks/useStreamPaymentTransactions';
-import ShortAddress from '../../../ShortAddress';
-import ReactTooltip from 'react-tooltip';
+} from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+import { unixToDateString } from '@/utils/timeUtils';
+import { defaultChain } from '@/wagmi';
+
 import classes from './StreamPaymentsReviewStep.module.css';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
+  const chainId = defaultChain.id;
+
   const predictedAddress = usePredictStreamAddress({
-    msgSender: config.addresses.nounsDaoExecutorProxy,
-    payer: config.addresses.nounsDaoExecutorProxy,
+    msgSender: nounsGovernorAddress[chainId],
+    payer: nounsGovernorAddress[chainId],
     recipient: state.address,
-    tokenAmount: formatTokenAmount(state.amount, state.TransferFundsCurrency),
+    tokenAmount: formatTokenAmount(Number(state.amount), state.TransferFundsCurrency),
     tokenAddress: getTokenAddressForCurrency(state.TransferFundsCurrency),
-    startTime: state.streamStartTimestamp,
-    endTime: state.streamEndTimestamp,
+    startTime: BigInt(state.streamStartTimestamp ?? 0),
+    endTime: BigInt(state.streamEndTimestamp ?? 0),
   });
 
   const actionTransactions = useStreamPaymentTransactions({
@@ -41,7 +49,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         id={'address-tooltip'}
         effect={'solid'}
         className={classes.hover}
-        getContent={dataTip => {
+        getContent={() => {
           return state.address;
         }}
       />
@@ -83,7 +91,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Streaming Payment Action</Trans>}
         onNextBtnClick={() => {
-          onNextBtnClick(actionTransactions);
+          onNextBtnClick(actionTransactions as unknown as ProposalTransaction);
           onDismiss();
         }}
       />

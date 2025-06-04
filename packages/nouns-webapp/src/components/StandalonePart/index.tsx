@@ -1,8 +1,9 @@
-import { ImageData as imageData, getPartData } from '@noundry/nouns-assets';
+import { getPartData, ImageData as imageData } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
+import cx from 'clsx';
 import Image from 'react-bootstrap/Image';
+
 import classes from './StandalonePart.module.css';
-import cx from 'classnames';
 
 interface StandalonePartProps {
   partType: string;

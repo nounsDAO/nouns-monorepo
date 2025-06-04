@@ -1,30 +1,30 @@
-import { BigNumber } from '@ethersproject/bignumber';
-import { useAppSelector } from '../hooks';
-import { compareBids } from '../utils/compareBids';
-import { generateEmptyNounderAuction, isNounderNoun } from '../utils/nounderNoun';
-import { Bid, BidEvent } from '../utils/types';
+import { useAppSelector } from '@/hooks';
+import { compareBids } from '@/utils/compareBids';
+import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounderNoun';
+import { Address, Bid, BidEvent } from '@/utils/types';
+
 import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
   return {
-    amount: BigNumber.from(reduxSafeAuction.amount),
-    bidder: reduxSafeAuction.bidder,
-    startTime: BigNumber.from(reduxSafeAuction.startTime),
-    endTime: BigNumber.from(reduxSafeAuction.endTime),
-    nounId: BigNumber.from(reduxSafeAuction.nounId),
+    amount: reduxSafeAuction.amount ? BigInt(reduxSafeAuction.amount) : undefined,
+    bidder: reduxSafeAuction.bidder ? (reduxSafeAuction.bidder as Address) : undefined,
+    startTime: BigInt(reduxSafeAuction.startTime),
+    endTime: BigInt(reduxSafeAuction.endTime),
+    nounId: BigInt(reduxSafeAuction.nounId),
     settled: false,
   };
 };
 
 const deserializeBid = (reduxSafeBid: BidEvent): Bid => {
   return {
-    nounId: BigNumber.from(reduxSafeBid.nounId),
+    nounId: BigInt(reduxSafeBid.nounId),
     sender: reduxSafeBid.sender,
-    value: BigNumber.from(reduxSafeBid.value),
+    value: BigInt(reduxSafeBid.value),
     extended: reduxSafeBid.extended,
     transactionHash: reduxSafeBid.transactionHash,
     transactionIndex: reduxSafeBid.transactionIndex,
-    timestamp: BigNumber.from(reduxSafeBid.timestamp),
+    timestamp: BigInt(reduxSafeBid.timestamp),
   };
 };
 const deserializeBids = (reduxSafeBids: BidEvent[]): Bid[] => {
@@ -39,23 +39,19 @@ const useOnDisplayAuction = (): Auction | undefined => {
   const currentAuction = useAppSelector(state => state.auction.activeAuction);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  if (
-    onDisplayAuctionNounId === undefined ||
-    lastAuctionNounId === undefined ||
-    currentAuction === undefined ||
-    !pastAuctions
-  )
+  if (!onDisplayAuctionNounId || !lastAuctionNounId || !currentAuction || !pastAuctions) {
     return undefined;
+  }
 
   // current auction
-  if (BigNumber.from(onDisplayAuctionNounId).eq(lastAuctionNounId)) {
+  if (BigInt(onDisplayAuctionNounId) === lastAuctionNounId) {
     return deserializeAuction(currentAuction);
   }
 
   // nounder auction
-  if (isNounderNoun(BigNumber.from(onDisplayAuctionNounId))) {
+  if (isNounderNoun(BigInt(onDisplayAuctionNounId))) {
     const emptyNounderAuction = generateEmptyNounderAuction(
-      BigNumber.from(onDisplayAuctionNounId),
+      BigInt(onDisplayAuctionNounId),
       pastAuctions,
     );
 
@@ -63,30 +59,32 @@ const useOnDisplayAuction = (): Auction | undefined => {
   }
 
   // past auction
-  const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
-    const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
-    return nounId && nounId.toNumber() === onDisplayAuctionNounId;
-  })?.activeAuction;
+  const pastAuction = pastAuctions.find(auction => {
+    if (!auction.activeAuction) return false;
+    const nounId = BigInt(auction.activeAuction.nounId);
+    return Number(nounId) === onDisplayAuctionNounId;
+  });
+  const reduxSafeAuction = pastAuction?.activeAuction;
 
   return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
 };
 
-export const useAuctionBids = (auctionNounId: BigNumber): Bid[] | undefined => {
+export const useAuctionBids = (auctionNounId: bigint): Bid[] | undefined => {
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const lastAuctionBids = useAppSelector(state => state.auction.bids);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
   // auction requested is active auction
-  if (lastAuctionNounId === auctionNounId.toNumber()) {
+  if (lastAuctionNounId === Number(auctionNounId)) {
     return deserializeBids(lastAuctionBids);
   } else {
     // find bids for past auction requested
-    const bidEvents: BidEvent[] | undefined = pastAuctions.find(auction => {
-      const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
-      return nounId && nounId.eq(auctionNounId);
+    const bidEvents: BidEvent[] | undefined = pastAuctions?.find(auction => {
+      const nounId = auction.activeAuction && BigInt(auction.activeAuction.nounId);
+      return !!nounId && nounId === auctionNounId;
     })?.bids;
 
-    return bidEvents && deserializeBids(bidEvents);
+    return bidEvents ? deserializeBids(bidEvents) : undefined;
   }
 };
 

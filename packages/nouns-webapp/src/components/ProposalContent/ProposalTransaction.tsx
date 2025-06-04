@@ -1,23 +1,30 @@
+import { Fragment } from 'react';
+
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import config from '../../config';
-import { utils } from 'ethers';
-import React, { Fragment } from 'react';
-import { linkIfAddress } from '.';
-import { ProposalDetail } from '../../wrappers/nounsDao';
-import ShortAddress from '../ShortAddress';
+import { formatUnits } from 'viem';
+
+import ShortAddress from '@/components/ShortAddress';
+import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
+import { defaultChain } from '@/wagmi';
+import { ProposalDetail } from '@/wrappers/nounsDao';
+
 import classes from './ProposalContent.module.css';
 
-type Props = {
+import { linkIfAddress } from '.';
+
+type ProposalTransactionProps = {
   transaction: ProposalDetail;
 };
 
-export default function ProposalTransaction({ transaction }: Props) {
+export default function ProposalTransaction({ transaction }: Readonly<ProposalTransactionProps>) {
+  const chainId = defaultChain.id;
+
   return (
     <li className="m-0">
       {linkIfAddress(transaction.target)}.{transaction.functionSig}
-      {transaction.value}
-      {!!transaction.functionSig ? (
+      {transaction.value ? String(transaction.value) : null}
+      {transaction.functionSig ? (
         <>
           (<br />
           {transaction.callData.split(',').map((content, i) => {
@@ -37,36 +44,39 @@ export default function ProposalTransaction({ transaction }: Props) {
       ) : (
         transaction.callData
       )}
-      {transaction.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && transaction.functionSig === 'transfer' && (
-        <div className={classes.txnInfoText}>
-          <div className={classes.txnInfoIconWrapper}>
-            <InformationCircleIcon className={classes.txnInfoIcon} />
+      {transaction.target.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase() &&
+        transaction.functionSig === 'transfer' && (
+          <div className={classes.txnInfoText}>
+            <div className={classes.txnInfoIconWrapper}>
+              <InformationCircleIcon className={classes.txnInfoIcon} />
+            </div>
+            <div>
+              <Trans>
+                This transaction was automatically added to refill the TokenBuyer. Proposers do not
+                receive this ETH.
+              </Trans>
+            </div>
           </div>
-          <div>
-            <Trans>
-              This transaction was automatically added to refill the TokenBuyer. Proposers do not
-              receive this ETH.
-            </Trans>
+        )}
+      {transaction.target.toLowerCase() === nounsPayerAddress[chainId].toLowerCase() &&
+        transaction.functionSig === 'sendOrRegisterDebt' && (
+          <div className={classes.txnInfoText}>
+            <div className={classes.txnInfoIconWrapper}>
+              <InformationCircleIcon className={classes.txnInfoIcon} />
+            </div>
+            <div>
+              <Trans>
+                This transaction sends{' '}
+                {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
+                  Number(formatUnits(BigInt(transaction.callData.split(',')[1]), 6)),
+                )}{' '}
+                USDC to{' '}
+                <ShortAddress address={transaction.callData.split(',')[0] as `0x${string}`} /> via
+                the DAO&apos;s PayerContract.
+              </Trans>
+            </div>
           </div>
-        </div>
-      )}
-      {transaction.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && transaction.functionSig === 'sendOrRegisterDebt' && (
-        <div className={classes.txnInfoText}>
-          <div className={classes.txnInfoIconWrapper}>
-            <InformationCircleIcon className={classes.txnInfoIcon} />
-          </div>
-          <div>
-            <Trans>
-              This transaction sends{' '}
-              {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
-                Number(utils.formatUnits(transaction.callData.split(',')[1], 6)),
-              )}{' '}
-              USDC to <ShortAddress address={transaction.callData.split(',')[0]} /> via the DAO's
-              PayerContract.
-            </Trans>
-          </div>
-        </div>
-      )}
+        )}
     </li>
   );
 }

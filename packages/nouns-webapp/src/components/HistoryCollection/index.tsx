@@ -1,38 +1,40 @@
-import { BigNumber, BigNumberish } from 'ethers';
-import Section from '../../layout/Section';
-import classes from './HistoryCollection.module.css';
+import React from 'react';
+
 import clsx from 'clsx';
-import StandaloneNoun from '../StandaloneNoun';
-import { LoadingNoun } from '../Noun';
-import config from '../../config';
 import { Container, Row } from 'react-bootstrap';
+
+import { LoadingNoun } from '@/components/Noun';
+import StandaloneNoun from '@/components/StandaloneNoun';
+import config from '@/config';
+import Section from '@/layout/Section';
+
+import classes from './HistoryCollection.module.css';
 
 interface HistoryCollectionProps {
   historyCount: number;
-  latestNounId: BigNumberish;
+  latestNounId: bigint | boolean | number | string;
 }
 
-const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryCollectionProps) => {
-  const { historyCount, latestNounId } = props;
-
+const HistoryCollection: React.FC<HistoryCollectionProps> = ({
+  historyCount,
+  latestNounId,
+}: HistoryCollectionProps) => {
   if (!latestNounId) return null;
 
-  const startAtZero = BigNumber.from(latestNounId).sub(historyCount).lt(0);
+  const startAtZero = BigInt(latestNounId) - BigInt(historyCount) < 0n;
 
-  let nounIds: Array<BigNumber | null> = new Array(historyCount);
+  let nounIds: Array<bigint | null> = new Array(historyCount);
   nounIds = nounIds.fill(null).map((_, i) => {
-    if (BigNumber.from(i).lt(latestNounId)) {
-      const index = startAtZero
-        ? BigNumber.from(0)
-        : BigNumber.from(Number(latestNounId) - historyCount);
-      return index.add(i);
+    if (BigInt(i) < BigInt(latestNounId)) {
+      const index = startAtZero ? BigInt(0) : BigInt(Number(latestNounId) - historyCount);
+      return index + BigInt(i);
     } else {
       return null;
     }
   });
 
   const nounsContent = nounIds.map((nounId, i) => {
-    return !nounId ? <LoadingNoun key={i} /> : <StandaloneNoun key={i} nounId={nounId} />;
+    return !nounId ? <LoadingNoun key={i} /> : <StandaloneNoun key={i} nounId={BigInt(nounId)} />;
   });
 
   return (

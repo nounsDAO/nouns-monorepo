@@ -1,8 +1,14 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+
 import classes from './Link.module.css';
 
-const Link: React.FC<{ text: ReactNode; url: string; leavesPage: boolean }> = props => {
-  const { text, url, leavesPage } = props;
+interface LinkProps {
+  text: ReactNode;
+  url: string;
+  leavesPage: boolean;
+}
+
+const Link: React.FC<LinkProps> = ({ leavesPage, text, url }) => {
   return (
     <a
       className={classes.link}

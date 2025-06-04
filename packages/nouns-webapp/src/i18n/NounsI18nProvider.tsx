@@ -1,14 +1,11 @@
-/**
- * NounsI18nProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
- */
-import { i18n } from '@lingui/core';
-import { I18nProvider } from '@lingui/react';
-import { DEFAULT_LOCALE, SupportedLocale } from './locales';
 import { ReactNode, useEffect } from 'react';
 
-export async function dynamicActivate(locale: SupportedLocale) {
-  console.log(`Starting locale activation for: ${locale}`);
+import { i18n } from '@lingui/core';
+import { I18nProvider } from '@lingui/react';
 
+import { DEFAULT_LOCALE, SupportedLocale } from './locales';
+
+export async function dynamicActivate(locale: SupportedLocale) {
   try {
     // Use a standard import without the loader syntax
     const catalog = await import(`../locales/${locale}.po`);
@@ -17,7 +14,6 @@ export async function dynamicActivate(locale: SupportedLocale) {
     if (catalog && (catalog.messages || catalog.default)) {
       // Load the messages into i18n
       i18n.load(locale, catalog.messages || catalog.default);
-      console.log(`Successfully loaded messages for ${locale}`);
     } else {
       console.error(`Catalog loaded but no messages found for ${locale}`);
     }
@@ -26,7 +22,6 @@ export async function dynamicActivate(locale: SupportedLocale) {
   }
 
   // Activate the locale
-  console.log('Activating locale:', locale);
   i18n.activate(locale);
 }
 
@@ -37,7 +32,7 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export function NounsI18nProvider({ locale, onActivate, children }: ProviderProps) {
+export function NounsI18nProvider({ locale, onActivate, children }: Readonly<ProviderProps>) {
   useEffect(() => {
     dynamicActivate(locale)
       .then(() => onActivate?.(locale))
@@ -50,7 +45,7 @@ export function NounsI18nProvider({ locale, onActivate, children }: ProviderProp
   // This renders the translation _keys_, not the translation _messages_, which is only acceptable while loading the DEFAULT_LOCALE,
   // as [there are no "default" messages](https://github.com/lingui/js-lingui/issues/388#issuecomment-497779030).
   // See https://github.com/lingui/js-lingui/issues/1194#issuecomment-1068488619.
-  if (i18n.locale === undefined && locale === DEFAULT_LOCALE) {
+  if (i18n.locale == undefined && locale === DEFAULT_LOCALE) {
     i18n.load(DEFAULT_LOCALE, {});
     i18n.activate(DEFAULT_LOCALE);
   }
