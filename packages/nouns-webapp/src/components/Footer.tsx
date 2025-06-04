@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 
 import DiscordIcon from '@/assets/icons/socials/discord.svg?react';
@@ -117,8 +117,9 @@ export const Footer = () => {
       <div className="mt-12 flex items-center justify-center text-base text-black sm:mt-16">
         <p className="m-0 p-1">{`${new Date().getFullYear()} Nouns DAO`}</p>·
         <p className="m-0 p-1">
-          {t`made with `}
-          <NogglesLogo className="inline-block h-3 align-baseline" />
+          <Trans>
+            made with <NogglesLogo className="inline-block h-3 align-baseline" />
+          </Trans>
         </p>
       </div>
     </footer>
