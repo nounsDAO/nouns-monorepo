@@ -36,7 +36,6 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
-import { cn } from '@/lib/utils';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { getNounVotes } from '@/utils/getNounsVotes';
 import { isProposalUpdatable } from '@/utils/proposals';
@@ -477,7 +476,7 @@ const VotePage = () => {
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
-    <Section fullWidth={false} className={cn(classes.votePage, 'mb-10 sm:mb-20')}>
+    <Section fullWidth={false} className={classes.votePage}>
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
