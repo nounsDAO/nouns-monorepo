@@ -71,7 +71,7 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="border-t p-6 sm:!p-10 lg:!p-12">
+    <footer className="mt-10 border-t p-6 sm:mt-20 sm:!p-10 lg:!p-12">
       <div className="flex flex-wrap-reverse items-end justify-between gap-10">
         <section className="flex flex-grow items-center justify-center gap-4 sm:justify-normal">
           {socialItems.map(({ alt, url, icon }) => (
