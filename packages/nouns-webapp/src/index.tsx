@@ -2,7 +2,6 @@ import type { Address } from './utils/types';
 
 import React, { useEffect } from 'react';
 
-import './index.css';
 import { ApolloProvider } from '@apollo/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
