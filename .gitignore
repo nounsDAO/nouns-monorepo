@@ -9,6 +9,7 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
+.claude
 
 # Local Netlify folder
 .netlify
