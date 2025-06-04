@@ -71,15 +71,16 @@ msgstr "Objection period triggered"
 msgid "You must have {0} votes to submit a proposal"
 msgstr "You must have {0} votes to submit a proposal"
 
+#: src/components/Footer.tsx
+msgid "made with <0/>"
+msgstr "made with <0/>"
+
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Review Streaming Payment Action"
 msgstr "Review Streaming Payment Action"
 
-#: src/components/Footer/index.tsx
-msgid "Twitter"
-msgstr "Twitter"
-
 #: src/pages/Playground/index.tsx
+#: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 #: src/components/Documentation/index.tsx
 msgid "Playground"
@@ -119,6 +120,7 @@ msgid "Add Function Call Arguments"
 msgstr "Add Function Call Arguments"
 
 #: src/pages/Governance/index.tsx
+#: src/components/Footer.tsx
 #: src/components/NavBarTreasury/index.tsx
 msgid "Treasury"
 msgstr "Treasury"
@@ -502,10 +504,6 @@ msgstr "minutes"
 msgid "Accessory"
 msgstr "Accessory"
 
-#: src/pages/Candidate/index.tsx
-msgid "Proposal Candidate Canceled!"
-msgstr "Proposal Candidate Canceled!"
-
 #: src/components/Proposals/index.tsx
 msgid "Candidates submitted by community members will appear here."
 msgstr "Candidates submitted by community members will appear here."
@@ -805,6 +803,10 @@ msgstr "Proposer has {0} vote{1}"
 msgid "On-Chain Artwork"
 msgstr "On-Chain Artwork"
 
+#: src/components/Footer.tsx
+msgid "Descriptor"
+msgstr "Descriptor"
+
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
 msgstr "You can settle manually in 1 minute"
@@ -833,6 +835,14 @@ msgstr "Error"
 msgid "Add Stream Date Details"
 msgstr "Add Stream Date Details"
 
+#: src/components/Footer.tsx
+msgid "Forks"
+msgstr "Forks"
+
+#: src/components/Footer.tsx
+msgid "Token"
+msgstr "Token"
+
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "Delegate {availableVotes} Vote"
@@ -858,10 +868,6 @@ msgstr "ended {0}"
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
 msgstr "Pending"
-
-#: src/components/Footer/index.tsx
-msgid "Farcaster"
-msgstr "Farcaster"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
@@ -1082,6 +1088,7 @@ msgstr "Delegate Update Failed"
 
 #: src/pages/Governance/index.tsx
 #: src/pages/Forks/index.tsx
+#: src/components/Footer.tsx
 msgid "Governance"
 msgstr "Governance"
 
@@ -1100,6 +1107,10 @@ msgstr "Governance ‘Slow Start’"
 #: src/components/Documentation/index.tsx
 msgid "Summary"
 msgstr "Summary"
+
+#: src/components/Footer.tsx
+msgid "Governor"
+msgstr "Governor"
 
 #: src/components/Proposals/index.tsx
 msgid "Proposal candidates can be created by anyone. If a candidate receives enough signatures by Nouns voters, it can be promoted to a proposal."
@@ -1205,8 +1216,6 @@ msgstr "The Nounders"
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
-#: src/pages/Candidate/index.tsx
-#: src/pages/Candidate/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -1274,6 +1283,10 @@ msgstr "ONE NOUN,"
 #: src/components/VoteSignals/VoteSignals.tsx
 msgid "Submit"
 msgstr "Submit"
+
+#: src/components/Footer.tsx
+msgid "Auction"
+msgstr "Auction"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
@@ -1371,6 +1384,7 @@ msgstr "No sponsored votes needed"
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 
+#: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 msgid "Nouns & Traits"
 msgstr "Nouns & Traits"
@@ -1470,7 +1484,6 @@ msgid "Vote on Prop {0}"
 msgstr "Vote on Prop {0}"
 
 #: src/components/NounInfoCard.tsx
-#: src/components/Footer/index.tsx
 msgid "Etherscan"
 msgstr "Etherscan"
 
@@ -1623,7 +1636,6 @@ msgid "Noun"
 msgstr "Noun"
 
 #: src/pages/Vote/index.tsx
-#: src/pages/Candidate/index.tsx
 msgid "Transaction Successful!"
 msgstr "Transaction Successful!"
 
