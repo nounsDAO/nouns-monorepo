@@ -95,6 +95,11 @@ export const Footer = () => {
                 {items.map(({ label, url }) => (
                   <li key={label}>
                     <Link
+                      onClick={() => {
+                        if (url.startsWith('/')) {
+                          window.scrollTo({ top: 0 });
+                        }
+                      }}
                       to={url}
                       target={url.startsWith('/') ? undefined : '_blank'}
                       className="font-medium text-black no-underline hover:text-red-500"
