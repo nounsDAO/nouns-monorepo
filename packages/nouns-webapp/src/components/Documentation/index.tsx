@@ -3,6 +3,13 @@ import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
 import Link from '@/components/Link';
+import {
+  useReadNounsDescriptorAccessoryCount,
+  useReadNounsDescriptorBackgroundCount,
+  useReadNounsDescriptorBodyCount,
+  useReadNounsDescriptorHeadCount,
+  useReadNounsDescriptorGlassesCount,
+} from '@/contracts';
 import Section from '@/layout/Section';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +17,34 @@ import classes from './Documentation.module.css';
 
 interface DocumentationProps {
   backgroundColor?: string;
+}
+
+function NounTraits() {
+  const { data: accessoryCount } = useReadNounsDescriptorAccessoryCount();
+  const { data: backgroundCount } = useReadNounsDescriptorBackgroundCount();
+  const { data: bodyCount } = useReadNounsDescriptorBodyCount();
+  const { data: headCount } = useReadNounsDescriptorHeadCount();
+  const { data: glassesCount } = useReadNounsDescriptorGlassesCount();
+
+  return (
+    <ul>
+      <li>
+        <Trans>backgrounds ({backgroundCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>bodies ({bodyCount?.toString()})</Trans>
+      </li>
+      <li>
+        <Trans>accessories ({accessoryCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>heads ({headCount?.toString()}) </Trans>
+      </li>
+      <li>
+        <Trans>glasses ({glassesCount?.toString()})</Trans>
+      </li>
+    </ul>
+  );
 }
 
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
@@ -272,23 +307,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   makes all Nouns equally rare. As of this writing, Nouns are made up of:
                 </Trans>
               </p>
-              <ul>
-                <li>
-                  <Trans>backgrounds (2) </Trans>
-                </li>
-                <li>
-                  <Trans>bodies (30)</Trans>
-                </li>
-                <li>
-                  <Trans>accessories (140) </Trans>
-                </li>
-                <li>
-                  <Trans>heads (242) </Trans>
-                </li>
-                <li>
-                  <Trans>glasses (23)</Trans>
-                </li>
-              </ul>
+              <NounTraits />
               <Trans>
                 You can experiment with off-chain Noun generation at the {playgroundLink}.
               </Trans>

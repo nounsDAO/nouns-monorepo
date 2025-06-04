@@ -25,6 +25,11 @@ msgstr ""
 msgid "You voted <0>Against</0> this proposal"
 msgstr ""
 
+#. placeholder {0}: bodyCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "bodies ({0})"
+msgstr ""
+
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr ""
@@ -35,10 +40,6 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "At this time only USDC and WETH streams are supported"
-msgstr ""
-
-#: src/components/Documentation/index.tsx
-msgid "accessories (140) "
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -247,6 +248,11 @@ msgstr ""
 msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
 msgstr ""
 
+#. placeholder {0}: glassesCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "glasses ({0})"
+msgstr ""
+
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
 msgid "ends {0}"
@@ -365,10 +371,6 @@ msgstr ""
 #. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
-msgstr ""
-
-#: src/components/Documentation/index.tsx
-msgid "glasses (23)"
 msgstr ""
 
 #: src/components/CurrentDelegatePannel/index.tsx
@@ -495,6 +497,11 @@ msgstr ""
 msgid "You don't have enough votes to submit a proposal"
 msgstr ""
 
+#. placeholder {0}: headCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "heads ({0}) "
+msgstr ""
+
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "minutes"
 msgstr ""
@@ -518,6 +525,11 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr ""
+
+#. placeholder {0}: backgroundCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "backgrounds ({0}) "
 msgstr ""
 
 #: src/components/CurrentBid/index.tsx
@@ -692,10 +704,6 @@ msgstr ""
 #: src/components/ProposalContent/index.tsx
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 msgid "Description"
-msgstr ""
-
-#: src/components/Documentation/index.tsx
-msgid "heads (242) "
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
@@ -1173,6 +1181,11 @@ msgstr ""
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr ""
 
+#. placeholder {0}: accessoryCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "accessories ({0}) "
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr ""
@@ -1246,10 +1259,6 @@ msgstr ""
 
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Once a signed proposal is onchain, signers will need to wait until the proposal is queued or defeated before putting another proposal onchain."
-msgstr ""
-
-#: src/components/Documentation/index.tsx
-msgid "bodies (30)"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx

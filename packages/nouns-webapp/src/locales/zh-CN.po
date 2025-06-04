@@ -25,6 +25,11 @@ msgstr "断开连接"
 msgid "You voted <0>Against</0> this proposal"
 msgstr "您对此提案投了<0>反对</0>票"
 
+#. placeholder {0}: bodyCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "bodies ({0})"
+msgstr "身体（{0}）"
+
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "这将清除所有先前的支持者和反馈投票"
@@ -36,10 +41,6 @@ msgstr "由于 100% 的 Noun 拍卖收入都发往 Nouns DAO，Nounders 决定�
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "At this time only USDC and WETH streams are supported"
 msgstr "目前仅支持 USDC 和 WETH 流支付"
-
-#: src/components/Documentation/index.tsx
-msgid "accessories (140) "
-msgstr "配饰（140） "
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Has"
@@ -244,6 +245,11 @@ msgstr "开始于 {0}"
 msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
 msgstr "贿赂选民以便从国库中提取资金以谋取个人利益"
 
+#. placeholder {0}: glassesCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "glasses ({0})"
+msgstr "眼镜（{0}）"
+
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
 msgid "ends {0}"
@@ -363,10 +369,6 @@ msgstr "您可在 {0} 分钟内手动结算"
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "结束于 {0}"
-
-#: src/components/Documentation/index.tsx
-msgid "glasses (23)"
-msgstr "眼镜（23）"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ChangeDelegatePanel/index.tsx
@@ -489,6 +491,11 @@ msgstr "背景"
 msgid "You don't have enough votes to submit a proposal"
 msgstr "您的票数不足，无法提交提案"
 
+#. placeholder {0}: headCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "heads ({0}) "
+msgstr "头部（{0}）"
+
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "minutes"
 msgstr "分钟"
@@ -513,6 +520,11 @@ msgstr "分叉"
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr "Nouns DAO 利用 {compoundGovLink} 的一个分叉，是 Nouns 生态系统的主要治理主体。Nouns DAO 金库接收每日 Noun 拍卖 100% 的 ETH 收益。每个 Noun 都是 Nouns DAO 的不可撤销成员，并在所有治理事务中享有一票。Noun 投票不可转让（若您出售 Noun，投票权随之转移），但可委托，只要您拥有 Noun，就可将投票委托给他人。"
+
+#. placeholder {0}: backgroundCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "backgrounds ({0}) "
+msgstr "背景（{0}）"
 
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
@@ -681,10 +693,6 @@ msgstr "提交签名"
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 msgid "Description"
 msgstr "描述"
-
-#: src/components/Documentation/index.tsx
-msgid "heads (242) "
-msgstr "头部（242）"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Sponsored by"
@@ -915,6 +923,8 @@ msgstr "仅对您可见"
 msgid "Add Action Details"
 msgstr "添加操作详情"
 
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "委托"
@@ -1155,6 +1165,11 @@ msgstr "提案已创建！"
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr "特征生成并非真正随机。待处理区块中的铸造可预测特征。"
 
+#. placeholder {0}: accessoryCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "accessories ({0}) "
+msgstr "配饰 ({0}) "
+
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounders 以 Noun 形式获得奖励（前五年供应的 10%）。"
@@ -1212,10 +1227,6 @@ msgstr "创建提案候选"
 #: src/components/CandidateSponsors/SignatureForm.tsx
 msgid "Once a signed proposal is onchain, signers will need to wait until the proposal is queued or defeated before putting another proposal onchain."
 msgstr "一旦已签名的提案上链，签名者需要等待该提案被排队或被否决后才能将另一个提案上链。"
-
-#: src/components/Documentation/index.tsx
-msgid "bodies (30)"
-msgstr "身体（30）"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Ending on"
@@ -1676,6 +1687,7 @@ msgstr "在未经审计的情况下对关键智能合约进行升级"
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "
 msgstr "背景 (2) "
+msgstr ""
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx

@@ -30,6 +30,11 @@ msgstr "切断する"
 msgid "You voted <0>Against</0> this proposal"
 msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 
+#. placeholder {0}: bodyCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "bodies ({0})"
+msgstr ""
+
 #: src/pages/EditCandidate/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "これにより、以前のすべてのスポンサーとフィードバック投票がクリアされます"
@@ -45,6 +50,7 @@ msgstr "現時点では、USDCとWETHのストリームのみがサポートさ�
 #: src/components/Documentation/index.tsx
 msgid "accessories (140) "
 msgstr "アクセサリー (140) "
+msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Has"
@@ -248,6 +254,12 @@ msgstr "開始 {0}"
 #: src/components/Documentation/index.tsx
 msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
 msgstr "個人的な利益のために財務省の引き出しを容易にするために有権者を買収する"
+msgstr ""
+
+#. placeholder {0}: glassesCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "glasses ({0})"
+msgstr ""
 
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
@@ -368,10 +380,6 @@ msgstr "{0} 分で手動で決済できます"
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "残り{0} で終了します"
-
-#: src/components/Documentation/index.tsx
-msgid "glasses (23)"
-msgstr "メガネ (23)"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ChangeDelegatePanel/index.tsx
@@ -494,6 +502,11 @@ msgstr "背景"
 msgid "You don't have enough votes to submit a proposal"
 msgstr "提案を提出するのに十分な投票がありません"
 
+#. placeholder {0}: headCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "heads ({0}) "
+msgstr ""
+
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "minutes"
 msgstr "分"
@@ -518,6 +531,11 @@ msgstr "フォーク"
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、Nounsエコシステムの主要な統治機関です。毎日起こるNounオークションから得られるETHの収益の100％はNouns DAO トレジャリーにて受け取られています。各NounはNouns DAOの変更不可能なメンバーであり、すべてのガバナンスの問題で1票の投票権を有します。Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
+
+#. placeholder {0}: backgroundCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "backgrounds ({0}) "
+msgstr ""
 
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
@@ -548,6 +566,7 @@ msgstr "Nounsは全員Nouns DAOの会員です。"
 #: src/components/ForkingPeriodTimer/index.tsx
 msgid "days"
 msgstr "日"
+msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
@@ -835,6 +854,7 @@ msgstr "フォーク"
 #: src/components/Footer.tsx
 msgid "Token"
 msgstr "トークン"
+msgstr ""
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -920,6 +940,8 @@ msgstr "あなたにのみ表示されます"
 msgid "Add Action Details"
 msgstr "アクションの詳細を追加"
 
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
@@ -1160,6 +1182,11 @@ msgstr "提案が作成されました！"
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr "特徴生成は完全にランダムというわけではなく、形質は、保留中のブロックにNounをミントする際に予想することができます。"
 
+#. placeholder {0}: accessoryCount?.toString()
+#: src/components/Documentation/index.tsx
+msgid "accessories ({0}) "
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
@@ -1221,6 +1248,7 @@ msgstr "署名済みの提案がオンチェーンにある場合、署名者は
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
 msgstr "体 (30)"
+msgstr ""
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Ending on"
@@ -1681,6 +1709,7 @@ msgstr "監査を受けずに重要なスマートコントラクトをアップ
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2) "
 msgstr "背景 (2) "
+msgstr ""
 
 #: src/pages/Playground/index.tsx
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
