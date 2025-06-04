@@ -40,9 +40,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
               <img
                 alt={bid.sender}
                 src={blo(bid.sender as Address)}
-                width={40}
-                height={40}
-                style={{ borderRadius: '50%' }}
+                className="size-10 rounded-full"
               />
               <div className={classes.bidderInfoText}>
                 <span>
@@ -51,12 +49,9 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
                     <img
                       src={_trophy}
                       alt="Winning bidder"
-                      className={classes.trophy}
-                      height={16}
-                      width={16}
+                      className={'ml-1 inline-block size-4'}
                     />
                   )}
-                  <br />
                   <div className={classes.bidDate}>
                     {i18n.date(new Date(Number(bid.timestamp) * 1000), {
                       dateStyle: 'medium',
