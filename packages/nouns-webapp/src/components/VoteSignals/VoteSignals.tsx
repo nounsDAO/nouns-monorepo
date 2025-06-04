@@ -5,14 +5,14 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { FormControl, Spinner } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
+import { Spinner } from '@/components/Spinner';
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';
-import classes from './VoteSignals.module.css';
 
 type VoteSignalsProps = {
   proposalId?: string;
@@ -155,9 +155,9 @@ function VoteSignals({
       You provided{' '}
       <span
         className={clsx(
-          userVoteSupport?.supportDetailed === 1 && classes.forText,
-          userVoteSupport?.supportDetailed === 0 && classes.againstText,
-          userVoteSupport?.supportDetailed === 2 && classes.abstainText,
+          userVoteSupport?.supportDetailed === 1 && 'text-[var(--brand-color-green)]',
+          userVoteSupport?.supportDetailed === 0 && 'text-[var(--brand-color-red)]',
+          userVoteSupport?.supportDetailed === 2 && 'text-[var(--brand-gray-light-text)]',
         )}
       >
         {userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()}
@@ -176,11 +176,13 @@ function VoteSignals({
   return (
     <>
       {proposalId && (
-        <div className={clsx(classes.voteSignals, isCandidate && classes.isCandidate)}>
-          <div className={classes.header}>
-            <h2>{title}</h2>
+        <div className={clsx(isCandidate && 'relative top-0')}>
+          <div className={clsx('my-4', isCandidate && 'mt-8')}>
+            <h2 className={clsx('m-0 mb-2 text-base font-bold', isCandidate && 'text-xl')}>
+              {title}
+            </h2>
             {!isCandidate && (
-              <p>
+              <p className="m-0 p-0 text-base font-[PT_Root_UI] text-[var(--brand-gray-light-text)]">
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
                   idea of how they intend to vote and helpful guidance on proposal changes to change
@@ -189,14 +191,19 @@ function VoteSignals({
               </p>
             )}
           </div>
-          <div className={classes.wrapper}>
+          <div
+            className={clsx(
+              'flex flex-col items-center justify-between overflow-hidden rounded-xl border border-[#e6e6e6]',
+              !isCandidate && 'lg:sticky lg:top-5',
+            )}
+          >
             {!feedbackList ? (
-              <div className={classes.spinner}>
-                <Spinner animation="border" />
+              <div className="mx-auto flex h-full w-full items-center justify-center p-5 text-center">
+                <Spinner />
               </div>
             ) : (
               <>
-                <div className={classes.voteSignalGroupsList}>
+                <div className="w-full px-4 py-1.5">
                   <VoteSignalGroup
                     voteSignals={forFeedback}
                     support={1}
@@ -214,34 +221,40 @@ function VoteSignals({
                   />
                 </div>
                 {!isFeedbackClosed && userVotes !== undefined && userVotes > 0 && (
-                  <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
+                  <div
+                    className={clsx(
+                      'flex w-full flex-col items-center justify-center gap-2.5 border-t border-[#e6e6e6] bg-[#f4f4f8] p-5',
+                      userVoteSupport && 'block',
+                    )}
+                  >
                     {!hasUserVoted ? (
                       <>
                         {isTransactionWaiting || isTransactionPending ? (
                           <>
-                            <p>
+                            <p className="m-0 p-0 text-base font-bold leading-tight">
                               <Trans>Adding your feedback</Trans>
                             </p>
                             <img
                               src="/loading-noggles.svg"
                               alt="loading"
-                              className={classes.loadingNoggles}
+                              className="mx-auto max-w-[60px] p-2.5"
                             />
                           </>
                         ) : (
                           <>
-                            <p>
+                            <p className="m-0 p-0 text-base font-bold leading-tight">
                               <Trans>Add your feedback</Trans>
                             </p>
-                            <div className={classes.buttons}>
+                            <div className="flex flex-row gap-2.5 md:w-full md:flex-col">
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.for,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support && support === 1
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -252,12 +265,13 @@ function VoteSignals({
                               </button>
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.against,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support !== undefined && support === 0
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -268,12 +282,13 @@ function VoteSignals({
                               </button>
                               <button
                                 className={clsx(
-                                  classes.button,
-                                  classes.abstain,
-                                  support === undefined && classes.noSupportSelected,
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  support === undefined && 'opacity-100',
                                   support && support === 2
-                                    ? classes.selectedSupport
-                                    : classes.unselectedSupport,
+                                    ? 'border-2 border-white outline-2 outline-black'
+                                    : 'opacity-40',
+                                  support === undefined && 'opacity-100',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
@@ -289,7 +304,7 @@ function VoteSignals({
                             </div>
                             <>
                               <FormControl
-                                className={classes.reasonInput}
+                                className="mb-0 w-full rounded-lg border border-[#aaa] p-2.5 text-sm"
                                 placeholder="Optional reason"
                                 value={reasonText}
                                 disabled={isTransactionPending || isTransactionWaiting}
@@ -297,7 +312,11 @@ function VoteSignals({
                                 as="textarea"
                               />
                               <button
-                                className={clsx(classes.button, classes.submit)}
+                                className={clsx(
+                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'disabled:cursor-not-allowed disabled:opacity-20',
+                                  'disabled:hover:border-2 disabled:hover:border-transparent disabled:hover:opacity-20 disabled:hover:outline-2 disabled:hover:outline-transparent',
+                                )}
                                 disabled={
                                   support === undefined ||
                                   isTransactionPending ||
@@ -323,11 +342,13 @@ function VoteSignals({
                         )}
                       </>
                     ) : (
-                      <div className={classes.voted}>
+                      <div className="text-left">
                         <p>{userFeedbackAdded}</p>
                         {userVoteSupport?.reason && (
-                          <div className={classes.userVotedReason}>
-                            <p>&ldquo;{userVoteSupport.reason}&rdquo;</p>
+                          <div className="">
+                            <p className="text-left text-sm font-normal italic text-[var(--brand-gray-light-text)]">
+                              &ldquo;{userVoteSupport.reason}&rdquo;
+                            </p>
                           </div>
                         )}
                       </div>
@@ -338,7 +359,7 @@ function VoteSignals({
             )}
           </div>
           {isCandidate && (
-            <p className={classes.descriptionBelow}>
+            <p className="m-0 mt-2 p-0 text-base text-sm font-[PT_Root_UI] leading-tight text-[var(--brand-gray-light-text)]">
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea
                 of how they intend to vote and helpful guidance on proposal changes to change their
