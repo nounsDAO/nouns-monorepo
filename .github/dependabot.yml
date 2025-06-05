@@ -4,9 +4,10 @@ updates:
   - package-ecosystem: 'github-actions'
     # Files stored in the repository root
     directory: '/'
-    # Check for updates every weekday
+    # Check for updates weekly
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+      day: 'monday'
       time: '00:00'
       timezone: 'Etc/UTC'
     # Include a list of updated dependencies
