@@ -46,7 +46,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.79.2",
     "@testing-library/jest-dom": "^6.6.3",
-    "@wagmi/connectors": "^5.8.3",
+    "@wagmi/connectors": "^5.8.4",
     "@wagmi/core": "^2.17.2",
     "abitype": "^1.0.8",
     "axios": "^0.30.0",
