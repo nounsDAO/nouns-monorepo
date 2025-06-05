@@ -7,7 +7,7 @@ import { dataToDescriptorInput } from './utils';
 // see image-data-example-for-populate-via-proposal.json for an example input file
 task(
   'populate-descriptor-via-proposal',
-  'Populates the descriptor with color palettes and Noun parts; accepts an input JSON with missing properies.',
+  'Populates the descriptor with color palettes and Noun parts; accepts an input JSON with missing properties.',
 )
   .addParam('nounsDescriptor', 'The `NounsDescriptor` contract address')
   .addParam('daoAddress', 'The `NounsDAOProxy` contract address')
