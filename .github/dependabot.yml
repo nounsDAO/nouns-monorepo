@@ -57,6 +57,7 @@ updates:
         patterns:
           - 'eslint'
           - 'eslint-*'
+          - '@eslint-react/*'
           - '@typescript-eslint/eslint-plugin'
           - '@typescript-eslint/parser'
       ethers:
@@ -84,3 +85,11 @@ updates:
         patterns:
           - 'tailwindcss'
           - '@tailwindcss/*'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      wagmi:
+        patterns:
+          - 'wagmi'
+          - '@wagmi/*'
