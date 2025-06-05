@@ -86,7 +86,7 @@
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.41.0",
     "viem": "^2.30.6",
-    "wagmi": "^2.15.4",
+    "wagmi": "^2.15.5",
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
