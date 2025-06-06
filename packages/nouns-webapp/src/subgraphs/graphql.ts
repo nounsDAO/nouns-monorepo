@@ -4684,6 +4684,7 @@ export type GetNounsIndexQuery = { __typename?: 'Query', nouns: Array<{ __typena
 
 export type GetLatestAuctionsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -5160,8 +5161,8 @@ export const GetNounsIndexDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetNounsIndexQuery, GetNounsIndexQueryVariables>;
 export const GetLatestAuctionsDocument = new TypedDocumentString(`
-    query GetLatestAuctions($first: Int = 1000) {
-  auctions(orderBy: startTime, orderDirection: desc, first: $first) {
+    query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {
+  auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {
     id
     amount
     settled

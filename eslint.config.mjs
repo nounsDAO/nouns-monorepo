@@ -196,13 +196,23 @@ export default defineConfig([
       'no-restricted-imports': [
         'warn',
         {
-          name: '@apollo/client',
-          message:
-            'Use @tanstack/react-query instead. ref: https://the-guild.dev/graphql/codegen/docs/guides/react-query#type-safe-graphql-operation-execution',
-        },
-        {
-          name: 'react-bootstrap',
-          message: 'Use tailwindcss instead',
+          paths: [
+            {
+              name: '@apollo/client',
+              message:
+                'Use @tanstack/react-query instead. ref: https://the-guild.dev/graphql/codegen/docs/guides/react-query#type-safe-graphql-operation-execution',
+            },
+            {
+              name: 'react-bootstrap',
+              message: 'Use tailwindcss instead',
+            },
+          ],
+          patterns: [
+            {
+              regex: '.*redux.*',
+              message: 'Use jotai and @tanstack/react-query instead',
+            },
+          ],
         },
       ],
       // Prettier rules

@@ -145,7 +145,8 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
     }
   }, [seed, seedIsInvalid, onLoadSeed]);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || nounId == undefined || !onLoadSeed)
+    return <Noun imgPath="" alt="Noun" />;
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
