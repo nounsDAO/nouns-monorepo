@@ -3,7 +3,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { Container, Row } from 'react-bootstrap';
 
-import { LoadingNoun } from '@/components/Noun';
+import { LoadingNoun } from '@/components/LegacyNoun';
 import StandaloneNoun from '@/components/StandaloneNoun';
 import config from '@/config';
 import Section from '@/layout/Section';

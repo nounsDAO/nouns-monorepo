@@ -6,13 +6,13 @@ import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import Noun from '@/components/Noun';
+import LegacyNoun from '@/components/LegacyNoun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
 
 import classes from './StandaloneNoun.module.css';
 
-import nounClasses from '@/components/Noun/Noun.module.css';
+import nounClasses from '@/components/LegacyNoun/Noun.module.css';
 
 interface StandaloneNounProps {
   nounId: bigint;
@@ -67,7 +67,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+      <LegacyNoun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
     </Link>
   );
 };
@@ -85,7 +85,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   };
 
   if (!seed || !nounId)
-    return <Noun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
+    return <LegacyNoun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
     <Link
@@ -93,7 +93,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun
+      <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName={nounClasses.circularNounWrapper}
@@ -121,7 +121,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun
+      <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         className={nounClasses.rounded}
@@ -145,7 +145,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
     }
   }, [seed, seedIsInvalid, onLoadSeed]);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <LegacyNoun imgPath="" alt="Noun" />;
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
@@ -153,7 +153,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
 
   const { image, description } = getNoun(nounId, seed);
 
-  const noun = <Noun imgPath={image} alt={description} />;
+  const noun = <LegacyNoun imgPath={image} alt={description} />;
   const nounWithLink = (
     <Link
       to={'/noun/' + nounId.toString()}

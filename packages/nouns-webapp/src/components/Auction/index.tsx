@@ -4,7 +4,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 
 import AuctionActivity from '@/components/AuctionActivity';
-import { LoadingNoun } from '@/components/Noun';
+import { LoadingNoun } from '@/components/LegacyNoun';
 import NounderNounContent from '@/components/NounderNounContent';
 import { StandaloneNounWithSeed } from '@/components/StandaloneNoun';
 import { useAppDispatch, useAppSelector } from '@/hooks';
