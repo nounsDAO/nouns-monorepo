@@ -129,7 +129,7 @@
     "graphql-scalars": "^1.24.2",
     "is-ci": "^4.1.0",
     "jsdom": "^26.1.0",
-    "lingo.dev": "^0.93.8",
+    "lingo.dev": "^0.94.4",
     "playwright": "^1.44.1",
     "postcss": "^8.5.3",
     "process": "^0.11.10",
