@@ -2,16 +2,16 @@ import { AuctionState } from '@/state/slices/auction';
 import { Auction } from '@/wrappers/nounsAuction';
 
 export const isNounderNoun = (nounId: bigint) => {
-  return nounId % 10n === 0n || nounId === 0n;
+  return nounId % 10n === 0n && nounId <= 1820n;
 };
 
-const emptyNounderAuction = (onDisplayAuctionId: number): Auction => {
+const emptyNounderAuction = (displayedAuctionId: number): Auction => {
   return {
     amount: 0n,
     bidder: '0x0000000000000000000000000000000000000000',
     startTime: 0n,
     endTime: 0n,
-    nounId: BigInt(onDisplayAuctionId),
+    nounId: BigInt(displayedAuctionId),
     settled: false,
   };
 };
