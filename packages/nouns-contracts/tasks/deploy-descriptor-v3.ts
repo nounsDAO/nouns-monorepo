@@ -101,7 +101,7 @@ task('deploy-descriptor-v3', 'Deploy NounsDescriptorV3 & populate it with art')
     });
     console.log('Population complete.');
 
-    console.log('Transfering ownership to DAO Executor...');
+    console.log('Transferring ownership to DAO Executor...');
     await nounsDescriptor.transferOwnership(daoExecutor);
     console.log('Transfer complete.');
 
