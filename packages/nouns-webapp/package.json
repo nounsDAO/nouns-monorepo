@@ -144,7 +144,7 @@
     "vite-plugin-inspect": "^11.1.0",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
-    "vitest": "^3.1.4",
+    "vitest": "^3.2.3",
     "vitest-browser-react": "^0.2.0"
   }
 }
