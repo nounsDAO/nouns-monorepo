@@ -12,7 +12,7 @@ import moderationRegexes from './moderationRegexes.json';
 export const containsBlockedText = (text: string, language: string) => {
   // Get modearation regexes for language
   const regexesForLanguage = new Map(Object.entries(moderationRegexes)).get(language);
-  // Default to letting the string through if the language is unsupprted
+  // Default to letting the string through if the language is unsupported
   if (regexesForLanguage === undefined) {
     console.log(`Unsupported language ${language} requested`);
     return false;
@@ -28,8 +28,8 @@ export const containsBlockedText = (text: string, language: string) => {
   return (
     regexesForLanguage
       .map((entry: { regex: string }) => {
-        const regex = entry.regex;
-        return text.match(regex) !== null;
+        const regExp = new RegExp(entry.regex, 'i');
+        return regExp.exec(text) !== null;
       })
       .filter((isRegexMatch: boolean) => isRegexMatch).length > 0
   );
