@@ -17,8 +17,8 @@ updates:
     # Specify labels for pull requests
     labels:
       - 'dependencies'
-    # Allow up to 20 open pull requests for dependencies
-    open-pull-requests-limit: 20
+    # Allow up to 2 open pull requests for dependencies
+    open-pull-requests-limit: 2
 
   # Maintain dependencies for PNPM
   - package-ecosystem: 'npm'
