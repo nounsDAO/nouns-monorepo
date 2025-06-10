@@ -199,18 +199,22 @@ const ChainSubscriber: React.FC = () => {
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
-  const { data } = useQuery({
+  const { data: auctions } = useQuery({
     queryKey: ['latestAuctions'],
-    queryFn: () => execute(latestAuctionsQuery, { first: 1000 }),
+    queryFn: async () =>
+      await Promise.all([
+        execute(latestAuctionsQuery, { first: 1000 }),
+        execute(latestAuctionsQuery, { first: 1000, skip: 1000 }),
+      ]).then(([page1, page2]) => [...page1.auctions, ...page2.auctions]),
   });
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (data?.auctions) {
-      dispatch(addPastAuctions({ auctions: data.auctions }));
+    if (auctions) {
+      dispatch(addPastAuctions({ auctions }));
     }
-  }, [data, latestAuctionId, dispatch]);
+  }, [auctions, latestAuctionId, dispatch]);
 
   return <></>;
 };
