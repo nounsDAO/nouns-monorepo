@@ -12,7 +12,7 @@ import moderationRegexes from './moderationRegexes.json';
 export const containsBlockedText = (text: string, language: string) => {
   // Get modearation regexes for language
   const regexesForLanguage = new Map(Object.entries(moderationRegexes)).get(language);
-  // Default to letting the string through if the language is unsupprted
+  // Default to letting the string through if the language is unsupported
   if (regexesForLanguage === undefined) {
     console.log(`Unsupported language ${language} requested`);
     return false;
