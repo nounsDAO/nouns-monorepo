@@ -187,7 +187,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
                         setSelectedNounId(nounId);
                       }}
                       data-selected={selectedNounId === nounId}
-                      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in group absolute overflow-clip rounded-2xl shadow-sm transition-all ease-in-out hover:shadow-lg motion-safe:hover:scale-105 motion-safe:data-[selected=true]:scale-105"
+                      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in group absolute cursor-pointer overflow-clip rounded-2xl shadow-sm transition-all ease-in-out hover:shadow-lg motion-safe:hover:scale-105 motion-safe:data-[selected=true]:scale-105"
                       style={{
                         left: `${virtualColumn.start}px`,
                         top: `${virtualRow.start}px`,
