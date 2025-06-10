@@ -29,7 +29,7 @@ export const containsBlockedText = (text: string, language: string) => {
     regexesForLanguage
       .map((entry: { regex: string }) => {
         const regex = entry.regex;
-        return text.match(regex) !== null;
+        return new RegExp(entry.regex, 'i').exec(text) !== null;
       })
       .filter((isRegexMatch: boolean) => isRegexMatch).length > 0
   );
