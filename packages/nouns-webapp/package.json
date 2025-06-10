@@ -91,7 +91,7 @@
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.41.0",
-    "viem": "^2.30.6",
+    "viem": "^2.31.0",
     "wagmi": "^2.15.4",
     "web-vitals": "^1.0.1"
   },
