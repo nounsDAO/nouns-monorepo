@@ -94,3 +94,4 @@ updates:
         patterns:
           - 'wagmi'
           - '@wagmi/*'
+          - 'viem'
