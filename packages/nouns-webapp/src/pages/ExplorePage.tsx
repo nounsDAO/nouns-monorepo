@@ -187,17 +187,13 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
                         setSelectedNounId(nounId);
                       }}
                       data-selected={selectedNounId === nounId}
-                      className="group absolute overflow-clip rounded-2xl shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg data-[selected=true]:scale-105"
+                      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in group absolute overflow-clip rounded-2xl shadow-sm transition-all ease-in-out hover:shadow-lg motion-safe:hover:scale-105 motion-safe:data-[selected=true]:scale-105"
                       style={{
                         left: `${virtualColumn.start}px`,
                         top: `${virtualRow.start}px`,
                         width: `${ITEM_SIZE}px`,
                         height: `${ITEM_SIZE}px`,
-                        animationDelay: `${virtualColumn.index * 50}ms`,
-                        animationFillMode: 'both',
-                        animationName: 'fadeInUp',
-                        animationDuration: '500ms',
-                        animationTimingFunction: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                        animationDuration: `${virtualColumn.index * 50}ms`,
                       }}
                     >
                       <Noun
