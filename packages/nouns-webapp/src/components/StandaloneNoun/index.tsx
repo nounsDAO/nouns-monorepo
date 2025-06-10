@@ -93,7 +93,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
-  if (!seed || !nounId)
+  if (!seed || nounId == undefined)
     return <LegacyNoun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
@@ -160,7 +160,8 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
     }
   }, [seed, seedIsInvalid, onLoadSeed]);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <LegacyNoun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || nounId == undefined || !onLoadSeed)
+    return <LegacyNoun imgPath="" alt="Noun" />;
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
