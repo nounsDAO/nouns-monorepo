@@ -24,6 +24,9 @@ export const getPart = (partType: string, partIndex: number) => {
   return { image };
 };
 
+/**
+ * @deprecated Use [Trait](../Trait.tsx) instead
+ */
 export const StandalonePart: React.FC<StandalonePartProps> = (props: StandalonePartProps) => {
   let part;
 
@@ -40,4 +43,5 @@ export const StandalonePart: React.FC<StandalonePartProps> = (props: StandaloneP
   );
 };
 
+// eslint-disable-next-line sonarjs/deprecation
 export default StandalonePart;
