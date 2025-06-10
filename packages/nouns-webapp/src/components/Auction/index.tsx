@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import AuctionActivity from '@/components/AuctionActivity';
 import { LoadingNoun } from '@/components/LegacyNoun';
 import NounderNounContent from '@/components/NounderNounContent';
+// eslint-disable-next-line sonarjs/deprecation
 import { StandaloneNounWithSeed } from '@/components/StandaloneNoun';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setStateBackgroundColor } from '@/state/slices/application';
@@ -47,6 +48,7 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
+      {/* eslint-disable-next-line sonarjs/deprecation */}
       <StandaloneNounWithSeed
         nounId={BigInt(currentAuction.nounId)}
         onLoadSeed={loadedNounHandler}
