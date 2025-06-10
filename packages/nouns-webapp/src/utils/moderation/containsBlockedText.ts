@@ -28,8 +28,8 @@ export const containsBlockedText = (text: string, language: string) => {
   return (
     regexesForLanguage
       .map((entry: { regex: string }) => {
-        const regex = entry.regex;
-        return new RegExp(entry.regex, 'i').exec(text) !== null;
+        const regExp = new RegExp(entry.regex, 'i');
+        return regExp.exec(text) !== null;
       })
       .filter((isRegexMatch: boolean) => isRegexMatch).length > 0
   );
