@@ -231,7 +231,7 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
         >
           {/* Noun Image */}
           <Noun
-            nounId={selectedNounId ? BigInt(selectedNounId) : undefined}
+            nounId={selectedNounId != undefined ? BigInt(selectedNounId) : undefined}
             loadingNounFallback
             className="bg-cool-background mx-auto size-[288px] object-cover"
           />
