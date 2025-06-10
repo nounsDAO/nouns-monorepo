@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LoadingNoun } from '@/components/Noun';
+import { LoadingNoun } from '@/components/LegacyNoun';
 import { getNoun } from '@/components/StandaloneNoun';
 import { useNounSeed } from '@/wrappers/nounToken';
 

@@ -4,9 +4,10 @@ updates:
   - package-ecosystem: 'github-actions'
     # Files stored in the repository root
     directory: '/'
-    # Check for updates every weekday
+    # Check for updates weekly
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+      day: 'monday'
       time: '00:00'
       timezone: 'Etc/UTC'
     # Include a list of updated dependencies
@@ -16,8 +17,8 @@ updates:
     # Specify labels for pull requests
     labels:
       - 'dependencies'
-    # Allow up to 20 open pull requests for dependencies
-    open-pull-requests-limit: 20
+    # Allow up to 2 open pull requests for dependencies
+    open-pull-requests-limit: 2
 
   # Maintain dependencies for PNPM
   - package-ecosystem: 'npm'
@@ -56,8 +57,10 @@ updates:
         patterns:
           - 'eslint'
           - 'eslint-*'
+          - '@eslint-react/*'
           - '@typescript-eslint/eslint-plugin'
           - '@typescript-eslint/parser'
+          - 'typescript-eslint'
       ethers:
         patterns:
           - 'ethers'
@@ -83,3 +86,12 @@ updates:
         patterns:
           - 'tailwindcss'
           - '@tailwindcss/*'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      wagmi:
+        patterns:
+          - 'wagmi'
+          - '@wagmi/*'
+          - 'viem'

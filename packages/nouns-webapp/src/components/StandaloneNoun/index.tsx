@@ -6,13 +6,13 @@ import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import Noun from '@/components/Noun';
+import LegacyNoun from '@/components/LegacyNoun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
 
 import classes from './StandaloneNoun.module.css';
 
-import nounClasses from '@/components/Noun/Noun.module.css';
+import nounClasses from '@/components/LegacyNoun/Noun.module.css';
 
 interface StandaloneNounProps {
   nounId: bigint;
@@ -42,6 +42,9 @@ export const getNoun = (nounId: string | bigint, seed: INounSeed) => {
   };
 };
 
+/**
+ * @deprecated Use [Noun](../Noun.tsx) instead
+ */
 export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
   const { nounId } = props;
   const seed = useNounSeed(nounId);
@@ -50,6 +53,9 @@ export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: Standa
   return <Image src={noun ? noun.image : ''} fluid />;
 };
 
+/**
+ * @deprecated Use [Noun](../Noun.tsx) instead
+ */
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
   const { nounId } = props;
   const seed = useNounSeed(nounId);
@@ -67,11 +73,14 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+      <LegacyNoun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
     </Link>
   );
 };
 
+/**
+ * @deprecated Use [Noun](../Noun.tsx) instead
+ */
 export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   props: StandaloneCircularNounProps,
 ) => {
@@ -84,8 +93,8 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
   };
 
-  if (!seed || !nounId)
-    return <Noun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
+  if (!seed || nounId == undefined)
+    return <LegacyNoun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
     <Link
@@ -93,7 +102,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun
+      <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName={nounClasses.circularNounWrapper}
@@ -103,6 +112,9 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   );
 };
 
+/**
+ * @deprecated Use [Noun](../Noun.tsx) instead
+ */
 export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   props: StandaloneNounProps,
 ) => {
@@ -121,7 +133,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun
+      <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         className={nounClasses.rounded}
@@ -130,6 +142,9 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   );
 };
 
+/**
+ * @deprecated Use [Noun](../Noun.tsx) instead
+ */
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
   nounId,
   onLoadSeed,
@@ -145,7 +160,8 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
     }
   }, [seed, seedIsInvalid, onLoadSeed]);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || nounId == undefined || !onLoadSeed)
+    return <LegacyNoun imgPath="" alt="Noun" />;
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(Number(nounId)));
@@ -153,7 +169,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
 
   const { image, description } = getNoun(nounId, seed);
 
-  const noun = <Noun imgPath={image} alt={description} />;
+  const noun = <LegacyNoun imgPath={image} alt={description} />;
   const nounWithLink = (
     <Link
       to={'/noun/' + nounId.toString()}
@@ -166,4 +182,5 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
   return shouldLinkToProfile ? nounWithLink : noun;
 };
 
+// eslint-disable-next-line sonarjs/deprecation
 export default StandaloneNoun;

@@ -430,8 +430,8 @@ export const nounsIndex = () => ({
 });
 
 export const latestAuctionsQuery = graphql(`
-  query GetLatestAuctions($first: Int = 1000) {
-    auctions(orderBy: startTime, orderDirection: desc, first: $first) {
+  query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {
+    auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {
       id
       amount
       settled

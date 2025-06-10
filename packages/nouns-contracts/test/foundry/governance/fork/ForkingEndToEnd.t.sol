@@ -39,7 +39,7 @@ contract ForkingHappyFlowTest is DeployUtilsFork {
         uint256[] memory tokensInEscrow1 = getOwnedTokens(nounerInEscrow1);
         uint256[] memory tokensInEscrow2 = getOwnedTokens(nounerInEscrow2);
 
-        // Two Nouner accounts sigaling they want to fork. Their combined tokens meet the forking threshold.
+        // Two Nouner accounts signaling they want to fork. Their combined tokens meet the forking threshold.
         escrowToFork(nounerInEscrow1);
         escrowToFork(nounerInEscrow2);
 

@@ -7,6 +7,7 @@ import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 
 import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import { cn } from '@/lib/utils';
 import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
 
 import classes from './VoteModal.module.css';
@@ -39,11 +40,11 @@ const VoteModal = ({
   const [failureCopy, setFailureCopy] = useState<ReactNode>('');
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
 
-  const getVoteErrorMessage = (error: string | undefined) => {
-    if (error?.match(/voter already voted/)) {
+  const getVoteErrorMessage = (error: string) => {
+    if (RegExp(/voter already voted/).exec(error)) {
       return <Trans>User Already Voted</Trans>;
     }
-    return error;
+    return <>{error}</>;
   };
 
   const handleVoteStateChange = useCallback(
@@ -67,7 +68,9 @@ const VoteModal = ({
           break;
         case 'Exception':
           setFailureCopy(<Trans>Error</Trans>);
-          setErrorMessage(getVoteErrorMessage(errorMessage) || <Trans>Please try again.</Trans>);
+          setErrorMessage(
+            errorMessage ? getVoteErrorMessage(errorMessage) : <Trans>Please try again.</Trans>,
+          );
           setIsLoading(false);
           setIsVoteFailed(true);
           break;
@@ -86,7 +89,7 @@ const VoteModal = ({
     handleVoteStateChange(castRefundableVoteWithReasonState);
   }, [castRefundableVoteWithReasonState, handleVoteStateChange]);
 
-  // Auto close the modal after a transaction completes succesfully
+  // Auto close the modal after a transaction completes successfully
   // Leave failed transaction up until user closes manually to allow for debugging
   useEffect(() => {
     if (isVoteSucessful) {
@@ -122,7 +125,7 @@ const VoteModal = ({
         <div className={classes.transactionStatus}>
           <p>
             <Trans>
-              You've successfully voted on on prop {i18n.number(Number(proposalId || '0'))}
+              You&apos;ve successfully voted on on prop {i18n.number(Number(proposalId || '0'))}
             </Trans>
           </p>
 
@@ -150,13 +153,10 @@ const VoteModal = ({
                   buttonText={<Trans>For</Trans>}
                   buttonIcon={<></>}
                   buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
-                  className={
-                    vote === Vote.FOR
-                      ? ''
-                      : vote === undefined
-                        ? classes.inactive
-                        : classes.unselected
-                  }
+                  className={cn(
+                    vote === undefined && classes.inactive,
+                    vote !== Vote.FOR && classes.unselected,
+                  )}
                 />
               </div>
               <br />
@@ -167,13 +167,10 @@ const VoteModal = ({
               buttonText={<Trans>Against</Trans>}
               buttonIcon={<></>}
               buttonStyle={NavBarButtonStyle.AGAINST_VOTE_SUBMIT}
-              className={
-                vote === Vote.AGAINST
-                  ? ''
-                  : vote === undefined
-                    ? classes.inactive
-                    : classes.unselected
-              }
+              className={cn(
+                vote === undefined && classes.inactive,
+                vote !== Vote.AGAINST && classes.unselected,
+              )}
             />
           </div>
           {!isObjectionPeriod && (
@@ -184,13 +181,10 @@ const VoteModal = ({
                   buttonText={<Trans>Abstain</Trans>}
                   buttonIcon={<></>}
                   buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
-                  className={
-                    vote === Vote.ABSTAIN
-                      ? ''
-                      : vote === undefined
-                        ? classes.inactive
-                        : classes.unselected
-                  }
+                  className={cn(
+                    vote === undefined && classes.inactive,
+                    vote !== Vote.ABSTAIN && classes.unselected,
+                  )}
                 />
               </div>
             </>

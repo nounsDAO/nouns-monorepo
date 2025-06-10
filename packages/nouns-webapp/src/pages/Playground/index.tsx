@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
@@ -17,9 +17,9 @@ import {
   Row,
 } from 'react-bootstrap';
 
-import InfoIcon from '../../assets/icons/Info.svg';
-import Link from '../../components/Link';
-import Noun from '../../components/Noun';
+import InfoIcon from '@/assets/icons/Info.svg';
+import Noun from '@/components/LegacyNoun';
+import Link from '@/components/Link';
 
 import NounModal from './NounModal';
 import classes from './Playground.module.css';
@@ -75,16 +75,21 @@ const parseTraitName = (partName: string): string =>
 
 const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
-const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode => {
-  const traitMap = new Map([
-    ['background', <Trans>Background</Trans>],
-    ['body', <Trans>Body</Trans>],
-    ['accessory', <Trans>Accessory</Trans>],
-    ['head', <Trans>Head</Trans>],
-    ['glasses', <Trans>Glasses</Trans>],
-  ]);
-
-  return traitMap.get(s);
+const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string) => {
+  switch (s) {
+    case 'background':
+      return <Trans>Background</Trans>;
+    case 'body':
+      return <Trans>Body</Trans>;
+    case 'accessory':
+      return <Trans>Accessory</Trans>;
+    case 'head':
+      return <Trans>Head</Trans>;
+    case 'glasses':
+      return <Trans>Glasses</Trans>;
+    default:
+      throw new Error(`Unknown trait key: ${s}`);
+  }
 };
 
 const Playground: React.FC = () => {
@@ -225,7 +230,7 @@ const Playground: React.FC = () => {
           type: DEFAULT_TRAIT_TYPE,
         });
         setPendingTraitValid(true);
-      } catch (error) {
+      } catch {
         setPendingTraitInvalid();
       }
     };
@@ -276,9 +281,9 @@ const Playground: React.FC = () => {
             </h1>
             <p>
               <Trans>
-                The playground was built using the {nounsProtocolLink}. Noun's traits are determined
-                by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using
-                the {nounsSDKLink}.
+                The playground was built using the {nounsProtocolLink}. Noun&apos;s traits are
+                determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and
+                rendered using the {nounsSDKLink}.
               </Trans>
             </p>
           </Col>
@@ -299,7 +304,7 @@ const Playground: React.FC = () => {
               {traits &&
                 traits.map((trait, index) => {
                   return (
-                    <Col lg={12} xs={6}>
+                    <Col lg={12} xs={6} key={trait.title}>
                       <Form className={classes.traitForm}>
                         <FloatingLabel
                           controlId="floatingSelect"
@@ -369,7 +374,9 @@ const Playground: React.FC = () => {
                     onChange={e => setPendingTrait({ ...pendingTrait, type: e.target.value })}
                   >
                     {Object.entries(traitKeyToTitle).map(([key, title]) => (
-                      <option value={key}>{capitalizeFirstLetter(title)}</option>
+                      <option value={key} key={key}>
+                        {capitalizeFirstLetter(title)}
+                      </option>
                     ))}
                   </Form.Select>
                 </FloatingLabel>
@@ -380,7 +387,7 @@ const Playground: React.FC = () => {
             )}
             <p className={classes.nounYearsFooter}>
               <Trans>
-                You've generated{' '}
+                You&apos;ve generated{' '}
                 {i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
                 worth of Nouns
               </Trans>
