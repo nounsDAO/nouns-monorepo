@@ -14,7 +14,7 @@ export const LoadingNoun = () => {
   );
 };
 
-const Noun: React.FC<{
+const LegacyNoun: React.FC<{
   imgPath: string;
   alt: string;
   className?: string;
@@ -33,4 +33,4 @@ const Noun: React.FC<{
   );
 };
 
-export default Noun;
+export default LegacyNoun;

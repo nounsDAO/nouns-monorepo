@@ -4,7 +4,7 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router';
 import { useAccount } from 'wagmi';
 
@@ -36,6 +36,7 @@ interface CandidateSponsorsProps {
   blockNumber?: bigint;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);

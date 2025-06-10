@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 
+import LegacyNoun from '@/components/LegacyNoun';
 import { Backdrop } from '@/components/Modal';
-import Noun from '@/components/Noun';
 import { svg2png } from '@/utils/svg2png';
 
 import classes from './NounModal.module.css';
@@ -54,7 +54,7 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
       {ReactDOM.createPortal(
         <div className={classes.modal}>
           {png && (
-            <Noun
+            <LegacyNoun
               imgPath={png}
               alt="noun"
               className={classes.nounImg}
