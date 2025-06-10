@@ -50,7 +50,7 @@
     "@tanstack/react-query": "^5.79.2",
     "@tanstack/react-virtual": "^3.13.10",
     "@testing-library/jest-dom": "^6.6.3",
-    "@wagmi/connectors": "^5.8.4",
+    "@wagmi/connectors": "^5.8.5",
     "@wagmi/core": "^2.17.2",
     "abitype": "^1.0.8",
     "axios": "^0.30.0",
