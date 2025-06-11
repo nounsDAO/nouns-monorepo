@@ -91,6 +91,7 @@ updates:
         patterns:
           - 'vitest'
           - '@vitest/*'
+          - 'playwright'
       wagmi:
         patterns:
           - 'wagmi'
