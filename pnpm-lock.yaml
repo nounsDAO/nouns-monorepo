@@ -397,9 +397,6 @@ importers:
       '@lingui/react':
         specifier: 5.3.2
         version: 5.3.2(@lingui/babel-plugin-lingui-macro@5.3.2(babel-plugin-macros@3.1.0)(typescript@5.8.3))(babel-plugin-macros@3.1.0)(react@18.3.1)
-      '@netlify/functions':
-        specifier: ^0.11.1
-        version: 0.11.1
       '@noundry/nouns-assets':
         specifier: ^1.14.0
         version: 1.14.0
@@ -2566,10 +2563,6 @@ packages:
   '@netlify/functions-utils@5.3.18':
     resolution: {integrity: sha512-llnoOrQF/iI5ZwDT27Izt+E6JGPDs57OF0EWQg+QRAMFtYyzevEsX7KbY8YTCYux0JB9UJ19OkOEOTN9fgm7OA==}
     engines: {node: ^14.16.0 || >=16.0.0}
-
-  '@netlify/functions@0.11.1':
-    resolution: {integrity: sha512-J2QUAYRblvTrl/cOYU2RNHdv/EYy4qnKQhds0aDNB560Y83wfpaMS3F7PKpHygGWrVuLRyevenIzsV9MaQrKlQ==}
-    engines: {node: '>=8.3.0'}
 
   '@netlify/git-utils@5.2.0':
     resolution: {integrity: sha512-maNQyhQ6zTS5Kwl03HXoUa7uTNjmCvZea5Jko2pyDWz0xW1cunnil+4s33wXrMZJNDvyv97O2vkC5N1sAS3fyQ==}
@@ -7521,10 +7514,6 @@ packages:
   eslint-visitor-keys@3.4.3:
     resolution: {integrity: sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  eslint-visitor-keys@4.2.0:
-    resolution: {integrity: sha512-UyLnSehNt62FFhSwjZlHmeokpRK59rcz29j+F1/aDgbkbRTk7wIc9XzdoasMUbRNKDM0qQt/+BJ4BrpFeABemw==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   eslint-visitor-keys@4.2.1:
     resolution: {integrity: sha512-Uhdk5sfqcee/9H/rCOJikYz67o0a2Tw2hGRPOG2Y1R2dg7brRe1uG0yaNQDHu+TO/uQPF/5eCapvYSmHUjt7JQ==}
@@ -18048,10 +18037,6 @@ snapshots:
       - rollup
       - supports-color
 
-  '@netlify/functions@0.11.1':
-    dependencies:
-      is-promise: 4.0.0
-
   '@netlify/git-utils@5.2.0':
     dependencies:
       execa: 6.1.0
@@ -21435,9 +21420,13 @@ snapshots:
     dependencies:
       acorn: 8.14.1
 
+  acorn-jsx@5.3.2(acorn@8.15.0):
+    dependencies:
+      acorn: 8.15.0
+
   acorn-walk@8.3.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
 
   acorn@8.14.1: {}
 
@@ -24629,8 +24618,6 @@ snapshots:
 
   eslint-visitor-keys@3.4.3: {}
 
-  eslint-visitor-keys@4.2.0: {}
-
   eslint-visitor-keys@4.2.1: {}
 
   eslint@9.28.0(jiti@2.4.2):
@@ -24654,7 +24641,7 @@ snapshots:
       debug: 4.4.1
       escape-string-regexp: 4.0.0
       eslint-scope: 8.3.0
-      eslint-visitor-keys: 4.2.0
+      eslint-visitor-keys: 4.2.1
       espree: 10.3.0
       esquery: 1.6.0
       esutils: 2.0.3
@@ -24684,9 +24671,9 @@ snapshots:
 
   espree@10.3.0:
     dependencies:
-      acorn: 8.14.1
-      acorn-jsx: 5.3.2(acorn@8.14.1)
-      eslint-visitor-keys: 4.2.0
+      acorn: 8.15.0
+      acorn-jsx: 5.3.2(acorn@8.15.0)
+      eslint-visitor-keys: 4.2.1
 
   esprima@2.7.3: {}
 
@@ -32848,7 +32835,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 22.15.31
-      acorn: 8.14.1
+      acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1
