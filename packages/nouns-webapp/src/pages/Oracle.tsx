@@ -162,13 +162,20 @@ export function OraclePage() {
 
   return (
     <div style={{ backgroundColor: stateBgColor }}>
-      <div className="container">
-        <div className="flex w-full flex-col md:flex-row">
-          <div className="mt-0 flex w-full max-w-full flex-shrink-0 px-3 lg:w-1/2 lg:flex-none">
-            {(loading || isNullish(auction)) && <LoadingNoun />}
-            {!loading && isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
-              <Noun imgPath={nextNoun?.image ?? ''} alt={nextNoun?.nounId.toString() ?? t`Noun`} />
-            )}
+      <div className="container-xl">
+        <div className="flex w-full flex-col lg:flex-row">
+          <div className="mt-0 w-full max-w-full flex-shrink-0 px-3 lg:w-1/2 lg:flex-none">
+            <div className="mx-[15%] w-[70%] self-end lg:mx-0 lg:w-auto">
+              {(loading || isNullish(auction)) && <LoadingNoun />}
+              {!loading &&
+                isNonNullish(auction) &&
+                auction.state === AuctionState.OverNotSettled && (
+                  <Noun
+                    imgPath={nextNoun?.image ?? ''}
+                    alt={nextNoun?.nounId.toString() ?? t`Noun`}
+                  />
+                )}
+            </div>
           </div>
           <div className="mt-0 w-full max-w-full flex-shrink-0 pb-0 pl-3 pr-20 leading-6 text-neutral-800 lg:w-1/2 lg:flex-none">
             {isNonNullish(auction) && auction.state === AuctionState.OverNotSettled && (
