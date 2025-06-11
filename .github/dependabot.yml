@@ -85,7 +85,8 @@ updates:
       tailwindcss:
         patterns:
           - 'tailwindcss'
-          - '@tailwindcss/*'
+          - 'tailwindcss-*'
+          - 'tailwind-*'
       vitest:
         patterns:
           - 'vitest'
