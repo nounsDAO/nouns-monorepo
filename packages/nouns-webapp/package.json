@@ -88,7 +88,7 @@
     "remark-breaks": "^3.0.3",
     "remeda": "^2.22.3",
     "sonner": "^2.0.5",
-    "tailwind-merge": "^3.3.0",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.41.0",
     "viem": "^2.30.6",
