@@ -4,11 +4,10 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
 
-import SettleManuallyBtn from '@/components/SettleManuallyBtn';
 import WalletConnectModal from '@/components/WalletConnectModal';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
@@ -209,8 +208,6 @@ const Bid: React.FC<BidProps> = props => {
 
   const isDisabled = isPlacingBid || isSettlingAuction || !activeAccount;
 
-  const isWalletConnected = activeAccount !== undefined;
-
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
@@ -260,12 +257,6 @@ const Bid: React.FC<BidProps> = props => {
                 <Trans>Settle the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
-            {/* Only show the force settles button if the wallet connected */}
-            {isWalletConnected && (
-              <Col lg={12}>
-                <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
-              </Col>
-            )}
           </>
         )}
       </InputGroup>
