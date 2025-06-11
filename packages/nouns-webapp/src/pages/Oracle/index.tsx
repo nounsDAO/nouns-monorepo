@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useWatchBlocks } from 'wagmi';
 
-import Noun, { LoadingNoun } from '@/components/Noun';
+import Noun, { LoadingNoun } from '@/components/LegacyNoun';
 import {
   readNounsAuctionHouseAuction,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
