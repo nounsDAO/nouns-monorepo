@@ -11,6 +11,7 @@ import {
 import { buildSVG } from '@nouns/sdk';
 import dayjs from 'dayjs';
 import { isNonNullish, isNullish } from 'remeda';
+import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useWatchBlocks } from 'wagmi';
 
@@ -20,7 +21,7 @@ import {
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
 } from '@/contracts';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { AlertModal, setAlertModal, setStateBackgroundColor } from '@/state/slices/application';
+import { setStateBackgroundColor } from '@/state/slices/application';
 import { RootState } from '@/store';
 import { beige, grey } from '@/utils/nounBgColors';
 import { config } from '@/wagmi';
@@ -103,8 +104,6 @@ export function OraclePage() {
   const [currentBlockTimestamp, setCurrentBlockTimestamp] = useState<number>(0);
   const prevNounIdRef = useRef<number | null>(null); // Add this to track the previous noun ID
 
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
   const {
     writeContract: settleAuction,
     isPending: isSettlingAuction,
@@ -151,13 +150,11 @@ export function OraclePage() {
 
   useEffect(() => {
     if (didSettleFail) {
-      setModal({
-        title: <Trans>Transaction Failed</Trans>,
-        message: settleAuctionError?.message || <Trans>Please try again.</Trans>,
-        show: true,
-      });
+      toast.error(
+        () => settleAuctionError?.message || <Trans>Transaction Failed. Please try again.</Trans>,
+      );
     }
-  }, [didSettleFail, setModal, settleAuctionError?.message]);
+  }, [didSettleFail, settleAuctionError?.message]);
 
   const handleSettleAuction = useCallback(() => {
     settleAuction({});
@@ -264,7 +261,7 @@ function BlockTimeCountdown({
       }
     }, 1000);
 
-    // Clean up the interval on component unmount
+    // Clean up the interval on a component unmount
     return () => clearInterval(timerId);
   }, [currentBlockTimestamp]);
 
