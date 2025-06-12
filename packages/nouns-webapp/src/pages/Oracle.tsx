@@ -186,7 +186,7 @@ export function OraclePage() {
               )}
             </div>
           </div>
-          <div className="mt-0 w-full max-w-full flex-shrink-0 pb-0 pl-3 pr-20 leading-6 text-neutral-800 lg:w-1/2 lg:flex-none">
+          <div className="mt-0 w-full max-w-full flex-shrink-0 leading-6 text-neutral-800 md:pb-0 md:pl-3 md:pr-20 lg:w-1/2 lg:flex-none">
             <AuctionControlPanel
               nextNoun={nextNoun}
               currentBlockTimestamp={currentBlockTimestamp}
