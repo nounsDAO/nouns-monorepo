@@ -214,15 +214,27 @@ const AuctionControlPanel = ({
   const { t } = useLingui();
 
   return (
-    <div>
+    <div className="text-xl text-neutral-500 dark:text-neutral-400">
       <h1>
-        {t`Noun`} {nextNoun?.nounId.toString()}
+        {t`Noun`} {nextNoun ? nextNoun?.nounId.toString() : '...'}
       </h1>
-      <p className="mb-4 text-2xl text-neutral-500 dark:text-neutral-400">
+      <p>
         <Trans>
           Nouns are determined by the block that they are minted on. This oracle will show you the
-          next noun to be minted. The block that the noun is minted on is the block that the auction
-          starts on. There is going to be a delay of{' '}
+          next noun to be minted.
+        </Trans>
+      </p>
+      <p>
+        <Trans>The block that the noun is minted on is the block that the auction starts on.</Trans>
+      </p>
+      <p>
+        <Trans>
+          Blocks change really fast, so the next Noun preview will end in a few seconds.
+        </Trans>
+      </p>
+      <p className="mb-4">
+        <Trans>
+          There is going to be a delay of{' '}
           <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
         </Trans>
       </p>
