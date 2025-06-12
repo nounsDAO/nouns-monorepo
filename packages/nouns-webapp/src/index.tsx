@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { parseAbiItem } from 'viem';
@@ -226,6 +227,9 @@ createRoot(document.getElementById('root')!).render(
         <React.StrictMode>
           <WagmiProvider config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
+              {import.meta.env.VITE_ENABLE_TANSTACK_QUERY_DEVTOOLS && (
+                <ReactQueryDevtools initialIsOpen={false} />
+              )}
               <ChainSubscriber />
               <ApolloProvider client={client}>
                 <PastAuctions />
