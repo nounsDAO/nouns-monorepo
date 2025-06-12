@@ -15,12 +15,12 @@ const activeChain =
 
 const transports = {
   [mainnet.id]: fallback([
-    webSocket(import.meta.env.VITE_MAINNET_WSRPC ?? ''),
-    http(import.meta.env.VITE_MAINNET_JSONRPC ?? ''),
+    ...(import.meta.env.VITE_MAINNET_WSRPC ? [webSocket(import.meta.env.VITE_MAINNET_WSRPC)] : []),
+    ...(import.meta.env.VITE_MAINNET_JSONRPC ? [http(import.meta.env.VITE_MAINNET_JSONRPC)] : []),
   ]),
   [sepolia.id]: fallback([
-    webSocket(import.meta.env.VITE_SEPOLIA_WSRPC ?? ''),
-    http(import.meta.env.VITE_SEPOLIA_JSONRPC ?? ''),
+    ...(import.meta.env.VITE_SEPOLIA_WSRPC ? [webSocket(import.meta.env.VITE_SEPOLIA_WSRPC)] : []),
+    ...(import.meta.env.VITE_SEPOLIA_JSONRPC ? [http(import.meta.env.VITE_SEPOLIA_JSONRPC)] : []),
   ]),
 };
 
