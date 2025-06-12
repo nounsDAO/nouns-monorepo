@@ -10,12 +10,15 @@ import {
 } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
 import dayjs from 'dayjs';
+import { PopcornIcon } from 'lucide-react';
 import { isNonNullish, isNullish } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useWatchBlocks } from 'wagmi';
 
 import Noun, { LoadingNoun } from '@/components/LegacyNoun';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   readNounsAuctionHouseAuction,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
@@ -160,27 +163,17 @@ export function OraclePage() {
     settleAuction({});
   }, [settleAuction]);
 
-  if (!(isNonNullish(auction) && auction.state === AuctionState.OverNotSettled)) {
-    return (
-      <div style={{ backgroundColor: stateBgColor }}>
-        <div className="container-xl">
-          <div className="flex w-full flex-col lg:flex-row">
-            <div className="mt-0 w-full max-w-full flex-shrink-0 pb-0 pl-3 pr-20 leading-6 text-neutral-800 lg:w-1/2 lg:flex-none">
-              <div>
-                <p>
-                  <Trans>Please wait for the auction to end before settling.</Trans>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div style={{ backgroundColor: stateBgColor }}>
       <div className="container-xl">
+        {!(isNonNullish(auction) && auction.state === AuctionState.OverNotSettled) && (
+          <Alert className="mb-4">
+            <PopcornIcon size={16} />
+            <AlertTitle>
+              <Trans>Please wait for the current auction to end before settling.</Trans>
+            </AlertTitle>
+          </Alert>
+        )}
         <div className="flex w-full flex-col lg:flex-row">
           <div className="mt-0 w-full max-w-full flex-shrink-0 px-3 lg:w-1/2 lg:flex-none">
             <div className="mx-[15%] w-[70%] self-end lg:mx-0 lg:w-auto">
@@ -236,14 +229,13 @@ const AuctionControlPanel = ({
           <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
         </div>
       )}
-      <button
-        type="button"
+      <Button
         className="relative m-0 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
         onClick={onSettleAuction}
         disabled={isSettlingAuction}
       >
         <Trans>Settle Auction</Trans>
-      </button>
+      </Button>
     </div>
   );
 };
