@@ -232,14 +232,14 @@ const AuctionControlPanel = ({
           Blocks change really fast, so the next Noun preview will end in a few seconds.
         </Trans>
       </p>
-      <p className="mb-4">
+      <p>
         <Trans>
           There is going to be a delay of{' '}
           <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
         </Trans>
       </p>
       <Button
-        className="relative m-0 mt-5 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
+        className="relative my-5 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
         onClick={onSettleAuction}
         disabled={isSettlingAuction}
       >
