@@ -109,8 +109,22 @@ const Playground: React.FC = () => {
     (amount: number = 1) => {
       for (let i = 0; i < amount; i++) {
         const seed = { ...getRandomNounSeed(), ...modSeed };
+
+        // Adjust background index for offset caused by transparent being first
+        if (modSeed?.background !== undefined && modSeed.background > 0) {
+          seed.background = modSeed.background - 1;
+        }
+
         const { parts, background } = getNounData(seed);
-        const svg = buildSVG(parts, encoder.data.palette, background);
+
+        // Handle transparent background option
+        let finalBackground: string | undefined = background;
+        if (modSeed?.background === 0) {
+          // 0 is the index for 'transparent'
+          finalBackground = undefined;
+        }
+
+        const svg = buildSVG(parts, encoder.data.palette, finalBackground);
         setNounSvgs(prev => {
           return prev ? [svg, ...prev] : [svg];
         });
@@ -123,7 +137,7 @@ const Playground: React.FC = () => {
   useEffect(() => {
     const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
     const traitNames = [
-      ['cool', 'warm'],
+      ['transparent', 'cool', 'warm'],
       ...Object.values(ImageData.images).map(i => {
         return i.map(imageData => imageData.filename);
       }),
