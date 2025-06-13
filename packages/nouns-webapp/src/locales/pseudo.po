@@ -81,7 +81,6 @@ msgid "Review Streaming Payment Action"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 #: src/components/Documentation/index.tsx
@@ -223,10 +222,6 @@ msgstr ""
 msgid "Withdraw Nouns from escrow"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "The logos and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-msgstr ""
-
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
 msgstr ""
@@ -304,7 +299,11 @@ msgstr ""
 msgid "Nouns Protocol"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/TraitsPage.tsx
+msgid "Loading traits..."
+msgstr ""
+
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr ""
@@ -417,7 +416,9 @@ msgid "Proposal Canceled!"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
+#: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Nouns"
 msgstr ""
 
@@ -497,7 +498,7 @@ msgstr ""
 msgid "About Proposal Candidates"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr ""
@@ -516,7 +517,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr ""
@@ -799,6 +800,10 @@ msgstr ""
 msgid "Updating..."
 msgstr ""
 
+#: src/pages/TraitsPage.tsx
+msgid "Browse and download all available Noun traits."
+msgstr ""
+
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 msgstr ""
@@ -837,6 +842,10 @@ msgstr ""
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr ""
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr ""
+
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr ""
@@ -857,8 +866,16 @@ msgstr ""
 msgid "Forks"
 msgstr ""
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Explore traits"
+msgstr ""
+
 #: src/components/Footer.tsx
 msgid "Token"
+msgstr ""
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
 msgstr ""
 
 #: src/components/ChangeDelegatePanel/index.tsx
@@ -1062,7 +1079,7 @@ msgstr ""
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr ""
@@ -1428,8 +1445,7 @@ msgstr ""
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr ""
 
-#: src/components/Footer.tsx
-#: src/components/NavBar/index.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Nouns & Traits"
 msgstr ""
 
@@ -1610,6 +1626,11 @@ msgstr ""
 msgid "One Noun, Every Day, Forever."
 msgstr ""
 
+#: src/pages/TraitsPage.tsx
+#: src/components/Footer.tsx
+msgid "Traits"
+msgstr ""
+
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
 msgstr ""
@@ -1653,7 +1674,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr ""
@@ -1683,7 +1704,7 @@ msgstr ""
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr ""
@@ -1718,7 +1739,7 @@ msgstr ""
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 msgid "Go to auction"
 msgstr ""
 
@@ -1794,7 +1815,7 @@ msgstr ""
 msgid "Editing a proposal will clear all previous feedback"
 msgstr ""
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 msgid "Noggles"
 msgstr ""
 

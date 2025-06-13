@@ -86,7 +86,6 @@ msgid "Review Streaming Payment Action"
 msgstr "ストリーミング支払いアクションを確認"
 
 #: src/pages/Playground/index.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 #: src/components/Documentation/index.tsx
@@ -226,10 +225,6 @@ msgstr "提案を行うには{threshold}票が必要です"
 msgid "Withdraw Nouns from escrow"
 msgstr "エスクローからNounsを引き出す"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "The logos and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-msgstr "プレイグラウンドで生成されたロゴとすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
-
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
 msgstr "提案アクションを追加"
@@ -306,7 +301,11 @@ msgstr "Noun {0}"
 msgid "Nouns Protocol"
 msgstr "Nounsプロトコル"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/TraitsPage.tsx
+msgid "Loading traits..."
+msgstr "特性を読み込み中..."
+
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr "探索"
@@ -419,7 +418,8 @@ msgid "Proposal Canceled!"
 msgstr "提案がキャンセルされました！"
 
 #: src/pages/Governance/index.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
+#: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
 
@@ -496,7 +496,7 @@ msgstr "閾値を通過するには、{0}以上のNouns（DAOの{1}%）が必要
 msgid "About Proposal Candidates"
 msgstr "提案候補について"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr "背景"
@@ -515,7 +515,7 @@ msgstr "頭 ({0})"
 msgid "minutes"
 msgstr "分"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr "付属品"
@@ -792,6 +792,10 @@ msgstr "...そしてさらに3つ"
 msgid "Updating..."
 msgstr "更新"
 
+#: src/pages/TraitsPage.tsx
+msgid "Browse and download all available Noun traits."
+msgstr "利用可能なすべての名詞の特性を閲覧してダウンロード。"
+
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 msgstr "お好きなだけ多くまたは少なくNounsを追加してください。追加のNounsはエスクロー期間とフォーク期間中に追加できます。"
@@ -830,6 +834,10 @@ msgstr "Nounderへの報酬"
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr "名詞を構成する個々の特性をダウンロード"
+
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "1つ以上の提案アクションを追加し、コミュニティのために提案を説明してください。提案は提出後に変更できないため、提出前にすべての情報を確認してください。投票期間は5日後に始まり、5日間続きます。"
@@ -850,9 +858,17 @@ msgstr "ストリーム日付の詳細を追加"
 msgid "Forks"
 msgstr "フォーク"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Explore traits"
+msgstr "特性を探索"
+
 #: src/components/Footer.tsx
 msgid "Token"
 msgstr "トークン"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "プレイグラウンドで生成されたロゴ、特性、およびすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -1051,7 +1067,7 @@ msgstr "あなたは提案 {0} に投票することに成功しました。"
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr "体"
@@ -1398,8 +1414,7 @@ msgstr "スポンサー付き投票は不要"
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr "提案と共に提出する署名を選択してください。署名の総数は提案の閾値{0}を超える必要があります。"
 
-#: src/components/Footer.tsx
-#: src/components/NavBar/index.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Nouns & Traits"
 msgstr "名詞と特性"
 
@@ -1577,6 +1592,11 @@ msgstr "現在の代表者"
 msgid "One Noun, Every Day, Forever."
 msgstr "1日1つのNoun、永遠に。"
 
+#: src/pages/TraitsPage.tsx
+#: src/components/Footer.tsx
+msgid "Traits"
+msgstr "特性"
+
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
 msgstr "ユーザーはすでに投票済みです"
@@ -1620,7 +1640,7 @@ msgstr "拒否"
 msgid "Preview"
 msgstr "プレビュー"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "頭"
@@ -1650,7 +1670,7 @@ msgstr "Nounsの投票者は提出が無料です。非投票者は{0} ETHの手
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 msgstr "この理由から、私たちプロジェクトの創設者（「Nounders」）は、自分たちをNounsで補償することを選びました。プロジェクトの最初の5年間、10番目ごとのNounは私たちのマルチシグ（5/10）に送られ、そこで権利確定され、Noundersに分配されます。"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -1683,7 +1703,7 @@ msgstr "投票の過半数を維持または獲得する目的で名詞オーク
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "投票を委任するアカウントのイーサリアムアドレスまたはENS名を入力します。"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 msgid "Go to auction"
 msgstr "オークションに行く"
 
@@ -1758,7 +1778,7 @@ msgstr "Nouns DAOをフォークする"
 msgid "Editing a proposal will clear all previous feedback"
 msgstr "提案を編集すると、以前のすべてのフィードバックがクリアされます"
 
-#: src/pages/ExplorePage.tsx
+#: src/pages/NounsPage.tsx
 msgid "Noggles"
 msgstr "ノグル"
 

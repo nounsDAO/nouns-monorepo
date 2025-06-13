@@ -50,7 +50,6 @@ checksums:
     Build%20With%20Nouns.%20Get%20Funded./singular: f23fe662c1868906a0e9cd1545bc32a6
     Making%20a%20proposal%20requires%20%7Bthreshold%7D%20votes/singular: 8fe260be2bd2bc7d5adbdc4fdcf290df
     Withdraw%20Nouns%20from%20escrow/singular: 90831600bd5b6f9ca9dfdde064a46a01
-    The%20logos%20and%20every%20Noun%20generated%20on%20the%20playground%20are%20%3C0%3ECC0%3C%2F0%3E%20(Creative%20Commons%20Zero)%2C%20meaning%20they%20are%20in%20the%20public%20domain%20and%20free%20to%20use%20for%20any%20purpose%20without%20restriction./singular: 8febc531038aac21e4827297d3a399bd
     Add%20Proposal%20Action/singular: 8a5e0f0bbe8d3a09a9f2762ad0c512bb
     "%3C0%3EProposed%20by%3A%20%3C%2F0%3E%3C1%3E%7Bproposer%7D%3C%2F1%3E%3C2%3E%7BtransactionLink%7D%3C%2F2%3E/singular": 466e742734b1b21f3a8f1b7787761aa9
     3.5%20artists%2C%206.5%20technologists/singular: 066bac6e14adab53325690f21c69b29a
@@ -69,6 +68,7 @@ checksums:
     or%20more/singular: 6a3c67ec542a65718be711c8006c4729
     Noun%20%7B0%7D/singular: bbd135b8a1548d1bd19fe9d20b73a750
     Nouns%20Protocol/singular: 845f78ccd686aaa59d738df1c9f7b600
+    Loading%20traits.../singular: d5eaa7745040d319dac3fe871d2b50cc
     Explore/singular: 69560a8d5ef8a05a483e58e427ff76ed
     Queued/singular: e19b621b39112ea373d249523599ac98
     You%20have%20no%20votes./singular: ec2b3c856983c6dd4228cb72ef2954c4
@@ -179,6 +179,7 @@ checksums:
     Nouns%20artwork%20is%20in%20the%20%7BpublicDomainLink%7D./singular: 0f69d597e859d202bee67a8ecdea0494
     ...%20and%20%7B0%7D%20more/singular: bd268f82780dcd6946cd416ccfa28337
     Updating.../singular: 0d59644e851a6a76f1fb45de9353c447
+    Browse%20and%20download%20all%20available%20Noun%20traits./singular: d7c09f055a7dfdd29cdc787fd8bce954
     Add%20as%20many%20or%20as%20few%20of%20your%20Nouns%20as%20you%E2%80%99d%20like.%20Additional%20Nouns%20can%20be%20added%20during%20the%20escrow%20and%20forking%20periods./singular: 0e061bcd9200331ae09fc80aa16aaa22
     Your%20%3C0%3E%7BavailableVotes%7D%3C%2F0%3E%20votes%20have%20been%20delegated%20to%20a%20new%20account./singular: 589732a4c0b8e6b8071ae2cc207dc3e2
     Deploy%20Nouns%20fork/singular: c570af6a4ce6119f26847141804d654b
@@ -188,12 +189,15 @@ checksums:
     You%20can%20settle%20manually%20in%201%20minute/singular: 9e471ac375eb2f152be45ee361b27b6f
     Nounders'%20Reward/singular: 620b72f78f4df2ac56477891d6563af5
     Voted%20with%3C0%3E%7BnumVotesForProp%7D%3C%2F0%3ENouns/singular: 6eb01c543f3c225898c362d3be28a7d5
+    Download%20the%20individual%20traits%20that%20compose%20Nouns/singular: a394d4d823acfcef18b754c496776bf9
     Add%20one%20or%20more%20proposal%20actions%20and%20describe%20your%20proposal%20for%20the%20community.%20The%20proposal%20cannot%20be%20modified%20after%20submission%2C%20so%20please%20verify%20all%20information%20before%20submitting.%20The%20voting%20period%20will%20begin%20after%205%20days%20and%20last%20for%205%20days./singular: 075b94a89e8f545babed4c4baf948b09
     One%20Noun%20is%20trustlessly%20auctioned%20every%2024%20hours%2C%20forever./singular: 6971d481ccb76b826faa0d4868e6ddda
     Error/singular: 3c95bcb32c2104b99a46f5b3dd015248
     Add%20Stream%20Date%20Details/singular: 8eddf5efc6069278f28bb8b6b277e322
     Forks/singular: d692bdb4892481b1b4d9adf13b5b7ce0
+    Explore%20traits/singular: e00e518fc472e1a15efde563c0643d41
     Token/singular: b5c17093add6b79d42d55be14888d800
+    The%20logos%2C%20traits%20and%20every%20Noun%20generated%20on%20the%20playground%20are%20%3C0%3ECC0%3C%2F0%3E%20(Creative%20Commons%20Zero)%2C%20meaning%20they%20are%20in%20the%20public%20domain%20and%20free%20to%20use%20for%20any%20purpose%20without%20restriction./singular: e5d29ffca4c2e60270b55b8303fac469
     Delegate%20%7BavailableVotes%7D%20Vote/singular: e1e815b2fa9d9a54bbefc94a3af5d142
     Ends%20on/singular: 8aa79cfa75d1b59252328f8263282a1f
     No%20candidates%20found/singular: eb32f25121d3d760218d4abe580c2c6d
@@ -360,6 +364,7 @@ checksums:
     Pre-voting%20feedback/singular: d31006f6a29f42a7c1d8329f83c8bc9b
     Current%20Delegate/singular: 27f172f76ac28e72cb062f80002b0ad5
     One%20Noun%2C%20Every%20Day%2C%20Forever./singular: c6f1b0a14103e0d4a545ea5b2d32d5af
+    Traits/singular: 71e2d9be85316b8ac0c28d30f5e8a35d
     User%20Already%20Voted/singular: f4b65664e6537bef3d63a95545867d5c
     Connect%20a%20wallet%20to%20vote./singular: 2883a3e3c4c24400528ba58740dae0c7
     You%20can%20experiment%20with%20off-chain%20Noun%20generation%20at%20the%20%7BplaygroundLink%7D./singular: 8b29e23ac3c91a61e89529c44d9a8173
