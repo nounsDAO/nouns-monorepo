@@ -25,7 +25,7 @@ export const Footer = () => {
         { label: t`Governance`, url: '/vote' },
         { label: t`Brand Assets`, url: '/brand' },
         { label: t`Playground`, url: '/playground' },
-        { label: t`Nouns`, url: '/explore' },
+        { label: t`Nouns`, url: '/nouns' },
         { label: t`Traits`, url: '/traits' },
         {
           label: t`Forks`,

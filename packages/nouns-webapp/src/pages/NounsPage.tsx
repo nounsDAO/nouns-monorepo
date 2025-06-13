@@ -21,9 +21,9 @@ import { useAppSelector } from '@/hooks';
 import { useBreakpointValues } from '@/hooks/useBreakpointValues';
 import { traitName } from '@/lib/traitName';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
-type ExplorePageProps = object;
+type NounsPageProps = object;
 
-const ExplorePage: React.FC<ExplorePageProps> = () => {
+const NounsPage: React.FC<NounsPageProps> = () => {
   const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
   const currentAuctionNounId = currentAuction ? BigInt(currentAuction.nounId) : undefined;
   const nounCount = currentAuctionNounId ? Number(currentAuctionNounId) + 1 : -1;
@@ -335,4 +335,4 @@ const ExplorePage: React.FC<ExplorePageProps> = () => {
     </motion.div>
   );
 };
-export default ExplorePage;
+export default NounsPage;
