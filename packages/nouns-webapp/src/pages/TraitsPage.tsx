@@ -9,6 +9,7 @@ import { buildSVG, PNGCollectionEncoder } from '@nouns/sdk';
 import { CopyIcon, DownloadIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import CCZero from '@/assets/cczero-badge.svg?react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -250,6 +251,30 @@ const TraitsPage: React.FC = () => {
           </div>
         </div>
       ))}
+
+      <section className="mt-12 border-t border-gray-200 pt-12">
+        <h2 className="font-londrina text-3xl font-bold text-gray-900">
+          <Trans>License</Trans>
+        </h2>
+        <div className="mt-6 items-start gap-6">
+          <p className="max-w-2xl text-lg text-gray-600">
+            <Trans>
+              All traits are{' '}
+              <a
+                href="https://creativecommons.org/public-domain/cc0/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline hover:text-blue-800"
+              >
+                CC0
+              </a>{' '}
+              (Creative Commons Zero), meaning they are in the public domain and free to use for any
+              purpose without restriction.
+            </Trans>
+          </p>
+          <CCZero className="mt-6 h-16" />
+        </div>
+      </section>
     </div>
   );
 };

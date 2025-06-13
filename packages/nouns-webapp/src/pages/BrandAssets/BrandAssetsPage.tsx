@@ -4,7 +4,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { DownloadIcon } from 'lucide-react';
 import { Link } from 'react-router';
 
-import CCZero from '@/pages/BrandAssets/cczero-badge.svg?react';
+import CCZero from '@/assets/cczero-badge.svg?react';
 import playgroundNouns from '@/pages/BrandAssets/playground-nouns.webp';
 import traitsImage from '@/pages/BrandAssets/traits.webp';
 
