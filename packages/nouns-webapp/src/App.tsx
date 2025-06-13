@@ -15,6 +15,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { CHAIN_ID } from '@/config';
 import { useAppDispatch } from '@/hooks';
 import AuctionPage from '@/pages/Auction';
+import { BrandAssetsPage } from '@/pages/BrandAssets/BrandAssetsPage';
 import CandidatePage from '@/pages/Candidate';
 import CandidateHistoryPage from '@/pages/CandidateHistoryPage';
 import CreateCandidatePage from '@/pages/CreateCandidate';
@@ -78,6 +79,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/fork/:id" element={<ForkPage />} />
           <Route path="/fork" element={<ForksPage />} />
+          <Route path="/brand" element={<BrandAssetsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />

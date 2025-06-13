@@ -24,6 +24,7 @@ export const Footer = () => {
       items: [
         { label: t`Governance`, url: '/vote' },
         { label: t`Nouns & Traits`, url: '/explore' },
+        { label: t`Brand Assets`, url: '/brand' },
         { label: t`Playground`, url: '/playground' },
         {
           label: t`Forks`,
