@@ -6,6 +6,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        londrina: ['Londrina Solid', 'sans-serif'],
+      },
       screens: {
         xs: '425px',
         '2xl': '1440px',

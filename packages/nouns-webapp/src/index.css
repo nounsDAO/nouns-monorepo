@@ -162,3 +162,19 @@ code {
     width: 100%;
   }
 }
+
+@layer utilities {
+  .bg-checkerboard {
+    background-image:
+      linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+      linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 3.125% 3.125%;
+    background-position:
+      0 0,
+      0 1.5625%,
+      1.5625% -1.5625%,
+      -1.5625% 0px;
+  }
+}

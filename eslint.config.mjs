@@ -212,6 +212,12 @@ export default defineConfig([
               regex: '.*redux.*',
               message: 'Use jotai and @tanstack/react-query instead',
             },
+            {
+              group: ['lucide-react'],
+              allowImportNamePattern: '^(IconNode|LucideIcon|LucideProps|SVGAttributes|.+Icon)$',
+              message:
+                'Import specific *Icon exports instead of generic names. e.g. DownloadIcon instead of Download',
+            },
           ],
         },
       ],
