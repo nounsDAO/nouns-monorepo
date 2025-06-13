@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 import CCZero from '@/pages/BrandAssets/cczero-badge.svg?react';
 import playgroundNouns from '@/pages/BrandAssets/playground-nouns.webp';
+import traitsImage from '@/pages/BrandAssets/traits.webp';
 
 interface AssetCardProps {
   title: string;
@@ -28,19 +29,7 @@ const AssetCard: React.FC<AssetCardProps> = ({ title, imageSrc, pngHref, svgHref
         <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
 
         {/* Checkerboard background container */}
-        <div
-          className="relative mb-6 flex items-center justify-center rounded-lg bg-white p-8 shadow-inner"
-          style={{
-            backgroundImage: `
-              linear-gradient(45deg, #f3f4f6 25%, transparent 25%), 
-              linear-gradient(-45deg, #f3f4f6 25%, transparent 25%), 
-              linear-gradient(45deg, transparent 75%, #f3f4f6 75%), 
-              linear-gradient(-45deg, transparent 75%, #f3f4f6 75%)
-            `,
-            backgroundSize: '20px 20px',
-            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
-          }}
-        >
+        <div className="bg-checkerboard relative mb-6 flex aspect-square items-center justify-center rounded-lg bg-white p-8 shadow-inner">
           <img
             src={imageSrc}
             alt={title}
@@ -72,30 +61,29 @@ const AssetCard: React.FC<AssetCardProps> = ({ title, imageSrc, pngHref, svgHref
   );
 };
 
-const PlaygroundCard: React.FC<{
+const SectionCard: React.FC<{
   title: string;
   imageSrc: string;
   description: string;
-}> = ({ title, imageSrc, description }) => {
+  to?: string;
+}> = ({ title, imageSrc, description, to = '/playground' }) => {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="p-6">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
-
         {/* Checkerboard background container */}
-        <div className="bg-warm-background relative flex items-center justify-center rounded-lg">
-          <img src={imageSrc} alt={title} className="max-h-64 max-w-full object-contain" />
+        <div className="bg-checkerboard relative flex aspect-square items-center justify-center rounded-lg shadow-inner">
+          <img src={imageSrc} alt={title} className="max-w-96 object-contain drop-shadow" />
         </div>
 
         <p className="mb-4 text-sm text-gray-600">{description}</p>
 
         {/* Go to playground button */}
         <Link
-          to="/playground"
+          to={to}
           reloadDocument
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
         >
-          <Trans>Go to playground</Trans>
+          {title}
         </Link>
       </div>
     </div>
@@ -159,13 +147,20 @@ export const BrandAssetsPage = () => {
         </section>
         <section className="mt-12">
           <h2 className="font-londrina mt-6 text-4xl font-bold">
-            <Trans>Nouns</Trans>
+            <Trans>Nouns & Traits</Trans>
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <PlaygroundCard
-              title={t`Playground`}
+            <SectionCard
+              title={t`Go to playground`}
+              to="/playground"
               imageSrc={playgroundNouns}
               description={t`Generate endless Nouns assembled from the onchain artwork`}
+            />
+            <SectionCard
+              title={t`Explore traits`}
+              imageSrc={traitsImage}
+              description={t`Download the individual traits that compose Nouns`}
+              to="/traits"
             />
           </div>
         </section>
@@ -176,7 +171,7 @@ export const BrandAssetsPage = () => {
           <div className="mt-6 items-start gap-6">
             <p className="max-w-2xl text-lg text-gray-600">
               <Trans>
-                The logos and every Noun generated on the playground are{' '}
+                The logos, traits and every Noun generated on the playground are{' '}
                 <a
                   href="https://creativecommons.org/public-domain/cc0/"
                   target="_blank"
