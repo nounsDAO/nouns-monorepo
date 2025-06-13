@@ -31,6 +31,7 @@ import NotFoundPage from '@/pages/NotFound';
 import NoundersPage from '@/pages/Nounders';
 import Playground from '@/pages/Playground';
 import ProposalHistory from '@/pages/ProposalHistory';
+import TraitsPage from '@/pages/TraitsPage';
 import VotePage from '@/pages/Vote';
 import { setActiveAccount } from '@/state/slices/account';
 
@@ -76,6 +77,7 @@ function App() {
           <Route path="/candidates/:id/history/:versionNumber" element={<CandidateHistoryPage />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/delegate" element={<DelegatePage />} />
+          <Route path="/traits" element={<TraitsPage />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/fork/:id" element={<ForkPage />} />
           <Route path="/fork" element={<ForksPage />} />

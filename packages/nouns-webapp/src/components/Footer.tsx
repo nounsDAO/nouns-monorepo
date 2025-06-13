@@ -23,9 +23,10 @@ export const Footer = () => {
       category: 'Nouns DAO',
       items: [
         { label: t`Governance`, url: '/vote' },
-        { label: t`Nouns & Traits`, url: '/explore' },
         { label: t`Brand Assets`, url: '/brand' },
         { label: t`Playground`, url: '/playground' },
+        { label: t`Nouns`, url: '/explore' },
+        { label: t`Traits`, url: '/traits' },
         {
           label: t`Forks`,
           url: '/fork',
