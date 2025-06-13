@@ -168,7 +168,7 @@ const TraitsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 pt-8">
       <div className="mb-8">
-        <h1 className="mt-2 text-4xl font-bold text-gray-900">
+        <h1 className="mt-2 text-5xl font-bold text-gray-900">
           <Trans>Traits</Trans>
         </h1>
         <p className="mt-4 text-lg text-gray-600">
@@ -178,7 +178,7 @@ const TraitsPage: React.FC = () => {
 
       {orderedCategories.map(category => (
         <div key={category} className="mb-12">
-          <h2 className="mb-6 text-2xl font-bold text-gray-900">{category}</h2>
+          <h2 className="font-londrina mb-6 text-3xl font-bold text-gray-900">{category}</h2>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
             {traitsByCategory[category].map(trait => (
               <Dialog key={trait.filename}>
