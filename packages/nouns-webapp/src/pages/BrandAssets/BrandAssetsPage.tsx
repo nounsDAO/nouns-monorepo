@@ -114,7 +114,7 @@ export const BrandAssetsPage = () => {
     },
   ];
   return (
-    <div className="-mb-20 min-h-screen bg-gray-100">
+    <div className="-mb-10 min-h-screen bg-gray-100 sm:-mb-20">
       <div className="container-xl py-12">
         <div className="mb-12">
           <h1 className="mb-4 text-5xl font-bold text-gray-900">
