@@ -81,6 +81,7 @@ msgid "Review Streaming Payment Action"
 msgstr "审核流支付操作"
 
 #: src/pages/Playground/index.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
 #: src/components/Documentation/index.tsx
@@ -220,6 +221,10 @@ msgstr "提出提案需要 {threshold} 票"
 msgid "Withdraw Nouns from escrow"
 msgstr "从托管中提取 Nouns"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "The logos and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "在游乐场生成的标志和每个名词都是<0>CC0</0>（Creative Commons Zero），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
+
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
 msgstr "添加提案操作"
@@ -241,14 +246,14 @@ msgstr "提案列表"
 msgid "starts {0}"
 msgstr "开始于 {0}"
 
-#: src/components/Documentation/index.tsx
-msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
-msgstr "贿赂选民以便从国库中提取资金以谋取个人利益"
-
 #. placeholder {0}: glassesCount?.toString()
 #: src/components/Documentation/index.tsx
 msgid "glasses ({0})"
 msgstr "眼镜（{0}）"
+
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "贿赂选民以便从国库中提取资金以谋取个人利益"
 
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
@@ -279,6 +284,10 @@ msgstr "竞拍记录："
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr "门槛（通过提案所需的最少支持票数）取决于提案的反对票数。它会随反对比例线性增加，介于最小门槛与最大门槛之间。"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Go to playground"
+msgstr "前往游乐场"
+
 #: src/components/Bid/index.tsx
 msgid "or more"
 msgstr "或以上"
@@ -292,8 +301,8 @@ msgstr "Noun {0}"
 msgid "Nouns Protocol"
 msgstr "Nouns 协议"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNav/index.tsx
 msgid "Explore"
 msgstr "探索"
 
@@ -405,6 +414,7 @@ msgid "Proposal Canceled!"
 msgstr "提案已取消！"
 
 #: src/pages/Governance/index.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Nouns"
 msgstr "Nouns"
 
@@ -481,8 +491,8 @@ msgstr "需要超过 {0} 个 Noun（占 DAO 的 {1}%）才能通过门槛"
 msgid "About Proposal Candidates"
 msgstr "关于提案候选"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Background"
 msgstr "背景"
 
@@ -500,8 +510,8 @@ msgstr "头部（{0}）"
 msgid "minutes"
 msgstr "分钟"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Accessory"
 msgstr "配件"
 
@@ -860,6 +870,11 @@ msgstr "提案否决权最初被设想为解决 Nouns DAO 资金库“51% 攻击
 msgid "ended {0}"
 msgstr "{0}结束"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+#: src/components/Footer.tsx
+msgid "Brand Assets"
+msgstr "品牌资产"
+
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Pending"
@@ -915,6 +930,10 @@ msgstr "未找到提案"
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "此候选提案最初是通过（一组）签名来创建的。若编辑此提案将会生成一份新的候选提案，需要原签署人重新签名，才能更新链上的提案"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+msgstr "下载官方 Nouns DAO 品牌资产，包括我们标志性的眼镜，提供多种格式。"
+
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
 msgstr "仅对您可见"
@@ -923,8 +942,6 @@ msgstr "仅对您可见"
 msgid "Add Action Details"
 msgstr "添加操作详情"
 
-#: src/components/Proposals/index.tsx
-#: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "委托"
@@ -1029,8 +1046,8 @@ msgstr "您已成功对提案 {0} 进行投票"
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr "使用<0>{numVotesForProp}</0>个 Noun 进行投票"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Body"
 msgstr "身体"
 
@@ -1074,6 +1091,10 @@ msgstr "理由（可选）"
 #: src/components/Documentation/index.tsx
 msgid "Settlement of one auction kicks off the next."
 msgstr "一次拍卖结算后，下一次拍卖随即开始。"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Black monochrome Noggles"
+msgstr "黑色单色眼镜"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
@@ -1292,6 +1313,10 @@ msgstr "使用 <0>{0}</0> 个 Noun 投票"
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr "通过采用DUNA模式，Nouns DAO为寻求在去中心化自治与法律确定性之间取得平衡的DAO们树立了先锋榜样，进一步巩固了其在去中心化治理创新前沿的地位。"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Logo"
+msgstr "标志"
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
 msgstr "连接您的钱包"
@@ -1306,6 +1331,10 @@ msgstr "连接您的钱包"
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Back"
 msgstr "返回"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "License"
+msgstr "许可证"
 
 #: src/components/NavWallet/WalletConnectButton/index.tsx
 msgid "Connect"
@@ -1342,6 +1371,10 @@ msgstr "成功！分叉已部署。"
 #: src/components/Documentation/index.tsx
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 msgstr "属性稀缺性没有明确规则；所有 Nouns 同等稀有。"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "White monochrome Noggles"
+msgstr "白色单色眼镜"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
@@ -1496,6 +1529,10 @@ msgstr "无需参数 "
 msgid "Add Streaming Payment Action"
 msgstr "添加流支付操作"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Generate endless Nouns assembled from the onchain artwork"
+msgstr "从链上艺术作品中生成无尽的名词"
+
 #: src/pages/Vote/index.tsx
 msgid "Withdraw from Stream <0/>"
 msgstr "从流中提取 <0/>"
@@ -1578,14 +1615,18 @@ msgstr "已否决"
 msgid "Preview"
 msgstr "预览"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Head"
 msgstr "头部"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Tip"
 msgstr "提示"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Colored Noggles"
+msgstr "彩色眼镜"
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
@@ -1604,6 +1645,7 @@ msgstr "Nouns 投票者提交是免费的。非投票者可以支付 {0} ETH 的
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 msgstr "因此，我们，项目的创始人（‘Nounders’），选择用 Nouns 来补偿自己。在项目的前五年中，每第十个 Noun 将被发送到我们的多签（5/10），在那里它将被归属并分配给 Nounders。"
 
+#: src/pages/ExplorePage.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -1636,7 +1678,7 @@ msgstr "试图改变名词拍卖节奏以维持或获得投票多数"
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "输入您想要委托投票的账户的以太坊地址或 ENS 名称。"
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+#: src/pages/ExplorePage.tsx
 msgid "Go to auction"
 msgstr "前往拍卖"
 
@@ -1684,13 +1726,7 @@ msgstr "该候选人目前有 {0} 个签名。"
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr "在未经审计的情况下对关键智能合约进行升级"
 
-#: src/components/Documentation/index.tsx
-msgid "backgrounds (2) "
-msgstr "背景 (2) "
-msgstr ""
-
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Glasses"
 msgstr "眼镜"
 
@@ -1716,6 +1752,10 @@ msgstr "分叉 Nouns DAO"
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
 msgstr "编辑提案将清除所有先前的反馈"
+
+#: src/pages/ExplorePage.tsx
+msgid "Noggles"
+msgstr "眼镜"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"
