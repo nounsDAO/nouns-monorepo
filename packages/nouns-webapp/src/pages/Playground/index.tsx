@@ -361,7 +361,7 @@ const Playground: React.FC = () => {
                 }
               >
                 <Image
-                  style={{ margin: '0 0 .25rem .25rem' }}
+                  style={{ margin: '0 0 .25rem .25rem', display: 'inline-block' }}
                   src={InfoIcon}
                   className={classes.voteIcon}
                 />
