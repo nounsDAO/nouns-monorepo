@@ -28,6 +28,7 @@ import ForksPage from '@/pages/Forks';
 import GovernancePage from '@/pages/Governance';
 import NotFoundPage from '@/pages/NotFound';
 import NoundersPage from '@/pages/Nounders';
+import { OraclePage } from '@/pages/Oracle';
 import Playground from '@/pages/Playground';
 import ProposalHistory from '@/pages/ProposalHistory';
 import VotePage from '@/pages/Vote';
@@ -78,6 +79,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/fork/:id" element={<ForkPage />} />
           <Route path="/fork" element={<ForksPage />} />
+          <Route path="/oracle" element={<OraclePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
