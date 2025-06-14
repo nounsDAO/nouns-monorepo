@@ -1,6 +1,6 @@
 import type { Address } from '@/utils/types';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
@@ -19,6 +19,7 @@ import { useWatchBlocks } from 'wagmi';
 import Noun, { LoadingNoun } from '@/components/LegacyNoun';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import {
   readNounsAuctionHouseAuction,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
@@ -232,14 +233,11 @@ const AuctionControlPanel = ({
           Blocks change really fast, so the next Noun preview will end in a few seconds.
         </Trans>
       </p>
-      <p>
-        <Trans>
-          There is going to be a delay of{' '}
-          <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
-        </Trans>
-      </p>
+
+      <BlockTimeCountdown currentBlockTimestamp={currentBlockTimestamp} />
+
       <Button
-        className="relative my-5 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
+        className="relative mb-5 inline-block h-12 w-full cursor-pointer select-none rounded-lg border-x-0 border-y-0 border-none border-transparent bg-neutral-800 px-3 py-1 text-center align-middle text-lg normal-case leading-7 text-white hover:bg-zinc-500 hover:text-stone-300 focus:bg-zinc-500 focus:text-stone-300"
         onClick={onSettleAuction}
         disabled={isSettlingAuction}
       >
@@ -283,10 +281,27 @@ function BlockTimeCountdown({
     return () => clearInterval(timerId);
   }, [currentBlockTimestamp]);
 
+  // Calculate progress value as a percentage (0-100)
+  const progressValue = ((AVERAGE_BLOCK_TIME - timeLeft) / AVERAGE_BLOCK_TIME) * 100;
+
   return (
-    <>
-      <span className="font-bold">{timeLeft}</span> {timeLeft === 1 ? 'second' : 'seconds'} until
-      next block
-    </>
+    <div className="my-4">
+      <div className="mb-1 flex justify-between">
+        <span>
+          <span className="font-bold">{timeLeft}</span> {timeLeft === 1 ? 'second' : 'seconds'}{' '}
+          until next block.
+        </span>
+      </div>
+      <Progress
+        value={progressValue}
+        className="h-3"
+        // Override the indicator color to match the button
+        style={
+          {
+            '--bs-primary-rgb': '38, 38, 38', // neutral-800 equivalent
+          } as React.CSSProperties
+        }
+      />
+    </div>
   );
 }
