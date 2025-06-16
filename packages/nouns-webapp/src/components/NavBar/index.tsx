@@ -181,12 +181,12 @@ const NavBar = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/explore"
+                to="/nouns"
                 className={clsx(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
                 <NavBarButton
-                  buttonText={<Trans>Nouns &amp; Traits</Trans>}
+                  buttonText={<Trans>Nouns</Trans>}
                   buttonIcon={<NogglesIcon />}
                   buttonStyle={nonWalletButtonStyle}
                 />
@@ -206,9 +206,9 @@ const NavBar = () => {
                       navDropdownClasses.warmInfoSelected,
                     ),
                   )}
-                  href="/explore"
+                  href="/nouns"
                 >
-                  Nouns &amp; Traits
+                  <Trans>Nouns</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={clsx(

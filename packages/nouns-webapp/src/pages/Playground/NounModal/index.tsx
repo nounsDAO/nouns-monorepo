@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button } from 'react-bootstrap';
+import { DownloadIcon } from 'lucide-react';
 import ReactDOM from 'react-dom';
 
 import LegacyNoun from '@/components/LegacyNoun';
 import { Backdrop } from '@/components/Modal';
+import { Button } from '@/components/ui/button';
 import { svg2png } from '@/utils/svg2png';
 
 import classes from './NounModal.module.css';
@@ -14,6 +15,16 @@ const downloadNounPNG = (png: string) => {
   downloadEl.href = png;
   downloadEl.download = 'noun.png';
   downloadEl.click();
+};
+
+const downloadNounSVG = (svg: string) => {
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const downloadEl = document.createElement('a');
+  downloadEl.href = url;
+  downloadEl.download = 'noun.svg';
+  downloadEl.click();
+  URL.revokeObjectURL(url);
 };
 
 const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
@@ -62,15 +73,27 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
             />
           )}
           <div className={classes.displayNounFooter}>
-            <span>Use this Noun as your profile picture!</span>
             {!isMobile && png && (
-              <Button
-                onClick={() => {
-                  downloadNounPNG(png);
-                }}
-              >
-                Download
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant={'outline'}
+                  onClick={() => {
+                    downloadNounPNG(png);
+                  }}
+                >
+                  <DownloadIcon size={16} />
+                  PNG
+                </Button>
+                <Button
+                  variant={'outline'}
+                  onClick={() => {
+                    downloadNounSVG(svg);
+                  }}
+                >
+                  <DownloadIcon size={16} />
+                  SVG
+                </Button>
+              </div>
             )}
           </div>
         </div>,

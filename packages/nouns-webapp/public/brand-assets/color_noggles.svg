@@ -1,0 +1,7 @@
+<svg width="800" height="300" viewBox="0 0 800 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M200 49.9999H300V250H200V49.9999Z" fill="white"/>
+<path d="M300 49.9999H400V250H300V49.9999Z" fill="black"/>
+<path d="M550 49.9999H650V250H550V49.9999Z" fill="white"/>
+<path d="M650 49.9999H750V250H650V49.9999Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M800 300H500V150H450V300H150V150H50V250H0V100H150V0H450V100H500V0H800V300ZM750 250V50H550V250H750ZM200 250H400V50H200V250Z" fill="#F3322C"/>
+</svg>

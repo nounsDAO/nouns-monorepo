@@ -244,14 +244,14 @@ msgstr "Proposals"
 msgid "starts {0}"
 msgstr "starts {0}"
 
-#: src/components/Documentation/index.tsx
-msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
-msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
-
 #. placeholder {0}: glassesCount?.toString()
 #: src/components/Documentation/index.tsx
 msgid "glasses ({0})"
 msgstr "glasses ({0})"
+
+#: src/components/Documentation/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
 
 #. placeholder {0}: dayjs(endDate).fromNow()
 #: src/components/StartOrEndTime/index.tsx
@@ -270,6 +270,10 @@ msgstr "Proposal candidates can be created by anyone. If a candidate receives en
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 msgstr "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 
+#: src/pages/TraitsPage.tsx
+msgid "Download All"
+msgstr "Download All"
+
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
 msgstr "There are no active forks."
@@ -281,6 +285,10 @@ msgstr "Bids for"
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Go to playground"
+msgstr "Go to playground"
 
 #: src/components/Bid/index.tsx
 msgid "or more"
@@ -295,8 +303,12 @@ msgstr "Noun {0}"
 msgid "Nouns Protocol"
 msgstr "Nouns Protocol"
 
+#: src/pages/TraitsPage.tsx
+msgid "Loading traits..."
+msgstr "Loading traits..."
+
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNav/index.tsx
 msgid "Explore"
 msgstr "Explore"
 
@@ -408,6 +420,9 @@ msgid "Proposal Canceled!"
 msgstr "Proposal Canceled!"
 
 #: src/pages/Governance/index.tsx
+#: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
 
@@ -487,8 +502,8 @@ msgstr "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold
 msgid "About Proposal Candidates"
 msgstr "About Proposal Candidates"
 
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Background"
 msgstr "Background"
 
@@ -506,8 +521,8 @@ msgstr "heads ({0}) "
 msgid "minutes"
 msgstr "minutes"
 
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Accessory"
 msgstr "Accessory"
 
@@ -687,6 +702,10 @@ msgstr "Any token holder can signal to fork (exit) in response to a governance p
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 
+#: src/pages/TraitsPage.tsx
+msgid "Creating ZIP..."
+msgstr "Creating ZIP..."
+
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
@@ -789,6 +808,10 @@ msgstr "... and {0} more"
 msgid "Updating..."
 msgstr "Updating..."
 
+#: src/pages/TraitsPage.tsx
+msgid "Browse and download all available Noun traits."
+msgstr "Browse and download all available Noun traits."
+
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
 msgstr "Add as many or as few of your Nouns as you’d like. Additional Nouns can be added during the escrow and forking periods."
@@ -827,6 +850,10 @@ msgstr "Nounders' Reward"
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr "Download the individual traits that compose Nouns"
+
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
@@ -847,9 +874,17 @@ msgstr "Add Stream Date Details"
 msgid "Forks"
 msgstr "Forks"
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Explore traits"
+msgstr "Explore traits"
+
 #: src/components/Footer.tsx
 msgid "Token"
 msgstr "Token"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -871,6 +906,11 @@ msgstr "The proposal veto right was initially envisioned as a temporary solution
 #: src/components/StartOrEndTime/index.tsx
 msgid "ended {0}"
 msgstr "ended {0}"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+#: src/components/Footer.tsx
+msgid "Brand Assets"
+msgstr "Brand Assets"
 
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -926,6 +966,10 @@ msgstr "No proposals found"
 #: src/pages/EditProposal/index.tsx
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+msgstr "Download official Nouns DAO brand assets including our iconic noggles in various formats."
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
@@ -1043,8 +1087,8 @@ msgstr "You've successfully voted on on prop {0}"
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr "Voted with<0>{numVotesForProp}</0>Noun"
 
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Body"
 msgstr "Body"
 
@@ -1089,6 +1133,10 @@ msgstr "Reason (Optional)"
 #: src/components/Documentation/index.tsx
 msgid "Settlement of one auction kicks off the next."
 msgstr "Settlement of one auction kicks off the next."
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Black monochrome Noggles"
+msgstr "Black monochrome Noggles"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
@@ -1325,6 +1373,10 @@ msgstr "Voting with <0>{0}</0> Noun"
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Logo"
+msgstr "Logo"
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
 msgstr "Connect your wallet"
@@ -1339,6 +1391,11 @@ msgstr "Connect your wallet"
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "Back"
 msgstr "Back"
+
+#: src/pages/TraitsPage.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "License"
+msgstr "License"
 
 #: src/components/NavWallet/WalletConnectButton/index.tsx
 msgid "Connect"
@@ -1376,6 +1433,10 @@ msgstr "Success! The fork has been deployed."
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 msgstr "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "White monochrome Noggles"
+msgstr "White monochrome Noggles"
+
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
@@ -1393,8 +1454,7 @@ msgstr "No sponsored votes needed"
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 
-#: src/components/Footer.tsx
-#: src/components/NavBar/index.tsx
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Nouns & Traits"
 msgstr "Nouns & Traits"
 
@@ -1521,6 +1581,10 @@ msgstr "Expires {0}"
 msgid "Current Threshold"
 msgstr "Current Threshold"
 
+#: src/pages/TraitsPage.tsx
+msgid "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required "
 msgstr "No arguments required "
@@ -1530,6 +1594,10 @@ msgstr "No arguments required "
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Add Streaming Payment Action"
 msgstr "Add Streaming Payment Action"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Generate endless Nouns assembled from the onchain artwork"
+msgstr "Generate endless Nouns assembled from the onchain artwork"
 
 #: src/pages/Vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1570,6 +1638,11 @@ msgstr "Current"
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."
 msgstr "One Noun, Every Day, Forever."
+
+#: src/pages/TraitsPage.tsx
+#: src/components/Footer.tsx
+msgid "Traits"
+msgstr "Traits"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
@@ -1614,14 +1687,18 @@ msgstr "Vetoed"
 msgid "Preview"
 msgstr "Preview"
 
+#: src/pages/NounsPage.tsx
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Head"
 msgstr "Head"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Tip"
 msgstr "Tip"
+
+#: src/pages/BrandAssets/BrandAssetsPage.tsx
+msgid "Colored Noggles"
+msgstr "Colored Noggles"
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
@@ -1640,6 +1717,7 @@ msgstr "Submissions are free for Nouns voters. Non-voters can submit for a {0} E
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed Nounders."
 
+#: src/pages/NounsPage.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -1674,7 +1752,7 @@ msgstr "attempt to alter Noun auction cadence for the purpose of maintaining or 
 msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 msgstr "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
 
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+#: src/pages/NounsPage.tsx
 msgid "Go to auction"
 msgstr "Go to auction"
 
@@ -1722,12 +1800,7 @@ msgstr "This candidate currently has {0} signatures."
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr "make upgrades to critical smart contracts without undergoing an audit"
 
-#: src/components/Documentation/index.tsx
-msgid "backgrounds (2) "
-msgstr "backgrounds (2) "
-
 #: src/pages/Playground/index.tsx
-#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 msgid "Glasses"
 msgstr "Glasses"
 
@@ -1754,6 +1827,10 @@ msgstr "Fork Nouns DAO"
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
 msgstr "Editing a proposal will clear all previous feedback"
+
+#: src/pages/NounsPage.tsx
+msgid "Noggles"
+msgstr "Noggles"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Candidate"

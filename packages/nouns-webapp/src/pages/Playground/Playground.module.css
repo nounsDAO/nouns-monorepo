@@ -69,4 +69,6 @@
 }
 .nounWrapper {
   margin-bottom: 1rem;
+  background-color: var(--brand-gray-background);
+  border-radius: 16px;
 }
