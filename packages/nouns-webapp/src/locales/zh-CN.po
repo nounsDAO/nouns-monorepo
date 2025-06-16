@@ -267,6 +267,10 @@ msgstr "任何人都可创建提案候选。若候选人获得足够的 Noun 投
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 msgstr "编辑提案候选将清除所有先前支持者并要求重新签名"
 
+#: src/pages/TraitsPage.tsx
+msgid "Download All"
+msgstr "下载全部"
+
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
 msgstr "当前无正在进行的分叉。"
@@ -684,6 +688,10 @@ msgstr "任何代币持有者均可针对某项治理提案，发出分叉（即
 #: src/components/Bid/index.tsx
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "请出价大于或等于最低竞标金额 {0} ETH"
+
+#: src/pages/TraitsPage.tsx
+msgid "Creating ZIP..."
+msgstr "正在创建ZIP..."
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -1348,6 +1356,7 @@ msgstr "连接您的钱包"
 msgid "Back"
 msgstr "返回"
 
+#: src/pages/TraitsPage.tsx
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "许可证"
@@ -1533,6 +1542,10 @@ msgstr "过期于 {0}"
 #: src/pages/Vote/index.tsx
 msgid "Current Threshold"
 msgstr "当前门槛"
+
+#: src/pages/TraitsPage.tsx
+msgid "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "所有特征均为<0>CC0</0>（知识共享零协议），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required "

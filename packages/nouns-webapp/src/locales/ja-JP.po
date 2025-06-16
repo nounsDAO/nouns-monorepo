@@ -272,6 +272,10 @@ msgstr "提案候補は誰でも作成できます。候補がNounsの投票者�
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 msgstr "提案候補を編集すると、以前のスポンサーがクリアされ、各スポンサーが再署名する必要があります"
 
+#: src/pages/TraitsPage.tsx
+msgid "Download All"
+msgstr "すべてダウンロード"
+
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
 msgstr "アクティブなフォークはありません。"
@@ -689,6 +693,10 @@ msgstr "トークン保有者は、ガバナンス提案に応じてフォーク
 #: src/components/Bid/index.tsx
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "最低入札額の {0} ETHと同じかそれ以上の入札額を設定してください"
+
+#: src/pages/TraitsPage.tsx
+msgid "Creating ZIP..."
+msgstr "ZIPを作成中..."
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -1353,6 +1361,7 @@ msgstr "ウォレットに接続してください"
 msgid "Back"
 msgstr "戻る"
 
+#: src/pages/TraitsPage.tsx
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "ライセンス"
@@ -1538,6 +1547,10 @@ msgstr "残り {0} で期限切れになります"
 #: src/pages/Vote/index.tsx
 msgid "Current Threshold"
 msgstr "現在の閾値"
+
+#: src/pages/TraitsPage.tsx
+msgid "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "すべての特性は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required "

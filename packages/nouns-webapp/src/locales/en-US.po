@@ -270,6 +270,10 @@ msgstr "Proposal candidates can be created by anyone. If a candidate receives en
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 msgstr "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 
+#: src/pages/TraitsPage.tsx
+msgid "Download All"
+msgstr "Download All"
+
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
 msgstr "There are no active forks."
@@ -697,6 +701,10 @@ msgstr "Any token holder can signal to fork (exit) in response to a governance p
 #: src/components/Bid/index.tsx
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
+
+#: src/pages/TraitsPage.tsx
+msgid "Creating ZIP..."
+msgstr "Creating ZIP..."
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -1384,6 +1392,7 @@ msgstr "Connect your wallet"
 msgid "Back"
 msgstr "Back"
 
+#: src/pages/TraitsPage.tsx
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "License"
@@ -1571,6 +1580,10 @@ msgstr "Expires {0}"
 #: src/pages/Vote/index.tsx
 msgid "Current Threshold"
 msgstr "Current Threshold"
+
+#: src/pages/TraitsPage.tsx
+msgid "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required "

@@ -270,6 +270,10 @@ msgstr ""
 msgid "Editing a proposal candidate will clear any previous sponsors and require each sponsor to re-sign"
 msgstr ""
 
+#: src/pages/TraitsPage.tsx
+msgid "Download All"
+msgstr ""
+
 #: src/pages/Forks/index.tsx
 msgid "There are no active forks."
 msgstr ""
@@ -696,6 +700,10 @@ msgstr ""
 #. placeholder {0}: minBidEth(minBid)
 #: src/components/Bid/index.tsx
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
+msgstr ""
+
+#: src/pages/TraitsPage.tsx
+msgid "Creating ZIP..."
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -1384,6 +1392,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: src/pages/TraitsPage.tsx
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr ""
@@ -1570,6 +1579,10 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Current Threshold"
+msgstr ""
+
+#: src/pages/TraitsPage.tsx
+msgid "All traits are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
