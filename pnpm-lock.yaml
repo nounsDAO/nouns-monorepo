@@ -720,8 +720,8 @@ importers:
         specifier: ^3.1.4
         version: 3.2.3(@types/debug@4.1.12)(@types/node@22.15.32)(@vitest/browser@3.2.3)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.2)(terser@5.42.0)(yaml@2.8.0)
       vitest-browser-react:
-        specifier: ^0.2.0
-        version: 0.2.0(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(@vitest/browser@3.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.2.3)
+        specifier: ^0.3.0
+        version: 0.3.0(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(@vitest/browser@3.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.2.3)
 
 packages:
 
@@ -14851,16 +14851,16 @@ packages:
       yaml:
         optional: true
 
-  vitest-browser-react@0.2.0:
-    resolution: {integrity: sha512-tVUVngdcTMFPSywxEo42hAAO074VjEF7Q1QkV8wqjI9oiYuguUfqp6Uw4mTbZ+DLFSITHXiked+PYQFH69XkLQ==}
-    engines: {node: ^18.0.0 || >=20.0.0}
+  vitest-browser-react@0.3.0:
+    resolution: {integrity: sha512-dk8T3GHhwrmCJLqDer1A2NB8MlIGsUb9Wr4/iMpbrwz4sBCh1PjV0SkZ9BYmoBrJ4j/Tx8qxzCXFXnbE2IbWzg==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     peerDependencies:
-      '@types/react': '>18.0.0'
-      '@types/react-dom': '>18.0.0'
-      '@vitest/browser': '>=2.1.0'
-      react: '>18.0.0'
-      react-dom: '>18.0.0'
-      vitest: '>=2.1.0'
+      '@types/react': ^18.0.0 || ^19.0.0
+      '@types/react-dom': ^18.0.0 || ^19.0.0
+      '@vitest/browser': ^2.1.0 || ^3.0.0
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+      vitest: ^2.1.0 || ^3.0.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -34028,7 +34028,7 @@ snapshots:
       terser: 5.42.0
       yaml: 2.8.0
 
-  vitest-browser-react@0.2.0(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(@vitest/browser@3.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.2.3):
+  vitest-browser-react@0.3.0(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(@vitest/browser@3.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@3.2.3):
     dependencies:
       '@vitest/browser': 3.2.3(bufferutil@4.0.9)(playwright@1.53.0)(utf-8-validate@5.0.10)(vite@6.3.5(@types/node@22.15.32)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.42.0)(yaml@2.8.0))(vitest@3.2.3)
       react: 18.3.1
