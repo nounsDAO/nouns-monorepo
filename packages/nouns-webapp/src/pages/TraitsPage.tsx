@@ -76,7 +76,7 @@ const downloadPNG = async (svg: string, filename: string) => {
 const copyToClipboard = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text);
-    toast.success(`Copied ${text} to clipboard`);
+    toast.success(`Copied ${text} to clipboard`, { duration: 5000 });
   } catch (error) {
     console.error('Failed to copy:', error);
     toast.error('Failed to copy to clipboard');
@@ -214,7 +214,7 @@ const TraitsPage: React.FC = () => {
       downloadEl.click();
       URL.revokeObjectURL(downloadEl.href);
 
-      toast.success('All traits downloaded as ZIP file!');
+      toast.success('All traits downloaded as ZIP file!', { duration: 5000 });
     } catch (error) {
       console.error('Error creating ZIP file:', error);
       toast.error('Failed to create ZIP file');
