@@ -6,7 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { ImageData } from '@noundry/nouns-assets';
 import { buildSVG, PNGCollectionEncoder } from '@nouns/sdk';
-import { CopyIcon, DownloadIcon } from 'lucide-react';
+import JSZip from 'jszip';
+import { CopyIcon, DownloadIcon, PackageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import CCZero from '@/assets/cczero-badge.svg?react';
@@ -28,6 +29,7 @@ interface TraitItem {
   svg: string;
   category: string;
   type: string;
+  index: number;
   hexColor?: string;
 }
 
@@ -59,7 +61,7 @@ const downloadSVG = (svg: string, filename: string) => {
 
 const downloadPNG = async (svg: string, filename: string) => {
   try {
-    const png = await svg2png(svg, 320, 320);
+    const png = await svg2png(svg, 512, 512);
     if (png) {
       const downloadEl = document.createElement('a');
       downloadEl.href = png;
@@ -101,12 +103,13 @@ const generateTraitItems = (): TraitItem[] => {
         svg,
         category: categoryTitle,
         type: traitType === 'glasses' ? 'Noggles' : traitType,
+        index,
       });
     });
   });
 
   // Add background colors
-  Object.entries(backgroundColors).forEach(([bgName, hexColor]) => {
+  Object.entries(backgroundColors).forEach(([bgName, hexColor], index) => {
     // Create a colored rectangle SVG with centered hex code text
     const svg = `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
       <rect width="32" height="32" fill="${hexColor}" />
@@ -119,6 +122,7 @@ const generateTraitItems = (): TraitItem[] => {
       svg,
       category: 'Backgrounds',
       type: 'background',
+      index,
       hexColor,
     });
   });
@@ -129,6 +133,7 @@ const generateTraitItems = (): TraitItem[] => {
 const TraitsPage: React.FC = () => {
   const [traits, setTraits] = useState<TraitItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [zipLoading, setZipLoading] = useState(false);
 
   useEffect(() => {
     const loadTraits = () => {
@@ -139,6 +144,84 @@ const TraitsPage: React.FC = () => {
 
     loadTraits();
   }, []);
+
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  const downloadAllTraitsAsZip = async () => {
+    if (zipLoading) return;
+
+    setZipLoading(true);
+    try {
+      const zip = new JSZip();
+
+      // Group traits by category for organized folder structure
+      const traitsByCategory = traits.reduce(
+        (acc, trait) => {
+          if (!acc[trait.category]) {
+            acc[trait.category] = [];
+          }
+          acc[trait.category].push(trait);
+          return acc;
+        },
+        {} as Record<string, TraitItem[]>,
+      );
+
+      // Collect background colors info for consolidated file
+      const backgroundColors: string[] = [];
+
+      // Process each category
+      for (const [category, categoryTraits] of Object.entries(traitsByCategory)) {
+        const categoryFolder = zip.folder(category);
+
+        for (const trait of categoryTraits) {
+          // Create filename with trait index prefix
+          const indexedFilename = `${trait.index}-${trait.filename}`;
+
+          // Add SVG file
+          categoryFolder?.file(`${indexedFilename}.svg`, trait.svg);
+
+          // For background colors, collect info for consolidated file
+          if (trait.type === 'background' && trait.hexColor) {
+            backgroundColors.push(`${trait.index}: ${trait.name} - ${trait.hexColor}`);
+          } else {
+            // For other traits, add PNG version
+            try {
+              const pngBlob = await svg2png(trait.svg, 512, 512);
+              if (pngBlob) {
+                // Convert data URL to blob
+                const response = await fetch(pngBlob);
+                const blob = await response.blob();
+                categoryFolder?.file(`${indexedFilename}.png`, blob);
+              }
+            } catch (error) {
+              console.warn(`Failed to convert ${trait.filename} to PNG:`, error);
+            }
+          }
+        }
+      }
+
+      // Add consolidated backgrounds.txt file if there are background colors
+      if (backgroundColors.length > 0) {
+        const backgroundsFolder = zip.folder('Backgrounds');
+        const backgroundsContent = backgroundColors.join('\n');
+        backgroundsFolder?.file('backgrounds.txt', backgroundsContent);
+      }
+
+      // Generate and download the ZIP
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const downloadEl = document.createElement('a');
+      downloadEl.href = URL.createObjectURL(zipBlob);
+      downloadEl.download = 'nouns-traits.zip';
+      downloadEl.click();
+      URL.revokeObjectURL(downloadEl.href);
+
+      toast.success('All traits downloaded as ZIP file!');
+    } catch (error) {
+      console.error('Error creating ZIP file:', error);
+      toast.error('Failed to create ZIP file');
+    } finally {
+      setZipLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -169,12 +252,24 @@ const TraitsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 pt-8">
       <div className="mb-8">
-        <h1 className="mt-2 text-5xl font-bold text-gray-900">
-          <Trans>Traits</Trans>
-        </h1>
-        <p className="mt-4 text-lg text-gray-600">
-          <Trans>Browse and download all available Noun traits.</Trans>
-        </p>
+        <div>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <h1 className="mt-2 text-5xl font-bold text-gray-900">
+              <Trans>Traits</Trans>
+            </h1>
+            <Button
+              onClick={downloadAllTraitsAsZip}
+              disabled={zipLoading}
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800"
+            >
+              <PackageIcon size={16} />
+              {zipLoading ? <Trans>Creating ZIP...</Trans> : <Trans>Download All</Trans>}
+            </Button>
+          </div>
+          <p className="mt-4 text-lg text-gray-600">
+            <Trans>Browse and download all available Noun traits.</Trans>
+          </p>
+        </div>
       </div>
 
       {orderedCategories.map(category => (
