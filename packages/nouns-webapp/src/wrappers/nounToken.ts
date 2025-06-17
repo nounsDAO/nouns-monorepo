@@ -149,7 +149,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
     query: { enabled: !!address && block !== undefined },
   });
 
-  return votes ? Number(votes as bigint) : undefined;
+  return votes !== undefined ? Number(votes) : undefined;
 };
 
 export const useDelegateVotes = () => {
