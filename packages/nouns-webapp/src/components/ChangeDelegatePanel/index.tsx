@@ -54,6 +54,7 @@ const getTitleFromState = (state: ChangeDelegateState) => {
   }
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   const { onDismiss, delegateTo } = props;
 
@@ -77,10 +78,12 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   useEffect(() => {
     if (delegateState.status === 'Success') {
       setChangeDelegateState(ChangeDelegateState.CHANGE_SUCCESS);
+      return;
     }
 
     if (delegateState.status === 'Exception' || delegateState.status === 'Fail') {
       setChangeDelegateState(ChangeDelegateState.CHANGE_FAILURE);
+      return;
     }
 
     if (delegateState.status === 'Mining') {
@@ -105,13 +108,15 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   useEffect(() => {
     if (delegateAddress.length === 0) {
       setDelegateInputClass(classes.empty);
-    } else {
-      if (isAddress(delegateAddress)) {
-        setDelegateInputClass(classes.valid);
-      } else {
-        setDelegateInputClass(classes.invalid);
-      }
+      return;
     }
+
+    if (isAddress(delegateAddress)) {
+      setDelegateInputClass(classes.valid);
+      return;
+    }
+
+    setDelegateInputClass(classes.invalid);
   }, [delegateAddress, delegateTo, hasResolvedDeepLinkedENS]);
 
   const etherscanTxLink = buildEtherscanTxLink(delegateState.transaction?.hash ?? '');
@@ -208,7 +213,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
 
   return (
     <>
-      <div className={currentDelegatePannelClasses.wrapper}>
+      <div className={'flex h-fit flex-col gap-3'}>
         <h1
           className={clsx(
             currentDelegatePannelClasses.title,
@@ -222,9 +227,9 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
           <div className={classes.changeDelegateWarning}>
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
-              {proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'} after
-              this delegation. Unexecuted props you&apos;ve created will now be cancelable by
-              anyone.
+              {proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'} after this
+              delegation. Unexecuted props you&apos;ve created might become cancelable if you
+              don&apos;t have enough sponsor votes.
             </Trans>
           </div>
         )}

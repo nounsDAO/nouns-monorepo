@@ -492,8 +492,8 @@ msgstr "Already has"
 msgid "You provided <0>{0}</0> feedback {1}"
 msgstr "You provided <0>{0}</0> feedback {1}"
 
-#. placeholder {0}: forkThreshold === undefined ? '...' : forkThreshold
-#. placeholder {1}: forkThresholdBPS && forkThresholdBPS / 100
+#. placeholder {0}: forkThreshold == null ? '...' : forkThreshold
+#. placeholder {1}: forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'
 #: src/pages/Fork/index.tsx
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
@@ -777,6 +777,12 @@ msgstr "{0} votes"
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr "WTF?"
+
+#. placeholder {0}: (proposalThreshold ?? 0) + 1
+#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'
+#: src/components/ChangeDelegatePanel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
+msgstr "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1485,12 +1491,6 @@ msgstr "Pre-proposal feedback"
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-
-#. placeholder {0}: (proposalThreshold ?? 0) + 1
-#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePanel/index.tsx
-msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
