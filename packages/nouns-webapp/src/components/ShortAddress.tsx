@@ -3,7 +3,7 @@ import React from 'react';
 import { blo } from 'blo';
 import { useEnsAvatar, useEnsName } from 'wagmi';
 
-import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { resolveNounContractAddress } from '@/utils/resolveNounsContractAddress';
 import { Address } from '@/utils/types';
@@ -18,7 +18,7 @@ const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, si
   const { data: ensName } = useEnsName({ address });
   const resolvedName = ensName ?? resolveNounContractAddress(address);
   const isBlocklisted = resolvedName ? containsBlockedText(resolvedName, 'en') : false;
-  const shortAddress = useShortAddress(address);
+  const shortAddress = formatShortAddress(address);
   const { data: ensAvatar } = useEnsAvatar({ name: resolvedName });
 
   const displayName = resolvedName && !isBlocklisted ? resolvedName : shortAddress;
