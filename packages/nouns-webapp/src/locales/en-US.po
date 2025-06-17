@@ -1633,7 +1633,7 @@ msgstr "Pre-voting feedback"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
-msgstr "Current"
+msgstr "Current Delegate"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."
