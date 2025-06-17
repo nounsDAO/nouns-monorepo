@@ -62,7 +62,7 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
 
 const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
-  const cachedSeeds = cache ? JSON.parse(cache) : undefined;
+  const cachedSeeds = cache ? (JSON.parse(cache) as Seed[]) : undefined;
   const { query, variables } = seedsQuery();
   const { data } = useQuery<{ seeds: Seed[] }>(query, {
     skip: !!cachedSeeds,
@@ -70,7 +70,7 @@ const useNounSeeds = () => {
   });
 
   useEffect(() => {
-    if (!cachedSeeds && data?.seeds?.length) {
+    if (!cachedSeeds && data?.seeds !== undefined) {
       const transformedSeeds = data.seeds.map(seed => ({
         ...seed,
         accessory: Number(seed.accessory),
@@ -87,9 +87,9 @@ const useNounSeeds = () => {
   return cachedSeeds;
 };
 
-export const useNounSeed = (nounId: bigint): INounSeed => {
+export const useNounSeed = (nounId: bigint): INounSeed | undefined => {
   const seeds = useNounSeeds();
-  const seed = seeds?.[nounId.toString()];
+  const seed = seeds?.[Number(nounId)];
 
   const { data: response } = useReadNounsTokenSeeds({
     args: [nounId],
@@ -115,7 +115,15 @@ export const useNounSeed = (nounId: bigint): INounSeed => {
     }
     return seedData;
   }
-  return seed;
+  return seed !== undefined
+    ? {
+        accessory: Number(seed.accessory),
+        background: Number(seed.background),
+        body: Number(seed.body),
+        glasses: Number(seed.glasses),
+        head: Number(seed.head),
+      }
+    : undefined;
 };
 
 export const useUserVotes = (): number | undefined => {
@@ -128,7 +136,7 @@ export const useAccountVotes = (account?: Address): number | undefined => {
     args: account ? [account] : undefined,
   });
 
-  return votes ? Number(votes as bigint) : undefined;
+  return votes !== undefined ? Number(votes) : undefined;
 };
 
 export const useUserDelegatee = (): string | undefined => {
@@ -188,7 +196,7 @@ export const useNounTokenBalance = (address: Address): number | undefined => {
     args: [address],
   });
 
-  return tokenBalance ? Number(tokenBalance as bigint) : undefined;
+  return tokenBalance !== undefined ? Number(tokenBalance) : undefined;
 };
 export const useUserOwnedNounIds = (pollInterval: number) => {
   const { address } = useAccount();
