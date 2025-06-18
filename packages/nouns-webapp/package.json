@@ -15,6 +15,7 @@
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
+    "pre-commit": "lingui extract $(git diff --name-only --staged)",
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
