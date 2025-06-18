@@ -10,7 +10,6 @@
     "dev": "turbo run dev",
     "format": "NODE_OPTIONS=--max_old_space_size=16384 prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'",
     "lint": "eslint --cache --cache-location .cache/.eslintcache",
-    "pre-commit": "pnpm -r pre-commit",
     "prepare": "husky",
     "test": "turbo run test"
   },
