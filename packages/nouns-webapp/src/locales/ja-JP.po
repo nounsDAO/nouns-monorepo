@@ -1629,6 +1629,12 @@ msgstr "{playgroundLink} にてオフチェーンのNoun生成を試すことが
 msgid "Abstain"
 msgstr "棄権"
 
+#. placeholder {0}: filteredDelegateGroupedVoteData.length
+#: src/components/VoteCard/index.tsx
+#: src/components/VoteCard/index.tsx
+msgid "{0, plural, one {voter} other {voters}}"
+msgstr "{0, plural, one {投票者} other {投票者}}"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"

@@ -36,6 +36,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
+import { cn } from '@/lib/utils';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { getNounVotes } from '@/utils/getNounsVotes';
 import { isProposalUpdatable } from '@/utils/proposals';
@@ -470,9 +471,7 @@ const VotePage = () => {
   if (error || dqError) {
     return <Trans>Failed to fetch</Trans>;
   }
-  const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
-  const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
@@ -654,25 +653,19 @@ const VotePage = () => {
               <VoteCard
                 proposal={proposal}
                 percentage={forPercentage}
-                nounIds={forNouns}
                 variant={VoteCardVariant.FOR}
-                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
                 proposal={proposal}
                 percentage={againstPercentage}
-                nounIds={againstNouns}
                 variant={VoteCardVariant.AGAINST}
-                delegateView={true}
                 delegateGroupedVoteData={data}
               />
               <VoteCard
                 proposal={proposal}
                 percentage={abstainPercentage}
-                nounIds={abstainNouns}
                 variant={VoteCardVariant.ABSTAIN}
-                delegateView={true}
                 delegateGroupedVoteData={data}
               />
             </Row>
@@ -713,7 +706,7 @@ const VotePage = () => {
                         {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes}{' '}
                         votes
                       </Trans>
-                      {isV2Prop && <SearchIcon className={classes.dqIcon} />}
+                      {isV2Prop && <SearchIcon className={cn(classes.dqIcon, 'inline-block')} />}
                     </h3>
                   </div>
                 </div>
