@@ -406,11 +406,6 @@ msgstr ""
 msgid "Nouns DUNA"
 msgstr ""
 
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Address</0>"
-msgstr ""
-
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Address"
 msgstr ""
@@ -446,11 +441,6 @@ msgstr ""
 #: src/components/ProposalStatusCopy/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
-msgstr ""
-
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Addresses</0>"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -1103,10 +1093,6 @@ msgstr ""
 msgid "Nouns voters can cast voting signals to give proposers of pending proposals an idea of how they intend to vote and helpful guidance on proposal changes to change their vote."
 msgstr ""
 
-#: src/components/VoteCard/index.tsx
-msgid "Addresses"
-msgstr ""
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr ""
@@ -1641,6 +1627,8 @@ msgstr ""
 
 #: src/pages/TraitsPage.tsx
 #: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Traits"
 msgstr ""
 

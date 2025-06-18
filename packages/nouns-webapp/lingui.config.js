@@ -7,7 +7,6 @@ export default {
   ],
   compileNamespace: 'cjs',
   fallbackLocales: {
-    default: 'en-US',
     pseudo: 'en-US',
   },
   format: 'po',

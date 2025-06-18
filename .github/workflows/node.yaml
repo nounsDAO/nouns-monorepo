@@ -112,3 +112,37 @@ jobs:
           FILES=$(git diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- '*.ts' '*.tsx' '*.js' '*.jsx')
           [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
           pnpm lint $FILES
+
+  translations:
+    name: Check for missing translations
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+      - name: Restore turbo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            packages/**/.turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm build
+      - name: Check for missing translations
+        run: |
+          pnpm --filter @nouns/webapp -- i18n:extract
+          pnpm --filter @nouns/webapp -- i18n:compile --strict
