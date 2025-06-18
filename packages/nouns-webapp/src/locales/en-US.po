@@ -406,11 +406,6 @@ msgstr "One Noun is equal to one vote."
 msgid "Nouns DUNA"
 msgstr "Nouns DUNA"
 
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Address</0>"
-msgstr "{0} <0>Address</0>"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Address"
 msgstr "Address"
@@ -447,11 +442,6 @@ msgstr "View Threshold Info"
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
 msgstr "Active"
-
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Addresses</0>"
-msgstr "{0} <0>Addresses</0>"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
@@ -1103,10 +1093,6 @@ msgstr "Body"
 msgid "Nouns voters can cast voting signals to give proposers of pending proposals an idea of how they intend to vote and helpful guidance on proposal changes to change their vote."
 msgstr "Nouns voters can cast voting signals to give proposers of pending proposals an idea of how they intend to vote and helpful guidance on proposal changes to change their vote."
 
-#: src/components/VoteCard/index.tsx
-msgid "Addresses"
-msgstr "Addresses"
-
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
 msgstr "Thank you for voting."
@@ -1641,6 +1627,8 @@ msgstr "One Noun, Every Day, Forever."
 
 #: src/pages/TraitsPage.tsx
 #: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Traits"
 msgstr "Traits"
 
