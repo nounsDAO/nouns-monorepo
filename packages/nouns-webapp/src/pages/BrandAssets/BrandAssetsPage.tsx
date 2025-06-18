@@ -72,7 +72,7 @@ const SectionCard: React.FC<{
       <div className="p-6">
         {/* Checkerboard background container */}
         <div className="bg-checkerboard relative flex aspect-square items-center justify-center rounded-lg shadow-inner">
-          <img src={imageSrc} alt={title} className="max-w-96 object-contain drop-shadow" />
+          <img src={imageSrc} alt={title} className="object-contain drop-shadow" />
         </div>
 
         <p className="mb-4 text-sm text-gray-600">{description}</p>
@@ -115,7 +115,7 @@ export const BrandAssetsPage = () => {
   ];
   return (
     <div className="-mb-10 min-h-screen bg-gray-100 sm:-mb-20">
-      <div className="container-xl py-12">
+      <div className="container-sm py-12">
         <div className="mb-12">
           <h1 className="mb-4 text-5xl font-bold text-gray-900">
             <Trans>Brand Assets</Trans>

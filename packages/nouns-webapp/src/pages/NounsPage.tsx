@@ -26,7 +26,7 @@ type NounsPageProps = object;
 const NounsPage: React.FC<NounsPageProps> = () => {
   const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
   const currentAuctionNounId = currentAuction ? BigInt(currentAuction.nounId) : undefined;
-  const nounCount = currentAuctionNounId ? Number(currentAuctionNounId) + 1 : -1;
+  const nounCount = currentAuctionNounId !== undefined ? Number(currentAuctionNounId) + 1 : -1;
   const [sortOrder, setSortOrder] =
     useState<(typeof sortOptions)[number]['value']>('date-descending');
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -55,7 +55,6 @@ const NounsPage: React.FC<NounsPageProps> = () => {
     query: {
       enabled: selectedNounId !== undefined,
       select: data => {
-        if (!data) return null;
         return {
           background: Number(data[0]),
           body: Number(data[1]),
@@ -272,7 +271,7 @@ const NounsPage: React.FC<NounsPageProps> = () => {
           {/* Traits List */}
           <div className="flex-grow border-t bg-white p-2">
             <ul className="space-y-1">
-              {(['head', 'glasses', 'accessory', 'body', 'background'] as const).map(traitType => {
+              {(['glasses', 'head', 'accessory', 'body', 'background'] as const).map(traitType => {
                 const traitIndex = selectedNounSeed?.[traitType] ?? 0;
 
                 const traitDisplayName = {
