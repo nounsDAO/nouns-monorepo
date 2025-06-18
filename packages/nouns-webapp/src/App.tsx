@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
@@ -86,6 +87,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
+        <Trans>Foo</Trans>
         <Toaster
           expand
           closeButton
