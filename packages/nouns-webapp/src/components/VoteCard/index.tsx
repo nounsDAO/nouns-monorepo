@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
-import { Trans } from '@lingui/react/macro';
+import { Trans, Plural } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Card, Col, Row } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
-import NounImageVoteTable from '@/components/NounImageVoteTable';
 import VoteProgressBar from '@/components/VoteProgressBar';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { cn } from '@/lib/utils';
 import { ensCacheKey } from '@/utils/ensLookup';
 import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
 import { Address } from '@/utils/types';
@@ -29,16 +29,14 @@ export enum VoteCardVariant {
 interface VoteCardProps {
   proposal: Proposal;
   percentage: number;
-  nounIds: Array<string>;
   variant: VoteCardVariant;
-  delegateView: boolean;
   delegateGroupedVoteData:
     | { delegate: Address; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
     | undefined;
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
+  const { proposal, percentage, variant, delegateGroupedVoteData } = props;
 
   let titleClass;
   let titleCopy;
@@ -121,59 +119,46 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                 classes.voteCardVoteCount,
                 responsiveUiUtilsClasses.desktopOnly,
                 !isEnUS ? classes.smallerVoteCountText : '',
+                'relative',
               )}
             >
-              {delegateView ? (
-                <>
-                  {filteredDelegateGroupedVoteData.length === 1 ? (
-                    <Trans>
-                      {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
-                      <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
-                        Address
-                      </span>
-                    </Trans>
-                  ) : (
-                    <Trans>
-                      {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
-                      <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
-                        Addresses
-                      </span>
-                    </Trans>
-                  )}
-                </>
-              ) : (
-                i18n.number(voteCount)
+              {i18n.number(voteCount)}
+              {filteredDelegateGroupedVoteData.length > 0 && (
+                <small className="text-muted-foreground absolute bottom-0 right-0 translate-y-1/2 whitespace-nowrap text-xs">
+                  {filteredDelegateGroupedVoteData.length}{' '}
+                  <Plural
+                    value={filteredDelegateGroupedVoteData.length}
+                    one="voter"
+                    other="voters"
+                  />
+                </small>
               )}
             </span>
           </Card.Text>
 
           <Card.Text className={clsx('m-0 py-2', classes.mobileVoteCountWrapper)}>
-            <span className={classes.voteCardVoteCount}>
-              {delegateView
-                ? i18n.number(filteredDelegateGroupedVoteData.length)
-                : i18n.number(voteCount)}
-            </span>
-            <span
-              className={clsx(
-                classes.voteCardVoteCount,
-                isEnUS ? classes.unitTextEn : classes.unitTextNonEn,
+            <span className={cn(classes.voteCardVoteCount, 'relative')}>
+              {i18n.number(voteCount)}
+              {filteredDelegateGroupedVoteData.length > 0 && (
+                <small className="text-muted-foreground absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 whitespace-nowrap text-xs">
+                  {filteredDelegateGroupedVoteData.length}{' '}
+                  <Plural
+                    value={filteredDelegateGroupedVoteData.length}
+                    one="voter"
+                    other="voters"
+                  />
+                </small>
               )}
-            >
-              {delegateView && <Trans>Addresses</Trans>}
             </span>
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
           <Row className={classes.nounProfilePics}>
-            {delegateView ? (
-              <DelegateGroupedNounImageVoteTable
-                filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
-                propId={Number(proposal.id || '0')}
-                proposalCreationBlock={proposal.createdBlock}
-              />
-            ) : (
-              <NounImageVoteTable nounIds={nounIds} propId={Number(proposal.id || '0')} />
-            )}
+            <DelegateGroupedNounImageVoteTable
+              filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
+              propId={Number(proposal.id || '0')}
+              proposalCreationBlock={proposal.createdBlock}
+            />
           </Row>
         </Card.Body>
       </Card>

@@ -1590,6 +1590,12 @@ msgstr "You can experiment with off-chain Noun generation at the {playgroundLink
 msgid "Abstain"
 msgstr "Abstain"
 
+#. placeholder {0}: filteredDelegateGroupedVoteData.length
+#: src/components/VoteCard/index.tsx
+#: src/components/VoteCard/index.tsx
+msgid "{0, plural, one {voter} other {voters}}"
+msgstr "{0, plural, one {voter} other {voters}}"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
