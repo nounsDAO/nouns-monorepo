@@ -303,7 +303,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
           <div
             className={clsx(
               classes.customButtonHighlighter,
-              isAddress(delegateAddress) && classes.extened,
+              isAddress(delegateAddress) && classes.extended,
             )}
           />
         )}
