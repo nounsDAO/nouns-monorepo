@@ -485,8 +485,8 @@ msgstr "已拥有"
 msgid "You provided <0>{0}</0> feedback {1}"
 msgstr "您已提供 <0>{0}</0> 条反馈 {1}"
 
-#. placeholder {0}: forkThreshold === undefined ? '...' : forkThreshold
-#. placeholder {1}: forkThresholdBPS && forkThresholdBPS / 100
+#. placeholder {0}: forkThreshold == null ? '...' : forkThreshold
+#. placeholder {1}: forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'
 #: src/pages/Fork/index.tsx
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr "需要超过 {0} 个 Noun（占 DAO 的 {1}%）才能通过门槛"
@@ -764,6 +764,12 @@ msgstr "{0} 票"
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr "什么情况？"
+
+#. placeholder {0}: (proposalThreshold ?? 0) + 1
+#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'
+#: src/components/ChangeDelegatePanel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
+msgstr "在此次委托后，您的账户将少于{0}{1}。如果您没有足够的赞助者投票，您创建的未执行提案可能会被取消。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1450,12 +1456,6 @@ msgstr "提案前反馈"
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "Nouns 直接存储在以太坊上，不使用指向 IPFS 等其他网络的指针。之所以能够实现这一点，是因为 Noun 的各个部件通过自定义的游程编码 (RLE) 进行压缩并存储在链上，而 RLE 是一种无损压缩技术。"
 
-#. placeholder {0}: (proposalThreshold ?? 0) + 1
-#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePanel/index.tsx
-msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr "此次委托后，您的账户余额将低于 {0} {1}。您创建的未执行提案，现在任何人都有权取消。"
-
 #: src/components/Proposals/index.tsx
 msgid "Submit Proposal"
 msgstr "提交提案"
@@ -1594,7 +1594,7 @@ msgstr "投票前反馈"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
-msgstr "当前委托"
+msgstr "当前委托人"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."

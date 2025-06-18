@@ -34,7 +34,7 @@ pnpm test             # Run tests across all packages
 
 ### Code Quality
 ```bash
-pnpm lint             # ESLint with caching
+pnpm -w lint          # ESLint with caching (workspace level, provide file paths)
 pnpm format           # Prettier formatting
 ```
 

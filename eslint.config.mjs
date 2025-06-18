@@ -193,6 +193,13 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
       // ESLint React rules
       '@eslint-react/no-class-component': 'error',
+      // Typescript eslint rules
+      '@typescript-eslint/strict-boolean-expressions': [
+        'error',
+        {
+          allowNullableString: true,
+        },
+      ],
       'no-restricted-imports': [
         'warn',
         {

@@ -174,6 +174,7 @@ checksums:
     Learn%20more%20below%2C%20or%20start%20creating%20Nouns%20off-chain%20using%20the%20%7BplaygroundLink%7D./singular: ebbaff079b6da90d6c0c0c18ff81daac
     "%7B0%7D%20votes/singular": a5d17791a0cb0fcd342484e3185fa5a6
     WTF%3F/singular: c9357eee19d1c79200e65953fb001af8
+    Your%20account%20will%20have%20less%20than%20%7B0%7D%20%7B1%7D%20after%20this%20delegation.%20Unexecuted%20props%20you've%20created%20might%20become%20cancelable%20if%20you%20don't%20have%20enough%20sponsor%20votes./singular: 877fe2f927cd3382a24933bacb8c294f
     Will%20have/singular: 7255af0c5c4078129c272608899f8b4a
     Starts%20%7B0%7D/singular: 1bbff6fb5bbda5631990ee20aad35bd8
     Gas%20spent%20on%20voting%20will%20be%20refunded%20to%20you./singular: 77fa45886868e8d068fea352ae58198e
@@ -333,7 +334,6 @@ checksums:
     Now%20has/singular: 84b554f97b9da380bb4dad9efff7c1e8
     Pre-proposal%20feedback/singular: dfafe6d5067f57f30c1818e492c430af
     Nouns%20are%20stored%20directly%20on%20Ethereum%20and%20do%20not%20utilize%20pointers%20to%20other%20networks%20such%20as%20IPFS.%20This%20is%20possible%20because%20Noun%20parts%20are%20compressed%20and%20stored%20on-chain%20using%20a%20custom%20run-length%20encoding%20(RLE)%2C%20which%20is%20a%20form%20of%20lossless%20compression./singular: 227ab1ed79f231243719a7e31e273a5f
-    Your%20account%20will%20have%20less%20than%20%7B0%7D%20%7B1%7D%20after%20this%20delegation.%20Unexecuted%20props%20you've%20created%20will%20now%20be%20cancelable%20by%20anyone./singular: d387edbc6a79b2097c8c8f6096c66f7b
     Submit%20Proposal/singular: 1a8bc81c2ae6a6ba09d95afbc239f439
     The%20Nouns%20Foundation%20considers%20the%20veto%20an%20emergency%20power%20that%20should%20not%20be%20exercised%20in%20the%20normal%20course%20of%20business.%20The%20Nouns%20Foundation%20will%20veto%20proposals%20that%20introduce%20non-trivial%20legal%20or%20existential%20risks%20to%20the%20Nouns%20DAO%20or%20the%20Nouns%20Foundation%2C%20including%20(but%20not%20necessarily%20limited%20to)%20proposals%20that%3A/singular: de3246c6d4985c2c078bb2847925b107
     Nouns%20govern%20%3C0%3ENouns%20DAO%3C%2F0%3E.%20Nouns%20can%20vote%20on%20proposals%20or%20delegate%20their%20vote%20to%20a%20third%20party.%20A%20minimum%20of%20%3C1%3E%7B0%7D%3C%2F1%3E%20is%20required%20to%20submit%20proposals./singular: 9148effae4c6fc41b17d6fa3d9642dc0
@@ -365,7 +365,7 @@ checksums:
     This%20transaction%20sends%20%7B0%7D%20USDC%20to%20%3C0%2F%3E%20via%20the%20DAO's%20PayerContract./singular: 7b28c4d886ce6069fc406fe264826036
     Proposal/singular: d4a39f7044290387096aef5f83743ab0
     Pre-voting%20feedback/singular: d31006f6a29f42a7c1d8329f83c8bc9b
-    Current%20Delegate/singular: 27f172f76ac28e72cb062f80002b0ad5
+    Current%20Delegate/singular: 88ecb11fd688bbb0d63742631fd7dd57
     One%20Noun%2C%20Every%20Day%2C%20Forever./singular: c6f1b0a14103e0d4a545ea5b2d32d5af
     Traits/singular: 71e2d9be85316b8ac0c28d30f5e8a35d
     User%20Already%20Voted/singular: f4b65664e6537bef3d63a95545867d5c

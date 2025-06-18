@@ -14,7 +14,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import {
   shortENS,
-  useShortAddress,
+  formatShortAddress,
   veryShortAddress,
   veryShortENS,
 } from '@/utils/addressAndENSDisplayUtils';
@@ -42,7 +42,55 @@ type CustomMenuProps = {
   style?: React.CSSProperties;
   className?: string;
   labeledBy?: string;
+  switchWalletHandler: () => void;
+  disconectWalletHandler: () => void;
 };
+
+const CustomMenu = React.forwardRef<HTMLDivElement, CustomMenuProps>((props, ref) => {
+  return (
+    <div
+      ref={ref}
+      style={props.style}
+      className={props.className}
+      aria-labelledby={props.labeledBy}
+    >
+      <div>
+        <div
+          onClick={props.switchWalletHandler}
+          className={clsx(
+            classes.dropDownTop,
+            navDropdownClasses.button,
+            navDropdownClasses.dropdownPrimaryText,
+            usePickByState(
+              navDropdownClasses.whiteInfoSelectedTop,
+              navDropdownClasses.coolInfoSelected,
+              navDropdownClasses.warmInfoSelected,
+            ),
+          )}
+        >
+          <Trans>Switch wallet</Trans>
+        </div>
+
+        <div
+          onClick={props.disconectWalletHandler}
+          className={clsx(
+            classes.dropDownBottom,
+            navDropdownClasses.button,
+            usePickByState(
+              navDropdownClasses.whiteInfoSelectedBottom,
+              navDropdownClasses.coolInfoSelected,
+              navDropdownClasses.warmInfoSelected,
+            ),
+            classes.disconnectText,
+          )}
+        >
+          <Trans>Disconnect</Trans>
+        </div>
+      </div>
+    </div>
+  );
+});
+CustomMenu.displayName = 'CustomMenu';
 
 const NavWallet: React.FC<NavWalletProps> = props => {
   const { address, buttonStyle } = props;
@@ -52,7 +100,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { disconnect: deactivate } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
-  const shortAddress = useShortAddress(address);
+  const shortAddress = formatShortAddress(address);
   const activeLocale = useActiveLocale();
   const { data: ensAvatar } = useEnsAvatar({ name: ensName?.toString() });
   const setModalStateHandler = (state: boolean) => {
@@ -103,10 +151,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     NavBarButtonStyle.WARM_WALLET,
   );
 
-  // @ts-expect-error RefType is not defined but is needed for the forwardRef
-  const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
+  const customDropdownToggle = React.forwardRef<HTMLDivElement, Props>(({ onClick }, ref) => (
     <>
       <div
+        ref={ref}
         className={clsx(
           navDropdownClasses.wrapper,
           buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
@@ -137,52 +185,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     </>
   ));
   customDropdownToggle.displayName = 'CustomDropdownToggle';
-
-  const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
-    return (
-      <div
-        ref={ref}
-        style={props.style}
-        className={props.className}
-        aria-labelledby={props.labeledBy}
-      >
-        <div>
-          <div
-            onClick={switchWalletHandler}
-            className={clsx(
-              classes.dropDownTop,
-              navDropdownClasses.button,
-              navDropdownClasses.dropdownPrimaryText,
-              usePickByState(
-                navDropdownClasses.whiteInfoSelectedTop,
-                navDropdownClasses.coolInfoSelected,
-                navDropdownClasses.warmInfoSelected,
-              ),
-            )}
-          >
-            <Trans>Switch wallet</Trans>
-          </div>
-
-          <div
-            onClick={disconectWalletHandler}
-            className={clsx(
-              classes.dropDownBottom,
-              navDropdownClasses.button,
-              usePickByState(
-                navDropdownClasses.whiteInfoSelectedBottom,
-                navDropdownClasses.coolInfoSelected,
-                navDropdownClasses.warmInfoSelected,
-              ),
-              classes.disconnectText,
-            )}
-          >
-            <Trans>Disconnect</Trans>
-          </div>
-        </div>
-      </div>
-    );
-  });
-  CustomMenu.displayName = 'CustomMenu';
 
   const renderENS = (ens: string) => {
     if (activeLocale === 'ja-JP') {
@@ -251,7 +253,12 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       onToggle={() => setButtonUp(!buttonUp)}
     >
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-      <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
+      <Dropdown.Menu
+        className={`${navDropdownClasses.desktopDropdown} `}
+        as={CustomMenu}
+        switchWalletHandler={switchWalletHandler}
+        disconectWalletHandler={disconectWalletHandler}
+      />
     </Dropdown>
   );
 

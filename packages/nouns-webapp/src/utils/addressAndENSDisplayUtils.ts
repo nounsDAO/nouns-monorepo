@@ -16,7 +16,7 @@ export const shortENS = (ens: string) => {
   return [ens.substring(0, 4), ens.substring(ens.length - 8)].join('...');
 };
 
-export const useShortAddress = (address?: Address) => {
+export const formatShortAddress = (address?: Address) => {
   if (!address) return '';
   return [address.substring(0, 4), address.substring(38)].join('...');
 };

@@ -15,7 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   BigDecimal: { input: any; output: any; }
-  BigInt: { input: "BigInt"; output: "BigInt"; }
+  BigInt: { input: bigint; output: bigint; }
   Bytes: { input: "Byte"; output: "Byte"; }
   /**
    * 8 bytes signed integer
@@ -4596,21 +4596,21 @@ export type GetSeedsQueryVariables = Exact<{
 }>;
 
 
-export type GetSeedsQuery = { __typename?: 'Query', seeds: Array<{ __typename?: 'Seed', id: string, background: "BigInt", body: "BigInt", accessory: "BigInt", head: "BigInt", glasses: "BigInt" }> };
+export type GetSeedsQuery = { __typename?: 'Query', seeds: Array<{ __typename?: 'Seed', id: string, background: bigint, body: bigint, accessory: bigint, head: bigint, glasses: bigint }> };
 
 export type GetProposalQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetProposalQuery = { __typename?: 'Query', proposal?: { __typename?: 'Proposal', id: string, description: string, status?: ProposalStatus | null, proposalThreshold?: "BigInt" | null, quorumVotes?: "BigInt" | null, forVotes: "BigInt", againstVotes: "BigInt", abstainVotes: "BigInt", createdTransactionHash: "Byte", createdBlock: "BigInt", createdTimestamp: "BigInt", startBlock: "BigInt", endBlock: "BigInt", updatePeriodEndBlock?: "BigInt" | null, objectionPeriodEndBlock: "BigInt", executionETA?: "BigInt" | null, targets?: Array<"Byte"> | null, values?: Array<"BigInt"> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, onTimelockV1?: boolean | null, voteSnapshotBlock: "BigInt", proposer: { __typename?: 'Delegate', id: string }, signers?: Array<{ __typename?: 'Delegate', id: string }> | null } | null };
+export type GetProposalQuery = { __typename?: 'Query', proposal?: { __typename?: 'Proposal', id: string, description: string, status?: ProposalStatus | null, proposalThreshold?: bigint | null, quorumVotes?: bigint | null, forVotes: bigint, againstVotes: bigint, abstainVotes: bigint, createdTransactionHash: "Byte", createdBlock: bigint, createdTimestamp: bigint, startBlock: bigint, endBlock: bigint, updatePeriodEndBlock?: bigint | null, objectionPeriodEndBlock: bigint, executionETA?: bigint | null, targets?: Array<"Byte"> | null, values?: Array<bigint> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, onTimelockV1?: boolean | null, voteSnapshotBlock: bigint, proposer: { __typename?: 'Delegate', id: string }, signers?: Array<{ __typename?: 'Delegate', id: string }> | null } | null };
 
 export type GetPartialProposalsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
 }>;
 
 
-export type GetPartialProposalsQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', id: string, title: string, status?: ProposalStatus | null, forVotes: "BigInt", againstVotes: "BigInt", abstainVotes: "BigInt", quorumVotes?: "BigInt" | null, executionETA?: "BigInt" | null, startBlock: "BigInt", endBlock: "BigInt", updatePeriodEndBlock?: "BigInt" | null, objectionPeriodEndBlock: "BigInt", onTimelockV1?: boolean | null, signers?: Array<{ __typename?: 'Delegate', id: string }> | null }> };
+export type GetPartialProposalsQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', id: string, title: string, status?: ProposalStatus | null, forVotes: bigint, againstVotes: bigint, abstainVotes: bigint, quorumVotes?: bigint | null, executionETA?: bigint | null, startBlock: bigint, endBlock: bigint, updatePeriodEndBlock?: bigint | null, objectionPeriodEndBlock: bigint, onTimelockV1?: boolean | null, signers?: Array<{ __typename?: 'Delegate', id: string }> | null }> };
 
 export type GetActivePendingUpdatableProposersQueryVariables = Exact<{
   first: Scalars['Int']['input'];
@@ -4633,49 +4633,49 @@ export type GetCandidateProposalsQueryVariables = Exact<{
 }>;
 
 
-export type GetCandidateProposalsQuery = { __typename?: 'Query', proposalCandidates: Array<{ __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: "BigInt", createdTransactionHash: "Byte", canceled: boolean, versions: Array<{ __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<"BigInt"> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte", proposalIdToUpdate: "BigInt", matchingProposalIds?: Array<"BigInt"> | null, contentSignatures: Array<{ __typename?: 'ProposalCandidateSignature', id: string, sig: "Byte", expirationTimestamp: "BigInt", canceled: boolean, reason: string, signer: { __typename?: 'Delegate', id: string, proposals: Array<{ __typename?: 'Proposal', id: string }> } }> } } }> };
+export type GetCandidateProposalsQuery = { __typename?: 'Query', proposalCandidates: Array<{ __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: bigint, createdTransactionHash: "Byte", canceled: boolean, versions: Array<{ __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<bigint> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte", proposalIdToUpdate: bigint, matchingProposalIds?: Array<bigint> | null, contentSignatures: Array<{ __typename?: 'ProposalCandidateSignature', id: string, sig: "Byte", expirationTimestamp: bigint, canceled: boolean, reason: string, signer: { __typename?: 'Delegate', id: string, proposals: Array<{ __typename?: 'Proposal', id: string }> } }> } } }> };
 
 export type GetCandidateProposalQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetCandidateProposalQuery = { __typename?: 'Query', proposalCandidate?: { __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: "BigInt", createdTransactionHash: "Byte", canceled: boolean, versions: Array<{ __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<"BigInt"> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte", proposalIdToUpdate: "BigInt", matchingProposalIds?: Array<"BigInt"> | null, contentSignatures: Array<{ __typename?: 'ProposalCandidateSignature', id: string, sig: "Byte", expirationTimestamp: "BigInt", canceled: boolean, reason: string, signer: { __typename?: 'Delegate', id: string, proposals: Array<{ __typename?: 'Proposal', id: string }> } }> } } } | null };
+export type GetCandidateProposalQuery = { __typename?: 'Query', proposalCandidate?: { __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: bigint, createdTransactionHash: "Byte", canceled: boolean, versions: Array<{ __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<bigint> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte", proposalIdToUpdate: bigint, matchingProposalIds?: Array<bigint> | null, contentSignatures: Array<{ __typename?: 'ProposalCandidateSignature', id: string, sig: "Byte", expirationTimestamp: bigint, canceled: boolean, reason: string, signer: { __typename?: 'Delegate', id: string, proposals: Array<{ __typename?: 'Proposal', id: string }> } }> } } } | null };
 
 export type GetCandidateProposalVersionsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetCandidateProposalVersionsQuery = { __typename?: 'Query', proposalCandidate?: { __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: "BigInt", canceled: boolean, createdTransactionHash: "Byte", versions: Array<{ __typename?: 'ProposalCandidateVersion', id: string, createdTimestamp: "BigInt", updateMessage: string, content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<"BigInt"> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte" } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', id: string } } | null };
+export type GetCandidateProposalVersionsQuery = { __typename?: 'Query', proposalCandidate?: { __typename?: 'ProposalCandidate', id: string, slug: string, proposer: "Byte", lastUpdatedTimestamp: bigint, canceled: boolean, createdTransactionHash: "Byte", versions: Array<{ __typename?: 'ProposalCandidateVersion', id: string, createdTimestamp: bigint, updateMessage: string, content: { __typename?: 'ProposalCandidateContent', title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<bigint> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, encodedProposalHash: "Byte" } }>, latestVersion: { __typename?: 'ProposalCandidateVersion', id: string } } | null };
 
 export type GetProposalVersionsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetProposalVersionsQuery = { __typename?: 'Query', proposalVersions: Array<{ __typename?: 'ProposalVersion', id: string, createdAt: "BigInt", updateMessage: string, title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<"BigInt"> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, proposal: { __typename?: 'Proposal', id: string } }> };
+export type GetProposalVersionsQuery = { __typename?: 'Query', proposalVersions: Array<{ __typename?: 'ProposalVersion', id: string, createdAt: bigint, updateMessage: string, title: string, description: string, targets?: Array<"Byte"> | null, values?: Array<bigint> | null, signatures?: Array<string> | null, calldatas?: Array<"Byte"> | null, proposal: { __typename?: 'Proposal', id: string } }> };
 
 export type GetAuctionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetAuctionQuery = { __typename?: 'Query', auction?: { __typename?: 'Auction', id: string, amount: "BigInt", settled: boolean, startTime: "BigInt", endTime: "BigInt", bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string, seed?: { __typename?: 'Seed', id: string, background: "BigInt", body: "BigInt", accessory: "BigInt", head: "BigInt", glasses: "BigInt" } | null, owner: { __typename?: 'Account', id: string } }, bids: Array<{ __typename?: 'Bid', id: string, blockNumber: "BigInt", txIndex: "BigInt", amount: "BigInt" }> } | null };
+export type GetAuctionQuery = { __typename?: 'Query', auction?: { __typename?: 'Auction', id: string, amount: bigint, settled: boolean, startTime: bigint, endTime: bigint, bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string, seed?: { __typename?: 'Seed', id: string, background: bigint, body: bigint, accessory: bigint, head: bigint, glasses: bigint } | null, owner: { __typename?: 'Account', id: string } }, bids: Array<{ __typename?: 'Bid', id: string, blockNumber: bigint, txIndex: bigint, amount: bigint }> } | null };
 
 export type GetBidsByAuctionQueryVariables = Exact<{
   auctionId: Scalars['String']['input'];
 }>;
 
 
-export type GetBidsByAuctionQuery = { __typename?: 'Query', bids: Array<{ __typename?: 'Bid', id: string, amount: "BigInt", blockNumber: "BigInt", blockTimestamp: "BigInt", txIndex: "BigInt", bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string } }> };
+export type GetBidsByAuctionQuery = { __typename?: 'Query', bids: Array<{ __typename?: 'Bid', id: string, amount: bigint, blockNumber: bigint, blockTimestamp: bigint, txIndex: bigint, bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string } }> };
 
 export type GetNounQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetNounQuery = { __typename?: 'Query', noun?: { __typename?: 'Noun', id: string, seed?: { __typename?: 'Seed', background: "BigInt", body: "BigInt", accessory: "BigInt", head: "BigInt", glasses: "BigInt" } | null, owner: { __typename?: 'Account', id: string } } | null };
+export type GetNounQuery = { __typename?: 'Query', noun?: { __typename?: 'Noun', id: string, seed?: { __typename?: 'Seed', background: bigint, body: bigint, accessory: bigint, head: bigint, glasses: bigint } | null, owner: { __typename?: 'Account', id: string } } | null };
 
 export type GetNounsIndexQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4688,14 +4688,14 @@ export type GetLatestAuctionsQueryVariables = Exact<{
 }>;
 
 
-export type GetLatestAuctionsQuery = { __typename?: 'Query', auctions: Array<{ __typename?: 'Auction', id: string, amount: "BigInt", settled: boolean, startTime: "BigInt", endTime: "BigInt", bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string, owner: { __typename?: 'Account', id: string } }, bids: Array<{ __typename?: 'Bid', id: string, amount: "BigInt", blockNumber: "BigInt", blockTimestamp: "BigInt", txHash: "Byte", txIndex: "BigInt", bidder?: { __typename?: 'Account', id: string } | null }> }> };
+export type GetLatestAuctionsQuery = { __typename?: 'Query', auctions: Array<{ __typename?: 'Auction', id: string, amount: bigint, settled: boolean, startTime: bigint, endTime: bigint, bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string, owner: { __typename?: 'Account', id: string } }, bids: Array<{ __typename?: 'Bid', id: string, amount: bigint, blockNumber: bigint, blockTimestamp: bigint, txHash: "Byte", txIndex: bigint, bidder?: { __typename?: 'Account', id: string } | null }> }> };
 
 export type GetLatestBidsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
 }>;
 
 
-export type GetLatestBidsQuery = { __typename?: 'Query', bids: Array<{ __typename?: 'Bid', id: string, amount: "BigInt", blockTimestamp: "BigInt", txIndex: "BigInt", blockNumber: "BigInt", bidder?: { __typename?: 'Account', id: string } | null, auction: { __typename?: 'Auction', id: string, startTime: "BigInt", endTime: "BigInt", settled: boolean } }> };
+export type GetLatestBidsQuery = { __typename?: 'Query', bids: Array<{ __typename?: 'Bid', id: string, amount: bigint, blockTimestamp: bigint, txIndex: bigint, blockNumber: bigint, bidder?: { __typename?: 'Account', id: string } | null, auction: { __typename?: 'Auction', id: string, startTime: bigint, endTime: bigint, settled: boolean } }> };
 
 export type GetNounVotingHistoryQueryVariables = Exact<{
   nounId: Scalars['ID']['input'];
@@ -4703,7 +4703,7 @@ export type GetNounVotingHistoryQueryVariables = Exact<{
 }>;
 
 
-export type GetNounVotingHistoryQuery = { __typename?: 'Query', noun?: { __typename?: 'Noun', id: string, votes: Array<{ __typename?: 'Vote', blockNumber: "BigInt", support: boolean, supportDetailed: number, proposal: { __typename?: 'Proposal', id: string }, voter: { __typename?: 'Delegate', id: string } }> } | null };
+export type GetNounVotingHistoryQuery = { __typename?: 'Query', noun?: { __typename?: 'Noun', id: string, votes: Array<{ __typename?: 'Vote', blockNumber: bigint, support: boolean, supportDetailed: number, proposal: { __typename?: 'Proposal', id: string }, voter: { __typename?: 'Delegate', id: string } }> } | null };
 
 export type GetNounTransferHistoryQueryVariables = Exact<{
   nounId: Scalars['String']['input'];
@@ -4711,7 +4711,7 @@ export type GetNounTransferHistoryQueryVariables = Exact<{
 }>;
 
 
-export type GetNounTransferHistoryQuery = { __typename?: 'Query', transferEvents: Array<{ __typename?: 'TransferEvent', id: string, blockNumber: "BigInt", previousHolder: { __typename?: 'Account', id: string }, newHolder: { __typename?: 'Account', id: string } }> };
+export type GetNounTransferHistoryQuery = { __typename?: 'Query', transferEvents: Array<{ __typename?: 'TransferEvent', id: string, blockNumber: bigint, previousHolder: { __typename?: 'Account', id: string }, newHolder: { __typename?: 'Account', id: string } }> };
 
 export type GetNounDelegationHistoryQueryVariables = Exact<{
   nounId: Scalars['String']['input'];
@@ -4719,12 +4719,12 @@ export type GetNounDelegationHistoryQueryVariables = Exact<{
 }>;
 
 
-export type GetNounDelegationHistoryQuery = { __typename?: 'Query', delegationEvents: Array<{ __typename?: 'DelegationEvent', id: string, blockNumber: "BigInt", previousDelegate: { __typename?: 'Delegate', id: string }, newDelegate: { __typename?: 'Delegate', id: string } }> };
+export type GetNounDelegationHistoryQuery = { __typename?: 'Query', delegationEvents: Array<{ __typename?: 'DelegationEvent', id: string, blockNumber: bigint, previousDelegate: { __typename?: 'Delegate', id: string }, newDelegate: { __typename?: 'Delegate', id: string } }> };
 
 export type GetCreateTimestampAllProposalsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCreateTimestampAllProposalsQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', id: string, createdTimestamp: "BigInt" }> };
+export type GetCreateTimestampAllProposalsQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', id: string, createdTimestamp: bigint }> };
 
 export type GetProposalVotesQueryVariables = Exact<{
   proposalId: Scalars['String']['input'];
@@ -4753,28 +4753,28 @@ export type GetAdjustedNounSupplyAtPropSnapshotQueryVariables = Exact<{
 }>;
 
 
-export type GetAdjustedNounSupplyAtPropSnapshotQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', adjustedTotalSupply: "BigInt" }> };
+export type GetAdjustedNounSupplyAtPropSnapshotQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', adjustedTotalSupply: bigint }> };
 
 export type GetPropUsingDynamicQuorumQueryVariables = Exact<{
   proposalId: Scalars['ID']['input'];
 }>;
 
 
-export type GetPropUsingDynamicQuorumQuery = { __typename?: 'Query', proposal?: { __typename?: 'Proposal', quorumCoefficient: "BigInt" } | null };
+export type GetPropUsingDynamicQuorumQuery = { __typename?: 'Query', proposal?: { __typename?: 'Proposal', quorumCoefficient: bigint } | null };
 
 export type GetProposalFeedbacksQueryVariables = Exact<{
   proposalId: Scalars['ID']['input'];
 }>;
 
 
-export type GetProposalFeedbacksQuery = { __typename?: 'Query', proposalFeedbacks: Array<{ __typename?: 'ProposalFeedback', supportDetailed: number, votes: "BigInt", reason?: string | null, createdTimestamp: "BigInt", voter: { __typename?: 'Delegate', id: string }, proposal: { __typename?: 'Proposal', id: string } }> };
+export type GetProposalFeedbacksQuery = { __typename?: 'Query', proposalFeedbacks: Array<{ __typename?: 'ProposalFeedback', supportDetailed: number, votes: bigint, reason?: string | null, createdTimestamp: bigint, voter: { __typename?: 'Delegate', id: string }, proposal: { __typename?: 'Proposal', id: string } }> };
 
 export type GetCandidateFeedbacksQueryVariables = Exact<{
   candidateId: Scalars['ID']['input'];
 }>;
 
 
-export type GetCandidateFeedbacksQuery = { __typename?: 'Query', candidateFeedbacks: Array<{ __typename?: 'CandidateFeedback', supportDetailed: number, votes: "BigInt", reason?: string | null, createdTimestamp: "BigInt", voter: { __typename?: 'Delegate', id: string }, candidate: { __typename?: 'ProposalCandidate', id: string } }> };
+export type GetCandidateFeedbacksQuery = { __typename?: 'Query', candidateFeedbacks: Array<{ __typename?: 'CandidateFeedback', supportDetailed: number, votes: bigint, reason?: string | null, createdTimestamp: bigint, voter: { __typename?: 'Delegate', id: string }, candidate: { __typename?: 'ProposalCandidate', id: string } }> };
 
 export type GetOwnedNounsQueryVariables = Exact<{
   owner: Scalars['ID']['input'];
@@ -4795,21 +4795,21 @@ export type GetEscrowDepositEventsQueryVariables = Exact<{
 }>;
 
 
-export type GetEscrowDepositEventsQuery = { __typename?: 'Query', escrowDeposits: Array<{ __typename?: 'EscrowDeposit', id: string, createdAt: "BigInt", reason?: string | null, tokenIDs: Array<"BigInt">, proposalIDs: Array<"BigInt">, owner: { __typename?: 'Delegate', id: string } }> };
+export type GetEscrowDepositEventsQuery = { __typename?: 'Query', escrowDeposits: Array<{ __typename?: 'EscrowDeposit', id: string, createdAt: bigint, reason?: string | null, tokenIDs: Array<bigint>, proposalIDs: Array<bigint>, owner: { __typename?: 'Delegate', id: string } }> };
 
 export type GetForkJoinsQueryVariables = Exact<{
   forkId: Scalars['String']['input'];
 }>;
 
 
-export type GetForkJoinsQuery = { __typename?: 'Query', forkJoins: Array<{ __typename?: 'ForkJoin', id: string, createdAt: "BigInt", reason?: string | null, tokenIDs: Array<"BigInt">, proposalIDs: Array<"BigInt">, owner: { __typename?: 'Delegate', id: string } }> };
+export type GetForkJoinsQuery = { __typename?: 'Query', forkJoins: Array<{ __typename?: 'ForkJoin', id: string, createdAt: bigint, reason?: string | null, tokenIDs: Array<bigint>, proposalIDs: Array<bigint>, owner: { __typename?: 'Delegate', id: string } }> };
 
 export type GetEscrowWithdrawEventsQueryVariables = Exact<{
   forkId: Scalars['String']['input'];
 }>;
 
 
-export type GetEscrowWithdrawEventsQuery = { __typename?: 'Query', escrowWithdrawals: Array<{ __typename?: 'EscrowWithdrawal', id: string, createdAt: "BigInt", tokenIDs: Array<"BigInt">, owner: { __typename?: 'Delegate', id: string } }> };
+export type GetEscrowWithdrawEventsQuery = { __typename?: 'Query', escrowWithdrawals: Array<{ __typename?: 'EscrowWithdrawal', id: string, createdAt: bigint, tokenIDs: Array<bigint>, owner: { __typename?: 'Delegate', id: string } }> };
 
 export type GetProposalTitlesQueryVariables = Exact<{
   ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
@@ -4823,19 +4823,19 @@ export type GetForkDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetForkDetailsQuery = { __typename?: 'Query', fork?: { __typename?: 'Fork', id: string, forkID: "BigInt", executed?: boolean | null, executedAt?: "BigInt" | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: "BigInt" | null, escrowedNouns: Array<{ __typename?: 'EscrowedNoun', noun: { __typename?: 'Noun', id: string } }>, joinedNouns: Array<{ __typename?: 'ForkJoinedNoun', noun: { __typename?: 'Noun', id: string } }> } | null };
+export type GetForkDetailsQuery = { __typename?: 'Query', fork?: { __typename?: 'Fork', id: string, forkID: bigint, executed?: boolean | null, executedAt?: bigint | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: bigint | null, escrowedNouns: Array<{ __typename?: 'EscrowedNoun', noun: { __typename?: 'Noun', id: string } }>, joinedNouns: Array<{ __typename?: 'ForkJoinedNoun', noun: { __typename?: 'Noun', id: string } }> } | null };
 
 export type GetForksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetForksQuery = { __typename?: 'Query', forks: Array<{ __typename?: 'Fork', id: string, forkID: "BigInt", executed?: boolean | null, executedAt?: "BigInt" | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: "BigInt" | null }> };
+export type GetForksQuery = { __typename?: 'Query', forks: Array<{ __typename?: 'Fork', id: string, forkID: bigint, executed?: boolean | null, executedAt?: bigint | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: bigint | null }> };
 
 export type GetIsForkActiveQueryVariables = Exact<{
   currentTimestamp: Scalars['BigInt']['input'];
 }>;
 
 
-export type GetIsForkActiveQuery = { __typename?: 'Query', forks: Array<{ __typename?: 'Fork', forkID: "BigInt", forkingPeriodEndTimestamp?: "BigInt" | null }> };
+export type GetIsForkActiveQuery = { __typename?: 'Query', forks: Array<{ __typename?: 'Fork', forkID: bigint, forkingPeriodEndTimestamp?: bigint | null }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String

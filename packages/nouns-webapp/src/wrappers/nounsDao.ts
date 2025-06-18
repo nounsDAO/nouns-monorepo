@@ -17,6 +17,7 @@ import {
   filter,
   flatMap,
   forEach,
+  isBigInt,
   isNonNullish,
   isNullish,
   isTruthy,
@@ -25,7 +26,7 @@ import {
   sort,
 } from 'remeda';
 import {
-  AbiParameter,
+  type AbiParameter,
   decodeAbiParameters,
   decodeEventLog,
   formatEther,
@@ -240,25 +241,25 @@ export interface ProposalTransaction {
 export interface EscrowDeposit {
   eventType: 'EscrowDeposit' | 'ForkJoin';
   id: string;
-  createdAt: string;
+  createdAt: bigint;
   owner: { id: Address };
   reason: string;
-  tokenIDs: string[];
+  tokenIDs: bigint[];
   proposalIDs: number[];
 }
 
 export interface EscrowWithdrawal {
   eventType: 'EscrowWithdrawal';
   id: string;
-  createdAt: string;
+  createdAt: bigint;
   owner: { id: Address };
-  tokenIDs: string[];
+  tokenIDs: bigint[];
 }
 
 export interface ForkCycleEvent {
   eventType: 'ForkStarted' | 'ForkExecuted' | 'ForkingEnded';
   id: string;
-  createdAt: string | null;
+  createdAt: bigint | null;
 }
 
 export interface ProposalTitle {
@@ -268,9 +269,9 @@ export interface ProposalTitle {
 
 export interface Fork {
   id: string;
-  forkID: string;
+  forkID: bigint;
   executed: boolean | null;
-  executedAt: string | null;
+  executedAt: bigint | null;
   forkTreasury: string | null;
   forkToken: string | null;
   tokensForkingCount: number;
@@ -281,14 +282,14 @@ export interface Fork {
 
 export interface ForkSubgraphEntity {
   id: string;
-  forkID: string;
-  executed: boolean;
-  executedAt: string;
-  forkTreasury: string;
-  forkToken: string;
+  forkID: bigint;
+  executed: boolean | null;
+  executedAt: bigint | null;
+  forkTreasury: string | null;
+  forkToken: string | null;
   tokensForkingCount: number;
   tokensInEscrowCount: number;
-  forkingPeriodEndTimestamp: string;
+  forkingPeriodEndTimestamp: string | null;
   escrowedNouns: {
     noun: {
       id: string;
@@ -350,7 +351,10 @@ const addMissingSchemes = (descriptionText: string | undefined) => {
 
   return descriptionText.replace(markdownLinkRegex, (match, text, url) => {
     // If the URL already has a scheme or starts with #, leave it as is
-    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('#')) {
+    if (
+      typeof url === 'string' &&
+      (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('#'))
+    ) {
       return match;
     }
     // Otherwise, add the https:// scheme
@@ -444,7 +448,7 @@ const determineCallData = (types: string | undefined, value: bigint | undefined)
   if (types) {
     return types;
   }
-  if (value) {
+  if (value !== undefined) {
     return `${formatEther(BigInt(value))} ETH`;
   }
   return '';
@@ -593,7 +597,7 @@ const handlePendingOrActiveState = (
   proposal: GraphQLProposal,
   isDaoGteV3?: boolean,
 ): ProposalState => {
-  if (!blockNumber) {
+  if (blockNumber === undefined) {
     return ProposalState.UNDETERMINED;
   }
 
@@ -627,9 +631,9 @@ const isUpdatableProposal = (
   isDaoGteV3?: boolean,
 ): boolean => {
   return Boolean(
-    isDaoGteV3 &&
-      proposal.updatePeriodEndBlock &&
-      blockNumber <= BigInt(proposal.updatePeriodEndBlock),
+    isDaoGteV3 === true &&
+      isBigInt(proposal.updatePeriodEndBlock) &&
+      blockNumber <= proposal.updatePeriodEndBlock,
   );
 };
 
@@ -640,10 +644,9 @@ const isInObjectionPeriod = (
   isDaoGteV3?: boolean,
 ): boolean => {
   return Boolean(
-    isDaoGteV3 &&
-      blockNumber > BigInt(proposal.endBlock) &&
-      BigInt(proposal.objectionPeriodEndBlock) > 0 &&
-      blockNumber <= BigInt(proposal.objectionPeriodEndBlock),
+    isDaoGteV3 === true &&
+      blockNumber > proposal.endBlock &&
+      blockNumber <= proposal.objectionPeriodEndBlock,
   );
 };
 
@@ -662,7 +665,7 @@ const getPastEndBlockState = (proposal: GraphQLProposal): ProposalState => {
     return ProposalState.DEFEATED;
   }
 
-  if (!proposal.executionETA) {
+  if (proposal.executionETA == null) {
     return ProposalState.SUCCEEDED;
   }
 
@@ -676,7 +679,7 @@ const handleQueuedState = (
   isDaoGteV3?: boolean,
   onTimelockV1?: boolean,
 ): ProposalState => {
-  if (!blockTimestamp || !proposal.executionETA) {
+  if (blockTimestamp == null || proposal.executionETA == null) {
     return ProposalState.UNDETERMINED;
   }
 
@@ -695,7 +698,10 @@ const isExpiredProposal = (
   onTimelockV1?: boolean,
 ): boolean => {
   // If v3+ and not on time lock v1, grace period is 21 days, otherwise 14 days
-  const GRACE_PERIOD = isDaoGteV3 && !onTimelockV1 ? 21 * 60 * 60 * 24 : 14 * 60 * 60 * 24;
+  const GRACE_PERIOD =
+    isDaoGteV3 != null && isDaoGteV3 && onTimelockV1 != null && !onTimelockV1
+      ? 21 * 60 * 60 * 24
+      : 14 * 60 * 60 * 24;
 
   return blockTimestamp.getTime() / 1_000 >= Number(proposal.executionETA) + Number(GRACE_PERIOD);
 };
@@ -728,7 +734,7 @@ const parsePartialSubgraphProposal = (
     againstCount: Number(proposal.againstVotes),
     abstainCount: Number(proposal.abstainVotes),
     quorumVotes: Number(proposal?.quorumVotes ?? 0),
-    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    eta: proposal.executionETA != null ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     objectionPeriodEndBlock: 0n,
   };
 };
@@ -758,7 +764,7 @@ const parseSubgraphProposal = (
   };
 
   let details;
-  if (toUpdate) {
+  if (toUpdate !== undefined && toUpdate) {
     details = formatProposalTransactionDetailsToUpdate(transactionDetails);
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
@@ -785,7 +791,7 @@ const parseSubgraphProposal = (
     startBlock: BigInt(proposal.startBlock),
     endBlock: BigInt(proposal.endBlock),
     createdTimestamp: BigInt(proposal.createdTimestamp),
-    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    eta: proposal.executionETA != null ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: details,
     transactionHash: proposal.createdTransactionHash as Hash,
     objectionPeriodEndBlock: BigInt(proposal.objectionPeriodEndBlock),
@@ -1296,13 +1302,13 @@ export function useJoinFork() {
 export function useForkThreshold(): number | undefined {
   const { data: threshold } = useReadNounsGovernorForkThreshold();
 
-  return threshold ? Number(threshold) : undefined;
+  return threshold != null ? Number(threshold) : undefined;
 }
 
 export function useNumTokensInForkEscrow(): number | undefined {
   const { data: count } = useReadNounsGovernorNumTokensInForkEscrow();
 
-  return count ? Number(count) : undefined;
+  return count != null ? Number(count) : undefined;
 }
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
@@ -1341,7 +1347,7 @@ export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) 
     escrowWithdrawal => ({
       ...escrowWithdrawal,
       eventType: 'EscrowWithdrawal' as const,
-      owner: { id: escrowWithdrawal.id as Address },
+      owner: { id: escrowWithdrawal.owner.id as Address },
     }),
   );
 
@@ -1363,12 +1369,13 @@ const eventsWithforkCycleEvents = (events: EscrowEvent[], forkDetails: Fork) => 
   const forkEnded: ForkCycleEvent = {
     eventType: 'ForkingEnded',
     id: 'fork-ended',
-    createdAt: endTimestamp ? endTimestamp.toString() : null,
+    createdAt: endTimestamp != null ? BigInt(endTimestamp) : null,
   };
   const forkEvents: ForkCycleEvent[] = [executed, forkEnded];
 
   const sortedEvents = [...events, ...forkEvents].sort((a: EscrowEvent, b: EscrowEvent) => {
-    return a.createdAt && b.createdAt && a.createdAt > b.createdAt ? -1 : 1;
+    if (a.createdAt == null || b.createdAt == null) return 0;
+    return a.createdAt > b.createdAt ? -1 : 1;
   });
   return sortedEvents;
 };
@@ -1437,7 +1444,7 @@ export const useEscrowEvents = (pollInterval: number, forkId: string) => {
     refetch: refetchForkJoins,
   } = useForkJoins(pollInterval, forkId);
   const loading = depositsLoading || withdrawalsLoading || forkDetailsLoading || forkJoinsLoading;
-  const error = depositsError || withdrawalsError || forkDetailsError || forkJoinsError;
+  const error = depositsError ?? withdrawalsError ?? forkDetailsError ?? forkJoinsError;
   const data: (EscrowDeposit | EscrowWithdrawal)[] = [
     ...depositEvents,
     ...withdrawalEvents,
@@ -1551,13 +1558,13 @@ export function useExecuteFork() {
 export function useAdjustedTotalSupply(): number | undefined {
   const { data } = useReadNounsGovernorAdjustedTotalSupply();
 
-  return data ? Number(data) : undefined;
+  return data != null ? Number(data) : undefined;
 }
 
 export function useForkThresholdBPS(): number | undefined {
   const { data } = useReadNounsGovernorForkThresholdBps();
 
-  return data ? Number(data) : undefined;
+  return data != null ? Number(data) : undefined;
 }
 
 export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => {

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import ReactDOM from 'react-dom';
 
+import { cn } from '@/lib/utils';
+
 import ChangeDelegatePanel from '../ChangeDelegatePanel';
 import CurrentDelegatePannel from '../CurrentDelegatePannel';
 
@@ -30,7 +32,7 @@ const DelegationModalOverlay: React.FC<DelegationModalOverlayProps> = props => {
         </button>
       </div>
 
-      <div className={classes.modal}>
+      <div className={cn(classes.modal, 'flex h-fit !max-h-fit flex-col gap-2')}>
         {isChangingDelegation ? (
           <ChangeDelegatePanel onDismiss={onDismiss} delegateTo={delegateTo} />
         ) : (

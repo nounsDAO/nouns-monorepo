@@ -492,8 +492,8 @@ msgstr ""
 msgid "You provided <0>{0}</0> feedback {1}"
 msgstr ""
 
-#. placeholder {0}: forkThreshold === undefined ? '...' : forkThreshold
-#. placeholder {1}: forkThresholdBPS && forkThresholdBPS / 100
+#. placeholder {0}: forkThreshold == null ? '...' : forkThreshold
+#. placeholder {1}: forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'
 #: src/pages/Fork/index.tsx
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr ""
@@ -776,6 +776,12 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
+msgstr ""
+
+#. placeholder {0}: (proposalThreshold ?? 0) + 1
+#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'
+#: src/components/ChangeDelegatePanel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1484,12 +1490,6 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-msgstr ""
-
-#. placeholder {0}: (proposalThreshold ?? 0) + 1
-#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePanel/index.tsx
-msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 msgstr ""
 
 #: src/components/Proposals/index.tsx

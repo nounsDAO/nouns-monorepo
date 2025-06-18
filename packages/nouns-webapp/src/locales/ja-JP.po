@@ -490,8 +490,8 @@ msgstr "すでに持っています"
 msgid "You provided <0>{0}</0> feedback {1}"
 msgstr "<0>{0}</0>のフィードバックを提供しました {1}"
 
-#. placeholder {0}: forkThreshold === undefined ? '...' : forkThreshold
-#. placeholder {1}: forkThresholdBPS && forkThresholdBPS / 100
+#. placeholder {0}: forkThreshold == null ? '...' : forkThreshold
+#. placeholder {1}: forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'
 #: src/pages/Fork/index.tsx
 msgid "More than {0} Nouns ({1}% of the DAO) are required to pass the threshold"
 msgstr "閾値を通過するには、{0}以上のNouns（DAOの{1}%）が必要です"
@@ -769,6 +769,12 @@ msgstr "{0} 票"
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr "WTF?"
+
+#. placeholder {0}: (proposalThreshold ?? 0) + 1
+#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'
+#: src/components/ChangeDelegatePanel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
+msgstr "この委任の後、あなたのアカウントは{0}{1}未満になります。十分なスポンサー票がない場合、作成した未実行の提案はキャンセル可能になるかもしれません。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1455,12 +1461,6 @@ msgstr "提案前のフィードバック"
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "NounはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、Nounのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
 
-#. placeholder {0}: (proposalThreshold ?? 0) + 1
-#. placeholder {1}: proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'
-#: src/components/ChangeDelegatePanel/index.tsx
-msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
-msgstr "この委任の後、あなたのアカウントには{0}{1}未満になります。作成した未実行の提案は、誰でもキャンセルできるようになります。"
-
 #: src/components/Proposals/index.tsx
 msgid "Submit Proposal"
 msgstr "提案を提出"
@@ -1599,7 +1599,7 @@ msgstr "投票前のフィードバック"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
-msgstr "現在の代表者"
+msgstr "現在の代理人"
 
 #: src/components/NounsIntroSection/index.tsx
 msgid "One Noun, Every Day, Forever."
