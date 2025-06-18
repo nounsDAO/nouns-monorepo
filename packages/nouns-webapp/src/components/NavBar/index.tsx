@@ -191,6 +191,18 @@ const NavBar = () => {
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
+              <Nav.Link
+                as={Link}
+                to="/traits"
+                className={clsx(classes.nounsNavLink, classes.exploreButton)}
+                onClick={closeNav}
+              >
+                <NavBarButton
+                  buttonText={<Trans>Traits</Trans>}
+                  buttonIcon={<NogglesIcon />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
@@ -209,6 +221,18 @@ const NavBar = () => {
                   href="/nouns"
                 >
                   <Trans>Nouns</Trans>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                    ),
+                  )}
+                  href="/traits"
+                >
+                  <Trans>Traits</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={clsx(
