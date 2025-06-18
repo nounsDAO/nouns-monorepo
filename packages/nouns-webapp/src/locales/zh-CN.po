@@ -1554,6 +1554,12 @@ msgstr "您可以在 {playgroundLink} 上尝试链下生成 Nouns。"
 msgid "Abstain"
 msgstr "弃权"
 
+#. placeholder {0}: filteredDelegateGroupedVoteData.length
+#: src/components/VoteCard/index.tsx
+#: src/components/VoteCard/index.tsx
+msgid "{0, plural, one {voter} other {voters}}"
+msgstr "{0, plural, one {投票者} other {投票者}}"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Noun 拍卖收益的 100%，都会直接发送到金库，无需人为干预。"
