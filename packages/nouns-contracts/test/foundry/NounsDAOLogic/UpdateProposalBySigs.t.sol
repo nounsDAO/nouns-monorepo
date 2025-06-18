@@ -236,7 +236,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicBaseTest {
         NounsDAOProposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
         address[] memory updateTargets = txs.targets;
 
-        // sign on differet new target
+        // sign on different new target
         address[] memory differentTargets = new address[](1);
         differentTargets[0] = makeAddr('different new target');
         txs.targets = differentTargets;
@@ -265,7 +265,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicBaseTest {
         NounsDAOProposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
         uint256[] memory updateValues = txs.values;
 
-        // sign on differet values
+        // sign on different values
         uint256[] memory differentValues = new uint256[](1);
         differentValues[0] = updateValues[0] + 1234;
         txs.values = differentValues;
@@ -294,7 +294,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicBaseTest {
         NounsDAOProposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
         string[] memory updateSignatures = txs.signatures;
 
-        // sign on differet signatures
+        // sign on different signatures
         string[] memory differentSignatures = new string[](1);
         differentSignatures[0] = 'different signature';
         txs.signatures = differentSignatures;
@@ -323,7 +323,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicBaseTest {
         NounsDAOProposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
         bytes[] memory updateCalldatas = txs.calldatas;
 
-        // sign on differet calldatas
+        // sign on different calldatas
         bytes[] memory differentCalldatas = new bytes[](1);
         differentCalldatas[0] = 'different calldatas';
         txs.calldatas = differentCalldatas;
