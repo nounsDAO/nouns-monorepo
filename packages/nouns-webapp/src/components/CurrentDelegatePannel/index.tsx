@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi';
 import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import ShortAddress from '@/components/ShortAddress';
 import { useReadNounsTokenDelegates } from '@/contracts';
-import { useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
 
 import classes from './CurrentDelegatePannel.module.css';
 
@@ -22,7 +22,7 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = ({
   const { address: maybeAccount } = useAccount();
   const { data: delegate } = useReadNounsTokenDelegates();
   const account = delegate ?? maybeAccount ?? '0x';
-  const shortAccount = useShortAddress(account);
+  const shortAccount = formatShortAddress(account);
 
   return (
     <div className={classes.wrapper}>

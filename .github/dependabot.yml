@@ -85,11 +85,13 @@ updates:
       tailwindcss:
         patterns:
           - 'tailwindcss'
-          - '@tailwindcss/*'
+          - 'tailwindcss-*'
+          - 'tailwind-*'
       vitest:
         patterns:
           - 'vitest'
           - '@vitest/*'
+          - 'playwright'
       wagmi:
         patterns:
           - 'wagmi'

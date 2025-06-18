@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 import _trophy from '@/assets/icons/trophy.svg';
 import TruncatedAmount from '@/components/TruncatedAmount';
-import { shortENS, useShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { shortENS, formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
 import { useReverseENSLookUp } from '@/utils/ensLookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
@@ -29,7 +29,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
 
   const ens = useReverseENSLookUp(bid.sender);
   const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
-  const shortAddress = useShortAddress(bid.sender);
+  const shortAddress = formatShortAddress(bid.sender);
 
   return (
     <li className={clsx(auctionActivityClasses.bidRowCool, classes.bidRow)}>

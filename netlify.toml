@@ -1,6 +1,3 @@
-[functions]
-  directory = "packages/nouns-webapp/functions"
-
 [build]
   command = "pnpm build"
   publish = "packages/nouns-webapp/dist"
