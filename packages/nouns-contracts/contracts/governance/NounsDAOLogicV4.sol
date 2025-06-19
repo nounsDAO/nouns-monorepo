@@ -129,7 +129,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      */
 
     /**
-     * @notice Used to initialize the contract during delegator contructor
+     * @notice Used to initialize the contract during delegator constructor
      * @dev This will only be called for a newly deployed DAO, not as part of an upgrade from V2 to V3
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
@@ -204,7 +204,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @param signatures Function signatures for proposal calls
      * @param calldatas Calldatas for proposal calls
      * @param description String description of the proposal
-     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @param clientId The ID of the client that facilitated posting the proposal onchain
      * @return uint256 Proposal id of new proposal
      */
     function propose(
@@ -253,7 +253,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @param signatures Function signatures for proposal calls
      * @param calldatas Calldatas for proposal calls
      * @param description String description of the proposal
-     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @param clientId The ID of the client that facilitated posting the proposal onchain
      * @return uint256 Proposal id of new proposal
      */
     function proposeOnTimelockV1(
@@ -305,7 +305,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @param signatures Function signatures for proposal calls
      * @param calldatas Calldatas for proposal calls
      * @param description String description of the proposal
-     * @param clientId The ID of the client that faciliated posting the proposal onchain
+     * @param clientId The ID of the client that facilitated posting the proposal onchain
      * @return uint256 Proposal id of new proposal
      */
     function proposeBySigs(
@@ -694,7 +694,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * Voting takes place regardless of refund success.
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
-     * @param clientId The ID of the client that faciliated posting the vote onchain
+     * @param clientId The ID of the client that facilitated posting the vote onchain
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(uint256 proposalId, uint8 support, uint32 clientId) external {
@@ -725,7 +725,7 @@ contract NounsDAOLogicV4 is NounsDAOStorage, NounsDAOEventsV3 {
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      * @param reason The reason given for the vote by the voter
-     * @param clientId The ID of the client that faciliated posting the vote onchain
+     * @param clientId The ID of the client that facilitated posting the vote onchain
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVoteWithReason(
