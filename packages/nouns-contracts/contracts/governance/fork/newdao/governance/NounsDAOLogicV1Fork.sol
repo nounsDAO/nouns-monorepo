@@ -31,7 +31,7 @@
 //   and sending their tokens to the DAO treasury.
 //
 // - `adjustedTotalSupply`, the total supply calculation used in DAO functions like quorum and proposal threshold, in
-//   which the DAO exludes tokens held by the treasury, such that tokens used to quit the DAO are not counted.
+//   which the DAO excludes tokens held by the treasury, such that tokens used to quit the DAO are not counted.
 //
 // - A function for the DAO to set which ERC20s are transferred pro rata in the `quit` function.
 //
@@ -152,7 +152,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
     constructor() initializer {}
 
     /**
-     * @notice Used to initialize the contract during delegator contructor
+     * @notice Used to initialize the contract during delegator constructor
      * @dev Not asserting that param values are within the hard-coded bounds in order to make it easier to run
      * manual tests; seems a safe decision since we assume fork DAOs are initialized by `ForkDAODeployer`
      * @param timelock_ The address of the NounsDAOExecutor
