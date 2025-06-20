@@ -13,8 +13,6 @@ const activeChain =
     find(chain => chain.id === activeChainId),
   ) ?? sepolia;
 
-console.log({ whatever: import.meta.env.VITE_MAINNET_WHATEVER });
-
 const transports = {
   [mainnet.id]: fallback([
     ...(import.meta.env.VITE_MAINNET_WSRPC !== undefined

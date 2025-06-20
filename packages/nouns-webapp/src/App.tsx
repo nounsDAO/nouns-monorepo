@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div className={`${classes.wrapper}`}>
-      {chainId && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {chainId !== undefined && Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       <BrowserRouter>
         <NavBar />
         <Routes>

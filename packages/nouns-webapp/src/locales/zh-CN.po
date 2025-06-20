@@ -153,6 +153,7 @@ msgid "Winner"
 msgstr "获胜者"
 
 #: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Candidates"
 msgstr "候选提案"
 
@@ -217,6 +218,7 @@ msgid "Making a proposal requires {threshold} votes"
 msgstr "提出提案需要 {threshold} 票"
 
 #: src/pages/Fork/WithdrawNounsButton.tsx
+#: src/pages/Fork/WithdrawNounsButton.tsx
 msgid "Withdraw Nouns from escrow"
 msgstr "从托管中提取 Nouns"
 
@@ -232,6 +234,7 @@ msgstr "<0>提案者：</0><1>{proposer}</1><2>{transactionLink}</2>"
 msgid "3.5 artists, 6.5 technologists"
 msgstr "3.5 位艺术家，6.5 位技术专家"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "Proposals"
 msgstr "提案列表"
@@ -403,11 +406,6 @@ msgstr "一个 Noun 等于一票。"
 msgid "Nouns DUNA"
 msgstr "Nouns DUNA"
 
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Address</0>"
-msgstr "{0} <0>地址</0>"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Address"
 msgstr "地址"
@@ -419,6 +417,7 @@ msgstr "提案已取消！"
 #: src/pages/Governance/index.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
 
@@ -428,6 +427,9 @@ msgstr "Nouns"
 msgid "You already have an active or pending proposal"
 msgstr "您已有正在进行或待处理的提案"
 
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "None"
 msgstr "无"
@@ -440,11 +442,6 @@ msgstr "查看门槛信息"
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
 msgstr "活跃"
-
-#. placeholder {0}: i18n.number(filteredDelegateGroupedVoteData.length)
-#: src/components/VoteCard/index.tsx
-msgid "{0} <0>Addresses</0>"
-msgstr "{0} <0>地址</0>"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
@@ -605,6 +602,8 @@ msgid "Proposal Executed!"
 msgstr "提案已执行！"
 
 #: src/pages/EditProposal/index.tsx
+#: src/pages/EditProposal/index.tsx
+#: src/pages/EditCandidate/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
@@ -638,6 +637,7 @@ msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are t
 msgstr "'Nounders' 是发起 Nouns 的十位建设者组成的团队。以下是 Nounders："
 
 #: src/components/AuctionTimer/index.tsx
+#: src/components/AuctionTimer/index.tsx
 msgid "Auction ended"
 msgstr "拍卖已结束"
 
@@ -664,9 +664,12 @@ msgid "Select Language"
 msgstr "选择语言"
 
 #: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
 msgid "Settle Auction"
 msgstr "结算拍卖"
 
+#: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
 msgid "DAO"
 msgstr "DAO"
@@ -973,6 +976,8 @@ msgid "Add Action Details"
 msgstr "添加操作详情"
 
 #: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "委托"
 
@@ -999,6 +1004,8 @@ msgstr "支持"
 msgid "Function"
 msgstr "函数"
 
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Place bid"
 msgstr "出价"
@@ -1082,12 +1089,9 @@ msgid "Body"
 msgstr "身体"
 
 #: src/components/VoteSignals/VoteSignals.tsx
+#: src/components/VoteSignals/VoteSignals.tsx
 msgid "Nouns voters can cast voting signals to give proposers of pending proposals an idea of how they intend to vote and helpful guidance on proposal changes to change their vote."
 msgstr "Nouns 投票者可以发出投票信号，这既能让待定提案的提出者预估到他们的投票倾向，也能为提案修改提供宝贵指引，以争取（或引导）投票者转变其最终投票。"
-
-#: src/components/VoteCard/index.tsx
-msgid "Addresses"
-msgstr "地址"
 
 #: src/components/VoteModal/index.tsx
 msgid "Thank you for voting."
@@ -1169,6 +1173,7 @@ msgid "There's a way for everyone to get involved with Nouns. From whimsical end
 msgstr "每个人都有办法参与到Nouns中。从给青蛙命名这样异想天开的尝试，到为玫瑰花车游行建造巨型花车这样的雄心勃勃的项目，甚至是像Prop House这样的加密基础设施。Nouns资助各种规模和领域的项目。"
 
 #: src/components/StreamWithdrawModal/index.tsx
+#: src/components/StreamWithdrawModal/index.tsx
 msgid "Withdraw from Stream"
 msgstr "从流支付中提取"
 
@@ -1248,17 +1253,34 @@ msgid "The Nounders"
 msgstr "Nounders"
 
 #: src/pages/Vote/index.tsx
+#: src/pages/Vote/index.tsx
+#: src/pages/Fork/WithdrawNounsButton.tsx
+#: src/pages/Fork/WithdrawNounsButton.tsx
+#: src/pages/Fork/WithdrawNounsButton.tsx
 #: src/pages/Fork/WithdrawNounsButton.tsx
 #: src/pages/Fork/DeployForkButton.tsx
+#: src/pages/Fork/DeployForkButton.tsx
+#: src/pages/Fork/DeployForkButton.tsx
+#: src/pages/Fork/DeployForkButton.tsx
+#: src/pages/EditProposal/index.tsx
+#: src/pages/EditProposal/index.tsx
+#: src/pages/EditProposal/index.tsx
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/CreateCandidate/index.tsx
 #: src/components/VoteSignals/VoteSignals.tsx
 #: src/components/VoteModal/index.tsx
+#: src/components/VoteModal/index.tsx
+#: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 #: src/components/CandidateSponsors/SubmitUpdateProposal.tsx
 #: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
+#: src/components/CandidateSponsors/SelectSponsorsToPropose.tsx
 #: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/AddNounsToForkModal/index.tsx
+#: src/components/AddNounsToForkModal/index.tsx
+#: src/components/AddNounsToForkModal/index.tsx
 #: src/components/AddNounsToForkModal/index.tsx
 msgid "Please try again."
 msgstr "请再试一次。"
@@ -1457,6 +1479,8 @@ msgid "Nouns are stored directly on Ethereum and do not utilize pointers to othe
 msgstr "Nouns 直接存储在以太坊上，不使用指向 IPFS 等其他网络的指针。之所以能够实现这一点，是因为 Noun 的各个部件通过自定义的游程编码 (RLE) 进行压缩并存储在链上，而 RLE 是一种无损压缩技术。"
 
 #: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
 msgid "Submit Proposal"
 msgstr "提交提案"
 
@@ -1566,6 +1590,7 @@ msgid "Withdraw from Stream <0/>"
 msgstr "从流中提取 <0/>"
 
 #: src/pages/Vote/index.tsx
+#: src/pages/Vote/index.tsx
 msgid "Threshold"
 msgstr "门槛"
 
@@ -1602,6 +1627,8 @@ msgstr "每天一个Noun，直至永远。"
 
 #: src/pages/TraitsPage.tsx
 #: src/components/Footer.tsx
+#: src/components/NavBar/index.tsx
+#: src/components/NavBar/index.tsx
 msgid "Traits"
 msgstr "特征"
 
@@ -1702,6 +1729,8 @@ msgid "Each time an auction is settled, the settlement transaction will also cau
 msgstr "每次拍卖结算时，结算交易也会导致一个新的 Noun 被铸造，并开始一个新的 24 小时拍卖。"
 
 #: src/pages/EditProposal/index.tsx
+#: src/pages/EditProposal/index.tsx
+#: src/pages/EditProposal/index.tsx
 msgid "Proposal Updated!"
 msgstr "提案已更新！"
 
@@ -1779,6 +1808,7 @@ msgstr "提取到您的钱包时出错。"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePanel/index.tsx
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Close"
 msgstr "关闭"
