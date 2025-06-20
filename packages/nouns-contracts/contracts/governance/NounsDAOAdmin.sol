@@ -96,7 +96,7 @@ library NounsDAOAdmin {
     /// @notice Emitted when the during of the forking period is set
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
 
-    /// @notice Emitted when the threhsold for forking is set
+    /// @notice Emitted when the threshold for forking is set
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
 
     /// @notice Emitted when the main timelock, timelockV1 and admin are set
@@ -308,7 +308,7 @@ library NounsDAOAdmin {
     }
 
     /**
-     * @notice Burns veto priviledges
+     * @notice Burns veto privileges
      * @dev Vetoer function destroying veto power forever
      */
     function _burnVetoPower() public {
@@ -505,7 +505,7 @@ library NounsDAOAdmin {
      * @param forkEscrow_ the fork escrow contract
      * @param forkDAODeployer_ the fork dao deployer contract
      * @param erc20TokensToIncludeInFork_ the ERC20 tokens used when splitting funds to a fork
-     * @param forkPeriod_ the period during which it's possible to join a fork after exeuction
+     * @param forkPeriod_ the period during which it's possible to join a fork after execution
      * @param forkThresholdBPS_ the threshold required of escrowed nouns in order to execute a fork
      */
     function _setForkParams(
