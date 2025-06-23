@@ -198,7 +198,7 @@ interface NounsDAOEventsV3 {
     /// @notice Emitted when the during of the forking period is set
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
 
-    /// @notice Emitted when the threhsold for forking is set
+    /// @notice Emitted when the threshold for forking is set
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
 
     /// @notice Emitted when the main timelock, timelockV1 and admin are set
