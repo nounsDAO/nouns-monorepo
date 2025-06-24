@@ -82,6 +82,7 @@ checksums:
     404%3A%20This%20is%20not%20the%20person%2C%20place%2C%20or%20thing%20you're%20looking%20for.../singular: 475247840d3ee73c23721731495201c5
     Artwork%20is%20generative%20and%20stored%20directly%20on-chain%20(not%20IPFS)./singular: 414b50c4f363d62471b5efbdef5ac76d
     There%20are%20unfortunately%20no%20algorithmic%20solutions%20for%20making%20these%20determinations%20in%20advance%20(if%20there%20were%2C%20the%20veto%20would%20not%20be%20required)%2C%20and%20proposals%20must%20be%20considered%20on%20a%20case%20by%20case%20basis./singular: 75e19f5970b94e807f64d074717e568b
+    Calendar/singular: f113fede755b1502d0a17ad5068ba005
     The%20playground%20was%20built%20using%20the%20%7BnounsProtocolLink%7D.%20Noun's%20traits%20are%20determined%20by%20the%20Noun%20Seed.%20The%20seed%20was%20generated%20using%20%7BnounsAssetsLink%7D%20and%20rendered%20using%20the%20%7BnounsSDKLink%7D./singular: 34ecd851a0b080cd7040288568aaba1e
     s/singular: 613c908c5843403da3c48fbd8e30ba5c
     Add%20an%20optional%20message%20for%20the%20changes%20to%20the%20proposal/singular: 8dd34eb04d62ee2b288f57d105dc99e4
@@ -93,7 +94,6 @@ checksums:
     Time%20left/singular: 1050d0becba1fe6e2bc9f4210f20c01c
     One%20Noun%20is%20equal%20to%20one%20vote./singular: 76ce41885030ce93a6f12dbe9a05e68f
     Nouns%20DUNA/singular: 07f3ba8c237531dd41c5726a46635d09
-    "%7B0%7D%20%3C0%3EAddress%3C%2F0%3E/singular": f386d8d8f7cebd5854e53b98f03391ad
     Address/singular: 5a9a8bc26f90d84c90105690a2eb23a1
     Proposal%20Canceled!/singular: 8fe6f92970624b443cc4153edb8ec543
     Nouns/singular: a178dd95246465cc3261deccad390d1b
@@ -101,7 +101,6 @@ checksums:
     None/singular: d163ad01ba50118a86047c8b73fbe922
     View%20Threshold%20Info/singular: ad743534ee0ec3baae4ce99e3829e66b
     Active/singular: 3e1ec025c4a50830bbb9ad57a176630a
-    "%7B0%7D%20%3C0%3EAddresses%3C%2F0%3E/singular": 301018524d48e0042c6e6fe8936f247e
     Add%20Transfer%20Funds%20Action/singular: 1c1d3a627412b79d60eab80e44de6d00
     "%3C0%3ENote%3A%20%3C%2F0%3EThis%20candidate%20is%20an%20update%20to%20%3C1%3EProposal%20%7B0%7D%3C%2F1%3E./singular": bfa230f499dd0ff84d70c8f1f7053b21
     Create%20proposal%20candidate/singular: 30cfd2f267c3d4c8142f099c03382a41
@@ -250,7 +249,6 @@ checksums:
     Voted%20with%3C0%3E%7BnumVotesForProp%7D%3C%2F0%3ENoun/singular: e450a6640dc3d8bf3248bd45c24fa967
     Body/singular: e88eb1ea71f5ef886aa43ea6ba292d87
     Nouns%20voters%20can%20cast%20voting%20signals%20to%20give%20proposers%20of%20pending%20proposals%20an%20idea%20of%20how%20they%20intend%20to%20vote%20and%20helpful%20guidance%20on%20proposal%20changes%20to%20change%20their%20vote./singular: 00213d58ed8b7cc085d1e59fb8b1dd37
-    Addresses/singular: 87b49e2ffcdbe3cc4bfd2d25cc75c096
     Thank%20you%20for%20voting./singular: ddd7b2fd75be7769c05cf5e3735fb95b
     Switch%20wallet/singular: fe59d4b3e784e1b077e2ec5e7ea72597
     "%3C0%3ENote%3A%20%3C%2F0%3EThis%20proposal%20candidate%20has%20been%20proposed%20onchain./singular": 9806f5b2148be2cb8808df8b689f3e3b
@@ -372,6 +370,7 @@ checksums:
     Connect%20a%20wallet%20to%20vote./singular: 2883a3e3c4c24400528ba58740dae0c7
     You%20can%20experiment%20with%20off-chain%20Noun%20generation%20at%20the%20%7BplaygroundLink%7D./singular: 8b29e23ac3c91a61e89529c44d9a8173
     Abstain/singular: 06067c6da87f0986967bf31cd9062171
+    "%7B0%2C%20plural%2C%20one%20%7Bvoter%7D%20other%20%7Bvoters%7D%7D/singular": dd2fbbd63c813d1e91bbc8682e297341
     100%25%20of%20Noun%20auction%20proceeds%20are%20trustlessly%20sent%20to%20the%20treasury./singular: 653d96fbb5444bbde63b3e26484282bd
     Starting%20on/singular: 2c6540596884e2d368293d2fde20ed59
     View%20on%20Etherscan/singular: b43a2c7797f02231d8420c137a927e10
