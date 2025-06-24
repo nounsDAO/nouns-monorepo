@@ -87,6 +87,12 @@ updates:
           - 'tailwindcss'
           - 'tailwindcss-*'
           - 'tailwind-*'
+      tanstack-query:
+        patterns:
+          - '@tanstack/query-core'
+          - '@tanstack/react-query'
+          - '@tanstack/react-query-devtools'
+          - '@tanstack/*query*'
       vitest:
         patterns:
           - 'vitest'
