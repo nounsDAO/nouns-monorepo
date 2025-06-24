@@ -22,6 +22,7 @@ export const Footer = () => {
     {
       category: 'Nouns DAO',
       items: [
+        { label: t`Calendar`, url: '/calendar' },
         { label: t`Governance`, url: '/vote' },
         { label: t`Brand Assets`, url: '/brand' },
         { label: t`Playground`, url: '/playground' },
