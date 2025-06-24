@@ -49,7 +49,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/query-core": "^5.80.10",
     "@tanstack/react-query": "^5.80.10",
-    "@tanstack/react-virtual": "^3.13.10",
+    "@tanstack/react-virtual": "^3.13.11",
     "@testing-library/jest-dom": "^6.6.3",
     "@wagmi/connectors": "^5.8.4",
     "@wagmi/core": "^2.17.2",
