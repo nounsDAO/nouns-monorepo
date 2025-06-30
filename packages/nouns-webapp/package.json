@@ -143,7 +143,7 @@
     "typescript-eslint": "^8.34.1",
     "vite": "^6.3.5",
     "vite-plugin-checker": "^0.9.3",
-    "vite-plugin-inspect": "^11.1.0",
+    "vite-plugin-inspect": "^11.3.0",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.4",
