@@ -67,7 +67,7 @@
     "jotai-tanstack-query": "^0.9.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.518.0",
-    "motion": "^12.16.0",
+    "motion": "^12.19.2",
     "next-themes": "^0.4.6",
     "pngjs": "^6.0.0",
     "postcss-normalize": "^13.0.1",
