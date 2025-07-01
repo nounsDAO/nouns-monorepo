@@ -1,5 +1,5 @@
 import { defineConfig } from '@wagmi/cli';
-import { etherscan, react, actions } from '@wagmi/cli/plugins';
+import { actions, etherscan, react } from '@wagmi/cli/plugins';
 import 'dotenv/config';
 import { mainnet, sepolia } from 'wagmi/chains';
 
@@ -106,6 +106,22 @@ const contractConfigs = [
     address: {
       [mainnet.id]: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
       [sepolia.id]: '0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af',
+    },
+  },
+  {
+    name: 'mETH',
+    fileName: 'meth',
+    address: {
+      [mainnet.id]: '0xd5F7838F5C461fefF7FE49ea5ebaF7728bB0ADfa',
+      [sepolia.id]: '0x072d71b257ECa6B60b5333626F6a55ea1B0c451c',
+    },
+  },
+  {
+    name: 'mETHStaking',
+    fileName: 'meth-staking',
+    address: {
+      [mainnet.id]: '0xe3cBd06D7dadB3F4e6557bAb7EdD924CD1489E8f',
+      [sepolia.id]: '0xCAfD88816f07d4FFF671D0aAc5E4c1E29875AB2D',
     },
   },
   {
