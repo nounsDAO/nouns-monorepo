@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "hono": "^4.5.0",
-    "ponder": "^0.10.26",
+    "ponder": "^0.11.23",
     "viem": "^2.21.3"
   },
   "devDependencies": {
