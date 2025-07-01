@@ -6,6 +6,8 @@ import {
   useReadEthToUsdPriceOracleLatestAnswer,
   useReadStEthBalanceOf,
 } from '@/contracts';
+import { useReadMEthStakingMEthToEth } from '@/contracts/meth-staking.gen';
+import { useReadMEthBalanceOf } from '@/contracts/meth.gen';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 
@@ -48,6 +50,21 @@ export const useTreasuryBalance = (): bigint => {
     },
   }) as { data: bigint | undefined };
 
+  // Get Mantle (mETH) balance for the main treasury
+  const { data: mantleBalanceTreasuryV2 } = useReadMEthBalanceOf({
+    args: nounsTreasuryAddress[chainId] ? [nounsTreasuryAddress[chainId]] : undefined,
+    query: {
+      enabled: Boolean(nounsTreasuryAddress[chainId]),
+    },
+  }) as { data: bigint | undefined };
+
+  const { data: mEthBalanceAsETH } = useReadMEthStakingMEthToEth({
+    query: {
+      enabled: mantleBalanceTreasuryV2 !== undefined,
+    },
+    args: [mantleBalanceTreasuryV2!],
+  });
+
   // Get token buyer balance
   const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
 
@@ -57,7 +74,8 @@ export const useTreasuryBalance = (): bigint => {
     (ethBalanceTreasuryV2?.value ?? 0n) +
     (lidoBalanceAsETH ?? 0n) +
     (lidoBalanceTreasuryV2AsETH ?? 0n) +
-    (tokenBuyerBalanceAsETH ?? 0n)
+    (tokenBuyerBalanceAsETH ?? 0n) +
+    (mEthBalanceAsETH ?? 0n)
   );
 };
 
@@ -74,7 +92,7 @@ export const useTreasuryUSDValue = (): number | undefined => {
   const treasuryBalance = useTreasuryBalance();
 
   // If either price or balance is not available, return undefined
-  if (!ethUsdcPrice || ethUsdcPrice === 0n) {
+  if (ethUsdcPrice === undefined || ethUsdcPrice === 0n) {
     return undefined;
   }
 
