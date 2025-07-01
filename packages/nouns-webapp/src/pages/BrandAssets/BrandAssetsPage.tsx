@@ -68,24 +68,22 @@ const SectionCard: React.FC<{
   to?: string;
 }> = ({ title, imageSrc, description, to = '/playground' }) => {
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-      <div className="p-6">
-        {/* Checkerboard background container */}
+    <div className="flex flex-col justify-between overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div>
         <div className="bg-checkerboard relative flex aspect-square items-center justify-center rounded-lg shadow-inner">
           <img src={imageSrc} alt={title} className="object-contain drop-shadow" />
         </div>
 
         <p className="mb-4 text-sm text-gray-600">{description}</p>
-
-        {/* Go to playground button */}
-        <Link
-          to={to}
-          reloadDocument
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
-        >
-          {title}
-        </Link>
       </div>
+
+      <Link
+        to={to}
+        reloadDocument
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
+      >
+        {title}
+      </Link>
     </div>
   );
 };
