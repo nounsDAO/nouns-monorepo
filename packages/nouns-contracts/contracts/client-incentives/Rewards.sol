@@ -403,8 +403,8 @@ contract Rewards is
 
         //// Second loop over the proposals:
         //// 1. Reward proposal's clientId.
-        //// 2. Reward the clientIds that faciliated voting.
-        //// 3. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwises one could pass
+        //// 2. Reward the clientIds that facilitated voting.
+        //// 3. Make sure all voting clientIds were included. This is meant to avoid griefing. Otherwise one could pass
         ////    a large array of votingClientIds, spend a lot of gas, and have that gas refunded.
 
         ClientRewardsMemoryMapping.Mapping memory m = ClientRewardsMemoryMapping.createMapping({
