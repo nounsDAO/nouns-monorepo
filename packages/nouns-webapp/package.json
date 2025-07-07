@@ -42,6 +42,7 @@
     "@nouns/assets": "workspace:*",
     "@nouns/contracts": "workspace:*",
     "@nouns/sdk": "workspace:*",
+    "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",
