@@ -88,7 +88,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6",
     "remark-breaks": "^3.0.3",
-    "remeda": "^2.22.3",
+    "remeda": "^2.24.0",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
