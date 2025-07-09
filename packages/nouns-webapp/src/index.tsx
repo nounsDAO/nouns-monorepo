@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ConnectKitProvider } from 'connectkit';
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
 import { parseAbiItem } from 'viem';
@@ -230,13 +231,19 @@ createRoot(document.getElementById('root')!).render(
               {import.meta.env.VITE_ENABLE_TANSTACK_QUERY_DEVTOOLS === 'true' && (
                 <ReactQueryDevtools initialIsOpen={false} />
               )}
-              <ChainSubscriber />
-              <ApolloProvider client={client}>
-                <PastAuctions />
-                <LanguageProvider>
-                  <App />
-                </LanguageProvider>
-              </ApolloProvider>
+              <ConnectKitProvider
+                theme="nouns"
+                mode="light"
+                options={{ hideNoWalletCTA: true, hideQuestionMarkCTA: true }}
+              >
+                <ChainSubscriber />
+                <ApolloProvider client={client}>
+                  <PastAuctions />
+                  <LanguageProvider>
+                    <App />
+                  </LanguageProvider>
+                </ApolloProvider>
+              </ConnectKitProvider>
             </QueryClientProvider>
           </WagmiProvider>
         </React.StrictMode>
