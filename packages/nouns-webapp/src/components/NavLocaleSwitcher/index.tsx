@@ -4,13 +4,13 @@ import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import { useAtom } from 'jotai/react';
 import { Dropdown } from 'react-bootstrap';
 
 import LanguageSelectionModal from '@/components/LanguageSelectionModal';
 import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
-import { setLocale } from '@/i18n/setLocale';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 
 import classes from './NavLocalSwitcher.module.css';
@@ -34,7 +34,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
 
   const [buttonUp, setButtonUp] = useState(false);
   const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
-  const activeLocale = useActiveLocale();
+  const [activeLocale, setActiveLocale] = useAtom(activeLocaleAtom);
 
   const statePrimaryButtonClass = usePickByState(
     navDropdownClasses.whiteInfo,
@@ -126,7 +126,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 dropDownStyle,
                 classes.desktopLanguageButton,
               )}
-              onClick={() => setLocale(locale)}
+              onClick={() => setActiveLocale(locale)}
             >
               {LOCALE_LABEL[locale]}
               {activeLocale === locale && <FontAwesomeIcon icon={faCheck} height={24} width={24} />}

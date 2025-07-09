@@ -3,14 +3,12 @@
  */
 import { ReactNode, useCallback } from 'react';
 
-import { initialLocale, useActiveLocale } from '../hooks/useActivateLocale';
+import { useActiveLocale } from '../hooks/useActivateLocale';
 
 import { SupportedLocale } from './locales';
 import { dynamicActivate, NounsI18nProvider } from './NounsI18nProvider';
 
-dynamicActivate(initialLocale);
-
-export function LanguageProvider({ children }: { children: ReactNode }) {
+export function LanguageProvider({ children }: Readonly<{ children: ReactNode }>) {
   const locale = useActiveLocale();
 
   const onActivate = useCallback((locale: SupportedLocale) => {
