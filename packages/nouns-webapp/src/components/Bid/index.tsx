@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
 
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
-import WalletConnectModal from '@/components/WalletConnectModal';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
   useWriteNounsAuctionHouseCreateBid,
@@ -26,7 +25,7 @@ const computeMinimumNextBid = (
   currentBid: bigint,
   minBidIncPercentage: bigint | undefined,
 ): bigint => {
-  if (!minBidIncPercentage) {
+  if (minBidIncPercentage === undefined) {
     return 0n;
   }
   // Calculate minBidIncPercentage/100 + 1 with bigint
@@ -73,18 +72,12 @@ const Bid: React.FC<BidProps> = props => {
     content: auctionEnded ? <Trans>Settle</Trans> : <Trans>Place bid</Trans>,
   });
 
-  const [showConnectModal, setShowConnectModal] = useState(false);
-
-  const hideModalHandler = () => {
-    setShowConnectModal(false);
-  };
-
   const { _ } = useLingui();
 
   const { data: minBidIncPercentage } = useReadNounsAuctionHouseMinBidIncrementPercentage();
   const minBid = computeMinimumNextBid(
-    auction && BigInt(auction.amount?.toString() ?? '0'),
-    minBidIncPercentage ? BigInt(minBidIncPercentage.toString()) : undefined,
+    auction.amount !== undefined ? BigInt(auction.amount.toString()) : 0n,
+    minBidIncPercentage !== undefined ? BigInt(minBidIncPercentage.toString()) : undefined,
   );
 
   const {
@@ -116,7 +109,7 @@ const Bid: React.FC<BidProps> = props => {
   };
 
   const placeBidHandler = async () => {
-    if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
+    if (auction == undefined || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
 
@@ -203,7 +196,7 @@ const Bid: React.FC<BidProps> = props => {
     settleAuctionError?.message,
   ]);
 
-  if (!auction) return null;
+  if (auction == undefined) return null;
 
   const isDisabled = isPlacingBid || isSettlingAuction || !activeAccount;
 
@@ -216,9 +209,6 @@ const Bid: React.FC<BidProps> = props => {
 
   return (
     <>
-      {showConnectModal && activeAccount === undefined && (
-        <WalletConnectModal onDismiss={hideModalHandler} />
-      )}
       <InputGroup>
         {!auctionEnded && (
           <>

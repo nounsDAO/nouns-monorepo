@@ -30,10 +30,11 @@ const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, si
   return (
     <div className="flex flex-row flex-nowrap items-center gap-1.5">
       <img
-        className="rounded-full"
+        key={`${address}-img`}
+        className="shrink-0 rounded-full"
         alt={address}
         src={ensAvatar ?? blo(address)}
-        style={{ width: size, height: size }}
+        style={{ width: size, height: size, backgroundImage: `url(${blo(address)})` }}
       />
       <span className="font-[PT_Root_UI] font-bold tracking-[0.2px]">{displayName}</span>
     </div>

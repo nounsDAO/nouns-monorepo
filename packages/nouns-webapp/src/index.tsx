@@ -11,6 +11,7 @@ import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider } from 'wagmi';
 
+import { CustomConnectkitProvider } from '@/components/CustomConnectkitProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { store } from '@/store';
@@ -42,7 +43,7 @@ import {
 import { setLastAuctionNounId, setOnDisplayAuctionNounId } from './state/slices/onDisplayAuction';
 import { addPastAuctions } from './state/slices/pastAuctions';
 import { nounPath } from './utils/history';
-import { config as wagmiConfig, defaultChain } from './wagmi';
+import { defaultChain, config as wagmiConfig } from './wagmi';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
@@ -98,7 +99,7 @@ const ChainSubscriber: React.FC = () => {
               nounId: Number(nounId),
               sender: sender as Address,
               value: Number(value),
-              extended: !!extended,
+              extended: extended !== undefined,
               transactionHash: transactionHash ?? '',
               transactionIndex: transactionIndex ?? 0,
               timestamp,
@@ -129,7 +130,7 @@ const ChainSubscriber: React.FC = () => {
               nounId: Number(nounId),
               sender: sender as Address,
               value: Number(value),
-              extended: !!extended,
+              extended: extended !== undefined,
               transactionHash: transactionHash ?? '',
               transactionIndex: transactionIndex ?? 0,
               timestamp,
@@ -227,14 +228,16 @@ createRoot(document.getElementById('root')!).render(
         <React.StrictMode>
           <WagmiProvider config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
-              {import.meta.env.VITE_ENABLE_TANSTACK_QUERY_DEVTOOLS && (
+              {import.meta.env.VITE_ENABLE_TANSTACK_QUERY_DEVTOOLS === 'true' && (
                 <ReactQueryDevtools initialIsOpen={false} />
               )}
               <ChainSubscriber />
               <ApolloProvider client={client}>
                 <PastAuctions />
                 <LanguageProvider>
-                  <App />
+                  <CustomConnectkitProvider>
+                    <App />
+                  </CustomConnectkitProvider>
                 </LanguageProvider>
               </ApolloProvider>
             </QueryClientProvider>
