@@ -64,6 +64,7 @@
     "dayjs": "^1.10.7",
     "graphql": "^16.11.0",
     "jotai": "^2.12.5",
+    "jotai-effect": "^2.0.4",
     "jotai-tanstack-query": "^0.9.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.518.0",
