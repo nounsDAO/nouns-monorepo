@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 
 import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,19 +15,12 @@ import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 
 import classes from './NavLocalSwitcher.module.css';
 
-import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
+import navDropdownClasses from '@/components/NavBar/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
 }
-
-type Props = {
-  onClick: (e: any) => void;
-  value: string;
-};
-
-type RefType = number;
 
 type CustomMenuProps = {
   children?: React.ReactNode;
@@ -67,31 +60,36 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     navDropdownClasses.warmInfoSelected,
   );
 
-  // @ts-ignore
-  const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
-    <>
-      <div
-        className={clsx(
-          navDropdownClasses.wrapper,
-          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
-        )}
-        onClick={e => {
-          e.preventDefault();
-          onClick(e);
-        }}
-      >
-        <div className={navDropdownClasses.button}>
-          <div className={navDropdownClasses.dropdownBtnContent}>
-            {<FontAwesomeIcon icon={faGlobe} />}
-          </div>
-          <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
-            <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
+  const customDropdownToggle = React.forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+    ({ onClick }, ref) => (
+      <>
+        <div
+          ref={ref}
+          className={clsx(
+            navDropdownClasses.wrapper,
+            buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
+          )}
+          onClick={e => {
+            e.preventDefault();
+            onClick?.(e);
+          }}
+        >
+          <div className={navDropdownClasses.button}>
+            <div className={navDropdownClasses.dropdownBtnContent}>
+              {<FontAwesomeIcon icon={faGlobe} />}
+            </div>
+            <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
+              <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
+            </div>
           </div>
         </div>
-      </div>
-    </>
-  ));
+      </>
+    ),
+  );
 
+  customDropdownToggle.displayName = 'CustomDropdownToggle';
+
+  // eslint-disable-next-line @eslint-react/no-nested-component-definitions
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
       <div
@@ -120,6 +118,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
 
           return (
             <div
+              key={locale}
               className={clsx(
                 navDropdownClasses.button,
                 navDropdownClasses.dropdownPrimaryText,
@@ -137,6 +136,8 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       </div>
     );
   });
+
+  CustomMenu.displayName = 'CustomMenu';
 
   return (
     <>

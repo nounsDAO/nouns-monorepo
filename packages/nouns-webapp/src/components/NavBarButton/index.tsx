@@ -1,8 +1,10 @@
+import { FC, HTMLAttributes } from 'react';
+
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
-import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import navDropdownClasses from '../NavBar/NavBarDropdown.module.css';
 
 import classes from './NavBarButton.module.css';
 
@@ -24,11 +26,10 @@ export enum NavBarButtonStyle {
   ABSTAIN_VOTE_SUBMIT,
 }
 
-interface NavBarButtonProps {
+interface NavBarButtonProps extends HTMLAttributes<HTMLDivElement> {
   buttonText: React.ReactNode;
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
-  onClick?: (e?: any) => void;
   disabled?: boolean;
   className?: string;
   isDropdown?: boolean;
@@ -88,9 +89,16 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
   }
 };
 
-const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle, onClick, disabled, className = '' } = props;
-
+const NavBarButton: FC<NavBarButtonProps> = ({
+  buttonText,
+  buttonIcon,
+  buttonStyle,
+  onClick,
+  isDropdown,
+  isButtonUp,
+  disabled,
+  className = '',
+}) => {
   const isDisabled = disabled ?? false;
 
   return (
@@ -98,26 +106,26 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
       <div
         className={clsx(
           `${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)} ${className}`,
-          props.isDropdown && classes.dropdown,
+          isDropdown === true && classes.dropdown,
         )}
         onClick={isDisabled ? () => {} : onClick}
       >
         <div
           className={clsx(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
         >
-          {buttonIcon && (
-            <div className={clsx(classes.icon, props.isDropdown && classes.dropdown)}>
+          {buttonIcon !== undefined && (
+            <div className={clsx(classes.icon, isDropdown === true && classes.dropdown)}>
               {buttonIcon}
             </div>
           )}
           <div>{buttonText}</div>
-          {props.isDropdown && (
+          {isDropdown === true && (
             <div
               className={
-                props.isButtonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown
+                isButtonUp === true ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown
               }
             >
-              <FontAwesomeIcon icon={props.isButtonUp ? faSortUp : faSortDown} />{' '}
+              <FontAwesomeIcon icon={isButtonUp === true ? faSortUp : faSortDown} />{' '}
             </div>
           )}
         </div>
