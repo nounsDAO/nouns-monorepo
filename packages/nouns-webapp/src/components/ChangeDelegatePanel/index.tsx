@@ -134,7 +134,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         key="enter-delegate-address"
         buttonText={
           <div className={classes.delegateKVotesBtn}>
-            {locale === 'en-US ' ? (
+            {locale === 'en-US' ? (
               <>
                 Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}

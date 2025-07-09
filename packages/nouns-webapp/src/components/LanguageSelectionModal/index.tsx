@@ -1,11 +1,13 @@
+import { FC } from 'react';
+
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
+import { useAtom } from 'jotai/react';
 
 import Modal from '@/components/Modal';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
-import { setLocale } from '@/i18n/setLocale';
 
 import classes from './LanguageSelectionModal.module.css';
 
@@ -16,9 +18,8 @@ interface LanguageSelectionModalProps {
 /**
  * Note: This is only used on mobile. On desktop, language is selected via a dropdown.
  */
-const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
-  const { onDismiss } = props;
-  const activeLocale = useActiveLocale();
+const LanguageSelectionModal: FC<LanguageSelectionModalProps> = ({ onDismiss }) => {
+  const [activeLocale, setActiveLocale] = useAtom(activeLocaleAtom);
 
   const modalContent = (
     <div className={classes.LanguageSelectionModal}>
@@ -28,7 +29,7 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
             className={classes.languageButton}
             key={locale}
             onClick={() => {
-              setLocale(locale);
+              setActiveLocale(locale);
               onDismiss();
             }}
           >
