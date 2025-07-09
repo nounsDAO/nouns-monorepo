@@ -124,7 +124,7 @@ const NavBar = () => {
             aria-controls="basic-navbar-nav"
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
-          <Navbar.Collapse className="justify-content-end">
+          <Navbar.Collapse className="justify-content-end z-10">
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
